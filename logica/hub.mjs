@@ -52,7 +52,8 @@ import { eventosTodosLosBloqueos } from './componentes/transactoresCompartidos/c
 import { eventosPorApartamneto } from './componentes/transactoresCompartidos/calendarios/capas/eventosPorApartamento.mjs';
 import { eventosPorApartamentoAirbnb } from './componentes/transactoresCompartidos/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs';
 import { exportarClendario } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/exportarCalendario.mjs';
-
+const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
+const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
 const arranque = async (entrada, salida) => {
     salida.render('constructorV1', {
         'vistaGlobal': '../global/navegacion.ejs'
@@ -80,14 +81,14 @@ const puerto = async (entrada, salida) => {
         pasarela: {
             contruyeSession: async () => {
                 try {
-                    const locationResponse = await clienteSquare.locationsApi.retrieveLocation(process.env.SQUARE_LOCATION_ID);
+                    const locationResponse = await clienteSquare.locationsApi.retrieveLocation(SQUARE_LOCATION_ID);
                     const currency = locationResponse.result.location.currency;
                     const country = locationResponse.result.location.country;
                     const idempotencyKey = uuidv4();
 
                     const clienteMetadatos = {
-                        squareApplicationId: process.env.SQUARE_APPLICATION_ID,
-                        squareLocationId: process.env.SQUARE_LOCATION_ID,
+                        squareApplicationId:SQUARE_APPLICATION_ID,
+                        squareLocationId: SQUARE_LOCATION_ID,
                         squareAccountCountry: country,
                         squareAccountCurrency: currency,
                         idempotencyKey
@@ -1015,15 +1016,15 @@ const puerto = async (entrada, salida) => {
             pasarela: {
                 squareConstruyeCliente: async () => {
                     try {
-                        const locationResponse = await clienteSquare.locationsApi.retrieveLocation(process.env.SQUARE_LOCATION_ID);
+                        const locationResponse = await clienteSquare.locationsApi.retrieveLocation(SQUARE_LOCATION_ID);
                         const currency = locationResponse.result.location.currency;
                         const country = locationResponse.result.location.country;
                         const idempotencyKey = uuidv4();
 
 
                         const clienteMetadatos = {
-                            squareApplicationId: process.env.SQUARE_APPLICATION_ID,
-                            squareLocationId: process.env.SQUARE_LOCATION_ID,
+                            squareApplicationId:SQUARE_APPLICATION_ID,
+                            squareLocationId: SQUARE_LOCATION_ID,
                             squareAccountCountry: country,
                             squareAccountCurrency: currency,
                             idempotencyKey
@@ -1588,7 +1589,7 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-                        const locationResponse = await clienteSquare.locationsApi.retrieveLocation(process.env.SQUARE_LOCATION_ID);
+                        const locationResponse = await clienteSquare.locationsApi.retrieveLocation(SQUARE_LOCATION_ID);
                         const currency = locationResponse.result.location.currency;
 
                         const pago = {
@@ -1978,7 +1979,7 @@ const puerto = async (entrada, salida) => {
                             const totalConImpuestosFormatoFinal = Number(totalPago.replaceAll(".", ""))
                             const token = entrada.body.token;
                             const idempotencyKey = entrada.body.idempotencyKey;
-                            const locationResponse = await clienteSquare.locationsApi.retrieveLocation(process.env.SQUARE_LOCATION_ID);
+                            const locationResponse = await clienteSquare.locationsApi.retrieveLocation(SQUARE_LOCATION_ID);
                             const currency = locationResponse.result.location.currency;
 
                             // Charge the customer's card
