@@ -87,7 +87,7 @@ const puerto = async (entrada, salida) => {
                     const idempotencyKey = uuidv4();
 
                     const clienteMetadatos = {
-                        squareApplicationId:SQUARE_APPLICATION_ID,
+                        squareApplicationId: SQUARE_APPLICATION_ID,
                         squareLocationId: SQUARE_LOCATION_ID,
                         squareAccountCountry: country,
                         squareAccountCurrency: currency,
@@ -1023,7 +1023,7 @@ const puerto = async (entrada, salida) => {
 
 
                         const clienteMetadatos = {
-                            squareApplicationId:SQUARE_APPLICATION_ID,
+                            squareApplicationId: SQUARE_APPLICATION_ID,
                             squareLocationId: SQUARE_LOCATION_ID,
                             squareAccountCountry: country,
                             squareAccountCurrency: currency,
@@ -9353,6 +9353,41 @@ const puerto = async (entrada, salida) => {
                                         throw new Error(errorDeFormado)
                                     }
 
+                                    const generarCadenaAleatoria = (longitud) => {
+                                        const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
+                                        let cadenaAleatoria = '';
+                                        for (let i = 0; i < longitud; i++) {
+                                            const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
+                                            cadenaAleatoria += caracteres.charAt(indiceAleatorio);
+                                        }
+                                        return cadenaAleatoria;
+                                    }
+                                    const validarCodigo = async (codigoAleatorio) => {
+                                        const validarCodigoAleatorio = `
+                                        SELECT
+                                        "uidPublico"
+                                        FROM "calendariosSincronizados"
+                                        WHERE "uidPublico" = $1;`
+                                        const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [codigoAleatorio])
+
+                                        if (resuelveValidarCodigoAleatorio.rowCount > 0) {
+                                            return true
+                                        }
+                                    }
+
+                                    const controlCodigo = async () => {
+                                        const longitudCodigo = 100; // Puedes ajustar la longitud según tus necesidades
+                                        let codigoGenerado;
+                                        let codigoExiste;
+                                        do {
+                                            codigoGenerado = generarCadenaAleatoria(longitudCodigo);
+                                            codigoExiste = await validarCodigo(codigoGenerado);
+                                        } while (codigoExiste);
+                                        // En este punto, tenemos un código único que no existe en la base de datos
+                                        return codigoGenerado;
+                                    }
+                                    const codigoAleatorioUnico = await controlCodigo();
+
                                     const plataformaOrigen = "airbnb"
                                     const consultaConfiguracion = `
                                     INSERT INTO "calendariosSincronizados"
@@ -9361,9 +9396,10 @@ const puerto = async (entrada, salida) => {
                                     url,
                                     "apartamentoIDV",
                                     "plataformaOrigen",
-                                    "dataIcal" 
+                                    "dataIcal", 
+                                    "uidPublico"
                                     )
-                                    VALUES ($1, $2, $3, $4, $5)
+                                    VALUES ($1, $2, $3, $4, $5, $6)
                                     RETURNING uid
                                         `
                                     const nuevoCalendario = [
@@ -9371,7 +9407,8 @@ const puerto = async (entrada, salida) => {
                                         url,
                                         apartamentoIDV,
                                         plataformaOrigen,
-                                        calendarioRaw
+                                        calendarioRaw,
+                                        codigoAleatorioUnico
                                     ]
                                     const resuelveCalendariosSincronizados = await conexion.query(consultaConfiguracion, nuevoCalendario)
                                     const nuevoUID = resuelveCalendariosSincronizados.rows[0].uid
