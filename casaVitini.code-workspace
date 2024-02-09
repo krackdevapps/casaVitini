@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+<<<<<<< HEAD
+	"settings": {}
+=======
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+>>>>>>> eaafe494 (Inicio del sistema de integracion continua)
+}

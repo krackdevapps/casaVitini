@@ -1,0 +1,112 @@
+<arranque publico="reservasNuevo.resumenReserva" square="motorarranque"></arranque>
+<link rel="stylesheet" href="/componentes/css/square.css">
+<div class="bloqueResumenReservaGlobal" componente="espacioConfirmarReserva">
+    <p class="tituloBloque">Resumen de la reserva</p>
+    <div class="bloqueSeccion">
+        <p class="infoResumenReserva">Aquí está el resumen de tu reserva. Por favor, verifica que las fechas de entrada
+            y salida sean correctas y revisa los detalles del alojamiento, asegurándote de que los apartamentos estén
+            especificados correctamente. Si deseas hacer alguna modificación en tu reserva, simplemente haz clic en el
+            botón "Modificar reserva". Si todo está bien, puedes proceder al pago, ya sea con tarjeta o mediante Google
+            Pay. Completa los datos de pago y selecciona el botón azul "Pagar y reservar". Una vez realizado el pago, tu
+            reserva quedará confirmada.</p>
+
+    </div>
+
+    <div class="bloqueSeccion">
+        <!--<p class="tituloBloqueSeccion">Estancia</p>-->
+        <div class="bloqueHorizontal">
+            <div class="bloqueResumenDia">
+                <p class="diaTipo">Fecha de entrada (En zona horaria America / Managua)</p>
+                <p id="fechaEntrada" class="diaParrafo">fecha de entrada</p>
+            </div>
+            <div class="bloqueResumenDia">
+                <p class="diaTipo">Fecha de salida (En zona horaria America / Managua)</p>
+                <p id="fechaSalida" class="diaParrafo">fecha de salidap>
+            </div>
+        </div>
+    </div>
+
+    <div resumen="alojamiento" class="bloqueSeccion">
+        <p class="tituloBloqueSeccion">Alojamiento</p>
+    </div>
+
+    <div class="plaza_alojamiento_resumenReserva_marcoBotones">
+        <div class="botonResumenReserva" boton="modificarReserva">Modificar los apartamentos seleccionados</div>
+        <!--  
+         <div class="botonResumenReserva" boton="baypasearPasarela">Baypasear pasarela (este boton esta para pruebas,
+            desaparecera pronto, este boton por lo general esta desactivado, solo)</div>
+        </div>
+        -->
+
+        <!--replica esquema formulario square-->
+        <div class="ressumenReservaBloquePago" componenete="espacioInfoPago">
+
+            <div componente="espacioInfoTotales" class="resumenReservaInfoPago"></div>
+            <div class="plaza_alojamiento_resumenReserva_contenedorTitualPago">
+
+                <div class="plaza_alojamiento_resumenReserva_titular_contenedor">
+                    <div class="plaza_alojamiento_resumenReserva_titular_informacion">
+                        Datos del titular de la reserva y pago.
+                    </div>
+                    <div class="infoResumenReserva">
+                        Para completar tu reserva con éxito, por favor, asegúrate de ingresar con precisión los datos
+                        del
+                        titular de la reserva. Además, proporciona con cuidado los detalles de pago, incluyendo la
+                        información de tu tarjeta de crédito o la opción de Google Pay. Garantizar la exactitud de esta
+                        información es esencial para confirmar tu reserva de manera eficiente y brindarte una
+                        experiencia
+                        sin contratiempos. ¡Gracias por tu atención a estos detalles!
+                    </div>
+                    <input type="text" class="plaza_alojamiento_resumenReserva_titular_campoTitular"
+                        placeholder="Nombre del titular de la reserva" campo="nombreTitular">
+                    <input type="text" class="plaza_alojamiento_resumenReserva_titular_campoTitular"
+                        placeholder="Pasaporte del titular de la reserva" campo="pasaporteTitular">
+                    <input type="text" class="plaza_alojamiento_resumenReserva_titular_campoTitular"
+                        placeholder="Telefono del titular de la reserva" campo="telefonoTitular">
+                    <input type="text" class="plaza_alojamiento_resumenReserva_titular_campoTitular"
+                        placeholder="Correo del titular de la reserva" campo="correoTitular">
+                </div>
+
+                <div class="plaza_resumenReserva_contenedorTotalAPagar">
+
+                    <p class="plaza_resumenReserva_totalInfo">Total a pagar:</p>
+                    <p class="plaza_resumenReserva_totalFinal" componente="totalConImpuestos">Calculando total...</p>
+                    <p class="plaza_resumenReserva_totalInfo" componente="botonDespliegaDesgloseTotal">(Puedes ver un
+                        desglose detallado del total pulsando aquí)
+                    </p>
+
+
+                </div>
+
+                <form class="payment-form" id="fast-checkout">
+                    <div class="wrapper">
+                        <!--  <div id="apple-pay-button" alt="apple-pay" type="button"></div>-->
+                        <div id="google-pay-button" alt="google-pay" type="button"></div>
+                        <div class="border">
+                            <span>0</span>
+                        </div>
+                        <div id="ach-wrapper">
+                            <label for="ach-account-holder-name">Full Name</label>
+                            <input id="ach-account-holder-name" type="text" placeholder="Jane Doe"
+                                name="ach-account-holder-name" autocomplete="name">
+                            <span id="ach-message"></span>
+                            <button id="ach-button" type="button"> Pay with Bank Account </button>
+                            <div class="border">
+                                <span>OR</span>
+                            </div>
+                        </div>
+                        <div id="card-container"></div>
+                        <button id="card-button" type="button"> Pagar reserva y confirmarla </button>
+                        <span id="payment-flow-message"></span>
+                    </div>
+                </form>
+
+
+            </div>
+
+
+
+
+
+        </div>
+    </div>

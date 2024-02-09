@@ -1,0 +1,392 @@
+.uiPanelGlobal {
+    background-color: rgba(161, 161, 161, 0);
+    padding: 0px;
+    display: flex;
+    margin: 0px;
+    align-items: flex-start;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    /* position: fixed; */
+    width: 100%;
+    max-width: 3840px;
+
+}
+
+@font-face {
+    font-family: 'biome';
+    src: url('/Componentes/fuentes/biome.ttf') format('truetype');
+}
+
+
+
+.fondo {
+    background: rgb(97, 97, 97);
+    height: 100vh;
+    width: 100%;
+    position: static;
+    z-index: 0;
+    object-fit: cover;
+    transition: all 250ms;
+    margin: 0px;
+}
+
+#uiLogo {
+    /* background: rgba(255, 255, 255, 0.2);*/
+    border-radius: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+
+    font-weight: bold;
+    height: fit-content;
+    width: fit-content;
+    position: relative;
+    color: rgba(0, 0, 0, 0.9);
+    white-space: nowrap;
+    letter-spacing: 0px;
+    margin: 0px;
+    /* -webkit-backdrop-filter: blur(5px);*/
+    /*  backdrop-filter: blur(50px);*/
+    cursor: default;
+    transition: all 500ms;
+    display: flex;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    /*
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    */
+    border: 1px solid transparent;
+
+}
+
+#imgLogo {
+    background: transparent;
+    pointer-events: none;
+
+}
+
+
+
+
+.uiNavegacion {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 30px;
+    width: fit-content;
+    height: fit-content;
+    margin: 8px;
+    padding: 0px;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+}
+
+.uiCategoria {
+    border: 0px none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 0px;
+    border-radius: 20px;
+    transition: all 500ms;
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+    color: black;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.uiCategoriaMenu {
+    border: 0px none;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin: 5px;
+    transition: background 250ms, color 250ms;
+    cursor: default;
+    pointer-events: none;
+}
+
+.iconoMenu {
+    width: 20px;
+    height: 20px;
+}
+
+
+
+
+
+body {
+    background: rgba(0, 0, 0, 0.1);
+    background-image: url("/componentes/imagenes/transparente.png");
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    transition: background 350ms linear;
+    flex-wrap: nowrap;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* background-attachment: scroll;*/
+    background-position: center center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+header {
+    width: 100%;
+}
+
+@keyframes AnimacionSueave {
+    0% {
+        transform: scale(0)
+    }
+
+    100% {
+        transform: scale(1)
+    }
+}
+
+.contenedorFondo {
+    /*background: wheat;*/
+    background-image: url(/componentes/imagenes/fotos/2.jpeg);
+    transition: all 500ms;
+    z-index: -1;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-attachment: scroll
+        /*  background-position: 100% 100%;*/
+
+
+
+
+}
+
+
+
+
+section {
+    /*  scale: 0;
+    transition: scale 1000ms;
+    animation: AnimacionSueave 1000ms;*/
+    /*  position: absolute;*/
+    top: 0px;
+    /* min-height: 100%; */
+    /* max-height: 1920px; */
+    display: flex;
+    align-content: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+    max-width: 2160px;
+    margin: 0px;
+    font-size: 13px;
+}
+
+.tintadoVinculo {
+    color: black;
+
+    border-radius: 20px;
+    /* height: fit-content; */
+    /* width: fit-content; */
+    padding: 0px;
+    margin: 5px;
+    text-decoration: none;
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.marcoVinculoLogo {
+    color: black;
+    text-decoration: none;
+    outline: none;
+    cursor: default;
+    border-radius: 20px;
+    margin: 8px;
+    pointer-events: all;
+}
+
+
+
+.marcoNavegacion {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: stretch;
+    position: fixed;
+    width: 100%;
+    z-index: 200;
+    pointer-events: none;
+    background: transparent;
+    transition: all 250ms linear;
+}
+
+@media (max-width: 720px) {
+    .globa_marcoNavegacion_desenfoque {
+        -webkit-backdrop-filter: blur(50px);
+        backdrop-filter: blur(50px);
+        background: rgba(255, 255, 255, 0.4);
+    }
+
+
+}
+
+
+.uiMenuResponsivo {
+    transition: all 250ms;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 30px;
+    overflow: hidden;
+    width: fit-content;
+    height: fit-content;
+    margin: 8px;
+    padding: 6px;
+    align-content: center;
+    justify-content: center;
+    align-items: stretch;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
+    opacity: 0;
+    transition: all 1000ms;
+}
+
+.uiMenuResponsivoDesplegado {
+    transition: all 250ms;
+    background-color: rgba(255, 255, 255, 0.0);
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* font-size: 14px; */
+    border-radius: 10px;
+    width: 10px;
+    /* height: 0px; */
+    margin-right: 20px;
+    padding: 20px;
+    transition: background 250ms, color 250ms;
+    cursor: default;
+    display: none;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    background-position: center center;
+    background-image: url(/componentes/iconos/menu5.svg);
+    background-size: cover;
+    zoom: 80%;
+}
+
+.uiMenuResponsivoDesplegado:hover {
+    color: white;
+}
+
+@media (max-width: 850px) {
+
+    .uiMenuResponsivo {
+        display: none;
+    }
+
+    .uiMenuResponsivoDesplegado {
+        display: block;
+    }
+
+    #imgLogo {
+        background: transparent;
+        pointer-events: none;
+        width: 140px;
+        transition: all 500ms linear;
+    }
+
+    .uiPanelGlobal {
+        align-items: center;
+    }
+}
+
+.uiMenuGlobalResponsivo {
+
+    display: flex;
+    background-color: aqua;
+    transition: all 250ms;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    overflow: hidden;
+    width: fit-content;
+    height: fit-content;
+    margin: 14px;
+    align-content: center;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    position: absolute;
+    gap: 4px;
+    top:66px;
+    right: 1px;
+    position: fixed;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
+    padding: 6px;
+}
+
+.enlaceInvisibleMenu {
+    text-decoration: none;
+    text-decoration-line: none;
+    text-decoration-color: white;
+}
+
+.enlaceInvisibleMenu:visited {
+    text-decoration: none;
+    text-decoration-line: none;
+    color: white;
+    text-decoration-color: white;
+}
+
+.contenedorMenu {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    pointer-events: all;
+}
+
+#errorVista {
+    margin-top: 100px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 12px;
+}
