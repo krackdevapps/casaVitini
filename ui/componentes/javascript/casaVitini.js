@@ -6649,7 +6649,7 @@ const casaVitini = {
                 bloqueInstalaciones.setAttribute("vista", "/instalaciones")
                 bloqueInstalaciones.setAttribute("zona", "instalaciones")
                 bloqueInstalaciones.addEventListener("click", casaVitini.componentes.cambiarVista)
-                bloqueInstalaciones.innerText = "Instalacione"
+                bloqueInstalaciones.innerText = "Instalaciones"
 
                 const bloqueContacto = document.createElement("a")
                 bloqueContacto.setAttribute("href", "/contacto")
