@@ -9,8 +9,8 @@ if (entorno === "nativo") {
     BaseDeDatos = {
         host: 'localhost',
         user: process.env.BASEDEDATOS_USER,
-        password: process.env.BASEDEDATOS_PASS,
-        database: process.env.BASEDEDATOS_DBNAME,
+        password: "hola",
+        database: "casaVitiniDev",
         //revisar esto
         max: 100,
         port: 5432,
