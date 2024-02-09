@@ -28,7 +28,9 @@ if (entorno === "docker") {
         port: 5432,
         idleTimeoutMillis: 1000,
         connectionTimeoutMillis: 3000,
-        /* ssl: {
+        /* 
+        // En espera de cifrado
+        ssl: {
             rejectUnauthorized: true,    // Habilita la verificación automática del certificado del servidor
             ca: caCert,                  // Especifica el certificado de tu CA para la verificación
             // Otros parámetros opcionales de SSL:
