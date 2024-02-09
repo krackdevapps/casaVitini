@@ -28,7 +28,7 @@ if (entorno === "docker") {
         port: 5432,
         idleTimeoutMillis: 1000,
         connectionTimeoutMillis: 3000,
-       /* ssl: {
+        /* ssl: {
             rejectUnauthorized: true,    // Habilita la verificación automática del certificado del servidor
             ca: caCert,                  // Especifica el certificado de tu CA para la verificación
             // Otros parámetros opcionales de SSL:
@@ -36,7 +36,8 @@ if (entorno === "docker") {
             // cert: fs.readFileSync('ruta_al_certificado_cliente.crt').toString(),     // Certificado del cliente (si es necesario)
             // passphrase: 'contraseña_de_la_clave_privada',                            // Contraseña de la clave privada (si es necesaria)
             // checkServerIdentity: (hostname, cert) => { ... },                         // Verificación personalizada del certificado del servidor (si es necesaria)
-          },*/
+          },
+        */
     }
 
 }
