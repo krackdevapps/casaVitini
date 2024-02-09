@@ -13,7 +13,7 @@ if (entorno === "nativo") {
         database: process.env.BASEDEDATOS_DBNAME,
         //revisar esto
         max: 100,
-        port: 10000,
+        port: 5432,
         idleTimeoutMillis: 1000,
         connectionTimeoutMillis: 3000,
     }
