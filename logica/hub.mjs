@@ -9189,7 +9189,8 @@ const puerto = async (entrada, salida) => {
                                     nombre,
                                     url,
                                     "apartamentoIDV",
-                                    "plataformaOrigen"
+                                    "plataformaOrigen",
+                                    "uidPublico"
                                     FROM 
                                     "calendariosSincronizados"
                                     WHERE
@@ -9243,7 +9244,8 @@ const puerto = async (entrada, salida) => {
                                     nombre,
                                     url,
                                     "apartamentoIDV",
-                                    "plataformaOrigen"
+                                    "plataformaOrigen",
+                                    "uidPublico"
                                     FROM 
                                     "calendariosSincronizados"
                                     WHERE
@@ -18424,22 +18426,49 @@ const calendarios_compartidos = async (entrada, salida) => {
             .split("/")
         urlArray.splice(0, 2);
         console.log("urlArray", urlArray)
-        if (urlArray[0] === "calendarios_publicos") {
 
-            const calendarioUIDPublico = urlArray[0];
-            if (!calendarioUIDPublico) {
-                const error = "Hay que definir la calendarioUID, solo se admiten numeros sin espacios.";
-                throw new Error(error);
+        //Verificara que existe el calendarios
+        // ENFOQUE ERRONEO ->> Hay que mostrar los eventos de CASAVITINI por apartmento durante un año a partir de hoy!!!!!! por que este calendario es para sincronizar con las otras plataformas
+        const consultaConfiguracion = `
+            SELECT 
+            uid,
+            nombre,
+            url,
+            "apartamentoIDV",
+            "plataformaOrigen",
+            FROM 
+            "calendariosSincronizados"
+            WHERE
+            "uidPublico" = $1
+            `
+        const resuelveCalendariosSincronizados = await conexion.query(consultaConfiguracion, [plataformaCalendarios])
+        if (resuelveCalendariosSincronizados.rowCount === 0) {
+            salida.end()
+        }
+
+        if (resuelveCalendariosSincronizados.rowCount === 1) {
+
+            for (const detallesDelCalendario of resuelveCalendariosSincronizados.rows) {
+                const apartamentoIDV = detallesDelCalendario.apartamentoIDV
+                const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+                detallesDelCalendario.apartamentoUI = apartamentoUI
             }
+            const datosCalendario = resuelveCalendariosSincronizados.rows
+
+
 
             const exportarCalendario_ = await exportarClendario()
             const icalData = exportarCalendario_
             salida.attachment('eventos.ical');
             salida.send(icalData);
-            return
+
         }
 
-        salida.end()
+
+
+
+
+
 
     } catch (errorCapturado) {
         const error = {
