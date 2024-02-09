@@ -18375,7 +18375,7 @@ const puerto = async (entrada, salida) => {
     salida.end()
 }
 
-const puertoGet = async (entrada, salida) => {
+const calendarios_compartidos = async (entrada, salida) => {
     try {
         const url = entrada.url.toLowerCase()
         const filtroUrl = /^[a-zA-Z0-9/_]+$/;
@@ -18415,7 +18415,7 @@ const puertoGet = async (entrada, salida) => {
 
 export default {
     arranque,
-    puertoGet,
+    calendarios_compartidos,
     puerto
 }
 

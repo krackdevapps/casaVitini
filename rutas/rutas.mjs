@@ -4,10 +4,10 @@ import hub from '../logica/hub.mjs';
 const router = express.Router();
 const {
     arranque,
-    puertoGet,
+    calendarios_compartidos,
     puerto
 } = hub;
-router.get('/puerto/:href(*)', puertoGet)
+router.get('/calendarios_compartidos/:href(*)', calendarios_compartidos)
 router.get('/:href(*)', arranque);
 router.post('/puerto', puerto)
 
