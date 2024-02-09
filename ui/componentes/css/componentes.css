@@ -1911,7 +1911,7 @@
 }
 
 .iconoUsuario {
-    background-image: url(/Componentes/Imagenes/iconoUsuario.svg);
+    background-image: url(/componentes/imagenes/iconoUsuario.svg);
     height: 50px;
     width: 50px;
     background-size: cover;
@@ -7220,7 +7220,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .detallesUsuario_esferaUsuario {
     background: rgba(255, 255, 255, 0.1);
-    background-image: url(/Componentes/Imagenes/iconoUsuario.svg);
+    background-image: url(/componentes/imagenes/iconoUsuario.svg);
     background-size: cover;
     height: 150px;
     width: 150px;
