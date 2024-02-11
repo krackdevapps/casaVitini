@@ -18424,8 +18424,10 @@ const calendarios_compartidos = async (entrada, salida) => {
         }
         const urlArray = url.toLowerCase()
             .split("/")
-        urlArray.splice(0, 2);
-        console.log("urlArray", urlArray)
+            .filter(url => url.trim() !== "calendarios_compartidos")
+            .filter(url => url.trim() !== "")
+        const calendarioUID = urlArray[0];
+        console.log("calendarioUID", calendarioUID)
 
         //Verificara que existe el calendarios
         // ENFOQUE ERRONEO ->> Hay que mostrar los eventos de CASAVITINI por apartmento durante un año a partir de hoy!!!!!! por que este calendario es para sincronizar con las otras plataformas
@@ -18435,32 +18437,185 @@ const calendarios_compartidos = async (entrada, salida) => {
             nombre,
             url,
             "apartamentoIDV",
-            "plataformaOrigen",
+            "dataIcal",
+            "plataformaOrigen"
             FROM 
             "calendariosSincronizados"
             WHERE
             "uidPublico" = $1
             `
-        const resuelveCalendariosSincronizados = await conexion.query(consultaConfiguracion, [plataformaCalendarios])
+        const resuelveCalendariosSincronizados = await conexion.query(consultaConfiguracion, [calendarioUID])
         if (resuelveCalendariosSincronizados.rowCount === 0) {
-            salida.end()
+            salida.status(404).end();
         }
 
         if (resuelveCalendariosSincronizados.rowCount === 1) {
 
-            for (const detallesDelCalendario of resuelveCalendariosSincronizados.rows) {
-                const apartamentoIDV = detallesDelCalendario.apartamentoIDV
-                const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-                detallesDelCalendario.apartamentoUI = apartamentoUI
-            }
+            const detallesDelCalendario = resuelveCalendariosSincronizados.rows[0]
+            const apartamentoIDV = detallesDelCalendario.apartamentoIDV
+            const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+            detallesDelCalendario.apartamentoUI = apartamentoUI
             const datosCalendario = resuelveCalendariosSincronizados.rows
 
+            const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
+            const tiempoZH = DateTime.now().setZone(zonaHoraria);
+            const fechaActual_ISO = tiempoZH.toISODate()
+            const fechaLimite = tiempoZH.plus({ days: 360 }).toISODate();
+            const fechaInicio = DateTime.fromISO(fechaActual_ISO);
+            const fechaFin = DateTime.fromISO(fechaLimite);
+
+            const generarFechasEnRango = (fechaInicio, fechaFin) => {
+                const fechasEnRango = [];
+                let fechaActual = fechaInicio;
+
+                while (fechaActual <= fechaFin) {
+                    fechasEnRango.push(fechaActual.toISODate());
+                    fechaActual = fechaActual.plus({ days: 1 });
+                }
+                return fechasEnRango;
+            }
+
+            const arrayFechas = generarFechasEnRango(fechaInicio, fechaFin)
+            const objetoFechas = {}
+
+            for (const fecha of arrayFechas) {
+                objetoFechas[fecha] = {}
+
+            }
+
+            // Primero buscamso si hay bloqueos permanentes
+            // si no hay procedemos a buscar bloquoeos temporales y reservas
+            const bloqueoPermanente = "permanente"
+            const consultaBloqueosPermanentes = `
+            SELECT apartamento 
+            FROM "bloqueosApartamentos" 
+            WHERE 
+            "tipoBloqueo" = $1 AND
+            apartamento = $4;`
+            const resuelveBloqueosPermanentes = await conexion.query(consultaBloqueosPermanentes, [bloqueoPermanente, apartamentoIDV])
+            const bloqueosPermamentes = resuelveBloqueosPermanentes.rows
+            const eventos = []
+
+            if (bloqueosPermamentes.length > 0) {
+                for (const detallesdelBloqueo of bloqueosPermamentes) {
+                    const estructuraEVENTO = {
+                        start: fechaInicio,
+                        end: fechaFin,
+                        summary: 'Bloqueo permanente',
+                        description: 'Bloqueo permanente aplicado al ' + apartamentoUI
+                    }
+                    eventos.push(estructuraEVENTO)
+                }
+            } else {
+                const bloqueoTemporal = "temporal"
+
+                const apartamenosBloqueadosTemporalmente = `
+                SELECT 
+                apartamento,
+                to_char(entrada, 'YYYY-MM-DD') as "entrada", 
+                to_char(salida, 'YYYY-MM-DD') as "salida" 
+                FROM "bloqueosApartamentos" 
+                WHERE 
+                "tipoBloqueo" = $1 AND
+                entrada <= $2::DATE AND
+                salida >= $3::DATE;`
+                const datosConsultaBloqueos = [
+                    bloqueoTemporal,
+                    fechaActual_ISO,
+                    fechaLimite
+                ]
+                const resuelveBloqueosTemporales = await conexion
+                    .query(apartamenosBloqueadosTemporalmente, datosConsultaBloqueos)
+
+                const bloqueosTemporales = resuelveBloqueosTemporales.rows
+
+                for (const detalleDelBloqueo of bloqueosTemporales) {
+
+                    const fechaEntradaBloqueo_ISO = detalleDelBloqueo.entrada
+                    const fechaSalidaBloqueo_ISO = detalleDelBloqueo.salida
+
+                    const estructuraEVENTO = {
+                        start:  DateTime.fromISO(fechaEntradaBloqueo_ISO),
+                        end:  DateTime.fromISO(fechaSalidaBloqueo_ISO),
+                        summary: 'Bloqueo permanente',
+                        description: 'Bloqueo permanente aplicado al ' + apartamentoUI
+                    }
+                    eventos.push(estructuraEVENTO)
 
 
-            const exportarCalendario_ = await exportarClendario()
-            const icalData = exportarCalendario_
-            salida.attachment('eventos.ical');
-            salida.send(icalData);
+
+                }
+
+
+
+
+
+
+
+
+
+
+                const reservasEncontradas = []
+                const consultaReservas = `
+                SELECT 
+                reserva,
+                to_char(entrada, 'YYYY-MM-DD') as "entrada", 
+                to_char(salida, 'YYYY-MM-DD') as "salida",
+                FROM reservas 
+                WHERE 
+                entrada < $1::DATE AND
+                salida > $2::DATE    
+                AND "estadoReserva" <> 'cancelada';`
+
+                const resuelveReservas = await conexion.query(consultaReservas, [fechaSalida_ISO, fechaEntrada_ISO])
+                for (const detallesReserva of resuelveReservas.rows) {
+                    const reservaUID = detallesReserva.reserva
+                    const fechaEntrada_ISO = detallesReserva.entrada
+                    const fechaSalida_ISO = detallesReserva.salida
+
+                    const consultaApartamentoEnReserva = `
+                    SELECT apartamento 
+                    FROM "reservaApartamentos" 
+                    WHERE reserva = $1 AND apartamento = $2;`
+                    const resuelveApartamento = await conexion.query(consultaApartamentoEnReserva, [reservaUID, apartamentoIDV])
+                    if (resuelveApartamento.rows === 1) {
+                        const evento = {
+                            fechaInicioEvento_ISO: fechaEntrada_ISO,
+                            fechaSalidaEvento_USI: fechaSalida_ISO,
+                            sumario: "Reserva " + reservaUID,
+                            descripcion: "Reserva en CasaVitini del " + apartamentoUI
+                        }
+                        reservasEncontradas.push(evento)
+
+                    }
+
+                }
+
+                console.log("fechaActual_ISO", fechaActual_ISO)
+                console.log("fechaLimite", fechaLimite)
+                console.log("objetoFechas", objetoFechas)
+
+
+                const fecha = {
+                    fechaEntrada_ISO: fechaEntrada_ISO,
+                    fechaSalida_ISO: fechaSalida_ISO
+                }
+                //const resuelveADP = await apartamentosDisponiblesPublico(fecha)
+
+
+
+
+
+                const exportarCalendario_ = await exportarClendario()
+                const icalData = exportarCalendario_
+                salida.attachment('eventos.ical');
+                salida.send(icalData);
+
+            }
+
+
+
+
 
         }
 
