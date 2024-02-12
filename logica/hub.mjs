@@ -18501,7 +18501,7 @@ const calendarios_compartidos = async (entrada, salida) => {
                     const estructuraEVENTO = {
                         start: fechaInicio,
                         end: fechaFin,
-                        summary: 'Bloqueo permanente',
+                        summary: 'Bloqueo permanente en casavitini.com',
                         description: 'Bloqueo permanente aplicado al ' + apartamentoUI
                     }
                     eventos.push(estructuraEVENTO)
@@ -18538,7 +18538,7 @@ const calendarios_compartidos = async (entrada, salida) => {
                     const estructuraEVENTO = {
                         start: DateTime.fromISO(fechaEntradaBloqueo_ISO),
                         end: DateTime.fromISO(fechaSalidaBloqueo_ISO),
-                        summary: 'Bloqueo temporal',
+                        summary: 'Bloqueo temporal en casavitini.com',
                         description: 'Bloqueo temporal aplicado al ' + apartamentoUI
                     }
                     eventos.push(estructuraEVENTO)
@@ -18580,7 +18580,7 @@ const calendarios_compartidos = async (entrada, salida) => {
                             const estructuraEVENTO = {
                                 start: DateTime.fromISO(fechaEntrada_ISO),
                                 end: DateTime.fromISO(fechaSalida_ISO),
-                                summary: 'Apartamento reservado: ' + apartamentoUI,
+                                summary: 'Apartamento reservado en casavitini.com: ' + apartamentoUI,
                                 description: 'Apartamento en reserva: ' + reservaUID
                             }
                             eventos.push(estructuraEVENTO)
@@ -18611,7 +18611,7 @@ const calendarios_compartidos = async (entrada, salida) => {
 
             const exportarCalendario_ = await exportarClendario(eventos)
             const icalData = exportarCalendario_
-            salida.attachment('eventos.ical');
+            salida.attachment('eventos.ics');
             salida.send(icalData);
 
 

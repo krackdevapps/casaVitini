@@ -28,7 +28,7 @@ process.on('uncaughtException', (error) => {
 
 // Instancia express
 const app = express()
-app.use(controlHttps);
+//app.use(controlHttps);
 
 app.set('views', './ui/constructor');
 app.set('view engine', 'ejs');

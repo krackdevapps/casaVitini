@@ -19,12 +19,14 @@ const exportarClendario = async (eventos) => {
         }
     ];
     eventos.forEach(evento => {
-        cal.createEvent({
+  cal.createEvent({
             start: evento.start,
             end: evento.end,
             summary: evento.summary,
             description: evento.description
         });
+        
+
     });
     return cal.toString();
 }
