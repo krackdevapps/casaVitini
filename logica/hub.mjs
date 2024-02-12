@@ -18536,8 +18536,8 @@ const calendarios_compartidos = async (entrada, salida) => {
                     const fechaSalidaBloqueo_ISO = detalleDelBloqueo.salida
 
                     const estructuraEVENTO = {
-                        start:  DateTime.fromISO(fechaEntradaBloqueo_ISO),
-                        end:  DateTime.fromISO(fechaSalidaBloqueo_ISO),
+                        start: DateTime.fromISO(fechaEntradaBloqueo_ISO),
+                        end: DateTime.fromISO(fechaSalidaBloqueo_ISO),
                         summary: 'Bloqueo temporal',
                         description: 'Bloqueo temporal aplicado al ' + apartamentoUI
                     }
@@ -18570,10 +18570,31 @@ const calendarios_compartidos = async (entrada, salida) => {
                     FROM "reservaApartamentos" 
                     WHERE reserva = $1 AND apartamento = $2;`
                     const resuelveApartamento = await conexion.query(consultaApartamentoEnReserva, [reservaUID, apartamentoIDV])
+                    // console.log("resuelveApartamento", resuelveApartamento.rows)
+                    // Aqui esta el error
+
+                    const apartamentosDeLaReserva = resuelveApartamento.rows
+                    for (const apartamentos of apartamentosDeLaReserva) {
+                        if (apartamentos.apartamento === apartamentoIDV) {
+
+                            const estructuraEVENTO = {
+                                start: DateTime.fromISO(fechaEntrada_ISO),
+                                end: DateTime.fromISO(fechaSalida_ISO),
+                                summary: 'Apartamento reservado: ' + apartamentoUI,
+                                description: 'Apartamento en reserva: ' + reservaUID
+                            }
+                            eventos.push(estructuraEVENTO)
+                        }
+
+                    }
+
+
                     if (resuelveApartamento.rows === 1) {
+                        // console.log("resuelveApartamento", resuelveApartamento.rows, "RESERVA SELECIONADA")
+
                         const evento = {
-                            start:  DateTime.fromISO(fechaEntrada_ISO),
-                            end:  DateTime.fromISO(fechaSalida_ISO),
+                            start: DateTime.fromISO(fechaEntrada_ISO),
+                            end: DateTime.fromISO(fechaSalida_ISO),
                             sumario: "Reserva " + reservaUID,
                             descripcion: "Reserva en CasaVitini del " + apartamentoUI
                         }
@@ -18581,10 +18602,10 @@ const calendarios_compartidos = async (entrada, salida) => {
                     }
                 }
 
-        
 
 
-              
+
+
 
             }
 
