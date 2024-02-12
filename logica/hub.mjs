@@ -18491,7 +18491,7 @@ const calendarios_compartidos = async (entrada, salida) => {
             FROM "bloqueosApartamentos" 
             WHERE 
             "tipoBloqueo" = $1 AND
-            apartamento = $4;`
+            apartamento = $2;`
             const resuelveBloqueosPermanentes = await conexion.query(consultaBloqueosPermanentes, [bloqueoPermanente, apartamentoIDV])
             const bloqueosPermamentes = resuelveBloqueosPermanentes.rows
             const eventos = []
@@ -18507,7 +18507,7 @@ const calendarios_compartidos = async (entrada, salida) => {
                     eventos.push(estructuraEVENTO)
                 }
             } else {
-                const bloqueoTemporal = "temporal"
+                const bloqueoTemporal = "rangoTemporal"
 
                 const apartamenosBloqueadosTemporalmente = `
                 SELECT 
@@ -18517,8 +18517,8 @@ const calendarios_compartidos = async (entrada, salida) => {
                 FROM "bloqueosApartamentos" 
                 WHERE 
                 "tipoBloqueo" = $1 AND
-                entrada <= $2::DATE AND
-                salida >= $3::DATE;`
+                entrada <= $3::DATE AND
+                salida >= $2::DATE;`
                 const datosConsultaBloqueos = [
                     bloqueoTemporal,
                     fechaActual_ISO,
@@ -18528,6 +18528,7 @@ const calendarios_compartidos = async (entrada, salida) => {
                     .query(apartamenosBloqueadosTemporalmente, datosConsultaBloqueos)
 
                 const bloqueosTemporales = resuelveBloqueosTemporales.rows
+                console.log("bloqueosTemporales", bloqueosTemporales)
 
                 for (const detalleDelBloqueo of bloqueosTemporales) {
 
@@ -18537,8 +18538,8 @@ const calendarios_compartidos = async (entrada, salida) => {
                     const estructuraEVENTO = {
                         start:  DateTime.fromISO(fechaEntradaBloqueo_ISO),
                         end:  DateTime.fromISO(fechaSalidaBloqueo_ISO),
-                        summary: 'Bloqueo permanente',
-                        description: 'Bloqueo permanente aplicado al ' + apartamentoUI
+                        summary: 'Bloqueo temporal',
+                        description: 'Bloqueo temporal aplicado al ' + apartamentoUI
                     }
                     eventos.push(estructuraEVENTO)
 
@@ -18547,27 +18548,18 @@ const calendarios_compartidos = async (entrada, salida) => {
                 }
 
 
-
-
-
-
-
-
-
-
-                const reservasEncontradas = []
                 const consultaReservas = `
                 SELECT 
                 reserva,
                 to_char(entrada, 'YYYY-MM-DD') as "entrada", 
-                to_char(salida, 'YYYY-MM-DD') as "salida",
+                to_char(salida, 'YYYY-MM-DD') as "salida"
                 FROM reservas 
                 WHERE 
-                entrada < $1::DATE AND
-                salida > $2::DATE    
+                entrada < $2::DATE AND
+                salida > $1::DATE    
                 AND "estadoReserva" <> 'cancelada';`
 
-                const resuelveReservas = await conexion.query(consultaReservas, [fechaSalida_ISO, fechaEntrada_ISO])
+                const resuelveReservas = await conexion.query(consultaReservas, [fechaActual_ISO, fechaLimite])
                 for (const detallesReserva of resuelveReservas.rows) {
                     const reservaUID = detallesReserva.reserva
                     const fechaEntrada_ISO = detallesReserva.entrada
@@ -18580,40 +18572,26 @@ const calendarios_compartidos = async (entrada, salida) => {
                     const resuelveApartamento = await conexion.query(consultaApartamentoEnReserva, [reservaUID, apartamentoIDV])
                     if (resuelveApartamento.rows === 1) {
                         const evento = {
-                            fechaInicioEvento_ISO: fechaEntrada_ISO,
-                            fechaSalidaEvento_USI: fechaSalida_ISO,
+                            start:  DateTime.fromISO(fechaEntrada_ISO),
+                            end:  DateTime.fromISO(fechaSalida_ISO),
                             sumario: "Reserva " + reservaUID,
                             descripcion: "Reserva en CasaVitini del " + apartamentoUI
                         }
-                        reservasEncontradas.push(evento)
-
+                        eventos.push(evento)
                     }
-
                 }
 
-                console.log("fechaActual_ISO", fechaActual_ISO)
-                console.log("fechaLimite", fechaLimite)
-                console.log("objetoFechas", objetoFechas)
+        
 
 
-                const fecha = {
-                    fechaEntrada_ISO: fechaEntrada_ISO,
-                    fechaSalida_ISO: fechaSalida_ISO
-                }
-                //const resuelveADP = await apartamentosDisponiblesPublico(fecha)
-
-
-
-
-
-                const exportarCalendario_ = await exportarClendario()
-                const icalData = exportarCalendario_
-                salida.attachment('eventos.ical');
-                salida.send(icalData);
+              
 
             }
 
-
+            const exportarCalendario_ = await exportarClendario(eventos)
+            const icalData = exportarCalendario_
+            salida.attachment('eventos.ical');
+            salida.send(icalData);
 
 
 

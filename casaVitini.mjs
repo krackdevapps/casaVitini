@@ -93,7 +93,7 @@ const controlBaseDeDatos = async (entrada, salida, next) => {
   }
 };
 app.use('/componentes', express.static(path.join('./ui/componentes')));
-app.use('/.well-known/acme-challenge/', express.static('/var/lib/letsencrypt'));
+//app.use('/.well-known/acme-challenge/', express.static('/var/lib/letsencrypt'));
 
 app.use(controlBaseDeDatos)
 app.use(session({
