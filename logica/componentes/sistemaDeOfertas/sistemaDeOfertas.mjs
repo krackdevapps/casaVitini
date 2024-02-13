@@ -21,7 +21,6 @@ const sistemaDeOfertas = async (reserva) => {
     }
     reserva.fechas.fechaActualProcesada_ISO = fechaActualTZ
 
-
     const contenedorOferta = []
     let descuentoTotal = new Decimal(0)
     const ofertasPorNumeroDeApartamentos = await porNumeroDeApartamentos(reserva)
