@@ -13125,7 +13125,7 @@ const administracion = {
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
                 marcoElastico.style.gap = "4px"
                 const transaccion = {
-                    zona: "administracion/configuracion/obtenerConfiguracion"
+                    zona: "administracion/configuracion/zonaHoraria/obtenerConfiguracion"
                 }
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
@@ -13197,12 +13197,12 @@ const administracion = {
                     const botonGuardarCambios = document.createElement("div")
                     botonGuardarCambios.classList.add("administracion_configuracion_boton")
                     botonGuardarCambios.innerText = "Guardar cambios"
-                    botonGuardarCambios.addEventListener("click", casaVitini.administracion.configuracion.guardarCambios)
+                    botonGuardarCambios.addEventListener("click", casaVitini.administracion.configuracion.zonaHoraria.guardarCambios)
                     contenedorBotones.appendChild(botonGuardarCambios)
 
                     const botonCancelarCambios = document.createElement("div")
                     botonCancelarCambios.classList.add("administracion_configuracion_boton")
-                    botonCancelarCambios.addEventListener("click", casaVitini.administracion.configuracion.cancelarCambios)
+                    botonCancelarCambios.addEventListener("click", casaVitini.administracion.configuracion.zonaHoraria.cancelarCambios)
                     botonCancelarCambios.innerText = "Cancelar cambios"
                     contenedorBotones.appendChild(botonCancelarCambios)
 
@@ -13246,7 +13246,7 @@ const administracion = {
             guardarCambios: async () => {
                 const campos = [...document.querySelectorAll("[campo]")]
                 const transacccion = {
-                    zona: "administracion/configuracion/guardarConfiguracion"
+                    zona: "administracion/configuracion/zonaHoraria/guardarConfiguracion"
                 }
 
                 campos.map((campo) => {
@@ -13258,7 +13258,7 @@ const administracion = {
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
 
-
+                console.log("respiestaServidor", respuestaServidor)
                 if (respuestaServidor?.error) {
                     casaVitini.administracion.configuracion.cancelarCambios()
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -13280,7 +13280,7 @@ const administracion = {
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
                 marcoElastico.style.gap = "4px"
                 const transaccion = {
-                    zona: "administracion/configuracion/obtenerConfiguracion"
+                    zona: "administracion/configuracion/horaDeEntradaSalida/obtenerConfiguracion"
                 }
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
@@ -13293,8 +13293,6 @@ const administracion = {
                     const configuracionGlobal = respuestaServidor?.ok
 
                     const zonaHoraria = configuracionGlobal.zonaHoraria
-
-                    const listaZonasHorarias = respuestaServidor.listaZonasHorarias
 
                     const horaEntradaTZ = configuracionGlobal.horaEntradaTZ
                     const horaSalidaTZ = configuracionGlobal.horaSalidaTZ
@@ -13322,25 +13320,7 @@ const administracion = {
                     descripcionConfiguracion.innerText = "La zona horaria local se aplica sobre el reloj UTC para que pueda ver la hora y las fechas en la zona horaria. Por ejemplo, en el apartado de Situación, en la renderización de los calendarios y etc. La zona horaria debe de configurarse con la misma zona horaria de las instalaciones físicas de pernoctacion de Casa Vitini. Entonces el sistema de Casa Vitini puede implantarse en cualquier ordenador sin importar su reloj en zona horaria local. Es fundamental que la zona horaria del sistema sea la misma que la zona horaria de las instalaciones físicas de pernoctación de Casa Vitini. El motivo de esto es que los pernoctante puedan obtener calendarios locales a la zona horaria de Casa Vitini y realizar las reservas en zona horaria local de Casa Vitini."
                     bloqueConfiguracion.appendChild(descripcionConfiguracion)
 
-                    const listaZonaHoraria = document.createElement("select")
-                    listaZonaHoraria.classList.add("administracion_configuracion_valorConfiguracionInput")
-                    listaZonaHoraria.setAttribute("campo", "zonaHoraria")
-                    listaZonaHoraria.setAttribute("valorInicial", zonaHoraria)
-                    listaZonaHoraria.addEventListener("input", casaVitini.administracion.configuracion.controlCampo)
-
-                    for (const zonaHorariaIterada of listaZonasHorarias) {
-
-                        const zonaHorariaUI = zonaHorariaIterada.replaceAll("/", " / ").replaceAll("_", " ")
-                        const zonaHorariaOpcion = document.createElement("option");
-                        zonaHorariaOpcion.text = zonaHorariaUI;
-                        zonaHorariaOpcion.value = zonaHorariaIterada;
-                        if (zonaHoraria === zonaHorariaIterada) {
-                            zonaHorariaOpcion.selected = true;
-                        }
-                        listaZonaHoraria.add(zonaHorariaOpcion);
-
-                    }
-                    bloqueConfiguracion.appendChild(listaZonaHoraria)
+            
                     contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
                     // Hora de entrada TZ
                     bloqueConfiguracion = document.createElement("div")
@@ -13359,7 +13339,7 @@ const administracion = {
                     let valorConfiguracion = document.createElement("input")
                     valorConfiguracion.setAttribute("campo", "horaEntradaTZ")
                     valorConfiguracion.setAttribute("valorInicial", horaEntradaTZ)
-                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.controlCampo)
+                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
                     valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
                     valorConfiguracion.value = horaEntradaTZ
                     valorConfiguracion.placeholder = "Selecciona una hora de entrada, por ejemplo 17:00"
@@ -13384,7 +13364,7 @@ const administracion = {
 
                     valorConfiguracion = document.createElement("input")
                     valorConfiguracion.setAttribute("campo", "horaSalidaTZ")
-                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.controlCampo)
+                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
                     valorConfiguracion.setAttribute("valorInicial", horaSalidaTZ)
                     valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
                     valorConfiguracion.value = horaSalidaTZ
@@ -13401,12 +13381,12 @@ const administracion = {
                     const botonGuardarCambios = document.createElement("div")
                     botonGuardarCambios.classList.add("administracion_configuracion_boton")
                     botonGuardarCambios.innerText = "Guardar cambios"
-                    botonGuardarCambios.addEventListener("click", casaVitini.administracion.configuracion.guardarCambios)
+                    botonGuardarCambios.addEventListener("click", casaVitini.administracion.configuracion.horaDeEntradaSalida.guardarCambios)
                     contenedorBotones.appendChild(botonGuardarCambios)
 
                     const botonCancelarCambios = document.createElement("div")
                     botonCancelarCambios.classList.add("administracion_configuracion_boton")
-                    botonCancelarCambios.addEventListener("click", casaVitini.administracion.configuracion.cancelarCambios)
+                    botonCancelarCambios.addEventListener("click", casaVitini.administracion.configuracion.horaDeEntradaSalida.cancelarCambios)
                     botonCancelarCambios.innerText = "Cancelar cambios"
                     contenedorBotones.appendChild(botonCancelarCambios)
 
@@ -13450,7 +13430,7 @@ const administracion = {
             guardarCambios: async () => {
                 const campos = [...document.querySelectorAll("[campo]")]
                 const transacccion = {
-                    zona: "administracion/configuracion/guardarConfiguracion"
+                    zona: "administracion/configuracion/horaDeEntradaSalida/guardarConfiguracion"
                 }
 
                 campos.map((campo) => {

@@ -8936,9 +8936,7 @@ const puerto = async (entrada, salida) => {
                         X: async () => {
                             try {
                                 const zonaHoraria = entrada.body.zonaHoraria
-                                const horaEntradaTZ = entrada.body.horaEntradaTZ
-                                const horaSalidaTZ = entrada.body.horaSalidaTZ
-
+     
                                 const filtroZonaHoraria = /^[a-zA-Z0-9\/_\-+]+$/;
                                 const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;
 
@@ -8947,26 +8945,8 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
 
-                                if (!horaEntradaTZ || !filtroHora.test(horaEntradaTZ)) {
-                                    const error = "La hora de entrada debe de ser 00:00 y no puede ser superior a 23:59, si quieres poner la hora por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35"
-                                    throw new Error(error)
-                                }
 
-                                if (!horaSalidaTZ || !filtroHora.test(horaSalidaTZ)) {
-                                    const error = "el campo 'horaEntradaTZ' debe de ser 00:00 y no puede ser superior a 23:59,si quieres poner la hora por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35"
-                                    throw new Error(error)
-                                }
-
-                                // Parsear las cadenas de hora a objetos DateTime de Luxon
-                                const horaEntradaControl = DateTime.fromFormat(horaEntradaTZ, 'HH:mm');
-                                const horaSalidaControl = DateTime.fromFormat(horaSalidaTZ, 'HH:mm');
-
-                                // Comparar las horas
-                                if (horaSalidaControl >= horaEntradaControl) {
-                                    const error = "La hora de entrada no puede ser anterior o igual a la hora de salida. Los pernoctantes primero salen del apartamento a su hora de salida y luego los nuevos pernoctantes entran en el apartamento a su hora de entrada. Por eso la hora de entrada tiene que ser mas tarde que al hora de salida. Por que primero salen del apartamento ocupado, el apartmento entonces pasa a estar libre y luego entran los nuevo pernoctantes al apartamento ahora libre de los anteriores pernoctantes."
-                                    throw new Error(error)
-                                }
-
+        
 
                                 // Validar que la zona horarai exista
                                 const validarZonaHoraria = (zonaHorariaAValidar) => {
@@ -8991,18 +8971,14 @@ const puerto = async (entrada, salida) => {
 
                                 await conexion.query('BEGIN'); // Inicio de la transacción
                                 const actualizarConfiguracionGlobal = `
-                            UPDATE "configuracionGlobal"
-                            SET
-                              "zonaHoraria" = $1,
-                              "horaEntradaTZ" = $2,
-                              "horaSalidaTZ" = $3
-                            WHERE
-                              "configuracionUID" = $4;
-                            `
+                                        UPDATE "configuracionGlobal"
+                                        SET
+                                          "zonaHoraria" = $1,
+                                        WHERE
+                                          "configuracionUID" = $2;
+                                        `
                                 const nuevaConfiguracion = [
                                     zonaHoraria,
-                                    horaEntradaTZ,
-                                    horaSalidaTZ,
                                     "zonaHoraria"
                                 ]
                                 const consultaValidarApartamento = await conexion.query(actualizarConfiguracionGlobal, nuevaConfiguracion)
@@ -9054,11 +9030,10 @@ const puerto = async (entrada, salida) => {
                                     const error = "No hay configuraciones globales"
                                     throw new Error(error)
                                 }
-                                const listaZonasHorarias = zonasHorarias()
+
 
                                 const ok = {
-                                    ok: resuelveConfiguracionGlobal.rows[0],
-                                    listaZonasHorarias: listaZonasHorarias
+                                    ok: resuelveConfiguracionGlobal.rows[0]
                                 }
                                 salida.json(ok)
 
@@ -9080,17 +9055,11 @@ const puerto = async (entrada, salida) => {
                         },
                         X: async () => {
                             try {
-                                const zonaHoraria = entrada.body.zonaHoraria
                                 const horaEntradaTZ = entrada.body.horaEntradaTZ
                                 const horaSalidaTZ = entrada.body.horaSalidaTZ
 
-                                const filtroZonaHoraria = /^[a-zA-Z0-9\/_\-+]+$/;
                                 const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;
 
-                                if (!zonaHoraria || !filtroZonaHoraria.test(zonaHoraria)) {
-                                    const error = "el campo 'zonaHorarial' solo puede ser letras minúsculas, mayúsculas, guiones bajos y medios, signo mac y numeros"
-                                    throw new Error(error)
-                                }
 
                                 if (!horaEntradaTZ || !filtroHora.test(horaEntradaTZ)) {
                                     const error = "La hora de entrada debe de ser 00:00 y no puede ser superior a 23:59, si quieres poner la hora por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35"
@@ -9111,41 +9080,19 @@ const puerto = async (entrada, salida) => {
                                     const error = "La hora de entrada no puede ser anterior o igual a la hora de salida. Los pernoctantes primero salen del apartamento a su hora de salida y luego los nuevos pernoctantes entran en el apartamento a su hora de entrada. Por eso la hora de entrada tiene que ser mas tarde que al hora de salida. Por que primero salen del apartamento ocupado, el apartmento entonces pasa a estar libre y luego entran los nuevo pernoctantes al apartamento ahora libre de los anteriores pernoctantes."
                                     throw new Error(error)
                                 }
-
-
-                                // Validar que la zona horarai exista
-                                const validarZonaHoraria = (zonaHorariaAValidar) => {
-                                    let resultadoFinal = "no"
-                                    const listaZonasHorarias = zonasHorarias()
-
-                                    for (const zonaHoraria of listaZonasHorarias) {
-
-                                        if (zonaHoraria === zonaHorariaAValidar) {
-                                            resultadoFinal = "si"
-                                        }
-                                    }
-
-                                    return resultadoFinal
-                                }
-
-                                if (validarZonaHoraria(zonaHoraria) === "no") {
-                                    const error = "el campo 'zonaHorariaGlobal' no existe"
-                                    throw new Error(error)
-                                }
+              
 
 
                                 await conexion.query('BEGIN'); // Inicio de la transacción
                                 const actualizarConfiguracionGlobal = `
-                            UPDATE "configuracionGlobal"
-                            SET
-                              "zonaHoraria" = $1,
-                              "horaEntradaTZ" = $2,
-                              "horaSalidaTZ" = $3
-                            WHERE
-                              "configuracionUID" = $4;
-                            `
+                                  UPDATE "configuracionGlobal"
+                                  SET
+                                    "horaEntradaTZ" = $1,
+                                    "horaSalidaTZ" = $2
+                                  WHERE
+                                    "configuracionUID" = $3;
+                                  `
                                 const nuevaConfiguracion = [
-                                    zonaHoraria,
                                     horaEntradaTZ,
                                     horaSalidaTZ,
                                     "zonaHoraria"
