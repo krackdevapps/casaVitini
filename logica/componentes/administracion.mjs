@@ -1414,7 +1414,7 @@ const administracion = {
                         diaSeleccionadoEntrada = fechaEntradaSelecionda_array[0]
                         mesSeleccionadoEntrada = fechaEntradaSelecionda_array[1]
                         anoSeleccionadoEntrada = fechaEntradaSelecionda_array[2]
-                        
+
 
                     } else {
                         let error = "Selecciona una fecha de entrada"
@@ -1427,10 +1427,10 @@ const administracion = {
                     let anoSeleccionadoSalida
                     if (fechaSalidaSelecionda) {
                         const fechaSalidaSelecionda_array = fechaSalidaSelecionda.split("/")
-                        diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]                     
+                        diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]
                         mesSeleccionadoSalida = fechaSalidaSelecionda_array[1]
                         anoSeleccionadoSalida = fechaSalidaSelecionda_array[2]
-                       
+
                     } else {
                         let error = "Selecciona una fecha de salida"
                         return casaVitini.ui.vistas.advertenciaInmersiva(error)
@@ -6638,7 +6638,7 @@ const administracion = {
                             botonCrearPagoManual.innerText = "Crear pago manual"
                             bloqueBotones.appendChild(botonCrearPagoManual)
 
-                            
+
 
                             const botonCerrar = document.createElement("div")
                             botonCerrar.classList.add("detallesReserva_transacciones_botonV1")
@@ -28713,8 +28713,14 @@ const administracion = {
             const mesRenderizado = Number(calendarioRenderizado.querySelector("[componente=mesReferencia]").getAttribute("mes"))
             const anoRenderizado = Number(calendarioRenderizado.querySelector("[componente=mesReferencia]").getAttribute("ano"))
             const granuladoURL = casaVitini.componentes.granuladorURL()
+            const contenedorSeguroParaParametros = granuladoURL.contenedorSeguroParaParametros
             const parametros = granuladoURL.parametros
             //const mesRenderizado = 
+
+            const instanciaUIDMes = casaVitini.componentes.codigoFechaInstancia()
+            calendarioRenderizado.querySelector(`[componente=marcoMes]`)
+                .setAttribute("instanciaUID", instanciaUIDMes)
+
 
             const selectorDiasRenderizados = calendarioRenderizado.querySelectorAll("[dia]")
             selectorDiasRenderizados.forEach((diaRenderizado) => {
@@ -28740,65 +28746,71 @@ const administracion = {
             contenedorCalendario.appendChild(contenedorCarga)
 
 
+            const contenedorCapas = {
+                capas: [],
+                capasCompuestas: {}
+            }
+            const parametrosURL = []
+            for (const conjunto of contenedorSeguroParaParametros) {
+                const par = conjunto.split(":")
+                const parametro = par[0]
+                const valor = par[1]
+                const estructuraURLParametro = `${parametro}:${valor}`
+                parametrosURL.push(estructuraURLParametro)
+
+                if (parametro === "capa") {
+                    const capaEnCamel = casaVitini.componentes.utilidades.cadenas.snakeToCamel(valor)
+                    contenedorCapas.capas.push(capaEnCamel)
+                }
+                if (parametro !== "fecha" && parametro !== "capa") {
+                    const parametroEnCamel = casaVitini.componentes.utilidades.cadenas.snakeToCamel(parametro)
+                    const composicionCapa = valor.split("=")
+                    contenedorCapas.capasCompuestas[parametroEnCamel] = composicionCapa
+                }
+            }
+
+            console.log("contenedorCapas", contenedorCapas)
+            console.log("parametrosURL", parametrosURL)
+            const soloCapasURL = []
+            for (const parDeParametro of parametrosURL) {
+                const parametro = parDeParametro.split(":")
+                if (parametro[0] !== "fecha") {
+                    soloCapasURL.push(parDeParametro)
+                }
+            }
 
             const calendario = {
                 tipo: "actual",
                 comando: "construyeObjeto",
                 instanciaUID: instanciaUID,
+                instanciaUIDMes: instanciaUIDMes
+
             }
             const calendarioResuelto = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
             const anoPresente = calendarioResuelto.ano
             const mesPresente = calendarioResuelto.mes
 
-            let parametrosURL = []
-            for (const [parametro, valor] of Object.entries(parametros)) {
-                const estructuraURLParametro = `${parametro}:${valor}`
-                if (parametro !== "fecha") {
-                    parametrosURL.push(estructuraURLParametro)
-
-                }
-            }
-            if (parametrosURL.length === 0) {
-
-                calendario.url = `fecha:${mesPresente}-${anoPresente}`
-            } else {
-
-
-                calendario.url = `fecha:${mesPresente}-${anoPresente}/` + parametrosURL.join("/")
-
-            }
+            console.log("soloCapasURL", soloCapasURL)
+            calendario.url = `fecha:${mesPresente}-${anoPresente}/${soloCapasURL.join("/")}`
+            console.log("calenadrio.url", calendario.url)
 
             if ((mesRenderizado !== mesPresente && anoRenderizado === anoPresente) || (anoRenderizado !== anoPresente)) {
-
                 // ADquitir la url actual, que puede ser diferente segun la capa
                 calendario.tipoRegistro = "crear"
                 casaVitini.administracion.calendario.controladorRegistros(calendario)
             } else {
                 // en el mdo dos siempre actualizar por is la url ha cambiado a selecionar una capa en hoy
-
                 calendario.tipoRegistro = "actualizar"
                 casaVitini.administracion.calendario.controladorRegistros(calendario)
             }
             await casaVitini.administracion.calendario.configuraMes(calendario)
 
-
-
-            if (parametros.capa) {
-                const capaURL = parametros.capa
-                const apartamentoIDVURL = parametros.apartamento
-
-                const capaCamelCase = casaVitini.componentes.utilidades.cadenas
-                    .snakeToCamel(capaURL)
-
-                const metadatos = {
-                    capaUID: capaCamelCase,
-                    capaContenido: apartamentoIDVURL,
-                    instanciaUID: instanciaUID
-                }
-                return casaVitini.administracion.calendario.capas(metadatos)
+            const metadatos = {
+                instanciaUID: instanciaUID,
+                contenedorCapas: contenedorCapas
             }
-
-
+            console.log("metadtos",metadatos)
+            return casaVitini.administracion.calendario.capas(metadatos)
 
 
 
