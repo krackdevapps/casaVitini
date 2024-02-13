@@ -8973,7 +8973,7 @@ const puerto = async (entrada, salida) => {
                                 const actualizarConfiguracionGlobal = `
                                         UPDATE "configuracionGlobal"
                                         SET
-                                          "zonaHoraria" = $1,
+                                          "zonaHoraria" = $1
                                         WHERE
                                           "configuracionUID" = $2;
                                         `
