@@ -1412,11 +1412,9 @@ const administracion = {
                     if (fechaEntradaSelecionda) {
                         const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
                         diaSeleccionadoEntrada = fechaEntradaSelecionda_array[0]
-                        diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
                         mesSeleccionadoEntrada = fechaEntradaSelecionda_array[1]
-                        mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
                         anoSeleccionadoEntrada = fechaEntradaSelecionda_array[2]
-                        anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
+                        
 
                     } else {
                         let error = "Selecciona una fecha de entrada"
@@ -1429,12 +1427,10 @@ const administracion = {
                     let anoSeleccionadoSalida
                     if (fechaSalidaSelecionda) {
                         const fechaSalidaSelecionda_array = fechaSalidaSelecionda.split("/")
-                        diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]
-                        diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
+                        diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]                     
                         mesSeleccionadoSalida = fechaSalidaSelecionda_array[1]
-                        mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
                         anoSeleccionadoSalida = fechaSalidaSelecionda_array[2]
-                        anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
+                       
                     } else {
                         let error = "Selecciona una fecha de salida"
                         return casaVitini.ui.vistas.advertenciaInmersiva(error)
@@ -1494,15 +1490,14 @@ const administracion = {
 
 
 
-
-
-                    const fechaEntradaFormado = `${diaSeleccionadoEntrada}/${mesSeleccionadoEntrada}/${anoSeleccionadoEntrada}`
-                    const fechaSalidaFormado = `${diaSeleccionadoSalida}/${mesSeleccionadoSalida}/${anoSeleccionadoSalida}`
+                    const fechaEntradaFormado = `${diaSeleccionadoEntrada.padStart(2, "0")}/${mesSeleccionadoEntrada.padStart(2, "0")}/${anoSeleccionadoEntrada}`
+                    const fechaSalidaFormado = `${diaSeleccionadoSalida.padStart(2, "0")}/${mesSeleccionadoSalida.padStart(2, "0")}/${anoSeleccionadoSalida}`
                     const transaccion = {
                         zona: "administracion/reservas/apartamentosDisponiblesAdministracion",
                         entrada: fechaEntradaFormado,
                         salida: fechaSalidaFormado
                     }
+                    console.log("transaccion", transaccion)
 
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -1511,6 +1506,7 @@ const administracion = {
                     }
 
                     if (respuestaServidor?.error) {
+                        instanciaRenderizada.querySelector("[componente=advertenciaIntegrada]").remove()
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
@@ -6641,6 +6637,8 @@ const administracion = {
                             })
                             botonCrearPagoManual.innerText = "Crear pago manual"
                             bloqueBotones.appendChild(botonCrearPagoManual)
+
+                            
 
                             const botonCerrar = document.createElement("div")
                             botonCerrar.classList.add("detallesReserva_transacciones_botonV1")
@@ -13844,7 +13842,6 @@ const administracion = {
                                             calendarioUID: uid
                                         }
                                         const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                                        console.log(">>>", respuestaServidor)
                                         document.querySelectorAll(`[instanciaUID="${instanciaUID}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`).forEach((pantalla) => {
                                             document.body.style.removeProperty("overflow")
                                             pantalla.remove()
@@ -14160,7 +14157,6 @@ const administracion = {
                                 document.querySelectorAll("[campo]").forEach((campo) => {
                                     const valorCampo = campo.value
                                     const valorInicial = campo.getAttribute("valorInicial")
-                                    console.log(">>> ", valorCampo, valorInicial)
                                     if (valorCampo !== valorInicial) {
                                         campo.setAttribute("valorInicial", valorCampo)
                                     }

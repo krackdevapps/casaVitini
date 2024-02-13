@@ -2,7 +2,6 @@ import { DateTime } from "luxon";
 
 const verificarRangoContenidoAirbnb = (rangoInicio, rangoFin, rangoInicioComparar, rangoFinComparar) => {
     const formatoFecha = 'yyyy-MM-dd';
-    console.log(">", rangoInicio, rangoFin, rangoInicioComparar, rangoFinComparar)
 
     const inicio = DateTime.fromFormat(rangoInicio, formatoFecha);
     const fin = DateTime.fromFormat(rangoFin, formatoFecha);

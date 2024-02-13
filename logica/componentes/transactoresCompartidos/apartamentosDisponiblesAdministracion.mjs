@@ -3,36 +3,16 @@ import { conexion } from '../db.mjs';
 import { verificarRangoContenidoAirbnb } from './calendariosSincronizados/airbnb/verificarRangoContenidoAirbnb.mjs';
 import { sincronizarCalendariosAirbnbPorIDV } from './calendariosSincronizados/airbnb/sincronizarCalendariosAirbnbPorIDV.mjs';
 import { apartamentosOcupadosAirbnb } from './calendariosSincronizados/airbnb/apartamentosOcudaosAirbnb.mjs';
+import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
 
 
 const apartamentosDisponiblesAdministracion = async (fecha) => {
-    const fechaEntrada = fecha.fechaEntrada
-    const fechaSalida = fecha.fechaSalida
+    const fechaEntrada_ISO = fecha.fechaEntrada_ISO
+    const fechaSalida_ISO = fecha.fechaSalida_ISO
     try {
-        const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
-        if (!filtroFecha.test(fechaEntrada)) {
-            const error = "el formato fecha de entrada no esta correctametne formateado"
-            throw new Error(error)
-        }
 
-        if (!filtroFecha.test(fechaSalida)) {
-            const error = "el formato fecha de salida no esta correctametne formateado"
-            throw new Error(error)
-
-        }
-        // Formateo fecha mucho ojo que los anglosajones tiene el formato mes/dia/ano y queremos usar dia/mes/ano y el objeto date de javascript por cojones usa ese formato
-        const desgloseEntrada = fechaEntrada.split("/")
-        const diaEntrada = desgloseEntrada[0]
-        const mesEntrada = desgloseEntrada[1]
-        const anoEntrada = desgloseEntrada[2]
-        const fechaEntrada_ISO = `${anoEntrada}-${mesEntrada}-${diaEntrada}`
-
-        const desgloseSalida = fechaSalida.split("/")
-        const diaSalida = desgloseSalida[0]
-        const mesSalida = desgloseSalida[1]
-        const anoSalida = desgloseSalida[2]
-        const fechaSalida_ISO = `${anoSalida}-${mesSalida}-${diaSalida}`
-
+        await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
+        await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
 
         const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO); // El formato es día/mes/ano
         const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO);
@@ -146,8 +126,6 @@ const apartamentosDisponiblesAdministracion = async (fecha) => {
             const elementoParaBorrar = apartamentosDisponiblesFinal.indexOf(apartamentoIDV);
             if (elementoParaBorrar !== -1) {
                 apartamentosDisponiblesFinal.splice(elementoParaBorrar, 1);
-                console.log("Cadena eliminada:", apartamentoIDV);
-                console.log("Nuevo array:", apartamentosDisponiblesFinal);
                 apartamentosNoDisponiblesArray.push(apartamentoIDV)
 
             }

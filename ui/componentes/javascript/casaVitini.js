@@ -6302,7 +6302,6 @@ const casaVitini = {
 
                 const servidor = await fetch(puerto, peticion);
                 const respuestaServidor = await servidor.json();
-                console.log("respuestaServidor", respuestaServidor)
                 if (!respuestaServidor) {
                     return casaVitini.componentes.errorUI()
                 }
@@ -6503,7 +6502,6 @@ const casaVitini = {
             }
         },
         ocultaMenuGlobalFlotante: (e) => {
-            console.log(">>>")
             const origen = e.target?.id
             console.log("origen", origen)
             if (origen !== "botonMenuResponsivo") {

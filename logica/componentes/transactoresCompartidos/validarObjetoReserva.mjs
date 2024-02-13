@@ -108,6 +108,10 @@ const validarObjetoReserva = async (reserva) => {
             throw new Error(error)
         }
 
+
+        // Validar que las reservas no sean de mas de un año por lo tanto la fecha de salida no puede ser superior aun año del dia actual
+
+
         // Comprobar que existen los datos de fecha en formato number
         const alojamiento = reserva?.alojamiento
         if (!alojamiento) {

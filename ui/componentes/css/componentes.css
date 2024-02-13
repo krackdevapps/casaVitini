@@ -8213,7 +8213,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     flex-wrap: nowrap;
     padding: 5px;
-    border-radius: 16px;
+    border-radius: 7px;
     gap: 4px;
     align-content: center;
     align-items: stretch;
@@ -8297,9 +8297,11 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     padding: 10px;
     border-radius: 11px;
-
-    background: rgba(255, 255, 255, 0.6);
-
+    text-decoration: none;
+    cursor: default;
+   /* background: rgba(255, 255, 255, 0.6);*/
+   user-select: none;
+   -webkit-user-select: none;
 }
 
 .detallesReserva_transacciones_botonV1:hover {
@@ -8414,9 +8416,10 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: stretch;
     gap: 0px;
     text-decoration: none;
+    cursor: default;
+
     color: black;
     transition: background 250ms linear;
-    cursor: default;
 
 }
 
@@ -10510,7 +10513,7 @@ grid-template-columns: 0.5fr 1.5fr;
     margin: 0px;
     padding: 10px;
     background: rgba(255, 255, 255, 0.7);
-    border-radius: 15px;
+    border-radius: 13px;
     cursor: default;
     text-decoration: none;
     color: black;
@@ -10588,7 +10591,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     gap: 6px;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
 .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual .botonCalendario {

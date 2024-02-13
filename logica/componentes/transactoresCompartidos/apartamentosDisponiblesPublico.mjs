@@ -1,8 +1,10 @@
+import { DateTime } from 'luxon';
 import { conexion } from '../db.mjs';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
 import { apartamentosOcupadosAirbnb } from './calendariosSincronizados/airbnb/apartamentosOcudaosAirbnb.mjs';
 import { sincronizarCalendariosAirbnbPorIDV } from './calendariosSincronizados/airbnb/sincronizarCalendariosAirbnbPorIDV.mjs';
 import { verificarRangoContenidoAirbnb } from './calendariosSincronizados/airbnb/verificarRangoContenidoAirbnb.mjs';
+import { codigoZonaHoraria } from './codigoZonaHoraria.mjs';
 
 const apartamentosDisponiblesPublico = async (fecha) => {
 
@@ -13,13 +15,34 @@ const apartamentosDisponiblesPublico = async (fecha) => {
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
 
-        const fechaEntradaReserva_Objeto = new Date(fechaEntrada_ISO); // El formato es día/mes/ano
-        const fechaSalidaReserva_Objeto = new Date(fechaSalida_ISO);
+        const fechaEntradaReserva_Objeto = DateTime.fromISO(fechaEntrada_ISO); // El formato es día/mes/ano
+        const fechaSalidaReserva_Objeto =  DateTime.fromISO(fechaSalida_ISO);
 
         if (fechaEntradaReserva_Objeto >= fechaSalidaReserva_Objeto) {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
             throw new Error(error)
         }
+
+
+        // Validar con limite de un año para las reservas
+        
+        const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
+        const tiempoZH = DateTime.now().setZone(zonaHoraria);
+        const fechaLimite_Objeto = tiempoZH.plus({ days: 365 }).toISODate();
+
+        const fechaLimite_UTC_Objeto = DateTime.fromISO(fechaLimite_Objeto)
+
+        console.log("-----> limite:", fechaLimite_UTC_Objeto.toISODate(), "salida", fechaSalidaReserva_Objeto.toISODate())
+        const diferenciaEnDias = fechaLimite_UTC_Objeto.diff(fechaSalidaReserva_Objeto, 'days').toObject().days;
+
+        console.log("-----> diferenciaEnDias:", diferenciaEnDias)
+
+        if (diferenciaEnDias <= 0) {
+            const error = "Como maximo las reservas no pueden superar el año a partir de hoy. Casa Vitini solo acepta reservas a un año maximo. Gracias."
+            throw new Error(error)
+        }
+
+        
 
         const apartamentosDisponiblesArray = []
         const zonaBloqueoPublico = "publico"
@@ -124,8 +147,6 @@ const apartamentosDisponiblesPublico = async (fecha) => {
             const elementoParaBorrar = apartamentosDisponiblesFinal.indexOf(apartamentoIDV);
             if (elementoParaBorrar !== -1) {
                 apartamentosDisponiblesFinal.splice(elementoParaBorrar, 1);
-                console.log("Cadena eliminada:", apartamentoIDV);
-                console.log("Nuevo array:", apartamentosDisponiblesFinal);
                 apartamentosNoDisponiblesArray.push(apartamentoIDV)
 
             }

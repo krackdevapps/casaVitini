@@ -1556,7 +1556,6 @@ const puerto = async (entrada, salida) => {
                     await mutex.acquire();
 
                     try {
-
                         const reserva = entrada.body.reserva
                         await conexion.query('BEGIN');
                         const resuelveValidacionObjetoReserva = await validarObjetoReserva(reserva);
@@ -1717,7 +1716,6 @@ const puerto = async (entrada, salida) => {
                             fechaEntrada_ISO: fechaEntrada_ISO,
                             fechaSalida_ISO: fechaSalida_ISO
                         }
-
                         await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
                         const resuelveADP = await apartamentosDisponiblesPublico(fecha)
                         const apartamentosDisponiblesEntonctrados = resuelveADP.apartamentosDisponibles
@@ -5070,9 +5068,13 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
 
                         }
+
+                        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)).fecha_ISO
+                        const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida)).fecha_ISO
+
                         const fecha = {
-                            fechaEntrada: fechaEntrada,
-                            fechaSalida: fechaSalida
+                            fechaEntrada_ISO: fechaEntrada_ISO,
+                            fechaSalida_ISO: fechaSalida_ISO
                         }
 
                         const transactor = await apartamentosDisponiblesAdministracion(fecha)
@@ -5329,8 +5331,8 @@ const puerto = async (entrada, salida) => {
                         // valida reserva y obten fechas
                         const validacionReserva = `
                         SELECT 
-                        to_char(entrada, 'DD/MM/YYYY') as entrada, 
-                        to_char(salida, 'DD/MM/YYYY') as salida,
+                        to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
+                        to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
                         "estadoReserva", 
                         "estadoPago"
                         FROM reservas
@@ -5348,8 +5350,8 @@ const puerto = async (entrada, salida) => {
 
 
 
-                        let fechaEntrada = resuelveValidacionReserva.rows[0].entrada
-                        let fechaSalida = resuelveValidacionReserva.rows[0].salida
+                        const fechaEntrada_ISO = resuelveValidacionReserva.rows[0].fechaEntrada_ISO
+                        const fechaSalida_ISO = resuelveValidacionReserva.rows[0].fechaSalida_ISO
                         // ACABAR ESTA SENTENCIA DE ABAJO--
                         // validar que el apartamento no este ya en la reserva
                         const validacionHabitacionYaExisteneEnReserva = `
@@ -5358,16 +5360,16 @@ const puerto = async (entrada, salida) => {
                         FROM "reservaApartamentos"
                         WHERE reserva = $1 AND apartamento = $2
                         `
-                        let resuelvevalidacionHabitacionYaExisteneEnReserva = await conexion.query(validacionHabitacionYaExisteneEnReserva, [reserva, apartamento])
+                        const resuelvevalidacionHabitacionYaExisteneEnReserva = await conexion.query(validacionHabitacionYaExisteneEnReserva, [reserva, apartamento])
                         if (resuelvevalidacionHabitacionYaExisteneEnReserva.rowCount === 1) {
                             const error = "El apartamento ya existe en la reserva"
                             throw new Error(error)
                         }
 
                         // Validar que el apartamento esta diponbiles en el modo normal, sacando las fechas de la reserva
-                        let transacion = {
-                            "fechaEntrada": fechaEntrada,
-                            "fechaSalida": fechaSalida
+                        const transacion = {
+                            fechaEntrada_ISO: fechaEntrada_ISO,
+                            fechaSalida_ISO: fechaSalida_ISO
 
                         }
                         const resuelveApartamentosDisponibles = await apartamentosDisponiblesAdministracion(transacion)
@@ -6724,8 +6726,8 @@ const puerto = async (entrada, salida) => {
                         }
                         // validar que los apartamentos que se existen estan disponbiles para las fechas
                         const transacion = {
-                            fechaEntrada: fechaEntrada,
-                            fechaSalida: fechaSalida
+                            fechaEntrada_ISO: fechaEntrada_ISO,
+                            fechaSalida_ISO: fechaSalida_ISO
                         }
                         const resuelveApartamentosDisponibles = await apartamentosDisponiblesAdministracion(transacion)
                         const apartamentosDisponibles = resuelveApartamentosDisponibles.apartamentosDisponibles
