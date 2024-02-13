@@ -29139,7 +29139,7 @@ const administracion = {
                 if (tipoEvento === "reserva") {
                     const reservaUID = detallesDelEvento.reserva
                     nombreEventoFinal = "Reserva " + reservaUID
-                    urlUI = "/administracion/reservas/" + url
+                    urlUI = "/administracion/reservas/" + reservaUID
                 }
 
                 if (tipoEvento === "todosLosApartamentos") {
@@ -29173,7 +29173,7 @@ const administracion = {
 
                     } else {
                         nombreEventoFinal = `Evento sin información`
-                        urlUI = ""
+                       //urlUI = ""
                     }
                 }
 
@@ -29184,7 +29184,9 @@ const administracion = {
                 eventoUI.setAttribute("componente", "eventoUI")
                 eventoUI.setAttribute("eventoUID", eventoUID)
                 eventoUI.classList.add(css)
-                eventoUI.setAttribute("href", urlUI)
+                if (urlUI) {
+                    eventoUI.setAttribute("href", urlUI)
+                }
                 eventoUI.style.gridColumn = `${inicioColumna} /${finalColumna} span `
                 eventoUI.style.gridRow = `${inicioFila}`
                 eventoUI.addEventListener("mouseover", () => {
