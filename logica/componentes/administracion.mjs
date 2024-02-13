@@ -28790,9 +28790,7 @@ const administracion = {
             const anoPresente = calendarioResuelto.ano
             const mesPresente = calendarioResuelto.mes
 
-            console.log("soloCapasURL", soloCapasURL)
             calendario.url = `fecha:${mesPresente}-${anoPresente}/${soloCapasURL.join("/")}`
-            console.log("calenadrio.url", calendario.url)
 
             if ((mesRenderizado !== mesPresente && anoRenderizado === anoPresente) || (anoRenderizado !== anoPresente)) {
                 // ADquitir la url actual, que puede ser diferente segun la capa
@@ -28809,7 +28807,7 @@ const administracion = {
                 instanciaUID: instanciaUID,
                 contenedorCapas: contenedorCapas
             }
-            console.log("metadtos",metadatos)
+            console.log("metadtos", metadatos)
             return casaVitini.administracion.calendario.capas(metadatos)
 
 
