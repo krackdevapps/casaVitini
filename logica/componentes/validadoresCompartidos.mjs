@@ -334,7 +334,7 @@ const validadoresCompartidos = {
                         const error = "el campo 'pasaporte' solo puede ser letras minúsculas, masculas y numeros."
                         throw new Error(error)
                     }
-             
+
                 }
 
                 if (telefono) {
@@ -346,7 +346,7 @@ const validadoresCompartidos = {
                         throw new Error(error)
                     }
 
-              
+
                 }
 
                 if (email) {
@@ -358,7 +358,7 @@ const validadoresCompartidos = {
                         const error = "El campo email no tiene le formato correcto, por ejemplo usuario@servidor.zona"
                         throw new Error(error)
                     }
-         
+
                 }
 
                 // validar existencia de correo
@@ -523,6 +523,56 @@ const validadoresCompartidos = {
 
         }
     },
+    claves: {
+        minimoRequisitos: (clave) => {
+
+            try {
+                if (clave.length < 12) {
+                    const error = "La contraseña debe de tener un minimo de 12 caracteres"
+                    throw new Error(error)
+                }
+                let tieneMayuscula = false;
+                let tieneNumero = false;
+                let tieneCaracterEspecial = false;
+          
+                // Verifica cada carácter de la clave
+                for (var i = 0; i < clave.length; i++) {
+                    var caracter = clave.charAt(i);
+
+                    // Verifica si el carácter es una mayúscula
+                    if (caracter >= "A" && caracter <= "Z") {
+                        tieneMayuscula = true;
+                    }
+                    // Verifica si el carácter es un número
+                    else if (caracter >= "0" && caracter <= "9") {
+                        tieneNumero = true;
+                    }
+                    // Verifica si el carácter es un carácter especial
+                    else if ("!@#$%^&*()_+".indexOf(caracter) !== -1) {
+                        tieneCaracterEspecial = true;
+                    }
+                }
+                if (!tieneMayuscula) {
+                    const error = "Por favor ponga como minimo una mayuscula en su contraseña"
+                    throw new Error(error)
+                }
+
+                if (!tieneNumero) {
+                    const error = "Por favor ponga como minimo un numero en su contraseña"
+                    throw new Error(error)
+                }
+
+                if (!tieneCaracterEspecial) {
+                    const error = "Por favor ponga como minimo un caracter especial en su contraseña, como por ejemplo: ! @ # $ % ^ & * ( ) _ +"
+                    throw new Error(error)
+                }
+            } catch (errorCapturado) {
+                throw errorCapturado
+            }
+
+
+        }
+    }
 
 
 

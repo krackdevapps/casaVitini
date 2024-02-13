@@ -631,6 +631,7 @@ const puerto = async (entrada, salida) => {
                 throw error
             }
         },
+        
 
     }
     const casaVitini = {
@@ -2281,6 +2282,8 @@ const puerto = async (entrada, salida) => {
                         if (!claveNueva) {
                             const error = "Escribe la nueva contrasena en el campo correspondiente"
                             throw new Error(error)
+                        }else{
+                            validadoresCompartidos.claves.minimoRequisitos(claveNueva)
                         }
                         if (!claveConfirmada) {
                             const error = "Confirma la nueva contrasena antes de cambiarla"
@@ -2496,12 +2499,20 @@ const puerto = async (entrada, salida) => {
                     if (!claveNueva) {
                         const error = "Escribe tu contrasena, no has escrito tu contrasena"
                         throw new Error(error)
+                    }else{
+                        validadoresCompartidos.claves.minimoRequisitos(claveNueva)
                     }
 
                     if (!claveConfirmada) {
                         const error = "Vuelve a escribir tu contrasena de nuevo"
                         throw new Error(error)
                     }
+
+
+
+
+
+
                     if (claveNueva !== claveConfirmada) {
                         const error = "La contrasenas no coinciden, revisa la contrasenas escritas"
                         throw new Error(error)
@@ -2678,9 +2689,6 @@ const puerto = async (entrada, salida) => {
                             const error = "Necesitar identifcarte para ver tus datos personales"
                             throw new Error(error)
                         }
-
-
-
 
                         const consultaDetallesUsuario = `
                         SELECT 
@@ -17176,6 +17184,8 @@ const puerto = async (entrada, salida) => {
                         if (claveNueva !== claveNuevaDos) {
                             const error = "No has escrito dos veces la misma nueva contrasena"
                             throw new Error(error)
+                        }else{
+                            validadoresCompartidos.claves.minimoRequisitos(claveNueva)
                         }
                         const cryptoData = {
                             sentido: "cifrar",

@@ -923,7 +923,13 @@
     backdrop-filter: blur(50px);
 }
 
+@media (max-width: 720px) {
 
+    .administracion_calendario_botonNavegacion {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
 
 
 .navegacionMesReferencia {
