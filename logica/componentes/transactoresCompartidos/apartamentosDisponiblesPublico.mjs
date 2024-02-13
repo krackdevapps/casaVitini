@@ -31,11 +31,7 @@ const apartamentosDisponiblesPublico = async (fecha) => {
         const fechaLimite_Objeto = tiempoZH.plus({ days: 365 }).toISODate();
 
         const fechaLimite_UTC_Objeto = DateTime.fromISO(fechaLimite_Objeto)
-
-        console.log("-----> limite:", fechaLimite_UTC_Objeto.toISODate(), "salida", fechaSalidaReserva_Objeto.toISODate())
         const diferenciaEnDias = fechaLimite_UTC_Objeto.diff(fechaSalidaReserva_Objeto, 'days').toObject().days;
-
-        console.log("-----> diferenciaEnDias:", diferenciaEnDias)
 
         if (diferenciaEnDias <= 0) {
             const error = "Como maximo las reservas no pueden superar el año a partir de hoy. Casa Vitini solo acepta reservas a un año maximo. Gracias."
