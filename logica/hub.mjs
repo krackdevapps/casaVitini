@@ -631,7 +631,7 @@ const puerto = async (entrada, salida) => {
                 throw error
             }
         },
-        
+
 
     }
     const casaVitini = {
@@ -2282,7 +2282,7 @@ const puerto = async (entrada, salida) => {
                         if (!claveNueva) {
                             const error = "Escribe la nueva contrasena en el campo correspondiente"
                             throw new Error(error)
-                        }else{
+                        } else {
                             validadoresCompartidos.claves.minimoRequisitos(claveNueva)
                         }
                         if (!claveConfirmada) {
@@ -2499,7 +2499,7 @@ const puerto = async (entrada, salida) => {
                     if (!claveNueva) {
                         const error = "Escribe tu contrasena, no has escrito tu contrasena"
                         throw new Error(error)
-                    }else{
+                    } else {
                         validadoresCompartidos.claves.minimoRequisitos(claveNueva)
                     }
 
@@ -11155,7 +11155,10 @@ const puerto = async (entrada, salida) => {
                 },
                 detallePrecioBaseApartamento: {
                     IDX: {
-                        ROL: ["administrador"]
+                        ROL: [
+                            "administrador",
+                            "empleado"
+                        ]
                     },
                     X: async () => {
                         try {
@@ -14596,10 +14599,10 @@ const puerto = async (entrada, salida) => {
 
             },
             arquitectura: {
-                IDX: {
-                    ROL: ["administrador"]
-                },
                 entidades: {
+                    IDX: {
+                        ROL: ["administrador"]
+                    },
                     listarEntidadesAlojamiento: async () => {
                         try {
                             const estructuraFinal = {}
@@ -15613,61 +15616,73 @@ const puerto = async (entrada, salida) => {
                     }
                 },
                 configuraciones: {
-                    listarConfiguracionApartamentos: async () => {
-                        try {
-                            const seleccionaApartamentos = `
-                            SELECT 
-                            uid,
-                            "apartamentoIDV",
-                            "estadoConfiguracion"
-                            FROM "configuracionApartamento"
-                            `
-                            const resuelveSeleccionaApartamentos = await conexion.query(seleccionaApartamentos)
-                            const apartamentosConConfiguracion = []
-                            if (resuelveSeleccionaApartamentos.rowCount > 0) {
-                                const apartamentoEntidad = resuelveSeleccionaApartamentos.rows
-                                for (const detallesDelApartamento of apartamentoEntidad) {
+                    listarConfiguracionApartamentos: {
+                        IDX: {
+                            ROL: [
+                                "administrador",
+                                "empleado"
+                            ]
+                        },
+                        X: async () => {
+                            try {
+                                const seleccionaApartamentos = `
+                                SELECT 
+                                uid,
+                                "apartamentoIDV",
+                                "estadoConfiguracion"
+                                FROM "configuracionApartamento"
+                                `
+                                const resuelveSeleccionaApartamentos = await conexion.query(seleccionaApartamentos)
+                                const apartamentosConConfiguracion = []
+                                if (resuelveSeleccionaApartamentos.rowCount > 0) {
+                                    const apartamentoEntidad = resuelveSeleccionaApartamentos.rows
+                                    for (const detallesDelApartamento of apartamentoEntidad) {
 
-                                    const apartamentoIDV = detallesDelApartamento.apartamentoIDV
-                                    const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-                                    const estadoConfiguracion = detallesDelApartamento.estadoConfiguracion
+                                        const apartamentoIDV = detallesDelApartamento.apartamentoIDV
+                                        const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+                                        const estadoConfiguracion = detallesDelApartamento.estadoConfiguracion
 
-                                    const estructuraFinal = {
-                                        apartamentoIDV: apartamentoIDV,
-                                        apartamentoUI: apartamentoUI,
-                                        estadoConfiguracion: estadoConfiguracion
+                                        const estructuraFinal = {
+                                            apartamentoIDV: apartamentoIDV,
+                                            apartamentoUI: apartamentoUI,
+                                            estadoConfiguracion: estadoConfiguracion
+                                        }
+                                        apartamentosConConfiguracion.push(estructuraFinal)
+
+
                                     }
-                                    apartamentosConConfiguracion.push(estructuraFinal)
-
-
                                 }
-                            }
-                            const ok = {
-                                ok: apartamentosConConfiguracion
-                            }
-                            salida.json(ok)
+                                const ok = {
+                                    ok: apartamentosConConfiguracion
+                                }
+                                salida.json(ok)
 
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
 
-                            salida.json(error)
+                                salida.json(error)
+                            }
                         }
                     },
-                    detalleConfiguracionAlojamiento: async () => {
-                        try {
-                            const apartamentoIDV = entrada.body.apartamentoIDV
+                    detalleConfiguracionAlojamiento: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const apartamentoIDV = entrada.body.apartamentoIDV
 
-                            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+                                const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
 
-                            if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-                                const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
-                                throw new Error(error)
-                            }
+                                if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
+                                    const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
+                                    throw new Error(error)
+                                }
 
 
-                            const consultaPerfilConfiguracion = `
+                                const consultaPerfilConfiguracion = `
                             SELECT 
                             uid,
                             "apartamentoIDV",
@@ -15676,19 +15691,19 @@ const puerto = async (entrada, salida) => {
                             FROM "configuracionApartamento"
                             WHERE "apartamentoIDV" = $1;
                             `
-                            const resuelveConsultaPerfilConfiguracion = await conexion.query(consultaPerfilConfiguracion, [apartamentoIDV])
-                            if (resuelveConsultaPerfilConfiguracion.rowCount === 0) {
-                                const ok = {
-                                    ok: "No hay ninguna configuracion disponible para este apartamento"
+                                const resuelveConsultaPerfilConfiguracion = await conexion.query(consultaPerfilConfiguracion, [apartamentoIDV])
+                                if (resuelveConsultaPerfilConfiguracion.rowCount === 0) {
+                                    const ok = {
+                                        ok: "No hay ninguna configuracion disponible para este apartamento"
+                                    }
+                                    salida.json(ok)
                                 }
-                                salida.json(ok)
-                            }
-                            if (resuelveConsultaPerfilConfiguracion.rowCount > 0) {
+                                if (resuelveConsultaPerfilConfiguracion.rowCount > 0) {
 
-                                const estadoConfiguracion = resuelveConsultaPerfilConfiguracion.rows[0].estadoConfiguracion
-                                const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+                                    const estadoConfiguracion = resuelveConsultaPerfilConfiguracion.rows[0].estadoConfiguracion
+                                    const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
 
-                                const consultaHabitaciones = `
+                                    const consultaHabitaciones = `
                                 SELECT 
                                 uid,
                                 apartamento,
@@ -15696,25 +15711,25 @@ const puerto = async (entrada, salida) => {
                                 FROM "configuracionHabitacionesDelApartamento"
                                 WHERE apartamento = $1;
                                 `
-                                const resuelveConsultaHabitaciones = await conexion.query(consultaHabitaciones, [apartamentoIDV])
-                                const habitacionesEncontradas = resuelveConsultaHabitaciones.rows
+                                    const resuelveConsultaHabitaciones = await conexion.query(consultaHabitaciones, [apartamentoIDV])
+                                    const habitacionesEncontradas = resuelveConsultaHabitaciones.rows
 
 
-                                for (const detalleHabitacion of habitacionesEncontradas) {
-                                    const uidHabitacion = detalleHabitacion.uid
-                                    const apartamentoIDV = detalleHabitacion.apartamento
-                                    const habitacionIDV = detalleHabitacion.habitacion
+                                    for (const detalleHabitacion of habitacionesEncontradas) {
+                                        const uidHabitacion = detalleHabitacion.uid
+                                        const apartamentoIDV = detalleHabitacion.apartamento
+                                        const habitacionIDV = detalleHabitacion.habitacion
 
-                                    const resolucionNombreHabitacion = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
-                                    if (resolucionNombreHabitacion.rowCount === 0) {
-                                        const error = "No existe el identificador de la habitacionIDV"
-                                        throw new Error(error)
-                                    }
-                                    const habitacionUI = resolucionNombreHabitacion.rows[0].habitacionUI
-                                    detalleHabitacion.habitacionUI = habitacionUI
+                                        const resolucionNombreHabitacion = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
+                                        if (resolucionNombreHabitacion.rowCount === 0) {
+                                            const error = "No existe el identificador de la habitacionIDV"
+                                            throw new Error(error)
+                                        }
+                                        const habitacionUI = resolucionNombreHabitacion.rows[0].habitacionUI
+                                        detalleHabitacion.habitacionUI = habitacionUI
 
 
-                                    const consultaCamas = `
+                                        const consultaCamas = `
                                     SELECT
                                     uid,
                                     habitacion, 
@@ -15724,255 +15739,270 @@ const puerto = async (entrada, salida) => {
                                     WHERE
                                     habitacion = $1
                                     `
-                                    const resolverConsultaCamas = await conexion.query(consultaCamas, [uidHabitacion])
-                                    detalleHabitacion.camas = []
-                                    if (resolverConsultaCamas.rowCount > 0) {
+                                        const resolverConsultaCamas = await conexion.query(consultaCamas, [uidHabitacion])
+                                        detalleHabitacion.camas = []
+                                        if (resolverConsultaCamas.rowCount > 0) {
 
 
-                                        const camasEntontradas = resolverConsultaCamas.rows
-                                        for (const detallesCama of camasEntontradas) {
+                                            const camasEntontradas = resolverConsultaCamas.rows
+                                            for (const detallesCama of camasEntontradas) {
 
-                                            const uidCama = detallesCama.uid
-                                            const camaIDV = detallesCama.cama
+                                                const uidCama = detallesCama.uid
+                                                const camaIDV = detallesCama.cama
 
-                                            const resolucionNombreCama = await conexion.query(`SELECT "camaUI", capacidad FROM camas WHERE cama = $1`, [camaIDV])
-                                            if (resolucionNombreCama.rowCount === 0) {
-                                                const error = "No existe el identificador de la camaIDV"
-                                                throw new Error(error)
+                                                const resolucionNombreCama = await conexion.query(`SELECT "camaUI", capacidad FROM camas WHERE cama = $1`, [camaIDV])
+                                                if (resolucionNombreCama.rowCount === 0) {
+                                                    const error = "No existe el identificador de la camaIDV"
+                                                    throw new Error(error)
+                                                }
+
+                                                const camaUI = resolucionNombreCama.rows[0].camaUI
+                                                const capacidad = resolucionNombreCama.rows[0].capacidad
+
+                                                const estructuraCama = {
+                                                    uid: uidCama,
+                                                    camaIDV: camaIDV,
+                                                    camaUI: camaUI,
+                                                    capacidad: capacidad
+
+                                                }
+                                                detalleHabitacion.camas.push(estructuraCama)
+
                                             }
-
-                                            const camaUI = resolucionNombreCama.rows[0].camaUI
-                                            const capacidad = resolucionNombreCama.rows[0].capacidad
-
-                                            const estructuraCama = {
-                                                uid: uidCama,
-                                                camaIDV: camaIDV,
-                                                camaUI: camaUI,
-                                                capacidad: capacidad
-
-                                            }
-                                            detalleHabitacion.camas.push(estructuraCama)
-
                                         }
                                     }
+
+                                    const ok = {
+                                        ok: habitacionesEncontradas,
+                                        apartamentoIDV: apartamentoIDV,
+                                        apartamentoUI: apartamentoUI,
+                                        estadoConfiguracion: estadoConfiguracion,
+                                    }
+                                    salida.json(ok)
+
+
+
                                 }
 
-                                const ok = {
-                                    ok: habitacionesEncontradas,
-                                    apartamentoIDV: apartamentoIDV,
-                                    apartamentoUI: apartamentoUI,
-                                    estadoConfiguracion: estadoConfiguracion,
+
+
+
+
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
                                 }
-                                salida.json(ok)
 
-
-
+                                salida.json(error)
                             }
 
-
-
-
-
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
-
-                            salida.json(error)
                         }
-
                     },
-                    obtenerImagenConfiguracionAdministracion: async () => {
-                        try {
-                            const apartamentoIDV = entrada.body.apartamentoIDV
-                            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+                    obtenerImagenConfiguracionAdministracion: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const apartamentoIDV = entrada.body.apartamentoIDV
+                                const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
 
-                            if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-                                const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
-                                throw new Error(error)
-                            }
-                            const consultaPerfilConfiguracion = `
+                                if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
+                                    const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
+                                    throw new Error(error)
+                                }
+                                const consultaPerfilConfiguracion = `
                             SELECT 
                             imagen
                             imagen
                             FROM "configuracionApartamento"
                             WHERE "apartamentoIDV" = $1;
                             `
-                            const resuelveConsultaPerfilConfiguracion = await conexion.query(consultaPerfilConfiguracion, [apartamentoIDV])
-                            if (resuelveConsultaPerfilConfiguracion.rowCount === 0) {
-                                const ok = {
-                                    ok: "No hay ninguna configuracion disponible para este apartamento"
+                                const resuelveConsultaPerfilConfiguracion = await conexion.query(consultaPerfilConfiguracion, [apartamentoIDV])
+                                if (resuelveConsultaPerfilConfiguracion.rowCount === 0) {
+                                    const ok = {
+                                        ok: "No hay ninguna configuracion disponible para este apartamento"
+                                    }
+                                    salida.json(ok)
                                 }
-                                salida.json(ok)
-                            }
-                            if (resuelveConsultaPerfilConfiguracion.rowCount === 1) {
-                                const imagen = resuelveConsultaPerfilConfiguracion.rows[0].imagen
+                                if (resuelveConsultaPerfilConfiguracion.rowCount === 1) {
+                                    const imagen = resuelveConsultaPerfilConfiguracion.rows[0].imagen
 
-                                const ok = {
-                                    ok: "Imagen de la configuracion adminsitrativa del apartamento, png codificado en base64",
-                                    imagen: imagen
+                                    const ok = {
+                                        ok: "Imagen de la configuracion adminsitrativa del apartamento, png codificado en base64",
+                                        imagen: imagen
+                                    }
+                                    salida.json(ok)
+
                                 }
-                                salida.json(ok)
 
+
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
+
+                                salida.json(error)
                             }
 
-
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
-
-                            salida.json(error)
                         }
-
                     },
-                    listarHabitacionesDisponbilesApartamentoConfiguracion: async () => {
-                        try {
-                            const apartamentoIDV = entrada.body.apartamentoIDV
-                            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+                    listarHabitacionesDisponbilesApartamentoConfiguracion: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const apartamentoIDV = entrada.body.apartamentoIDV
+                                const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
 
-                            if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-                                const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
-                                throw new Error(error)
-                            }
+                                if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
+                                    const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
+                                    throw new Error(error)
+                                }
 
-                            const consultaDetallesConfiguracion = `
+                                const consultaDetallesConfiguracion = `
                             SELECT 
                             *
                             FROM "configuracionApartamento"
                             WHERE "apartamentoIDV" = $1;
                             `
-                            const metadatos = [
-                                apartamentoIDV
-                            ]
-                            const resuelveConsultaDetallesConfiguracion = await conexion.query(consultaDetallesConfiguracion, metadatos)
-                            if (resuelveConsultaDetallesConfiguracion.rowCount === 0) {
-                                const ok = {
-                                    ok: "No hay ninguna configuracion disponible para este apartamento"
-                                }
-                                salida.json(ok)
-                            }
-
-
-                            if (resuelveConsultaDetallesConfiguracion.rowCount > 0) {
-
-
-                                const consultaHabitacionesEnConfiguracion = await conexion.query(`SELECT habitacion FROM "configuracionHabitacionesDelApartamento" WHERE apartamento = $1`, [apartamentoIDV])
-                                const habitacionesEnConfiguracionArrayLimpio = []
-                                const habitacionesEnConfiguracion = consultaHabitacionesEnConfiguracion.rows
-                                for (const detalleHabitacion of habitacionesEnConfiguracion) {
-                                    const habitacionIDV = detalleHabitacion.habitacion
-                                    habitacionesEnConfiguracionArrayLimpio.push(habitacionIDV)
+                                const metadatos = [
+                                    apartamentoIDV
+                                ]
+                                const resuelveConsultaDetallesConfiguracion = await conexion.query(consultaDetallesConfiguracion, metadatos)
+                                if (resuelveConsultaDetallesConfiguracion.rowCount === 0) {
+                                    const ok = {
+                                        ok: "No hay ninguna configuracion disponible para este apartamento"
+                                    }
+                                    salida.json(ok)
                                 }
 
 
-                                const resuelveHabitacionesComoEntidad = await conexion.query(`SELECT habitacion, "habitacionUI" FROM habitaciones`)
-                                const habitacionesComoEntidad = resuelveHabitacionesComoEntidad.rows
-                                const habitacionComoEntidadArrayLimpio = []
-                                const habitacionesComoEntidadEstructuraFinal = {}
-                                for (const detalleHabitacion of habitacionesComoEntidad) {
-                                    const habitacionUI = detalleHabitacion.habitacionUI
-                                    const habitacionIDV = detalleHabitacion.habitacion
-
-                                    habitacionComoEntidadArrayLimpio.push(habitacionIDV)
-
-                                    habitacionesComoEntidadEstructuraFinal[habitacionIDV] = habitacionUI
-
-                                }
+                                if (resuelveConsultaDetallesConfiguracion.rowCount > 0) {
 
 
-                                const habitacionesDisponiblesNoInsertadas = habitacionComoEntidadArrayLimpio.filter(entidad => !habitacionesEnConfiguracionArrayLimpio.includes(entidad));
+                                    const consultaHabitacionesEnConfiguracion = await conexion.query(`SELECT habitacion FROM "configuracionHabitacionesDelApartamento" WHERE apartamento = $1`, [apartamentoIDV])
+                                    const habitacionesEnConfiguracionArrayLimpio = []
+                                    const habitacionesEnConfiguracion = consultaHabitacionesEnConfiguracion.rows
+                                    for (const detalleHabitacion of habitacionesEnConfiguracion) {
+                                        const habitacionIDV = detalleHabitacion.habitacion
+                                        habitacionesEnConfiguracionArrayLimpio.push(habitacionIDV)
+                                    }
 
-                                const estructuraFinal = []
 
-                                for (const habitacionDisponible of habitacionesDisponiblesNoInsertadas) {
-                                    if (habitacionesComoEntidadEstructuraFinal[habitacionDisponible]) {
+                                    const resuelveHabitacionesComoEntidad = await conexion.query(`SELECT habitacion, "habitacionUI" FROM habitaciones`)
+                                    const habitacionesComoEntidad = resuelveHabitacionesComoEntidad.rows
+                                    const habitacionComoEntidadArrayLimpio = []
+                                    const habitacionesComoEntidadEstructuraFinal = {}
+                                    for (const detalleHabitacion of habitacionesComoEntidad) {
+                                        const habitacionUI = detalleHabitacion.habitacionUI
+                                        const habitacionIDV = detalleHabitacion.habitacion
 
-                                        const estructuraFinalObjeto = {
-                                            habitacionIDV: habitacionDisponible,
-                                            habitacionUI: habitacionesComoEntidadEstructuraFinal[habitacionDisponible]
+                                        habitacionComoEntidadArrayLimpio.push(habitacionIDV)
 
-                                        }
-
-                                        estructuraFinal.push(estructuraFinalObjeto)
+                                        habitacionesComoEntidadEstructuraFinal[habitacionIDV] = habitacionUI
 
                                     }
 
-                                }
-                                const ok = {
-                                    ok: estructuraFinal
-                                }
-                                salida.json(ok)
 
+                                    const habitacionesDisponiblesNoInsertadas = habitacionComoEntidadArrayLimpio.filter(entidad => !habitacionesEnConfiguracionArrayLimpio.includes(entidad));
+
+                                    const estructuraFinal = []
+
+                                    for (const habitacionDisponible of habitacionesDisponiblesNoInsertadas) {
+                                        if (habitacionesComoEntidadEstructuraFinal[habitacionDisponible]) {
+
+                                            const estructuraFinalObjeto = {
+                                                habitacionIDV: habitacionDisponible,
+                                                habitacionUI: habitacionesComoEntidadEstructuraFinal[habitacionDisponible]
+
+                                            }
+
+                                            estructuraFinal.push(estructuraFinalObjeto)
+
+                                        }
+
+                                    }
+                                    const ok = {
+                                        ok: estructuraFinal
+                                    }
+                                    salida.json(ok)
+
+                                }
+
+
+
+
+
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
+
+                                salida.json(error)
                             }
 
 
-
-
-
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
-
-                            salida.json(error)
                         }
-
-
                     },
-                    addHabitacionToConfiguracionApartamento: async () => {
-                        try {
-                            const apartamentoIDV = entrada.body.apartamentoIDV
-                            const habitacionIDV = entrada.body.habitacionIDV
-                            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+                    addHabitacionToConfiguracionApartamento: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const apartamentoIDV = entrada.body.apartamentoIDV
+                                const habitacionIDV = entrada.body.habitacionIDV
+                                const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
 
-                            if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-                                const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
-                                throw new Error(error)
-                            }
+                                if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
+                                    const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
+                                    throw new Error(error)
+                                }
 
-                            if (!habitacionIDV || !filtroCadenaMinusculasSinEspacios.test(habitacionIDV)) {
-                                const error = "el campo 'habitacionIDV' solo puede ser letras minúsculas, numeros y sin espacios"
-                                throw new Error(error)
-                            }
+                                if (!habitacionIDV || !filtroCadenaMinusculasSinEspacios.test(habitacionIDV)) {
+                                    const error = "el campo 'habitacionIDV' solo puede ser letras minúsculas, numeros y sin espacios"
+                                    throw new Error(error)
+                                }
 
-                            const consultaApartamento = `
+                                const consultaApartamento = `
                             SELECT 
                             "estadoConfiguracion"
                             FROM "configuracionApartamento"
                             WHERE "apartamentoIDV" = $1;
                             `
-                            const resuelveConsultaApartamento = await conexion.query(consultaApartamento, [apartamentoIDV])
-                            if (resuelveConsultaApartamento.rowCount === 0) {
-                                const error = "No hay ningun apartamento con ese identificador visual"
-                                throw new Error(error)
-                            }
-                            if (resuelveConsultaApartamento.rows[0].estadoConfiguracion === "disponible") {
-                                const error = "No se puede anadir una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
-                                throw new Error(error)
-                            }
-
-
-                            if (resuelveConsultaApartamento.rowCount === 1) {
-
-
-                                const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
-
-                                const resolucionNombreHabitacion = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
-                                if (resolucionNombreHabitacion.rowCount === 0) {
-                                    const error = "No existe el identificador visual de la habitacion"
+                                const resuelveConsultaApartamento = await conexion.query(consultaApartamento, [apartamentoIDV])
+                                if (resuelveConsultaApartamento.rowCount === 0) {
+                                    const error = "No hay ningun apartamento con ese identificador visual"
                                     throw new Error(error)
                                 }
-                                const habitacionUI = resolucionNombreHabitacion.rows[0].habitacionUI
-
-                                const validarInexistenciaHabitacionEnConfiguracionDeApartamento = await conexion.query(`SELECT * FROM "configuracionHabitacionesDelApartamento" WHERE apartamento = $1 AND habitacion = $2 `, [apartamentoIDV, habitacionIDV])
-                                if (validarInexistenciaHabitacionEnConfiguracionDeApartamento.rowCount === 1) {
-                                    const error = `Ya existe la ${habitacionUI} en esta configuracion del ${apartamentoUI}`
+                                if (resuelveConsultaApartamento.rows[0].estadoConfiguracion === "disponible") {
+                                    const error = "No se puede anadir una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
                                     throw new Error(error)
                                 }
 
-                                const insertarHabitacion = `
+
+                                if (resuelveConsultaApartamento.rowCount === 1) {
+
+
+                                    const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+
+
+                                    const resolucionNombreHabitacion = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
+                                    if (resolucionNombreHabitacion.rowCount === 0) {
+                                        const error = "No existe el identificador visual de la habitacion"
+                                        throw new Error(error)
+                                    }
+                                    const habitacionUI = resolucionNombreHabitacion.rows[0].habitacionUI
+
+                                    const validarInexistenciaHabitacionEnConfiguracionDeApartamento = await conexion.query(`SELECT * FROM "configuracionHabitacionesDelApartamento" WHERE apartamento = $1 AND habitacion = $2 `, [apartamentoIDV, habitacionIDV])
+                                    if (validarInexistenciaHabitacionEnConfiguracionDeApartamento.rowCount === 1) {
+                                        const error = `Ya existe la ${habitacionUI} en esta configuracion del ${apartamentoUI}`
+                                        throw new Error(error)
+                                    }
+
+                                    const insertarHabitacion = `
                                 INSERT INTO "configuracionHabitacionesDelApartamento"
                                 (
                                 apartamento,
@@ -15980,139 +16010,149 @@ const puerto = async (entrada, salida) => {
                                 )
                                 VALUES ($1, $2) RETURNING uid
                                 `
-                                const resuelveInsertarHabitacion = await conexion.query(insertarHabitacion, [apartamentoIDV, habitacionIDV])
-                                if (resuelveInsertarHabitacion.rowCount === 0) {
-                                    const error = `Se han pasado las validaciones pero la base de datos no ha insertado el registro`
+                                    const resuelveInsertarHabitacion = await conexion.query(insertarHabitacion, [apartamentoIDV, habitacionIDV])
+                                    if (resuelveInsertarHabitacion.rowCount === 0) {
+                                        const error = `Se han pasado las validaciones pero la base de datos no ha insertado el registro`
+                                        throw new Error(error)
+                                    }
+
+                                    if (resuelveInsertarHabitacion.rowCount === 1) {
+                                        const ok = {
+                                            ok: "Se ha insertado correctament la nueva habitacion",
+                                            habitacionUID: resuelveInsertarHabitacion.rows[0].uid,
+                                            habitacionIDV: habitacionIDV,
+                                            habitacionUI: habitacionUI
+                                        }
+                                        salida.json(ok)
+                                    }
+                                }
+
+
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
+
+                                salida.json(error)
+                            }
+
+
+                        }
+                    },
+                    listarCamasDisponbilesApartamentoConfiguracion: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const habitacionUID = entrada.body.habitacionUID
+                                const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+
+                                if (!habitacionUID || !Number.isInteger(habitacionUID) || habitacionUID < 0) {
+                                    const error = "el campo 'habitacionUID' solo puede ser numeros"
                                     throw new Error(error)
                                 }
 
-                                if (resuelveInsertarHabitacion.rowCount === 1) {
-                                    const ok = {
-                                        ok: "Se ha insertado correctament la nueva habitacion",
-                                        habitacionUID: resuelveInsertarHabitacion.rows[0].uid,
-                                        habitacionIDV: habitacionIDV,
-                                        habitacionUI: habitacionUI
-                                    }
-                                    salida.json(ok)
-                                }
-                            }
-
-
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
-
-                            salida.json(error)
-                        }
-
-
-                    },
-                    listarCamasDisponbilesApartamentoConfiguracion: async () => {
-                        try {
-                            const habitacionUID = entrada.body.habitacionUID
-                            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-
-                            if (!habitacionUID || !Number.isInteger(habitacionUID) || habitacionUID < 0) {
-                                const error = "el campo 'habitacionUID' solo puede ser numeros"
-                                throw new Error(error)
-                            }
-
-                            const validarHabitacionUID = `
+                                const validarHabitacionUID = `
                             SELECT 
                             habitacion
                             FROM "configuracionHabitacionesDelApartamento"
                             WHERE uid = $1;
                             `
-                            const metadatos = [
-                                habitacionUID
-                            ]
-                            const resuelveConsultaDetallesConfiguracion = await conexion.query(validarHabitacionUID, metadatos)
-                            if (resuelveConsultaDetallesConfiguracion.rowCount === 0) {
-                                const ok = {
-                                    ok: "No hay ninguna habitacion con ese identificador disponible para este apartamento"
-                                }
-                                salida.json(ok)
-                            }
-
-
-                            if (resuelveConsultaDetallesConfiguracion.rowCount > 0) {
-
-
-                                const consultaCamasEnHabitacion = await conexion.query(`SELECT cama FROM "configuracionCamasEnHabitacion" WHERE habitacion = $1`, [habitacionUID])
-                                const camasArrayLimpioEnHabitacion = []
-                                const camasEncontradasEnHabitacion = consultaCamasEnHabitacion.rows
-                                for (const detalleHabitacion of camasEncontradasEnHabitacion) {
-                                    const camaIDV = detalleHabitacion.cama
-                                    camasArrayLimpioEnHabitacion.push(camaIDV)
+                                const metadatos = [
+                                    habitacionUID
+                                ]
+                                const resuelveConsultaDetallesConfiguracion = await conexion.query(validarHabitacionUID, metadatos)
+                                if (resuelveConsultaDetallesConfiguracion.rowCount === 0) {
+                                    const ok = {
+                                        ok: "No hay ninguna habitacion con ese identificador disponible para este apartamento"
+                                    }
+                                    salida.json(ok)
                                 }
 
 
-                                const resuelveCamasComoEntidad = await conexion.query(`SELECT cama, "camaUI" FROM camas`)
-                                const camasComoEntidad = resuelveCamasComoEntidad.rows
-                                const camasComoEntidadArrayLimpio = []
-                                const camasComoEntidadEstructuraFinal = {}
-                                for (const detalleHabitacion of camasComoEntidad) {
-                                    const camaUI = detalleHabitacion.camaUI
-                                    const camaIDV = detalleHabitacion.cama
+                                if (resuelveConsultaDetallesConfiguracion.rowCount > 0) {
 
-                                    camasComoEntidadArrayLimpio.push(camaIDV)
-                                    camasComoEntidadEstructuraFinal[camaIDV] = camaUI
 
-                                }
-
-                                const camasDisponiblesNoInsertadas = camasComoEntidadArrayLimpio.filter(entidad => !camasArrayLimpioEnHabitacion.includes(entidad));
-                                const estructuraFinal = []
-
-                                for (const camaDisponible of camasDisponiblesNoInsertadas) {
-                                    if (camasComoEntidadEstructuraFinal[camaDisponible]) {
-                                        const estructuraFinalObjeto = {
-                                            camaIDV: camaDisponible,
-                                            camaUI: camasComoEntidadEstructuraFinal[camaDisponible]
-                                        }
-                                        estructuraFinal.push(estructuraFinalObjeto)
+                                    const consultaCamasEnHabitacion = await conexion.query(`SELECT cama FROM "configuracionCamasEnHabitacion" WHERE habitacion = $1`, [habitacionUID])
+                                    const camasArrayLimpioEnHabitacion = []
+                                    const camasEncontradasEnHabitacion = consultaCamasEnHabitacion.rows
+                                    for (const detalleHabitacion of camasEncontradasEnHabitacion) {
+                                        const camaIDV = detalleHabitacion.cama
+                                        camasArrayLimpioEnHabitacion.push(camaIDV)
                                     }
 
-                                }
-                                const ok = {
-                                    ok: estructuraFinal
-                                }
-                                salida.json(ok)
 
+                                    const resuelveCamasComoEntidad = await conexion.query(`SELECT cama, "camaUI" FROM camas`)
+                                    const camasComoEntidad = resuelveCamasComoEntidad.rows
+                                    const camasComoEntidadArrayLimpio = []
+                                    const camasComoEntidadEstructuraFinal = {}
+                                    for (const detalleHabitacion of camasComoEntidad) {
+                                        const camaUI = detalleHabitacion.camaUI
+                                        const camaIDV = detalleHabitacion.cama
+
+                                        camasComoEntidadArrayLimpio.push(camaIDV)
+                                        camasComoEntidadEstructuraFinal[camaIDV] = camaUI
+
+                                    }
+
+                                    const camasDisponiblesNoInsertadas = camasComoEntidadArrayLimpio.filter(entidad => !camasArrayLimpioEnHabitacion.includes(entidad));
+                                    const estructuraFinal = []
+
+                                    for (const camaDisponible of camasDisponiblesNoInsertadas) {
+                                        if (camasComoEntidadEstructuraFinal[camaDisponible]) {
+                                            const estructuraFinalObjeto = {
+                                                camaIDV: camaDisponible,
+                                                camaUI: camasComoEntidadEstructuraFinal[camaDisponible]
+                                            }
+                                            estructuraFinal.push(estructuraFinalObjeto)
+                                        }
+
+                                    }
+                                    const ok = {
+                                        ok: estructuraFinal
+                                    }
+                                    salida.json(ok)
+
+                                }
+
+
+
+
+
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
+
+                                salida.json(error)
                             }
 
 
-
-
-
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
-
-                            salida.json(error)
                         }
-
-
                     },
-                    addCamaToConfiguracionApartamentoHabitacion: async () => {
-                        try {
-                            const camaIDV = entrada.body.camaIDV;
-                            const habitacionUID = entrada.body.habitacionUID;
-                            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+                    addCamaToConfiguracionApartamentoHabitacion: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const camaIDV = entrada.body.camaIDV;
+                                const habitacionUID = entrada.body.habitacionUID;
+                                const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
 
-                            if (!camaIDV || !filtroCadenaMinusculasSinEspacios.test(camaIDV)) {
-                                const error = "el campo 'camaIDV' solo puede ser letras minúsculas, numeros y sin espacios"
-                                throw new Error(error)
-                            }
+                                if (!camaIDV || !filtroCadenaMinusculasSinEspacios.test(camaIDV)) {
+                                    const error = "el campo 'camaIDV' solo puede ser letras minúsculas, numeros y sin espacios"
+                                    throw new Error(error)
+                                }
 
-                            if (!habitacionUID || !Number.isInteger(habitacionUID) || habitacionUID < 0) {
-                                const error = "el campo 'habitacionUID' solo puede ser numeros"
-                                throw new Error(error)
-                            }
+                                if (!habitacionUID || !Number.isInteger(habitacionUID) || habitacionUID < 0) {
+                                    const error = "el campo 'habitacionUID' solo puede ser numeros"
+                                    throw new Error(error)
+                                }
 
-                            // validar la cama
-                            const consultaCamaIDV = `
+                                // validar la cama
+                                const consultaCamaIDV = `
                             SELECT
                             capacidad,
                             "camaUI", 
@@ -16120,54 +16160,54 @@ const puerto = async (entrada, salida) => {
                             FROM camas
                             WHERE cama = $1;
                             `
-                            const resuelveConsultaCamaIDV = await conexion.query(consultaCamaIDV, [camaIDV])
-                            if (resuelveConsultaCamaIDV.rowCount === 0) {
-                                const error = "No existe ninguna cama con ese identificador visual"
-                                throw new Error(error)
-                            }
-                            const camaUI = resuelveConsultaCamaIDV.rows[0].camaUI
-                            const capacidad = resuelveConsultaCamaIDV.rows[0].capacidad
+                                const resuelveConsultaCamaIDV = await conexion.query(consultaCamaIDV, [camaIDV])
+                                if (resuelveConsultaCamaIDV.rowCount === 0) {
+                                    const error = "No existe ninguna cama con ese identificador visual"
+                                    throw new Error(error)
+                                }
+                                const camaUI = resuelveConsultaCamaIDV.rows[0].camaUI
+                                const capacidad = resuelveConsultaCamaIDV.rows[0].capacidad
 
 
-                            const consultaHabitacion = `
+                                const consultaHabitacion = `
                             SELECT 
                             habitacion, apartamento
                             FROM "configuracionHabitacionesDelApartamento"
                             WHERE uid = $1;
                             `
-                            const resuelveConsultaHabitacion = await conexion.query(consultaHabitacion, [habitacionUID])
-                            if (resuelveConsultaHabitacion.rowCount === 0) {
-                                const error = "No hay ninguna habitacíon con ese UID"
-                                throw new Error(error)
-                            }
-                            if (resuelveConsultaHabitacion.rowCount === 1) {
-                                const apartamentoIDV = resuelveConsultaHabitacion.rows[0].apartamento
-                                const consultaApartamento = `
+                                const resuelveConsultaHabitacion = await conexion.query(consultaHabitacion, [habitacionUID])
+                                if (resuelveConsultaHabitacion.rowCount === 0) {
+                                    const error = "No hay ninguna habitacíon con ese UID"
+                                    throw new Error(error)
+                                }
+                                if (resuelveConsultaHabitacion.rowCount === 1) {
+                                    const apartamentoIDV = resuelveConsultaHabitacion.rows[0].apartamento
+                                    const consultaApartamento = `
                                 SELECT 
                                 "estadoConfiguracion"
                                 FROM "configuracionApartamento"
                                 WHERE "apartamentoIDV" = $1;
                                 `
-                                const resuelveConsultaApartamento = await conexion.query(consultaApartamento, [apartamentoIDV])
-                                if (resuelveConsultaApartamento.rows[0].estadoConfiguracion === "disponible") {
-                                    const error = "No se puede anadir una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
-                                    throw new Error(error)
-                                }
+                                    const resuelveConsultaApartamento = await conexion.query(consultaApartamento, [apartamentoIDV])
+                                    if (resuelveConsultaApartamento.rows[0].estadoConfiguracion === "disponible") {
+                                        const error = "No se puede anadir una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
+                                        throw new Error(error)
+                                    }
 
 
 
 
-                                const habitacionIDV = resuelveConsultaHabitacion.rows[0].habitacion
+                                    const habitacionIDV = resuelveConsultaHabitacion.rows[0].habitacion
 
-                                const resuelveCamasEnHabitacion = await conexion.query(`SELECT cama FROM "configuracionCamasEnHabitacion" WHERE habitacion = $1 AND cama = $2 `, [habitacionUID, camaIDV])
-                                if (resuelveCamasEnHabitacion.rowCount > 0) {
-                                    const error = "Esta cama ya existe"
-                                    throw new Error(error)
-                                }
+                                    const resuelveCamasEnHabitacion = await conexion.query(`SELECT cama FROM "configuracionCamasEnHabitacion" WHERE habitacion = $1 AND cama = $2 `, [habitacionUID, camaIDV])
+                                    if (resuelveCamasEnHabitacion.rowCount > 0) {
+                                        const error = "Esta cama ya existe"
+                                        throw new Error(error)
+                                    }
 
-                                if (resuelveCamasEnHabitacion.rowCount === 0) {
+                                    if (resuelveCamasEnHabitacion.rowCount === 0) {
 
-                                    const insertarCamaEnHabitacion = `
+                                        const insertarCamaEnHabitacion = `
                                     INSERT INTO "configuracionCamasEnHabitacion"
                                     (
                                     habitacion,
@@ -16175,254 +16215,274 @@ const puerto = async (entrada, salida) => {
                                     )
                                     VALUES ($1, $2) RETURNING uid
                                     `
-                                    const resuelveInsertarHabitacion = await conexion.query(insertarCamaEnHabitacion, [habitacionUID, camaIDV])
-                                    if (resuelveInsertarHabitacion.rowCount === 0) {
-                                        const error = `Se han pasado las validaciones pero la base de datos no ha insertado el registro`
-                                        throw new Error(error)
+                                        const resuelveInsertarHabitacion = await conexion.query(insertarCamaEnHabitacion, [habitacionUID, camaIDV])
+                                        if (resuelveInsertarHabitacion.rowCount === 0) {
+                                            const error = `Se han pasado las validaciones pero la base de datos no ha insertado el registro`
+                                            throw new Error(error)
+                                        }
+
+                                        if (resuelveInsertarHabitacion.rowCount === 1) {
+                                            const nuevoUID = resuelveInsertarHabitacion.rows[0].uid
+                                            const ok = {
+                                                ok: "Se ha insertardo la cama correctamente en la habitacion",
+                                                nuevoUID: nuevoUID,
+                                                camaUI: camaUI,
+                                                camaIDV: camaIDV,
+                                                capaciad: capacidad
+                                            }
+                                            salida.json(ok)
+                                        }
+
+
+
                                     }
 
-                                    if (resuelveInsertarHabitacion.rowCount === 1) {
-                                        const nuevoUID = resuelveInsertarHabitacion.rows[0].uid
-                                        const ok = {
-                                            ok: "Se ha insertardo la cama correctamente en la habitacion",
-                                            nuevoUID: nuevoUID,
-                                            camaUI: camaUI,
-                                            camaIDV: camaIDV,
-                                            capaciad: capacidad
-                                        }
-                                        salida.json(ok)
-                                    }
 
 
 
                                 }
 
 
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
 
-
+                                salida.json(error)
                             }
 
 
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
-
-                            salida.json(error)
                         }
-
-
                     },
-                    eliminarHabitacionDeConfiguracionDeAlojamiento: async () => {
-                        try {
-                            const habitacionUID = entrada.body.habitacionUID
+                    eliminarHabitacionDeConfiguracionDeAlojamiento: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const habitacionUID = entrada.body.habitacionUID
 
-                            if (!habitacionUID || !Number.isInteger(habitacionUID) || habitacionUID < 0) {
-                                const error = "el campo 'habitacionUID' solo puede ser numeros"
-                                throw new Error(error)
-                            }
+                                if (!habitacionUID || !Number.isInteger(habitacionUID) || habitacionUID < 0) {
+                                    const error = "el campo 'habitacionUID' solo puede ser numeros"
+                                    throw new Error(error)
+                                }
 
-                            const validarHabitacionUID = `
+                                const validarHabitacionUID = `
                                 SELECT 
                                 apartamento
                                 FROM "configuracionHabitacionesDelApartamento"
                                 WHERE uid = $1
                                 `
-                            const resuelveValidarHabitacionUID = await conexion.query(validarHabitacionUID, [habitacionUID])
-                            if (resuelveValidarHabitacionUID.rowCount === 0) {
-                                const error = "No existe la habitacion, revisa el habitacionUID"
-                                throw new Error(error)
-                            }
+                                const resuelveValidarHabitacionUID = await conexion.query(validarHabitacionUID, [habitacionUID])
+                                if (resuelveValidarHabitacionUID.rowCount === 0) {
+                                    const error = "No existe la habitacion, revisa el habitacionUID"
+                                    throw new Error(error)
+                                }
 
-                            const apartamentoIDV = resuelveValidarHabitacionUID.rows[0].apartamento
-                            const consultaApartamento = `
+                                const apartamentoIDV = resuelveValidarHabitacionUID.rows[0].apartamento
+                                const consultaApartamento = `
                             SELECT 
                             "estadoConfiguracion"
                             FROM "configuracionApartamento"
                             WHERE "apartamentoIDV" = $1;
                             `
-                            const resuelveConsultaApartamento = await conexion.query(consultaApartamento, [apartamentoIDV])
-                            if (resuelveConsultaApartamento.rows[0].estadoConfiguracion === "disponible") {
-                                const error = "No se puede eliminar una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
-                                throw new Error(error)
-                            }
+                                const resuelveConsultaApartamento = await conexion.query(consultaApartamento, [apartamentoIDV])
+                                if (resuelveConsultaApartamento.rows[0].estadoConfiguracion === "disponible") {
+                                    const error = "No se puede eliminar una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
+                                    throw new Error(error)
+                                }
 
 
-                            const eliminarHabitacion = `
+                                const eliminarHabitacion = `
                                 DELETE FROM "configuracionHabitacionesDelApartamento"
                                 WHERE uid = $1;
                                 `
-                            const resuelveEliminarHabitacion = await conexion.query(eliminarHabitacion, [habitacionUID])
-                            if (resuelveEliminarHabitacion.rowCount === 0) {
-                                const error = "No se ha eliminado la habitacion por que no se ha entonctrado el registo en la base de datos"
-                                throw new Error(error)
-                            }
-                            if (resuelveEliminarHabitacion.rowCount === 1) {
-                                const ok = {
-                                    "ok": "Se ha eliminado correctamente la habitacion como entidad",
+                                const resuelveEliminarHabitacion = await conexion.query(eliminarHabitacion, [habitacionUID])
+                                if (resuelveEliminarHabitacion.rowCount === 0) {
+                                    const error = "No se ha eliminado la habitacion por que no se ha entonctrado el registo en la base de datos"
+                                    throw new Error(error)
                                 }
-                                salida.json(ok)
-                            }
+                                if (resuelveEliminarHabitacion.rowCount === 1) {
+                                    const ok = {
+                                        "ok": "Se ha eliminado correctamente la habitacion como entidad",
+                                    }
+                                    salida.json(ok)
+                                }
 
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
 
-                            salida.json(error)
+                                salida.json(error)
+                            }
                         }
                     },
-                    eliminarCamaDeConfiguracionDeAlojamiento: async () => {
-                        try {
-                            const camaUID = entrada.body.camaUID
+                    eliminarCamaDeConfiguracionDeAlojamiento: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const camaUID = entrada.body.camaUID
 
-                            if (!camaUID || !Number.isInteger(camaUID) || camaUID < 0) {
-                                const error = "el campo 'camaUID' solo puede ser numeros"
-                                throw new Error(error)
-                            }
+                                if (!camaUID || !Number.isInteger(camaUID) || camaUID < 0) {
+                                    const error = "el campo 'camaUID' solo puede ser numeros"
+                                    throw new Error(error)
+                                }
 
-                            const validarHabitacionUID = `
+                                const validarHabitacionUID = `
                                 SELECT 
                                 habitacion
                                 FROM "configuracionCamasEnHabitacion"
                                 WHERE uid = $1
                                 `
-                            const resuelveValidarHabitacionUID = await conexion.query(validarHabitacionUID, [camaUID])
-                            if (resuelveValidarHabitacionUID.rowCount === 0) {
-                                const error = "No existe la cama, revisa el camaUID"
-                                throw new Error(error)
-                            }
+                                const resuelveValidarHabitacionUID = await conexion.query(validarHabitacionUID, [camaUID])
+                                if (resuelveValidarHabitacionUID.rowCount === 0) {
+                                    const error = "No existe la cama, revisa el camaUID"
+                                    throw new Error(error)
+                                }
 
-                            const habitacionUID = resuelveValidarHabitacionUID.rows[0].habitacion
-                            const consultaIntermediaEscaleraHaciaArriba = `
+                                const habitacionUID = resuelveValidarHabitacionUID.rows[0].habitacion
+                                const consultaIntermediaEscaleraHaciaArriba = `
                             SELECT 
                             apartamento
                             FROM "configuracionHabitacionesDelApartamento"
                             WHERE uid = $1;
                             `
-                            const resuelveConsultaIntermediaEscaleraHaciaArriba = await conexion.query(consultaIntermediaEscaleraHaciaArriba, [habitacionUID])
-                            const apartamentoIDV = resuelveConsultaIntermediaEscaleraHaciaArriba.rows[0].apartamento
-                            const consultaApartamento = `
+                                const resuelveConsultaIntermediaEscaleraHaciaArriba = await conexion.query(consultaIntermediaEscaleraHaciaArriba, [habitacionUID])
+                                const apartamentoIDV = resuelveConsultaIntermediaEscaleraHaciaArriba.rows[0].apartamento
+                                const consultaApartamento = `
                             SELECT 
                             "estadoConfiguracion"
                             FROM "configuracionApartamento"
                             WHERE "apartamentoIDV" = $1;
                             `
-                            const resuelveConsultaApartamento = await conexion.query(consultaApartamento, [apartamentoIDV])
-                            if (resuelveConsultaApartamento.rows[0].estadoConfiguracion === "disponible") {
-                                const error = "No se puede eliminar una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
-                                throw new Error(error)
-                            }
+                                const resuelveConsultaApartamento = await conexion.query(consultaApartamento, [apartamentoIDV])
+                                if (resuelveConsultaApartamento.rows[0].estadoConfiguracion === "disponible") {
+                                    const error = "No se puede eliminar una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
+                                    throw new Error(error)
+                                }
 
 
 
 
 
-                            const eliminarCama = `
+                                const eliminarCama = `
                                 DELETE FROM "configuracionCamasEnHabitacion"
                                 WHERE uid = $1;
                                 `
-                            const resuelveEliminarCama = await conexion.query(eliminarCama, [camaUID])
-                            if (resuelveEliminarCama.rowCount === 0) {
-                                const error = "No se ha eliminado la cama por que no se ha entcontrado el registro en la base de datos"
-                                throw new Error(error)
-                            }
-                            if (resuelveEliminarCama.rowCount === 1) {
-                                const ok = {
-                                    "ok": "Se ha eliminado correctamente la cama de la habitacion",
+                                const resuelveEliminarCama = await conexion.query(eliminarCama, [camaUID])
+                                if (resuelveEliminarCama.rowCount === 0) {
+                                    const error = "No se ha eliminado la cama por que no se ha entcontrado el registro en la base de datos"
+                                    throw new Error(error)
                                 }
-                                salida.json(ok)
-                            }
+                                if (resuelveEliminarCama.rowCount === 1) {
+                                    const ok = {
+                                        "ok": "Se ha eliminado correctamente la cama de la habitacion",
+                                    }
+                                    salida.json(ok)
+                                }
 
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
 
-                            salida.json(error)
+                                salida.json(error)
+                            }
                         }
                     },
-                    eliminarConfiguracionDeAlojamiento: async () => {
-                        try {
-                            const apartamentoIDV = entrada.body.apartamentoIDV
-                            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+                    eliminarConfiguracionDeAlojamiento: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const apartamentoIDV = entrada.body.apartamentoIDV
+                                const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
 
-                            if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-                                const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
-                                throw new Error(error)
-                            }
+                                if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
+                                    const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
+                                    throw new Error(error)
+                                }
 
-                            const validarApartamentoUID = `
+                                const validarApartamentoUID = `
                                 SELECT 
                                 *
                                 FROM "configuracionApartamento"
                                 WHERE "apartamentoIDV" = $1
                                 `
-                            const resuelveValidarApartamentoUID = await conexion.query(validarApartamentoUID, [apartamentoIDV])
-                            if (resuelveValidarApartamentoUID.rowCount === 0) {
-                                const error = "No existe el perfil de configuracion del apartamento"
-                                throw new Error(error)
-                            }
+                                const resuelveValidarApartamentoUID = await conexion.query(validarApartamentoUID, [apartamentoIDV])
+                                if (resuelveValidarApartamentoUID.rowCount === 0) {
+                                    const error = "No existe el perfil de configuracion del apartamento"
+                                    throw new Error(error)
+                                }
 
-                            const eliminarConfiguracionDeApartamento = `
+                                const eliminarConfiguracionDeApartamento = `
                                 DELETE FROM "configuracionApartamento"
                                 WHERE "apartamentoIDV" = $1
                                 `
-                            const resuelveEliminarApartamento = await conexion.query(eliminarConfiguracionDeApartamento, [apartamentoIDV])
-                            if (resuelveEliminarApartamento.rowCount === 0) {
-                                const error = "No se ha eliminado la configuracion del apartamenro por que no se ha encontrado el registro en la base de datos"
-                                throw new Error(error)
-                            }
-                            if (resuelveEliminarApartamento.rowCount > 0) {
-                                const ok = {
-                                    "ok": "Se ha eliminado correctamente la configuracion de apartamento",
+                                const resuelveEliminarApartamento = await conexion.query(eliminarConfiguracionDeApartamento, [apartamentoIDV])
+                                if (resuelveEliminarApartamento.rowCount === 0) {
+                                    const error = "No se ha eliminado la configuracion del apartamenro por que no se ha encontrado el registro en la base de datos"
+                                    throw new Error(error)
                                 }
-                                salida.json(ok)
-                            }
+                                if (resuelveEliminarApartamento.rowCount > 0) {
+                                    const ok = {
+                                        "ok": "Se ha eliminado correctamente la configuracion de apartamento",
+                                    }
+                                    salida.json(ok)
+                                }
 
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
 
-                            salida.json(error)
+                                salida.json(error)
+                            }
                         }
                     },
-                    crearConfiguracionAlojamiento: async () => {
-                        try {
-                            const apartamentoIDV = entrada.body.apartamentoIDV
-                            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-                            if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV) || apartamentoIDV.length > 50) {
-                                const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres"
-                                throw new Error(error)
-                            }
+                    crearConfiguracionAlojamiento: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const apartamentoIDV = entrada.body.apartamentoIDV
+                                const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+                                if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV) || apartamentoIDV.length > 50) {
+                                    const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres"
+                                    throw new Error(error)
+                                }
 
-                            const validarIDV = `
+                                const validarIDV = `
                                 SELECT 
                                 "apartamentoUI"
                                 FROM apartamentos
                                 WHERE apartamento = $1
                                 `
-                            const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV])
-                            if (resuelveValidarIDV.rowCount === 0) {
-                                const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon"
-                                throw new Error(error)
-                            }
+                                const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV])
+                                if (resuelveValidarIDV.rowCount === 0) {
+                                    const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon"
+                                    throw new Error(error)
+                                }
 
-                            const validarUnicidadConfigurativa = `
+                                const validarUnicidadConfigurativa = `
                                 SELECT 
                                 *
                                 FROM "configuracionApartamento"
                                 WHERE "apartamentoIDV" = $1
                                 `
-                            const resuelveValidarUnicidadConfigurativa = await conexion.query(validarUnicidadConfigurativa, [apartamentoIDV])
-                            if (resuelveValidarUnicidadConfigurativa.rowCount > 0) {
-                                const error = "Ya existe una configuracion para la entidad del apartamento por favor selecciona otro apartamento como entidad"
-                                throw new Error(error)
-                            }
+                                const resuelveValidarUnicidadConfigurativa = await conexion.query(validarUnicidadConfigurativa, [apartamentoIDV])
+                                if (resuelveValidarUnicidadConfigurativa.rowCount > 0) {
+                                    const error = "Ya existe una configuracion para la entidad del apartamento por favor selecciona otro apartamento como entidad"
+                                    throw new Error(error)
+                                }
 
-                            const estadoInicial = "nodisponible"
-                            const crearConfiguracion = `
+                                const estadoInicial = "nodisponible"
+                                const crearConfiguracion = `
                                 INSERT INTO "configuracionApartamento"
                                 (
                                 "apartamentoIDV",
@@ -16435,310 +16495,326 @@ const puerto = async (entrada, salida) => {
                                 )
                                 RETURNING "apartamentoIDV"
                                 `
-                            const resuelveCrearConfiguracion = await conexion.query(crearConfiguracion, [apartamentoIDV, estadoInicial])
-                            if (resuelveCrearConfiguracion.rowCount === 0) {
-                                const error = "No se ha podido crear la nueva configuracion"
-                                throw new Error(error)
-                            }
-                            if (resuelveCrearConfiguracion.rowCount === 1) {
-                                const ok = {
-                                    ok: "Se ha creado correctament la nuevo configuracion del apartamento",
-                                    apartamentoIDV: resuelveCrearConfiguracion.rows[0].apartamentoIDV
+                                const resuelveCrearConfiguracion = await conexion.query(crearConfiguracion, [apartamentoIDV, estadoInicial])
+                                if (resuelveCrearConfiguracion.rowCount === 0) {
+                                    const error = "No se ha podido crear la nueva configuracion"
+                                    throw new Error(error)
                                 }
-                                salida.json(ok)
+                                if (resuelveCrearConfiguracion.rowCount === 1) {
+                                    const ok = {
+                                        ok: "Se ha creado correctament la nuevo configuracion del apartamento",
+                                        apartamentoIDV: resuelveCrearConfiguracion.rows[0].apartamentoIDV
+                                    }
+                                    salida.json(ok)
+                                }
+
+
+
+
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
+
+                                salida.json(error)
                             }
-
-
-
-
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
-
-                            salida.json(error)
                         }
                     },
-                    cambiarEstadoConfiguracionAlojamiento: async () => {
-                        try {
-                            const apartamentoIDV = entrada.body.apartamentoIDV
-                            const nuevoEstado = entrada.body.nuevoEstado
-                            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-                            if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-                                const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios"
-                                throw new Error(error)
-                            }
+                    cambiarEstadoConfiguracionAlojamiento: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const apartamentoIDV = entrada.body.apartamentoIDV
+                                const nuevoEstado = entrada.body.nuevoEstado
+                                const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+                                if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
+                                    const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios"
+                                    throw new Error(error)
+                                }
 
 
-                            if (!nuevoEstado || !filtroCadenaMinusculasSinEspacios.test(nuevoEstado)) {
-                                const error = "el campo 'nuevoEstado' solo puede ser letras minúsculas, numeros y sin pesacios"
-                                throw new Error(error)
-                            }
+                                if (!nuevoEstado || !filtroCadenaMinusculasSinEspacios.test(nuevoEstado)) {
+                                    const error = "el campo 'nuevoEstado' solo puede ser letras minúsculas, numeros y sin pesacios"
+                                    throw new Error(error)
+                                }
 
-                            const validarIDV = `
+                                const validarIDV = `
                                 SELECT 
                                 "estadoConfiguracion"
                                 FROM "configuracionApartamento"
                                 WHERE "apartamentoIDV" = $1
                                 `
-                            const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV])
-                            if (resuelveValidarIDV.rowCount === 0) {
-                                const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon"
-                                throw new Error(error)
-                            }
-                            const estadoConfiguracionActual = resuelveValidarIDV.rows[0].estadoConfiguracion
-                            const validarEstadoIDV = `
+                                const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV])
+                                if (resuelveValidarIDV.rowCount === 0) {
+                                    const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon"
+                                    throw new Error(error)
+                                }
+                                const estadoConfiguracionActual = resuelveValidarIDV.rows[0].estadoConfiguracion
+                                const validarEstadoIDV = `
                                 SELECT 
                                 *
                                 FROM "estadoApartamentos"
                                 WHERE estado = $1
                                 `
-                            const resuelveValidarEstadoIDV = await conexion.query(validarEstadoIDV, [nuevoEstado])
-                            if (resuelveValidarEstadoIDV.rowCount === 0) {
-                                const error = "Revisa el estado que has introducido por que no se conoce este estado para la configuracion del apartamento"
-                                throw new Error(error)
-                            }
+                                const resuelveValidarEstadoIDV = await conexion.query(validarEstadoIDV, [nuevoEstado])
+                                if (resuelveValidarEstadoIDV.rowCount === 0) {
+                                    const error = "Revisa el estado que has introducido por que no se conoce este estado para la configuracion del apartamento"
+                                    throw new Error(error)
+                                }
 
-                            if (nuevoEstado === "disponible") {
-                                // Mirar que el apartamento tenga al menos una habitacion
-                                const consultaHabitaciones = `
+                                if (nuevoEstado === "disponible") {
+                                    // Mirar que el apartamento tenga al menos una habitacion
+                                    const consultaHabitaciones = `
                                 SELECT 
                                 habitacion,
                                 uid
                                 FROM "configuracionHabitacionesDelApartamento"
                                 WHERE apartamento = $1
                                 `
-                                const resuelveConsultaHabitaciones = await conexion.query(consultaHabitaciones, [apartamentoIDV])
-                                if (resuelveConsultaHabitaciones.rowCount === 0) {
-                                    const error = "No se puede poner en disponible esta configuracíon por que no es valida. Necesitas al menos una habitacíon en esta configuracíon y este apartamento no la tiene"
-                                    throw new Error(error)
-                                }
-                                // Mirar que todas las habitaciones tengan una cama asignada
-                                if (resuelveConsultaHabitaciones.rowCount > 0) {
-
-                                    const habitacionesSinCama = []
-                                    const habitacionesEnConfiguracion = resuelveConsultaHabitaciones.rows
-                                    for (const detalleHabitacion of habitacionesEnConfiguracion) {
-                                        const habitacionUID = detalleHabitacion.uid
-                                        const habitacionIDV = detalleHabitacion.habitacion
-
-                                        const resolucionHabitacionUI = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
-                                        if (resolucionHabitacionUI.rowCount === 0) {
-                                            const error = "No existe el identificador del apartamentoIDV"
-                                            throw new Error(error)
-                                        }
-                                        const habitacionUI = resolucionHabitacionUI.rows[0].habitacionUI
-
-                                        const selectorHabitacionAsignada = await conexion.query(`SELECT "cama" FROM "configuracionCamasEnHabitacion" WHERE habitacion = $1`, [habitacionUID])
-                                        if (selectorHabitacionAsignada.rowCount === 0) {
-                                            habitacionesSinCama.push(habitacionUI)
-                                        }
-                                    }
-
-                                    if (habitacionesSinCama.length > 0) {
-                                        let funsionArray = habitacionesSinCama.join(", "); // Fusiona los elementos con comas
-                                        funsionArray = funsionArray.replace(/,([^,]*)$/, ' y $1');
-                                        const error = `No se puede establecer el estado disponible por que la configuracion no es valida. Por favor revisa las camas asignadas ne las habitaciones. En las habitaciones ${funsionArray} no hay una sola cama signada como opcion. Por favor asigna la camas`
+                                    const resuelveConsultaHabitaciones = await conexion.query(consultaHabitaciones, [apartamentoIDV])
+                                    if (resuelveConsultaHabitaciones.rowCount === 0) {
+                                        const error = "No se puede poner en disponible esta configuracíon por que no es valida. Necesitas al menos una habitacíon en esta configuracíon y este apartamento no la tiene"
                                         throw new Error(error)
+                                    }
+                                    // Mirar que todas las habitaciones tengan una cama asignada
+                                    if (resuelveConsultaHabitaciones.rowCount > 0) {
+
+                                        const habitacionesSinCama = []
+                                        const habitacionesEnConfiguracion = resuelveConsultaHabitaciones.rows
+                                        for (const detalleHabitacion of habitacionesEnConfiguracion) {
+                                            const habitacionUID = detalleHabitacion.uid
+                                            const habitacionIDV = detalleHabitacion.habitacion
+
+                                            const resolucionHabitacionUI = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
+                                            if (resolucionHabitacionUI.rowCount === 0) {
+                                                const error = "No existe el identificador del apartamentoIDV"
+                                                throw new Error(error)
+                                            }
+                                            const habitacionUI = resolucionHabitacionUI.rows[0].habitacionUI
+
+                                            const selectorHabitacionAsignada = await conexion.query(`SELECT "cama" FROM "configuracionCamasEnHabitacion" WHERE habitacion = $1`, [habitacionUID])
+                                            if (selectorHabitacionAsignada.rowCount === 0) {
+                                                habitacionesSinCama.push(habitacionUI)
+                                            }
+                                        }
+
+                                        if (habitacionesSinCama.length > 0) {
+                                            let funsionArray = habitacionesSinCama.join(", "); // Fusiona los elementos con comas
+                                            funsionArray = funsionArray.replace(/,([^,]*)$/, ' y $1');
+                                            const error = `No se puede establecer el estado disponible por que la configuracion no es valida. Por favor revisa las camas asignadas ne las habitaciones. En las habitaciones ${funsionArray} no hay una sola cama signada como opcion. Por favor asigna la camas`
+                                            throw new Error(error)
+
+                                        }
 
                                     }
 
+                                    // Mira que tenga un perfil de precio creado y superiro 0
+                                    const consultaPerfilPrecio = await conexion.query(`SELECT precio FROM "preciosApartamentos" WHERE apartamento = $1`, [apartamentoIDV])
+                                    if (consultaPerfilPrecio.rowCount === 0) {
+                                        const error = "La configuración no es válida. No se puede establecer en disponible por que esta configuración no tiene asignado un perfil de precio para poder calcular los impuestos. Por favor establece un perfil de precio para esta configuración."
+                                        throw new Error(error)
+                                    }
+
+                                    if (consultaPerfilPrecio.rows[0].precio <= 0) {
+                                        const error = "El apartamento tiene una configuracion correcta y tambien tiene un perfil de precio pero en el perfil de precio hay establecido 0.00 como precio base y no esta permitido."
+                                        throw new Error(error)
+                                    }
+
+
+                                    // No puede haber un estado disponible con precio base en 0.00
+
+
+
+
+
+
+
+
                                 }
 
-                                // Mira que tenga un perfil de precio creado y superiro 0
-                                const consultaPerfilPrecio = await conexion.query(`SELECT precio FROM "preciosApartamentos" WHERE apartamento = $1`, [apartamentoIDV])
-                                if (consultaPerfilPrecio.rowCount === 0) {
-                                    const error = "La configuración no es válida. No se puede establecer en disponible por que esta configuración no tiene asignado un perfil de precio para poder calcular los impuestos. Por favor establece un perfil de precio para esta configuración."
-                                    throw new Error(error)
-                                }
 
-                                if (consultaPerfilPrecio.rows[0].precio <= 0) {
-                                    const error = "El apartamento tiene una configuracion correcta y tambien tiene un perfil de precio pero en el perfil de precio hay establecido 0.00 como precio base y no esta permitido."
-                                    throw new Error(error)
-                                }
-
-
-                                // No puede haber un estado disponible con precio base en 0.00
-
-
-
-
-
-
-
-
-                            }
-
-
-                            const actualizarEstadoConfiguracion = `
+                                const actualizarEstadoConfiguracion = `
                             UPDATE "configuracionApartamento"
                             SET "estadoConfiguracion" = $1
                             WHERE "apartamentoIDV" = $2;
                             `
-                            const clienteActualizarEstadoConfiguracion = await conexion.query(actualizarEstadoConfiguracion, [nuevoEstado, apartamentoIDV])
-                            if (clienteActualizarEstadoConfiguracion.rowCount === 0) {
-                                const error = "No se ha podido actualizar el estado de la configuracion del apartamento"
-                                throw new Error(error)
-                            }
-                            if (clienteActualizarEstadoConfiguracion.rowCount === 1) {
-                                const ok = {
-                                    ok: "Se ha actualizado el estado correctamente",
-                                    nuevoEstado: nuevoEstado
+                                const clienteActualizarEstadoConfiguracion = await conexion.query(actualizarEstadoConfiguracion, [nuevoEstado, apartamentoIDV])
+                                if (clienteActualizarEstadoConfiguracion.rowCount === 0) {
+                                    const error = "No se ha podido actualizar el estado de la configuracion del apartamento"
+                                    throw new Error(error)
                                 }
-                                salida.json(ok)
-                            }
+                                if (clienteActualizarEstadoConfiguracion.rowCount === 1) {
+                                    const ok = {
+                                        ok: "Se ha actualizado el estado correctamente",
+                                        nuevoEstado: nuevoEstado
+                                    }
+                                    salida.json(ok)
+                                }
 
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
 
-                            salida.json(error)
+                                salida.json(error)
+                            }
                         }
                     },
-                    gestionImagenConfiguracionApartamento: async () => {
-                        try {
-                            const apartamentoIDV = entrada.body.apartamentoIDV
-                            const contenidoArchivo = entrada.body.contenidoArchivo
+                    gestionImagenConfiguracionApartamento: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const apartamentoIDV = entrada.body.apartamentoIDV
+                                const contenidoArchivo = entrada.body.contenidoArchivo
 
-                            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-                            if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-                                const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios"
-                                throw new Error(error)
-                            }
+                                const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+                                if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
+                                    const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios"
+                                    throw new Error(error)
+                                }
 
-                            const filtroBase64 = /^[A-Za-z0-9+/=]+$/;
-                            if (typeof contenidoArchivo !== "string" || !filtroBase64.test(contenidoArchivo)) {
-                                const error = "El campo contenido archivo solo acepta archivos codificados en base64";
-                                throw new Error(error);
-                            }
+                                const filtroBase64 = /^[A-Za-z0-9+/=]+$/;
+                                if (typeof contenidoArchivo !== "string" || !filtroBase64.test(contenidoArchivo)) {
+                                    const error = "El campo contenido archivo solo acepta archivos codificados en base64";
+                                    throw new Error(error);
+                                }
 
-                            const esImagenPNG = (contenidoArchivo) => {
-                                const binarioMagicoPNG = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-                                // Decodifica la cadena base64 a un buffer
-                                const buffer = Buffer.from(contenidoArchivo, 'base64');
-                                // Compara los primeros 8 bytes del buffer con el binario mágico
-                                return buffer.subarray(0, 8).compare(binarioMagicoPNG) === 0;
-                            }
+                                const esImagenPNG = (contenidoArchivo) => {
+                                    const binarioMagicoPNG = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+                                    // Decodifica la cadena base64 a un buffer
+                                    const buffer = Buffer.from(contenidoArchivo, 'base64');
+                                    // Compara los primeros 8 bytes del buffer con el binario mágico
+                                    return buffer.subarray(0, 8).compare(binarioMagicoPNG) === 0;
+                                }
 
-                            const esImagenTIFF = (contenidoArchivo) => {
-                                const binarioMagicoTIFF = Buffer.from([73, 73, 42, 0]); // Puedes ajustar estos valores según el formato TIFF que estés buscando
-                                const buffer = Buffer.from(contenidoArchivo, 'base64');
-                                return buffer.subarray(0, 4).compare(binarioMagicoTIFF) === 0 || buffer.subarray(0, 4).compare(Buffer.from([77, 77, 0, 42])) === 0; // Otro formato posible
-                            };
+                                const esImagenTIFF = (contenidoArchivo) => {
+                                    const binarioMagicoTIFF = Buffer.from([73, 73, 42, 0]); // Puedes ajustar estos valores según el formato TIFF que estés buscando
+                                    const buffer = Buffer.from(contenidoArchivo, 'base64');
+                                    return buffer.subarray(0, 4).compare(binarioMagicoTIFF) === 0 || buffer.subarray(0, 4).compare(Buffer.from([77, 77, 0, 42])) === 0; // Otro formato posible
+                                };
 
-                            const esImagenJPEG = (contenidoArchivo) => {
-                                const binarioMagicoJPEG = Buffer.from([255, 216, 255]);
-                                const buffer = Buffer.from(contenidoArchivo, 'base64');
-                                return buffer.subarray(0, 3).compare(binarioMagicoJPEG) === 0;
-                            };
+                                const esImagenJPEG = (contenidoArchivo) => {
+                                    const binarioMagicoJPEG = Buffer.from([255, 216, 255]);
+                                    const buffer = Buffer.from(contenidoArchivo, 'base64');
+                                    return buffer.subarray(0, 3).compare(binarioMagicoJPEG) === 0;
+                                };
 
-                            if (esImagenPNG(contenidoArchivo)) {
-                            } else if (esImagenTIFF(contenidoArchivo)) {
-                            } else if (esImagenJPEG(contenidoArchivo)) {
-                            } else {
-                                const error = "Solo se acetan imagenes PNG, TIFF, JPEG y JPG.";
-                                throw new Error(error);
-                            }
+                                if (esImagenPNG(contenidoArchivo)) {
+                                } else if (esImagenTIFF(contenidoArchivo)) {
+                                } else if (esImagenJPEG(contenidoArchivo)) {
+                                } else {
+                                    const error = "Solo se acetan imagenes PNG, TIFF, JPEG y JPG.";
+                                    throw new Error(error);
+                                }
 
-                            await conexion.query('BEGIN'); // Inicio de la transacción
+                                await conexion.query('BEGIN'); // Inicio de la transacción
 
-                            const validarIDV = `
+                                const validarIDV = `
                                 SELECT 
                                 "estadoConfiguracion"
                                 FROM "configuracionApartamento"
                                 WHERE "apartamentoIDV" = $1
                                 `
-                            const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV])
-                            if (resuelveValidarIDV.rowCount === 0) {
-                                const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon"
-                                throw new Error(error)
-                            }
+                                const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV])
+                                if (resuelveValidarIDV.rowCount === 0) {
+                                    const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon"
+                                    throw new Error(error)
+                                }
 
-                            if (resuelveValidarIDV.rows[0].estadoConfiguracion === "disponible") {
-                                const error = "No se puede actualizar la imagen de una configuracion de apartamento cuando esta disponbile,cambie el estado primero"
-                                throw new Error(error)
-                            }
+                                if (resuelveValidarIDV.rows[0].estadoConfiguracion === "disponible") {
+                                    const error = "No se puede actualizar la imagen de una configuracion de apartamento cuando esta disponbile,cambie el estado primero"
+                                    throw new Error(error)
+                                }
 
-                            const actualizarImagenConfiguracion = `
+                                const actualizarImagenConfiguracion = `
                             UPDATE "configuracionApartamento"
                             SET imagen = $1
                             WHERE "apartamentoIDV" = $2;
                             `
-                            const resuelveActualizarImagenConfiguracion = await conexion.query(actualizarImagenConfiguracion, [contenidoArchivo, apartamentoIDV])
-                            if (resuelveActualizarImagenConfiguracion.rowCount === 0) {
-                                const error = "No se ha podido actualizar la imagen del apartmento reintentalo"
-                                throw new Error(error)
-                            }
-                            if (resuelveActualizarImagenConfiguracion.rowCount === 1) {
-                                const ok = {
-                                    ok: "Se ha actualizado imagen correctamnte",
-                                    imagen: String(contenidoArchivo)
+                                const resuelveActualizarImagenConfiguracion = await conexion.query(actualizarImagenConfiguracion, [contenidoArchivo, apartamentoIDV])
+                                if (resuelveActualizarImagenConfiguracion.rowCount === 0) {
+                                    const error = "No se ha podido actualizar la imagen del apartmento reintentalo"
+                                    throw new Error(error)
                                 }
-                                salida.json(ok)
+                                if (resuelveActualizarImagenConfiguracion.rowCount === 1) {
+                                    const ok = {
+                                        ok: "Se ha actualizado imagen correctamnte",
+                                        imagen: String(contenidoArchivo)
+                                    }
+                                    salida.json(ok)
+                                }
+                                await conexion.query('COMMIT'); // Confirmar la transacción
+
+                            } catch (errorCapturado) {
+                                await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+
+                                const error = {
+                                    error: errorCapturado.message
+                                }
+
+                                salida.json(error)
                             }
-                            await conexion.query('COMMIT'); // Confirmar la transacción
-
-                        } catch (errorCapturado) {
-                            await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
-                            const error = {
-                                error: errorCapturado.message
-                            }
-
-                            salida.json(error)
                         }
                     },
-                    eliminarImagenConfiguracionApartamento: async () => {
-                        try {
-                            const apartamentoIDV = entrada.body.apartamentoIDV
+                    eliminarImagenConfiguracionApartamento: {
+                        IDX: {
+                            ROL: ["administrador"]
+                        },
+                        X: async () => {
+                            try {
+                                const apartamentoIDV = entrada.body.apartamentoIDV
 
-                            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-                            if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-                                const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios"
-                                throw new Error(error)
-                            }
+                                const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+                                if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
+                                    const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios"
+                                    throw new Error(error)
+                                }
 
-                            const validarIDV = `
+                                const validarIDV = `
                                 SELECT 
                                 "estadoConfiguracion"
                                 FROM "configuracionApartamento"
                                 WHERE "apartamentoIDV" = $1
                                 `
-                            const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV])
-                            if (resuelveValidarIDV.rowCount === 0) {
-                                const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon"
-                                throw new Error(error)
-                            }
+                                const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV])
+                                if (resuelveValidarIDV.rowCount === 0) {
+                                    const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon"
+                                    throw new Error(error)
+                                }
 
-                            if (resuelveValidarIDV.rows[0].estadoConfiguracion === "disponible") {
-                                const error = "No se puede actualizar la imagen de una configuracion de apartamento cuando esta disponbile,cambie el estado primero"
-                                throw new Error(error)
-                            }
+                                if (resuelveValidarIDV.rows[0].estadoConfiguracion === "disponible") {
+                                    const error = "No se puede actualizar la imagen de una configuracion de apartamento cuando esta disponbile,cambie el estado primero"
+                                    throw new Error(error)
+                                }
 
-                            const actualizarImagenConfiguracion = `
+                                const actualizarImagenConfiguracion = `
                             UPDATE "configuracionApartamento"
                             SET imagen = NULL
                             WHERE "apartamentoIDV" = $1;
                             `
-                            const resuelveActualizarImagenConfiguracion = await conexion.query(actualizarImagenConfiguracion, [apartamentoIDV])
-                            if (resuelveActualizarImagenConfiguracion.rowCount === 0) {
-                                const error = "No se ha podido borrar la imagen del apartmento reintentalo"
-                                throw new Error(error)
-                            }
-                            if (resuelveActualizarImagenConfiguracion.rowCount === 1) {
-                                const ok = {
-                                    ok: "Se ha borrado imagen correctamnte"
+                                const resuelveActualizarImagenConfiguracion = await conexion.query(actualizarImagenConfiguracion, [apartamentoIDV])
+                                if (resuelveActualizarImagenConfiguracion.rowCount === 0) {
+                                    const error = "No se ha podido borrar la imagen del apartmento reintentalo"
+                                    throw new Error(error)
                                 }
-                                salida.json(ok)
-                            }
+                                if (resuelveActualizarImagenConfiguracion.rowCount === 1) {
+                                    const ok = {
+                                        ok: "Se ha borrado imagen correctamnte"
+                                    }
+                                    salida.json(ok)
+                                }
 
-                        } catch (errorCapturado) {
-                            const error = {
-                                error: errorCapturado.message
-                            }
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
 
-                            salida.json(error)
+                                salida.json(error)
+                            }
                         }
                     }
                 },
@@ -17184,7 +17260,7 @@ const puerto = async (entrada, salida) => {
                         if (claveNueva !== claveNuevaDos) {
                             const error = "No has escrito dos veces la misma nueva contrasena"
                             throw new Error(error)
-                        }else{
+                        } else {
                             validadoresCompartidos.claves.minimoRequisitos(claveNueva)
                         }
                         const cryptoData = {

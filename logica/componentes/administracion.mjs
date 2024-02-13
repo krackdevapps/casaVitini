@@ -13765,9 +13765,11 @@ const administracion = {
                                 const nombre = detallesDelCalendario.nombre
                                 const apartamentoIDV = detallesDelCalendario.apartamentoIDV
                                 const apartamentoUI = detallesDelCalendario.apartamentoUI
+                                const uidPublico = detallesDelCalendario.uidPublico
                                 const plataformaOrigen = detallesDelCalendario.plataformaOrigen
                                 const dataIcal = detallesDelCalendario.dataIcal
 
+                                const dominioActual = window.location.hostname
                                 const contenedorCalendarioIndiviudal = document.createElement("div")
                                 contenedorCalendarioIndiviudal.classList.add("contenedorCalendarioIndividual")
                                 contenedorCalendarioIndiviudal.setAttribute("calendarioUID", uid)
@@ -13796,10 +13798,21 @@ const administracion = {
                                 titulo.innerText = "URL del calendario"
                                 datosCalendario.appendChild(titulo)
 
-                                const urlCalendario = document.createElement("div")
-                                urlCalendario.classList.add("urlCalendario")
-                                urlCalendario.innerText = url
-                                datosCalendario.appendChild(urlCalendario)
+                                const urlCalendarioImportado = document.createElement("div")
+                                urlCalendarioImportado.classList.add("urlCalendario")
+                                urlCalendarioImportado.innerText = url
+                                datosCalendario.appendChild(urlCalendarioImportado)
+
+
+                                titulo = document.createElement("p")
+                                titulo.classList.add("tituloDatoCalendario")
+                                titulo.innerText = "URL del calendario para exportar"
+                                datosCalendario.appendChild(titulo)
+
+                                const urlCalendarioExportar = document.createElement("div")
+                                urlCalendarioExportar.classList.add("urlCalendario")
+                                urlCalendarioExportar.innerText = "https://" + dominioActual + "/calendarios_compartidos/" + uidPublico
+                                datosCalendario.appendChild(urlCalendarioExportar)
 
                                 contenedorCalendarioIndiviudal.appendChild(datosCalendario)
 
@@ -27686,7 +27699,8 @@ const administracion = {
                 calendario.tipo = "actual"
                 calendario.comando = "construyeObjeto"
                 const calendarioResuelto = await casaVitini.componentes.resolverCalendarioNuevo(calendarioActual)
-                console.log("calendarioResuelto", calendarioResuelto)
+                
+                console.log("calendarioResuelto----------")
 
 
                 calendario.tipo = "personalizado"
