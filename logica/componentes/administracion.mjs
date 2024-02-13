@@ -1497,7 +1497,7 @@ const administracion = {
                         entrada: fechaEntradaFormado,
                         salida: fechaSalidaFormado
                     }
-                    console.log("transaccion", transaccion)
+                    
 
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -13258,7 +13258,7 @@ const administracion = {
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
 
-                console.log("respiestaServidor", respuestaServidor)
+                
                 if (respuestaServidor?.error) {
                     casaVitini.administracion.configuracion.cancelarCambios()
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -27636,7 +27636,7 @@ const administracion = {
                 capas: [],
                 capasCompuestas: {}
             }
-            console.log("parametros", parametros)
+            
             if (parametros.fecha) {
                 const fecha = parametros.fecha.split("-")
                 const mes = Number(fecha[0])
@@ -27680,7 +27680,7 @@ const administracion = {
                 calendario.comando = "construyeObjeto"
                 const calendarioResuelto = await casaVitini.componentes.resolverCalendarioNuevo(calendarioActual)
                 
-                console.log("calendarioResuelto----------")
+                
 
 
                 calendario.tipo = "personalizado"
@@ -27878,9 +27878,9 @@ const administracion = {
                             const capaUID = capa.getAttribute("capaUID")
                             estructura.capas.push(capaUID)
                         })
-                        console.log("capasSelecionadas", capasSelecionadas)
+                        
 
-                        console.log("capasSelecionadas.includes(todoLosApartamentos)", capasSelecionadas.includes("todosLosApartamentos"))
+                        
                         if (!capasSelecionadas.includes("todosLosApartamentos")) {
                             const apartametnosSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID=porApartamento][estado=seleccionado]")
                             const porApartamento = []
@@ -27917,7 +27917,7 @@ const administracion = {
                         const mensaje = "Selecciona alguna capa para aplicarla en el calendario. No has seleccionado ninguna capa. Si por el contrario lo que quieres es cerrar la pantalla de capas pulsa en le boton cerrar."
                         return casaVitini.ui.vistas.advertenciaInmersivaSuperPuesta(mensaje)
                     }
-                    console.log("estructura", estructura)
+                    
                     casaVitini.componentes.limpiarAdvertenciasInmersivas()
                     const metadatos = {
                         contenedorCapas: estructura,
@@ -28245,7 +28245,7 @@ const administracion = {
 
                     if (grupo === "cabeza") {
                         const elementosDelGrupo = contenedorCapa.closest("[grupo=campo]").querySelectorAll("[grupo=elemento]")
-                        console.log("elementosDelGrupo", contenedorCapa.closest("[grupo=campo]"))
+                        
                         if (estadoCapa === "seleccionado") {
                             elementosDelGrupo.forEach((capa) => {
                                 capa.removeAttribute("estado")
@@ -28657,7 +28657,7 @@ const administracion = {
                 instanciaUID: instanciaUID,
                 tipoRegistro: "crear",
             }
-            console.log("objetoAnterior", calendario)
+            
 
             let parametrosURL = []
             const contenedorCapas = {
@@ -28763,8 +28763,8 @@ const administracion = {
                 }
             }
 
-            console.log("contenedorCapas", contenedorCapas)
-            console.log("parametrosURL", parametrosURL)
+            
+            
             const soloCapasURL = []
             for (const parDeParametro of parametrosURL) {
                 const parametro = parDeParametro.split(":")
@@ -28801,7 +28801,7 @@ const administracion = {
                 instanciaUID: instanciaUID,
                 contenedorCapas: contenedorCapas
             }
-            console.log("metadtos", metadatos)
+            
             return casaVitini.administracion.calendario.capas(metadatos)
 
 
@@ -28811,7 +28811,7 @@ const administracion = {
             const instanciaUID = calendario.instanciaUID
             delete calendario.instanciaUID
             const instanciaUIDMes = calendario.instanciaUIDMes
-            console.log("instanciaUID Error", instanciaUID)
+            
             const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
 
             const selectorDiasRenderizados = calendarioRenderizado.querySelectorAll("[dia], [componente=eventoUI]")
@@ -28937,7 +28937,7 @@ const administracion = {
                 funcionPersonalizada: "casaVitini.administracion.calendario.irAFecha",
                 datosPaginacion: configuracion
             }
-            console.log("tipoRegistro", tipoRegistro, constructorURLFinal, estado)
+            
 
             if (tipoRegistro === "crear") {
                 window.history.pushState(estado, titulo, constructorURLFinal);
@@ -28952,7 +28952,7 @@ const administracion = {
             const instanciaUIDMes = casaVitini.componentes.codigoFechaInstancia()
             document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=marcoMes]`)
                 .setAttribute("instanciaUID", instanciaUIDMes)
-            console.log("irAFecha", calendario, "instanciaUID", calendario.instanciaUID)
+            
             calendario.instanciaUIDMes = instanciaUIDMes
             calendario.instanciaUID = instanciaUID
 

@@ -773,7 +773,6 @@ const puerto = async (entrada, salida) => {
                     entrada.session.rol = rol
                     entrada.session.ip = ip
                     entrada.session.userAgent = userAgent
-                    console.log("sessionConectar", entrada.session)
 
                     const ok = {
                         ok: IDX_,
@@ -797,8 +796,6 @@ const puerto = async (entrada, salida) => {
                     const usuario = entrada.session?.usuario;
                     const rol = entrada.session?.rol
                     const respuesta = {}
-                    console.log("sessionestado", entrada.session)
-                    console.log("usuario", entrada.session.usuario)
                     if (usuario) {
                         respuesta.estado = "conectado"
                         respuesta.usuario = usuario
@@ -826,7 +823,6 @@ const puerto = async (entrada, salida) => {
                 const error = {
                     error: errorCapturado.message
                 }
-                console.log("errorSalida", error)
                 salida.json(error)
             }
         },
@@ -8546,7 +8542,6 @@ const puerto = async (entrada, salida) => {
                         const eventosCalendarios_airbnbn = await apartamentosOcupadosHoy(fechaActualTZ)
 
                         for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnbn) {
-                            console.log("calendariosSincronizadosAirbnb", calendariosSincronizadosAirbnb)
                             /*
                             {
                                   apartametnoIDV: 'apartamento3',
@@ -8853,7 +8848,6 @@ const puerto = async (entrada, salida) => {
                             fechaHoy_ISO: fechaActualTZ
                         }
                         const eventosSincronizadosAirbnb = await eventosDelApartamento(datosAirbnb)
-                        console.log("eventosSincronizadoAIrbnbn", eventosSincronizadosAirbnb)
 
                         objetoFinal.calendariosSincronizados = {}
 
@@ -9300,14 +9294,14 @@ const puerto = async (entrada, salida) => {
                                         }); calendarioRaw = calendarioData.data
                                         const jcalData = ICAL.parse(calendarioRaw); // Intenta analizar el contenido como datos jCal
                                         const jcal = new ICAL.Component(jcalData); // Crea un componente jCal
-                                        console.log("jcal", jcal.name)
+                                        
                                         // Verifica si el componente es un calendario (VCALENDAR)
                                         if (jcal?.name.toLowerCase() !== 'vcalendar') {
-                                            console.log("1")
+                                            
                                             throw new Error(errorDeFormado)
                                         }
                                     } catch (errorCapturado) {
-                                        console.log("2", errorCapturado.message)
+                                        
 
                                         throw new Error(errorDeFormado)
                                     }
@@ -9477,14 +9471,14 @@ const puerto = async (entrada, salida) => {
                                             calendarioRaw = calendarioData.data
                                             const jcalData = ICAL.parse(calendarioRaw); // Intenta analizar el contenido como datos jCal
                                             const jcal = new ICAL.Component(jcalData); // Crea un componente jCal
-                                            console.log("jcal", jcal.name)
+                                            
                                             // Verifica si el componente es un calendario (VCALENDAR)
                                             if (jcal?.name.toLowerCase() !== 'vcalendar') {
-                                                console.log("1")
+                                                
                                                 throw new Error(errorDeFormado)
                                             }
                                         } catch (errorCapturado) {
-                                            console.log("2", errorCapturado.message)
+                                            
 
                                             throw new Error(errorDeFormado)
                                         }
@@ -17980,7 +17974,7 @@ const puerto = async (entrada, salida) => {
                                         fecha: fecha,
                                         calendarioUID: String(calendarioUID)
                                     }
-                                    console.log("metadatosEventos", metadatosEventos)
+                                    
                                     const eventosPorApartamentoAirbnb_ = await eventosPorApartamentoAirbnb(metadatosEventos)
                                     for (const [fechaDia, contenedorEventos] of Object.entries(eventosPorApartamentoAirbnb_.eventosMes)) {
                                         const selectorDia = estructuraGlobal.eventosMes[fechaDia]
@@ -18160,7 +18154,7 @@ const puerto = async (entrada, salida) => {
                                                 fecha: fecha,
                                                 calendarioUID: String(calendarioUID)
                                             }
-                                            console.log("metadatosEventos", metadatosEventos)
+                                            
                                             const eventosPorApartamentoAirbnb_ = await eventosPorApartamentoAirbnb(metadatosEventos)
                                             for (const [fechaDia, contenedorEventos] of Object.entries(eventosPorApartamentoAirbnb_.eventosMes)) {
                                                 const selectorDia = estructuraGlobal.eventosMes[fechaDia]
@@ -18208,7 +18202,7 @@ const puerto = async (entrada, salida) => {
                                         const calendariosUIDValidos = resuelveCalendariosUID.rows.map((calendarioUID) => {
                                             return String(calendarioUID.uid)
                                         })
-                                        console.log("calendariosUID", calendariosUID, calendariosUIDValidos)
+                                        
                                         const controlCalendariosF2 = calendariosUID.every(calendariosUID => calendariosUIDValidos.includes(calendariosUID));
 
                                         if (!controlCalendariosF2) {
@@ -18462,7 +18456,7 @@ const calendarios_compartidos = async (entrada, salida) => {
             .filter(url => url.trim() !== "calendarios_compartidos")
             .filter(url => url.trim() !== "")
         const calendarioUID = urlArray[0];
-        console.log("calendarioUID", calendarioUID)
+        
 
         //Verificara que existe el calendarios
         // ENFOQUE ERRONEO ->> Hay que mostrar los eventos de CASAVITINI por apartmento durante un año a partir de hoy!!!!!! por que este calendario es para sincronizar con las otras plataformas
@@ -18563,7 +18557,7 @@ const calendarios_compartidos = async (entrada, salida) => {
                     .query(apartamenosBloqueadosTemporalmente, datosConsultaBloqueos)
 
                 const bloqueosTemporales = resuelveBloqueosTemporales.rows
-                console.log("bloqueosTemporales", bloqueosTemporales)
+                
 
                 for (const detalleDelBloqueo of bloqueosTemporales) {
 
@@ -18605,7 +18599,7 @@ const calendarios_compartidos = async (entrada, salida) => {
                     FROM "reservaApartamentos" 
                     WHERE reserva = $1 AND apartamento = $2;`
                     const resuelveApartamento = await conexion.query(consultaApartamentoEnReserva, [reservaUID, apartamentoIDV])
-                    // console.log("resuelveApartamento", resuelveApartamento.rows)
+                    // 
                     // Aqui esta el error
 
                     const apartamentosDeLaReserva = resuelveApartamento.rows
@@ -18625,7 +18619,7 @@ const calendarios_compartidos = async (entrada, salida) => {
 
 
                     if (resuelveApartamento.rows === 1) {
-                        // console.log("resuelveApartamento", resuelveApartamento.rows, "RESERVA SELECIONADA")
+                        // 
 
                         const evento = {
                             start: DateTime.fromISO(fechaEntrada_ISO),
