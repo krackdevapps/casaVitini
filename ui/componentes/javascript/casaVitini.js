@@ -6026,15 +6026,18 @@ const casaVitini = {
     },
     componentes: {
         cambiarVista: (vistaMenu) => {
-            vistaMenu.preventDefault()
-            vistaMenu.stopPropagation()
-            const vista = vistaMenu.target.getAttribute("vista")
-            const entrada = {
-                vista: vista,
-                tipoOrigen: "menuNavegador",
-                objetoOrigen: vistaMenu
+
+            if (vistaMenu.button === 0) { // 0 es el botón izquierdo, 1 es el botón central
+                vistaMenu.preventDefault()
+                vistaMenu.stopPropagation()
+                const vista = vistaMenu.target.getAttribute("vista")
+                const entrada = {
+                    vista: vista,
+                    tipoOrigen: "menuNavegador",
+                    objetoOrigen: vistaMenu
+                }
+                return casaVitini.componentes.controladorVista(entrada)
             }
-            return casaVitini.componentes.controladorVista(entrada)
         },
         controladorVista: async (entrada) => {
             const objetoOrigen = entrada.objetoOrigen?.target
@@ -12657,7 +12660,7 @@ const casaVitini = {
 
             let arrayURL = urlActual.split("/")
             arrayURL = arrayURL.filter((url) => url)
-            
+
 
             arrayURL.map((bloque) => {
                 if (bloque.includes(":")) {
