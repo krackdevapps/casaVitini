@@ -3,10 +3,10 @@ import { verificarRangoContenidoAirbnb } from "./verificarRangoContenidoAirbnb.m
 
 const eventosDelApartamento = async (datos) => {
     // AL LORO DESCOMENTAR LO DE ABAJO CUANDO SE ACABEN LAS PRUEBAS!!!!!
-    //const fechaHoy_ISO = datos.fechaHoy_ISO
+    const fechaHoy_ISO = datos.fechaHoy_ISO
     const apartamentoIDV = datos.apartamentoIDV
 
-    const fechaHoy_ISO = "2024-05-05"
+    //const fechaHoy_ISO = "2024-05-05"
     // Sincronizar y obtener los dtos
 
     const calendarioExterno = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV)
