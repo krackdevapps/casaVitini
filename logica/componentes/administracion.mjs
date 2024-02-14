@@ -12502,7 +12502,7 @@ const administracion = {
 
                                 const descripcionEvento = document.createElement("p")
                                 descripcionEvento.classList.add("descripcionEvento")
-                                descripcionEvento.innerText = "Este evento proviene de un calendario sincronizado con Airbnb. Para ver los detalles de este evento pulsa en el boton inferior que le permitira ir directamente a los detalles del evento en la web de Airbnb."
+                                descripcionEvento.innerText = "Este evento proviene de un calendario sincronizado con Airbnb. Para ver los detalles de este evento pulsa en el botón inferior que le permitirá ir directamente a los detalles del evento en la web de Airbnb."
                                 contenedorTitulo.appendChild(descripcionEvento)
                                 contenedorEvento.appendChild(contenedorTitulo)
 
@@ -12920,7 +12920,7 @@ const administracion = {
 
                         const descripcionEvento = document.createElement("p")
                         descripcionEvento.classList.add("descripcionEvento")
-                        descripcionEvento.innerText = "Este evento proviene de un calendario sincronizado con Airbnb. Para ver los detalles de este evento pulsa en el boton inferior que le permitira ir directamente a los detalles del evento en la web de Airbnb."
+                        descripcionEvento.innerText = "Este evento proviene de un calendario sincronizado con Airbnb. Para ver los detalles de este evento pulsa en el botón inferior que le permitirá ir directamente a los detalles del evento en la web de Airbnb."
                         contenedorTitulo.appendChild(descripcionEvento)
                         contenedorEvento.appendChild(contenedorTitulo)
 
