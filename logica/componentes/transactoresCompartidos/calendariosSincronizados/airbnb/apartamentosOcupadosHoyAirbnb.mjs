@@ -27,7 +27,7 @@ const apartamentosOcupadosHoy = async (fechaHoy_ISO) => {
         const apartamentoIDV = calendarioExterno.apartamentoIDV
 
         const detallesDelApartamento = {
-            apartametnoIDV: apartamentoIDV,
+            apartamentoIDV: apartamentoIDV,
             eventos: []
         }
 

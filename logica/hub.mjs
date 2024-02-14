@@ -8417,7 +8417,7 @@ const puerto = async (entrada, salida) => {
                         to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
                         to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
                         to_char(entrada, 'DD/MM/YYYY') as "entradaHumano", 
-                        to_char(salida, 'DD//MM/YYYY') as "salidaHumano"
+                        to_char(salida, 'DD/MM/YYYY') as "salidaHumano"
                         FROM reservas
                         WHERE entrada <= $1::DATE AND salida >= $1::DATE; 
                         `
@@ -8499,7 +8499,7 @@ const puerto = async (entrada, salida) => {
                                             numeroDiaReservaUI = cantidadDias.diasDiferencia + " días"
                                         }
                                         if (cantidadDias.diasDiferencia === 1) {
-                                            numeroDiaReservaUI = cantidadDias.diasDiferencia + " día y " + cantidadDias.horasDiferencia + " horas"
+                                            numeroDiaReservaUI = cantidadDias.diasDiferencia + " día y " + cantidadDias.horasDiferencia.toFixed(0) + " horas"
 
                                         }
                                         if (cantidadDias.diasDiferencia === 0) {
@@ -8544,7 +8544,7 @@ const puerto = async (entrada, salida) => {
                         for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnbn) {
                             /*
                             {
-                                  apartametnoIDV: 'apartamento3',
+                                  apartamentoIDV: 'apartamento3',
                                   eventos: [
                                     {
                                       fechaFinal: '2024-03-31',
@@ -8556,7 +8556,7 @@ const puerto = async (entrada, salida) => {
                                 }
                             */
 
-                            const apartamentoIDV_destino = calendariosSincronizadosAirbnb.apartametnoIDV
+                            const apartamentoIDV_destino = calendariosSincronizadosAirbnb.apartamentoIDV
                             const eventosDelApartamento = calendariosSincronizadosAirbnb.eventos
                             ok.ok[apartamentoIDV_destino].calendariosSincronizados = {}
                             ok.ok[apartamentoIDV_destino].calendariosSincronizados.airbnb = {}
