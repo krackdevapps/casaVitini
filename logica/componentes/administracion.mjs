@@ -94,7 +94,7 @@ const administracion = {
             botonVerHoy.classList.add("adminitracion_reservas_contenedorBotonesGlobales")
             botonVerHoy.setAttribute("boton", "botonVerHoy")
             botonVerHoy.addEventListener("click", casaVitini.administracion.reservas.verReservasHoy)
-            botonVerHoy.innerText = "Ver hoy"
+            botonVerHoy.innerText = "Ver entradas hoy"
             contenedorBotonesGlobales.appendChild(botonVerHoy)
 
 
