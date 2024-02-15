@@ -13,8 +13,7 @@ import { conexion } from './logica/componentes/db.mjs';
 
 dotenv.config();
 
-const minutosSesion = 60 // Minutos
-const duracionGlobalSessionServidor = minutosSesion * 60 // Recuerda esto es segundos
+const duracionGlobalSessionServidor = 60 * 60 // Recuerda esto es segundos
 const duracionGlobalSessionCliente = duracionGlobalSessionServidor * 1000 // Recuerda esto es en miliSegundos
 
 // Evitar petadas por SIGTERM o admin shutdown de procesos conectados como el de la base de datos.
@@ -107,7 +106,8 @@ app.use(session({
     maxAge: duracionGlobalSessionCliente,
     sameSite: true,
     expires: duracionGlobalSessionCliente,
-    httpOnly: true
+    httpOnly: true,
+    rolling: false,
   },
   rolling: true,
 }));
