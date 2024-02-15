@@ -891,8 +891,6 @@ const puerto = async (entrada, salida) => {
                         }
                         salida.json(respuesta)
                     }
-
-
                     if (tipo === "personalizado") {
                         const ano = entrada.body.ano
                         const mes = entrada.body.mes
@@ -964,11 +962,21 @@ const puerto = async (entrada, salida) => {
                         salida.json(calendario)
 
                     }
+                    if (tipo === "diaMinimoDeEntrada") {
+
+                        const fechaMinimaDeEntrada  = tiempoZH.plus({ days: 365 })
+
+
+
+                        
+
+
+                        
+                    }
                 } catch (errorCapturado) {
                     const error = {
                         error: errorCapturado.message
                     }
-
                     salida.json(error)
                 }
             },

@@ -13,14 +13,14 @@ const validarObjetoReserva = async (reserva) => {
         await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_Humano)
         await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_Humano)
 
-        const fechaEntrada_ISO =  (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_Humano)).fecha_ISO
+        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_Humano)).fecha_ISO
         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_Humano)).fecha_ISO
 
 
-        let nombreTitular = reserva.datosTitular.nombreTitular
-        let pasaporteTitular = reserva.datosTitular.pasaporteTitular
-        let telefonoTitular = reserva.datosTitular.telefonoTitular
-        let correoTitular = reserva.datosTitular.correoTitular
+        let nombreTitular = reserva.datosTitular?.nombreTitular || ""
+        let pasaporteTitular = reserva.datosTitular?.pasaporteTitular || ""
+        let telefonoTitular = reserva.datosTitular?.telefonoTitular || ""
+        let correoTitular = reserva.datosTitular?.correoTitular || ""
 
         nombreTitular = nombreTitular
             .replace(/[^a-zA-Z0-9\s]/g, "")
@@ -84,7 +84,7 @@ const validarObjetoReserva = async (reserva) => {
 
         const fechaActualCompletaTZ = tiempoZH.toISO()
         const fechaActualTZ = tiempoZH.toISODate()
-        const fechaActualUTC = DateTime.now().toUTC().toISODate();
+        const fechaActualUTC_Objeto = DateTime.now().toUTC()
 
         const diaHoyTZ = tiempoZH.day
         const mesPresenteTZ = tiempoZH.month
@@ -94,8 +94,8 @@ const validarObjetoReserva = async (reserva) => {
         const minutoPresenteTZ = tiempoZH.minute
 
 
-        const fechaEntradaReserva_ISO = DateTime.fromISO(fechaEntrada_ISO);
-        const fechaSalidaReserva_ISO = DateTime.fromISO(fechaSalida_ISO);
+        const fechaEntradaReserva_ISO = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
+        const fechaSalidaReserva_ISO = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria });
 
         if (fechaEntradaReserva_ISO < fechaActualTZ) {
             const error = "La fecha de entrada no puede ser anterior a la fecha actual"
@@ -107,7 +107,23 @@ const validarObjetoReserva = async (reserva) => {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
             throw new Error(error)
         }
+        const fechaLimite_Objeto = tiempoZH.plus({ days: 365 })
+        const fechaMinimaDiaEntrada_Objeto = tiempoZH.plus({ days: 10 })
 
+
+        const diferenciaEnDiasLimiteDiaDeEntrada = fechaEntradaReserva_ISO.diff(fechaMinimaDiaEntrada_Objeto, 'days').toObject().days;
+
+        if (diferenciaEnDiasLimiteDiaDeEntrada <= 0) {
+            const error = "Casa Vitini solo acepta reservas con un minimo de diez dias de antelacion. Gracias."
+            throw new Error(error)
+        }
+
+        const diferenciaEnDiasLimiteFuturo = fechaLimite_Objeto.diff(fechaSalidaReserva_ISO, 'days').toObject().days;
+        if (diferenciaEnDiasLimiteFuturo <= 0) {
+            const error = "Como maximo las reservas no pueden superar el año a partir de hoy. Casa Vitini solo acepta reservas a un año maximo. Gracias."
+            throw new Error(error)
+        }
+        
 
         // Validar que las reservas no sean de mas de un año por lo tanto la fecha de salida no puede ser superior aun año del dia actual
 
@@ -123,7 +139,7 @@ const validarObjetoReserva = async (reserva) => {
         const fecha = {
             fechaEntrada_ISO: fechaEntrada_ISO,
             fechaSalida_ISO: fechaSalida_ISO
-            }
+        }
         const resueleApartamentosDisponibles = await apartamentosDisponiblesPublico(fecha)
         const apartamentosDisponibles = resueleApartamentosDisponibles?.apartamentosDisponibles
 
