@@ -81,18 +81,7 @@ const validarObjetoReserva = async (reserva) => {
         reserva.datosTitular.correoTitular = correoTitular
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
-
-        const fechaActualCompletaTZ = tiempoZH.toISO()
         const fechaActualTZ = tiempoZH.toISODate()
-        const fechaActualUTC_Objeto = DateTime.now().toUTC()
-
-        const diaHoyTZ = tiempoZH.day
-        const mesPresenteTZ = tiempoZH.month
-        const anoPresenteTZ = tiempoZH.year
-
-        const horaPresenteTZ = tiempoZH.hour
-        const minutoPresenteTZ = tiempoZH.minute
-
 
         const fechaEntradaReserva_ISO = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
         const fechaSalidaReserva_ISO = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria });

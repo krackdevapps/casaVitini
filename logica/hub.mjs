@@ -510,33 +510,33 @@ const puerto = async (entrada, salida) => {
                     try {
                         const consultasHorasSalidaYEntrada = `
                         SELECT 
-                        "zonaHoraria", 
-                        "horaEntradaTZ", 
-                        "horaSalidaTZ"
-                        FROM "configuracionGlobal"
-                        WHERE "configuracionUID" = $1; 
-                        `
-                        const configuracionUID = [
-                            "zonaHoraria"
-                        ]
-                        const resuelveConfiguracionGlobal = await conexion.query(consultasHorasSalidaYEntrada, configuracionUID)
-                        const detallesConfiguracion = resuelveConfiguracionGlobal.rows[0]
+                            valor,
+                            "configuracionUID"
+                        FROM 
+                            "configuracionGlobal"
+                        WHERE 
+                            "configuracionUID" IN ($1, $2, $3);
+                       `;
 
-                        const estructuraFinal = {
-                            zonaHoraria: detallesConfiguracion.zonaHoraria,
-                            horaEntradaTZ: detallesConfiguracion.horaEntradaTZ,
-                            horaSalidaTZ: detallesConfiguracion.horaSalidaTZ
+                        const configuracionUID = [
+                            "horaEntradaTZ",
+                            "horaSalidaTZ",
+                            "zonaHoraria"
+                        ];
+                        const resuelveConfiguracionGlobal = await conexion.query(consultasHorasSalidaYEntrada, configuracionUID)
+                        const detallesConfiguracion = resuelveConfiguracionGlobal.rows
+                        const estructuraFinal = {}
+                        for (const parConfirmacion of detallesConfiguracion) {
+                            const configuracionUID = parConfirmacion.configuracionUID
+                            const valor = parConfirmacion.valor
+                            estructuraFinal[configuracionUID] = valor
                         }
+                        console.log(estructuraFinal)
                         return estructuraFinal
 
                     } catch (errorCapturado) {
                         throw errorCapturado
                     }
-
-
-
-
-
                 },
             }
 
@@ -964,14 +964,14 @@ const puerto = async (entrada, salida) => {
                     }
                     if (tipo === "diaMinimoDeEntrada") {
 
-                        const fechaMinimaDeEntrada  = tiempoZH.plus({ days: 365 })
+                        const fechaMinimaDeEntrada = tiempoZH.plus({ days: 365 })
 
 
 
-                        
 
 
-                        
+
+
                     }
                 } catch (errorCapturado) {
                     const error = {
@@ -8938,7 +8938,7 @@ const puerto = async (entrada, salida) => {
                         X: async () => {
                             try {
                                 const zonaHoraria = entrada.body.zonaHoraria
-     
+
                                 const filtroZonaHoraria = /^[a-zA-Z0-9\/_\-+]+$/;
                                 const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;
 
@@ -8948,7 +8948,7 @@ const puerto = async (entrada, salida) => {
                                 }
 
 
-        
+
 
                                 // Validar que la zona horarai exista
                                 const validarZonaHoraria = (zonaHorariaAValidar) => {
@@ -9017,26 +9017,33 @@ const puerto = async (entrada, salida) => {
                         X: async () => {
                             try {
                                 const consultaConfiguracionGlobal = `
-                            SELECT 
-                            *
-                            FROM 
-                            "configuracionGlobal"
-                            WHERE
-                            "configuracionUID" = $1
-                            `
+                                SELECT 
+                                    valor,
+                                    "configuracionUID"
+                                FROM 
+                                    "configuracionGlobal"
+                                WHERE 
+                                    "configuracionUID" IN ($1, $2);
+                               `;
+
                                 const configuracionUID = [
-                                    "zonaHoraria"
-                                ]
+                                    "horaEntradaTZ",
+                                    "horaSalidaTZ",
+                                ];
                                 const resuelveConfiguracionGlobal = await conexion.query(consultaConfiguracionGlobal, configuracionUID)
                                 if (resuelveConfiguracionGlobal.rowCount === 0) {
                                     const error = "No hay configuraciones globales"
                                     throw new Error(error)
                                 }
-
-
-                                const ok = {
-                                    ok: resuelveConfiguracionGlobal.rows[0]
+                                const configuraciones = resuelveConfiguracionGlobal.rows
+                                const ok = {ok:{}}
+                                for (const parConfiguracion of configuraciones) {
+                                    const configuracionUID = parConfiguracion.configuracionUID
+                                    const valor = parConfiguracion.valor
+                                    ok.ok[configuracionUID] = valor
                                 }
+
+
                                 salida.json(ok)
 
 
@@ -9082,22 +9089,30 @@ const puerto = async (entrada, salida) => {
                                     const error = "La hora de entrada no puede ser anterior o igual a la hora de salida. Los pernoctantes primero salen del apartamento a su hora de salida y luego los nuevos pernoctantes entran en el apartamento a su hora de entrada. Por eso la hora de entrada tiene que ser mas tarde que al hora de salida. Por que primero salen del apartamento ocupado, el apartmento entonces pasa a estar libre y luego entran los nuevo pernoctantes al apartamento ahora libre de los anteriores pernoctantes."
                                     throw new Error(error)
                                 }
-              
+
 
 
                                 await conexion.query('BEGIN'); // Inicio de la transacción
+                                const configuracionUID_horaEntradaTZ = "horaEntradaTZ"
+                                const configuracionUID_horaSalidaTZ = "horaSalidaTZ"
+
                                 const actualizarConfiguracionGlobal = `
-                                  UPDATE "configuracionGlobal"
-                                  SET
-                                    "horaEntradaTZ" = $1,
-                                    "horaSalidaTZ" = $2
-                                  WHERE
-                                    "configuracionUID" = $3;
-                                  `
+                                UPDATE "configuracionGlobal"
+                                SET
+                                    valor = CASE
+                                        WHEN "configuracionUID" = $2 THEN $1
+                                        WHEN "configuracionUID" = $4 THEN $3
+                                        ELSE valor
+                                    END
+                                WHERE
+                                    "configuracionUID" IN ($2, $4);
+                                `;
+                                
                                 const nuevaConfiguracion = [
                                     horaEntradaTZ,
+                                    configuracionUID_horaEntradaTZ,
                                     horaSalidaTZ,
-                                    "zonaHoraria"
+                                    configuracionUID_horaSalidaTZ
                                 ]
                                 const consultaValidarApartamento = await conexion.query(actualizarConfiguracionGlobal, nuevaConfiguracion)
                                 if (consultaValidarApartamento.rowCount === 0) {
@@ -9302,14 +9317,14 @@ const puerto = async (entrada, salida) => {
                                         }); calendarioRaw = calendarioData.data
                                         const jcalData = ICAL.parse(calendarioRaw); // Intenta analizar el contenido como datos jCal
                                         const jcal = new ICAL.Component(jcalData); // Crea un componente jCal
-                                        
+
                                         // Verifica si el componente es un calendario (VCALENDAR)
                                         if (jcal?.name.toLowerCase() !== 'vcalendar') {
-                                            
+
                                             throw new Error(errorDeFormado)
                                         }
                                     } catch (errorCapturado) {
-                                        
+
 
                                         throw new Error(errorDeFormado)
                                     }
@@ -9479,14 +9494,14 @@ const puerto = async (entrada, salida) => {
                                             calendarioRaw = calendarioData.data
                                             const jcalData = ICAL.parse(calendarioRaw); // Intenta analizar el contenido como datos jCal
                                             const jcal = new ICAL.Component(jcalData); // Crea un componente jCal
-                                            
+
                                             // Verifica si el componente es un calendario (VCALENDAR)
                                             if (jcal?.name.toLowerCase() !== 'vcalendar') {
-                                                
+
                                                 throw new Error(errorDeFormado)
                                             }
                                         } catch (errorCapturado) {
-                                            
+
 
                                             throw new Error(errorDeFormado)
                                         }
@@ -17982,7 +17997,7 @@ const puerto = async (entrada, salida) => {
                                         fecha: fecha,
                                         calendarioUID: String(calendarioUID)
                                     }
-                                    
+
                                     const eventosPorApartamentoAirbnb_ = await eventosPorApartamentoAirbnb(metadatosEventos)
                                     for (const [fechaDia, contenedorEventos] of Object.entries(eventosPorApartamentoAirbnb_.eventosMes)) {
                                         const selectorDia = estructuraGlobal.eventosMes[fechaDia]
@@ -18162,7 +18177,7 @@ const puerto = async (entrada, salida) => {
                                                 fecha: fecha,
                                                 calendarioUID: String(calendarioUID)
                                             }
-                                            
+
                                             const eventosPorApartamentoAirbnb_ = await eventosPorApartamentoAirbnb(metadatosEventos)
                                             for (const [fechaDia, contenedorEventos] of Object.entries(eventosPorApartamentoAirbnb_.eventosMes)) {
                                                 const selectorDia = estructuraGlobal.eventosMes[fechaDia]
@@ -18210,7 +18225,7 @@ const puerto = async (entrada, salida) => {
                                         const calendariosUIDValidos = resuelveCalendariosUID.rows.map((calendarioUID) => {
                                             return String(calendarioUID.uid)
                                         })
-                                        
+
                                         const controlCalendariosF2 = calendariosUID.every(calendariosUID => calendariosUIDValidos.includes(calendariosUID));
 
                                         if (!controlCalendariosF2) {
@@ -18464,7 +18479,7 @@ const calendarios_compartidos = async (entrada, salida) => {
             .filter(url => url.trim() !== "calendarios_compartidos")
             .filter(url => url.trim() !== "")
         const calendarioUID = urlArray[0];
-        
+
 
         //Verificara que existe el calendarios
         // ENFOQUE ERRONEO ->> Hay que mostrar los eventos de CASAVITINI por apartmento durante un año a partir de hoy!!!!!! por que este calendario es para sincronizar con las otras plataformas
@@ -18565,7 +18580,7 @@ const calendarios_compartidos = async (entrada, salida) => {
                     .query(apartamenosBloqueadosTemporalmente, datosConsultaBloqueos)
 
                 const bloqueosTemporales = resuelveBloqueosTemporales.rows
-                
+
 
                 for (const detalleDelBloqueo of bloqueosTemporales) {
 

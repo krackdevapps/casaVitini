@@ -1,17 +1,17 @@
 import { conexion } from "../db.mjs"
 const codigoZonaHoraria = async () => {
+    const zonaHorariaUID = "zonaHoraria"
     const consultaZonaHorariaConfigurada = `
     SELECT
-    "zonaHoraria"
+    valor
     FROM 
     "configuracionGlobal"
     WHERE 
     "configuracionUID" = $1;`
-    const configuracionUID = "zonaHoraria"
-    const resuelveConsultaZonaHorariaConfigurada = await conexion.query(consultaZonaHorariaConfigurada, [configuracionUID])
+    const resuelveConsultaZonaHorariaConfigurada = await conexion.query(consultaZonaHorariaConfigurada, [zonaHorariaUID])
     const ok = {}
     if (resuelveConsultaZonaHorariaConfigurada.rowCount === 1) {
-        ok.zonaHoraria = resuelveConsultaZonaHorariaConfigurada.rows[0].zonaHoraria
+        ok.zonaHoraria = resuelveConsultaZonaHorariaConfigurada.rows[0].valor
     }
     return ok
 }
