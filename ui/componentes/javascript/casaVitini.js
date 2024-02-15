@@ -992,16 +992,15 @@ const casaVitini = {
 
 
                         }
-
-
-
                         bloqueApartamento.appendChild(contenedorHabitaciones)
-
                         bloqueConjuntoApartamentos.appendChild(bloqueApartamento)
                     }
                     const botonModificarReserva = document.querySelector("[boton=modificarReserva]")
                     botonModificarReserva.setAttribute("vista", "/alojamiento")
                     botonModificarReserva.addEventListener("click", casaVitini.componentes.cambiarVista)
+                    const botonPreConfirmar = document.querySelector("[boton=preConfirmar]")
+                    botonPreConfirmar.addEventListener("click", casaVitini.ui.vistas.reservasNuevo.preConfirmar)
+
                     const botonBaypaseo = document.querySelector("[boton=baypasearPasarela]")
                     botonBaypaseo?.addEventListener("click", async () => {
                         // Esto es el byPASS
@@ -2183,8 +2182,10 @@ const casaVitini = {
 
 
 
+                },
+                preConfirmar: async () => {
+                    console.log("ss")
                 }
-
 
             },
             errorVista: () => {

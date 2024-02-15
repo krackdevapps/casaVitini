@@ -1690,6 +1690,76 @@ const puerto = async (entrada, salida) => {
                         mutex.release();
                     }
                 },
+                preConfirmarReserva: async () => {
+                    await mutex.acquire();
+
+                    try {
+                        const reserva = entrada.body.reserva
+                        await conexion.query('BEGIN');
+                        const resuelveValidacionObjetoReserva = await validarObjetoReserva(reserva);
+                        if (!resuelveValidacionObjetoReserva.ok) {
+                            const error = "Ha ocurrido un error desconocido en la validacion del objeto"
+                            throw new Error(error)
+                        }
+                        await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
+                        const metadatos = {
+                            tipoProcesadorPrecio: "objeto",
+                            reserva: reserva
+                        }
+
+                        const resuelvePrecioReserva = await precioReserva(metadatos);
+                        const totalConImpuestos = resuelvePrecioReserva.ok.desgloseFinanciero.totales.totalConImpuestos
+
+
+                        if (!totalConImpuestos) {
+                            const error = "Debido a un error inesperado no se ha podido obtener el precio final"
+                            throw new Error(error)
+                        }
+               
+
+                        const resolvertInsertarReserva = await insertarReserva(reserva)
+                        const reservaUID = resolvertInsertarReserva.reservaUID
+                      //  await actualizarEstadoPago(reservaUID)
+
+                        if (resolvertInsertarReserva.ok) {
+                            const metadatos = {
+                                reservaUID: reservaUID,
+                                solo: "globalYFinanciera"
+                            }
+
+                            const resolverDetallesReserva = await detallesReserva(metadatos)
+                            const enlacePDF = await componentes.gestionEnlacesPDF.crearEnlacePDF(reservaUID)
+                            resolverDetallesReserva.enlacePDF = enlacePDF
+
+                            const ok = {
+                                ok: "Reserva confirmada y pagada",
+                                x: "casaVitini.ui.vistas.reservasNuevo.reservaConfirmada.sustitutorObjetos",
+                                detalles: resolverDetallesReserva
+
+                            }
+                            salida.json(ok)
+                        }
+                        await conexion.query('COMMIT');
+                        // Si hay un error en el envio del email, este no escala, se queda local.
+
+                        enviarEmailReservaConfirmaada(reservaUID)
+
+                    } catch (errorCapturado) {
+                        await conexion.query('ROLLBACK');
+                        const errorFinal = {};
+                        if (errorCapturado.message && !errorCapturado.errors) {
+                            errorFinal.error = errorCapturado.message
+
+
+                        }
+                        if (errorCapturado.errors) {
+                            errorFinal.error = errorCapturado.errors[0].detail
+                        }
+                        salida.json(errorFinal)
+                    } finally {
+                        mutex.release();
+                    }
+                },
                 apartamentosDisponiblesPublico: async () => {
                     try {
                         const fechaEntrada = entrada.body.entrada

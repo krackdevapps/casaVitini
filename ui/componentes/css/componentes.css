@@ -10342,6 +10342,8 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    align-content: center;
+    align-items: center;
 }
 
 .plaza_resumenReserva_totalInfo {
@@ -11031,5 +11033,35 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 .espacioEventosAirbnb .sinInfo {
 padding: 4px;
+
+}
+
+.bloqueResumenReservaGlobal .formaDePago {
+    padding: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    outline: none;
+    border: none;
+    border-radius: 12px;
+    appearance: none;
+}
+
+.bloqueResumenReservaGlobal .botonConfirmar {
+    background: green;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    outline: none;
+    border: none;
+    border-radius: 12px;
+    margin: 4px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+.bloqueResumenReservaGlobal .botonConfirmar:hover {
+    background: #85d085;
 
 }
