@@ -8401,20 +8401,20 @@ const puerto = async (entrada, salida) => {
 
                     }
                 },
-                pendinetes_de_revision: {
+                pendientes_de_revision: {
                     obtener_reservas: async () => {
                         // Obtener todas las reservas no pagadas de origen cliente
                         const obtenerReservas = `
                         SELECT
                             r.reserva,
-                            r.entrada,
-                            r.salida,
-                            r.creacion
+                            to_char(r.entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
+                            to_char(r.salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
+                            to_char(r.creacion, 'YYYY-MM-DD') as "fechaCreacion_ISO",
                             rt."totalConImpuestos"
                         FROM 
                             reservas r
                         JOIN
-                           "reservasTotales" rt ON r.reserva = rt.reserva
+                           "reservaTotales" rt ON r.reserva = rt.reserva
                         WHERE 
                             r.origen = $1 AND
                             r."estadoPago" = $2 AND
@@ -8424,16 +8424,18 @@ const puerto = async (entrada, salida) => {
                             "noPagado",
                             "confirmada"
                         ]
-                        const resuelveReservasPendientes = await conexion.query(obtenerReservas, [parametrosDeBusqueda])
+
+                        const resuelveReservasPendientes = await conexion.query(obtenerReservas, parametrosDeBusqueda)
                         const reservasPendientes = resuelveReservasPendientes.rows
                         const ok = {
                             ok: "Aquí tienes las reservas de origen publico pendientes por revisar",
                             reservas: []
                         }
 
-                        if (reseulveValidarPago.rowCount > 0) {
+                        if (resuelveReservasPendientes.rowCount > 0) {
                             ok.reservas.reservasPendientes
                         }
+                        salida.json(ok)
 
                     }
                 }
