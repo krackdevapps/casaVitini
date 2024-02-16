@@ -1606,15 +1606,9 @@ const puerto = async (entrada, salida) => {
                             }
                         };
 
-
-
                         const resolverPago = await componentes.pasarela.crearPago(pago)
-
                         const resolvertInsertarReserva = await insertarReserva(reserva)
-
-
                         const reservaUID = resolvertInsertarReserva.reservaUID
-
                         const tarjeta = resolverPago.cardDetails.card.cardBrand
                         const tarjetaDigitos = resolverPago.cardDetails.card.last4
                         const cantidadSinPunto = resolverPago.amountMoney.amount
@@ -1692,7 +1686,6 @@ const puerto = async (entrada, salida) => {
                 },
                 preConfirmarReserva: async () => {
                     await mutex.acquire();
-
                     try {
                         const reserva = entrada.body.reserva
                         await conexion.query('BEGIN');
@@ -1702,60 +1695,33 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
-                        const metadatos = {
-                            tipoProcesadorPrecio: "objeto",
-                            reserva: reserva
-                        }
-
-                        const resuelvePrecioReserva = await precioReserva(metadatos);
-                        const totalConImpuestos = resuelvePrecioReserva.ok.desgloseFinanciero.totales.totalConImpuestos
-
-
-                        if (!totalConImpuestos) {
-                            const error = "Debido a un error inesperado no se ha podido obtener el precio final"
-                            throw new Error(error)
-                        }
-               
-
                         const resolvertInsertarReserva = await insertarReserva(reserva)
                         const reservaUID = resolvertInsertarReserva.reservaUID
-                      //  await actualizarEstadoPago(reservaUID)
-
+                        await actualizarEstadoPago(reservaUID)
                         if (resolvertInsertarReserva.ok) {
                             const metadatos = {
                                 reservaUID: reservaUID,
                                 solo: "globalYFinanciera"
                             }
-
                             const resolverDetallesReserva = await detallesReserva(metadatos)
                             const enlacePDF = await componentes.gestionEnlacesPDF.crearEnlacePDF(reservaUID)
                             resolverDetallesReserva.enlacePDF = enlacePDF
 
                             const ok = {
                                 ok: "Reserva confirmada y pagada",
-                                x: "casaVitini.ui.vistas.reservasNuevo.reservaConfirmada.sustitutorObjetos",
                                 detalles: resolverDetallesReserva
-
                             }
                             salida.json(ok)
                         }
                         await conexion.query('COMMIT');
-                        // Si hay un error en el envio del email, este no escala, se queda local.
 
                         enviarEmailReservaConfirmaada(reservaUID)
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK');
-                        const errorFinal = {};
-                        if (errorCapturado.message && !errorCapturado.errors) {
-                            errorFinal.error = errorCapturado.message
-
-
+                        const error = {
+                            error: errorCapturado.message
                         }
-                        if (errorCapturado.errors) {
-                            errorFinal.error = errorCapturado.errors[0].detail
-                        }
-                        salida.json(errorFinal)
+                        salida.json(error)
                     } finally {
                         mutex.release();
                     }
@@ -8438,6 +8404,14 @@ const puerto = async (entrada, salida) => {
 
                     }
                 },
+                pendinetes_de_revision: {
+                    obtener_reservas: () => {
+                        // Obtener todas las reservas no pagadas de origen cliente
+
+
+                        
+                    }
+                }
             },
             situacion: {
                 obtenerSituacion: async () => {
@@ -9106,7 +9080,7 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                                 const configuraciones = resuelveConfiguracionGlobal.rows
-                                const ok = {ok:{}}
+                                const ok = { ok: {} }
                                 for (const parConfiguracion of configuraciones) {
                                     const configuracionUID = parConfiguracion.configuracionUID
                                     const valor = parConfiguracion.valor
@@ -9177,7 +9151,7 @@ const puerto = async (entrada, salida) => {
                                 WHERE
                                     "configuracionUID" IN ($2, $4);
                                 `;
-                                
+
                                 const nuevaConfiguracion = [
                                     horaEntradaTZ,
                                     configuracionUID_horaEntradaTZ,

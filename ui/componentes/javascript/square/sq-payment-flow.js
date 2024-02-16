@@ -31,8 +31,8 @@ window.showError = function (message) {
 
 window.createPayment = async function (token, verificationToken) {
   casaVitini.componentes.flujoPagoUI.infoDuranteFlujo()
-    console.log("Se Inicia el pago")
-    
+  console.log("Se Inicia el pago")
+
   // Aqui se deberua recoger el objeto reserva e intergrarlo en el objeto que hay dentro de dataJsonString
   const destinoDinamico = document.querySelector("[pasarelaZonaDePago]")?.getAttribute("pasarelaZonaDePago")
   if (!destinoDinamico) {
@@ -62,7 +62,7 @@ window.createPayment = async function (token, verificationToken) {
   console.log("destinoDinamico", destinoDinamico)
 
   if (destinoDinamico === "enlaceDePago") {
-    console.log("enlacesDedpago", )
+    console.log("enlacesDedpago",)
 
     const enlaceUID = document.querySelector("[pagoUID]").getAttribute("pagoUID")
     acoplador.zona = "plaza/enlaceDePago/realizarPago"
@@ -120,7 +120,7 @@ window.createPayment = async function (token, verificationToken) {
         // Verificar si la función existe
         if (typeof x === 'function') {
           // Ejecutar la función si existe
-         return x(detalles);
+          return x(detalles);
         } else {
           const error = "No exista la funcion a la que se esta llamando tras confirmar la reserva"
           return casaVitini.ui.vistas.advertenciaInmersiva(error)

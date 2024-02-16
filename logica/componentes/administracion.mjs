@@ -12149,6 +12149,12 @@ const administracion = {
                 }
             }
         },
+        pendientes_de_revision: {
+            arranque: () => {
+
+                
+            }
+        }
     },
     administracion: {
         arranque: () => {

@@ -13,8 +13,7 @@ const insertarReserva = async (reserva) => {
         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_Humano)).fecha_ISO
 
         const estadoReserva = "confirmada"
-        const estadoPago = "npPagado"
-
+        const estadoPago = "noPagado"
         const origen = "cliente"
 
         const fechaReserva = DateTime.utc().toISO()

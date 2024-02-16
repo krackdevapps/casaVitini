@@ -2185,6 +2185,36 @@ const casaVitini = {
                 },
                 preConfirmar: async () => {
                     console.log("ss")
+                    casaVitini.componentes.flujoPagoUI.desplegarUI("Preconfirmando su reserva...")
+
+                    const reservaLocal = JSON.parse(sessionStorage.getItem("reserva"))
+                    const nombreTitular = document.querySelector("[campo=nombreTitular]").value || "nombre de prueba"
+                    const pasaporteTitular = document.querySelector("[campo=pasaporteTitular]").value || "pasasporteTest"
+                    const correoTitular = document.querySelector("[campo=correoTitular]").value || "test@test.com"
+                    const telefonoTitular = document.querySelector("[campo=telefonoTitular]").value || "1234567890"
+
+                    const datosTitular = {
+                        nombreTitular: nombreTitular,
+                        pasaporteTitular: pasaporteTitular,
+                        correoTitular: correoTitular,
+                        telefonoTitular: telefonoTitular
+                    }
+                    reservaLocal.datosTitular = datosTitular
+                    const Peticion = {
+                        zona: "plaza/reservas/preConfirmarReserva",
+                        reserva: reservaLocal
+                    };
+                    const respuestaServidor = await casaVitini.componentes.servidor(Peticion)
+                    if (respuestaServidor?.error) {
+                        return casaVitini.componentes.flujoPagoUI.errorInfo(respuestaServidor.error)
+
+                      //  return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor.error)
+                    }
+                    if (respuestaServidor.ok) {
+                        const detalles = respuestaServidor.detalles
+                        casaVitini.componentes.limpiarAdvertenciasInmersivas()
+                        return casaVitini.ui.vistas.reservasNuevo.reservaConfirmada.sustitutorObjetos(detalles)
+                    }
                 }
 
             },
@@ -3379,7 +3409,7 @@ const casaVitini = {
                                 const impuestos = desgloseFinanciero.impuestos
                                 const totales = desgloseFinanciero.totales
 
-                                
+
 
                                 const desgloseTotales = {
                                     totalesPorApartamento: totalesPorApartamento,
@@ -5848,13 +5878,13 @@ const casaVitini = {
                             const destino = "section [componente=espacioPago]"
                             casaVitini.componentes.square.uiForm(destino)
                             try {
-                                
+
                                 await casaVitini.componentes.square.crearSesionPago(instanciaUID);
-                                
+
                                 await casaVitini.componentes.square.inyectorSquareJS(instanciaUID);
-                                
+
                                 await casaVitini.componentes.square.inyectorMetodosPago(instanciaUID);
-                                
+
                                 await casaVitini.componentes.square.inyectorFlujoPago(instanciaUID);
                             } catch (error) {
                                 return casaVitini.ui.vistas.advertenciaInmersiva(error.message)
@@ -6502,7 +6532,7 @@ const casaVitini = {
         },
         ocultaMenuGlobalFlotante: (e) => {
             const origen = e.target?.id
-            
+
             if (origen !== "botonMenuResponsivo") {
                 const selectorMenuFlotanteRenderizado = document.querySelector("[componente=menuGlobalFlotante]")
                 selectorMenuFlotanteRenderizado.remove()
@@ -11386,7 +11416,7 @@ const casaVitini = {
             }
         },
         flujoPagoUI: {
-            desplegarUI: () => {
+            desplegarUI: (mensaje) => {
                 document.body.style.overflow = 'hidden';
                 const advertenciaInmersivaUI = document.createElement("div")
                 advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersiva")
@@ -11406,7 +11436,7 @@ const casaVitini = {
                 const info = document.createElement("div")
                 info.setAttribute("class", "advertenciaInfoFlujoPago")
                 info.setAttribute("componente", "mensajeFlujoPasarela")
-                info.innerText = "Esperando a la pasarela de pago..."
+                info.innerText = mensaje
                 advertenciaInmersivaUI.appendChild(info)
 
                 document.body.appendChild(advertenciaInmersivaUI)
