@@ -7951,8 +7951,6 @@ const puerto = async (entrada, salida) => {
                     }
                 },
                 detallesDelPernoctantePorComprobar: async () => {
-
-
                     try {
                         const reservaUID = entrada.body.reservaUID
                         await validadoresCompartidos.reservas.validarReserva(reservaUID)
@@ -8013,7 +8011,6 @@ const puerto = async (entrada, salida) => {
                     } finally {
 
                     }
-
                 },
                 confirmarFechaCheckIn: async () => {
                     try {
@@ -8405,11 +8402,39 @@ const puerto = async (entrada, salida) => {
                     }
                 },
                 pendinetes_de_revision: {
-                    obtener_reservas: () => {
+                    obtener_reservas: async () => {
                         // Obtener todas las reservas no pagadas de origen cliente
+                        const obtenerReservas = `
+                        SELECT
+                            r.reserva,
+                            r.entrada,
+                            r.salida,
+                            r.creacion
+                            rt."totalConImpuestos"
+                        FROM 
+                            reservas r
+                        JOIN
+                           "reservasTotales" rt ON r.reserva = rt.reserva
+                        WHERE 
+                            r.origen = $1 AND
+                            r."estadoPago" = $2 AND
+                            r."estadoReserva" = $3;`
+                        const parametrosDeBusqueda = [
+                            "cliente",
+                            "noPagado",
+                            "confirmada"
+                        ]
+                        const resuelveReservasPendientes = await conexion.query(obtenerReservas, [parametrosDeBusqueda])
+                        const reservasPendientes = resuelveReservasPendientes.rows
+                        const ok = {
+                            ok: "Aquí tienes las reservas de origen publico pendientes por revisar",
+                            reservas: []
+                        }
 
+                        if (reseulveValidarPago.rowCount > 0) {
+                            ok.reservas.reservasPendientes
+                        }
 
-                        
                     }
                 }
             },
