@@ -8427,13 +8427,14 @@ const puerto = async (entrada, salida) => {
 
                         const resuelveReservasPendientes = await conexion.query(obtenerReservas, parametrosDeBusqueda)
                         const reservasPendientes = resuelveReservasPendientes.rows
+                        console.log("reservasPpendientes", reservasPendientes)
                         const ok = {
                             ok: "Aquí tienes las reservas de origen publico pendientes por revisar",
                             reservas: []
                         }
 
                         if (resuelveReservasPendientes.rowCount > 0) {
-                            ok.reservas.reservasPendientes
+                            ok.reservas.push(...reservasPendientes)
                         }
                         salida.json(ok)
 
