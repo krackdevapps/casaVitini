@@ -12155,7 +12155,7 @@ const administracion = {
                 const instanciaUID = sectionRenderizada.getAttribute("instanciaUID")
 
 
-                const espacioReservasPendientes =document.querySelector(`section[instanciaUID="${instanciaUID}"]`).querySelector("[componente=espacioReservasPendientesDeRevision]")
+                const espacioReservasPendientes = document.querySelector(`section[instanciaUID="${instanciaUID}"]`).querySelector("[componente=espacioReservasPendientesDeRevision]")
 
                 const transaccion = {
                     zona: "administracion/reservas/pendientes_de_revision/obtener_reservas"
@@ -12197,7 +12197,7 @@ const administracion = {
 
                                 const contenedorReserva = document.createElement("div")
                                 contenedorReserva.classList.add("contenedorReserva")
-
+                                contenedorReserva.setAttribute("reservaUID", reserva)
 
                                 const contenedorInformacion = document.createElement("div")
                                 contenedorInformacion.classList.add("contenedorInformacion")
@@ -12259,7 +12259,7 @@ const administracion = {
                                 fechaEntrada_div.classList.add("fechaEntrada")
                                 fechaEntrada_div.innerText = fechaEntrada_ISO
                                 contenedorFechaEntrada.appendChild(fechaEntrada_div)
-                               
+
                                 contenedorFechas.appendChild(contenedorFechaEntrada)
 
 
@@ -12275,7 +12275,7 @@ const administracion = {
                                 fechaSalida_div.classList.add("fechaSalida")
                                 fechaSalida_div.innerText = fechaSalida_ISO
                                 contenedorFechaSalida.appendChild(fechaSalida_div)
-                               
+
                                 contenedorFechas.appendChild(contenedorFechaSalida)
                                 contenedorInformacion.appendChild(contenedorFechas)
                                 contenedorReserva.appendChild(contenedorInformacion)
@@ -12292,6 +12292,14 @@ const administracion = {
                                 const botonRechazar = document.createElement("div")
                                 botonRechazar.classList.add("boton")
                                 botonRechazar.innerText = "Rechazar reserva"
+                                botonRechazar.addEventListener("click", () => {
+                                    const metadatos = {
+                                        instanciaUID_listaReservasPendientes: instanciaUID,
+                                        reservaUID: reserva
+                                    }
+                                    casaVitini.administracion.reservas.pendientes_de_revision.rechazarReserva.UI(metadatos)
+
+                                })
                                 contenedorBotones.appendChild(botonRechazar)
 
                                 contenedorReserva.appendChild(contenedorBotones)
@@ -12304,7 +12312,112 @@ const administracion = {
                         }
                     }
                 }
-            }
+            },
+            rechazarReserva: {
+                UI: (metadatos) => {
+
+                    const reservaUID = metadatos.reservaUID
+                    const instanciaUID_listaReservasPendientes = metadatos.instanciaUID_listaReservasPendientes
+
+                    const advertenciaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizada()
+                    const destinoIyector = advertenciaInmersiva.querySelector("[destino=inyector]")
+                    const instanciaUID_opcionesReserva = advertenciaInmersiva.getAttribute("instanciaUID")
+
+                    const contenedorCancelacion = document.createElement("div")
+                    contenedorCancelacion.classList.add("administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion")
+
+                    const tituloCancelarReserva = document.createElement("p")
+                    tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
+                    tituloCancelarReserva.innerText = "Rechazar y eliminar la reserva " + reservaUID
+                    tituloCancelarReserva.style.color = "red"
+                    contenedorCancelacion.appendChild(tituloCancelarReserva)
+
+                    const botonCancelarProcesoCancelacion = document.createElement("div")
+                    botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
+                    botonCancelarProcesoCancelacion.innerText = "Cerrar y volver atras"
+                    botonCancelarProcesoCancelacion.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.cancelarReserva.salirDelProceso)
+                    contenedorCancelacion.appendChild(botonCancelarProcesoCancelacion)
+
+                    const bloqueBloqueoApartamentos = document.createElement("div")
+                    bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
+
+                    const tituloBloquoApartamentos = document.createElement("div")
+                    tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                    tituloBloquoApartamentos.innerText = "Rechazar la reserva elimina la reserva del sistema y libera los apartamentos de esa para podernos de nuevo disponibles para reservas."
+                    bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
+
+                    const infoSeguridad = document.createElement("div")
+                    infoSeguridad.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                    infoSeguridad.innerText = "Para rechazar la reserva y elimarla irreversiblemente junto con toda su información relacionada debe de escribir su contraseña de usuario y su cuenta de debe de tener autorización Administrativa."
+                    bloqueBloqueoApartamentos.appendChild(infoSeguridad)
+
+                    const campo = document.createElement("input")
+                    campo.classList.add("administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_campo")
+                    campo.setAttribute("campo", "clave")
+                    campo.type = "password"
+                    campo.placeholder = "Escriba la contraseña de su VitiniID"
+                    bloqueBloqueoApartamentos.appendChild(campo)
+
+                    contenedorCancelacion.appendChild(bloqueBloqueoApartamentos)
+
+                    const bloqueBotones = document.createElement("div")
+                    bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
+
+
+                    const botonCancelar = document.createElement("div")
+                    botonCancelar.classList.add("administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_botonV1")
+                    botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
+                    botonCancelar.innerText = "Eliminar reseva irreversiblemente"
+                    botonCancelar.addEventListener("click", () => {
+                        const metadatosConfirmacion = {
+                            reservaUID: reservaUID,
+                            instanciaUID_opcionesReserva: instanciaUID_opcionesReserva,
+                            instanciaUID_listaReservasPendientes:instanciaUID_listaReservasPendientes
+                        }
+                        return casaVitini.administracion.reservas.pendientes_de_revision.rechazarReserva.confirmar(metadatosConfirmacion)
+                    })
+                    bloqueBloqueoApartamentos.appendChild(botonCancelar)
+                    contenedorCancelacion.appendChild(bloqueBotones)
+
+                    destinoIyector.appendChild(contenedorCancelacion)
+                    document.body.appendChild(advertenciaInmersiva)
+
+
+                },
+                confirmar: async (metadatos) => {
+
+                    const reservaUID = metadatos.reservaUID
+                    const instanciaUID_opcionesReserva = metadatos.instanciaUID_opcionesReserva
+                    const instanciaUID_listaReservasPendientes = metadatos.instanciaUID_listaReservasPendientes
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const clave = document.querySelector(`[instanciaUID="${instanciaUID_opcionesReserva}"] [campo=clave]`)
+                    const metadatosPantallaCarga = {
+                        mensaje: "Esperando al servidor...",
+                        instanciaUID: instanciaUID,
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
+
+                    const transaccion = {
+                        zona: "administracion/reservas/eliminarIrreversiblementeReserva",
+                        reserva: Number(reservaUID),
+                        clave: clave?.value
+                    }
+                    const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                    const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
+                    selectorPantallaDeCarga.map((pantalla) => {
+                        pantalla.remove()
+                    })
+                    if (respuestaServidor?.error) {
+                        document.querySelector(`[instanciaUID="${instanciaUID_opcionesReserva}"] [campo=clave]`).value = null
+                        return casaVitini.ui.vistas.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                    }
+                    if (respuestaServidor?.ok) {
+                        document.querySelector(`[instanciaUID="${instanciaUID_opcionesReserva}"]`)?.remove()
+                        document.querySelector(`[instanciaUID="${instanciaUID_listaReservasPendientes}"] [reservaUID="${reservaUID}"]`).remove()
+                    }
+
+                }
+            },
         }
     },
     administracion: {

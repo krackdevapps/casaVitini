@@ -12656,10 +12656,13 @@ const casaVitini = {
             },
             pantallaInmersivaPersonalizada: () => {
                 document.body.style.overflow = 'hidden';
+                const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
 
                 const pantallaInmersivaPersonalizadaUI = document.createElement("div")
                 pantallaInmersivaPersonalizadaUI.setAttribute("class", "advertenciaInmersiva")
                 pantallaInmersivaPersonalizadaUI.setAttribute("componente", "advertenciaInmersiva")
+                pantallaInmersivaPersonalizadaUI.setAttribute("instanciaUID",instanciaUID)
+
 
                 const contenedorAdvertenciaInmersiva = document.createElement("div")
                 contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
