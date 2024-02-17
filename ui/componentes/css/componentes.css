@@ -8305,9 +8305,9 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 11px;
     text-decoration: none;
     cursor: default;
-   /* background: rgba(255, 255, 255, 0.6);*/
-   user-select: none;
-   -webkit-user-select: none;
+    /* background: rgba(255, 255, 255, 0.6);*/
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .detallesReserva_transacciones_botonV1:hover {
@@ -10946,6 +10946,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: flex-start;
     gap: 6px;
 }
+
 .contenedorMenuCapas .titulo {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px;
@@ -10974,7 +10975,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 100%;
     border: 2px solid #00000075;
     padding: 3px;
- 
+
 }
 
 
@@ -11029,10 +11030,11 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .contenedorMenuCapas .boton:hover {
     background: #00000030;
-   
+
 }
+
 .espacioEventosAirbnb .sinInfo {
-padding: 4px;
+    padding: 4px;
 
 }
 
@@ -11064,4 +11066,71 @@ padding: 4px;
 .bloqueResumenReservaGlobal .botonConfirmar:hover {
     background: #85d085;
 
+}
+
+.reservas_pendientes_de_revision .contenedorReserva {
+    margin: 6px;
+    background: rgb(255 255 255 / 31%);
+        display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 20px;
+
+}
+
+.reservas_pendientes_de_revision .contenedorDatos {
+    display: flex;
+    padding: 16px;
+    flex-direction: column;
+    justify-content: center;
+    
+}
+
+.reservas_pendientes_de_revision .dato {
+    margin: 0px;
+    
+}
+
+
+.reservas_pendientes_de_revision .contenedorInformacion {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;}
+
+.reservas_pendientes_de_revision .contenedorFechas {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 10px;
+}
+
+.reservas_pendientes_de_revision .contenedorBotones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    justify-content: space-between;
+}
+
+
+.reservas_pendientes_de_revision .boton {
+    display: flex;
+    padding: 10px;
+    border-radius: 10px;
+    background: #0000002b;
+    transition: background 250ms linear;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    align-content: center;
+    justify-content: center;
+}
+
+.reservas_pendientes_de_revision .boton:hover {
+
+    background: #0000005e;
 }

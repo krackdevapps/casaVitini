@@ -1497,7 +1497,7 @@ const administracion = {
                         entrada: fechaEntradaFormado,
                         salida: fechaSalidaFormado
                     }
-                    
+
 
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -12150,9 +12150,160 @@ const administracion = {
             }
         },
         pendientes_de_revision: {
-            arranque: () => {
+            arranque: async () => {
+                const sectionRenderizada = document.querySelector("section[instanciaUID]")
+                const instanciaUID = sectionRenderizada.getAttribute("instanciaUID")
 
-                
+
+                const espacioReservasPendientes =document.querySelector(`section[instanciaUID="${instanciaUID}"]`).querySelector("[componente=espacioReservasPendientesDeRevision]")
+
+                const transaccion = {
+                    zona: "administracion/reservas/pendientes_de_revision/obtener_reservas"
+                }
+                const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                if (respuestaServidor?.error) {
+                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                }
+
+                if (respuestaServidor?.ok) {
+
+                    /*
+                    {
+                        "ok": "Aquí tienes las reservas de origen publico pendientes por revisar",
+                        "reservas": [
+                            {
+                                "reserva": 1603,
+                                "fechaEntrada_ISO": "2024-02-26",
+                                "fechaSalida_ISO": "2024-02-29",
+                                "fechaCreacion_ISO": "2024-02-15",
+                                "totalConImpuestos": "401.00"
+                            }
+                        ]
+                    }
+                     */
+
+                    if (espacioReservasPendientes) {
+                        const reservasPendientes = respuestaServidor.reservas
+                        if (reservasPendientes.length === 0) {
+                        } else {
+                            for (const detallesDeLaReservaPendiente of reservasPendientes) {
+
+                                const reserva = detallesDeLaReservaPendiente.reserva
+                                const fechaEntrada_ISO = detallesDeLaReservaPendiente.fechaEntrada_ISO
+                                const fechaSalida_ISO = detallesDeLaReservaPendiente.fechaSalida_ISO
+                                const fechaCreacion_ISO = detallesDeLaReservaPendiente.fechaCreacion_ISO
+                                const totalConImpuestos = detallesDeLaReservaPendiente.totalConImpuestos
+
+
+                                const contenedorReserva = document.createElement("div")
+                                contenedorReserva.classList.add("contenedorReserva")
+
+
+                                const contenedorInformacion = document.createElement("div")
+                                contenedorInformacion.classList.add("contenedorInformacion")
+
+                                const contenedorDatos = document.createElement("div")
+                                contenedorDatos.classList.add("contenedorDatos")
+
+                                const tituloReserva = document.createElement("p")
+                                tituloReserva.classList.add("dato")
+                                tituloReserva.innerText = "Reserva:"
+                                contenedorDatos.appendChild(tituloReserva)
+
+
+                                const numeroReserva = document.createElement("p")
+                                numeroReserva.classList.add("dato")
+                                numeroReserva.classList.add("negrita")
+                                numeroReserva.innerText = reserva
+                                contenedorDatos.appendChild(numeroReserva)
+
+                                const tituloFechaReserva = document.createElement("p")
+                                tituloFechaReserva.classList.add("dato")
+                                tituloFechaReserva.innerText = "Fecha de realización:"
+                                contenedorDatos.appendChild(tituloFechaReserva)
+
+
+                                const fechaReserva = document.createElement("p")
+                                fechaReserva.classList.add("dato")
+                                fechaReserva.classList.add("negrita")
+                                fechaReserva.innerText = fechaCreacion_ISO
+                                contenedorDatos.appendChild(fechaReserva)
+
+
+                                const tituloTotalReserva = document.createElement("p")
+                                tituloTotalReserva.classList.add("dato")
+                                tituloTotalReserva.innerText = "Total:"
+                                contenedorDatos.appendChild(tituloTotalReserva)
+
+
+                                const totalReserva = document.createElement("p")
+                                totalReserva.classList.add("negrita")
+                                totalReserva.classList.add("dato")
+                                totalReserva.innerText = totalConImpuestos
+                                contenedorDatos.appendChild(totalReserva)
+                                contenedorInformacion.appendChild(contenedorDatos)
+
+
+                                const contenedorFechas = document.createElement("div")
+                                contenedorFechas.classList.add("contenedorFechas")
+
+                                const contenedorFechaEntrada = document.createElement("div")
+                                contenedorFechaEntrada.classList.add("contenedorFechaEntrada")
+
+                                const tituloFechaEntrada = document.createElement("div")
+                                tituloFechaEntrada.classList.add("tituloFecha")
+                                tituloFechaEntrada.innerText = "Fecha de entrada"
+                                contenedorFechaEntrada.appendChild(tituloFechaEntrada)
+
+                                const fechaEntrada_div = document.createElement("div")
+                                fechaEntrada_div.classList.add("fechaEntrada")
+                                fechaEntrada_div.innerText = fechaEntrada_ISO
+                                contenedorFechaEntrada.appendChild(fechaEntrada_div)
+                               
+                                contenedorFechas.appendChild(contenedorFechaEntrada)
+
+
+                                const contenedorFechaSalida = document.createElement("div")
+                                contenedorFechaSalida.classList.add("contenedorFechaSalida")
+
+                                const tituloFechaSalida = document.createElement("div")
+                                tituloFechaSalida.classList.add("tituloFecha")
+                                tituloFechaSalida.innerText = "Fecha de salida"
+                                contenedorFechaSalida.appendChild(tituloFechaSalida)
+
+                                const fechaSalida_div = document.createElement("div")
+                                fechaSalida_div.classList.add("fechaSalida")
+                                fechaSalida_div.innerText = fechaSalida_ISO
+                                contenedorFechaSalida.appendChild(fechaSalida_div)
+                               
+                                contenedorFechas.appendChild(contenedorFechaSalida)
+                                contenedorInformacion.appendChild(contenedorFechas)
+                                contenedorReserva.appendChild(contenedorInformacion)
+
+
+                                const contenedorBotones = document.createElement("div")
+                                contenedorBotones.classList.add("contenedorBotones")
+
+                                const botonInsertarPago = document.createElement("div")
+                                botonInsertarPago.classList.add("boton")
+                                botonInsertarPago.innerText = "Insertar pago"
+                                contenedorBotones.appendChild(botonInsertarPago)
+
+                                const botonRechazar = document.createElement("div")
+                                botonRechazar.classList.add("boton")
+                                botonRechazar.innerText = "Rechazar reserva"
+                                contenedorBotones.appendChild(botonRechazar)
+
+                                contenedorReserva.appendChild(contenedorBotones)
+                                espacioReservasPendientes.appendChild(contenedorReserva)
+
+
+
+                            }
+
+                        }
+                    }
+                }
             }
         }
     },
@@ -13264,7 +13415,7 @@ const administracion = {
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
 
-                
+
                 if (respuestaServidor?.error) {
                     casaVitini.administracion.configuracion.cancelarCambios()
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -13326,7 +13477,7 @@ const administracion = {
                     descripcionConfiguracion.innerText = "La zona horaria local se aplica sobre el reloj UTC para que pueda ver la hora y las fechas en la zona horaria. Por ejemplo, en el apartado de Situación, en la renderización de los calendarios y etc. La zona horaria debe de configurarse con la misma zona horaria de las instalaciones físicas de pernoctacion de Casa Vitini. Entonces el sistema de Casa Vitini puede implantarse en cualquier ordenador sin importar su reloj en zona horaria local. Es fundamental que la zona horaria del sistema sea la misma que la zona horaria de las instalaciones físicas de pernoctación de Casa Vitini. El motivo de esto es que los pernoctante puedan obtener calendarios locales a la zona horaria de Casa Vitini y realizar las reservas en zona horaria local de Casa Vitini."
                     bloqueConfiguracion.appendChild(descripcionConfiguracion)
 
-            
+
                     contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
                     // Hora de entrada TZ
                     bloqueConfiguracion = document.createElement("div")
@@ -27642,7 +27793,7 @@ const administracion = {
                 capas: [],
                 capasCompuestas: {}
             }
-            
+
             if (parametros.fecha) {
                 const fecha = parametros.fecha.split("-")
                 const mes = Number(fecha[0])
@@ -27685,8 +27836,8 @@ const administracion = {
                 calendario.tipo = "actual"
                 calendario.comando = "construyeObjeto"
                 const calendarioResuelto = await casaVitini.componentes.resolverCalendarioNuevo(calendarioActual)
-                
-                
+
+
 
 
                 calendario.tipo = "personalizado"
@@ -27884,9 +28035,9 @@ const administracion = {
                             const capaUID = capa.getAttribute("capaUID")
                             estructura.capas.push(capaUID)
                         })
-                        
 
-                        
+
+
                         if (!capasSelecionadas.includes("todosLosApartamentos")) {
                             const apartametnosSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID=porApartamento][estado=seleccionado]")
                             const porApartamento = []
@@ -27923,7 +28074,7 @@ const administracion = {
                         const mensaje = "Selecciona alguna capa para aplicarla en el calendario. No has seleccionado ninguna capa. Si por el contrario lo que quieres es cerrar la pantalla de capas pulsa en le boton cerrar."
                         return casaVitini.ui.vistas.advertenciaInmersivaSuperPuesta(mensaje)
                     }
-                    
+
                     casaVitini.componentes.limpiarAdvertenciasInmersivas()
                     const metadatos = {
                         contenedorCapas: estructura,
@@ -28251,7 +28402,7 @@ const administracion = {
 
                     if (grupo === "cabeza") {
                         const elementosDelGrupo = contenedorCapa.closest("[grupo=campo]").querySelectorAll("[grupo=elemento]")
-                        
+
                         if (estadoCapa === "seleccionado") {
                             elementosDelGrupo.forEach((capa) => {
                                 capa.removeAttribute("estado")
@@ -28663,7 +28814,7 @@ const administracion = {
                 instanciaUID: instanciaUID,
                 tipoRegistro: "crear",
             }
-            
+
 
             let parametrosURL = []
             const contenedorCapas = {
@@ -28769,8 +28920,8 @@ const administracion = {
                 }
             }
 
-            
-            
+
+
             const soloCapasURL = []
             for (const parDeParametro of parametrosURL) {
                 const parametro = parDeParametro.split(":")
@@ -28807,7 +28958,7 @@ const administracion = {
                 instanciaUID: instanciaUID,
                 contenedorCapas: contenedorCapas
             }
-            
+
             return casaVitini.administracion.calendario.capas(metadatos)
 
 
@@ -28817,7 +28968,7 @@ const administracion = {
             const instanciaUID = calendario.instanciaUID
             delete calendario.instanciaUID
             const instanciaUIDMes = calendario.instanciaUIDMes
-            
+
             const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
 
             const selectorDiasRenderizados = calendarioRenderizado.querySelectorAll("[dia], [componente=eventoUI]")
@@ -28943,7 +29094,7 @@ const administracion = {
                 funcionPersonalizada: "casaVitini.administracion.calendario.irAFecha",
                 datosPaginacion: configuracion
             }
-            
+
 
             if (tipoRegistro === "crear") {
                 window.history.pushState(estado, titulo, constructorURLFinal);
@@ -28958,7 +29109,7 @@ const administracion = {
             const instanciaUIDMes = casaVitini.componentes.codigoFechaInstancia()
             document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=marcoMes]`)
                 .setAttribute("instanciaUID", instanciaUIDMes)
-            
+
             calendario.instanciaUIDMes = instanciaUIDMes
             calendario.instanciaUID = instanciaUID
 
@@ -29173,7 +29324,7 @@ const administracion = {
 
                     } else {
                         nombreEventoFinal = `Evento sin información`
-                       //urlUI = ""
+                        //urlUI = ""
                     }
                 }
 

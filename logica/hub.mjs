@@ -8409,7 +8409,7 @@ const puerto = async (entrada, salida) => {
                             r.reserva,
                             to_char(r.entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
                             to_char(r.salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
-                            to_char(r.creacion, 'YYYY-MM-DD') as "fechaCreacion_ISO",
+                            to_char(creacion, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS "creacion_ISO_UTC",
                             rt."totalConImpuestos"
                         FROM 
                             reservas r
