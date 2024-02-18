@@ -1118,8 +1118,7 @@ const puerto = async (entrada, salida) => {
                     enlace = $1
                     `
                     const resuelveValidarEnlace = await conexion.query(consultaValidarEnlace, [nombreEnlace])
-
-
+                    console.log("resuelveValidarEnlace", resuelveValidarEnlace.rowCount)
                     if (resuelveValidarEnlace.rowCount === 0) {
                         const error = "No existe el enlace para generar el PDF"
                         throw new Error(error)
@@ -1136,10 +1135,10 @@ const puerto = async (entrada, salida) => {
                     salida.setHeader('Content-Disposition', 'attachment; filename=documento.pdf');
                     salida.send(pdf);
                 } catch (errorCapturado) {
+                    console.log("errorCap", errorCapturado)
                     const error = {
                         error: errorCapturado.message
                     }
-
                     salida.json(error)
                 }
             },
@@ -8451,7 +8450,7 @@ const puerto = async (entrada, salida) => {
                             r.reserva,
                             to_char(r.entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
                             to_char(r.salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
-                            to_char(creacion, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS "fechaCreacion_ISO",
+                            to_char(r.creacion, 'DD/MM/YYYY HH24:MI:SS') AS "fechaCreacion_ISO",
                             rt."totalConImpuestos"
                         FROM 
                             reservas r
@@ -8460,7 +8459,10 @@ const puerto = async (entrada, salida) => {
                         WHERE 
                             r.origen = $1 AND
                             r."estadoPago" = $2 AND
-                            r."estadoReserva" = $3;`
+                            r."estadoReserva" = $3
+                        ORDER BY 
+                            r.creacion ASC
+                        ;`
                         const parametrosDeBusqueda = [
                             "cliente",
                             "noPagado",

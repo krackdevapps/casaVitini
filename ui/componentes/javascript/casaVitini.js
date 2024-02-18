@@ -1028,6 +1028,7 @@ const casaVitini = {
                     })
 
                     // Ojo por que parece ser que si tarda en cargarse mas el archivo square.js que lo de abajo hay un problemon
+                    /*
                     try {
                         await casaVitini.componentes.square.crearSesionPago(instanciaUID);
                         await casaVitini.componentes.square.inyectorSquareJS(instanciaUID);
@@ -1036,14 +1037,14 @@ const casaVitini = {
                     } catch (error) {
                         return casaVitini.ui.vistas.advertenciaInmersiva(error.message)
                     }
-
+                    */
                     // Obten precio e imprimelo
                     const metadatos = {
-                        tipoFormatoReserva: "objetoLocal"
+                        tipoFormatoReserva: "objetoLocal_reservaNoConfirmada"
                     }
 
                     const desgloseTotalReserva = await casaVitini.componentes.obtenerPrecioReserva(metadatos)
-
+                    console.log("desgloseTotalReserva", desgloseTotalReserva)
                     const totalesPorApartamento = desgloseTotalReserva.desgloseFinanciero.totalesPorApartamento
                     const totalesPorNoche = desgloseTotalReserva.desgloseFinanciero.totalesPorNoche
                     const ofertas = desgloseTotalReserva.desgloseFinanciero.ofertas
@@ -1052,7 +1053,6 @@ const casaVitini = {
                     const totalConImpuestos = totales.totalConImpuestos
 
                     const destino = "[componente=espacioInfoTotales]"
-
                     const desgloseTotales = {
                         totalesPorApartamento: totalesPorApartamento,
                         totalesPorNoche: totalesPorNoche,
@@ -1061,7 +1061,7 @@ const casaVitini = {
                         ofertas: ofertas,
                         destino: destino
                     }
-                    casaVitini.componentes.ui.totales(desgloseTotales)
+                    // casaVitini.componentes.ui.totales(desgloseTotales)
 
 
                     const selectorTotalConImpuestos = document.querySelector("[componente=totalConImpuestos]")
@@ -1072,13 +1072,14 @@ const casaVitini = {
                     const selectorBotonDespliegaDesgloseTotal = document.querySelector("[componente=botonDespliegaDesgloseTotal]")
                     selectorBotonDespliegaDesgloseTotal.addEventListener("click", () => {
 
-                        const codigoTotales = document.querySelector("[componente=espacioInfoTotales]").innerHTML
+                        const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
                         document.body.style.overflow = 'hidden';
 
                         const advertenciaInmersivaIU = document.createElement("div")
                         advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
                         advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
                         advertenciaInmersivaIU.setAttribute("contenedor", "opcionesCancelacion")
+                        advertenciaInmersivaIU.setAttribute("instanciaUID", instanciaUID)
 
                         const contenedorAdvertenciaInmersiva = document.createElement("div")
                         contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
@@ -1096,8 +1097,10 @@ const casaVitini = {
                         contenedorDesgloseTotales.appendChild(testInfo)
 
                         const contenedorTotales = document.createElement("div")
-                        contenedorTotales.innerHTML = codigoTotales
+                        contenedorTotales.setAttribute("contenedor", "espacioGlobalTotales")
+                        //contenedorTotales.innerHTML = codigoTotales
                         contenedorDesgloseTotales.appendChild(contenedorTotales)
+
 
                         const botonCancelarProcesoCancelacion = document.createElement("div")
                         botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
@@ -1111,6 +1114,16 @@ const casaVitini = {
 
                         document.body.appendChild(advertenciaInmersivaIU)
 
+                        const destino = `[instanciaUID="${instanciaUID}"] [contenedor=espacioGlobalTotales]`
+                        const desgloseTotales = {
+                            totalesPorApartamento: totalesPorApartamento,
+                            totalesPorNoche: totalesPorNoche,
+                            totales: totales,
+                            impuestos: impuestos,
+                            ofertas: ofertas,
+                            destino: destino
+                        }
+                        casaVitini.componentes.ui.totales(desgloseTotales)
                     })
 
                 },
@@ -1641,6 +1654,7 @@ const casaVitini = {
 
                             if (detallesReserva) {
                                 document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
+                                document.body.classList.add("difunmadoFondo")
 
                                 const obtenerPDF = async (enlaceUID) => {
 
@@ -1683,12 +1697,16 @@ const casaVitini = {
                                             body: JSON.stringify(metadatospdf)
                                         };
                                         const respuestaServidor = await fetch(puerto, peticion);
-                                        if (respuestaServidor?.error) {
+
+                                        const contentType = respuestaServidor.headers.get('content-type');
+
+                                        if (contentType === "application/json; charset=utf-8") {
+                                            const respuestaServidorJSON = await respuestaServidor.json() || {};
                                             advertenciaInmersivaRenderizada?.remove()
-                                            casaVitini.ui.vistas.advertenciaInmersiva(error.message)
+                                            return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidorJSON.error)
                                         }
 
-                                        if (advertenciaInmersivaRenderizada) {
+                                        if (contentType === "application/pdf" && advertenciaInmersivaRenderizada) {
                                             const BLOB = await respuestaServidor.blob();
                                             const selectorZonaGestion = advertenciaInmersivaRenderizada.querySelector("[espacio=gestionPDF]");
                                             selectorZonaGestion.innerHTML = null;
@@ -1768,26 +1786,34 @@ const casaVitini = {
 
                                 const marcoElastico = document.createElement("div")
                                 marcoElastico.classList.add("marcoElastico")
+                                marcoElastico.setAttribute("contenedor", "reservaConfiramda")
+
                                 marcoElastico.style.alignItems = "stretch"
                                 marcoElastico.style.gap = "4px"
 
 
                                 const titulo = document.createElement("div")
                                 titulo.classList.add("titulo")
-                                titulo.innerText = " Reserva confirmada"
+                                titulo.innerText = "Reserva confirmada"
                                 marcoElastico.appendChild(titulo)
 
                                 const infoGlobal = document.createElement("div")
                                 infoGlobal.classList.add("plaza_reservas_reservaConfirmada_infoGlobal")
-                                infoGlobal.innerText = "Su reserva está confirmada y le estamos esperando. Aquí tiene los detalles de su reserva. Puede descargar un resumen de su reserva en formato de documento PDF. Su reserva se ha registrado junto a su correo electrónico. Si desea ver con más detalle su reserva puede crear una cuenta en MiCasa para poder ver todos los detalles de su reserva. Si necesita contactar con Casa Vitini puede encontrar toda la información de contacto en la sección Contacto. Se ha enviado una copia del resumen de su reserva a su dirección de correo electrónico."
+                                infoGlobal.innerText = "Su reserva está preconfirmada y le estamos esperando. Aquí tiene los detalles de su reserva. Puede descargar un resumen de su reserva en formato de documento PDF. Su reserva se ha registrado junto a su correo electrónico. Si desea ver con más detalle su reserva puede crear una cuenta en MiCasa para poder ver todos los detalles de su reserva. Si necesita contactar con Casa Vitini puede encontrar toda la información de contacto en la sección Contacto. Se ha enviado una copia del resumen de su reserva a su dirección de correo electrónico."
                                 marcoElastico.appendChild(infoGlobal)
+
+
+                                const infoIngreso = document.createElement("div")
+                                infoIngreso.classList.add("plaza_reservas_reservaConfirmada_infoIngreso")
+                                infoIngreso.innerHTML = "Por favor realize el ingreso del total de su reserva en la siguiente cuenta bancaria antes de 72 horas a partir de la preconfirmacion de su reserva, puede hacerlo en una transferencia o en varias. Sea tan amable de poner el numero de la reserva en el concepto de la transferencia.<br>Cuenta bancaria para realizar el ingreso:<br>000000000000000000000000"
+                                marcoElastico.appendChild(infoIngreso)
 
                                 const contenedor = document.createElement("div")
                                 contenedor.classList.add("plaza_reservas_reservaConfirmada_contenedor")
 
-                                const contenedorEspacioTotales = document.createElement("div")
-                                contenedorEspacioTotales.classList.add("administracion_reservas_detallesReservas_contenedorTotales")
-                                contenedorEspacioTotales.setAttribute("contenedor", "espacioTotales")
+                                const espacioDatosGlobalesReserva = document.createElement("div")
+                                espacioDatosGlobalesReserva.classList.add("administracion_reservas_detallesReservas_contenedorTotales")
+                                espacioDatosGlobalesReserva.setAttribute("contenedor", "espacioDatosGlobalesReserva")
 
                                 const reversaUI = document.createElement("div")
                                 reversaUI.classList.add("administracion_reservas_detallesReservas_contenedorReservaUID")
@@ -1803,7 +1829,7 @@ const casaVitini = {
                                 numeroReservaUID.innerText = reserva
                                 reversaUI.appendChild(numeroReservaUID)
 
-                                contenedorEspacioTotales.appendChild(reversaUI)
+                                espacioDatosGlobalesReserva.appendChild(reversaUI)
 
 
                                 const botonDescargarPDF = document.createElement("div")
@@ -1812,7 +1838,7 @@ const casaVitini = {
                                 botonDescargarPDF.addEventListener("click", () => {
                                     obtenerPDF(codigoEnlacePDF)
                                 })
-                                contenedorEspacioTotales.appendChild(botonDescargarPDF)
+                                espacioDatosGlobalesReserva.appendChild(botonDescargarPDF)
 
                                 // Contenedor datos titular
                                 const contenedorTitular = document.createElement("div")
@@ -1890,7 +1916,7 @@ const casaVitini = {
                                 contenedorDatosDelTitular.appendChild(bloqueDatoTitular)
 
                                 contenedorTitular.appendChild(contenedorDatosDelTitular)
-                                contenedorEspacioTotales.appendChild(contenedorTitular)
+                                espacioDatosGlobalesReserva.appendChild(contenedorTitular)
 
                                 // Contenedor de las fechas
                                 const contenedorFechas = document.createElement("div")
@@ -1929,7 +1955,7 @@ const casaVitini = {
                                 contenedorFechaSalida.appendChild(fechaSalida)
                                 contenedorFechas.appendChild(contenedorFechaSalida)
 
-                                contenedorEspacioTotales.appendChild(contenedorFechas)
+                                espacioDatosGlobalesReserva.appendChild(contenedorFechas)
 
 
                                 const titulosTotales = {
@@ -1940,7 +1966,7 @@ const casaVitini = {
                                     totalImpuestos: "Total de impuestos aplicados",
                                     totalConImpuestos: "Total a pagar y valor final de la reserva",
                                 }
-                                contenedor.appendChild(contenedorEspacioTotales)
+                                contenedor.appendChild(espacioDatosGlobalesReserva)
                                 marcoElastico.appendChild(contenedor)
 
                                 const infoGlobal2 = document.createElement("div")
@@ -1977,11 +2003,88 @@ const casaVitini = {
                                     totales: totales,
                                     impuestos: impuestos,
                                     ofertas: ofertas,
-                                    destino: "[contenedor=espacioTotales]"
+                                    destino: "[contenedor=espacioDatosGlobalesReserva]"
                                 }
 
-                                casaVitini.componentes.ui.totales(desgloseTotales)
+                               // casaVitini.componentes.ui.totales(desgloseTotales)
 
+
+                                const contenedorTotal = document.createElement("div")
+                                contenedorTotal.classList.add("contenedorTotal")
+
+
+                                const tituloTotal = document.createElement("p")
+                                tituloTotal.classList.add("tituloContenedor")
+                                tituloTotal.innerText = "Total de la reserva"
+                                contenedorTotal.appendChild(tituloTotal)
+
+
+                                const totalReserva = document.createElement("p")
+                                totalReserva.classList.add("totalReserva")
+                                totalReserva.innerText = totales.totalConImpuestos + "$"
+                                contenedorTotal.appendChild(totalReserva)
+
+
+                                const masInfo = document.createElement("p")
+                                masInfo.classList.add("info")
+                                masInfo.innerText = "Si desea ver el detalle del total pulse aquí"
+                                masInfo.addEventListener("click", () => {
+
+                                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                                    document.body.style.overflow = 'hidden';
+
+                                    const advertenciaInmersivaIU = document.createElement("div")
+                                    advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
+                                    advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
+                                    advertenciaInmersivaIU.setAttribute("contenedor", "opcionesCancelacion")
+                                    advertenciaInmersivaIU.setAttribute("instanciaUID", instanciaUID)
+
+                                    const contenedorAdvertenciaInmersiva = document.createElement("div")
+                                    contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
+
+                                    const contenidoAdvertenciaInmersiva = document.createElement("div")
+                                    contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
+                                    contenidoAdvertenciaInmersiva.setAttribute("contenedor", "contenidoAdvertenciaInmersiva")
+
+                                    const contenedorDesgloseTotales = document.createElement("div")
+                                    contenedorDesgloseTotales.classList.add("administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion")
+
+                                    const testInfo = document.createElement("div")
+                                    testInfo.classList.add("plaza_resumenReserva_textoInfo")
+                                    testInfo.innerText = "A continuación, se presentan los detalles del desglose completo del importe total de la reserva. Aquí encontrarás una explicación detallada de cada componente que contribuye al costo total. Este desglose incluye los diversos cargos, impuestos u otros conceptos asociados con tu reserva. Revisar estos detalles te proporcionará una comprensión transparente de los costos involucrados en tu elección de alojamiento. ¡Estamos comprometidos a brindarte la información necesaria para que tu experiencia de reserva sea clara y sin sorpresas!"
+                                    contenedorDesgloseTotales.appendChild(testInfo)
+
+                                    const contenedorTotales = document.createElement("div")
+                                    contenedorTotales.setAttribute("contenedor", "espacioGlobalTotales")
+                                    //contenedorTotales.innerHTML = codigoTotales
+                                    contenedorDesgloseTotales.appendChild(contenedorTotales)
+
+                                    const botonCancelarProcesoCancelacion = document.createElement("div")
+                                    botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
+                                    botonCancelarProcesoCancelacion.innerText = "Cerrar y volver a la reserva preconfirmada"
+                                    botonCancelarProcesoCancelacion.addEventListener("click", casaVitini.componentes.limpiarAdvertenciasInmersivas)
+                                    contenedorDesgloseTotales.appendChild(botonCancelarProcesoCancelacion)
+
+                                    contenidoAdvertenciaInmersiva.appendChild(contenedorDesgloseTotales)
+                                    contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
+                                    advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
+
+                                    document.body.appendChild(advertenciaInmersivaIU)
+
+                                    const destino = `[instanciaUID="${instanciaUID}"] [contenedor=espacioGlobalTotales]`
+                                    const desgloseTotales = {
+                                        totalesPorApartamento: totalesPorApartamento,
+                                        totalesPorNoche: totalesPorNoche,
+                                        totales: totales,
+                                        impuestos: impuestos,
+                                        ofertas: ofertas,
+                                        destino: destino
+                                    }
+                                    casaVitini.componentes.ui.totales(desgloseTotales)
+                                })
+                                contenedorTotal.appendChild(masInfo)
+
+                                espacioDatosGlobalesReserva.appendChild(contenedorTotal)
 
                             } else {
 
@@ -2208,7 +2311,7 @@ const casaVitini = {
                     if (respuestaServidor?.error) {
                         return casaVitini.componentes.flujoPagoUI.errorInfo(respuestaServidor.error)
 
-                      //  return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor.error)
+                        //  return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor.error)
                     }
                     if (respuestaServidor.ok) {
                         const detalles = respuestaServidor.detalles
@@ -11469,13 +11572,13 @@ const casaVitini = {
         },
         obtenerPrecioReserva: async (metadatos) => {
             const tipoFormatoReserva = metadatos.tipoFormatoReserva
-            if (tipoFormatoReserva !== "objetoLocal" && tipoFormatoReserva !== "uid" && tipoFormatoReserva !== "objetoDedicado") {
-                const error = "obenerPrecioReserva necesita un tipoFormatReserva, este puede ser objetoLocal, uid, objetoDedicado"
+            if (tipoFormatoReserva !== "objetoLocal_reservaNoConfirmada" && tipoFormatoReserva !== "uid" && tipoFormatoReserva !== "objetoDedicado") {
+                const error = "obenerPrecioReserva necesita un tipoFormatoReserva, este puede ser objetoLocal, uid, objetoDedicado"
                 return casaVitini.ui.vistas.advertenciaInmersiva(error)
 
             }
 
-            if (tipoFormatoReserva === "objetoLocal") {
+            if (tipoFormatoReserva === "objetoLocal_reservaNoConfirmada") {
                 const reservaObjetoLocal = sessionStorage.getItem("reserva") ? JSON.parse(sessionStorage.getItem("reserva")) : null;
                 if (!reservaObjetoLocal) {
                 } else {
@@ -11493,6 +11596,7 @@ const casaVitini = {
                     }
                 }
             }
+
 
         },
         ocultarMenusVolatiles: (menuVolatil) => {
@@ -12037,7 +12141,11 @@ const casaVitini = {
 
                 const destino = desgloseFinanciero.destino
                 const selectorDestino = document.querySelector(destino)
-
+                console.log("selectorDestino", selectorDestino)
+                if (!selectorDestino) {
+                    const error = "totales no encuentra el elemento de destino, revisa el identificador del elemento"
+                    return casaVitini.ui.vistas.advertenciaInmersiva(error)
+                }
 
                 const simboloDescuento = {
                     porcentaje: "%",
@@ -12661,7 +12769,7 @@ const casaVitini = {
                 const pantallaInmersivaPersonalizadaUI = document.createElement("div")
                 pantallaInmersivaPersonalizadaUI.setAttribute("class", "advertenciaInmersiva")
                 pantallaInmersivaPersonalizadaUI.setAttribute("componente", "advertenciaInmersiva")
-                pantallaInmersivaPersonalizadaUI.setAttribute("instanciaUID",instanciaUID)
+                pantallaInmersivaPersonalizadaUI.setAttribute("instanciaUID", instanciaUID)
 
 
                 const contenedorAdvertenciaInmersiva = document.createElement("div")

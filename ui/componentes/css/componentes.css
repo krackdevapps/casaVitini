@@ -9191,6 +9191,24 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
+
+.plaza_reservas_reservaConfirmada_infoIngreso {
+    text-align: center;
+    font-size: 13px;
+    display: flex;
+    padding: 12px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    justify-content: center;
+    font-weight: bold;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+
+}
+
 .plaza_reservas_reservaConfirmada_contenedor {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -11071,7 +11089,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .reservas_pendientes_de_revision .contenedorReserva {
     margin: 6px;
     background: rgb(255 255 255 / 31%);
-        display: flex;
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
     backdrop-filter: blur(50px);
@@ -11085,19 +11103,20 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 16px;
     flex-direction: column;
     justify-content: center;
-    
+
 }
 
 .reservas_pendientes_de_revision .dato {
     margin: 0px;
-    
+
 }
 
 
 .reservas_pendientes_de_revision .contenedorInformacion {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;}
+    flex-wrap: wrap;
+}
 
 .reservas_pendientes_de_revision .contenedorFechas {
     display: flex;
@@ -11138,4 +11157,40 @@ grid-template-columns: 0.5fr 1.5fr;
 .reservas_pendientes_de_revision .boton:hover {
 
     background: #0000005e;
+}
+
+
+.reservas_pendientes_de_revision .info {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+[contenedor="reservaConfiramda"] .contenedorTotal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+    align-content: center;
+    gap: 10px;
+}
+
+[contenedor="reservaConfiramda"] .contenedorTotal .tituloContenedor {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    color: black;
+    font-weight: bold;
+}
+
+[contenedor="reservaConfiramda"] .contenedorTotal .totalReserva {
+    margin: 0px;
+    font-weight: bold;
+
+}
+
+[contenedor="reservaConfiramda"] .contenedorTotal .info {
+    margin: 0px;
+    padding: 10px;
+    border-radius: 10px;
+    background: turquoise;
 }

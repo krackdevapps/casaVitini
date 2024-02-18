@@ -12200,6 +12200,10 @@ const administracion = {
 
                 const espacioReservasPendientes = document.querySelector(`section[instanciaUID="${instanciaUID}"]`).querySelector("[componente=espacioReservasPendientesDeRevision]")
 
+                const info = document.createElement("div")
+                info.classList.add("info")
+                info.innerText = "No hay reservas pendientes de revisión"
+
                 const transaccion = {
                     zona: "administracion/reservas/pendientes_de_revision/obtener_reservas"
                 }
@@ -12228,9 +12232,9 @@ const administracion = {
                     if (espacioReservasPendientes) {
                         const reservasPendientes = respuestaServidor.reservas
                         if (reservasPendientes.length === 0) {
+                            casaVitini.administracion.reservas.pendientes_de_revision.componentes.infoSinReservas(instanciaUID)
                         } else {
                             for (const detallesDeLaReservaPendiente of reservasPendientes) {
-
                                 const reserva = detallesDeLaReservaPendiente.reserva
                                 const fechaEntrada_ISO = detallesDeLaReservaPendiente.fechaEntrada_ISO
                                 const fechaSalida_ISO = detallesDeLaReservaPendiente.fechaSalida_ISO
@@ -12460,10 +12464,27 @@ const administracion = {
                     if (respuestaServidor?.ok) {
                         document.querySelector(`[instanciaUID="${instanciaUID_opcionesReserva}"]`)?.remove()
                         document.querySelector(`[instanciaUID="${instanciaUID_listaReservasPendientes}"] [reservaUID="${reservaUID}"]`).remove()
+                        const numeroReservaRenderizadasRestantes = document.querySelectorAll(`[instanciaUID="${instanciaUID_listaReservasPendientes}"] [reservaUID]`).length
+                        if (numeroReservaRenderizadasRestantes === 0) {
+                            casaVitini.administracion.reservas.pendientes_de_revision.componentes.infoSinReservas(instanciaUID_listaReservasPendientes)
+                        }
+
                     }
 
                 }
             },
+            componentes: {
+                infoSinReservas: (instanciaUID) => {
+                    const espacioReservasPendientes = document.querySelector(`section[instanciaUID="${instanciaUID}"]`).querySelector("[componente=espacioReservasPendientesDeRevision]")
+                    if (espacioReservasPendientes) {
+                        const info = document.createElement("div")
+                        info.classList.add("info")
+                        info.innerText = "No hay reservas pendientes de revisión, actualiza la página para comprobar de nuevo."
+                        espacioReservasPendientes.appendChild(info)
+                    }
+
+                }
+            }
         }
     },
     administracion: {
