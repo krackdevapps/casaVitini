@@ -9050,7 +9050,7 @@ const administracion = {
 
                             const infoSeguridad = document.createElement("div")
                             infoSeguridad.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                            infoSeguridad.innerText = "Para eliminar una reserva irreversiblemente junto con toda su información relacionada debe escribir su contraseña de usuario y su cuenta de debe de tener autorización Administrativa."
+                            infoSeguridad.innerText = "Para eliminar una reserva irreversiblemente junto con toda su información relacionada debe escribir su contraseña de usuario y su cuenta debe tener autorización administrativa."
                             bloqueBloqueoApartamentos.appendChild(infoSeguridad)
 
                             const campo = document.createElement("input")
@@ -12394,7 +12394,7 @@ const administracion = {
 
                     const infoSeguridad = document.createElement("div")
                     infoSeguridad.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                    infoSeguridad.innerText = "Para rechazar la reserva y elimarla irreversiblemente junto con toda su información relacionada debe escribir su contraseña de usuario y su cuenta de debe de tener autorización Administrativa."
+                    infoSeguridad.innerText = "Para rechazar la reserva y elimarla irreversiblemente junto con toda su información relacionada debe escribir su contraseña de usuario y su cuenta debe tener autorización administrativa."
                     bloqueBloqueoApartamentos.appendChild(infoSeguridad)
 
                     const campo = document.createElement("input")
