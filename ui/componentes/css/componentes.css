@@ -11102,10 +11102,13 @@ grid-template-columns: 0.5fr 1.5fr;
 .reservas_pendientes_de_revision .contenedorFechas {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: flex-start;
     padding: 10px;
     gap: 10px;
+    background: #0000001f;
+    margin: 6px;
+    border-radius: 15px;
 }
 
 .reservas_pendientes_de_revision .contenedorBotones {
@@ -11128,6 +11131,8 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-user-select: none;
     align-content: center;
     justify-content: center;
+    text-decoration: none;
+    color: black;
 }
 
 .reservas_pendientes_de_revision .boton:hover {

@@ -7357,6 +7357,8 @@ const puerto = async (entrada, salida) => {
                             //let pagadorNombre = entrada.body.pagadorNombre
                             //let pagadorPasaporte = entrada.body.pagadorPasaporte
                             let chequeUID = entrada.body.chequeUID
+                            let transferenciaUID = entrada.body.transferenciaUID
+
                             let pagoUIDPasarela = entrada.body.pagoUIDPasarela
                             let tarjetaUltimos = entrada.body.tarjetaUltimos
 
@@ -7404,6 +7406,13 @@ const puerto = async (entrada, salida) => {
                                     }
                                     return chequeUID
                                 },
+                                transferenciaUID: (transferenciaUID) => {
+                                    if (!transferenciaUID || !filtroCadena.test(transferenciaUID)) {
+                                        const error = "El campo transferenciaUID solo admite una cadena con mayúsculas, minúsculas, numero y espacios"
+                                        throw new Error(error)
+                                    }
+                                    return transferenciaUID
+                                },
                                 pagoUIDPasarela: (pagoUIDPasarela) => {
                                     if (!pagoUIDPasarela || !filtroCadenaSinEspacios.test(pagoUIDPasarela)) {
                                         const error = "El campo pagoUIDPasarela solo admite una cadena con mayúsculas, minúsculas y numero"
@@ -7438,10 +7447,12 @@ const puerto = async (entrada, salida) => {
                                         reserva,
                                         cantidad,
                                         "fechaPago",
-                                        "chequeUID"
+                                        "chequeUID",
+                                        "transferenciaUID"
+
                                         )
                                         VALUES 
-                                        ($1, $2, $3, $4, $5, $6, $7, $8)
+                                        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                                         RETURNING
                                         "pagoUID",
                                         "plataformaDePago",
@@ -7449,7 +7460,9 @@ const puerto = async (entrada, salida) => {
                                         "pagoUIDPasarela",
                                         cantidad,
                                         "fechaPago"::TEXT AS "fechaPago",
-                                        "chequeUID"
+                                        "chequeUID",
+                                        "transferenciaUID"
+
                                         `
                                         const datosPago = [
                                             datosDelNuevoPago.plataformaDePago,
@@ -7459,7 +7472,9 @@ const puerto = async (entrada, salida) => {
                                             datosDelNuevoPago.reservaUID,
                                             datosDelNuevoPago.cantidadConPunto,
                                             datosDelNuevoPago.fechaPago,
-                                            datosDelNuevoPago.chequeUID
+                                            datosDelNuevoPago.chequeUID,
+                                            datosDelNuevoPago.transferenciaUID
+
                                         ]
                                         const consulta = await conexion.query(asociarPago, datosPago)
                                         return consulta.rows[0]
@@ -7514,6 +7529,33 @@ const puerto = async (entrada, salida) => {
                                         //pagadorNombre: pagadorNombre,
                                         //pagadorPasaporte: pagadorPasaporte,
                                         chequeUID: chequeUID
+                                    }
+                                    pagoUID = await sql.insertarPago(nuevoPago)
+
+                                    estructuraFinal.ok = "Se ha insertado el nuevo pago en cheque"
+                                    estructuraFinal.detallesDelPago = pagoUID
+
+
+
+                                    break;
+                                case 'transferenciaBancaria':
+
+                                    cantidad = validadores.cantidad(cantidad)
+                                    //pagadorNombre = validadores.pagadorNombre(pagadorNombre)
+                                    //pagadorPasaporte = validadores.pagadorPasaporte(pagadorPasaporte)
+                                    transferenciaUID = validadores.transferenciaUID(transferenciaUID)
+
+                                    nuevoPago = {
+                                        plataformaDePago: plataformaDePago,
+                                        //tarjeta: tarjeta,
+                                        //tarjetaDigitos: tarjetaDigitos,
+                                        //pagoUIDPasarela: pagoUIDPasarela,
+                                        reservaUID: reservaUID,
+                                        cantidadConPunto: cantidad,
+                                        fechaPago: fechaActual,
+                                        //pagadorNombre: pagadorNombre,
+                                        //pagadorPasaporte: pagadorPasaporte,
+                                        transferenciaUID: transferenciaUID
                                     }
                                     pagoUID = await sql.insertarPago(nuevoPago)
 
@@ -7606,7 +7648,7 @@ const puerto = async (entrada, salida) => {
                                     estructuraFinal.detallesDelPago = pagoUID
                                     break;
                                 default:
-                                    const error = "El campo plataformaDePago solo admite una cadena mayúsculas y minúsculas sin espacios. Las plataformas de pagos son tarjeta, efectivo, pasarela,"
+                                    const error = "El campo plataformaDePago solo admite una cadena mayúsculas y minúsculas sin espacios. Las plataformas de pagos son tarjeta, efectivo, pasarela y tranferenciaBancaria"
                                     throw new Error(error)
 
                             }
