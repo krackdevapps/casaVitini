@@ -1705,7 +1705,6 @@ const puerto = async (entrada, salida) => {
                             const resolverDetallesReserva = await detallesReserva(metadatos)
                             const enlacePDF = await componentes.gestionEnlacesPDF.crearEnlacePDF(reservaUID)
                             resolverDetallesReserva.enlacePDF = enlacePDF
-
                             const ok = {
                                 ok: "Reserva confirmada y pagada",
                                 detalles: resolverDetallesReserva
@@ -1713,7 +1712,6 @@ const puerto = async (entrada, salida) => {
                             salida.json(ok)
                         }
                         await conexion.query('COMMIT');
-
                         enviarEmailReservaConfirmaada(reservaUID)
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK');
