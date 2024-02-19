@@ -14552,26 +14552,10 @@ const administracion = {
 
                     const informacion = document.createElement("div")
                     informacion.classList.add("administracion_configuracion_informacion")
-                    informacion.innerText = "Determina los limites de las reservas que preconfirman los clientes desde Casa Vitini. A diferencia de las reservas que se confirman en el panel de administracion. Las reservas que preconfirman los clientes tienen unos limites."
+                    informacion.innerText = "Determina los limites de las reservas que preconfirman los clientes desde Casa Vitini. A diferencia de las reservas que se confirman en el panel de administracion. Las reservas que preconfirman los clientes tienen unos limites. Como unos días de antelación, numero de días maximo de duración o un limite futuro para aceptar reservas hasta un punto en el futuro."
                     contenedorConfiguracionGlobal.appendChild(informacion)
 
-                    // Zona horaria Global
 
-                    let bloqueConfiguracion = document.createElement("div")
-                    bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
-
-                    let tituloConfiguracion = document.createElement("div")
-                    tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
-                    tituloConfiguracion.innerText = "Dias de antelacion de las reservas publicas"
-                    bloqueConfiguracion.appendChild(tituloConfiguracion)
-
-                    let descripcionConfiguracion = document.createElement("div")
-                    descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
-                    descripcionConfiguracion.innerText = "Determina cuandos dias de antelación deben de tener las reservas que hacen los clientes para ser aceptadas. Esto sirve para aceptar las reservas y para preparar el calendario publico para facilitar al cliente la seleccion de los dias de la reserva a preconfirmar."
-                    bloqueConfiguracion.appendChild(descripcionConfiguracion)
-
-
-                    contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
                     bloqueConfiguracion = document.createElement("div")
                     bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
 
@@ -14582,7 +14566,7 @@ const administracion = {
 
                     descripcionConfiguracion = document.createElement("div")
                     descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
-                    descripcionConfiguracion.innerText = "Dias de antelacion. Determina el numero de dias de antelacion escribienod el numero de dias de antelacion."
+                    descripcionConfiguracion.innerText = "Dias de antelacion. Determina el numero de dias de antelacion escribiendo el numero de días de antelacion. Si por ejempo escribes un minímo de diez días de antelacíon, los días seran de antelación y se aceptaran reservas a partír del día numero 11 desde el dia presente. El diía presente cuenta como dia 0. Si por el contrario no aceptas reservas sin días de antelación, por que aceptas reservas incluso para el mismo día, entonces establece los diás de antelacíon en 0"
                     bloqueConfiguracion.appendChild(descripcionConfiguracion)
 
                     let valorConfiguracion = document.createElement("input")

@@ -9858,15 +9858,20 @@ const puerto = async (entrada, salida) => {
                                     const error = "Los dias de antelacion no pueden ser iguales o superiores a los dias del limiteFuturoReserva por que entonces no se permiten reservas de mas de 0 dias"
                                     throw new Error(error)
                                 }
-
+                                console.log(limiteFuturoReserva)
                                 if (0 === Number(limiteFuturoReserva)) {
                                     const error = "El limite futuro no puede ser de 0, por que entonces no se permite reservas de mas de 0 dias."
                                     throw new Error(error)
                                 }
+                                if (0 === Number(diasMaximosReserva)) {
+                                    const error = "No puedes determinar que el numero maximo de días de las reservas publicas sea de 0."
+                                    throw new Error(error)
+                                }
+
 
                                 const maximoDiasDuracionReserva = Number(limiteFuturoReserva) - Number(diasAntelacionReserva) 
-                                if (Number(diasMaximosReserva) >= Number(maximoDiasDuracionReserva)) {
-                                    const error = `En base la configuracíon que solicitas, es decir en base a los dias minimos de antelación y el limite futuro de dias, las reservas tendrian un maximo de ${maximoDiasDuracionReserva} dias de duracíon, por lo tanto no puedes establecer mas dias de duracíon que eso. Es decir o escoges poner menos dias de duración maximo para una reserva o ampliar los limites anteriores.`
+                                if (Number(diasMaximosReserva) > Number(maximoDiasDuracionReserva)) {
+                                    const error = `En base la configuracíon que solicitas, es decir en base a los dias minimos de antelación establecidos y el limite futuro de dias, las reservas tendrian un maximo de ${maximoDiasDuracionReserva} días de duracíon, por lo tanto no puedes establecer mas días de duracíon que eso. Es decir o escoges poner menos dias de duración maximo para una reserva o ampliar los limites anteriores.`
                                     throw new Error(error)
                                 }
 
