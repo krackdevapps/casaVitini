@@ -14526,9 +14526,9 @@ const administracion = {
                 document.body.removeAttribute("style")
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
                 marcoElastico.style.gap = "4px"
-                return
+                
                 const transaccion = {
-                    zona: "administracion/configuracion/horaDeEntradaSalida/obtenerConfiguracion"
+                    zona: "administracion/configuracion/limitesReservaPublica/obtenerConfiguracion"
                 }
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
@@ -14540,17 +14540,19 @@ const administracion = {
                 if (respuestaServidor?.ok) {
                     const configuracionGlobal = respuestaServidor?.ok
 
-                    const zonaHoraria = configuracionGlobal.zonaHoraria
 
-                    const horaEntradaTZ = configuracionGlobal.horaEntradaTZ
-                    const horaSalidaTZ = configuracionGlobal.horaSalidaTZ
+                    const diasMaximosReserva = configuracionGlobal.diasMaximosReserva
+                    const diasAntelacionReserva = configuracionGlobal.diasAntelacionReserva
+                    const limiteFuturoReserva = configuracionGlobal.limiteFuturoReserva
+
+             
 
                     const contenedorConfiguracionGlobal = document.createElement("div")
                     contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
 
                     const informacion = document.createElement("div")
                     informacion.classList.add("administracion_configuracion_informacion")
-                    informacion.innerText = "Determine la configuración global del sistema. Esta configuración se aplica a todo el sistema y a todos los usuarios. "
+                    informacion.innerText = "Determina los limites de las reservas que preconfirman los clientes desde Casa Vitini. A diferencia de las reservas que se confirman en el panel de administracion. Las reservas que preconfirman los clientes tienen unos limites."
                     contenedorConfiguracionGlobal.appendChild(informacion)
 
                     // Zona horaria Global
@@ -14560,63 +14562,88 @@ const administracion = {
 
                     let tituloConfiguracion = document.createElement("div")
                     tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
-                    tituloConfiguracion.innerText = "Zona horaria de Casa Vitini"
+                    tituloConfiguracion.innerText = "Dias de antelacion de las reservas publicas"
                     bloqueConfiguracion.appendChild(tituloConfiguracion)
 
                     let descripcionConfiguracion = document.createElement("div")
                     descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
-                    descripcionConfiguracion.innerText = "La zona horaria local se aplica sobre el reloj UTC para que pueda ver la hora y las fechas en la zona horaria. Por ejemplo, en el apartado de Situación, en la renderización de los calendarios y etc. La zona horaria debe de configurarse con la misma zona horaria de las instalaciones físicas de pernoctacion de Casa Vitini. Entonces el sistema de Casa Vitini puede implantarse en cualquier ordenador sin importar su reloj en zona horaria local. Es fundamental que la zona horaria del sistema sea la misma que la zona horaria de las instalaciones físicas de pernoctación de Casa Vitini. El motivo de esto es que los pernoctante puedan obtener calendarios locales a la zona horaria de Casa Vitini y realizar las reservas en zona horaria local de Casa Vitini."
+                    descripcionConfiguracion.innerText = "Determina cuandos dias de antelación deben de tener las reservas que hacen los clientes para ser aceptadas. Esto sirve para aceptar las reservas y para preparar el calendario publico para facilitar al cliente la seleccion de los dias de la reserva a preconfirmar."
                     bloqueConfiguracion.appendChild(descripcionConfiguracion)
 
 
                     contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
-                    // Hora de entrada TZ
                     bloqueConfiguracion = document.createElement("div")
                     bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
 
                     tituloConfiguracion = document.createElement("div")
                     tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
-                    tituloConfiguracion.innerText = "Hora de entrada"
+                    tituloConfiguracion.innerText = "Dias de antelación"
                     bloqueConfiguracion.appendChild(tituloConfiguracion)
 
                     descripcionConfiguracion = document.createElement("div")
                     descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
-                    descripcionConfiguracion.innerText = "Hora de entrada en zona horaria. Esta es la hora de entrada en la zona horaria seleccionada. Sirve para determinar la hora de entrada de las reservas en el día de entrada"
+                    descripcionConfiguracion.innerText = "Dias de antelacion. Determina el numero de dias de antelacion escribienod el numero de dias de antelacion."
                     bloqueConfiguracion.appendChild(descripcionConfiguracion)
 
                     let valorConfiguracion = document.createElement("input")
-                    valorConfiguracion.setAttribute("campo", "horaEntradaTZ")
-                    valorConfiguracion.setAttribute("valorInicial", horaEntradaTZ)
+                    valorConfiguracion.setAttribute("campo", "diasAntelacionReserva")
+                    valorConfiguracion.setAttribute("valorInicial", diasAntelacionReserva)
                     valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
                     valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
-                    valorConfiguracion.value = horaEntradaTZ
-                    valorConfiguracion.placeholder = "Selecciona una hora de entrada, por ejemplo 17:00"
+                    valorConfiguracion.value = diasAntelacionReserva
+                    valorConfiguracion.placeholder = "Determina el numero de días de antelación"
                     bloqueConfiguracion.appendChild(valorConfiguracion)
 
                     contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
 
-                    // Hora de salida TZ
+
                     bloqueConfiguracion = document.createElement("div")
                     bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
 
                     tituloConfiguracion = document.createElement("div")
 
                     tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
-                    tituloConfiguracion.innerText = "Hora de salida"
+                    tituloConfiguracion.innerText = "Duración maxima de la reserva"
                     bloqueConfiguracion.appendChild(tituloConfiguracion)
 
                     descripcionConfiguracion = document.createElement("div")
                     descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
-                    descripcionConfiguracion.innerText = "Hora de salida en zona horaria. Esta es la hora de salida en la zona horaria seleccionada. Sirve para determinar la hora de salida de las reservas en el día de salida "
+                    descripcionConfiguracion.innerText = "Determina el numero maximo de dias que puede tener una reserva "
                     bloqueConfiguracion.appendChild(descripcionConfiguracion)
 
                     valorConfiguracion = document.createElement("input")
-                    valorConfiguracion.setAttribute("campo", "horaSalidaTZ")
+                    valorConfiguracion.setAttribute("campo", "diasMaximosReserva")
                     valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
-                    valorConfiguracion.setAttribute("valorInicial", horaSalidaTZ)
+                    valorConfiguracion.setAttribute("valorInicial", diasMaximosReserva)
                     valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
-                    valorConfiguracion.value = horaSalidaTZ
+                    valorConfiguracion.value = diasMaximosReserva
                     valorConfiguracion.placeholder = "Selecciona una hora de salida, por ejemplo 19:00 "
+                    bloqueConfiguracion.appendChild(valorConfiguracion)
+
+                    contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
+
+
+                    bloqueConfiguracion = document.createElement("div")
+                    bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
+
+                    tituloConfiguracion = document.createElement("div")
+
+                    tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                    tituloConfiguracion.innerText = "Limite futuro para aceptar reservas"
+                    bloqueConfiguracion.appendChild(tituloConfiguracion)
+
+                    descripcionConfiguracion = document.createElement("div")
+                    descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                    descripcionConfiguracion.innerText = "Determina el numero maximo de dias en lo que se esta dispuesto a aceptar una reserva. Por ejemplo si no aceptas reservas mas alla de un año."
+                    bloqueConfiguracion.appendChild(descripcionConfiguracion)
+
+                    valorConfiguracion = document.createElement("input")
+                    valorConfiguracion.setAttribute("campo", "limiteFuturoReserva")
+                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
+                    valorConfiguracion.setAttribute("valorInicial", limiteFuturoReserva)
+                    valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
+                    valorConfiguracion.value = limiteFuturoReserva
+                    valorConfiguracion.placeholder = "Determinal el limite futuro en numero de dias"
                     bloqueConfiguracion.appendChild(valorConfiguracion)
 
                     contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
