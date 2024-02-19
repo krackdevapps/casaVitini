@@ -14588,7 +14588,7 @@ const administracion = {
                     let valorConfiguracion = document.createElement("input")
                     valorConfiguracion.setAttribute("campo", "diasAntelacionReserva")
                     valorConfiguracion.setAttribute("valorInicial", diasAntelacionReserva)
-                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
+                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.limitesReservaPublica.controlCampo)
                     valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
                     valorConfiguracion.value = diasAntelacionReserva
                     valorConfiguracion.placeholder = "Determina el numero de días de antelación"
@@ -14613,7 +14613,7 @@ const administracion = {
 
                     valorConfiguracion = document.createElement("input")
                     valorConfiguracion.setAttribute("campo", "diasMaximosReserva")
-                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
+                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.limitesReservaPublica.controlCampo)
                     valorConfiguracion.setAttribute("valorInicial", diasMaximosReserva)
                     valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
                     valorConfiguracion.value = diasMaximosReserva
@@ -14639,7 +14639,7 @@ const administracion = {
 
                     valorConfiguracion = document.createElement("input")
                     valorConfiguracion.setAttribute("campo", "limiteFuturoReserva")
-                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
+                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.limitesReservaPublica.controlCampo)
                     valorConfiguracion.setAttribute("valorInicial", limiteFuturoReserva)
                     valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
                     valorConfiguracion.value = limiteFuturoReserva
@@ -14656,19 +14656,82 @@ const administracion = {
                     const botonGuardarCambios = document.createElement("div")
                     botonGuardarCambios.classList.add("administracion_configuracion_boton")
                     botonGuardarCambios.innerText = "Guardar cambios"
-                    botonGuardarCambios.addEventListener("click", casaVitini.administracion.configuracion.horaDeEntradaSalida.guardarCambios)
+                    botonGuardarCambios.addEventListener("click", casaVitini.administracion.configuracion.limitesReservaPublica.guardarCambios)
                     contenedorBotones.appendChild(botonGuardarCambios)
 
                     const botonCancelarCambios = document.createElement("div")
                     botonCancelarCambios.classList.add("administracion_configuracion_boton")
-                    botonCancelarCambios.addEventListener("click", casaVitini.administracion.configuracion.horaDeEntradaSalida.cancelarCambios)
+                    botonCancelarCambios.addEventListener("click", casaVitini.administracion.configuracion.limitesReservaPublica.cancelarCambios)
                     botonCancelarCambios.innerText = "Cancelar cambios"
                     contenedorBotones.appendChild(botonCancelarCambios)
 
                     marcoElastico.appendChild(contenedorBotones)
                 }
             },
+            cancelarCambios: () => {
+                const campos = [...document.querySelectorAll("[campo]")]
+                campos.map((campo) => {
 
+                    campo.value = campo.getAttribute("valorInicial")
+                })
+                const contenedorBotones = document.querySelector("[contenedor=botones]")
+                contenedorBotones.removeAttribute("style")
+            },
+            controlCampo: () => {
+
+                const campos = [...document.querySelectorAll("[campo]")]
+                let estadoFinal = null
+                campos.map((campo) => {
+                    if (campo.value !== campo.getAttribute("valorInicial")) {
+                        estadoFinal = "visible"
+                    }
+
+                })
+                const contenedorBotones = document.querySelector("[contenedor=botones]")
+
+                if (estadoFinal === "visible") {
+                    contenedorBotones.style.display = "flex"
+                } else {
+                    contenedorBotones.removeAttribute("style")
+                }
+
+
+
+
+
+
+
+            },
+            guardarCambios: async () => {
+                const campos = [...document.querySelectorAll("[campo]")]
+                const transacccion = {
+                    zona: "administracion/configuracion/limitesReservaPublica/guardarConfiguracion"
+                }
+
+                campos.map((campo) => {
+
+                    const nombreCampo = campo.getAttribute("campo")
+                    const valorCampo = campo.value
+                    transacccion[nombreCampo] = valorCampo
+                })
+
+                const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
+
+
+                if (respuestaServidor?.error) {
+                    casaVitini.administracion.configuracion.cancelarCambios()
+                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                }
+                if (respuestaServidor?.ok) {
+                    const contenedorBotones = document.querySelector("[contenedor=botones]")
+                    contenedorBotones.removeAttribute("style")
+                    campos.map((campo) => {
+                        campo.setAttribute("valorInicial", campo.value)
+                    })
+
+                }
+
+            }
 
         }
     },

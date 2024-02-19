@@ -9836,37 +9836,46 @@ const puerto = async (entrada, salida) => {
                         },
                         X: async () => {
                             try {
-                                const horaEntradaTZ = entrada.body.horaEntradaTZ
-                                const horaSalidaTZ = entrada.body.horaSalidaTZ
+                                const diasAntelacionReserva = entrada.body.diasAntelacionReserva
+                                const limiteFuturoReserva = entrada.body.limiteFuturoReserva
+                                const diasMaximosReserva = entrada.body.diasMaximosReserva
 
-                                const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;
+                                const filtroNumero = /^\d+$/;
 
-
-                                if (!horaEntradaTZ || !filtroHora.test(horaEntradaTZ)) {
-                                    const error = "La hora de entrada debe de ser 00:00 y no puede ser superior a 23:59, si quieres poner la hora por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35"
+                                if (!diasAntelacionReserva || !filtroNumero.test(diasAntelacionReserva)) {
+                                    const error = "El campo diasAntelacionReserva solo acepta numeros"
+                                    throw new Error(error)
+                                }
+                                if (!limiteFuturoReserva || !filtroNumero.test(limiteFuturoReserva)) {
+                                    const error = "El campo limiteFuturoReserva solo acepta numeros"
+                                    throw new Error(error)
+                                }
+                                if (!diasMaximosReserva || !filtroNumero.test(diasMaximosReserva)) {
+                                    const error = "El campo diasMaximosReserva solo acepta numeros"
+                                    throw new Error(error)
+                                }
+                                if (Number(diasAntelacionReserva) >= Number(limiteFuturoReserva)) {
+                                    const error = "Los dias de antelacion no pueden ser iguales o superiores a los dias del limiteFuturoReserva por que entonces no se permiten reservas de mas de 0 dias"
                                     throw new Error(error)
                                 }
 
-                                if (!horaSalidaTZ || !filtroHora.test(horaSalidaTZ)) {
-                                    const error = "el campo 'horaEntradaTZ' debe de ser 00:00 y no puede ser superior a 23:59,si quieres poner la hora por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35"
+                                if (0 === Number(limiteFuturoReserva)) {
+                                    const error = "El limite futuro no puede ser de 0, por que entonces no se permite reservas de mas de 0 dias."
                                     throw new Error(error)
                                 }
 
-                                // Parsear las cadenas de hora a objetos DateTime de Luxon
-                                const horaEntradaControl = DateTime.fromFormat(horaEntradaTZ, 'HH:mm');
-                                const horaSalidaControl = DateTime.fromFormat(horaSalidaTZ, 'HH:mm');
-
-                                // Comparar las horas
-                                if (horaSalidaControl >= horaEntradaControl) {
-                                    const error = "La hora de entrada no puede ser anterior o igual a la hora de salida. Los pernoctantes primero salen del apartamento a su hora de salida y luego los nuevos pernoctantes entran en el apartamento a su hora de entrada. Por eso la hora de entrada tiene que ser mas tarde que al hora de salida. Por que primero salen del apartamento ocupado, el apartmento entonces pasa a estar libre y luego entran los nuevo pernoctantes al apartamento ahora libre de los anteriores pernoctantes."
+                                const maximoDiasDuracionReserva = Number(limiteFuturoReserva) - Number(diasAntelacionReserva) 
+                                if (Number(diasMaximosReserva) >= Number(maximoDiasDuracionReserva)) {
+                                    const error = `En base la configuracíon que solicitas, es decir en base a los dias minimos de antelación y el limite futuro de dias, las reservas tendrian un maximo de ${maximoDiasDuracionReserva} dias de duracíon, por lo tanto no puedes establecer mas dias de duracíon que eso. Es decir o escoges poner menos dias de duración maximo para una reserva o ampliar los limites anteriores.`
                                     throw new Error(error)
                                 }
 
 
-
+              
                                 await conexion.query('BEGIN'); // Inicio de la transacción
-                                const configuracionUID_horaEntradaTZ = "horaEntradaTZ"
-                                const configuracionUID_horaSalidaTZ = "horaSalidaTZ"
+                                const configuracionUID_diasAntelacionReserva = "diasAntelacionReserva"
+                                const configuracionUID_limiteFuturoReserva = "limiteFuturoReserva"
+                                const configuracionUID_diasMaximosReserva = "diasMaximosReserva"
 
                                 const actualizarConfiguracionGlobal = `
                                 UPDATE "configuracionGlobal"
@@ -9874,17 +9883,20 @@ const puerto = async (entrada, salida) => {
                                     valor = CASE
                                         WHEN "configuracionUID" = $2 THEN $1
                                         WHEN "configuracionUID" = $4 THEN $3
+                                        WHEN "configuracionUID" = $6 THEN $5
                                         ELSE valor
                                     END
                                 WHERE
-                                    "configuracionUID" IN ($2, $4);
+                                    "configuracionUID" IN ($2, $4, $6);
                                 `;
 
                                 const nuevaConfiguracion = [
-                                    horaEntradaTZ,
-                                    configuracionUID_horaEntradaTZ,
-                                    horaSalidaTZ,
-                                    configuracionUID_horaSalidaTZ
+                                    diasAntelacionReserva,
+                                    configuracionUID_diasAntelacionReserva,
+                                    limiteFuturoReserva,
+                                    configuracionUID_limiteFuturoReserva,
+                                    diasMaximosReserva,
+                                    configuracionUID_diasMaximosReserva
                                 ]
                                 const consultaValidarApartamento = await conexion.query(actualizarConfiguracionGlobal, nuevaConfiguracion)
                                 if (consultaValidarApartamento.rowCount === 0) {
