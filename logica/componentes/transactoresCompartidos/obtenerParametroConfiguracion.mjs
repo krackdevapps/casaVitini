@@ -20,11 +20,7 @@ const obtenerParametroConfiguracion = async (configuracionUID) => {
             throw new Error(error)
         }
         const parametrosConfiguracion = resuelveConfiguracion.rows[0].valor
-        const ok = {
-            ok: "Aqui tienes el parametro de configuracion",
-            valor: parametrosConfiguracion
-        }
-        return ok
+        return parametrosConfiguracion
     } catch (error) {
         throw error;
     }

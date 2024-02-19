@@ -14566,7 +14566,7 @@ const administracion = {
 
                     descripcionConfiguracion = document.createElement("div")
                     descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
-                    descripcionConfiguracion.innerText = "Dias de antelacion. Determina el numero de dias de antelacion escribiendo el numero de días de antelacion. Si por ejempo escribes un minímo de diez días de antelacíon, los días seran de antelación y se aceptaran reservas a partír del día numero 11 desde el dia presente. El diía presente cuenta como dia 0. Si por el contrario no aceptas reservas sin días de antelación, por que aceptas reservas incluso para el mismo día, entonces establece los diás de antelacíon en 0"
+                    descripcionConfiguracion.innerText = "Determina el numero de dias de antelacion escribiendo el numero de días de antelacion. Si por ejempo escribes un minímo de diez días de antelacíon, se aceptaran reservas a partír del día numero 11 desde el dia presente. El día presente cuenta como dia 0. Si por ejemplo quisieras aceptar reservas para el mismo día, entonces establece los diás de antelación en 0"
                     bloqueConfiguracion.appendChild(descripcionConfiguracion)
 
                     let valorConfiguracion = document.createElement("input")
@@ -14592,7 +14592,7 @@ const administracion = {
 
                     descripcionConfiguracion = document.createElement("div")
                     descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
-                    descripcionConfiguracion.innerText = "Determina el numero maximo de dias que puede tener una reserva "
+                    descripcionConfiguracion.innerText = "Determina el numero maximo de días con noche que puede tener una reserva "
                     bloqueConfiguracion.appendChild(descripcionConfiguracion)
 
                     valorConfiguracion = document.createElement("input")
