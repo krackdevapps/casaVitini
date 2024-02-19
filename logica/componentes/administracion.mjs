@@ -14519,6 +14519,130 @@ const administracion = {
             },
 
 
+        },
+        limitesReservaPublica: {
+
+            arranque: async () => {
+                document.body.removeAttribute("style")
+                const marcoElastico = document.querySelector("[componente=marcoElastico]")
+                marcoElastico.style.gap = "4px"
+                return
+                const transaccion = {
+                    zona: "administracion/configuracion/horaDeEntradaSalida/obtenerConfiguracion"
+                }
+
+                const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+
+                if (respuestaServidor?.error) {
+                    casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
+                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                }
+                if (respuestaServidor?.ok) {
+                    const configuracionGlobal = respuestaServidor?.ok
+
+                    const zonaHoraria = configuracionGlobal.zonaHoraria
+
+                    const horaEntradaTZ = configuracionGlobal.horaEntradaTZ
+                    const horaSalidaTZ = configuracionGlobal.horaSalidaTZ
+
+                    const contenedorConfiguracionGlobal = document.createElement("div")
+                    contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
+
+                    const informacion = document.createElement("div")
+                    informacion.classList.add("administracion_configuracion_informacion")
+                    informacion.innerText = "Determine la configuración global del sistema. Esta configuración se aplica a todo el sistema y a todos los usuarios. "
+                    contenedorConfiguracionGlobal.appendChild(informacion)
+
+                    // Zona horaria Global
+
+                    let bloqueConfiguracion = document.createElement("div")
+                    bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
+
+                    let tituloConfiguracion = document.createElement("div")
+                    tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                    tituloConfiguracion.innerText = "Zona horaria de Casa Vitini"
+                    bloqueConfiguracion.appendChild(tituloConfiguracion)
+
+                    let descripcionConfiguracion = document.createElement("div")
+                    descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                    descripcionConfiguracion.innerText = "La zona horaria local se aplica sobre el reloj UTC para que pueda ver la hora y las fechas en la zona horaria. Por ejemplo, en el apartado de Situación, en la renderización de los calendarios y etc. La zona horaria debe de configurarse con la misma zona horaria de las instalaciones físicas de pernoctacion de Casa Vitini. Entonces el sistema de Casa Vitini puede implantarse en cualquier ordenador sin importar su reloj en zona horaria local. Es fundamental que la zona horaria del sistema sea la misma que la zona horaria de las instalaciones físicas de pernoctación de Casa Vitini. El motivo de esto es que los pernoctante puedan obtener calendarios locales a la zona horaria de Casa Vitini y realizar las reservas en zona horaria local de Casa Vitini."
+                    bloqueConfiguracion.appendChild(descripcionConfiguracion)
+
+
+                    contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
+                    // Hora de entrada TZ
+                    bloqueConfiguracion = document.createElement("div")
+                    bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
+
+                    tituloConfiguracion = document.createElement("div")
+                    tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                    tituloConfiguracion.innerText = "Hora de entrada"
+                    bloqueConfiguracion.appendChild(tituloConfiguracion)
+
+                    descripcionConfiguracion = document.createElement("div")
+                    descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                    descripcionConfiguracion.innerText = "Hora de entrada en zona horaria. Esta es la hora de entrada en la zona horaria seleccionada. Sirve para determinar la hora de entrada de las reservas en el día de entrada"
+                    bloqueConfiguracion.appendChild(descripcionConfiguracion)
+
+                    let valorConfiguracion = document.createElement("input")
+                    valorConfiguracion.setAttribute("campo", "horaEntradaTZ")
+                    valorConfiguracion.setAttribute("valorInicial", horaEntradaTZ)
+                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
+                    valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
+                    valorConfiguracion.value = horaEntradaTZ
+                    valorConfiguracion.placeholder = "Selecciona una hora de entrada, por ejemplo 17:00"
+                    bloqueConfiguracion.appendChild(valorConfiguracion)
+
+                    contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
+
+                    // Hora de salida TZ
+                    bloqueConfiguracion = document.createElement("div")
+                    bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
+
+                    tituloConfiguracion = document.createElement("div")
+
+                    tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                    tituloConfiguracion.innerText = "Hora de salida"
+                    bloqueConfiguracion.appendChild(tituloConfiguracion)
+
+                    descripcionConfiguracion = document.createElement("div")
+                    descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                    descripcionConfiguracion.innerText = "Hora de salida en zona horaria. Esta es la hora de salida en la zona horaria seleccionada. Sirve para determinar la hora de salida de las reservas en el día de salida "
+                    bloqueConfiguracion.appendChild(descripcionConfiguracion)
+
+                    valorConfiguracion = document.createElement("input")
+                    valorConfiguracion.setAttribute("campo", "horaSalidaTZ")
+                    valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
+                    valorConfiguracion.setAttribute("valorInicial", horaSalidaTZ)
+                    valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
+                    valorConfiguracion.value = horaSalidaTZ
+                    valorConfiguracion.placeholder = "Selecciona una hora de salida, por ejemplo 19:00 "
+                    bloqueConfiguracion.appendChild(valorConfiguracion)
+
+                    contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
+                    marcoElastico.appendChild(contenedorConfiguracionGlobal)
+
+                    const contenedorBotones = document.createElement("div")
+                    contenedorBotones.setAttribute("contenedor", "botones")
+                    contenedorBotones.classList.add("administracion_configuracion_contenedorBotones")
+
+                    const botonGuardarCambios = document.createElement("div")
+                    botonGuardarCambios.classList.add("administracion_configuracion_boton")
+                    botonGuardarCambios.innerText = "Guardar cambios"
+                    botonGuardarCambios.addEventListener("click", casaVitini.administracion.configuracion.horaDeEntradaSalida.guardarCambios)
+                    contenedorBotones.appendChild(botonGuardarCambios)
+
+                    const botonCancelarCambios = document.createElement("div")
+                    botonCancelarCambios.classList.add("administracion_configuracion_boton")
+                    botonCancelarCambios.addEventListener("click", casaVitini.administracion.configuracion.horaDeEntradaSalida.cancelarCambios)
+                    botonCancelarCambios.innerText = "Cancelar cambios"
+                    contenedorBotones.appendChild(botonCancelarCambios)
+
+                    marcoElastico.appendChild(contenedorBotones)
+                }
+            },
+
+
         }
     },
     clientes: {
