@@ -52,6 +52,7 @@ import { eventosTodosLosBloqueos } from './componentes/transactoresCompartidos/c
 import { eventosPorApartamneto } from './componentes/transactoresCompartidos/calendarios/capas/eventosPorApartamento.mjs';
 import { eventosPorApartamentoAirbnb } from './componentes/transactoresCompartidos/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs';
 import { exportarClendario } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/exportarCalendario.mjs';
+import { obtenerParametroConfiguracion } from './componentes/transactoresCompartidos/obtenerParametroConfiguracion.mjs';
 const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
 const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
 const arranque = async (entrada, salida) => {
@@ -962,16 +963,59 @@ const puerto = async (entrada, salida) => {
                         salida.json(calendario)
 
                     }
-                    if (tipo === "diaMinimoDeEntrada") {
+                    if (tipo === "actualPublico") {
 
-                        const fechaMinimaDeEntrada = tiempoZH.plus({ days: 365 })
+                        const anoActual = anoPresenteTZ;
+                        const mesActual = mesPresenteTZ;
+                        const diaActual = diaHoyTZ;
+
+                        const posicionDia1 = tiempoZH.set({ day: 1 }).weekday
+                        const numeroDeDiasPorMes = tiempoZH.daysInMonth;
+
+                        const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva")
+                        const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva")
+                        const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva")
 
 
+                        const estructuraGlobal_DiasAntelacion = {}
 
+                        for (let index = 0; index < diasAntelacionReserva; index++) {
+                            const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
+                            console.log("fechaAntelacionObjeto", fechaAntelacionObjeto)
+                            const anoObjeto = String(fechaAntelacionObjeto.year)
+                            const mesObjeto = String(fechaAntelacionObjeto.month)
+                            const diaObjeto = String(fechaAntelacionObjeto.day)
 
+                            estructuraGlobal_DiasAntelacion[anoObjeto] ||= {};
+                            console.log("estructuraGlobal_DiasAntelacion", estructuraGlobal_DiasAntelacion)
+                            const estructuraAno = estructuraGlobal_DiasAntelacion[anoObjeto]
+                            estructuraAno[mesObjeto] ||= {}
+                            const estructuraMes = estructuraAno[mesObjeto]
+                            estructuraMes[diaObjeto] ||= true
 
+                        }
+                        const fechaLimiteFuturo = tiempoZH.plus({ day: limiteFuturoReserva }).toObject();
+                        const estructuraGlobal_limiteFuturo = {
+                            ano: fechaLimiteFuturo.year,
+                            mes: fechaLimiteFuturo.month,
+                            dia: fechaLimiteFuturo.day,
+                        }
 
-
+                        const respuesta = {
+                            calendario: "ok",
+                            ano: anoActual,
+                            mes: mesActual,
+                            dia: diaActual,
+                            tiempo: "presente",
+                            posicionDia1: posicionDia1,
+                            numeroDiasPorMes: numeroDeDiasPorMes,
+                            limites: {
+                                diasAntelacion: estructuraGlobal_DiasAntelacion,
+                                limiteFuturo: estructuraGlobal_limiteFuturo,
+                                diasMaximosReserva: diasMaximosReserva
+                            }
+                        }
+                        salida.json(respuesta)
                     }
                 } catch (errorCapturado) {
                     const error = {
@@ -9867,14 +9911,14 @@ const puerto = async (entrada, salida) => {
                                 }
 
 
-                                const maximoDiasDuracionReserva = Number(limiteFuturoReserva) - Number(diasAntelacionReserva) 
+                                const maximoDiasDuracionReserva = Number(limiteFuturoReserva) - Number(diasAntelacionReserva)
                                 if (Number(diasMaximosReserva) > Number(maximoDiasDuracionReserva)) {
                                     const error = `En base la configuracíon que solicitas, es decir en base a los dias minimos de antelación establecidos y el limite futuro de dias, las reservas tendrian un maximo de ${maximoDiasDuracionReserva} días de duracíon, por lo tanto no puedes establecer mas días de duracíon que eso. Es decir o escoges poner menos dias de duración maximo para una reserva o ampliar los limites anteriores.`
                                     throw new Error(error)
                                 }
 
 
-              
+
                                 await conexion.query('BEGIN'); // Inicio de la transacción
                                 const configuracionUID_diasAntelacionReserva = "diasAntelacionReserva"
                                 const configuracionUID_limiteFuturoReserva = "limiteFuturoReserva"
