@@ -4,6 +4,7 @@ import { apartamentosDisponiblesPublico } from './apartamentosDisponiblesPublico
 import { codigoZonaHoraria } from './codigoZonaHoraria.mjs';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs'
 import { obtenerParametroConfiguracion } from './obtenerParametroConfiguracion.mjs';
+import { limitesReservaPublica } from './limitesReservaPublica.mjs';
 
 const validarObjetoReserva = async (reserva) => {
 
@@ -97,33 +98,14 @@ const validarObjetoReserva = async (reserva) => {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
             throw new Error(error)
         }
-        const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva")
-        const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva")
-        const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva")
 
-        const fechaLimite_Objeto = tiempoZH.plus({ days: limiteFuturoReserva })
-
-
-        let diasDeAntelacion = fechaEntradaReserva_ISO.diff(tiempoZH, 'days').toObject().days
-        diasDeAntelacion = diasDeAntelacion < 0 ? 0 : Math.ceil(diasDeAntelacion)
-        if (diasDeAntelacion < diasAntelacionReserva) {
-            const error = `Casa Vitini solo acepta reservas con un minimo de ${diasAntelacionReserva} dias de antelacion. Gracias.`
-            throw new Error(error)
+        const fechasParaValidarLimites = {
+            fechaEntrada_ISO: fechaEntrada_ISO,
+            fechaSalida_ISO: fechaSalida_ISO
         }
 
-        let diferenciaEnDiasLimiteFuturo = fechaLimite_Objeto.diff(fechaSalidaReserva_ISO, 'days').toObject().days;
-        if (diferenciaEnDiasLimiteFuturo <= 0) {
-            const error = `Como maximo las reservas no pueden superar ${limiteFuturoReserva} dias a partir de hoy. Gracias.`
-            throw new Error(error)
-        }
-
-        const nochesDeLaReserva = fechaSalidaReserva_ISO.diff(fechaEntradaReserva_ISO, 'days').toObject().days;
-        if (nochesDeLaReserva > diasMaximosReserva) {
-            const error = `Como maximo las reservas no pueden tener mas de ${diasMaximosReserva} dias con noche. Gracias.`
-            throw new Error(error)
-        }
-
- 
+        await limitesReservaPublica(fechasParaValidarLimites)
+        
         const alojamiento = reserva?.alojamiento
         if (!alojamiento) {
             const error = "No exite la llave de 'Alojamiento' esperada dentro del objeto, por lo tante hasta aquí hemos llegado"
