@@ -881,6 +881,36 @@ const puerto = async (entrada, salida) => {
                         const posicionDia1 = tiempoZH.set({ day: 1 }).weekday
                         const numeroDeDiasPorMes = tiempoZH.daysInMonth;
 
+
+                        const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva")
+                        const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva")
+                        const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva")
+
+
+                        const estructuraGlobal_DiasAntelacion = {}
+
+                        for (let index = 0; index < diasAntelacionReserva; index++) {
+                            const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
+                            console.log("fechaAntelacionObjeto", fechaAntelacionObjeto)
+                            const anoObjeto = String(fechaAntelacionObjeto.year)
+                            const mesObjeto = String(fechaAntelacionObjeto.month)
+                            const diaObjeto = String(fechaAntelacionObjeto.day)
+
+                            estructuraGlobal_DiasAntelacion[anoObjeto] ||= {};
+                            console.log("estructuraGlobal_DiasAntelacion", estructuraGlobal_DiasAntelacion)
+                            const estructuraAno = estructuraGlobal_DiasAntelacion[anoObjeto]
+                            estructuraAno[mesObjeto] ||= {}
+                            const estructuraMes = estructuraAno[mesObjeto]
+                            estructuraMes[diaObjeto] ||= true
+
+                        }
+                        const fechaLimiteFuturo = tiempoZH.plus({ day: limiteFuturoReserva }).toObject();
+                        const estructuraGlobal_limiteFuturo = {
+                            ano: fechaLimiteFuturo.year,
+                            mes: fechaLimiteFuturo.month,
+                            dia: fechaLimiteFuturo.day,
+                        }
+
                         const respuesta = {
                             calendario: "ok",
                             ano: anoActual,
@@ -888,7 +918,12 @@ const puerto = async (entrada, salida) => {
                             dia: diaActual,
                             tiempo: "presente",
                             posicionDia1: posicionDia1,
-                            numeroDiasPorMes: numeroDeDiasPorMes
+                            numeroDiasPorMes: numeroDeDiasPorMes,
+                            limites: {
+                                diasAntelacion: estructuraGlobal_DiasAntelacion,
+                                limiteFuturo: estructuraGlobal_limiteFuturo,
+                                diasMaximoReserva: diasMaximosReserva
+                            }
                         }
                         salida.json(respuesta)
                     }
@@ -960,17 +995,7 @@ const puerto = async (entrada, salida) => {
                         calendario.numeroDiasPorMes = numeroDeDiasPorMes
                         calendario.posicionDia1 = posicionDiaComienzoMes
 
-                        salida.json(calendario)
 
-                    }
-                    if (tipo === "actualPublico") {
-
-                        const anoActual = anoPresenteTZ;
-                        const mesActual = mesPresenteTZ;
-                        const diaActual = diaHoyTZ;
-
-                        const posicionDia1 = tiempoZH.set({ day: 1 }).weekday
-                        const numeroDeDiasPorMes = tiempoZH.daysInMonth;
 
                         const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva")
                         const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva")
@@ -1000,23 +1025,16 @@ const puerto = async (entrada, salida) => {
                             mes: fechaLimiteFuturo.month,
                             dia: fechaLimiteFuturo.day,
                         }
-
-                        const respuesta = {
-                            calendario: "ok",
-                            ano: anoActual,
-                            mes: mesActual,
-                            dia: diaActual,
-                            tiempo: "presente",
-                            posicionDia1: posicionDia1,
-                            numeroDiasPorMes: numeroDeDiasPorMes,
-                            limites: {
-                                diasAntelacion: estructuraGlobal_DiasAntelacion,
-                                limiteFuturo: estructuraGlobal_limiteFuturo,
-                                diasMaximosReserva: diasMaximosReserva
-                            }
+                        calendario.limites = {
+                            diasAntelacion: estructuraGlobal_DiasAntelacion,
+                            limiteFuturo: estructuraGlobal_limiteFuturo,
+                            diasMaximoReserva: diasMaximosReserva
                         }
-                        salida.json(respuesta)
+
+                        salida.json(calendario)
+
                     }
+                  
                 } catch (errorCapturado) {
                     const error = {
                         error: errorCapturado.message
