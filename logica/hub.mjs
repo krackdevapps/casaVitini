@@ -888,6 +888,7 @@ const puerto = async (entrada, salida) => {
 
 
                         const estructuraGlobal_DiasAntelacion = {}
+                        const primeraFechaDisponible = tiempoZH.plus({ day: diasAntelacionReserva }).toObject();
 
                         for (let index = 0; index < diasAntelacionReserva; index++) {
                             const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
@@ -922,7 +923,12 @@ const puerto = async (entrada, salida) => {
                             limites: {
                                 diasAntelacion: estructuraGlobal_DiasAntelacion,
                                 limiteFuturo: estructuraGlobal_limiteFuturo,
-                                diasMaximoReserva: diasMaximosReserva
+                                diasMaximoReserva: diasMaximosReserva,
+                                primeraFechaDisponible: {
+                                    dia: primeraFechaDisponible.day,
+                                    mes: primeraFechaDisponible.month,
+                                    ano: primeraFechaDisponible.year
+                                }
                             }
                         }
                         salida.json(respuesta)
@@ -1003,6 +1009,7 @@ const puerto = async (entrada, salida) => {
 
 
                         const estructuraGlobal_DiasAntelacion = {}
+                        const primeraFechaDisponible = tiempoZH.plus({ day: diasAntelacionReserva }).toObject();
 
                         for (let index = 0; index < diasAntelacionReserva; index++) {
                             const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
@@ -1028,7 +1035,12 @@ const puerto = async (entrada, salida) => {
                         calendario.limites = {
                             diasAntelacion: estructuraGlobal_DiasAntelacion,
                             limiteFuturo: estructuraGlobal_limiteFuturo,
-                            diasMaximoReserva: diasMaximosReserva
+                            diasMaximoReserva: diasMaximosReserva,
+                            primeraFechaDisponible: {
+                                dia: primeraFechaDisponible.day,
+                                mes: primeraFechaDisponible.month,
+                                ano: primeraFechaDisponible.year
+                            }
                         }
 
                         salida.json(calendario)

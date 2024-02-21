@@ -940,6 +940,7 @@
     border-radius: 10px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 13px;
+    width: 100%;
 }
 
 .texto {
@@ -3972,6 +3973,13 @@
 
 }
 
+.calendarioDiaNoDisponiblePorAntelacion {
+
+    background: rgb(246, 116, 116);
+    border: 3px solid transparent;
+    pointer-events: none;
+
+}
 .calendarioDiaCompleto {
     background: rgb(249, 65, 65);
     border: 3px solid transparent;
