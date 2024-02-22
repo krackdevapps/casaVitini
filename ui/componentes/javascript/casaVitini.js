@@ -332,11 +332,11 @@ const casaVitini = {
                             casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
 
                             const calendario = {
-                                tipo: "actual",
+                                tipo: "actualConDiasDeAntelacion",
                                 comando: "construyeObjeto"
                             }
                             const calendarioPresente = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-               
+                            console.log("calenadrioPResetna", calendarioPresente)
                             const primeraFechaDisponible = calendarioPresente.limites.primeraFechaDisponible
 
                             if (calendarioPresente.mes !== primeraFechaDisponible.mes ||
@@ -436,7 +436,7 @@ const casaVitini = {
                             }
 
                             const calendarioPresente = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-            
+
                             const primeraFechaDisponible = calendarioPresente.limites.primeraFechaDisponible
 
 
@@ -445,7 +445,7 @@ const casaVitini = {
                                 calendarioPresente.tiempo = "futuro"
                             }
 
-                           // calendarioPresente.dia = primeraFechaDisponible.dia
+                            // calendarioPresente.dia = primeraFechaDisponible.dia
                             calendarioPresente.mes = primeraFechaDisponible.mes
                             calendarioPresente.ano = primeraFechaDisponible.ano
 
@@ -7631,7 +7631,7 @@ const casaVitini = {
                         }
                     }
 
-                    
+
                     if (calendario.tiempo === "presente") {
                         if (diaActual > diaFinal) {
                             bloqueDia.classList.add("calendarioDiaNoDisponible")
@@ -11109,88 +11109,20 @@ const casaVitini = {
         },
         resolverCalendarioNuevo: async (calendario) => {
 
-
-
-            let tipo = calendario.tipo
-            if (!tipo) {
-                const error = "el resolverdor de calendarios necesita un tipo de resolucion, esta puede ser actual o personalizado"
-                return casaVitini.ui.vistas.advertenciaInmersiva(error)
-            }
-            let comando = calendario.comando
-
-
-            let transaccion;
-            if (tipo === "actual") {
-                transaccion = {
-                    zona: "componentes/calendario",
-                    tipo: "actual"
-                };
-            }
-            if (tipo === "personalizado") {
-                let mes = calendario.mes
-                if (!mes || typeof mes !== "number") {
-                    casaVitini.componentes.limpiarAdvertenciasInmersivas()
-                    const error = "el mes del resolverdor de calendario debe de ser un numero"
-                    return casaVitini.ui.vistas.advertenciaInmersiva(error)
-                }
-                let ano = calendario.ano
-                if (!ano || typeof ano !== "number") {
-                    casaVitini.componentes.limpiarAdvertenciasInmersivas()
-
-                    const error = "el ano del resolverdor de calendario debe de ser un numero"
-                    return casaVitini.ui.vistas.advertenciaInmersiva(error)
-                }
-                if (!comando) {
-                    casaVitini.componentes.limpiarAdvertenciasInmersivas()
-
-                    const error = "el resolverdor de calendario necesita que le especifices si necesitas un objeto con construyeObjeto o un calendario en si con construyeCalendario (sera deprecado)"
-                    return casaVitini.ui.vistas.advertenciaInmersiva(error)
-                }
-                transaccion = {
-                    zona: "componentes/calendario",
-                    tipo: "personalizado",
-                    ano: ano,
-                    mes: mes
-                };
-            }
-
-            if (!transaccion) {
-                return
-
-            }
-
-            const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+            calendario.zona = "componentes/calendario"
+            const respuestaServidor = await casaVitini.componentes.servidor(calendario)
 
             if (respuestaServidor?.error) {
                 const selectorContenedorCalendario = document.querySelectorAll("[componente=bloqueCalendario]")
                 selectorContenedorCalendario.forEach((bloqueCalendario) => {
                     bloqueCalendario.remove()
                 })
-                casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
-                return
+                return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
             }
 
             if (respuestaServidor?.calendario) {
-                if (comando === "construyeCalendario") {
+                return respuestaServidor;
 
-                    if (calendario.tipoFecha !== "entrada" && calendario.tipoFecha !== "salida") {
-                        return
-                    }
-
-                    let tipoFecha = {
-                        "tipoFecha": calendario.tipoFecha,
-                    }
-
-                    constructorCalendarioNuevo(tipoFecha)
-                    constructorMesNuevo(respuestaServidor)
-                    if (calendario.diaSeleccionado) {
-                        //let DiaNumero = Number(Calendario.diaSeleccionado)
-                        //  SeleccionarDia(DiaNumero)
-                    }
-                }
-                if (comando === "construyeObjeto") {
-                    return respuestaServidor;
-                }
             }
         },
         navegacionCalendarioNuevo: async (calendario) => {
