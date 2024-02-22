@@ -862,15 +862,9 @@ const puerto = async (entrada, salida) => {
                     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                     const tiempoZH = DateTime.now().setZone(zonaHoraria);
 
-                    const fechaActualCompletaTZ = tiempoZH.toISO()
-                    const fechaActualTZ = tiempoZH.toISODate()
-
                     const diaHoyTZ = tiempoZH.day
                     const mesPresenteTZ = tiempoZH.month
                     const anoPresenteTZ = tiempoZH.year
-
-                    const horaPresenteTZ = tiempoZH.hour
-                    const minutoPresenteTZ = tiempoZH.minute
 
                     if (tipo === "actual") {
 
@@ -1046,7 +1040,81 @@ const puerto = async (entrada, salida) => {
                         salida.json(calendario)
 
                     }
-                  
+                    if (tipo === "actualConDiasDeAntelacion") {
+
+                        const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva")
+                        const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva")
+                        const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva")
+
+
+                        const fechaActualTZConDiasDeAntelacion = tiempoZH.plus({ day: diasAntelacionReserva })
+
+                        const anoActualConDiasDeAntelacion = fechaActualTZConDiasDeAntelacion.year;
+                        const mesActualConDiasDeAntelacion = fechaActualTZConDiasDeAntelacion.month;
+                        const diaActualConDiasDeAntelacion = fechaActualTZConDiasDeAntelacion.day;
+
+                        const posicionDia1 = fechaActualTZConDiasDeAntelacion.set({ day: 1 }).weekday
+                        const numeroDeDiasPorMes = fechaActualTZConDiasDeAntelacion.daysInMonth;
+
+
+                        const estructuraGlobal_DiasAntelacion = {}
+                        const primeraFechaDisponible = tiempoZH.plus({ day: diasAntelacionReserva }).toObject();
+
+                        for (let index = 0; index < diasAntelacionReserva; index++) {
+                            const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
+                            console.log("fechaAntelacionObjeto", fechaAntelacionObjeto)
+                            const anoObjeto = String(fechaAntelacionObjeto.year)
+                            const mesObjeto = String(fechaAntelacionObjeto.month)
+                            const diaObjeto = String(fechaAntelacionObjeto.day)
+
+                            estructuraGlobal_DiasAntelacion[anoObjeto] ||= {};
+                            console.log("estructuraGlobal_DiasAntelacion", estructuraGlobal_DiasAntelacion)
+                            const estructuraAno = estructuraGlobal_DiasAntelacion[anoObjeto]
+                            estructuraAno[mesObjeto] ||= {}
+                            const estructuraMes = estructuraAno[mesObjeto]
+                            estructuraMes[diaObjeto] ||= true
+
+                        }
+                        const fechaLimiteFuturo = tiempoZH.plus({ day: limiteFuturoReserva }).toObject();
+                        const estructuraGlobal_limiteFuturo = {
+                            ano: fechaLimiteFuturo.year,
+                            mes: fechaLimiteFuturo.month,
+                            dia: fechaLimiteFuturo.day,
+                        }
+
+                        let tiempoFinal
+                        if (anoActualConDiasDeAntelacion > anoPresenteTZ) {
+                            tiempoFinal = "futuro"
+                        } else if (anoActualConDiasDeAntelacion === anoPresenteTZ) {
+                            if (mesActualConDiasDeAntelacion === mesPresenteTZ) {
+                                tiempoFinal = "presente"
+                            } else if (mesActualConDiasDeAntelacion > mesPresenteTZ) {
+                                tiempoFinal = "futuro"
+                            }
+                        }
+
+                        const respuesta = {
+                            calendario: "ok",
+                            ano: anoActualConDiasDeAntelacion,
+                            mes: mesActualConDiasDeAntelacion,
+                            dia: diaActualConDiasDeAntelacion,
+                            tiempo: tiempoFinal,
+                            posicionDia1: posicionDia1,
+                            numeroDiasPorMes: numeroDeDiasPorMes,
+                            limites: {
+                                diasAntelacion: estructuraGlobal_DiasAntelacion,
+                                limiteFuturo: estructuraGlobal_limiteFuturo,
+                                diasMaximoReserva: diasMaximosReserva,
+                                primeraFechaDisponible: {
+                                    dia: primeraFechaDisponible.day,
+                                    mes: primeraFechaDisponible.month,
+                                    ano: primeraFechaDisponible.year
+                                }
+                            }
+                        }
+                        salida.json(respuesta)
+                    }
+
                 } catch (errorCapturado) {
                     const error = {
                         error: errorCapturado.message

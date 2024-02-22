@@ -336,7 +336,7 @@ const casaVitini = {
                                 comando: "construyeObjeto"
                             }
                             const calendarioPresente = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-
+               
                             const primeraFechaDisponible = calendarioPresente.limites.primeraFechaDisponible
 
                             if (calendarioPresente.mes !== primeraFechaDisponible.mes ||
@@ -436,16 +436,16 @@ const casaVitini = {
                             }
 
                             const calendarioPresente = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-                            calendarioPresente.fechaActualPublica = {
-                                [calendarioPresente.ano]: {
-                                    [calendarioPresente.mes]: {
-                                        [calendarioPresente.dia]: true
-                                    }
-                                }
-                            }
+            
                             const primeraFechaDisponible = calendarioPresente.limites.primeraFechaDisponible
 
-                            calendarioPresente.dia = primeraFechaDisponible.dia
+
+                            if (calendarioPresente.mes !== primeraFechaDisponible.mes ||
+                                calendarioPresente.ano !== primeraFechaDisponible.ano) {
+                                calendarioPresente.tiempo = "futuro"
+                            }
+
+                           // calendarioPresente.dia = primeraFechaDisponible.dia
                             calendarioPresente.mes = primeraFechaDisponible.mes
                             calendarioPresente.ano = primeraFechaDisponible.ano
 
@@ -7631,6 +7631,7 @@ const casaVitini = {
                         }
                     }
 
+                    
                     if (calendario.tiempo === "presente") {
                         if (diaActual > diaFinal) {
                             bloqueDia.classList.add("calendarioDiaNoDisponible")
@@ -7778,12 +7779,13 @@ const casaVitini = {
                         bloqueDia.classList.remove("calendarioDiaDisponible")
                         bloqueDia.classList.add("calendarioDiaNoDisponiblePorAntelacion")
                     }
-                    if (fechaActualPublica[anoActual] &&
-                        fechaActualPublica[anoActual][mesActual] &&
-                        fechaActualPublica[anoActual][mesActual][diaFinal]) {
+
+                    if (calendario.tiempo === "presente" && diaActual === diaFinal) {
                         bloqueDia.style.border = "3px solid white";
                         bloqueDia.setAttribute("tipoDia", "hoy")
                     }
+
+
 
                     bloqueDia.innerText = diaFinal
                     marcoMes.appendChild(bloqueDia)
@@ -11196,7 +11198,7 @@ const casaVitini = {
             const boton = calendario.target.getAttribute("sentido")
             const selectorBotones = calendario.target.closest("[contenedor=calendario]").querySelectorAll("[sentido]")
             selectorBotones.forEach((botonRenderizado) => {
-                 botonRenderizado.style.pointerEvents = "none"
+                botonRenderizado.style.pointerEvents = "none"
             })
 
             const instanciaUID = calendario.target.closest("[instanciaUID]").getAttribute("instanciaUID")
