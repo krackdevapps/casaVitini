@@ -8783,70 +8783,6 @@ const casaVitini = {
                     }
 
 
-
-
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-                        if (controladorRango === "interno") {
-                            // Si es mes de entrada pero no de salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-                            }
-                            // si es mes de salida pero no de entrada
-                            if (mesActual === mesSeleccionadoSalida && mesActual !== mesSeleccionadoEntrada) {
-                                if (diaFinal < diaSeleccionadoSalida) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-
-                            }
-                            // si es mes de entrada y salida
-                            if (mesActual !== mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (mesActual === mesSeleccionadoEntrada && mesActual === mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-
-                            }
-                        }
-
-                    }
-                    if (datosFechaEntradaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                //     bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-
-                        }
-                    }
-
-                    if (datosFechaSalidaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                //         bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                //         bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        }
-                    }
-
                     if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
                         bloqueDia.classList.add("calendarioDiaParcial")
                     }
@@ -8855,18 +8791,136 @@ const casaVitini = {
                         bloqueDia.classList.add("calendarioDiaCompleto")
                     }
 
+
+
+                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
+
+                        if (
+                            (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
+                            &&
+                            (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
+                        ) {
+                            // si es mes de entrada y salida
+                            console.log("4")
+                            if (diaFinal === diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+                            }
+                            if (diaFinal < diaSeleccionadoEntrada) {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                            }
+                            if (diaFinal === diaSeleccionadoEntrada) {
+                                bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                bloqueDia.setAttribute("diaEstado", "seleccionado")
+                            }
+                            if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                            }
+                            if (diaFinal > diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                            }
+
+                        } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
+                            // Si es mes de entrada
+                            console.log("1")
+
+                            if (diaFinal === diaSeleccionadoEntrada) {
+                                bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                bloqueDia.setAttribute("diaEstado", "seleccionado")
+                            }
+                            if (diaFinal > diaSeleccionadoEntrada) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                            }
+                            if (calendario.tiempo === "futuro") {
+                                if (diaFinal < diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            }
+                        } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                            console.log("2")
+                            // si es mes de salida pero no de entrada
+                            if (diaFinal < diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                            }
+                            if (diaFinal > diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                            }
+                            if (diaFinal === diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+                            }
+                        } else {
+                            // Entonces ver si es mes intermedio
+                            if (anoSeleccionadoEntrada === anoSeleccionadoSalida) {
+                                if (
+                                    (anoActual === anoSeleccionadoEntrada)
+                                    &&
+                                    (mesActual > mesSeleccionadoEntrada && mesActual < mesSeleccionadoSalida)
+                                ) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                            } else if (anoSeleccionadoEntrada !== anoSeleccionadoSalida) {
+                                if (anoActual >= anoSeleccionadoEntrada && anoActual <= anoSeleccionadoSalida) {
+                                    if (mesActual > mesSeleccionadoEntrada || mesActual < mesSeleccionadoSalida) {
+                                        bloqueDia.classList.add("calendarioDiaReserva")
+                                    }
+                                }
+                            }
+                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+
+                            }
+
+
+                        }
+                    }
+                    else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
+                        console.log(">> 1")
+
+
+                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
+                            if (diaFinal === diaSeleccionadoEntrada) {
+                                bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                bloqueDia.setAttribute("diaEstado", "seleccionado")
+                            }
+
+                        }
+                    }
+                    else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
+                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                            if (diaFinal === diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+                            }
+                            if (diaFinal > diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                            }
+                            if (diaFinal < diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                            }
+                        }
+                    }
+
+
                     marcoMes?.appendChild(bloqueDia)
                 }
 
                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-
-                if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-
+                if (datosFechaSalidaSeleccionada === "existen") {
+                    if (anoActual < anoSeleccionadoSalida) {
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                        console.log("1")
+                    } else if (anoActual === anoSeleccionadoSalida && mesActual < mesSeleccionadoSalida) {
+                        console.log("2")
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                    } else {
+                        console.log("5")
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
+                    }
+                } else {
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
                 }
 
 
@@ -8963,79 +9017,164 @@ const casaVitini = {
                         bloqueDia.classList.add("calendarioDiaCompleto")
                     }
 
+
                     if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
 
-                        if (controladorRango === "interno") {
-                            // Si es mes de entrada pero no de salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-                            }
-                            // si es mes de salida pero no de entrada
-                            if (mesActual === mesSeleccionadoSalida && mesActual !== mesSeleccionadoEntrada) {
-                                if (diaFinal < diaSeleccionadoSalida) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-
-                            }
+                        if (
+                            (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
+                            &&
+                            (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
+                        ) {
                             // si es mes de entrada y salida
-                            if (mesActual !== mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
+                            console.log("41")
 
-                                // bloqueDia.classList.remove("calendarioDiaDisponible")
+                            if (diaFinal === diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                bloqueDia.setAttribute("diaEstado", "seleccionado")
+                            }
+                            if (diaFinal < diaSeleccionadoEntrada) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+
+                            }
+                            if (diaFinal === diaSeleccionadoEntrada) {
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+
+                            }
+                            if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+
+
+
+                            }
+                            if (diaFinal > diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                                bloqueDia.setAttribute("destino", "1")
+                            }
+
+                        } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
+                            // Si es mes de entrada
+                            console.log("1")
+
+                            if (diaFinal === diaSeleccionadoEntrada) {
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+
+                            }
+                            if (diaFinal > diaSeleccionadoEntrada) {
                                 bloqueDia.classList.add("calendarioDiaReserva")
                             }
-                            if (mesActual === mesSeleccionadoEntrada && mesActual === mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
+                            if (diaFinal < diaSeleccionadoEntrada) {
+                                // replicar esto
+                                if (bloqueDia.getAttribute("estadoDia") === "noDisponible") {
                                 }
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                            }
+
+                            if (calendario.tiempo === "futuro") {
+                                if (diaFinal < diaSeleccionadoEntrada) {
+                                    // bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            }
+                        } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                            console.log("2")
+                            // si es mes de salida pero no de entrada
+                            if (diaFinal < diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+
+
 
                             }
-                        }
-                    }
-                    if (datosFechaSalidaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                            if (diaFinal > diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+
+                            }
                             if (diaFinal === diaSeleccionadoSalida) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
                                 bloqueDia.classList.add("calendarioDiaSeleccionado")
                                 bloqueDia.setAttribute("diaEstado", "seleccionado")
 
                             }
+                        } else {
+                            // Entonces ver si es mes intermedio
+                            if (anoSeleccionadoEntrada === anoSeleccionadoSalida) {
+                                if (
+                                    (anoActual === anoSeleccionadoEntrada)
+                                    &&
+                                    (mesActual > mesSeleccionadoEntrada && mesActual < mesSeleccionadoSalida)
+                                ) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                            } else if (anoSeleccionadoEntrada !== anoSeleccionadoSalida) {
+                                if (anoActual >= anoSeleccionadoEntrada && anoActual <= anoSeleccionadoSalida) {
+                                    if (mesActual > mesSeleccionadoEntrada || mesActual < mesSeleccionadoSalida) {
+                                        bloqueDia.classList.add("calendarioDiaReserva")
+                                    }
+                                }
+                            }
 
+                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+
+                            }
                         }
                     }
-                    if (datosFechaEntradaSeleccionada === "existen") {
+                    else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
                         if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
                             if (diaFinal === diaSeleccionadoEntrada) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
                                 bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                bloqueDia.setAttribute("diaEstado", "seleccionado")
+                            }
+                            if (diaFinal > diaSeleccionadoEntrada) {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
                             }
                             if (diaFinal < diaSeleccionadoEntrada) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
                                 bloqueDia.classList.add("calendarioDiaNoDisponible")
+                            }
+                        } else {
+                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                            }
+                        }
+
+
+
+                    }
+                    else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
+                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                            if (diaFinal === diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaSeleccionado")
+                            }
+                            if (diaFinal > diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                            }
+                            if (diaFinal < diaSeleccionadoSalida) {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                            }
+                        } else {
+                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
                             }
                         }
                     }
                     marcoMes.appendChild(bloqueDia)
                 }
-                // diaSalidaAsistidoConPasadoCrearReserva
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
 
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-
+                if (datosFechaEntradaSeleccionada === "existen") {
+                    if (anoActual > anoSeleccionadoEntrada) {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                    } else if (anoActual === anoSeleccionadoEntrada && mesActual > mesSeleccionadoEntrada) {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                    } else {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
+                    }
+                } else {
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
                 }
+
 
             }
             // Fin buscar reserva adminitracion
@@ -9239,11 +9378,6 @@ const casaVitini = {
 
                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                //  selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                //  selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                console.log(mesActual < mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
-                console.log(mesActual, mesSeleccionadoSalida, anoActual, anoSeleccionadoSalida)
-                console.log("datosFechaSalidaSeleccionada", datosFechaSalidaSeleccionada)
                 if (datosFechaSalidaSeleccionada === "existen") {
                     if (anoActual < anoSeleccionadoSalida) {
                         selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
@@ -9500,7 +9634,7 @@ const casaVitini = {
                 }
                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-      
+
                 if (datosFechaEntradaSeleccionada === "existen") {
                     if (anoActual > anoSeleccionadoEntrada) {
                         selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
