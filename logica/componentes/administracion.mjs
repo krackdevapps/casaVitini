@@ -4747,8 +4747,6 @@ const administracion = {
                 casaVitini.administracion.reservas.detallesReserva.reservaUI(urlRaw)
 
             },
-
-
             seleccionarDia: (dia_) => {
 
                 const diaSeleccionado = dia_.target.getAttribute("dia").padStart(2, "0")
@@ -4942,7 +4940,6 @@ const administracion = {
 
 
             },
-
             reservaUI: async () => {
                 const granuladoURL = casaVitini.componentes.granuladorURL()
                 const posicionReservaUID = granuladoURL.directorios.findIndex(directorio => directorio === "reservas") + 1;
@@ -10265,7 +10262,6 @@ const administracion = {
 
                 }
             },
-
             crearEnlace_obsoleto: {
                 UI: async (instanciaUID) => {
                     const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
@@ -14526,7 +14522,7 @@ const administracion = {
                 document.body.removeAttribute("style")
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
                 marcoElastico.style.gap = "4px"
-                
+
                 const transaccion = {
                     zona: "administracion/configuracion/limitesReservaPublica/obtenerConfiguracion"
                 }
@@ -14545,7 +14541,7 @@ const administracion = {
                     const diasAntelacionReserva = configuracionGlobal.diasAntelacionReserva
                     const limiteFuturoReserva = configuracionGlobal.limiteFuturoReserva
 
-             
+
 
                     const contenedorConfiguracionGlobal = document.createElement("div")
                     contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
@@ -29061,6 +29057,11 @@ const administracion = {
             }
 
             const resuelveDiasCompletos = await casaVitini.componentes.servidor(controlDiasCompletos)
+            const selectorCalendarioRenderizado_control = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+
+            if (!selectorCalendarioRenderizado_control) {
+                return
+            }
             const detallesDiasOcupacion = resuelveDiasCompletos.ok.dias
 
             let mesActual = calendario.mes
@@ -29132,13 +29133,14 @@ const administracion = {
                 marcoMes?.appendChild(bloqueDia)
             }
 
-            selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-            selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
 
 
             if (selectorCalendarioRenderizado) {
+                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+
                 selectorCalendarioRenderizado.querySelector("[contenedor=contruyendoCalendario]")?.remove()
                 const contenedorMes = selectorCalendarioRenderizado.querySelector(`[componente=marcoMes][instanciaUID="${instanciaUIDMes}"]`)
 
@@ -29537,6 +29539,8 @@ const administracion = {
             const origen = metadatos.origen
 
             const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+            if (!document.querySelector(`[instanciaUID="${instanciaUID}"]`)) return;
+            
             let instanciaUIDMes
 
             if (origen === "navegacionEntreMeses" || origen === "menuDesplegable" || origen === "historial") {
