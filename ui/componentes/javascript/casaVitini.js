@@ -242,647 +242,661 @@ const casaVitini = {
 
                 },
                 reservasNuevoEntrada: async (componente) => {
-
-                    const bloqueCalendario = document.querySelectorAll("[componente=bloqueCalendario]")
-                    const calendario = document.querySelector("[contenedor=calendario]")
-                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
-                    document.removeEventListener("click", casaVitini.componentes.ocultarElementos)
-                    const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                    let diaSeleccionadoEntrada
-                    let mesSeleccionadoEntrada
-                    let anoSeleccionadoEntrada
-                    let datosFechaEntradaSeleccionada
-                    if (fechaEntradaVolatil_Humana) {
-                        const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
-                        diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
-                        mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
-                        anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
-                    }
-
-                    const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                    let diaSeleccionadoSalida
-                    let mesSeleccionadoSalida
-                    let anoSeleccionadoSalida
-                    let datosFechaSalidaSeleccionada
-                    if (fechaSalidaVolatil_Humana) {
-                        const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
-                        diaSeleccionadoSalida = Number(fechaSaliraArray[0])
-                        mesSeleccionadoSalida = Number(fechaSaliraArray[1])
-                        anoSeleccionadoSalida = Number(fechaSaliraArray[2])
-                    }
-
-                    if (componente === "entrada") {
-                        if (calendario?.getAttribute("calendarioIO") === "entrada") {
-                            bloqueCalendario.forEach((calendarioRenderizado) => {
-                                calendarioRenderizado.remove()
-                            })
-                            document.removeEventListener("click", casaVitini.componentes.ocultarElementos)
-                            return
-                        }
-                        if (calendario?.getAttribute("calendarioIO") === "salida") {
-                            bloqueCalendario.forEach((calendarioRenderizado) => {
-                                calendarioRenderizado.remove()
-                            })
-                            document.removeEventListener("click", casaVitini.componentes.ocultarElementos)
-                            // return
+                    try {
+                        const bloqueCalendario = document.querySelectorAll("[componente=bloqueCalendario]")
+                        const calendario = document.querySelector("[contenedor=calendario]")
+                        const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                        document.removeEventListener("click", casaVitini.componentes.ocultarElementos)
+                        const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                        let diaSeleccionadoEntrada
+                        let mesSeleccionadoEntrada
+                        let anoSeleccionadoEntrada
+                        let datosFechaEntradaSeleccionada
+                        if (fechaEntradaVolatil_Humana) {
+                            const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
+                            diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
+                            mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
+                            anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
                         }
 
-                        let reservaLocal = JSON.parse(localStorage.getItem("reserva"))
-                        const selectorBloqueFechaEntrada = document.querySelector("[calendario=entrada")
-                        const alturaDinamicaArriba = casaVitini.componentes.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(selectorBloqueFechaEntrada) + 20
+                        const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                        let diaSeleccionadoSalida
+                        let mesSeleccionadoSalida
+                        let anoSeleccionadoSalida
+                        let datosFechaSalidaSeleccionada
+                        if (fechaSalidaVolatil_Humana) {
+                            const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
+                            diaSeleccionadoSalida = Number(fechaSaliraArray[0])
+                            mesSeleccionadoSalida = Number(fechaSaliraArray[1])
+                            anoSeleccionadoSalida = Number(fechaSaliraArray[2])
+                        }
 
-                        if (fechaEntradaVolatil_Humana && !fechaSalidaVolatil_Humana) {
-                            const metadatos = {
-                                tipoFecha: "entrada",
-                                almacenamientoCalendarioID: "reserva",
-                                perfilMes: "diaEntradaAsistidoSinPasado",
-                                calendarioIO: "entrada",
-                                mensajeInfo: "Selecciona el día de entrada",
-                                alturaDinamica: alturaDinamicaArriba,
-                                instanciaUID: instanciaUID
+                        if (componente === "entrada") {
+                            if (calendario?.getAttribute("calendarioIO") === "entrada") {
+                                bloqueCalendario.forEach((calendarioRenderizado) => {
+                                    calendarioRenderizado.remove()
+                                })
+                                document.removeEventListener("click", casaVitini.componentes.ocultarElementos)
+                                return
                             }
-                            casaVitini.componentes.constructorCalendarioNuevo(metadatos)
-
-                            const calendario = {
-                                tipo: "personalizado",
-                                comando: "construyeObjeto",
-                                tipoFecha: "entrada",
-                                //  "diaSeleccionado": diaEntradaMemoriaVolatil.Dia,
-                                mes: mesSeleccionadoEntrada,
-                                ano: anoSeleccionadoEntrada
+                            if (calendario?.getAttribute("calendarioIO") === "salida") {
+                                bloqueCalendario.forEach((calendarioRenderizado) => {
+                                    calendarioRenderizado.remove()
+                                })
+                                document.removeEventListener("click", casaVitini.componentes.ocultarElementos)
+                                // return
                             }
-                            const calendarioPresente = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-                            calendarioPresente.instanciaUID = instanciaUID
-                            casaVitini.componentes.constructorMesNuevo(calendarioPresente)
+
+                            let reservaLocal = JSON.parse(localStorage.getItem("reserva"))
+                            const selectorBloqueFechaEntrada = document.querySelector("[calendario=entrada")
+                            const alturaDinamicaArriba = casaVitini.componentes.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(selectorBloqueFechaEntrada) + 20
+
+                            if (fechaEntradaVolatil_Humana && !fechaSalidaVolatil_Humana) {
+                                const metadatos = {
+                                    tipoFecha: "entrada",
+                                    almacenamientoCalendarioID: "reserva",
+                                    perfilMes: "calendario_entrada_publico_sinPasado",
+                                    calendarioIO: "entrada",
+                                    mensajeInfo: "Selecciona el día de entrada",
+                                    alturaDinamica: alturaDinamicaArriba,
+                                    instanciaUID: instanciaUID,
+                                    metodoSelectorDia: "casaVitini.ui.vistas.reservasNuevo.seleccionarDia"
+                                }
+                                casaVitini.componentes.constructorCalendarioNuevo(metadatos)
+
+                                const calendario = {
+                                    tipo: "personalizado",
+                                    comando: "construyeObjeto",
+                                    tipoFecha: "entrada",
+                                    //  "diaSeleccionado": diaEntradaMemoriaVolatil.Dia,
+                                    mes: mesSeleccionadoEntrada,
+                                    ano: anoSeleccionadoEntrada
+                                }
+                                const calendarioPresente = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
+                                calendarioPresente.instanciaUID = instanciaUID
+                                casaVitini.componentes.constructorMesNuevo(calendarioPresente)
+
+                            }
+                            if (!fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
+
+                                const tipoFecha = {
+                                    tipoFecha: "entrada",
+                                    almacenamientoCalendarioID: "reserva",
+                                    perfilMes: "calendario_entrada_publico_sinPasado",
+                                    calendarioIO: "entrada",
+                                    mensajeInfo: "Selecciona el día de entrada",
+                                    alturaDinamica: alturaDinamicaArriba,
+                                    instanciaUID: instanciaUID,
+                                    metodoSelectorDia: "casaVitini.ui.vistas.reservasNuevo.seleccionarDia"
+
+                                }
+
+                                casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
+
+                                const calendario = {
+                                    tipo: "actualConDiasDeAntelacion",
+                                    comando: "construyeObjeto"
+                                }
+                                const calendarioPresente = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
+                                console.log("calenadrioPResetna", calendarioPresente)
+                                const primeraFechaDisponible = calendarioPresente.limites.primeraFechaDisponible
+
+                                if (calendarioPresente.mes !== primeraFechaDisponible.mes ||
+                                    calendarioPresente.ano !== primeraFechaDisponible.ano) {
+                                    calendarioPresente.tiempo = "futuro"
+                                }
+                                // calendarioPresente.dia = calendarioPresente.dia
+                                //  calendarioPresente.dia = primeraFechaDisponible.dia
+                                calendarioPresente.mes = primeraFechaDisponible.mes
+                                calendarioPresente.ano = primeraFechaDisponible.ano
+
+
+
+                                if (calendarioPresente.dia === calendarioPresente.numeroDiasPorMes) {
+                                    calendarioPresente.ano = Number(calendarioPresente.mes) === 12 ? Number(calendarioPresente.ano) + 1 : Number(calendarioPresente.ano)
+                                    calendarioPresente.mes = Number(calendarioPresente.mes) === 12 ? 1 : Number(calendarioPresente.mes) + 1
+                                    // calendarioPresente.Dia = 1
+                                }
+                                calendarioPresente.instanciaUID = instanciaUID
+                                casaVitini.componentes.constructorMesNuevo(calendarioPresente)
+                            }
+                            if (fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
+
+                                const metadatos = {
+                                    tipoFecha: "entrada",
+                                    almacenamientoCalendarioID: "reserva",
+                                    perfilMes: "calendario_entrada_publico_sinPasado",
+                                    calendarioIO: "entrada",
+                                    mensajeInfo: "Selecciona el día de entrada",
+                                    alturaDinamica: alturaDinamicaArriba,
+                                    instanciaUID: instanciaUID,
+                                    metodoSelectorDia: "casaVitini.ui.vistas.reservasNuevo.seleccionarDia"
+
+                                }
+                                casaVitini.componentes.constructorCalendarioNuevo(metadatos)
+
+                                const calendario = {
+                                    tipo: "personalizado",
+                                    comando: "construyeObjeto",
+                                    tipoFecha: "entrada",
+                                    mes: mesSeleccionadoSalida,
+                                    ano: anoSeleccionadoSalida
+                                }
+
+
+                                calendarioPersonalizado = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
+                                calendarioPersonalizado.instanciaUID = instanciaUID
+                                casaVitini.componentes.constructorMesNuevo(calendarioPersonalizado)
+                            }
+
+                            if (fechaSalidaVolatil_Humana && fechaEntradaVolatil_Humana) {
+                                const metadatos = {
+                                    tipoFecha: "entrada",
+                                    almacenamientoCalendarioID: "reserva",
+                                    perfilMes: "calendario_entrada_publico_sinPasado",
+                                    calendarioIO: "entrada",
+                                    mensajeInfo: "Selecciona el día de entrada",
+                                    alturaDinamica: alturaDinamicaArriba,
+                                    instanciaUID: instanciaUID,
+                                    metodoSelectorDia: "casaVitini.ui.vistas.reservasNuevo.seleccionarDia"
+
+                                }
+                                casaVitini.componentes.constructorCalendarioNuevo(metadatos)
+
+
+                                const calendario = {
+                                    tipo: "personalizado",
+                                    comando: "construyeObjeto",
+                                    mes: mesSeleccionadoEntrada,
+                                    ano: anoSeleccionadoEntrada
+                                }
+
+                                calendarioPersonalizado = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
+                                calendarioPersonalizado.instanciaUID = instanciaUID
+                                await casaVitini.componentes.constructorMesNuevo(calendarioPersonalizado)
+                            }
+                            document.addEventListener("click", casaVitini.componentes.ocultarElementos)
 
                         }
-                        if (!fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
+                        if (componente === "salida") {
+
+                            if (calendario?.getAttribute("calendarioIO") === "salida") {
+                                bloqueCalendario.forEach((calendarioRenderizado) => {
+                                    calendarioRenderizado.remove()
+                                })
+                                document.removeEventListener("click", casaVitini.componentes.ocultarElementos)
+                                return
+                            }
+                            if (calendario?.getAttribute("calendarioIO") === "entrada") {
+                                bloqueCalendario.forEach((calendarioRenderizado) => {
+                                    calendarioRenderizado.remove()
+                                })
+                                document.removeEventListener("click", casaVitini.componentes.ocultarElementos)
+                                //return
+
+                            }
+
+                            const selectorBloqueFechaEntrada = document.querySelector("[calendario=entrada")
+                            const alturaDinamicaArriba = casaVitini.componentes.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(selectorBloqueFechaEntrada) + 20
 
                             const tipoFecha = {
-                                tipoFecha: "entrada",
+                                tipoFecha: "salida",
                                 almacenamientoCalendarioID: "reserva",
-                                perfilMes: "diaEntradaAsistidoSinPasado",
-                                calendarioIO: "entrada",
-                                mensajeInfo: "Selecciona el día de entrada",
+                                perfilMes: "calendario_salida_publico_sinPasado",
+                                calendarioIO: "salida",
+                                mensajeInfo: "Selecciona el día de salida",
                                 alturaDinamica: alturaDinamicaArriba,
-                                instanciaUID: instanciaUID
-                            }
+                                instanciaUID: instanciaUID,
+                                metodoSelectorDia: "casaVitini.ui.vistas.reservasNuevo.seleccionarDia"
 
+
+                            }
                             casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
 
-                            const calendario = {
-                                tipo: "actualConDiasDeAntelacion",
-                                comando: "construyeObjeto"
+
+                            let diaEntradaSelecioando
+                            let calendarioPersonalizado
+                            if (fechaEntradaVolatil_Humana && !fechaSalidaVolatil_Humana) {
+                                const calendario = {
+                                    tipo: "personalizado",
+                                    comando: "construyeObjeto",
+                                    tipoFecha: "entrada",
+                                    mes: mesSeleccionadoEntrada,
+                                    ano: anoSeleccionadoEntrada
+                                }
+
+
+                                diaEntradaSelecioando = diaSeleccionadoEntrada
+                                calendarioPersonalizado = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
+                                calendarioPersonalizado.instanciaUID = instanciaUID
+                                casaVitini.componentes.constructorMesNuevo(calendarioPersonalizado)
+
                             }
-                            const calendarioPresente = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-                            console.log("calenadrioPResetna", calendarioPresente)
-                            const primeraFechaDisponible = calendarioPresente.limites.primeraFechaDisponible
-
-                            if (calendarioPresente.mes !== primeraFechaDisponible.mes ||
-                                calendarioPresente.ano !== primeraFechaDisponible.ano) {
-                                calendarioPresente.tiempo = "futuro"
-                            }
-                            // calendarioPresente.dia = calendarioPresente.dia
-                            //  calendarioPresente.dia = primeraFechaDisponible.dia
-                            calendarioPresente.mes = primeraFechaDisponible.mes
-                            calendarioPresente.ano = primeraFechaDisponible.ano
+                            if (fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
+                                const calendario = {
+                                    tipo: "personalizado",
+                                    comando: "construyeObjeto",
+                                    tipoFecha: "salida",
+                                    mes: mesSeleccionadoSalida,
+                                    ano: anoSeleccionadoSalida
+                                }
 
 
-
-                            if (calendarioPresente.dia === calendarioPresente.numeroDiasPorMes) {
-                                calendarioPresente.ano = Number(calendarioPresente.mes) === 12 ? Number(calendarioPresente.ano) + 1 : Number(calendarioPresente.ano)
-                                calendarioPresente.mes = Number(calendarioPresente.mes) === 12 ? 1 : Number(calendarioPresente.mes) + 1
-                                // calendarioPresente.Dia = 1
-                            }
-                            calendarioPresente.instanciaUID = instanciaUID
-                            casaVitini.componentes.constructorMesNuevo(calendarioPresente)
-                        }
-                        if (fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
-
-                            const metadatos = {
-                                tipoFecha: "entrada",
-                                almacenamientoCalendarioID: "reserva",
-                                perfilMes: "diaEntradaAsistidoSinPasado",
-                                calendarioIO: "entrada",
-                                mensajeInfo: "Selecciona el día de entrada",
-                                alturaDinamica: alturaDinamicaArriba,
-                                instanciaUID: instanciaUID
-                            }
-                            casaVitini.componentes.constructorCalendarioNuevo(metadatos)
-
-                            const calendario = {
-                                tipo: "personalizado",
-                                comando: "construyeObjeto",
-                                tipoFecha: "entrada",
-                                mes: mesSeleccionadoSalida,
-                                ano: anoSeleccionadoSalida
+                                calendarioPersonalizado = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
+                                calendarioPersonalizado.instanciaUID = instanciaUID
+                                casaVitini.componentes.constructorMesNuevo(calendarioPersonalizado)
                             }
 
+                            if (!fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
+                                const calendario = {
+                                    tipo: "actualConDiasDeAntelacion",
+                                    comando: "construyeObjeto",
+                                }
 
-                            calendarioPersonalizado = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-                            calendarioPersonalizado.instanciaUID = instanciaUID
-                            casaVitini.componentes.constructorMesNuevo(calendarioPersonalizado)
-                        }
+                                const calendarioPresente = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
 
-                        if (fechaSalidaVolatil_Humana && fechaEntradaVolatil_Humana) {
-                            const metadatos = {
-                                tipoFecha: "entrada",
-                                almacenamientoCalendarioID: "reserva",
-                                perfilMes: "diaEntradaAsistidoSinPasado",
-                                calendarioIO: "entrada",
-                                mensajeInfo: "Selecciona el día de entrada",
-                                alturaDinamica: alturaDinamicaArriba,
-                                instanciaUID: instanciaUID
-                            }
-                            casaVitini.componentes.constructorCalendarioNuevo(metadatos)
+                                const primeraFechaDisponible = calendarioPresente.limites.primeraFechaDisponible
 
 
-                            const calendario = {
-                                tipo: "personalizado",
-                                comando: "construyeObjeto",
-                                mes: mesSeleccionadoEntrada,
-                                ano: anoSeleccionadoEntrada
-                            }
+                                if (calendarioPresente.mes !== primeraFechaDisponible.mes ||
+                                    calendarioPresente.ano !== primeraFechaDisponible.ano) {
+                                    calendarioPresente.tiempo = "futuro"
+                                }
 
-                            calendarioPersonalizado = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-                            calendarioPersonalizado.instanciaUID = instanciaUID
-                            await casaVitini.componentes.constructorMesNuevo(calendarioPersonalizado)
-                        }
-                        document.addEventListener("click", casaVitini.componentes.ocultarElementos)
+                                // calendarioPresente.dia = primeraFechaDisponible.dia
+                                calendarioPresente.mes = primeraFechaDisponible.mes
+                                calendarioPresente.ano = primeraFechaDisponible.ano
 
-                    }
-                    if (componente === "salida") {
+                                if (calendarioPresente.dia === calendarioPresente.numeroDiasPorMes) {
+                                    calendarioPresente.ano = Number(calendarioPresente.mes) === 12 ? Number(calendarioPresente.ano) + 1 : Number(calendarioPresente.ano)
+                                    calendarioPresente.mes = Number(calendarioPresente.mes) === 12 ? 1 : Number(calendarioPresente.mes) + 1
+                                    // calendarioPresente.Dia = 1
+                                }
 
-                        if (calendario?.getAttribute("calendarioIO") === "salida") {
-                            bloqueCalendario.forEach((calendarioRenderizado) => {
-                                calendarioRenderizado.remove()
-                            })
-                            document.removeEventListener("click", casaVitini.componentes.ocultarElementos)
-                            return
-                        }
-                        if (calendario?.getAttribute("calendarioIO") === "entrada") {
-                            bloqueCalendario.forEach((calendarioRenderizado) => {
-                                calendarioRenderizado.remove()
-                            })
-                            document.removeEventListener("click", casaVitini.componentes.ocultarElementos)
-                            //return
-
-                        }
-
-                        const selectorBloqueFechaEntrada = document.querySelector("[calendario=entrada")
-                        const alturaDinamicaArriba = casaVitini.componentes.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(selectorBloqueFechaEntrada) + 20
-
-                        const tipoFecha = {
-                            tipoFecha: "salida",
-                            almacenamientoCalendarioID: "reserva",
-                            perfilMes: "diaSalidaAsistidoSinPasado",
-                            calendarioIO: "salida",
-                            mensajeInfo: "Selecciona el día de salida",
-                            alturaDinamica: alturaDinamicaArriba,
-                            instanciaUID: instanciaUID
-
-                        }
-                        casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
-
-
-                        let diaEntradaSelecioando
-                        let calendarioPersonalizado
-                        if (fechaEntradaVolatil_Humana && !fechaSalidaVolatil_Humana) {
-                            const calendario = {
-                                tipo: "personalizado",
-                                comando: "construyeObjeto",
-                                tipoFecha: "entrada",
-                                mes: mesSeleccionadoEntrada,
-                                ano: anoSeleccionadoEntrada
+                                calendarioPresente.instanciaUID = instanciaUID
+                                casaVitini.componentes.constructorMesNuevo(calendarioPresente)
                             }
 
+                            if (fechaSalidaVolatil_Humana && fechaEntradaVolatil_Humana) {
+                                let calendario = {
+                                    tipo: "personalizado",
+                                    comando: "construyeObjeto",
+                                    tipoFecha: "salida",
+                                    mes: mesSeleccionadoSalida,
+                                    ano: anoSeleccionadoSalida
+                                }
 
-                            diaEntradaSelecioando = diaSeleccionadoEntrada
-                            calendarioPersonalizado = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-                            calendarioPersonalizado.instanciaUID = instanciaUID
-                            casaVitini.componentes.constructorMesNuevo(calendarioPersonalizado)
-
-                        }
-                        if (fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
-                            const calendario = {
-                                tipo: "personalizado",
-                                comando: "construyeObjeto",
-                                tipoFecha: "salida",
-                                mes: mesSeleccionadoSalida,
-                                ano: anoSeleccionadoSalida
+                                calendarioPersonalizado = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
+                                calendarioPersonalizado.instanciaUID = instanciaUID
+                                await casaVitini.componentes.constructorMesNuevo(calendarioPersonalizado)
                             }
+                            document.addEventListener("click", casaVitini.componentes.ocultarElementos)
 
-
-                            calendarioPersonalizado = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-                            calendarioPersonalizado.instanciaUID = instanciaUID
-                            casaVitini.componentes.constructorMesNuevo(calendarioPersonalizado)
                         }
+                        if (componente === "botonDisponibilidad") {
+                            casaVitini.componentes.ocultarElementos()
+                            let reservaLocal = JSON.parse(localStorage.getItem("reserva"))
+                            let seccion = document.querySelector("section:not([estado=obsoleto])")
 
-                        if (!fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
-                            const calendario = {
-                                tipo: "actualConDiasDeAntelacion",
-                                comando: "construyeObjeto",
-                            }
-
-                            const calendarioPresente = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-
-                            const primeraFechaDisponible = calendarioPresente.limites.primeraFechaDisponible
-
-
-                            if (calendarioPresente.mes !== primeraFechaDisponible.mes ||
-                                calendarioPresente.ano !== primeraFechaDisponible.ano) {
-                                calendarioPresente.tiempo = "futuro"
-                            }
-
-                            // calendarioPresente.dia = primeraFechaDisponible.dia
-                            calendarioPresente.mes = primeraFechaDisponible.mes
-                            calendarioPresente.ano = primeraFechaDisponible.ano
-
-                            if (calendarioPresente.dia === calendarioPresente.numeroDiasPorMes) {
-                                calendarioPresente.ano = Number(calendarioPresente.mes) === 12 ? Number(calendarioPresente.ano) + 1 : Number(calendarioPresente.ano)
-                                calendarioPresente.mes = Number(calendarioPresente.mes) === 12 ? 1 : Number(calendarioPresente.mes) + 1
-                                // calendarioPresente.Dia = 1
-                            }
-
-                            calendarioPresente.instanciaUID = instanciaUID
-                            casaVitini.componentes.constructorMesNuevo(calendarioPresente)
-                        }
-
-                        if (fechaSalidaVolatil_Humana && fechaEntradaVolatil_Humana) {
-                            let calendario = {
-                                tipo: "personalizado",
-                                comando: "construyeObjeto",
-                                tipoFecha: "salida",
-                                mes: mesSeleccionadoSalida,
-                                ano: anoSeleccionadoSalida
-                            }
-
-                            calendarioPersonalizado = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
-                            calendarioPersonalizado.instanciaUID = instanciaUID
-                            await casaVitini.componentes.constructorMesNuevo(calendarioPersonalizado)
-                        }
-                        document.addEventListener("click", casaVitini.componentes.ocultarElementos)
-
-                    }
-                    if (componente === "botonDisponibilidad") {
-                        casaVitini.componentes.ocultarElementos()
-                        let reservaLocal = JSON.parse(localStorage.getItem("reserva"))
-                        let seccion = document.querySelector("section:not([estado=obsoleto])")
-
-                        const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
-
-                        const bloqueCalendario = document.createElement("div")
-                        bloqueCalendario.setAttribute("class", "bloqueCalendarioNuevo")
-                        // bloqueCalendario.style.top = PosicionAlto + "px"
-
-                        const cartelInfoCalendarioEstado = document.createElement("div")
-                        cartelInfoCalendarioEstado.setAttribute("class", "cartelInfoCalendarioEstado")
-                        cartelInfoCalendarioEstado.setAttribute("componente", "infoCalendario")
-
-
-                        if (!fechaEntradaVolatil_Humana) {
-                            const error = "Selecciona una fecha de entrada pulsando en el cuadrado de fecha de entrada y seleccionando la fecha en el calendario flotante"
-                            return casaVitini.ui.vistas.advertenciaInmersiva(error)
-                        }
-                        if (!fechaSalidaVolatil_Humana) {
-                            const error = "Selecciona una fecha de salida pulsando en el cuadro de fecha de salida y seleccionando la fecha en el calendario flotante"
-                            return casaVitini.ui.vistas.advertenciaInmersiva(error)
-                        }
-                        document.body.classList.add("difunmadoFondo")
-
-                        document.querySelector(".bloquePernoctacion")?.remove()
-                        document.querySelector(".bloqueBotonResumenReserva")?.remove()
-                        document.querySelectorAll("[componente=superBloque]").forEach((contenedorAlojamientoRenderizado) => {
-                            contenedorAlojamientoRenderizado.remove()
-                        })
-
-                        const contenedorBusquedaAlojamiento = document.querySelector("[contenedor=busquedaAlojamiento]")
-
-                        const superBloqueReserva = document.createElement("div")
-                        superBloqueReserva.classList.add("plaza_alojamiento_superBloque")
-                        superBloqueReserva.setAttribute("componente", "superBloque")
-                        superBloqueReserva.setAttribute("instanciaUID", instanciaUID)
-
-                        const contenedorEstadoBusqueda = document.createElement("div")
-                        contenedorEstadoBusqueda.classList.add("plaza_alojamiento_contenedorEsperaAlojamiento")
-
-                        const spinnerContainer = document.createElement('div');
-                        spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
-                        spinnerContainer.classList.add("lds-spinner");
-
-                        for (let i = 0; i < 12; i++) {
-                            const div = document.createElement('div');
-                            spinnerContainer.appendChild(div);
-                        }
-                        contenedorEstadoBusqueda.appendChild(spinnerContainer)
-
-                        const info = document.createElement("div")
-                        info.setAttribute("class", "advertenciaInfoFlujoPago")
-                        info.setAttribute("componente", "mensajeFlujoPasarela")
-                        info.innerText = "Buscando alojamiento..."
-                        contenedorEstadoBusqueda.appendChild(info)
-
-                        const boton = document.createElement("div")
-                        boton.setAttribute("class", "errorBoton")
-                        boton.classList.add("blur")
-                        boton.innerText = "Cancelar"
-                        boton.addEventListener("click", () => {
-                            document.querySelector(`[instanciaUID="${instanciaUID}"]`).remove()
-                            document.body.removeAttribute("class")
-
-                        })
-
-                        contenedorEstadoBusqueda.appendChild(boton)
-                        superBloqueReserva.appendChild(contenedorEstadoBusqueda)
-                        contenedorBusquedaAlojamiento.appendChild(superBloqueReserva)
-
-                        const botonBorrarBusquedaAlojamiento = document.querySelector("[componente=botonBorrarBusquedaAlojamiento]")
-                        botonBorrarBusquedaAlojamiento.style.display = "flex"
-
-
-                        const fechaEntradaArray = fechaEntradaVolatil_Humana.split("/")
-                        const fechaSalidaArray = fechaSalidaVolatil_Humana.split("/")
-
-                        const diaEntrada = fechaEntradaArray[0].padStart("2", 0)
-                        const mesEntrada = fechaEntradaArray[1].padStart("2", 0)
-                        const anoEntrada = fechaEntradaArray[2].padStart("4", 0)
-
-                        const diaSalida = fechaSalidaArray[0].padStart("2", 0)
-                        const mesSalida = fechaSalidaArray[1].padStart("2", 0)
-                        const anoSalida = fechaSalidaArray[2].padStart("4", 0)
-
-                        const fechaEntrada = `${diaEntrada}/${mesEntrada}/${anoEntrada}`
-                        const fechaSalida = `${diaSalida}/${mesSalida}/${anoSalida}`
-                        document.querySelector("[componente=botonDisponibilidad]").classList.remove("parpadeaFondo")
-
-                        const transaccion = {
-                            zona: "plaza/reservas/apartamentosDisponiblesPublico",
-                            entrada: fechaEntrada,
-                            salida: fechaSalida
-                        }
-
-                        const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
-                        if (!document.querySelector(`[instanciaUID="${instanciaUID}"]`)) {
-                            return
-                        }
-                        let apartamentosDisponibles
-                        if (respuestaServidor?.error) {
-                            document.querySelector(`[instanciaUID="${instanciaUID}"]`).remove()
-                            return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
-                        }
-
-                        if (respuestaServidor.ok) {
-                            apartamentosDisponibles = respuestaServidor?.ok.apartamentosDisponibles
-                        }
-
-                        const superBloqueReservaRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                        superBloqueReservaRenderizado.innerHTML = null
-                        if (!superBloqueReservaRenderizado) {
-                            return
-                        }
-
-                        if (Object.keys(apartamentosDisponibles).length === 0) {
-                            const infoSinAlojamiento = document.createElement("p")
-                            infoSinAlojamiento.setAttribute("class", "plaza_alojamiento_infoSinAlojamientoDisponible")
-                            infoSinAlojamiento.innerText = "No hay níngun alojamiento dispopnible para las fechas seleccionadas."
-                            superBloqueReservaRenderizado.appendChild(infoSinAlojamiento);
-                            return
-                        }
-                        document.body.classList.add("difunmadoFondo")
-
-                        const tituloBloqueAlojamiento = document.createElement("p")
-                        tituloBloqueAlojamiento.setAttribute("class", "tituloBloqueAlojamiento parpadeaFondoTransparente")
-                        tituloBloqueAlojamiento.setAttribute("componente", "tituloInfoSeleccionar")
-
-                        tituloBloqueAlojamiento.innerText = "Aquí tienes el alojamiento disponible para seleccionar."
-                        superBloqueReservaRenderizado.appendChild(tituloBloqueAlojamiento);
-
-
-                        const bloqueAlojamientoUI = document.createElement("div")
-                        bloqueAlojamientoUI.classList.add("bloqueAlojamiento")
-                        bloqueAlojamientoUI.setAttribute("contenedor", "alojamiento")
-                        superBloqueReservaRenderizado.appendChild(bloqueAlojamientoUI)
-
-                        const desgloseTotalesPorApartmentos = respuestaServidor?.ok.desgloseFinanciero.totalesPorApartamento
-                        const desgloseTotalesFormateado = {}
-                        desgloseTotalesPorApartmentos.map((detallesApartamento) => {
-                            const apartamentoIDV = detallesApartamento.apartamentoIDV
-                            desgloseTotalesFormateado[apartamentoIDV] = detallesApartamento
-
-                        })
-
-                        for (const apartamento of Object.entries(apartamentosDisponibles)) {
-
-                            const apartamentoIDV = apartamento[0]
-                            const apartamentoUI = apartamento[1].apartamentoUI
-                            const habitaciones = apartamento[1].habitaciones
-                            const caracteristicas = apartamento[1].caracteristicas
-
-                            // let precioBrutoPorDia = apartamento[1].preciosTotales.totalBrutoPordia
                             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
 
-                            const bloqueApartamento = document.createElement("div")
-                            bloqueApartamento.setAttribute("class", "plaza_alojamiento_contenedorApartamento")
-                            bloqueApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-                            bloqueApartamento.setAttribute("apartamentoUI", apartamentoUI)
-                            bloqueApartamento.setAttribute("instanciaUID", instanciaUID)
-                            bloqueApartamento.setAttribute("habitaciones", JSON.stringify(habitaciones))
+                            const bloqueCalendario = document.createElement("div")
+                            bloqueCalendario.setAttribute("class", "bloqueCalendarioNuevo")
+                            // bloqueCalendario.style.top = PosicionAlto + "px"
 
-                            bloqueApartamento.addEventListener("click", (e) => {
+                            const cartelInfoCalendarioEstado = document.createElement("div")
+                            cartelInfoCalendarioEstado.setAttribute("class", "cartelInfoCalendarioEstado")
+                            cartelInfoCalendarioEstado.setAttribute("componente", "infoCalendario")
 
-                                const selectorApartamento = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
-                                const selectorSelectorApartamento = selectorApartamento.querySelector("[componente=selectorApartamento]")
 
-                                if (selectorApartamento.getAttribute("estadoApartamento") !== "seleccionado") {
-                                    selectorApartamento.setAttribute("estadoApartamento", "seleccionado")
-                                    selectorSelectorApartamento.style.opacity = "1"
-                                } else {
-                                    selectorApartamento.removeAttribute("estadoApartamento")
-                                    selectorSelectorApartamento.removeAttribute("style")
-                                }
+                            if (!fechaEntradaVolatil_Humana) {
+                                const error = "Selecciona una fecha de entrada pulsando en el cuadrado de fecha de entrada y seleccionando la fecha en el calendario flotante"
+                                return casaVitini.ui.vistas.advertenciaInmersiva(error)
+                            }
+                            if (!fechaSalidaVolatil_Humana) {
+                                const error = "Selecciona una fecha de salida pulsando en el cuadro de fecha de salida y seleccionando la fecha en el calendario flotante"
+                                return casaVitini.ui.vistas.advertenciaInmersiva(error)
+                            }
+                            document.body.classList.add("difunmadoFondo")
 
-                                const selectorApartamentosSeleccionados = document.querySelectorAll("[estadoApartamento=seleccionado]")
-                                const marcoFlotante = document.querySelector("[componente=marcoFlotanteIrAResumen]")
-                                const selectorInfoTextoParpadeo = document.querySelector("[componente=tituloInfoSeleccionar]")
-                                if (selectorApartamentosSeleccionados.length > 0) {
-                                    selectorInfoTextoParpadeo.classList.remove("parpadeaFondoTransparente")
-                                    marcoFlotante.style.opacity = "1"
-                                    marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
-                                        .style.pointerEvents = "all"
+                            document.querySelector(".bloquePernoctacion")?.remove()
+                            document.querySelector(".bloqueBotonResumenReserva")?.remove()
+                            document.querySelectorAll("[componente=superBloque]").forEach((contenedorAlojamientoRenderizado) => {
+                                contenedorAlojamientoRenderizado.remove()
+                            })
 
-                                } else {
-                                    selectorInfoTextoParpadeo.classList.add("parpadeaFondoTransparente")
-                                    marcoFlotante.removeAttribute("style")
-                                    marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
-                                        .removeAttribute("style")
-                                }
+                            const contenedorBusquedaAlojamiento = document.querySelector("[contenedor=busquedaAlojamiento]")
+
+                            const superBloqueReserva = document.createElement("div")
+                            superBloqueReserva.classList.add("plaza_alojamiento_superBloque")
+                            superBloqueReserva.setAttribute("componente", "superBloque")
+                            superBloqueReserva.setAttribute("instanciaUID", instanciaUID)
+
+                            const contenedorEstadoBusqueda = document.createElement("div")
+                            contenedorEstadoBusqueda.classList.add("plaza_alojamiento_contenedorEsperaAlojamiento")
+
+                            const spinnerContainer = document.createElement('div');
+                            spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
+                            spinnerContainer.classList.add("lds-spinner");
+
+                            for (let i = 0; i < 12; i++) {
+                                const div = document.createElement('div');
+                                spinnerContainer.appendChild(div);
+                            }
+                            contenedorEstadoBusqueda.appendChild(spinnerContainer)
+
+                            const info = document.createElement("div")
+                            info.setAttribute("class", "advertenciaInfoFlujoPago")
+                            info.setAttribute("componente", "mensajeFlujoPasarela")
+                            info.innerText = "Buscando alojamiento..."
+                            contenedorEstadoBusqueda.appendChild(info)
+
+                            const boton = document.createElement("div")
+                            boton.setAttribute("class", "errorBoton")
+                            boton.classList.add("blur")
+                            boton.innerText = "Cancelar"
+                            boton.addEventListener("click", () => {
+                                document.querySelector(`[instanciaUID="${instanciaUID}"]`).remove()
+                                document.body.removeAttribute("class")
 
                             })
 
-                            const bloqueImagen = document.createElement("div")
-                            bloqueImagen.setAttribute("class", "bloqueImagen")
-                            // bloqueTituloImagen.appendChild(bloqueImagen)
+                            contenedorEstadoBusqueda.appendChild(boton)
+                            superBloqueReserva.appendChild(contenedorEstadoBusqueda)
+                            contenedorBusquedaAlojamiento.appendChild(superBloqueReserva)
 
-                            const contenedorTitulo = document.createElement("div")
-                            contenedorTitulo.classList.add("plaza_alojamiento_contenedorApartamento_contenedorTitulo")
+                            const botonBorrarBusquedaAlojamiento = document.querySelector("[componente=botonBorrarBusquedaAlojamiento]")
+                            botonBorrarBusquedaAlojamiento.style.display = "flex"
 
-                            const bloqueVerticalTitulo = document.createElement("div")
-                            bloqueVerticalTitulo.setAttribute("class", "bloqueVerticalTitulo")
 
-                            const elementoTituloNombre = document.createElement("div")
-                            elementoTituloNombre.setAttribute("class", "elementoTituloPrincipal")
-                            elementoTituloNombre.innerText = apartamentoUI
-                            bloqueVerticalTitulo.appendChild(elementoTituloNombre)
+                            const fechaEntradaArray = fechaEntradaVolatil_Humana.split("/")
+                            const fechaSalidaArray = fechaSalidaVolatil_Humana.split("/")
 
-                            const bloqueTituloApartamentoComponenteUI = document.createElement("div")
-                            bloqueTituloApartamentoComponenteUI.setAttribute("class", "tituloApartamentoComponenteUI")
-                            bloqueVerticalTitulo.appendChild(bloqueTituloApartamentoComponenteUI)
+                            const diaEntrada = fechaEntradaArray[0].padStart("2", 0)
+                            const mesEntrada = fechaEntradaArray[1].padStart("2", 0)
+                            const anoEntrada = fechaEntradaArray[2].padStart("4", 0)
 
-                            contenedorTitulo.appendChild(bloqueVerticalTitulo)
+                            const diaSalida = fechaSalidaArray[0].padStart("2", 0)
+                            const mesSalida = fechaSalidaArray[1].padStart("2", 0)
+                            const anoSalida = fechaSalidaArray[2].padStart("4", 0)
 
-                            const bloqueCaracteristicas = document.createElement("div")
-                            bloqueCaracteristicas.classList.add("plaza_alojamiento_contenedorApartmento_contenedorCaracteristicas")
+                            const fechaEntrada = `${diaEntrada}/${mesEntrada}/${anoEntrada}`
+                            const fechaSalida = `${diaSalida}/${mesSalida}/${anoSalida}`
+                            document.querySelector("[componente=botonDisponibilidad]").classList.remove("parpadeaFondo")
 
-                            for (const caracteristica of caracteristicas) {
-                                const caracteristicaUI = document.createElement("div")
-                                caracteristicaUI.classList.add("plaza_alojamiento_contenedorCaracteristicas_caracteristicas")
-                                caracteristicaUI.innerText = caracteristica.caracteristica
-                                bloqueCaracteristicas.appendChild(caracteristicaUI)
+                            const transaccion = {
+                                zona: "plaza/reservas/apartamentosDisponiblesPublico",
+                                entrada: fechaEntrada,
+                                salida: fechaSalida
                             }
 
+                            const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
 
-                            contenedorTitulo.appendChild(bloqueCaracteristicas)
+                            if (!document.querySelector(`[instanciaUID="${instanciaUID}"]`)) {
+                                return
+                            }
+                            let apartamentosDisponibles
+                            if (respuestaServidor?.error) {
+                                document.querySelector(`[instanciaUID="${instanciaUID}"]`).remove()
+                                return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                            }
 
-                            bloqueApartamento.appendChild(contenedorTitulo)
+                            if (respuestaServidor.ok) {
+                                apartamentosDisponibles = respuestaServidor?.ok.apartamentosDisponibles
+                            }
 
-                            const elementoTituloCocina = document.createElement("div")
-                            elementoTituloCocina.setAttribute("class", "elementoTitulo")
-                            elementoTituloCocina.innerText = `${desgloseTotalesFormateado[apartamentoIDV].totalBrutoRango}$ Total con impuestos incluidos`
-                            bloqueTituloApartamentoComponenteUI.appendChild(elementoTituloCocina)
+                            const superBloqueReservaRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                            superBloqueReservaRenderizado.innerHTML = null
+                            if (!superBloqueReservaRenderizado) {
+                                return
+                            }
 
-                            const bloqueHabitaciones = document.createElement("div")
-                            bloqueHabitaciones.classList.add("plaza_alojamiento_contenedorApartmento_contenedorHabitaciones")
-                            bloqueHabitaciones.setAttribute("componente", "bloqueHabitaciones")
+                            if (Object.keys(apartamentosDisponibles).length === 0) {
+                                const infoSinAlojamiento = document.createElement("p")
+                                infoSinAlojamiento.setAttribute("class", "plaza_alojamiento_infoSinAlojamientoDisponible")
+                                infoSinAlojamiento.innerText = "No hay níngun alojamiento dispopnible para las fechas seleccionadas."
+                                superBloqueReservaRenderizado.appendChild(infoSinAlojamiento);
+                                return
+                            }
+                            document.body.classList.add("difunmadoFondo")
 
-                            const checkUI = document.createElement("div")
-                            checkUI.classList.add("plaza_alojamiento_contenedorApartmento_check")
-                            checkUI.setAttribute("componente", "selectorApartamento")
-                            checkUI.innerText = "Seleccionado"
-                            bloqueApartamento.appendChild(checkUI)
+                            const tituloBloqueAlojamiento = document.createElement("p")
+                            tituloBloqueAlojamiento.setAttribute("class", "tituloBloqueAlojamiento parpadeaFondoTransparente")
+                            tituloBloqueAlojamiento.setAttribute("componente", "tituloInfoSeleccionar")
 
-                            for (const habitacion of Object.entries(habitaciones)) {
-
-                                const habitacionIDV = habitacion[0]
-                                const habitacionUI = habitacion[1].habitacionUI
-                                const configuracionesHabitacion = habitacion[1].configuraciones
-                                const numeroDeCamasPorHabitacion = Object.keys(configuracionesHabitacion).length
+                            tituloBloqueAlojamiento.innerText = "Aquí tienes el alojamiento disponible para seleccionar."
+                            superBloqueReservaRenderizado.appendChild(tituloBloqueAlojamiento);
 
 
-                                const habitacionBloque = document.createElement("div")
-                                habitacionBloque.setAttribute("class", "habitacion")
-                                habitacionBloque.setAttribute("componente", "habitacacionContenedor")
-                                habitacionBloque.setAttribute("habitacionIDV", habitacionIDV)
-                                habitacionBloque.addEventListener("click", (e) => {
-                                    // e.stopPropagation()
-                                })
+                            const bloqueAlojamientoUI = document.createElement("div")
+                            bloqueAlojamientoUI.classList.add("bloqueAlojamiento")
+                            bloqueAlojamientoUI.setAttribute("contenedor", "alojamiento")
+                            superBloqueReservaRenderizado.appendChild(bloqueAlojamientoUI)
 
-                                const habitacionNombre = document.createElement("div")
-                                habitacionNombre.setAttribute("class", "habitacionNombre")
-                                habitacionNombre.innerText = habitacionUI
-                                habitacionBloque.appendChild(habitacionNombre)
-                                if (numeroDeCamasPorHabitacion > 1) {
-                                    const infoHabitacion = document.createElement("div")
-                                    infoHabitacion.classList.add("plaza_alojamiento_contenedorHabitacion_infoSeleccionTipoCama")
-                                    infoHabitacion.setAttribute("componente", "infoSeleccionCama")
-                                    infoHabitacion.innerText = "Selecciona el tipo de cama para la habitación."
-                                    habitacionBloque.appendChild(infoHabitacion)
+                            const desgloseTotalesPorApartmentos = respuestaServidor?.ok.desgloseFinanciero.totalesPorApartamento
+                            const desgloseTotalesFormateado = {}
+                            desgloseTotalesPorApartmentos.map((detallesApartamento) => {
+                                const apartamentoIDV = detallesApartamento.apartamentoIDV
+                                desgloseTotalesFormateado[apartamentoIDV] = detallesApartamento
 
-                                }
+                            })
 
-                                if (numeroDeCamasPorHabitacion === 1) {
-                                    const infoHabitacion = document.createElement("div")
-                                    infoHabitacion.classList.add("plaza_alojamiento_contenedorHabitacion_infoSeleccionTipoCama")
-                                    infoHabitacion.innerText = "Esta habitación solo dispone de este tipo de cama. Al seleccionar este apartamento, se selecciona esta cama para esta habitación"
-                                    habitacionBloque.appendChild(infoHabitacion)
+                            for (const apartamento of Object.entries(apartamentosDisponibles)) {
 
-                                }
+                                const apartamentoIDV = apartamento[0]
+                                const apartamentoUI = apartamento[1].apartamentoUI
+                                const habitaciones = apartamento[1].habitaciones
+                                const caracteristicas = apartamento[1].caracteristicas
 
-                                const bloqueHabitacionCamas = document.createElement("div")
-                                bloqueHabitacionCamas.setAttribute("class", "bloqueHabitacion")
-                                // 
+                                // let precioBrutoPorDia = apartamento[1].preciosTotales.totalBrutoPordia
+                                const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
 
-                                for (const configuracionHabitacion of Object.entries(configuracionesHabitacion)) {
+                                const bloqueApartamento = document.createElement("div")
+                                bloqueApartamento.setAttribute("class", "plaza_alojamiento_contenedorApartamento")
+                                bloqueApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
+                                bloqueApartamento.setAttribute("apartamentoUI", apartamentoUI)
+                                bloqueApartamento.setAttribute("instanciaUID", instanciaUID)
+                                bloqueApartamento.setAttribute("habitaciones", JSON.stringify(habitaciones))
 
-                                    const camaIDV = configuracionHabitacion[1].camaIDV
-                                    const camaUI = configuracionHabitacion[1].camaUI
-                                    const capacidad = configuracionHabitacion[1].capacidad
+                                bloqueApartamento.addEventListener("click", (e) => {
 
-                                    const bloqueCama = document.createElement("div")
-                                    bloqueCama.setAttribute("class", "habitacionCamas")
-                                    bloqueCama.setAttribute("camaIDV", camaIDV)
-                                    bloqueCama.setAttribute("capacidadPernoctativa", capacidad)
-                                    bloqueCama.setAttribute("componente", "botonSelectorCama")
-                                    bloqueCama.innerText = camaUI
-                                    if (numeroDeCamasPorHabitacion > 1) {
-                                        bloqueCama.addEventListener("click", (e) => {
-                                            e.stopPropagation()
-                                            const datosCama = {
-                                                apartamentoIDV: apartamentoIDV,
-                                                habitacionIDV: habitacionIDV,
-                                                camaIDV: camaIDV
-                                            }
-                                            casaVitini.ui.vistas.reservasNuevo.seleccionarCama(datosCama)
-                                        })
+                                    const selectorApartamento = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
+                                    const selectorSelectorApartamento = selectorApartamento.querySelector("[componente=selectorApartamento]")
+
+                                    if (selectorApartamento.getAttribute("estadoApartamento") !== "seleccionado") {
+                                        selectorApartamento.setAttribute("estadoApartamento", "seleccionado")
+                                        selectorSelectorApartamento.style.opacity = "1"
+                                    } else {
+                                        selectorApartamento.removeAttribute("estadoApartamento")
+                                        selectorSelectorApartamento.removeAttribute("style")
                                     }
 
-                                    bloqueHabitacionCamas.appendChild(bloqueCama)
+                                    const selectorApartamentosSeleccionados = document.querySelectorAll("[estadoApartamento=seleccionado]")
+                                    const marcoFlotante = document.querySelector("[componente=marcoFlotanteIrAResumen]")
+                                    const selectorInfoTextoParpadeo = document.querySelector("[componente=tituloInfoSeleccionar]")
+                                    if (selectorApartamentosSeleccionados.length > 0) {
+                                        selectorInfoTextoParpadeo.classList.remove("parpadeaFondoTransparente")
+                                        marcoFlotante.style.opacity = "1"
+                                        marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
+                                            .style.pointerEvents = "all"
 
-                                    habitacionBloque.appendChild(bloqueCama)
+                                    } else {
+                                        selectorInfoTextoParpadeo.classList.add("parpadeaFondoTransparente")
+                                        marcoFlotante.removeAttribute("style")
+                                        marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
+                                            .removeAttribute("style")
+                                    }
+
+                                })
+
+                                const bloqueImagen = document.createElement("div")
+                                bloqueImagen.setAttribute("class", "bloqueImagen")
+                                // bloqueTituloImagen.appendChild(bloqueImagen)
+
+                                const contenedorTitulo = document.createElement("div")
+                                contenedorTitulo.classList.add("plaza_alojamiento_contenedorApartamento_contenedorTitulo")
+
+                                const bloqueVerticalTitulo = document.createElement("div")
+                                bloqueVerticalTitulo.setAttribute("class", "bloqueVerticalTitulo")
+
+                                const elementoTituloNombre = document.createElement("div")
+                                elementoTituloNombre.setAttribute("class", "elementoTituloPrincipal")
+                                elementoTituloNombre.innerText = apartamentoUI
+                                bloqueVerticalTitulo.appendChild(elementoTituloNombre)
+
+                                const bloqueTituloApartamentoComponenteUI = document.createElement("div")
+                                bloqueTituloApartamentoComponenteUI.setAttribute("class", "tituloApartamentoComponenteUI")
+                                bloqueVerticalTitulo.appendChild(bloqueTituloApartamentoComponenteUI)
+
+                                contenedorTitulo.appendChild(bloqueVerticalTitulo)
+
+                                const bloqueCaracteristicas = document.createElement("div")
+                                bloqueCaracteristicas.classList.add("plaza_alojamiento_contenedorApartmento_contenedorCaracteristicas")
+
+                                for (const caracteristica of caracteristicas) {
+                                    const caracteristicaUI = document.createElement("div")
+                                    caracteristicaUI.classList.add("plaza_alojamiento_contenedorCaracteristicas_caracteristicas")
+                                    caracteristicaUI.innerText = caracteristica.caracteristica
+                                    bloqueCaracteristicas.appendChild(caracteristicaUI)
                                 }
 
 
-                                //   bloqueHabitacionCamas.appendChild(habitacionNombre)
-                                bloqueHabitaciones.appendChild(habitacionBloque)
-                            }
-                            // bloqueTituloImagen.appendChild(bloqueHabitaciones)
-                            bloqueAlojamientoUI.appendChild(bloqueApartamento)
-                            const metadatos = {
-                                apartamentoIDV: apartamentoIDV,
-                                instanciaUID: instanciaUID,
+                                contenedorTitulo.appendChild(bloqueCaracteristicas)
+
+                                bloqueApartamento.appendChild(contenedorTitulo)
+
+                                const elementoTituloCocina = document.createElement("div")
+                                elementoTituloCocina.setAttribute("class", "elementoTitulo")
+                                elementoTituloCocina.innerText = `${desgloseTotalesFormateado[apartamentoIDV].totalBrutoRango}$ Total con impuestos incluidos`
+                                bloqueTituloApartamentoComponenteUI.appendChild(elementoTituloCocina)
+
+                                const bloqueHabitaciones = document.createElement("div")
+                                bloqueHabitaciones.classList.add("plaza_alojamiento_contenedorApartmento_contenedorHabitaciones")
+                                bloqueHabitaciones.setAttribute("componente", "bloqueHabitaciones")
+
+                                const checkUI = document.createElement("div")
+                                checkUI.classList.add("plaza_alojamiento_contenedorApartmento_check")
+                                checkUI.setAttribute("componente", "selectorApartamento")
+                                checkUI.innerText = "Seleccionado"
+                                bloqueApartamento.appendChild(checkUI)
+
+                                for (const habitacion of Object.entries(habitaciones)) {
+
+                                    const habitacionIDV = habitacion[0]
+                                    const habitacionUI = habitacion[1].habitacionUI
+                                    const configuracionesHabitacion = habitacion[1].configuraciones
+                                    const numeroDeCamasPorHabitacion = Object.keys(configuracionesHabitacion).length
+
+
+                                    const habitacionBloque = document.createElement("div")
+                                    habitacionBloque.setAttribute("class", "habitacion")
+                                    habitacionBloque.setAttribute("componente", "habitacacionContenedor")
+                                    habitacionBloque.setAttribute("habitacionIDV", habitacionIDV)
+                                    habitacionBloque.addEventListener("click", (e) => {
+                                        // e.stopPropagation()
+                                    })
+
+                                    const habitacionNombre = document.createElement("div")
+                                    habitacionNombre.setAttribute("class", "habitacionNombre")
+                                    habitacionNombre.innerText = habitacionUI
+                                    habitacionBloque.appendChild(habitacionNombre)
+                                    if (numeroDeCamasPorHabitacion > 1) {
+                                        const infoHabitacion = document.createElement("div")
+                                        infoHabitacion.classList.add("plaza_alojamiento_contenedorHabitacion_infoSeleccionTipoCama")
+                                        infoHabitacion.setAttribute("componente", "infoSeleccionCama")
+                                        infoHabitacion.innerText = "Selecciona el tipo de cama para la habitación."
+                                        habitacionBloque.appendChild(infoHabitacion)
+
+                                    }
+
+                                    if (numeroDeCamasPorHabitacion === 1) {
+                                        const infoHabitacion = document.createElement("div")
+                                        infoHabitacion.classList.add("plaza_alojamiento_contenedorHabitacion_infoSeleccionTipoCama")
+                                        infoHabitacion.innerText = "Esta habitación solo dispone de este tipo de cama. Al seleccionar este apartamento, se selecciona esta cama para esta habitación"
+                                        habitacionBloque.appendChild(infoHabitacion)
+
+                                    }
+
+                                    const bloqueHabitacionCamas = document.createElement("div")
+                                    bloqueHabitacionCamas.setAttribute("class", "bloqueHabitacion")
+                                    // 
+
+                                    for (const configuracionHabitacion of Object.entries(configuracionesHabitacion)) {
+
+                                        const camaIDV = configuracionHabitacion[1].camaIDV
+                                        const camaUI = configuracionHabitacion[1].camaUI
+                                        const capacidad = configuracionHabitacion[1].capacidad
+
+                                        const bloqueCama = document.createElement("div")
+                                        bloqueCama.setAttribute("class", "habitacionCamas")
+                                        bloqueCama.setAttribute("camaIDV", camaIDV)
+                                        bloqueCama.setAttribute("capacidadPernoctativa", capacidad)
+                                        bloqueCama.setAttribute("componente", "botonSelectorCama")
+                                        bloqueCama.innerText = camaUI
+                                        if (numeroDeCamasPorHabitacion > 1) {
+                                            bloqueCama.addEventListener("click", (e) => {
+                                                e.stopPropagation()
+                                                const datosCama = {
+                                                    apartamentoIDV: apartamentoIDV,
+                                                    habitacionIDV: habitacionIDV,
+                                                    camaIDV: camaIDV
+                                                }
+                                                casaVitini.ui.vistas.reservasNuevo.seleccionarCama(datosCama)
+                                            })
+                                        }
+
+                                        bloqueHabitacionCamas.appendChild(bloqueCama)
+
+                                        habitacionBloque.appendChild(bloqueCama)
+                                    }
+
+
+                                    //   bloqueHabitacionCamas.appendChild(habitacionNombre)
+                                    bloqueHabitaciones.appendChild(habitacionBloque)
+                                }
+                                // bloqueTituloImagen.appendChild(bloqueHabitaciones)
+                                bloqueAlojamientoUI.appendChild(bloqueApartamento)
+                                const metadatos = {
+                                    apartamentoIDV: apartamentoIDV,
+                                    instanciaUID: instanciaUID,
+                                }
+
+                                casaVitini.ui.vistas.reservasNuevo.obtenerImagenApartamento(metadatos)
+                                // Imagen apartamento aqui
                             }
 
-                            casaVitini.ui.vistas.reservasNuevo.obtenerImagenApartamento(metadatos)
-                            // Imagen apartamento aqui
+
+
+
+                            const marcoBotonFlotanteIrAResumenReserva = document.createElement("div")
+                            marcoBotonFlotanteIrAResumenReserva.classList.add("plaza_alojamiento_marcoBotonIreAResumenReserva")
+                            marcoBotonFlotanteIrAResumenReserva.setAttribute("componente", "marcoFlotanteIrAResumen")
+
+
+
+                            const marcoIntermedio = document.createElement("div")
+                            marcoIntermedio.classList.add("plaza_alojamiento_marcoIntermedioBotonIrResumenReserva")
+
+
+                            const botonResumenReserva = document.createElement("div")
+                            botonResumenReserva.classList.add("plaza_alojamiento_boronResumenReservaEnMarcoFlotante")
+                            botonResumenReserva.classList.add("parpadeaFondoSemiBlanco")
+
+                            botonResumenReserva.setAttribute("componente", "botonIrAResumenReserva")
+
+                            botonResumenReserva.innerText = "Ir al resumen de mi reserva"
+                            botonResumenReserva.addEventListener("click", casaVitini.ui.vistas.reservasNuevo.iraResumenReserva)
+
+
+                            marcoIntermedio.append(botonResumenReserva)
+                            marcoBotonFlotanteIrAResumenReserva.append(marcoIntermedio)
+                            superBloqueReservaRenderizado.appendChild(marcoBotonFlotanteIrAResumenReserva)
                         }
-
-
-
-
-                        const marcoBotonFlotanteIrAResumenReserva = document.createElement("div")
-                        marcoBotonFlotanteIrAResumenReserva.classList.add("plaza_alojamiento_marcoBotonIreAResumenReserva")
-                        marcoBotonFlotanteIrAResumenReserva.setAttribute("componente", "marcoFlotanteIrAResumen")
-
-
-
-                        const marcoIntermedio = document.createElement("div")
-                        marcoIntermedio.classList.add("plaza_alojamiento_marcoIntermedioBotonIrResumenReserva")
-
-
-                        const botonResumenReserva = document.createElement("div")
-                        botonResumenReserva.classList.add("plaza_alojamiento_boronResumenReservaEnMarcoFlotante")
-                        botonResumenReserva.classList.add("parpadeaFondoSemiBlanco")
-
-                        botonResumenReserva.setAttribute("componente", "botonIrAResumenReserva")
-
-                        botonResumenReserva.innerText = "Ir al resumen de mi reserva"
-                        botonResumenReserva.addEventListener("click", casaVitini.ui.vistas.reservasNuevo.iraResumenReserva)
-
-
-                        marcoIntermedio.append(botonResumenReserva)
-                        marcoBotonFlotanteIrAResumenReserva.append(marcoIntermedio)
-                        superBloqueReservaRenderizado.appendChild(marcoBotonFlotanteIrAResumenReserva)
+                    } catch (errorCapturado) {
+                        const mensajeError = errorCapturado.message
+                        casaVitini.ui.vistas.advertenciaInmersiva(mensajeError)
                     }
+
                 },
                 resumenReserva: async () => {
                     document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
@@ -1809,9 +1823,15 @@ const casaVitini = {
 
 
 
-                                    } catch (error) {
+                                    } catch (errorCapturado) {
                                         advertenciaInmersivaRenderizada?.remove()
-                                        casaVitini.ui.vistas.advertenciaInmersiva(error.message)
+                                        if (errorCapturado instanceof TypeError && errorCapturado.message === 'Failed to fetch') {
+                                            const mensaje = "No se ha podido contactar con el servidor, revisa tu conexión y reintentalo."
+                                            casaVitini.ui.vistas.advertenciaInmersiva(mensaje)
+
+                                        } else {
+                                            casaVitini.ui.vistas.advertenciaInmersiva(errorCapturado.message)
+                                        }
                                     }
 
                                 }
@@ -6543,7 +6563,6 @@ const casaVitini = {
                 }
             }
         },
-
         errorUI: () => {
             const selectorContenedorError = document.querySelector(`[componente=contenedorError]`)
             if (selectorContenedorError) {
@@ -6708,7 +6727,7 @@ const casaVitini = {
 
             if (origen !== "botonMenuResponsivo") {
                 const selectorMenuFlotanteRenderizado = document.querySelector("[componente=menuGlobalFlotante]")
-                selectorMenuFlotanteRenderizado.remove()
+                selectorMenuFlotanteRenderizado?.remove()
                 document.removeEventListener("click", casaVitini.componentes.ocultaMenuGlobalFlotante)
                 window.removeEventListener("resize", casaVitini.componentes.ocultaMenuGlobalFlotante)
                 window.removeEventListener("scroll", casaVitini.componentes.ocultaMenuGlobalFlotante)
@@ -6971,146 +6990,162 @@ const casaVitini = {
 
         },
         constructorCalendarioNuevo: (metadatos) => {
+            try {
+                const almacenamientoVolatilUID = metadatos.almacenamientoCalendarioID
+                if (!almacenamientoVolatilUID) {
+                    const error = "El constructor del calendario, necesita un nombre para el almacenamiento volatil"
+                    throw new Error(error)
+                }
+                const tipoFecha = metadatos.tipoFecha
+                if (!tipoFecha) {
+                    const error = "El constructor del calendario, necesita un tipoFecha, ya sea entrada o salida"
+                    throw new Error(error)
+                }
+                const calendarioIO = metadatos.calendarioIO
+                if (!calendarioIO) {
+                    const error = "El constructor del calendario, necesita un calendarioIO, ya sea entrada o salida"
+                    throw new Error(error)
+                }
+                const perfilMes = metadatos.perfilMes
+                if (!perfilMes) {
+                    const error = "El constructor del calendario, necesita un perfilMes, consulte los perfiles en contructorMes"
+                    throw new Error(error)
+                }
+                const mensajeInfo = metadatos.mensajeInfo
+                if (!mensajeInfo) {
+                    const error = "El constructor del calendario, necesita un mensajeInfo, para informar de para que es este calendario"
+                    throw new Error(error)
+                }
+                const alturaDinamica = metadatos.alturaDinamica
+                if (!alturaDinamica) {
+                    const error = "El contructor del calendario necesita una altura dinamica para colora el contenedor del calendario"
+                    throw new Error(error)
+                }
+                const instanciaUID = metadatos.instanciaUID
+                if (!instanciaUID) {
+                    const error = "El contructor del calendario necesita una instanciaUID para el contenedor del calendario"
+                    throw new Error(error)
+                }
+                const metodoSelectorDia = metadatos.metodoSelectorDia
+                if (!metodoSelectorDia) {
+                    const error = "El contructor del calendario necesita un metodoSelectorDia para el contenedor del calendario"
+                    throw new Error(error)
+                } else {
+                    try {
+                        eval(metodoSelectorDia)
+                    } catch (errorCapturado) {
+                        const error = "El metodoSelectorDia hace refencia a nada, revisa la direcion del arbol del objeto: " + errorCapturado.message
+                        throw new Error(error)
+                    }
+                }
 
-            const almacenamientoVolatilUID = metadatos.almacenamientoCalendarioID
-            if (!almacenamientoVolatilUID) {
-                let error = "El constructor del calendario, necesita un nombre para el almacenamiento volatil"
-                return casaVitini.ui.vistas.advertenciaInmersiva(error)
+                const calendario = document.createElement("div")
+                calendario.setAttribute("class", "calendarioNuevo")
+                //calendario.setAttribute("campo", "calendario")
+                calendario.setAttribute("contenedor", "calendario")
+                calendario.setAttribute("componente", "marcoCalendario")
+                calendario.setAttribute("almacenamientoCalendarioID", almacenamientoVolatilUID)
+                calendario.setAttribute("tipoCalendario", tipoFecha)
+                calendario.setAttribute("calendarioIO", calendarioIO)
+                calendario.setAttribute("metodoSelectorDia", metodoSelectorDia)
+                calendario.setAttribute("elemento", "flotante")
+                calendario.setAttribute("perfilMes", perfilMes)
+                calendario.setAttribute("IO", calendarioIO)
+                calendario.style.display = "none"
+
+                const cartelInfoCalendarioEstado = document.createElement("div")
+                cartelInfoCalendarioEstado.setAttribute("class", "cartelInfoCalendarioEstado")
+                cartelInfoCalendarioEstado.setAttribute("componente", "infoCalendario")
+                cartelInfoCalendarioEstado.setAttribute("campo", "calendario")
+                cartelInfoCalendarioEstado.innerText = mensajeInfo
+
+                const navegacionMes = document.createElement("nav")
+                navegacionMes.setAttribute("class", "navegacionMes")
+
+                calendario.appendChild(navegacionMes)
+                calendario.appendChild(cartelInfoCalendarioEstado)
+
+                const botonNavegacionMesAtras = document.createElement("div")
+                botonNavegacionMesAtras.setAttribute("class", "botonNavegacionMes")
+                botonNavegacionMesAtras.setAttribute("id", "botonAtras")
+                botonNavegacionMesAtras.setAttribute("sentido", "atras")
+
+                botonNavegacionMesAtras.innerText = "Atras"
+                botonNavegacionMesAtras.addEventListener("click", casaVitini.componentes.navegacionCalendarioNuevo)
+                navegacionMes.appendChild(botonNavegacionMesAtras)
+
+                const navegacionMesReferencia = document.createElement("div")
+                navegacionMesReferencia.setAttribute("id", "navegacionMesReferencia")
+                navegacionMesReferencia.setAttribute("class", "navegacionMesReferencia")
+                navegacionMesReferencia.setAttribute("componente", "mesReferencia")
+
+                navegacionMes.appendChild(navegacionMesReferencia)
+
+                const botonNavegacionMesAdelante = document.createElement("div")
+                botonNavegacionMesAdelante.setAttribute("class", "botonNavegacionMes")
+                botonNavegacionMesAdelante.setAttribute("id", "botonAdelante")
+
+                botonNavegacionMesAdelante.innerText = "Adelante"
+                botonNavegacionMesAdelante.setAttribute("sentido", "adelante")
+
+                botonNavegacionMesAdelante.addEventListener("click", casaVitini.componentes.navegacionCalendarioNuevo)
+                navegacionMes.appendChild(botonNavegacionMesAdelante)
+
+                const marcoMes = document.createElement("ol")
+                marcoMes.setAttribute("id", "marcoMes")
+                marcoMes.setAttribute("class", "marcoMes")
+                marcoMes.setAttribute("componente", "marcoMes")
+
+
+                calendario.appendChild(marcoMes)
+
+                const pilaDias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+                for (const nombreDia of pilaDias) {
+                    let diaSemana = document.createElement("li")
+                    diaSemana.setAttribute("class", "nombreDia")
+                    diaSemana.setAttribute("tipoNombreDia", "extendido")
+                    diaSemana.innerText = nombreDia
+                    marcoMes.appendChild(diaSemana)
+                }
+
+                const pilaDiasAbreviados = ["L", "M", "X", "J", "V", "S", "D"]
+                for (const nombreDia of pilaDiasAbreviados) {
+                    let diaSemana = document.createElement("li")
+                    diaSemana.setAttribute("class", "nombreDia")
+                    diaSemana.setAttribute("tipoNombreDia", "abreviado")
+                    diaSemana.innerText = nombreDia
+                    marcoMes.appendChild(diaSemana)
+                }
+                const seccion = document.querySelector("section:not([estado=obsoleto])")
+                const bloqueCalendario = document.createElement("div")
+                bloqueCalendario.setAttribute("class", "bloqueCalendarioNuevo")
+                bloqueCalendario.setAttribute("instanciaUID", instanciaUID)
+                bloqueCalendario.setAttribute("componente", "bloqueCalendario")
+                bloqueCalendario.style.top = alturaDinamica + "px"
+
+                const contenedoCalendarioIntermedio = document.createElement("div")
+                contenedoCalendarioIntermedio.setAttribute("class", "componentes_calendario_contenedorCalentadioIntermedio")
+
+
+                //bloqueCalendario.appendChild(cartelInfoCalendarioEstado)
+                //bloqueCalendario.style.visibility = "hidden"
+                const mensajeSpinner = "Construyendo calendario..."
+                const spinner = casaVitini.componentes.spinner(mensajeSpinner)
+                const contenedorCarga = document.createElement("div")
+                contenedorCarga.classList.add("componente_calendario_contenedoCarga")
+                contenedorCarga.setAttribute("contenedor", "contruyendoCalendario")
+                contenedorCarga.setAttribute("elemento", "flotante")
+                contenedorCarga.appendChild(spinner)
+
+                contenedoCalendarioIntermedio.appendChild(calendario)
+                contenedoCalendarioIntermedio.appendChild(contenedorCarga)
+                bloqueCalendario.appendChild(contenedoCalendarioIntermedio)
+
+                document.body.appendChild(bloqueCalendario)
+
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
-            const tipoFecha = metadatos.tipoFecha
-            if (!tipoFecha) {
-                let error = "El constructor del calendario, necesita un tipoFecha, ya sea entrada o salida"
-                return casaVitini.ui.vistas.advertenciaInmersiva(error)
-            }
-            const calendarioIO = metadatos.calendarioIO
-            if (!calendarioIO) {
-                const error = "El constructor del calendario, necesita un calendarioIO, ya sea entrada o salida"
-                return casaVitini.ui.vistas.advertenciaInmersiva(error)
-            }
-            const perfilMes = metadatos.perfilMes
-            if (!perfilMes) {
-                let error = "El constructor del calendario, necesita un perfilMes, consulte los perfiles en contructorMes"
-                return casaVitini.ui.vistas.advertenciaInmersiva(error)
-            }
-            const mensajeInfo = metadatos.mensajeInfo
-            if (!mensajeInfo) {
-                const error = "El constructor del calendario, necesita un mensajeInfo, para informar de para que es este calendario"
-                return casaVitini.ui.vistas.advertenciaInmersiva(error)
-            }
-            const alturaDinamica = metadatos.alturaDinamica
-            if (!alturaDinamica) {
-                const error = "El contructor del calendario necesita una altura dinamica para colora el contenedor del calendario"
-                return casaVitini.ui.vistas.advertenciaInmersiva(error)
-            }
-            const instanciaUID = metadatos.instanciaUID
-            if (!instanciaUID) {
-                const error = "El contructor del calendario necesita una instanciaUID para el contenedor del calendario"
-                return casaVitini.ui.vistas.advertenciaInmersiva(error)
-            }
-
-            const calendario = document.createElement("div")
-            calendario.setAttribute("class", "calendarioNuevo")
-            calendario.setAttribute("campo", "calendario")
-            calendario.setAttribute("contenedor", "calendario")
-
-            calendario.setAttribute("componente", "marcoCalendario")
-            calendario.setAttribute("almacenamientoCalendarioID", almacenamientoVolatilUID)
-            calendario.setAttribute("tipoCalendario", tipoFecha)
-            calendario.setAttribute("calendarioIO", calendarioIO)
-            calendario.setAttribute("elemento", "flotante")
-            calendario.setAttribute("perfilMes", perfilMes)
-            calendario.setAttribute("IO", calendarioIO)
-            calendario.style.display = "none"
-
-            const cartelInfoCalendarioEstado = document.createElement("div")
-            cartelInfoCalendarioEstado.setAttribute("class", "cartelInfoCalendarioEstado")
-            cartelInfoCalendarioEstado.setAttribute("componente", "infoCalendario")
-            cartelInfoCalendarioEstado.setAttribute("campo", "calendario")
-            cartelInfoCalendarioEstado.innerText = mensajeInfo
-
-            const navegacionMes = document.createElement("nav")
-            navegacionMes.setAttribute("class", "navegacionMes")
-
-            calendario.appendChild(navegacionMes)
-            calendario.appendChild(cartelInfoCalendarioEstado)
-
-            const botonNavegacionMesAtras = document.createElement("div")
-            botonNavegacionMesAtras.setAttribute("class", "botonNavegacionMes")
-            botonNavegacionMesAtras.setAttribute("id", "botonAtras")
-            botonNavegacionMesAtras.setAttribute("sentido", "atras")
-
-            botonNavegacionMesAtras.innerText = "Atras"
-            botonNavegacionMesAtras.addEventListener("click", casaVitini.componentes.navegacionCalendarioNuevo)
-            navegacionMes.appendChild(botonNavegacionMesAtras)
-
-            const navegacionMesReferencia = document.createElement("div")
-            navegacionMesReferencia.setAttribute("id", "navegacionMesReferencia")
-            navegacionMesReferencia.setAttribute("class", "navegacionMesReferencia")
-            navegacionMesReferencia.setAttribute("componente", "mesReferencia")
-
-            navegacionMes.appendChild(navegacionMesReferencia)
-
-            const botonNavegacionMesAdelante = document.createElement("div")
-            botonNavegacionMesAdelante.setAttribute("class", "botonNavegacionMes")
-            botonNavegacionMesAdelante.setAttribute("id", "botonAdelante")
-
-            botonNavegacionMesAdelante.innerText = "Adelante"
-            botonNavegacionMesAdelante.setAttribute("sentido", "adelante")
-
-            botonNavegacionMesAdelante.addEventListener("click", casaVitini.componentes.navegacionCalendarioNuevo)
-            navegacionMes.appendChild(botonNavegacionMesAdelante)
-
-            const marcoMes = document.createElement("ol")
-            marcoMes.setAttribute("id", "marcoMes")
-            marcoMes.setAttribute("class", "marcoMes")
-            marcoMes.setAttribute("componente", "marcoMes")
-
-
-            calendario.appendChild(marcoMes)
-
-            const pilaDias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
-            for (const nombreDia of pilaDias) {
-                let diaSemana = document.createElement("li")
-                diaSemana.setAttribute("class", "nombreDia")
-                diaSemana.setAttribute("tipoNombreDia", "extendido")
-                diaSemana.innerText = nombreDia
-                marcoMes.appendChild(diaSemana)
-            }
-
-            const pilaDiasAbreviados = ["L", "M", "X", "J", "V", "S", "D"]
-            for (const nombreDia of pilaDiasAbreviados) {
-                let diaSemana = document.createElement("li")
-                diaSemana.setAttribute("class", "nombreDia")
-                diaSemana.setAttribute("tipoNombreDia", "abreviado")
-                diaSemana.innerText = nombreDia
-                marcoMes.appendChild(diaSemana)
-            }
-            const seccion = document.querySelector("section:not([estado=obsoleto])")
-            const bloqueCalendario = document.createElement("div")
-            bloqueCalendario.setAttribute("class", "bloqueCalendarioNuevo")
-            bloqueCalendario.setAttribute("instanciaUID", instanciaUID)
-            bloqueCalendario.setAttribute("componente", "bloqueCalendario")
-            bloqueCalendario.style.top = alturaDinamica + "px"
-
-            const contenedoCalendarioIntermedio = document.createElement("div")
-            contenedoCalendarioIntermedio.setAttribute("class", "componentes_calendario_contenedorCalentadioIntermedio")
-
-
-            //bloqueCalendario.appendChild(cartelInfoCalendarioEstado)
-            //bloqueCalendario.style.visibility = "hidden"
-            const mensajeSpinner = "Construyendo calendario..."
-            const spinner = casaVitini.componentes.spinner(mensajeSpinner)
-            const contenedorCarga = document.createElement("div")
-            contenedorCarga.classList.add("componente_calendario_contenedoCarga")
-            contenedorCarga.setAttribute("contenedor", "contruyendoCalendario")
-            contenedorCarga.setAttribute("elemento", "flotante")
-            contenedorCarga.appendChild(spinner)
-
-            contenedoCalendarioIntermedio.appendChild(calendario)
-            contenedoCalendarioIntermedio.appendChild(contenedorCarga)
-            bloqueCalendario.appendChild(contenedoCalendarioIntermedio)
-
-            document.body.appendChild(bloqueCalendario)
 
         },
         constructorCalendarioIncrustado: (metadatos) => {
@@ -7257,4290 +7292,2251 @@ const casaVitini = {
 
         },
         constructorMesNuevo: async (calendario) => {
-
-            const instanciaUID = calendario.instanciaUID
-            const selectorCalendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-            const instanciaUID_ProcesoCambioMes = calendario.instanciaUID_ProcesoCambioMes
-            if (!selectorCalendarioRenderizado) {
-                return
-            }
-            if (instanciaUID_ProcesoCambioMes) {
-                const selectorMarcoMesRenderizadoEnEspera = selectorCalendarioRenderizado
-                    .querySelector(`[inctanciaUID_procesoCambioMes="${instanciaUID_ProcesoCambioMes}"]`)
-                if (!selectorMarcoMesRenderizadoEnEspera) {
-
+            try {
+                const instanciaUID = calendario.instanciaUID
+                const selectorCalendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                const instanciaUID_procesoCambioMes = calendario.instanciaUID_procesoCambioMes
+                const metodoSelectorDia = selectorCalendarioRenderizado.querySelector("[metodoSelectorDia]").getAttribute("metodoSelectorDia")
+                if (!selectorCalendarioRenderizado) {
                     return
                 }
-            }
-
-            const nombreMes = ["Enero", "Febrero", "Marzo", "Abrir", "Mayo", "Junio", "Julio", "Agost", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-            const nombreMesFinal = nombreMes[calendario.mes - 1]
-            const indicadorMesAno = nombreMesFinal + " " + calendario.ano
-
-            const navegacionMesReferencia = selectorCalendarioRenderizado.querySelector("[componente=mesReferencia]")
-
-            navegacionMesReferencia.innerText = indicadorMesAno
-            navegacionMesReferencia.setAttribute("ano", calendario.ano)
-            navegacionMesReferencia.setAttribute("mes", calendario.mes)
-            const infoCalendario = selectorCalendarioRenderizado.querySelector("[componente=infoCalendario]")
-
-            const posicionDia1 = calendario.posicionDia1
-            const numeroDiasPorMes = calendario.numeroDiasPorMes;
-            const diaActual = calendario.dia
-
-            const marcoCalendario = selectorCalendarioRenderizado.querySelector("[componente=marcoCalendario]")
-            const tipoCalendario = marcoCalendario?.getAttribute("IO")
-
-            selectorCalendarioRenderizado.querySelectorAll("[dia]").forEach(diaObsoleto => {
-                diaObsoleto.remove()
-            });
-            const perfilMes = marcoCalendario?.getAttribute("perfilMes")
-
-            const controlDiasCompletos = {
-                zona: "componentes/diasOcupadosTotalmentePorMes",
-                mes: Number(calendario.mes),
-                ano: Number(calendario.ano)
-            }
-
-            // const diasOcupadosResuelto = await casaVitini.componentes.servidor(controlDiasCompletos)
-            // const detallesDiasOcupacion = diasOcupadosResuelto.ok.dias || {} 
-            const detallesDiasOcupacion = {}
-
-            let marcoMes
-            if (instanciaUID_ProcesoCambioMes) {
-                marcoMes = selectorCalendarioRenderizado.querySelector(`[componente=marcoCalendario] [componente=marcoMes][inctanciaUID_procesoCambioMes="${instanciaUID_ProcesoCambioMes}"]`)
-                if (!marcoMes) {
-                    return
-                }
-            } else {
-                marcoMes = selectorCalendarioRenderizado.querySelector(`[componente=marcoCalendario] [componente=marcoMes]`)
-            }
-            let tipodia;
-            if (perfilMes === "diaEntradaAsistido") {
-                tipodia === "hoy"
-            }
-            if (perfilMes === "diaSalidaAsistido") {
-                tipodia === "diaEntradaSeleccionado"
-            }
-            if (perfilMes === "diaEntradaAsistidoSinPasado") {
-                const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaVolatil_Humana) {
-                    const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
-                    diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
-                    mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
-                    anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaVolatil_Humana) {
-                    const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
-                    diaSeleccionadoSalida = Number(fechaSaliraArray[0])
-                    mesSeleccionadoSalida = Number(fechaSaliraArray[1])
-                    anoSeleccionadoSalida = Number(fechaSaliraArray[2])
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-                const limitesPublicos = calendario.limites
-                const diasAntelacion = limitesPublicos.diasAntelacion
-                const limiteFuturo = limitesPublicos.limiteFuturo
-                const diasMaximoReserva = limitesPublicos.diasMaximoReserva
-
-                const fechaActualPublica = calendario.fechaActualPublica
-
-                const mesActual = calendario.mes
-                const anoActual = calendario.ano
-
-                marcoCalendario?.setAttribute("perfilMes", perfilMes)
-
-                const verficaRangoInernamente = (mesActual, anoActual, fechaEntrada_ISO_, fechaSalida_ISO_) => {
-                    const inicio = new Date(fechaEntrada_ISO_);
-                    const fin = new Date(fechaSalida_ISO_);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-                const fechaEntrada_ISO = `${anoSeleccionadoEntrada}-${String(mesSeleccionadoEntrada).padStart(2, "0")}-${String(diaSeleccionadoEntrada).padStart(2, "0")}`
-                const fechaSalida_ISO = `${anoSeleccionadoSalida}-${String(mesSeleccionadoSalida).padStart(2, "0")}-${String(diaSeleccionadoSalida).padStart(2, "0")}`
-                const fechaLimitePorDiasDeDuracion = (fechaSeleccionada_ISO, diasMaximos) => {
-                    console.log(">>", fechaSeleccionada_ISO, diasMaximos)
-
-                    // Definir la fecha inicial
-                    const ok = {
-                        arbol: {},
-                        fecha: {}
-                    }
-                    if (fechaSeleccionada_ISO) {
-                        const fechaLimitePorSeleccion = new Date(fechaSeleccionada_ISO); // Asegúrate de que el formato de la fecha sea 'YYYY-MM-DD'
-                        // Definir el número de días que deseas sumar
-                        const numeroDeDiasASumar = Number(diasMaximos);
-                        // Sumar los días a la fecha inicial
-                        fechaLimitePorSeleccion.setDate(fechaLimitePorSeleccion.getDate() - numeroDeDiasASumar);
-                        const fechaAdelantada = fechaLimitePorSeleccion
-                        const dia = fechaLimitePorSeleccion.getDate();
-                        const mes = fechaLimitePorSeleccion.getMonth() + 1; // Los meses se indexan desde 0 (enero) a 11 (diciembre)
-                        const ano = fechaLimitePorSeleccion.getFullYear();
-                        // Imprimir la nueva fecha
-                        ok.fecha.ano = ano
-                        ok.fecha.mes = mes
-                        ok.fecha.dia = dia
-                        ok.arbol[ano] = {
-                            [mes]: {
-                                [dia]: true
-                            }
-                        }
-
-
-                    }
-                    console.log("entrada ok", ok)
-                    return ok
-                }
-                const objetoFechaLimitePorDias = fechaLimitePorDiasDeDuracion(fechaSalida_ISO, diasMaximoReserva)
-
-
-                let controladorRango;
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntrada_ISO, fechaSalida_ISO)) {
-                    controladorRango = "interno"
-                }
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.addEventListener("click", casaVitini.ui.vistas.reservasNuevo.seleccionarDia)
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal < diaActual) {
-                            bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            bloqueDia.setAttribute("estadoDia", "noDisponible")
-
-                        }
-                    }
-
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-
-                    if (diasAntelacion[anoActual] &&
-                        diasAntelacion[anoActual][mesActual] &&
-                        diasAntelacion[anoActual][mesActual][diaFinal]) {
-                        bloqueDia.classList.add("calendarioDiaNoDisponiblePorAntelacion")
-                        bloqueDia.setAttribute("estadoDia", "noDisponible")
-
-                    }
-                    if (anoActual === limiteFuturo.ano && mesActual === limiteFuturo.mes) {
-                        if (diaFinal > limiteFuturo.dia) {
-                            bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            bloqueDia.setAttribute("estadoDia", "noDisponible")
-                        }
-                    }
-
-                    if (!datosFechaEntradaSeleccionada && !datosFechaSalidaSeleccionada) {
-
-                        if (calendario.tiempo === "presente") {
-                            if (diaActual < diaFinal) {
-                                if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                    bloqueDia.setAttribute("estadoDia", "disponible")
-                                    bloqueDia.classList.add("calendarioDiaDisponible")
-                                }
-                            }
-                        }
-                        if (calendario.tiempo === "futuro") {
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.setAttribute("estado", "disponible")
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-
-
-                    } else if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-
-                        if (
-                            (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
-                            &&
-                            (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
-                        ) {
-                            // si es mes de entrada y salida
-                            console.log("4")
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-
-                        } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
-                            // Si es mes de entrada
-                            console.log("1")
-
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (calendario.tiempo === "futuro") {
-                                if (diaFinal < diaSeleccionadoEntrada) {
-                                    bloqueDia.classList.add("calendarioDiaDisponible")
-                                }
-                            }
-                        } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            console.log("2")
-                            // si es mes de salida pero no de entrada
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                        } else {
-                            // Entonces ver si es mes intermedio
-                            if (anoSeleccionadoEntrada === anoSeleccionadoSalida) {
-                                if (
-                                    (anoActual === anoSeleccionadoEntrada)
-                                    &&
-                                    (mesActual > mesSeleccionadoEntrada && mesActual < mesSeleccionadoSalida)
-                                ) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-                            } else if (anoSeleccionadoEntrada !== anoSeleccionadoSalida) {
-                                if (anoActual >= anoSeleccionadoEntrada && anoActual <= anoSeleccionadoSalida) {
-                                    if (mesActual > mesSeleccionadoEntrada || mesActual < mesSeleccionadoSalida) {
-                                        bloqueDia.classList.add("calendarioDiaReserva")
-                                    }
-                                }
-                            }
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-
-                            }
-
-
-                        }
-                    }
-                    else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
-                        console.log(">> 1")
-
-
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-
-                        }
-                    }
-                    else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-                    }
-
-                    if (datosFechaSalidaSeleccionada === "existen") {
-                        if (objetoFechaLimitePorDias.arbol[anoActual] &&
-                            objetoFechaLimitePorDias.arbol[anoActual][mesActual]) {
-                            const diaEntradaLimiteReserva = objetoFechaLimitePorDias.fecha.dia
-                            if (diaFinal < diaEntradaLimiteReserva) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-
-                            }
-                        }
-                    }
-
-
-                    if (calendario.tiempo === "presente" && diaActual === diaFinal) {
-                        bloqueDia.style.border = "3px solid white";
-                        bloqueDia.setAttribute("tipoDia", "hoy")
-                    }
-
-                    bloqueDia.innerText = diaFinal
-                    marcoMes.appendChild(bloqueDia)
-                }
-
-                if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                    let patronConsulta = `[dia='${diaSeleccionadoEntrada}']`
-
-                }
-
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-
-                if (datosFechaSalidaSeleccionada === "existen") {
-                    if (anoActual < anoSeleccionadoSalida) {
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                        console.log("1")
-                    } else if (anoActual === anoSeleccionadoSalida && mesActual < mesSeleccionadoSalida) {
-                        console.log("2")
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                    } else {
-                        console.log("5")
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-                    }
-                } else if (calendario.tiempo === "presente" || calendario.tiempo === "futuro") {
-                    if (anoActual < limiteFuturo.ano) {
-                        console.log("3")
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                    } else if (anoActual === limiteFuturo.ano && mesActual < limiteFuturo.mes) {
-                        console.log("4")
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                    } else {
-                        console.log("5")
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
+                if (instanciaUID_procesoCambioMes) {
+                    const selectorMarcoMesRenderizadoEnEspera = selectorCalendarioRenderizado
+                        .querySelector(`[inctanciaUID_procesoCambioMes="${instanciaUID_procesoCambioMes}"]`)
+                    if (!selectorMarcoMesRenderizadoEnEspera) {
+                        return
                     }
                 }
-                if (
-                    (datosFechaSalidaSeleccionada === "existen")
-                    &&
-                    (objetoFechaLimitePorDias.arbol[anoActual][mesActual])
-                ) {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-                } else if (calendario.tiempo === "futuro" ||
-                    (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)) {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                const nombreMes = [
+                    "Enero",
+                    "Febrero",
+                    "Marzo",
+                    "Abrir",
+                    "Mayo",
+                    "Junio",
+                    "Julio",
+                    "Agost",
+                    "Septiembre",
+                    "Octubre",
+                    "Noviembre",
+                    "Diciembre"
+                ]
+                const nombreMesFinal = nombreMes[calendario.mes - 1]
+                const indicadorMesAno = nombreMesFinal + " " + calendario.ano
+
+                const navegacionMesReferencia = selectorCalendarioRenderizado.querySelector("[componente=mesReferencia]")
+
+                navegacionMesReferencia.innerText = indicadorMesAno
+                navegacionMesReferencia.setAttribute("ano", calendario.ano)
+                navegacionMesReferencia.setAttribute("mes", calendario.mes)
+                const infoCalendario = selectorCalendarioRenderizado.querySelector("[componente=infoCalendario]")
+
+                const posicionDia1 = calendario.posicionDia1
+                const numeroDiasPorMes = calendario.numeroDiasPorMes;
+                const diaActual = calendario.dia
+
+                const marcoCalendario = selectorCalendarioRenderizado.querySelector("[componente=marcoCalendario]")
+                const tipoCalendario = marcoCalendario?.getAttribute("IO")
+
+                selectorCalendarioRenderizado.querySelectorAll("[dia]").forEach(diaObsoleto => {
+                    diaObsoleto.remove()
+                });
+                const perfilMes = marcoCalendario?.getAttribute("perfilMes")
+
+                const controlDiasCompletos = {
+                    zona: "componentes/diasOcupadosTotalmentePorMes",
+                    mes: Number(calendario.mes),
+                    ano: Number(calendario.ano)
+                }
+
+                // const diasOcupadosResuelto = await casaVitini.componentes.servidor(controlDiasCompletos)
+                // const detallesDiasOcupacion = diasOcupadosResuelto.ok.dias || {} 
+                const detallesDiasOcupacion = {}
+
+                let marcoMes
+                if (instanciaUID_procesoCambioMes) {
+                    marcoMes = selectorCalendarioRenderizado.querySelector(`[componente=marcoCalendario] [componente=marcoMes][inctanciaUID_procesoCambioMes="${instanciaUID_procesoCambioMes}"]`)
+                    if (!marcoMes) {
+                        return
+                    }
                 } else {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
+                    marcoMes = selectorCalendarioRenderizado.querySelector(`[componente=marcoCalendario] [componente=marcoMes]`)
                 }
 
-            }
-            if (perfilMes === "diaSalidaAsistidoSinPasado") {
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-
-                const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaVolatil_Humana) {
-                    const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
-                    diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
-                    mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
-                    anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaVolatil_Humana) {
-                    const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
-                    diaSeleccionadoSalida = Number(fechaSaliraArray[0])
-                    mesSeleccionadoSalida = Number(fechaSaliraArray[1])
-                    anoSeleccionadoSalida = Number(fechaSaliraArray[2])
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                const mesActual = calendario.mes
-                const anoActual = calendario.ano
-
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-                const fechaEntradaSeleccionada_ISO = `${anoSeleccionadoEntrada}-${String(mesSeleccionadoEntrada).padStart(2, "0")}-${String(diaSeleccionadoEntrada).padStart(2, "0")}`
-                const fechaSalidaSeleccionada_ISO = `${anoSeleccionadoSalida}-${String(mesSeleccionadoSalida).padStart(2, "0")}-${String(diaSeleccionadoSalida).padStart(2, "0")}`
-
-                let controladorRango;
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaSeleccionada_ISO, fechaSalidaSeleccionada_ISO)) {
-                    controladorRango = "interno"
-                }
-                const limitesPublicos = calendario.limites
-                const diasAntelacion = limitesPublicos.diasAntelacion
-                const limiteFuturo = limitesPublicos.limiteFuturo
-                const diasMaximoReserva = limitesPublicos.diasMaximoReserva
-                const fechaActualPublica = calendario.fechaActualPublica
-
-                const fechaLimitePorDiasDeDuracion = (fechaSeleccionada_ISO, diasMaximos) => {
-                    // Definir la fecha inicial
-                    const ok = {
-                        arbol: {},
-                        fecha: {}
+                if (perfilMes === "calendario_entrada_publico_sinPasado") {
+                    const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                    let diaSeleccionadoEntrada
+                    let mesSeleccionadoEntrada
+                    let anoSeleccionadoEntrada
+                    let datosFechaEntradaSeleccionada
+                    if (fechaEntradaVolatil_Humana) {
+                        const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
+                        diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
+                        mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
+                        anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
+                        datosFechaEntradaSeleccionada = "existen"
                     }
-                    if (fechaSeleccionada_ISO) {
-                        const fechaLimitePorSeleccion = new Date(fechaSeleccionada_ISO); // Asegúrate de que el formato de la fecha sea 'YYYY-MM-DD'
-                        // Definir el número de días que deseas sumar
-                        const numeroDeDiasASumar = Number(diasMaximos);
-                        // Sumar los días a la fecha inicial
-                        fechaLimitePorSeleccion.setDate(fechaLimitePorSeleccion.getDate() + numeroDeDiasASumar);
-                        const fechaAdelantada = fechaLimitePorSeleccion
-                        const dia = fechaLimitePorSeleccion.getDate();
-                        const mes = fechaLimitePorSeleccion.getMonth() + 1; // Los meses se indexan desde 0 (enero) a 11 (diciembre)
-                        const ano = fechaLimitePorSeleccion.getFullYear();
-                        // Imprimir la nueva fecha
-                        ok.fecha.ano = ano
-                        ok.fecha.mes = mes
-                        ok.fecha.dia = dia
-                        ok.arbol[ano] = {
-                            [mes]: {
-                                [dia]: true
+
+                    const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                    let diaSeleccionadoSalida
+                    let mesSeleccionadoSalida
+                    let anoSeleccionadoSalida
+                    let datosFechaSalidaSeleccionada
+                    if (fechaSalidaVolatil_Humana) {
+                        const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
+                        diaSeleccionadoSalida = Number(fechaSaliraArray[0])
+                        mesSeleccionadoSalida = Number(fechaSaliraArray[1])
+                        anoSeleccionadoSalida = Number(fechaSaliraArray[2])
+                        datosFechaSalidaSeleccionada = "existen"
+                    }
+                    const limitesPublicos = calendario.limites
+                    const diasAntelacion = limitesPublicos.diasAntelacion
+                    const limiteFuturo = limitesPublicos.limiteFuturo
+                    const diasMaximoReserva = limitesPublicos.diasMaximoReserva
+
+                    const fechaActualPublica = calendario.fechaActualPublica
+
+                    const mesActual = calendario.mes
+                    const anoActual = calendario.ano
+
+                    marcoCalendario?.setAttribute("perfilMes", perfilMes)
+                    const verificaRangoInternamente = (
+                        mesActual,
+                        anoActual,
+                        fechaInicio,
+                        fechaSalida
+                    ) => {
+                        const inicio = new Date(fechaInicio);
+                        const fin = new Date(fechaSalida);
+
+                        const inicioMesAno = new Date(inicio.getFullYear(), inicio.getMonth());
+                        const finMesAno = new Date(fin.getFullYear(), fin.getMonth());
+                        const fechaMesAno = new Date(anoActual, mesActual - 1);
+                        return fechaMesAno >= inicioMesAno && fechaMesAno <= finMesAno;
+                    };
+
+                    const fechaEntrada_ISO = `${anoSeleccionadoEntrada}-${String(mesSeleccionadoEntrada).padStart(2, "0")}-${String(diaSeleccionadoEntrada).padStart(2, "0")}`
+                    const fechaSalida_ISO = `${anoSeleccionadoSalida}-${String(mesSeleccionadoSalida).padStart(2, "0")}-${String(diaSeleccionadoSalida).padStart(2, "0")}`
+                    const fechaLimitePorDiasDeDuracion = (fechaSeleccionada_ISO, diasMaximos) => {
+                        console.log(">>", fechaSeleccionada_ISO, diasMaximos)
+
+                        // Definir la fecha inicial
+                        const ok = {
+                            arbol: {},
+                            fecha: {}
+                        }
+                        if (fechaSeleccionada_ISO) {
+                            const fechaLimitePorSeleccion = new Date(fechaSeleccionada_ISO); // Asegúrate de que el formato de la fecha sea 'YYYY-MM-DD'
+                            // Definir el número de días que deseas sumar
+                            const numeroDeDiasASumar = Number(diasMaximos);
+                            // Sumar los días a la fecha inicial
+                            fechaLimitePorSeleccion.setDate(fechaLimitePorSeleccion.getDate() - numeroDeDiasASumar);
+                            const fechaAdelantada = fechaLimitePorSeleccion
+                            const dia = fechaLimitePorSeleccion.getDate();
+                            const mes = fechaLimitePorSeleccion.getMonth() + 1; // Los meses se indexan desde 0 (enero) a 11 (diciembre)
+                            const ano = fechaLimitePorSeleccion.getFullYear();
+                            // Imprimir la nueva fecha
+                            ok.fecha.ano = ano
+                            ok.fecha.mes = mes
+                            ok.fecha.dia = dia
+                            ok.arbol[ano] = {
+                                [mes]: {
+                                    [dia]: true
+                                }
                             }
                         }
+                        console.log("entrada ok", ok)
+                        return ok
                     }
-                    console.log("ok", ok)
-                    return ok
-                }
-                const objetoFechaLimitePorDias = fechaLimitePorDiasDeDuracion(fechaEntradaSeleccionada_ISO, diasMaximoReserva)
-
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.classList.add("dia")
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.addEventListener("click", casaVitini.ui.vistas.reservasNuevo.seleccionarDia)
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal < diaActual) {
-                            bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            bloqueDia.setAttribute("estadoDia", "noDisponible")
-
+                    const objetoFechaLimitePorDias = fechaLimitePorDiasDeDuracion(fechaSalida_ISO, diasMaximoReserva)
+                    for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
+                        let diaFinal = numeroDia + 1;
+                        const bloqueDia = document.createElement("li")
+                        bloqueDia.setAttribute("class", "dia")
+                        if (diaFinal === 1) {
+                            bloqueDia.style.gridColumnStart = posicionDia1
                         }
-                    }
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-                    if (diasAntelacion[anoActual] &&
-                        diasAntelacion[anoActual][mesActual] &&
-                        diasAntelacion[anoActual][mesActual][diaFinal]) {
-                        bloqueDia.classList.add("calendarioDiaNoDisponiblePorAntelacion")
-                        bloqueDia.setAttribute("estadoDia", "noDisponible")
-
-                    }
-
-                    if (objetoFechaLimitePorDias.arbol[anoActual] &&
-                        objetoFechaLimitePorDias.arbol[anoActual][mesActual]) {
-                        const diaSalidaLimiteReserva = objetoFechaLimitePorDias.fecha.dia
-                        if (diaFinal > diaSalidaLimiteReserva) {
-                            bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            bloqueDia.setAttribute("estadoDia", "noDisponible")
-                        }
-                    }
-                    if (anoActual === limiteFuturo.ano && mesActual === limiteFuturo.mes) {
-                        if (diaFinal > limiteFuturo.dia) {
-                            bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            bloqueDia.setAttribute("estadoDia", "noDisponible")
-                        }
-                    }
-                    if (!datosFechaEntradaSeleccionada && !datosFechaSalidaSeleccionada) {
+                        bloqueDia.setAttribute("dia", diaFinal)
+                        bloqueDia.addEventListener("click", casaVitini.ui.vistas.reservasNuevo.seleccionarDia)
                         if (calendario.tiempo === "presente") {
-                            if (diaActual < diaFinal) {
+                            if (diaFinal < diaActual) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                bloqueDia.setAttribute("estadoDia", "noDisponible")
+
+                            }
+                        }
+
+
+                        if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
+                            bloqueDia.classList.add("calendarioDiaParcial")
+                        }
+                        if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
+                            bloqueDia.classList.add("calendarioDiaCompleto")
+                        }
+
+                        if (diasAntelacion[anoActual] &&
+                            diasAntelacion[anoActual][mesActual] &&
+                            diasAntelacion[anoActual][mesActual][diaFinal]) {
+                            bloqueDia.classList.add("calendarioDiaNoDisponiblePorAntelacion")
+                            bloqueDia.setAttribute("estadoDia", "noDisponible")
+
+                        }
+                        if (anoActual === limiteFuturo.ano && mesActual === limiteFuturo.mes) {
+                            if (diaFinal > limiteFuturo.dia) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                bloqueDia.setAttribute("estadoDia", "noDisponible")
+                            }
+                        }
+
+                        if (!datosFechaEntradaSeleccionada && !datosFechaSalidaSeleccionada) {
+
+                            if (calendario.tiempo === "presente") {
+                                if (diaActual < diaFinal) {
+                                    if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                        bloqueDia.setAttribute("estadoDia", "disponible")
+                                        bloqueDia.classList.add("calendarioDiaDisponible")
+                                    }
+                                }
+                            }
+                            if (calendario.tiempo === "futuro") {
                                 if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                    bloqueDia.setAttribute("estadoDia", "disponible")
+                                    bloqueDia.setAttribute("estado", "disponible")
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            }
+
+
+                        } else if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
+                            if (
+                                (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
+                                &&
+                                (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
+                            ) {
+                                // si es mes de entrada y salida
+                                console.log("4")
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                }
+                                if (diaFinal < diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                }
+                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                }
+
+                            } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
+                                // Si es mes de entrada
+                                console.log("1")
+
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                }
+                                if (diaFinal > diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                                if (calendario.tiempo === "futuro") {
+                                    if (diaFinal < diaSeleccionadoEntrada) {
+                                        bloqueDia.classList.add("calendarioDiaDisponible")
+                                    }
+                                }
+                            } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                                console.log("2")
+                                // si es mes de salida pero no de entrada
+                                if (diaFinal < diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                }
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                }
+                            } else {
+                                // Entonces ver si es mes intermedio
+                                if (verificaRangoInternamente(mesActual, anoActual, fechaEntrada_ISO, fechaSalida_ISO)) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }else{
+                                    if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                        bloqueDia.classList.add("calendarioDiaDisponible")
+                                    }
+                                }
+                            }
+                        }
+                        else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
+                            console.log(">> 1")
+
+
+                            if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                }
+
+                            }
+                        }
+                        else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
+                            if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                }
+                                if (diaFinal < diaSeleccionadoSalida) {
                                     bloqueDia.classList.add("calendarioDiaDisponible")
                                 }
                             }
                         }
-                        if (calendario.tiempo === "futuro") {
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.setAttribute("estadoDia", "disponible")
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-
-                    } else if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-
-                        if (
-                            (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
-                            &&
-                            (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
-                        ) {
-                            // si es mes de entrada y salida
-                            console.log("41")
-
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-
-                            }
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
 
 
 
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                                bloqueDia.setAttribute("destino", "1")
-                            }
 
-                        } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
-                            // Si es mes de entrada
-                            console.log("1")
 
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
 
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                // replicar esto
-                                if (bloqueDia.getAttribute("estadoDia") === "noDisponible") {
-                                }
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
 
-                            if (calendario.tiempo === "futuro") {
-                                if (diaFinal < diaSeleccionadoEntrada) {
-                                    // bloqueDia.classList.add("calendarioDiaDisponible")
+                        if (datosFechaSalidaSeleccionada === "existen") {
+                            if (objetoFechaLimitePorDias.arbol[anoActual] &&
+                                objetoFechaLimitePorDias.arbol[anoActual][mesActual]) {
+                                const diaEntradaLimiteReserva = objetoFechaLimitePorDias.fecha.dia
+                                if (diaFinal < diaEntradaLimiteReserva) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+
                                 }
                             }
-                        } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            console.log("2")
-                            // si es mes de salida pero no de entrada
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-
-
-
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-
-                            }
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-
-                            }
-                        } else {
-                            // Entonces ver si es mes intermedio
-                            if (anoSeleccionadoEntrada === anoSeleccionadoSalida) {
-                                if (
-                                    (anoActual === anoSeleccionadoEntrada)
-                                    &&
-                                    (mesActual > mesSeleccionadoEntrada && mesActual < mesSeleccionadoSalida)
-                                ) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-                            } else if (anoSeleccionadoEntrada !== anoSeleccionadoSalida) {
-                                if (anoActual >= anoSeleccionadoEntrada && anoActual <= anoSeleccionadoSalida) {
-                                    if (mesActual > mesSeleccionadoEntrada || mesActual < mesSeleccionadoSalida) {
-                                        bloqueDia.classList.add("calendarioDiaReserva")
-                                    }
-                                }
-                            }
-
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-
-                            }
                         }
-                    }
-                    else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        } else {
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-
-
-
-                    }
-                    else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        } else {
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-                    }
-
-
-
-
-                    if (calendario.tiempo === "presente" && diaActual === diaFinal) {
-                        bloqueDia.style.border = "3px solid white";
-                        bloqueDia.setAttribute("tipoDia", "hoy")
-                    }
-                    bloqueDia.innerText = diaFinal
-                    marcoMes.appendChild(bloqueDia)
-                }
-
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-
-                if (datosFechaEntradaSeleccionada === "existen") {
-                    if (anoActual > anoSeleccionadoEntrada) {
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                    } else if (anoActual === anoSeleccionadoEntrada && mesActual > mesSeleccionadoEntrada) {
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                    } else {
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-                    }
-                } else if (calendario.tiempo === "futuro") {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                } else if (calendario.tiempo === "presente") {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-                }
-
-                if (
-                    (datosFechaEntradaSeleccionada === "existen")
-                    &&
-                    (objetoFechaLimitePorDias.arbol[anoActual][mesActual])
-                ) {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-
-
-                } else if (calendario.tiempo === "presente" || calendario.tiempo === "futuro") {
-                    if (anoActual < limiteFuturo.ano) {
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                    } else if (anoActual === limiteFuturo.ano && mesActual < limiteFuturo.mes) {
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                    } else {
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-                    }
-                }
-
-
-
-            }
-            if (perfilMes === "diaEntradaAsistidoConPasado") {
-
-                const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaVolatil_Humana) {
-                    const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
-                    diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
-                    mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
-                    anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-
-
-
-                const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaVolatil_Humana) {
-                    const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
-                    diaSeleccionadoSalida = Number(fechaSaliraArray[0])
-                    mesSeleccionadoSalida = Number(fechaSaliraArray[1])
-                    anoSeleccionadoSalida = Number(fechaSaliraArray[2])
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-
-                marcoCalendario?.setAttribute("perfilMes", perfilMes)
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.reservas.seleccionarDia)
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
+                        if (calendario.tiempo === "presente" && diaActual === diaFinal) {
                             bloqueDia.style.border = "3px solid white";
                             bloqueDia.setAttribute("tipoDia", "hoy")
-                            // bloqueDia.setAttribute("estado", "deshabilitado")
-
-                            // bloqueDia.style.pointerEvents = "none"
                         }
-
-                        //   let navegacionMesReferencia = document.querySelector("section:not([Estado=Obsoleo]) #navegacionMesReferencia")
-                        //   navegacionMesReferencia.setAttribute("tiempo", "presente")
+                        bloqueDia.innerText = diaFinal
+                        marcoMes.appendChild(bloqueDia)
                     }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
                     if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                        if (diaSeleccionadoEntrada === diaFinal) {
-                            bloqueDia.style.background = "black"
-                            bloqueDia.style.color = "white"
-                            bloqueDia.setAttribute("tipoDia", "diaEntradaSelecionado")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-
-                        }
-
-                        /*    if (diaSeleccionadoEntrada > diaFinal) {
-                                bloqueDia.style.color = "pink"
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-             
-                            }*/
+                        let patronConsulta = `[dia='${diaSeleccionadoEntrada}']`
 
                     }
-
-
-                    if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                        if (diaSeleccionadoSalida === diaFinal) {
-                            bloqueDia.style.background = "grey"
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-
-                        }
-
-                        if (diaSeleccionadoSalida < diaFinal) {
-                            bloqueDia.style.color = "grey"
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                        }
-                    }
-                    bloqueDia.innerText = diaFinal
-                    marcoMes.appendChild(bloqueDia)
-                }
-
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-
-                if (mesActual === diaSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                    // Ojo con usar template strings en los queryselectors
-                    const patronConsulta = `[dia="${diaSeleccionadoEntrada}"]`
-                    selectorCalendarioRenderizado.querySelector(patronConsulta).style.background = "black"
-                    selectorCalendarioRenderizado.querySelector(patronConsulta).style.color = "white"
-                }
-
-                if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-                }
-
-            }
-            // Inicio del calendario obsoleto
-            if (perfilMes === "diaSalidaAsistido") {
-                marcoCalendario?.setAttribute("perfilMes", perfilMes)
-
-                const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaVolatil_Humana) {
-                    const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
-                    diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
-                    mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
-                    anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaVolatil_Humana) {
-                    const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
-                    diaSeleccionadoSalida = Number(fechaSaliraArray[0])
-                    mesSeleccionadoSalida = Number(fechaSaliraArray[1])
-                    anoSeleccionadoSalida = Number(fechaSaliraArray[2])
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-
-
-
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid white";
-                            bloqueDia.setAttribute("tipodia", "hoy")
-                        }
-
-                    }
-
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-
-
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.reservas.seleccionarDia)
-
-
-
-                    if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-
-                        if (diaFinal === diaSeleccionadoSalida) {
-                            bloqueDia.style.background = "green"
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("tipodia", tipodia)
-
-                        }
-
-
-                    }
-
-
-                    if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                        if (diaSeleccionadoEntrada === diaFinal) {
-                            bloqueDia.style.background = "blue"
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-
-                        }
-
-                        if (diaSeleccionadoEntrada > diaFinal) {
-                            bloqueDia.style.color = "pink"
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-
-                        }
-
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-
-
-                    document.querySelector("#botonAtras").style.opacity = 1
-                    document.querySelector("#botonAtras").style.pointerEvents = "all"
-
-                    document.querySelector("#botonAdelante").style.opacity = 1
-                    document.querySelector("#botonAdelante").style.pointerEvents = "all"
-                    if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                        document.querySelector("#botonAtras").style.opacity = 0
-                        document.querySelector("#botonAtras").style.pointerEvents = "none"
-                    }
-
-
-
-
-                    bloqueDia.innerText = diaFinal
-                    marcoMes.appendChild(bloqueDia)
-                }
-
-
-                //  if (calendario.tiempo === "presente") {
-                //document.getElementById("navegacionMesReferencia").setAttribute("tiempo", "presente")
-                //  document.querySelector("#botonAtras").style.opacity = 0
-                //  document.querySelector("#botonAtras").style.pointerEvents = "none"
-                ///  }
-
-                //  if (calendario.tiempo === "Futuro") {
-                //  document.getElementById("navegacionMesReferencia").setAttribute("tiempo", "futuro")
-                //   document.querySelector("#botonAtras").style.opacity = 1
-                //   document.querySelector("#botonAtras").style.pointerEvents = "all"
-                //  }
-
-            }
-            // Fin del calenadrio obsoleto
-            if (perfilMes === "diaEntradaAsistidoReservaConPasado") {
-
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-
-                mesActual = String(mesActual).padStart(2, '0')
-                mesActual = Number(mesActual)
-
-                anoActual = String(anoActual).padStart(4, '0')
-                anoActual = Number(anoActual)
-
-                let reserva = document.querySelector("[reserva]")?.getAttribute("reserva")
-                let fechaEntradaReserva = document.querySelector("[calendario=entrada][fechaEntrada]")?.getAttribute("fechaEntrada")
-                fechaEntradaReserva = fechaEntradaReserva.split("/")
-
-                let diaEntradaReserva = fechaEntradaReserva[0]
-                diaEntradaReserva = Number(diaEntradaReserva)
-
-                let mesEntradaReserva = fechaEntradaReserva[1]
-                mesEntradaReserva = Number(mesEntradaReserva)
-
-                let anoEntradaReserva = fechaEntradaReserva[2]
-                anoEntradaReserva = Number(anoEntradaReserva)
-
-                let fechaSalidaReserva = document.querySelector("[calendario=salida][fechaSalida]")?.getAttribute("fechaSalida")
-                fechaSalidaReserva = fechaSalidaReserva.split("/")
-                let diaSalidaReserva = fechaSalidaReserva[0]
-                diaSalidaReserva = Number(diaSalidaReserva)
-
-                let mesSalidaReserva = fechaSalidaReserva[1]
-                mesSalidaReserva = Number(mesSalidaReserva)
-
-                let anoSalidaReserva = fechaSalidaReserva[2]
-                anoSalidaReserva = Number(anoSalidaReserva)
-
-                let fechaEntradaFormadoAAAAMMDD = `${anoEntradaReserva}-${mesEntradaReserva}-${diaEntradaReserva}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSalidaReserva}-${mesSalidaReserva}-${diaSalidaReserva}`
-
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-
-                    const mesValido = fecha > inicio && fecha < fin;
-                    const noEsInicioMes = fecha.getMonth() !== inicio.getMonth();
-                    const noEsFinMes = fecha.getMonth() !== fin.getMonth();
-
-                    return mesValido && noEsInicioMes && noEsFinMes;
-                }
-
-                const controlLimitePasado = {
-                    zona: "administracion/reservas/obtenerElasticidadDelRango",
-                    reserva: Number(reserva),
-                    mesCalendario: String(mesActual).padStart(2, '0'),
-                    anoCalendario: String(anoActual).padStart(2, '0'),
-                    sentidoRango: "pasado"
-                }
-
-                const resolverLimitePasado = await casaVitini.componentes.servidor(controlLimitePasado)
-                if (resolverLimitePasado.error) {
-                    const selectorCalendarioRenderizados = [...document.querySelectorAll("[componente=bloqueCalendario]")]
-                    selectorCalendarioRenderizados.map((calendario) => {
-                        calendario.remove()
-                    })
-                    return casaVitini.ui.vistas.advertenciaInmersiva(resolverLimitePasado.error)
-                }
-                let diaLimitePasado
-                let mesLimitePasado
-                let anoLimitePasado
-
-                const infoCalendario = selectorCalendarioRenderizado.querySelector("[componente=infoCalendario]")
-                if (resolverLimitePasado.ok === "rangoPasadoLibre") {
-                    infoCalendario.innerText = "Todo el mes disponible para seleccionar la nueva fecha de entrada de esta reserva"
-                }
-                if (resolverLimitePasado.limitePasado) {
-                    const fechaLimitePasado_Array = resolverLimitePasado.limitePasado.split("-")
-
-
-
-
-                    if (resolverLimitePasado.ok === "noHayRangoPasado") {
-                        infoCalendario.innerText = "La fecha de entrada de esta reserva no puede ser inferior a la actual por que no hay rango disponible"
-                        diaLimitePasado = Number(fechaLimitePasado_Array[2])
-                        mesLimitePasado = Number(fechaLimitePasado_Array[1])
-                        anoLimitePasado = Number(fechaLimitePasado_Array[0])
-                    }
-
-                    if (resolverLimitePasado.ok === "rangoPasadoLimitado") {
-                        infoCalendario.innerText = "Una parte de este mes esta disponible para seleccionar la nueva fecha de entrada para esta reserva"
-                        diaLimitePasado = Number(fechaLimitePasado_Array[2])
-                        mesLimitePasado = Number(fechaLimitePasado_Array[1])
-                        anoLimitePasado = Number(fechaLimitePasado_Array[0])
-                    }
-
-                }
-
-
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    const diaFinal = Number(numeroDia + 1);
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-
-                    if (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) {
-                        if (diaEntradaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-
-                            bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "E " + diaFinal
-
-                        }
-
-                        if (diaEntradaReserva < diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-
-                        }
-                    }
-                    if (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva) {
-                        if (diaSalidaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "S " + diaFinal
-                            bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-
-                        }
-                        if (diaSalidaReserva < diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.remove("calendarioDiaReserva")
-                            bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-                        }
-
-                        if (diaSalidaReserva > diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-                        }
-
-                    }
-                    if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                        bloqueDia.classList.remove("calendarioDiaDisponible")
-                        bloqueDia.classList.add("calendarioDiaReserva")
-                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-                    }
-                    if (resolverLimitePasado.limitePasado) {
-                        if (mesActual === mesLimitePasado && anoActual === anoLimitePasado) {
-                            if (diaLimitePasado === diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.remove("calendarioDiaReserva")
-
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-                                bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-                            }
-                            if (diaLimitePasado > diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.remove("calendarioDiaReserva")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-                                bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-                            }
-                        }
-
-                    }
-                    marcoMes.appendChild(bloqueDia)
-                }
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                // diaEntradaAsistidoReservaConPasado
-                if (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva) {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-
-                }
-                if (mesActual === mesLimitePasado && anoActual === anoLimitePasado) {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
                     selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-
-                }
-
-
-            }
-            if (perfilMes === "diaSalidaAsistidoReservaConPasado") {
-
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-
-                let reserva = document.querySelector("[reserva]")?.getAttribute("reserva")
-                let fechaSalidaReserva = document.querySelector("[calendario=salida][fechaSalida]")?.getAttribute("fechaSalida")
-                fechaSalidaReserva = fechaSalidaReserva.split("/")
-                let diaSalidaReserva = fechaSalidaReserva[0]
-                diaSalidaReserva = Number(diaSalidaReserva)
-
-                let mesSalidaReserva = fechaSalidaReserva[1]
-                mesSalidaReserva = Number(mesSalidaReserva)
-
-                let anoSalidaReserva = fechaSalidaReserva[2]
-                anoSalidaReserva = Number(anoSalidaReserva)
-
-                let fechaEntradaReserva = document.querySelector("[calendario=entrada][fechaEntrada]")?.getAttribute("fechaEntrada")
-                fechaEntradaReserva = fechaEntradaReserva.split("/")
-
-                let diaEntradaReserva = fechaEntradaReserva[0]
-                diaEntradaReserva = Number(diaEntradaReserva)
-
-                let mesEntradaReserva = fechaEntradaReserva[1]
-                mesEntradaReserva = Number(mesEntradaReserva)
-
-                let anoEntradaReserva = fechaEntradaReserva[2]
-                anoEntradaReserva = Number(anoEntradaReserva)
-
-
-                let fechaEntradaFormadoAAAAMMDD = `${anoEntradaReserva}-${mesEntradaReserva}-${diaEntradaReserva}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSalidaReserva}-${mesSalidaReserva}-${diaSalidaReserva}`
-
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-
-                    const mesValido = fecha > inicio && fecha < fin;
-                    const noEsInicioMes = fecha.getMonth() !== inicio.getMonth();
-                    const noEsFinMes = fecha.getMonth() !== fin.getMonth();
-
-                    return mesValido && noEsInicioMes && noEsFinMes;
-                }
-
-                const controlLimiteFuturo = {
-                    zona: "administracion/reservas/obtenerElasticidadDelRango",
-                    reserva: Number(reserva),
-                    mesCalendario: String(mesActual),
-                    anoCalendario: String(anoActual),
-                    sentidoRango: "futuro"
-                }
-                const resolverLimiteFuturo = await casaVitini.componentes.servidor(controlLimiteFuturo)
-
-                if (resolverLimiteFuturo.error) {
-                    const selectorCalendarioRenderizados = [...document.querySelectorAll("[componente=bloqueCalendario]")]
-                    selectorCalendarioRenderizados.map((calendario) => {
-                        calendario.remove()
-                    })
-                    return casaVitini.ui.vistas.advertenciaInmersiva(resolverLimiteFuturo.error)
-
-                }
-
-                let diaLimiteFuturo
-                let mesLimiteFuturo
-                let anoLimiteFuturo
-                if (resolverLimiteFuturo.ok === "rangoPasadoLibre") {
-                    infoCalendario.innerText = "Todo el mes disponible para seleccionar la nueva fecha de salida de esta reserva"
-                }
-                if (resolverLimiteFuturo.limiteFuturo) {
-                    const fechaLimiteFuturo_Array = resolverLimiteFuturo.limiteFuturo.split("-")
-
-                    if (resolverLimiteFuturo.ok === "noHayRangoFuturo") {
-                        infoCalendario.innerText = "La fecha de salida de esta reserva no puede ser superior a la actual por que no hay rango disponible"
-                        diaLimiteFuturo = Number(fechaLimiteFuturo_Array[2])
-                        mesLimiteFuturo = Number(fechaLimiteFuturo_Array[1])
-                        anoLimiteFuturo = Number(fechaLimiteFuturo_Array[0])
-                    }
-
-                    if (resolverLimiteFuturo.ok === "rangoFuturoLimitado") {
-                        infoCalendario.innerText = "Una parte de este mes esta disponible para seleccionar la nueva fecha de salida para esta reserva"
-                        diaLimiteFuturo = Number(fechaLimiteFuturo_Array[2])
-                        mesLimiteFuturo = Number(fechaLimiteFuturo_Array[1])
-                        anoLimiteFuturo = Number(fechaLimiteFuturo_Array[0])
-                    }
-
-
-
-
-                }
-
-                marcoCalendario?.setAttribute("perfilMes", perfilMes)
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-
-                        }
-                    }
-
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-                    if (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) {
-                        if (diaEntradaReserva > diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.remove("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-
-                        }
-                        if (diaEntradaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "E " + diaFinal
-                            bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-
-                        }
-                        if (diaEntradaReserva < diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaNoDisponible")
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            // bloqueDia.style.pointerEvents = "none"
-                            // bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-                        }
-
-                    }
-                    if (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva) {
-
-                        if (diaSalidaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "S " + diaFinal
-
-                        }
-                        if (diaSalidaReserva > diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaNoDisponible")
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-
-                        }
-
-                        if (diaSalidaReserva < diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaDisponible")
-                            //bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-                            //bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                        }
-                    }
-
-                    if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                        bloqueDia.classList.remove("calendarioDiaDisponible")
-                        bloqueDia.classList.add("calendarioDiaReserva")
-                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-                    }
-
-                    if (resolverLimiteFuturo.limiteFuturo) {
-                        if (mesActual === mesLimiteFuturo && anoActual === anoLimiteFuturo) {
-                            if (diaLimiteFuturo === diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-                                bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-
-                            }
-                            if (diaLimiteFuturo <= diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-                                bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-
-                            }
-                        }
-
-                    }
-                    marcoMes?.appendChild(bloqueDia)
-                }
-                // diaSalidaAsistidoReservaConPasado   
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-
-                if (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-
-                }
-
-                if (mesActual === mesLimiteFuturo && anoActual === anoLimiteFuturo) {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
                     selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
 
-                }
-
-            }
-            // Inicio buscar reserva adminitracion
-            if (perfilMes === "diaEntradaAsistidoConPasadoBuscarReserva") {
-
-                // Si hay fecha de entrada, posicionar el calendario en la fecha de entrada
-                // Si hay fecha de salida, limitar el calendario de entrada por la fecha de salida
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-
-
-
-                let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaSelecionda) {
-                    const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
-                    diaSeleccionadoEntrada = fechaEntradaSelecionda_array[0]
-                    diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                    mesSeleccionadoEntrada = fechaEntradaSelecionda_array[1]
-                    mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                    anoSeleccionadoEntrada = fechaEntradaSelecionda_array[2]
-                    anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaSelecionda) {
-                    const fechaSalidaSelecionda_array = fechaSalidaSelecionda.split("/")
-                    diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]
-                    diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
-                    mesSeleccionadoSalida = fechaSalidaSelecionda_array[1]
-                    mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
-                    anoSeleccionadoSalida = fechaSalidaSelecionda_array[2]
-                    anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                marcoCalendario?.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-                let fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-
-
-                let controladorRango;
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.reservas.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-
-                        if (
-                            (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
-                            &&
-                            (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
-                        ) {
-                            // si es mes de entrada y salida
-                            console.log("4")
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-
-                        } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
-                            // Si es mes de entrada
+                    if (datosFechaSalidaSeleccionada === "existen") {
+                        if (anoActual < anoSeleccionadoSalida) {
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
                             console.log("1")
-
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (calendario.tiempo === "futuro") {
-                                if (diaFinal < diaSeleccionadoEntrada) {
-                                    bloqueDia.classList.add("calendarioDiaDisponible")
-                                }
-                            }
-                        } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                        } else if (anoActual === anoSeleccionadoSalida && mesActual < mesSeleccionadoSalida) {
                             console.log("2")
-                            // si es mes de salida pero no de entrada
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
                         } else {
-                            // Entonces ver si es mes intermedio
-                            if (anoSeleccionadoEntrada === anoSeleccionadoSalida) {
-                                if (
-                                    (anoActual === anoSeleccionadoEntrada)
-                                    &&
-                                    (mesActual > mesSeleccionadoEntrada && mesActual < mesSeleccionadoSalida)
-                                ) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-                            } else if (anoSeleccionadoEntrada !== anoSeleccionadoSalida) {
-                                if (anoActual >= anoSeleccionadoEntrada && anoActual <= anoSeleccionadoSalida) {
-                                    if (mesActual > mesSeleccionadoEntrada || mesActual < mesSeleccionadoSalida) {
-                                        bloqueDia.classList.add("calendarioDiaReserva")
-                                    }
-                                }
-                            }
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-
-                            }
-
-
-                        }
-                    }
-                    else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
-                        console.log(">> 1")
-
-
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-
-                        }
-                    }
-                    else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-                    }
-
-
-                    marcoMes?.appendChild(bloqueDia)
-                }
-
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                if (datosFechaSalidaSeleccionada === "existen") {
-                    if (anoActual < anoSeleccionadoSalida) {
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                        console.log("1")
-                    } else if (anoActual === anoSeleccionadoSalida && mesActual < mesSeleccionadoSalida) {
-                        console.log("2")
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                    } else {
-                        console.log("5")
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-                    }
-                } else {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                }
-
-
-            }
-            if (perfilMes === "diaSalidaAsistidoConPasadoBuscarReserva") {
-
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-
-                let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaSelecionda) {
-                    const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
-                    diaSeleccionadoEntrada = fechaEntradaSelecionda_array[0]
-                    diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                    mesSeleccionadoEntrada = fechaEntradaSelecionda_array[1]
-                    mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                    anoSeleccionadoEntrada = fechaEntradaSelecionda_array[2]
-                    anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaSelecionda) {
-                    const fechaSalidaSelecionda_array = fechaSalidaSelecionda.split("/")
-                    diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]
-                    diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
-                    mesSeleccionadoSalida = fechaSalidaSelecionda_array[1]
-                    mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
-                    anoSeleccionadoSalida = fechaSalidaSelecionda_array[2]
-                    anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-
-                let fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-                let controladorRango
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.reservas.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-
-                        if (
-                            (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
-                            &&
-                            (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
-                        ) {
-                            // si es mes de entrada y salida
-                            console.log("41")
-
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-
-                            }
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-
-
-
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                                bloqueDia.setAttribute("destino", "1")
-                            }
-
-                        } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
-                            // Si es mes de entrada
-                            console.log("1")
-
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                // replicar esto
-                                if (bloqueDia.getAttribute("estadoDia") === "noDisponible") {
-                                }
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-
-                            if (calendario.tiempo === "futuro") {
-                                if (diaFinal < diaSeleccionadoEntrada) {
-                                    // bloqueDia.classList.add("calendarioDiaDisponible")
-                                }
-                            }
-                        } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            console.log("2")
-                            // si es mes de salida pero no de entrada
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-
-
-
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-
-                            }
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-
-                            }
-                        } else {
-                            // Entonces ver si es mes intermedio
-                            if (anoSeleccionadoEntrada === anoSeleccionadoSalida) {
-                                if (
-                                    (anoActual === anoSeleccionadoEntrada)
-                                    &&
-                                    (mesActual > mesSeleccionadoEntrada && mesActual < mesSeleccionadoSalida)
-                                ) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-                            } else if (anoSeleccionadoEntrada !== anoSeleccionadoSalida) {
-                                if (anoActual >= anoSeleccionadoEntrada && anoActual <= anoSeleccionadoSalida) {
-                                    if (mesActual > mesSeleccionadoEntrada || mesActual < mesSeleccionadoSalida) {
-                                        bloqueDia.classList.add("calendarioDiaReserva")
-                                    }
-                                }
-                            }
-
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-
-                            }
-                        }
-                    }
-                    else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        } else {
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-
-
-
-                    }
-                    else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        } else {
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-                    }
-                    marcoMes.appendChild(bloqueDia)
-                }
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-
-                if (datosFechaEntradaSeleccionada === "existen") {
-                    if (anoActual > anoSeleccionadoEntrada) {
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                    } else if (anoActual === anoSeleccionadoEntrada && mesActual > mesSeleccionadoEntrada) {
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                    } else {
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-                    }
-                } else {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                }
-
-
-            }
-            // Fin buscar reserva adminitracion
-            if (perfilMes === "diaEntradaAsistidoConPasadoCrearReserva") {
-
-                // Si hay fecha de entrada, posicionar el calendario en la fecha de entrada
-                // Si hay fecha de salida, limitar el calendario de entrada por la fecha de salida
-                const mesActual = calendario.mes
-                const anoActual = calendario.ano
-
-                /*
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-                */
-                let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaSelecionda) {
-                    const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
-                    diaSeleccionadoEntrada = fechaEntradaSelecionda_array[0]
-                    diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                    mesSeleccionadoEntrada = fechaEntradaSelecionda_array[1]
-                    mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                    anoSeleccionadoEntrada = fechaEntradaSelecionda_array[2]
-                    anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaSelecionda) {
-                    const fechaSalidaSelecionda_array = fechaSalidaSelecionda.split("/")
-                    diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]
-                    diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
-                    mesSeleccionadoSalida = fechaSalidaSelecionda_array[1]
-                    mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
-                    anoSeleccionadoSalida = fechaSalidaSelecionda_array[2]
-                    anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                marcoCalendario?.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-                let fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-
-
-                let controladorRango;
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.reservas.nuevaReserva.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-
-                        if (
-                            (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
-                            &&
-                            (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
-                        ) {
-                            // si es mes de entrada y salida
-                            console.log("4")
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-
-                        } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
-                            // Si es mes de entrada
-                            console.log("1")
-
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (calendario.tiempo === "futuro") {
-                                if (diaFinal < diaSeleccionadoEntrada) {
-                                    bloqueDia.classList.add("calendarioDiaDisponible")
-                                }
-                            }
-                        } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            console.log("2")
-                            // si es mes de salida pero no de entrada
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                        } else {
-                            // Entonces ver si es mes intermedio
-                            if (anoSeleccionadoEntrada === anoSeleccionadoSalida) {
-                                if (
-                                    (anoActual === anoSeleccionadoEntrada)
-                                    &&
-                                    (mesActual > mesSeleccionadoEntrada && mesActual < mesSeleccionadoSalida)
-                                ) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-                            } else if (anoSeleccionadoEntrada !== anoSeleccionadoSalida) {
-                                if (anoActual >= anoSeleccionadoEntrada && anoActual <= anoSeleccionadoSalida) {
-                                    if (mesActual > mesSeleccionadoEntrada || mesActual < mesSeleccionadoSalida) {
-                                        bloqueDia.classList.add("calendarioDiaReserva")
-                                    }
-                                }
-                            }
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-                    }
-                    else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
-                        console.log(">> 1")
-
-
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-
-                        }
-                    }
-                    else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-                    }
-                    marcoMes?.appendChild(bloqueDia)
-                }
-
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                if (datosFechaSalidaSeleccionada === "existen") {
-                    if (anoActual < anoSeleccionadoSalida) {
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                        console.log("1")
-                    } else if (anoActual === anoSeleccionadoSalida && mesActual < mesSeleccionadoSalida) {
-                        console.log("2")
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                    } else {
-                        console.log("5")
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-                    }
-                } else {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                }
-
-
-            }
-            if (perfilMes === "diaSalidaAsistidoConPasadoCrearReserva") {
-
-                const mesActual = calendario.mes
-                const anoActual = calendario.ano
-
-                /*
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-                */
-                let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaSelecionda) {
-                    const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
-
-                    diaSeleccionadoEntrada = fechaEntradaSelecionda_array[0]
-                    diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                    mesSeleccionadoEntrada = fechaEntradaSelecionda_array[1]
-                    mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                    anoSeleccionadoEntrada = fechaEntradaSelecionda_array[2]
-                    anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaSelecionda) {
-                    const fechaSalidaSelecionda_array = fechaSalidaSelecionda.split("/")
-                    diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]
-                    diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
-                    mesSeleccionadoSalida = fechaSalidaSelecionda_array[1]
-                    mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
-                    anoSeleccionadoSalida = fechaSalidaSelecionda_array[2]
-                    anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-
-                let fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-                let controladorRango
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.reservas.nuevaReserva.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-
-                        if (
-                            (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
-                            &&
-                            (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
-                        ) {
-                            // si es mes de entrada y salida
-                            console.log("41")
-
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-
-                            }
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-
-
-
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                                bloqueDia.setAttribute("destino", "1")
-                            }
-
-                        } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
-                            // Si es mes de entrada
-                            console.log("1")
-
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                // replicar esto
-                                if (bloqueDia.getAttribute("estadoDia") === "noDisponible") {
-                                }
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-
-                            if (calendario.tiempo === "futuro") {
-                                if (diaFinal < diaSeleccionadoEntrada) {
-                                    // bloqueDia.classList.add("calendarioDiaDisponible")
-                                }
-                            }
-                        } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            console.log("2")
-                            // si es mes de salida pero no de entrada
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-
-
-
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-
-                            }
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-
-                            }
-                        } else {
-                            // Entonces ver si es mes intermedio
-                            if (anoSeleccionadoEntrada === anoSeleccionadoSalida) {
-                                if (
-                                    (anoActual === anoSeleccionadoEntrada)
-                                    &&
-                                    (mesActual > mesSeleccionadoEntrada && mesActual < mesSeleccionadoSalida)
-                                ) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-                            } else if (anoSeleccionadoEntrada !== anoSeleccionadoSalida) {
-                                if (anoActual >= anoSeleccionadoEntrada && anoActual <= anoSeleccionadoSalida) {
-                                    if (mesActual > mesSeleccionadoEntrada || mesActual < mesSeleccionadoSalida) {
-                                        bloqueDia.classList.add("calendarioDiaReserva")
-                                    }
-                                }
-                            }
-
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-
-                            }
-                        }
-                    }
-                    else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        } else {
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-
-
-
-                    }
-                    else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                            if (diaFinal < diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        } else {
-                            if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
-                                bloqueDia.classList.add("calendarioDiaDisponible")
-                            }
-                        }
-                    }
-                    marcoMes.appendChild(bloqueDia)
-                }
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-
-                if (datosFechaEntradaSeleccionada === "existen") {
-                    if (anoActual > anoSeleccionadoEntrada) {
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                    } else if (anoActual === anoSeleccionadoEntrada && mesActual > mesSeleccionadoEntrada) {
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                    } else {
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-                    }
-                } else {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                }
-
-
-
-
-            }
-            if (perfilMes === "diaEntradaAsistidoConPasadoComportamientoDePrecios") {
-                // Si hay fecha de entrada, posicionar el calendario en la fecha de entrada
-                // Si hay fecha de salida, limitar el calendario de entrada por la fecha de salida
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-
-
-
-                let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaSelecionda) {
-                    fechaEntradaSelecionda = JSON.parse(fechaEntradaSelecionda)
-                    diaSeleccionadoEntrada = fechaEntradaSelecionda.dia
-                    diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                    mesSeleccionadoEntrada = fechaEntradaSelecionda.mes
-                    mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                    anoSeleccionadoEntrada = fechaEntradaSelecionda.ano
-                    anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaSelecionda) {
-                    fechaSalidaSelecionda = JSON.parse(fechaSalidaSelecionda)
-                    diaSeleccionadoSalida = fechaSalidaSelecionda.dia
-                    diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
-                    mesSeleccionadoSalida = fechaSalidaSelecionda.mes
-                    mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
-                    anoSeleccionadoSalida = fechaSalidaSelecionda.ano
-                    anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                marcoCalendario?.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-                let fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-
-
-                let controladorRango;
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.crearComportamiento.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-                        if (controladorRango === "interno") {
-                            // Si es mes de entrada pero no de salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada) {
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-                            }
-                            // si es mes de salida pero no de entrada
-                            if (mesActual === mesSeleccionadoSalida && mesActual !== mesSeleccionadoEntrada) {
-                                if (diaFinal < diaSeleccionadoSalida) {
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-                            }
-                            // si es mes de entrada y salida
-                            if (mesActual !== mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (mesActual === mesSeleccionadoEntrada && mesActual === mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-
-                            }
-                        }
-                    }
-                    if (datosFechaEntradaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                //     bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                        }
-                    }
-                    if (datosFechaSalidaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                //         bloqueDia.classList.remove("calendarioDiaDisponible")
-                                // bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                //         bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        }
-                    }
-                    marcoMes?.appendChild(bloqueDia)
-                }
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-
-                }
-
-
-            }
-            if (perfilMes === "diaSalidaAsistidoConPasadoComportamientoDePrecios") {
-
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-
-
-                let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaSelecionda) {
-                    fechaEntradaSelecionda = JSON.parse(fechaEntradaSelecionda)
-                    diaSeleccionadoEntrada = fechaEntradaSelecionda.dia
-                    diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                    mesSeleccionadoEntrada = fechaEntradaSelecionda.mes
-                    mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                    anoSeleccionadoEntrada = fechaEntradaSelecionda.ano
-                    anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaSelecionda) {
-                    fechaSalidaSelecionda = JSON.parse(fechaSalidaSelecionda)
-                    diaSeleccionadoSalida = fechaSalidaSelecionda.dia
-                    diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
-                    mesSeleccionadoSalida = fechaSalidaSelecionda.mes
-                    mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
-                    anoSeleccionadoSalida = fechaSalidaSelecionda.ano
-                    anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-
-                let fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-                let controladorRango
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.crearComportamiento.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-
-                        if (controladorRango === "interno") {
-                            // Si es mes de entrada pero no de salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-                            }
-                            // si es mes de salida pero no de entrada
-                            if (mesActual === mesSeleccionadoSalida && mesActual !== mesSeleccionadoEntrada) {
-                                if (diaFinal < diaSeleccionadoSalida) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-
-                            }
-                            // si es mes de entrada y salida
-                            if (mesActual !== mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-
-                                // bloqueDia.classList.remove("calendarioDiaDisponible")
-
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (mesActual === mesSeleccionadoEntrada && mesActual === mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-
-                            }
-                        }
-                    }
-                    if (datosFechaSalidaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-
-                            }
-
-                        }
-                    }
-                    if (datosFechaEntradaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                //bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        }
-                    }
-                    marcoMes.appendChild(bloqueDia)
-                }
-                // diaSalidaAsistidoConPasadoCrearReserva
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-
-                }
-
-            }
-            if (perfilMes === "diaEntradaAsistidoConPasadoCrearOferta") {
-
-                // Si hay fecha de entrada, posicionar el calendario en la fecha de entrada
-                // Si hay fecha de salida, limitar el calendario de entrada por la fecha de salida
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-
-
-
-                let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaSelecionda) {
-                    fechaEntradaSelecionda = JSON.parse(fechaEntradaSelecionda)
-                    diaSeleccionadoEntrada = fechaEntradaSelecionda.dia
-                    diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                    mesSeleccionadoEntrada = fechaEntradaSelecionda.mes
-                    mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                    anoSeleccionadoEntrada = fechaEntradaSelecionda.ano
-                    anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaSelecionda) {
-                    fechaSalidaSelecionda = JSON.parse(fechaSalidaSelecionda)
-                    diaSeleccionadoSalida = fechaSalidaSelecionda.dia
-                    diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
-                    mesSeleccionadoSalida = fechaSalidaSelecionda.mes
-                    mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
-                    anoSeleccionadoSalida = fechaSalidaSelecionda.ano
-                    anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-                let fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-
-
-                let controladorRango;
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-                        if (controladorRango === "interno") {
-                            // Si es mes de entrada pero no de salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-                            }
-                            // si es mes de salida pero no de entrada
-                            if (mesActual === mesSeleccionadoSalida && mesActual !== mesSeleccionadoEntrada) {
-                                if (diaFinal < diaSeleccionadoSalida) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-
-                            }
-                            // Si no es de salida ni entrada
-                            if (mesActual !== mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            // si es mes de entrada y salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual === mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-
-                            }
-                        }
-
-                    }
-                    if (datosFechaEntradaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                //     bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-
-                        }
-                    }
-
-                    if (datosFechaSalidaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                //         bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                //         bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        }
-                    }
-
-
-
-                    marcoMes?.appendChild(bloqueDia)
-                }
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-
-                if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-
-                }
-                // Si existe la instancia UID, encontes se rendereiza
-
-            }
-            if (perfilMes === "diaSalidaAsistidoConPasadoCrearOferta") {
-
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-
-
-                let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaSelecionda) {
-                    fechaEntradaSelecionda = JSON.parse(fechaEntradaSelecionda)
-                    diaSeleccionadoEntrada = fechaEntradaSelecionda.dia
-                    diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                    mesSeleccionadoEntrada = fechaEntradaSelecionda.mes
-                    mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                    anoSeleccionadoEntrada = fechaEntradaSelecionda.ano
-                    anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaSelecionda) {
-                    fechaSalidaSelecionda = JSON.parse(fechaSalidaSelecionda)
-                    diaSeleccionadoSalida = fechaSalidaSelecionda.dia
-                    diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
-                    mesSeleccionadoSalida = fechaSalidaSelecionda.mes
-                    mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
-                    anoSeleccionadoSalida = fechaSalidaSelecionda.ano
-                    anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-
-                const fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                const fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-                let controladorRango
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-                    const mesEntradaRenderizado = (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
-                    const mesSalidaRenderzado = (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
-                    const mesInternoRango = verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)
-
-                    const mesEntradaSalidaRenderizado = (
-                        (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) &&
-                        (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
-                    )
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-
-                        if (mesInternoRango) {
-                            if (mesActual === mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-                            }
-                            if (mesActual === mesSeleccionadoSalida && mesActual !== mesSeleccionadoEntrada) {
-                                if (diaFinal < diaSeleccionadoSalida) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-                            }
-                            if (mesActual !== mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (mesActual === mesSeleccionadoEntrada && mesActual === mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-
-                            }
-                        }
-                    }
-                    if (datosFechaSalidaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-
-                            }
-
-                        }
-                    }
-                    if (datosFechaEntradaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        }
-                    }
-                    marcoMes?.appendChild(bloqueDia)
-                }
-                // diaSalidaAsistidoConPasadoCrearOferta
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-
-                if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-
-                }
-
-            }
-            if (perfilMes === "diaEntradaAsistidoBloqueosConPasado") {
-
-                // Si hay fecha de entrada, posicionar el calendario en la fecha de entrada
-                // Si hay fecha de salida, limitar el calendario de entrada por la fecha de salida
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-
-
-                const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaVolatil_Humana) {
-                    const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
-                    diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
-                    mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
-                    anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaVolatil_Humana) {
-                    const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
-                    diaSeleccionadoSalida = Number(fechaSaliraArray[0])
-                    mesSeleccionadoSalida = Number(fechaSaliraArray[1])
-                    anoSeleccionadoSalida = Number(fechaSaliraArray[2])
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-                let fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-
-
-                let controladorRango;
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.bloqueos_temporales.componentes.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-                        if (controladorRango === "interno") {
-                            // Si es mes de entrada pero no de salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-                            }
-                            // si es mes de salida pero no de entrada
-                            if (mesActual === mesSeleccionadoSalida && mesActual !== mesSeleccionadoEntrada) {
-                                if (diaFinal < diaSeleccionadoSalida) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-
-                            }
-                            // Si no es de salida ni entrada
-                            if (mesActual !== mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            // si es mes de entrada y salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual === mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-
-                            }
-                        }
-
-                    }
-                    if (datosFechaEntradaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-                        }
-                    }
-
-                    if (datosFechaSalidaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaReservaLimiteSeleccionable")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        }
-                    }
-                    marcoMes?.appendChild(bloqueDia)
-                }
-
-                // diaEntradaAsistidoBloqueosConPasado
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-
-                if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-
-                }
-
-            }
-            if (perfilMes === "diaSalidaAsistidoBloqueosConPasado") {
-
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-
-
-                const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaVolatil_Humana) {
-                    const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
-                    diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
-                    mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
-                    anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaVolatil_Humana) {
-                    const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
-                    diaSeleccionadoSalida = Number(fechaSaliraArray[0])
-                    mesSeleccionadoSalida = Number(fechaSaliraArray[1])
-                    anoSeleccionadoSalida = Number(fechaSaliraArray[2])
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-                marcoCalendario?.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-
-                let fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-                let controladorRango
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.bloqueos_temporales.componentes.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-
-                        if (controladorRango === "interno") {
-                            // Si es mes de entrada pero no de salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-                            }
-                            // si es mes de salida pero no de entrada
-                            if (mesActual === mesSeleccionadoSalida && mesActual !== mesSeleccionadoEntrada) {
-                                if (diaFinal < diaSeleccionadoSalida) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-
-                            }
-                            // si es mes de entrada y salida
-                            if (mesActual !== mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-
-                                // bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (mesActual === mesSeleccionadoEntrada && mesActual === mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-
-                            }
-                        }
-                    }
-                    if (datosFechaSalidaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-
-                            }
-
-                        }
-                    }
-                    if (datosFechaEntradaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                // bloqueDia.classList.add("calendarioDiaReservaLimite")
-                                bloqueDia.classList.add("calendarioDiaReservaLimiteSeleccionable")
-
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        }
-                    }
-                    marcoMes?.appendChild(bloqueDia)
-                }
-                // diaSalidaAsistidoBloqueosConPasado
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-
-                if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-
-                }
-
-            }
-            if (perfilMes === "diaEntradaAsistidoConPasadoEnlacesDePago") {
-
-                // Si hay fecha de entrada, posicionar el calendario en la fecha de entrada
-                // Si hay fecha de salida, limitar el calendario de entrada por la fecha de salida
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-
-
-                let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaSelecionda) {
-                    fechaEntradaSelecionda = JSON.parse(fechaEntradaSelecionda)
-                    diaSeleccionadoEntrada = fechaEntradaSelecionda.dia
-                    diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                    mesSeleccionadoEntrada = fechaEntradaSelecionda.mes
-                    mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                    anoSeleccionadoEntrada = fechaEntradaSelecionda.ano
-                    anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaSelecionda) {
-                    fechaSalidaSelecionda = JSON.parse(fechaSalidaSelecionda)
-                    diaSeleccionadoSalida = fechaSalidaSelecionda.dia
-                    diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
-                    mesSeleccionadoSalida = fechaSalidaSelecionda.mes
-                    mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
-                    anoSeleccionadoSalida = fechaSalidaSelecionda.ano
-                    anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-                let fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-
-
-                let controladorRango;
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-                        if (controladorRango === "interno") {
-                            // Si es mes de entrada pero no de salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-                            }
-                            // si es mes de salida pero no de entrada
-                            if (mesActual === mesSeleccionadoSalida && mesActual !== mesSeleccionadoEntrada) {
-                                if (diaFinal < diaSeleccionadoSalida) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-
-                            }
-                            // Si no es de salida ni entrada
-                            if (mesActual !== mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            // si es mes de entrada y salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual === mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-
-                            }
-                        }
-
-                    }
-                    if (datosFechaEntradaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                //     bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-                            }
-
-                        }
-                    }
-
-                    if (datosFechaSalidaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                //         bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal > diaSeleccionadoSalida) {
-                                //         bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        }
-                    }
-
-
-
-                    marcoMes?.appendChild(bloqueDia)
-                }
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-
-                if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-
-                }
-                // Si existe la instancia UID, encontes se rendereiza
-
-            }
-            if (perfilMes === "diaSalidaAsistidoConPasadoEnlacesDePago") {
-
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-                mesActual = String(mesActual).padStart(2, '0');
-                mesActual = Number(mesActual)
-                anoActual = String(anoActual).padStart(4, '0');
-                anoActual = Number(anoActual)
-
-
-                let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoEntrada
-                let mesSeleccionadoEntrada
-                let anoSeleccionadoEntrada
-                let datosFechaEntradaSeleccionada
-                if (fechaEntradaSelecionda) {
-                    fechaEntradaSelecionda = JSON.parse(fechaEntradaSelecionda)
-                    diaSeleccionadoEntrada = fechaEntradaSelecionda.dia
-                    diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                    mesSeleccionadoEntrada = fechaEntradaSelecionda.mes
-                    mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                    anoSeleccionadoEntrada = fechaEntradaSelecionda.ano
-                    anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
-                    datosFechaEntradaSeleccionada = "existen"
-                }
-
-                let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
-                let diaSeleccionadoSalida
-                let mesSeleccionadoSalida
-                let anoSeleccionadoSalida
-                let datosFechaSalidaSeleccionada
-                if (fechaSalidaSelecionda) {
-                    fechaSalidaSelecionda = JSON.parse(fechaSalidaSelecionda)
-                    diaSeleccionadoSalida = fechaSalidaSelecionda.dia
-                    diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
-                    mesSeleccionadoSalida = fechaSalidaSelecionda.mes
-                    mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
-                    anoSeleccionadoSalida = fechaSalidaSelecionda.ano
-                    anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
-                    datosFechaSalidaSeleccionada = "existen"
-                }
-
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-                    const mesInterno = fecha > inicio && fecha < fin;
-                    const mesInicio = fecha.getMonth() == inicio.getMonth();
-                    const mesFin = fecha.getMonth() === fin.getMonth();
-                    return mesInterno || mesInicio || mesFin;
-                }
-
-                let fechaEntradaFormadoAAAAMMDD = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
-                let fechaSalidaFormadoAAAAMMDD = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
-                let controladorRango
-                if (verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)) {
-                    controladorRango = "interno"
-                }
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    let diaFinal = numeroDia + 1;
-                    diaFinal = Number(diaFinal)
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.reservas.nuevaReserva.seleccionarDia)
-                    bloqueDia.classList.add("calendarioDiaDisponible")
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("calendarioDiaParcial")
-                    }
-
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("calendarioDiaCompleto")
-                    }
-
-                    if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
-
-                        if (controladorRango === "interno") {
-                            // Si es mes de entrada pero no de salida
-                            if (mesActual === mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-                            }
-                            // si es mes de salida pero no de entrada
-                            if (mesActual === mesSeleccionadoSalida && mesActual !== mesSeleccionadoEntrada) {
-                                if (diaFinal < diaSeleccionadoSalida) {
-
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-
-                                }
-
-                            }
-                            // si es mes de entrada y salida
-                            if (mesActual !== mesSeleccionadoEntrada && mesActual !== mesSeleccionadoSalida) {
-
-                                // bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaReserva")
-                            }
-                            if (mesActual === mesSeleccionadoEntrada && mesActual === mesSeleccionadoSalida) {
-                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
-                                    //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                    bloqueDia.classList.add("calendarioDiaReserva")
-                                }
-
-                            }
-                        }
-                    }
-                    if (datosFechaSalidaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
-                            if (diaFinal === diaSeleccionadoSalida) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.setAttribute("diaEstado", "seleccionado")
-
-                            }
-
-                        }
-                    }
-                    if (datosFechaEntradaSeleccionada === "existen") {
-                        if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-                            if (diaFinal === diaSeleccionadoEntrada) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                            }
-                            if (diaFinal < diaSeleccionadoEntrada) {
-                                //  bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                            }
-                        }
-                    }
-                    marcoMes.appendChild(bloqueDia)
-                }
-                // diaSalidaAsistidoConPasadoCrearReserva
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
-
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-
-                }
-
-            }
-            if (perfilMes === "diaEntradaAsistidoCheckIn") {
-
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-
-                const fechaCheckIN = document
-                    .querySelector(`[instanciaUID="${instanciaUID}"]`)
-                    .closest("[fechaCheckIn]")
-                    ?.getAttribute("fechaCheckIn")
-
-                const fechaCheckOutAdelantado = document
-                    .querySelector(`[instanciaUID="${instanciaUID}"]`)
-                    .closest("[fechaCheckOut]")
-                    ?.getAttribute("fechaCheckOut")
-
-
-
-                mesActual = String(mesActual).padStart(2, '0')
-                mesActual = Number(mesActual)
-
-                anoActual = String(anoActual).padStart(4, '0')
-                anoActual = Number(anoActual)
-
-                let fechaEntradaReserva = document.querySelector("[calendario=entrada][fechaEntrada]")?.getAttribute("fechaEntrada")
-                fechaEntradaReserva = fechaEntradaReserva.split("/")
-
-                let diaEntradaReserva = fechaEntradaReserva[0]
-                diaEntradaReserva = Number(diaEntradaReserva)
-
-                let mesEntradaReserva = fechaEntradaReserva[1]
-                mesEntradaReserva = Number(mesEntradaReserva)
-
-                let anoEntradaReserva = fechaEntradaReserva[2]
-                anoEntradaReserva = Number(anoEntradaReserva)
-
-                let fechaSalidaReserva = document.querySelector("[calendario=salida][fechaSalida]")?.getAttribute("fechaSalida")
-                fechaSalidaReserva = fechaSalidaReserva.split("/")
-                let diaSalidaReserva = fechaSalidaReserva[0]
-                diaSalidaReserva = Number(diaSalidaReserva)
-
-                let mesSalidaReserva = fechaSalidaReserva[1]
-                mesSalidaReserva = Number(mesSalidaReserva)
-
-                let anoSalidaReserva = fechaSalidaReserva[2]
-                anoSalidaReserva = Number(anoSalidaReserva)
-
-                const fechaEntradaFormadoAAAAMMDD = `${anoEntradaReserva}-${mesEntradaReserva}-${diaEntradaReserva}`
-                const fechaSalidaFormadoAAAAMMDD = `${anoSalidaReserva}-${mesSalidaReserva}-${diaSalidaReserva}`
-
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-
-                    const mesValido = fecha > inicio && fecha < fin;
-                    const noEsInicioMes = fecha.getMonth() !== inicio.getMonth();
-                    const noEsFinMes = fecha.getMonth() !== fin.getMonth();
-
-                    return mesValido && noEsInicioMes && noEsFinMes;
-                }
-
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-
-
-
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                // diaEntradaAsistidoReservaConPasado
-                if (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva) {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
-
-                }
-                if (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-
-                }
-
-
-
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    const diaFinal = Number(numeroDia + 1);
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.UIComponentes.checkin.seleccionarDia)
-                    // bloqueDia.classList.add("calendarioDiaDisponible")
-                    bloqueDia.style.pointerEvents = "none"
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-
-                    const mesEntradaRenderizado = (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva)
-                    const mesSalidaRenderzado = (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva)
-                    const mesInternoRango = verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)
-
-                    const mesEntradaSalidaRenderizado = (
-                        (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) &&
-                        (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva)
-                    )
-
-                    if (mesEntradaSalidaRenderizado) {
-
-
-
-                        if (diaEntradaReserva > diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-
-
-                        if (diaEntradaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            //bloqueDia.style.pointerEvents = "none"
-                            //bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "E " + diaFinal
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-
-                        if (diaEntradaReserva < diaFinal && diaSalidaReserva > diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-
-                        if (diaSalidaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "none"
-                            //bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "S " + diaFinal
-                            bloqueDia.classList.add("calendarioDiaReservaLimite")
-
-                        }
-                        if (diaSalidaReserva < diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-
-                        }
-
-                    }
-                    else if (mesEntradaRenderizado) {
-
-                        if (diaEntradaReserva > diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-                        if (diaEntradaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            //bloqueDia.style.pointerEvents = "none"
-                            //bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "E " + diaFinal
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-
-                        if (diaEntradaReserva < diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-                    }
-                    else if (mesSalidaRenderzado) {
-                        if (diaSalidaReserva > diaFinal) {
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-                        if (diaSalidaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "S " + diaFinal
-                            bloqueDia.classList.add("calendarioDiaReservaLimite")
-
-                        }
-                        if (diaSalidaReserva < diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaReserva")
-                            // bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.style.pointerEvents = "none"
-
-                        }
-
-
-                    }
-                    if (mesInternoRango) {
-                        bloqueDia.classList.remove("calendarioDiaDisponible")
-                        bloqueDia.classList.add("calendarioDiaReserva")
-                        bloqueDia.style.pointerEvents = "all"
-
-                    }
-                    if (fechaCheckIN) {
-                        const fechaCheckIN_array = fechaCheckIN.split("/")
-                        const diaCheckIn = Number(fechaCheckIN_array[0])
-                        const mesCheckIn = Number(fechaCheckIN_array[1])
-                        const anoCheckIn = Number(fechaCheckIN_array[2])
-
-                        if (mesActual === mesCheckIn && anoActual === anoCheckIn) {
-                            if (diaCheckIn === diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaReserva")
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-
-                            }
-
-                        }
-
-                    }
-
-                    if (fechaCheckOutAdelantado) {
-                        const fechaCheckOutAdelantado_array = fechaCheckOutAdelantado.split("/")
-                        const diaCheckOut = Number(fechaCheckOutAdelantado_array[0])
-                        const mesCheckOut = Number(fechaCheckOutAdelantado_array[1])
-                        const anoCheckOut = Number(fechaCheckOutAdelantado_array[2])
-
-                        if (mesActual === mesCheckOut && anoActual === anoCheckOut) {
-                            if (diaCheckOut === diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaReserva")
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                                bloqueDia.innerText = "COa " + diaFinal
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-
-                            }
-                            if (diaCheckOut < diaFinal && diaSalidaReserva > diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaReserva")
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-
-                            } else if (diaCheckOut < diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaReserva")
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-
-
-
-                            }
+                            console.log("5")
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
                         }
-
+                    } else if (calendario.tiempo === "presente" || calendario.tiempo === "futuro") {
+                        if (anoActual < limiteFuturo.ano) {
+                            console.log("3")
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                        } else if (anoActual === limiteFuturo.ano && mesActual < limiteFuturo.mes) {
+                            console.log("4")
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                        } else {
+                            console.log("5")
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
+                        }
+                    }
+                    if (
+                        (datosFechaSalidaSeleccionada === "existen")
+                        &&
+                        (objetoFechaLimitePorDias.arbol[anoActual][mesActual])
+                    ) {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
+                    } else if (calendario.tiempo === "futuro" ||
+                        (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)) {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                    } else {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
                     }
 
-                    marcoMes.appendChild(bloqueDia)
                 }
+                if (perfilMes === "calendario_salida_publico_sinPasado") {
+                    marcoCalendario.setAttribute("perfilMes", perfilMes)
+
+                    const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                    let diaSeleccionadoEntrada
+                    let mesSeleccionadoEntrada
+                    let anoSeleccionadoEntrada
+                    let datosFechaEntradaSeleccionada
+                    if (fechaEntradaVolatil_Humana) {
+                        const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
+                        diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
+                        mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
+                        anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
+                        datosFechaEntradaSeleccionada = "existen"
+                    }
+
+                    const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                    let diaSeleccionadoSalida
+                    let mesSeleccionadoSalida
+                    let anoSeleccionadoSalida
+                    let datosFechaSalidaSeleccionada
+                    if (fechaSalidaVolatil_Humana) {
+                        const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
+                        diaSeleccionadoSalida = Number(fechaSaliraArray[0])
+                        mesSeleccionadoSalida = Number(fechaSaliraArray[1])
+                        anoSeleccionadoSalida = Number(fechaSaliraArray[2])
+                        datosFechaSalidaSeleccionada = "existen"
+                    }
+
+                    const mesActual = calendario.mes
+                    const anoActual = calendario.ano
+
+                    const verificaRangoInternamente = (
+                        mesActual,
+                        anoActual,
+                        fechaInicio,
+                        fechaSalida
+                    ) => {
+                        const inicio = new Date(fechaInicio);
+                        const fin = new Date(fechaSalida);
+
+                        const inicioMesAno = new Date(inicio.getFullYear(), inicio.getMonth());
+                        const finMesAno = new Date(fin.getFullYear(), fin.getMonth());
+                        const fechaMesAno = new Date(anoActual, mesActual - 1);
+                        return fechaMesAno >= inicioMesAno && fechaMesAno <= finMesAno;
+                    };
+
+                    const fechaEntrada_ISO = `${anoSeleccionadoEntrada}-${String(mesSeleccionadoEntrada).padStart(2, "0")}-${String(diaSeleccionadoEntrada).padStart(2, "0")}`
+                    const fechaSalida_ISO = `${anoSeleccionadoSalida}-${String(mesSeleccionadoSalida).padStart(2, "0")}-${String(diaSeleccionadoSalida).padStart(2, "0")}`
+
+                    const limitesPublicos = calendario.limites
+                    const diasAntelacion = limitesPublicos.diasAntelacion
+                    const limiteFuturo = limitesPublicos.limiteFuturo
+                    const diasMaximoReserva = limitesPublicos.diasMaximoReserva
+                    const fechaActualPublica = calendario.fechaActualPublica
+
+                    const fechaLimitePorDiasDeDuracion = (fechaSeleccionada_ISO, diasMaximos) => {
+                        // Definir la fecha inicial
+                        const ok = {
+                            arbol: {},
+                            fecha: {}
+                        }
+                        if (fechaSeleccionada_ISO) {
+                            const fechaLimitePorSeleccion = new Date(fechaSeleccionada_ISO); // Asegúrate de que el formato de la fecha sea 'YYYY-MM-DD'
+                            // Definir el número de días que deseas sumar
+                            const numeroDeDiasASumar = Number(diasMaximos);
+                            // Sumar los días a la fecha inicial
+                            fechaLimitePorSeleccion.setDate(fechaLimitePorSeleccion.getDate() + numeroDeDiasASumar);
+                            const fechaAdelantada = fechaLimitePorSeleccion
+                            const dia = fechaLimitePorSeleccion.getDate();
+                            const mes = fechaLimitePorSeleccion.getMonth() + 1; // Los meses se indexan desde 0 (enero) a 11 (diciembre)
+                            const ano = fechaLimitePorSeleccion.getFullYear();
+                            // Imprimir la nueva fecha
+                            ok.fecha.ano = ano
+                            ok.fecha.mes = mes
+                            ok.fecha.dia = dia
+                            ok.arbol[ano] = {
+                                [mes]: {
+                                    [dia]: true
+                                }
+                            }
+                        }
+                        console.log("ok", ok)
+                        return ok
+                    }
+                    const objetoFechaLimitePorDias = fechaLimitePorDiasDeDuracion(fechaEntrada_ISO, diasMaximoReserva)
+
+                    for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
+                        let diaFinal = numeroDia + 1;
+                        const bloqueDia = document.createElement("li")
+                        bloqueDia.classList.add("dia")
+                        if (diaFinal === 1) {
+                            bloqueDia.style.gridColumnStart = posicionDia1
+                        }
+
+                        bloqueDia.setAttribute("dia", diaFinal)
+                        bloqueDia.addEventListener("click", casaVitini.ui.vistas.reservasNuevo.seleccionarDia)
+                        if (calendario.tiempo === "presente") {
+                            if (diaFinal < diaActual) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                bloqueDia.setAttribute("estadoDia", "noDisponible")
+
+                            }
+                        }
+                        if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
+                            bloqueDia.classList.add("calendarioDiaParcial")
+                        }
+                        if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
+                            bloqueDia.classList.add("calendarioDiaCompleto")
+                        }
+                        if (diasAntelacion[anoActual] &&
+                            diasAntelacion[anoActual][mesActual] &&
+                            diasAntelacion[anoActual][mesActual][diaFinal]) {
+                            bloqueDia.classList.add("calendarioDiaNoDisponiblePorAntelacion")
+                            bloqueDia.setAttribute("estadoDia", "noDisponible")
+
+                        }
+
+                        if (objetoFechaLimitePorDias.arbol[anoActual] &&
+                            objetoFechaLimitePorDias.arbol[anoActual][mesActual]) {
+                            const diaSalidaLimiteReserva = objetoFechaLimitePorDias.fecha.dia
+                            if (diaFinal > diaSalidaLimiteReserva) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                bloqueDia.setAttribute("estadoDia", "noDisponible")
+                            }
+                        }
+                        if (anoActual === limiteFuturo.ano && mesActual === limiteFuturo.mes) {
+                            if (diaFinal > limiteFuturo.dia) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                bloqueDia.setAttribute("estadoDia", "noDisponible")
+                            }
+                        }
+                        if (!datosFechaEntradaSeleccionada && !datosFechaSalidaSeleccionada) {
+                            if (calendario.tiempo === "presente") {
+                                if (diaActual < diaFinal) {
+                                    if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                        bloqueDia.setAttribute("estadoDia", "disponible")
+                                        bloqueDia.classList.add("calendarioDiaDisponible")
+                                    }
+                                }
+                            }
+                            if (calendario.tiempo === "futuro") {
+                                if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                    bloqueDia.setAttribute("estadoDia", "disponible")
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            }
+
+                        } else if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
+
+                            if (
+                                (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
+                                &&
+                                (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
+                            ) {
+                                // si es mes de entrada y salida
+                                console.log("41")
+
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                }
+                                if (diaFinal < diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+
+                                }
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+
+                                }
+                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+
+
+
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                    bloqueDia.setAttribute("destino", "1")
+                                }
+
+                            } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
+                                // Si es mes de entrada
+                                console.log("1")
+
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+
+                                }
+                                if (diaFinal > diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                                if (diaFinal < diaSeleccionadoEntrada) {
+                                    // replicar esto
+                                    if (bloqueDia.getAttribute("estadoDia") === "noDisponible") {
+                                    }
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                }
+
+                                if (calendario.tiempo === "futuro") {
+                                    if (diaFinal < diaSeleccionadoEntrada) {
+                                        // bloqueDia.classList.add("calendarioDiaDisponible")
+                                    }
+                                }
+                            } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                                console.log("2")
+                                // si es mes de salida pero no de entrada
+                                if (diaFinal < diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                }
+                            } else {
+                                // Entonces ver si es mes intermedio
+                                if (verificaRangoInternamente(mesActual, anoActual, fechaEntrada_ISO, fechaSalida_ISO)) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }else{
+                                    if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                        bloqueDia.classList.add("calendarioDiaDisponible")
+                                    }
+                                }
+                            }
+                        }
+                        else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
+                            if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                }
+                                if (diaFinal > diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                                if (diaFinal < diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                }
+                            } else {
+                                if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            }
+
+
+
+                        }
+                        else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
+                            if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                                if (diaFinal < diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            } else {
+                                if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            }
+                        }
 
 
 
 
+                        if (calendario.tiempo === "presente" && diaActual === diaFinal) {
+                            bloqueDia.style.border = "3px solid white";
+                            bloqueDia.setAttribute("tipoDia", "hoy")
+                        }
+                        bloqueDia.innerText = diaFinal
+                        marcoMes.appendChild(bloqueDia)
+                    }
 
-
-            }
-            if (perfilMes === "diaSalidaAsistidoCheckOutAdelantado") {
-
-                let mesActual = calendario.mes
-                let anoActual = calendario.ano
-
-                const fechaCheckOut = document
-                    .querySelector(`[instanciaUID="${instanciaUID}"]`)
-                    .closest("[fechaCheckOut]")
-                    ?.getAttribute("fechaCheckOut")
-
-
-
-                const fechaCheckIN = document
-                    .querySelector(`[instanciaUID="${instanciaUID}"]`)
-                    .closest("[fechaCheckIn]")
-                    ?.getAttribute("fechaCheckIn")
-
-
-                mesActual = String(mesActual).padStart(2, '0')
-                mesActual = Number(mesActual)
-
-                anoActual = String(anoActual).padStart(4, '0')
-                anoActual = Number(anoActual)
-
-                let fechaEntradaReserva = document.querySelector("[calendario=entrada][fechaEntrada]")?.getAttribute("fechaEntrada")
-                fechaEntradaReserva = fechaEntradaReserva.split("/")
-
-                let diaEntradaReserva = fechaEntradaReserva[0]
-                diaEntradaReserva = Number(diaEntradaReserva)
-
-                let mesEntradaReserva = fechaEntradaReserva[1]
-                mesEntradaReserva = Number(mesEntradaReserva)
-
-                let anoEntradaReserva = fechaEntradaReserva[2]
-                anoEntradaReserva = Number(anoEntradaReserva)
-
-                let fechaSalidaReserva = document.querySelector("[calendario=salida][fechaSalida]")?.getAttribute("fechaSalida")
-                fechaSalidaReserva = fechaSalidaReserva.split("/")
-                let diaSalidaReserva = fechaSalidaReserva[0]
-                diaSalidaReserva = Number(diaSalidaReserva)
-
-                let mesSalidaReserva = fechaSalidaReserva[1]
-                mesSalidaReserva = Number(mesSalidaReserva)
-
-                let anoSalidaReserva = fechaSalidaReserva[2]
-                anoSalidaReserva = Number(anoSalidaReserva)
-
-                const fechaEntradaFormadoAAAAMMDD = `${anoEntradaReserva}-${mesEntradaReserva}-${diaEntradaReserva}`
-                const fechaSalidaFormadoAAAAMMDD = `${anoSalidaReserva}-${mesSalidaReserva}-${diaSalidaReserva}`
-
-                const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
-                    const inicio = new Date(fechaInicio);
-                    const fin = new Date(fechaSalida);
-                    const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
-
-                    const mesValido = fecha > inicio && fecha < fin;
-                    const noEsInicioMes = fecha.getMonth() !== inicio.getMonth();
-                    const noEsFinMes = fecha.getMonth() !== fin.getMonth();
-
-                    return mesValido && noEsInicioMes && noEsFinMes;
-                }
-
-                marcoCalendario.setAttribute("perfilMes", perfilMes)
-
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                // diaEntradaAsistidoReservaConPasado
-                if (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva) {
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
                     selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
 
-                }
-                if (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-
-                }
-
-
-                for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
-                    const diaFinal = Number(numeroDia + 1);
-                    const bloqueDia = document.createElement("li")
-                    bloqueDia.setAttribute("class", "dia")
-                    bloqueDia.innerText = diaFinal
-
-                    if (diaFinal === 1) {
-                        bloqueDia.style.gridColumnStart = posicionDia1
-                    }
-                    bloqueDia.setAttribute("dia", diaFinal)
-                    bloqueDia.setAttribute("estado", "disponible")
-                    bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.UIComponentes.checkout.seleccionarDia)
-                    // bloqueDia.classList.add("calendarioDiaDisponible")
-                    bloqueDia.style.pointerEvents = "none"
-
-                    if (calendario.tiempo === "presente") {
-                        if (diaFinal === diaActual) {
-                            bloqueDia.style.border = "3px solid ghostwhite"
-                        }
-                    }
-                    const mesEntradaRenderizado = (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva)
-                    const mesSalidaRenderzado = (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva)
-                    const mesInternoRango = verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)
-
-                    const mesEntradaSalidaRenderizado = (
-                        (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) &&
-                        (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva)
-                    )
-
-                    if (mesEntradaSalidaRenderizado) {
-
-
-
-                        if (diaEntradaReserva > diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-
-                        }
-
-
-                        if (diaEntradaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "E " + diaFinal
-
-                        }
-
-                        if (diaEntradaReserva < diaFinal && diaSalidaReserva > diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-
-                        if (diaSalidaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "S " + diaFinal
-                            bloqueDia.classList.add("calendarioDiaReservaLimite")
-
-                        }
-                        if (diaSalidaReserva < diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-
-                        }
-
-                    }
-                    else if (mesEntradaRenderizado) {
-
-                        if (diaEntradaReserva > diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-
-
-                        if (diaEntradaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            //bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "none"
-                            bloqueDia.classList.add("calendarioDiaReservaLimite")
-
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "E " + diaFinal
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-
-                        if (diaEntradaReserva < diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaDisponible")
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-                    }
-                    else if (mesSalidaRenderzado) {
-
-
-
-                        if (diaSalidaReserva > diaFinal) {
-                            bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "all"
-
-                        }
-                        if (diaSalidaReserva === diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaReserva")
-                            bloqueDia.style.pointerEvents = "none"
-                            //bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.innerText = "S " + diaFinal
-                            bloqueDia.classList.add("calendarioDiaReservaLimite")
-
-                        }
-                        if (diaSalidaReserva < diaFinal) {
-                            bloqueDia.classList.remove("calendarioDiaReserva")
-                            // bloqueDia.classList.add("calendarioDiaReserva")
-                            bloqueDia.setAttribute("estado", "deshabilitado")
-                            bloqueDia.style.pointerEvents = "none"
-
-                        }
-
-
-                    }
-
-                    if (mesInternoRango) {
-
-                        bloqueDia.classList.remove("calendarioDiaDisponible")
-                        bloqueDia.classList.add("calendarioDiaReserva")
-                        bloqueDia.style.pointerEvents = "all"
-
-                    }
-                    if (fechaCheckOut) {
-                        const fechaCheckOut_array = fechaCheckOut.split("/")
-                        const diaCheckOut = Number(fechaCheckOut_array[0])
-                        const mesCheckOut = Number(fechaCheckOut_array[1])
-                        const anoCheckOut = Number(fechaCheckOut_array[2])
-                        if (mesActual === mesCheckOut && anoActual === anoCheckOut) {
-                            if (diaCheckOut === diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaSeleccionado")
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-
-                            }
-
-                        }
-
-                    }
-
-                    if (fechaCheckIN) {
-                        const fechaCheckIN_Array = fechaCheckIN.split("/")
-                        const diaCheckIn = Number(fechaCheckIN_Array[0])
-                        const mesCheckIn = Number(fechaCheckIN_Array[1])
-                        const anoCheckIn = Number(fechaCheckIN_Array[2])
-
-                        if (mesActual === mesCheckIn && anoActual === anoCheckIn) {
-                            if (diaCheckIn === diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaReserva")
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.classList.add("calendarioDiaReservaLimite")
-                                bloqueDia.innerText = "CI " + diaFinal
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-
-                            }
-                            if (diaCheckIn > diaFinal && diaSalidaReserva < diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaReserva")
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-
-                            } else if (diaCheckIn > diaFinal) {
-                                bloqueDia.classList.remove("calendarioDiaReserva")
-                                bloqueDia.classList.remove("calendarioDiaDisponible")
-                                bloqueDia.classList.add("calendarioDiaNoDisponible")
-                                bloqueDia.style.pointerEvents = "none"
-                                bloqueDia.setAttribute("estado", "deshabilitado")
-
-
-
-                            }
+                    if (datosFechaEntradaSeleccionada === "existen") {
+                        if (anoActual > anoSeleccionadoEntrada) {
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                        } else if (anoActual === anoSeleccionadoEntrada && mesActual > mesSeleccionadoEntrada) {
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                        } else {
                             selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
                             selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
                         }
+                    } else if (calendario.tiempo === "futuro") {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                    } else if (calendario.tiempo === "presente") {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
+                    }
 
+                    if (
+                        (datosFechaEntradaSeleccionada === "existen")
+                        &&
+                        (objetoFechaLimitePorDias.arbol[anoActual][mesActual])
+                    ) {
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
+
+
+                    } else if (calendario.tiempo === "presente" || calendario.tiempo === "futuro") {
+                        if (anoActual < limiteFuturo.ano) {
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                        } else if (anoActual === limiteFuturo.ano && mesActual < limiteFuturo.mes) {
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                        } else {
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
+                        }
+                    }
+
+
+
+                }
+
+                if (perfilMes === "calendario_entrada_asistido_detallesReserva_conPasado") {
+
+                    let mesActual = calendario.mes
+                    let anoActual = calendario.ano
+
+                    mesActual = String(mesActual).padStart(2, '0')
+                    mesActual = Number(mesActual)
+
+                    anoActual = String(anoActual).padStart(4, '0')
+                    anoActual = Number(anoActual)
+
+                    let reserva = document.querySelector("[reserva]")?.getAttribute("reserva")
+                    let fechaEntradaReserva = document.querySelector("[calendario=entrada][fechaEntrada]")?.getAttribute("fechaEntrada")
+                    fechaEntradaReserva = fechaEntradaReserva.split("/")
+
+                    let diaEntradaReserva = fechaEntradaReserva[0]
+                    diaEntradaReserva = Number(diaEntradaReserva)
+
+                    let mesEntradaReserva = fechaEntradaReserva[1]
+                    mesEntradaReserva = Number(mesEntradaReserva)
+
+                    let anoEntradaReserva = fechaEntradaReserva[2]
+                    anoEntradaReserva = Number(anoEntradaReserva)
+
+                    let fechaSalidaReserva = document.querySelector("[calendario=salida][fechaSalida]")?.getAttribute("fechaSalida")
+                    fechaSalidaReserva = fechaSalidaReserva.split("/")
+                    let diaSalidaReserva = fechaSalidaReserva[0]
+                    diaSalidaReserva = Number(diaSalidaReserva)
+
+                    let mesSalidaReserva = fechaSalidaReserva[1]
+                    mesSalidaReserva = Number(mesSalidaReserva)
+
+                    let anoSalidaReserva = fechaSalidaReserva[2]
+                    anoSalidaReserva = Number(anoSalidaReserva)
+
+                    const fechaEntrada_ISO = `${anoEntradaReserva}-${mesEntradaReserva}-${diaEntradaReserva}`
+                    const fechaSalida_ISO = `${anoSalidaReserva}-${mesSalidaReserva}-${diaSalidaReserva}`
+
+                    const verificaRangoInternamente = (
+                        mesActual,
+                        anoActual,
+                        fechaInicio,
+                        fechaSalida
+                    ) => {
+                        const inicio = new Date(fechaInicio);
+                        const fin = new Date(fechaSalida);
+
+                        const inicioMesAno = new Date(inicio.getFullYear(), inicio.getMonth());
+                        const finMesAno = new Date(fin.getFullYear(), fin.getMonth());
+                        const fechaMesAno = new Date(anoActual, mesActual - 1);
+                        return fechaMesAno >= inicioMesAno && fechaMesAno <= finMesAno;
+                    };
+
+
+                    const controlLimitePasado = {
+                        zona: "administracion/reservas/obtenerElasticidadDelRango",
+                        reserva: Number(reserva),
+                        mesCalendario: String(mesActual).padStart(2, '0'),
+                        anoCalendario: String(anoActual).padStart(2, '0'),
+                        sentidoRango: "pasado"
+                    }
+
+                    const resolverLimitePasado = await casaVitini.componentes.servidor(controlLimitePasado)
+                    if (resolverLimitePasado.error) {
+                        const selectorCalendarioRenderizados = [...document.querySelectorAll("[componente=bloqueCalendario]")]
+                        selectorCalendarioRenderizados.map((calendario) => {
+                            calendario.remove()
+                        })
+                        return casaVitini.ui.vistas.advertenciaInmersiva(resolverLimitePasado.error)
+                    }
+                    let diaLimitePasado
+                    let mesLimitePasado
+                    let anoLimitePasado
+
+                    const infoCalendario = selectorCalendarioRenderizado.querySelector("[componente=infoCalendario]")
+                    if (resolverLimitePasado.ok === "rangoPasadoLibre") {
+                        infoCalendario.innerText = "Todo el mes disponible para seleccionar la nueva fecha de entrada de esta reserva"
+                    }
+                    if (resolverLimitePasado.limitePasado) {
+                        const fechaLimitePasado_Array = resolverLimitePasado.limitePasado.split("-")
+
+
+
+
+                        if (resolverLimitePasado.ok === "noHayRangoPasado") {
+                            infoCalendario.innerText = "La fecha de entrada de esta reserva no puede ser inferior a la actual por que no hay rango disponible"
+                            diaLimitePasado = Number(fechaLimitePasado_Array[2])
+                            mesLimitePasado = Number(fechaLimitePasado_Array[1])
+                            anoLimitePasado = Number(fechaLimitePasado_Array[0])
+                        }
+
+                        if (resolverLimitePasado.ok === "rangoPasadoLimitado") {
+                            infoCalendario.innerText = "Una parte de este mes esta disponible para seleccionar la nueva fecha de entrada para esta reserva"
+                            diaLimitePasado = Number(fechaLimitePasado_Array[2])
+                            mesLimitePasado = Number(fechaLimitePasado_Array[1])
+                            anoLimitePasado = Number(fechaLimitePasado_Array[0])
+                        }
+
+                    }
+
+
+                    marcoCalendario.setAttribute("perfilMes", perfilMes)
+                    for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
+                        const diaFinal = Number(numeroDia + 1);
+                        const bloqueDia = document.createElement("li")
+                        bloqueDia.setAttribute("class", "dia")
+                        bloqueDia.innerText = diaFinal
+
+                        if (diaFinal === 1) {
+                            bloqueDia.style.gridColumnStart = posicionDia1
+                        }
+                        bloqueDia.setAttribute("dia", diaFinal)
+                        bloqueDia.setAttribute("estado", "disponible")
+                        bloqueDia.classList.add("calendarioDiaDisponible")
+
+                        if (calendario.tiempo === "presente") {
+                            if (diaFinal === diaActual) {
+                                bloqueDia.style.border = "3px solid ghostwhite"
+                            }
+                        }
+                        if (
+                            (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva)
+                            &&
+                            (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva)
+                        ) {
+                            // si es mes de entrada y salida
+                            console.log("4")
+                            if (diaFinal === diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                bloqueDia.innerText = "S " + diaFinal
+                                bloqueDia.style.pointerEvents = "none"
+                            }
+                            if (diaFinal < diaEntradaReserva) {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                            }
+                            if (diaFinal === diaEntradaReserva) {
+                                bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                bloqueDia.innerText = "E " + diaFinal
+                                bloqueDia.style.pointerEvents = "none"
+
+                            }
+                            if (diaFinal > diaEntradaReserva && diaFinal < diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                            }
+                            if (diaFinal > diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                            }
+
+                        } else if ((mesActual === mesEntradaReserva && anoActual === anoEntradaReserva)) {
+                            // Si es mes de entrada
+                            console.log("1")
+
+                            if (diaFinal === diaEntradaReserva) {
+                                bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                bloqueDia.innerText = "E " + diaFinal
+                                bloqueDia.style.pointerEvents = "none"
+
+                            }
+                            if (diaFinal > diaEntradaReserva) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                            }
+                            if (calendario.tiempo === "futuro") {
+                                if (diaFinal < diaEntradaReserva) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            }
+                        } else if (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva) {
+                            console.log("2")
+                            // si es mes de salida pero no de entrada
+                            if (diaFinal < diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+
+                            }
+                            if (diaFinal > diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                            }
+                            if (diaFinal === diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                bloqueDia.innerText = "S " + diaFinal
+                                bloqueDia.style.pointerEvents = "none"
+
+
+                            }
+                        } else {
+                            // Entonces ver si es mes intermedio
+                            if (verificaRangoInternamente(mesActual, anoActual, fechaEntrada_ISO, fechaSalida_ISO)) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+
+                            }
+                        }
+
+
+                        if (resolverLimitePasado.limitePasado) {
+                            if (mesActual === mesLimitePasado && anoActual === anoLimitePasado) {
+                                if (diaLimitePasado === diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.classList.remove("calendarioDiaReserva")
+
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+                                    bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                }
+                                if (diaLimitePasado > diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.classList.remove("calendarioDiaReserva")
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+                                    bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                }
+                            }
+
+                        }
+                        marcoMes.appendChild(bloqueDia)
+                    }
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                    if (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva) {
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
+
+                    }
+                    if (mesActual === mesLimitePasado && anoActual === anoLimitePasado) {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
+
+                    }
+
+
+                }
+                if (perfilMes === "calendario_salida_asistido_detallesReserva_conPasado") {
+
+                    let mesActual = calendario.mes
+                    let anoActual = calendario.ano
+
+                    mesActual = String(mesActual).padStart(2, '0');
+                    mesActual = Number(mesActual)
+
+                    anoActual = String(anoActual).padStart(4, '0');
+                    anoActual = Number(anoActual)
+
+                    let reserva = document.querySelector("[reserva]")?.getAttribute("reserva")
+                    let fechaSalidaReserva = document.querySelector("[calendario=salida][fechaSalida]")?.getAttribute("fechaSalida")
+                    fechaSalidaReserva = fechaSalidaReserva.split("/")
+                    let diaSalidaReserva = fechaSalidaReserva[0]
+                    diaSalidaReserva = Number(diaSalidaReserva)
+
+                    let mesSalidaReserva = fechaSalidaReserva[1]
+                    mesSalidaReserva = Number(mesSalidaReserva)
+
+                    let anoSalidaReserva = fechaSalidaReserva[2]
+                    anoSalidaReserva = Number(anoSalidaReserva)
+
+                    let fechaEntradaReserva = document.querySelector("[calendario=entrada][fechaEntrada]")?.getAttribute("fechaEntrada")
+                    fechaEntradaReserva = fechaEntradaReserva.split("/")
+
+                    let diaEntradaReserva = fechaEntradaReserva[0]
+                    diaEntradaReserva = Number(diaEntradaReserva)
+
+                    let mesEntradaReserva = fechaEntradaReserva[1]
+                    mesEntradaReserva = Number(mesEntradaReserva)
+
+                    let anoEntradaReserva = fechaEntradaReserva[2]
+                    anoEntradaReserva = Number(anoEntradaReserva)
+
+
+                    const fechaEntrada_ISO = `${anoEntradaReserva}-${mesEntradaReserva}-${diaEntradaReserva}`
+                    const fechaSalida_ISO = `${anoSalidaReserva}-${mesSalidaReserva}-${diaSalidaReserva}`
+
+                    const verificaRangoInternamente = (
+                        mesActual,
+                        anoActual,
+                        fechaInicio,
+                        fechaSalida
+                    ) => {
+                        const inicio = new Date(fechaInicio);
+                        const fin = new Date(fechaSalida);
+
+                        const inicioMesAno = new Date(inicio.getFullYear(), inicio.getMonth());
+                        const finMesAno = new Date(fin.getFullYear(), fin.getMonth());
+                        const fechaMesAno = new Date(anoActual, mesActual - 1);
+                        return fechaMesAno >= inicioMesAno && fechaMesAno <= finMesAno;
+                    };
+
+                    const controlLimiteFuturo = {
+                        zona: "administracion/reservas/obtenerElasticidadDelRango",
+                        reserva: Number(reserva),
+                        mesCalendario: String(mesActual),
+                        anoCalendario: String(anoActual),
+                        sentidoRango: "futuro"
+                    }
+                    const resolverLimiteFuturo = await casaVitini.componentes.servidor(controlLimiteFuturo)
+
+                    if (resolverLimiteFuturo.error) {
+                        const selectorCalendarioRenderizados = [...document.querySelectorAll("[componente=bloqueCalendario]")]
+                        selectorCalendarioRenderizados.map((calendario) => {
+                            calendario.remove()
+                        })
+                        return casaVitini.ui.vistas.advertenciaInmersiva(resolverLimiteFuturo.error)
+
+                    }
+
+                    let diaLimiteFuturo
+                    let mesLimiteFuturo
+                    let anoLimiteFuturo
+                    if (resolverLimiteFuturo.ok === "rangoPasadoLibre") {
+                        infoCalendario.innerText = "Todo el mes disponible para seleccionar la nueva fecha de salida de esta reserva"
+                    }
+                    if (resolverLimiteFuturo.limiteFuturo) {
+                        const fechaLimiteFuturo_Array = resolverLimiteFuturo.limiteFuturo.split("-")
+
+                        if (resolverLimiteFuturo.ok === "noHayRangoFuturo") {
+                            infoCalendario.innerText = "La fecha de salida de esta reserva no puede ser superior a la actual por que no hay rango disponible"
+                            diaLimiteFuturo = Number(fechaLimiteFuturo_Array[2])
+                            mesLimiteFuturo = Number(fechaLimiteFuturo_Array[1])
+                            anoLimiteFuturo = Number(fechaLimiteFuturo_Array[0])
+                        }
+
+                        if (resolverLimiteFuturo.ok === "rangoFuturoLimitado") {
+                            infoCalendario.innerText = "Una parte de este mes esta disponible para seleccionar la nueva fecha de salida para esta reserva"
+                            diaLimiteFuturo = Number(fechaLimiteFuturo_Array[2])
+                            mesLimiteFuturo = Number(fechaLimiteFuturo_Array[1])
+                            anoLimiteFuturo = Number(fechaLimiteFuturo_Array[0])
+                        }
+
+
+
+
+                    }
+
+                    marcoCalendario?.setAttribute("perfilMes", perfilMes)
+                    for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
+                        let diaFinal = numeroDia + 1;
+                        diaFinal = Number(diaFinal)
+                        const bloqueDia = document.createElement("li")
+                        bloqueDia.setAttribute("class", "dia")
+                        bloqueDia.innerText = diaFinal
+
+                        if (diaFinal === 1) {
+                            bloqueDia.style.gridColumnStart = posicionDia1
+                        }
+                        bloqueDia.setAttribute("dia", diaFinal)
+                        bloqueDia.setAttribute("estado", "disponible")
+                        bloqueDia.classList.add("calendarioDiaDisponible")
+
+                        if (calendario.tiempo === "presente") {
+                            if (diaFinal === diaActual) {
+                                bloqueDia.style.border = "3px solid ghostwhite"
+
+                            }
+                        }
+
+
+                        if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
+                            bloqueDia.classList.add("calendarioDiaParcial")
+                        }
+
+                        if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
+                            bloqueDia.classList.add("calendarioDiaCompleto")
+                        }
+
+                        if (
+                            (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva)
+                            &&
+                            (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva)
+                        ) {
+                            // si es mes de entrada y salida
+                            console.log("41")
+
+                            if (diaFinal === diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                bloqueDia.innerText = "S " + diaFinal
+                                bloqueDia.style.pointerEvents = "none"
+
+
+                            }
+                            if (diaFinal < diaEntradaReserva) {
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+
+                            }
+                            if (diaFinal === diaEntradaReserva) {
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                bloqueDia.innerText = "E " + diaFinal
+                                bloqueDia.style.pointerEvents = "none"
+
+
+                            }
+                            if (diaFinal > diaEntradaReserva && diaFinal < diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+
+                            }
+                            if (diaFinal > diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                                bloqueDia.setAttribute("destino", "1")
+                            }
+
+                        } else if ((mesActual === mesEntradaReserva && anoActual === anoEntradaReserva)) {
+                            // Si es mes de entrada
+                            console.log("1")
+
+                            if (diaFinal === diaEntradaReserva) {
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                bloqueDia.innerText = "E " + diaFinal
+                                bloqueDia.style.pointerEvents = "none"
+
+
+                            }
+                            if (diaFinal > diaEntradaReserva) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+
+                            }
+                            if (diaFinal < diaEntradaReserva) {
+                                // replicar esto
+                                if (bloqueDia.getAttribute("estadoDia") === "noDisponible") {
+                                }
+                                bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+
+                            }
+
+                            if (calendario.tiempo === "futuro") {
+                                if (diaFinal < diaEntradaReserva) {
+                                    // bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            }
+                        } else if (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva) {
+                            console.log("2")
+                            // si es mes de salida pero no de entrada
+                            if (diaFinal < diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+
+                            }
+                            if (diaFinal > diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+
+
+                            }
+                            if (diaFinal === diaSalidaReserva) {
+                                bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                bloqueDia.innerText = "S " + diaFinal
+                                bloqueDia.style.pointerEvents = "none"
+
+
+                            }
+                        } else {
+                            // Entonces ver si es mes intermedio
+                            if (verificaRangoInternamente(mesActual, anoActual, fechaEntrada_ISO, fechaSalida_ISO)) {
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                            }
+                        }
+
+                        if (resolverLimiteFuturo.limiteFuturo) {
+                            if (mesActual === mesLimiteFuturo && anoActual === anoLimiteFuturo) {
+                                if (diaLimiteFuturo === diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+                                    bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+
+                                }
+                                if (diaLimiteFuturo <= diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+                                    bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+
+                                }
+                            }
+
+                        }
+                        marcoMes?.appendChild(bloqueDia)
+                    }
+                    // calendario_salida_asistido_detallesReserva_conPasado   
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+
+                    if (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
+
+                    }
+
+                    if (mesActual === mesLimiteFuturo && anoActual === anoLimiteFuturo) {
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
+
+                    }
+
+                }
+
+                if (perfilMes === "calendario_entrada_asistido_detallesReserva_checkIn_conPasado") {
+
+                    let mesActual = calendario.mes
+                    let anoActual = calendario.ano
+
+                    const fechaCheckIN = document
+                        .querySelector(`[instanciaUID="${instanciaUID}"]`)
+                        .closest("[fechaCheckIn]")
+                        ?.getAttribute("fechaCheckIn")
+
+                    const fechaCheckOutAdelantado = document
+                        .querySelector(`[instanciaUID="${instanciaUID}"]`)
+                        .closest("[fechaCheckOut]")
+                        ?.getAttribute("fechaCheckOut")
+
+
+
+                    mesActual = String(mesActual).padStart(2, '0')
+                    mesActual = Number(mesActual)
+
+                    anoActual = String(anoActual).padStart(4, '0')
+                    anoActual = Number(anoActual)
+
+                    let fechaEntradaReserva = document.querySelector("[calendario=entrada][fechaEntrada]")?.getAttribute("fechaEntrada")
+                    fechaEntradaReserva = fechaEntradaReserva.split("/")
+
+                    let diaEntradaReserva = fechaEntradaReserva[0]
+                    diaEntradaReserva = Number(diaEntradaReserva)
+
+                    let mesEntradaReserva = fechaEntradaReserva[1]
+                    mesEntradaReserva = Number(mesEntradaReserva)
+
+                    let anoEntradaReserva = fechaEntradaReserva[2]
+                    anoEntradaReserva = Number(anoEntradaReserva)
+
+                    let fechaSalidaReserva = document.querySelector("[calendario=salida][fechaSalida]")?.getAttribute("fechaSalida")
+                    fechaSalidaReserva = fechaSalidaReserva.split("/")
+                    let diaSalidaReserva = fechaSalidaReserva[0]
+                    diaSalidaReserva = Number(diaSalidaReserva)
+
+                    let mesSalidaReserva = fechaSalidaReserva[1]
+                    mesSalidaReserva = Number(mesSalidaReserva)
+
+                    let anoSalidaReserva = fechaSalidaReserva[2]
+                    anoSalidaReserva = Number(anoSalidaReserva)
+
+                    const fechaEntradaFormadoAAAAMMDD = `${anoEntradaReserva}-${mesEntradaReserva}-${diaEntradaReserva}`
+                    const fechaSalidaFormadoAAAAMMDD = `${anoSalidaReserva}-${mesSalidaReserva}-${diaSalidaReserva}`
+
+                    const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
+                        const inicio = new Date(fechaInicio);
+                        const fin = new Date(fechaSalida);
+                        const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
+
+                        const mesValido = fecha > inicio && fecha < fin;
+                        const noEsInicioMes = fecha.getMonth() !== inicio.getMonth();
+                        const noEsFinMes = fecha.getMonth() !== fin.getMonth();
+
+                        return mesValido && noEsInicioMes && noEsFinMes;
+                    }
+
+                    marcoCalendario.setAttribute("perfilMes", perfilMes)
+
+
+
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                    // calendario_entrada_asistido_detallesReserva_conPasado
+                    if (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva) {
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
+
+                    }
+                    if (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
+
+                    }
+
+
+
+                    for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
+                        const diaFinal = Number(numeroDia + 1);
+                        const bloqueDia = document.createElement("li")
+                        bloqueDia.setAttribute("class", "dia")
+                        bloqueDia.innerText = diaFinal
+
+                        if (diaFinal === 1) {
+                            bloqueDia.style.gridColumnStart = posicionDia1
+                        }
+                        bloqueDia.setAttribute("dia", diaFinal)
+                        bloqueDia.setAttribute("estado", "disponible")
+                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.UIComponentes.checkin.seleccionarDia)
+                        // bloqueDia.classList.add("calendarioDiaDisponible")
+                        bloqueDia.style.pointerEvents = "none"
+
+                        if (calendario.tiempo === "presente") {
+                            if (diaFinal === diaActual) {
+                                bloqueDia.style.border = "3px solid ghostwhite"
+                            }
+                        }
+
+                        const mesEntradaRenderizado = (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva)
+                        const mesSalidaRenderzado = (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva)
+                        const mesInternoRango = verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)
+
+                        const mesEntradaSalidaRenderizado = (
+                            (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) &&
+                            (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva)
+                        )
+
+                        if (mesEntradaSalidaRenderizado) {
+
+
+
+                            if (diaEntradaReserva > diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                bloqueDia.style.pointerEvents = "none"
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+
+
+                            if (diaEntradaReserva === diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                //bloqueDia.style.pointerEvents = "none"
+                                //bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.innerText = "E " + diaFinal
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+
+                            if (diaEntradaReserva < diaFinal && diaSalidaReserva > diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+
+                            if (diaSalidaReserva === diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "none"
+                                //bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.innerText = "S " + diaFinal
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+
+                            }
+                            if (diaSalidaReserva < diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "none"
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+
+                            }
+
+                        }
+                        else if (mesEntradaRenderizado) {
+
+                            if (diaEntradaReserva > diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                bloqueDia.style.pointerEvents = "none"
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+                            if (diaEntradaReserva === diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                //bloqueDia.style.pointerEvents = "none"
+                                //bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.innerText = "E " + diaFinal
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+
+                            if (diaEntradaReserva < diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+                        }
+                        else if (mesSalidaRenderzado) {
+                            if (diaSalidaReserva > diaFinal) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+                            if (diaSalidaReserva === diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "none"
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.innerText = "S " + diaFinal
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+
+                            }
+                            if (diaSalidaReserva < diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaReserva")
+                                // bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.style.pointerEvents = "none"
+
+                            }
+
+
+                        }
+                        if (mesInternoRango) {
+                            bloqueDia.classList.remove("calendarioDiaDisponible")
+                            bloqueDia.classList.add("calendarioDiaReserva")
+                            bloqueDia.style.pointerEvents = "all"
+
+                        }
+                        if (fechaCheckIN) {
+                            const fechaCheckIN_array = fechaCheckIN.split("/")
+                            const diaCheckIn = Number(fechaCheckIN_array[0])
+                            const mesCheckIn = Number(fechaCheckIN_array[1])
+                            const anoCheckIn = Number(fechaCheckIN_array[2])
+
+                            if (mesActual === mesCheckIn && anoActual === anoCheckIn) {
+                                if (diaCheckIn === diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaReserva")
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+
+                                }
+
+                            }
+
+                        }
+
+                        if (fechaCheckOutAdelantado) {
+                            const fechaCheckOutAdelantado_array = fechaCheckOutAdelantado.split("/")
+                            const diaCheckOut = Number(fechaCheckOutAdelantado_array[0])
+                            const mesCheckOut = Number(fechaCheckOutAdelantado_array[1])
+                            const anoCheckOut = Number(fechaCheckOutAdelantado_array[2])
+
+                            if (mesActual === mesCheckOut && anoActual === anoCheckOut) {
+                                if (diaCheckOut === diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaReserva")
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                    bloqueDia.innerText = "COa " + diaFinal
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+
+                                }
+                                if (diaCheckOut < diaFinal && diaSalidaReserva > diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaReserva")
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+
+                                } else if (diaCheckOut < diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaReserva")
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+
+
+
+                                }
+                                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
+                                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
+                            }
+
+                        }
+
+                        marcoMes.appendChild(bloqueDia)
                     }
 
 
 
 
 
-                    marcoMes.appendChild(bloqueDia)
+
                 }
+                if (perfilMes === "calendario_salida_asistido_detallesReserva_checkIn_conPasado") {
+
+                    let mesActual = calendario.mes
+                    let anoActual = calendario.ano
+
+                    const fechaCheckOut = document
+                        .querySelector(`[instanciaUID="${instanciaUID}"]`)
+                        .closest("[fechaCheckOut]")
+                        ?.getAttribute("fechaCheckOut")
 
 
-            }
-            if (instanciaUID_ProcesoCambioMes) {
-                const selectorMarcoMesRenderizadoEnEspera = selectorCalendarioRenderizado
-                    .querySelector(`[inctanciaUID_procesoCambioMes="${instanciaUID_ProcesoCambioMes}"]`)
-                if (!selectorMarcoMesRenderizadoEnEspera) {
-                    return
+
+                    const fechaCheckIN = document
+                        .querySelector(`[instanciaUID="${instanciaUID}"]`)
+                        .closest("[fechaCheckIn]")
+                        ?.getAttribute("fechaCheckIn")
+
+
+                    mesActual = String(mesActual).padStart(2, '0')
+                    mesActual = Number(mesActual)
+
+                    anoActual = String(anoActual).padStart(4, '0')
+                    anoActual = Number(anoActual)
+
+                    let fechaEntradaReserva = document.querySelector("[calendario=entrada][fechaEntrada]")?.getAttribute("fechaEntrada")
+                    fechaEntradaReserva = fechaEntradaReserva.split("/")
+
+                    let diaEntradaReserva = fechaEntradaReserva[0]
+                    diaEntradaReserva = Number(diaEntradaReserva)
+
+                    let mesEntradaReserva = fechaEntradaReserva[1]
+                    mesEntradaReserva = Number(mesEntradaReserva)
+
+                    let anoEntradaReserva = fechaEntradaReserva[2]
+                    anoEntradaReserva = Number(anoEntradaReserva)
+
+                    let fechaSalidaReserva = document.querySelector("[calendario=salida][fechaSalida]")?.getAttribute("fechaSalida")
+                    fechaSalidaReserva = fechaSalidaReserva.split("/")
+                    let diaSalidaReserva = fechaSalidaReserva[0]
+                    diaSalidaReserva = Number(diaSalidaReserva)
+
+                    let mesSalidaReserva = fechaSalidaReserva[1]
+                    mesSalidaReserva = Number(mesSalidaReserva)
+
+                    let anoSalidaReserva = fechaSalidaReserva[2]
+                    anoSalidaReserva = Number(anoSalidaReserva)
+
+                    const fechaEntradaFormadoAAAAMMDD = `${anoEntradaReserva}-${mesEntradaReserva}-${diaEntradaReserva}`
+                    const fechaSalidaFormadoAAAAMMDD = `${anoSalidaReserva}-${mesSalidaReserva}-${diaSalidaReserva}`
+
+                    const verficaRangoInernamente = (mesActual, anoActual, fechaInicio, fechaSalida) => {
+                        const inicio = new Date(fechaInicio);
+                        const fin = new Date(fechaSalida);
+                        const fecha = new Date(anoActual, mesActual - 1); // El mes comienza en 0 (enero es 0)
+
+                        const mesValido = fecha > inicio && fecha < fin;
+                        const noEsInicioMes = fecha.getMonth() !== inicio.getMonth();
+                        const noEsFinMes = fecha.getMonth() !== fin.getMonth();
+
+                        return mesValido && noEsInicioMes && noEsFinMes;
+                    }
+
+                    marcoCalendario.setAttribute("perfilMes", perfilMes)
+
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                    // calendario_entrada_asistido_detallesReserva_conPasado
+                    if (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva) {
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
+
+                    }
+                    if (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
+
+                    }
+
+
+                    for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
+                        const diaFinal = Number(numeroDia + 1);
+                        const bloqueDia = document.createElement("li")
+                        bloqueDia.setAttribute("class", "dia")
+                        bloqueDia.innerText = diaFinal
+
+                        if (diaFinal === 1) {
+                            bloqueDia.style.gridColumnStart = posicionDia1
+                        }
+                        bloqueDia.setAttribute("dia", diaFinal)
+                        bloqueDia.setAttribute("estado", "disponible")
+                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.UIComponentes.checkout.seleccionarDia)
+                        // bloqueDia.classList.add("calendarioDiaDisponible")
+                        bloqueDia.style.pointerEvents = "none"
+
+                        if (calendario.tiempo === "presente") {
+                            if (diaFinal === diaActual) {
+                                bloqueDia.style.border = "3px solid ghostwhite"
+                            }
+                        }
+                        const mesEntradaRenderizado = (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva)
+                        const mesSalidaRenderzado = (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva)
+                        const mesInternoRango = verficaRangoInernamente(mesActual, anoActual, fechaEntradaFormadoAAAAMMDD, fechaSalidaFormadoAAAAMMDD)
+
+                        const mesEntradaSalidaRenderizado = (
+                            (mesActual === mesEntradaReserva && anoActual === anoEntradaReserva) &&
+                            (mesActual === mesSalidaReserva && anoActual === anoSalidaReserva)
+                        )
+
+                        if (mesEntradaSalidaRenderizado) {
+
+
+
+                            if (diaEntradaReserva > diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                bloqueDia.style.pointerEvents = "none"
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+
+                            }
+
+
+                            if (diaEntradaReserva === diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "none"
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.innerText = "E " + diaFinal
+
+                            }
+
+                            if (diaEntradaReserva < diaFinal && diaSalidaReserva > diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+
+                            if (diaSalidaReserva === diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "none"
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.innerText = "S " + diaFinal
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+
+                            }
+                            if (diaSalidaReserva < diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "none"
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+
+                            }
+
+                        }
+                        else if (mesEntradaRenderizado) {
+
+                            if (diaEntradaReserva > diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                bloqueDia.style.pointerEvents = "none"
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+
+
+                            if (diaEntradaReserva === diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                //bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "none"
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.innerText = "E " + diaFinal
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+
+                            if (diaEntradaReserva < diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaDisponible")
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+                        }
+                        else if (mesSalidaRenderzado) {
+
+
+
+                            if (diaSalidaReserva > diaFinal) {
+                                bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "all"
+
+                            }
+                            if (diaSalidaReserva === diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaReserva")
+                                bloqueDia.style.pointerEvents = "none"
+                                //bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.innerText = "S " + diaFinal
+                                bloqueDia.classList.add("calendarioDiaReservaLimite")
+
+                            }
+                            if (diaSalidaReserva < diaFinal) {
+                                bloqueDia.classList.remove("calendarioDiaReserva")
+                                // bloqueDia.classList.add("calendarioDiaReserva")
+                                bloqueDia.setAttribute("estado", "deshabilitado")
+                                bloqueDia.style.pointerEvents = "none"
+
+                            }
+
+
+                        }
+
+                        if (mesInternoRango) {
+
+                            bloqueDia.classList.remove("calendarioDiaDisponible")
+                            bloqueDia.classList.add("calendarioDiaReserva")
+                            bloqueDia.style.pointerEvents = "all"
+
+                        }
+                        if (fechaCheckOut) {
+                            const fechaCheckOut_array = fechaCheckOut.split("/")
+                            const diaCheckOut = Number(fechaCheckOut_array[0])
+                            const mesCheckOut = Number(fechaCheckOut_array[1])
+                            const anoCheckOut = Number(fechaCheckOut_array[2])
+                            if (mesActual === mesCheckOut && anoActual === anoCheckOut) {
+                                if (diaCheckOut === diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+
+                                }
+
+                            }
+
+                        }
+
+                        if (fechaCheckIN) {
+                            const fechaCheckIN_Array = fechaCheckIN.split("/")
+                            const diaCheckIn = Number(fechaCheckIN_Array[0])
+                            const mesCheckIn = Number(fechaCheckIN_Array[1])
+                            const anoCheckIn = Number(fechaCheckIN_Array[2])
+
+                            if (mesActual === mesCheckIn && anoActual === anoCheckIn) {
+                                if (diaCheckIn === diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaReserva")
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                    bloqueDia.innerText = "CI " + diaFinal
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+
+                                }
+                                if (diaCheckIn > diaFinal && diaSalidaReserva < diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaReserva")
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+
+                                } else if (diaCheckIn > diaFinal) {
+                                    bloqueDia.classList.remove("calendarioDiaReserva")
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                    bloqueDia.style.pointerEvents = "none"
+                                    bloqueDia.setAttribute("estado", "deshabilitado")
+
+
+
+                                }
+                                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
+                                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
+                            }
+
+                        }
+
+
+
+
+
+                        marcoMes.appendChild(bloqueDia)
+                    }
+
+
                 }
+
+                if (perfilMes === "calendario_entrada_perfilSimple") {
+
+                    // Si hay fecha de entrada, posicionar el calendario en la fecha de entrada
+                    // Si hay fecha de salida, limitar el calendario de entrada por la fecha de salida
+                    const mesActual = calendario.mes
+                    const anoActual = calendario.ano
+
+                    /*
+                    mesActual = String(mesActual).padStart(2, '0');
+                    mesActual = Number(mesActual)
+                    anoActual = String(anoActual).padStart(4, '0');
+                    anoActual = Number(anoActual)
+                    */
+                    let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
+                    let diaSeleccionadoEntrada
+                    let mesSeleccionadoEntrada
+                    let anoSeleccionadoEntrada
+                    let datosFechaEntradaSeleccionada
+                    if (fechaEntradaSelecionda) {
+                        const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
+                        diaSeleccionadoEntrada = fechaEntradaSelecionda_array[0]
+                        diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
+                        mesSeleccionadoEntrada = fechaEntradaSelecionda_array[1]
+                        mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
+                        anoSeleccionadoEntrada = fechaEntradaSelecionda_array[2]
+                        anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
+                        datosFechaEntradaSeleccionada = "existen"
+                    }
+
+                    let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
+                    let diaSeleccionadoSalida
+                    let mesSeleccionadoSalida
+                    let anoSeleccionadoSalida
+                    let datosFechaSalidaSeleccionada
+                    if (fechaSalidaSelecionda) {
+                        const fechaSalidaSelecionda_array = fechaSalidaSelecionda.split("/")
+                        diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]
+                        diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
+                        mesSeleccionadoSalida = fechaSalidaSelecionda_array[1]
+                        mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
+                        anoSeleccionadoSalida = fechaSalidaSelecionda_array[2]
+                        anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
+                        datosFechaSalidaSeleccionada = "existen"
+                    }
+
+                    marcoCalendario?.setAttribute("perfilMes", perfilMes)
+
+                    const verificaRangoInternamente = (
+                        mesActual,
+                        anoActual,
+                        fechaInicio,
+                        fechaSalida
+                    ) => {
+                        const inicio = new Date(fechaInicio);
+                        const fin = new Date(fechaSalida);
+
+                        const inicioMesAno = new Date(inicio.getFullYear(), inicio.getMonth());
+                        const finMesAno = new Date(fin.getFullYear(), fin.getMonth());
+                        const fechaMesAno = new Date(anoActual, mesActual - 1);
+                        return fechaMesAno >= inicioMesAno && fechaMesAno <= finMesAno;
+                    };
+
+                    const fechaEntrada_ISO = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
+                    const fechaSalida_ISO = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
+
+
+                    for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
+                        let diaFinal = numeroDia + 1;
+                        diaFinal = Number(diaFinal)
+                        const bloqueDia = document.createElement("li")
+                        bloqueDia.setAttribute("class", "dia")
+                        bloqueDia.innerText = diaFinal
+
+                        if (diaFinal === 1) {
+                            bloqueDia.style.gridColumnStart = posicionDia1
+                        }
+                        bloqueDia.setAttribute("dia", diaFinal)
+                        bloqueDia.setAttribute("estado", "disponible")
+                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
+                        bloqueDia.classList.add("calendarioDiaDisponible")
+
+                        if (calendario.tiempo === "presente") {
+                            if (diaFinal === diaActual) {
+                                bloqueDia.style.border = "3px solid ghostwhite"
+                            }
+                        }
+
+
+                        if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
+                            bloqueDia.classList.add("calendarioDiaParcial")
+                        }
+
+                        if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
+                            bloqueDia.classList.add("calendarioDiaCompleto")
+                        }
+
+                        if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
+                            if (
+                                (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
+                                &&
+                                (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
+                            ) {
+                                // si es mes de entrada y salida
+                                console.log("4")
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                }
+                                if (diaFinal < diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                }
+                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                }
+
+                            } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
+                                // Si es mes de entrada
+                                console.log("1")
+
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                }
+                                if (diaFinal > diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                                if (calendario.tiempo === "futuro") {
+                                    if (diaFinal < diaSeleccionadoEntrada) {
+                                        bloqueDia.classList.add("calendarioDiaDisponible")
+                                    }
+                                }
+                            } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                                console.log("2")
+                                // si es mes de salida pero no de entrada
+                                if (diaFinal < diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                }
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                }
+                            } else {
+                                // Entonces ver si es mes intermedio
+                                if (verificaRangoInternamente(mesActual, anoActual, fechaEntrada_ISO, fechaSalida_ISO)) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                            }
+                        }
+                        else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
+                            console.log(">> 1")
+
+
+                            if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                }
+
+                            }
+                        }
+                        else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
+                            if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                }
+                                if (diaFinal < diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            }
+                        }
+                        marcoMes?.appendChild(bloqueDia)
+                    }
+
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                    if (datosFechaSalidaSeleccionada === "existen") {
+                        if (anoActual < anoSeleccionadoSalida) {
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                            console.log("1")
+                        } else if (anoActual === anoSeleccionadoSalida && mesActual < mesSeleccionadoSalida) {
+                            console.log("2")
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                        } else {
+                            console.log("5")
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
+                        }
+                    } else {
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                        selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                    }
+
+
+                }
+                if (perfilMes === "calendario_salida_perfilSimple") {
+
+                    const mesActual = calendario.mes
+                    const anoActual = calendario.ano
+
+                    let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
+                    let diaSeleccionadoEntrada
+                    let mesSeleccionadoEntrada
+                    let anoSeleccionadoEntrada
+                    let datosFechaEntradaSeleccionada
+                    if (fechaEntradaSelecionda) {
+                        const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
+
+                        diaSeleccionadoEntrada = fechaEntradaSelecionda_array[0]
+                        diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
+                        mesSeleccionadoEntrada = fechaEntradaSelecionda_array[1]
+                        mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
+                        anoSeleccionadoEntrada = fechaEntradaSelecionda_array[2]
+                        anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
+                        datosFechaEntradaSeleccionada = "existen"
+                    }
+
+                    let fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
+                    let diaSeleccionadoSalida
+                    let mesSeleccionadoSalida
+                    let anoSeleccionadoSalida
+                    let datosFechaSalidaSeleccionada
+                    if (fechaSalidaSelecionda) {
+                        const fechaSalidaSelecionda_array = fechaSalidaSelecionda.split("/")
+                        diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]
+                        diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
+                        mesSeleccionadoSalida = fechaSalidaSelecionda_array[1]
+                        mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
+                        anoSeleccionadoSalida = fechaSalidaSelecionda_array[2]
+                        anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
+                        datosFechaSalidaSeleccionada = "existen"
+                    }
+
+                    marcoCalendario.setAttribute("perfilMes", perfilMes)
+
+                    const verificaRangoInternamente = (
+                        mesActual,
+                        anoActual,
+                        fechaInicio,
+                        fechaSalida
+                    ) => {
+                        const inicio = new Date(fechaInicio);
+                        const fin = new Date(fechaSalida);
+
+                        const inicioMesAno = new Date(inicio.getFullYear(), inicio.getMonth());
+                        const finMesAno = new Date(fin.getFullYear(), fin.getMonth());
+                        const fechaMesAno = new Date(anoActual, mesActual - 1);
+                        return fechaMesAno >= inicioMesAno && fechaMesAno <= finMesAno;
+                    };
+
+                    const fechaEntrada_ISO = `${anoSeleccionadoEntrada}-${mesSeleccionadoEntrada}-${diaSeleccionadoEntrada}`
+                    const fechaSalida_ISO = `${anoSeleccionadoSalida}-${mesSeleccionadoSalida}-${diaSeleccionadoSalida}`
+
+                    for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
+                        let diaFinal = numeroDia + 1;
+                        diaFinal = Number(diaFinal)
+                        const bloqueDia = document.createElement("li")
+                        bloqueDia.setAttribute("class", "dia")
+                        bloqueDia.innerText = diaFinal
+
+                        if (diaFinal === 1) {
+                            bloqueDia.style.gridColumnStart = posicionDia1
+                        }
+                        bloqueDia.setAttribute("dia", diaFinal)
+                        bloqueDia.setAttribute("estado", "disponible")
+                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
+                        bloqueDia.classList.add("calendarioDiaDisponible")
+
+                        if (calendario.tiempo === "presente") {
+                            if (diaFinal === diaActual) {
+                                bloqueDia.style.border = "3px solid ghostwhite"
+                            }
+                        }
+
+                        if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
+                            bloqueDia.classList.add("calendarioDiaParcial")
+                        }
+
+                        if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
+                            bloqueDia.classList.add("calendarioDiaCompleto")
+                        }
+
+                        if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
+                            //  bloqueDia.classList.remove("calendarioDiaDisponible")
+                            bloqueDia.classList.add("calendarioDiaCompleto")
+                        }
+
+                        if (datosFechaEntradaSeleccionada === "existen" && datosFechaSalidaSeleccionada === "existen") {
+
+                            if (
+                                (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)
+                                &&
+                                (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida)
+                            ) {
+                                // si es mes de entrada y salida
+                                console.log("41")
+
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                }
+                                if (diaFinal < diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+
+                                }
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+
+                                }
+                                if (diaFinal > diaSeleccionadoEntrada && diaFinal < diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+
+
+
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                    bloqueDia.setAttribute("destino", "1")
+                                }
+
+                            } else if ((mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada)) {
+                                // Si es mes de entrada
+                                console.log("1")
+
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+
+                                }
+                                if (diaFinal > diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+                                if (diaFinal < diaSeleccionadoEntrada) {
+                                    // replicar esto
+                                    if (bloqueDia.getAttribute("estadoDia") === "noDisponible") {
+                                    }
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                }
+
+                                if (calendario.tiempo === "futuro") {
+                                    if (diaFinal < diaSeleccionadoEntrada) {
+                                        // bloqueDia.classList.add("calendarioDiaDisponible")
+                                    }
+                                }
+                            } else if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                                console.log("2")
+                                // si es mes de salida pero no de entrada
+                                if (diaFinal < diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+
+
+
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+
+                                }
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+
+                                }
+                            } else {
+                                // Entonces ver si es mes intermedio
+                                if (verificaRangoInternamente(mesActual, anoActual, fechaEntrada_ISO, fechaSalida_ISO)) {
+                                    bloqueDia.classList.add("calendarioDiaReserva")
+                                }
+
+                            }
+                        }
+                        else if (datosFechaEntradaSeleccionada === "existen" && !datosFechaSalidaSeleccionada) {
+                            if (mesActual === mesSeleccionadoEntrada && anoActual === anoSeleccionadoEntrada) {
+                                if (diaFinal === diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                    bloqueDia.setAttribute("diaEstado", "seleccionado")
+                                }
+                                if (diaFinal > diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                                if (diaFinal < diaSeleccionadoEntrada) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                }
+                            } else {
+                                if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            }
+
+
+
+                        }
+                        else if (datosFechaSalidaSeleccionada === "existen" && !datosFechaEntradaSeleccionada) {
+                            if (mesActual === mesSeleccionadoSalida && anoActual === anoSeleccionadoSalida) {
+                                if (diaFinal === diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                }
+                                if (diaFinal > diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                                if (diaFinal < diaSeleccionadoSalida) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            } else {
+                                if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                }
+                            }
+                        }
+                        marcoMes.appendChild(bloqueDia)
+                    }
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+
+                    if (datosFechaEntradaSeleccionada === "existen") {
+                        if (anoActual > anoSeleccionadoEntrada) {
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                        } else if (anoActual === anoSeleccionadoEntrada && mesActual > mesSeleccionadoEntrada) {
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                        } else {
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
+                        }
+                    } else {
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                        selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                    }
+
+
+
+
+                }
+
+                if (instanciaUID_procesoCambioMes) {
+                    const selectorMarcoMesRenderizadoEnEspera = selectorCalendarioRenderizado
+                        .querySelector(`[inctanciaUID_procesoCambioMes="${instanciaUID_procesoCambioMes}"]`)
+                    if (!selectorMarcoMesRenderizadoEnEspera) {
+                        return
+                    }
+                }
+                if (selectorCalendarioRenderizado) {
+                    selectorCalendarioRenderizado.querySelector("[contenedor=contruyendoCalendario]")?.remove()
+                    selectorCalendarioRenderizado.querySelector("[contenedor=calendario]").removeAttribute("style")
+                }
+            } catch (errorCapturado) {
+                throw errorCapturado
+
             }
-            if (selectorCalendarioRenderizado) {
-                selectorCalendarioRenderizado.querySelector("[contenedor=contruyendoCalendario]")?.remove()
-                selectorCalendarioRenderizado.querySelector("[contenedor=calendario]").removeAttribute("style")
-            }
+
         },
         resolverCalendarioNuevo: async (calendario) => {
 
@@ -11571,7 +9567,7 @@ const casaVitini = {
             const instanciaUID = calendario.target.closest("[instanciaUID]").getAttribute("instanciaUID")
             let mesActual = Number(document.querySelector("[componente=mesReferencia]").getAttribute("mes"))
             let anoActual = Number(document.querySelector("[componente=mesReferencia]").getAttribute("ano"))
-            const instanciaUID_ProcesoCambioMes = casaVitini.componentes.codigoFechaInstancia()
+            const instanciaUID_procesoCambioMes = casaVitini.componentes.codigoFechaInstancia()
 
             if (boton === "adelante") {
                 if (mesActual + 1 < 13) {
@@ -11600,7 +9596,7 @@ const casaVitini = {
 
             const calendarioResuelto = await casaVitini.componentes.resolverCalendarioNuevo(calendarioContruir)
             calendarioResuelto.instanciaUID = instanciaUID
-            calendarioResuelto.instanciaUID_ProcesoCambioMes = instanciaUID_ProcesoCambioMes
+            calendarioResuelto.instanciaUID_procesoCambioMes = instanciaUID_procesoCambioMes
 
             const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
 
@@ -11610,7 +9606,7 @@ const casaVitini = {
             })
             const contenedorCalendario = calendarioRenderizado.querySelector(`[contenedor=calendario]`)
             const selectorMarcoMesRenderizado = calendarioRenderizado.querySelector(`[componente=marcoMes]`)
-            selectorMarcoMesRenderizado.setAttribute("inctanciaUID_procesoCambioMes", instanciaUID_ProcesoCambioMes)
+            selectorMarcoMesRenderizado.setAttribute("inctanciaUID_procesoCambioMes", instanciaUID_procesoCambioMes)
 
             const contenedorContruyendoCalendarioRenderizado = calendarioRenderizado.querySelectorAll("[contenedor=contruyendoCalendario]")
             contenedorContruyendoCalendarioRenderizado.forEach((contenedorRenderizado) => {
