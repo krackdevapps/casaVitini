@@ -64,6 +64,7 @@ const obtenerTodosLosCalendarios = async () => {
                 console.log("errorCapturado", errorCapturado.message)
                 estructura.estadoSincronizacion = "noSincronizado"
             }
+            console.log("raw", calendarioDatos)
             const jcalData = ICAL.parse(calendarioDatos);
             const jcal = new ICAL.Component(jcalData);
             const eventosCalenario = jcal.jCal[2]

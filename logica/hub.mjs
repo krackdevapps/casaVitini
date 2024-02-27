@@ -532,7 +532,7 @@ const puerto = async (entrada, salida) => {
                             const valor = parConfirmacion.valor
                             estructuraFinal[configuracionUID] = valor
                         }
-                        console.log(estructuraFinal)
+
                         return estructuraFinal
 
                     } catch (errorCapturado) {
@@ -886,13 +886,11 @@ const puerto = async (entrada, salida) => {
 
                         for (let index = 0; index < diasAntelacionReserva; index++) {
                             const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
-                            console.log("fechaAntelacionObjeto", fechaAntelacionObjeto)
                             const anoObjeto = String(fechaAntelacionObjeto.year)
                             const mesObjeto = String(fechaAntelacionObjeto.month)
                             const diaObjeto = String(fechaAntelacionObjeto.day)
 
                             estructuraGlobal_DiasAntelacion[anoObjeto] ||= {};
-                            console.log("estructuraGlobal_DiasAntelacion", estructuraGlobal_DiasAntelacion)
                             const estructuraAno = estructuraGlobal_DiasAntelacion[anoObjeto]
                             estructuraAno[mesObjeto] ||= {}
                             const estructuraMes = estructuraAno[mesObjeto]
@@ -1007,13 +1005,13 @@ const puerto = async (entrada, salida) => {
 
                         for (let index = 0; index < diasAntelacionReserva; index++) {
                             const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
-                            console.log("fechaAntelacionObjeto", fechaAntelacionObjeto)
+
                             const anoObjeto = String(fechaAntelacionObjeto.year)
                             const mesObjeto = String(fechaAntelacionObjeto.month)
                             const diaObjeto = String(fechaAntelacionObjeto.day)
 
                             estructuraGlobal_DiasAntelacion[anoObjeto] ||= {};
-                            console.log("estructuraGlobal_DiasAntelacion", estructuraGlobal_DiasAntelacion)
+
                             const estructuraAno = estructuraGlobal_DiasAntelacion[anoObjeto]
                             estructuraAno[mesObjeto] ||= {}
                             const estructuraMes = estructuraAno[mesObjeto]
@@ -1062,13 +1060,13 @@ const puerto = async (entrada, salida) => {
 
                         for (let index = 0; index < diasAntelacionReserva; index++) {
                             const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
-                            console.log("fechaAntelacionObjeto", fechaAntelacionObjeto)
+
                             const anoObjeto = String(fechaAntelacionObjeto.year)
                             const mesObjeto = String(fechaAntelacionObjeto.month)
                             const diaObjeto = String(fechaAntelacionObjeto.day)
 
                             estructuraGlobal_DiasAntelacion[anoObjeto] ||= {};
-                            console.log("estructuraGlobal_DiasAntelacion", estructuraGlobal_DiasAntelacion)
+
                             const estructuraAno = estructuraGlobal_DiasAntelacion[anoObjeto]
                             estructuraAno[mesObjeto] ||= {}
                             const estructuraMes = estructuraAno[mesObjeto]
@@ -1260,7 +1258,7 @@ const puerto = async (entrada, salida) => {
                     enlace = $1
                     `
                     const resuelveValidarEnlace = await conexion.query(consultaValidarEnlace, [nombreEnlace])
-                    console.log("resuelveValidarEnlace", resuelveValidarEnlace.rowCount)
+
                     if (resuelveValidarEnlace.rowCount === 0) {
                         const error = "No existe el enlace para generar el PDF"
                         throw new Error(error)
@@ -1277,7 +1275,7 @@ const puerto = async (entrada, salida) => {
                     salida.setHeader('Content-Disposition', 'attachment; filename=documento.pdf');
                     salida.send(pdf);
                 } catch (errorCapturado) {
-                    console.log("errorCap", errorCapturado)
+
                     const error = {
                         error: errorCapturado.message
                     }
@@ -6313,8 +6311,8 @@ const puerto = async (entrada, salida) => {
                     try {
                         const reserva = entrada.body.reserva
                         const sentidoRango = entrada.body.sentidoRango
-                        const mesCalendario = entrada.body.mesCalendario.padStart(2, '0');
-                        const anoCalendario = entrada.body.anoCalendario.padStart(2, '0');
+                        const mesCalendario = entrada.body.mesCalendario
+                        const anoCalendario = entrada.body.anoCalendario
                         if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
                             const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
@@ -6323,6 +6321,7 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo 'sentidoRango' solo puede ser pasado o futuro"
                             throw new Error(error)
                         }
+                        console.log("enjtrad", entrada.body)
                         const regexMes = /^\d{2}$/;
                         const regexAno = /^\d{4,}$/;
 
@@ -6533,7 +6532,7 @@ const puerto = async (entrada, salida) => {
                                         mensaje: "No se ha confirmado el cambio de fecha de entrada de esta reserva por que no hay disponible elasticidad en el rango. No hay rango disponible para la nueva fecha de entrada que estas soliciando para esta reserva."
                                     }
 
-                                    if (origenLimite === "reserva") {
+                                    if (origenLimite === "reserva" || origenLimite === "eventoSincronizado") {
                                         if (fechaLimitePasado_Objeto > fechaSeleccionada_Objeto) {
                                             salida.json(ok)
 
@@ -8611,7 +8610,7 @@ const puerto = async (entrada, salida) => {
 
                         const resuelveReservasPendientes = await conexion.query(obtenerReservas, parametrosDeBusqueda)
                         const reservasPendientes = resuelveReservasPendientes.rows
-                        console.log("reservasPpendientes", reservasPendientes)
+
                         const ok = {
                             ok: "Aquí tienes las reservas de origen publico pendientes por revisar",
                             reservas: []
@@ -9998,7 +9997,7 @@ const puerto = async (entrada, salida) => {
                                     const error = "Los dias de antelacion no pueden ser iguales o superiores a los dias del limiteFuturoReserva por que entonces no se permiten reservas de mas de 0 dias"
                                     throw new Error(error)
                                 }
-                                console.log(limiteFuturoReserva)
+
                                 if (0 === Number(limiteFuturoReserva)) {
                                     const error = "El limite futuro no puede ser de 0, por que entonces no se permite reservas de mas de 0 dias."
                                     throw new Error(error)

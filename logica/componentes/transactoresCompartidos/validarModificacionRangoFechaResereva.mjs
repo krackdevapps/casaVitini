@@ -1,5 +1,8 @@
 import { DateTime } from 'luxon';
 import { conexion } from '../db.mjs';
+import { sincronizarCalendariosAirbnbPorIDV } from './calendariosSincronizados/airbnb/sincronizarCalendariosAirbnbPorIDV.mjs';
+import ICAL from 'ical.js';
+
 
 const validarModificacionRangoFechaResereva = async (metadatos) => {
     try {
@@ -64,17 +67,16 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
         }
 
         const fechaEntradaReserva_ISO = resuelveConsultaDatosReservaActual.rows[0].fechaEntrada_ISO
-        const fechaEntradaReserva_Objeto = DateTime.fromISO(fechaEntradaReserva_ISO)
-
         const fechaSalidaReserva_ISO = resuelveConsultaDatosReservaActual.rows[0].fechaSalida_ISO
+
+        const fechaEntradaReserva_Objeto = DateTime.fromISO(fechaEntradaReserva_ISO)
         const fechaSalidaReserva_Objeto = DateTime.fromISO(fechaSalidaReserva_ISO)
 
-        const mesReservaEntrada = fechaEntradaReserva_Objeto.month
-        const anoReservaEntrada = fechaEntradaReserva_Objeto.year
+        const mesReservaEntrada = fechaEntradaReserva_ISO.split("-")[1]
+        const anoReservaEntrada = fechaEntradaReserva_ISO.split("-")[0]
 
-
-        const mesReservaSalida = fechaSalidaReserva_Objeto.month
-        const anoReservaSalida = fechaSalidaReserva_Objeto.year
+        const mesReservaSalida = fechaSalidaReserva_ISO.split("-")[1]
+        const anoReservaSalida = fechaSalidaReserva_ISO.split("-")[0]
 
 
         const consultaAlojamientoReservaActual = `
@@ -92,7 +94,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
         const apartamentosReservaActual = resuelveConsultaAlojamientoReservaActual.rows.map((apartamento) => {
             return apartamento.apartamento
         })
-
 
         const reservaActual = {
             apartamentos: apartamentosReservaActual
@@ -114,14 +115,23 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
 
         const controlConfiguracionAlojamiento = apartamentosReservaActual.every(apto => apartamentosConConfiguracionDisponible.includes(apto));
         if (!controlConfiguracionAlojamiento) {
-            const error = "No se puede comprobar la elasticidad del rango de esta reserva por que hay apartamentos que no existen en la configuracion de alojamiento. Dicho de otra manera, esta reserva tiene apartamentos que ya no existen como configuracion de alojamiento. Puede que esta reserva que hiciera un unas configuraciones de alojamiento que ya no existe."
+            const error = "No se puede comprobar la elasticidad del rango de esta reserva por que hay apartamentos que no existen en la configuracion de alojamiento. Dicho de otra manera, esta reserva tiene apartamentos que ya no existen como configuracion de alojamiento. Puede que esta reserva se hiciera cuando existian unas configuraciones de alojamiento que ahora ya no existen."
             throw new Error(error)
         }
-        //falta validacion que la fecha de pasado no sea superior a la fecha de entrada y lo mismo para la otra
-        //////////////////////////////////////////////////////////////
+        const verificaRangoInternamente = (
+            mesActual,
+            anoActual,
+            fechaInicio,
+            fechaSalida
+        ) => {
+            const inicio = new Date(fechaInicio);
+            const fin = new Date(fechaSalida);
 
-
-
+            const inicioMesAno = new Date(inicio.getFullYear(), inicio.getMonth());
+            const finMesAno = new Date(fin.getFullYear(), fin.getMonth());
+            const fechaMesAno = new Date(anoActual, mesActual - 1);
+            return fechaMesAno >= inicioMesAno && fechaMesAno <= finMesAno;
+        };
 
         if (sentidoRango === "pasado") {
 
@@ -130,13 +140,14 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 month: mesCalendario, day: 1
             })
                 .minus({ days: 1 })
+
             const fechaSeleccionadaParaPasado_ISO = fechaSeleccionadaParaPasado_Objeto.toISODate().toString()
 
             if (anoReservaSalida < anoCalenddrio || mesReservaSalida < mesCalendario && anoReservaSalida === anoCalenddrio) {
                 const error = "El mes de entrada seleccionado no puede ser superior a al mes de fecha de salida de la reserva"
                 throw new Error(error)
             }
-
+            /// No se tiene en en cuenta los apartamentos, solo busca bloqueos a sacoa partir de la fecha
             const consultaBloqueos = `
             SELECT 
             uid,
@@ -149,16 +160,21 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"  
             FROM "bloqueosApartamentos" 
             WHERE                     
+            (
+            apartamento = ANY($3)
+            )
+            AND
+            (
             (salida > $2::DATE AND entrada < $1::DATE)
             AND 
             (zona = 'global' OR zona = 'privado')
             OR 
             ("tipoBloqueo" = 'permanente')
+            )
             ;`
-            const resuelveBloqueos = await conexion.query(consultaBloqueos, [fechaEntradaReserva_ISO, fechaSeleccionadaParaPasado_ISO])
+            const resuelveBloqueos = await conexion.query(consultaBloqueos, [fechaEntradaReserva_ISO, fechaSeleccionadaParaPasado_ISO, apartamentosReservaActual])
 
-            const bloqueosEntradaEncontrados = []
-            const bloqueosQueNoPermitenElasticidadDelRango = {}
+            const contenedorBloqueosEncontrados = []
 
             for (const detallesDelBloqueo of resuelveBloqueos.rows) {
                 const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada_ISO
@@ -166,157 +182,210 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 const apartamento = detallesDelBloqueo.apartamento
                 const bloqueoUID = detallesDelBloqueo.uid
                 const motivo = detallesDelBloqueo.motivo
+                const tipoBloqueo = detallesDelBloqueo.tipoBloqueo
 
-                const fechaEntradaBloqueo_Objeto = DateTime.fromISO(fechaEntradaBloqueo_ISO)
-                const fechaSalidaBloqueo_Objeto = DateTime.fromISO(fechaSalidaBloqueo_ISO)
-
-                const fechaEntradaReserva_Objeto = DateTime.fromISO(fechaEntradaReserva_ISO)
-
-                // Si la fecha de fin del bloqueo es superior a la fecha de entrada de la reserva entonces:
-                if (fechaEntradaReserva_Objeto < fechaSalidaBloqueo_Objeto) {
-                    // Si la fecha de entrada del bloqueo es inferior a la fecha de entrada reserva entonces no hay rango pasado
-                    if (fechaEntradaReserva_Objeto > fechaEntradaBloqueo_Objeto) {
-                        const estructuraFinalBloqueo = {
-                            bloqueoUID: bloqueoUID,
-                            motivo: motivo || "(Sin motivo espeficado en el bloqueo)"
-                        }
-                        if (bloqueosQueNoPermitenElasticidadDelRango[apartamento]) {
-                            (bloqueosQueNoPermitenElasticidadDelRango[apartamento]).push(estructuraFinalBloqueo)
-                        } else {
-                            bloqueosQueNoPermitenElasticidadDelRango[apartamento] = estructuraFinalBloqueo
-                        }
-                    }
-                } else {
-                    const bloqueosEstructura = {
-                        fecha_ISO: fechaSalidaBloqueo_ISO,
-                        origen: "bloqueo"
-
-                    }
-                    bloqueosEntradaEncontrados.push(bloqueosEstructura)
+                const estructura = {
+                    fechaEntrada_ISO: fechaEntradaBloqueo_ISO,
+                    fechaSalida_ISO: fechaSalidaBloqueo_ISO,
+                    uid: bloqueoUID,
+                    tipoElemento: "bloqueo",
+                    tipoBloqueo: tipoBloqueo,
+                    motivo: motivo || "(Sin motivo espeficado en el bloqueo)"
 
                 }
-
+                contenedorBloqueosEncontrados.push(estructura)
             }
-            if (Object.keys(bloqueosQueNoPermitenElasticidadDelRango).length > 0) {
-                const ok = {
-                    ok: "noHayRangoPasado",
-                    limitePasado: fechaEntradaReserva_ISO,
-                    motivo: "porBloqueos",
-                    desgloseBloqueos: bloqueosQueNoPermitenElasticidadDelRango
-                }
-                return ok
-            }
+        
 
+            const contenedorReservaEncontradas = []
             // extraer las reservas dentro del rango
             const consultaReservas = `
                 SELECT 
-                reserva,
-                to_char(entrada, 'DD/MM/YYYY') as entrada, 
-                to_char(salida, 'DD/MM/YYYY') as salida,
-                to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-                to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"    
-                FROM reservas 
+                    r.reserva,
+                    to_char(r.entrada, 'YYYY-MM-DD') AS "fechaEntrada_ISO", 
+                    to_char(r.salida, 'YYYY-MM-DD') AS "fechaSalida_ISO",
+                    ARRAY_AGG(ra.apartamento) AS apartamentos
+                FROM reservas r
+                JOIN "reservaApartamentos" ra ON r.reserva = ra.reserva
                 WHERE                     
-                (salida >= $2::DATE AND entrada <= $1::DATE)
-                AND reserva <> $3
-                AND "estadoReserva" <> 'cancelada';`
-            const resuelveConsultaReservas = await conexion.query(consultaReservas, [fechaEntradaReserva_ISO, fechaSeleccionadaParaPasado_ISO, reserva])
-            if (resuelveConsultaReservas.rowCount === 0 && bloqueosEntradaEncontrados.length === 0) {
+                    r.salida >= $2::DATE 
+                    AND r.entrada <= $1::DATE 
+                    AND r.reserva <> $3 
+                    AND r."estadoReserva" <> 'cancelada'
+                    AND r.reserva IN (
+                        SELECT reserva
+                        FROM "reservaApartamentos" 
+                        WHERE apartamento = ANY($4)
+                    )     
+                GROUP BY
+                    r.reserva, r.entrada, r.salida;
+                                `
+            const resuelveConsultaReservas = await conexion.query(consultaReservas, [fechaEntradaReserva_ISO, fechaSeleccionadaParaPasado_ISO, reserva, apartamentosReservaActual])
+
+            for (const detallesReserva of resuelveConsultaReservas.rows) {
+                const reserva = detallesReserva.reserva
+                const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
+                const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
+                const apartamentos = detallesReserva.apartamentos
+
+                const estructura = {
+                    fechaEntrada_ISO: fechaEntrada_ISO,
+                    fechaSalida_ISO: fechaSalida_ISO,
+                    uid: reserva,
+                    tipoElemento: "reserva",
+                    apartamentos: apartamentos
+                }
+                contenedorReservaEncontradas.push(estructura)
+
+            }
+
+            // En base a los apartamentos de la reserva se impoirtan los calendarios que funcionan por apartmento
+            const calendariosSincronizados = []
+            for (const apartamentoIDV of apartamentosReservaActual) {
+                const eventosCalendarioPorIDV = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV)
+                calendariosSincronizados.push(eventosCalendarioPorIDV)
+            }
+
+            // Buscar solo los eventos del mismo mes
+            const contenedorEventosCalendariosSincronizados = []
+            // Iteramos el array con todos los grupos por apartamentoIDV
+            for (const contenedorCalendariosPorIDV of calendariosSincronizados) {
+                // Dentro de cada apartamentoIDV hay un grupo de calendarios
+                const apartamentoIDV = contenedorCalendariosPorIDV.apartamentoIDV
+                const calendariosPorApartamento = contenedorCalendariosPorIDV.calendariosPorApartamento
+                // Obtenemos todos los eventos como objetos por calendario
+                for (const eventosDelCalendario of calendariosPorApartamento) {
+                    const eventosCalendario = eventosDelCalendario.calendarioObjeto
+                    // Iteramos por cada evento
+                    for (const detallesDelEvento of eventosCalendario) {
+
+                        const fechaFinal = detallesDelEvento.fechaFinal
+                        const fechaInicio = detallesDelEvento.fechaInicio
+                        const uid = detallesDelEvento.uid
+                        const nombreEvento = detallesDelEvento.nombreEvento
+
+                        const rangoInterno = verificaRangoInternamente(mesCalendario, anoCalenddrio, fechaInicio, fechaFinal)
+                        if (rangoInterno) {
+                            const estructura = {
+                                apartamentoIDV: apartamentoIDV,
+                                fechaEntrada_ISO: fechaFinal,
+                                fechaSalida_ISO: fechaInicio,
+                                tipoElemento: "eventoCalendarioSincronizado",
+                                nombreEvento: nombreEvento,
+                                tipoElemento: "eventoSincronizado"
+                            }
+                            contenedorEventosCalendariosSincronizados.push(estructura)
+                        }
+                    }
+                }
+            }
+
+            const fechaInicioRango_objeto = fechaSeleccionadaParaPasado_Objeto
+            const fechaFinRango_entradaReserva_objeto = DateTime.fromISO(fechaEntradaReserva_ISO);
+            const contenedorEventosCalendariosSincronizados_enRango = contenedorEventosCalendariosSincronizados.filter((detallesDelEvento) => {
+                const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
+                const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
+                return (fechaInicioEvento_ISO <= fechaFinRango_entradaReserva_objeto) && (fechaFinEvento_ISO >= fechaInicioRango_objeto)
+
+            })
+
+            const contenedorGlobal = [
+                ...contenedorBloqueosEncontrados,
+                ...contenedorReservaEncontradas,
+                ...contenedorEventosCalendariosSincronizados_enRango,
+            ]
+            const contenedorDeEventosQueDejanSinRangoDisponible = []
+
+
+            // Ojo: lo que se es haciendo aqui en este loop no es ver cuales estan dentro del mes, eso ya esta hecho, aquí lo que se mira es silos eventos estan enganchados al a fecha de entrad de la reserva para ver en primera instancia si hay algun tipo de rango disponbile
+            for (const detallesDelEvento of contenedorGlobal) {
+                const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
+                const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
+                const tipoElemento = detallesDelEvento.tipoElemento
+                if ((tipoElemento === "reserva" || tipoElemento === "eventoSincronizado")
+                    &&
+                    (fechaInicioEvento_ISO < fechaFinRango_entradaReserva_objeto && fechaFinRango_entradaReserva_objeto <= fechaFinEvento_ISO)) {
+                    contenedorDeEventosQueDejanSinRangoDisponible.push(detallesDelEvento)
+                }
+                if (tipoElemento === "bloqueo") {
+                    const tipoBloqueo = detallesDelEvento.tipoBloqueo
+                    if ((tipoBloqueo === "rangoTemporal")
+                        &&
+                        (fechaInicioEvento_ISO < fechaFinRango_entradaReserva_objeto && fechaFinRango_entradaReserva_objeto <= fechaFinEvento_ISO)) {
+                        contenedorDeEventosQueDejanSinRangoDisponible.push(detallesDelEvento)
+                    } else if (tipoBloqueo === "permanente") {
+                        contenedorDeEventosQueDejanSinRangoDisponible.push(detallesDelEvento)
+                    }
+                }
+            }
+
+            if (contenedorDeEventosQueDejanSinRangoDisponible.length) {
                 const ok = {
-                    ok: "rangoPasadoLibre"
+                    ok: "noHayRangoPasado",
+                    eventos: contenedorDeEventosQueDejanSinRangoDisponible
                 }
                 return ok
             }
 
-            // crrear un objeto, donde la llave sea el numero de reserva y dentro tenga la fecha deentrada salida y estado activo y ordenado por fecha
-            const reservasEnElRangoPorAnalizar = resuelveConsultaReservas.rows
-            const arrayUIDReservas = []
-            reservasEnElRangoPorAnalizar.map((reservaObjeto) => {
-                const reservaUID = reservaObjeto.reserva
-                arrayUIDReservas.push(reservaUID)
-            })
-
-
-            // extraer los apartamentos de cada reserva y crear otro objeto con la misma extructura, una llave con el numero dela reserva y un array con apartamentos
-            const consultaApartamentos = `
-                SELECT reserva, apartamento
-                FROM "reservaApartamentos" 
-                WHERE ARRAY[reserva] && $1;`
-
-            const resuelveConsultaApartamentos = await conexion.query(consultaApartamentos, [arrayUIDReservas])
-            const apartamentosProcesados = {}
-
-            resuelveConsultaApartamentos.rows.map((apartamentoPorProcesar) => {
-                const controlLlaveObjeto = apartamentosProcesados[apartamentoPorProcesar.reserva]
-                if (!controlLlaveObjeto) {
-                    apartamentosProcesados[apartamentoPorProcesar.reserva] = []
+            // Aqui se mira si habiendo algo de rango disponible. Aqui entonces se mira cuanto rango disponbile hay
+            const contenedorQueDejanRangoDisponbile = []
+            for (const detallesDelEvento of contenedorGlobal) {
+                const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
+                const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
+                const tipoElemento = detallesDelEvento.tipoElemento
+                if ((tipoElemento === "reserva" || tipoElemento === "eventoSincronizado")
+                    &&
+                    (
+                        (fechaInicioEvento_ISO <= fechaInicioRango_objeto)
+                        ||
+                        (fechaInicioEvento_ISO > fechaInicioRango_objeto)
+                        && (fechaFinEvento_ISO <= fechaFinRango_entradaReserva_objeto)
+                    )
+                ) {
+                    contenedorQueDejanRangoDisponbile.push(detallesDelEvento)
                 }
-                apartamentosProcesados[apartamentoPorProcesar.reserva].push(apartamentoPorProcesar.apartamento)
-            })
-
-            for (const reservaPorProcesar of reservasEnElRangoPorAnalizar) {
-                const reservaUID = reservaPorProcesar.reserva
-                reservaPorProcesar["apartamentos"] = apartamentosProcesados[reservaUID]
-            }
-
-            const coincidenciaPorAlojamiento = []
-            const contenedoresPorOrdenar = [...bloqueosEntradaEncontrados]
-
-            for (const analisisReservaAlojamiento of reservasEnElRangoPorAnalizar) {
-                const alojamentoAnalisis = analisisReservaAlojamiento.apartamentos
-                const alojamientoReservaActual = reservaActual.apartamentos
-                const coincidenciaApartamentoNoDisponible = alojamientoReservaActual.some(apartamento => alojamentoAnalisis.includes(apartamento));
-                if (coincidenciaApartamentoNoDisponible) {
-                    coincidenciaPorAlojamiento.push(analisisReservaAlojamiento)
-                    const reservaEstructura = {
-                        fecha_ISO: analisisReservaAlojamiento.fechaSalida_ISO,
-                        origen: "reserva"
-
+                if (tipoElemento === "bloqueo") {
+                    const tipoBloqueo = detallesDelEvento.tipoBloqueo
+                    if (tipoBloqueo === "rangoTemporal" && (
+                        (fechaInicioEvento_ISO <= fechaInicioRango_objeto)
+                        ||
+                        (fechaInicioEvento_ISO > fechaInicioRango_objeto)
+                        &&
+                        (fechaFinEvento_ISO <= fechaFinRango_entradaReserva_objeto)
+                    )) {
+                        contenedorQueDejanRangoDisponbile.push(detallesDelEvento)
                     }
-                    contenedoresPorOrdenar.push(reservaEstructura)
                 }
             }
 
-            if (contenedoresPorOrdenar.length > 0) {
-                const fechasOrdenadas = contenedoresPorOrdenar.sort((contenedor1, contenedor2) => {
-                    const fechaA = DateTime.fromISO(contenedor1.fecha_ISO);
-                    const fechaB = DateTime.fromISO(contenedor2.fecha_ISO);
-                    return fechaA - fechaB;
+            if (contenedorQueDejanRangoDisponbile.length) {
+                const eventosOrdenadorPorFechaDeSalida = contenedorQueDejanRangoDisponbile.sort((evento1, evento2) => {
+                    const fechaSalidaA = DateTime.fromISO(evento1.fechaSalida_ISO); // Convertir fecha de salida del evento 1 a objeto DateTime
+                    const fechaSalidaB = DateTime.fromISO(evento2.fechaSalida_ISO); // Convertir fecha de salida del evento 2 a objeto DateTime
+                    // Ordenar de manera descendente según la fecha de salida
+                    if (fechaSalidaA < fechaSalidaB) {
+                        return 1; // Si la fecha de salida del evento 1 es menor, lo colocamos después en el array
+                    } else if (fechaSalidaA > fechaSalidaB) {
+                        return -1; // Si la fecha de salida del evento 1 es mayor, lo colocamos antes en el array
+                    } else {
+                        return 0; // Si las fechas de salida son iguales, no hay cambio en el orden
+                    }
                 });
-                const contenedorFinal = fechasOrdenadas[fechasOrdenadas.length - 1]
-                const fechaLimitePasado = DateTime.fromISO(contenedorFinal);
-                const fechaEntradaReservaFormato = DateTime.fromISO(fechaEntradaReserva_ISO);
-                const origen = contenedorFinal.origen
 
-                if (origen === "reserva") {
-                    const fechaEnContenedor = DateTime.fromISO(contenedorFinal.fecha_ISO).minus({ day: 1 }).toISODate()
-                    contenedorFinal.fecha_ISO = fechaEnContenedor
-
-
-                }
-
-                if (fechaLimitePasado > fechaEntradaReservaFormato) {
-                    const ok = {
-                        ok: "noHayRangoPasado"
-                    }
-                    return ok
-                } else {
-                    const ok = {
-                        ok: "rangoPasadoLimitado",
-                        limitePasado: contenedorFinal.fecha_ISO,
-                        origen: origen
-                    }
-                    return ok
-                }
-            }
-            if (contenedoresPorOrdenar.length === 0) {
+                console.log("eventosOrdenadorPorFechaDeSalida", eventosOrdenadorPorFechaDeSalida)
                 const ok = {
-                    ok: "rangoPasadoLibre"
+                    ok: "rangoPasadoLimitado",
+                    limitePasado: eventosOrdenadorPorFechaDeSalida[0].fechaSalida_ISO,
+                    origen: eventosOrdenadorPorFechaDeSalida[0].tipoElemento,
+                    detallesDelEventoBloqueante: eventosOrdenadorPorFechaDeSalida
                 }
                 return ok
             }
 
-
+            const ok = {
+                ok: "rangoPasadoLibre"
+            }
+            return ok
         }
 
         if (sentidoRango === "futuro") {
@@ -343,17 +412,22 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
             to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"    
             FROM "bloqueosApartamentos" 
-            WHERE                     
+            WHERE       
+            (
+                apartamento = ANY($3)
+            )
+            AND
+            (              
             (salida >= $2::DATE AND entrada <= $1::DATE)
             AND 
             (zona = 'global' OR zona = 'privado')
             OR 
-            ("tipoBloqueo" = 'permanente');`
-            const resuelveBloqueos = await conexion.query(consultaBloqueos, [fechaSeleccionadaParaFuturo_ISO, fechaSalidaReserva_ISO])
+            ("tipoBloqueo" = 'permanente')
+            );`
+            const resuelveBloqueos = await conexion.query(consultaBloqueos, [fechaSeleccionadaParaFuturo_ISO, fechaSalidaReserva_ISO, apartamentosReservaActual])
 
-            const bloqueosSalidaEncontrados = []
-
-            const bloqueosQueNoPermitenElasticidadDelRango = {}
+            
+            const contenedorBloqueosEncontrados = []
 
             for (const detallesDelBloqueo of resuelveBloqueos.rows) {
                 const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada_ISO
@@ -361,164 +435,312 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 const apartamento = detallesDelBloqueo.apartamento
                 const bloqueoUID = detallesDelBloqueo.uid
                 const motivo = detallesDelBloqueo.motivo
+                const tipoBloqueo = detallesDelBloqueo.tipoBloqueo
 
-                const fechaEntradaBloqueo_Objeto = DateTime.fromISO(fechaEntradaBloqueo_ISO)
-                const fechaSalidaBloqueo_Objeto = DateTime.fromISO(fechaSalidaBloqueo_ISO)
-
-                const fechaSalidaReserva_Objeto = DateTime.fromISO(fechaSalidaReserva_ISO)
-                // Si la fecha de inicio del bloqueo es inferior a la fecha de salida de la reserva entonces:
-
-
-                if (fechaEntradaBloqueo_Objeto < fechaSalidaReserva_Objeto) {
-                    // Si la fecha de fin del blqueo es superior a la fecha de salida de la reserva entonces no hay rango futuro
-                    if (fechaSalidaReserva_Objeto < fechaSalidaBloqueo_Objeto) {
-                        const estructuraFinalBloqueo = {
-                            bloqueoUID: bloqueoUID,
-                            motivo: motivo || "(Sin motivo espeficado en el bloqueo)"
-                        }
-                        if (bloqueosQueNoPermitenElasticidadDelRango[apartamento]) {
-                            (bloqueosQueNoPermitenElasticidadDelRango[apartamento]).push(estructuraFinalBloqueo)
-                        } else {
-                            bloqueosQueNoPermitenElasticidadDelRango[apartamento] = estructuraFinalBloqueo
-                        }
-                    }
-                } else {
-                    const bloqueosEstructura = {
-                        fecha_ISO: fechaEntradaBloqueo_ISO,
-                        origen: "bloqueo"
-
-                    }
-                    bloqueosSalidaEncontrados.push(bloqueosEstructura)
+                const estructura = {
+                    fechaEntrada_ISO: fechaEntradaBloqueo_ISO,
+                    fechaSalida_ISO: fechaSalidaBloqueo_ISO,
+                    uid: bloqueoUID,
+                    tipoElemento: "bloqueo",
+                    tipoBloqueo: tipoBloqueo,
+                    motivo: motivo || "(Sin motivo espeficado en el bloqueo)"
 
                 }
-            }
-            if (Object.keys(bloqueosQueNoPermitenElasticidadDelRango).length > 0) {
-                const ok = {
-                    ok: "noHayRangoFuturo",
-                    limiteFuturo: fechaSalidaReserva_ISO,
-
-                    motivo: "porBloqeuos",
-                    desgloseBloqueos: bloqueosQueNoPermitenElasticidadDelRango
-                }
-                return ok
-
+                contenedorBloqueosEncontrados.push(estructura)
 
             }
 
 
+
+            const contenedorReservaEncontradas = []
 
             // extraer las reservas dentro del rango
             const consultaReservas = `
                 SELECT 
-                reserva,
-                to_char(entrada, 'DD/MM/YYYY') as entrada, 
-                to_char(salida, 'DD/MM/YYYY') as salida,
-                to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-                to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"     
-                FROM reservas 
-                WHERE 
-                (salida >= $2::DATE AND entrada <= $1::DATE)
-                AND reserva <> $3   
-                AND "estadoReserva" <> 'cancelada';`
+                    r.reserva,
+                    to_char(r.entrada, 'YYYY-MM-DD') AS "fechaEntrada_ISO", 
+                    to_char(r.salida, 'YYYY-MM-DD') AS "fechaSalida_ISO",
+                    ARRAY_AGG(ra.apartamento) AS apartamentos    
+                FROM reservas r
+                JOIN "reservaApartamentos" ra ON r.reserva = ra.reserva
+                WHERE               
+                r.salida >= $2::DATE 
+                AND r.entrada <= $1::DATE 
+                AND r.reserva <> $3 
+                AND r."estadoReserva" <> 'cancelada'
+                AND r.reserva IN (
+                    SELECT reserva
+                    FROM "reservaApartamentos" 
+                    WHERE apartamento = ANY($4)
+                )   
+                GROUP BY
+                r.reserva, r.entrada, r.salida;            
+                ;`
 
-            const resuelveConsultaReservas = await conexion.query(consultaReservas, [fechaSeleccionadaParaFuturo_ISO, fechaSalidaReserva_ISO, reserva])
-            if (resuelveConsultaReservas.rowCount === 0 && bloqueosSalidaEncontrados.length === 0) {
+            const resuelveConsultaReservas = await conexion.query(consultaReservas, [fechaSeleccionadaParaFuturo_ISO, fechaSalidaReserva_ISO, reserva, apartamentosReservaActual])
+
+            for (const detallesReserva of resuelveConsultaReservas.rows) {
+                const reserva = detallesReserva.reserva
+                const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
+                const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
+                const apartamentos = detallesReserva.apartamentos
+
+                const estructura = {
+                    fechaEntrada_ISO: fechaEntrada_ISO,
+                    fechaSalida_ISO: fechaSalida_ISO,
+                    uid: reserva,
+                    tipoElemento: "reserva",
+                    apartamentos: apartamentos
+                }
+                contenedorReservaEncontradas.push(estructura)
+
+            }
+
+
+            // En base a los apartamentos de la reserva se impoirtan los calendarios que funcionan por apartmento
+            const calendariosSincronizados = []
+            for (const apartamentoIDV of apartamentosReservaActual) {
+                const eventosCalendarioPorIDV = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV)
+                calendariosSincronizados.push(eventosCalendarioPorIDV)
+            }
+
+
+            const contenedorEventosCalendariosSincronizados = []
+            // Iteramos el array con todos los grupos por apartamentoIDV
+            for (const contenedorCalendariosPorIDV of calendariosSincronizados) {
+                // Dentro de cada apartamentoIDV hay un grupo de calendarios
+                const apartamentoIDV = contenedorCalendariosPorIDV.apartamentoIDV
+                const calendariosPorApartamento = contenedorCalendariosPorIDV.calendariosPorApartamento
+                // Obtenemos todos los eventos como objetos por calendario
+                for (const eventosDelCalendario of calendariosPorApartamento) {
+                    const eventosCalendario = eventosDelCalendario.calendarioObjeto
+                    // Iteramos por cada evento
+                    for (const detallesDelEvento of eventosCalendario) {
+
+                        const fechaFinal = detallesDelEvento.fechaFinal
+                        const fechaInicio = detallesDelEvento.fechaInicio
+                        const uid = detallesDelEvento.uid
+                        const nombreEvento = detallesDelEvento.nombreEvento
+
+                        const rangoInterno = verificaRangoInternamente(mesCalendario, anoCalenddrio, fechaInicio, fechaFinal)
+                        if (rangoInterno) {
+                            const estructura = {
+                                apartamentoIDV: apartamentoIDV,
+                                fechaEntrada_ISO: fechaFinal,
+                                fechaSalida_ISO: fechaInicio,
+                                tipoElemento: "eventoCalendarioSincronizado",
+                                nombreEvento: nombreEvento,
+                                tipoElemento: "eventoSincronizado"
+                            }
+                            contenedorEventosCalendariosSincronizados.push(estructura)
+                        }
+                    }
+                }
+            }
+
+            const fechaInicioRango_salidaReserva_objeto = DateTime.fromISO(fechaSalidaReserva_ISO);
+            const fechaFinRango_objeto = fechaSeleccionadaParaFuturo_ISO
+
+            const contenedorEventosCalendariosSincronizados_enRango = contenedorEventosCalendariosSincronizados.filter((detallesDelEvento) => {
+                const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
+                const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
+                return (fechaInicioEvento_ISO <= fechaFinRango_objeto) && (fechaFinEvento_ISO >= fechaInicioRango_salidaReserva_objeto)
+
+            })
+
+            const contenedorGlobal = [
+                ...contenedorBloqueosEncontrados,
+                ...contenedorReservaEncontradas,
+                ...contenedorEventosCalendariosSincronizados_enRango,
+            ]
+
+            console.log("contenedorGlobal", contenedorGlobal)
+
+            const contenedorDeEventosQueDejanSinRangoDisponible = []
+
+            for (const detallesDelEvento of contenedorGlobal) {
+                const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
+                const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
+                const tipoElemento = detallesDelEvento.tipoElemento
+                if ((tipoElemento === "reserva" || tipoElemento === "eventoSincronizado")
+                    &&
+                    (fechaInicioEvento_ISO < fechaInicioRango_salidaReserva_objeto && fechaInicioRango_salidaReserva_objeto <= fechaFinEvento_ISO)) {
+                    contenedorDeEventosQueDejanSinRangoDisponible.push(detallesDelEvento)
+                }
+                if (tipoElemento === "bloqueo") {
+                    const tipoBloqueo = detallesDelEvento.tipoBloqueo
+                    if ((tipoBloqueo === "rangoTemporal")
+                        &&
+                        (fechaInicioEvento_ISO < fechaInicioRango_salidaReserva_objeto && fechaInicioRango_salidaReserva_objeto <= fechaFinEvento_ISO)) {
+                        contenedorDeEventosQueDejanSinRangoDisponible.push(detallesDelEvento)
+                    } else if (tipoBloqueo === "permanente") {
+                        contenedorDeEventosQueDejanSinRangoDisponible.push(detallesDelEvento)
+                    }
+                }
+            }
+
+            if (contenedorDeEventosQueDejanSinRangoDisponible.length) {
                 const ok = {
-                    ok: "rangoFuturoLibre"
+                    ok: "noHayRangoFuturo",
+                    eventos: contenedorDeEventosQueDejanSinRangoDisponible
                 }
                 return ok
             }
 
-            // crrear un objeto, donde la llave sea el numero de reserva y dentro tenga la fecha deentrada salida y estado activo y ordenado por fecha
-            const reservasEnElRangoPorAnalizar = resuelveConsultaReservas.rows
-            const arrayUIDReservas = reservasEnElRangoPorAnalizar.map((detallesReserva) => {
-                return detallesReserva.reserva
-            })
 
-
-            // extraer los apartamentos de cada reserva y crear otro objeto con la misma extructura, una llave con el numero dela reserva y un array con apartamentos
-            const consultaApartamentos = `
-                SELECT
-                reserva, 
-                apartamento
-                FROM 
-                "reservaApartamentos" 
-                WHERE
-                ARRAY[reserva] && $1;`
-
-            const resuelveConsultaApartamentos = await conexion.query(consultaApartamentos, [arrayUIDReservas])
-            const apartamentosProcesados = {}
-
-            resuelveConsultaApartamentos.rows.map((apartamentoPorProcesar) => {
-                const controlLlaveObjeto = apartamentosProcesados[apartamentoPorProcesar.reserva]
-                if (!controlLlaveObjeto) {
-                    apartamentosProcesados[apartamentoPorProcesar.reserva] = []
+            // Aqui se mira si habiendo algo de rango disponible. Aqui entonces se mira cuanto rango disponbile hay
+            const contenedorQueDejanRangoDisponbile = []
+            for (const detallesDelEvento of contenedorGlobal) {
+                const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
+                const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
+                const tipoElemento = detallesDelEvento.tipoElemento
+                if ((tipoElemento === "reserva" || tipoElemento === "eventoSincronizado")
+                    &&
+                    (
+                        (fechaInicioEvento_ISO >= fechaInicioRango_salidaReserva_objeto)
+                        ||
+                        (fechaInicioEvento_ISO < fechaInicioRango_salidaReserva_objeto)
+                        && (fechaFinEvento_ISO >= fechaFinRango_objeto)
+                    )
+                ) {
+                    contenedorQueDejanRangoDisponbile.push(detallesDelEvento)
                 }
-                apartamentosProcesados[apartamentoPorProcesar.reserva].push(apartamentoPorProcesar.apartamento)
-            })
-
-
-            for (const reservaPorProcesar of reservasEnElRangoPorAnalizar) {
-                const reservaUID = reservaPorProcesar.reserva
-                reservaPorProcesar["apartamentos"] = apartamentosProcesados[reservaUID]
-            }
-
-            const coincidenciaPorAlojamiento = []
-            const contenedoresPorOrdenar = [...bloqueosSalidaEncontrados]
-
-            for (const analisisReservaAlojamiento of reservasEnElRangoPorAnalizar) {
-                let alojamentoAnalisis = analisisReservaAlojamiento.apartamentos
-                let alojamientoReservaActual = reservaActual.apartamentos
-                const coincidenciaApartamentoNoDisponible = alojamientoReservaActual.some(apartamento => alojamentoAnalisis.includes(apartamento));
-                if (coincidenciaApartamentoNoDisponible) {
-
-                    coincidenciaPorAlojamiento.push(analisisReservaAlojamiento)
-                    const reservaEstructura = {
-                        fecha_ISO: analisisReservaAlojamiento.fechaEntrada_ISO,
-                        origen: "reserva"
+                if (tipoElemento === "bloqueo") {
+                    const tipoBloqueo = detallesDelEvento.tipoBloqueo
+                    if (tipoBloqueo === "rangoTemporal" && (
+                        (fechaInicioEvento_ISO >= fechaInicioRango_salidaReserva_objeto)
+                        ||
+                        (fechaInicioEvento_ISO < fechaInicioRango_salidaReserva_objeto)
+                        &&
+                        (fechaFinEvento_ISO >= fechaFinRango_objeto)
+                    )) {
+                        contenedorQueDejanRangoDisponbile.push(detallesDelEvento)
                     }
-                    contenedoresPorOrdenar.push(reservaEstructura)
                 }
             }
+            console.log("contenedorQueDejanRangoDisponbile", contenedorQueDejanRangoDisponbile)
 
-            if (contenedoresPorOrdenar.length > 0) {
-                const contenedoresOrdenados = contenedoresPorOrdenar.sort((contenedor1, contenedor2) => {
-                    const fechaA = DateTime.fromISO(contenedor1.fecha_ISO);
-                    const fechaB = DateTime.fromISO(contenedor2.fecha_ISO);
-                    return fechaA - fechaB;
+            if (contenedorQueDejanRangoDisponbile.length) {
+                const eventosOrdenadorPorFechaDeEntrada = contenedorQueDejanRangoDisponbile.sort((evento1, evento2) => {
+                    const fechaEntradaA = DateTime.fromISO(evento1.fechaEntrada_ISO); // Convertir fecha de salida del evento 1 a objeto DateTime
+                    const fechaEntradaB = DateTime.fromISO(evento2.fechaEntrada_ISO); // Convertir fecha de salida del evento 2 a objeto DateTime
+                    // Ordenar de manera descendente según la fecha de salida
+                    if (fechaEntradaA > fechaEntradaB) {
+                        return 1; // Si la fecha de salida del evento 1 es menor, lo colocamos después en el array
+                    } else if (fechaEntradaA < fechaEntradaB) {
+                        return -1; // Si la fecha de salida del evento 1 es mayor, lo colocamos antes en el array
+                    } else {
+                        return 0; // Si las fechas de salida son iguales, no hay cambio en el orden
+                    }
                 });
 
-                const contenedorFinal = contenedoresOrdenados[0]
-                const fechaLimiteFuturo = DateTime.fromISO(contenedorFinal);
-                const fechaSalidaReserva_Objeto = DateTime.fromISO(fechaSalidaReserva_ISO);
-                const origen = contenedorFinal.origen
-
-                if (origen === "reserva") {
-                    const fechaEnContenedor = DateTime.fromISO(contenedorFinal.fecha_ISO).plus({ day: 1 }).toISODate()
-                    contenedorFinal.fecha_ISO = fechaEnContenedor
-                }
-
-                if (fechaLimiteFuturo < fechaSalidaReserva_Objeto) {
-                    const ok = {
-                        ok: "noHayRangoFuturo"
-                    }
-                    return ok
-                } else {
-                    const ok = {
-                        ok: "rangoFuturoLimitado",
-                        limiteFuturo: contenedorFinal.fecha_ISO,
-                        origen: origen
-                    }
-                    return ok
-
-                }
-            }
-            if (contenedoresPorOrdenar.length === 0) {
+                console.log("eventosOrdenadorPorFechaDeEntrada", eventosOrdenadorPorFechaDeEntrada)
                 const ok = {
-                    ok: "rangoFuturoLibre"
+                    ok: "rangoFuturoLimitado",
+                    limiteFuturo: eventosOrdenadorPorFechaDeEntrada[0].fechaEntrada_ISO,
+                    origen: eventosOrdenadorPorFechaDeEntrada[0].tipoElemento,
+                    detallesDelEventoBloqueante: eventosOrdenadorPorFechaDeEntrada
                 }
                 return ok
             }
+
+            const ok = {
+                ok: "rangoFuturoLibre"
+            }
+            return ok
+
+
+            /*
+                        // crrear un objeto, donde la llave sea el numero de reserva y dentro tenga la fecha deentrada salida y estado activo y ordenado por fecha
+                        const reservasEnElRangoPorAnalizar = resuelveConsultaReservas.rows
+                        const arrayUIDReservas = reservasEnElRangoPorAnalizar.map((detallesReserva) => {
+                            return detallesReserva.reserva
+                        })
+            
+            
+                        // extraer los apartamentos de cada reserva y crear otro objeto con la misma extructura, una llave con el numero dela reserva y un array con apartamentos
+                        const consultaApartamentos = `
+                            SELECT
+                            reserva, 
+                            apartamento
+                            FROM 
+                            "reservaApartamentos" 
+                            WHERE
+                            ARRAY[reserva] && $1;`
+            
+                        const resuelveConsultaApartamentos = await conexion.query(consultaApartamentos, [arrayUIDReservas])
+                        const apartamentosProcesados = {}
+            
+                        resuelveConsultaApartamentos.rows.map((apartamentoPorProcesar) => {
+                            const controlLlaveObjeto = apartamentosProcesados[apartamentoPorProcesar.reserva]
+                            if (!controlLlaveObjeto) {
+                                apartamentosProcesados[apartamentoPorProcesar.reserva] = []
+                            }
+                            apartamentosProcesados[apartamentoPorProcesar.reserva].push(apartamentoPorProcesar.apartamento)
+                        })
+            
+            
+                        for (const reservaPorProcesar of reservasEnElRangoPorAnalizar) {
+                            const reservaUID = reservaPorProcesar.reserva
+                            reservaPorProcesar["apartamentos"] = apartamentosProcesados[reservaUID]
+                        }
+            
+                        const coincidenciaPorAlojamiento = []
+                        const contenedoresPorOrdenar = [...bloqueosSalidaEncontrados]
+            
+                        for (const analisisReservaAlojamiento of reservasEnElRangoPorAnalizar) {
+                            let alojamentoAnalisis = analisisReservaAlojamiento.apartamentos
+                            let alojamientoReservaActual = reservaActual.apartamentos
+                            const coincidenciaApartamentoNoDisponible = alojamientoReservaActual.some(apartamento => alojamentoAnalisis.includes(apartamento));
+                            if (coincidenciaApartamentoNoDisponible) {
+            
+                                coincidenciaPorAlojamiento.push(analisisReservaAlojamiento)
+                                const reservaEstructura = {
+                                    fecha_ISO: analisisReservaAlojamiento.fechaEntrada_ISO,
+                                    origen: "reserva"
+                                }
+                                contenedoresPorOrdenar.push(reservaEstructura)
+                            }
+                        }
+            
+                        if (contenedoresPorOrdenar.length > 0) {
+                            const contenedoresOrdenados = contenedoresPorOrdenar.sort((contenedor1, contenedor2) => {
+                                const fechaA = DateTime.fromISO(contenedor1.fecha_ISO);
+                                const fechaB = DateTime.fromISO(contenedor2.fecha_ISO);
+                                return fechaA - fechaB;
+                            });
+            
+                            const contenedorFinal = contenedoresOrdenados[0]
+                            const fechaLimiteFuturo = DateTime.fromISO(contenedorFinal);
+                            const fechaSalidaReserva_Objeto = DateTime.fromISO(fechaSalidaReserva_ISO);
+                            const origen = contenedorFinal.origen
+            
+                            if (origen === "reserva") {
+                                const fechaEnContenedor = DateTime.fromISO(contenedorFinal.fecha_ISO).plus({ day: 1 }).toISODate()
+                                contenedorFinal.fecha_ISO = fechaEnContenedor
+                            }
+            
+                            if (fechaLimiteFuturo < fechaSalidaReserva_Objeto) {
+                                const ok = {
+                                    ok: "noHayRangoFuturo"
+                                }
+                                return ok
+                            } else {
+                                const ok = {
+                                    ok: "rangoFuturoLimitado",
+                                    limiteFuturo: contenedorFinal.fecha_ISO,
+                                    origen: origen
+                                }
+                                return ok
+            
+                            }
+                        }
+                        if (contenedoresPorOrdenar.length === 0) {
+                            const ok = {
+                                ok: "rangoFuturoLibre"
+                            }
+                            return ok
+                        }*/
         }
     } catch (error) {
         throw error;
