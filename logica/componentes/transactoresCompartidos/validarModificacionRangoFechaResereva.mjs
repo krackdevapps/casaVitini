@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import { conexion } from '../db.mjs';
 import { sincronizarCalendariosAirbnbPorIDV } from './calendariosSincronizados/airbnb/sincronizarCalendariosAirbnbPorIDV.mjs';
 import ICAL from 'ical.js';
+import { codigoZonaHoraria } from './codigoZonaHoraria.mjs';
 
 
 const validarModificacionRangoFechaResereva = async (metadatos) => {
@@ -195,7 +196,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 }
                 contenedorBloqueosEncontrados.push(estructura)
             }
-        
+
 
             const contenedorReservaEncontradas = []
             // extraer las reservas dentro del rango
@@ -372,13 +373,34 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     }
                 });
 
-                console.log("eventosOrdenadorPorFechaDeSalida", eventosOrdenadorPorFechaDeSalida)
+                // Hay mas de un evento con la fecha mas cercana?
+                let fechaMasCercana = eventosOrdenadorPorFechaDeSalida[0].fechaSalida_ISO
+                let sePermiteElMismoDia = "si"
+                for (const detallesDeLosEventosOrdenados of eventosOrdenadorPorFechaDeSalida) {
+
+                    const fechaPorBuscar =detallesDeLosEventosOrdenados.fechaSalida_ISO
+                    const tipoElemento = detallesDeLosEventosOrdenados.tipoElemento
+                    if (fechaMasCercana === fechaPorBuscar ||
+                        tipoElemento === "bloqueo") {
+                            sePermiteElMismoDia = "no"        
+                    }                   
+                }
+
                 const ok = {
                     ok: "rangoPasadoLimitado",
-                    limitePasado: eventosOrdenadorPorFechaDeSalida[0].fechaSalida_ISO,
+                    limitePasado: fechaMasCercana,
                     origen: eventosOrdenadorPorFechaDeSalida[0].tipoElemento,
-                    detallesDelEventoBloqueante: eventosOrdenadorPorFechaDeSalida
+                    comportamiento: "No se ha restado un dia por que es un bloqueo",
+                    detallesDeLosEventosBloqueantes: eventosOrdenadorPorFechaDeSalida
                 }
+
+                if (sePermiteElMismoDia === "no") {
+                    const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
+                    ok.limitePasado = DateTime.fromISO(fechaMasCercana, { zone: zonaHoraria }).minus({days: 1}).toISODate()                   
+                    ok.comportamiento = "Se ha restado un dia por que es una reserva o un evento sincronizado"
+                }
+
+ 
                 return ok
             }
 
@@ -426,7 +448,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             );`
             const resuelveBloqueos = await conexion.query(consultaBloqueos, [fechaSeleccionadaParaFuturo_ISO, fechaSalidaReserva_ISO, apartamentosReservaActual])
 
-            
+
             const contenedorBloqueosEncontrados = []
 
             for (const detallesDelBloqueo of resuelveBloqueos.rows) {
@@ -449,8 +471,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 contenedorBloqueosEncontrados.push(estructura)
 
             }
-
-
 
             const contenedorReservaEncontradas = []
 
@@ -496,14 +516,12 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
 
             }
 
-
             // En base a los apartamentos de la reserva se impoirtan los calendarios que funcionan por apartmento
             const calendariosSincronizados = []
             for (const apartamentoIDV of apartamentosReservaActual) {
                 const eventosCalendarioPorIDV = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV)
                 calendariosSincronizados.push(eventosCalendarioPorIDV)
             }
-
 
             const contenedorEventosCalendariosSincronizados = []
             // Iteramos el array con todos los grupos por apartamentoIDV

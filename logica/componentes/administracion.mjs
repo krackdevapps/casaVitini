@@ -271,7 +271,7 @@ const administracion = {
                     dia.classList.remove("calendarioDiaSeleccionado")
 
                 })
-                if (diaSeleccionadoComoElemento.getAttribute("diaEstado") === "seleccionado") {
+                if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
                     diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
                     if (calendarioIO === "entrada") {
                         document.querySelector("[calendario=entrada]").removeAttribute("memoriaVolatil")
@@ -282,18 +282,18 @@ const administracion = {
                         document.querySelector("#fechaSalida").innerText = "Seleccionar"
                     }
                     diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
-                    diaSeleccionadoComoElemento.removeAttribute("diaEstado")
+                    diaSeleccionadoComoElemento.removeAttribute("estadoDia")
 
                     return
                 }
                 let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
                 diasDisponibles.map(diaDisponible => {
-                    diaDisponible.removeAttribute("diaEstado")
+                    diaDisponible.removeAttribute("estadoDia")
                     diaDisponible.style.background = ""
                     diaDisponible.style.color = ""
                 })
 
-                diaSeleccionadoComoElemento.setAttribute("diaEstado", "seleccionado")
+                diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
                 diaSeleccionadoComoElemento.classList.add("calendarioDiaSeleccionado")
 
                 let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
@@ -1441,7 +1441,7 @@ const administracion = {
                     dia.classList.remove("calendarioDiaSeleccionado")
 
                 })
-                if (diaSeleccionadoComoElemento.getAttribute("diaEstado") === "seleccionado") {
+                if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
                     diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
                     if (calendarioIO === "entrada") {
                         document.querySelector("[calendario=entrada]").removeAttribute("memoriaVolatil")
@@ -1452,18 +1452,18 @@ const administracion = {
                         document.querySelector("[dataReserva=fechaSalida]").innerText = "Seleccionar fecha de salida"
                     }
                     diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
-                    diaSeleccionadoComoElemento.removeAttribute("diaEstado")
+                    diaSeleccionadoComoElemento.removeAttribute("estadoDia")
 
                     return
                 }
                 let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
                 diasDisponibles.map(diaDisponible => {
-                    diaDisponible.removeAttribute("diaEstado")
+                    diaDisponible.removeAttribute("estadoDia")
                     diaDisponible.style.background = ""
                     diaDisponible.style.color = ""
                 })
 
-                diaSeleccionadoComoElemento.setAttribute("diaEstado", "seleccionado")
+                diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
                 diaSeleccionadoComoElemento.classList.add("calendarioDiaSeleccionado")
 
                 let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
@@ -4106,7 +4106,7 @@ const administracion = {
                         const calendario = diaSeleccionadoComoElemento.closest("[componente=marcoCalendario]")
                         const calendarioIO = calendario.getAttribute("calendarioIO")
 
-                        if (diaSeleccionadoComoElemento.getAttribute("diaEstado") === "seleccionado") {
+                        if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
                             diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
 
                             if (calendarioIO === "entrada") {
@@ -4127,13 +4127,13 @@ const administracion = {
 
 
                             }
-                            diaSeleccionadoComoElemento.removeAttribute("diaEstado")
+                            diaSeleccionadoComoElemento.removeAttribute("estadoDia")
                             casaVitini.administracion.reservas.detallesReserva.controladorZonaPropuestasCambioFechas()
                             return
                         }
-                        calendario.querySelectorAll("[diaEstado=seleccionado]").forEach(diasDelCalendario => {
+                        calendario.querySelectorAll("[estadoDia=seleccionado]").forEach(diasDelCalendario => {
                             //  diaDisponible.removeAttribute("style")
-                            diasDelCalendario.removeAttribute("diaEstado")
+                            diasDelCalendario.removeAttribute("estadoDia")
                             diasDelCalendario.style.background = ""
                             diasDelCalendario.style.color = ""
                         });
@@ -4141,7 +4141,7 @@ const administracion = {
 
                         diaSeleccionadoComoElemento.style.background = "green"
                         diaSeleccionadoComoElemento.style.color = "white"
-                        diaSeleccionadoComoElemento.setAttribute("diaEstado", "seleccionado")
+                        diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
 
                         const anoSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("ano").padStart(4, "0")
                         const mesSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("mes").padStart(2, "0")
@@ -4446,7 +4446,7 @@ const administracion = {
                         const calendario = diaSeleccionadoComoElemento.closest("[componente=marcoCalendario]")
                         const calendarioIO = calendario.getAttribute("calendarioIO")
 
-                        if (diaSeleccionadoComoElemento.getAttribute("diaEstado") === "seleccionado") {
+                        if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
                             diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
 
                             if (calendarioIO === "salida") {
@@ -4460,13 +4460,13 @@ const administracion = {
                                 selectorBotonConfirmar.removeAttribute("fechaCheckOut")
 
                             }
-                            diaSeleccionadoComoElemento.removeAttribute("diaEstado")
+                            diaSeleccionadoComoElemento.removeAttribute("estadoDia")
                             casaVitini.administracion.reservas.detallesReserva.controladorZonaPropuestasCambioFechas()
                             return
                         }
-                        calendario.querySelectorAll("[diaEstado=seleccionado]").forEach(diasDelCalendario => {
+                        calendario.querySelectorAll("[estadoDia=seleccionado]").forEach(diasDelCalendario => {
                             //  diaDisponible.removeAttribute("style")
-                            diasDelCalendario.removeAttribute("diaEstado")
+                            diasDelCalendario.removeAttribute("estadoDia")
                             diasDelCalendario.style.background = ""
                             diasDelCalendario.style.color = ""
                         });
@@ -4474,7 +4474,7 @@ const administracion = {
 
                         diaSeleccionadoComoElemento.style.background = "green"
                         diaSeleccionadoComoElemento.style.color = "white"
-                        diaSeleccionadoComoElemento.setAttribute("diaEstado", "seleccionado")
+                        diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
 
                         const anoSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("ano").padStart(4, "0")
                         const mesSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("mes").padStart(2, "0")
@@ -4721,7 +4721,7 @@ const administracion = {
                 const calendarioIO = calendario.getAttribute("calendarioIO")
 
 
-                if (diaSeleccionadoComoElemento.getAttribute("diaEstado") === "seleccionado") {
+                if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
                     diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
 
                     if (calendarioIO === "entrada") {
@@ -4738,14 +4738,14 @@ const administracion = {
 
 
                     }
-                    diaSeleccionadoComoElemento.removeAttribute("diaEstado")
+                    diaSeleccionadoComoElemento.removeAttribute("estadoDia")
                     casaVitini.administracion.reservas.detallesReserva.controladorZonaPropuestasCambioFechas()
 
                     return
                 }
                 document.querySelectorAll("[estado=disponible]").forEach(diaDisponible => {
                     //  diaDisponible.removeAttribute("style")
-                    diaDisponible.removeAttribute("diaEstado")
+                    diaDisponible.removeAttribute("estadoDia")
                     diaDisponible.style.background = ""
                     diaDisponible.style.color = ""
                 });
@@ -4753,7 +4753,7 @@ const administracion = {
 
                 diaSeleccionadoComoElemento.style.background = "red"
                 diaSeleccionadoComoElemento.style.color = "white"
-                diaSeleccionadoComoElemento.setAttribute("diaEstado", "seleccionado")
+                diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
 
                 const anoSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("ano").padStart(4, "0")
                 const mesSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("mes").padStart(2, "0")
@@ -18278,7 +18278,7 @@ const administracion = {
                     dia.classList.remove("calendarioDiaReserva")
                     dia.classList.remove("calendarioDiaSeleccionado")
                 })
-                if (diaSeleccionadoComoElemento.getAttribute("diaEstado") === "seleccionado") {
+                if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
                     diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
                     if (calendarioIO === "entrada") {
                         document.querySelector("[calendario=entrada]").removeAttribute("memoriaVolatil")
@@ -18289,17 +18289,17 @@ const administracion = {
                         document.querySelector("[dataReserva=fechaSalida]").innerText = "Seleccionar fecha de salida"
                     }
                     diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
-                    diaSeleccionadoComoElemento.removeAttribute("diaEstado")
+                    diaSeleccionadoComoElemento.removeAttribute("estadoDia")
                     return
                 }
                 let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
                 diasDisponibles.map(diaDisponible => {
-                    diaDisponible.removeAttribute("diaEstado")
+                    diaDisponible.removeAttribute("estadoDia")
                     diaDisponible.style.background = ""
                     diaDisponible.style.color = ""
                 })
 
-                diaSeleccionadoComoElemento.setAttribute("diaEstado", "seleccionado")
+                diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
                 diaSeleccionadoComoElemento.classList.add("calendarioDiaSeleccionado")
 
                 let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
@@ -20684,7 +20684,7 @@ const administracion = {
                     dia.classList.remove("calendarioDiaReserva")
                     dia.classList.remove("calendarioDiaSeleccionado")
                 })
-                if (diaSeleccionadoComoElemento.getAttribute("diaEstado") === "seleccionado") {
+                if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
                     diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
                     if (calendarioIO === "entrada") {
                         document.querySelector("[calendario=entrada]").removeAttribute("memoriaVolatil")
@@ -20695,17 +20695,17 @@ const administracion = {
                         document.querySelector("[data=fechaFinData]").innerText = "Seleccionar fecha de salida"
                     }
                     diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
-                    diaSeleccionadoComoElemento.removeAttribute("diaEstado")
+                    diaSeleccionadoComoElemento.removeAttribute("estadoDia")
                     return
                 }
                 let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
                 diasDisponibles.map(diaDisponible => {
-                    diaDisponible.removeAttribute("diaEstado")
+                    diaDisponible.removeAttribute("estadoDia")
                     diaDisponible.style.background = ""
                     diaDisponible.style.color = ""
                 })
 
-                diaSeleccionadoComoElemento.setAttribute("diaEstado", "seleccionado")
+                diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
                 diaSeleccionadoComoElemento.classList.add("calendarioDiaSeleccionado")
 
                 let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
@@ -23379,7 +23379,7 @@ const administracion = {
                     dia.classList.remove("calendarioDiaReserva")
                     dia.classList.remove("calendarioDiaSeleccionado")
                 })
-                if (diaSeleccionadoComoElemento.getAttribute("diaEstado") === "seleccionado") {
+                if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
                     diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
                     if (calendarioIO === "entrada") {
 
@@ -23432,17 +23432,17 @@ const administracion = {
 
                     }
                     diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
-                    diaSeleccionadoComoElemento.removeAttribute("diaEstado")
+                    diaSeleccionadoComoElemento.removeAttribute("estadoDia")
                     return
                 }
                 let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
                 diasDisponibles.map(diaDisponible => {
-                    diaDisponible.removeAttribute("diaEstado")
+                    diaDisponible.removeAttribute("estadoDia")
                     diaDisponible.style.background = ""
                     diaDisponible.style.color = ""
                 })
 
-                diaSeleccionadoComoElemento.setAttribute("diaEstado", "seleccionado")
+                diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
                 diaSeleccionadoComoElemento.classList.add("calendarioDiaSeleccionado")
 
                 if (calendarioIO === "entrada") {

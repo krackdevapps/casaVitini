@@ -640,7 +640,7 @@ const puerto = async (entrada, salida) => {
             try {
                 const IDX = entrada.body.IDX
                 if (!IDX) {
-                    const error = "Falta espeficiar la 'accion'"
+                    const error = "Falta espeficiar la 'IDX', este puede ser conectar, desconectar y estado"
                     throw new Error(error)
                 }
                 await componentes.eliminarCuentasNoVerificadas()
@@ -654,7 +654,7 @@ const puerto = async (entrada, salida) => {
                     }
                     const clave = entrada.body.clave
                     if (!clave) {
-                        const error = "Falta especificar la contrasena"
+                        const error = "Falta especificar la clave"
                         throw new Error(error)
                     }
                     const intentosMaximos = 10
