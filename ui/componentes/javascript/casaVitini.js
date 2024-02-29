@@ -10753,7 +10753,7 @@ const casaVitini = {
                         selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
 
                     }
-                    if (mesActual_decimal === mesEntradaReserva_decimal && anoActual === anoEntradaReserva_decimal) {
+                    if (mesActual_decimal === mesEntradaReserva_decimal && anoActual_decimal === anoEntradaReserva_decimal) {
                         selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
                         selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
 
