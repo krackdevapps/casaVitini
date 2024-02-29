@@ -10784,7 +10784,7 @@ const casaVitini = {
 
                         const mesEntradaRenderizado = (mesActual_decimal === mesEntradaReserva_decimal && anoActual_decimal === anoEntradaReserva_decimal)
                         const mesSalidaRenderzado = (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal)
-                        const mesInternoRango = verificaRangoInternamente(mesActual, anoActual, fechaEntrada_ISO, fechaSalida_ISO)
+                        const mesInternoRango = verificaRangoInternamente(mesActual_decimal, anoActual_decimal, fechaEntrada_ISO, fechaSalida_ISO)
 
                         const mesEntradaSalidaRenderizado = (
                             (mesActual_decimal === mesEntradaReserva_decimal && anoActual_decimal === anoEntradaReserva_decimal) &&
@@ -11039,7 +11039,7 @@ const casaVitini = {
                         }
                         const mesEntradaRenderizado = (mesActual_decimal === mesEntradaReserva_decimal && anoActual_decimal === anoEntradaReserva_decimal)
                         const mesSalidaRenderzado = (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal)
-                        const mesInternoRango = verificaRangoInternamente(mesActual, anoActual, fechaEntrada_ISO, fechaSalida_ISO)
+                        const mesInternoRango = verificaRangoInternamente(mesActual_decimal, anoActual_decimal, fechaEntrada_ISO, fechaSalida_ISO)
                         const mesEntradaSalidaRenderizado = (
                             (mesActual_decimal === mesEntradaReserva_decimal && anoActual_decimal === anoEntradaReserva_decimal) &&
                             (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal)
