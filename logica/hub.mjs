@@ -61,6 +61,12 @@ const arranque = async (entrada, salida) => {
     });
 
 }
+class vitiniSysError extends Error {
+    constructor(errorObjeto) {
+        super(JSON.stringify(errorObjeto));
+        this.objeto = errorObjeto;
+    }
+}
 
 const puerto = async (entrada, salida) => {
     const componentes = {
@@ -6428,7 +6434,7 @@ const puerto = async (entrada, salida) => {
                     try {
                         const reserva = entrada.body.reserva
                         const sentidoRango = entrada.body.sentidoRango
-                        const fecha = entrada.body.fecha
+                        const fechaSolicitada_ISO = entrada.body.fechaSolicitada_ISO
 
 
                         if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
@@ -6439,28 +6445,16 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo 'sentidoRango' solo puede ser pasado o futuro"
                             throw new Error(error)
                         }
-                        const filtroFecha = /^\d{2}\/\d{2}\/\d{4}$/;
-                        if (!filtroFecha.test(fecha)) {
-                            const error = "El campo 'fecha' debe de tener este formado 00/00/0000"
-                            throw new Error(error)
-                        }
-
-                        // Crea un objeto DateTime y verifica si la fecha es válida
-                        const fechaArray = fecha.split("/")
-                        const fecha_ISO = `${fechaArray[2]}-${fechaArray[1]}-${fechaArray[0]}`
-                        const fecha_Objeto = DateTime.fromISO(fecha_ISO);
-
-                        if (!fecha_Objeto.isValid) {
-                            const error = "La fecha aunque cumple el formato esperado, representa una fecha no validad"
-                            throw new Error(error)
-                        }
+                        await validadoresCompartidos.fechas.validarFecha_ISO(fechaSolicitada_ISO)
+                        const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
+                        const fechaSolicitada_objeto = DateTime.fromISO(fechaSolicitada_ISO, { zone: zonaHoraria })
+                        const fechaSolicitada_array = fechaSolicitada_ISO.split("-")
 
                         await conexion.query('BEGIN'); // Inicio de la transacción
 
-                        const fechaSeleccionadaArray = fecha.split("/")
-                        const fechaSeleccionada_ISO = `${fechaSeleccionadaArray[2]}-${fechaSeleccionadaArray[1]}-${fechaSeleccionadaArray[0]}`
-                        const mesSeleccionado = fechaSeleccionadaArray[1]
-                        const anoSeleccionado = fechaSeleccionadaArray[2]
+
+                        const mesSeleccionado = fechaSolicitada_array[1]
+                        const anoSeleccionado = fechaSolicitada_array[0]
                         const validacionReserva = `
                         SELECT 
                         reserva,
@@ -6479,17 +6473,16 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         if (resuelveValidacionReserva.rows[0].estadoReserva === "cancelada") {
-                            const error = "La reserva no se puede modificar por que esta cancelada"
+                            const error = "La reserva no se puede modificar por que esta cancelada, una reserva cancelada no interfiere en los dias ocupados"
                             throw new Error(error)
                         }
                         const detallesReserva = resuelveValidacionReserva.rows[0]
 
                         const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
-                        const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO)
+                        const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria })
 
                         const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
-                        const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO)
-
+                        const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria })
 
                         const metadatos = {
                             reserva: reserva,
@@ -6497,57 +6490,47 @@ const puerto = async (entrada, salida) => {
                             anoCalendario: anoSeleccionado,
                             sentidoRango: sentidoRango
                         }
-                        const transaccionInterna = await validarModificacionRangoFechaResereva(metadatos)
-                        const codigoFinal = transaccionInterna.ok
-                        const transaccionPrecioReserva = {
-                            tipoProcesadorPrecio: "uid",
-                            reservaUID: reserva
-                        }
+
                         if (sentidoRango === "pasado") {
-                            if (fecha_Objeto >= fechaSalida_Objeto) {
-                                const error = "La fecha de entrada introducida no puede ser igual o superior a la fecha de salida actual de la reserva"
-                                throw new Error(error)
+
+
+                            if (fechaSalida_Objeto <= fechaSolicitada_objeto) {
+                                const mensajeSinPasado = "La fecha nueva fecha de entrada solicitada no puede ser igual o superior a la fecha de salida de la reserva."
+                                throw new Error(mensajeSinPasado)
                             }
-                            if (fecha_Objeto > fechaEntrada_Objeto) {
-                                if (codigoFinal === "rangoPasadoLibre") {
+                            const transaccionInterna = await validarModificacionRangoFechaResereva(metadatos)
+                            const codigoFinal = transaccionInterna.ok
+                            const transaccionPrecioReserva = {
+                                tipoProcesadorPrecio: "uid",
+                                reservaUID: reserva
+                            }
+
+                            const mensajeSinPasado = "No se puede aplicar esa fecha de entrada a la reserva por que en base a los apartamentos de esa reserva no hay dias libres. Puedes ver a continuacíon lo eventos que lo impiden."
+
+
+                            if (codigoFinal === "noHayRangoPasado") {
+                                const objetoPRueba = {
+                                    detallesDelError: mensajeSinPasado,
+                                    ...transaccionInterna
                                 }
-                                if (codigoFinal === "noHayRangoPasado") {
-                                    const ok = {
-                                        ...transaccionInterna,
-                                        mensaje: "No se ha confirmado el cambio de fecha de entrada de esta reserva por que no hay disponible elasticidad en el rango. No hay rango disponible para la nueva fecha de entrada que estas soliciando para esta reserva."
+                                throw new vitiniSysError(objetoPRueba)
+                            }
+
+                            if (codigoFinal === "rangoPasadoLimitado") {
+                                const detallesDelLimite = transaccionInterna.limitePasado
+                                const fechaLimitePasado_ISO = detallesDelLimite.fecha_ISO
+                                const fechaLimitePasado_Objeto = DateTime.fromISO(fechaLimitePasado_ISO);
+
+                                if (fechaSolicitada_objeto <= fechaLimitePasado_Objeto) {
+                                    const objetoPRueba = {
+                                        detallesDelError: mensajeSinPasado,
+                                        ...transaccionInterna
                                     }
-                                    salida.json(ok)
-                                }
-                                if (codigoFinal === "rangoPasadoLimitado") {
-                                    const detallesDelLimite = transaccionInterna.limitePasado
-                                    const fechaLimitePasado_ISO = detallesDelLimite.fecha_ISO
-                                    const origenLimite = detallesDelLimite.origen
-                                    const fechaLimitePasado_Objeto = DateTime.fromISO(fechaLimitePasado_ISO);
-                                    const fechaSeleccionada_Objeto = DateTime.fromISO(fechaSeleccionada_ISO);
-
-
-
-                                    const ok = {
-                                        ...transaccionInterna,
-                                        mensaje: "No se ha confirmado el cambio de fecha de entrada de esta reserva por que no hay disponible elasticidad en el rango. No hay rango disponible para la nueva fecha de entrada que estas soliciando para esta reserva."
-                                    }
-
-                                    if (origenLimite === "reserva" || origenLimite === "eventoSincronizado") {
-                                        if (fechaLimitePasado_Objeto > fechaSeleccionada_Objeto) {
-                                            salida.json(ok)
-
-                                        }
-                                    }
-                                    if (origenLimite === "bloqueo") {
-                                        if (fechaLimitePasado_Objeto >= fechaSeleccionada_Objeto) {
-                                            salida.json(ok)
-                                        }
-                                    }
-
-
+                                    throw new vitiniSysError(objetoPRueba)
                                 }
 
                             }
+
                             const actualizarModificacionFechaEntradaReserva = `
                             UPDATE reservas
                             SET entrada = $1
@@ -6555,9 +6538,8 @@ const puerto = async (entrada, salida) => {
                             RETURNING
                             to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO";
                             `
-                            const resuelveActualizarModificacionFechaEntradaReserva = await conexion.query(actualizarModificacionFechaEntradaReserva, [fechaSeleccionada_ISO, reserva])
+                            const resuelveActualizarModificacionFechaEntradaReserva = await conexion.query(actualizarModificacionFechaEntradaReserva, [fechaSolicitada_ISO, reserva])
                             if (resuelveActualizarModificacionFechaEntradaReserva.rowCount === 1) {
-
                                 const nuevaFechaEntrada = resuelveActualizarModificacionFechaEntradaReserva.rows[0].fechaEntrada_ISO
                                 await insertarTotalesReserva(transaccionPrecioReserva)
 
@@ -6570,45 +6552,34 @@ const puerto = async (entrada, salida) => {
                             }
                         }
                         if (sentidoRango === "futuro") {
-                            if (fecha_Objeto <= fechaEntrada_Objeto) {
-                                const error = "La fecha de salida introducida no puede ser igual o inferior a la fecha de entrada actual de la reserva"
+                            if (fechaSolicitada_objeto <= fechaEntrada_Objeto) {
+                                const error = "La fecha de salida solicitada no puede ser igual o inferior a la fecha de entrada de la reserva."
                                 throw new Error(error)
                             }
+                            const transaccionInterna = await validarModificacionRangoFechaResereva(metadatos)
+                            const codigoFinal = transaccionInterna.ok
+                            const transaccionPrecioReserva = {
+                                tipoProcesadorPrecio: "uid",
+                                reservaUID: reserva
+                            }
+                            const mensajeSinFuturo = "No se puede seleccionar esa fecha de salida. Con los apartamentos existentes en la reserva no se puede por que hay otro eventos que lo impiden. Puedes ver los eventos que lo impiden detallados a continuación."
 
-                            if (fecha_Objeto < fechaSalida_Objeto) {
-                                if (codigoFinal === "rangoFuturoLibre") {
+                            if (codigoFinal === "noHayRangoFuturo") {
+                                const objetoPRueba = {
+                                    detallesDelError: mensajeSinFuturo,
+                                    ...transaccionInterna
                                 }
-                                if (codigoFinal === "noHayRangoFuturo") {
-                                    const ok = {
-                                        ...transaccionInterna,
-                                        mensaje: "No se puede seleccionar esa fecha de salida. Con los apartamentos existentes en esta reserva no se puede seleccionar una fecha superior a la fecha de salida por que no estan disponibles"
+                                throw new vitiniSysError(objetoPRueba)
+                            }
+                            if (codigoFinal === "rangoFuturoLimitado") {
+                                const detallesDelLimite = transaccionInterna.limiteFuturo
+                                const fechaLimiteFuturo_Objeto = DateTime.fromISO(detallesDelLimite);
+                                if (fechaLimiteFuturo_Objeto <= fechaSolicitada_objeto) {
+                                    const objetoPRueba = {
+                                        detallesDelError: mensajeSinFuturo,
+                                        ...transaccionInterna
                                     }
-                                    salida.json(ok)
-
-                                }
-                                if (codigoFinal === "rangoFuturoLimitado") {
-                                    const detallesDelLimite = transaccionInterna.limiteFuturo
-                                    const origenLimite = detallesDelLimite.origen
-                                    const fechaLimiteFuturo_ISO = detallesDelLimite.fecha_ISO
-                                    const fechaLimiteFuturo_Objeto = DateTime.fromISO(fechaLimiteFuturo_ISO);
-                                    const fechaSeleccionada_Objeto = DateTime.fromISO(fechaSeleccionada_ISO);
-
-                                    const ok = {
-                                        ...transaccionInterna,
-                                        mensaje: "No se puede seleccionar esa fecha de salida. Con los apartamentos existentes en esta reserva no se puede seleccionar una fecha superior a la fecha de salida por que no estan disponibles"
-                                    }
-
-                                    if (origenLimite === "reserva") {
-                                        if (fechaLimiteFuturo_Objeto < fechaSeleccionada_Objeto) {
-                                            salida.json(ok)
-                                        }
-                                    }
-                                    if (origenLimite === "bloqueo") {
-                                        if (fechaLimiteFuturo_Objeto <= fechaSeleccionada_Objeto) {
-                                            salida.json(ok)
-                                        }
-                                    }
-
+                                    throw new vitiniSysError(objetoPRueba)
                                 }
                             }
 
@@ -6618,11 +6589,10 @@ const puerto = async (entrada, salida) => {
                             WHERE reserva = $2
                             RETURNING
                             to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO";`
-                            const resuelveConfirmarFecha = await conexion.query(actualizarModificacionFechaEntradaReserva, [fechaSeleccionada_ISO, reserva])
+                            const resuelveConfirmarFecha = await conexion.query(actualizarModificacionFechaEntradaReserva, [fechaSolicitada_ISO, reserva])
                             if (resuelveConfirmarFecha.rowCount === 1) {
                                 const nuevaFechaSalida = resuelveConfirmarFecha.rows[0].fechaSalida_ISO
                                 await insertarTotalesReserva(transaccionPrecioReserva)
-
                                 const ok = {
                                     ok: "Se ha actualizado correctamente la fecha de entrada en la reserva",
                                     sentidoRango: "futuro",
@@ -6636,11 +6606,14 @@ const puerto = async (entrada, salida) => {
 
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-                        const error = {
-                            error: errorCapturado.message
+                        const error = {}
+                        if (errorCapturado instanceof vitiniSysError) {
+                            error.error = errorCapturado.objeto
+                        } else {
+                            error.error = errorCapturado.message
                         }
-
                         salida.json(error)
+
                     } finally {
 
                         bloqueoConfirmarModificarFechaReserva()

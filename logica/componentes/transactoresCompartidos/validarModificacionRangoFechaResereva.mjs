@@ -145,7 +145,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             const fechaSeleccionadaParaPasado_ISO = fechaSeleccionadaParaPasado_Objeto.toISODate().toString()
 
             if (anoReservaSalida < anoCalenddrio || mesReservaSalida < mesCalendario && anoReservaSalida === anoCalenddrio) {
-                const error = "El mes de entrada seleccionado no puede ser superior a al mes de fecha de salida de la reserva"
+                const error = "El mes de entrada seleccionado no puede ser igual o superior a al mes de fecha de salida de la reserva"
                 throw new Error(error)
             }
             /// No se tiene en en cuenta los apartamentos, solo busca bloqueos a sacoa partir de la fecha
@@ -378,12 +378,12 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 let sePermiteElMismoDia = "si"
                 for (const detallesDeLosEventosOrdenados of eventosOrdenadorPorFechaDeSalida) {
 
-                    const fechaPorBuscar =detallesDeLosEventosOrdenados.fechaSalida_ISO
+                    const fechaPorBuscar = detallesDeLosEventosOrdenados.fechaSalida_ISO
                     const tipoElemento = detallesDeLosEventosOrdenados.tipoElemento
-                    if (fechaMasCercana === fechaPorBuscar ||
+                    if (fechaMasCercana === fechaPorBuscar &&
                         tipoElemento === "bloqueo") {
-                            sePermiteElMismoDia = "no"        
-                    }                   
+                        sePermiteElMismoDia = "no"
+                    }
                 }
 
                 const ok = {
@@ -394,13 +394,13 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     detallesDeLosEventosBloqueantes: eventosOrdenadorPorFechaDeSalida
                 }
 
-                if (sePermiteElMismoDia === "no") {
+                if (sePermiteElMismoDia === "si") {
                     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
-                    ok.limitePasado = DateTime.fromISO(fechaMasCercana, { zone: zonaHoraria }).minus({days: 1}).toISODate()                   
+                    ok.limitePasado = DateTime.fromISO(fechaMasCercana, { zone: zonaHoraria }).minus({ days: 1 }).toISODate()
                     ok.comportamiento = "Se ha restado un dia por que es una reserva o un evento sincronizado"
                 }
 
- 
+
                 return ok
             }
 
@@ -652,13 +652,33 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     }
                 });
 
-                console.log("eventosOrdenadorPorFechaDeEntrada", eventosOrdenadorPorFechaDeEntrada)
+                let fechaMasCercana = eventosOrdenadorPorFechaDeEntrada[0].fechaEntrada_ISO
+                let sePermiteElMismoDia = "si"
+                for (const detallesDeLosEventosOrdenados of eventosOrdenadorPorFechaDeEntrada) {
+
+                    const fechaPorBuscar = detallesDeLosEventosOrdenados.fechaEntrada_ISO
+                    const tipoElemento = detallesDeLosEventosOrdenados.tipoElemento
+                    if (fechaMasCercana === fechaPorBuscar &&
+                        tipoElemento === "bloqueo") {
+                        sePermiteElMismoDia = "no"
+                    }
+                }
+
                 const ok = {
                     ok: "rangoFuturoLimitado",
-                    limiteFuturo: eventosOrdenadorPorFechaDeEntrada[0].fechaEntrada_ISO,
+                    limiteFuturo: fechaMasCercana,
                     origen: eventosOrdenadorPorFechaDeEntrada[0].tipoElemento,
-                    detallesDelEventoBloqueante: eventosOrdenadorPorFechaDeEntrada
+                    comportamiento: "No se ha sumado un dia por que es un bloqueo",
+                    detallesDeLosEventosBloqueantes: eventosOrdenadorPorFechaDeEntrada
                 }
+                if (sePermiteElMismoDia === "si") {
+                    const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
+                    ok.limiteFuturo = DateTime.fromISO(fechaMasCercana, { zone: zonaHoraria }).plus({ days: 1 }).toISODate()
+                    ok.comportamiento = "Se ha sumado un dia por que es una reserva o un evento sincronizado"
+                }
+
+
+
                 return ok
             }
 

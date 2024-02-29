@@ -360,6 +360,7 @@ section {
     position: fixed;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
     padding: 6px;
+    z-index: 1000;
 }
 
 .enlaceInvisibleMenu {

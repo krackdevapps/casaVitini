@@ -4932,7 +4932,6 @@ const casaVitini = {
                                 mensaje: mensaje
                             }
                             casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                            const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                             const transaccion = {
                                 zona: "miCasa/crearCuentaDesdeMiCasa",
                                 usuarioIDX: usuarioIDX,
@@ -4942,6 +4941,7 @@ const casaVitini = {
                             }
 
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                            const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                             if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
                                 pantallaDeCargaRenderizada.remove()
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -11340,7 +11340,7 @@ const casaVitini = {
                             console.log(">> 1")
 
 
-                            if (mesActual_decimal === fechaEntradaSeleccionada.mes && anoActual === fechaEntradaSeleccionada.ano) {
+                            if (mesActual_decimal === fechaEntradaSeleccionada.mes && anoActual_decimal === fechaEntradaSeleccionada.ano) {
                                 if (diaFinal_decimal === fechaEntradaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaSeleccionado")
                                     bloqueDia.setAttribute("estadoDia", "seleccionado")
