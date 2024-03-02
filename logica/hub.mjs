@@ -13090,7 +13090,7 @@ const puerto = async (entrada, salida) => {
                         const nombreComportamiento = entrada.body.nombreComportamiento
                         const fechaInicio = entrada.body.fechaInicio
                         const fechaFin = entrada.body.fechaFin
-                        let comportamientos = entrada.body.comportamientos
+                        const comportamientos = entrada.body.comportamientos
 
                         const filtroCantidad = /^\d+(\.\d{1,2})?$/;
                         const filtroNombre = /^[a-zA-Z0-9\s]+$/;
@@ -13108,7 +13108,29 @@ const puerto = async (entrada, salida) => {
                             const error = "el formato fecha de fin no esta correctametne formateado debe ser una cadena asi 00/00/0000"
                             throw new Error(error)
                         }
+                        if (comportamientos.length === 0) {
+                            const error = "Anada al menos un apartmento dedicado"
+                            throw new Error(error)
+                        } else {
+                            const identificadoresVisualesEnArray = []
+                            comportamientos.forEach((apart) => {
+                                console.log(typeof apart, Array.isArray(apart), apart === null)
 
+                                if (typeof apart !== "object" || Array.isArray(apart) || apart === null) {
+                                    const error = "Dentro del array de apartamentos se esperaba un objeto"
+                                    throw new Error(error)
+                                }
+                                const apartamentoIDV_preProcesado = apart.apartamentoIDV
+                                identificadoresVisualesEnArray.push(apartamentoIDV_preProcesado)
+                            })
+                            const identificadoresVisualesRepetidos = identificadoresVisualesEnArray.filter((elem, index) => identificadoresVisualesEnArray.indexOf(elem) !== index);
+                            console.log("identificadoresVisualesRepetidos", identificadoresVisualesRepetidos)
+
+                            if (identificadoresVisualesRepetidos.length > 0) {
+                                const error = "Existen identificadores visuales repetidos en el array de apartamentos"
+                                throw new Error(error)
+                            }
+                        }
 
                         const fechaInicioArreglo = fechaInicio.split("/")
                         const diaEntrada = fechaInicioArreglo[0]
@@ -13159,23 +13181,27 @@ const puerto = async (entrada, salida) => {
                         const apartamentosArreglo = []
                         for (const comportamiento of comportamientos) {
                             const apartamentoIDV = comportamiento.apartamentoIDV
-                            let cantidad = comportamiento.cantidad
+                            const cantidad = comportamiento.cantidad
                             const simbolo = comportamiento.simbolo
 
                             if (!apartamentoIDV || !filtroCadenaSinEspacui.test(apartamentoIDV)) {
                                 const error = "El campo apartamentoIDV solo admite minúsculas, numeros y espacios"
                                 throw new Error(error)
                             }
-                            const consultaValidarApartamentoIDV = `
-                            SELECT *
-                            FROM "configuracionApartamento"
-                            WHERE "apartamentoIDV" = $1
-                            `
-                            const resuelveConfiguraValidarApartamentoIDV = await conexion.query(consultaValidarApartamentoIDV, [apartamentoIDV])
-                            if (resuelveConfiguraValidarApartamentoIDV.rowCount === 0) {
-                                const error = "No exista el apartmento" + String(apartamentoIDV)
+                       
+                            const validarApartamentoIDV = `
+                                  SELECT 
+                                  "apartamentoIDV"
+                                  FROM 
+                                  "configuracionApartamento"
+                                  WHERE "apartamentoIDV" = $1
+                                  `
+                            const resuelveApartamentoIDV = await conexion.query(validarApartamentoIDV, [apartamentoIDV])
+                            if (resuelveApartamentoIDV.rowCount === 0) {
+                                const error = "No existe ningún apartamento con ese identificador visual"
                                 throw new Error(error)
                             }
+                            const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
 
                             if (!simbolo ||
                                 (
@@ -13185,18 +13211,17 @@ const puerto = async (entrada, salida) => {
                                     simbolo !== "reducirPorcentaje" &&
                                     simbolo !== "precioEstablecido"
                                 )) {
-                                const error = "El campo simbolo solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido"
-                                throw new Error(error)
+                                    const error = `El campo simbolo de ${apartamentoUI} solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido`
+                                    throw new Error(error)
                             }
 
                             if (!cantidad || !filtroCantidad.test(cantidad)) {
-                                const error = "El campo cantidad solo admite minúsculas, numeros y espacios"
+                                const error = `El campo cantidad del ${apartamentoUI} solo admite una cadena con un numero con dos decimales separados por punto, es decir 00.00`
                                 throw new Error(error)
                             }
 
-                            cantidad = Number(cantidad)
-                            if (cantidad === 0) {
-                                const error = "No se puede asignar una cantidad de cero por logica y por seguridad"
+                            if (cantidad === "00.00") {
+                                const error = "No se puede asignar una cantidad de cero"
                                 throw new Error(error)
                             }
                             apartamentosArreglo.push(apartamentoIDV)
@@ -13377,13 +13402,13 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                             }
+                            await conexion.query('COMMIT');
                             const ok = {
                                 ok: "Se ha creado correctamente el comportamiento",
                                 nuevoUIDComportamiento: nuevoUIDComportamiento
                             }
                             salida.json(ok)
                         }
-                        await conexion.query('COMMIT');
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK');
                         const error = {
@@ -13486,10 +13511,10 @@ const puerto = async (entrada, salida) => {
 
                     try {
                         const nombreComportamiento = entrada.body.nombreComportamiento
-                        let fechaInicio = entrada.body.fechaInicio
-                        let fechaFinal = entrada.body.fechaFinal
+                        const fechaInicio = entrada.body.fechaInicio
+                        const fechaFinal = entrada.body.fechaFinal
                         const comportamientoUID = entrada.body.comportamientoUID
-                        let comportamientos = entrada.body.comportamientos
+                        const comportamientos = entrada.body.comportamientos
                         const filtroCantidad = /^\d+\.\d{2}$/;
                         const filtroNombre = /^[a-zA-Z0-9\s]+$/;
                         const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
@@ -13520,6 +13545,25 @@ const puerto = async (entrada, salida) => {
                         if (comportamientos.length === 0) {
                             const error = "Anada al menos un apartmento dedicado"
                             throw new Error(error)
+                        } else {
+                            const identificadoresVisualesEnArray = []
+                            comportamientos.forEach((apart) => {
+                                console.log(typeof apart, Array.isArray(apart), apart === null)
+
+                                if (typeof apart !== "object" || Array.isArray(apart) || apart === null) {
+                                    const error = "Dentro del array de apartamentos se esperaba un objeto"
+                                    throw new Error(error)
+                                }
+                                const apartamentoIDV_preProcesado = apart.apartamentoIDV
+                                identificadoresVisualesEnArray.push(apartamentoIDV_preProcesado)
+                            })
+                            const identificadoresVisualesRepetidos = identificadoresVisualesEnArray.filter((elem, index) => identificadoresVisualesEnArray.indexOf(elem) !== index);
+                            console.log("identificadoresVisualesRepetidos", identificadoresVisualesRepetidos)
+
+                            if (identificadoresVisualesRepetidos.length > 0) {
+                                const error = "Existen identificadores visuales repetidos en el array de apartamentos"
+                                throw new Error(error)
+                            }
                         }
 
 
@@ -13527,7 +13571,6 @@ const puerto = async (entrada, salida) => {
                         const diaEntrada = fechaInicioArreglo[0]
                         const mesEntrada = fechaInicioArreglo[1]
                         const anoEntrada = fechaInicioArreglo[2]
-
 
                         const fechaFinArreglo = fechaFinal.split("/")
                         const diaSalida = fechaFinArreglo[0]
@@ -13556,13 +13599,29 @@ const puerto = async (entrada, salida) => {
                         const apartamentosArreglo = []
                         for (const comportamiento of comportamientos) {
                             const apartamentoIDV = comportamiento.apartamentoIDV
-                            let cantidad = comportamiento.cantidad
+                            const cantidad = comportamiento.cantidad
                             const simbolo = comportamiento.simbolo
 
                             if (!apartamentoIDV || !filtroCadenaSinEspacio.test(apartamentoIDV)) {
                                 const error = "El campo apartamentoIDV solo admite minúsculas, numeros y espacios"
                                 throw new Error(error)
                             }
+                            //Validar existencia del apartamento
+                            // Validar nombre unico oferta
+                            const validarApartamentoIDV = `
+                                  SELECT 
+                                  "apartamentoIDV"
+                                  FROM 
+                                  "configuracionApartamento"
+                                  WHERE "apartamentoIDV" = $1
+                                  `
+                            const resuelveApartamentoIDV = await conexion.query(validarApartamentoIDV, [apartamentoIDV])
+                            if (resuelveApartamentoIDV.rowCount === 0) {
+                                const error = "No existe ningún apartamento con ese identificador visual"
+                                throw new Error(error)
+                            }
+                            const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+
                             if (!simbolo ||
                                 (
                                     simbolo !== "aumentoPorcentaje" &&
@@ -13571,18 +13630,19 @@ const puerto = async (entrada, salida) => {
                                     simbolo !== "reducirPorcentaje" &&
                                     simbolo !== "precioEstablecido"
                                 )) {
-                                const error = "El campo simbolo solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido"
+
+                                const error = `El campo simbolo de ${apartamentoUI} solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido`
                                 throw new Error(error)
                             }
+                       
 
                             if (!cantidad || !filtroCantidad.test(cantidad)) {
-                                const error = "El campo cantidad solo admite minúsculas, numeros y espacios"
+                                const error = `El campo cantidad del ${apartamentoUI} solo admite una cadena con un numero con dos decimales separados por punto, es decir 00.00`
                                 throw new Error(error)
                             }
 
-                            cantidad = Number(cantidad)
-                            if (cantidad === 0) {
-                                const error = "No se puede asignar una cantidad de cero por logica y por seguridad"
+                            if (cantidad === "00.00") {
+                                const error = "No se puede asignar una cantidad de cero"
                                 throw new Error(error)
                             }
                             apartamentosArreglo.push(apartamentoIDV)
@@ -13635,7 +13695,6 @@ const puerto = async (entrada, salida) => {
                                 const resuelveSeleccionarApartamentosPorComportamiento = await conexion.query(seleccionarApartamentosPorComportamiento, [UIDComportamientoChoque])
                                 if (resuelveSeleccionarApartamentosPorComportamiento.rowCount > 0) {
 
-                                    // Aqui falta un loop
                                     const apartamentoExistentes = resuelveSeleccionarApartamentosPorComportamiento.rows
                                     apartamentoExistentes.map((apartamentoExistente) => {
 
@@ -13655,7 +13714,6 @@ const puerto = async (entrada, salida) => {
                             }
 
                             const coincidenciasExistentes = []
-
 
                             for (const detalleApartemtno of comportamientos) {
                                 const apartamentoIDVSolicitante = detalleApartemtno.apartamentoIDV
@@ -13696,8 +13754,6 @@ const puerto = async (entrada, salida) => {
                                 const nombreComportamiento = coincidenciaAgrupada[0]
                                 const apartamentosCoincidentes = coincidenciaAgrupada[1].join(", ")
                                 infoFinal.push(`${nombreComportamiento} (${apartamentosCoincidentes})`)
-
-
                             }
                             infoFinal.join(", ")
                             if (coincidenciasExistentes.length > 0) {
@@ -13728,7 +13784,7 @@ const puerto = async (entrada, salida) => {
                             `
                             await conexion.query(eliminarComportamiento, [comportamientoUID])
                             const filtroCadenaSinEspacui = /^[a-z0-9]+$/;
-
+                            const apartamentosInsertados = []
                             for (const comportamiento of comportamientos) {
 
                                 const apartamentoIDV = comportamiento.apartamentoIDV
@@ -13764,19 +13820,21 @@ const puerto = async (entrada, salida) => {
 
                                 const actualizarComportamientoDedicado = `
                                     INSERT INTO "comportamientoPreciosApartamentos"
-                                    (
-                                        "apartamentoIDV",
-                                        simbolo,
-                                        cantidad,
-                                        "comportamientoUID"
-                                    )
+                                (
+                                    "apartamentoIDV",
+                                    simbolo,
+                                    cantidad,
+                                    "comportamientoUID"
+                                )
                                     VALUES
-                                    (
-                                        NULLIF($1, NULL),
-                                        COALESCE($2, NULL),
-                                        COALESCE($3::numeric, NULL),
-                                        NULLIF($4::numeric, NULL)
-                                    );
+                                (
+                                    NULLIF($1, NULL),
+                                    COALESCE($2, NULL),
+                                    COALESCE($3::numeric, NULL),
+                                    NULLIF($4::numeric, NULL)
+                                )
+                                    RETURNING *;
+                            
                                     `
                                 const comportamientoDedicado = [
                                     apartamentoIDV,
@@ -13786,19 +13844,17 @@ const puerto = async (entrada, salida) => {
 
                                 ]
 
-                                await conexion.query(actualizarComportamientoDedicado, comportamientoDedicado)
-
+                                const resuelveApartamento = await conexion.query(actualizarComportamientoDedicado, comportamientoDedicado)
+                                apartamentosInsertados.push(resuelveApartamento.rows[0])
 
                             }
+                            await conexion.query('COMMIT'); // Confirmar la transacción
                             const ok = {
-                                ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados"
+                                ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
+                                apartamentosDelComportamiento: apartamentosInsertados
                             }
                             salida.json(ok)
-
-
-
                         }
-                        await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
 
