@@ -19139,6 +19139,7 @@ const administracion = {
             },
             guardarCambiosOferta: async (oferta) => {
                 const ofertaUID = document.querySelector("[ofertaUID]").getAttribute("ofertaUID")
+                const seccionUID = document.querySelector("section").getAttribute("instanciaUID")
                 const fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                 const fechaFin = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
                 const tipoOferta = document.querySelector("[ofertaEnPrimerPlano=Activado]").getAttribute("zonaOferta")
@@ -19195,18 +19196,23 @@ const administracion = {
                 transaccion["apartamentosSeleccionados"] = apartamentosSeleccionados
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                const seccionRenderizada = document.querySelector(`section[instanciaUID="${seccionUID}"]`)
+                if (!seccionRenderizada) return
 
                 if (respuestaServidor?.error) {
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                 }
                 if (respuestaServidor?.ok) {
+                    const detallesOferta = respuestaServidor.detallesOferta
+                    const contenedorValoresIniciales = document.querySelector("[componente=espacioOfertas]")
+                    contenedorValoresIniciales.setAttribute("valorInicial", JSON.stringify(detallesOferta))
                     const modo = {
                         modo: "botonCancelarCambios"
                     }
                     return casaVitini.administracion.gestion_de_ofertas.detallesOferta.ofertaModos(modo)
                 }
             },
-            ofertaModos: (modo) => {
+            ofertaModos: async (modo) => {
                 let botonModo
                 if (modo.target) {
                     botonModo = modo.target.getAttribute("componente")
@@ -19257,6 +19263,126 @@ const administracion = {
                     })
                     document.querySelector("[componente=espacioCrearOferta]").classList.add("eventosDesactivadosInicialmente")
                     document.querySelector("[componente=soloLecturaInfo]").classList.remove("elementoOcultoInicialmente")
+
+                    const contenedorValorInicial = document.querySelector("[componente=espacioOfertas]").getAttribute("valorInicial")
+                    const ofertaInicial = JSON.parse(contenedorValorInicial)
+
+                    const nombreOferta_valorInicial = ofertaInicial.nombreOferta
+                    const fechaInicio_valorInicial = ofertaInicial.fechaInicio
+                    const fechaFin_valorInicial = ofertaInicial.fechaFin
+                    const tipoOfertaIDV_valorInicial = ofertaInicial.tipoOfertaIDV
+                    const cantidad_valorInicial = ofertaInicial.cantidad
+                    const numero_valorInicial = ofertaInicial.numero
+                    const tipoDescuentoIDV_valorInicial = ofertaInicial.tipoDescuentoIDV
+                    const descuentoAplicadoAIDV_valorInicial = ofertaInicial.descuentoAplicadoAIDV
+                    const simboloNumero_valorInicial = ofertaInicial.simboloNumero
+
+
+                    const campoNombreOferta = document.querySelector("[campoOferta=nombreOferta]")
+                    campoNombreOferta.value = nombreOferta_valorInicial
+
+                    document.querySelector("[calendario=entrada]").setAttribute("memoriaVolatil", fechaInicio_valorInicial)
+                    document.querySelector("[calendario=salida]").setAttribute("memoriaVolatil", fechaFin_valorInicial)
+
+                    document.querySelector("[fechaUI=fechaInicio]").innerText = fechaInicio_valorInicial
+                    document.querySelector("[fechaUI=fechaFin]").innerText = fechaFin_valorInicial
+
+                    const selectorTipoOferta = document.querySelectorAll("[tipoOferta]")
+                    selectorTipoOferta.forEach((tipoOferta) => {
+                        tipoOferta.removeAttribute("style")
+                    })
+                    const tipoOfertaBoton = document.querySelector(`[tipoOferta=${tipoOfertaIDV_valorInicial}]`)
+                    tipoOfertaBoton.style.background = "blue"
+                    tipoOfertaBoton.style.color = "white"
+
+                    document.querySelectorAll("[zonaOferta]").forEach((zonaOferta) => {
+                        zonaOferta.remove()
+                    })
+
+                    const espacioOfertas = document.querySelector("[componente=espacioCrearOferta]")
+                    if (tipoOfertaIDV_valorInicial === "porNumeroDeApartamentos") {
+                        const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porNumeroDeApartamentos()
+                        espacioOfertas.appendChild(opcionesUI)
+                    }
+                    if (tipoOfertaIDV_valorInicial === "porApartamentosEspecificos") {
+                        const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porApartamentosEspecificos()
+                        espacioOfertas.appendChild(opcionesUI)
+                    }
+                    if (tipoOfertaIDV_valorInicial === "porDiasDeAntelacion") {
+                        const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porDiasDeAntelacion()
+                        espacioOfertas.appendChild(opcionesUI)
+                    }
+                    if (tipoOfertaIDV_valorInicial === "porDiasDeReserva") {
+                        const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porDiasDeReserva()
+                        espacioOfertas.appendChild(opcionesUI)
+                    }
+                    if (tipoOfertaIDV_valorInicial === "porRangoDeFechas") {
+                        const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porRangoDeFechas()
+                        espacioOfertas.appendChild(opcionesUI)
+                    }
+
+                    document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}]`).setAttribute("ofertaEnPrimerPlano", "Activado")
+                    const selectorTipoOfertaRenderizado = document.querySelector(`[tipoOferta=${tipoOfertaIDV_valorInicial}]`)
+                    selectorTipoOfertaRenderizado.style.background = "blue"
+                    selectorTipoOfertaRenderizado.style.color = "white"
+                   
+                    if (tipoOfertaIDV_valorInicial === "porNumeroDeApartamentos" || tipoOfertaIDV_valorInicial === "porDiasDeAntelacion" || tipoOfertaIDV_valorInicial === "porDiasDeReserva") {
+                        document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=simboloNumero] [value=${simboloNumero_valorInicial}]`).selected = true
+                        document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=numero]`).value = numero_valorInicial
+                        document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=tipoDescuento] [value=${tipoDescuentoIDV_valorInicial}]`).selected = true
+                        document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=cantidad]`).value = cantidad_valorInicial
+                    }
+
+                    if (tipoOfertaIDV_valorInicial === "porRangoDeFechas") {
+                        document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=tipoDescuento] [value=${tipoDescuentoIDV_valorInicial}]`).selected = true
+                        document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=cantidad]`).value = cantidad_valorInicial
+                    }
+
+                    if (tipoOfertaIDV_valorInicial === "porApartamentosEspecificos") {
+                        document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=contextoAplicacion] [value=${descuentoAplicadoAIDV_valorInicial}]`).selected = true
+                        if (descuentoAplicadoAIDV === "totalNetoReserva") {
+                            document.querySelector(`[controladorDesliegue=descuentoGlobal]`).classList.remove("estadoInicialInvisible")
+                            document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=tipoDescuento] [value=${tipoDescuentoIDV_valorInicial}]`).selected = true
+                            document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=cantidad]`).value = cantidad_valorInicial
+                        }
+
+                        if (descuentoAplicadoAIDV === "totalNetoApartmentoDedicado") {
+                            document.querySelector(`[controladorDesliegue=descuentosDedicados]`).classList.remove("estadoInicialInvisible")
+                        }
+
+                        const apartamentosDedicados = ofertaInicial.apartamentosDedicados
+
+                        for (const apartamentoDedicadoDetalles of apartamentosDedicados) {
+                            const apartamentoDedicadoIDV = apartamentoDedicadoDetalles.apartamentoIDV
+                            const apartamentoDedicadoUI = apartamentoDedicadoDetalles.apartamentoUI
+                            const apartamentoDedicadoTipoDescuento = apartamentoDedicadoDetalles.tipoDescuento
+                            const apartamentoDedicadoCantidadApartamento = apartamentoDedicadoDetalles.cantidadApartamento
+                            const metadatosApartamentoUI = {
+                                apartamentoIDV: apartamentoDedicadoIDV,
+                                apartamentoUI: apartamentoDedicadoUI,
+                                tipoDescuentoIDV: apartamentoDedicadoTipoDescuento,
+                                cantidad: apartamentoDedicadoCantidadApartamento
+                            }
+                            const insertarApartamentoUI = await casaVitini.administracion.gestion_de_ofertas.crearOferta.insertarApartamentoUI(metadatosApartamentoUI)
+                            document.querySelector("[componente=infoSinApartamento]").style.display = "none"
+                            const zonaApartamentos = document.querySelector("[componente=zonaAnadirApartamento]")
+                            zonaApartamentos.appendChild(insertarApartamentoUI)
+
+                            const insertarOpcionesApartamento = await casaVitini.administracion.gestion_de_ofertas.crearOferta.insertarOpcionesApartamento(metadatosApartamentoUI)
+                            document.querySelector("[componente=infoDescuentoDedicados]").style.display = "none"
+                            const zonaDescuentoDedicados = document.querySelector("[parteOferta=descuentosDedicados]")
+                            zonaDescuentoDedicados.appendChild(insertarOpcionesApartamento)
+                        }
+                    }
+
+
+
+
+
+
+
+
+
                 }
 
 

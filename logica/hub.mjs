@@ -12635,8 +12635,7 @@ const puerto = async (entrada, salida) => {
                                    "tipoOferta" = COALESCE($7, NULL),
                                    cantidad = COALESCE($8::numeric, NULL),
                                    "tipoDescuento" = COALESCE($9, NULL)
-                                   WHERE uid = $10
-                                   RETURNING *;`
+                                   WHERE uid = $10;`
                                 const datos = [
                                     nombreOferta,
                                     fechaInicio_ISO,
@@ -12689,20 +12688,12 @@ const puerto = async (entrada, salida) => {
                                     tipoDescuento: tipoDescuento,
                                     ofertaUID: ofertaUID,
                                 }
-                                console.log("metadatos", metadatos)
-                                const resuelve = await consultaActualizarCompartido(metadatos)
+                                await consultaActualizarCompartido(metadatos)
                                 await conexion.query('COMMIT');
-
-                                const fechaInicio_UTC = resuelve.fechaInicio
-                                const fechaFin_UTC = resuelve.fechaFin
-
-
-
-
-
                                 const ok = {
-                                    ok: "Se ha acualizado correctamente la oferta 1",
-                                    detallesOferta: { ...resuelve }
+                                    ok: "Se ha acualizado correctamente la oferta",
+                                    detallesOferta: await obtenerDetallesOferta(ofertaUID)
+
                                 }
                                 salida.json(ok)
                             }
