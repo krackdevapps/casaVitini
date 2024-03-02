@@ -11935,6 +11935,15 @@ const puerto = async (entrada, salida) => {
                             const fechaInicio_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaInicio)).fecha_ISO
                             const fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin)).fecha_ISO
 
+                            const fechaInicio_objeto = DateTime.fromISO(fechaInicio_ISO)
+                            const fechaFin_objeto = DateTime.fromISO(fechaFin_ISO)
+
+                            if (fechaInicio_objeto > fechaFin_objeto) {
+                                const error = "La fecha de inicio de la oferta no puede ser inferior a la fecha del fin de la oferta"
+                                throw new Error(error)
+                            }
+
+
                             if (tipoOferta !== "porNumeroDeApartamentos" &&
                                 tipoOferta !== "porApartamentosEspecificos" &&
                                 tipoOferta !== "porDiasDeAntelacion" &&
@@ -11947,10 +11956,10 @@ const puerto = async (entrada, salida) => {
 
                             // Validar nombre unico oferta
                             const validarNombreOfertaUnico = `
-                        SELECT "nombreOferta"
-                        FROM ofertas
-                        WHERE "nombreOferta" = $1
-                        `
+                                SELECT "nombreOferta"
+                                FROM ofertas
+                                WHERE "nombreOferta" = $1
+                                `
                             const consultaValidarNombreOfertaUnico = await conexion.query(validarNombreOfertaUnico, [nombreOferta])
                             if (consultaValidarNombreOfertaUnico.rowCount > 0) {
                                 const error = "Ya existe un nombre de oferta exactamente igual a este, por favor elige otro nombre para esta oferta con el fin de evitar confusiones"
@@ -12608,6 +12617,13 @@ const puerto = async (entrada, salida) => {
                             const fechaInicio_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaInicio)).fecha_ISO
                             const fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin)).fecha_ISO
 
+                            const fechaInicio_objeto = DateTime.fromISO(fechaInicio_ISO)
+                            const fechaFin_objeto = DateTime.fromISO(fechaFin_ISO)
+
+                            if (fechaInicio_objeto > fechaFin_objeto) {
+                                const error = "La fecha de inicio de la oferta no puede ser inferior a la fecha del fin de la oferta"
+                                throw new Error(error)
+                            }
 
                             if (tipoOferta !== "porNumeroDeApartamentos" &&
                                 tipoOferta !== "porApartamentosEspecificos" &&

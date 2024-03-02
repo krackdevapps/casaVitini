@@ -190,6 +190,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     fechaSalida_ISO: fechaSalidaBloqueo_ISO,
                     uid: bloqueoUID,
                     tipoElemento: "bloqueo",
+                    apartamentoIDV: apartamento,
                     tipoBloqueo: tipoBloqueo,
                     motivo: motivo || "(Sin motivo espeficado en el bloqueo)"
 
@@ -264,8 +265,10 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                         const fechaInicio = detallesDelEvento.fechaInicio
                         const uid = detallesDelEvento.uid
                         const nombreEvento = detallesDelEvento.nombreEvento
+                        const descripcion = detallesDelEvento.descripcion
 
                         const rangoInterno = verificaRangoInternamente(mesCalendario, anoCalenddrio, fechaInicio, fechaFinal)
+
                         if (rangoInterno) {
                             const estructura = {
                                 apartamentoIDV: apartamentoIDV,
@@ -273,6 +276,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                                 fechaSalida_ISO: fechaInicio,
                                 tipoElemento: "eventoCalendarioSincronizado",
                                 nombreEvento: nombreEvento,
+                                descripcion: descripcion,
                                 tipoElemento: "eventoSincronizado"
                             }
                             contenedorEventosCalendariosSincronizados.push(estructura)
@@ -464,6 +468,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     fechaSalida_ISO: fechaSalidaBloqueo_ISO,
                     uid: bloqueoUID,
                     tipoElemento: "bloqueo",
+                    apartamentoIDV: apartamento,
                     tipoBloqueo: tipoBloqueo,
                     motivo: motivo || "(Sin motivo espeficado en el bloqueo)"
 
@@ -539,6 +544,8 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                         const fechaInicio = detallesDelEvento.fechaInicio
                         const uid = detallesDelEvento.uid
                         const nombreEvento = detallesDelEvento.nombreEvento
+                        const descripcion = detallesDelEvento.descripcion
+
 
                         const rangoInterno = verificaRangoInternamente(mesCalendario, anoCalenddrio, fechaInicio, fechaFinal)
                         if (rangoInterno) {
@@ -548,6 +555,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                                 fechaSalida_ISO: fechaInicio,
                                 tipoElemento: "eventoCalendarioSincronizado",
                                 nombreEvento: nombreEvento,
+                                descripcion: descripcion,
                                 tipoElemento: "eventoSincronizado"
                             }
                             contenedorEventosCalendariosSincronizados.push(estructura)

@@ -158,8 +158,8 @@ const administracion = {
 
                 let fechaEntradaElemento = document.createElement("div")
                 fechaEntradaElemento.classList.add("fechaNuevo")
-                fechaEntradaElemento.id = "fechaEntrada"
-                fechaEntradaElemento.innerText = "Seleccionar"
+                fechaEntradaElemento.setAttribute("fechaUI", "fechaInicio")
+                fechaEntradaElemento.innerText = "(Seleccionar)"
                 bloqueFechaEntrada.appendChild(fechaEntradaElemento)
 
                 let bloqueFechaSalida = document.createElement("div")
@@ -179,8 +179,8 @@ const administracion = {
                 bloqueFechaSalida.appendChild(textoFechaSalida)
                 let fechaSalidaElemento = document.createElement("div")
                 fechaSalidaElemento.classList.add("fechaNuevo")
-                fechaSalidaElemento.id = "fechaSalida"
-                fechaSalidaElemento.innerText = "Seleccionar"
+                fechaSalidaElemento.setAttribute("fechaUI", "fechaFin")
+                fechaSalidaElemento.innerText = "(Seleccionar)"
                 bloqueFechaSalida.appendChild(fechaSalidaElemento)
 
 
@@ -653,7 +653,7 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de entrada para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.reservas.buscador.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia"
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -683,7 +683,7 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de entrada para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.reservas.buscador.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia"
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -729,7 +729,7 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de salida para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.reservas.buscador.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia"
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -759,7 +759,7 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de salida para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.reservas.buscador.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia"
 
 
                         }
@@ -790,7 +790,7 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de salida para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.reservas.buscador.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia"
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -1336,7 +1336,7 @@ const administracion = {
                         mensajeInfo: "Selecciona la fecha de entrada para esta reserva nueva",
                         alturaDinamica: alturaDinamicaArriba,
                         instanciaUID: instanciaUID,
-                        metodoSelectorDia: "casaVitini.administracion.reservas.nuevaReserva.seleccionarDia"
+                        metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia"
                     }
                     casaVitini.componentes.constructorCalendarioNuevo(metadatosCalendario)
                     document.addEventListener("click", casaVitini.componentes.ocultarElementos)
@@ -1403,7 +1403,7 @@ const administracion = {
                         mensajeInfo: "Selecciona la fecha de salida para esta reserva nueva",
                         alturaDinamica: alturaDinamicaArriba,
                         instanciaUID: instanciaUID,
-                        metodoSelectorDia: "casaVitini.administracion.reservas.nuevaReserva.seleccionarDia"
+                        metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia"
 
                     }
                     casaVitini.componentes.constructorCalendarioNuevo(metadatosCalendario)
@@ -4830,7 +4830,7 @@ const administracion = {
                     botonAceptarPropuesta.addEventListener("click", () => {
                         casaVitini.componentes.limpiarAdvertenciasInmersivas()
                         const nuevaFecha = {
-                            fechaPropestaISO: `${anoSeleccionado}-${mesSeleccionado}-${diaSeleccionado}`,
+                            fechaSolicitada_ISO: `${anoSeleccionado}-${mesSeleccionado}-${diaSeleccionado}`,
                             reserva: reservaUID,
                             sentidoRango: "pasado"
                         }
@@ -4915,7 +4915,7 @@ const administracion = {
                     botonAceptarPropuesta.addEventListener("click", () => {
                         casaVitini.componentes.limpiarAdvertenciasInmersivas()
                         const nuevaFecha = {
-                            fechaPropestaISO: `${anoSeleccionado}-${mesSeleccionado}-${diaSeleccionado}`,
+                            fechaSolicitada_ISO: `${anoSeleccionado}-${mesSeleccionado}-${diaSeleccionado}`,
                             reserva: reservaUID,
                             sentidoRango: "futuro"
                         }
@@ -4930,28 +4930,143 @@ const administracion = {
             confirmarCambioFecha: async (propuesta) => {
                 const instanciaUID_pantallaDeCarga = casaVitini.componentes.codigoFechaInstancia()
                 const sentidoRango = propuesta.sentidoRango
+                const fechaSolicitada_ISO = propuesta.fechaSolicitada_ISO
                 const transaccion = {
                     zona: "administracion/reservas/confirmarModificarFechaReserva",
                     reserva: parseInt(propuesta.reserva, 10),
                     sentidoRango: sentidoRango,
-                    fechaSolicitada_ISO: propuesta.fechaPropestaISO
+                    fechaSolicitada_ISO: fechaSolicitada_ISO
                 }
                 console.log("fecha", transaccion)
                 const mensajes = {
-                    pasado: "Confirmando la nueva fecha de entrada, por favor espere...",
-                    futuro: "Confirmando la nueva fecha de salida, por favor espere..."
-
+                    pasado: [
+                        "Confirmando la nueva fecha de entrada, por favor espere...",
+                        "No se puede establecer la fecha de entrada por que los apartamentos de esta reserva estan en otro eventos que ocurren al mismo tiempo. A continuación tienes una lista de los eventos que entran en conflicto.",
+                    ],
+                    futuro: [
+                        "Confirmando la nueva fecha de salida, por favor espere...",
+                        "No se puede establecer la fecha de salida por que los apartamentos de esta reserva estan en otro eventos que ocurren al mismo tiempo. A continuación tienes una lista de los eventos que entran en conflicto."
+                    ]
                 }
                 const datosPantallaSuperpuesta = {
                     instanciaUID: instanciaUID_pantallaDeCarga,
-                    mensaje: mensajes[sentidoRango]
+                    mensaje: mensajes[sentidoRango][0]
                 }
                 casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
 
+
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 const pantallaDeCargaRenderizada = document.querySelector(`[componente=advertenciaInmersiva][instanciaUID="${instanciaUID_pantallaDeCarga}"]`)
-
+                console.log("respuesta", respuestaServidor)
                 if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
+
+                    const detallesError = respuestaServidor?.error
+                    const detallesDeLosEventosBloqueantes = detallesError.detallesDeLosEventosBloqueantes
+
+                    casaVitini.componentes.limpiarAdvertenciasInmersivas()
+
+                    const contenedorError = document.createElement("div")
+                    contenedorError.classList.add("contenedorErrorPropuesta")
+
+                    const tituloPropuesta = document.createElement("p")
+                    tituloPropuesta.classList.add("detallesReservaTituloCancelarReserva")
+                    tituloPropuesta.innerText = "No se puede cambiar la fecha debido a otro eventos ya existentes"
+                    tituloPropuesta.style.color = "black"
+                    contenedorError.appendChild(tituloPropuesta)
+
+                    const botonCancelar = document.createElement("div")
+                    botonCancelar.classList.add("detallesReservaCancelarBoton")
+                    botonCancelar.innerText = "Cerrar y volver a la reserva"
+                    botonCancelar.addEventListener("click", casaVitini.componentes.limpiarAdvertenciasInmersivas)
+                    contenedorError.appendChild(botonCancelar)
+
+
+                    const infoPropuesta = document.createElement("div")
+                    infoPropuesta.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                    infoPropuesta.innerText = mensajes[sentidoRango][1]
+                    contenedorError.appendChild(infoPropuesta)
+
+                    for (const detallesDelEvento of detallesDeLosEventosBloqueantes) {
+
+                        const fechaEntrada_ISO = detallesDelEvento.fechaEntrada_ISO
+                        const fechaSalida_ISO = detallesDelEvento.fechaSalida_ISO
+
+                        const fechaEntrada_array = fechaEntrada_ISO.split("-")
+                        const fechaSalida_array = fechaSalida_ISO.split("-")
+
+                        const fechaEntrada_Humana = `${fechaEntrada_array[2]}/${fechaEntrada_array[1]}/${fechaEntrada_array[0]}`
+                        const fechaSalida_Humana = `${fechaSalida_array[2]}/${fechaSalida_array[1]}/${fechaSalida_array[0]}`
+
+                        const eventoUID = detallesDelEvento.uid
+                        const tipoElemento = detallesDelEvento.tipoElemento
+
+                        const descripcion = detallesDelEvento.descripcion
+
+                        const contenedorEvento = document.createElement("div")
+                        contenedorEvento.classList.add("contenedorEvento")
+
+                        const tipoEvento = document.createElement("div")
+                        tipoEvento.classList.add("negrita")
+                        tipoEvento.innerText = tipoElemento.toUpperCase()
+                        contenedorEvento.appendChild(tipoEvento)
+
+                        const nombreDato = document.createElement("div")
+                        nombreDato.innerText = "Rango del evento"
+                        contenedorEvento.appendChild(nombreDato)
+
+                        const fechaEvento = document.createElement("div")
+                        // fechaEvento.classList.add()
+                        fechaEvento.innerText = `${fechaEntrada_Humana} >>> ${fechaSalida_Humana}`
+                        contenedorEvento.appendChild(fechaEvento)
+                        console.log("tipoEvento", tipoElemento)
+                        if (tipoElemento === "reserva") {
+                            const botonIrAlEvento = document.createElement("a")
+                            botonIrAlEvento.classList.add("botonIrAlEvento")
+                            botonIrAlEvento.innerText = "Ir a los detalles de la reserva"
+                            botonIrAlEvento.setAttribute("href", "/administracion/reservas/" + eventoUID)
+                            botonIrAlEvento.setAttribute("vista", "/administracion/reservas/" + eventoUID)
+                            botonIrAlEvento.addEventListener("click", casaVitini.componentes.cambiarVista)
+                            contenedorEvento.appendChild(botonIrAlEvento)
+                        }
+
+                        if (tipoElemento === "bloqueo") {
+                            const apartamentoIDV = detallesDelEvento.apartamentoIDV
+                            const botonIrAlEvento = document.createElement("a")
+                            botonIrAlEvento.classList.add("botonIrAlEvento")
+                            botonIrAlEvento.innerText = "Ir a los detalles del bloqueo"
+                            botonIrAlEvento.setAttribute("href", "/administracion/bloqueos/" + apartamentoIDV + "/" + eventoUID)
+                            botonIrAlEvento.setAttribute("vista", "/administracion/bloqueos/" + apartamentoIDV + "/" + eventoUID)
+                            botonIrAlEvento.addEventListener("click", casaVitini.componentes.cambiarVista)
+                            contenedorEvento.appendChild(botonIrAlEvento)
+                        }
+
+                        if (tipoElemento === "eventoCalendarioSincronizado" && descripcion) {
+
+                            const regex = /Reservation URL: (https:\/\/www\.airbnb\.com\/hosting\/reservations\/details\/[A-Za-z0-9]+)/;
+                            const match = descripcion.match(regex);
+                            const urlEvento = match?.[1] ?? "No se encontró la URL en el texto proporcionado.";
+
+                            const botonIrAlEvento = document.createElement("a")
+                            botonIrAlEvento.classList.add("botonIrAlEvento")
+                            botonIrAlEvento.innerText = "Ir a los detalles del calendario sincronizado"
+                            botonIrAlEvento.setAttribute("href", urlEvento)
+                            botonIrAlEvento.setAttribute("vista", urlEvento)
+                            contenedorEvento.appendChild(botonIrAlEvento)
+                        }
+
+                        if (tipoElemento === "eventoCalendarioSincronizado" && !descripcion) {
+                            const botonIrAlEvento = document.createElement("a")
+                            botonIrAlEvento.classList.add("infoEventoSinDetalles")
+                            botonIrAlEvento.innerText = "Este evento es de un calendario externo sincronizado y no ofrece detalles del mismo"
+                            contenedorEvento.appendChild(botonIrAlEvento)
+                        }
+                        contenedorError.appendChild(contenedorEvento)
+                    }
+
+                    const mensajeError = casaVitini.componentes.ui.pantallaInmersivaPersonalizada()
+                    mensajeError.querySelector("[contenedor=contenidoAdvertenciaInmersiva]").appendChild(contenedorError)
+                    document.body.appendChild(mensajeError)
+
                     pantallaDeCargaRenderizada.remove()
                     // falta la pantalla de error con los elementos
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -4977,7 +5092,7 @@ const administracion = {
                         selectorFechaSalida.setAttribute("fechaSalida", fecha_Humano)
                         selectorFechaSalidaUI.innerText = fecha_Humano
                     }
- 
+
                 }
 
             },
@@ -18200,7 +18315,9 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de entrada para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.gestion_de_ofertas.crearOferta.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                            seleccionableDiaLimite: "si"
+
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -18228,7 +18345,9 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de entrada para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.gestion_de_ofertas.crearOferta.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                            seleccionableDiaLimite: "si"
+
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -18274,7 +18393,9 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de salida para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.gestion_de_ofertas.crearOferta.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                            seleccionableDiaLimite: "si"
+
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -18304,7 +18425,9 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de salida para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.gestion_de_ofertas.crearOferta.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                            seleccionableDiaLimite: "si"
+
 
 
                         }
@@ -18335,7 +18458,9 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de salida para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.comportamiento_de_precios.crearComportamiento.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                            seleccionableDiaLimite: "si"
+
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -18353,7 +18478,7 @@ const administracion = {
                 let calendario = document.querySelector("[componente=bloqueCalendario] [componente=marcoCalendario]")
                 let calendarioIO = calendario.getAttribute("calendarioIO")
 
-
+                const marcoMes = dia.target.closest("[componente=marcoMes]")
                 let diaSeleccionado = dia.target.getAttribute("dia")
                 diaSeleccionado = diaSeleccionado.padStart(2, "0")
                 diaSeleccionado = Number(diaSeleccionado)
@@ -18369,6 +18494,8 @@ const administracion = {
                     ano: anoSeleccionado
                 }
                 const fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
+                const diasDelCalendario = marcoMes.querySelectorAll("[dia]")
+
                 let selectorDias = [...document.querySelectorAll("[calendarioIO] [dia]")]
                 selectorDias.map((dia) => {
                     // dia.classList.remove("calendarioDiaDisponible")
@@ -18376,26 +18503,43 @@ const administracion = {
                     dia.classList.remove("calendarioDiaSeleccionado")
                 })
                 if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
-                    diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
+                    diaSeleccionadoComoElemento.setAttribute("estadoDia", "disponible")
+
                     if (calendarioIO === "entrada") {
                         document.querySelector("[calendario=entrada]").removeAttribute("memoriaVolatil")
-                        document.querySelector("[dataReserva=fechaEntrada]").innerText = "Seleccionar fecha de entrada"
+                        //document.querySelector("[dataReserva=fechaEntrada]").innerText = "Seleccionar fecha de entrada"
                     }
                     if (calendarioIO === "salida") {
                         document.querySelector("[calendario=salida]").removeAttribute("memoriaVolatil")
-                        document.querySelector("[dataReserva=fechaSalida]").innerText = "Seleccionar fecha de salida"
+                        // document.querySelector("[dataReserva=fechaSalida]").innerText = "Seleccionar fecha de salida"
                     }
-                    diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
-                    diaSeleccionadoComoElemento.removeAttribute("estadoDia")
+
+                    //  diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
+                    //  diaSeleccionadoComoElemento.classList.remove("calendarioDiaReserva")
+
+
+                    diasDelCalendario.forEach(dia => {
+                        if (dia.getAttribute("estadoDia") === "disponible" ||
+                            dia.getAttribute("estadoDia") === "seleccionado") {
+                            dia.classList.remove("calendarioDiaSeleccionado")
+                            dia.classList.remove("calendarioDiaReserva")
+                            dia.classList.add("calendarioDiaDisponible")
+                            dia.setAttribute("estadoDia", "disponible")
+                        }
+
+                    });
+
+
                     return
                 }
-                let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
-                diasDisponibles.map(diaDisponible => {
-                    diaDisponible.removeAttribute("estadoDia")
-                    diaDisponible.style.background = ""
-                    diaDisponible.style.color = ""
-                })
+                diasDelCalendario.forEach(dia => {
+                    dia.classList.remove("calendarioDiaSeleccionado")
+                    dia.classList.remove("calendarioDiaReserva")
+                    dia.classList.add("calendarioDiaDisponible")
+                    dia.setAttribute("estadoDia", "disponible")
 
+
+                });
                 diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
                 diaSeleccionadoComoElemento.classList.add("calendarioDiaSeleccionado")
 
@@ -18438,14 +18582,15 @@ const administracion = {
                     if (fechaSalidaSelecionda) {
                         if (mesSeleccionadoSalida === mesSeleccionado && anoSeleccionado === anoSeleccionadoSalida) {
                             selectorDias.map((dia) => {
-                                if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) < diaSeleccionadoSalida) {
-                                    //  dia.classList.remove("calendarioDiaDisponible")
+                                if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) <= diaSeleccionadoSalida) {
+                                    dia.classList.remove("calendarioDiaDisponible")
                                     dia.classList.add("calendarioDiaReserva")
                                 }
                             })
                         } else {
                             selectorDias.map((dia) => {
                                 if (Number(dia.getAttribute("dia")) > diaSeleccionado) {
+                                    dia.classList.remove("calendarioDiaDisponible")
                                     dia.classList.add("calendarioDiaReserva")
                                 }
                             })
@@ -18460,13 +18605,15 @@ const administracion = {
                     if (fechaEntradaSelecionda) {
                         if (mesSeleccionadoEntrada === mesSeleccionado && anoSeleccionado === anoSeleccionadoEntrada) {
                             selectorDias.map((dia) => {
-                                if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) > diaSeleccionadoEntrada) {
+                                if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) >= diaSeleccionadoEntrada) {
+                                    dia.classList.remove("calendarioDiaDisponible")
                                     dia.classList.add("calendarioDiaReserva")
                                 }
                             })
                         } else {
                             selectorDias.map((dia) => {
                                 if (Number(dia.getAttribute("dia")) < diaSeleccionado) {
+                                    dia.classList.remove("calendarioDiaDisponible")
                                     dia.classList.add("calendarioDiaReserva")
                                 }
                             })
@@ -18477,8 +18624,8 @@ const administracion = {
             },
             crearOfertaConfirmar: async (crearOferta) => {
 
-                const fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("fechaInicioFinal") || "00/00/0000"
-                const fechaFin = document.querySelector("[calendario=salida]").getAttribute("fechaFinFinal") || "00/00/0000"
+                const fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil") || "00/00/0000"
+                const fechaFin = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil") || "00/00/0000"
                 const tipoOferta = document.querySelector("[ofertaEnPrimerPlano=Activado]").getAttribute("zonaOferta")
                 const nombreOferta = document.querySelector("[campoOferta=nombreOferta]").value
 
@@ -18887,7 +19034,7 @@ const administracion = {
                     selectorFechaInicio.setAttribute("fechaInicioFinal", fechaInicio)
 
                     selectorFechaInicio.setAttribute("memoriaVolatil", fechaInicio)
-                    let selectorFechaInicioUI = document.querySelector("[data=fechaInicioData]")
+                    let selectorFechaInicioUI = document.querySelector("[fechaUI=fechaInicio]")
                     selectorFechaInicioUI.innerText = fechaInicio
 
                     let selectorFechaFin = document.querySelector("[calendario=salida]")
@@ -18895,7 +19042,7 @@ const administracion = {
                     let fechaFinArray = fechaFin.split("/")
 
                     selectorFechaFin.setAttribute("memoriaVolatil", fechaFin)
-                    let selectorFechaFinUI = document.querySelector("[data=fechaFinData]")
+                    let selectorFechaFinUI = document.querySelector("[fechaUI=fechaFin]")
                     selectorFechaFinUI.innerText = fechaFin
 
                     const espacioOfertas = document.querySelector("[componente=espacioCrearOferta]")
@@ -18986,8 +19133,8 @@ const administracion = {
             },
             guardarCambiosOferta: async (oferta) => {
                 const ofertaUID = document.querySelector("[ofertaUID]").getAttribute("ofertaUID")
-                const fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("fechaInicioFinal")
-                const fechaFin = document.querySelector("[calendario=salida]").getAttribute("fechaFinFinal")
+                const fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                const fechaFin = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
                 const tipoOferta = document.querySelector("[ofertaEnPrimerPlano=Activado]").getAttribute("zonaOferta")
                 const nombreOferta = document.querySelector("[campoOferta=nombreOferta]").value
 
@@ -19304,7 +19451,7 @@ const administracion = {
             // Crear el párrafo de la fecha de inicio seleccionada
             const pFechaInicioSeleccionada = document.createElement('p');
             pFechaInicioSeleccionada.classList.add('fechaInicio');
-            pFechaInicioSeleccionada.setAttribute('data', 'fechaInicioData');
+            pFechaInicioSeleccionada.setAttribute('fechaUI', 'fechaInicio');
             pFechaInicioSeleccionada.textContent = '(Seleccionar)';
 
             // Agregar los elementos al div contenedor de fecha de inicio
@@ -19327,7 +19474,7 @@ const administracion = {
             // Crear el párrafo de la fecha de fin seleccionada
             const pFechaFinSeleccionada = document.createElement('p');
             pFechaFinSeleccionada.classList.add('fechaFin');
-            pFechaFinSeleccionada.setAttribute('data', 'fechaFinData');
+            pFechaFinSeleccionada.setAttribute('fechaUI', 'fechaFin');
             pFechaFinSeleccionada.textContent = '(Seleccionar)';
 
             // Agregar los elementos al div contenedor de fecha de fin
@@ -20610,7 +20757,8 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de entrada para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.comportamiento_de_precios.crearComportamiento.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                            seleccionableDiaLimite: "si"
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -20638,7 +20786,8 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de entrada para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.comportamiento_de_precios.crearComportamiento.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                            seleccionableDiaLimite: "si"
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -20684,7 +20833,9 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de salida para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.comportamiento_de_precios.crearComportamiento.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                            seleccionableDiaLimite: "si"
+
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -20714,7 +20865,9 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de salida para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.comportamiento_de_precios.crearComportamiento.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                            seleccionableDiaLimite: "si"
+
 
 
                         }
@@ -20745,7 +20898,9 @@ const administracion = {
                             mensajeInfo: "Selecciona una fecha de salida para buscar reservas por un rango",
                             alturaDinamica: alturaDinamicaArriba,
                             instanciaUID: instanciaUID,
-                            metodoSelectorDia: "casaVitini.administracion.comportamiento_de_precios.crearComportamiento.seleccionarDia"
+                            metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                            seleccionableDiaLimite: "si"
+
 
                         }
                         casaVitini.componentes.constructorCalendarioNuevo(tipoFecha)
@@ -20844,7 +20999,7 @@ const administracion = {
                     if (fechaSalidaSelecionda) {
                         if (mesSeleccionadoSalida === mesSeleccionado && anoSeleccionado === anoSeleccionadoSalida) {
                             selectorDias.map((dia) => {
-                                if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) < diaSeleccionadoSalida) {
+                                if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) <= diaSeleccionadoSalida) {
                                     //  dia.classList.remove("calendarioDiaDisponible")
                                     dia.classList.add("calendarioDiaReserva")
                                 }
@@ -20866,7 +21021,7 @@ const administracion = {
                     if (fechaEntradaSelecionda) {
                         if (mesSeleccionadoEntrada === mesSeleccionado && anoSeleccionado === anoSeleccionadoEntrada) {
                             selectorDias.map((dia) => {
-                                if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) > diaSeleccionadoEntrada) {
+                                if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) >= diaSeleccionadoEntrada) {
                                     dia.classList.add("calendarioDiaReserva")
                                 }
                             })
@@ -21241,39 +21396,43 @@ const administracion = {
                         selectorEstadoComportamiento.style.background = "#00ff006e"
                         selectorEstadoComportamiento.innerHTML = "Comportamiento activado"
                     }
-                    let campoNombreOferta = document.querySelector("[campoOferta=nombreOferta]")
+                    const campoNombreOferta = document.querySelector("[campoOferta=nombreOferta]")
+                    campoNombreOferta.setAttribute("valorInicial", nombreComportamiento)
                     campoNombreOferta.value = nombreComportamiento
-                    let selectorFechaInicio = document.querySelector("[calendario=entrada]")
-                    selectorFechaInicio.setAttribute("fechaInicioFinal", fechaInicio)
 
+                    let selectorFechaInicio = document.querySelector("[calendario=entrada]")
+                    selectorFechaInicio.setAttribute("valorInicial", fechaInicio)
                     selectorFechaInicio.setAttribute("memoriaVolatil", fechaInicio)
-                    let selectorFechaInicioUI = document.querySelector("[data=fechaInicioData]")
+
+                    let selectorFechaInicioUI = document.querySelector("[fechaUI=fechaInicio]")
                     selectorFechaInicioUI.innerText = fechaInicio
 
                     let selectorFechaFin = document.querySelector("[calendario=salida]")
-                    selectorFechaFin.setAttribute("fechaFinFinal", fechaFinal)
+                    selectorFechaFin.setAttribute("valorInicial", fechaFinal)
                     selectorFechaFin.setAttribute("memoriaVolatil", fechaFinal)
-                    let selectorFechaFinUI = document.querySelector("[data=fechaFinData]")
+                    let selectorFechaFinUI = document.querySelector("[fechaUI=fechaFin]")
                     selectorFechaFinUI.innerText = fechaFinal
 
+                    const contenedorApartamentos = document.querySelector("[contenedor=apartamentos]")
+                    contenedorApartamentos.setAttribute("valorInicial", JSON.stringify(apartamentos))
 
                     for (const detalleApartamento of apartamentos) {
 
-                        let apartamentoIDV_ = detalleApartamento.apartamentoIDV
-                        let apartamentoUI_ = detalleApartamento.apartamentoUI
-                        let cantidad_ = detalleApartamento.cantidad
-                        let simbolo = detalleApartamento.simbolo
+                        const apartamentoIDV_ = detalleApartamento.apartamentoIDV
+                        const apartamentoUI_ = detalleApartamento.apartamentoUI
+                        const cantidad_ = detalleApartamento.cantidad
+                        const simbolo = detalleApartamento.simbolo
 
-                        let metadatosApartamentoUI = {
+                        const metadatosApartamentoUI = {
                             apartamentoIDV: apartamentoIDV_,
                             apartamentoUI: apartamentoUI_,
                             simbolo: simbolo,
                             cantidad: cantidad_
                         }
 
-                        let insertarOpcionesApartamento = casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarOpcionesApartamento(metadatosApartamentoUI)
+                        const insertarOpcionesApartamento = casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarOpcionesApartamento(metadatosApartamentoUI)
                         document.querySelector("[componente=infoDescuentoDedicados]").style.display = "none"
-                        let zonaDescuentoDedicados = document.querySelector("[componente=comportamientoSuperBloque]")
+                        const zonaDescuentoDedicados = document.querySelector("[componente=comportamientoSuperBloque]")
                         zonaDescuentoDedicados.appendChild(insertarOpcionesApartamento)
                         document.querySelector("[componente=comportamientoSuperBloque]").style.display = "grid"
                     }
@@ -21282,28 +21441,34 @@ const administracion = {
             },
             guardarCambiosComportamiento: async (oferta) => {
 
+                const seccionUID = document.querySelector("section").getAttribute("instanciaUID")
 
-                let comportamientoUID = document.querySelector("[comportamientoUID]").getAttribute("comportamientoUID")
-                let nombreComportamiento = document.querySelector("[campoOferta=nombreOferta]").value
-                let fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("fechaInicioFinal")
-                let fechaFinal = document.querySelector("[calendario=salida]").getAttribute("fechaFinFinal")
+                const comportamientoUID = document.querySelector("[comportamientoUID]").getAttribute("comportamientoUID")
 
+                const nombreComportamiento = document.querySelector("[campoOferta=nombreOferta]").value
+                const nombreComportamiento_valor = nombreComportamiento.value
+
+                const fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                const fechaInicio_valor = fechaInicio.getAttribute("memoriaVolatil")
+
+                const fechaFinal = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                const fechaFinal_valor = fechaFinal.getAttribute("memoriaVolatil")
 
                 const transaccion = {
                     zona: "administracion/comportamientoDePrecios/actualizarComportamiento",
                     comportamientoUID: Number(comportamientoUID),
-                    nombreComportamiento: nombreComportamiento,
-                    fechaInicio: fechaInicio,
-                    fechaFinal: fechaFinal
+                    nombreComportamiento: nombreComportamiento_valor,
+                    fechaInicio: fechaInicio_valor,
+                    fechaFinal: fechaFinal_valor,
+                    comportamientos: []
                 }
 
-                transaccion.comportamientos = []
-                let selectoresApartamentos = [...document.querySelectorAll(`[descuentoDedicadoIDV]`)]
+                const selectoresApartamentos = [...document.querySelectorAll(`[descuentoDedicadoIDV]`)]
                 selectoresApartamentos.map((apartamentos) => {
-                    let apartamentoIDV = apartamentos.getAttribute("descuentoDedicadoIDV")
-                    let cantidad = apartamentos.querySelector("[campoapartamentoseleccionado=cantidad]").value
-                    let simbolo = apartamentos.querySelector("[campoapartamentoseleccionado=simbolo]").value
-                    let apartamentoFinal = {
+                    const apartamentoIDV = apartamentos.getAttribute("descuentoDedicadoIDV")
+                    const cantidad = apartamentos.querySelector("[campoapartamentoseleccionado=cantidad]").value
+                    const simbolo = apartamentos.querySelector("[campoapartamentoseleccionado=simbolo]").value
+                    const apartamentoFinal = {
                         apartamentoIDV: apartamentoIDV,
                         cantidad: cantidad,
                         simbolo: simbolo
@@ -21311,13 +21476,20 @@ const administracion = {
                     transaccion.comportamientos.push(apartamentoFinal)
                 })
 
-                let respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                const seccionRenderizada = document.querySelector(`section[instanciaUID=${seccionUID}]`)
+                if (!seccionRenderizada) return
 
                 if (respuestaServidor?.error) {
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
-
                 }
                 if (respuestaServidor?.ok) {
+
+                    nombreComportamiento.setAttribute("valorInicial", nombreComportamiento_valor)
+                    fechaInicio.setAttribute("valorInicial", fechaInicio_valor)
+                    fechaFinal.setAttribute("valorInicial", fechaFinal_valor)
+
+                    
                     const modo = {
                         modo: "botonCancelarCambios"
                     }
@@ -21588,7 +21760,7 @@ const administracion = {
             // Crear el párrafo de la fecha de inicio seleccionada
             const pFechaInicioSeleccionada = document.createElement('p');
             pFechaInicioSeleccionada.classList.add('fechaInicio');
-            pFechaInicioSeleccionada.setAttribute('data', 'fechaInicioData');
+            pFechaInicioSeleccionada.setAttribute('fechaUI', 'fechaInicio');
             pFechaInicioSeleccionada.textContent = '(Seleccionar)';
 
             // Agregar los elementos al div contenedor de fecha de inicio
@@ -21611,7 +21783,7 @@ const administracion = {
             // Crear el párrafo de la fecha de fin seleccionada
             const pFechaFinSeleccionada = document.createElement('p');
             pFechaFinSeleccionada.classList.add('fechaFin');
-            pFechaFinSeleccionada.setAttribute('data', 'fechaFinData');
+            pFechaFinSeleccionada.setAttribute('fechaUI', 'fechaFin');
             pFechaFinSeleccionada.textContent = '(Seleccionar)';
 
             // Agregar los elementos al div contenedor de fecha de fin
@@ -21657,6 +21829,8 @@ const administracion = {
             const porApartamentoDedicado = document.createElement('div');
             porApartamentoDedicado.classList.add('espaciadoInterno');
             porApartamentoDedicado.setAttribute('zonaOferta', 'porApartamentoDedicado');
+            porApartamentoDedicado.setAttribute('contenedor', 'apartamentos');
+
 
             // Crear el primer div interno
             const divCrearOfertaEspacioOpciones_3 = document.createElement('div');
@@ -22875,7 +23049,7 @@ const administracion = {
 
 
             },
-            "constructorCalendario": async (boton) => {
+            constructorCalendario: async (boton) => {
                 let botonID = boton.getAttribute("componente")
                 const alturaDinamicaArriba = casaVitini.componentes.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(boton) + 20
                 const bloqueCalendario = document.querySelector("[componente=bloqueCalendario]")
@@ -22931,7 +23105,9 @@ const administracion = {
                         mensajeInfo: "Selecciona la fecha de inicio del bloqueo",
                         alturaDinamica: alturaDinamicaArriba,
                         instanciaUID: instanciaUID,
-                        metodoSelectorDia: "casaVitini.administracion.bloqueos_temporales.componentes.seleccionarDia"
+                        metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                        seleccionableDiaLimite: "si"
+
                     }
                     casaVitini.componentes.constructorCalendarioNuevo(metadatosCalendario)
                     document.addEventListener("click", casaVitini.componentes.ocultarElementos)
@@ -22989,7 +23165,9 @@ const administracion = {
                         mensajeInfo: "Selecciona la fecha de final del bloqueo.",
                         alturaDinamica: alturaDinamicaArriba,
                         instanciaUID: instanciaUID,
-                        metodoSelectorDia: "casaVitini.administracion.bloqueos_temporales.componentes.seleccionarDia"
+                        metodoSelectorDia: "casaVitini.componentes.calendarioCompartido.seleccionarDia",
+                        seleccionableDiaLimite: "si"
+
 
                     }
                     casaVitini.componentes.constructorCalendarioNuevo(metadatosCalendario)
@@ -23402,7 +23580,7 @@ const administracion = {
             }
         },
         componentes: {
-            seleccionarDia: (dia) => {
+            seleccionarDia_antiguo: (dia) => {
                 let diaSeleccionadoComoElemento = dia.target;
                 let calendario = document.querySelector("[componente=bloqueCalendario] [componente=marcoCalendario]")
                 let calendarioIO = calendario.getAttribute("calendarioIO")
@@ -23413,8 +23591,8 @@ const administracion = {
                 let mesSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("mes")
                 const mesSeleccionadoTexto = mesSeleccionado.padStart(2, "0")
                 const mesmesSeleccionadoNumero = Number(mesSeleccionado)
-                let anoSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("ano")
-                anoSeleccionado = Number(anoSeleccionado)
+                const anoSeleccionado = Number(document.querySelector("[componente=mesReferencia]").getAttribute("ano"))
+
 
 
                 let fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
@@ -23482,14 +23660,12 @@ const administracion = {
 
                         document.querySelector("[calendario=entrada][componente=fechaEntrada] [componente=bloqueNuevaPropuesta]")?.remove()
 
-
                         if (!memoriaVolatilInicialEntrada) {
                             document.querySelector("[calendario=entrada]").removeAttribute("memoriaVolatil")
                         }
 
                         if (memoriaVolatilInicialEntrada) {
                             document.querySelector("[calendario=entrada]").setAttribute("memoriaVolatil", memoriaVolatilInicialEntrada)
-
                             if (mesInicialEntrada === mesSeleccionado && anoSeleccionado === anoInicialEntrada) {
                                 selectorDias.map((dia) => {
                                     if (Number(dia.getAttribute("dia")) === Number(diaInicialEntrada)) {
@@ -23549,12 +23725,15 @@ const administracion = {
                         if (mesSeleccionadoSalida === mesSeleccionado && anoSeleccionado === anoSeleccionadoSalida) {
                             selectorDias.map((dia) => {
                                 if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) < diaSeleccionadoSalida) {
+                                    dia.classList.remove("calendarioDiaDisponible")
+
                                     dia.classList.add("calendarioDiaReserva")
                                 }
                             })
                         } else {
                             selectorDias.map((dia) => {
                                 if (Number(dia.getAttribute("dia")) > diaSeleccionado) {
+                                    dia.classList.remove("calendarioDiaDisponible")
                                     dia.classList.add("calendarioDiaReserva")
                                 }
                             })
@@ -23604,6 +23783,151 @@ const administracion = {
                     bloqueNuevaPropuesta.innerText = `Nueva fecha de fin de bloqueo propuesta: ${fechaSeleccionadaUI}. Para guardar la propueda, guarde los cambios. Para cancelar pulse ne cancelar cambios.`
                     selectorBloqueFechaSalida.appendChild(bloqueNuevaPropuesta)
                 }
+            },
+            seleccionarDia: (dia) => {
+                let diaSeleccionadoComoElemento = dia.target;
+                let calendario = document.querySelector("[componente=bloqueCalendario] [componente=marcoCalendario]")
+                let calendarioIO = calendario.getAttribute("calendarioIO")
+
+
+                const diaSeleccionado = dia.target.getAttribute("dia").padStart(2, "0")
+                const anoSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("ano").padStart(4, "0")
+                const mesSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("mes").padStart(2, "0")
+                let fechaSeleccionada = {
+                    dia: diaSeleccionado,
+                    mes: mesSeleccionado,
+                    ano: anoSeleccionado
+                }
+                const fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
+                const fechaSeleccionadaTexto = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
+
+                let selectorDias = [...document.querySelectorAll("[calendarioIO] [dia]")]
+                selectorDias.map((dia) => {
+                    // dia.classList.remove("calendarioDiaDisponible")
+                    dia.classList.remove("calendarioDiaReserva")
+                    dia.classList.remove("calendarioDiaSeleccionado")
+                })
+                if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
+                    diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
+                    if (calendarioIO === "entrada") {
+                        document.querySelector("[calendario=entrada]").removeAttribute("memoriaVolatil")
+                        //document.querySelector("[dataReserva=fechaEntrada]").innerText = "Seleccionar fecha de entrada"
+                    }
+                    if (calendarioIO === "salida") {
+                        document.querySelector("[calendario=salida]").removeAttribute("memoriaVolatil")
+                        // document.querySelector("[dataReserva=fechaSalida]").innerText = "Seleccionar fecha de salida"
+                    }
+                    diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
+                    diaSeleccionadoComoElemento.removeAttribute("estadoDia")
+                    return
+                }
+                let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
+                diasDisponibles.map(diaDisponible => {
+                    diaDisponible.removeAttribute("estadoDia")
+                    diaDisponible.style.background = ""
+                    diaDisponible.style.color = ""
+                })
+
+                diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
+                diaSeleccionadoComoElemento.classList.add("calendarioDiaSeleccionado")
+
+                let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                let diaSeleccionadoEntrada
+                let mesSeleccionadoEntrada
+                let anoSeleccionadoEntrada
+                let datosFechaEntradaSeleccionada
+                if (fechaEntradaSelecionda) {
+                    const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
+                    diaSeleccionadoEntrada = fechaEntradaSelecionda_array[0]
+                    diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
+                    mesSeleccionadoEntrada = fechaEntradaSelecionda_array[1]
+                    mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
+                    anoSeleccionadoEntrada = fechaEntradaSelecionda_array[2]
+                    anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
+                    datosFechaEntradaSeleccionada = "existen"
+                }
+
+                let fechaSalidaSelecionda = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                let diaSeleccionadoSalida
+                let mesSeleccionadoSalida
+                let anoSeleccionadoSalida
+                let datosFechaSalidaSeleccionada
+                if (fechaSalidaSelecionda) {
+                    const fechaSalidaSelecionda_array = fechaSalidaSelecionda.split("/")
+                    diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]
+                    diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
+                    mesSeleccionadoSalida = fechaSalidaSelecionda_array[1]
+                    mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
+                    anoSeleccionadoSalida = fechaSalidaSelecionda_array[2]
+                    anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
+                    datosFechaSalidaSeleccionada = "existen"
+                }
+
+                if (calendarioIO === "entrada") {
+                    document.querySelector("[calendario=entrada]").setAttribute("memoriaVolatil", fechaSeleccionadaUI)
+                    document.querySelector("[calendario=entrada]").setAttribute("fechaInicioFinal", fechaSeleccionadaUI)
+                    //document.querySelector("[data=fechaInicioData]").innerText = fechaSeleccionadaUI
+                    if (fechaSalidaSelecionda) {
+                        if (mesSeleccionadoSalida === mesSeleccionado && anoSeleccionado === anoSeleccionadoSalida) {
+                            selectorDias.map((dia) => {
+                                if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) <= diaSeleccionadoSalida) {
+                                    //  dia.classList.remove("calendarioDiaDisponible")
+                                    dia.classList.add("calendarioDiaReserva")
+                                }
+                            })
+                        } else {
+                            selectorDias.map((dia) => {
+                                if (Number(dia.getAttribute("dia")) > diaSeleccionado) {
+                                    dia.classList.add("calendarioDiaReserva")
+                                }
+                            })
+                        }
+                    }
+
+                    const selectorBloqueFechaEntrada = document.querySelector("[calendario=entrada][componente=fechaEntrada]")
+                    document.querySelector("[calendario=entrada][componente=fechaEntrada] [componente=bloqueNuevaPropuesta]")?.remove()
+
+                    const bloqueNuevaPropuesta = document.createElement("div")
+                    bloqueNuevaPropuesta.classList.add("adminsitracion_bloqueos_detallesBloquoes_contenedorNuevaPropuesta")
+                    bloqueNuevaPropuesta.setAttribute("componente", "bloqueNuevaPropuesta")
+                    bloqueNuevaPropuesta.setAttribute("datoBloqueo", "fechaInicio")
+                    bloqueNuevaPropuesta.setAttribute("fechaInicioPropuesta", fechaSeleccionadaTexto)
+                    bloqueNuevaPropuesta.innerText = `Nueva fecha de inicio de bloqueo propuesta: ${fechaSeleccionadaUI}. Para guardar la propueda, guarde los cambios. Para cancelar pulse ne cancelar cambios.`
+                    selectorBloqueFechaEntrada.appendChild(bloqueNuevaPropuesta)
+                }
+
+                if (calendarioIO === "salida") {
+                    document.querySelector("[calendario=salida]").setAttribute("memoriaVolatil", fechaSeleccionadaUI)
+                    document.querySelector("[calendario=salida]").setAttribute("fechaFinFinal", fechaSeleccionadaUI)
+                    // document.querySelector("[data=fechaFinData]").innerText = fechaSeleccionadaUI
+                    if (fechaEntradaSelecionda) {
+                        if (mesSeleccionadoEntrada === mesSeleccionado && anoSeleccionado === anoSeleccionadoEntrada) {
+                            selectorDias.map((dia) => {
+                                if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) >= diaSeleccionadoEntrada) {
+                                    dia.classList.add("calendarioDiaReserva")
+                                }
+                            })
+                        } else {
+                            selectorDias.map((dia) => {
+                                if (Number(dia.getAttribute("dia")) < diaSeleccionado) {
+                                    dia.classList.add("calendarioDiaReserva")
+                                }
+                            })
+                        }
+
+                    }
+                    const selectorBloqueFechaSalida = document.querySelector("[calendario=salida][componente=fechaSalida]")
+                    document.querySelector("[calendario=salida][componente=fechaSalida] [componente=bloqueNuevaPropuesta]")?.remove()
+
+                    const bloqueNuevaPropuesta = document.createElement("div")
+                    bloqueNuevaPropuesta.classList.add("adminsitracion_bloqueos_detallesBloquoes_contenedorNuevaPropuesta")
+                    bloqueNuevaPropuesta.setAttribute("componente", "bloqueNuevaPropuesta")
+                    bloqueNuevaPropuesta.setAttribute("datoBloqueo", "fechaFin")
+                    bloqueNuevaPropuesta.setAttribute("fechaFinPropuesta", fechaSeleccionadaTexto)
+                    bloqueNuevaPropuesta.innerText = `Nueva fecha de fin de bloqueo propuesta: ${fechaSeleccionadaUI}. Para guardar la propueda, guarde los cambios. Para cancelar pulse ne cancelar cambios.`
+                    selectorBloqueFechaSalida.appendChild(bloqueNuevaPropuesta)
+                }
+
             },
         },
         crearBloqueo: {
