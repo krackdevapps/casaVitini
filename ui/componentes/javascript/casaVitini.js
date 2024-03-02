@@ -11302,11 +11302,12 @@ const casaVitini = {
                                     bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     bloqueDia.setAttribute("estadoDia", "disponible")
                                 }
-                                if (calendario.tiempo === "futuro") {
-                                    if (diaFinal_decimal < fechaEntradaSeleccionada.dia) {
-                                        //bloqueDia.classList.add("calendarioDiaDisponible")
-                                    }
+                                if (diaFinal_decimal < fechaEntradaSeleccionada.dia) {
+                                    bloqueDia.classList.add("calendarioDiaDisponible")
+                                    bloqueDia.addEventListener("click", eval(metodoSelectorDia))
+                                    bloqueDia.setAttribute("estadoDia", "disponible")
                                 }
+
                             } else if (mesActual_decimal === fechaSalidaSeleccionada.mes && anoActual_decimal === fechaSalidaSeleccionada.ano) {
                                 console.log("2")
                                 // si es mes de salida pero no de entrada
@@ -11333,7 +11334,7 @@ const casaVitini = {
                                     bloqueDia.classList.add("calendarioDiaReserva")
                                     bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     bloqueDia.setAttribute("estadoDia", "disponible")
-                                }else{
+                                } else {
                                     bloqueDia.classList.add("calendarioDiaDisponible")
                                     bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     bloqueDia.setAttribute("estadoDia", "disponible")
@@ -11349,12 +11350,12 @@ const casaVitini = {
                                     bloqueDia.setAttribute("estadoDia", "seleccionado")
                                     bloqueDia.addEventListener("click", eval(metodoSelectorDia))
 
-                                }else {
+                                } else {
                                     bloqueDia.classList.add("calendarioDiaDisponible")
                                     bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     bloqueDia.setAttribute("estadoDia", "disponible")
                                 }
-                            }else{
+                            } else {
                                 bloqueDia.classList.add("calendarioDiaDisponible")
                                 bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                 bloqueDia.setAttribute("estadoDia", "disponible")
@@ -11379,7 +11380,7 @@ const casaVitini = {
                                     bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     bloqueDia.setAttribute("estadoDia", "disponible")
                                 }
-                            }else{
+                            } else {
                                 bloqueDia.classList.add("calendarioDiaDisponible")
                                 bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                 bloqueDia.setAttribute("estadoDia", "disponible")
@@ -11596,7 +11597,7 @@ const casaVitini = {
                                     bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     bloqueDia.setAttribute("estadoDia", "disponible")
 
-                                }else {
+                                } else {
                                     bloqueDia.classList.add("calendarioDiaDisponible")
                                     bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     bloqueDia.setAttribute("estadoDia", "disponible")
@@ -11624,10 +11625,10 @@ const casaVitini = {
                                     bloqueDia.classList.add("calendarioDiaNoDisponible")
                                 }
                             } else {
-                                    bloqueDia.classList.add("calendarioDiaDisponible")
-                                    bloqueDia.addEventListener("click", eval(metodoSelectorDia))
-                                    bloqueDia.setAttribute("estadoDia", "disponible")
-                                
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                                bloqueDia.addEventListener("click", eval(metodoSelectorDia))
+                                bloqueDia.setAttribute("estadoDia", "disponible")
+
                             }
 
 
@@ -11652,10 +11653,10 @@ const casaVitini = {
                                     bloqueDia.setAttribute("estadoDia", "disponible")
                                 }
                             } else {
-                                    bloqueDia.classList.add("calendarioDiaDisponible")
-                                    bloqueDia.addEventListener("click", eval(metodoSelectorDia))
-                                    bloqueDia.setAttribute("estadoDia", "disponible")
-                                
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                                bloqueDia.addEventListener("click", eval(metodoSelectorDia))
+                                bloqueDia.setAttribute("estadoDia", "disponible")
+
                             }
                         } else if (!Object.keys(fechaSalidaSeleccionada).length && !Object.keys(fechaEntradaSeleccionada).length) {
 
