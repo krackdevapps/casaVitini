@@ -19325,7 +19325,7 @@ const administracion = {
                     const selectorTipoOfertaRenderizado = document.querySelector(`[tipoOferta=${tipoOfertaIDV_valorInicial}]`)
                     selectorTipoOfertaRenderizado.style.background = "blue"
                     selectorTipoOfertaRenderizado.style.color = "white"
-                   
+
                     if (tipoOfertaIDV_valorInicial === "porNumeroDeApartamentos" || tipoOfertaIDV_valorInicial === "porDiasDeAntelacion" || tipoOfertaIDV_valorInicial === "porDiasDeReserva") {
                         document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=simboloNumero] [value=${simboloNumero_valorInicial}]`).selected = true
                         document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=numero]`).value = numero_valorInicial
@@ -23229,7 +23229,7 @@ const administracion = {
 
                 }
             },
-            "traductorCambioVista": (uidBloqueo) => {
+            traductorCambioVista: (uidBloqueo) => {
                 uidBloqueo.preventDefault()
                 uidBloqueo.stopPropagation()
                 const vista = uidBloqueo.target.closest("[vista]").getAttribute("vista")
@@ -23243,7 +23243,7 @@ const administracion = {
 
 
             },
-            "traductorConstructorCalendario": (calendario) => {
+            traductorConstructorCalendario: (calendario) => {
                 const componente = calendario.target.closest("[calendario]")
                 return casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.constructorCalendario(componente)
 
@@ -23381,7 +23381,7 @@ const administracion = {
 
                 }
             },
-            "selectorRangoTemporalUI": (rango) => {
+            selectorRangoTemporalUI: (rango) => {
 
                 const fechaInicio = rango.entrada
                 const fechaFin = rango.salida
@@ -23424,7 +23424,7 @@ const administracion = {
 
                 if (modo === "estadoConDatos") {
                     contenedorFechaEntrada.setAttribute("memoriaVolatil", fechaInicio)
-                    contenedorFechaEntrada.setAttribute("memoriaVolatilInicial", fechaInicio)
+                    contenedorFechaEntrada.setAttribute("valorInicial", fechaInicio)
                 }
                 contenedorFechaEntrada.addEventListener("click", casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.traductorConstructorCalendario)
 
@@ -23450,7 +23450,7 @@ const administracion = {
 
                 if (modo === "estadoConDatos") {
                     contenedorFechaSalida.setAttribute("memoriaVolatil", fechaFin)
-                    contenedorFechaSalida.setAttribute("memoriaVolatilInicial", fechaFin)
+                    contenedorFechaSalida.setAttribute("valorInicial", fechaFin)
                 }
 
                 contenedorFechaSalida.addEventListener("click", casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.traductorConstructorCalendario)
@@ -23472,7 +23472,7 @@ const administracion = {
                 return contenedorFecha
 
             },
-            "controladorSelectorRangoTemporalUI": (tipoBloqueoUI) => {
+            controladorSelectorRangoTemporalUI: (tipoBloqueoUI) => {
                 const tipoBloqueo = tipoBloqueoUI.target.value
                 const selectorContenedorFechas = document.querySelector("[componente=contenedorFechas]")
                 if (tipoBloqueo === "permanente") {
@@ -23486,7 +23486,7 @@ const administracion = {
                     }
                 }
             },
-            "botonesDetallesBloqueoUI": (configuracion) => {
+            botonesDetallesBloqueoUI: (configuracion) => {
 
                 if (configuracion !== "crear" && configuracion !== "modificar" && configuracion !== "guardarEliminar") {
                     const error = "Este componente necesita un tipo de configuracion, esta puede ser, crear, modificar o guardarEliminar"
@@ -23559,7 +23559,7 @@ const administracion = {
 
 
             },
-            "controladorBotonesGlobales": {
+            controladorBotonesGlobales: {
                 // Crear es para la seccion de crear
 
                 "crear": () => {
@@ -23585,7 +23585,7 @@ const administracion = {
 
                 }
             },
-            "guardarCambios": async () => {
+            guardarCambios: async () => {
                 const selectorBloqueUID = document.querySelector("[bloqueoUID]")
                 const bloqueUID = selectorBloqueUID.getAttribute("bloqueoUID")
                 const selectorTipoBloqueo = document.querySelector("[datoBloqueo=tipoBloqueo]")
@@ -23619,41 +23619,20 @@ const administracion = {
 
                 if (respuestaServidor?.ok) {
 
-                    const fechaInicioPropuesta = document.querySelector("[fechaInicioPropuesta]")?.getAttribute("fechaInicioPropuesta")
-                    const fechaFinPropuesta = document.querySelector("[fechaFinPropuesta]")?.getAttribute("fechaFinPropuesta")
+                    const fechaInicio_elemento = document.querySelector("[calendario=entrada]")
+                    const fechaFin_elemento = document.querySelector("[calendario=salida]")
 
+                    const fechaInicio_humana = fechaInicio_elemento.getAttribute("memoriaVolatil")
+                    document.querySelector("[fechaUI=fechaInicio]").innerText = fechaInicio_humana
+                    fechaInicio_elemento.setAttribute("valorInicial", fechaInicio_humana)
 
-                    if (fechaInicioPropuesta) {
-                        const fechaInicioArray = fechaInicioPropuesta.split("/")
-                        const datosMemoriaVolatil = {
-                            dia: fechaInicioArray[0],
-                            mes: fechaInicioArray[1],
-                            ano: fechaInicioArray[2]
-                        }
-                        const memoriaVolatilInicial = document.querySelector("[calendario=entrada]")
-                        memoriaVolatilInicial.setAttribute("memoriaVolatilInicial", JSON.stringify(datosMemoriaVolatil))
-                        document.querySelector("[fechaInicioPropuesta]").remove()
-                        document.querySelector("[fechaUI=fechaInicio]").innerText = fechaInicioPropuesta
-                    }
-
-                    if (fechaFinPropuesta) {
-                        const fechaFinArray = fechaFinPropuesta.split("/")
-                        const datosMemoriaVolatil = {
-                            dia: fechaFinArray[0],
-                            mes: fechaFinArray[1],
-                            ano: fechaFinArray[2]
-                        }
-                        const memoriaVolatilInicial = document.querySelector("[calendario=salida]")
-                        memoriaVolatilInicial.setAttribute("memoriaVolatilInicial", JSON.stringify(datosMemoriaVolatil))
-                        document.querySelector("[fechaFinPropuesta]").remove()
-                        document.querySelector("[fechaUI=fechaFin]").innerText = fechaFinPropuesta
-                    }
-
+                    const fechaFin_humana = fechaFin_elemento.getAttribute("memoriaVolatil")
+                    document.querySelector("[fechaUI=fechaFin]").innerText = fechaFin_humana
+                    fechaFin_elemento.setAttribute("valorInicial", fechaFin_humana)
 
                     selectorTipoBloqueo.setAttribute("datoInicial", tipoBloqueo)
                     selectorZona.setAttribute("datoInicial", zona)
                     selectorMotivo.setAttribute("datoInicial", motivo)
-
 
                     casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.controladorBotonesGlobales.modificar()
                     const selectorContendorBloqueo = document.querySelector("[componente=contenedorDelBloqueo]")
@@ -23662,8 +23641,8 @@ const administracion = {
                 }
 
             },
-            "eliminarBloqueo": {
-                "UI": async () => {
+            eliminarBloqueo: {
+                UI: async () => {
                     const advertenciaInmersivaIU = document.createElement("div")
                     advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
                     advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
@@ -23745,17 +23724,26 @@ const administracion = {
 
                 }
             },
-            "cancelarCambios": () => {
-
+            cancelarCambios: () => {
                 // Revertir cambios
-
                 const tipoBloqueo = document.querySelector("[datoBloqueo=tipoBloqueo]")
                 const zona = document.querySelector("[datoBloqueo=zonaUI]")
                 const motivo = document.querySelector("[datoBloqueo=motivoUI]")
 
+                const fechaInicio = document.querySelector("[calendario=entrada]")
+                const fechaFin = document.querySelector("[calendario=salida]")
+
+
                 const tipoBloqueoInicial = tipoBloqueo.getAttribute("datoInicial")
                 const zonaInicial = zona.getAttribute("datoInicial")
-                const motivoInicial = motivo.getAttribute("datoInicial")
+                const motivoInicial = motivo.getAttribute("datoInicial") || ""
+
+                const fechaInicio_valorInicial = fechaInicio.getAttribute("valorInicial")
+                const fechaFin_valorInicial = fechaFin.getAttribute("valorInicial")
+
+                fechaInicio.querySelector("[fechaUI=fechaInicio]").innerText = fechaInicio_valorInicial
+                fechaFin.querySelector("[fechaUI=fechaFin]").innerText = fechaFin_valorInicial
+
 
                 tipoBloqueo.value = tipoBloqueoInicial
                 zona.value = zonaInicial
