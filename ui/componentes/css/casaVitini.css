@@ -246,7 +246,7 @@ section {
     flex-wrap: nowrap;
     justify-content: space-around;
     align-items: stretch;
-    position: fixed;
+    /* position: fixed;*/
     width: 100%;
     z-index: 200;
     pointer-events: none;
@@ -297,7 +297,7 @@ section {
     width: 10px;
     /* height: 0px; */
     margin-right: 20px;
-    padding: 20px;
+    padding: 24px;
     transition: background 250ms, color 250ms;
     cursor: default;
     display: none;
@@ -306,7 +306,9 @@ section {
     background-position: center center;
     background-image: url(/componentes/iconos/menu5.svg);
     background-size: cover;
-    zoom: 80%;
+     zoom: 80%; 
+    backdrop-filter: blur(50px);
+    background-color: #ffffff1f;
 }
 
 .uiMenuResponsivoDesplegado:hover {
@@ -336,7 +338,6 @@ section {
 }
 
 .uiMenuGlobalResponsivo {
-
     display: flex;
     background-color: aqua;
     transition: all 250ms;
@@ -355,8 +356,8 @@ section {
     flex-wrap: nowrap;
     position: absolute;
     gap: 4px;
-    top:66px;
-    right: 1px;
+    top: 50px;
+    right: 12px;
     position: fixed;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
     padding: 6px;
@@ -384,6 +385,9 @@ section {
     flex-wrap: nowrap;
     flex-direction: row;
     pointer-events: all;
+    position: fixed;
+    right: 10px;
+    z-index: 1000;
 }
 
 #errorVista {

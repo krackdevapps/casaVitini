@@ -12,14 +12,7 @@ const casaVitini = {
                     document.querySelector("section").style.position = "absolute"
                     document.querySelector(".marcoElasticoRelativo").style.height = "100%"
 
-                    const titulo = document.querySelector("[componente=titulo]")
-                    titulo.style.position = "static"
-                    titulo.style.display = " flex";
-                    titulo.style.alignContent = "center";
-                    titulo.style.justifyContent = "center";
-                    titulo.style.alignItems = "flex-start";
-                    titulo.style.height = "100%";
-                    titulo.style.fontSize = "54px"
+               
 
                 },
             },
@@ -6637,7 +6630,7 @@ const casaVitini = {
         arranque: async () => {
             document.getElementById("botonMenuResponsivo").addEventListener("click", casaVitini.componentes.menuResponsivo)
             window.addEventListener("resize", casaVitini.componentes.limpiarTodoElementoVolatil)
-            casaVitini.componentes.controlGlobalScroll()
+          //  casaVitini.componentes.controlGlobalScroll()
 
             const vistas = document.querySelectorAll("[vista]")
             for (const vistaMenu of vistas) {

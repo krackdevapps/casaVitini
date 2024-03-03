@@ -6,12 +6,20 @@
     margin: 20px;
     top: 30px;
     text-align: center;
-    margin-top: 70px;
     transition: all 1s;
     margin-bottom: 10px;
     font-weight: bold;
 }
-
+.tituloPortada{
+     display: flex;
+     place-content: center;
+     align-items: flex-start;
+     height: 100%;
+     font-size: 54px;
+     padding: 60px;
+     font-weight: bold;
+     color: #0000009e;
+} 
 .plaza_marcoError_seccion {
     display: flex;
     padding: 10px;
