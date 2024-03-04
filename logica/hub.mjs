@@ -19086,24 +19086,20 @@ const calendarios_compartidos = async (entrada, salida) => {
 
                 const bloqueosTemporales = resuelveBloqueosTemporales.rows
 
-
                 for (const detalleDelBloqueo of bloqueosTemporales) {
-
                     const fechaEntradaBloqueo_ISO = detalleDelBloqueo.entrada
                     const fechaSalidaBloqueo_ISO = detalleDelBloqueo.salida
 
+                    // Aqui hay que hacer que no muestre la hora
+
                     const estructuraEVENTO = {
-                        start: DateTime.fromISO(fechaEntradaBloqueo_ISO),
-                        end: DateTime.fromISO(fechaSalidaBloqueo_ISO),
+                        start: DateTime.fromISO(fechaEntradaBloqueo_ISO).toISODate(),
+                        end: DateTime.fromISO(fechaSalidaBloqueo_ISO).toISODate(),
                         summary: 'Bloqueo temporal en casavitini.com',
                         description: 'Bloqueo temporal aplicado al ' + apartamentoUI
                     }
                     eventos.push(estructuraEVENTO)
-
-
-
                 }
-
 
                 const consultaReservas = `
                 SELECT 
@@ -19135,27 +19131,24 @@ const calendarios_compartidos = async (entrada, salida) => {
                         if (apartamentos.apartamento === apartamentoIDV) {
 
                             const estructuraEVENTO = {
-                                start: DateTime.fromISO(fechaEntrada_ISO),
-                                end: DateTime.fromISO(fechaSalida_ISO),
+                                start: DateTime.fromISO(fechaEntrada_ISO+"T000000Z").toISODate(),
+                                end: DateTime.fromISO(fechaSalida_ISO+"T235959Z").toISODate(),
                                 summary: 'Apartamento reservado en casavitini.com: ' + apartamentoUI,
                                 description: 'Apartamento en reserva: ' + reservaUID
                             }
                             eventos.push(estructuraEVENTO)
                         }
-
                     }
 
-
                     if (resuelveApartamento.rows === 1) {
-                        // 
-
+                        // Esto esta mal por que y no se añade con le push por que si hay uno se va a iterar el loop de arriba y luego esto.
                         const evento = {
                             start: DateTime.fromISO(fechaEntrada_ISO),
                             end: DateTime.fromISO(fechaSalida_ISO),
                             sumario: "Reserva " + reservaUID,
                             descripcion: "Reserva en CasaVitini del " + apartamentoUI
                         }
-                        eventos.push(evento)
+                       // eventos.push(evento)
                     }
                 }
 

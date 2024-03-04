@@ -7135,6 +7135,16 @@ const administracion = {
                             const instanciaUID = metadatos.instanciaUID
 
 
+                           const plataformaDePagoUI = {
+                                efectivo: "Efectivo",
+                                transferenciaBancaria: "Transferencia bancaria",
+                                tarjeta: "Tarteja TPV",
+                                pasarela: "Pasarela de pago",
+                                cheque: "Cheque"
+
+
+                            }
+
                             const bloqueDetallesDelPago = document.createElement("div")
                             bloqueDetallesDelPago.classList.add("reservaDetalles_transacciones_bloqueDetallesDelPago")
                             bloqueDetallesDelPago.setAttribute("pagoUID", pagoUID)
@@ -7177,7 +7187,7 @@ const administracion = {
 
                             bloqueDato = document.createElement("div")
                             bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                            bloqueDato.innerText = plataformaDePago
+                            bloqueDato.innerText = plataformaDePagoUI[plataformaDePago]
                             bloqueInfoDato.appendChild(bloqueDato)
 
                             bloqueDetallesDelPago.appendChild(bloqueInfoDato)
@@ -8555,7 +8565,7 @@ const administracion = {
                                     transaccion[nombreCampo] = valorCampo
                                 })
                             }
-
+                            console.log("transaccion", transaccion)
 
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                             const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaEspera}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
@@ -8600,7 +8610,7 @@ const administracion = {
                                         cantidad: detallesDelPago.cantidad,
                                         fechaPago: detallesDelPago.fechaPago,
                                         chequeUID: detallesDelPago.chequeUID,
-                                        instanciaUID: instanciaUID
+                                        instanciaUID: instanciaUID_listaDePagos
                                     }
                                     const enlaceUI = casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.UI.pagoUI(metadatos)
                                     const listaDePagosRenderizada = seleccionarInstancia.querySelector(`[contenedor=listaDePagos]`)
@@ -8653,10 +8663,9 @@ const administracion = {
 
                                 let campo = document.createElement("input")
                                 campo.classList.add("detallesReserva_campoNombreEnlace")
-                                campo.setAttribute("campo", "tranferenciaUID")
+                                campo.setAttribute("campo", "transferenciaUID")
                                 campo.placeholder = "Codigo identificador de la transferencia bancaria"
                                 contenedor.appendChild(campo)
-
 
                                 campo = document.createElement("input")
                                 campo.classList.add("detallesReserva_campoNombreEnlace")
