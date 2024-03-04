@@ -3,7 +3,6 @@ import ical from 'ical-generator';
 const exportarClendario = async (eventos) => {
     const cal = ical();
     cal.prodId("//Casas Vitini//Calendario v1.0//EN")
-    console.log("eventsoREcivio", eventos)
     const eventosEsquema = [
         {
             start: new Date('2024-02-01T08:00:00'),
