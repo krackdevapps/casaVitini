@@ -1832,8 +1832,13 @@ const puerto = async (entrada, salida) => {
                     }
                 },
                 preConfirmarReserva: async () => {
+
                     await mutex.acquire();
                     try {
+                        if (!await interruptor("aceptarReservasPublicas")) {
+                            const error = "Casa Vitini en este momento no acepta preconfirmaciones de reservas a traves de este proceso. Por favor ponte en contacto con nosotros si quieres preconfirmar una reserva. Dirigete a la seccion contacto para obtener formas de contactar con nosotros. Gracias y disculpe las molestias"
+                            throw new Error(error)
+                        }
                         const reserva = entrada.body.reserva
                         await conexion.query('BEGIN');
                         const resuelveValidacionObjetoReserva = await validarObjetoReserva(reserva);
@@ -1873,6 +1878,10 @@ const puerto = async (entrada, salida) => {
                 },
                 apartamentosDisponiblesPublico: async () => {
                     try {
+                        if (!await interruptor("aceptarReservasPublicas")) {
+                            const error = "Casa Vitini en este momento no acepta preconfirmaciones de reservas a traves de este proceso. Por favor ponte en contacto con nosotros si quieres preconfirmar una reserva. Dirigete a la seccion contacto para obtener formas de contactar con nosotros. Gracias y disculpe las molestias"
+                            throw new Error(error)
+                        }
                         const fechaEntrada = entrada.body.entrada
                         const fechaSalida = entrada.body.salida
 
@@ -10051,10 +10060,7 @@ const puerto = async (entrada, salida) => {
                         X: async () => {
                             try {
 
-                                if (!await interruptor("estado")) {
-                                    const error = "Interruptor desactivado"
-                                    throw new Error(error)
-                                }
+
 
                                 const consultaConfiguracionGlobal = `
                                 SELECT 
