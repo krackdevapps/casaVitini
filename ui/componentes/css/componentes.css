@@ -10624,8 +10624,9 @@ grid-template-columns: 0.5fr 1.5fr;
 .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual .urlCalendario {
     margin: 0px;
     font-weight: bold;
-
     padding: 0px;
+    font-size: 13px;
+    word-break: break-all;
 }
 
 
