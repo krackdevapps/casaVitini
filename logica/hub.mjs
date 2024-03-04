@@ -54,6 +54,7 @@ import { eventosPorApartamentoAirbnb } from './componentes/transactoresCompartid
 import { exportarClendario } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/exportarCalendario.mjs';
 import { obtenerParametroConfiguracion } from './componentes/transactoresCompartidos/obtenerParametroConfiguracion.mjs';
 import { obtenerDetallesOferta } from './componentes/sistemaDeOfertas/obtenerDetallesOferta.mjs';
+import { interruptor } from './componentes/transactoresCompartidos/interruptor.mjs';
 const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
 const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
 const arranque = async (entrada, salida) => {
@@ -10049,6 +10050,12 @@ const puerto = async (entrada, salida) => {
                         },
                         X: async () => {
                             try {
+
+                                if (!await interruptor("estado")) {
+                                    const error = "Interruptor desactivado"
+                                    throw new Error(error)
+                                }
+
                                 const consultaConfiguracionGlobal = `
                                 SELECT 
                                     estado,
@@ -10069,7 +10076,6 @@ const puerto = async (entrada, salida) => {
                                     const estado = parConfiguracion.estado || ""
                                     ok.ok[interruptorIDV] = estado
                                 }
-
                                 salida.json(ok)
 
 
@@ -10082,7 +10088,7 @@ const puerto = async (entrada, salida) => {
                             }
                         }
                     },
-                    guardarInterruptor: {
+                    actualizarEstado: {
                         IDX: {
                             ROL: [
                                 "administrador"
@@ -10098,8 +10104,10 @@ const puerto = async (entrada, salida) => {
                                     const error = "El interruptorIDV solo puede ser una cadena que acepta numeros, minusculas y mayusculas"
                                     throw new Error(error)
                                 }
-                                if (!estado || !filtroIDV.test(estado)) {
-                                    const error = "El estado solo puede ser una cadena que acepta numeros, minusculas y mayusculas"
+                                if (!estado ||
+                                    !filtroIDV.test(estado) ||
+                                    (estado !== "activado" && estado !== "desactivado")) {
+                                    const error = "El estado solo puede ser activado o desactivado"
                                     throw new Error(error)
                                 }
 
@@ -10112,11 +10120,11 @@ const puerto = async (entrada, salida) => {
                                     "interruptorIDV" = $1;
                                `;
 
-                                const resuelveConfiguracionGlobal = await conexion.query(validarInterruptorIDV, interruptorIDV)
+                                const resuelveConfiguracionGlobal = await conexion.query(validarInterruptorIDV, [interruptorIDV])
                                 if (resuelveConfiguracionGlobal.rowCount === 0) {
-                                    const error = "No existe ningun interruptor con ese indentificador visuak"
+                                    const error = "No existe ningun interruptor con ese indentificador visual"
                                     throw new Error(error)
-                                } 
+                                }
                                 await conexion.query('BEGIN'); // Inicio de la transacción
                                 const actualizarInterruptor = `
                                 UPDATE 
@@ -10140,7 +10148,7 @@ const puerto = async (entrada, salida) => {
                                 await conexion.query('COMMIT'); // Confirmar la transacción
                                 const ok = {
                                     ok: "Se ha actualizado correctamente el interruptor",
-                                    interrutorIDV:interruptorIDV,
+                                    interrutorIDV: interruptorIDV,
                                     estado: estadoNuevo
                                 }
                                 salida.json(ok)

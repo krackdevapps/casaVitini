@@ -14911,7 +14911,7 @@ const administracion = {
                 }
                 if (respuestaServidor?.ok) {
                     const configuracionGlobal = respuestaServidor.ok
-                    const interruptor_aceptarReservasPublicas = configuracionGlobal.interruptor_aceptarReservasPublicas
+                    const aceptarReservasPublicas = configuracionGlobal.aceptarReservasPublicas
                     const estados = [
                         {
                             estadoUI: "Activado",
@@ -14944,21 +14944,28 @@ const administracion = {
                     descripcionConfiguracion.innerText = "Este interruptor determina si se deben permitir reservas públicas ahora mismo. Sí el interruptor esta activado, personas en todo el mundo podran preconfirmar reservas desde Casa Vitini."
                     bloqueConfiguracion.appendChild(descripcionConfiguracion)
 
-                    const interruptor_aceptarReservasPublicas_UI = document.createElement("select")
-                    interruptor_aceptarReservasPublicas_UI.setAttribute("interruptor", "interruptor_aceptarReservasPublicas")
-                    interruptor_aceptarReservasPublicas_UI.classList.add("administracion_configuracion_valorConfiguracionInput")
-                    interruptor_aceptarReservasPublicas_UI.value = interruptor_aceptarReservasPublicas
-                    interruptor_aceptarReservasPublicas_UI.placeholder = "Determina el numero de días de antelación"
-                    bloqueConfiguracion.appendChild(interruptor_aceptarReservasPublicas_UI)
-                    console.log("interruptor_aceptarReservasPublicas",interruptor_aceptarReservasPublicas)
-                    let estadoInicial = document.createElement("option");
+                    const io_aceptarReservasPublicas_UI = document.createElement("select")
+                    io_aceptarReservasPublicas_UI.setAttribute("interruptor", "aceptarReservasPublicas")
+                    io_aceptarReservasPublicas_UI.classList.add("administracion_configuracion_valorConfiguracionInput")
+                    io_aceptarReservasPublicas_UI.setAttribute("valorInicial", aceptarReservasPublicas)
+                    io_aceptarReservasPublicas_UI.addEventListener("change", (e) => {
+                        const metadatos = {
+                            interruptorIDV: "aceptarReservasPublicas",
+                            estado: e.target.value
+                        }
+                        e.target.style.pointerEvents = "none"
+                        return casaVitini.administracion.configuracion.interruptores.actualizarInterruptor(metadatos)
+                    })
+                    bloqueConfiguracion.appendChild(io_aceptarReservasPublicas_UI)
+
+                    let estadoInicial = document.createElement("option")
                     estadoInicial.value = "";
                     estadoInicial.disabled = true;
-                    if (!interruptor_aceptarReservasPublicas) {
+                    if (!aceptarReservasPublicas) {
                         estadoInicial.selected = true;
                     }
                     estadoInicial.text = "Seleccionar el estado del interruptor";
-                    interruptor_aceptarReservasPublicas_UI.add(estadoInicial);
+                    io_aceptarReservasPublicas_UI.add(estadoInicial);
 
                     for (const detallesDelEstado of estados) {
                         const estadoIDV = detallesDelEstado.estadoIDV
@@ -14967,10 +14974,10 @@ const administracion = {
                         const opcion = document.createElement("option");
                         opcion.value = estadoIDV;
                         opcion.text = estadoUI;
-                        if (estadoIDV === interruptor_aceptarReservasPublicas) {
+                        if (estadoIDV === aceptarReservasPublicas) {
                             opcion.selected = true;
                         }
-                        interruptor_aceptarReservasPublicas_UI.add(opcion);
+                        io_aceptarReservasPublicas_UI.add(opcion);
                     }
 
 
@@ -15016,32 +15023,61 @@ const administracion = {
 
 
             },
-            guardarCambios: async () => {
-                const campos = [...document.querySelectorAll("[campo]")]
+            actualizarInterruptor: async (interruptor) => {
+                const seccionRenderizadaOrigen = document.querySelector("section")
+                const seccionUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
+                const interruptorIDV = interruptor.interruptorIDV
+                const estado = interruptor.estado
+                console.log("interruptorIDV", interruptorIDV)
+
+                const selectorListaEstadosInterruptor = seccionRenderizadaOrigen.querySelector(`[interruptor=${interruptorIDV}]`)
+                const valorInicial = selectorListaEstadosInterruptor.getAttribute("valorInicial")
+                const estadoSoliciado = selectorListaEstadosInterruptor.querySelector(`option[value=${estado}]`)
+                let procesandoEstadoUI
+
+                if (estado === "activado") {
+                    procesandoEstadoUI = "Activando..."
+                }
+                if (estado === "desactivado") {
+                    procesandoEstadoUI = "Desactivando..."
+                }
+                estadoSoliciado.text = procesandoEstadoUI
+
+
                 const transacccion = {
-                    zona: "administracion/configuracion/limitesReservaPublica/guardarConfiguracion"
+                    zona: "administracion/configuracion/interruptores/actualizarEstado",
+                    interruptorIDV: interruptorIDV,
+                    estado: estado
                 }
 
-                campos.map((campo) => {
-
-                    const nombreCampo = campo.getAttribute("campo")
-                    const valorCampo = campo.value
-                    transacccion[nombreCampo] = valorCampo
-                })
-
                 const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
-
+                const seccionRenderizada = document.querySelector(`section[instanciaUID="${seccionUID}"]`)
+                if (!seccionRenderizada) return
+                selectorListaEstadosInterruptor.removeAttribute("style")
 
                 if (respuestaServidor?.error) {
-                    casaVitini.administracion.configuracion.cancelarCambios()
+                    let estadoInicialUI
+                    if (estado === "activado") {
+                        estadoInicialUI = "Activado"
+                    }
+                    if (estado === "desactivado") {
+                        estadoInicialUI = "Desactivado"
+                    }
+                    estadoSoliciado.text = estadoInicialUI
+                    console.log("valorInicial", valorInicial)
+                    selectorListaEstadosInterruptor.value = valorInicial
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                 }
                 if (respuestaServidor?.ok) {
-                    const contenedorBotones = document.querySelector("[contenedor=botones]")
-                    contenedorBotones.removeAttribute("style")
-                    campos.map((campo) => {
-                        campo.setAttribute("valorInicial", campo.value)
-                    })
+                    let estadoFinalUI
+                    if (estado === "activado") {
+                        estadoFinalUI = "Activado"
+                    }
+                    if (estado === "desactivado") {
+                        estadoFinalUI = "Desactivado"
+                    }
+                    estadoSoliciado.text = estadoFinalUI
+                    selectorListaEstadosInterruptor.setAttribute("valorInicial", estado)
 
                 }
 
