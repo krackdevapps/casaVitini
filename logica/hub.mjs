@@ -10039,6 +10039,123 @@ const puerto = async (entrada, salida) => {
                         }
                     }
                 },
+                interruptores: {
+                    obtenerInterruptores: {
+                        IDX: {
+                            ROL: [
+                                "administrador",
+                                "empleado"
+                            ]
+                        },
+                        X: async () => {
+                            try {
+                                const consultaConfiguracionGlobal = `
+                                SELECT 
+                                    estado,
+                                    "interruptorIDV"
+                                FROM 
+                                    "interruptoresGlobales";
+                               `;
+
+                                const resuelveConfiguracionGlobal = await conexion.query(consultaConfiguracionGlobal)
+                                if (resuelveConfiguracionGlobal.rowCount === 0) {
+                                    const error = "No hay configuraciones globales con estos parametros"
+                                    throw new Error(error)
+                                }
+                                const configuraciones = resuelveConfiguracionGlobal.rows
+                                const ok = { ok: {} }
+                                for (const parConfiguracion of configuraciones) {
+                                    const interruptorIDV = parConfiguracion.interruptorIDV
+                                    const estado = parConfiguracion.estado || ""
+                                    ok.ok[interruptorIDV] = estado
+                                }
+
+                                salida.json(ok)
+
+
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
+
+                                salida.json(error)
+                            }
+                        }
+                    },
+                    guardarInterruptor: {
+                        IDX: {
+                            ROL: [
+                                "administrador"
+                            ]
+                        },
+                        X: async () => {
+                            try {
+                                const interruptorIDV = entrada.body.interruptorIDV
+                                const estado = entrada.body.estado
+
+                                const filtroIDV = /^[a-zA-Z0-9]+$/;
+                                if (!interruptorIDV || !filtroIDV.test(interruptorIDV)) {
+                                    const error = "El interruptorIDV solo puede ser una cadena que acepta numeros, minusculas y mayusculas"
+                                    throw new Error(error)
+                                }
+                                if (!estado || !filtroIDV.test(estado)) {
+                                    const error = "El estado solo puede ser una cadena que acepta numeros, minusculas y mayusculas"
+                                    throw new Error(error)
+                                }
+
+                                const validarInterruptorIDV = `
+                                SELECT 
+                                    "interruptorIDV"
+                                FROM 
+                                    "interruptoresGlobales"
+                                WHERE 
+                                    "interruptorIDV" = $1;
+                               `;
+
+                                const resuelveConfiguracionGlobal = await conexion.query(validarInterruptorIDV, interruptorIDV)
+                                if (resuelveConfiguracionGlobal.rowCount === 0) {
+                                    const error = "No existe ningun interruptor con ese indentificador visuak"
+                                    throw new Error(error)
+                                } 
+                                await conexion.query('BEGIN'); // Inicio de la transacción
+                                const actualizarInterruptor = `
+                                UPDATE 
+                                    "interruptoresGlobales"
+                                SET
+                                    estado = $1
+                                WHERE
+                                    "interruptorIDV" = $2
+                                    RETURNING *;`;
+
+                                const nuevoEstado = [
+                                    estado,
+                                    interruptorIDV
+                                ]
+                                const resuelveEstado = await conexion.query(actualizarInterruptor, nuevoEstado)
+                                if (resuelveEstado.rowCount === 0) {
+                                    const error = "No se ha podido actualizar el estado del interruptor"
+                                    throw new Error(error)
+                                }
+                                const estadoNuevo = resuelveEstado.rows[0].estado
+                                await conexion.query('COMMIT'); // Confirmar la transacción
+                                const ok = {
+                                    ok: "Se ha actualizado correctamente el interruptor",
+                                    interrutorIDV:interruptorIDV,
+                                    estado: estadoNuevo
+                                }
+                                salida.json(ok)
+
+                            } catch (errorCapturado) {
+                                await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+                                const error = {
+                                    error: errorCapturado.message
+                                }
+
+                                salida.json(error)
+                            }
+                        }
+                    }
+                },
 
             },
             clientes: {

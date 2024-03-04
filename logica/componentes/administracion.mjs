@@ -14891,6 +14891,162 @@ const administracion = {
 
             }
 
+        },
+        interruptores: {
+
+            arranque: async () => {
+                document.body.removeAttribute("style")
+                const marcoElastico = document.querySelector("[componente=marcoElastico]")
+                marcoElastico.style.gap = "4px"
+
+                const transaccion = {
+                    zona: "administracion/configuracion/interruptores/obtenerInterruptores"
+                }
+
+                const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+
+                if (respuestaServidor?.error) {
+                    casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
+                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                }
+                if (respuestaServidor?.ok) {
+                    const configuracionGlobal = respuestaServidor.ok
+                    const interruptor_aceptarReservasPublicas = configuracionGlobal.interruptor_aceptarReservasPublicas
+                    const estados = [
+                        {
+                            estadoUI: "Activado",
+                            estadoIDV: "activado"
+                        },
+                        {
+                            estadoUI: "Desactivado",
+                            estadoIDV: "desactivado"
+                        }
+                    ]
+
+                    const contenedorConfiguracionGlobal = document.createElement("div")
+                    contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
+
+                    const informacion = document.createElement("div")
+                    informacion.classList.add("administracion_configuracion_informacion")
+                    informacion.innerText = "Los interruptores permiten activar o desactivar funciones especificas. Como por ejemplo permitir reservas publicas o no. Puede activar y desactivar los interruptores y hay tener un control mas modular del sistema."
+                    contenedorConfiguracionGlobal.appendChild(informacion)
+
+                    bloqueConfiguracion = document.createElement("div")
+                    bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
+
+                    tituloConfiguracion = document.createElement("div")
+                    tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                    tituloConfiguracion.innerText = "Permitir reservas publicas"
+                    bloqueConfiguracion.appendChild(tituloConfiguracion)
+
+                    descripcionConfiguracion = document.createElement("div")
+                    descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                    descripcionConfiguracion.innerText = "Este interruptor determina si se deben permitir reservas públicas ahora mismo. Sí el interruptor esta activado, personas en todo el mundo podran preconfirmar reservas desde Casa Vitini."
+                    bloqueConfiguracion.appendChild(descripcionConfiguracion)
+
+                    const interruptor_aceptarReservasPublicas_UI = document.createElement("select")
+                    interruptor_aceptarReservasPublicas_UI.setAttribute("interruptor", "interruptor_aceptarReservasPublicas")
+                    interruptor_aceptarReservasPublicas_UI.classList.add("administracion_configuracion_valorConfiguracionInput")
+                    interruptor_aceptarReservasPublicas_UI.value = interruptor_aceptarReservasPublicas
+                    interruptor_aceptarReservasPublicas_UI.placeholder = "Determina el numero de días de antelación"
+                    bloqueConfiguracion.appendChild(interruptor_aceptarReservasPublicas_UI)
+                    console.log("interruptor_aceptarReservasPublicas",interruptor_aceptarReservasPublicas)
+                    let estadoInicial = document.createElement("option");
+                    estadoInicial.value = "";
+                    estadoInicial.disabled = true;
+                    if (!interruptor_aceptarReservasPublicas) {
+                        estadoInicial.selected = true;
+                    }
+                    estadoInicial.text = "Seleccionar el estado del interruptor";
+                    interruptor_aceptarReservasPublicas_UI.add(estadoInicial);
+
+                    for (const detallesDelEstado of estados) {
+                        const estadoIDV = detallesDelEstado.estadoIDV
+                        const estadoUI = detallesDelEstado.estadoUI
+
+                        const opcion = document.createElement("option");
+                        opcion.value = estadoIDV;
+                        opcion.text = estadoUI;
+                        if (estadoIDV === interruptor_aceptarReservasPublicas) {
+                            opcion.selected = true;
+                        }
+                        interruptor_aceptarReservasPublicas_UI.add(opcion);
+                    }
+
+
+
+                    contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
+
+
+
+                    marcoElastico.appendChild(contenedorConfiguracionGlobal)
+                }
+            },
+            cancelarCambios: () => {
+                const campos = [...document.querySelectorAll("[campo]")]
+                campos.map((campo) => {
+
+                    campo.value = campo.getAttribute("valorInicial")
+                })
+                const contenedorBotones = document.querySelector("[contenedor=botones]")
+                contenedorBotones.removeAttribute("style")
+            },
+            controlCampo: () => {
+
+                const campos = [...document.querySelectorAll("[campo]")]
+                let estadoFinal = null
+                campos.map((campo) => {
+                    if (campo.value !== campo.getAttribute("valorInicial")) {
+                        estadoFinal = "visible"
+                    }
+
+                })
+                const contenedorBotones = document.querySelector("[contenedor=botones]")
+
+                if (estadoFinal === "visible") {
+                    contenedorBotones.style.display = "flex"
+                } else {
+                    contenedorBotones.removeAttribute("style")
+                }
+
+
+
+
+
+
+
+            },
+            guardarCambios: async () => {
+                const campos = [...document.querySelectorAll("[campo]")]
+                const transacccion = {
+                    zona: "administracion/configuracion/limitesReservaPublica/guardarConfiguracion"
+                }
+
+                campos.map((campo) => {
+
+                    const nombreCampo = campo.getAttribute("campo")
+                    const valorCampo = campo.value
+                    transacccion[nombreCampo] = valorCampo
+                })
+
+                const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
+
+
+                if (respuestaServidor?.error) {
+                    casaVitini.administracion.configuracion.cancelarCambios()
+                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                }
+                if (respuestaServidor?.ok) {
+                    const contenedorBotones = document.querySelector("[contenedor=botones]")
+                    contenedorBotones.removeAttribute("style")
+                    campos.map((campo) => {
+                        campo.setAttribute("valorInicial", campo.value)
+                    })
+
+                }
+
+            }
+
         }
     },
     clientes: {
