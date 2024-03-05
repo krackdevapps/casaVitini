@@ -55,6 +55,7 @@ import { exportarClendario } from './componentes/transactoresCompartidos/calenda
 import { obtenerParametroConfiguracion } from './componentes/transactoresCompartidos/obtenerParametroConfiguracion.mjs';
 import { obtenerDetallesOferta } from './componentes/sistemaDeOfertas/obtenerDetallesOferta.mjs';
 import { interruptor } from './componentes/transactoresCompartidos/interruptor.mjs';
+import { horaEntradaSalida } from './componentes/transactoresCompartidos/horaEntradaSalida.mjs';
 const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
 const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
 const arranque = async (entrada, salida) => {
@@ -9214,7 +9215,7 @@ const puerto = async (entrada, salida) => {
                                 const actualizarConfiguracionGlobal = `
                                         UPDATE "configuracionGlobal"
                                         SET
-                                          "zonaHoraria" = $1
+                                          valor = $1
                                         WHERE
                                           "configuracionUID" = $2;
                                         `
@@ -19021,15 +19022,8 @@ const calendarios_compartidos = async (entrada, salida) => {
             const fechaInicio = DateTime.fromISO(fechaActual_ISO);
             const fechaFin = DateTime.fromISO(fechaLimite);
 
-            const horasSalidaEntrada = await puerto().casaVitini.componentes.administracion.reservas.horasSalidaEntrada()
-            const horaEntradaTZ = horasSalidaEntrada.horaEntradaTZ
-            const horaSalidaTZ = horasSalidaEntrada.horaSalidaTZ
+            const matrizHoraEntradaSalida = await horaEntradaSalida()
 
-            const horaEntrada_HORA = horaEntradaTZ.split(":")[0]
-            const horaEntrada_MINUTO = horaEntradaTZ.split(":")[1]
-
-            const horaSalida_HORA = horaSalidaTZ.split(":")[0]
-            const horaSalida_MINUTO = horaSalidaTZ.split(":")[1]
 
             const generarFechasEnRango = (fechaInicio, fechaFin) => {
                 const fechasEnRango = [];
@@ -19055,7 +19049,7 @@ const calendarios_compartidos = async (entrada, salida) => {
             // si no hay procedemos a buscar bloquoeos temporales y reservas
             const bloqueoPermanente = "permanente"
             const consultaBloqueosPermanentes = `
-            SELECT apartamento 
+            SELECT apartamento, uid
             FROM "bloqueosApartamentos" 
             WHERE 
             "tipoBloqueo" = $1 AND
@@ -19066,11 +19060,14 @@ const calendarios_compartidos = async (entrada, salida) => {
 
             if (bloqueosPermamentes.length > 0) {
                 for (const detallesdelBloqueo of bloqueosPermamentes) {
+                    const bloqueoUID = detallesdelBloqueo.uid
+
                     const estructuraEVENTO = {
                         start: fechaInicio,
                         end: fechaFin,
                         summary: 'Bloqueo permanente en casavitini.com',
-                        description: 'Bloqueo permanente aplicado al ' + apartamentoUI
+                        description: `Detalles del bloqueo: https://casavitini.com/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
+
                     }
                     eventos.push(estructuraEVENTO)
                 }
@@ -19079,6 +19076,7 @@ const calendarios_compartidos = async (entrada, salida) => {
 
                 const apartamenosBloqueadosTemporalmente = `
                 SELECT 
+                uid,
                 apartamento,
                 to_char(entrada, 'YYYY-MM-DD') as "entrada", 
                 to_char(salida, 'YYYY-MM-DD') as "salida" 
@@ -19100,14 +19098,41 @@ const calendarios_compartidos = async (entrada, salida) => {
                 for (const detalleDelBloqueo of bloqueosTemporales) {
                     const fechaEntradaBloqueo_ISO = detalleDelBloqueo.entrada
                     const fechaSalidaBloqueo_ISO = detalleDelBloqueo.salida
+                    const bloqueoUID = detalleDelBloqueo.uid
+
 
                     // Aqui hay que hacer que no muestre la hora
 
+                    const fechaEntrada_objeto = (DateTime.fromObject({
+                        year: fechaEntradaBloqueo_ISO.split("-")[0],
+                        month: fechaEntradaBloqueo_ISO.split("-")[1],
+                        day: fechaEntradaBloqueo_ISO.split("-")[2],
+                        hour: "00",
+                        minute: "00"
+                    }, {
+                        zone: zonaHoraria
+                    }))
+
+
+                    const fechaSalida_objeto = (DateTime.fromObject({
+                        year: fechaSalidaBloqueo_ISO.split("-")[0],
+                        month: fechaSalidaBloqueo_ISO.split("-")[1],
+                        day: fechaSalidaBloqueo_ISO.split("-")[2],
+                        hour: "23",
+                        minute: "59",
+                        second: "59"
+
+                    }, {
+                        zone: zonaHoraria
+                    }))
+
+
+
                     const estructuraEVENTO = {
-                        start: DateTime.fromISO(fechaEntradaBloqueo_ISO).toISODate(),
-                        end: DateTime.fromISO(fechaSalidaBloqueo_ISO).toISODate(),
-                        summary: 'Bloqueo temporal en casavitini.com',
-                        description: 'Bloqueo temporal aplicado al ' + apartamentoUI
+                        start: fechaEntrada_objeto.toISO(),
+                        end: fechaSalida_objeto.toISO(),
+                        summary: `Bloqueo temporal del ${apartamentoUI} en casavitini.com`,
+                        description: `Detalles del bloqueo: https://casavitini.com/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
                     }
                     eventos.push(estructuraEVENTO)
                 }
@@ -19127,17 +19152,32 @@ const calendarios_compartidos = async (entrada, salida) => {
                 for (const detallesReserva of resuelveReservas.rows) {
                     const reservaUID = detallesReserva.reserva
                     const fechaEntrada_ISO = detallesReserva.entrada
+                    const fechaSalida_ISO = detallesReserva.salida
+
+                    
                     const fechaEntrada_objeto = (DateTime.fromObject({
-                        year: 1982,
-                        month: 5,
-                        day: 25,
-                        hour: horaEntrada_HORA,
-                        minute: horaEntrada_MINUTO
+                        year: fechaEntrada_ISO.split("-")[0],
+                        month: fechaEntrada_ISO.split("-")[1],
+                        day: fechaEntrada_ISO.split("-")[2],
+                        hour: matrizHoraEntradaSalida.horaEntrada_objeto.hora,
+                        minute: matrizHoraEntradaSalida.horaEntrada_objeto.minuto
                     }, {
                         zone: zonaHoraria
                     }))
+
+
+                    const fechaSalida_objeto = (DateTime.fromObject({
+                        year: fechaSalida_ISO.split("-")[0],
+                        month: fechaSalida_ISO.split("-")[1],
+                        day: fechaSalida_ISO.split("-")[2],
+                        hour: matrizHoraEntradaSalida.horaSalida_objeto.hora,
+                        minute: matrizHoraEntradaSalida.horaSalida_objeto.minuto
+                    }, {
+                        zone: zonaHoraria
+                    }))
+
+
                     console.log("fechaEntrada_objeto", fechaEntrada_objeto.toISO())
-                    const fechaSalida_ISO = detallesReserva.salida
 
                     const consultaApartamentoEnReserva = `
                     SELECT apartamento 
@@ -19153,10 +19193,10 @@ const calendarios_compartidos = async (entrada, salida) => {
                             const estructuraEVENTO = {
                                 //start: DateTime.fromISO(fechaEntrada_ISO+"T000000Z").toISODate(),
 
-                                start: "2022-10-02",
-                                end: DateTime.fromISO(fechaSalida_ISO).toISODate(),
-                                summary: '11Apartamento reservado en casavitini.com: ' + apartamentoUI,
-                                description: 'Apartamento en reserva: ' + reservaUID
+                                start: fechaEntrada_objeto.toISO(),
+                                end: fechaSalida_objeto.toISO(),
+                                summary: `${apartamentoUI} de la reserva ${reservaUID} en casavitini.com`,
+                                description: "Detalles de la reserva: https://casavitini.com/administracion/reservas/" + reservaUID
                             }
                             eventos.push(estructuraEVENTO)
                         }

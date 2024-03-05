@@ -13657,7 +13657,7 @@ const administracion = {
                 if (respuestaServidor?.ok) {
                     const configuracionGlobal = respuestaServidor?.ok
 
-                    const zonaHoraria = configuracionGlobal.zonaHoraria
+                    const zonaHoraria = configuracionGlobal.valor
 
                     const listaZonasHorarias = respuestaServidor.listaZonasHorarias
 
@@ -13775,7 +13775,7 @@ const administracion = {
                     const valorCampo = campo.value
                     transacccion[nombreCampo] = valorCampo
                 })
-
+                console.log("transaccion", transacccion)
                 const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
 
 
@@ -14937,7 +14937,7 @@ const administracion = {
 
                     const informacion = document.createElement("div")
                     informacion.classList.add("administracion_configuracion_informacion")
-                    informacion.innerText = "Los interruptores permiten activar o desactivar funciones especificas. Como por ejemplo permitir reservas publicas o no. Puede activar y desactivar los interruptores y hay tener un control mas modular del sistema."
+                    informacion.innerText = "Los interruptores permiten activar o desactivar funciones especificas. Como por ejemplo permitir reservas publicas o no. Puede activar y desactivar los interruptores y tener un control mas modular del sistema."
                     contenedorConfiguracionGlobal.appendChild(informacion)
 
                     bloqueConfiguracion = document.createElement("div")
