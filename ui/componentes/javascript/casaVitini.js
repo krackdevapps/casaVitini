@@ -7496,7 +7496,7 @@ const casaVitini = {
                         if (!Object.keys(fechaEntradaSeleccionada).length && !Object.keys(fechaSalidaSeleccionada).length) {
 
                             if (calendario.tiempo === "presente") {
-                                if (diaActual_decimal < diaFinal_decimal) {
+                                if (diaActual_decimal <= diaFinal_decimal) {
                                     if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
                                         bloqueDia.setAttribute("estadoDia", "disponible")
                                         bloqueDia.classList.add("calendarioDiaDisponible")
@@ -7842,7 +7842,7 @@ const casaVitini = {
                         }
                         if (!Object.keys(fechaEntradaSeleccionada).length && !Object.keys(fechaSalidaSeleccionada).length) {
                             if (calendario.tiempo === "presente") {
-                                if (diaActual_decimal < diaFinal_decimal) {
+                                if (diaActual_decimal <= diaFinal_decimal) {
                                     if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
                                         bloqueDia.setAttribute("estadoDia", "disponible")
                                         bloqueDia.classList.add("calendarioDiaDisponible")
