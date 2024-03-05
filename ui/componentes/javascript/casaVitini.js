@@ -2439,8 +2439,8 @@ const casaVitini = {
             miCasa: {
                 arranque: () => {
                     // document.body.style.backgroundImage = "url(/componentes/imagenes/loginFondo.jpg)"
-                    document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
-
+                    //document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
+                    //document.body.classList.add("difunmadoFondo")
                     document.querySelector("[boton=iniciarSession]").addEventListener("click", () => {
                         casaVitini.ui.vistas.miCasa.botonIniciarSession("iniciarSession")
                     })

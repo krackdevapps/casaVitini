@@ -324,6 +324,7 @@
  .miCasa_marcoVitiniIDX {
      display: flex;
      flex-direction: column;
+     padding: 10px;
      align-items: center;
 
  }
@@ -1244,7 +1245,6 @@
      border-radius: 16px;
      margin: 8px;
      padding: 4px;
-     margin-top: 100px;
      backdrop-filter: blur(50px);
      -webkit-backdrop-filter: blur(50px);
      gap: 4px;
@@ -1801,7 +1801,7 @@
      flex-wrap: nowrap;
      align-content: stretch;
      align-items: stretch;
-     gap: 4px;
+     gap: 6px;
 
  }
 
@@ -1868,7 +1868,7 @@
  }
 
  .campoID {
-     background: rgba(255, 255, 255, 0.3);
+     background: rgba(255, 255, 255, 0.8);
      backdrop-filter: blur(50px);
      -webkit-backdrop-filter: blur(50px);
      padding: 10px;
@@ -11281,3 +11281,64 @@ grid-template-columns: 0.5fr 1.5fr;
      background: rgb(255 255 255 / 50%);
 
  }
+
+
+.conozcanos .contenedorParalax {
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    perspective: 2px;
+  }
+  
+  .conozcanos .cajon {
+    transform-style: preserve-3d;
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF;
+  }
+  
+  .conozcanos .cajon h1 {
+    text-align: center;
+    font-size: 4rem;
+    font-family: sans-serif;
+  }
+  
+  .conozcanos .no-parallax {
+    background-color: #5333ed;
+    z-index: 999;
+    height: 50vh;
+  }
+  
+  .conozcanos .parallax h1 {
+    width: 60%;
+    font-size: 2rem;
+  }
+  
+  .conozcanos .parallax::after {
+    content: " ";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateZ(-1px) scale(1.5);
+    background-size: 100%;
+    z-index: -1;
+  }
+  .conozcanos .bg::after {
+    background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url("/componentes/imagenes/fotos/image00004.jpeg");
+    background-size: cover;
+  }
+  
+  @media screen and (min-width: 768px) {
+    .conozcanos .cajon h1 {
+      font-size: 8rem;
+    }
+  
+    .conozcanos .parallax h1 {
+      font-size: 4rem;
+    }
+  }
