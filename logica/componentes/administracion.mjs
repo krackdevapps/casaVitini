@@ -854,9 +854,10 @@ const administracion = {
                 delete transaccion.paginaTipo
 
                 const selectorCuadradoFechaEntrada = document.querySelector("[calendario=entrada]")
-                const selectorFechaEntradaUI = selectorCuadradoFechaEntrada.querySelector("#fechaEntrada")
+                const selectorFechaEntradaUI = selectorCuadradoFechaEntrada.querySelector("[fechaUI=fechaInicio]")
+                console.log("selectorFechaEntradaUI", selectorFechaEntradaUI)
                 const selectorCuadradoFechaSalida = document.querySelector("[calendario=salida]")
-                const selectorFechaSalidaUI = selectorCuadradoFechaSalida.querySelector("#fechaSalida")
+                const selectorFechaSalidaUI = selectorCuadradoFechaSalida.querySelector("[fechaUI=fechaFin]")
 
                 if (transaccion.parametros?.rango) {
 
@@ -1250,9 +1251,9 @@ const administracion = {
             },
             limpiarFormularioBusqueda: () => {
                 const selectorCuadradoFechaEntrada = document.querySelector("[calendario=entrada]")
-                const selectorFechaEntradaUI = selectorCuadradoFechaEntrada.querySelector("#fechaEntrada")
+                const selectorFechaEntradaUI = selectorCuadradoFechaEntrada.querySelector("[fechaUI=fechaInicio]")
                 const selectorCuadradoFechaSalida = document.querySelector("[calendario=salida]")
-                const selectorFechaSalidaUI = selectorCuadradoFechaSalida.querySelector("#fechaSalida")
+                const selectorFechaSalidaUI = selectorCuadradoFechaSalida.querySelector("[fechaUI=fechaFin]")
                 selectorCuadradoFechaEntrada.removeAttribute("memoriaVolatil")
                 selectorFechaEntradaUI.innerText = "Seleccionar"
                 selectorCuadradoFechaSalida.removeAttribute("memoriaVolatil")
@@ -5440,7 +5441,7 @@ const administracion = {
                     // Menu categorias reserva responsiba
                     const marcoMenuResponsivo = document.createElement('div');
                     marcoMenuResponsivo.setAttribute('class', 'administracion_reserva_detallesReserva_marcoMenuResponsivo');
-                    marcoMenuResponsivo.innerText = "Menu reserva 1"
+                    marcoMenuResponsivo.innerText = "Menu reserva"
                     marcoMenuResponsivo.addEventListener("click", () => {
 
                         casaVitini.administracion.reservas.detallesReserva.desplegarMenuResponsivo(reservaUID)

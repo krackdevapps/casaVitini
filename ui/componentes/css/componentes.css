@@ -2186,7 +2186,12 @@
      align-items: center;
      justify-content: center;
  }
+ @media (max-width: 720px) {
+    .adminitracion_reservas_DetallesReserva_botonCategoria {
+        padding-top: 18px;
+        padding-bottom: 18px;    }
 
+}
  .botonSimpleV2:hover {
      background-color: #0040ff;
      color: white;
