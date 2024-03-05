@@ -1047,6 +1047,7 @@ const puerto = async (entrada, salida) => {
                         salida.json(calendario)
 
                     }
+                    /*
                     if (tipo === "actualConDiasDeAntelacion") {
 
                         const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva")
@@ -1121,6 +1122,7 @@ const puerto = async (entrada, salida) => {
                         }
                         salida.json(respuesta)
                     }
+                    */
 
                 } catch (errorCapturado) {
                     const error = {
