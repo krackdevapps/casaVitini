@@ -308,6 +308,8 @@ section {
     background-size: cover;
      zoom: 80%; 
     backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+
     background-color: #ffffff1f;
 }
 
