@@ -6231,13 +6231,26 @@ const casaVitini = {
                         controladorParalax()                    
                     })
                     */
-
+                    document.querySelector("#uiLogo").style.filter = "invert(1)"
                     const header = document.querySelector("header")
                     header.style.position = "absolute"
                     const section = document.querySelector("section")
                     section.style.maxWidth = "none"
+                    const logo = document.querySelector("[componente=logoCasaVitini]")
+                    document.querySelector("[contenedor=paralaje]").addEventListener("scroll", (e) => {
+                        
+                            const alturaScroll = e.target.scrollTop
+                            console.log("alturaScroll", alturaScroll)
+                        if (alturaScroll > 10) {
+                            logo.style.opacity = "0"
+                            logo.style.pointerEvents = "none"
 
+                        }else {
+                            logo.style.opacity = "1"
+                            logo.style.pointerEvents = "all"
+                        }
 
+                    })
 
 
                 }

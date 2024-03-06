@@ -11313,26 +11313,19 @@ grid-template-columns: 0.5fr 1.5fr;
       height: 100vh;
     }
     &.text {
-      height: 50vh;
+      min-height: 50vh;
     }
     &.heading {
       z-index: -1;
       transform: translateY(-30vh) translateZ(1px) scale(1.5);
+     
     }
   }
-  
-  .footer {
-    position: relative;
-    display: block;
-    background-color: black;
-    height: 100vh;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    h3{
-      font-weight: normal; 
-      color: var(--color-blue);
-    }
-  }
+  .conozcanos .bloqueTexto {
+    padding: 40px;
+    text-wrap: pretty;
+    font-weight: bold;
+    font-size: 20px;
+   
+ }
   
