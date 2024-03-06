@@ -11288,14 +11288,14 @@ grid-template-columns: 0.5fr 1.5fr;
  }
 
 
- .container {
+ .conozcanos .container {
     height: 100vh;
     overflow: hidden;
     overflow-y: auto;
     perspective: 3px;
   }
   
-  .mallaParalax {
+  .conozcanos .mallaParalax {
     background-size: cover;
     color: white;
     background-color: var(--bg, --color-black);
@@ -11321,7 +11321,7 @@ grid-template-columns: 0.5fr 1.5fr;
      
     }
   }
-  .conozcanos .bloqueTexto {
+ .conozcanos .bloqueTexto {
     padding: 40px;
     text-wrap: pretty;
     font-weight: bold;
