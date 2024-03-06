@@ -199,19 +199,19 @@
  }
 
  .bloqueReservasPortada {
-     margin: 0px;
-     padding: 0px;
-     color: rgba(0, 0, 0, 0.8);
-     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-     width: 100%;
-     flex-wrap: nowrap;
-     justify-content: space-around;
-     align-items: center;
-     align-content: center;
-     flex-direction: row;
-     position: relative;
-     margin-bottom: 20px;
-     display: flex;
+    margin: 0px;
+    padding: 0px;
+    color: rgba(0, 0, 0, 0.8);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 100%;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: row;
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
 
  }
 
@@ -277,6 +277,8 @@
      justify-content: center;
      border-radius: 16px;
      transition: all 250ms;
+     text-decoration: none;
+     color: black;
  }
 
  .conenedorReserva:hover {
@@ -2186,12 +2188,15 @@
      align-items: center;
      justify-content: center;
  }
- @media (max-width: 720px) {
-    .adminitracion_reservas_DetallesReserva_botonCategoria {
-        padding-top: 18px;
-        padding-bottom: 18px;    }
 
-}
+ @media (max-width: 720px) {
+     .adminitracion_reservas_DetallesReserva_botonCategoria {
+         padding-top: 18px;
+         padding-bottom: 18px;
+     }
+
+ }
+
  .botonSimpleV2:hover {
      background-color: #0040ff;
      color: white;
@@ -10325,7 +10330,7 @@ grid-template-columns: 0.5fr 1.5fr;
      /*  gap: 6px;*/
      display: flex;
      flex-direction: column;
-     align-items: center;
+     align-items: stretch;
  }
 
  .contactos_bannerGlobal {
@@ -10335,37 +10340,41 @@ grid-template-columns: 0.5fr 1.5fr;
 
  .contactos_bannerTexto {
      font-size: 16px;
-     max-width: 1280px;
      text-align: justify;
-     -webkit-backdrop-filter: blur(50px);
+     /* -webkit-backdrop-filter: blur(50px);
      backdrop-filter: blur(50px);
+     */
+     background: white;
      height: fit-content;
-     padding: 10px;
-     margin-top: 100px;
+     padding: 30px;
+     margin: 30px;
+     border-radius: 20px;
+     z-index: 10;
  }
 
  .contactos_bannerTextoInterno {
      font-size: 16px;
-     max-width: 1280px;
      text-align: justify;
-     backdrop-filter: blur(50px);
-     -webkit-backdrop-filter: blur(50px);
+     background-color: white;
      height: fit-content;
-     padding: 10px;
-     margin-top: 100px;
-
+     padding: 30px;
+    margin: 30px;
+    border-radius: 20px;
  }
 
  .contactos_bannerTextoInternoUltimo {
-     font-size: 16px;
-     max-width: 1280px;
-     text-align: justify;
-     backdrop-filter: blur(50px);
-     -webkit-backdrop-filter: blur(50px);
-     height: fit-content;
-     padding: 10px;
-     margin-top: 100px;
-     margin-bottom: 100px;
+    font-size: 16px;
+    /* max-width: 1280px; */
+    text-align: justify;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    height: fit-content;
+    padding: 30px;
+    /* margin-top: 100px; */
+    /* margin-bottom: 100px; */
+    margin: 30px;
+    border-radius: 20px;
+    background: white;
 
  }
 
@@ -10374,7 +10383,6 @@ grid-template-columns: 0.5fr 1.5fr;
      flex-direction: column;
      align-items: center;
      justify-content: flex-start;
-     margin-top: 100px;
  }
 
  .plaza_resumenReserva_contenedorTotalAPagar {
@@ -10423,7 +10431,6 @@ grid-template-columns: 0.5fr 1.5fr;
      background-image: url("/componentes/imagenes/fotos/image00004.jpeg");
      background-size: cover;
      background-repeat: no-repeat;
-     background-attachment: fixed;
      background-position: center center;
  }
 
@@ -10431,7 +10438,6 @@ grid-template-columns: 0.5fr 1.5fr;
      background-image: url("/componentes/imagenes/fotos/image00016.jpeg");
      background-size: cover;
      background-repeat: no-repeat;
-     background-attachment: fixed;
      background-position: center center;
  }
 
@@ -10439,7 +10445,6 @@ grid-template-columns: 0.5fr 1.5fr;
      background-image: url("/componentes/imagenes/fotos/image00014.jpeg");
      background-size: cover;
      background-repeat: no-repeat;
-     background-attachment: fixed;
      background-position: center center;
  }
 
@@ -10588,15 +10593,15 @@ grid-template-columns: 0.5fr 1.5fr;
  }
 
  .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual {
-    display: grid;
-    grid-template-columns: auto 200px ;
-    grid-template-rows: 1fr;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    background: #d9dada;
-    margin: 0px;
-    padding: 6px;
-    border-radius: 16px;
+     display: grid;
+     grid-template-columns: auto 200px;
+     grid-template-rows: 1fr;
+     grid-column-gap: 0px;
+     grid-row-gap: 0px;
+     background: #d9dada;
+     margin: 0px;
+     padding: 6px;
+     border-radius: 16px;
  }
 
  @media (max-width: 720px) {
@@ -11283,62 +11288,51 @@ grid-template-columns: 0.5fr 1.5fr;
  }
 
 
-.conozcanos .contenedorParalax {
+ .container {
     height: 100vh;
-    overflow-x: hidden;
+    overflow: hidden;
     overflow-y: auto;
-    perspective: 2px;
+    perspective: 3px;
   }
   
-  .conozcanos .cajon {
-    transform-style: preserve-3d;
+  .mallaParalax {
+    background-size: cover;
+    color: white;
+    background-color: var(--bg, --color-black);
     position: relative;
-    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #FFF;
-  }
-  
-  .conozcanos .cajon h1 {
-    text-align: center;
-    font-size: 4rem;
-    font-family: sans-serif;
-  }
-  
-  .conozcanos .no-parallax {
-    background-color: #5333ed;
-    z-index: 999;
-    height: 50vh;
-  }
-  
-  .conozcanos .parallax h1 {
-    width: 60%;
-    font-size: 2rem;
-  }
-  
-  .conozcanos .parallax::after {
-    content: " ";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    transform: translateZ(-1px) scale(1.5);
-    background-size: 100%;
-    z-index: -1;
-  }
-  .conozcanos .bg::after {
-    background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url("/componentes/imagenes/fotos/image00004.jpeg");
-    background-size: cover;
-  }
-  
-  @media screen and (min-width: 768px) {
-    .conozcanos .cajon h1 {
-      font-size: 8rem;
+    &.image {
+      background-position: center center;
+      transform: translateZ(-1px) scale(1.5);
+      /* Force the background image to fill the whole element. */
+      background-size: cover;
+      /* Keep the image from overlapping sibling elements. */
+      z-index: -1;
+      height: 100vh;
     }
-  
-    .conozcanos .parallax h1 {
-      font-size: 4rem;
+    &.text {
+      height: 50vh;
+    }
+    &.heading {
+      z-index: -1;
+      transform: translateY(-30vh) translateZ(1px) scale(1.5);
     }
   }
+  
+  .footer {
+    position: relative;
+    display: block;
+    background-color: black;
+    height: 100vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h3{
+      font-weight: normal; 
+      color: var(--color-blue);
+    }
+  }
+  

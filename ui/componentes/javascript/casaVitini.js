@@ -4,15 +4,14 @@ const casaVitini = {
             portada: {
                 arranque: () => {
                     document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
-
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
                     //document.querySelector("#uiLogo").style.filter = "invert(1)"
-                    document.querySelector("section").style.height = "100%"
+                    document.querySelector("section").style.height = "100vh"
                     document.querySelector("section").style.margin = "0px"
                     document.querySelector("section").style.position = "absolute"
-                    document.querySelector(".marcoElasticoRelativo").style.height = "100%"
+                    document.querySelector(".marcoElasticoRelativo").style.height = "100vh"
 
-               
+
 
                 },
             },
@@ -6211,14 +6210,38 @@ const casaVitini = {
 
             },
             conozcanos: {
-                portada: {
-                    arranque: () => {
-                        // document.querySelector("#uiLogo").style.filter = "invert(1)"
-
-                        // document.body.style.backgroundImage = 'url("/componentes/imagenes/image00012.jpeg")';
-                        //  document.body.style.backgroundImage = 'url("/componentes/imagenes/fotos/image00011.jpeg")';
+                arranque: () => {
+                    console.log("arranque")
+                    /*
+                    const controladorParalax = () => {
+                        document.querySelectorAll("[contenedorPara=paralaje]").forEach(matriz => {
+                            // Obtener la posición del contenedor en relación con el área visible del navegador
+                            var rect = matriz.getBoundingClientRect();
+                            // Verificar si el contenedor está visible en el área visible del navegador
+                            if (rect.top < window.innerHeight && rect.bottom >= 0) {
+                                // Calcular el desplazamiento relativo basado en la posición del contenedor en la ventana
+                                var desplazamiento = rect.top / window.innerHeight;
+                                // Aplicar efecto de paralaje basado en el desplazamiento
+                                matriz.style.transform = "translateY(" + (desplazamiento) * 100 + "px) translateZ(-1px) scale(1.5)";
+                            }
+                        })
                     }
+                    controladorParalax()
+                    window.addEventListener("scroll", () => {
+                        controladorParalax()                    
+                    })
+                    */
+
+                    const header = document.querySelector("header")
+                    header.style.position = "absolute"
+                    const section = document.querySelector("section")
+                    section.style.maxWidth = "none"
+
+
+
+
                 }
+
             },
             instalaciones: {
                 arranque: () => {
@@ -6315,6 +6338,8 @@ const casaVitini = {
             url = url.filter((url) => url)
 
             document.querySelector("#uiLogo").removeAttribute("style")
+            document.querySelector("header").removeAttribute("style")
+
             document.querySelector("#botonMenuResponsivo").removeAttribute("style")
 
             const seccion = document.querySelector('section');
@@ -6629,7 +6654,7 @@ const casaVitini = {
         arranque: async () => {
             document.getElementById("botonMenuResponsivo").addEventListener("click", casaVitini.componentes.menuResponsivo)
             window.addEventListener("resize", casaVitini.componentes.limpiarTodoElementoVolatil)
-          //  casaVitini.componentes.controlGlobalScroll()
+            //  casaVitini.componentes.controlGlobalScroll()
 
             const vistas = document.querySelectorAll("[vista]")
             for (const vistaMenu of vistas) {
@@ -7426,7 +7451,7 @@ const casaVitini = {
                     const fechaEntrada_ISO = `${fechaEntradaSeleccionada.ano}-${String(fechaEntradaSeleccionada.mes).padStart(2, "0")}-${String(fechaEntradaSeleccionada.dia).padStart(2, "0")}`
                     const fechaSalida_ISO = `${fechaSalidaSeleccionada.ano}-${String(fechaSalidaSeleccionada.mes).padStart(2, "0")}-${String(fechaSalidaSeleccionada.dia).padStart(2, "0")}`
                     const fechaLimitePorDiasDeDuracion = (fechaSeleccionada_ISO, diasMaximos) => {
-              
+
                         const ok = {
                             arbol: {},
                             fecha: {}
