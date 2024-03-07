@@ -5,11 +5,8 @@ const casaVitini = {
                 arranque: () => {
                     document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
-                    //document.querySelector("#uiLogo").style.filter = "invert(1)"
-                    document.querySelector("section").style.height = "100vh"
-                    document.querySelector("section").style.margin = "0px"
-                    document.querySelector("section").style.position = "absolute"
-                    document.querySelector(".marcoElasticoRelativo").style.height = "100vh"
+                    
+                         document.querySelector(".marcoElasticoRelativo").style.flex = "1"
 
 
 
@@ -891,7 +888,7 @@ const casaVitini = {
                 },
                 resumenReserva: async () => {
                     document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
-                    document.body.classList.add("difunmadoFondo")
+                    document.body.classList.remove("difunmadoFondo")
 
                     const instanciaUID = document.querySelector("section").getAttribute("instanciaUID")
 
@@ -1193,7 +1190,7 @@ const casaVitini = {
                         contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                         advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                        document.body.appendChild(advertenciaInmersivaIU)
+                        document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
                         const destino = `[instanciaUID="${instanciaUID}"] [contenedor=espacioGlobalTotales]`
                         const desgloseTotales = {
@@ -1755,7 +1752,7 @@ const casaVitini = {
 
                                     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                                    document.body.appendChild(advertenciaInmersivaIU)
+                                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
                                     const advertenciaInmersivaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
 
@@ -2151,7 +2148,7 @@ const casaVitini = {
                                     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                                    document.body.appendChild(advertenciaInmersivaIU)
+                                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
                                     const destino = `[instanciaUID="${instanciaUID}"] [contenedor=espacioGlobalTotales]`
                                     const desgloseTotales = {
@@ -2304,7 +2301,7 @@ const casaVitini = {
                         contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                         advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                        document.body.appendChild(advertenciaInmersivaIU)
+                        document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
 
 
@@ -2385,15 +2382,19 @@ const casaVitini = {
                         telefonoTitular: telefonoTitular
                     }
                     reservaLocal.datosTitular = datosTitular
-                    const Peticion = {
+                    const preconfirmarReserva = {
                         zona: "plaza/reservas/preConfirmarReserva",
                         reserva: reservaLocal
                     };
-                    const respuestaServidor = await casaVitini.componentes.servidor(Peticion)
-                    if (respuestaServidor?.error) {
-                        return casaVitini.componentes.flujoPagoUI.errorInfo(respuestaServidor.error)
+                    console.log("ss")
 
-                        //  return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor.error)
+                    const respuestaServidor = await casaVitini.componentes.servidor(preconfirmarReserva)
+                    console.log("ss")
+                    console.log("respuestaServidor", respuestaServidor)
+
+                    if (respuestaServidor?.error) {
+                         return casaVitini.componentes.flujoPagoUI.errorInfo(respuestaServidor.error)
+                         // return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor.error)
                     }
                     if (respuestaServidor.ok) {
                         const detalles = respuestaServidor.detalles
@@ -2419,7 +2420,7 @@ const casaVitini = {
                 vistaError.style.position = "relative"
 
                 constructorSeccion.appendChild(vistaError);
-                document.body.appendChild(constructorSeccion)
+                document.querySelector("main").appendChild(constructorSeccion)
                 document.getElementById("uiNavegacion").setAttribute("vistaActual", "error")
                 document.getElementById("uiNavegacion").removeAttribute("arranqueVolatil")
                 let espacio = document.body;
@@ -4434,7 +4435,7 @@ const casaVitini = {
                                 contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                                 advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                                document.body.appendChild(advertenciaInmersivaIU)
+                                document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
 
 
@@ -5779,7 +5780,7 @@ const casaVitini = {
             },
             advertenciaInmersiva: (advertencia) => {
 
-                const advertenciaInmersivaUI = document.createElement("div")
+                const advertenciaInmersivaUI = document.createElement("section")
                 advertenciaInmersivaUI.setAttribute("class", "errorUI")
                 advertenciaInmersivaUI.setAttribute("componente", "advertenciaInmersiva")
 
@@ -5798,7 +5799,7 @@ const casaVitini = {
 
                 marcoElastico.appendChild(boton)
                 advertenciaInmersivaUI.appendChild(marcoElastico)
-                document.body.appendChild(advertenciaInmersivaUI)
+                document.querySelector("main").appendChild(advertenciaInmersivaUI)
 
                 document.body.style.overflow = 'hidden';
 
@@ -5826,7 +5827,7 @@ const casaVitini = {
                 marcoElastico.appendChild(boton)
                 advertenciaInmersivaUI.appendChild(marcoElastico)
 
-                document.body.appendChild(advertenciaInmersivaUI)
+                document.querySelector("main").appendChild(advertenciaInmersivaUI)
 
             },
             pantallaDeCargaSuperPuesta: (metadatos) => {
@@ -5869,7 +5870,7 @@ const casaVitini = {
 
                 marcoElastico.appendChild(boton)
                 advertenciaInmersivaUI.appendChild(marcoElastico)
-                document.body.appendChild(advertenciaInmersivaUI)
+                document.querySelector("main").appendChild(advertenciaInmersivaUI)
 
             },
             pagos: {
@@ -6520,10 +6521,6 @@ const casaVitini = {
                 return casaVitini.ui.vistas.advertenciaInmersiva(mensaje)
             }
 
-            if (!elementoScroll) {
-                const mensaje = "Falta el elementoScroll para determinar si el evento debe de crearse o eliminarse"
-                return casaVitini.ui.vistas.advertenciaInmersiva(mensaje)
-            }
             console.log("metadatos", metadatos)
             const elemento = document.querySelector(`[instanciaUID="${sectionUID}"] ${elementoScroll}`)
             console.log("elemento", elemento)
@@ -6697,7 +6694,7 @@ const casaVitini = {
             seccion.style.justifyContent = "center"
             seccion.style.height = "100%"
             seccion.innerHTML = null
-            document.body.appendChild(advertenciaInmersivaIU)
+            document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
 
         },
@@ -6782,7 +6779,7 @@ const casaVitini = {
                 menuGlobalFlotante.querySelectorAll("[vista]").forEach((menu) => {
                     menu.addEventListener("click", casaVitini.componentes.cambiarVista)
                 })
-                document.body.appendChild(menuGlobalFlotante)
+                document.querySelector("main").appendChild(menuGlobalFlotante)
                 document.addEventListener("click", casaVitini.componentes.ocultaMenuGlobalFlotante)
                 window.addEventListener("resize", casaVitini.componentes.ocultaMenuGlobalFlotante)
                 window.addEventListener("scroll", casaVitini.componentes.ocultaMenuGlobalFlotante)
@@ -7212,7 +7209,7 @@ const casaVitini = {
                 contenedoCalendarioIntermedio.appendChild(contenedorCarga)
                 bloqueCalendario.appendChild(contenedoCalendarioIntermedio)
 
-                document.body.appendChild(bloqueCalendario)
+                document.querySelector("main").appendChild(bloqueCalendario)
 
             } catch (errorCapturado) {
                 throw errorCapturado
@@ -10056,7 +10053,7 @@ const casaVitini = {
         flujoPagoUI: {
             desplegarUI: (mensaje) => {
                 document.body.style.overflow = 'hidden';
-                const advertenciaInmersivaUI = document.createElement("div")
+                const advertenciaInmersivaUI = document.createElement("section")
                 advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersiva")
                 advertenciaInmersivaUI.setAttribute("componente", "advertenciaInmersiva")
 
@@ -10077,7 +10074,7 @@ const casaVitini = {
                 info.innerText = mensaje
                 advertenciaInmersivaUI.appendChild(info)
 
-                document.body.appendChild(advertenciaInmersivaUI)
+                document.querySelector("main").appendChild(advertenciaInmersivaUI)
             },
 
             botonAcetpar: () => {

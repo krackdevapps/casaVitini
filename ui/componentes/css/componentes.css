@@ -3,11 +3,11 @@
     font-size: 18px;
     /* font-weight: bold; */
     color: rgba(0, 0, 0, 0.585);
-    margin: 20px;
-    top: 30px;
+    /* margin: 20px; */
+    /* top: 30px; */
     text-align: center;
     transition: all 1s;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
     font-weight: bold;
 }
 
@@ -27,18 +27,10 @@
     padding: 10px;
 }
 
-.difunmadoFondo::before {
-    content: "";
+.difunmadoFondo {
     /* background: inherit; */
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-
-    z-index: -1;
     /* height: 100%; */
     /* width: 100%;*/
     transition: all 500ms linear;
@@ -337,7 +329,7 @@
     grid-template-columns: repeat(7, 1fr);
     padding: 0px;
     margin: 0px;
-    height: 100%;
+    flex: 1;
     grid-template-rows: 0.01fr auto;
 }
 
@@ -804,25 +796,22 @@
 }
 
 .administracion_calendario_calendarioUI {
-    overflow: hidden;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
     text-align: center;
     width: fit-content;
-    /*  background-color: rgba(249, 255, 255, 0.252);*/
+    /* background-color: rgba(249, 255, 255, 0.252); */
     transform: all 250ms;
-    /*-webkit-backdrop-filter: blur(30px);
-    backdrop-filter: blur(30px);*/
-    /*  border-radius: 20px;*/
-    pointer-events: all;
+    /* border-radius: 20px; */
+    /* pointer-events: all; */
     display: flex;
     flex-direction: column;
     align-items: stretch;
     width: 100%;
     /* padding: 10px; */
-
-
+    /* height: 100%; */
+    flex: 1;
 }
 
 .calendarioIncrustado {
@@ -1200,9 +1189,7 @@
     align-items: stretch;
     justify-content: flex-start;
     width: 100%;
-    height: 100%;
-    pointer-events: none;
-
+    flex: 1;
 }
 
 .bloqueAlojamiento {
@@ -1277,7 +1264,7 @@
 }
 
 .plaza_alojamiento_marcoBotonIreAResumenReserva {
-    position: fixed;
+    position: sticky;
     left: 0px;
     color: #fff;
     text-align: center;
@@ -9561,7 +9548,6 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .componente_calendario_contenedoCarga_Mes {
-
     font-size: 13px;
     padding: 12px;
     user-select: none;
@@ -9586,15 +9572,13 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     /* width: 100%; */
     /* max-width: 720px; */
-    /* padding: 10px;/*
-    /* margin: 10px; */
     flex-direction: row;
     justify-content: center;
     align-content: center;
     align-items: stretch;
-    height: 100%;
+    /* height: 100%; */
+    flex: 1;
 }
-
 .componente_calendario_contenedoCarga_calendarioIncrustado {
     display: flex;
     /* width: 100%; */
@@ -11334,7 +11318,9 @@ grid-template-columns: 0.5fr 1.5fr;
     text-rendering: optimizeLegibility;
     -webkit-transform: translateY(-30vh) translateZ(1px);
 }
-
+.texto111 {
+    -webkit-transform: translateY(0vh) translateZ(0px);
+}
 
 
 .conozcanos .ultima {
@@ -11416,9 +11402,6 @@ html {
     /* overflow: hidden;*/
 }
 
-body {
-    font: 100% / 1.5 Arial;
-}
 
 * {
     margin: 0;

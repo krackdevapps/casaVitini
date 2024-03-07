@@ -13,10 +13,8 @@ const sistemaDeOfertas = async (reserva) => {
     let fechaActualTZ
     if (reserva.fechas.creacion_ISO_UTC) {
         fechaActualTZ = DateTime.fromISO(reserva.fechas.creacion_ISO_UTC).setZone(zonaHoraria).toISO();
-        console.log("fecha actual obtenida del objeto", fechaActualTZ)
     } else {
         fechaActualTZ = DateTime.now().setZone(zonaHoraria).toISODate();
-        console.log("fecha actual generada de hoy", fechaActualTZ)
 
     }
     reserva.fechas.fechaActualProcesada_ISO = fechaActualTZ
