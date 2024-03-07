@@ -6211,6 +6211,8 @@ const casaVitini = {
             },
             conozcanos: {
                 arranque: () => {
+                    const sectionRenderizada = document.querySelector("section[instanciaUID]")
+                    const instanciaUID = sectionRenderizada.getAttribute("instanciaUID")
                     console.log("arranque1")
                     /*
                     const controladorParalax = () => {
@@ -6236,20 +6238,12 @@ const casaVitini = {
                     section.style.maxWidth = "none"
                     section.style.position = "absolute"
 
-                    const logo = document.querySelector("[componente=logoCasaVitini]")
-                    document.querySelector("[contenedor=paralaje]").addEventListener("scroll", (e) => {
-                        const alturaScroll = e.target.scrollTop
-                        console.log("alturaScroll", alturaScroll)
-                        if (alturaScroll > 10) {
-                            logo.style.opacity = "0"
-                            logo.style.pointerEvents = "none"
+                    const metadatos = {
+                        sectionUID: instanciaUID,
+                        elementoScroll: "[contenedor=paralaje]"
+                    }
+                    casaVitini.componentes.controlLogoScroll(metadatos)
 
-                        } else {
-                            logo.style.opacity = "1"
-                            logo.style.pointerEvents = "all"
-                        }
-
-                    })
 
 
 
@@ -6530,13 +6524,18 @@ const casaVitini = {
                 const mensaje = "Falta el elementoScroll para determinar si el evento debe de crearse o eliminarse"
                 return casaVitini.ui.vistas.advertenciaInmersiva(mensaje)
             }
+            console.log("metadatos", metadatos)
+            const elemento = document.querySelector(`[instanciaUID="${sectionUID}"] ${elementoScroll}`)
+            console.log("elemento", elemento)
 
-            const elemento = document.querySelector(`[instanciaUID="${sectionUID}"] ${elementoScroll}]`)
             if (!elemento) {
-                document.querySelector(`[instanciaUID="${sectionUID}"] ${elementoScroll}]`).removeEventListener("scroll", controladorEvento)
+                document.querySelector(`[instanciaUID="${sectionUID}"] ${elementoScroll}`).removeEventListener("scroll", controladorEvento)
                 return
             }
+            const logo = document.querySelector("[componente=logoCasaVitini]")
+
             const controladorEvento = (e) => {
+                e.stopPropagation()
                 const alturaScroll = e.target.scrollTop
                 console.log("alturaScroll", alturaScroll)
                 if (alturaScroll > 10) {
@@ -6547,8 +6546,9 @@ const casaVitini = {
                     logo.style.opacity = "1"
                     logo.style.pointerEvents = "all"
                 }
-                elemento.addEventListener("scroll", controladorEvento)
             }
+            elemento.addEventListener("scroll", controladorEvento)
+
         },
         navegacion: async (e) => {
             let zona = (history.state)?.zona
