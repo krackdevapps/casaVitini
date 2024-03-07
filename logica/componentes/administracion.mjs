@@ -29367,6 +29367,7 @@ const administracion = {
     },
     calendario: {
         arranque: async () => {
+            
             const granuladoURL = casaVitini.componentes.granuladorURL()
             const parametros = granuladoURL.parametros
             const contenedorSeguroParaParametros = granuladoURL.contenedorSeguroParaParametros

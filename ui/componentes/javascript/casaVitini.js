@@ -6211,7 +6211,7 @@ const casaVitini = {
             },
             conozcanos: {
                 arranque: () => {
-                    console.log("arranque")
+                    console.log("arranque1")
                     /*
                     const controladorParalax = () => {
                         document.querySelectorAll("[contenedorPara=paralaje]").forEach(matriz => {
@@ -6232,25 +6232,27 @@ const casaVitini = {
                     })
                     */
                     document.querySelector("#uiLogo").style.filter = "invert(1)"
-                    const header = document.querySelector("header")
-                    header.style.position = "absolute"
                     const section = document.querySelector("section")
                     section.style.maxWidth = "none"
+                    section.style.position = "absolute"
+
                     const logo = document.querySelector("[componente=logoCasaVitini]")
                     document.querySelector("[contenedor=paralaje]").addEventListener("scroll", (e) => {
-                        
-                            const alturaScroll = e.target.scrollTop
-                            console.log("alturaScroll", alturaScroll)
+                        const alturaScroll = e.target.scrollTop
+                        console.log("alturaScroll", alturaScroll)
                         if (alturaScroll > 10) {
                             logo.style.opacity = "0"
                             logo.style.pointerEvents = "none"
 
-                        }else {
+                        } else {
                             logo.style.opacity = "1"
                             logo.style.pointerEvents = "all"
                         }
 
                     })
+
+
+
 
 
                 }
@@ -6351,6 +6353,7 @@ const casaVitini = {
             url = url.filter((url) => url)
 
             document.querySelector("#uiLogo").removeAttribute("style")
+            document.querySelector("header").removeAttribute("style")
             document.querySelector("header").removeAttribute("style")
 
             document.querySelector("#botonMenuResponsivo").removeAttribute("style")
@@ -6512,6 +6515,40 @@ const casaVitini = {
                 }
             }
 
+        },
+        controlLogoScroll: (metadatos) => {
+
+            const sectionUID = metadatos.sectionUID
+            const elementoScroll = metadatos.elementoScroll
+
+            if (!sectionUID) {
+                const mensaje = "Falta el sectionUID para determinar si el evento debe de crearse o eliminarse"
+                return casaVitini.ui.vistas.advertenciaInmersiva(mensaje)
+            }
+
+            if (!elementoScroll) {
+                const mensaje = "Falta el elementoScroll para determinar si el evento debe de crearse o eliminarse"
+                return casaVitini.ui.vistas.advertenciaInmersiva(mensaje)
+            }
+
+            const elemento = document.querySelector(`[instanciaUID="${sectionUID}"] ${elementoScroll}]`)
+            if (!elemento) {
+                document.querySelector(`[instanciaUID="${sectionUID}"] ${elementoScroll}]`).removeEventListener("scroll", controladorEvento)
+                return
+            }
+            const controladorEvento = (e) => {
+                const alturaScroll = e.target.scrollTop
+                console.log("alturaScroll", alturaScroll)
+                if (alturaScroll > 10) {
+                    logo.style.opacity = "0"
+                    logo.style.pointerEvents = "none"
+
+                } else {
+                    logo.style.opacity = "1"
+                    logo.style.pointerEvents = "all"
+                }
+                elemento.addEventListener("scroll", controladorEvento)
+            }
         },
         navegacion: async (e) => {
             let zona = (history.state)?.zona
