@@ -30364,20 +30364,16 @@ const administracion = {
                 marcoMes?.appendChild(bloqueDia)
             }
 
-            selectorCalendarioRenderizado.querySelectorAll("[contenedor=contruyendoCalendario]").forEach((contenedorRenderizado) => {
-                contenedorRenderizado.remove()
-            })
-
             if (selectorCalendarioRenderizado) {
                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
 
-                selectorCalendarioRenderizado.querySelector("[contenedor=contruyendoCalendario]")?.remove()
                 const contenedorMes = selectorCalendarioRenderizado.querySelector(`[componente=marcoMes][instanciaUID="${instanciaUIDMes}"]`)
 
                 if (contenedorMes) {
+                    selectorCalendarioRenderizado.querySelector("[contenedor=contruyendoCalendario]")?.remove()
 
                 }
 
@@ -30494,21 +30490,16 @@ const administracion = {
             })
             const contenedorCalendario = calendarioRenderizado.querySelector(`[contenedor=calendario]`)
          
-
-            const contenedorContruyendoCalendarioRenderizado = calendarioRenderizado.querySelectorAll("[contenedor=contruyendoCalendario]")
-            contenedorContruyendoCalendarioRenderizado.forEach((contenedorRenderizado) => {
-                contenedorRenderizado.remove()
-            })
-
             const mensajeSpinner = "Construyendo mes..."
             const spinner = casaVitini.administracion.calendario.spinner(mensajeSpinner)
             const contenedorCarga = document.createElement("div")
             contenedorCarga.classList.add("componente_calendario_contenedoCarga_Mes")
             contenedorCarga.setAttribute("contenedor", "contruyendoCalendario")
             contenedorCarga.setAttribute("elemento", "flotante")
-
             contenedorCarga.appendChild(spinner)
-            contenedorCalendario.appendChild(contenedorCarga)
+
+            const construyendoCalendarioRenderizado = calendarioRenderizado.querySelector("[contenedor=contruyendoCalendario]")
+            if (!construyendoCalendarioRenderizado) contenedorCalendario.appendChild(contenedorCarga)
 
             
             const contenedorCapas = {
@@ -30603,7 +30594,8 @@ const administracion = {
             contenedorCarga.setAttribute("elemento", "flotante")
 
             contenedorCarga.appendChild(spinner)
-            contenedorCalendario.appendChild(contenedorCarga)
+            const construyendoCalendarioRenderizado = calendarioRenderizado.querySelector("[contenedor=contruyendoCalendario]")
+            if (!construyendoCalendarioRenderizado) contenedorCalendario.appendChild(contenedorCarga)
             
             
             const calendarioResuelto = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
@@ -31005,7 +30997,7 @@ const administracion = {
 
                         const selectorContenedorDia = selectorMesDestino.querySelector(`[dia="${diaDestino}"]`)
                         // Analizar por que salta este error
-                        const selectorArrayRenderizado = selectorContenedorDia.getAttribute("eventosContenedor")
+                        const selectorArrayRenderizado = selectorContenedorDia?.getAttribute("eventosContenedor")
                         const objetoEventos = JSON.parse(selectorArrayRenderizado) || {}
                         let posicionEvento = 0
                         const posicionColumnaDia = obtenerCoordenadasCeldaGrid(diaDestino).columna

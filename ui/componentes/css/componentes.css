@@ -3607,7 +3607,7 @@
     padding: 10px;
     border-radius: 10px;
     font-size: 13px;
-
+    text-align: center;
 }
 
 .errorBoton {
@@ -11317,14 +11317,17 @@ grid-template-columns: 0.5fr 1.5fr;
     /* transform: translateY(-30vh) translateZ(1px) scale(1.5);*/
     text-rendering: optimizeLegibility;
     -webkit-transform: translateY(-30vh) translateZ(1px);
-}
-.texto111 {
-    -webkit-transform: translateY(0vh) translateZ(0px);
+    font-size: 40px;
+
 }
 
 
 .conozcanos .ultima {
     /*  -webkit-transform: translateZ(1px) scale(1);*/
+
+}
+.texto111 {
+    -webkit-transform: translateY(0) translateZ(0) !important;
 
 }
 

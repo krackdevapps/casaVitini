@@ -6256,7 +6256,6 @@ const casaVitini = {
             instalaciones: {
                 arranque: () => {
                     document.body.style.backgroundImage = 'url("/componentes/imagenes/transparente.png")';
-                    document.body.classList.add("difunmadoFondo")
                     document.body.style.paddingBottom = "20px"
                 }
             },
