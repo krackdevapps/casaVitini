@@ -145,7 +145,7 @@ body {
     background-image: url("/componentes/imagenes/transparente.png");
     margin: 0px;
     padding: 0px;
-    transition: all 500ms linear;
+    transition: background 500ms linear;
     flex-wrap: nowrap;
     background-size: cover;
     background-repeat: no-repeat;
@@ -153,13 +153,15 @@ body {
     /* background-attachment: scroll;*/
     background-position: center center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 100vh;}
 
 main {
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-height: 100vh;
     /* El main ocupa el espacio restante */
 }
 
@@ -199,7 +201,7 @@ header {
 
 
 
-section {
+main {
     display: flex;
     align-content: center;
     flex-wrap: nowrap;

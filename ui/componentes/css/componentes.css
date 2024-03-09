@@ -27,14 +27,24 @@
     padding: 10px;
 }
 
-.difunmadoFondo {
+
+.difuminadoFondo::before {
+    content: "";
     /* background: inherit; */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
+
+    z-index: -1;
     /* height: 100%; */
     /* width: 100%;*/
     transition: all 500ms linear;
 }
+
 
 .fondoStaticoPrueba::before {
     content: "";
@@ -1234,8 +1244,6 @@
     border-radius: 16px;
     margin: 8px;
     padding: 4px;
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
     gap: 4px;
 }
 
@@ -1324,8 +1332,7 @@
     padding: 4px;
     gap: 4px;
     min-height: 400px;
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.2);
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
@@ -1658,8 +1665,6 @@
 }
 
 .botonResumenReserva {
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
     padding: 12px;
     font-size: 12px;
@@ -1911,8 +1916,6 @@
 
 .plaza_alojamiento_resumenReserva_contenedorTitualPago {
     background-color: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
     border-radius: 13px;
 }
 
@@ -3545,6 +3548,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 12px;
     cursor: default;
+    top: 0vh;
     z-index: 99;
 }
 

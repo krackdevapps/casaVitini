@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>A grouped pure CSS parallax demo (with webkit overflow fix) by Keith Clark</title>
+    <meta name="description"
+        content="Demonstration of a webkit-specific work around to fix a horizontal scrolling issue with CSS parallax">
+    <style>
+        .parallax {
+            font-size: 200%;
+        }
+
+        .parallax__group {
+            position: relative;
+            height: 100vh;
+        }
+
+        .parallax__layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .parallax__layer--base {
+            z-index: 2;
+            /* Ajusta los estilos de la capa base aquí */
+        }
+
+        .parallax__layer--back {
+            z-index: 1;
+            /* Ajusta los estilos de la capa de fondo aquí */
+        }
+
+        .title {
+            text-align: center;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="parallax">
+        <div id="group2" class="parallax__group">
+            <div class="parallax__layer parallax__layer--base">
+                <div class="title">Base Layer</div>
+            </div>
+            <div class="parallax__layer parallax__layer--back">
+                <div class="title">Background Layer</div>
+            </div>
+        </div>
+        <div id="group3" class="parallax__group">
+            <div class="parallax__layer parallax__layer--base">
+                <div class="title">Base Layer</div>
+            </div>
+            <div class="parallax__layer parallax__layer--back">
+                <div class="title">Background Layer</div>
+            </div>
+        </div>
+        <div id="group4" class="parallax__group">
+            <div class="parallax__layer parallax__layer--base">
+                <div class="title">Base Layer</div>
+            </div>
+            <div class="parallax__layer parallax__layer--back">
+                <div class="title">Background Layer</div>
+            </div>
+        </div>
+        <div id="group5" class="parallax__group">
+            <div class="parallax__layer parallax__layer--base">
+                <div class="title">Base Layer</div>
+            </div>
+            <div class="parallax__layer parallax__layer--back">
+                <div class="title">Background Layer</div>
+            </div>
+        </div>
+        <div id="group6" class="parallax__group">
+            <div class="parallax__layer parallax__layer--base">
+                <div class="title">Base Layer</div>
+            </div>
+            <div class="parallax__layer parallax__layer--back">
+                <div class="title">Background Layer</div>
+            </div>
+        </div>
+        <div id="group7" class="parallax__group">
+            <div class="parallax__layer parallax__layer--base">
+                <div class="title">Base Layer</div>
+            </div>
+            <div class="parallax__layer parallax__layer--back">
+                <div class="title">Background Layer</div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+</html>
