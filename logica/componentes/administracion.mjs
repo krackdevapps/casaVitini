@@ -3,7 +3,7 @@ const administracion = {
     reservas: {
         arranque: async () => {
 
-            document.querySelector("section:not([estado=obsoleto])").setAttribute("tipoVista", "reservasPaginadas")
+            document.querySelector("main:not([estado=obsoleto])").setAttribute("tipoVista", "reservasPaginadas")
             document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
 
             const granuladoURL = casaVitini.componentes.granuladorURL()
@@ -242,7 +242,7 @@ const administracion = {
 
                 espacioReservas.appendChild(buscadorUI)
                 marcoElastico.appendChild(espacioReservas)
-                const seccion = document.querySelector("section:not([estado=obsoleto])")
+                const seccion = document.querySelector("main:not([estado=obsoleto])")
                 seccion.appendChild(marcoElastico)
 
 
@@ -2076,7 +2076,7 @@ const administracion = {
                     opcionApartamento.innerText = `Cerrar opciones de ${apartamentoUI}`
                     opcionesApartamento.appendChild(opcionApartamento)
 
-                    document.querySelector("section:not([Estado=Obsoleto]").appendChild(opcionesApartamento)
+                    document.querySelector("main:not([Estado=Obsoleto]").appendChild(opcionesApartamento)
                     document.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles)
 
                 },
@@ -2283,7 +2283,7 @@ const administracion = {
                     opcionHabitacion.innerText = `Cerrar opciones de la ${habitacionUI}`
                     opcionesHabitacion.appendChild(opcionHabitacion)
 
-                    document.querySelector("section:not([Estado=Obsoleto]").appendChild(opcionesHabitacion)
+                    document.querySelector("main:not([Estado=Obsoleto]").appendChild(opcionesHabitacion)
                     document.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles)
 
 
@@ -2459,7 +2459,7 @@ const administracion = {
                     botonCerrar.innerText = "Cerrar opciones de cama"
                     opcionesCambioCama.appendChild(botonCerrar)
 
-                    document.querySelector("section:not([Estado=Obsoleto]").appendChild(opcionesCambioCama)
+                    document.querySelector("main:not([Estado=Obsoleto]").appendChild(opcionesCambioCama)
                     document.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles)
 
 
@@ -2711,7 +2711,7 @@ const administracion = {
                         document.querySelector("[componente=bloqueCalendario]")?.remove()
                     })
                     bloqueOpcionesCliente.appendChild(botonOpcionCliente)
-                    document.querySelector("section:not([Estado=Obsoleto]").appendChild(bloqueOpcionesCliente)
+                    document.querySelector("main:not([Estado=Obsoleto]").appendChild(bloqueOpcionesCliente)
 
 
                     document.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles)
@@ -3328,7 +3328,7 @@ const administracion = {
                     mensajeBuscando.innerText = "Buscando..."
                     resultadosBusqueda.appendChild(mensajeBuscando)
 
-                    const seccion = document.querySelector("section:not([estado=obsoleto])")
+                    const seccion = document.querySelector("main:not([estado=obsoleto])")
                     seccion.appendChild(resultadosBusqueda)
                     clearTimeout(casaVitini.componentes.temporizador);
                     casaVitini.componentes.temporizador = setTimeout(() => {
@@ -4587,7 +4587,7 @@ const administracion = {
                 const bloqueCalendario = document.querySelector("[componente=bloqueCalendario]")
                 const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
 
-                const instanciaUID_DeLaSeccionRenderizada = document.querySelector("section[instanciaUID]").getAttribute("instanciaUID")
+                const instanciaUID_DeLaSeccionRenderizada = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
                 const alturaDinamicaArriba = casaVitini.componentes.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(boton.target.closest("[componente]"))
 
                 const estadoReserva = {
@@ -5477,7 +5477,7 @@ const administracion = {
                     // Anadir el div principal al contenedor
                     marcoElastico.appendChild(divPrincipal);
                     //marcoElastico.style.marginTop = "100px"
-                    const seccion = document.querySelector("section:not([estado=obsoleto])")
+                    const seccion = document.querySelector("main:not([estado=obsoleto])")
                     seccion.appendChild(marcoElastico)
 
                     if (categoriaGlobalInicial) {
@@ -5603,7 +5603,7 @@ const administracion = {
             },
             calcularPrecioReserva: async () => {
                 const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
-                const instanciaUID = document.querySelector("section").getAttribute("instanciaUID")
+                const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
                 const selectorEstadoPago = document.querySelector("[dataReserva=estadoPago]")
                 const selectorTotalConImpuestos = document.querySelector("[dataReserva=totalReservaConImpuestos]")
 
@@ -12378,11 +12378,11 @@ const administracion = {
         },
         pendientes_de_revision: {
             arranque: async () => {
-                const sectionRenderizada = document.querySelector("section[instanciaUID]")
+                const sectionRenderizada = document.querySelector("main[instanciaUID]")
                 const instanciaUID = sectionRenderizada.getAttribute("instanciaUID")
 
 
-                const espacioReservasPendientes = document.querySelector(`section[instanciaUID="${instanciaUID}"]`).querySelector("[componente=espacioReservasPendientesDeRevision]")
+                const espacioReservasPendientes = document.querySelector(`main[instanciaUID="${instanciaUID}"]`).querySelector("[componente=espacioReservasPendientesDeRevision]")
 
                 const info = document.createElement("div")
                 info.classList.add("info")
@@ -12659,7 +12659,7 @@ const administracion = {
             },
             componentes: {
                 infoSinReservas: (instanciaUID) => {
-                    const espacioReservasPendientes = document.querySelector(`section[instanciaUID="${instanciaUID}"]`).querySelector("[componente=espacioReservasPendientesDeRevision]")
+                    const espacioReservasPendientes = document.querySelector(`main[instanciaUID="${instanciaUID}"]`).querySelector("[componente=espacioReservasPendientesDeRevision]")
                     if (espacioReservasPendientes) {
                         const info = document.createElement("div")
                         info.classList.add("info")
@@ -14905,7 +14905,6 @@ const administracion = {
         interruptores: {
 
             arranque: async () => {
-                document.body.removeAttribute("style")
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
                 marcoElastico.style.gap = "4px"
 
@@ -15034,7 +15033,7 @@ const administracion = {
 
             },
             actualizarInterruptor: async (interruptor) => {
-                const seccionRenderizadaOrigen = document.querySelector("section")
+                const seccionRenderizadaOrigen = document.querySelector("main")
                 const seccionUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
                 const interruptorIDV = interruptor.interruptorIDV
                 const estado = interruptor.estado
@@ -15061,7 +15060,7 @@ const administracion = {
                 }
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
-                const seccionRenderizada = document.querySelector(`section[instanciaUID="${seccionUID}"]`)
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${seccionUID}"]`)
                 if (!seccionRenderizada) return
                 selectorListaEstadosInterruptor.removeAttribute("style")
 
@@ -17962,7 +17961,7 @@ const administracion = {
     gestion_de_ofertas: {
         arranque: async () => {
             const granuladoURL = casaVitini.componentes.granuladorURL()
-            document.body.classList.add("difunmadoFondo")
+            document.body.classList.add("difuminadoFondo")
 
             const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
             document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
@@ -18294,7 +18293,7 @@ const administracion = {
         crearOferta: {
             arranque: () => {
                 document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
-                document.body.classList.add("difunmadoFondo")
+                document.body.classList.add("difuminadoFondo")
 
                 const selector = document.querySelector("[componente=espacioOfertas]")
                 const ofertaUI = casaVitini.administracion.gestion_de_ofertas.detalleUI()
@@ -18926,7 +18925,7 @@ const administracion = {
                 apartamentosUI.style.width = (anchoDinamico - 10) + "px"
 
                 apartamentosUI.innerText = "Obteniendo apartamentos..."
-                let seccion = document.querySelector("section:not([estado=obsoleto])")
+                let seccion = document.querySelector("main:not([estado=obsoleto])")
                 document.body.appendChild(apartamentosUI)
 
                 const transaccion = {
@@ -19163,7 +19162,7 @@ const administracion = {
         },
         detallesOferta: {
             obtenerDetallesOferta: async (ofertaUID) => {
-                const seccionUID = document.querySelector("section").getAttribute("instanciaUID")
+                const seccionUID = document.querySelector("main").getAttribute("instanciaUID")
 
                 console.log("ofertaUID", ofertaUID)
                 const transaccion = {
@@ -19172,7 +19171,7 @@ const administracion = {
                 }
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                const seccionRenderizada = document.querySelector(`section[instanciaUID="${seccionUID}"]`)
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${seccionUID}"]`)
                 if (!seccionRenderizada) return
 
                 if (respuestaServidor?.error) {
@@ -19341,7 +19340,7 @@ const administracion = {
             },
             guardarCambiosOferta: async (oferta) => {
                 const ofertaUID = document.querySelector("[ofertaUID]").getAttribute("ofertaUID")
-                const seccionUID = document.querySelector("section").getAttribute("instanciaUID")
+                const seccionUID = document.querySelector("main").getAttribute("instanciaUID")
                 const fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                 const fechaFin = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
                 const tipoOferta = document.querySelector("[ofertaEnPrimerPlano=Activado]").getAttribute("zonaOferta")
@@ -19398,7 +19397,7 @@ const administracion = {
                 transaccion["apartamentosSeleccionados"] = apartamentosSeleccionados
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                const seccionRenderizada = document.querySelector(`section[instanciaUID="${seccionUID}"]`)
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${seccionUID}"]`)
                 if (!seccionRenderizada) return
 
                 if (respuestaServidor?.error) {
@@ -20696,7 +20695,7 @@ const administracion = {
     comportamiento_de_precios: {
         arranque: async () => {
             document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
-            document.body.classList.add("difunmadoFondo")
+            document.body.classList.add("difuminadoFondo")
 
             const granuladoURL = casaVitini.componentes.granuladorURL()
             const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
@@ -21440,7 +21439,7 @@ const administracion = {
                 apartamentosUI.style.width = (anchoDinamico - 10) + "px"
 
                 apartamentosUI.innerText = "Obteniendo apartamentos..."
-                let seccion = document.querySelector("section:not([estado=obsoleto])")
+                let seccion = document.querySelector("main:not([estado=obsoleto])")
                 document.body.appendChild(apartamentosUI)
                 //zona: "apartamentosDisponiblesParaCrearOfertas"
 
@@ -21777,7 +21776,7 @@ const administracion = {
             },
             guardarCambiosComportamiento: async (oferta) => {
 
-                const seccionUID = document.querySelector("section").getAttribute("instanciaUID")
+                const seccionUID = document.querySelector("main").getAttribute("instanciaUID")
 
                 const comportamientoUID = document.querySelector("[comportamientoUID]").getAttribute("comportamientoUID")
 
@@ -21813,7 +21812,7 @@ const administracion = {
                 })
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                const seccionRenderizada = document.querySelector(`section[instanciaUID="${seccionUID}"]`)
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${seccionUID}"]`)
                 if (!seccionRenderizada) return
 
                 if (respuestaServidor?.error) {
@@ -29374,13 +29373,13 @@ const administracion = {
             const calendario = {}
             const ultimoDirectorio = granuladoURL.directorios[granuladoURL.directorios.length - 1]
             document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
-            document.body.classList.add("difunmadoFondo")
+            document.body.classList.add("difuminadoFondo")
             // Llama a la función al cargar la página y en eventos que puedan cambiar la altura del div
             // window.removeEventListener("resize", casaVitini.administracion.calendario.controlVertical);
             // window.addEventListener('resize', casaVitini.administracion.calendario.controlVertical);
             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
 
-            const sectionRenderizada = document.querySelector("section[instanciaUID]")
+            const sectionRenderizada = document.querySelector("main[instanciaUID]")
             const instanciaUID_seccion = sectionRenderizada.getAttribute("instanciaUID")
 
             const metadatosControaldorLogo = {
@@ -29468,11 +29467,6 @@ const administracion = {
             }
             calendario.tipoRegistro = "actualizar"
             casaVitini.administracion.calendario.controladorRegistros(calendario)
-            //document.querySelector("section").style.maxWidth = "100vw"
-            // document.querySelector("section").style.minHeight = "100vh"
-            //document.querySelector("section").style.flex = "1"         
-            //sectionRenderizada.style.position = "absolute"
-            // const calendarioResuelto = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
             const tipoFecha = {
                 almacenamientoCalendarioID: "calendarioGlobal",
                 instanciaUID: instanciaUID
@@ -30218,7 +30212,7 @@ const administracion = {
             }
             calendario.appendChild(marcoMes)
 
-            const seccion = document.querySelector("section:not([estado=obsoleto])")
+            const seccion = document.querySelector("main:not([estado=obsoleto])")
             const bloqueCalendario = document.createElement("div")
             bloqueCalendario.setAttribute("class", "adminsitracion_calendario_bloqueCalendario")
             bloqueCalendario.setAttribute("instanciaUID", instanciaUID)
@@ -30241,10 +30235,12 @@ const administracion = {
 
             contenedoCalendarioIntermedio.appendChild(calendario)
             contenedoCalendarioIntermedio.appendChild(contenedorCarga)
+            
             bloqueCalendario.appendChild(contenedoCalendarioIntermedio)
 
-            document.querySelector("section").appendChild(bloqueCalendario)
-
+            document.querySelector("main").appendChild(bloqueCalendario)
+            
+            
         },
         constructorMesNuevo: async (calendario) => {
             const instanciaUID = calendario.instanciaUID
@@ -30639,7 +30635,7 @@ const administracion = {
         },
         controlVertical: () => {
             return
-            const selectorSeccion = document.querySelector('section')
+            const selectorSeccion = document.querySelector('main')
 
             const selectorCalendarioGlobal = document.querySelector("[componente=calendarioGlobal]")
             if (!selectorCalendarioGlobal) {

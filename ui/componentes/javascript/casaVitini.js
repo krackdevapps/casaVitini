@@ -646,7 +646,7 @@ const casaVitini = {
                                 superBloqueReservaRenderizado.appendChild(infoSinAlojamiento);
                                 return
                             }
-                            document.body.classList.add("difunmadoFondo")
+                            document.body.classList.add("difuminadoFondo")
 
                             const tituloBloqueAlojamiento = document.createElement("p")
                             tituloBloqueAlojamiento.setAttribute("class", "tituloBloqueAlojamiento parpadeaFondoTransparente")
@@ -1727,7 +1727,7 @@ const casaVitini = {
 
                             if (detallesReserva) {
                                 document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
-                                document.body.classList.add("difunmadoFondo")
+                                document.body.classList.add("difuminadoFondo")
 
                                 const obtenerPDF = async (enlaceUID) => {
 
@@ -2440,7 +2440,7 @@ const casaVitini = {
                 arranque: () => {
                     // document.body.style.backgroundImage = "url(/componentes/imagenes/loginFondo.jpg)"
                     //document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
-                    //document.body.classList.add("difunmadoFondo")
+                    //document.body.classList.add("difuminadoFondo")
                     document.querySelector("[boton=iniciarSession]").addEventListener("click", () => {
                         casaVitini.ui.vistas.miCasa.botonIniciarSession("iniciarSession")
                     })
@@ -5085,7 +5085,7 @@ const casaVitini = {
                             botonEnviar.textContent = 'Enviar mensaje de recuperación a mi buzón';
 
                             // Adjuntar elementos al DOM
-                            const secction = document.querySelector("section")
+                            const secction = document.querySelector("main")
                             secction.appendChild(titulo);
 
                             contenedorCrearCuenta.appendChild(texto);
@@ -5459,7 +5459,7 @@ const casaVitini = {
                             botonEnviar.textContent = 'Verificar código';
 
                             // Adjuntar elementos al DOM
-                            const secction = document.querySelector("section")
+                            const secction = document.querySelector("main")
                             secction.appendChild(titulo);
                             marcoElastico.appendChild(botonRecuperarCuenta);
 
@@ -5677,7 +5677,7 @@ const casaVitini = {
                             botonEnviar.textContent = 'Reestablecer contraseña';
 
                             // Adjuntar elementos al DOM
-                            const secction = document.querySelector("section")
+                            const secction = document.querySelector("main")
                             secction.appendChild(titulo);
 
                             contenedorCrearCuenta.appendChild(texto);
@@ -5773,7 +5773,7 @@ const casaVitini = {
 
                     document.querySelector("#uiLogo").style.filter = "invert(1)"
                     document.querySelector("#botonMenuResponsivo").style.filter = "invert(1)"
-                    //document.body.classList.add("difunmadoFondo")
+                    //document.body.classList.add("difuminadoFondo")
 
 
                 },
@@ -6235,9 +6235,9 @@ const casaVitini = {
                     })
                     */
                     document.querySelector("#uiLogo").style.filter = "invert(1)"
-                    const section = document.querySelector("section")
-                    section.style.maxWidth = "none"
-                    section.style.position = "absolute"
+                    const main = document.querySelector("main")
+                    main.style.maxWidth = "none"
+                    main.style.position = "absolute"
 
                     const metadatos = {
                         sectionUID: instanciaUID,
@@ -6360,7 +6360,7 @@ const casaVitini = {
             main.style.height = "100%"
             main.style.justifyContent = "center"
             main.style.alignItems = "center"
-            //seccion.classList.add("difunmadoFondo")
+            //seccion.classList.add("difuminadoFondo")
 
             const spinnerSimple = casaVitini.componentes.spinnerSimple()
             main.appendChild(spinnerSimple)

@@ -82,7 +82,7 @@ window.createPayment = async function (token, verificationToken) {
     dataJsonString.verificationToken = verificationToken;
   }
   try {
-    const instanciaUID = document.querySelector("section").getAttribute("instanciaUID")
+    const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
     const response = await fetch('/puerto', {
       method: 'POST',
       headers: {

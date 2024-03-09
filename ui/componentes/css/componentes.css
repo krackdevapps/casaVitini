@@ -38,11 +38,10 @@
     left: 0;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-
     z-index: -1;
     /* height: 100%; */
     /* width: 100%;*/
-    transition: all 500ms linear;
+    transition: backdrop-filter 500ms linear;
 }
 
 
@@ -9203,8 +9202,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .plaza_reservas_reservaConfirmada_infoGlobal {
     font-size: 13px;
     padding: 12px;
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
+
     background: rgba(255, 255, 255, 0.3);
     border-radius: 16px;
 
@@ -9217,8 +9215,7 @@ grid-template-columns: 0.5fr 1.5fr;
     font-size: 13px;
     display: flex;
     padding: 12px;
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
+ 
     background: rgba(255, 255, 255, 0.3);
     border-radius: 16px;
     justify-content: center;
@@ -9230,8 +9227,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .plaza_reservas_reservaConfirmada_contenedor {
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
+
     background: white;
     border-radius: 16px;
     display: flex;
@@ -9324,8 +9320,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .plaza_reservas_reservaConfirmada_botonV1 {
     display: flex;
     font-weight: bold;
-    justify-content: center;
-    align-items: center;
+    justify-content: center;  
     font-size: 13px;
     padding: 10px;
     background: rgba(255, 255, 255, 0.3);
@@ -9334,8 +9329,7 @@ grid-template-columns: 0.5fr 1.5fr;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
+
 }
 
 .plaza_reservas_reservaConfirmada_botonV1:hover {
@@ -9527,8 +9521,8 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .administracion_calendario_componente_calendario_contenedoCarga {
-    -webkit-backdrop-filter: blur(50px);
-    backdrop-filter: blur(50px);
+  /*  -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);*/
     font-size: 13px;
     padding: 12px;
     user-select: none;
@@ -11404,10 +11398,6 @@ grid-template-columns: 0.5fr 1.5fr;
 /* demo styles
   --------------------------------------------- */
 
-body,
-html {
-    /* overflow: hidden;*/
-}
 
 
 * {
