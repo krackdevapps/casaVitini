@@ -5,8 +5,8 @@ const casaVitini = {
                 arranque: () => {
                     document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
-                    
-                         document.querySelector(".marcoElasticoRelativo").style.flex = "1"
+
+                    document.querySelector(".marcoElasticoRelativo").style.flex = "1"
 
 
 
@@ -1190,7 +1190,7 @@ const casaVitini = {
                         contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                         advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                       document.body.appendChild(advertenciaInmersivaIU)
+                        document.body.appendChild(advertenciaInmersivaIU)
 
                         const destino = `[instanciaUID="${instanciaUID}"] [contenedor=espacioGlobalTotales]`
                         const desgloseTotales = {
@@ -1752,7 +1752,7 @@ const casaVitini = {
 
                                     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                                   document.body.appendChild(advertenciaInmersivaIU)
+                                    document.body.appendChild(advertenciaInmersivaIU)
 
                                     const advertenciaInmersivaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
 
@@ -2148,7 +2148,7 @@ const casaVitini = {
                                     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                                   document.body.appendChild(advertenciaInmersivaIU)
+                                    document.body.appendChild(advertenciaInmersivaIU)
 
                                     const destino = `[instanciaUID="${instanciaUID}"] [contenedor=espacioGlobalTotales]`
                                     const desgloseTotales = {
@@ -2301,7 +2301,7 @@ const casaVitini = {
                         contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                         advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                       document.body.appendChild(advertenciaInmersivaIU)
+                        document.body.appendChild(advertenciaInmersivaIU)
 
 
 
@@ -2393,8 +2393,8 @@ const casaVitini = {
                     console.log("respuestaServidor", respuestaServidor)
 
                     if (respuestaServidor?.error) {
-                         return casaVitini.componentes.flujoPagoUI.errorInfo(respuestaServidor.error)
-                         // return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor.error)
+                        return casaVitini.componentes.flujoPagoUI.errorInfo(respuestaServidor.error)
+                        // return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor.error)
                     }
                     if (respuestaServidor.ok) {
                         const detalles = respuestaServidor.detalles
@@ -2420,7 +2420,7 @@ const casaVitini = {
                 vistaError.style.position = "relative"
 
                 constructorSeccion.appendChild(vistaError);
-               document.body.appendChild(constructorSeccion)
+                document.body.appendChild(constructorSeccion)
                 document.getElementById("uiNavegacion").setAttribute("vistaActual", "error")
                 document.getElementById("uiNavegacion").removeAttribute("arranqueVolatil")
                 let espacio = document.body;
@@ -4435,7 +4435,7 @@ const casaVitini = {
                                 contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                                 advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                               document.body.appendChild(advertenciaInmersivaIU)
+                                document.body.appendChild(advertenciaInmersivaIU)
 
 
 
@@ -5799,7 +5799,7 @@ const casaVitini = {
 
                 marcoElastico.appendChild(boton)
                 advertenciaInmersivaUI.appendChild(marcoElastico)
-               document.body.appendChild(advertenciaInmersivaUI)
+                document.body.appendChild(advertenciaInmersivaUI)
 
                 document.body.style.overflow = 'hidden';
 
@@ -5827,7 +5827,7 @@ const casaVitini = {
                 marcoElastico.appendChild(boton)
                 advertenciaInmersivaUI.appendChild(marcoElastico)
 
-               document.body.appendChild(advertenciaInmersivaUI)
+                document.body.appendChild(advertenciaInmersivaUI)
 
             },
             pantallaDeCargaSuperPuesta: (metadatos) => {
@@ -5870,7 +5870,7 @@ const casaVitini = {
 
                 marcoElastico.appendChild(boton)
                 advertenciaInmersivaUI.appendChild(marcoElastico)
-               document.body.appendChild(advertenciaInmersivaUI)
+                document.body.appendChild(advertenciaInmersivaUI)
 
             },
             pagos: {
@@ -6214,40 +6214,23 @@ const casaVitini = {
                 arranque: () => {
                     const sectionRenderizada = document.querySelector("main[instanciaUID]")
                     const instanciaUID = sectionRenderizada.getAttribute("instanciaUID")
-                    console.log("arranque1")
-                    /*
-                    const controladorParalax = () => {
-                        document.querySelectorAll("[contenedorPara=paralaje]").forEach(matriz => {
-                            // Obtener la posición del contenedor en relación con el área visible del navegador
-                            var rect = matriz.getBoundingClientRect();
-                            // Verificar si el contenedor está visible en el área visible del navegador
-                            if (rect.top < window.innerHeight && rect.bottom >= 0) {
-                                // Calcular el desplazamiento relativo basado en la posición del contenedor en la ventana
-                                var desplazamiento = rect.top / window.innerHeight;
-                                // Aplicar efecto de paralaje basado en el desplazamiento
-                                matriz.style.transform = "translateY(" + (desplazamiento) * 100 + "px) translateZ(-1px) scale(1.5)";
-                            }
-                        })
-                    }
-                    controladorParalax()
-                    window.addEventListener("scroll", () => {
-                        controladorParalax()                    
-                    })
-                    */
+  
                     document.querySelector("#uiLogo").style.filter = "invert(1)"
+                    const header = document.querySelector("header")
+                    header.style.maxWidth = "none"
+                    header.style.position = "absolute"
+
+
                     const main = document.querySelector("main")
-                    main.style.maxWidth = "none"
-                    main.style.position = "absolute"
+                    main.style.maxWidth = "100vw"
+
+
 
                     const metadatos = {
                         sectionUID: instanciaUID,
                         elementoScroll: "[contenedor=paralaje]"
                     }
                     casaVitini.componentes.controlLogoScroll(metadatos)
-
-
-
-
 
 
                 }
@@ -6300,8 +6283,13 @@ const casaVitini = {
             }
             // document.body.style.backgroundImage= "url(/componentes/imagenes/transparente.png)";
             //                    document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
+            
 
-
+            document.querySelector("#uiLogo").removeAttribute("style")
+            document.querySelector("body").removeAttribute("style")
+            document.querySelector("header").removeAttribute("style")
+            document.querySelector("main").removeAttribute("style")
+            document.querySelector("#botonMenuResponsivo").removeAttribute("style")
 
 
 
@@ -6346,11 +6334,6 @@ const casaVitini = {
             delete url[2]
             url = url.filter((url) => url)
 
-            document.querySelector("#uiLogo").removeAttribute("style")
-            document.querySelector("header").removeAttribute("style")
-            document.querySelector("header").removeAttribute("style")
-
-            document.querySelector("#botonMenuResponsivo").removeAttribute("style")
 
             const main = document.querySelector('main');
             main.setAttribute("instanciaUID", instanciaUID)
@@ -6693,7 +6676,7 @@ const casaVitini = {
             seccion.style.justifyContent = "center"
             seccion.style.height = "100%"
             seccion.innerHTML = null
-           document.body.appendChild(advertenciaInmersivaIU)
+            document.body.appendChild(advertenciaInmersivaIU)
 
 
         },
@@ -6778,7 +6761,7 @@ const casaVitini = {
                 menuGlobalFlotante.querySelectorAll("[vista]").forEach((menu) => {
                     menu.addEventListener("click", casaVitini.componentes.cambiarVista)
                 })
-               document.body.appendChild(menuGlobalFlotante)
+                document.body.appendChild(menuGlobalFlotante)
                 document.addEventListener("click", casaVitini.componentes.ocultaMenuGlobalFlotante)
                 window.addEventListener("resize", casaVitini.componentes.ocultaMenuGlobalFlotante)
                 window.addEventListener("scroll", casaVitini.componentes.ocultaMenuGlobalFlotante)
@@ -7208,7 +7191,7 @@ const casaVitini = {
                 contenedoCalendarioIntermedio.appendChild(contenedorCarga)
                 bloqueCalendario.appendChild(contenedoCalendarioIntermedio)
 
-               document.body.appendChild(bloqueCalendario)
+                document.body.appendChild(bloqueCalendario)
 
             } catch (errorCapturado) {
                 throw errorCapturado
@@ -10073,7 +10056,7 @@ const casaVitini = {
                 info.innerText = mensaje
                 advertenciaInmersivaUI.appendChild(info)
 
-               document.body.appendChild(advertenciaInmersivaUI)
+                document.body.appendChild(advertenciaInmersivaUI)
             },
 
             botonAcetpar: () => {
