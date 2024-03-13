@@ -1246,14 +1246,15 @@
     gap: 4px;
 }
 
+
 .plaza_alojamiento_contenedorApartmento_check {
     position: relative;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
-    top: 50%;
+    top: -50%;
     margin-left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0%);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background-color: rgb(255 255 255 / 0.4);
@@ -9116,7 +9117,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
     50% {
-        background: #ffe667;
+        background: #ff9338;
     }
 
     100% {
@@ -9132,7 +9133,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
     50% {
-        background: #ffe667;
+        background: #ffa84b;
     }
 
     100% {
@@ -9148,7 +9149,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
     50% {
-        background: #ffe667;
+        background: #ffa84b;
     }
 
     100% {
@@ -9739,8 +9740,8 @@ grid-template-columns: 0.5fr 1.5fr;
     grid-template-rows: 1fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
-    gap: 6px;
-    padding: 6px;
+    gap: 18px;
+    padding: 18px;
     flex-direction: row-reverse;
     flex-wrap: wrap;
 }
@@ -10091,6 +10092,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
     text-align: justify;
     margin-bottom: 6px;
+    padding-top: 0px;
 }
 
 .plaza_servicios_bloqueCaracteristica {
@@ -10169,6 +10171,9 @@ grid-template-columns: 0.5fr 1.5fr;
     /* background-attachment: fixed;*/
     /* background-attachment: scroll;*/
     background-position: center center;
+    margin-left: 30px;
+    margin-right: 30px;
+
 }
 
 .plaza_servicios_icono_terraza {
@@ -11345,9 +11350,9 @@ grid-template-columns: 0.5fr 1.5fr;
 
 /*Modifcaciones dev*/
 .conozcanos .rojo {
- /*   background: #ff00007a; */
+    /*   background: #ff00007a; */
     background: grey;
-   /* backdrop-filter: blur(100px);*/
+    /* backdrop-filter: blur(100px);*/
 }
 
 .conozcanos .azul {
@@ -11359,7 +11364,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .conozcanos .parallax__group {
-  /*  width: 70vw;*/
+    /*  width: 70vw;*/
 }
 
 /*fin modificaciones*/
@@ -11411,17 +11416,18 @@ grid-template-columns: 0.5fr 1.5fr;
     top: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    font-size: 15px;
 }
 
 .conozcanos .textoAnterior {
     top: -50vh;
-    color: white;   
-     font-size: 30px;
+    color: white;
+    font-size: 30px;
 }
 
 .conozcanos .ultimoTexto {
     top: 225vh;
-    color: white;   
+    color: white;
     font-size: 30px;
 }
 
@@ -11458,8 +11464,149 @@ grid-template-columns: 0.5fr 1.5fr;
 .conozcanos #group8 {
     z-index: 3;
 }
+
 .conozcanos .transparente {
     background: transparent;
 }
 
 /*Fin parallax*/
+
+.plaza_servicios_superBloque .contenedorApartamento {
+    /* background: #cdcdcd; */
+    margin-right: 30px;
+    margin-left: 30px;
+    border-radius: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border: 1px solid #00000047;
+}
+
+.plaza_servicios_superBloque .contenedorApartamento .titulo {
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 16px;
+    text-align: center;
+}
+
+.plaza_servicios_superBloque .contenedorApartamento .descripcion {
+    font-size: 13px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 10px;
+    text-align: center;
+}
+
+
+
+.plaza_servicios_superBloque .contenedorApartamento .contenedorImagenes {
+    margin: 0px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+    gap: 15px 15px;
+    grid-template-areas:
+        ". . ."
+        ". . ."
+        ". . .";
+    align-items: center;
+    align-content: center;
+    justify-items: stretch;
+
+
+}
+
+.plaza_servicios_superBloque .contenedorApartamento .imagenContenedor {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 200px;
+    width: 100%;
+    background-color: whitesmoke;
+    border-radius: 8px;
+    transition: all 100ms linear;
+}
+
+
+.plaza_servicios_superBloque .contenedorApartamento .imagenContenedor:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 0px 20px 0px #0000007a;
+}
+
+.plaza_servicios_superBloque .contenedorApartamento .apartamento_5_imagen1 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_5/image1.jpeg");
+
+}
+
+
+.plaza_servicios_superBloque .contenedorImagenAmpliada {
+    background: #a5a5a500;
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    transition: opacity 250ms linear;
+    opacity: 0;
+    gap: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    cursor: default;
+    top: 0vh;
+    left: 0vw;
+    z-index: 99;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.plaza_servicios_superBloque .contenedorImagenVolatil {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: whitesmoke;
+    border-radius: 8px;
+    transition: all 250ms linear;
+    /* transition: top 1s, left 1s, right 1s, bottom 1s;*/
+
+    position: relative;
+}
+
+
+.plaza_servicios_superBloque .contenedorImagenAmpliada .contenedorBotones {
+    display: grid;
+    grid-template-columns: min-content auto min-content;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    padding: 10px;
+    align-items: center;
+    gap: 6px;
+    justify-items: center;
+    position: relative;
+
+}
+
+
+.plaza_servicios_superBloque .contenedorImagenAmpliada .marcoEspaciadoContenedorBotones {
+    display: flex;
+    /* padding: 6px; */
+    top: 50px;
+    width: 100vw;
+    position: absolute;
+    z-index: 100;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.plaza_servicios_superBloque .contenedorImagenAmpliada .contenedorBotones .boton {
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    padding: 10px;
+    width: 123px;
+    justify-content: center;
+    align-items: center;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+
+}

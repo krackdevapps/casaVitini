@@ -6214,7 +6214,7 @@ const casaVitini = {
                 arranque: () => {
                     const sectionRenderizada = document.querySelector("main[instanciaUID]")
                     const instanciaUID = sectionRenderizada.getAttribute("instanciaUID")
-  
+
                     document.querySelector("#uiLogo").style.filter = "invert(1)"
                     const header = document.querySelector("header")
                     header.style.maxWidth = "none"
@@ -6231,15 +6231,161 @@ const casaVitini = {
                         elementoScroll: "[contenedor=paralaje]"
                     }
                     casaVitini.componentes.controlLogoScroll(metadatos)
-
-
                 }
-
             },
             instalaciones: {
                 arranque: () => {
-                    document.body.style.backgroundImage = 'url("/componentes/imagenes/transparente.png")';
-                    document.body.style.paddingBottom = "20px"
+
+                    const imagenesAmpliables = document.querySelectorAll("[componente=fotoAmpliable]")
+                    const cerrarImagen = (imagen) => {
+                        const numeroImagen = imagen.numeroImagen
+                        const apartamentoIDV = imagen.apartamentoIDV
+                        const imagenElemento = document.querySelector(`main [apartamento="${apartamentoIDV}"] [numeroImagen="${numeroImagen}"]`)
+                        const posicionImagen = imagenElemento.getBoundingClientRect();
+                        const contenedorImagen = document.querySelector("main [componente=contenedorImagenAmpliada] [contenedor=imagenVolatil]")
+                        contenedorImagen.addEventListener("transitionend", (e) => {
+                            console.log("finImagen", e.target)
+                            contenedorImagenAmpliada.remove()
+                        })
+
+
+                        document.querySelector("main [componente=contenedorBotones]").remove()
+                        document.body.removeAttribute("style");
+
+                        const contenedorImagenAmpliada = document.querySelector("main [componente=contenedorImagenAmpliada]")
+                        contenedorImagenAmpliada.style.pointerEvents = "none"
+
+
+                        console.log("contenedorImagen_destino", contenedorImagen)
+                        contenedorImagen.style.top = posicionImagen.y + "px"
+                        contenedorImagen.style.left = posicionImagen.x + "px"
+                        contenedorImagen.style.width = posicionImagen.width + "px"
+                        contenedorImagen.style.height = posicionImagen.height + "px"
+
+                    }
+                    const ampliarImagen = (imagen) => {
+                        document.body.style.overflow = 'hidden';
+                        const imagenElemento = imagen.target
+                        const fontoURL = window.getComputedStyle(imagenElemento).getPropertyValue("background-image");
+
+                        imagenesAmpliables.forEach((imagenAmpliable) => {
+                            imagenAmpliable.removeAttribute("style")
+                        })
+                        const apartamentoIDV = imagenElemento.closest("[apartamento]").getAttribute("apartamento")
+                        const imagenesDelApartamento = imagenElemento.closest("[apartamento]").querySelectorAll("[componente]")
+                        imagenesDelApartamento.forEach((imagenDelGrupo, numero) => {
+                            imagenDelGrupo.setAttribute("numeroImagen", numero)
+                        })
+                        const numeroImagen = imagen.target.getAttribute("numeroImagen")
+                        const posicionImagen = imagenElemento.getBoundingClientRect();
+
+                        const contenedorImagenAmpliada = document.createElement("div")
+                        contenedorImagenAmpliada.classList.add("contenedorImagenAmpliada")
+                        contenedorImagenAmpliada.setAttribute("componente", "contenedorImagenAmpliada")
+
+                        const contenedorBotones = document.createElement("div")
+                        contenedorBotones.classList.add("contenedorBotones")
+                        contenedorBotones.setAttribute("componente", "contenedorBotones")
+
+
+                        const botonAtras = document.createElement("div")
+                        botonAtras.classList.add("boton")
+                        botonAtras.innerText = "Atras"
+                        contenedorBotones.appendChild(botonAtras)
+
+                        const botonCerrar = document.createElement("div")
+                        botonCerrar.classList.add("boton")
+                        botonCerrar.innerText = "Cerrar"
+                        botonCerrar.addEventListener("click", (e) => {
+                            console.log(e.target)
+                            const identifcadorImagen = {
+                                apartamentoIDV: apartamentoIDV,
+                                numeroImagen: numeroImagen
+                            }
+                            console.log("identifcadorImagen", identifcadorImagen)
+                            cerrarImagen(identifcadorImagen)
+                        })
+                        contenedorBotones.appendChild(botonCerrar)
+
+                        const botonSiguiente = document.createElement("div")
+                        botonSiguiente.classList.add("boton")
+                        botonSiguiente.innerText = "Siguiente"
+                        contenedorBotones.appendChild(botonSiguiente)
+
+                        const marcoEspaciadorContenedorBotones = document.createElement("div")
+                        marcoEspaciadorContenedorBotones.classList.add("marcoEspaciadoContenedorBotones")
+
+
+                        marcoEspaciadorContenedorBotones.appendChild(contenedorBotones)
+                        contenedorImagenAmpliada.appendChild(marcoEspaciadorContenedorBotones)
+
+                        const contenedorImagenVolatil = document.createElement("div")
+                        contenedorImagenVolatil.classList.add("contenedorImagenVolatil")
+                        contenedorImagenVolatil.setAttribute("contenedor", "imagenVolatil")
+                        contenedorImagenVolatil.style.backgroundImage = fontoURL
+                        contenedorImagenVolatil.style.top = posicionImagen.y + "px"
+                        contenedorImagenVolatil.style.left = posicionImagen.x + "px"
+                        contenedorImagenVolatil.style.width = posicionImagen.width + "px"
+                        contenedorImagenVolatil.style.height = posicionImagen.height + "px"
+
+                        contenedorImagenAmpliada.appendChild(contenedorImagenVolatil)
+                        document.querySelector("[contenedor=instalaciones]").appendChild(contenedorImagenAmpliada)
+
+                        // La version dos seria, la version con la imagen dentro de un recuadro sin estar bajo los botones:
+                        // 1 - Se crea el grid, con dos filas y una columna, se renderiza pero oculto
+                        // 2 - Se obtiene el alto renderizado del contenedor botones
+                        // 3 - El top del elmento original, es decir a imagen a ampliar, menos el alto del contenedor botones renderizado es la altural del MARGIN de la imagen relativa dentro de cajon dos del grid
+
+                        requestAnimationFrame(() => {
+                            //contenedorImagenAmpliada.style.backdropFilter = "blur(50px)";
+                            //contenedorImagenAmpliada.style["-webkit-backdrop-filter"] = "blur(50px)";
+                            contenedorImagenAmpliada.style.opacity = "1";
+
+                        });
+
+                        let start = null;
+                        const step = (timestamp) => {
+                            if (!start) { start = timestamp } else {
+                                //contenedorImagenVolatil.style.top = "98px"
+                                //contenedorImagenVolatil.style.bottom = "10px"
+                                //contenedorImagenVolatil.style.left = "10px"
+                                //contenedorImagenVolatil.style.right = "10px"
+                                // Esto no se anima
+
+                                 contenedorImagenVolatil.style.top = "0px"
+                                 contenedorImagenVolatil.style.left = "0"
+                                 contenedorImagenVolatil.style.height = "100vh"
+                                 contenedorImagenVolatil.style.width = "100vw"
+                            };
+                            let progress = timestamp - start;
+                            if (progress < 1) {
+                                window.requestAnimationFrame(step);
+                            }
+                        }
+
+                        requestAnimationFrame(step);
+
+                    }
+
+
+
+                    imagenesAmpliables.forEach((imagenAmpliable) => {
+                        imagenAmpliable.addEventListener("click", ampliarImagen)
+                    })
+
+
+                    imagenesAmpliables.forEach((imagenAmpliable) => {
+                        imagenAmpliable.addEventListener("click", ampliarImagen)
+                    })
+
+
+
+
+                    // hacer lo del ampliar fotos
+
+
+
+
                 }
             },
             rol: {
@@ -6283,7 +6429,7 @@ const casaVitini = {
             }
             // document.body.style.backgroundImage= "url(/componentes/imagenes/transparente.png)";
             //                    document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
-            
+
 
             document.querySelector("#uiLogo").removeAttribute("style")
             document.querySelector("body").removeAttribute("style")
