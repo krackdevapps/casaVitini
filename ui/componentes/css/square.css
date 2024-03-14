@@ -69,7 +69,7 @@
   height: 1px;
   width: 100%;
   margin: 30px 0;
-  font-size: 12px;
+  
   line-height: 20px;
   text-transform: uppercase;
   position: relative;
@@ -114,7 +114,7 @@
 
 #payment-flow-message.error {
   color: #bf0020;
-  font-size: 12px;
+  
   line-height: 14px;
 }
 
@@ -130,6 +130,6 @@
   color: #fff;
   border-radius: 8px;
   border: none;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 13px;
+  font-family: vitiniFuente, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
 }

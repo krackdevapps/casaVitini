@@ -1,5 +1,5 @@
 .titulo {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 18px;
     /* font-weight: bold; */
     color: rgba(0, 0, 0, 0.585);
@@ -80,7 +80,7 @@
 
 .adminitracion_reservas_crearReserva_infoSinAlojamiento {
     padding: 10px;
-    font-size: 13px;
+    
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -92,8 +92,8 @@
 .plaza_enlacesDePago_campo {
     outline: none;
     border: none;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     padding: 10px;
     border-radius: 10px;
     backdrop-filter: blur(50px);
@@ -104,8 +104,8 @@
 .plaza_enlacesDePago_botonV1 {
     outline: none;
     border: none;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     padding: 10px;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.3);
@@ -127,7 +127,7 @@
 .crearOfertaDescuentoDedicadoUITitulo {
     font-weight: bold;
     padding: 6px;
-    font-size: 13px;
+    
 }
 
 .crearComportameintoEspacioBotones {
@@ -143,7 +143,7 @@
 .crearOferDescuentoDedicadoCantidad {
     margin: 0px;
     padding: 10px;
-    font-size: 13px;
+    
     background: rgba(255, 255, 255, 0.3);
     border-radius: 8px;
     border: none;
@@ -189,7 +189,7 @@
 .crearOfertaDescuentoDedicadoListaTipoDescuento {
     margin: 0px;
     padding: 10px;
-    font-size: 13px;
+    
     appearance: none;
     border: none;
     background: rgba(255, 255, 255, 0.3);
@@ -203,7 +203,7 @@
     margin: 0px;
     padding: 0px;
     color: rgba(0, 0, 0, 0.8);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     width: 100%;
     flex-wrap: nowrap;
     justify-content: center;
@@ -230,8 +230,8 @@
 }
 
 .zonaReserva {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     font-weight: bold;
     height: 40px;
     line-height: 40px;
@@ -293,7 +293,7 @@
 }
 
 .textoReserva {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 14px;
     margin: 2px;
     pointer-events: none;
@@ -522,7 +522,7 @@
 
 .dia {
     text-align: right;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 15px;
     padding: 10px;
     font-weight: bold;
@@ -537,7 +537,7 @@
 }
 
 .administracion_calendario_ccomponenteCalendario_dia {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 15px;
     /* padding: 10px; */
     font-weight: bold;
@@ -560,8 +560,8 @@
 }
 
 .reservaInformacion {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     font-weight: bold;
     background-color: rgba(249, 255, 255, 0.252);
     height: 40px;
@@ -584,8 +584,8 @@
 }
 
 .filaInformacion {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     font-weight: bold;
     background-color: rgba(249, 255, 255, 0.252);
     line-height: 40px;
@@ -612,8 +612,8 @@
 }
 
 .marcoAlojamiento {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     font-weight: bold;
     background-color: rgba(249, 255, 255, 0.252);
     line-height: 40px;
@@ -682,8 +682,8 @@
 }
 
 .zonaReserva {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     font-weight: bold;
     height: 40px;
     line-height: 40px;
@@ -724,10 +724,10 @@
 
 .nombreDia {
     font-weight: bold;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     padding: 8px;
     text-align: center;
-    font-size: 13px;
+    
     pointer-events: none;
     align-items: center;
     justify-content: center;
@@ -859,14 +859,14 @@
 .adminitracion_calendario_selectorCapa {
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
-    font-size: 13px;
+    
     padding: 10px;
     border-radius: 10px;
     appearance: none;
     outline: none;
     border: none;
     background: rgb(37 37 37 / 0.2);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     text-align: center;
     width: fit-content;
 }
@@ -905,8 +905,8 @@
     background-color: rgb(37 37 37 / 0.2);
     /* color: white; */
     border-radius: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     transition: all 500ms;
     opacity: 0;
     pointer-events: none;
@@ -925,8 +925,8 @@
     background-color: rgb(37 37 37 / 0.2);
     /* color: white; */
     border-radius: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     transition: all 500ms;
     opacity: 0;
     pointer-events: none;
@@ -949,15 +949,15 @@
     padding-left: 8px;
     padding-right: 8px;
     border-radius: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     width: 100%;
 }
 
 .texto {
     padding: 0px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     margin: 0px;
 }
 
@@ -980,7 +980,7 @@
     background-color: rgba(249, 255, 255, 0.252);
     padding: 10px;
     font-size: 14px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     border-radius: 20px;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
@@ -1024,9 +1024,9 @@
     flex-wrap: nowrap;
     justify-content: center;
     align-items: stretch;
-    font-size: 12px;
+    
     background-color: #ffffff61;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     border-radius: 6px;
     overflow: hidden;
     align-content: stretch;
@@ -1040,9 +1040,9 @@
     flex-wrap: nowrap;
     justify-content: center;
     align-items: stretch;
-    font-size: 12px;
+    
     background-color: #ffffff61;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     border-radius: 6px;
     overflow: hidden;
     transition: all 250ms linear;
@@ -1095,9 +1095,9 @@
 }
 
 .textoDiaNuevo {
-    font-size: 12px;
+    
     padding: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     padding-right: 10px;
     pointer-events: none;
     user-select: none;
@@ -1118,8 +1118,8 @@
     flex-wrap: nowrap;
     justify-content: center;
     align-content: center;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
 
 }
 
@@ -1134,16 +1134,16 @@
     flex-wrap: nowrap;
     justify-content: center;
     align-content: center;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     padding: 10px;
 
 }
 
 .botonMostrarDisponibilidad {
     background-color: rgb(225 225 225 / 70%);
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     padding: 10px;
     user-select: none;
     cursor: default;
@@ -1164,15 +1164,15 @@
     margin-right: 10px;
     padding: 10px;
     border-radius: 10px;
-    font-family: verdana;
-    font-size: 13px;
+    
+    
     margin-left: 10px;
 }
 
 .reservaDetalles_transacciones_enlacesDePago_infoSinEnlaces {
     display: flex;
     padding: 10px;
-    font-size: 13px;
+    
     justify-content: center;
 }
 
@@ -1353,20 +1353,20 @@
     align-content: center;
     align-items: flex-start;
     justify-content: flex-start;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
 }
 
 .elementoTitulo {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-weight: bold;
-    font-size: 13px;
+    
 
 }
 
 .elementoTituloPrincipal {
 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-weight: bold;
     font-size: 16px;
 
@@ -1420,7 +1420,7 @@
     align-content: flex-start;
     justify-content: flex-end;
     align-items: stretch;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     padding: 4px;
     gap: 4px;
     border-radius: 16px;
@@ -1432,11 +1432,11 @@
 
 .habitacionCamas {
 
-    font-size: 12px;
+    
     /* border: 1px solid #0000003d; */
     border-radius: 12px;
     padding: 8px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     cursor: default;
     transition: all 500ms linear;
     background: #8080804f;
@@ -1506,9 +1506,9 @@
     user-select: none;
     -webkit-user-select: none;
     font-weight: bold;
-    font-size: 12px;
+    
     padding: 6px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
 }
 
 .tituloInquilino {
@@ -1519,14 +1519,14 @@
     justify-content: center;
     align-items: stretch;
 
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     margin: 0px;
     padding: 10px;
 }
 
 .campoNombreInquilino {
-    font-size: 12px;
+    
     outline: none;
     border: none;
     padding: 10px;
@@ -1534,7 +1534,7 @@
     margin-right: 0px;
     margin-bottom: 0px;
     background: #ffffffb3;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     text-transform: uppercase;
 }
 
@@ -1574,8 +1574,8 @@
 
 .plaza_alojamiento_infoSinAlojamientoDisponible {
     /* background-color: #ffffff59; */
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     margin: 0px;
     border-radius: 10px;
     padding: 10px;
@@ -1586,8 +1586,8 @@
 
 .tituloBloqueAlojamiento {
     /* background-color: #ffffff59; */
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     margin: 0px;
     border-radius: 10px;
     padding: 10px;
@@ -1599,7 +1599,7 @@
 .alojamientoInfoEsperaUI {
     margin: 0px;
     padding: 10px;
-    font-size: 13px;
+    
     font-weight: bold;
     display: flex;
     justify-content: center;
@@ -1620,8 +1620,8 @@
     align-content: center;
     align-items: stretch;
     justify-content: flex-start;
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     margin: 0px;
     border-radius: 6px;
     padding: 6px;
@@ -1667,8 +1667,8 @@
 .botonResumenReserva {
     background: rgba(255, 255, 255, 0.3);
     padding: 12px;
-    font-size: 12px;
-    font-family: verdana;
+    
+    
     border-radius: 10px;
     padding-left: 20px;
     padding-right: 20px;
@@ -1687,7 +1687,7 @@
     margin: 4px;
     font-size: 16px;
     font-weight: bold;
-    font-family: verdana;
+    
     text-align: center;
     /* padding: 8px; */
     border-radius: 8px;
@@ -1698,7 +1698,7 @@
     background-color: rgba(255, 255, 255, 0.3);
 
     border-radius: 8px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
 
 
 }
@@ -1706,7 +1706,7 @@
 .tituloBloqueSeccion {
     font-size: 14px;
     font-weight: bold;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     margin: 0px;
     text-align: center;
     padding: 10px;
@@ -1725,9 +1725,9 @@
     justify-content: center;
     border-radius: 12px;
     /* margin: 8px; */
-    font-size: 13px;
+    
     font-weight: bold;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     padding: 10px;
     gap: 4px;
 }
@@ -1761,7 +1761,7 @@
 
 .tituloBloqueHabitacion {
     margin: 2px;
-    font-size: 12px;
+    
     color: grey;
     font-weight: bold;
     padding: 10px;
@@ -1773,7 +1773,7 @@
 }
 
 .resumenReservaNombreDNI {
-    font-size: 12px;
+    
     margin: 2px;
 }
 
@@ -1812,8 +1812,8 @@
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background-color: rgba(0, 0, 0, 0.2);
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     margin: 0px;
     padding: 8px;
     color: white;
@@ -1871,8 +1871,8 @@
     border: none;
     color: black;
     border-radius: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     margin: 0px;
     transition: background 500ms linear;
 }
@@ -1888,8 +1888,8 @@
     color: white;
     padding: 10px;
     border-radius: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     display: flex;
     visibility: hidden;
     pointer-events: none;
@@ -1931,8 +1931,8 @@
 
 .tituloUsuario,
 .tituloRol {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     margin-right: 10px;
     margin-left: 10px;
     margin-top: 4px;
@@ -1987,8 +1987,8 @@
 .botonUsuario,
 .informacionCerrarSession {
     border-radius: 8px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     padding: 10px;
     margin-left: 0px;
     margin-right: 0px;
@@ -2025,8 +2025,8 @@
 
 .tituloAdminitracionContexto {
     margin: 1px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     font-weight: bold;
     padding-left: 12px;
     padding-top: 4px;
@@ -2049,8 +2049,8 @@
 
     background-color: rgba(255, 255, 255, 0.4);
     padding: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     border-radius: 14px;
     text-decoration: none;
     color: black;
@@ -2121,10 +2121,10 @@
     text-decoration: none;
     color: black;
     background-color: rgb(225 225 225 / 70%);
-    font-size: 12px;
+    
     cursor: default;
     padding: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     /* margin: 4px; */
     margin-right: 0px;
     transition: all 250ms linear;
@@ -2137,11 +2137,11 @@
     text-decoration: none;
     color: black;
     background-color: rgba(255, 255, 255, 0.3);
-    font-size: 12px;
+    
     cursor: default;
     border-radius: 10px;
     padding-left: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     margin: 0px;
     transition: all 250ms linear;
     padding-right: 13px;
@@ -2159,11 +2159,11 @@
     text-decoration: none;
     color: black;
     background-color: rgba(255, 255, 255, 0.3);
-    font-size: 12px;
+    
     cursor: default;
     border-radius: 10px;
     padding-left: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     margin: 0px;
     transition: all 250ms linear;
     padding-right: 13px;
@@ -2226,8 +2226,8 @@
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     padding-left: 12px;
     padding-right: 12px;
     transition: all 250ms linear;
@@ -2251,9 +2251,9 @@
     flex-wrap: nowrap;
     justify-content: center;
     align-items: stretch;
-    font-size: 12px;
+    
     background: #838383;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     border-radius: 6px;
     overflow: hidden;
     transition: all 250ms linear;
@@ -2302,8 +2302,8 @@
     grid-template-columns: 100px auto auto auto auto;
     gap: 0px;
     /* min-width: 800px; */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     text-align: center;
     overflow-x: auto;
     border-radius: 10px;
@@ -2324,8 +2324,8 @@
     display: grid;
     gap: 0px;
     /* min-width: 800px;*/
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     text-align: center;
     overflow: hidden;
     border-radius: 10px;
@@ -2385,8 +2385,8 @@
 .celdaCompartidoGrid {
     padding: 10px;
     /* min-width: 800px;*/
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     text-align: center;
     overflow: hidden;
     cursor: default;
@@ -2396,8 +2396,8 @@
 .celdaTituloCompartidoGrid {
     padding: 10px;
     /* min-width: 800px;*/
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     font-weight: bold;
     background: violet;
     text-align: center;
@@ -2526,8 +2526,8 @@
     margin: 0px;
     padding: 4px;
     padding-right: 4px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     justify-content: center;
     flex-wrap: nowrap;
     flex-direction: row;
@@ -2633,7 +2633,7 @@
 
 
 .administracion_reserva_detallesReserva_menuResponsivo_texto {
-    font-size: 13px;
+    
 }
 
 .administracion_reserva_detallesReserva_marcoMenuResponsivo {
@@ -2648,7 +2648,7 @@
     align-content: center;
     flex-direction: column;
     flex-wrap: nowrap;
-    font-size: 13px;
+    
     align-items: center;
 }
 
@@ -2686,7 +2686,7 @@
     flex-direction: column;
     align-items: stretch;
     gap: 4px;
-    font-size: 13px;
+    
 }
 
 .resertaDetallesEspacioTotales {
@@ -2736,8 +2736,8 @@
 
 .administracionReservaDetallesBloqueContendioAlojamiento {
     display: flex;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     align-items: stretch;
     justify-content: center;
     flex-direction: column;
@@ -2748,8 +2748,8 @@
 
 .administracionReservaBloqueDual {
     display: flex;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -2759,8 +2759,8 @@
 
 .administracion_reservas_detallesReserva_contenedorReservaUID {
     display: flex;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -2805,8 +2805,8 @@
 
 .administracion_reservas_detallesReserva_panel_bloqueTitular {
     display: flex;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
@@ -2826,8 +2826,8 @@
 
 .miCasa_reservas_detallesReservas_bloqueDual {
     display: flex;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -2858,7 +2858,7 @@
     margin: 0px;
     padding-left: 10px;
     font-weight: bold;
-    font-size: 13px;
+    
     padding-top: 6px;
     padding-bottom: 6px;
     /* margin-bottom: 4px; */
@@ -3029,8 +3029,8 @@
 .opcionMicasa {
     border-radius: 12px;
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     margin: 0px;
     cursor: default;
     backdrop-filter: blur(50px);
@@ -3068,13 +3068,13 @@
     -webkit-appearance: none;
     appearance: none;
     background: rgb(255 255 255 / 0.3);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     /* margin: 4px; */
     border-radius: 10px;
     border: none;
     outline: none;
     padding: 10px;
-    font-size: 13px;
+    
     margin-right: 0px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -3088,8 +3088,8 @@
 
 .botonBuscarClientes {
     background: rgba(255, 255, 255, 0.5);
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     padding: 10px;
     user-select: none;
     cursor: default;
@@ -3110,8 +3110,8 @@
 }
 
 .administracionReservasTituloBloque {
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     text-align: center;
     padding: 8px;
     font-weight: bold;
@@ -3181,7 +3181,7 @@
     padding: 4px;
     border-radius: 12px;
     gap: 4px;
-    font-size: 13px;
+    
     margin-top: 4px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -3194,8 +3194,8 @@
     outline: none;
     border: none;
     padding: 8px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 5px;
     background: rgba(255, 255, 255, 0.3);
 
@@ -3205,8 +3205,8 @@
     outline: none;
     border: none;
     padding: 8px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 9px;
     background: rgba(255, 255, 255, 0.3);
 
@@ -3217,8 +3217,8 @@
     outline: none;
     border: none;
     padding: 8px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 5px;
     background: rgba(255, 255, 255, 0.561)
 }
@@ -3305,8 +3305,8 @@
 }
 
 .administracionReservaDetallesBuscadorRapidoBloqueCliente {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     padding: 6px;
     transition: all 250ms;
 }
@@ -3428,8 +3428,8 @@
     padding-top: 0px;
     overflow: hidden;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
 }
 
 
@@ -3492,9 +3492,9 @@
 
 .textoDiaNuevoAdministracion {
     font-weight: bold;
-    font-size: 12px;
+    
     /* padding-left: 10px; */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     /* padding-right: 10px; */
     pointer-events: none;
     user-select: none;
@@ -3522,8 +3522,8 @@
     justify-content: center;
     flex-direction: column;
     gap: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     user-select: none;
     cursor: default;
 
@@ -3545,8 +3545,8 @@
     justify-content: center;
     flex-direction: column;
     gap: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     cursor: default;
     top: 0vh;
     z-index: 99;
@@ -3566,8 +3566,8 @@
     justify-content: center;
     flex-direction: column;
     gap: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     user-select: none;
     cursor: default;
     z-index: 100;
@@ -3581,8 +3581,8 @@
     justify-content: center;
     flex-direction: column;
     gap: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     user-select: none;
     cursor: default;
     z-index: 110;
@@ -3610,7 +3610,7 @@
 .advertenciaInfoFlujoPago {
     padding: 10px;
     border-radius: 10px;
-    font-size: 13px;
+    
     text-align: center;
 }
 
@@ -3625,7 +3625,7 @@
     user-select: none;
     -webkit-user-select: none;
     transition: all 250ms;
-    font-size: 13px;
+    
 }
 
 .blur {
@@ -3718,8 +3718,8 @@
 
 .administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_campo {
 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     color: black;
     border-radius: 8px;
     padding: 10px;
@@ -3752,7 +3752,7 @@
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     grid-auto-rows: minmax(auto, auto);
-    font-size: 13px;
+    
     padding: 0px;
     justify-items: stretch;
     justify-content: center;
@@ -3805,8 +3805,8 @@
     max-width: 1920px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     display: flex;
     justify-items: stretch;
     justify-content: center;
@@ -3831,8 +3831,8 @@
     border-radius: 12px;
     margin: 0px;
     max-width: 1920px;
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     display: grid;
     grid-auto-rows: minmax(auto, auto);
     justify-items: stretch;
@@ -3852,8 +3852,8 @@
     max-width: 1920px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     display: none;
     grid-auto-rows: minmax(auto, auto);
     justify-items: stretch;
@@ -4028,7 +4028,7 @@
     align-content: center;
     justify-content: center;
     align-items: stretch;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
 
 
 }
@@ -4069,8 +4069,8 @@
 }
 
 .infoResumenReserva {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     margin: 8px;
     font-weight: normal;
 
@@ -4079,8 +4079,8 @@
 .reserva_resumen_desglose_pago_bloque {
     padding: 4px;
     border-radius: 12px;
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     gap: 4px;
     display: flex;
     flex-direction: column;
@@ -4105,8 +4105,8 @@
 
 .reserva_resumen_desglose_pago_titulo {
     padding: 4px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     font-weight: bold;
 }
 
@@ -4114,23 +4114,23 @@
     background-color: #ffffff73;
     padding: 10px;
     border-radius: 10px;
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
 
 }
 
 .reservas_detalles_infoDesgloseNo {
 
 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     margin: 4px;
     text-align: center;
 }
 
 .detallesReservaTituloCancelarReserva {
 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 20px;
     font-weight: bold;
     margin: 4px;
@@ -4149,8 +4149,8 @@
 }
 
 .detallesReservaCancelarReservaTituloBloquoApartamentos {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     margin: 0px;
     padding: 6px;
     display: flex;
@@ -4172,8 +4172,8 @@
 
 .detallesReservaCancelarEntradaTextoCancelar {
     padding: 8px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 8px;
     border: none;
     width: 200px;
@@ -4194,8 +4194,8 @@
 .detallesReservaCancelarBoton {
     background: #00000036;
     padding: 8px;
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 8px;
     border-radius: 8px;
     text-align: center;
@@ -4206,8 +4206,8 @@
     background: #00000036;
     padding: 8px;
     pointer-events: none;
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 8px;
     border-radius: 8px;
     text-align: center;
@@ -4223,8 +4223,8 @@
 .administracion_reservas_detallesReserva_cancelarReserva_botonV1 {
     background: #00000036;
     padding: 8px;
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 8px;
     border-radius: 8px;
     text-align: center;
@@ -4274,8 +4274,8 @@
 
 .infoCrearReservaAdministratia {
     margin: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
 }
 
 .botonBuscarAlojamiento {
@@ -4340,9 +4340,9 @@
     margin: 0px;
     border-radius: 8px;
     padding: 10px;
-    font-size: 13px;
+    
     font-weight: bold;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
 }
 
 .bloqueHabiaciones {
@@ -4362,8 +4362,8 @@
     background: #ffffff91;
     padding: 4px;
     border-radius: 4px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
 
 }
 
@@ -4374,10 +4374,10 @@
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 8px;
     padding: 10px;
-    font-size: 13px;
+    
     font-weight: bold;
     transition: all 250ms linear;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
 }
 
 .botonSeleccionarApartamento:hover {
@@ -4392,8 +4392,8 @@
 .botonConfirmarCrearReservaNueva {
     background: rgba(255, 255, 255, 0.8);
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 10px;
     cursor: default
 }
@@ -4416,8 +4416,8 @@
     align-items: stretch;
     justify-content: flex-start;
     gap: 6px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     text-decoration: none;
@@ -4506,8 +4506,8 @@
 
 .situacionDetallesGenerales {
     background: rgb(255 255 255 / 0.4);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     gap: 6px;
     padding: 10px;
     border-radius: 16px;
@@ -4577,8 +4577,8 @@
     align-content: center;
     justify-content: flex-start;
     align-items: stretch;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     gap: 6px;
     border-radius: 16px;
     backdrop-filter: blur(50px);
@@ -4699,7 +4699,7 @@
 .nuevoClienteTituloDato {
     margin: 0px;
     padding: 4px;
-    font-size: 12px;
+    
     font-weight: bold;
 }
 
@@ -4730,7 +4730,7 @@
     background: #ffffff6e;
     padding: 10px;
     border-radius: 10px;
-    font-size: 12px;
+    
     font-weight: bold;
     text-align: center;
 }
@@ -4776,7 +4776,7 @@
 }
 
 .buscadorClientesEstadoBusqueda {
-    font-size: 13px;
+    
     padding: 10px;
     text-align: center;
     border-radius: 10px;
@@ -4794,7 +4794,7 @@
     text-align: center;
     padding: 10px;
     border-radius: 10px;
-    font-size: 13px;
+    
 }
 
 .reservasBloqueContenedor {
@@ -4816,10 +4816,10 @@
     padding: 12px;
     border-radius: 15px;
     border: none;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     background: rgb(255 255 255 / 0.3);
     outline: none;
-    font-size: 13px;
+    
     margin-right: 0px;
 
 }
@@ -4883,14 +4883,14 @@
 
 .detallesClienteTituloDato {
     margin: 0px;
-    font-size: 13px;
+    
     padding: 6px;
     font-weight: bold;
 }
 
 .detallesClienteDatoCampo {
     margin: 0px;
-    font-size: 13px;
+    
     padding: 6px;
 
 }
@@ -4912,7 +4912,7 @@
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
-    font-size: 13px;
+    
     padding: 10px;
     user-select: none;
     -webkit-user-select: none;
@@ -4926,8 +4926,8 @@
     border: none;
     outline: none;
     resize: none;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     background: rgba(255, 255, 255, 0.3);
 
 }
@@ -4971,7 +4971,7 @@
 
 .precioEImpuestosOpcionApartamentoTitulo {
     margin: 0px;
-    font-size: 13px;
+    
     padding-left: 4px;
     padding-right: 4px;
     color: rgba(0, 0, 0, 0.5);
@@ -4979,7 +4979,7 @@
 
 .precioEImpuestosOpcionApartamentoDato {
     margin: 0px;
-    font-size: 13px;
+    
     padding-left: 4px;
     padding-right: 4px;
 
@@ -4989,7 +4989,7 @@
 
     margin: 0px;
     /* padding: 6px; */
-    font-size: 13px;
+    
     font-weight: bold;
     display: flex;
     align-content: flex-end;
@@ -5028,7 +5028,7 @@
     margin: 0px;
     padding: 6px;
     border-radius: 6px;
-    font-size: 13px;
+    
 }
 
 .preciosEImpuestosbotonOpcion:hover {
@@ -5073,7 +5073,7 @@
     align-content: stretch;
     flex-wrap: nowrap;
     border-radius: 16px;
-    font-size: 13px;
+    
     padding: 6px;
     gap: 6px;
     background: rgba(255, 255, 255, 0.3);
@@ -5110,7 +5110,7 @@
 }
 
 .preciosEImpuestosDetalleApartamentoDetallesTituloBloque {
-    font-size: 13px;
+    
     font-weight: bold;
     margin: 0px;
 }
@@ -5230,13 +5230,13 @@
     margin: 0px;
     padding: 6px;
     font-weight: bold;
-    font-size: 13px;
+    
 }
 
 .detalleImpuestoDatoLectura {
     margin: 0px;
     padding: 6px;
-    font-size: 13px;
+    
 }
 
 .detalleImpuestoBloqueBotones {
@@ -5256,7 +5256,7 @@
     border-radius: 12px;
     margin: 0px;
     background: rgba(255, 255, 255, 0.3);
-    font-size: 13px;
+    
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
 }
@@ -5265,8 +5265,8 @@
     outline: none;
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border: none;
     border-radius: 8px;
 }
@@ -5276,8 +5276,8 @@
     outline: none;
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border: none;
     border-radius: 8px;
     appearance: none;
@@ -5288,8 +5288,8 @@
     outline: none;
     border: none;
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.3);
     appearance: none;
@@ -5403,7 +5403,7 @@
     background: rgba(255, 255, 255, 0.3);
     border-radius: 14px;
     padding: 10px;
-    font-size: 13px;
+    
     text-decoration: none;
     transition: all 500ms linear;
     color: black;
@@ -5506,7 +5506,7 @@
     display: flex;
     border-radius: 12px;
     padding: 6px;
-    font-size: 13px;
+    
     font-weight: bold;
     flex-direction: row;
     justify-content: center;
@@ -5570,7 +5570,7 @@
 
 .opcionTipoOFerta {
     background: #ffffff8f;
-    font-size: 13px;
+    
     padding: 10px;
     border-radius: 12px;
     margin: 0px;
@@ -5579,7 +5579,7 @@
 .crearOfertaTitulo {
     margin: 0px;
     padding: 6px;
-    font-size: 13px;
+    
     text-align: center;
     font-weight: bold;
 }
@@ -5587,7 +5587,7 @@
 .crearOfertaTituloTipoOferta {
     margin: 0px;
     font-weight: bold;
-    font-size: 13px;
+    
 }
 
 .crearOfertaDescripcionTipoOferta {
@@ -5597,14 +5597,14 @@
 .crearOfertaTituloOpcion {
     margin: 0px;
     padding: 6px;
-    font-size: 13px;
+    
 
 }
 
 .crearComportamientoConentenedor {
     margin: 0px;
     padding: 6px;
-    font-size: 13px;
+    
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -5626,18 +5626,18 @@
 .tituloFecha {
 
     margin: 0px;
-    font-size: 13px;
+    
     font-weight: bold;
 }
 
 .fechaInicio {
     margin: 0px;
-    font-size: 13px;
+    
 }
 
 .fechaFin {
     margin: 0px;
-    font-size: 13px;
+    
 }
 
 .crearOfeartaEspacioOpciones {
@@ -5716,7 +5716,7 @@
     margin: 0px;
     font-weight: bold;
     padding: 10px;
-    font-size: 13px;
+    
     background: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     backdrop-filter: blur(50px);
@@ -5906,7 +5906,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .ofertaUITituloOferta {
     padding: 8px;
     margin: 0px;
-    font-size: 13px;
+    
 }
 
 .ofertaUIFechaContenedor {
@@ -5928,14 +5928,14 @@ grid-template-columns: 0.5fr 1.5fr;
 .enlaceUIContenedor {
     padding: 6px;
     border-radius: 10px;
-    font-size: 13px;
+    
 }
 
 .enlaceUIContenedor_vinculo {
     background: rgba(0, 0, 0, 0.1);
     padding: 10px;
     border-radius: 10px;
-    font-size: 13px;
+    
     color: black;
     text-decoration: none;
     user-select: none;
@@ -5949,13 +5949,13 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .ofertaUITituloOpcion {
     margin: 0px;
-    font-size: 13px;
+    
     font-weight: bold;
 }
 
 .ofertaUIDatoOpcion {
     margin: 0px;
-    font-size: 13px;
+    
 }
 
 .ofertaUIContenedorFechas {
@@ -5963,20 +5963,20 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .ofertaUITituloFecha {
-    font-size: 13px;
+    
 
     font-weight: bold;
 }
 
 .ofertaUIDatoFecha {
-    font-size: 13px;
+    
 
 }
 
 .crearOFertaBotonAnadirApartamento {
     margin: 0px;
     padding: 10px;
-    font-size: 13px;
+    
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
 
@@ -6011,7 +6011,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 6px;
     gap: 6px;
     border-radius: 10px;
-    font-size: 13px;
+    
 }
 
 .crearOfertaApartamentoUI {
@@ -6035,14 +6035,14 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .crearOfertaApartamentoTItulo {
-    font-size: 13px;
+    
     font-weight: bold;
     margin: 0px;
     padding: 2px;
 }
 
 .crearOfertaApartamentoEstado {
-    font-size: 13px;
+    
     margin: 0px;
     padding: 2px;
 }
@@ -6060,7 +6060,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 6px;
     gap: 6px;
     border-radius: 10px;
-    font-size: 13px;
+    
     border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
@@ -6097,7 +6097,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .crearComportamientoBotonEliminarApartamento {
     padding: 10px;
     border-radius: 10px;
-    font-size: 13px;
+    
     background: rgba(255, 255, 255, 0.3);
 }
 
@@ -6117,8 +6117,8 @@ grid-template-columns: 0.5fr 1.5fr;
     outline: none;
     border: none;
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.3);
 }
@@ -6127,8 +6127,8 @@ grid-template-columns: 0.5fr 1.5fr;
     outline: none;
     border: none;
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.3);
     appearance: none;
@@ -6146,13 +6146,13 @@ grid-template-columns: 0.5fr 1.5fr;
     margin: 0;
     padding: 0px;
     font-weight: bold;
-    font-size: 13px;
+    
 }
 
 .ofertaUIDefinicionOferta {
     margin: 0;
     padding: 0px;
-    font-size: 13px;
+    
 
 }
 
@@ -6173,7 +6173,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .editarOfertaSoloLecutraInfo {
     margin: 0px;
-    font-size: 13px;
+    
 }
 
 .reserva_resumen_bloque_detalles_oferta {
@@ -6196,7 +6196,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
     margin: 0px;
     padding: 4px;
-    font-size: 13px;
+    
 
 }
 
@@ -6220,18 +6220,18 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .gestionBloqueoApartamento_tituloApartamentoUI {
-    font-size: 13px;
+    
 }
 
 .gestionBloqueoApartamento_numeroBloqueosUI {
-    font-size: 13px;
+    
 }
 
 .listaBloqueos_bloqueBloqueoUI {
     background: rgba(255, 255, 255, 0.3);
     padding: 6px;
     border-radius: 10px;
-    font-size: 13px;
+    
     gap: 6px;
     display: flex;
     flex-direction: column;
@@ -6276,8 +6276,8 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     padding: 10px;
     border-radius: 6px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     outline: none;
     border: none;
     appearance: none;
@@ -6293,7 +6293,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 4px;
     appearance: none;
     outline: none;
-    font-size: 13px;
+    
     border: none;
 }
 
@@ -6314,9 +6314,9 @@ grid-template-columns: 0.5fr 1.5fr;
     border: none;
     background: rgba(253, 253, 253, 0.3);
     padding: 10px;
-    font-size: 13px;
+    
     outline: none;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
 }
 
 
@@ -6325,7 +6325,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.3);
     padding: 6px;
     border-radius: 10px;
-    font-size: 13px;
+    
     gap: 6px;
     display: grid;
     flex-direction: column;
@@ -6339,7 +6339,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .detallesBloqueos_bloqueBloqueoUI {
-    font-size: 13px;
+    
     gap: 6px;
     display: flex;
     flex-direction: column;
@@ -6421,7 +6421,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
-    font-size: 13px;
+    
 }
 
 .portadaBloqueos_espacioBotones {
@@ -6436,7 +6436,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .portadaBloqueos_botonV1 {
     background: rgba(253, 253, 253, 0.3);
     text-decoration: none;
-    font-size: 13px;
+    
     color: black;
     padding: 10px;
     cursor: default;
@@ -6471,7 +6471,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .confAlojamiento_botonPortadaUI {
     background: rgba(253, 253, 253, 0.3);
     text-decoration: none;
-    font-size: 13px;
+    
     color: black;
     padding: 10px;
     padding-top: 40px;
@@ -6510,7 +6510,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .confAlojamiento_entidades_botonContenedor {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
-    font-size: 13px;
+    
     border-radius: 10px;
     text-decoration: none;
     color: black;
@@ -6525,7 +6525,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .confAlojamiento_entidades_contenedorEntidades {
     padding: 6px;
-    font-size: 13px;
+    
     gap: 6px;
     display: flex;
     flex-wrap: wrap;
@@ -6588,13 +6588,13 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .confAlojamiento_entidades_crearEntidad_info {
-    font-size: 13px;
+    
     padding: 6px;
 
 }
 
 .confAlojamiento_entidades_crearEntidad_campoEntrada {
-    font-size: 13px;
+    
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
@@ -6608,7 +6608,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: wrap;
     gap: 6px;
     justify-content: center;
-    font-size: 13px;
+    
     user-select: none;
     -webkit-user-select: none;
 }
@@ -6632,7 +6632,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 0px;
     justify-content: center;
     align-content: center;
-    font-size: 13px;
+    
     justify-items: stretch;
 }
 
@@ -6645,7 +6645,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 0px;
     justify-content: center;
     align-content: center;
-    font-size: 13px;
+    
     justify-items: stretch;
 }
 
@@ -6657,7 +6657,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 0px;
     justify-content: center;
     align-content: center;
-    font-size: 13px;
+    
     justify-items: stretch;
 }
 
@@ -6667,7 +6667,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 20px;
     cursor: default;
     background: rgba(255, 255, 255, 0.3);
-    font-size: 13px;
+    
     border-radius: 10px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -6799,7 +6799,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     padding: 10px;
     border-radius: 10px;
-    font-size: 13px;
+    
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
 }
@@ -6826,7 +6826,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 14px;
     display: flex;
     gap: 6px;
-    font-size: 13px;
+    
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
@@ -6844,7 +6844,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 14px;
     display: flex;
     gap: 6px;
-    font-size: 13px;
+    
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
@@ -6938,7 +6938,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
-    font-size: 13px;
+    
     text-decoration: none;
     cursor: default;
     color: black;
@@ -6971,13 +6971,13 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
-    font-size: 13px;
+    
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     gap: 6px;
     align-items: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
 }
 
 .arquitecturaConfCrearConfiguracion_titulo {
@@ -6990,7 +6990,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
     outline: none;
     border: 1px solid grey;
-    font-size: 13px;
+    
     border-radius: 10px;
 
 }
@@ -7149,7 +7149,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
-    font-size: 13px;
+    
     -webkit-backdrop-filter: blur(50px);
 }
 
@@ -7190,7 +7190,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .miCuenta_cambiarClave_testo {
-    font-size: 13px;
+    
     padding: 6px;
     margin: 0px;
     display: flex;
@@ -7215,7 +7215,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .miCuenta_cambiarClave_botonV1 {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
-    font-size: 13px;
+    
     border-radius: 10px;
     display: flex;
     user-select: none;
@@ -7239,8 +7239,8 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
 }
 
 
@@ -7263,7 +7263,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .detallesUsuario_rolUI {
-    font-size: 13px;
+    
 }
 
 @media (max-width: 720px) {
@@ -7273,7 +7273,7 @@ grid-template-columns: 0.5fr 1.5fr;
     }
 
     .detallesUsuario_usuarioUI {
-        font-size: 13px;
+        
         font-weight: bold;
     }
 
@@ -7289,8 +7289,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
     background-color: rgba(255, 255, 255, 0.4);
     padding: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     border-radius: 16px;
     text-decoration: none;
     color: black;
@@ -7342,7 +7342,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
     border-radius: 10px;
     font-size: 13;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     outline: none;
     border: none;
     background: rgba(255, 255, 255, 0.3);
@@ -7353,8 +7353,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .detallesUsuario_contenedorCampoEInfo {
 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     border-radius: 16px;
     text-decoration: none;
     color: black;
@@ -7386,7 +7386,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
     padding: 10px;
     display: flex;
-    font-size: 13px;
+    
     border-radius: 10px;
     user-select: none;
     -webkit-user-select: none;
@@ -7415,7 +7415,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     flex-direction: column;
     align-items: stretch;
-    font-size: 13px;
+    
     gap: 6px;
 }
 
@@ -7423,7 +7423,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
     border-radius: 10px;
     font-size: 13;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     outline: none;
     border: none;
     background: rgba(255, 255, 255, 0.3);
@@ -7444,7 +7444,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .usuarios_botonV1 {
     background: rgba(255, 255, 255, 0.3);
-    font-size: 13px;
+    
     border-radius: 10px;
     padding: 10px;
     text-decoration: none;
@@ -7460,7 +7460,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .usuariosCrearCuenta_contenedorGlobal {
     background: rgba(255, 255, 255, 0.3);
-    font-size: 13px;
+    
     border-radius: 16px;
     padding: 6px;
     gap: 6px;
@@ -7477,8 +7477,8 @@ grid-template-columns: 0.5fr 1.5fr;
 .usuariosCrearCuenta_campoUsuario {
     border-radius: 10px;
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border: none;
     outline: none;
     -webkit-appearance: none;
@@ -7488,7 +7488,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .usuariosCrearCuenta_contenedorBotones {
-    font-size: 13px;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7497,7 +7497,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .usuarioCrearCuenta_botonV1 {
     background: rgba(255, 255, 255, 0.3);
-    font-size: 13px;
+    
     border-radius: 10px;
     padding: 10px;
     backdrop-filter: blur(50px);
@@ -7515,7 +7515,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .miCasa_sessiones_contenedorSession {
     background: rgba(255, 255, 255, 0.3);
-    font-size: 13px;
+    
     border-radius: 16px;
     padding: 6px;
     gap: 6px;
@@ -7562,7 +7562,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .miCasa_sessiones_botonCerrarSession {
     background: rgba(255, 255, 255, 0.1);
-    font-size: 13px;
+    
     border-radius: 10px;
     padding: 10px;
     gap: 6px;
@@ -7582,7 +7582,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .miCasa_sessiones_botonV2 {
     background: rgba(255, 255, 255, 0.3);
-    font-size: 13px;
+    
     border-radius: 10px;
     padding: 10px;
     gap: 6px;
@@ -7626,8 +7626,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
     background-color: rgba(255, 255, 255, 0.4);
     padding: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     border-radius: 16px;
     text-decoration: none;
     color: black;
@@ -7644,13 +7644,13 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .text13 {
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
 }
 
 .miCasa_crearCuenta_contenedorCrearCuenta {
     /* background: rgba(255, 255, 255, 0.3);*/
-    font-size: 13px;
+    
     border-radius: 16px;
     padding: 6px;
     gap: 6px;
@@ -7665,8 +7665,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
     border-radius: 10px;
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border: none;
     outline: none;
     -webkit-appearance: none;
@@ -7678,7 +7678,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
     border-radius: 10px;
     font-size: 13;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     outline: none;
     border: none;
     background: rgba(255, 255, 255, 0.3);
@@ -7699,7 +7699,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .detallesEnlace_contenedor {
     background: rgba(255, 255, 255, 0.3);
-    font-size: 13px;
+    
     border-radius: 16px;
     padding: 6px;
     gap: 6px;
@@ -7714,8 +7714,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
     border-radius: 10px;
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border: none;
     outline: none;
     -webkit-appearance: none;
@@ -7729,8 +7729,8 @@ grid-template-columns: 0.5fr 1.5fr;
     height: 100px;
     border-radius: 10px;
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border: none;
     outline: none;
     -webkit-appearance: none;
@@ -7746,13 +7746,13 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .detallesEnlace_estadoPago {
-    font-size: 13px;
+    
     font-weight: bold;
     padding: 10px;
 }
 
 .detallesEnlace_codigo {
-    font-size: 13px;
+    
     font-weight: bold;
     padding: 10px;
     cursor: default;
@@ -7775,7 +7775,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .detallesEnlace_botonV1 {
     background: rgba(255, 255, 255, 0.3);
-    font-size: 13px;
+    
     border-radius: 10px;
     padding: 10px;
     gap: 6px;
@@ -7804,8 +7804,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
     border-radius: 10px;
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border: none;
     outline: none;
     -webkit-appearance: none;
@@ -7820,8 +7820,8 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 10px;
     min-height: 200px;
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border: none;
     outline: none;
     -webkit-appearance: none;
@@ -7830,7 +7830,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .detallesReserva_enlacePago_codigoUI {
-    font-size: 13px;
+    
     font-weight: bold;
     padding: 10px;
     cursor: default;
@@ -7971,7 +7971,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .pagoPorEnlace_titutlo {
     display: flex;
     font-weight: bold;
-    font-size: 13px;
+    
     justify-content: center;
 }
 
@@ -7981,7 +7981,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
-    font-size: 13px;
+    
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -7991,7 +7991,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .enlaceDePago_contenedor {
     padding: 6px;
     border-radius: 10px;
-    font-size: 13px;
+    
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -8005,7 +8005,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .pagoPorEnlace_info {
     margin: 0px;
-    font-size: 13px;
+    
     padding: 6px;
 
 }
@@ -8027,8 +8027,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
     background: #00000036;
     padding: 8px;
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 8px;
     border-radius: 8px;
     text-align: center;
@@ -8043,7 +8043,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .detallesReserva_reembolso_tituloGlobal {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 20px;
     font-weight: bold;
     margin: 4px;
@@ -8058,8 +8058,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .detallesReserva_reembolso_campoConfirmacion {
     padding: 9px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     /* font-weight: bold; */
     outline: none;
     border: none;
@@ -8147,7 +8147,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .detallesReserva_reembolso_campo {
-    font-size: 13px;
+    
     font-weight: bold;
     padding: 10px;
     border-radius: 10px;
@@ -8380,7 +8380,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     flex-direction: column;
     padding: 2px;
-    font-size: 13px;
+    
     gap: 6px;
 }
 
@@ -8388,12 +8388,12 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     flex-direction: column;
     padding: 6px;
-    font-size: 13px;
+    
 }
 
 
 .administracion_reservas_detallesReserva_enlacesDePago_contenedorEnlacesDePago {
-    font-size: 13px;
+    
     display: flex;
     gap: 4px;
     flex-direction: column;
@@ -8419,7 +8419,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: nowrap;
     padding: 6px;
     align-items: stretch;
-    font-size: 13px;
+    
     gap: 6px;
 }
 
@@ -8476,8 +8476,8 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .administracion_configuracion_valorConfiguracionInput {
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     padding: 10px;
     border-radius: 10px;
     appearance: none;
@@ -8509,7 +8509,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: nowrap;
     padding: 10px;
     align-items: stretch;
-    font-size: 13px;
+    
     gap: 6px;
 }
 
@@ -8583,7 +8583,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     gap: 6px;
     padding: 6px;
-    font-size: 13px;
+    
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
@@ -8662,7 +8662,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: flex-start;
     align-items: stretch;
     align-content: flex-start;
-    font-size: 13px;
+    
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
@@ -8684,7 +8684,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     align-items: stretch;
     gap: 4px;
-    font-size: 13px;
+    
 }
 
 
@@ -8719,7 +8719,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     align-items: stretch;
     gap: 4px;
-    font-size: 13px;
+    
 }
 
 
@@ -8744,7 +8744,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
     transition: all 500ms linear;
     display: flex;
-    font-size: 13px;
+    
 }
 
 .administracion_reservas_detallesReserfa_miscelanea_botonOpcion:hover {
@@ -8803,7 +8803,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
-    font-size: 13px;
+    
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -8860,8 +8860,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .administracion_reservas_reservaDetalles_transacciones_reembolsos_tituloDetallesPago {
 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     margin: 0px;
     padding: 6px;
 }
@@ -8923,13 +8923,13 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-appearance: none;
     appearance: none;
     background: rgb(255 255 255 / 0.3);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     /* margin: 4px; */
     border-radius: 10px;
     border: none;
     outline: none;
     padding: 10px;
-    font-size: 13px;
+    
     margin-right: 0px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -8990,8 +8990,8 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .plaza_alojamiento_resumenReserva_titular_campoTitular {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     padding: 10px;
     border-radius: 6px;
     outline: none;
@@ -9011,7 +9011,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .plaza_alojamiento_resumenReserva_titular_informacion {
     display: flex;
     justify-content: center;
-    font-size: 13px;
+    
     font-weight: bold;
     padding: 10px;
 }
@@ -9168,7 +9168,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    font-size: 13px;
+    
     gap: 10px;
     align-items: flex-start;
 }
@@ -9201,7 +9201,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .plaza_reservas_reservaConfirmada_infoGlobal {
-    font-size: 13px;
+    
     padding: 12px;
 
     background: rgba(255, 255, 255, 0.3);
@@ -9213,7 +9213,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .plaza_reservas_reservaConfirmada_infoIngreso {
     text-align: center;
-    font-size: 13px;
+    
     display: flex;
     padding: 12px;
 
@@ -9244,7 +9244,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: row;
     align-items: stretch;
     justify-content: space-around;
-    font-size: 13px;
+    
     gap: 4px;
 }
 
@@ -9258,7 +9258,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .plaza_reservas_reservaConfirmada_contenedorTitular {
-    font-size: 13px;
+    
     padding: 10px;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
@@ -9322,7 +9322,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     font-weight: bold;
     justify-content: center;
-    font-size: 13px;
+    
     padding: 10px;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
@@ -9339,7 +9339,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .administracion_reservas_detallesReservas_contenedorReservaUID {
-    font-size: 13px;
+    
     display: flex;
     justify-content: center;
     align-content: center;
@@ -9369,8 +9369,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .plaza_reservas_reservaConfirmada_contenedorTotales_tituloTotales {
     padding: 7px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     font-weight: bold;
 }
 
@@ -9409,7 +9409,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-user-select: none;
     text-decoration: none;
     color: black;
-    font-size: 13px;
+    
     cursor: default;
     transition: all 500ms;
 }
@@ -9423,7 +9423,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-user-select: none;
     text-decoration: none;
     color: black;
-    font-size: 13px;
+    
     cursor: default;
     transition: all 500ms;
     display: flex;
@@ -9441,7 +9441,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-user-select: none;
     text-decoration: none;
     color: black;
-    font-size: 13px;
+    
     cursor: default;
     transition: all 500ms;
     display: flex;
@@ -9475,8 +9475,8 @@ grid-template-columns: 0.5fr 1.5fr;
 .administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_campo {
     outline: none;
     border: none;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     padding: 10px;
     border-radius: 10px;
     backdrop-filter: blur(50px);
@@ -9489,8 +9489,8 @@ grid-template-columns: 0.5fr 1.5fr;
 .administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_botonV1 {
     background: #00000036;
     padding: 8px;
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 8px;
     border-radius: 8px;
     text-align: center;
@@ -9513,7 +9513,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 10px;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
-    font-size: 13px;
+    
     padding: 12px;
     user-select: none;
     cursor: default;
@@ -9524,7 +9524,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .administracion_calendario_componente_calendario_contenedoCarga {
     /*  -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);*/
-    font-size: 13px;
+    
     padding: 12px;
     user-select: none;
     cursor: default;
@@ -9538,7 +9538,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 10px;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
-    font-size: 13px;
+    
     padding: 12px;
     user-select: none;
     cursor: default;
@@ -9547,7 +9547,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .componente_calendario_contenedoCarga_Mes {
-    font-size: 13px;
+    
     padding: 12px;
     user-select: none;
     cursor: default;
@@ -9623,7 +9623,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    font-size: 13px;
+    
     gap: 4px;
     align-items: stretch;
 }
@@ -9649,8 +9649,8 @@ grid-template-columns: 0.5fr 1.5fr;
 .componentes_ui_paginador_listaResponsiva {
     padding: 6px;
     border-radius: 8px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     outline: none;
     user-select: none;
     -webkit-user-select: none;
@@ -9729,7 +9729,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .adminitracion_situacion_portada_contenedorFecha {
     display: flex;
     justify-content: center;
-    font-size: 13px;
+    
     font-weight: bold;
     padding: 10px;
 }
@@ -9759,13 +9759,13 @@ grid-template-columns: 0.5fr 1.5fr;
 .plaza_contacto_tituloInfo {
     margin: 0px;
     padding: 6px;
-    font-size: 13px;
+    
     color: white;
     font-weight: bold;
 }
 
 .plaza_contacto_tituloContenedor {
-    font-size: 13px;
+    
     color: white;
     margin: 0px;
 }
@@ -9787,7 +9787,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(0, 0, 0, 0.1);
     border-radius: 20px;
     color: rgba(0, 0, 0, 0.6);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 18px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -9840,8 +9840,8 @@ grid-template-columns: 0.5fr 1.5fr;
     text-decoration: none;
     outline: none;
     border: none;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     padding: 10px;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.3);
@@ -9865,8 +9865,8 @@ grid-template-columns: 0.5fr 1.5fr;
 .administracion_arquitectura_entidades_detallesEntidad_botonAnadir {
     outline: none;
     border: none;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     padding: 10px;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.3);
@@ -9901,8 +9901,8 @@ grid-template-columns: 0.5fr 1.5fr;
 .administracion_arquitectura_entidades_detallesEntidad_botonBorrarFila {
     outline: none;
     border: none;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     padding: 10px;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.3);
@@ -10032,7 +10032,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
     text-decoration: none;
     color: black;
-    font-size: 12px;
+    
     font-weight: bold;
     cursor: default;
     user-select: none;
@@ -10050,7 +10050,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
     text-decoration: none;
     color: black;
-    font-size: 12px;
+    
     font-weight: bold;
     cursor: default;
     user-select: none;
@@ -10072,7 +10072,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
     text-decoration: none;
     color: black;
-    font-size: 12px;
+    
     font-weight: bold;
     cursor: default;
     user-select: none;
@@ -10259,7 +10259,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
     text-decoration: none;
     color: black;
-    font-size: 12px;
+    
     font-weight: bold;
     cursor: default;
     user-select: none;
@@ -10277,7 +10277,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
     text-decoration: none;
     color: black;
-    font-size: 12px;
+    
     font-weight: bold;
     cursor: default;
     user-select: none;
@@ -10298,7 +10298,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
     text-decoration: none;
     color: black;
-    font-size: 12px;
+    
     font-weight: bold;
     cursor: default;
     user-select: none;
@@ -10403,7 +10403,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .plaza_resumenReserva_textoInfo {
     font-weight: normal;
-    font-size: 13px;
+    
     text-align: justify;
 }
 
@@ -10440,7 +10440,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
 .tituloConozcanos {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 38px;
     /* font-weight: bold; */
     color: rgba(0, 0, 0, 0.585);
@@ -10641,7 +10641,7 @@ grid-template-columns: 0.5fr 1.5fr;
     margin: 0px;
     font-weight: bold;
     padding: 0px;
-    font-size: 13px;
+    
     word-break: break-all;
 }
 
@@ -10684,8 +10684,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .administracion_configuracion_calendariosSincronizados .formularioUI .nombreCalendario {
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 12px;
     outline: none;
     border: none;
@@ -10693,8 +10693,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .administracion_configuracion_calendariosSincronizados .formularioUI .listaApartamentos {
     padding: 10px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 12px;
     outline: none;
     border: none;
@@ -10704,8 +10704,8 @@ grid-template-columns: 0.5fr 1.5fr;
 .administracion_configuracion_calendariosSincronizados .formularioUI .definicion {
     padding: 10px;
     margin: 0px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 12px;
     outline: none;
     border: none;
@@ -10715,8 +10715,8 @@ grid-template-columns: 0.5fr 1.5fr;
 .administracion_configuracion_calendariosSincronizados .formularioUI .plataforma {
     padding: 10px;
     margin: 0px;
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 12px;
     outline: none;
     border: none;
@@ -10752,7 +10752,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .administracion_configuracion_calendariosSincronizados .botonCrearCalendario {
     padding: 10px;
     font-size: 13;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     outline: none;
     border: none;
     border-radius: 14px;
@@ -10816,7 +10816,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .advertenciaInmersiva .contenedorEliminar .tituloInmersivo {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 18px;
     color: rgba(0, 0, 0, 0.585);
     top: 30px;
@@ -10827,8 +10827,8 @@ grid-template-columns: 0.5fr 1.5fr;
 .advertenciaInmersiva .contenedorEliminar .boton {
     background: #00000036;
     padding: 8px;
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     border-radius: 8px;
     border-radius: 8px;
     text-align: center;
@@ -11009,7 +11009,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .contenedorMenuCapas .titulo {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 18px;
     /* font-weight: bold; */
     color: rgba(0, 0, 0, 0.585);
@@ -11101,8 +11101,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .bloqueResumenReservaGlobal .formaDePago {
     padding: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     outline: none;
     border: none;
     border-radius: 12px;
@@ -11112,8 +11112,8 @@ grid-template-columns: 0.5fr 1.5fr;
 .bloqueResumenReservaGlobal .botonConfirmar {
     background: green;
     padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     outline: none;
     border: none;
     border-radius: 12px;
@@ -11219,8 +11219,8 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [contenedor="reservaConfiramda"] .contenedorTotal .tituloContenedor {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     color: black;
     font-weight: bold;
 }
@@ -11485,14 +11485,14 @@ grid-template-columns: 0.5fr 1.5fr;
 .plaza_servicios_superBloque .contenedorApartamento .titulo {
     font-size: 16px;
     font-weight: bold;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     margin: 0px;
     text-align: center;
 }
 
 .plaza_servicios_superBloque .contenedorApartamento .descripcion {
-    font-size: 13px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    
     margin: 10px;
     text-align: center;
 }
@@ -11632,8 +11632,8 @@ grid-template-columns: 0.5fr 1.5fr;
     transition: opacity 250ms linear;
     opacity: 0;
     gap: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
+    
+    
     cursor: default;
     top: 0vh;
     left: 0vw;
@@ -11705,4 +11705,11 @@ grid-template-columns: 0.5fr 1.5fr;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
+}
+
+@media (max-width: 850px) {
+    .plaza_servicios_superBloque .contenedorImagenAmpliada .contenedorBotones .boton {
+                width: auto;
+
+    }
 }

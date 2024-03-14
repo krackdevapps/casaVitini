@@ -1,3 +1,20 @@
+@font-face {
+    font-family: vitiniFuente;
+    src: url(/componentes/fuentes/segoe/Segoe_UI.ttf);
+}
+
+@font-face {
+    font-family: vitiniFuenteNegrita;
+    src: url(/componentes/fuentes/segoe/Segoe_UI_Bold.ttf);
+}
+
+* {
+    font-family: vitiniFuente, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /*font-family: Verdana;*/
+    font-size: 13px;
+
+}
+
 .uiPanelGlobal {
     background-color: rgba(161, 161, 161, 0);
     padding: 0px;
@@ -13,14 +30,7 @@
     -webkit-user-select: none;
     /* position: fixed; */
     width: 100vw;
-
 }
-
-@font-face {
-    font-family: 'biome';
-    src: url('/Componentes/fuentes/biome.ttf') format('truetype');
-}
-
 
 
 .fondo {
@@ -37,7 +47,7 @@
 #uiLogo {
     /* background: rgba(255, 255, 255, 0.2);*/
     border-radius: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 16px;
 
     font-weight: bold;
@@ -93,8 +103,8 @@
 
 .uiCategoria {
     border: 0px none;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 13px;
+    
+    
     padding-top: 8px;
     padding-bottom: 8px;
     padding-left: 20px;
@@ -118,7 +128,7 @@
 .uiCategoriaMenu {
     border: 0px none;
     text-align: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     font-size: 14px;
     padding-top: 6px;
     padding-bottom: 6px;
@@ -151,7 +161,7 @@ body {
     background-attachment: fixed;
     /* background-attachment: scroll; */
     background-position: center center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -170,7 +180,6 @@ main {
     align-items: stretch;
     max-width: 2160px;
     margin: 0px;
-    font-size: 13px;
     width: 100vw;
 }
 
@@ -286,7 +295,7 @@ header {
     transition: all 250ms;
     background-color: rgba(255, 255, 255, 0.5);
     text-align: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     /* font-size: 14px; */
     border-radius: 10px;
     width: 10px;
@@ -388,6 +397,5 @@ header {
 
 #errorVista {
     margin-top: 100px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-family: 12px;
+    
 }
