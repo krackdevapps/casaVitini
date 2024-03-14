@@ -5,7 +5,6 @@ const casaVitini = {
                 arranque: () => {
                     document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
-
                     document.querySelector(".marcoElasticoRelativo").style.flex = "1"
 
 
@@ -15,6 +14,8 @@ const casaVitini = {
             reservasNuevo: {
                 arranque: async () => {
                     document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
+
+
                     const granuladoURL = casaVitini.componentes.granuladorURL()
                     const directorios = granuladoURL.directorios[granuladoURL.directorios.length - 1]
 
@@ -6176,9 +6177,7 @@ const casaVitini = {
                     })
                     campo.value = codigo
                     marcoPago.appendChild(campo)
-
                     marcoElastico.appendChild(marcoPago)
-
 
                     const botonBuscar = document.createElement("div")
                     botonBuscar.classList.add("plaza_enlacesDePago_botonV1")
@@ -6200,13 +6199,8 @@ const casaVitini = {
                         return casaVitini.componentes.controladorVista(navegacion)
                     })
                     marcoElastico.appendChild(botonBuscar)
-
-
-
-
                     marcoElasticoRelativo.appendChild(marcoElastico)
                     contenedorEnlaceDePago.appendChild(marcoElasticoRelativo)
-
                 }
 
             },
@@ -6220,12 +6214,8 @@ const casaVitini = {
                     header.style.maxWidth = "none"
                     header.style.position = "absolute"
 
-
                     const main = document.querySelector("main")
                     main.style.maxWidth = "100vw"
-
-
-
                     const metadatos = {
                         sectionUID: instanciaUID,
                         elementoScroll: "[contenedor=paralaje]"
@@ -6235,12 +6225,18 @@ const casaVitini = {
             },
             instalaciones: {
                 arranque: () => {
-
                     const imagenesAmpliables = document.querySelectorAll("[componente=fotoAmpliable]")
-                    const cerrarImagen = (imagen) => {
-                        const numeroImagen = imagen.numeroImagen
-                        const apartamentoIDV = imagen.apartamentoIDV
-                        const imagenElemento = document.querySelector(`main [apartamento="${apartamentoIDV}"] [numeroImagen="${numeroImagen}"]`)
+                    const cerrarImagen = () => {
+
+                        const grupoActual = document.
+                            querySelector(`[componente=contenedorImagenAmpliada][grupoActualIDV]`)
+                            .getAttribute("grupoActualIDV")
+                        const numeroImagen = document
+                            .querySelector(`[componente=contenedorImagenAmpliada][numeroImagen]`)
+                            .getAttribute("numeroImagen")
+
+
+                        const imagenElemento = document.querySelector(`main [grupoIDV="${grupoActual}"] [numeroImagen="${numeroImagen}"]`)
                         const posicionImagen = imagenElemento.getBoundingClientRect();
                         const contenedorImagen = document.querySelector("main [componente=contenedorImagenAmpliada] [contenedor=imagenVolatil]")
                         contenedorImagen.addEventListener("transitionend", (e) => {
@@ -6248,81 +6244,120 @@ const casaVitini = {
                             contenedorImagenAmpliada.remove()
                         })
 
-
                         document.querySelector("main [componente=contenedorBotones]").remove()
                         document.body.removeAttribute("style");
 
                         const contenedorImagenAmpliada = document.querySelector("main [componente=contenedorImagenAmpliada]")
                         contenedorImagenAmpliada.style.pointerEvents = "none"
-
-
-                        console.log("contenedorImagen_destino", contenedorImagen)
                         contenedorImagen.style.top = posicionImagen.y + "px"
                         contenedorImagen.style.left = posicionImagen.x + "px"
                         contenedorImagen.style.width = posicionImagen.width + "px"
                         contenedorImagen.style.height = posicionImagen.height + "px"
+                        //contenedorImagenAmpliada.style.opacity = "0"
+
+                    }
+                    const cambiarImagen = (sentidoDireccion) => {
+
+                        const grupoActual = document.
+                            querySelector(`[componente=contenedorImagenAmpliada][grupoActualIDV]`)
+                            .getAttribute("grupoActualIDV")
+                        const imagenActual = document
+                            .querySelector(`[componente=contenedorImagenAmpliada][numeroImagen]`)
+                            .getAttribute("numeroImagen")
+                        const numerosTotales = document.querySelector(`[componente=contenedorImagenAmpliada][numeroImagen]`)
+                            .getAttribute("numerosTotales")
+                        let imagenDestino
+
+                        if (sentidoDireccion === "imagenSiguiente") {
+                            const imagenSiguiente = Number(imagenActual) + 1
+                            imagenDestino = imagenSiguiente > numerosTotales ? 0 : imagenSiguiente
+                        }
+                        if (sentidoDireccion === "imagenAnterior") {
+                            const imagenAnterior = Number(imagenActual) - 1
+                            imagenDestino = imagenAnterior < 0 ? numerosTotales : imagenAnterior
+                        }
+
+                        document.querySelector(`[componente=contenedorImagenAmpliada][numeroImagen]`)
+                            .setAttribute("numeroImagen", imagenDestino)
+                        console.log("grupoActual", grupoActual, "imagenDestino", imagenDestino)
+
+                        const contenedorImagen = document
+                            .querySelector(`[grupoIDV="${grupoActual}"] [numeroImagen="${imagenDestino}"]`)
+                        const selectorImagenCSSResponsiva = contenedorImagen.getAttribute("imagenResponsiva")
+
+                        const contenedorImagenAmpliada = document.querySelector(`[componente=contenedorImagenAmpliada] [contenedor=imagenVolatil]`)
+                        const cssImagenObsoleto = contenedorImagenAmpliada.getAttribute("imagenAmpliadaClaseCSS")
+                        console.log("cssImagenObsoleto", cssImagenObsoleto)
+                        contenedorImagenAmpliada.classList.remove(cssImagenObsoleto)
+                        contenedorImagenAmpliada.classList.add(selectorImagenCSSResponsiva)
+                        contenedorImagenAmpliada.setAttribute("imagenAmpliadaClaseCSS", selectorImagenCSSResponsiva)
+
 
                     }
                     const ampliarImagen = (imagen) => {
                         document.body.style.overflow = 'hidden';
                         const imagenElemento = imagen.target
-                        const fontoURL = window.getComputedStyle(imagenElemento).getPropertyValue("background-image");
+                        const fondoClaseCSS = imagenElemento.getAttribute("imagenResponsiva");
+                        console.log("fondoClaseCSS", fondoClaseCSS)
 
                         imagenesAmpliables.forEach((imagenAmpliable) => {
                             imagenAmpliable.removeAttribute("style")
                         })
-                        const apartamentoIDV = imagenElemento.closest("[apartamento]").getAttribute("apartamento")
-                        const imagenesDelApartamento = imagenElemento.closest("[apartamento]").querySelectorAll("[componente]")
+                        const grupoIDV = imagenElemento.closest("[grupoIDV]").getAttribute("grupoIDV")
+                        const imagenesDelApartamento = imagenElemento.closest("[grupoIDV]").querySelectorAll("[componente]")
+                        let numerosTotales = 0
                         imagenesDelApartamento.forEach((imagenDelGrupo, numero) => {
+                            numerosTotales = numero
                             imagenDelGrupo.setAttribute("numeroImagen", numero)
                         })
+
                         const numeroImagen = imagen.target.getAttribute("numeroImagen")
                         const posicionImagen = imagenElemento.getBoundingClientRect();
 
                         const contenedorImagenAmpliada = document.createElement("div")
                         contenedorImagenAmpliada.classList.add("contenedorImagenAmpliada")
                         contenedorImagenAmpliada.setAttribute("componente", "contenedorImagenAmpliada")
+                        contenedorImagenAmpliada.setAttribute("grupoActualIDV", grupoIDV)
+                        contenedorImagenAmpliada.setAttribute("numeroImagen", numeroImagen)
+                        contenedorImagenAmpliada.setAttribute("numerosTotales", numerosTotales)
 
                         const contenedorBotones = document.createElement("div")
                         contenedorBotones.classList.add("contenedorBotones")
                         contenedorBotones.setAttribute("componente", "contenedorBotones")
 
-
                         const botonAtras = document.createElement("div")
                         botonAtras.classList.add("boton")
                         botonAtras.innerText = "Atras"
+                        botonAtras.addEventListener("click", () => {
+                            cambiarImagen("imagenAnterior")
+                        })
                         contenedorBotones.appendChild(botonAtras)
 
                         const botonCerrar = document.createElement("div")
                         botonCerrar.classList.add("boton")
                         botonCerrar.innerText = "Cerrar"
-                        botonCerrar.addEventListener("click", (e) => {
-                            console.log(e.target)
-                            const identifcadorImagen = {
-                                apartamentoIDV: apartamentoIDV,
-                                numeroImagen: numeroImagen
-                            }
-                            console.log("identifcadorImagen", identifcadorImagen)
-                            cerrarImagen(identifcadorImagen)
-                        })
+                        botonCerrar.addEventListener("click", cerrarImagen)
                         contenedorBotones.appendChild(botonCerrar)
 
                         const botonSiguiente = document.createElement("div")
                         botonSiguiente.classList.add("boton")
                         botonSiguiente.innerText = "Siguiente"
+                        botonSiguiente.addEventListener("click", () => {
+                            cambiarImagen("imagenSiguiente")
+                        })
                         contenedorBotones.appendChild(botonSiguiente)
 
                         const marcoEspaciadorContenedorBotones = document.createElement("div")
                         marcoEspaciadorContenedorBotones.classList.add("marcoEspaciadoContenedorBotones")
-
 
                         marcoEspaciadorContenedorBotones.appendChild(contenedorBotones)
                         contenedorImagenAmpliada.appendChild(marcoEspaciadorContenedorBotones)
 
                         const contenedorImagenVolatil = document.createElement("div")
                         contenedorImagenVolatil.classList.add("contenedorImagenVolatil")
+                        contenedorImagenVolatil.classList.add(fondoClaseCSS)
                         contenedorImagenVolatil.setAttribute("contenedor", "imagenVolatil")
-                        contenedorImagenVolatil.style.backgroundImage = fontoURL
+                        contenedorImagenVolatil.setAttribute("imagenAmpliadaClaseCSS", fondoClaseCSS)
                         contenedorImagenVolatil.style.top = posicionImagen.y + "px"
                         contenedorImagenVolatil.style.left = posicionImagen.x + "px"
                         contenedorImagenVolatil.style.width = posicionImagen.width + "px"
@@ -6337,55 +6372,30 @@ const casaVitini = {
                         // 3 - El top del elmento original, es decir a imagen a ampliar, menos el alto del contenedor botones renderizado es la altural del MARGIN de la imagen relativa dentro de cajon dos del grid
 
                         requestAnimationFrame(() => {
-                            //contenedorImagenAmpliada.style.backdropFilter = "blur(50px)";
-                            //contenedorImagenAmpliada.style["-webkit-backdrop-filter"] = "blur(50px)";
+                            contenedorImagenAmpliada.style.backdropFilter = "blur(50px)";
+                            contenedorImagenAmpliada.style["-webkit-backdrop-filter"] = "blur(50px)";
                             contenedorImagenAmpliada.style.opacity = "1";
-
                         });
 
                         let start = null;
                         const step = (timestamp) => {
+                            console.log("timeStamp", timestamp)
                             if (!start) { start = timestamp } else {
-                                //contenedorImagenVolatil.style.top = "98px"
-                                //contenedorImagenVolatil.style.bottom = "10px"
-                                //contenedorImagenVolatil.style.left = "10px"
-                                //contenedorImagenVolatil.style.right = "10px"
-                                // Esto no se anima
-
-                                 contenedorImagenVolatil.style.top = "0px"
-                                 contenedorImagenVolatil.style.left = "0"
-                                 contenedorImagenVolatil.style.height = "100vh"
-                                 contenedorImagenVolatil.style.width = "100vw"
+                                contenedorImagenVolatil.style.top = "0px"
+                                contenedorImagenVolatil.style.left = "0"
+                                contenedorImagenVolatil.style.height = "100vh"
+                                contenedorImagenVolatil.style.width = "100vw"
                             };
                             let progress = timestamp - start;
                             if (progress < 1) {
                                 window.requestAnimationFrame(step);
                             }
                         }
-
                         requestAnimationFrame(step);
-
                     }
-
-
-
                     imagenesAmpliables.forEach((imagenAmpliable) => {
                         imagenAmpliable.addEventListener("click", ampliarImagen)
                     })
-
-
-                    imagenesAmpliables.forEach((imagenAmpliable) => {
-                        imagenAmpliable.addEventListener("click", ampliarImagen)
-                    })
-
-
-
-
-                    // hacer lo del ampliar fotos
-
-
-
-
                 }
             },
             rol: {

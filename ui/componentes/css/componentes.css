@@ -1276,7 +1276,7 @@
     left: 0px;
     color: #fff;
     text-align: center;
-    z-index: 2;
+    z-index: 200;
     bottom: 10px;
     display: flex;
     flex-direction: column;
@@ -10110,6 +10110,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     padding: 10px;
     flex-direction: column;
+    gap: 10px;
 }
 
 .plaza_servicios_contenedorCaracteristicas {
@@ -11476,8 +11477,8 @@ grid-template-columns: 0.5fr 1.5fr;
     margin-right: 30px;
     margin-left: 30px;
     border-radius: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 15px;
+
     border: 1px solid #00000047;
 }
 
@@ -11485,7 +11486,7 @@ grid-template-columns: 0.5fr 1.5fr;
     font-size: 16px;
     font-weight: bold;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 16px;
+    margin: 0px;
     text-align: center;
 }
 
@@ -11502,12 +11503,7 @@ grid-template-columns: 0.5fr 1.5fr;
     margin: 0px;
     display: grid;
     grid-template-columns: auto auto auto;
-    grid-template-rows: auto auto auto;
     gap: 15px 15px;
-    grid-template-areas:
-        ". . ."
-        ". . ."
-        ". . .";
     align-items: center;
     align-content: center;
     justify-items: stretch;
@@ -11532,10 +11528,100 @@ grid-template-columns: 0.5fr 1.5fr;
     box-shadow: 0px 0px 20px 0px #0000007a;
 }
 
-.plaza_servicios_superBloque .contenedorApartamento .apartamento_5_imagen1 {
+/* Inicio Apartametno 5 */
+.plaza_servicios_superBloque .apartamento_5_imagen1 {
     background-image: url("/componentes/imagenes/apartamentos/apartamento_5/image1.jpeg");
-
 }
+
+.plaza_servicios_superBloque .apartamento_5_imagen2 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_5/image2.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_5_imagen3 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_5/image3.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_5_imagen4 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_5/image4.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_5_imagen5 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_5/image5.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_5_imagen6 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_5/image6.jpeg");
+}
+
+/* Fin Apartametno 5 */
+
+
+/* Inicio Apartametno 6 */
+.plaza_servicios_superBloque .apartamento_6_imagen1 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_6/image1.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_6_imagen2 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_6/image2.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_6_imagen3 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_6/image3.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_6_imagen4 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_6/image4.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_6_imagen5 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_6/image5.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_6_imagen6 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_6/image6.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_6_imagen7 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_6/image7.jpeg");
+}
+
+/* Fin Apartametno 6 */
+
+
+/* Inicio Apartametno 7 */
+.plaza_servicios_superBloque .apartamento_7_imagen1 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_7/image1.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_7_imagen2 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_7/image2.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_7_imagen3 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_7/image3.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_7_imagen4 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_7/image4.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_7_imagen5 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_7/image5.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_7_imagen6 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_7/image6.jpeg");
+}
+
+.plaza_servicios_superBloque .apartamento_7_imagen7 {
+    background-image: url("/componentes/imagenes/apartamentos/apartamento_7/image7.jpeg");
+}
+
+/* Fin Apartametno 7 */
+
+
+
+
 
 
 .plaza_servicios_superBloque .contenedorImagenAmpliada {
@@ -11560,11 +11646,12 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .plaza_servicios_superBloque .contenedorImagenVolatil {
+    /*cover o no cover,*/
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-    background-color: whitesmoke;
-    border-radius: 8px;
+    /*background-color: whitesmoke;*/
+    /*border-radius: 8px;*/
     transition: all 250ms linear;
     /* transition: top 1s, left 1s, right 1s, bottom 1s;*/
 
@@ -11584,6 +11671,13 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-items: center;
     position: relative;
 
+}
+
+@media (max-width: 850px) {
+    .plaza_servicios_superBloque .contenedorImagenAmpliada .contenedorBotones {
+        margin-top: 6px;
+
+    }
 }
 
 
@@ -11608,5 +11702,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
-
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
 }
