@@ -2371,10 +2371,10 @@ const casaVitini = {
                     casaVitini.componentes.flujoPagoUI.desplegarUI("Preconfirmando su reserva...")
 
                     const reservaLocal = JSON.parse(sessionStorage.getItem("reserva"))
-                    const nombreTitular = document.querySelector("[campo=nombreTitular]").value || "nombre de prueba"
-                    const pasaporteTitular = document.querySelector("[campo=pasaporteTitular]").value || "pasasporteTest"
-                    const correoTitular = document.querySelector("[campo=correoTitular]").value || "test@test.com"
-                    const telefonoTitular = document.querySelector("[campo=telefonoTitular]").value || "1234567890"
+                    const nombreTitular = document.querySelector("[campo=nombreTitular]").value //|| "nombre de prueba"
+                    const pasaporteTitular = document.querySelector("[campo=pasaporteTitular]").value //|| "pasasporteTest"
+                    const correoTitular = document.querySelector("[campo=correoTitular]").value //|| "test@test.com"
+                    const telefonoTitular = document.querySelector("[campo=telefonoTitular]").value //|| "1234567890"
 
                     const datosTitular = {
                         nombreTitular: nombreTitular,
@@ -6214,6 +6214,9 @@ const casaVitini = {
                     header.style.maxWidth = "none"
                     header.style.position = "absolute"
 
+                    const contenedorMenu = header.querySelector("[componente=contenedorMenu]")
+                    //contenedorMenu.style.paddingRight = "18px"
+
                     const main = document.querySelector("main")
                     main.style.maxWidth = "100vw"
                     const metadatos = {
@@ -6257,7 +6260,6 @@ const casaVitini = {
 
                     }
                     const cambiarImagen = (sentidoDireccion) => {
-
                         const grupoActual = document.
                             querySelector(`[componente=contenedorImagenAmpliada][grupoActualIDV]`)
                             .getAttribute("grupoActualIDV")
@@ -6295,6 +6297,7 @@ const casaVitini = {
 
                     }
                     const ampliarImagen = (imagen) => {
+                        
                         document.body.style.overflow = 'hidden';
                         const imagenElemento = imagen.target
                         const fondoClaseCSS = imagenElemento.getAttribute("imagenResponsiva");
@@ -6444,6 +6447,7 @@ const casaVitini = {
             document.querySelector("#uiLogo").removeAttribute("style")
             document.querySelector("body").removeAttribute("style")
             document.querySelector("header").removeAttribute("style")
+            document.querySelector("[componente=contenedorMenu]").removeAttribute("style")
             document.querySelector("main").removeAttribute("style")
             document.querySelector("#botonMenuResponsivo").removeAttribute("style")
 

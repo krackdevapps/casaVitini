@@ -1,19 +1,26 @@
 @font-face {
     font-family: vitiniFuente;
-    src: url(/componentes/fuentes/segoe/Segoe_UI.ttf);
+    src: url(/componentes/fuentes/segoe/Segoe_UI.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
-    font-family: vitiniFuenteNegrita;
-    src: url(/componentes/fuentes/segoe/Segoe_UI_Bold.ttf);
+    font-family: vitiniFuente;
+    src: url(/componentes/fuentes/segoe/Segoe_UI_Bold.ttf) format('truetype');
+    font-weight: bold;
+    font-style: normal;
 }
 
 * {
     font-family: vitiniFuente, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /*font-family: Verdana;*/
+    /*font-family: Tahoma, vitiniFuente;*/
     font-size: 13px;
+    margin: 0;
+    padding: 0;
 
 }
+
 
 .uiPanelGlobal {
     background-color: rgba(161, 161, 161, 0);
@@ -29,7 +36,7 @@
     user-select: none;
     -webkit-user-select: none;
     /* position: fixed; */
-    width: 100vw;
+    width: 100%;
 }
 
 
@@ -47,7 +54,7 @@
 #uiLogo {
     /* background: rgba(255, 255, 255, 0.2);*/
     border-radius: 20px;
-    
+
     font-size: 16px;
 
     font-weight: bold;
@@ -103,8 +110,8 @@
 
 .uiCategoria {
     border: 0px none;
-    
-    
+
+
     padding-top: 8px;
     padding-bottom: 8px;
     padding-left: 20px;
@@ -128,7 +135,7 @@
 .uiCategoriaMenu {
     border: 0px none;
     text-align: center;
-    
+
     font-size: 14px;
     padding-top: 6px;
     padding-bottom: 6px;
@@ -161,12 +168,12 @@ body {
     background-attachment: fixed;
     /* background-attachment: scroll; */
     background-position: center center;
-    
+
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
 
 }
 
@@ -180,7 +187,7 @@ main {
     align-items: stretch;
     max-width: 2160px;
     margin: 0px;
-    width: 100vw;
+    width: 100%;
 }
 
 header {
@@ -295,7 +302,7 @@ header {
     transition: all 250ms;
     background-color: rgba(255, 255, 255, 0.5);
     text-align: center;
-    
+
     /* font-size: 14px; */
     border-radius: 10px;
     width: 10px;
@@ -391,11 +398,11 @@ header {
     pointer-events: all;
     position: fixed;
     right: 0px;
-    padding-right: 2px;
+    right: 20px;
     z-index: 1000;
 }
 
 #errorVista {
     margin-top: 100px;
-    
+
 }
