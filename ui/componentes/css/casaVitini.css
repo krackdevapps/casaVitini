@@ -18,7 +18,7 @@
     font-size: 13px;
     margin: 0;
     padding: 0;
-
+    box-sizing: border-box;
 }
 
 
@@ -91,9 +91,6 @@
 
 }
 
-
-
-
 .uiNavegacion {
     background-color: rgba(255, 255, 255, 0.4);
     border-radius: 30px;
@@ -159,22 +156,18 @@
 body {
     background: rgba(0, 0, 0, 0.1);
     background-image: url(/componentes/imagenes/transparente.png);
-    margin: 0px;
-    padding: 0px;
     transition: background 500ms linear;
     flex-wrap: nowrap;
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    /* background-attachment: scroll; */
     background-position: center center;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100vh;
     width: 100%;
-
+    overflow-y: scroll;
 }
 
 main {
@@ -320,6 +313,8 @@ header {
     zoom: 80%;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(50px);
+    padding-left: 30px;
+padding-right: 30px;
 }
 
 .uiMenuResponsivoDesplegado:hover {
@@ -397,8 +392,7 @@ header {
     flex-direction: row;
     pointer-events: all;
     position: fixed;
-    right: 0px;
-    right: 20px;
+    right: 2px;
     z-index: 1000;
 }
 

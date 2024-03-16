@@ -6211,20 +6211,103 @@ const casaVitini = {
 
                     document.querySelector("#uiLogo").style.filter = "invert(1)"
                     const header = document.querySelector("header")
-                    header.style.maxWidth = "none"
-                    header.style.position = "absolute"
 
-                    const contenedorMenu = header.querySelector("[componente=contenedorMenu]")
-                    //contenedorMenu.style.paddingRight = "18px"
+                    const controladorAnchoRestante = () => {
+                        console.log("test")
+                        const header1 = document.querySelector("header")
+                        const anchoHeader = header1.getBoundingClientRect().height
+                        const contenedoresPalaraje = document.querySelector("[contenedor=paralaje]")
+                        contenedoresPalaraje.style.marginTop = "-" + anchoHeader + "px"
 
-                    const main = document.querySelector("main")
-                    main.style.maxWidth = "100vw"
-                    const metadatos = {
-                        sectionUID: instanciaUID,
-                        elementoScroll: "[contenedor=paralaje]"
                     }
-                    casaVitini.componentes.controlLogoScroll(metadatos)
+                    controladorAnchoRestante()
+
+
+                    const contenedoresPalaraje = document.querySelectorAll("[contenedorParalaje]")
+                    const iconoRaton = document.querySelector("[icono=mouse]")
+
+                    
+                    const controladorParalaje = () => {
+                        const alturaScroll = window.scrollY
+                        if (iconoRaton && alturaScroll > 10) {
+                            iconoRaton.addEventListener("transitionend", (e) => {
+                                e.target.remove()
+                            })
+                            iconoRaton.style.opacity = "0"
+                        }
+
+
+                        contenedoresPalaraje.forEach((contenedorParalaje) => {
+                            const parallaxContainer2 = contenedorParalaje;
+                            const parallaxImage2 = contenedorParalaje.querySelector('[imagenParalaje]');
+                            const textoAnimado = contenedorParalaje.querySelector('[elemento=textoAnimado]');
+
+                            const containerRect2 = parallaxContainer2.getBoundingClientRect();
+
+                            requestAnimationFrame(() => {
+                                if ((containerRect2.top < 0 && containerRect2.bottom < window.innerHeight) ||
+                                    (containerRect2.top < window.innerHeight && containerRect2.bottom > 0)) {
+
+                                    const scrollPosition2 = window.scrollY;
+                                    const parallaxTop2 = parallaxContainer2.offsetTop;
+                                    const parallaxHeight2 = parallaxContainer2.offsetHeight;
+                                    const parallaxVisibleHeight2 = Math.min(window.innerHeight, parallaxTop2 + parallaxHeight2) - Math.max(0, containerRect2.top);
+                                    const conCero = Math.min(window.innerHeight, parallaxTop2 + parallaxHeight2) - (containerRect2.top + parallaxHeight2);
+
+                                    const translateY_2 = (scrollPosition2 - containerRect2.top) * 0.5;
+                                    const maxTranslateY = parallaxVisibleHeight2 - parallaxHeight2;
+                                    const translateY = Math.max(-maxTranslateY, Math.min(0, translateY_2)) / 2;
+
+                                    if (containerRect2.top <= 0 && containerRect2.bottom <= window.innerHeight) {
+                                        parallaxImage2.style.transform = 'translate3d(0 ,' + (conCero / 2) + 'px ,0)';
+                                        if (textoAnimado) {
+                                                  textoAnimado.style.transform = 'translate3d(0 ,-' + (conCero) + 'px ,0)';
+                                        }
+
+                                        // console.log("imagen yendose")
+                                    } else if (containerRect2.top < window.innerHeight && containerRect2.bottom > 0) {
+                                        parallaxImage2.style.transform = 'translate3d(0 ,-' + translateY + 'px ,0)';
+                                        if (textoAnimado) {
+                                             textoAnimado.style.transform = 'translate3d(0 ,' + (translateY * 2) + 'px ,0)';
+                                        }
+                                        //console.log("imagen viniendo")
+                                    } else {
+                            //  parallaxImage2.style.transform = 'translateY(0)';
+                               // console.log("imagen no visible antes")
+                            }
+                                }
+                            })
+                        })
+
+
+                    }
+                    
+
+                    // window.removeEventListener('scroll', controladorParalaje);
+                    //window.removeEventListener('scroll', controladorParalaje);
+                    //  window.addEventListener('scroll', controladorParalaje);
+
+                    // Cacheo de elementos
+                    //const contenedoresPalaraje = document.querySelectorAll('.contenedor-paralaje');
+
+                    // Definir una función para el control del parallax
+             
+                    let animationRunning = false;
+                    function scrollHandler() {
+                        if (!animationRunning) {
+                            animationRunning = true;
+                            requestAnimationFrame(function () {
+                                controladorParalaje();
+                                animationRunning = false;
+                            });
+                        }
+                    }
+
+                    // Agregar evento de desplazamiento
+                    window.addEventListener('scroll', scrollHandler);
                 }
+
+
             },
             instalaciones: {
                 arranque: () => {
@@ -6297,7 +6380,7 @@ const casaVitini = {
 
                     }
                     const ampliarImagen = (imagen) => {
-                        
+
                         document.body.style.overflow = 'hidden';
                         const imagenElemento = imagen.target
                         const fondoClaseCSS = imagenElemento.getAttribute("imagenResponsiva");
