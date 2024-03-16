@@ -12692,7 +12692,8 @@ const administracion = {
     situacion: {
         arranque: async () => {
             document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
-
+            const seccionRenderizadaOrigen = document.querySelector("main")
+            const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
             const granuladoURL = casaVitini.componentes.granuladorURL()
             const directorioUltimo = granuladoURL.directorios[granuladoURL.directorios.length - 1]
 
@@ -12728,8 +12729,6 @@ const administracion = {
 
             marcoElastico.style.gap = "4px"
             if (directorioUltimo === "situacion") {
-                const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
-
                 const mensajeSpinner = "Obteniendo situación..."
                 const spinner = casaVitini.componentes.spinnerSimple(mensajeSpinner)
                 const contenedorCarga = document.createElement("div")
@@ -12743,6 +12742,7 @@ const administracion = {
                     zona: "administracion/situacion/obtenerSituacion"
                 }
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+
                 const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (!instanciaRenderizada) return
 
@@ -12750,7 +12750,9 @@ const administracion = {
 
                 if (respuestaServidor?.error) {
                     casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
-                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                    const titulo = document.querySelector(".titulo")
+                    titulo.innerText = respuestaServidor.error
+                    return
                 }
                 if (respuestaServidor?.ok) {
                     const situacion = respuestaServidor?.ok
@@ -13115,7 +13117,8 @@ const administracion = {
                     apartamentoIDV: directorioUltimo
                 }
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                if (!seccionRenderizada) return
                 if (respuestaServidor?.error) {
                     const info = {
                         titulo: "No existe el identificador del apartamento",
@@ -16207,6 +16210,8 @@ const administracion = {
     },
     precios: {
         arranque: async () => {
+            const seccionRenderizadaOrigen = document.querySelector("main")
+            const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
             const granuladoURL = casaVitini.componentes.granuladorURL()
             const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
             document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
@@ -16229,6 +16234,14 @@ const administracion = {
                     apartamentoIDV: granuladoURL.parametros.apartamentos
                 }
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                if (!seccionRenderizada) return
+                if (respuestaServidor.error) {
+                    const titulo = document.querySelector(".titulo")
+                    titulo.innerText = "No existe ningún precio con el identificador: " + granuladoURL.parametros.apartamentos
+                    return
+
+                }
                 return casaVitini.administracion.precios.detallesApartamenro(respuestaServidor)
             }
             if (granuladoURL.parametros.impuestos) {
@@ -16237,6 +16250,14 @@ const administracion = {
                     impuestoUID: Number(granuladoURL.parametros.impuestos)
                 }
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                if (!seccionRenderizada) return
+                if (respuestaServidor.error) {
+                    const titulo = document.querySelector(".titulo")
+                    titulo.innerText = "No existe ningún impuesto con el identificador: " + granuladoURL.parametros.apartamentos
+                    return
+
+                }
                 return casaVitini.administracion.precios.detalleImpuesto(respuestaServidor)
             }
 
@@ -17056,6 +17077,8 @@ const administracion = {
     },
     impuestos: {
         arranque: async () => {
+            const seccionRenderizadaOrigen = document.querySelector("main")
+            const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
             const granuladoURL = casaVitini.componentes.granuladorURL()
             const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
             document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
@@ -17089,6 +17112,16 @@ const administracion = {
                     impuestoUID: Number(comandoInicial)
                 }
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                if (!seccionRenderizada) return
+                if (respuestaServidor.error) {
+                    const titulo = document.querySelector(".titulo")
+                    titulo.innerText = "No existe ningún impuesto con el identificador: " + comandoInicial
+                    return
+
+                }
+
+
                 return casaVitini.administracion.impuestos.detalleImpuesto(respuestaServidor)
             }
             const info = {
@@ -19187,13 +19220,11 @@ const administracion = {
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 const seccionRenderizada = document.querySelector(`main[instanciaUID="${seccionUID}"]`)
                 if (!seccionRenderizada) return
-
+                console.log("respuestaServidor", respuestaServidor)
                 if (respuestaServidor?.error) {
-                    const info = {
-                        titulo: "No existe ninguna oferta con ese identificador",
-                        descripcion: "La oferta que buscas con ese identificador no existe. Comprueba el identificador de la reserva"
-                    }
-                    return casaVitini.componentes.mensajeSimple(info)
+                    const titulo = document.querySelector(".titulo")
+                    titulo.innerText = "No existe la oferta 248"
+                    return
                 }
                 if (respuestaServidor?.ok) {
                     const espacioOfertasGlobal = document.querySelector("[componente=espacioOfertas]")
@@ -19456,7 +19487,6 @@ const administracion = {
                     document.querySelector("[componente=espacioCrearOferta]").classList.remove("eventosDesactivadosInicialmente")
                     document.querySelector("[componente=soloLecturaInfo]").classList.add("elementoOcultoInicialmente")
                 }
-
                 if (botonModo === "botonCancelarCambios") {
                     let selectorBotonesEditar = [...document.querySelectorAll("[componente=botonEditarOferta]")]
                     selectorBotonesEditar.map((boton) => {
@@ -19520,6 +19550,7 @@ const administracion = {
                         espacioOfertas.appendChild(opcionesUI)
                     }
                     if (tipoOfertaIDV_valorInicial === "porApartamentosEspecificos") {
+                        console.log("tipoOfertaIDV_valorInicial", tipoOfertaIDV_valorInicial)
                         const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porApartamentosEspecificos()
                         espacioOfertas.appendChild(opcionesUI)
                     }
@@ -19555,13 +19586,15 @@ const administracion = {
 
                     if (tipoOfertaIDV_valorInicial === "porApartamentosEspecificos") {
                         document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=contextoAplicacion] [value=${descuentoAplicadoAIDV_valorInicial}]`).selected = true
-                        if (descuentoAplicadoAIDV === "totalNetoReserva") {
+                        console.log("descuentoAplicadoAIDV", descuentoAplicadoAIDV_valorInicial)
+
+                        if (descuentoAplicadoAIDV_valorInicial === "totalNetoReserva") {
                             document.querySelector(`[controladorDesliegue=descuentoGlobal]`).classList.remove("estadoInicialInvisible")
                             document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=tipoDescuento] [value=${tipoDescuentoIDV_valorInicial}]`).selected = true
                             document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=cantidad]`).value = cantidad_valorInicial
                         }
 
-                        if (descuentoAplicadoAIDV === "totalNetoApartmentoDedicado") {
+                        if (descuentoAplicadoAIDV_valorInicial === "totalNetoApartmentoDedicado") {
                             document.querySelector(`[controladorDesliegue=descuentosDedicados]`).classList.remove("estadoInicialInvisible")
                         }
 
@@ -19589,21 +19622,7 @@ const administracion = {
                             zonaDescuentoDedicados.appendChild(insertarOpcionesApartamento)
                         }
                     }
-
-
-
-
-
-
-
-
-
                 }
-
-
-
-
-
             },
             estadoOferta: async (estadoOferta) => {
 
@@ -19919,7 +19938,7 @@ const administracion = {
 
         },
         componenteUI: {
-            "porNumeroDeApartamentos": () => {
+            porNumeroDeApartamentos: () => {
                 const divOfertaConXApartamentos_O1 = document.createElement('div');
                 divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porNumeroDeApartamentos');
                 divOfertaConXApartamentos_O1.classList.add('espaciadoInterno');
@@ -20033,7 +20052,7 @@ const administracion = {
                 divOfertaConXApartamentos_O1.appendChild(divEspacioOpciones_O1);
                 return divOfertaConXApartamentos_O1
             },
-            "porApartamentosEspecificos": () => {
+            porApartamentosEspecificos: () => {
 
                 // Crear el elemento div principal
                 const porApartamentoDedicado = document.createElement('div');
@@ -20218,7 +20237,7 @@ const administracion = {
 
 
             },
-            "porDiasDeAntelacion": () => {
+            porDiasDeAntelacion: () => {
                 const divOfertaConXApartamentos_O1 = document.createElement('div');
                 divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porDiasDeAntelacion');
                 divOfertaConXApartamentos_O1.classList.add('espaciadoInterno');
@@ -20331,7 +20350,7 @@ const administracion = {
                 divOfertaConXApartamentos_O1.appendChild(divEspacioOpciones_O1);
                 return divOfertaConXApartamentos_O1
             },
-            "porDiasDeReserva": () => {
+            porDiasDeReserva: () => {
                 const divOfertaConXApartamentos_O1 = document.createElement('div');
                 divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porDiasDeReserva');
                 divOfertaConXApartamentos_O1.classList.add('espaciadoInterno');
@@ -20443,7 +20462,7 @@ const administracion = {
                 divOfertaConXApartamentos_O1.appendChild(divEspacioOpciones_O1);
                 return divOfertaConXApartamentos_O1
             },
-            "porRangoDeFechas": () => {
+            porRangoDeFechas: () => {
                 const divOfertaConXApartamentos_O1 = document.createElement('div');
                 divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porRangoDeFechas');
                 divOfertaConXApartamentos_O1.classList.add('espaciadoInterno');
@@ -20560,7 +20579,7 @@ const administracion = {
                 divOfertaConXApartamentos_O1.appendChild(divEspacioOpciones_O1);
                 return divOfertaConXApartamentos_O1
             },
-            "botonesCrearOferta": () => {
+            botonesCrearOferta: () => {
                 const divBotones_O1 = document.createElement('div');
                 divBotones_O1.classList.add('crearOfertaEpacioBotones');
                 divBotones_O1.setAttribute("componente", "espacioBotones")
@@ -20574,7 +20593,7 @@ const administracion = {
                 divBotones_O1.appendChild(pBotonCrearOferta_O1)
                 return divBotones_O1
             },
-            "botonesModificarOferta": () => {
+            botonesModificarOferta: () => {
                 const divBotones_O1 = document.createElement('div');
                 divBotones_O1.classList.add('crearOfertaEpacioBotones');
                 divBotones_O1.setAttribute("componente", "espacioBotones")
@@ -20620,7 +20639,7 @@ const administracion = {
 
 
             },
-            "desplegarOpcionesOferta": (opcionOferta) => {
+            desplegarOpcionesOferta: (opcionOferta) => {
                 const tipoOferta = opcionOferta.target.closest("[tipoOferta]").getAttribute("tipoOferta")
                 const modoOferta = document.querySelector("[modo]").getAttribute("modo")
                 const selectoresBotonDeplegarOpcionesOferta = [...document.querySelectorAll("[tipoOferta]")]
@@ -21694,6 +21713,8 @@ const administracion = {
         },
         detallesComportamiento: {
             UI: async (uid) => {
+                const seccionRenderizadaOrigen = document.querySelector("main")
+                const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
 
                 const transaccion = {
                     zona: "administracion/comportamientoDePrecios/detallesComportamiento",
@@ -21701,13 +21722,13 @@ const administracion = {
                 }
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                if (!seccionRenderizada) return
 
                 if (respuestaServidor?.error) {
-                    const info = {
-                        titulo: "No existe ninguna reserva con ese identificador",
-                        descripcion: "La reserva que buscas con ese identificador no existe. Comprueba el identificador de la reserva"
-                    }
-                    return casaVitini.componentes.mensajeSimple(info)
+                    const titulo = document.querySelector(".titulo")
+                    titulo.innerText = "No existe ningún comportamiento de precio con el identificador: " + uid
+                    return
                 }
                 if (respuestaServidor?.ok) {
                     const detalles = respuestaServidor?.ok
@@ -23080,7 +23101,8 @@ const administracion = {
         },
         bloqueosPorApartamento: {
             UI: async (apartamento) => {
-
+                const seccionRenderizadaOrigen = document.querySelector("main")
+                const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
                 const selectorTitulo = document.querySelector("[componente=titulo]")
                 selectorTitulo.innerText = "Bloqueos temporales"
                 const selectorEspacioBloqueos = document.querySelector("[componente=bloqueosTemporales]")
@@ -23090,9 +23112,15 @@ const administracion = {
                     "apartamentoIDV": apartamento
                 }
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                if (!seccionRenderizada) return
                 if (respuestaServidor?.error) {
-                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+
+                    const info = {
+                        titulo: "No existe el identificador del apartamento",
+                        descripcion: respuestaServidor.error
+                    }
+                    return casaVitini.componentes.mensajeSimple(info)
                 }
                 if (respuestaServidor?.ok) {
 
@@ -23242,7 +23270,7 @@ const administracion = {
                     })
                 }
             },
-            "traductorCambioVista": (uidBloqueo) => {
+            traductorCambioVista: (uidBloqueo) => {
                 uidBloqueo.preventDefault()
                 uidBloqueo.stopPropagation()
                 const vista = uidBloqueo.target.closest("[vista]").getAttribute("vista")
@@ -23259,6 +23287,8 @@ const administracion = {
         },
         detallesDelBloqueo: {
             UI: async (url) => {
+                const seccionRenderizadaOrigen = document.querySelector("main")
+                const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
                 const apartmentoIDV = url[0]
                 const uidBloqueo = url[1]
                 const selectorTitulo = document.querySelector("[componente=titulo]")
@@ -23272,9 +23302,15 @@ const administracion = {
                 }
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                if (!seccionRenderizada) return
                 if (respuestaServidor?.error) {
-                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+
+                    const info = {
+                        titulo: "No existe el bloqueo del apartamento",
+                        descripcion: respuestaServidor.error
+                    }
+                    return casaVitini.componentes.mensajeSimple(info)
                 }
                 if (respuestaServidor?.ok) {
 
@@ -24582,10 +24618,8 @@ const administracion = {
 
             const granuladoURL = casaVitini.componentes.granuladorURL()
             const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
+            return casaVitini.administracion.arquitectura_del_alojamiento.portadaUI()
 
-            if (comandoInicial === "arquitectura_del_alojamiento" && Object.keys(granuladoURL.parametros).length === 0) {
-                return casaVitini.administracion.arquitectura_del_alojamiento.portadaUI()
-            }
         },
         portadaUI: () => {
             const espacioBotonesGlobales = document.querySelector("[componente=espacioBotonesGlobales]")
@@ -25126,7 +25160,8 @@ const administracion = {
                     return casaVitini.administracion.arquitectura_del_alojamiento.entidades.editarEntidad.portadaUI(Object.entries(parametros)[0])
                 },
                 portadaUI: async (entidadMatriz) => {
-
+                    const seccionRenderizadaOrigen = document.querySelector("main")
+                    const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
                     const espacioBotonesGlobales = document.querySelector("[componente=espacioBotonesGlobales]")
                     const espacioConfiguracionDelAlojamiento = document.querySelector("[componente=configuracionDelAlojamiento]")
                     const selectorTitulo = document.querySelector("[componente=titulo]")
@@ -25147,7 +25182,8 @@ const administracion = {
                             entidadIDV: entidadIDV
                         }
                         const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
+                        const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                        if (!seccionRenderizada) return
                         if (respuestaServidor?.error) {
                             const info = {
                                 titulo: "No existe ningun apartamento como entidad con ese identificador",
@@ -25310,7 +25346,8 @@ const administracion = {
                         }
 
                         respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
+                        const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                        if (!seccionRenderizada) return
                         if (respuestaServidor?.error) {
                             const info = {
                                 titulo: "No existe ninguna habitación como entidad con ese identificador",
@@ -25408,7 +25445,8 @@ const administracion = {
                             entidadIDV: entidadIDV
                         }
                         respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
+                        const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                        if (!seccionRenderizada) return
                         if (respuestaServidor?.error) {
                             const info = {
                                 titulo: "No existe ninguna cama como entidad con ese identificador",
@@ -26105,7 +26143,8 @@ const administracion = {
             },
             detallesConfiguracion: {
                 portadaUI: async (IDV) => {
-
+                    const seccionRenderizadaOrigen = document.querySelector("main")
+                    const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
                     const apartamentoIDV = IDV[0]
                     const selectorTitulo = document.querySelector(" [componente=titulo]")
                     selectorTitulo.innerText = "Configuración del apartamento"
@@ -26116,8 +26155,14 @@ const administracion = {
                         apartamentoIDV: apartamentoIDV
                     }
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                    const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                    if (!seccionRenderizada) return
                     if (respuestaServidor?.error) {
-                        return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                        const info = {
+                            titulo: "No existe la configuracion de alojamiento",
+                            descripcion: respuestaServidor.error
+                        }
+                        return casaVitini.componentes.mensajeSimple(info)
                     }
 
                     if (respuestaServidor?.ok) {

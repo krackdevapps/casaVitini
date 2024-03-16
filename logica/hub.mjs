@@ -16165,10 +16165,8 @@ const puerto = async (entrada, salida) => {
                             `
                                 const resuelveConsultaPerfilConfiguracion = await conexion.query(consultaPerfilConfiguracion, [apartamentoIDV])
                                 if (resuelveConsultaPerfilConfiguracion.rowCount === 0) {
-                                    const ok = {
-                                        ok: "No hay ninguna configuracion disponible para este apartamento"
-                                    }
-                                    salida.json(ok)
+                                    const error = "No hay ninguna configuracion disponible para este apartamento"
+                                    throw new Error(error)
                                 }
                                 if (resuelveConsultaPerfilConfiguracion.rowCount > 0) {
 
@@ -16292,10 +16290,8 @@ const puerto = async (entrada, salida) => {
                             `
                                 const resuelveConsultaPerfilConfiguracion = await conexion.query(consultaPerfilConfiguracion, [apartamentoIDV])
                                 if (resuelveConsultaPerfilConfiguracion.rowCount === 0) {
-                                    const ok = {
-                                        ok: "No hay ninguna configuracion disponible para este apartamento"
-                                    }
-                                    salida.json(ok)
+                                    const error = "No hay ninguna configuracion disponible para este apartamento"
+                                    throw new Error(error)
                                 }
                                 if (resuelveConsultaPerfilConfiguracion.rowCount === 1) {
                                     const imagen = resuelveConsultaPerfilConfiguracion.rows[0].imagen
@@ -16344,10 +16340,8 @@ const puerto = async (entrada, salida) => {
                                 ]
                                 const resuelveConsultaDetallesConfiguracion = await conexion.query(consultaDetallesConfiguracion, metadatos)
                                 if (resuelveConsultaDetallesConfiguracion.rowCount === 0) {
-                                    const ok = {
-                                        ok: "No hay ninguna configuracion disponible para este apartamento"
-                                    }
-                                    salida.json(ok)
+                                    const error = "No hay ninguna configuracion disponible para este apartamento"
+                                    throw new Error(error)
                                 }
 
 
@@ -19156,7 +19150,7 @@ const calendarios_compartidos = async (entrada, salida) => {
                     const fechaEntrada_ISO = detallesReserva.entrada
                     const fechaSalida_ISO = detallesReserva.salida
 
-                    
+
                     const fechaEntrada_objeto = (DateTime.fromObject({
                         year: fechaEntrada_ISO.split("-")[0],
                         month: fechaEntrada_ISO.split("-")[1],

@@ -11645,8 +11645,9 @@ const casaVitini = {
             contenedorIntermedio.appendChild(contenedorBloque)
             contenedor.appendChild(contenedorIntermedio)
 
-            const seccion = document.querySelector("section")
+            const seccion = document.querySelector("main")
             seccion.removeAttribute("instanciaUID")
+            seccion.innerHTML = null
             //seccion.style.position = "absolute"
             //seccion.style.justifyContent = "center"
             //seccion.style.height = "100%"
