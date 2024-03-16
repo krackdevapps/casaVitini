@@ -6161,7 +6161,6 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: nowrap;
     align-content: center;
     justify-content: center;
-    padding: 6px;
     height: 14px;
 }
 

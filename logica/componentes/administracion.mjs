@@ -19606,12 +19606,17 @@ const administracion = {
 
             },
             estadoOferta: async (estadoOferta) => {
-                let ofertaUID = document.querySelector("[ofertaUID]").getAttribute("ofertaUID")
-                let selectorEstadoOfertaUI = document.querySelector("[estadoOferta]")
-                let estadoActualMemoriaVolatil = selectorEstadoOfertaUI.innerText
+
+                const ofertaUID = document.querySelector("[ofertaUID]")?.getAttribute("ofertaUID")
+                if (!ofertaUID) {
+                    const error = "No se puede cambiar el estado de esta oferta porque no tiene un identificador único de oferta (ofertaUID). Esto puede deberse a que aún no has creado la oferta o que la has borrado. Si estás creando una oferta, por favor asegúrate de crearla pulsando el botón 'Crear oferta' antes de activarla."
+                    return casaVitini.ui.vistas.advertenciaInmersiva(error)
+                }
+                const selectorEstadoOfertaUI = document.querySelector("[estadoOferta]")
+                const estadoActualMemoriaVolatil = selectorEstadoOfertaUI.innerText
                 selectorEstadoOfertaUI.innerText = "Esperando al servidor...."
 
-                let estadoOfertaActual = estadoOferta.target.getAttribute("estadoOferta")
+                const estadoOfertaActual = estadoOferta.target.getAttribute("estadoOferta")
                 let estadoOfertaPropuesto
                 if (estadoOfertaActual === "desactivada") {
                     estadoOfertaPropuesto = "activada"
@@ -19625,14 +19630,14 @@ const administracion = {
                     ofertaUID: Number(ofertaUID),
                     estadoOferta: estadoOfertaPropuesto
                 }
-                let respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
 
                 if (respuestaServidor?.error) {
                     document.querySelector("[estadoOferta]").innerText = estadoActualMemoriaVolatil
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                 }
                 if (respuestaServidor?.ok) {
-                    let estadoOfertaComfirmado = respuestaServidor?.estadoOferta
+                    const estadoOfertaComfirmado = respuestaServidor?.estadoOferta
                     selectorEstadoOfertaUI.setAttribute("estadoOferta", estadoOfertaComfirmado)
                     let estadoOfertaUI
                     if (estadoOfertaComfirmado === "activada") {

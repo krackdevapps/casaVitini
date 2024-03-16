@@ -168,6 +168,8 @@ body {
     height: 100vh;
     width: 100%;
     overflow-y: scroll;
+    padding-bottom: env(safe-area-inset-bottom);
+    min-height: -webkit-fill-available;
 }
 
 main {

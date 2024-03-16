@@ -6282,16 +6282,6 @@ const casaVitini = {
 
                     }
                     
-
-                    // window.removeEventListener('scroll', controladorParalaje);
-                    //window.removeEventListener('scroll', controladorParalaje);
-                    //  window.addEventListener('scroll', controladorParalaje);
-
-                    // Cacheo de elementos
-                    //const contenedoresPalaraje = document.querySelectorAll('.contenedor-paralaje');
-
-                    // Definir una función para el control del parallax
-             
                     let animationRunning = false;
                     function scrollHandler() {
                         if (!animationRunning) {
@@ -9691,6 +9681,8 @@ const casaVitini = {
                                 }
                                 if (diaFinal_decimal > fechaSalidaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaDisponible")
+                                    bloqueDia.addEventListener("click", eval(metodoSelectorDia))
+                                    bloqueDia.setAttribute("estadoDia", "disponible")
 
                                 }
                                 if (diaFinal_decimal === fechaSalidaSeleccionada.dia) {
