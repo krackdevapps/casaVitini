@@ -6214,19 +6214,24 @@ const casaVitini = {
 
                     const controladorAnchoRestante = () => {
                         console.log("test")
-                        const header1 = document.querySelector("header")
-                        const anchoHeader = header1.getBoundingClientRect().height
+                        const selectorAranqueConozcano = document.querySelector("[zonaUID=conozcanos]")
+                        if (!selectorAranqueConozcano) {
+                            observador.disconnect();
+                            return
+                        }
+                        const anchoHeader = header.getBoundingClientRect().height
                         const contenedoresPalaraje = document.querySelector("[contenedor=paralaje]")
                         contenedoresPalaraje.style.marginTop = "-" + anchoHeader + "px"
 
                     }
                     controladorAnchoRestante()
-
+                    const observador = new ResizeObserver(controladorAnchoRestante)
+                    observador.observe(header);
 
                     const contenedoresPalaraje = document.querySelectorAll("[contenedorParalaje]")
                     const iconoRaton = document.querySelector("[icono=mouse]")
 
-                    
+
                     const controladorParalaje = () => {
                         const alturaScroll = window.scrollY
                         if (iconoRaton && alturaScroll > 10) {
@@ -6261,27 +6266,27 @@ const casaVitini = {
                                     if (containerRect2.top <= 0 && containerRect2.bottom <= window.innerHeight) {
                                         parallaxImage2.style.transform = 'translate3d(0 ,' + (conCero / 2) + 'px ,0)';
                                         if (textoAnimado) {
-                                                  textoAnimado.style.transform = 'translate3d(0 ,-' + (conCero) + 'px ,0)';
+                                            textoAnimado.style.transform = 'translate3d(0 ,-' + (conCero) + 'px ,0)';
                                         }
 
                                         // console.log("imagen yendose")
                                     } else if (containerRect2.top < window.innerHeight && containerRect2.bottom > 0) {
                                         parallaxImage2.style.transform = 'translate3d(0 ,-' + translateY + 'px ,0)';
                                         if (textoAnimado) {
-                                             textoAnimado.style.transform = 'translate3d(0 ,' + (translateY * 2) + 'px ,0)';
+                                            textoAnimado.style.transform = 'translate3d(0 ,' + (translateY * 2) + 'px ,0)';
                                         }
                                         //console.log("imagen viniendo")
                                     } else {
-                            //  parallaxImage2.style.transform = 'translateY(0)';
-                               // console.log("imagen no visible antes")
-                            }
+                                        //  parallaxImage2.style.transform = 'translateY(0)';
+                                        // console.log("imagen no visible antes")
+                                    }
                                 }
                             })
                         })
 
 
                     }
-                    
+
                     let animationRunning = false;
                     function scrollHandler() {
                         if (!animationRunning) {

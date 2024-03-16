@@ -29444,6 +29444,7 @@ const administracion = {
             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
 
             const sectionRenderizada = document.querySelector("main[instanciaUID]")
+            sectionRenderizada.style.maxWidth = "100%"
             const instanciaUID_seccion = sectionRenderizada.getAttribute("instanciaUID")
 
             const metadatosControaldorLogo = {
