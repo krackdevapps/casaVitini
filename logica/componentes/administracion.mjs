@@ -855,7 +855,7 @@ const administracion = {
 
                 const selectorCuadradoFechaEntrada = document.querySelector("[calendario=entrada]")
                 const selectorFechaEntradaUI = selectorCuadradoFechaEntrada.querySelector("[fechaUI=fechaInicio]")
-                console.log("selectorFechaEntradaUI", selectorFechaEntradaUI)
+                
                 const selectorCuadradoFechaSalida = document.querySelector("[calendario=salida]")
                 const selectorFechaSalidaUI = selectorCuadradoFechaSalida.querySelector("[fechaUI=fechaFin]")
 
@@ -4763,7 +4763,7 @@ const administracion = {
                 const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
 
                 if (calendarioIO === "entrada") {
-                    console.log("hola")
+                    
                     /* 
                     document.querySelectorAll("[tipoPropuesta=fechaEntrada]").forEach(propuesta => {
                         propuesta.remove()
@@ -4938,7 +4938,7 @@ const administracion = {
                     sentidoRango: sentidoRango,
                     fechaSolicitada_ISO: fechaSolicitada_ISO
                 }
-                console.log("fecha", transaccion)
+                
                 const mensajes = {
                     pasado: [
                         "Confirmando la nueva fecha de entrada, por favor espere...",
@@ -4958,7 +4958,7 @@ const administracion = {
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 const pantallaDeCargaRenderizada = document.querySelector(`[componente=advertenciaInmersiva][instanciaUID="${instanciaUID_pantallaDeCarga}"]`)
-                console.log("respuesta", respuestaServidor)
+                
                 if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
 
                     const detallesError = respuestaServidor?.error
@@ -5019,7 +5019,7 @@ const administracion = {
                         // fechaEvento.classList.add()
                         fechaEvento.innerText = `${fechaEntrada_Humana} >>> ${fechaSalida_Humana}`
                         contenedorEvento.appendChild(fechaEvento)
-                        console.log("tipoEvento", tipoElemento)
+                        
                         if (tipoElemento === "reserva") {
                             const botonIrAlEvento = document.createElement("a")
                             botonIrAlEvento.classList.add("botonIrAlEvento")
@@ -8566,7 +8566,7 @@ const administracion = {
                                     transaccion[nombreCampo] = valorCampo
                                 })
                             }
-                            console.log("transaccion", transaccion)
+                            
 
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                             const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaEspera}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
@@ -13793,7 +13793,7 @@ const administracion = {
                     const valorCampo = campo.value
                     transacccion[nombreCampo] = valorCampo
                 })
-                console.log("transaccion", transacccion)
+                
                 const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
 
 
@@ -15054,7 +15054,7 @@ const administracion = {
                 const seccionUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
                 const interruptorIDV = interruptor.interruptorIDV
                 const estado = interruptor.estado
-                console.log("interruptorIDV", interruptorIDV)
+                
 
                 const selectorListaEstadosInterruptor = seccionRenderizadaOrigen.querySelector(`[interruptor=${interruptorIDV}]`)
                 const valorInicial = selectorListaEstadosInterruptor.getAttribute("valorInicial")
@@ -15090,7 +15090,7 @@ const administracion = {
                         estadoInicialUI = "Desactivado"
                     }
                     estadoSoliciado.text = estadoInicialUI
-                    console.log("valorInicial", valorInicial)
+                    
                     selectorListaEstadosInterruptor.value = valorInicial
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                 }
@@ -19211,7 +19211,7 @@ const administracion = {
             obtenerDetallesOferta: async (ofertaUID) => {
                 const seccionUID = document.querySelector("main").getAttribute("instanciaUID")
 
-                console.log("ofertaUID", ofertaUID)
+                
                 const transaccion = {
                     zona: "administracion/ofertas/detallesOferta",
                     ofertaUID: Number(ofertaUID)
@@ -19220,7 +19220,7 @@ const administracion = {
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 const seccionRenderizada = document.querySelector(`main[instanciaUID="${seccionUID}"]`)
                 if (!seccionRenderizada) return
-                console.log("respuestaServidor", respuestaServidor)
+                
                 if (respuestaServidor?.error) {
                     const titulo = document.querySelector(".titulo")
                     titulo.innerText = "No existe la oferta 248"
@@ -19550,7 +19550,7 @@ const administracion = {
                         espacioOfertas.appendChild(opcionesUI)
                     }
                     if (tipoOfertaIDV_valorInicial === "porApartamentosEspecificos") {
-                        console.log("tipoOfertaIDV_valorInicial", tipoOfertaIDV_valorInicial)
+                        
                         const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porApartamentosEspecificos()
                         espacioOfertas.appendChild(opcionesUI)
                     }
@@ -19586,7 +19586,7 @@ const administracion = {
 
                     if (tipoOfertaIDV_valorInicial === "porApartamentosEspecificos") {
                         document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=contextoAplicacion] [value=${descuentoAplicadoAIDV_valorInicial}]`).selected = true
-                        console.log("descuentoAplicadoAIDV", descuentoAplicadoAIDV_valorInicial)
+                        
 
                         if (descuentoAplicadoAIDV_valorInicial === "totalNetoReserva") {
                             document.querySelector(`[controladorDesliegue=descuentoGlobal]`).classList.remove("estadoInicialInvisible")
@@ -21860,7 +21860,7 @@ const administracion = {
                 }
                 if (respuestaServidor?.ok) {
                     const apartamentosDelComportameinto = respuestaServidor.apartamentosDelComportamiento
-                    console.log("respuestaServidor", respuestaServidor.apartamentosDelComportamiento)
+                    
                     nombreComportamiento.setAttribute("valorInicial", nombreComportamiento_valor)
                     fechaInicio.setAttribute("valorInicial", fechaInicio_valor)
                     fechaFinal.setAttribute("valorInicial", fechaFinal_valor)
@@ -21982,7 +21982,7 @@ const administracion = {
 
                         const insertarOpcionesApartamento = casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarOpcionesApartamento(metadatosApartamentoUI)
                         document.querySelector("[componente=infoDescuentoDedicados]").style.display = "none"
-                        console.log("zonaDescuentoDedicados", zonaDescuentoDedicados)
+                        
                         zonaDescuentoDedicados.appendChild(insertarOpcionesApartamento)
                         document.querySelector("[componente=comportamientoSuperBloque]").style.display = "grid"
                     }
@@ -29538,7 +29538,7 @@ const administracion = {
             }
 
             casaVitini.administracion.calendario.constructorCalendarioNuevo(tipoFecha)
-
+            
             const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
             //const selectorCapas = calendarioRenderizado.querySelector("[componente=selectorCapas]")
 
@@ -30297,14 +30297,14 @@ const administracion = {
             contenedorCarga.setAttribute("contenedor", "contruyendoCalendario")
             //contenedorCarga.setAttribute("elemento", "flotante")
             contenedorCarga.appendChild(spinner)
-
+            
             contenedoCalendarioIntermedio.appendChild(calendario)
             contenedoCalendarioIntermedio.appendChild(contenedorCarga)
-
+            
             bloqueCalendario.appendChild(contenedoCalendarioIntermedio)
-
+            
             document.querySelector("main").appendChild(bloqueCalendario)
-
+            
 
         },
         constructorMesNuevo: async (calendario) => {
@@ -30529,7 +30529,7 @@ const administracion = {
 
         },
         verHoy: async (calendarioActual) => {
-            console.log("hola")
+            
             const instanciaUID = calendarioActual.target.closest("[instanciaUID]").getAttribute("instanciaUID")
             const calendarioRenderizado = document.querySelector(`[componente=calendarioGlobal][instanciaUID="${instanciaUID}"]`)
             const mesRenderizado = Number(calendarioRenderizado.querySelector("[componente=mesReferencia]").getAttribute("mes"))
@@ -30711,17 +30711,17 @@ const administracion = {
             const altoRenderizadoSection = selectorSeccion.scrollHeight;
             const alturaVentana = window.innerHeight;
 
-            console.log("ventana", alturaVentana, "calendario", altoRenderizadoSection)
+            
 
             if (alturaVentana > altoRenderizadoSection) {
-                console.log("altura ventana mayos")
+                
                 selectorCalendarioGlobal.style.position = "absolute"
             } else if (alturaVentana < altoRenderizadoSection) {
-                console.log("altura ventana menor")
+                
                 selectorCalendarioGlobal.style.position = "relative"
             } else if (alturaVentana === altoRenderizadoSection) {
                 selectorCalendarioGlobal.style.position = "absolute"
-                console.log("altura ventana igual")
+                
             }
         },
         controladorRegistros: (metadatos) => {
@@ -31133,7 +31133,7 @@ const administracion = {
                     }
 
                     for (const detallesDelEvento of eventosEnDetalle) {
-                        console.log("detallesDelEvento", detallesDelEvento)
+                        
                         const reservaUID = detallesDelEvento.reserva
                         const eventoUID = detallesDelEvento.eventoUID
                         const reservaUI = detallesDelEvento.reserva

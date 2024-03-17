@@ -7842,6 +7842,7 @@ grid-template-columns: 0.5fr 1.5fr;
     height: 25px;
     /* Altura de 25px */
     padding: 10px;
+    transform: translate(-50%, -50%);
 
 }
 
@@ -8800,6 +8801,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
     justify-content: center;
     flex-wrap: nowrap;
+    gap: 20px;
 }
 
 .administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueDato {

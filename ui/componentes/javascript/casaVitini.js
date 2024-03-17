@@ -329,7 +329,7 @@ const casaVitini = {
                                 }
                                 const calendarioPresente = await casaVitini.componentes.resolverCalendarioNuevo(calendario)
                                 const primeraFechaDisponible = calendarioPresente.limites.primeraFechaDisponible
-                                console.log("calendarioPresetne", calendarioPresente)
+
                                 if (calendarioPresente.mes !== primeraFechaDisponible.mes ||
                                     calendarioPresente.ano !== primeraFechaDisponible.ano) {
                                     calendarioPresente.tiempo = "futuro"
@@ -1123,7 +1123,7 @@ const casaVitini = {
                     }
 
                     const desgloseTotalReserva = await casaVitini.componentes.obtenerPrecioReserva(metadatos)
-                    console.log("desgloseTotalReserva", desgloseTotalReserva)
+
                     const totalesPorApartamento = desgloseTotalReserva.desgloseFinanciero.totalesPorApartamento
                     const totalesPorNoche = desgloseTotalReserva.desgloseFinanciero.totalesPorNoche
                     const ofertas = desgloseTotalReserva.desgloseFinanciero.ofertas
@@ -2367,7 +2367,7 @@ const casaVitini = {
 
                 },
                 preConfirmar: async () => {
-                    console.log("ss")
+
                     casaVitini.componentes.flujoPagoUI.desplegarUI("Preconfirmando su reserva...")
 
                     const reservaLocal = JSON.parse(sessionStorage.getItem("reserva"))
@@ -2387,11 +2387,11 @@ const casaVitini = {
                         zona: "plaza/reservas/preConfirmarReserva",
                         reserva: reservaLocal
                     };
-                    console.log("ss")
+
 
                     const respuestaServidor = await casaVitini.componentes.servidor(preconfirmarReserva)
-                    console.log("ss")
-                    console.log("respuestaServidor", respuestaServidor)
+
+
 
                     if (respuestaServidor?.error) {
                         return casaVitini.componentes.flujoPagoUI.errorInfo(respuestaServidor.error)
@@ -6213,7 +6213,7 @@ const casaVitini = {
                     const header = document.querySelector("header")
 
                     const controladorAnchoRestante = () => {
-                        console.log("test")
+
                         const selectorAranqueConozcano = document.querySelector("[zonaUID=conozcanos]")
                         if (!selectorAranqueConozcano) {
                             observador.disconnect();
@@ -6230,14 +6230,22 @@ const casaVitini = {
                     const contenedoresPalaraje = document.querySelectorAll("[contenedorParalaje]")
                     const iconoRaton = document.querySelector("[icono=mouse]")
 
-                    const controladorParalaje = () => {
+                    const controladorIconoMouse = () => {
                         const alturaScroll = window.scrollY
                         if (iconoRaton && alturaScroll > 10) {
                             iconoRaton.addEventListener("transitionend", (e) => {
-                                e.target.remove()
+                               // e.target.remove()
                             })
                             iconoRaton.style.opacity = "0"
+                        }else {
+                            iconoRaton.style.opacity = "1"
+
                         }
+                    }
+
+
+                    const controladorParalaje = () => {
+               
 
                         contenedoresPalaraje.forEach((contenedorParalaje) => {
                             const parallaxContainer2 = contenedorParalaje;
@@ -6285,7 +6293,7 @@ const casaVitini = {
                                             containerBottom > windowInnerHeight
                                         )
                                     ) {
-                                        parallaxImage2.style.transform = 'translate3d(0 ,' + (conCero / 2) + 'px ,0)';
+                                       //parallaxImage2.style.transform = 'translate3d(0 ,' + (conCero / 2) + 'px ,0)';
                                         if (textoAnimado) {
                                             textoAnimado.style.transform = 'translate3d(0 ,-' + (conCero) + 'px ,0)';
                                         }
@@ -6295,7 +6303,7 @@ const casaVitini = {
                                     //     containerTop > 0 &&
                                     //     containerBottom >= windowInnerHeight
                                     // ) {
-                                    //     console.log("viene")
+                                    //     
                                     //     parallaxImage2.style.transform = 'translate3d(0 ,-' + translateY + 'px ,0)';
                                     //     if (textoAnimado) {
                                     //         textoAnimado.style.transform = 'translate3d(0 ,' + (translateY) + 'px ,0)';
@@ -6304,14 +6312,14 @@ const casaVitini = {
 
                                     /*
                                     if (containerTop < 0 && containerBottom < windowInnerHeight) {
-                                        // console.log("<<< seva", nombreImagen)
-                                        console.log("visible", nombreImagen)
+                                        // 
+                                        
                                         parallaxImage2.style.transform = 'translate3d(0 ,' + (conCero / 2) + 'px ,0)';
                                         if (textoAnimado) {
                                             textoAnimado.style.transform = 'translate3d(0 ,-' + (conCero) + 'px ,0)';
                                         }
                                     } else if (containerTop < windowInnerHeight && containerBottom > 0) {
-                                        console.log(">>> viene", nombreImagen, "-" + translateY)
+                                        
 
                                         parallaxImage2.style.transform = 'translate3d(0 ,-' + translateY + 'px ,0)';
                                         if (textoAnimado) {
@@ -6324,7 +6332,7 @@ const casaVitini = {
                                 }
                             })
                         })
-                        console.log("__________________________________")
+
                     }
 
                     let animationRunning = false;
@@ -6339,7 +6347,8 @@ const casaVitini = {
                     }
 
                     // Agregar evento de desplazamiento
-                    window.addEventListener('scroll', scrollHandler);
+                     window.addEventListener('scroll', scrollHandler);
+                     window.addEventListener('scroll', controladorIconoMouse);
 
                     // let options = {
                     //     root: null,
@@ -6351,6 +6360,15 @@ const casaVitini = {
                     // // Ahora, supongamos que tienes un elemento al que quieres observar
                     // let target = document.querySelector("[contenedor=paralaje]");
                     // observer_1.observe(target);
+
+                    const image = document.querySelectorAll('[imagenParalaje=imagen]');
+                    new simpleParallax(image, {
+                        delay: 0,
+                        orientation: 'down',
+                        scale: 1.3,
+                        overflow: false,
+                 
+                    });
                 }
             },
             instalaciones: {
@@ -6370,7 +6388,7 @@ const casaVitini = {
                         const posicionImagen = imagenElemento.getBoundingClientRect();
                         const contenedorImagen = document.querySelector("main [componente=contenedorImagenAmpliada] [contenedor=imagenVolatil]")
                         contenedorImagen.addEventListener("transitionend", (e) => {
-                            console.log("finImagen", e.target)
+
                             contenedorImagenAmpliada.remove()
                         })
 
@@ -6408,7 +6426,7 @@ const casaVitini = {
 
                         document.querySelector(`[componente=contenedorImagenAmpliada][numeroImagen]`)
                             .setAttribute("numeroImagen", imagenDestino)
-                        console.log("grupoActual", grupoActual, "imagenDestino", imagenDestino)
+
 
                         const contenedorImagen = document
                             .querySelector(`[grupoIDV="${grupoActual}"] [numeroImagen="${imagenDestino}"]`)
@@ -6416,7 +6434,7 @@ const casaVitini = {
 
                         const contenedorImagenAmpliada = document.querySelector(`[componente=contenedorImagenAmpliada] [contenedor=imagenVolatil]`)
                         const cssImagenObsoleto = contenedorImagenAmpliada.getAttribute("imagenAmpliadaClaseCSS")
-                        console.log("cssImagenObsoleto", cssImagenObsoleto)
+
                         contenedorImagenAmpliada.classList.remove(cssImagenObsoleto)
                         contenedorImagenAmpliada.classList.add(selectorImagenCSSResponsiva)
                         contenedorImagenAmpliada.setAttribute("imagenAmpliadaClaseCSS", selectorImagenCSSResponsiva)
@@ -6428,7 +6446,7 @@ const casaVitini = {
                         document.body.style.overflow = 'hidden';
                         const imagenElemento = imagen.target
                         const fondoClaseCSS = imagenElemento.getAttribute("imagenResponsiva");
-                        console.log("fondoClaseCSS", fondoClaseCSS)
+
 
                         imagenesAmpliables.forEach((imagenAmpliable) => {
                             imagenAmpliable.removeAttribute("style")
@@ -6509,7 +6527,7 @@ const casaVitini = {
 
                         let start = null;
                         const step = (timestamp) => {
-                            console.log("timeStamp", timestamp)
+
                             if (!start) { start = timestamp } else {
                                 contenedorImagenVolatil.style.top = "0px"
                                 contenedorImagenVolatil.style.left = "0"
@@ -6790,9 +6808,9 @@ const casaVitini = {
                 return casaVitini.ui.vistas.advertenciaInmersiva(mensaje)
             }
 
-            console.log("metadatos", metadatos)
+
             const elemento = document.querySelector(`[instanciaUID="${sectionUID}"] ${elementoScroll}`)
-            console.log("elemento", elemento)
+
 
             if (!elemento) {
                 document.querySelector(`[instanciaUID="${sectionUID}"] ${elementoScroll}`).removeEventListener("scroll", controladorEvento)
@@ -6803,7 +6821,7 @@ const casaVitini = {
             const controladorEvento = (e) => {
                 e.stopPropagation()
                 const alturaScroll = e.target.scrollTop
-                console.log("alturaScroll", alturaScroll)
+
                 if (alturaScroll > 10) {
                     logo.style.opacity = "0"
                     logo.style.pointerEvents = "none"
@@ -7687,9 +7705,9 @@ const casaVitini = {
 
                 const posicionDia1 = calendario.posicionDia1
                 const numeroDiasPorMes = calendario.numeroDiasPorMes;
-                console.log("calendario.dia", calendario.dia)
+
                 const diaActual_decimal = parseInt(calendario.dia, 10)
-                console.log("diaActual_decimal", diaActual_decimal)
+
                 const marcoCalendario = selectorCalendarioRenderizado.querySelector("[componente=marcoCalendario]")
                 const tipoCalendario = marcoCalendario?.getAttribute("IO")
 
@@ -7792,7 +7810,7 @@ const casaVitini = {
                                 }
                             }
                         }
-                        console.log("entrada ok", ok)
+
                         return ok
                     }
                     const objetoFechaLimitePorDias = fechaLimitePorDiasDeDuracion(fechaSalida_ISO, diasMaximoReserva)
@@ -7860,7 +7878,7 @@ const casaVitini = {
                                 (mesActual_decimal === fechaSalidaSeleccionada.mes && anoActual_decimal === fechaSalidaSeleccionada.ano)
                             ) {
                                 // si es mes de entrada y salida
-                                console.log("4")
+
                                 if (diaFinal_decimal === fechaSalidaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaReservaLimite")
                                 }
@@ -7880,7 +7898,7 @@ const casaVitini = {
 
                             } else if ((mesActual_decimal === fechaEntradaSeleccionada.mes && anoActual_decimal === fechaEntradaSeleccionada.ano)) {
                                 // Si es mes de entrada
-                                console.log("1")
+
 
                                 if (diaFinal_decimal === fechaEntradaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaSeleccionado")
@@ -7895,7 +7913,7 @@ const casaVitini = {
                                     }
                                 }
                             } else if (mesActual_decimal === fechaSalidaSeleccionada.mes && anoActual_decimal === fechaSalidaSeleccionada.ano) {
-                                console.log("2")
+
                                 // si es mes de salida pero no de entrada
                                 if (diaFinal_decimal < fechaSalidaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaReserva")
@@ -7918,7 +7936,7 @@ const casaVitini = {
                             }
                         }
                         else if (Object.keys(fechaEntradaSeleccionada).length && !Object.keys(fechaSalidaSeleccionada).length) {
-                            console.log(">> 1")
+
 
 
                             if (mesActual_decimal === fechaEntradaSeleccionada.mes && anoActual_decimal === fechaEntradaSeleccionada.ano) {
@@ -8000,29 +8018,29 @@ const casaVitini = {
                         if (anoActual_decimal < fechaSalidaSeleccionada.ano) {
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                            console.log("1")
+
                         } else if (anoActual_decimal === fechaSalidaSeleccionada.ano && mesActual_decimal < fechaSalidaSeleccionada.mes) {
-                            console.log("2")
+
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
                         } else {
-                            console.log("5")
-                            console.log(anoActual_decimal, limiteFuturo.ano, mesActual_decimal, limiteFuturo.mes)
+
+
 
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
                         }
                     } else if (calendario.tiempo === "presente" || calendario.tiempo === "futuro") {
                         if (anoActual_decimal < limiteFuturo.ano) {
-                            console.log("3")
+
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
                         } else if (anoActual_decimal === limiteFuturo.ano && mesActual_decimal < limiteFuturo.mes) {
-                            console.log("4")
+
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
                         } else {
-                            console.log("5")
+
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
                         }
@@ -8032,19 +8050,19 @@ const casaVitini = {
                         &&
                         (objetoFechaLimitePorDias.arbol[anoActual_decimal][mesActual_decimal])
                     ) {
-                        console.log("6")
-                        console.log(objetoFechaLimitePorDias.arbol[anoActual_decimal][mesActual_decimal], "ss")
+
+
 
                         selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
                         selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
                     } else if (calendario.tiempo === "futuro" ||
                         (mesActual_decimal === fechaSalidaSeleccionada.mes && anoActual_decimal === fechaSalidaSeleccionada.ano)) {
-                        console.log("7")
+
 
                         selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
                         selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
                     } else {
-                        console.log("8")
+
 
                         selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
                         selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
@@ -8131,7 +8149,7 @@ const casaVitini = {
                                 }
                             }
                         }
-                        console.log("ok", ok)
+
                         return ok
                     }
                     const objetoFechaLimitePorDias = fechaLimitePorDiasDeDuracion(fechaEntrada_ISO, diasMaximoReserva)
@@ -8205,7 +8223,7 @@ const casaVitini = {
                                 (mesActual_decimal === fechaSalidaSeleccionada.mes && anoActual_decimal === fechaSalidaSeleccionada.ano)
                             ) {
                                 // si es mes de entrada y salida
-                                console.log("41")
+
 
                                 if (diaFinal_decimal === fechaSalidaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaSeleccionado")
@@ -8232,7 +8250,7 @@ const casaVitini = {
 
                             } else if ((mesActual_decimal === fechaEntradaSeleccionada.mes && anoActual_decimal === fechaEntradaSeleccionada.ano)) {
                                 // Si es mes de entrada
-                                console.log("1")
+
 
                                 if (diaFinal_decimal === fechaEntradaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaReservaLimite")
@@ -8254,7 +8272,7 @@ const casaVitini = {
                                     }
                                 }
                             } else if (mesActual_decimal === fechaSalidaSeleccionada.mes && anoActual_decimal === fechaSalidaSeleccionada.ano) {
-                                console.log("2")
+
                                 // si es mes de salida pero no de entrada
                                 if (diaFinal_decimal < fechaSalidaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaReserva")
@@ -8483,7 +8501,7 @@ const casaVitini = {
                             (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal)
                         ) {
                             // si es mes de entrada y salida
-                            console.log("4")
+
                             if (diaFinal_decimal === diaSalidaReserva_decimal) {
                                 bloqueDia.classList.add("calendarioDiaReservaLimite")
                                 bloqueDia.innerText = "S " + diaFinal_decimal
@@ -8511,7 +8529,7 @@ const casaVitini = {
 
                         } else if ((mesActual_decimal === mesEntradaReserva_decimal && anoActual_decimal === anoEntradaReserva_decimal)) {
                             // Si es mes de entrada
-                            console.log("1")
+
 
                             if (diaFinal_decimal === diaEntradaReserva_decimal) {
                                 bloqueDia.classList.add("calendarioDiaSeleccionado")
@@ -8530,7 +8548,7 @@ const casaVitini = {
                             }
 
                         } else if (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal) {
-                            console.log("2")
+
                             // si es mes de salida pero no de entrada
                             if (diaFinal_decimal < diaSalidaReserva_decimal) {
                                 bloqueDia.classList.add("calendarioDiaReserva")
@@ -8550,7 +8568,7 @@ const casaVitini = {
                                 bloqueDia.classList.add("calendarioDiaReserva")
                                 bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
                             } else {
-                                console.log("fuera del rango")
+
                                 bloqueDia.classList.add("calendarioDiaDisponible")
                                 bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
                             }
@@ -8708,7 +8726,7 @@ const casaVitini = {
                             (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal)
                         ) {
                             // si es mes de entrada y salida
-                            console.log("41", diaFinal_decimal, diaSalidaReserva_decimal, diaFinal_decimal === diaSalidaReserva_decimal)
+
 
                             if (diaFinal_decimal === diaSalidaReserva_decimal) {
                                 bloqueDia.classList.add("calendarioDiaReservaLimite")
@@ -8743,7 +8761,7 @@ const casaVitini = {
 
                         } else if ((mesActual_decimal === mesEntradaReserva_decimal && anoActual_decimal === anoEntradaReserva_decimal)) {
                             // Si es mes de entrada
-                            console.log("1")
+
 
                             if (diaFinal_decimal === diaEntradaReserva_decimal) {
                                 bloqueDia.classList.add("calendarioDiaReservaLimite")
@@ -8772,7 +8790,7 @@ const casaVitini = {
                                 }
                             }
                         } else if (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal) {
-                            console.log("2")
+
                             // si es mes de salida pero no de entrada
                             if (diaFinal_decimal < diaSalidaReserva_decimal) {
                                 bloqueDia.classList.add("calendarioDiaReserva")
@@ -8796,9 +8814,9 @@ const casaVitini = {
                             if (verificaRangoInternamente(mesActual_decimal, anoActual_decimal, fechaEntrada_ISO, fechaSalida_ISO)) {
                                 bloqueDia.classList.add("calendarioDiaReserva")
                                 bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
-                                console.log("dentro del rangfo")
+
                             } else {
-                                console.log("fuera del rango")
+
                                 bloqueDia.classList.add("calendarioDiaDisponible")
                                 bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
                             }
@@ -9411,7 +9429,7 @@ const casaVitini = {
                                 (mesActual_decimal === fechaSalidaSeleccionada.mes && anoActual_decimal === fechaSalidaSeleccionada.ano)
                             ) {
                                 // si es mes de entrada y salida
-                                console.log("4")
+
                                 if (diaFinal_decimal === fechaSalidaSeleccionada.dia) {
                                     if (seleccionableDiaLimite === "si") {
                                         bloqueDia.classList.add("calendarioDiaReserva")
@@ -9443,7 +9461,7 @@ const casaVitini = {
 
                             } else if ((mesActual_decimal === fechaEntradaSeleccionada.mes && anoActual_decimal === fechaEntradaSeleccionada.ano)) {
                                 // Si es mes de entrada
-                                console.log("1")
+
 
                                 if (diaFinal_decimal === fechaEntradaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaSeleccionado")
@@ -9461,7 +9479,7 @@ const casaVitini = {
                                 }
 
                             } else if (mesActual_decimal === fechaSalidaSeleccionada.mes && anoActual_decimal === fechaSalidaSeleccionada.ano) {
-                                console.log("2")
+
                                 // si es mes de salida pero no de entrada
                                 if (diaFinal_decimal < fechaSalidaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaReserva")
@@ -9494,7 +9512,7 @@ const casaVitini = {
                             }
                         }
                         else if (Object.keys(fechaEntradaSeleccionada).length && !Object.keys(fechaSalidaSeleccionada).length) {
-                            console.log(">> 1")
+
 
                             if (mesActual_decimal === fechaEntradaSeleccionada.mes && anoActual_decimal === fechaEntradaSeleccionada.ano) {
                                 if (diaFinal_decimal === fechaEntradaSeleccionada.dia) {
@@ -9554,13 +9572,13 @@ const casaVitini = {
                         if (anoActual_decimal < fechaSalidaSeleccionada.ano) {
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                            console.log("1")
+
                         } else if (anoActual_decimal === fechaSalidaSeleccionada.ano && mesActual_decimal < fechaSalidaSeleccionada.mes) {
-                            console.log("2")
+
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
                         } else {
-                            console.log("5")
+
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
                         }
@@ -9656,7 +9674,7 @@ const casaVitini = {
                                 (mesActual_decimal === fechaSalidaSeleccionada.mes && anoActual_decimal === fechaSalidaSeleccionada.ano)
                             ) {
                                 // si es mes de entrada y salida
-                                console.log("41")
+
 
                                 if (diaFinal_decimal === fechaSalidaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaSeleccionado")
@@ -9695,7 +9713,7 @@ const casaVitini = {
 
                             } else if ((mesActual_decimal === fechaEntradaSeleccionada.mes && anoActual_decimal === fechaEntradaSeleccionada.ano)) {
                                 // Si es mes de entrada
-                                console.log("1")
+
 
                                 if (diaFinal_decimal === fechaEntradaSeleccionada.dia) {
                                     if (seleccionableDiaLimite === "si") {
@@ -9725,7 +9743,7 @@ const casaVitini = {
                                     }
                                 }
                             } else if (mesActual_decimal === fechaSalidaSeleccionada.mes && anoActual_decimal === fechaSalidaSeleccionada.ano) {
-                                console.log("2")
+
                                 // si es mes de salida pero no de entrada
                                 if (diaFinal_decimal < fechaSalidaSeleccionada.dia) {
                                     bloqueDia.classList.add("calendarioDiaReserva")
@@ -10944,7 +10962,7 @@ const casaVitini = {
 
                 const destino = desgloseFinanciero.destino
                 const selectorDestino = document.querySelector(destino)
-                console.log("selectorDestino", selectorDestino)
+
                 if (!selectorDestino) {
                     const error = "totales no encuentra el elemento de destino, revisa el identificador del elemento"
                     return casaVitini.ui.vistas.advertenciaInmersiva(error)
@@ -11786,10 +11804,10 @@ const casaVitini = {
 
                 const fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
                 const diasDelCalendario = marcoMes.querySelectorAll("[dia]")
-                console.log("diaSeleccionadoComoElemento.getAttribute()", diaSeleccionadoComoElemento.getAttribute("estadoDia"))
+
 
                 if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
-                    console.log("ss")
+
                     diaSeleccionadoComoElemento.setAttribute("estadoDia", "disponible")
 
                     if (calendarioIO === "entrada") {
@@ -11821,7 +11839,7 @@ const casaVitini = {
                     }
 
                     if (dia.getAttribute("estadoDia") === "disponible") {
-                        console.log("dia dipsonbile", dia)
+
                         dia.classList.remove("calendarioDiaSeleccionado")
                         dia.classList.remove("calendarioDiaReserva")
                         dia.classList.add("calendarioDiaDisponible")

@@ -6341,7 +6341,7 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo 'sentidoRango' solo puede ser pasado o futuro"
                             throw new Error(error)
                         }
-                        console.log("enjtrad", entrada.body)
+                        
                         const regexMes = /^\d{2}$/;
                         const regexAno = /^\d{4,}$/;
 
@@ -13209,7 +13209,7 @@ const puerto = async (entrada, salida) => {
                         } else {
                             const identificadoresVisualesEnArray = []
                             comportamientos.forEach((apart) => {
-                                console.log(typeof apart, Array.isArray(apart), apart === null)
+                                
 
                                 if (typeof apart !== "object" || Array.isArray(apart) || apart === null) {
                                     const error = "Dentro del array de apartamentos se esperaba un objeto"
@@ -13219,7 +13219,7 @@ const puerto = async (entrada, salida) => {
                                 identificadoresVisualesEnArray.push(apartamentoIDV_preProcesado)
                             })
                             const identificadoresVisualesRepetidos = identificadoresVisualesEnArray.filter((elem, index) => identificadoresVisualesEnArray.indexOf(elem) !== index);
-                            console.log("identificadoresVisualesRepetidos", identificadoresVisualesRepetidos)
+                            
 
                             if (identificadoresVisualesRepetidos.length > 0) {
                                 const error = "Existen identificadores visuales repetidos en el array de apartamentos"
@@ -13268,7 +13268,7 @@ const puerto = async (entrada, salida) => {
                                 const error = `El campo simbolo de ${apartamentoUI} solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido`
                                 throw new Error(error)
                             }
-                            console.log(!cantidad, !filtroCantidad.test(cantidad))
+                            
                             if (!cantidad || typeof cantidad !== "string" || !filtroCantidad.test(cantidad)) {
                                 const error = `El campo cantidad del ${apartamentoUI} solo admite una cadena con un numero con dos decimales separados por punto, es decir 00.00`
                                 throw new Error(error)
@@ -13602,7 +13602,7 @@ const puerto = async (entrada, salida) => {
                         } else {
                             const identificadoresVisualesEnArray = []
                             comportamientos.forEach((apart) => {
-                                console.log(typeof apart, Array.isArray(apart), apart === null)
+                                
 
                                 if (typeof apart !== "object" || Array.isArray(apart) || apart === null) {
                                     const error = "Dentro del array de apartamentos se esperaba un objeto"
@@ -13612,7 +13612,7 @@ const puerto = async (entrada, salida) => {
                                 identificadoresVisualesEnArray.push(apartamentoIDV_preProcesado)
                             })
                             const identificadoresVisualesRepetidos = identificadoresVisualesEnArray.filter((elem, index) => identificadoresVisualesEnArray.indexOf(elem) !== index);
-                            console.log("identificadoresVisualesRepetidos", identificadoresVisualesRepetidos)
+                            
 
                             if (identificadoresVisualesRepetidos.length > 0) {
                                 const error = "Existen identificadores visuales repetidos en el array de apartamentos"
@@ -19173,7 +19173,7 @@ const calendarios_compartidos = async (entrada, salida) => {
                     }))
 
 
-                    console.log("fechaEntrada_objeto", fechaEntrada_objeto.toISO())
+                    
 
                     const consultaApartamentoEnReserva = `
                     SELECT apartamento 
