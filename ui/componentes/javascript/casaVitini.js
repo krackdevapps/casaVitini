@@ -6,7 +6,10 @@ const casaVitini = {
                     document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
                     document.querySelector(".marcoElasticoRelativo").style.flex = "1"
-
+                    document.body.style.height = "100%"
+                    const main = document.querySelector("main")
+                    //main.style.height = "100%"
+                    //main.style.flex = "0"
 
 
                 },
@@ -14,7 +17,6 @@ const casaVitini = {
             reservasNuevo: {
                 arranque: async () => {
                     document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
-
 
                     const granuladoURL = casaVitini.componentes.granuladorURL()
                     const directorios = granuladoURL.directorios[granuladoURL.directorios.length - 1]
@@ -6206,7 +6208,6 @@ const casaVitini = {
             },
             conozcanos: {
                 arranque: () => {
-                    const sectionRenderizada = document.querySelector("main[instanciaUID]")
                     document.querySelector("#uiLogo").style.filter = "invert(1)"
                     const header = document.querySelector("header")
 
@@ -6298,7 +6299,9 @@ const casaVitini = {
                     window.addEventListener('scroll', scrollHandler);
                     window.addEventListener('scroll', controladorIconoMouse);
 
+
                     const grupoImagenesPalarax = document.querySelectorAll('[imagenParalaje=imagen]');
+
                     const palaraxControlador = new simpleParallax(grupoImagenesPalarax, {
                         delay: 1,
                         orientation: 'down',
@@ -6306,6 +6309,10 @@ const casaVitini = {
                         overflow: false,
 
                     });
+
+
+
+
                 }
             },
             instalaciones: {
@@ -6526,14 +6533,10 @@ const casaVitini = {
             //                    document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
 
 
-            document.querySelector("#uiLogo").removeAttribute("style")
-            document.querySelector("body").removeAttribute("style")
-            document.querySelector("header").removeAttribute("style")
-            document.querySelector("[componente=contenedorMenu]").removeAttribute("style")
-            document.querySelector("main").removeAttribute("style")
-            document.querySelector("#botonMenuResponsivo").removeAttribute("style")
-
-
+            const elementosReset = document.querySelectorAll("#uiLogo, body, header, main, [componente=contenedorMenu], #botonMenuResponsivo")
+            elementosReset.forEach((elementoReseteo) => {
+                elementoReseteo.removeAttribute("style")
+            })
 
             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
             casaVitini.componentes.limpiarAdvertenciasInmersivas()

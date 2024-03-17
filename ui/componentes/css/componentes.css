@@ -15,9 +15,7 @@
     display: flex;
     place-content: center;
     align-items: flex-start;
-    height: 100%;
     font-size: 54px;
-    padding: 60px;
     font-weight: bold;
     color: #0000009e;
 }
@@ -210,9 +208,10 @@
     align-items: center;
     align-content: center;
     flex-direction: row;
-    position: relative;
-    margin-bottom: 20px;
+    position: absolute;
+    bottom: 20px;
     display: flex;
+
 
 }
 
