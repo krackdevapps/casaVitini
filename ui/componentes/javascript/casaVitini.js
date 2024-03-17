@@ -6,9 +6,8 @@ const casaVitini = {
                     document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
                     document.querySelector(".marcoElasticoRelativo").style.flex = "1"
-                    document.body.style.height = "100%"
                     const main = document.querySelector("main")
-                    //main.style.height = "100%"
+                    main.style.height = "100%"
                     //main.style.flex = "0"
 
 
@@ -6317,6 +6316,7 @@ const casaVitini = {
             },
             instalaciones: {
                 arranque: () => {
+                    document.body.style.background = "#fdefd9"
                     const imagenesAmpliables = document.querySelectorAll("[componente=fotoAmpliable]")
                     const cerrarImagen = () => {
 
@@ -6337,7 +6337,7 @@ const casaVitini = {
                         })
 
                         document.querySelector("main [componente=contenedorBotones]").remove()
-                        document.body.removeAttribute("style");
+                        document.body.style.removeProperty("overflow")
 
                         const contenedorImagenAmpliada = document.querySelector("main [componente=contenedorImagenAmpliada]")
                         contenedorImagenAmpliada.style.pointerEvents = "none"

@@ -208,8 +208,8 @@
     align-items: center;
     align-content: center;
     flex-direction: row;
-    position: absolute;
-    bottom: 20px;
+ position: fixed;
+bottom: 15px;
     display: flex;
 
 
@@ -10153,14 +10153,29 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .plaza_servicios_icono_piscina {
     background-image: url("/componentes/imagenes/fotos/image00004.jpeg");
-    background-size: cover;
+     background-size: contain; 
     background-repeat: no-repeat;
     /* background-attachment: fixed;*/
     /* background-attachment: scroll;*/
-    background-position: center center;
+    /* background-position: center center; */
+    margin-left: 40px;
+    margin-right: 40px;
+    height: 1200px;
+}
+.bloqueNuevo1 {
+    display: flex;
+    /*flex-direction: row;*/
+}
+.bloquePiscina {
+    height: 100%;
     margin-left: 30px;
     margin-right: 30px;
-
+    zoom: 1;
+    align-items: center;
+}
+.imagentest {
+    width: 100%;
+    border-radius: 10px;
 }
 
 .plaza_servicios_icono_terraza {
@@ -11471,13 +11486,12 @@ grid-template-columns: 0.5fr 1.5fr;
 /*Fin parallax*/
 
 .plaza_servicios_superBloque .contenedorApartamento {
-    /* background: #cdcdcd; */
+     background: #f6e1af; 
     margin-right: 30px;
     margin-left: 30px;
     border-radius: 10px;
     padding: 15px;
-
-    border: 1px solid #00000047;
+    /* border: 1px solid #00000047; */
 }
 
 .plaza_servicios_superBloque .contenedorApartamento .titulo {
@@ -11648,7 +11662,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .plaza_servicios_superBloque .contenedorImagenVolatil {
     /*cover o no cover,*/
-    background-size: cover;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
     /*background-color: whitesmoke;*/
