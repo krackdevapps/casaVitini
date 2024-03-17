@@ -10177,6 +10177,11 @@ grid-template-columns: 0.5fr 1.5fr;
     width: 100%;
     border-radius: 10px;
 }
+.infoCaracteristicaTest {
+  width: 100%;
+    margin-top: -60px;
+}
+  
 
 .plaza_servicios_icono_terraza {
 
