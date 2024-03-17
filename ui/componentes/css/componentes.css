@@ -11870,7 +11870,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .contenedorParalax .icon-scroll,
 .contenedorParalax .icon-scroll:before {
 
-    left: 50%;
+    /* left: 50%; */
 }
 
 .contenedorParalax .icon-scroll {
@@ -11897,6 +11897,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: #fff;
     margin-left: -4px;
     top: 8px;
+    left: 19px;
     border-radius: 4px;
     -webkit-animation-duration: 1.5s;
     animation-duration: 1.5s;
