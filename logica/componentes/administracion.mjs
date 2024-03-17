@@ -13091,7 +13091,7 @@ const administracion = {
                                 } else {
                                     const botonIrAlEvento = document.createElement("div")
                                     botonIrAlEvento.classList.add("sinInfo")
-                                    botonIrAlEvento.innerText = "Airbnb no proporciona ninguna informacion sobre este evento. Probablamente este evento sea de un calendario que Airbnbn ha sincronizado con otra plataforma. Para ver mas informacion de este evento por favor dirigase a la web de Airbnb por que Airbnbn no proporciona ninguna forma de enlazar este evento."
+                                    botonIrAlEvento.innerText = "Airbnb no proporciona ninguna informacion sobre este evento. Probablamente este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma. Para ver mas informacion de este evento por favor dirigase a la web de Airbnb por que Airbnb no proporciona ninguna forma de enlazar este evento."
                                     contenedorEvento.appendChild(botonIrAlEvento)
                                 }
 
@@ -13510,7 +13510,7 @@ const administracion = {
                         } else {
                             const botonIrAlEvento = document.createElement("div")
                             botonIrAlEvento.classList.add("sinInfo")
-                            botonIrAlEvento.innerText = "Airbnb no proporciona ninguna informacion sobre este evento. Probablamente este evento sea de un calendario que Airbnbn ha sincronizado con otra plataforma. Para ver mas informacion de este evento por favor dirigase a la web de Airbnb por que Airbnbn no proporciona ninguna forma de enlazar este evento."
+                            botonIrAlEvento.innerText = "Airbnb no proporciona ninguna informacion sobre este evento. Probablamente este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma. Para ver mas informacion de este evento por favor dirigase a la web de Airbnb por que Airbnb no proporciona ninguna forma de enlazar este evento."
                             contenedorEvento.appendChild(botonIrAlEvento)
                         }
 
@@ -13579,8 +13579,8 @@ const administracion = {
                     //  marcoElastico.appendChild(detallesReserva)
 
                     const calenadariosSincronizados = detallesApartamento.calendariosSincronizados
-                    const eventosAirbnbn = calenadariosSincronizados.airbnb.eventos
-                    for (const detallesDelEvento of eventosAirbnbn) {
+                    const eventosAirbnb_ = calenadariosSincronizados.airbnb.eventos
+                    for (const detallesDelEvento of eventosAirbnb_) {
                         /*
                             {
                         "fechaFinal": "2024-05-05",

@@ -8789,9 +8789,9 @@ const puerto = async (entrada, salida) => {
 
                         // buscar reservas en el dia actual
 
-                        const eventosCalendarios_airbnbn = await apartamentosOcupadosHoy(fechaActualTZ)
+                        const eventosCalendarios_airbnb = await apartamentosOcupadosHoy(fechaActualTZ)
 
-                        for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnbn) {
+                        for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnb) {
                             /*
                             {
                                   apartamentoIDV: 'apartamento3',

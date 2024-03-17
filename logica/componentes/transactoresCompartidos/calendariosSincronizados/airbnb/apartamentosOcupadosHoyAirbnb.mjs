@@ -3,7 +3,7 @@ import { sincronizarCalendariosAirbnbPorIDV } from "./sincronizarCalendariosAirb
 import { verificarRangoContenidoAirbnb } from "./verificarRangoContenidoAirbnb.mjs"
 
 const apartamentosOcupadosHoy = async (fechaHoy_ISO) => {
-    // Obtener todo los calendarios de airbnb que coinciden con hoy, o las fecha que se le pase. Este script es diferente a apartamentosOcupadosAirbnbn y por tanto estos dos script deben exsite y no son reutilizables.
+    // Obtener todo los calendarios de airbnb que coinciden con hoy, o las fecha que se le pase. Este script es diferente a apartamentosOcupadosAirbnb y por tanto estos dos script deben exsite y no son reutilizables.
     const plataformaOrigen = "airbnb"
     const consultaCalendariosSincronizados = `
     SELECT 

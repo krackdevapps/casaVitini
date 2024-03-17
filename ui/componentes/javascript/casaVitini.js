@@ -6912,7 +6912,7 @@ const casaVitini = {
             advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
 
-            const seccion = document.querySelector("section")
+            const seccion = document.querySelector("main")
             seccion.removeAttribute("instanciaUID")
             seccion.style.position = "absolute"
             seccion.style.justifyContent = "center"
