@@ -11800,7 +11800,7 @@ grid-template-columns: 0.5fr 1.5fr;
     transform: translateX(-50%, -50%);
     z-index: 10;
     position: absolute;
-    top: 90vh;
+    bottom: 40px;
     pointer-events: none;
 }
 
@@ -11867,6 +11867,8 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
     transition: opacity 500ms linear;
     transform: translateY(-50%, -50%);
+    -webkit-transform: translateY(-50%, -50%);
+    position: absolute;
 
 
 }
@@ -11885,6 +11887,8 @@ grid-template-columns: 0.5fr 1.5fr;
     animation-iteration-count: infinite;
     -webkit-animation-name: scroll;
     animation-name: scroll;
+    z-index: 200;
+position: absolute;
 }
 
 @-webkit-keyframes scroll {

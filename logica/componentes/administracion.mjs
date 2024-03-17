@@ -31133,7 +31133,7 @@ const administracion = {
                     }
 
                     for (const detallesDelEvento of eventosEnDetalle) {
-
+                        console.log("detallesDelEvento", detallesDelEvento)
                         const reservaUID = detallesDelEvento.reserva
                         const eventoUID = detallesDelEvento.eventoUID
                         const reservaUI = detallesDelEvento.reserva
@@ -31143,15 +31143,27 @@ const administracion = {
                         const duracion_en_dias = detallesDelEvento.duracion_en_dias
                         const tipoEvento = detallesDelEvento.tipoEvento
 
-                        const fechaEntradaArray = fechaEntrada_ISO.split("-")
-                        const diaEntrada = Number(fechaEntradaArray[2])
-                        const mesEntrada = Number(fechaEntradaArray[1])
-                        const anoEntrada = Number(fechaEntradaArray[0])
 
-                        const fechaSalidaArray = fechaSalida_ISO.split("-")
-                        const diaSalida = Number(fechaSalidaArray[2])
-                        const mesSalida = Number(fechaSalidaArray[1])
-                        const anoSalida = Number(fechaSalidaArray[0])
+                        let diaEntrada
+                        let mesEntrada
+                        let anoEntrada
+                        let diaSalida
+                        let mesSalida
+                        let anoSalida
+                        if (fechaEntrada_ISO) {
+                            const fechaEntradaArray = fechaEntrada_ISO.split("-")
+                            diaEntrada = Number(fechaEntradaArray[2])
+                            mesEntrada = Number(fechaEntradaArray[1])
+                            anoEntrada = Number(fechaEntradaArray[0])
+                        }
+
+                        if (fechaSalida_ISO) {
+                            const fechaSalidaArray = fechaSalida_ISO.split("-")
+                            diaSalida = Number(fechaSalidaArray[2])
+                            mesSalida = Number(fechaSalidaArray[1])
+                            anoSalida = Number(fechaSalidaArray[0])
+                        }
+
 
                         const configuracionEventoUI = {
                             eventoUID: eventoUID,

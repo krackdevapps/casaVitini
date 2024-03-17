@@ -6222,7 +6222,6 @@ const casaVitini = {
                         const anchoHeader = header.getBoundingClientRect().height
                         const contenedoresPalaraje = document.querySelector("[contenedor=paralaje]")
                         contenedoresPalaraje.style.marginTop = "-" + anchoHeader + "px"
-
                     }
                     controladorAnchoRestante()
                     const observador = new ResizeObserver(controladorAnchoRestante)
@@ -6230,7 +6229,6 @@ const casaVitini = {
 
                     const contenedoresPalaraje = document.querySelectorAll("[contenedorParalaje]")
                     const iconoRaton = document.querySelector("[icono=mouse]")
-
 
                     const controladorParalaje = () => {
                         const alturaScroll = window.scrollY
@@ -6241,54 +6239,96 @@ const casaVitini = {
                             iconoRaton.style.opacity = "0"
                         }
 
-
                         contenedoresPalaraje.forEach((contenedorParalaje) => {
                             const parallaxContainer2 = contenedorParalaje;
                             const parallaxImage2 = contenedorParalaje.querySelector('[imagenParalaje]');
+                            const nombreImagen = parallaxImage2.getAttribute("nombre")
+
                             const textoAnimado = contenedorParalaje.querySelector('[elemento=textoAnimado]');
 
                             const containerRect2 = parallaxContainer2.getBoundingClientRect();
+                            const windowInnerHeight = window.innerHeight
+                            const scrollPosition2 = window.scrollY;
+                            const containerBottom = containerRect2.bottom
+                            const containerTop = containerRect2.top
 
                             requestAnimationFrame(() => {
-                                if ((containerRect2.top < 0 && containerRect2.bottom < window.innerHeight) ||
-                                    (containerRect2.top < window.innerHeight && containerRect2.bottom > 0)) {
 
-                                    const scrollPosition2 = window.scrollY;
+                                if ((containerTop < 0 && containerBottom < windowInnerHeight) ||
+                                    (containerTop < windowInnerHeight && containerBottom > 0)) {
+
+                                    // parallaxImage2.style.transform = 'translate3d(0 ,' + (scrollPosition2 / 2) + 'px ,0)';
+
                                     const parallaxTop2 = parallaxContainer2.offsetTop;
                                     const parallaxHeight2 = parallaxContainer2.offsetHeight;
-                                    const parallaxVisibleHeight2 = Math.min(window.innerHeight, parallaxTop2 + parallaxHeight2) - Math.max(0, containerRect2.top);
-                                    const conCero = Math.min(window.innerHeight, parallaxTop2 + parallaxHeight2) - (containerRect2.top + parallaxHeight2);
+                                    // const parallaxVisibleHeight2 = Math.min(windowInnerHeight, parallaxTop2 + parallaxHeight2) - Math.max(0, containerTop);
+                                    // const conCero = Math.min(windowInnerHeight, parallaxTop2 + parallaxHeight2) - (containerTop + parallaxHeight2);
 
-                                    const translateY_2 = (scrollPosition2 - containerRect2.top) * 0.5;
+                                    const parallaxVisibleHeight2 = (windowInnerHeight < parallaxTop2 + parallaxHeight2 ? windowInnerHeight : parallaxTop2 + parallaxHeight2) - (containerTop > 0 ? containerTop : 0);
+                                    const conCero = (windowInnerHeight < parallaxTop2 + parallaxHeight2 ? windowInnerHeight : parallaxTop2 + parallaxHeight2) - (containerTop + parallaxHeight2);
+
+                                    const translateY_2 = (scrollPosition2 - containerTop) * 0.5;
                                     const maxTranslateY = parallaxVisibleHeight2 - parallaxHeight2;
-                                    const translateY = Math.max(-maxTranslateY, Math.min(0, translateY_2)) / 2;
+                                    // const translateY = Math.max(-maxTranslateY, Math.min(0, translateY_2)) / 2;
 
-                                    if (containerRect2.top <= 0 && containerRect2.bottom <= window.innerHeight) {
+                                    const clampedTranslateY = translateY_2 < 0 ? (-maxTranslateY > translateY_2 ? -maxTranslateY : translateY_2) : (0 < translateY_2 ? (translateY_2) : translateY_2);
+                                    const translateY = clampedTranslateY / 2;
+
+                                    if (
+                                        (
+                                            containerTop < 0 &&
+                                            containerBottom < windowInnerHeight
+                                        )
+                                        ||
+                                        (
+                                            containerTop > 0 &&
+                                            containerBottom > windowInnerHeight
+                                        )
+                                    ) {
                                         parallaxImage2.style.transform = 'translate3d(0 ,' + (conCero / 2) + 'px ,0)';
                                         if (textoAnimado) {
                                             textoAnimado.style.transform = 'translate3d(0 ,-' + (conCero) + 'px ,0)';
                                         }
+                                    }
 
-                                        // console.log("imagen yendose")
-                                    } else if (containerRect2.top < window.innerHeight && containerRect2.bottom > 0) {
+                                    // if (
+                                    //     containerTop > 0 &&
+                                    //     containerBottom >= windowInnerHeight
+                                    // ) {
+                                    //     console.log("viene")
+                                    //     parallaxImage2.style.transform = 'translate3d(0 ,-' + translateY + 'px ,0)';
+                                    //     if (textoAnimado) {
+                                    //         textoAnimado.style.transform = 'translate3d(0 ,' + (translateY) + 'px ,0)';
+                                    //     }
+                                    // }
+
+                                    /*
+                                    if (containerTop < 0 && containerBottom < windowInnerHeight) {
+                                        // console.log("<<< seva", nombreImagen)
+                                        console.log("visible", nombreImagen)
+                                        parallaxImage2.style.transform = 'translate3d(0 ,' + (conCero / 2) + 'px ,0)';
+                                        if (textoAnimado) {
+                                            textoAnimado.style.transform = 'translate3d(0 ,-' + (conCero) + 'px ,0)';
+                                        }
+                                    } else if (containerTop < windowInnerHeight && containerBottom > 0) {
+                                        console.log(">>> viene", nombreImagen, "-" + translateY)
+
                                         parallaxImage2.style.transform = 'translate3d(0 ,-' + translateY + 'px ,0)';
                                         if (textoAnimado) {
-                                            textoAnimado.style.transform = 'translate3d(0 ,' + (translateY * 2) + 'px ,0)';
+                                            textoAnimado.style.transform = 'translate3d(0 ,' + (translateY) + 'px ,0)';
                                         }
-                                        //console.log("imagen viniendo")
                                     } else {
-                                        //  parallaxImage2.style.transform = 'translateY(0)';
-                                        // console.log("imagen no visible antes")
+                                        // parallaxImage2.style.transform = 'translateY(0)';
                                     }
+                                    */
                                 }
                             })
                         })
-
-
+                        console.log("__________________________________")
                     }
 
                     let animationRunning = false;
-                    function scrollHandler() {
+                    const scrollHandler = () => {
                         if (!animationRunning) {
                             animationRunning = true;
                             requestAnimationFrame(function () {
@@ -6300,9 +6340,18 @@ const casaVitini = {
 
                     // Agregar evento de desplazamiento
                     window.addEventListener('scroll', scrollHandler);
+
+                    // let options = {
+                    //     root: null,
+                    //     rootMargin: '0px',
+                    //     threshold: 1.0
+                    //   }
+                    // const observer_1 = new IntersectionObserver(scrollHandler, options);
+
+                    // // Ahora, supongamos que tienes un elemento al que quieres observar
+                    // let target = document.querySelector("[contenedor=paralaje]");
+                    // observer_1.observe(target);
                 }
-
-
             },
             instalaciones: {
                 arranque: () => {
