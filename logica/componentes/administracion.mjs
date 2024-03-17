@@ -30987,15 +30987,16 @@ const administracion = {
 
                 if (tipoEvento === "calendarioAirbnb") {
                     const descripcion = detallesDelEvento.descripcion || ""
+                    const apartamentoUI = detallesDelEvento.apartamentoUI
                     const regex = /Reservation URL: (https:\/\/www\.airbnb\.com\/hosting\/reservations\/details\/[A-Za-z0-9]+)/;
                     const match = descripcion.match(regex);
                     if (match) {
                         const urlEvento = match?.[1] ?? null;
-                        nombreEventoFinal = `Airbnb`
+                        nombreEventoFinal = `Airbnb (${apartamentoUI})`
                         urlUI = urlEvento
 
                     } else {
-                        nombreEventoFinal = `Evento sin información`
+                        nombreEventoFinal = `Airbnb (${apartamentoUI}), sin info`
                         //urlUI = ""
                     }
                 }

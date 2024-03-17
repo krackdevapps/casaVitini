@@ -504,9 +504,10 @@
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     margin-bottom: 10px;
-
-
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
+
 
 .administracion_calendario_eventoUI_selecionado {
     background: grey;
@@ -11844,17 +11845,18 @@ grid-template-columns: 0.5fr 1.5fr;
     background-repeat: no-repeat;
     background-image: url("/componentes/imagenes/montana.jpg");
 }
+
 .contenedorParalax .fondo5 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-   background-image: url("/componentes/imagenes/leonciudad.jpg");
+    background-image: url("/componentes/imagenes/leonciudad.jpg");
 }
 
 
 .contenedorParalax .icon-scroll,
 .contenedorParalax .icon-scroll:before {
-    
+
     left: 50%;
 }
 
@@ -11890,7 +11892,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-animation-name: scroll;
     animation-name: scroll;
     z-index: 200;
-position: absolute;
+    position: absolute;
 }
 
 @-webkit-keyframes scroll {

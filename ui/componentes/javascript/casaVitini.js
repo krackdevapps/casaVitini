@@ -6300,7 +6300,7 @@ const casaVitini = {
 
                     const grupoImagenesPalarax = document.querySelectorAll('[imagenParalaje=imagen]');
                     const palaraxControlador = new simpleParallax(grupoImagenesPalarax, {
-                        delay: 0,
+                        delay: 1,
                         orientation: 'down',
                         scale: 1.3,
                         overflow: false,
