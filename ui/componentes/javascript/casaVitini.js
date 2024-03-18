@@ -6332,7 +6332,6 @@ const casaVitini = {
                         const posicionImagen = imagenElemento.getBoundingClientRect();
                         const contenedorImagen = document.querySelector("main [componente=contenedorImagenAmpliada] [contenedor=imagenVolatil]")
                         contenedorImagen.addEventListener("transitionend", (e) => {
-
                             contenedorImagenAmpliada.remove()
                         })
 

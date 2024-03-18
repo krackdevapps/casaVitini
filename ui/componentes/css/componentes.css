@@ -208,8 +208,8 @@
     align-items: center;
     align-content: center;
     flex-direction: row;
- position: fixed;
-bottom: 15px;
+    position: fixed;
+    bottom: 15px;
     display: flex;
 
 
@@ -10151,8 +10151,12 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-.plaza_servicios_icono_piscina {
+.imagenPiscina {
     background-image: url(/componentes/imagenes/fotos/image00004.jpeg);
+
+}
+
+.plaza_servicios_icono_piscina {
     background-size: cover;
     background-repeat: no-repeat;
     /* background-attachment: fixed; */
@@ -10160,12 +10164,38 @@ grid-template-columns: 0.5fr 1.5fr;
     background-position: center center;
     margin-left: 40px;
     margin-right: 40px;
-    height: 2025px;
+    height: 1025px;
 }
+
+@media (max-width: 850px) {
+
+    .plaza_servicios_icono_piscina {
+
+        height: 425px;
+    }
+
+}
+[contenedor="instalaciones"] .contenedorImagen {
+    transition: all 250ms linear;
+
+}
+
+
+@media (min-width: 850px) {
+    [contenedor="instalaciones"] .contenedorImagen:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 0px 20px 0px #0000007a;
+    }
+    
+}
+
+
+
 .bloqueNuevo1 {
     display: flex;
     /*flex-direction: row;*/
 }
+
 .bloquePiscina {
     height: 100%;
     margin-left: 30px;
@@ -10173,39 +10203,52 @@ grid-template-columns: 0.5fr 1.5fr;
     zoom: 1;
     align-items: center;
 }
+
 .imagentest {
     width: 100%;
     border-radius: 10px;
 }
+
 .infoCaracteristicaTest {
-  width: 100%;
+    width: 100%;
     margin-top: -60px;
 }
-  
+
+.imagenTerraza {
+    background-image: url("/componentes/imagenes/fotos/image00015.jpeg");
+
+}
 
 .plaza_servicios_icono_terraza {
 
-    background-image: url("/componentes/imagenes/fotos/image00015.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     /* background-attachment: fixed;*/
     /* background-attachment: scroll;*/
     background-position: center center;
+}
+
+.imagenWC {
+    background-image: url("/componentes/imagenes/fotos/image00013.jpeg");
+
 }
 
 .plaza_servicios_icono_wc {
 
-    background-image: url("/componentes/imagenes/fotos/image00013.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     /* background-attachment: fixed;*/
     /* background-attachment: scroll;*/
     background-position: center center;
+}
+
+.imagenPorcheDelantero {
+    background-image: url("/componentes/imagenes/fotos/image00014.jpeg");
+
 }
 
 .plaza_servicio_porcheDelantero {
 
-    background-image: url("/componentes/imagenes/fotos/image00014.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     /* background-attachment: fixed;*/
@@ -10213,21 +10256,26 @@ grid-template-columns: 0.5fr 1.5fr;
     background-position: center center;
 }
 
+.imagenEspacioCentral {
+    background-image: url("/componentes/imagenes/fotos/image00019.jpeg");
 
+}
 
 .plaza_servicio_icono_espacioCentral {
 
-    background-image: url("/componentes/imagenes/fotos/image00019.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     /* background-attachment: fixed;*/
     /* background-attachment: scroll;*/
     background-position: center center;
+}
+
+.imagenAccesoPlayas {
+    background-image: url("/componentes/imagenes/fotos/image00006.jpeg");
 }
 
 .plaza_servicio_icono_accesoPlayas {
 
-    background-image: url("/componentes/imagenes/fotos/image00006.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     /* background-attachment: fixed;*/
@@ -10235,10 +10283,13 @@ grid-template-columns: 0.5fr 1.5fr;
     background-position: center center;
 }
 
+.imagenCocina {
+    background-image: url("/componentes/imagenes/fotos/image00012.jpeg");
+
+}
 
 .plaza_servicio_icono_cocina {
 
-    background-image: url("/componentes/imagenes/fotos/image00012.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     /* background-attachment: fixed;*/
@@ -11491,7 +11542,7 @@ grid-template-columns: 0.5fr 1.5fr;
 /*Fin parallax*/
 
 .plaza_servicios_superBloque .contenedorApartamento {
-     background: #f6e1af; 
+    background: #f6e1af;
     margin-right: 30px;
     margin-left: 30px;
     border-radius: 10px;
