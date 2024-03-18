@@ -5,10 +5,10 @@ const casaVitini = {
                 arranque: () => {
                     document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
-                    document.querySelector(".marcoElasticoRelativo").style.flex = "1"
                     const main = document.querySelector("main")
-                    main.style.height = "100%"
+                    main.setAttribute("zonaCSS", "portada")
                     //main.style.flex = "0"
+                    main.style.height = "100%"
 
 
                 },
@@ -19,6 +19,9 @@ const casaVitini = {
 
                     const granuladoURL = casaVitini.componentes.granuladorURL()
                     const directorios = granuladoURL.directorios[granuladoURL.directorios.length - 1]
+                    const main = document.querySelector("main")
+                    main.style.height = "100%"
+                    main.setAttribute("zonaCSS", "alojamiento")
 
                     if (directorios === "alojamiento") {
                         return casaVitini.ui.vistas.reservasNuevo.buscarAlojamientoUI()
@@ -891,6 +894,8 @@ const casaVitini = {
                 resumenReserva: async () => {
                     document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
                     document.body.classList.add("difuminadoFondo")
+                    const main = document.querySelector("main")
+                    main.setAttribute("zonaCSS", "alojamiento")
 
                     const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
 
@@ -1754,7 +1759,7 @@ const casaVitini = {
 
                                     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                                    document.body.appendChild(advertenciaInmersivaIU)
+                                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
                                     const advertenciaInmersivaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
 
@@ -2303,13 +2308,7 @@ const casaVitini = {
                         contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                         advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                        document.body.appendChild(advertenciaInmersivaIU)
-
-
-
-
-
-
+                        document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
                     }
                 },
@@ -2443,6 +2442,8 @@ const casaVitini = {
                     // document.body.style.backgroundImage = "url(/componentes/imagenes/loginFondo.jpg)"
                     //document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
                     //document.body.classList.add("difuminadoFondo")
+                    const main = document.querySelector("main")
+                    main.setAttribute("zonaCSS", "miCasa")
                     document.querySelector("[boton=iniciarSession]").addEventListener("click", () => {
                         casaVitini.ui.vistas.miCasa.botonIniciarSession("iniciarSession")
                     })
@@ -2521,7 +2522,8 @@ const casaVitini = {
                 cuenta: {
                     portada: {
                         arranque: async () => {
-                            document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
+                            const main = document.querySelector("main")
+                            main.setAttribute("zonaCSS", "miCasa")
                             const marcoCuenta = document.querySelector("[componente=marcoCuenta]")
                             const metadatos = {
                                 zona: "IDX",
@@ -2650,7 +2652,8 @@ const casaVitini = {
                     },
                     datosPersonales: {
                         arranque: async () => {
-                            document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
+                            const main = document.querySelector("main")
+                            main.setAttribute("zonaCSS", "miCasa")
                             const contenedorDatosPersonales = document.querySelector("[componente=marcoCuenta]")
                             const transaccion = {
                                 zona: "/miCasa/datosPersonalesDesdeMiCasa"
@@ -2690,7 +2693,12 @@ const casaVitini = {
 
                                 const nombreUI = document.createElement("a")
                                 nombreUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                                nombreUI.innerText = "Nombre"
+
+                                let titulo = document.createElement("p")
+                                titulo.classList.add("tituloDato")
+                                titulo.innerText = "Nombre"
+                                nombreUI.appendChild(titulo)
+
 
                                 const campoNombre = document.createElement("input")
                                 campoNombre.classList.add("detallesUsuario_campoDatosUsuario")
@@ -2702,7 +2710,11 @@ const casaVitini = {
 
                                 const primerApellidoUI = document.createElement("a")
                                 primerApellidoUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                                primerApellidoUI.innerText = "Primero apellido"
+
+                                titulo = document.createElement("p")
+                                titulo.classList.add("tituloDato")
+                                titulo.innerText = "Primero apellido"
+                                primerApellidoUI.appendChild(titulo)
 
                                 const campoPrimerApellido = document.createElement("input")
                                 campoPrimerApellido.classList.add("detallesUsuario_campoDatosUsuario")
@@ -2715,7 +2727,11 @@ const casaVitini = {
 
                                 const segundoApellidoUI = document.createElement("a")
                                 segundoApellidoUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                                segundoApellidoUI.innerText = "Segundo apellido"
+
+                                titulo = document.createElement("p")
+                                titulo.classList.add("tituloDato")
+                                titulo.innerText = "Segundo apellido"
+                                segundoApellidoUI.appendChild(titulo)
 
                                 const campoSegundoApellido = document.createElement("input")
                                 campoSegundoApellido.classList.add("detallesUsuario_campoDatosUsuario")
@@ -2728,7 +2744,11 @@ const casaVitini = {
 
                                 const pasaporteUI = document.createElement("a")
                                 pasaporteUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                                pasaporteUI.innerText = "Pasaporte"
+
+                                titulo = document.createElement("p")
+                                titulo.classList.add("tituloDato")
+                                titulo.innerText = "Pasaporte"
+                                pasaporteUI.appendChild(titulo)
 
                                 const campoPasaporte = document.createElement("input")
                                 campoPasaporte.classList.add("detallesUsuario_campoDatosUsuario")
@@ -2741,7 +2761,11 @@ const casaVitini = {
 
                                 const telefonoUI = document.createElement("a")
                                 telefonoUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                                telefonoUI.innerText = "Telefono"
+
+                                titulo = document.createElement("p")
+                                titulo.classList.add("tituloDato")
+                                titulo.innerText = "Telefono"
+                                telefonoUI.appendChild(titulo)
 
                                 const campoTelefono = document.createElement("input")
                                 campoTelefono.classList.add("detallesUsuario_campoDatosUsuario")
@@ -2755,7 +2779,11 @@ const casaVitini = {
 
                                 const emailUI = document.createElement("a")
                                 emailUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                                emailUI.innerText = "Correo electroníco"
+
+                                titulo = document.createElement("p")
+                                titulo.classList.add("tituloDato")
+                                titulo.innerText = "Correo electroníco"
+                                emailUI.appendChild(titulo)
 
                                 const campoEmail = document.createElement("input")
                                 campoEmail.classList.add("detallesUsuario_campoDatosUsuario")
@@ -2880,7 +2908,8 @@ const casaVitini = {
                     },
                     sessionesActivas: {
                         arranque: async () => {
-                            document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
+                            const main = document.querySelector("main")
+                            main.setAttribute("zonaCSS", "miCasa")
 
                             const espacioBotones = document.querySelector("[componente=espacioBotones]")
                             const espacioSessiones = document.querySelector("[componente=espacioSessiones]")
@@ -3063,7 +3092,8 @@ const casaVitini = {
                     cambiarClave: {
                         portada: {
                             arranque: () => {
-                                document.body.removeAttribute("style")
+                                const main = document.querySelector("main")
+                                main.setAttribute("zonaCSS", "miCasa")
                                 const botonCambiarClave = document.querySelector("[componente=botonCambiarClave]")
                                 botonCambiarClave.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.cambiarClave.portada.cambiarClaveTransactor)
                             },
@@ -3102,8 +3132,8 @@ const casaVitini = {
                     eliminarCuenta: {
                         portada: {
                             arranque: () => {
-                                document.body.removeAttribute("style")
-
+                                const main = document.querySelector("main")
+                                main.setAttribute("zonaCSS", "miCasa")
                                 const botonCambiarClave = document.querySelector("[componente=botonEliminarCuenta]")
                                 botonCambiarClave.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.eliminarCuenta.portada.transactor)
                             },
@@ -3134,8 +3164,8 @@ const casaVitini = {
                     },
                     modificarIDX: {
                         arranque: async () => {
-                            document.body.removeAttribute("style")
-
+                            const main = document.querySelector("main")
+                            main.setAttribute("zonaCSS", "miCasa")
                             const botonActualizarIDX = document.querySelector("[componente=botonCambiarIDX]")
                             botonActualizarIDX.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.modificarIDX.guardarCambios)
 
@@ -3165,7 +3195,8 @@ const casaVitini = {
                     },
                     reservas: {
                         arranque: async () => {
-                            document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
+                            const main = document.querySelector("main")
+                            main.setAttribute("zonaCSS", "miCasa")
 
                             const granuladoURL = casaVitini.componentes.granuladorURL()
                             const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
@@ -3214,15 +3245,20 @@ const casaVitini = {
 
                         },
                         detallesReserva: async (reservaUID) => {
-
+                            const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
                             const transacccion = {
                                 zona: "miCasa/misReservas/detallesReserva",
                                 reservaUID: Number(reservaUID)
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
-
+                            const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                            if (!instanciaRenderizada) { return }
                             if (respuestaServidor?.error) {
-                                return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor.error)
+                                const info = {
+                                    titulo: "No existe ninguna reserva con ese identicador",
+                                    descripcion: respuestaServidor.error
+                                }
+                                return casaVitini.componentes.mensajeSimple(info)
                             }
 
                             if (respuestaServidor.reserva) {
@@ -4611,6 +4647,8 @@ const casaVitini = {
 
                         },
                         mostrarReservasResueltas: async (transaccion) => {
+                            const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
+
                             const origen = transaccion.origen
                             delete transaccion.origen
                             const tipoConstruccionGrid = transaccion.tipoConstruccionGrid
@@ -4622,6 +4660,8 @@ const casaVitini = {
                             delete transaccion.paginaTipo
 
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                            const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                            if (!instanciaRenderizada) { return }
                             if (respuestaServidor?.error) {
                                 const espacioClientes = document.querySelector("[componente=espacioMisReservas]")
                                 document.querySelector("[gridUID=gridMisReservas]")?.remove()
@@ -4910,7 +4950,8 @@ const casaVitini = {
                 crearCuenta: {
                     portada: {
                         arranque: () => {
-                            document.body.removeAttribute("style")
+                            const main = document.querySelector("main")
+                            main.setAttribute("zonaCSS", "miCasa")
                             const boton = document.querySelector("[componente=botonCrearNuevaCuenta]")
                             boton.addEventListener("click", casaVitini.ui.vistas.miCasa.crearCuenta.portada.transactor)
                         },
@@ -4936,17 +4977,17 @@ const casaVitini = {
 
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                             const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                            if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
+                            if (!pantallaDeCargaRenderizada) { return }
+                            if (respuestaServidor?.error) {
                                 pantallaDeCargaRenderizada.remove()
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                             }
-                            if (respuestaServidor?.ok && pantallaDeCargaRenderizada) {
+                            if (respuestaServidor?.ok) {
                                 const vista = {
                                     vista: "/micasa",
                                     tipoOrigen: "menuNavegador"
                                 }
                                 await casaVitini.componentes.controladorVista(vista)
-
                                 const informacion = "Se ha creado la cuenta corractamente. Bienvenido a Casa Vitini."
                                 casaVitini.ui.vistas.advertenciaInmersiva(informacion)
                             }
@@ -5024,7 +5065,8 @@ const casaVitini = {
                 },
                 recuperarCuenta: {
                     arranque: async () => {
-                        document.body.removeAttribute("style")
+                        const main = document.querySelector("main")
+                        main.setAttribute("zonaCSS", "miCasa")
 
                         const granuladoURL = casaVitini.componentes.granuladorURL()
                         const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
@@ -5770,13 +5812,13 @@ const casaVitini = {
             contacto:
             {
                 arranque: () => {
-                    //document.body.style.backgroundImage = 'url("/componentes/imagenes/nicaragua.png")';
-                    document.body.style.backgroundImage = 'url("/componentes/imagenes/contacto.jpg")';
+                    const main = document.querySelector("main")
+                    main.setAttribute("zonaCSS", "contacto")
 
+                    document.body.style.backgroundImage = 'url("/componentes/imagenes/contacto.jpg")';
                     document.querySelector("#uiLogo").style.filter = "invert(1)"
                     document.querySelector("#botonMenuResponsivo").style.filter = "invert(1)"
                     //document.body.classList.add("difuminadoFondo")
-
 
                 },
             },
@@ -5872,7 +5914,7 @@ const casaVitini = {
 
                 marcoElastico.appendChild(boton)
                 advertenciaInmersivaUI.appendChild(marcoElastico)
-                document.body.appendChild(advertenciaInmersivaUI)
+                document.querySelector("main").appendChild(advertenciaInmersivaUI)
 
             },
             pagos: {
@@ -6207,6 +6249,8 @@ const casaVitini = {
             },
             conozcanos: {
                 arranque: () => {
+                    const main = document.querySelector("main")
+                    main.setAttribute("zonaCSS", "conozcanos")
                     document.querySelector("#uiLogo").style.filter = "invert(1)"
                     const header = document.querySelector("header")
 
@@ -6316,6 +6360,8 @@ const casaVitini = {
             },
             instalaciones: {
                 arranque: () => {
+                    const main = document.querySelector("main")
+                    main.setAttribute("zonaCSS", "instalaciones")
                     document.body.style.background = "#fdefd9"
                     const imagenesAmpliables = document.querySelectorAll("[componente=fotoAmpliable]")
                     const cerrarImagen = () => {
@@ -6455,7 +6501,7 @@ const casaVitini = {
                         contenedorImagenVolatil.style.height = posicionImagen.height + "px"
 
                         contenedorImagenAmpliada.appendChild(contenedorImagenVolatil)
-                        document.querySelector("[contenedor=instalaciones]").appendChild(contenedorImagenAmpliada)
+                        document.querySelector("main").appendChild(contenedorImagenAmpliada)
 
                         // La version dos seria, la version con la imagen dentro de un recuadro sin estar bajo los botones:
                         // 1 - Se crea el grid, con dos filas y una columna, se renderiza pero oculto
@@ -6532,10 +6578,11 @@ const casaVitini = {
             //                    document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
 
 
-            const elementosReset = document.querySelectorAll("#uiLogo, body, header, main, [componente=contenedorMenu], #botonMenuResponsivo")
+            const elementosReset = document.querySelectorAll("#uiLogo, body, header, [componente=contenedorMenu], #botonMenuResponsivo")
             elementosReset.forEach((elementoReseteo) => {
                 elementoReseteo.removeAttribute("style")
             })
+
 
             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
             casaVitini.componentes.limpiarAdvertenciasInmersivas()
@@ -6581,8 +6628,9 @@ const casaVitini = {
 
             const main = document.querySelector('main');
             main.setAttribute("instanciaUID", instanciaUID)
-            main.innerHTML = null
+            main.removeAttribute("zonaCSS")
             main.removeAttribute("style")
+            main.innerHTML = null
             main.style.position = "absolute"
             main.style.height = "100%"
             main.style.justifyContent = "center"
