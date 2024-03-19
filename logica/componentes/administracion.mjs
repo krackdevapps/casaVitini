@@ -2,16 +2,19 @@
 const administracion = {
     reservas: {
         arranque: async () => {
-
-            document.querySelector("main:not([estado=obsoleto])").setAttribute("tipoVista", "reservasPaginadas")
-            // document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
+            //   document.querySelector("main:not([estado=obsoleto])").setAttribute("tipoVista", "reservasPaginadas")
+            const main = document.querySelector("main")
 
             const granuladoURL = casaVitini.componentes.granuladorURL()
             const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
             const directorios = granuladoURL.directorios
             if (comandoInicial === "reservas" && Object.keys(granuladoURL.parametros).length === 0) {
+                main.setAttribute("zonaCSS", "administracion/reservas/buscador")
+
                 casaVitini.administracion.reservas.buscador.buscadorUI()
             } else if (comandoInicial === "buscador") {
+                main.setAttribute("zonaCSS", "administracion/reservas/buscador")
+
                 casaVitini.administracion.reservas.buscador.buscadorUI()
 
                 const transaccion = {
@@ -54,7 +57,6 @@ const administracion = {
                     selectorContenedorFecha.setAttribute("memoriaVolatil", transaccion.fechaEntrada)
                     console.log("transaccion.fechaEntrada", transaccion.fechaEntrada)
                     selectorContenedorFecha.querySelector("[fechaUI=fechaInicio]").innerText = transaccion.fechaEntrada
-
                 }
                 if (transaccion.fecha_salida) {
                     transaccion.fechaSalida = transaccion.fecha_salida.replaceAll("-", "/")
@@ -64,23 +66,15 @@ const administracion = {
                     selectorContenedorFecha.setAttribute("memoriaVolatil", transaccion.fechaSalida)
                     selectorContenedorFecha.querySelector("[fechaUI=fechaFin]").innerText = transaccion.fechaSalida
                 }
-
-
-
-
-
-
                 casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(transaccion)
-
             } else {
+                main.setAttribute("zonaCSS", "administracion/reservas/detallesReserva")
                 return casaVitini.administracion.reservas.detallesReserva.reservaUI()
             }
-
         },
         buscador: {
             buscadorUI: (url) => {
-                const main = document.querySelector("main")
-                main.setAttribute("zonaCSS", "administracion/reservas/buscador")
+
 
                 const marcoElastico = document.createElement("div")
                 marcoElastico.classList.add("marcoElasticoRelativo")
@@ -912,8 +906,8 @@ const administracion = {
                 }
 
                 //const resolverReservas = await casaVitini.administracion.reservas.buscador.resolverReservas(transaccion)
-              
-              console.log("transaccion",transaccion)
+
+                console.log("transaccion", transaccion)
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
 
                 if (respuestaServidor?.error) {
@@ -3740,7 +3734,7 @@ const administracion = {
                     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                    document.body.appendChild(advertenciaInmersivaIU)
+                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
                 },
                 propuestaEliminarHabitacionUI: (datosEliminacion) => {
@@ -3819,7 +3813,7 @@ const administracion = {
 
                     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.body.appendChild(advertenciaInmersivaIU)
+                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
                 },
                 propuestaEliminarApartamentoUI: (datosElimiacion) => {
                     // hacer propesta de eliminar apartamento
@@ -3904,7 +3898,7 @@ const administracion = {
                     contenidoAdvertenciaInmersiva.appendChild(bloquePropuestaCambio)
                     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.body.appendChild(advertenciaInmersivaIU)
+                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
 
 
@@ -4029,7 +4023,7 @@ const administracion = {
                         contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                         advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                        document.body.appendChild(advertenciaInmersivaIU)
+                        document.querySelector("main").appendChild(advertenciaInmersivaIU)
                         const fechaEntrada = document.querySelector("[dataReserva=fechaEntrada]").innerText
 
                         const fechaEntradaArray = fechaEntrada.split("/")
@@ -4369,7 +4363,7 @@ const administracion = {
                         contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                         advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                        document.body.appendChild(advertenciaInmersivaIU)
+                        document.querySelector("main").appendChild(advertenciaInmersivaIU)
                         const fechaSalida = document.querySelector("[dataReserva=fechaSalida]").innerText
 
                         const fechaSalidaArray = fechaSalida.split("/")
@@ -5639,7 +5633,7 @@ const administracion = {
                         selectorTotalConImpuestos.innerText = totalConImpuestos
                         const section = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
 
-                        const selectorListaDePagosRenderizada = section.querySelector("[contenedorID=listaDePagos]")
+                        const selectorListaDePagosRenderizada = section.querySelector("[contenedorID=transacciones]")
                         const selectorDesgloseFinancieroUIRenderizado = section.querySelector("[contenedorID=desgloseFinancieroUI]")
                         if (selectorListaDePagosRenderizada) {
                             return casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.desplegarUI()
@@ -6355,7 +6349,7 @@ const administracion = {
 
                             const tituloCancelarReserva = document.createElement("p")
                             tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                            tituloCancelarReserva.innerText = "Eliminar enlae de pago"
+                            tituloCancelarReserva.innerText = "Eliminar enlace de pago"
                             contenidoAdvertenciaInmersiva.appendChild(tituloCancelarReserva)
 
                             const bloqueBloqueoApartamentos = document.createElement("div")
@@ -6404,16 +6398,27 @@ const administracion = {
                             contenidoAdvertenciaInmersiva.appendChild(bloqueBotones)
                             contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                             advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                            document.body.appendChild(advertenciaInmersivaIU)
+                            document.querySelector("main").appendChild(advertenciaInmersivaIU)
                         },
                         confirmar: async (datosElimiacion) => {
+                            const instanciaUID_pantallaCarga = casaVitini.componentes.codigoFechaInstancia()
+                            const mensaje = "Elimiando enlace de pago..."
+                            const datosPantallaSuperpuesta = {
+                                instanciaUID: instanciaUID_pantallaCarga,
+                                mensaje: mensaje
+                            }
+                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const enlaceUID = datosElimiacion.enlaceUID
                             const instanciaUID = datosElimiacion.instanciaUID
                             const transaccion = {
                                 zona: "administracion/enlacesDePago/eliminarEnlace",
                                 enlaceUID: Number(enlaceUID)
                             }
+
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                            const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_pantallaCarga}"]`)
+                            if (!instanciaRenderizada) { return }
+                            instanciaRenderizada.remove()
 
                             if (respuestaServidor?.error) {
                                 casaVitini.componentes.limpiarAdvertenciasInmersivas()
@@ -6422,7 +6427,6 @@ const administracion = {
 
                             if (respuestaServidor?.ok) {
                                 const contenedorEspacioEnlacesDePago = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-
 
                                 document.querySelector(`[enlacePagoUID="${enlaceUID}"]`)?.remove()
                                 casaVitini.componentes.limpiarAdvertenciasInmersivas()
@@ -6546,12 +6550,19 @@ const administracion = {
                             contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                             advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                            document.body.appendChild(advertenciaInmersivaIU)
+                            document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
 
 
                         },
                         confirmar: async (instanciaUID) => {
+                            const instanciaUID_pantallaCarga = casaVitini.componentes.codigoFechaInstancia()
+                            const mensaje = "Creando enlace..."
+                            const datosPantallaSuperpuesta = {
+                                instanciaUID: instanciaUID_pantallaCarga,
+                                mensaje: mensaje
+                            }
+                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
                             const nombreEnlace = document.querySelector("[espacio=formularioCrearEnlaceDePago] [campo=nombreEnlace]")
                             const cantidad = document.querySelector("[espacio=formularioCrearEnlaceDePago] [campo=cantidad]")
@@ -6564,8 +6575,11 @@ const administracion = {
                                 cantidad: cantidad.value,
                                 horasCaducidad: horasCaducidad.value,
                             }
-                            const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
 
+                            const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                            const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_pantallaCarga}"]`)
+                            if (!instanciaRenderizada) { return }
+                            instanciaRenderizada.remove()
                             if (respuestaServidor?.error) {
                                 return casaVitini.ui.vistas.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
                             }
@@ -6767,7 +6781,7 @@ const administracion = {
                             const totalReserva = listaDePagos.totalReserva
                             const totalPagado = listaDePagos.totalPagado
                             const faltantePorPagar = listaDePagos.faltantePorPagar
-                            const instanciaUID = listaDePagos.instanciaUID
+                            const instanciaUID_contenedorDinamicoTransacciones = listaDePagos.instanciaUID_contenedorDinamicoTransacciones
 
                             const totalReembolsado = listaDePagos.totalReembolsado
                             const porcentajeReembolsado = listaDePagos.porcentajeReembolsado
@@ -6804,10 +6818,7 @@ const administracion = {
                             const botonCrearPagoManual = document.createElement("div")
                             botonCrearPagoManual.classList.add("detallesReserva_transacciones_botonV1")
                             botonCrearPagoManual.addEventListener("click", () => {
-                                const metadatos = {
-                                    instanciaUID_listaDePagos: instanciaUID
-                                }
-                                casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.crearPagoManual.UI(metadatos)
+                                casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.crearPagoManual.UI()
                             })
                             botonCrearPagoManual.innerText = "Crear pago manual"
                             bloqueBotones.appendChild(botonCrearPagoManual)
@@ -6925,7 +6936,7 @@ const administracion = {
                                         cantidad: detallesDelPago.cantidad,
                                         sumaDeLoReembolsado: detallesDelPago.sumaDeLoReembolsado,
                                         reembolsado: detallesDelPago.reembolsado,
-                                        instanciaUID: instanciaUID
+                                        instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones
                                     }
 
                                     const pagoUI = casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.UI.pagoUI(metadatos)
@@ -6935,16 +6946,10 @@ const administracion = {
                                 bloqueTransacciones.appendChild(bloqueListaDePagos)
 
                             }
-
                             contenedorAdvertenciaInmersiva.appendChild(bloqueTransacciones)
-
-                            const enlacePagoUIRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                            const enlacePagoUIRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_contenedorDinamicoTransacciones}"]`)
                             enlacePagoUIRenderizada.innerHTML = null
                             enlacePagoUIRenderizada.appendChild(contenedorAdvertenciaInmersiva)
-
-
-
-
 
                         },
                         realizarReembolso_quienMeLlama: async () => {
@@ -7132,7 +7137,7 @@ const administracion = {
                             const sumaDeLoReembolsado = metadatos.sumaDeLoReembolsado
                             const reembolsado = metadatos.reembolsado
                             const chequeUID = metadatos.chequeUID
-                            const instanciaUID = metadatos.instanciaUID
+                            const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
 
 
                             const plataformaDePagoUI = {
@@ -7151,8 +7156,11 @@ const administracion = {
                             bloqueDetallesDelPago.addEventListener("click", (e) => {
                                 const metadatos = {
                                     pagoUID: pagoUID,
-                                    instanciaUID: instanciaUID
+                                    instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones
+
                                 }
+                                console.log("00", instanciaUID_contenedorDinamicoTransacciones)
+
                                 casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.detallesDelPago.UI(metadatos)
                             })
 
@@ -7323,12 +7331,12 @@ const administracion = {
                         advertenciasInmersivasRenderizadas.map((advertencia) =>
                             advertencia.remove()
                         )
-                        const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                        const instanciaUID_contenedorDinamicoTransacciones = casaVitini.componentes.codigoFechaInstancia()
 
                         const contenedorListaDePagos = document.createElement("div")
                         contenedorListaDePagos.setAttribute("class", "administracion_reservas_detallesReservas_transacciones_contenedorListaDePagos")
-                        contenedorListaDePagos.setAttribute("instanciaUID", instanciaUID)
-                        contenedorListaDePagos.setAttribute("contenedorID", "listaDePagos")
+                        contenedorListaDePagos.setAttribute("instanciaUID", instanciaUID_contenedorDinamicoTransacciones)
+                        contenedorListaDePagos.setAttribute("contenedorID", "transacciones")
                         //document.body.style.overflow = 'hidden';
 
 
@@ -7368,7 +7376,7 @@ const administracion = {
 
                         if (respuestaServidor?.error) {
                             casaVitini.componentes.limpiarAdvertenciasInmersivas()
-                            const seleccionarInstancia = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                            const seleccionarInstancia = document.querySelector(`[instanciaUID="${instanciaUID_contenedorDinamicoTransacciones}"]`)
                             if (seleccionarInstancia) {
                                 seleccionarInstancia.remove()
                             }
@@ -7376,10 +7384,10 @@ const administracion = {
                         }
                         if (respuestaServidor?.ok) {
 
-                            const seleccionarInstancia = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                            const seleccionarInstancia = document.querySelector(`[instanciaUID="${instanciaUID_contenedorDinamicoTransacciones}"]`)
                             if (seleccionarInstancia) {
                                 seleccionarInstancia.style.justifyContent = "flex-start";
-                                respuestaServidor.instanciaUID = instanciaUID
+                                respuestaServidor.instanciaUID_contenedorDinamicoTransacciones = instanciaUID_contenedorDinamicoTransacciones
                                 return casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.UI.listaDePagos(respuestaServidor)
                             }
 
@@ -7391,7 +7399,8 @@ const administracion = {
                     detallesDelPago: {
                         UI: async (metadatos) => {
                             const pagoUID = metadatos.pagoUID
-                            const instanciaUID = metadatos.instanciaUID
+                            const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
+                            console.log("detallesDelPAgo", instanciaUID_contenedorDinamicoTransacciones)
 
                             document.body.style.overflow = 'hidden';
 
@@ -7417,9 +7426,7 @@ const administracion = {
 
                             contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                             advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                            document.body.appendChild(advertenciaInmersivaIU)
-
-
+                            document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
                             const ocultaPanales = () => {
                                 const selectorContenedores = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"]`)
@@ -7434,17 +7441,12 @@ const administracion = {
 
                             }
 
-
-
                             const transaccion = {
                                 zona: "administracion/reservas/transacciones/obtenerDetallesDelPago",
                                 pagoUID: pagoUID
                             }
 
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
-
-
                             if (respuestaServidor?.error) {
                                 casaVitini.componentes.limpiarAdvertenciasInmersivas()
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -7464,8 +7466,6 @@ const administracion = {
                                 const reembolsado = detallesDelPago.reembolsado
 
                                 const deglosePorReembolso = respuestaServidor.deglosePorReembolso
-
-
                                 const selectorInstanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"]`)?.querySelector("[espacio=detallesDelPago]")
 
                                 if (!selectorInstanciaRenderizada) {
@@ -7639,10 +7639,10 @@ const administracion = {
                                     selectorContenedorReembolso.innerText = null
                                     const metadatos = {
                                         pagoUID: pagoUID,
-                                        instanciaUID: instanciaUID,
+                                        instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones,
                                         instanciaUIDDetalleDelPago: instanciaUIDDetalleDelPago
                                     }
-                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.reembolsos.realizarReembolso(metadatos)
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.reembolsos.reembolsoUI(metadatos)
                                 })
                                 contenedorBotones.appendChild(botonCrearReembolso)
 
@@ -7664,7 +7664,7 @@ const administracion = {
                                     const selectorContenedorEliminarPago = document.querySelector("[contenedor=eliminarPago]")
                                     selectorContenedorEliminarPago.innerHTML = null
                                     const metadatos = {
-                                        instanciaUID: instanciaUID,
+                                        instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones,
                                         instanciaUIDDetalleDelPago: instanciaUIDDetalleDelPago
 
                                     }
@@ -7674,23 +7674,15 @@ const administracion = {
                                 })
                                 selectorInstanciaRenderizada.appendChild(contenedorBotones)
 
-
-
                                 const contenedorEliminarPago = document.createElement("div")
                                 contenedorEliminarPago.classList.add("administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorCrearReembolso")
                                 contenedorEliminarPago.setAttribute("contenedor", "eliminarPago")
                                 selectorInstanciaRenderizada.appendChild(contenedorEliminarPago)
 
-
-
                                 const contenedorCrearReembolso = document.createElement("div")
                                 contenedorCrearReembolso.classList.add("administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorCrearReembolso")
                                 contenedorCrearReembolso.setAttribute("contenedor", "nuevoReembolso")
                                 selectorInstanciaRenderizada.appendChild(contenedorCrearReembolso)
-
-
-
-
 
 
                                 const contenedorReembolsos = document.createElement("div")
@@ -7735,7 +7727,7 @@ const administracion = {
                                     const reembolsoUID = metadatos.reembolsoUID
                                     const instanciaUIDDetalleDelPago = metadatos.instanciaUIDDetalleDelPago
                                     const pagoUID = metadatos.pagoUID
-                                    const instanciaUID = metadatos.instanciaUID
+                                    const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
 
                                     restaurarTodasLasOpcionesDeTodosLosReembolsos(pagoUID, instanciaUIDDetalleDelPago)
 
@@ -7759,7 +7751,7 @@ const administracion = {
                                         const metadatosEliminarReembolso = {
                                             instanciaUIDDetalleDelPago: instanciaUIDDetalleDelPago,
                                             reembolsoUID: reembolsoUID,
-                                            instanciaUID: instanciaUID
+                                            instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones
 
                                         }
 
@@ -7897,7 +7889,7 @@ const administracion = {
                                     contenedorBotones.classList.add("administracion_reservas_detallesReserva_transacciones_reembolsos_detallesReembolso_contenedorBotones")
                                     contenedorBotones.setAttribute("contenedor", "opcionesDelReembolso")
                                     const metadatosOpcionesReembolso = {
-                                        instanciaUID: instanciaUID,
+                                        instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones,
                                         instanciaUIDDetalleDelPago: instanciaUIDDetalleDelPago,
                                         reembolsoUID: reembolsoUID,
                                         pagoIUD: pagoUID
@@ -7943,10 +7935,11 @@ const administracion = {
                         }
                     },
                     reembolsos: {
-                        realizarReembolso: async (metadatos) => {
+                        reembolsoUI: async (metadatos) => {
 
                             const pagoUID = metadatos.pagoUID
-                            const instanciaUID = metadatos.instanciaUID
+                            // Esto que cojones es:
+                            const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
                             const instanciaUIDDetalleDelPago = metadatos.instanciaUIDDetalleDelPago
 
                             const selectorContenedorCrearReembolso = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"] [contenedor=nuevoReembolso]`)
@@ -8010,18 +8003,18 @@ const administracion = {
 
 
                                 let totalReembolsable
-                                const selectorTotalReembolsableConReeembolsos = document.querySelector(`[instanciaUID="${instanciaUID}"] [totalReembolsable]`)
+                                const selectorTotalReembolsableConReeembolsos = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"] [totalReembolsable]`)
                                 if (selectorTotalReembolsableConReeembolsos) {
                                     totalReembolsable = selectorTotalReembolsableConReeembolsos.getAttribute("totalReembolsable")
                                 } else {
-                                    const selectorTotalReembolsableSinReembolsos = document.querySelector(`[instanciaUID="${instanciaUID}"] [cantidadPago]`).getAttribute("cantidadPago")
+                                    const selectorTotalReembolsableSinReembolsos = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"] [cantidadPago]`).getAttribute("cantidadPago")
                                     totalReembolsable = selectorTotalReembolsableSinReembolsos
 
                                 }
 
 
 
-                                const selectorUI = document.querySelector(`[instanciaUID="${instanciaUID}"] [informacionPorcentaje=informacionPorcentaje]`)
+                                const selectorUI = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"] [informacionPorcentaje=informacionPorcentaje]`)
                                 selectorUI.innerHTML = "Calculando..."
                                 try {
                                     const transaccion = {
@@ -8261,10 +8254,10 @@ const administracion = {
                             botonConfirmar.addEventListener("click", () => {
                                 const metadatos = {
                                     pagoUID: pagoUID,
-                                    instanciaUID: instanciaUID,
+                                    instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones,
                                     instanciaUIDDetalleDelPago: instanciaUIDDetalleDelPago
                                 }
-                                casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.reembolsos.crearReembolso(metadatos)
+                                casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.reembolsos.confirmarReembolso(metadatos)
                             })
                             bloqueBotones.appendChild(botonConfirmar)
 
@@ -8326,12 +8319,13 @@ const administracion = {
                             const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
 
                         },
-                        crearReembolso: async (metadatos) => {
+                        confirmarReembolso: async (metadatos) => {
 
 
                             const pagoUID = String(metadatos.pagoUID)
-                            const instanciaUID = metadatos.instanciaUID
+                            const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
                             const instanciaUIDDetalleDelPago = metadatos.instanciaUIDDetalleDelPago
+                            const instanciaUID_pantallaDeCarga = casaVitini.componentes.codigoFechaInstancia()
 
                             const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
 
@@ -8343,7 +8337,7 @@ const administracion = {
                             }
                             const metadatosPantallaCarga = {
                                 mensaje: "Esperando al servidor...",
-                                instanciaUID: instanciaUID,
+                                instanciaUID: instanciaUID_pantallaDeCarga,
                             }
                             casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
 
@@ -8373,12 +8367,10 @@ const administracion = {
 
 
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                            const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
+                            const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaDeCarga}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
                             selectorPantallaDeCarga.map((pantalla) => {
                                 pantalla.remove()
                             })
-
-
 
                             if (respuestaServidor?.error) {
                                 return casaVitini.ui.vistas.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
@@ -8390,7 +8382,7 @@ const administracion = {
                                 casaVitini.componentes.limpiarAdvertenciasInmersivas()
                                 const metadatos = {
                                     pagoUID: pagoUID,
-                                    instanciaUID: instanciaUID
+                                    instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones
                                 }
                                 casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.detallesDelPago.UI(metadatos)
                                 //casaVitini.ui.vistas.advertenciaInmersivaSuperPuesta(mensaje)
@@ -8400,7 +8392,6 @@ const administracion = {
                     },
                     crearPagoManual: {
                         UI: (metadatos) => {
-                            const instanciaUID_listaDePagos = metadatos.instanciaUID_listaDePagos
 
                             const mostrarContenedorTipoPago = (opcion) => {
                                 const selectorTodosLosContenedorTipoPago = [...document.querySelectorAll(`[componente=advertenciaInmersiva] [contenedorTipoPago]`)]
@@ -8516,7 +8507,7 @@ const administracion = {
                             botonConfirmar.setAttribute("componente", "botonConfirmarCancelarReserva")
                             botonConfirmar.innerText = "Confirmar y guardar pago manual"
                             botonConfirmar.addEventListener("click", () => {
-                                casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.crearPagoManual.confirmar(instanciaUID_listaDePagos)
+                                casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.crearPagoManual.confirmar()
                             })
                             bloqueBotones.appendChild(botonConfirmar)
 
@@ -8535,12 +8526,14 @@ const administracion = {
                             contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                             advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                            document.body.appendChild(advertenciaInmersivaIU)
+                            document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
 
 
                         },
-                        confirmar: async (instanciaUID_listaDePagos) => {
+                        confirmar: async () => {
+                            const instanciaUID_contenedorDinamicoTransacciones = document.querySelector("[contenedorID=transacciones]").getAttribute("instanciaUID")
+
                             const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
                             const contenedorActivo = document.querySelector('[estado=activa][contenedorTipoPago]')
                             const plataformaDePago = document.querySelector("[campo=selectorRol]").value
@@ -8577,11 +8570,11 @@ const administracion = {
                             }
 
                             if (respuestaServidor?.ok) {
-                                const seleccionarInstancia = document.querySelector(`[instanciaUID="${instanciaUID_listaDePagos}"]`)
+                                const seleccionarInstancia = document.querySelector(`[instanciaUID="${instanciaUID_contenedorDinamicoTransacciones}"]`)
                                 if (seleccionarInstancia) {
                                     const datosPagosGlobal = {
                                         reservaUID: reservaUID,
-                                        instanciaUID: instanciaUID_listaDePagos
+                                        instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones
                                     }
                                     casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.actualizarDatosGlobalesPago(datosPagosGlobal)
                                     casaVitini.componentes.limpiarAdvertenciasInmersivas()
@@ -8610,7 +8603,7 @@ const administracion = {
                                         cantidad: detallesDelPago.cantidad,
                                         fechaPago: detallesDelPago.fechaPago,
                                         chequeUID: detallesDelPago.chequeUID,
-                                        instanciaUID: instanciaUID_listaDePagos
+                                        instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones
                                     }
                                     const enlaceUI = casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.UI.pagoUI(metadatos)
                                     const listaDePagosRenderizada = seleccionarInstancia.querySelector(`[contenedor=listaDePagos]`)
@@ -8754,7 +8747,8 @@ const administracion = {
                     },
                     eliminarPagoManual: {
                         UI: (metadatos) => {
-                            const instanciaUID = metadatos.instanciaUID
+                            const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
+                            console.log("instanciaUID_contenedorDinamicoTransacciones", instanciaUID_contenedorDinamicoTransacciones)
                             const instanciaUIDDetalleDelPago = metadatos.instanciaUIDDetalleDelPago
                             const contenedor = document.createElement("div")
                             contenedor.classList.add("administracion_reservas_detallesReserva_transacciones_eliminarPagoManual")
@@ -8776,7 +8770,7 @@ const administracion = {
                             botonConfirmar.innerText = "Eliminar irreversiblemente el pago"
                             botonConfirmar.addEventListener("click", () => {
                                 const metadatos = {
-                                    instanciaUID: instanciaUID,
+                                    instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones,
                                     instanciaUIDDetalleDelPago: instanciaUIDDetalleDelPago
                                 }
                                 casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.eliminarPagoManual.confirmar(metadatos)
@@ -8799,13 +8793,15 @@ const administracion = {
                             return contenedor
                         },
                         confirmar: async (metadatos) => {
-                            const instanciaUID = metadatos.instanciaUID
+                            const instanciaUID_reserva= document.querySelector("main").getAttribute("instanciaUID")
+                            const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
                             const instanciaUIDDetalleDelPago = metadatos.instanciaUIDDetalleDelPago
                             const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
+                            const instanciaUID_pantallaDeCarga = casaVitini.componentes.codigoFechaInstancia()
 
                             const metadatosPantallaCarga = {
                                 mensaje: "Esperando al servidor...",
-                                instanciaUID: instanciaUIDDetalleDelPago,
+                                instanciaUID: instanciaUID_pantallaDeCarga,
                             }
                             casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
 
@@ -8819,7 +8815,7 @@ const administracion = {
                                 reservaUID: Number(reservaUID)
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                            const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUIDDetalleDelPago}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
+                            const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaDeCarga}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
                             selectorPantallaDeCarga.map((pantalla) => {
                                 pantalla.remove()
                             })
@@ -8829,33 +8825,24 @@ const administracion = {
                             }
                             if (respuestaServidor?.ok) {
                                 document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"]`)?.remove()
-                                const selectorContenedorTransacciones = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                                if (selectorContenedorTransacciones) {
-                                    selectorContenedorTransacciones.querySelector(`[contenedor=listaDePagos]`).querySelector(`[pagoUID="${pagoUID}"]`)?.remove()
-                                }
+                                const selectorContenedorTransacciones = document.querySelector(`main[instanciaUID="${instanciaUID_reserva}"]`)
+                                selectorContenedorTransacciones.querySelector(`[contenedor=listaDePagos]`).querySelector(`[pagoUID="${pagoUID}"]`)?.remove()
+                              
                                 const datosActualizar = {
-                                    instanciaUID: instanciaUID,
                                     reservaUID: reservaUID,
                                 }
                                 casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.actualizarDatosGlobalesPago(datosActualizar)
 
-
-
-
                                 // Eliminar detalles del pago con le uid de detalles del pago
                                 // Eliminar el pago renderizado con el uidinstancia y el apguid
-
-
-
                             }
                         }
 
                     },
                     actualizarDatosGlobalesPago: async (metadatos) => {
 
-
                         const reservaUID = metadatos.reservaUID
-                        const instanciaUID = metadatos.instanciaUID
+                        const instanciaUID_contenedorDinamicoTransacciones = document.querySelector("[contenedorID=transacciones]").getAttribute("instanciaUID")
 
                         const selectorTotalReservaEnPanelGlobal = document.querySelector(`[dataReserva=totalReservaConImpuestos]`)
                         const selectorTotalReserva = document.querySelector(`[componentePago=totalReserva]`)
@@ -8871,9 +8858,6 @@ const administracion = {
                             selectorTotalReservaEnPanelGlobal.innerHTML = "Recalculando..."
                         }
 
-
-
-
                         selectorTotalReserva.innerHTML = "Recalculando..."
                         selectorTotalPagado.innerHTML = "Recalculando..."
                         selectorFaltantePorPagar.innerHTML = "Recalculando..."
@@ -8882,13 +8866,12 @@ const administracion = {
                         selectorPorecentajePagado.innerHTML = "Total pagado"
                         selectorTotalReembolsado.innerHTML = "Recalculando..."
 
-
                         const obtenerPagoaActualizados = {
                             zona: "administracion/reservas/transacciones/obtenerPagosDeLaReserva",
                             reservaUID: reservaUID
                         }
                         const respuestaServidor = await casaVitini.componentes.servidor(obtenerPagoaActualizados)
-                        const seleccionarInstancia = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                        const seleccionarInstancia = document.querySelector(`[instanciaUID="${instanciaUID_contenedorDinamicoTransacciones}"]`)
 
                         if (respuestaServidor?.error) {
                             if (seleccionarInstancia) {
@@ -8909,6 +8892,7 @@ const administracion = {
                                 selectorTotalReservaEnPanelGlobal.innerHTML = totalReserva + "$"
                             }
                             if (!seleccionarInstancia) {
+                                console.log("ee")
                                 return
                             }
 
@@ -10616,7 +10600,7 @@ const administracion = {
 
                     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.body.appendChild(advertenciaInmersivaIU)
+                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
 
                     const transaccion = {
@@ -14921,7 +14905,7 @@ const administracion = {
                     mensaje: mensaje
                 }
                 casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-               
+
                 const campos = [...document.querySelectorAll("[campo]")]
                 const transacccion = {
                     zona: "administracion/configuracion/limitesReservaPublica/guardarConfiguracion"

@@ -7483,7 +7483,7 @@ const casaVitini = {
                 contenedoCalendarioIntermedio.appendChild(contenedorCarga)
                 bloqueCalendario.appendChild(contenedoCalendarioIntermedio)
 
-                document.body.appendChild(bloqueCalendario)
+                document.querySelector("main").appendChild(bloqueCalendario)
 
             } catch (errorCapturado) {
                 throw errorCapturado

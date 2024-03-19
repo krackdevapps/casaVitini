@@ -453,7 +453,13 @@ const validadoresCompartidos = {
                 const fecha_ISO = `${ano}-${mes}-${dia}`
 
                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
-                const fechaControl = DateTime.fromISO(fecha_ISO, { zone: zonaHoraria }).isValid;
+                //const fechaControl = DateTime.fromISO(fecha_ISO, { zone: zonaHoraria }).isValid;
+                const fechaControl = DateTime.fromObject({
+                    day: dia,
+                    month: mes,
+                    year: ano
+                }, { zone: zonaHoraria }).isValid;
+
                 if (!fechaControl) {
                     const error = "La fecha no es valida, representacion no terraquea"
                     throw new Error(error)
@@ -534,7 +540,7 @@ const validadoresCompartidos = {
                 let tieneMayuscula = false;
                 let tieneNumero = false;
                 let tieneCaracterEspecial = false;
-          
+
                 // Verifica cada carácter de la clave
                 for (var i = 0; i < clave.length; i++) {
                     var caracter = clave.charAt(i);

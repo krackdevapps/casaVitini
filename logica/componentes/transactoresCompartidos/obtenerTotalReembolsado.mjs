@@ -6,7 +6,6 @@ const obtenerTotalReembolsado = async (reservaUID) => {
     try {
         await validadoresCompartidos.reservas.validarReserva(reservaUID)
 
-
         // Obtener todos los pagoUID de la reserva
         const consultaPagosReserva = `
         SELECT
@@ -33,8 +32,7 @@ const obtenerTotalReembolsado = async (reservaUID) => {
                 const resuelveTotalDelReembolso = await conexion.query(consultaObtenReembolsoDelPago, [pagoUID])
                 const reembolsoDelPago = resuelveTotalDelReembolso.rows
                 for (const detallesDelReembolso of reembolsoDelPago) {
-                    const cantidadDelreembolso = detallesDelReembolso.cantidad
-                    
+                    const cantidadDelreembolso = detallesDelReembolso.cantidad                   
                     totalReembolsado = new Decimal(totalReembolsado).plus(cantidadDelreembolso)
                 }
             }
