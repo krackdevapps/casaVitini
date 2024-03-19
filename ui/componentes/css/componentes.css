@@ -3122,7 +3122,22 @@
     margin-right: 0px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
+}
 
+[zonaCSS="administracion/usuarios/buscador"] .campoBuscadorClientes {
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgb(255 255 255 / 0.3);
+
+    /* margin: 4px; */
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    padding: 10px;
+
+    margin-right: 0px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
 }
 
 [zonaCSS="administracion/clientes/buscador"] .campoBuscadorClientes::placeholder {
@@ -4233,6 +4248,37 @@
     align-items: stretch;
 }
 
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+    border-radius: 12px;
+    gap: 4px;
+    row-gap: 4px;
+    column-gap: 4px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+    border-radius: 12px;
+    gap: 4px;
+    row-gap: 4px;
+    column-gap: 4px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+    border-radius: 12px;
+    gap: 4px;
+    row-gap: 4px;
+    column-gap: 4px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
 [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
     border-radius: 12px;
     gap: 4px;
@@ -4283,6 +4329,27 @@
 
 
 [zonaCSS="administracion/clientes/detalles"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+    margin: 0px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+    margin: 0px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+    margin: 0px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
     margin: 0px;
     padding: 6px;
     display: flex;
@@ -4364,6 +4431,26 @@
     border-radius: 12px;
     flex-direction: column;
 }
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesReservaCancelarReservabloqueBotones {
+    /* width: 100%; */
+    display: flex;
+    gap: 4px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    border-radius: 12px;
+    flex-direction: column;
+}
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesReservaCancelarReservabloqueBotones {
+    /* width: 100%; */
+    display: flex;
+    gap: 4px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    border-radius: 12px;
+    flex-direction: column;
+}
 
 
 [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .detallesReservaCancelarReservabloqueBotones {
@@ -4403,6 +4490,25 @@
 
 
 [zonaCSS="administracion/clientes/detalles"] .detallesReservaCancelarBoton {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+
+}
+
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesReservaCancelarBoton {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+
+}
+
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesReservaCancelarBoton {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
@@ -4714,7 +4820,7 @@
 }
 
 @media (max-width: 1000px) {
-    .espacioSituacion {
+    [zonaCSS="administracion/situacion"]   .espacioSituacion {
         display: flex;
         flex-direction: column;
         align-items: stretch;
@@ -5027,6 +5133,37 @@
     gap: 6px;
 }
 
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+
+[zonaCSS="administracion/usuarios/buscador"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/usuarios/nuevo"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
 [zonaCSS="administracion/ofertas/ofertaUI"] .espacioClientes {
     display: flex;
     flex-direction: column;
@@ -5146,6 +5283,45 @@
     align-items: stretch;
 }
 
+[zonaCSS="administracion/gestion_de_bloqueos"] .espacioBloqueos {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .espacioBloqueos {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .espacioBloqueos {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: stretch;
+}
+
 [zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .espacioBloqueos {
     display: flex;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -5188,6 +5364,25 @@
 }
 
 [zonaCSS="administracion/clientes/buscador"] .buscadorClientesEstadoBusqueda {
+
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+    background: rgb(255 255 255 / 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+[zonaCSS="administracion/reservas/buscador"] .buscadorClientesEstadoBusqueda {
+
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+    background: rgb(255 255 255 / 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/usuarios/buscador"] .buscadorClientesEstadoBusqueda {
 
     padding: 10px;
     text-align: center;
@@ -5706,6 +5901,15 @@
 
 }
 
+[zonaCSS="administracion/impuestos/nuevo"] .detalleImpuestoSelectorLista {
+    outline: none;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    appearance: none;
+
+}
 [zonaCSS="administracion/impuestos/nuevo"] .preciosEImpuestosbotonOpcionCrearNuevoImpuesto {
     outline: none;
     border: none;
@@ -6085,7 +6289,6 @@
         flex-wrap: nowrap;
         align-content: stretch;
         align-items: stretch;
-
     }
 
 }
@@ -6898,7 +7101,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 
-.gestionBloqueoApartamento_bloqueApartamentoUI {
+[zonaCSS="administracion/gestion_de_bloqueos"] .gestionBloqueoApartamento_bloqueApartamentoUI {
     background: rgba(255, 255, 255, 0.3);
     padding: 12px;
     border-radius: 10px;
@@ -6917,7 +7120,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 
-.listaBloqueos_bloqueBloqueoUI {
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueos_bloqueBloqueoUI {
     background: rgba(255, 255, 255, 0.3);
     padding: 6px;
     border-radius: 10px;
@@ -6938,7 +7141,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.6);
 }
 
-.listaBloqueos_contenedorTipoBloqueo {
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueos_contenedorTipoBloqueo {
     padding: 6px;
     border-radius: 6px;
     display: flex;
@@ -6946,7 +7149,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-.listaBloqueos_motivo {
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueos_motivo {
     padding: 0px;
 }
 
@@ -6960,7 +7163,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: wrap;
 }
 
-.administracion_bloqueos_detallesBloqueo_listaSelec {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .administracion_bloqueos_detallesBloqueo_listaSelec {
     background: rgba(253, 253, 253, 0.3);
 
     display: flex;
@@ -6973,12 +7176,12 @@ grid-template-columns: 0.5fr 1.5fr;
     appearance: none;
 }
 
-.listaBloqueo_contenedorZonaUI {
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueo_contenedorZonaUI {
     padding: 6px;
     border-radius: 6px;
 }
 
-.listaBloqueos_tipoBloqueo {
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueos_tipoBloqueo {
 
     border-radius: 4px;
     appearance: none;
@@ -6987,7 +7190,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border: none;
 }
 
-.detallesDelBloqueo_contenedorFecha {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesDelBloqueo_contenedorFecha {
     padding: 6px;
     border-radius: 6px;
     display: flex;
@@ -6997,7 +7200,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: row;
 }
 
-.detalleBloqueos_motivo {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detalleBloqueos_motivo {
     resize: vertical;
     border-radius: 6px;
     min-height: 200px;
@@ -7011,7 +7214,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
 
-.detallesBloqueos_contenedorGlobal {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueos_contenedorGlobal {
     background: rgba(255, 255, 255, 0.3);
     padding: 6px;
     border-radius: 10px;
@@ -7028,7 +7231,7 @@ grid-template-columns: 0.5fr 1.5fr;
     cursor: default;
 }
 
-.detallesBloqueos_bloqueBloqueoUI {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueos_bloqueBloqueoUI {
 
     gap: 6px;
     display: flex;
@@ -7040,7 +7243,7 @@ grid-template-columns: 0.5fr 1.5fr;
     cursor: default;
 }
 
-.detallesloqueos_contenedorBloquesGlobales {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesloqueos_contenedorBloquesGlobales {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -7053,7 +7256,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
 }
 
-.detallesBloqueo_contenedorTipoBloqueoV2 {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorTipoBloqueoV2 {
     border-radius: 6px;
     display: flex;
     gap: 6px;
@@ -7067,7 +7270,7 @@ grid-template-columns: 0.5fr 1.5fr;
     margin-top: 6px;
 }
 
-.detallesBloqueo_contenedorZonaUI {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorZonaUI {
     border-radius: 6px;
     display: flex;
     gap: 6px;
@@ -7075,30 +7278,30 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: wrap;
 }
 
-.detallesBloqueo_contenedorFechaEntrada {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorFechaEntrada {
     padding: 10px;
     border-radius: 10px;
 }
 
-.listaBloqueos_fecha {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .listaBloqueos_fecha {
     display: flex;
     justify-content: center;
 }
 
-.detallesBloqueo_contenedorFechaEntrada:hover {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorFechaEntrada:hover {
     background: rgba(255, 255, 255, 0.4);
 }
 
-.detallesBloqueo_contenedorFechaSalida {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorFechaSalida {
     padding: 10px;
     border-radius: 10px;
 }
 
-.detallesBloqueo_contenedorFechaSalida:hover {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorFechaSalida:hover {
     background: rgba(255, 255, 255, 0.4);
 }
 
-.detallesBloqueo_contenedorBotones {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorBotones {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -7107,14 +7310,14 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-.detallesBloqueo_botonV1 {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_botonV1 {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
 
 }
 
-.portadaBloqueos_espacioBotones {
+[zonaCSS="administracion/gestion_de_bloqueos"] .portadaBloqueos_espacioBotones {
     display: flex;
     text-decoration: none;
     color: black;
@@ -7123,7 +7326,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: wrap;
 }
 
-.portadaBloqueos_botonV1 {
+[zonaCSS="administracion/gestion_de_bloqueos"] .portadaBloqueos_botonV1 {
     background: rgba(253, 253, 253, 0.3);
     text-decoration: none;
 
@@ -7288,7 +7491,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"]  .confAlojamiento_entidades_crearEntidad_campoEntrada {
+[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_campoEntrada {
 
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
@@ -7869,8 +8072,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-.detallesUsuario_contenedorGlobal {
-    background: rgba(255, 255, 255, 0.3);
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorGlobal {
     padding: 10px;
     border-radius: 25px;
     backdrop-filter: blur(50px);
@@ -7878,7 +8080,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     justify-content: center;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
 }
 
 [zonaCSS="miCasa"] .miCasa_marcoIDX_contenedor {
@@ -7889,16 +8091,32 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     justify-content: center;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
 }
 
 [zonaCSS="miCasa"] .detallesUsuario_contenedorUsuarioIDX {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-direction: column;
 
 }
 
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorUsuarioIDX {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+
+}
+
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_rolUI {
+    text-align: center;
+}
+
+[zonaCSS="miCasa"] .detallesUsuario_rolUI {
+    text-align: center;
+}
 [zonaCSS="miCasa"] .miCuenta_cambiarClave_testo {
 
     padding: 6px;
@@ -7962,7 +8180,20 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 100%;
 }
 
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_esferaUsuario {
+    background: rgba(255, 255, 255, 0.1);
+    background-image: url(/componentes/imagenes/iconoUsuario.svg);
+    background-size: cover;
+    height: 150px;
+    width: 150px;
+    border-radius: 100%;
+}
+
 [zonaCSS="miCasa"] .detallesUsuario_contenedorDatosGlobales {
+    padding: 10px;
+}
+
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorDatosGlobales {
     padding: 10px;
 }
 
@@ -7971,7 +8202,10 @@ grid-template-columns: 0.5fr 1.5fr;
     font-weight: bold;
 }
 
-
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_usuarioUI {
+    font-size: 40px;
+    font-weight: bold;
+}
 
 @media (max-width: 720px) {
     [zonaCSS="miCasa"] .detallesUsuario_esferaUsuario {
@@ -7983,10 +8217,77 @@ grid-template-columns: 0.5fr 1.5fr;
         font-weight: bold;
     }
 
+    [zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_usuarioUI {
+        font-weight: bold;
+    }
+
     [zonaCSS="miCasa"] .detallesUsuario_contenedorGlobal {
         border-radius: 16px;
     }
 
+    [zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorUsuarioIDX {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: row;
+
+    }
+
+    [zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_esferaUsuario {
+        background: rgba(255, 255, 255, 0.1);
+        background-image: url(/componentes/imagenes/iconoUsuario.svg);
+        background-size: cover;
+        height: 70px;
+        width: 70px;
+        border-radius: 100%;
+    }
+
+    [zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorGlobal {
+        padding: 10px;
+        border-radius: 25px;
+        backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    [zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorGlobal {
+        padding: 10px;
+        border-radius: 25px;
+        backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    [zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_rolUI {
+        text-align: left;
+    }
+    [zonaCSS="miCasa"] .miCasa_marcoIDX_contenedor {
+        padding: 10px;
+        border-radius: 25px;
+        backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    [zonaCSS="miCasa"] .detallesUsuario_contenedorUsuarioIDX {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: row;
+    
+    }
+    [zonaCSS="miCasa"] .detallesUsuario_rolUI {
+        text-align: left;
+    }
 }
 
 .detallesUsuario_opcionInformacion {
@@ -8010,7 +8311,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-.detallesUsuario_contenedorOpciones {
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorOpciones {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -8022,7 +8323,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
 }
 
-.detallesUsuario_opcionInformacion:hover {
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_opcionInformacion:hover {
     background-color: rgba(0, 0, 0, 0.45);
     color: white;
 }
@@ -8039,7 +8340,18 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
     flex-direction: column;
 }
-
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorDatosUsuario {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 20px;
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
 [zonaCSS="miCasa"] .detallesUsuario_campoDatosUsuario {
     padding: 10px;
     border-radius: 10px;
@@ -8052,7 +8364,18 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
 
 }
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_campoDatosUsuario {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13;
 
+    outline: none;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+
+}
 [zonaCSS="miCasa"] .detallesUsuario_contenedorCampoEInfo {
     border-radius: 16px;
     text-decoration: none;
@@ -8067,7 +8390,20 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     flex-direction: column;
 }
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorCampoEInfo {
+    border-radius: 16px;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
 
+    transition: all 250ms linear;
+
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
 [zonaCSS="miCasa"] .detallesUsuario_contenedorBotones {
     display: flex;
     border-radius: 16px;
@@ -8078,8 +8414,30 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: wrap;
     display: none;
 }
-
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorBotones {
+    display: flex;
+    border-radius: 16px;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    display: none;
+}
 [zonaCSS="miCasa"] .detallesUsuario_botonV1 {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    padding: 10px;
+    display: flex;
+
+    border-radius: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+
+}
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_botonV1 {
     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -8102,6 +8460,14 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .tituloDato {
+    padding: 8px;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+
+}
+
 .detallesUsuario_botonV1:hover {
 
     background: rgba(255, 255, 255, 0.6);
@@ -8113,7 +8479,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-.detallesUsuario_contenedorCampos {
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorCampos {
     background: rgba(255, 255, 255, 0.3);
     padding: 6px;
     border-radius: 16px;
@@ -8138,19 +8504,19 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-.detallesUsuario_infoModificarIDX {
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_infoModificarIDX {
     padding: 6px;
 
 }
 
-.usuarios_contenedorBotones {
+[zonaCSS="administracion/usuarios/buscador"] .usuarios_contenedorBotones {
 
     display: flex;
     justify-content: flex-end;
 
 }
 
-.usuarios_botonV1 {
+[zonaCSS="administracion/usuarios/buscador"] .usuarios_botonV1 {
     background: rgba(255, 255, 255, 0.3);
 
     border-radius: 10px;
@@ -8166,7 +8532,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: white;
 }
 
-.usuariosCrearCuenta_contenedorGlobal {
+[zonaCSS="administracion/usuarios/nuevo"] .usuariosCrearCuenta_contenedorGlobal {
     background: rgba(255, 255, 255, 0.3);
 
     border-radius: 16px;
@@ -8178,7 +8544,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-.usuariosCrearCuenta_informacion {
+[zonaCSS="administracion/usuarios/nuevo"] .usuariosCrearCuenta_informacion {
     padding: 6px;
 }
 
@@ -8195,7 +8561,20 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-.usuariosCrearCuenta_contenedorBotones {
+[zonaCSS="administracion/usuarios/nuevo"] .usuariosCrearCuenta_campoUsuario {
+    border-radius: 10px;
+    padding: 10px;
+
+
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+}
+
+[zonaCSS="administracion/usuarios/nuevo"] .usuariosCrearCuenta_contenedorBotones {
 
     display: flex;
     flex-direction: column;
@@ -8203,7 +8582,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 
-.usuarioCrearCuenta_botonV1 {
+[zonaCSS="administracion/usuarios/nuevo"] .usuarioCrearCuenta_botonV1 {
     background: rgba(255, 255, 255, 0.3);
 
     border-radius: 10px;
@@ -8379,7 +8758,7 @@ grid-template-columns: 0.5fr 1.5fr;
     appearance: none;
 }
 
-.detallesUsuario_rol_selector {
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_rol_selector {
     padding: 10px;
     border-radius: 10px;
     font-size: 13;
@@ -8392,15 +8771,7 @@ grid-template-columns: 0.5fr 1.5fr;
     appearance: none;
 }
 
-.detallesUsuario_contenedorBotones {
-    display: flex;
-    border-radius: 16px;
-    gap: 6px;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
+
 
 .detallesEnlace_contenedor {
     background: rgba(255, 255, 255, 0.3);
@@ -9113,7 +9484,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: stretch;
 }
 
-.administracion_configuracion_contenedorConfiguracion {
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_contenedorConfiguracion {
     border-radius: 16px;
 
     display: flex;
@@ -9129,14 +9500,14 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 6px;
 }
 
-.administracion_configuracion_informacion {
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_informacion {
     border-radius: 12px;
     padding: 6px;
     display: flex;
     justify-content: center;
 }
 
-.administracion_configuracion_bloqueConfiguracion {
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_bloqueConfiguracion {
     border-radius: 12px;
     padding: 6px;
     background: rgba(255, 255, 255, 0.3);
@@ -9171,17 +9542,17 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-.administracion_configuracion_tituloConfiguracion {
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_tituloConfiguracion {
     font-weight: bold;
     padding: 4px;
 }
 
-.administracion_configuracion_descripcion {
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_descripcion {
     padding: 4px;
 
 }
 
-.administracion_configuracion_valorConfiguracionInput {
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_valorConfiguracionInput {
 
 
     padding: 10px;
@@ -9192,13 +9563,13 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-.administracion_configuracion_contenedorBotones {
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_contenedorBotones {
     display: none;
     justify-content: center;
     gap: 4px;
 }
 
-.administracion_configuracion_boton {
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_boton {
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
@@ -10373,12 +10744,12 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-.listaBloqueos_titulo {
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .listaBloqueos_titulo {
     display: flex;
     justify-content: center;
 }
 
-.administracion_bloqueos_listaBloqueos_titutloTipoBloqueo {
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .administracion_bloqueos_listaBloqueos_titutloTipoBloqueo {
     display: flex;
     justify-content: flex-start;
 }
@@ -11937,7 +12308,12 @@ grid-template-columns: 0.5fr 1.5fr;
     margin: 4px;
     text-align: center;
 }
-
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesReservaTituloCancelarReserva {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px;
+    text-align: center;
+}
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .detallesReservaTituloCancelarReserva {
     font-size: 20px;
     font-weight: bold;
@@ -11951,6 +12327,21 @@ grid-template-columns: 0.5fr 1.5fr;
     margin: 4px;
     text-align: center;
 }
+
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesReservaTituloCancelarReserva {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px;
+    text-align: center;
+}
+[zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesReservaTituloCancelarReserva {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px;
+    text-align: center;
+}
+
 
 [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .detallesReservaTituloCancelarReserva {
     font-size: 20px;

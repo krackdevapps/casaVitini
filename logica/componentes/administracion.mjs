@@ -912,6 +912,8 @@ const administracion = {
                 }
 
                 //const resolverReservas = await casaVitini.administracion.reservas.buscador.resolverReservas(transaccion)
+              
+              console.log("transaccion",transaccion)
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
 
                 if (respuestaServidor?.error) {
@@ -13638,7 +13640,6 @@ const administracion = {
     },
     configuracion: {
         arranque: async () => {
-            document.body.removeAttribute("style")
             const marcoElastico = document.querySelector("[componente=marcoElastico]")
             marcoElastico.style.gap = "4px"
             const botones = [...document.querySelectorAll("[componente=botonConfiguracion]")]
@@ -13657,7 +13658,9 @@ const administracion = {
         },
         zonaHoraria: {
             arranque: async () => {
-                document.body.removeAttribute("style")
+                const main = document.querySelector("main")
+                main.setAttribute("zonaCSS", "administracion/configuracion")
+
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
                 marcoElastico.style.gap = "4px"
                 const transaccion = {
@@ -13780,6 +13783,14 @@ const administracion = {
 
             },
             guardarCambios: async () => {
+                const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                const mensaje = "Actualizando zona horaria del reloj..."
+                const datosPantallaSuperpuesta = {
+                    instanciaUID: instanciaUID,
+                    mensaje: mensaje
+                }
+                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+
                 const campos = [...document.querySelectorAll("[campo]")]
                 const transacccion = {
                     zona: "administracion/configuracion/zonaHoraria/guardarConfiguracion"
@@ -13793,7 +13804,9 @@ const administracion = {
                 })
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
-
+                const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                if (!instanciaRenderizada) { return }
+                instanciaRenderizada.remove()
 
                 if (respuestaServidor?.error) {
                     casaVitini.administracion.configuracion.cancelarCambios()
@@ -13812,7 +13825,9 @@ const administracion = {
         },
         horaDeEntradaSalida: {
             arranque: async () => {
-                document.body.removeAttribute("style")
+
+                const main = document.querySelector("main")
+                main.setAttribute("zonaCSS", "administracion/configuracion")
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
                 marcoElastico.style.gap = "4px"
                 const transaccion = {
@@ -13964,6 +13979,14 @@ const administracion = {
 
             },
             guardarCambios: async () => {
+                const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                const mensaje = "Actualizando hora de entrada y salida..."
+                const datosPantallaSuperpuesta = {
+                    instanciaUID: instanciaUID,
+                    mensaje: mensaje
+                }
+                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+
                 const campos = [...document.querySelectorAll("[campo]")]
                 const transacccion = {
                     zona: "administracion/configuracion/horaDeEntradaSalida/guardarConfiguracion"
@@ -13977,7 +14000,9 @@ const administracion = {
                 })
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
-
+                const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                if (!instanciaRenderizada) { return }
+                instanciaRenderizada.remove()
 
                 if (respuestaServidor?.error) {
                     casaVitini.administracion.configuracion.cancelarCambios()
@@ -13995,7 +14020,8 @@ const administracion = {
             }
         },
         arranqueAntiguo: async () => {
-            document.body.removeAttribute("style")
+            const main = document.querySelector("main")
+            main.setAttribute("zonaCSS", "administracion/configuracion")
             const marcoElastico = document.querySelector("[componente=marcoElastico]")
             marcoElastico.style.gap = "4px"
             const transaccion = {
@@ -14198,7 +14224,8 @@ const administracion = {
         },
         calendariosSincronizados: {
             arranque: async () => {
-                document.body.removeAttribute("style")
+                const main = document.querySelector("main")
+                main.setAttribute("zonaCSS", "administracion/configuracion")
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
                 marcoElastico.style.gap = "4px"
                 const granuladoURL = casaVitini.componentes.granuladorURL()
@@ -14722,7 +14749,8 @@ const administracion = {
         limitesReservaPublica: {
 
             arranque: async () => {
-                document.body.removeAttribute("style")
+                const main = document.querySelector("main")
+                main.setAttribute("zonaCSS", "administracion/configuracion")
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
                 marcoElastico.style.gap = "4px"
 
@@ -14886,6 +14914,14 @@ const administracion = {
 
             },
             guardarCambios: async () => {
+                const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                const mensaje = "Actualizando limites de las reservas publicas..."
+                const datosPantallaSuperpuesta = {
+                    instanciaUID: instanciaUID,
+                    mensaje: mensaje
+                }
+                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+               
                 const campos = [...document.querySelectorAll("[campo]")]
                 const transacccion = {
                     zona: "administracion/configuracion/limitesReservaPublica/guardarConfiguracion"
@@ -14899,7 +14935,9 @@ const administracion = {
                 })
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
-
+                const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                if (!instanciaRenderizada) { return }
+                instanciaRenderizada.remove()
 
                 if (respuestaServidor?.error) {
                     casaVitini.administracion.configuracion.cancelarCambios()
@@ -14920,6 +14958,9 @@ const administracion = {
         interruptores: {
 
             arranque: async () => {
+                const main = document.querySelector("main")
+                main.setAttribute("zonaCSS", "administracion/configuracion")
+
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
                 marcoElastico.style.gap = "4px"
 
@@ -17922,7 +17963,6 @@ const administracion = {
             },
             confirmarCrearImpuesto: async () => {
                 const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
-
                 const mensaje = "Creando nuevo impuesto..."
                 const datosPantallaSuperpuesta = {
                     instanciaUID: instanciaUID,
@@ -23055,11 +23095,12 @@ const administracion = {
             })
 
             if (directoriosFiltrados.length === 1) {
+                main.setAttribute("zonaCSS", "administracion/gestion_de_bloqueos/por_apartamento")
 
                 return casaVitini.administracion.bloqueos_temporales.bloqueosPorApartamento.UI(directoriosFiltrados[0])
             }
             if (directoriosFiltrados.length === 2) {
-
+                main.setAttribute("zonaCSS", "administracion/gestion_de_bloqueos/bloqueoUI")
                 return casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.UI(directoriosFiltrados)
             }
             const info = {
@@ -23902,6 +23943,15 @@ const administracion = {
                 }
             },
             guardarCambios: async () => {
+                const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                const mensaje = "Actualizando bloqueo..."
+                const datosPantallaSuperpuesta = {
+                    instanciaUID: instanciaUID,
+                    mensaje: mensaje
+                }
+                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+
+
                 const selectorBloqueUID = document.querySelector("[bloqueoUID]")
                 const bloqueUID = selectorBloqueUID.getAttribute("bloqueoUID")
                 const selectorTipoBloqueo = document.querySelector("[datoBloqueo=tipoBloqueo]")
@@ -23915,7 +23965,6 @@ const administracion = {
                 const selectorMotivo = document.querySelector("[datoBloqueo=motivoUI]")
                 const motivo = selectorMotivo.value || null
 
-
                 const transaccion = {
                     zona: "administracion/bloqueos/modificarBloqueo",
                     bloqueoUID: Number(bloqueUID),
@@ -23927,11 +23976,12 @@ const administracion = {
                 }
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
+                const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                if (!instanciaRenderizada) { return }
+                instanciaRenderizada.remove()
                 if (respuestaServidor?.error) {
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                 }
-
 
                 if (respuestaServidor?.ok) {
 
@@ -24004,9 +24054,17 @@ const administracion = {
                     bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
                     contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.body.appendChild(advertenciaInmersivaIU)
+                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
                 },
                 confirmar: async () => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const mensaje = "Elimiando bloqueo..."
+                    const datosPantallaSuperpuesta = {
+                        instanciaUID: instanciaUID,
+                        mensaje: mensaje
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+
                     const bloqueoUID = document.querySelector("[bloqueoUID]").getAttribute("bloqueoUID")
                     const apartamentoIDV = document.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")
                     const transaccion = {
@@ -24015,7 +24073,9 @@ const administracion = {
 
                     }
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
+                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    if (!instanciaRenderizada) { return }
+                    instanciaRenderizada.remove()
                     if (respuestaServidor?.error) {
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
@@ -24437,9 +24497,9 @@ const administracion = {
         },
         crearBloqueo: {
             arranque: () => {
-                // document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
                 casaVitini.administracion.bloqueos_temporales.crearBloqueo.UI()
-
+                const main = document.querySelector("main")
+                main.setAttribute("zonaCSS", "administracion/gestion_de_bloqueos/bloqueoUI")
             },
             UI: async () => {
 
@@ -24626,7 +24686,7 @@ const administracion = {
                 const apartamentoIDV = document.querySelector("[datoBloqueo=apartamento]").value
                 const tipoBloqueo = document.querySelector("[datoBloqueo=tipoBloqueo]").value
                 const zonaUI = document.querySelector("[datoBloqueo=zonaUI]").value
-                const fechaInicio = document.querySelector("[calendario=entrada")?.getAttribute("memoriaVolatil") 
+                const fechaInicio = document.querySelector("[calendario=entrada")?.getAttribute("memoriaVolatil")
                 const fechaFin = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
                 const motivo = document.querySelector("[datoBloqueo=motivoUI]").value || null
 
@@ -24639,7 +24699,7 @@ const administracion = {
                     fechaFin: fechaFin,
                     motivo: motivo,
                 }
-                
+
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                 if (!instanciaRenderizada) { return }
@@ -27642,15 +27702,17 @@ const administracion = {
     },
     usuarios: {
         arranque: async () => {
-            // document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
-
+            const main = document.querySelector("main")
             const granuladoURL = casaVitini.componentes.granuladorURL()
             const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
 
             if (comandoInicial === "usuarios" && !granuladoURL.parametros.buscar) {
+                main.setAttribute("zonaCSS", "administracion/usuarios/buscador")
                 return casaVitini.administracion.usuarios.portada.buscadorUI()
             }
             if (granuladoURL.parametros.buscar) {
+                main.setAttribute("zonaCSS", "administracion/usuarios/buscador")
+
                 casaVitini.administracion.usuarios.portada.buscadorUI()
                 if (!granuladoURL.parametros.buscar) {
                     return
@@ -27681,6 +27743,7 @@ const administracion = {
 
             }
             if (comandoInicial === "crear") {
+                main.setAttribute("zonaCSS", "administracion/usuarios/nuevo")
                 return casaVitini.administracion.usuarios.crearCuenta.UI()
             }
             return casaVitini.administracion.usuarios.detallesUsuario.arranque(comandoInicial)
@@ -28206,7 +28269,10 @@ const administracion = {
             },
         },
         detallesUsuario: {
-            arranque: (uid) => {
+            arranque: () => {
+                const main = document.querySelector("main")
+                main.setAttribute("zonaCSS", "administracion/usuarios/detallesDelUsuario")
+
                 const granuladoURL = casaVitini.componentes.granuladorURL()
                 const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
 
@@ -28381,7 +28447,11 @@ const administracion = {
 
                         const nombreUI = document.createElement("a")
                         nombreUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                        nombreUI.innerText = "Nombre"
+                        let titulo = document.createElement("p")
+                        titulo.classList.add("tituloDato")
+                        titulo.innerText = "Nombre"
+                        nombreUI.appendChild(titulo)
+
 
                         const campoNombre = document.createElement("input")
                         campoNombre.classList.add("detallesUsuario_campoDatosUsuario")
@@ -28393,7 +28463,10 @@ const administracion = {
 
                         const primerApellidoUI = document.createElement("a")
                         primerApellidoUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                        primerApellidoUI.innerText = "Primero apellido"
+                        titulo = document.createElement("p")
+                        titulo.classList.add("tituloDato")
+                        titulo.innerText = "Primero apellido"
+                        primerApellidoUI.appendChild(titulo)
 
                         const campoPrimerApellido = document.createElement("input")
                         campoPrimerApellido.classList.add("detallesUsuario_campoDatosUsuario")
@@ -28406,7 +28479,11 @@ const administracion = {
 
                         const segundoApellidoUI = document.createElement("a")
                         segundoApellidoUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                        segundoApellidoUI.innerText = "Segundo apellido"
+                        titulo = document.createElement("p")
+                        titulo.classList.add("tituloDato")
+                        titulo.innerText = "Segundo apellido"
+                        segundoApellidoUI.appendChild(titulo)
+
 
                         const campoSegundoApellido = document.createElement("input")
                         campoSegundoApellido.classList.add("detallesUsuario_campoDatosUsuario")
@@ -28419,7 +28496,11 @@ const administracion = {
 
                         const pasaporteUI = document.createElement("a")
                         pasaporteUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                        pasaporteUI.innerText = "Pasaporte"
+
+                        titulo = document.createElement("p")
+                        titulo.classList.add("tituloDato")
+                        titulo.innerText = "Pasaporte"
+                        pasaporteUI.appendChild(titulo)
 
                         const campoPasaporte = document.createElement("input")
                         campoPasaporte.classList.add("detallesUsuario_campoDatosUsuario")
@@ -28432,7 +28513,12 @@ const administracion = {
 
                         const telefonoUI = document.createElement("a")
                         telefonoUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                        telefonoUI.innerText = "Telefono"
+
+
+                        titulo = document.createElement("p")
+                        titulo.classList.add("tituloDato")
+                        titulo.innerText = "Telefono"
+                        telefonoUI.appendChild(titulo)
 
                         const campoTelefono = document.createElement("input")
                         campoTelefono.classList.add("detallesUsuario_campoDatosUsuario")
@@ -28446,7 +28532,12 @@ const administracion = {
 
                         const emailUI = document.createElement("a")
                         emailUI.classList.add("detallesUsuario_contenedorCampoEInfo")
-                        emailUI.innerText = "Correo electroníco"
+
+
+                        titulo = document.createElement("p")
+                        titulo.classList.add("tituloDato")
+                        titulo.innerText = "Correo electroníco"
+                        emailUI.appendChild(titulo)
 
                         const campoEmail = document.createElement("input")
                         campoEmail.classList.add("detallesUsuario_campoDatosUsuario")
@@ -28559,6 +28650,13 @@ const administracion = {
 
                 },
                 guardarCambios: async () => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const mensaje = "Actualizando datos del usuario..."
+                    const datosPantallaSuperpuesta = {
+                        instanciaUID: instanciaUID,
+                        mensaje: mensaje
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
 
                     const campos = [...document.querySelectorAll("[campo]")]
                     const usuarioIDX = document.querySelector("[usuarioIDX]").getAttribute("usuarioIDX")
@@ -28573,6 +28671,10 @@ const administracion = {
 
                     })
                     const respuestaServidor = await casaVitini.componentes.servidor(datosParaActualizar)
+                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    if (!instanciaRenderizada) { return }
+                    instanciaRenderizada.remove()
+
                     if (respuestaServidor?.error) {
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
@@ -28657,6 +28759,7 @@ const administracion = {
                         const selectorRoles = document.createElement("select");
                         selectorRoles.classList.add("detallesUsuario_rol_selector")
                         selectorRoles.setAttribute("selector", "roles")
+                        selectorRoles.addEventListener("change", casaVitini.administracion.usuarios.detallesUsuario.rol.guardarCambios)
 
                         for (const detallesRol of roles) {
 
@@ -28707,6 +28810,14 @@ const administracion = {
 
                 },
                 guardarCambios: async () => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const mensaje = "Actualizando rol del VitiniIDX..."
+                    const datosPantallaSuperpuesta = {
+                        instanciaUID: instanciaUID,
+                        mensaje: mensaje
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+
                     const usuarioIDX = document.querySelector("[usuarioIDX]").getAttribute("usuarioIDX")
                     const selectorRol = document.querySelector("[selector=roles]").value
                     const datosParaActualizar = {
@@ -28716,6 +28827,9 @@ const administracion = {
                     }
 
                     const respuestaServidor = await casaVitini.componentes.servidor(datosParaActualizar)
+                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    if (!instanciaRenderizada) { return }
+                    instanciaRenderizada.remove()
                     if (respuestaServidor?.error) {
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
@@ -28735,15 +28849,11 @@ const administracion = {
                 },
                 cancelarCambios: () => {
                     const campos = [...document.querySelectorAll("[campo]")]
-
                     campos.map((campo) => {
                         campo.value = null
                     })
                     const selectorContenedorBotones = document.querySelector("[componente=contenedorBotones]")
                     selectorContenedorBotones.removeAttribute("style")
-
-
-
                 },
 
             },
@@ -28816,7 +28926,7 @@ const administracion = {
                     bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
                     contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.body.appendChild(advertenciaInmersivaIU)
+                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
                 },
                 transactor: async (nuevoEstado) => {
                     const nuevoEstado_ = nuevoEstado.target.getAttribute("nuevoEstado")
@@ -28977,6 +29087,14 @@ const administracion = {
 
                 },
                 guardarCambios: async () => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const mensaje = "Actualizando contraseña del usuario..."
+                    const datosPantallaSuperpuesta = {
+                        instanciaUID: instanciaUID,
+                        mensaje: mensaje
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+
                     const usuarioIDX = document.querySelector("[usuarioIDX]")
                     const claveNueva = document.querySelector("[componente=claveNueva]")
                     const claveNuevaDos = document.querySelector("[componente=claveNuevaDos]")
@@ -28989,6 +29107,9 @@ const administracion = {
                     }
 
                     const respuestaServidor = await casaVitini.componentes.servidor(datosParaActualizar)
+                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    if (!instanciaRenderizada) { return }
+                    instanciaRenderizada.remove()
                     if (respuestaServidor?.error) {
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
@@ -29088,9 +29209,17 @@ const administracion = {
                     bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
                     contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.body.appendChild(advertenciaInmersivaIU)
+                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
                 },
                 transactor: async (nuevoEstado) => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const mensaje = "Actualizando estado del VitiniIDX..."
+                    const datosPantallaSuperpuesta = {
+                        instanciaUID: instanciaUID,
+                        mensaje: mensaje
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+
                     const nuevoEstado_ = nuevoEstado.target.getAttribute("nuevoEstado")
                     const usuarioIDX = document.querySelector("[usuarioIDX]").getAttribute("usuarioIDX")
                     const transaccion = {
@@ -29099,7 +29228,9 @@ const administracion = {
                         "nuevoEstado": nuevoEstado_
                     }
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
+                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    if (!instanciaRenderizada) { return }
+                    instanciaRenderizada.remove()
                     if (respuestaServidor?.error) {
                         const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
                         selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
@@ -29184,16 +29315,26 @@ const administracion = {
                     bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
                     contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.body.appendChild(advertenciaInmersivaIU)
+                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
                 },
-                transactor: async (nuevoEstado) => {
+                transactor: async () => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const mensaje = "Elimiando el VitiniIDX..."
+                    const datosPantallaSuperpuesta = {
+                        instanciaUID: instanciaUID,
+                        mensaje: mensaje
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+
                     const usuarioIDX = document.querySelector("[usuarioIDX]").getAttribute("usuarioIDX")
                     const transaccion = {
                         zona: "administracion/usuarios/eliminarCuentaDesdeAdministracion",
                         "usuarioIDX": usuarioIDX
                     }
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
+                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    if (!instanciaRenderizada) { return }
+                    instanciaRenderizada.remove()
                     if (respuestaServidor?.error) {
                         const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
                         selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
@@ -29361,6 +29502,13 @@ const administracion = {
 
                 },
                 guardarCambios: async () => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const mensaje = "Actualizando el VitiniIDX..."
+                    const datosPantallaSuperpuesta = {
+                        instanciaUID: instanciaUID,
+                        mensaje: mensaje
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
 
                     const usuarioIDX = document.querySelector("[usuarioIDX]")
                     const nuevoIDX = document.querySelector("[componente=nuevoIDX]")
@@ -29371,6 +29519,10 @@ const administracion = {
                     }
 
                     const respuestaServidor = await casaVitini.componentes.servidor(datosParaActualizar)
+                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    if (!instanciaRenderizada) { return }
+                    instanciaRenderizada.remove()
+
                     if (respuestaServidor?.error) {
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
@@ -29513,6 +29665,13 @@ const administracion = {
 
             },
             transasctor: async () => {
+                const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                const mensaje = "Creando usuarios..."
+                const datosPantallaSuperpuesta = {
+                    instanciaUID: instanciaUID,
+                    mensaje: mensaje
+                }
+                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
 
                 const nuevoUsuarioIDX = document.querySelector("[campo=usuarioIDX]").value
                 const clave = document.querySelector("[campo=clave]").value
@@ -29526,6 +29685,10 @@ const administracion = {
                 }
 
                 const respuestaServidor = await casaVitini.componentes.servidor(metadatos)
+                const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                if (!instanciaRenderizada) { return }
+                instanciaRenderizada.remove()
+
                 if (respuestaServidor?.error) {
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                 }
