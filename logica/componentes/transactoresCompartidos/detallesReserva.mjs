@@ -25,7 +25,6 @@ const detallesReserva = async (metadatos) => {
         "estadoPago",
         to_char(creacion, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS "creacion_ISO_UTC",
         to_char(creacion, 'DD/MM/YYYY HH24:MI') as creacion,
-        "titular",
         origen 
         FROM reservas
         WHERE reserva = $1;`
@@ -38,10 +37,15 @@ const detallesReserva = async (metadatos) => {
         const informacionGlobal = async () => {
 
             const detallesGlobalesReserva = reservaRespuesta.rows[0]
-            const titularPoolUID = detallesGlobalesReserva.titularPool
-            const titularUID = detallesGlobalesReserva.titular
-            if (titularUID) {
+            const consultaTitular = `
+            SELECT
+            "titularUID"
+            FROM "reservaTitulares"
+            WHERE "reservaUID" = $1`
+            const resuelveTitularVitini = await conexion.query(consultaTitular, [reservaUID])
+            const titularUID = resuelveTitularVitini.rows[0]?.titularUID
 
+            if (titularUID) {
                 const consultaElimintarTitularPool = `
                 DELETE FROM 
                 "poolTitularesReserva"

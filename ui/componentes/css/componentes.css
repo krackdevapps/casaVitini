@@ -3383,12 +3383,13 @@
 }
 
 @media screen and (max-width: 720px) {
-    .administracionReservasDetalesMarcoEnvolventeInformacionGeneral {
+   
+[zonaCSS="administracion/reservas/detallesReserva"]  .administracionReservasDetalesMarcoEnvolventeInformacionGeneral {
         display: flex;
         flex-direction: column;
     }
 
-    .miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
+    [zonaCSS="miCasa"]  .miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
         display: flex;
         flex-direction: column;
     }

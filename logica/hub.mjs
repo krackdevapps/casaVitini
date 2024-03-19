@@ -4203,8 +4203,10 @@ const puerto = async (entrada, salida) => {
                                 END AS "nombreCompleto"
                             FROM 
                                 reservas r
+                            LEFT JOIN
+                                "reservaTitulares" rt ON r.reserva = rt."reservaUID"
                             LEFT JOIN 
-                                clientes c ON r.titular = c.uid
+                                clientes c ON rt."titularUID" = c.uid
                             LEFT JOIN
                                 "poolTitularesReserva" ptr ON r.reserva = ptr.reserva
                             WHERE 
@@ -4324,8 +4326,10 @@ const puerto = async (entrada, salida) => {
                                     COUNT(*) OVER() as total_filas
                                     FROM 
                                     reservas r
+                                    LEFT JOIN
+                                    "reservaTitulares" rt ON r.reserva = rt."reservaUID"
                                     LEFT JOIN 
-                                    clientes c ON r.titular = c.uid
+                                    clientes c ON rt."titularUID" = c.uid
                                     LEFT JOIN
                                     "poolTitularesReserva" ptr ON r.reserva = ptr.reserva
                                     WHERE 
@@ -4416,8 +4420,10 @@ const puerto = async (entrada, salida) => {
                                         COUNT(*) OVER() as total_filas
                                     FROM 
                                         reservas r
+                                    LEFT JOIN
+                                        "reservaTitulares" rt ON r.reserva = rt."reservaUID"
                                     LEFT JOIN 
-                                        clientes c ON r.titular = c.uid
+                                        clientes c ON rt."titularUID" = c.uid
                                     LEFT JOIN
                                         "poolTitularesReserva" ptr ON r.reserva = ptr.reserva
                                     WHERE 
@@ -4489,8 +4495,10 @@ const puerto = async (entrada, salida) => {
                                     COUNT(*) OVER() as total_filas
                                         FROM 
                                             reservas r
+                                        LEFT JOIN
+                                            "reservaTitulares" rt ON r.reserva = rt."reservaUID"
                                         LEFT JOIN 
-                                            clientes c ON r.titular = c.uid
+                                            clientes c ON rt."titularUID" = c.uid
                                         LEFT JOIN
                                         "poolTitularesReserva" ptr ON r.reserva = ptr.reserva
                                         WHERE
@@ -4561,8 +4569,10 @@ const puerto = async (entrada, salida) => {
                                     COUNT(*) OVER() as total_filas
                                     FROM 
                                         reservas r
+                                    LEFT JOIN
+                                        "reservaTitulares" rt ON r.reserva = rt."reservaUID"
                                     LEFT JOIN 
-                                        clientes c ON r.titular = c.uid
+                                        clientes c ON rt."titularUID" = c.uid
                                     LEFT JOIN
                                     "poolTitularesReserva" ptr ON r.reserva = ptr.reserva
                                     WHERE
@@ -4703,8 +4713,10 @@ const puerto = async (entrada, salida) => {
                                 COUNT(*) OVER() as total_filas
                             FROM 
                                 reservas r
+                            LEFT JOIN
+                                "reservaTitulares" rt ON r.reserva = rt."reservaUID"
                             LEFT JOIN 
-                                clientes c ON r.titular = c.uid
+                                clientes c ON rt."titularUID" = c.uid
                             LEFT JOIN
                                 "poolTitularesReserva" ptr ON r.reserva = ptr.reserva
                             WHERE
@@ -6071,14 +6083,14 @@ const puerto = async (entrada, salida) => {
                     const mutex = new Mutex();
                     const bloqueoCrearClienteDesdeReservaYAnadirloAreserva = await mutex.acquire();
                     try {
-                        let reserva = entrada.body.reserva
-                        let habitacionUID = entrada.body.habitacionUID
-                        let nombre = entrada.body.nombre
-                        let primerApellido = entrada.body.primerApellido
-                        let segundoApellido = entrada.body.segundoApellido
-                        let pasaporte = entrada.body.pasaporte
-                        let telefono = entrada.body.telefono
-                        let correoElectronico = entrada.body.correoElectronico
+                        const reserva = entrada.body.reserva
+                        const habitacionUID = entrada.body.habitacionUID
+                        const nombre = entrada.body.nombre
+                        const primerApellido = entrada.body.primerApellido
+                        const segundoApellido = entrada.body.segundoApellido
+                        const pasaporte = entrada.body.pasaporte
+                        const telefono = entrada.body.telefono
+                        const correoElectronico = entrada.body.correoElectronico
                         if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
                             const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
@@ -6113,25 +6125,33 @@ const puerto = async (entrada, salida) => {
                         FROM "reservaHabitaciones"
                         WHERE reserva = $1 AND uid = $2
                         `
-                        let resuelveValidacionHabitacion = await conexion.query(validacionHabitacion, [reserva, habitacionUID])
+                        const resuelveValidacionHabitacion = await conexion.query(validacionHabitacion, [reserva, habitacionUID])
                         if (resuelveValidacionHabitacion.rowCount === 0) {
                             const error = "No existe la habitacion dentro de esta reserva"
                             throw new Error(error)
                         }
 
-
-                        const datosNuevoCliente = {
+                        const nuevoClientePorValidar = {
                             nombre: nombre,
                             primerApellido: primerApellido,
                             segundoApellido: segundoApellido,
                             pasaporte: pasaporte,
                             telefono: telefono,
-                            correoElectronico: correoElectronico
+                            correoElectronico: correoElectronico,
                         }
 
-                        const nuevoCliente = await insertarCliente(datosNuevoCliente)
-                        const nuevoUIDCliente = nuevoCliente.uid
+                        const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoClientePorValidar)
+                        const datosNuevoCliente = {
+                            nombre: datosValidados.nombre,
+                            primerApellido: datosValidados.primerApellido,
+                            segundoApellido: datosValidados.segundoApellido,
+                            pasaporte: datosValidados.pasaporte,
+                            telefono: datosValidados.telefono,
+                            correoElectronico: datosValidados.correoElectronico
+                        }
 
+                        const nuevoClienteInsertado = await insertarCliente(datosNuevoCliente)
+                        const nuevoUIDCliente = nuevoClienteInsertado.uid
 
                         const insertarPernoctante = `
                         INSERT INTO 
@@ -6154,7 +6174,15 @@ const puerto = async (entrada, salida) => {
                             const ok = {
                                 ok: "Se ha anadido correctamente el cliente en la habitacin de la reserva",
                                 nuevoUIDPernoctante: resuelveInsertarPernoctante.rows[0].pernoctanteUID,
-                                nuevoUIDCliente: nuevoUIDCliente
+                                nuevoUIDCliente: nuevoUIDCliente,
+                                nuevoCliente: {
+                                    nombre: datosValidados.nombre,
+                                    primerApellido: datosValidados.primerApellido,
+                                    segundoApellido: datosValidados.segundoApellido,
+                                    pasaporte: datosValidados.pasaporte,
+                                    telefono: datosValidados.telefono,
+                                    correoElectronico: datosValidados.correoElectronico
+                                }
                             }
                             salida.json(ok)
                         }
@@ -7983,7 +8011,6 @@ const puerto = async (entrada, salida) => {
                             }
 
                             if (resuelveValidarCliente.rowCount === 1) {
-
                                 const consultaElimintarTitularPool = `
                                 DELETE FROM 
                                 "poolTitularesReserva"
@@ -7991,6 +8018,14 @@ const puerto = async (entrada, salida) => {
                                 reserva = $1;
                                 `
                                 await conexion.query(consultaElimintarTitularPool, [reservaUID])
+
+                                const eliminaTitular = `
+                                DELETE FROM 
+                                "reservaTitulares"
+                                WHERE
+                                "reservaUID" = $1;
+                                `
+                                await conexion.query(eliminaTitular, [reservaUID])
 
                                 const nombre = resuelveValidarCliente.rows[0].nombre
                                 const primerApellido = resuelveValidarCliente.rows[0].primerApellido ? resuelveValidarCliente.rows[0].primerApellido : ""
@@ -8000,22 +8035,20 @@ const puerto = async (entrada, salida) => {
                                 const telefono = resuelveValidarCliente.rows[0].telefono ? resuelveValidarCliente.rows[0].telefono : ""
 
                                 const nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`
-
                                 await validadoresCompartidos.reservas.validarReserva(reservaUID)
+
                                 const consultaActualizarTitular = `
-                                UPDATE
-                                    reservas
-                                SET 
-                                    titular = $1
-                                WHERE 
-                                    reserva = $2;`
+                                INSERT INTO "reservaTitulares"
+                                (
+                                "titularUID",
+                                "reservaUID"
+                                )
+                                VALUES ($1, $2);`
                                 const datosParaActualizar = [
                                     clienteUID,
                                     reservaUID
                                 ]
-
                                 const resuelveActualizarTitular = await conexion.query(consultaActualizarTitular, datosParaActualizar)
-
 
                                 if (resuelveActualizarTitular.rowCount === 0) {
                                     const error = "No se ha podido actualizar el titular de la reserva"
@@ -8051,25 +8084,20 @@ const puerto = async (entrada, salida) => {
                             await validadoresCompartidos.reservas.validarReserva(reservaUID)
 
                             const consultaElimintarTitularPool = `
-                            DELETE FROM 
-                                "poolTitularesReserva"
-                            WHERE
-                                reserva = $1;
+                                DELETE FROM 
+                                    "poolTitularesReserva"
+                                WHERE
+                                    reserva = $1;
                             `
                             await conexion.query(consultaElimintarTitularPool, [reservaUID])
 
                             const consultaActualizarTitular = `
-                                UPDATE
-                                    reservas
-                                SET 
-                                    titular = $1
+                                DELETE FROM
+                                    "reservaTitulares"
                                 WHERE 
-                                    reserva = $2;`
-                            const datosParaActualizar = [
-                                null,
-                                reservaUID
-                            ]
-                            const resuelveActualizarTitular = await conexion.query(consultaActualizarTitular, datosParaActualizar)
+                                    "reservaUID" = $1;`
+                   
+                            const resuelveActualizarTitular = await conexion.query(consultaActualizarTitular, [reservaUID])
                             if (resuelveActualizarTitular.rowCount === 0) {
                                 const error = "No se ha podido actualizar el titular de la reserva"
                                 throw new Error(error)
@@ -8112,37 +8140,53 @@ const puerto = async (entrada, salida) => {
                             reserva = $1;`
                             await conexion.query(consultaElimintarTitularPool, [reservaUID])
 
-                            const datosNuevoCliente = {
+                            const eliminaTitular = `
+                            DELETE FROM 
+                            "reservaTitulares"
+                            WHERE
+                            "reservaUID" = $1;
+                            `
+                            await conexion.query(eliminaTitular, [reservaUID])
+
+
+                            const nuevoClientePorValidar = {
                                 nombre: nombre,
                                 primerApellido: primerApellido,
                                 segundoApellido: segundoApellido,
                                 pasaporte: pasaporte,
                                 telefono: telefono,
                                 correoElectronico: correoElectronico,
-                                notas: notas,
+                            }
+    
+                            const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoClientePorValidar)
+                            const datosNuevoCliente = {
+                                nombre: datosValidados.nombre,
+                                primerApellido: datosValidados.primerApellido,
+                                segundoApellido: datosValidados.segundoApellido,
+                                pasaporte: datosValidados.pasaporte,
+                                telefono: datosValidados.telefono,
+                                correoElectronico: datosValidados.correoElectronico
                             }
 
                             const nuevoCliente = await insertarCliente(datosNuevoCliente)
 
                             const clienteUID = nuevoCliente.uid
-                            const nombre_ = nuevoCliente.nombre
-                            const primerApellido_ = nuevoCliente.primerApellido ? nuevoCliente.primerApellido : ""
-                            const segundoApellido_ = nuevoCliente.segundoApellido ? nuevoCliente.segundoApellido : ""
-                            const email_ = nuevoCliente.email ? nuevoCliente.email : ""
-                            const pasaporte_ = nuevoCliente.pasaporte
-                            const telefono_ = nuevoCliente.telefono ? nuevoCliente.telefono : ""
+                            const nombre_ = datosValidados.nombre
+                            const primerApellido_ = datosValidados.primerApellido ? datosValidados.primerApellido : ""
+                            const segundoApellido_ = datosValidados.segundoApellido ? nuevoCliente.segundoApellido : ""
+                            const email_ = datosValidados.email ? datosValidados.email : ""
+                            const pasaporte_ = datosValidados.pasaporte
+                            const telefono_ = datosValidados.telefono ? datosValidados.telefono : ""
 
                             const nombreCompleto = `${nombre_} ${primerApellido_} ${segundoApellido_}`
                             // Asociar nuevo cliente como titular
-
-
                             const consultaInsertaTitularReserva = `
-                            UPDATE reservas
-                            SET
-                              titular = $1
-                            WHERE
-                              reserva = $2
-                            `
+                            INSERT INTO "reservaTitulares"
+                            (
+                            "titularUID",
+                            "reservaUID"
+                            )
+                            VALUES ($1, $2);`
                             const resuelveInsertarTitular = await conexion.query(consultaInsertaTitularReserva, [clienteUID, reservaUID])
                             if (resuelveInsertarTitular.rowCount === 0) {
                                 const error = "No se ha podio insertar el titular por favor vuelve a intentarlo"
@@ -8188,7 +8232,6 @@ const puerto = async (entrada, salida) => {
                         salida.send(pdf);
 
                     } catch (errorCapturado) {
-
                         const error = {
                             error: errorCapturado.message
                         }

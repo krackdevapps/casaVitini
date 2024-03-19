@@ -13,7 +13,7 @@ const validadoresCompartidos = {
                 let telefono = cliente.telefono
                 let correoElectronico = cliente.correoElectronico
                 let notas = cliente?.notas
-                const filtroCadena = /^[a-zA-Z0-9\s]+$/;
+                const filtroCadena = /^[a-zA-Z0-9\s\-_.]+$/;
                 if (nombre?.length > 0) {
                     if (!filtroCadena.test(nombre)) {
                         const error = "el campo 'nombre' solo puede ser letras minúsculas, masculas."
@@ -48,9 +48,7 @@ const validadoresCompartidos = {
 
                 }
                 if (pasaporte?.length > 0) {
-                    const filtroPasaporte = /^[a-zA-Z0-9]+$/;
-
-                    if (!filtroPasaporte.test(pasaporte)) {
+                    if (!filtroCadena.test(pasaporte)) {
                         const error = "el campo 'pasaporte' solo puede ser letras minúsculas, masculas y numeros."
                         throw new Error(error)
                     }

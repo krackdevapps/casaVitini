@@ -3088,6 +3088,14 @@ const administracion = {
                     if (respuestaServidor?.ok) {
                         const selectorAnadirPernoctanteRedenrizada = document.querySelector(`[habitacionUID="${habitacionUID}"] [componente=anadirPernoctanteUI]`)
                         selectorAnadirPernoctanteRedenrizada?.remove()
+                        console.log("respuesta", respuestaServidor)
+                        const datosNuevoCliente = respuestaServidor.datosNuevoCliente
+                        const nombre = datosNuevoCliente.nombre
+                        const primerApellido = datosNuevoCliente.primerApellido ? datosNuevoCliente.primerApellido : ""
+                        const segundoApellido = datosNuevoCliente.segundoApellido ? datosNuevoCliente.segundoApellido : ""
+                        const pasaporte = datosNuevoCliente.pasaporte
+                        const telefono = datosNuevoCliente.telefono
+                        const correoElectronico = datosNuevoCliente.correoElectronico
 
                         let metadatos = {
                             tipoPernoctante: "cliente",
@@ -3098,12 +3106,9 @@ const administracion = {
 
                         const pernoctanteUI = casaVitini.administracion.reservas.detallesReserva.UIComponentes.pernoctanteUI(metadatos)
 
-                        const primerApellido = transaccion.primerApellido ? transaccion.primerApellido : ""
-                        const segundoApellido = transaccion.segundoApellido ? transaccion.segundoApellido : ""
-
                         metadatos = {
                             clienteUID: respuestaServidor?.nuevoUIDCliente,
-                            nombreCompleto: `${transaccion?.nombre} ${primerApellido} ${segundoApellido}`
+                            nombreCompleto: `${nombre} ${primerApellido} ${segundoApellido}`
                         }
 
                         const pernoctanteNombreUI = casaVitini.administracion.reservas.detallesReserva.UIComponentes.pernoctanteNombreUI(metadatos)
@@ -3410,7 +3415,7 @@ const administracion = {
 
                     let primerApellido = document.createElement("input")
                     primerApellido.classList.add("administracionReservasDetallesCampoBuscadorCliente")
-                    primerApellido.setAttribute("campo", "primerApelliado")
+                    primerApellido.setAttribute("campo", "primerApellido")
                     primerApellido.setAttribute("formulario", "AnadirPernoctante")
                     primerApellido.placeholder = "Primer apellido"
                     buscadorRapidoClienteUI.appendChild(primerApellido)
@@ -15608,22 +15613,22 @@ const administracion = {
                     nombreDato.innerText = nombre
                     bloqueDato.appendChild(nombreDato)
 
-                    // primerApelliado
+                    // primerApellido
                     bloqueDato = document.createElement("div")
                     bloqueDato.classList.add("detallesClienteBloqueDato")
                     bloqueVertical.appendChild(bloqueDato)
 
-                    let primerApelliadoTitulo = document.createElement("p")
-                    primerApelliadoTitulo.classList.add("detallesClienteTituloDato")
-                    primerApelliadoTitulo.innerText = "Primer apellido"
+                    let primerApellidoTitulo = document.createElement("p")
+                    primerApellidoTitulo.classList.add("detallesClienteTituloDato")
+                    primerApellidoTitulo.innerText = "Primer apellido"
 
-                    bloqueDato.appendChild(primerApelliadoTitulo)
+                    bloqueDato.appendChild(primerApellidoTitulo)
 
-                    let primerApelliadoDato = document.createElement("p")
-                    primerApelliadoDato.classList.add("detallesClienteDatoCampo")
-                    primerApelliadoDato.innerText = primerApellido
-                    primerApelliadoDato.setAttribute("componenteDetalle", "primerApellido")
-                    bloqueDato.appendChild(primerApelliadoDato)
+                    let primerApellidoDato = document.createElement("p")
+                    primerApellidoDato.classList.add("detallesClienteDatoCampo")
+                    primerApellidoDato.innerText = primerApellido
+                    primerApellidoDato.setAttribute("componenteDetalle", "primerApellido")
+                    bloqueDato.appendChild(primerApellidoDato)
 
                     // segundoApellido
                     bloqueDato = document.createElement("div")
@@ -25396,7 +25401,7 @@ const administracion = {
                             botonAnadirCaracteristica.innerText = "Añadir caracteristica"
                             botonAnadirCaracteristica.addEventListener("click", () => {
                                 const selectorContenedorCaracteristicas = document.querySelector("[contenedor=caracteristicas]")
-                                const filaCaracteristicaUI = caracteristicasUI()
+                                const filaCaracteristicaUI =  casaVitini.administracion.arquitectura_del_alojamiento.entidades.editarEntidad.caracteristicasUI()
                                 selectorContenedorCaracteristicas.appendChild(filaCaracteristicaUI)
 
                             })

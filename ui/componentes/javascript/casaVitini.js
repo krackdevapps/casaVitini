@@ -4137,7 +4137,7 @@ const casaVitini = {
 
                                 let primerApellido = document.createElement("input")
                                 primerApellido.classList.add("administracionReservasDetallesCampoBuscadorCliente")
-                                primerApellido.setAttribute("campo", "primerApelliado")
+                                primerApellido.setAttribute("campo", "primerApellido")
                                 primerApellido.setAttribute("formulario", "AnadirPernoctante")
                                 primerApellido.placeholder = "Primer apellido"
                                 nuevoClienteUI.appendChild(primerApellido)
