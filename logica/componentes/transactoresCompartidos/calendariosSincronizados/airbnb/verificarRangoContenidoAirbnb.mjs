@@ -9,12 +9,12 @@ const verificarRangoContenidoAirbnb = (rangoInicio, rangoFin, rangoInicioCompara
     const finComparar = DateTime.fromFormat(rangoFinComparar, formatoFecha);
 
     // Verificar si el rango de fechas a comparar está totalmente contenido en el otro rango
-    if (inicioComparar >= inicio && finComparar <= fin) {
+    if (inicioComparar > inicio && finComparar < fin) {
         //"El rango está totalmente contenido."
         return "ocupado";
     }
     // Verificar si hay intersección entre los rangos de fechas
-    if (inicioComparar <= fin && finComparar >= inicio) {
+    if (inicioComparar < fin && finComparar > inicio) {
         //"El rango se superpone parcialmente."
         return "ocupado";
     }

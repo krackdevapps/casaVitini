@@ -7,7 +7,6 @@ import { verificarRangoContenidoAirbnb } from './calendariosSincronizados/airbnb
 import { codigoZonaHoraria } from './codigoZonaHoraria.mjs';
 
 const apartamentosDisponiblesPublico = async (fecha) => {
-
     try {
         const fechaEntrada_ISO = fecha.fechaEntrada_ISO
         const fechaSalida_ISO = fecha.fechaSalida_ISO
@@ -22,11 +21,7 @@ const apartamentosDisponiblesPublico = async (fecha) => {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
             throw new Error(error)
         }
-
-
-        // Validar con limite de un año para las reservas
-        
-    
+        // Validar con limite de un año para las reservas    
         const apartamentosDisponiblesArray = []
         const zonaBloqueoPublico = "publico"
         const zonaBloqueoGlobal = "global"
@@ -42,7 +37,6 @@ const apartamentosDisponiblesPublico = async (fecha) => {
         const reservas = resuelveReservas.rows
 
         const apartamentosNoDiponbilesV2 = []
-
         const bloqueoTemporal = "rangoTemporal"
         const apartamenosBloqueadosTemporalmente = `
         SELECT apartamento 
@@ -75,16 +69,13 @@ const apartamentosDisponiblesPublico = async (fecha) => {
                 FROM "reservaApartamentos" 
                 WHERE reserva = $1;`
             const ApartamentosNoDisponibles = await conexion.query(consultaApartamentosNoDisponibles, [reservaUID])
-
             ApartamentosNoDisponibles.rows.map((apartamento) => {
                 const apartamentoIDV = apartamento.apartamento
                 apartamentosNoDiponbilesV2.push(apartamentoIDV)
             })
-
         }
 
         const estadoDisponibleApartamento = "disponible"
-
         const consultaFinalDinamica = `
                 SELECT 
                 "apartamentoIDV"
@@ -112,7 +103,6 @@ const apartamentosDisponiblesPublico = async (fecha) => {
                 apartamentosNoDiponbilesV2.push(apartamentoNoDisponible.apartamentoIDV)
             })
         }
-
         apartamentosDisponibles.rows.map((apartamento) => {
             apartamentosDisponiblesArray.push(apartamento.apartamentoIDV)
         })
@@ -123,7 +113,6 @@ const apartamentosDisponiblesPublico = async (fecha) => {
             fechaSalida_ISO: fechaSalida_ISO,
             apartamentosDisponibles: apartamentosDisponiblesFinal,
         }
-
         const apartamentosOcupadosPorEliminar_Airbnb = await apartamentosOcupadosAirbnb(datosAirbnb)
 
         for (const apartamentoIDV of apartamentosOcupadosPorEliminar_Airbnb) {

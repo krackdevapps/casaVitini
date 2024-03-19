@@ -180,7 +180,7 @@ main {
     justify-content: flex-start;
     flex-direction: column;
     flex: 1;
-    align-items: stretch;
+    align-items: center;
     max-width: 2160px;
     margin: 0px;
     width: 100%;
