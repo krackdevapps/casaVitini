@@ -17136,7 +17136,7 @@ const administracion = {
 
             if (comandoInicial === "impuestos") {
                 casaVitini.administracion.impuestos.contenedorBotones()
-                return casaVitini.administracion.impuestos.mostrarImpuestosResueltos()
+                return casaVitini.administracion.impuestos.mostrarImpuestosResueltos(granuladoURL.parametros)
             }
             const soloDigitos = /^\d+$/;
             if (soloDigitos.test(comandoInicial)) {
@@ -17162,7 +17162,7 @@ const administracion = {
             }
             return casaVitini.componentes.mensajeSimple(info)
         },
-        mostrarImpuestosResueltos: async () => {
+        mostrarImpuestosResueltos: async (listasImpuestos) => {
             const main = document.querySelector("main")
             const instanciaUID = main.getAttribute("instanciaUID")
             const granuladoURL = casaVitini.componentes.granuladorURL()
@@ -17172,7 +17172,8 @@ const administracion = {
                 zona: "administracion/impuestos/listaImpuestos",
                 origen: "url",
                 tipoConstruccionGrid: "total",
-                ...granuladoURL.parametros
+                ...listasImpuestos
+
             }
             transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
             if (transaccion.nombre_columna) {
@@ -18047,6 +18048,7 @@ const administracion = {
 
         },
         ordenarPorColumna: async (columna) => {
+            console.log("Hola")
             const nombreColumna = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("nombreColumna")
             const selectorColumnasentido = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("sentidoColumna")
             const numeroPagina = columna.target.closest("[gridUID]").getAttribute("numeroPagina")
@@ -18057,6 +18059,7 @@ const administracion = {
                 tipoConstruccionGrid: "soloLista",
                 origen: "tituloColumna"
             }
+            console.log("transaccion", transaccion)
             if (selectorColumnasentido === "ascendente") {
                 transaccion.sentidoColumna = "descendente"
                 transaccion.nombreColumna = nombreColumna
