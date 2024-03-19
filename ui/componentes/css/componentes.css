@@ -2695,7 +2695,7 @@
         display: none;
     }
 
-    .administracion_reserva_detallesReserva_marcoMenuResponsivo {
+    [zonaCSS="administracion/reservas/detallesReserva"]  .administracion_reserva_detallesReserva_marcoMenuResponsivo {
         display: flex;
     }
 
@@ -2704,7 +2704,7 @@
 
 
 
-.administracion_reserva_detallesReserva_marcoMenuResponsivo:hover {
+[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reserva_detallesReserva_marcoMenuResponsivo:hover {
 
     background: #0040ff;
     color: white;
@@ -3539,7 +3539,9 @@
 [zonaCSS="administracion/reservas/nueva"] .fechaSalidaElemento:hover {
     background: rgba(255, 255, 255, 0.3);
 }
-
+[zonaCSS="administracion/reservas/detallesReserva"] .fechaSalidaElemento:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
 [zonaCSS="administracion/reservas/nueva"] .componenteFechaEntrada:hover~.fechaSalidaElemento {
     background: rgba(255, 255, 255, 0.3);
 }
@@ -4408,9 +4410,7 @@
 [zonaCSS="miCasa"] .reserva_resumen_desglose_pago_bloque {
     padding: 4px;
     border-radius: 12px;
-
-
-    gap: 4px;
+   gap: 4px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -4418,8 +4418,29 @@
     /* background: #bababa; */
     border: 1px solid rgba(0, 0, 0, 0.4);
 }
-
+[zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_bloque {
+    padding: 4px;
+    border-radius: 12px;
+   gap: 4px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    /* background: #bababa; */
+    border: 1px solid rgba(0, 0, 0, 0.4);
+}
 [zonaCSS="miCasa"] .reserva_resumen_desglose_porNoche {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+}
+[zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_porNoche {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -4434,20 +4455,22 @@
 
 [zonaCSS="miCasa"] .reserva_resumen_desglose_pago_titulo {
     padding: 4px;
-
-
-    font-weight: bold;
+   font-weight: bold;
 }
-
+[zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_titulo {
+    padding: 4px;
+   font-weight: bold;
+}
 [zonaCSS="miCasa"] .reserva_resumen_desglose_pago_elemento {
     background-color: #ffffff73;
     padding: 10px;
     border-radius: 10px;
-
-
-
 }
-
+[zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_elemento {
+    background-color: #ffffff73;
+    padding: 10px;
+    border-radius: 10px;
+}
 .reservas_detalles_infoDesgloseNo {
 
 
@@ -5097,10 +5120,8 @@
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: 6px;
-
-
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     text-decoration: none;
@@ -9769,7 +9790,9 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: nowrap;
     align-items: stretch;
 }
-
+[zonaCSS="administracion/reservas/detallesReserva"] .infoBuscando {
+  padding: 10px;
+}
 .administracion_reservas_detallesReserva_contenedorMisleanea {
     display: flex;
     flex-direction: column;
@@ -10863,6 +10886,26 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
 
+[zonaCSS="administracion/reservas/detallesReserva"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF {
+    text-decoration: none;
+    background: rgb(255 255 255 / 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    user-select: none;
+    cursor: default;
+    -webkit-user-select: none;
+    color: black;
+    transition: all 500ms;
+}
+
+[zonaCSS="administracion/reservas/detallesReserva"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF:hover {
+    background: white;
+}
+
+
+
+
+
 .administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_botonV1 {
     background: #00000036;
     padding: 8px;
@@ -10890,12 +10933,12 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 10px;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
-
-    padding: 12px;
+    padding: 20px;
     user-select: none;
     cursor: default;
     -webkit-user-select: none;
     pointer-events: all;
+    padding-top: 40px;
 }
 
 .administracion_calendario_componente_calendario_contenedoCarga {
@@ -11015,8 +11058,13 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     gap: 4px;
 }
+[zonaCSS="administracion/reservas/detallesReserva"] .componentes_ui_desloseTotales_contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 
-.administracion_reserver_detallesReserva_contenedorDesgloseTotal {
+[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reserver_detallesReserva_contenedorDesgloseTotal {
     display: flex;
     padding: 4px;
     flex-direction: column;
@@ -12585,8 +12633,6 @@ grid-template-columns: 0.5fr 1.5fr;
 [zonaCSS="administracion/reservas/pendientesDeRevision"] .administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_campo {
     outline: none;
     border: none;
-
-
     padding: 10px;
     border-radius: 10px;
     backdrop-filter: blur(50px);
@@ -12594,6 +12640,20 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.3);
     color: red;
 }
+
+
+
+[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_campo {
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    color: red;
+}
+
 
 [zonaCSS="administracion/reservas/pendientesDeRevision"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
     margin: 0px;

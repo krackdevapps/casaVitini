@@ -1290,7 +1290,7 @@ const administracion = {
 
             },
             constructorCalendario: async (boton) => {
-                const botonID = boton.target.getAttribute("componente")
+                const botonID = boton.target.closest("[calendario]").getAttribute("componente")
                 let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                 let fechaSalidaSelecionda = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
                 const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
@@ -4832,7 +4832,7 @@ const administracion = {
                     contenedorPropuesta.appendChild(botonAceptarPropuesta)
                     const propuestaUI = casaVitini.componentes.ui.pantallaInmersivaPersonalizada()
                     propuestaUI.querySelector("[contenedor=contenidoAdvertenciaInmersiva]").appendChild(contenedorPropuesta)
-                    document.body.appendChild(propuestaUI)
+                    document.querySelector("main").appendChild(propuestaUI)
                 }
 
                 if (calendarioIO === "salida") {
@@ -4917,7 +4917,7 @@ const administracion = {
                     contenedorPropuesta.appendChild(botonAceptarPropuesta)
                     const propuestaUI = casaVitini.componentes.ui.pantallaInmersivaPersonalizada()
                     propuestaUI.querySelector("[contenedor=contenidoAdvertenciaInmersiva]").appendChild(contenedorPropuesta)
-                    document.body.appendChild(propuestaUI)
+                    document.querySelector("main").appendChild(propuestaUI)
                 }
             },
             confirmarCambioFecha: async (propuesta) => {
@@ -5435,7 +5435,6 @@ const administracion = {
                     marcoMenuResponsivo.setAttribute('class', 'administracion_reserva_detallesReserva_marcoMenuResponsivo');
                     marcoMenuResponsivo.innerText = "Menu reserva"
                     marcoMenuResponsivo.addEventListener("click", () => {
-
                         casaVitini.administracion.reservas.detallesReserva.desplegarMenuResponsivo(reservaUID)
                     })
 
@@ -5691,12 +5690,12 @@ const administracion = {
                 contenidoAdvertenciaInmersiva.appendChild(contenedor)
                 contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                 advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                document.body.appendChild(advertenciaInmersivaIU)
+                document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
-
-                const selectorPreRenderizacion = contenedor
-                    .querySelector("[contenedor=menuResponsivoDesplegado]")
-                    .querySelector("[componete=panelDetallesReserva]")
+                // bug
+                // const selectorPreRenderizacion = contenedor
+                //     .querySelector("[contenedor=menuResponsivoDesplegado]")
+                //     .querySelector("[componete=panelDetallesReserva]")
 
 
 
@@ -8793,7 +8792,7 @@ const administracion = {
                             return contenedor
                         },
                         confirmar: async (metadatos) => {
-                            const instanciaUID_reserva= document.querySelector("main").getAttribute("instanciaUID")
+                            const instanciaUID_reserva = document.querySelector("main").getAttribute("instanciaUID")
                             const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
                             const instanciaUIDDetalleDelPago = metadatos.instanciaUIDDetalleDelPago
                             const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
@@ -8827,7 +8826,7 @@ const administracion = {
                                 document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"]`)?.remove()
                                 const selectorContenedorTransacciones = document.querySelector(`main[instanciaUID="${instanciaUID_reserva}"]`)
                                 selectorContenedorTransacciones.querySelector(`[contenedor=listaDePagos]`).querySelector(`[pagoUID="${pagoUID}"]`)?.remove()
-                              
+
                                 const datosActualizar = {
                                     reservaUID: reservaUID,
                                 }
@@ -9093,7 +9092,7 @@ const administracion = {
                         contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                         advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                        document.body.appendChild(advertenciaInmersivaIU)
+                        document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
 
                     },
@@ -9351,7 +9350,7 @@ const administracion = {
 
                             contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                             advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                            document.body.appendChild(advertenciaInmersivaIU)
+                            document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
                             const advertenciaInmersivaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
 
@@ -10737,7 +10736,11 @@ const administracion = {
 
                             listaResultados.style.width = anchoDinamico + "px"
                             listaResultados.innerText = null
-                            listaResultados.innerText = "Buscando..."
+
+                            const info = document.createElement("p")
+                            info.classList.add("infoBuscando")
+                            info.innerText = "Buscando..."
+                            listaResultados.appendChild(info)
                             document.addEventListener("mousedown", (e) => {
                                 if (e.target.getAttribute("componente") === "elementoResultadosBuscadorRapido") {
                                     e.preventDefault()

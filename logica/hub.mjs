@@ -8825,19 +8825,19 @@ const puerto = async (entrada, salida) => {
 
                                         let numeroDiaReservaUI
                                         if (cantidadDias.diasDiferencia > 1) {
-                                            numeroDiaReservaUI = cantidadDias.diasDiferencia + " días"
+                                            numeroDiaReservaUI = cantidadDias.diasDiferencia.toFixed(0) + " días"
                                         }
                                         if (cantidadDias.diasDiferencia === 1) {
-                                            numeroDiaReservaUI = cantidadDias.diasDiferencia + " día y " + cantidadDias.horasDiferencia.toFixed(0) + " horas"
+                                            numeroDiaReservaUI = cantidadDias.diasDiferencia.toFixed(0) + " día y " + cantidadDias.horasDiferencia.toFixed(0) + " horas"
 
                                         }
                                         if (cantidadDias.diasDiferencia === 0) {
                                             if (cantidadDias.horasDiferencia > 1) {
-                                                numeroDiaReservaUI = cantidadDias.horasDiferencia + " horas"
+                                                numeroDiaReservaUI = cantidadDias.horasDiferencia.toFixed(0) + " horas"
 
                                             }
                                             if (cantidadDias.horasDiferencia === 1) {
-                                                numeroDiaReservaUI = cantidadDias.horasDiferencia + " hora"
+                                                numeroDiaReservaUI = cantidadDias.horasDiferencia.toFixed(0) + " hora"
 
                                             }
                                             if (cantidadDias.horasDiferencia === 0) {
