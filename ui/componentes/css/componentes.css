@@ -310,7 +310,7 @@
     position: relative;
     justify-content: space-between;
     align-content: center;
-    gap: 6px;
+    gap: 16px;
     flex-wrap: nowrap;
 }
 
@@ -3766,7 +3766,7 @@
     width: 100%;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-
+    top: 0px;
     display: flex;
     flex-wrap: nowrap;
     align-content: center;
@@ -4869,6 +4869,16 @@
     align-items: stretch;
     justify-content: center;
 }
+
+
+[globalUI="marcoInmersivo"] {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
+
 
 [zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesReservaCancelarBoton {
     background: #00000036;
@@ -6450,16 +6460,7 @@
     margin-top: 100px;
 }
 
-.plaza_alojamiento_contenedorEsperaAlojamiento {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    padding: 6px;
-    gap: 6px;
-    /* padding-top: 80px; */
-    align-items: center;
 
-}
 
 .contenedorContenidoInmersiva {
     display: flex;
@@ -8561,6 +8562,15 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
 }
 
+
+[globalUI="textoCentrado"] {
+    padding: 6px;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 [zonaCSS="miCasa"] .miCuenta_cambiarClave_contenedor {
     padding: 10px;
     border-radius: 16px;
@@ -10241,8 +10251,8 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS=alojamiento] .administracion_reservas_detallesReservas_contenedorTotales {
     display: flex;
-    padding: 4px;
-    gap: 4px;
+    padding: 16px;
+    gap: 10px;
     flex-direction: column;
 }
 
@@ -10742,22 +10752,16 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_infoGlobal {
-
-    padding: 12px;
-
+    padding: 16px;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 16px;
-
-
 }
 
 
 [zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_infoIngreso {
     text-align: center;
-
     display: flex;
-    padding: 12px;
-
+    padding: 16px;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 16px;
     justify-content: center;
@@ -10765,7 +10769,6 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     align-content: center;
     align-items: center;
-
 }
 
 [zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_contenedor {
@@ -11187,6 +11190,11 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     gap: 4px;
 }
+[globalUI="contenedorContenidoVertical"] {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 
 [zonaCSS="alojamiento"] .componentes_ui_desloseTotales_contenedor {
     display: flex;
@@ -11308,7 +11316,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 @media (max-width: 720px) {
-    .plaza_contacto_gridContacto {
+    [zonaCSS="contacto"]  .plaza_contacto_gridContacto {
         display: flex;
 
         flex-direction: column;
@@ -12050,6 +12058,19 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS="alojamiento"] .plaza_resumenReserva_textoInfo {
     font-weight: normal;
+    text-align: justify;
+}
+[zonaCSS="alojamiento"] .plaza_alojamiento_contenedorEsperaAlojamiento {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 16px;
+    gap: 6px;
+    /* padding-top: 80px; */
+    align-items: center;
+
+}
+.textoJustificado {
     text-align: justify;
 }
 
@@ -12988,7 +13009,10 @@ grid-template-columns: 0.5fr 1.5fr;
     margin: 0px;
     padding: 10px;
     border-radius: 10px;
-    background: turquoise;
+    background: rgb(255 255 255 / 17%);
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
 }
 
 .contenedorErrorPropuesta {

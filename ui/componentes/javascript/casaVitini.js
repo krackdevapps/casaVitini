@@ -15,8 +15,8 @@ const casaVitini = {
             },
             reservasNuevo: {
                 arranque: async () => {
-                    document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
-
+                    //document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
+                    document.body.style.background = "rgb(214 192 157)"
                     const granuladoURL = casaVitini.componentes.granuladorURL()
                     const directorios = granuladoURL.directorios[granuladoURL.directorios.length - 1]
                     const main = document.querySelector("main")
@@ -550,7 +550,7 @@ const casaVitini = {
                                 const error = "Selecciona una fecha de salida pulsando en el cuadro de fecha de salida y seleccionando la fecha en el calendario flotante"
                                 return casaVitini.ui.vistas.advertenciaInmersiva(error)
                             }
-                            document.body.classList.add("fondoConDesenfoque")
+                            //document.body.classList.add("fondoConDesenfoque")
 
                             document.querySelector(".bloquePernoctacion")?.remove()
                             document.querySelector(".bloqueBotonResumenReserva")?.remove()
@@ -651,7 +651,7 @@ const casaVitini = {
                                 superBloqueReservaRenderizado.appendChild(infoSinAlojamiento);
                                 return
                             }
-                            document.body.classList.add("fondoConDesenfoque")
+                            //document.body.classList.add("fondoConDesenfoque")
 
                             const tituloBloqueAlojamiento = document.createElement("p")
                             tituloBloqueAlojamiento.setAttribute("class", "tituloBloqueAlojamiento parpadeaFondoTransparente")
@@ -892,8 +892,7 @@ const casaVitini = {
 
                 },
                 resumenReserva: async () => {
-                    document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
-                    document.body.classList.add("fondoConDesenfoque")
+                    document.body.style.background = "rgb(214 192 157)"
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "alojamiento")
 
@@ -1733,8 +1732,8 @@ const casaVitini = {
 
 
                             if (detallesReserva) {
-                                document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
-                                document.body.classList.add("fondoConDesenfoque")
+                                document.body.style.background = "rgb(214 192 157)"
+
 
                                 const obtenerPDF = async (enlaceUID) => {
 
@@ -1873,9 +1872,6 @@ const casaVitini = {
                                 const marcoElastico = document.createElement("div")
                                 marcoElastico.classList.add("marcoElastico")
                                 marcoElastico.setAttribute("contenedor", "reservaConfiramda")
-
-                                marcoElastico.style.alignItems = "stretch"
-                                marcoElastico.style.gap = "4px"
 
 
                                 const titulo = document.createElement("div")
@@ -2131,12 +2127,13 @@ const casaVitini = {
                                     const contenidoAdvertenciaInmersiva = document.createElement("div")
                                     contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
                                     contenidoAdvertenciaInmersiva.setAttribute("contenedor", "contenidoAdvertenciaInmersiva")
+                                    contenidoAdvertenciaInmersiva.setAttribute("globalUI", "marcoInmersivo")
 
                                     const contenedorDesgloseTotales = document.createElement("div")
-                                    contenedorDesgloseTotales.classList.add("administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion")
+                                    contenedorDesgloseTotales.classList.add("marco")
 
                                     const testInfo = document.createElement("div")
-                                    testInfo.classList.add("plaza_resumenReserva_textoInfo")
+                                    testInfo.classList.add("textoJustificado")
                                     testInfo.innerText = "A continuación, se presentan los detalles del desglose completo del importe total de la reserva. Aquí encontrarás una explicación detallada de cada componente que contribuye al costo total. Este desglose incluye los diversos cargos, impuestos u otros conceptos asociados con tu reserva. Revisar estos detalles te proporcionará una comprensión transparente de los costos involucrados en tu elección de alojamiento. ¡Estamos comprometidos a brindarte la información necesaria para que tu experiencia de reserva sea clara y sin sorpresas!"
                                     contenedorDesgloseTotales.appendChild(testInfo)
 
@@ -2550,7 +2547,7 @@ const casaVitini = {
                                 if (rol === "empleado") {
                                     rolUI = "empleado"
                                 }
-                                if (rol === "usuario") {
+                                if (rol === "cliente") {
                                     rolUI = "usuario"
                                 }
 
@@ -6386,7 +6383,7 @@ const casaVitini = {
 
                         const selectorAranqueConozcano = document.querySelector("[zonaUID=conozcanos]")
                         if (!selectorAranqueConozcano) {
-                            observador.disconnect();
+                            //  observador.disconnect();
                             return
                         }
                         const anchoHeader = header.getBoundingClientRect().height
@@ -6397,94 +6394,100 @@ const casaVitini = {
                     const observador = new ResizeObserver(controladorAnchoRestante)
                     observador.observe(header);
 
-                    const contenedoresPalaraje = document.querySelectorAll("[contenedorParalaje]")
-                    const iconoRaton = document.querySelector("[icono=mouse]")
 
-                    const controladorIconoMouse = () => {
-                        const alturaScroll = window.scrollY
-                        if (iconoRaton && alturaScroll > 10) {
-                            iconoRaton.addEventListener("transitionend", (e) => {
-                                // e.target.remove()
-                            })
-                            iconoRaton.style.opacity = "0"
-                        } else {
-                            iconoRaton.style.opacity = "1"
-                        }
-                    }
 
-                    const controladorParalaje = () => {
-
-                        contenedoresPalaraje.forEach((contenedorParalaje) => {
-                            const parallaxContainer2 = contenedorParalaje;
-                            const parallaxImage2 = contenedorParalaje.querySelector('[imagenParalaje]');
-                            const nombreImagen = parallaxImage2.getAttribute("nombre")
-
-                            const textoAnimado = contenedorParalaje.querySelector('[elemento=textoAnimado]');
-
-                            const containerRect2 = parallaxContainer2.getBoundingClientRect();
-                            const windowInnerHeight = window.innerHeight
-                            const containerBottom = containerRect2.bottom
-                            const containerTop = containerRect2.top
-
-                            requestAnimationFrame(() => {
-
-                                if ((containerTop < 0 && containerBottom < windowInnerHeight) ||
-                                    (containerTop < windowInnerHeight && containerBottom > 0)) {
-
-                                    const parallaxTop2 = parallaxContainer2.offsetTop;
-                                    const parallaxHeight2 = parallaxContainer2.offsetHeight;
-
-                                    const conCero = (windowInnerHeight < parallaxTop2 + parallaxHeight2 ?
-                                        windowInnerHeight : parallaxTop2 + parallaxHeight2) -
-                                        (containerTop + parallaxHeight2);
-
-                                    if (
-                                        (containerTop < 0 &&
-                                            containerBottom < windowInnerHeight)
-                                        ||
-                                        (containerTop > 0 &&
-                                            containerBottom > windowInnerHeight)
-                                    ) {
-                                        //parallaxImage2.style.transform = 'translate3d(0 ,' + (conCero / 2) + 'px ,0)';
-                                        if (textoAnimado) {
-                                            textoAnimado.style.transform = 'translate3d(0 ,-' + (conCero) + 'px ,0)';
-                                        }
-                                    }
-                                }
-                            })
-                        })
-                    }
-
-                    let animationRunning = false;
-                    const scrollHandler = () => {
-                        if (!animationRunning) {
-                            animationRunning = true;
-                            requestAnimationFrame(function () {
-                                controladorParalaje();
-                                animationRunning = false;
-                            });
-                        }
-                    }
 
                     // Agregar evento de desplazamiento
-                    window.addEventListener('scroll', scrollHandler);
-                    window.addEventListener('scroll', controladorIconoMouse);
+                    window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
+                    window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
 
+                    window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
+                    window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
 
                     const grupoImagenesPalarax = document.querySelectorAll('[imagenParalaje=imagen]');
-
-                    const palaraxControlador = new simpleParallax(grupoImagenesPalarax, {
-                        delay: 1,
+                    casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador = new simpleParallax(grupoImagenesPalarax, {
+                        delay: 0,
                         orientation: 'down',
                         scale: 1.3,
                         overflow: false,
-
                     });
+                },
+                controladorIconoMouse: () => {
+                    const iconoRaton = document.querySelector("[icono=mouse]")
+                    if (!iconoRaton) {
+                        window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
+                    }
+                    const alturaScroll = window.scrollY
+                    if (iconoRaton && alturaScroll > 10) {
+                        iconoRaton.addEventListener("transitionend", (e) => {
+                            // e.target.remove()
+                        })
+                        iconoRaton.style.opacity = "0"
+                    } else {
+                        iconoRaton.style.opacity = "1"
+                    }
+                },
+                scrollHandler: () => {
+                    let animationRunning = false;
 
+                    if (!animationRunning) {
+                        animationRunning = true;
+                        requestAnimationFrame(function () {
+                            casaVitini.ui.vistas.conozcanos.controladorParalaje();
+                            animationRunning = false;
+                        });
+                    }
+                    const contenedorParalaje = document.querySelector("[contenedor=paralaje]")
+                    if (!contenedorParalaje) {
+                        window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
+                    }
+                },
+                controladorParalaje: () => {
+                    const contenedoresPalaraje = document.querySelectorAll("[contenedorParalaje]")
 
+                    contenedoresPalaraje.forEach((contenedorParalaje) => {
+                        const parallaxContainer2 = contenedorParalaje;
+                        const parallaxImage2 = contenedorParalaje.querySelector('[imagenParalaje]');
+                        const nombreImagen = parallaxImage2.getAttribute("nombre")
 
+                        const textoAnimado = contenedorParalaje.querySelector('[elemento=textoAnimado]');
 
-                }
+                        const containerRect2 = parallaxContainer2.getBoundingClientRect();
+                        const windowInnerHeight = window.innerHeight
+                        const containerBottom = containerRect2.bottom
+                        const containerTop = containerRect2.top
+
+                        requestAnimationFrame(() => {
+
+                            if ((containerTop < 0 && containerBottom < windowInnerHeight) ||
+                                (containerTop < windowInnerHeight && containerBottom > 0)) {
+
+                                const parallaxTop2 = parallaxContainer2.offsetTop;
+                                const parallaxHeight2 = parallaxContainer2.offsetHeight;
+
+                                const conCero = (windowInnerHeight < parallaxTop2 + parallaxHeight2 ?
+                                    windowInnerHeight : parallaxTop2 + parallaxHeight2) -
+                                    (containerTop + parallaxHeight2);
+
+                                if (
+                                    (containerTop < 0 &&
+                                        containerBottom < windowInnerHeight)
+                                    ||
+                                    (containerTop > 0 &&
+                                        containerBottom > windowInnerHeight)
+                                ) {
+                                    //parallaxImage2.style.transform = 'translate3d(0 ,' + (conCero / 2) + 'px ,0)';
+                                    if (textoAnimado) {
+                                        textoAnimado.style.transform = 'translate3d(0 ,-' + (conCero) + 'px ,0)';
+                                    }
+                                }
+                            }
+                        })
+                    })
+                },
+                instanciasTemporales: {
+                    parallaxControlador: null,
+                },
             },
             instalaciones: {
                 arranque: () => {
@@ -6712,7 +6715,7 @@ const casaVitini = {
                 casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(configuracionPantallaCarga)
             }
 
-      
+
 
             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
             document.querySelector("main").setAttribute("instanciaUID", instanciaUID)
@@ -6775,19 +6778,25 @@ const casaVitini = {
             };
 
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-            
+
             const contenedorVista = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
             if (!contenedorVista) {
                 return
             }
             document.querySelectorAll("#uiLogo, body, header, [componente=contenedorMenu], #botonMenuResponsivo")
-            .forEach((elementoReseteo) => {
-                elementoReseteo.removeAttribute("style")
-            })
+                .forEach((elementoReseteo) => {
+                    elementoReseteo.removeAttribute("style")
+                })
 
+            // Reseteo y limpieza
             contenedorVista.removeAttribute("zonaCSS")
             contenedorVista.removeAttribute("style")
             contenedorVista.removeAttribute("rama")
+            casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador?.destroy()
+            window.removeEventListener("resize", casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador?.resizeIsDone);
+            window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
+            window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
+
             if (respuestaServidor?.error) {
 
                 const marcoError = document.createElement("div")
@@ -6799,7 +6808,9 @@ const casaVitini = {
             }
             if (respuestaServidor?.ok) {
                 await casaVitini.componentes.controladorEstadoIDX()
-                await new Promise(resolve => setTimeout(resolve, 250));
+                //await new Promise(resolve => setTimeout(resolve, 250));
+
+
 
                 const codigo = respuestaServidor.ok
                 contenedorVista.innerHTML = null
