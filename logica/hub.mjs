@@ -11603,14 +11603,14 @@ const puerto = async (entrada, salida) => {
 
                             const seleccionarImpuestos = `
                             SELECT
-                            impuesto, "tipoImpositivo", "tipoValor", moneda
+                            nombre, "tipoImpositivo", "tipoValor"
                             FROM
                             impuestos
                             WHERE
-                            "aplicacionSobre" = $1 OR "aplicacionSobre" = $2;
+                            ("aplicacionSobre" = $1 OR "aplicacionSobre" = $2) AND estado = $3;
                           
                             `
-                            const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto"])
+                            const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto", "activado"])
                             const objetoFInal = []
                             for (const apartamentoEncotrado of apartamentosEncontrados) {
 
@@ -11665,26 +11665,12 @@ const puerto = async (entrada, salida) => {
                                         totalDiaBruto = totalDiaBruto.toFixed(2)
                                         apartamento["totalDiaBruto"] = totalDiaBruto
 
-
                                     }
-
                                 }
-
-
                                 objetoFInal.push(apartamento)
-
-
-
-
-
-                            }
-
-
-
-
-
-                            let ok = {
-                                "ok": objetoFInal
+                           }
+                            const ok = {
+                                ok: objetoFInal
                             }
                             salida.json(ok)
                         } catch (errorCapturado) {
@@ -11793,14 +11779,14 @@ const puerto = async (entrada, salida) => {
                             detallesApartamento.precioNetoPorDiaPropuesto = precioNetoApartamentoPorDia
                             const seleccionarImpuestos = `
                         SELECT
-                        impuesto, "tipoImpositivo", "tipoValor", moneda
+                        nombre, "tipoImpositivo", "tipoValor"
                         FROM
                         impuestos
                         WHERE
-                        "aplicacionSobre" = $1 OR "aplicacionSobre" = $2;
+                        ("aplicacionSobre" = $1 OR "aplicacionSobre" = $2) AND estado = $3;
                       
                         `
-                            const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto"])
+                            const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto", "activado"])
                             if (resuelveSeleccionarImpuestos.rowCount > 0) {
                                 detallesApartamento.impuestos = []
                                 const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
@@ -11809,7 +11795,7 @@ const puerto = async (entrada, salida) => {
                                 let sumaTotalImpuestos = 0.00
                                 impuestosEncontrados.map((detalleImpuesto) => {
                                     const tipoImpositivo = detalleImpuesto.tipoImpositivo
-                                    const nombreImpuesto = detalleImpuesto.impuesto
+                                    const nombreImpuesto = detalleImpuesto.nombre
                                     const tipoValor = detalleImpuesto.tipoValor
                                     impuestosFinal = {
                                         "nombreImpuesto": nombreImpuesto,
@@ -11843,7 +11829,7 @@ const puerto = async (entrada, salida) => {
 
 
                             const ok = {
-                                "ok": detallesApartamento
+                                ok: detallesApartamento
                             }
                             salida.json(ok)
                         } catch (errorCapturado) {
@@ -11940,14 +11926,14 @@ const puerto = async (entrada, salida) => {
                             detallesApartamento.precioNetoPorDia = precioNetoApartamentoPorDia
                             const seleccionarImpuestos = `
                         SELECT
-                        impuesto, "tipoImpositivo", "tipoValor", moneda
+                        nombre, "tipoImpositivo", "tipoValor"
                         FROM
                         impuestos
                         WHERE
-                        "aplicacionSobre" = $1 OR "aplicacionSobre" = $2;
+                        ("aplicacionSobre" = $1 OR "aplicacionSobre" = $2) AND estado = $3;
                       
                         `
-                            const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto"])
+                            const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto", "activado"])
                             if (resuelveSeleccionarImpuestos.rowCount > 0) {
                                 detallesApartamento.impuestos = []
                                 const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
@@ -11956,7 +11942,7 @@ const puerto = async (entrada, salida) => {
                                 let sumaTotalImpuestos = 0.00
                                 impuestosEncontrados.map((detalleImpuesto) => {
                                     const tipoImpositivo = detalleImpuesto.tipoImpositivo
-                                    const nombreImpuesto = detalleImpuesto.impuesto
+                                    const nombreImpuesto = detalleImpuesto.nombre
                                     const tipoValor = detalleImpuesto.tipoValor
                                     impuestosFinal = {
                                         "nombreImpuesto": nombreImpuesto,

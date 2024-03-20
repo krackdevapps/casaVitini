@@ -26,9 +26,8 @@
 }
 
 
-.difuminadoFondo::before {
+.fondoConDesenfoque::before {
     content: "";
-    /* background: inherit; */
     position: fixed;
     top: 0;
     right: 0;
@@ -37,8 +36,6 @@
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     z-index: -1;
-    /* height: 100%; */
-    /* width: 100%;*/
     transition: backdrop-filter 500ms linear;
 }
 

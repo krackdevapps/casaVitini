@@ -59,14 +59,14 @@ const precioBaseApartamento = async (apartamentoIDV) => {
 
         const seleccionarImpuestos = `
         SELECT
-        impuesto, "tipoImpositivo", "tipoValor", moneda
+        nombre, "tipoImpositivo", "tipoValor"
         FROM
         impuestos
         WHERE
-        "aplicacionSobre" = $1 OR "aplicacionSobre" = $2;
+        ("aplicacionSobre" = $1 OR "aplicacionSobre" = $2) AND estado = $3;
       
         `
-        const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto"])
+        const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto", "activado"])
         if (resuelveSeleccionarImpuestos.rowCount > 0) {
             detallesApartamento.impuestos = []
             const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
@@ -76,7 +76,7 @@ const precioBaseApartamento = async (apartamentoIDV) => {
             impuestosEncontrados.map((detalleImpuesto) => {
                 const tipoImpositivo = new Decimal(detalleImpuesto.tipoImpositivo)
 
-                const nombreImpuesto = detalleImpuesto.impuesto 
+                const nombreImpuesto = detalleImpuesto.nombre 
                 const tipoValor = detalleImpuesto.tipoValor
                 impuestosFinal = {
                     nombreImpuesto: nombreImpuesto,
