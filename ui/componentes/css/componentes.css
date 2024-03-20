@@ -2980,10 +2980,6 @@
     cursor: default;
 }
 
-[zonaCSS="miCasa"] .administracionReservasDetallesTituloApartamento:hover {
-    background: rgba(0, 0, 0, 0.1);
-}
-
 
 [zonaCSS="administracion/reservas/detallesReserva"] .administracionReservasDetallesTituloApartamento:hover {
     background: rgba(0, 0, 0, 0.1);
@@ -3049,10 +3045,6 @@
     color: rgb(62, 62, 62);
 }
 
-[zonaCSS="miCasa"] .adminitracionReservasDetallesTituloHabitacion:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: black;
-}
 
 
 
@@ -3083,10 +3075,6 @@
     cursor: default;
 }
 
-[zonaCSS="miCasa"] .adminitracionReservasDetallesTituloTipoCama:hover {
-    background: #0040ff;
-    color: white;
-}
 
 [zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesTituloTipoCama {
     background: rgba(0, 0, 0, 0.2);
@@ -4083,8 +4071,8 @@
     color: white;
 
 
-}
 
+}
 [zonaCSS="miCasa"] .resertaDetallesPernoctantesSinAlojameinto {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
@@ -4092,16 +4080,13 @@
     max-width: 1920px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-
-
-    display: flex;
+    display: none;
     justify-items: stretch;
     justify-content: center;
     align-content: center;
     align-items: stretch;
     gap: 0px;
     flex-direction: column;
-
 }
 
 
@@ -5222,7 +5207,7 @@
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 6px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -12163,7 +12148,6 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    background: rgba(255, 255, 255, 0.3);
     border-radius: 20px;
     padding: 6px;
 
@@ -12377,7 +12361,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
-    gap: 6px;
+    gap: 16px;
 }
 
 
@@ -12386,11 +12370,9 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
-    padding: 6px;
     border-radius: 14px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    background: rgba(255, 255, 255, 0.3);
 }
 
 .administracion_configuracion_calendariosSincronizados .botonCrearCalendario {

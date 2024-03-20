@@ -5914,6 +5914,7 @@ const casaVitini = {
                 },
             },
             advertenciaInmersiva: (advertencia) => {
+                document.body.style.overflow = 'hidden';
 
                 const advertenciaInmersivaUI = document.createElement("section")
                 advertenciaInmersivaUI.setAttribute("class", "errorUI")
@@ -5934,9 +5935,8 @@ const casaVitini = {
 
                 marcoElastico.appendChild(boton)
                 advertenciaInmersivaUI.appendChild(marcoElastico)
-                document.body.appendChild(advertenciaInmersivaUI)
+                document.querySelector("main").appendChild(advertenciaInmersivaUI)
 
-                document.body.style.overflow = 'hidden';
 
             },
             advertenciaInmersivaSuperPuesta: (advertencia) => {
@@ -5965,14 +5965,46 @@ const casaVitini = {
                 document.body.appendChild(advertenciaInmersivaUI)
 
             },
+            errorConexion_noIvasivo: (advertencia) => {
+                document.body.style.overflow = 'hidden';
+
+                const advertenciaInmersivaUI = document.createElement("div")
+                advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersivaSuperpuesta")
+                advertenciaInmersivaUI.setAttribute("componente", "advertenciaInmersiva")
+                advertenciaInmersivaUI.setAttribute("errorUI", "conexion")
+
+                const marcoElastico = document.createElement("div")
+                marcoElastico.classList.add("marcoElasticoError")
+
+                const info = document.createElement("div")
+                info.setAttribute("class", "errorInfo")
+                info.innerText = "No se puede establecer conexion con el servidor. Por favor verifica que estas conectado y reintentalo. Se ha producido un error en la red y no se ha podido comunicar con el servidor, si es por una causa circunstancial de la red, reintentalo y deberia funcionar. Comprueba que tienes acceso a la red. Por ejemplo, comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos es probable que el problema este en el servidor de Casa Vitini."
+                marcoElastico.appendChild(info)
+
+                const boton = document.createElement("div")
+                boton.setAttribute("class", "errorBoton")
+                boton.innerText = "Volver"
+                boton.addEventListener("click", (e) => {
+                    e.target.closest("[errorUI=conexion]").remove()
+                })
+
+                marcoElastico.appendChild(boton)
+                advertenciaInmersivaUI.appendChild(marcoElastico)
+                document.body.appendChild(advertenciaInmersivaUI)
+            },
             pantallaDeCargaSuperPuesta: (metadatos) => {
 
                 const instanciaUID = metadatos.instanciaUID
                 const mensaje = metadatos.mensaje ? metadatos.mensaje : "Espere..."
                 const botonCancelar = metadatos.botonCancelar ? metadatos.botoCancelar : "mostrar"
+                const identificadorVisual = metadatos.identificadorVisual
+                const iconoSpinner = metadatos.iconoSpinner ? metadatos.iconoSpinner : "si"
+                const textoBoton = metadatos.textoBoton ? metadatos.textoBoton : "Cancelar"
+
 
                 const advertenciaInmersivaUI = document.createElement("div")
                 advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersivaSuperpuesta")
+                advertenciaInmersivaUI.setAttribute("identificadorVisual", identificadorVisual)
                 advertenciaInmersivaUI.setAttribute("pantallaSuperpuesta", "pantallaCargaSuperpuesta")
                 advertenciaInmersivaUI.setAttribute("componente", "advertenciaInmersiva")
                 advertenciaInmersivaUI.setAttribute("instanciaUID", instanciaUID)
@@ -5980,15 +6012,18 @@ const casaVitini = {
                 const marcoElastico = document.createElement("div")
                 marcoElastico.classList.add("marcoElasticoError")
 
-                const spinnerContainer = document.createElement('div');
-                spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
-                spinnerContainer.classList.add("lds-spinner");
+                if (iconoSpinner === "si") {
+                    const spinnerContainer = document.createElement('div');
+                    spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
+                    spinnerContainer.classList.add("lds-spinner");
 
-                for (let i = 0; i < 12; i++) {
-                    const div = document.createElement('div');
-                    spinnerContainer.appendChild(div);
+                    for (let i = 0; i < 12; i++) {
+                        const div = document.createElement('div');
+                        spinnerContainer.appendChild(div);
+                    }
+                    marcoElastico.appendChild(spinnerContainer)
                 }
-                marcoElastico.appendChild(spinnerContainer)
+
 
                 const info = document.createElement("div")
                 info.setAttribute("class", "advertenciaInfoFlujoPago")
@@ -5998,7 +6033,7 @@ const casaVitini = {
 
                 const boton = document.createElement("div")
                 boton.setAttribute("class", "errorBoton")
-                boton.innerText = "Cancelar"
+                boton.innerText = textoBoton
                 boton.addEventListener("click", (e) => {
                     document.body.style.removeProperty("overflow");
                     e.target.parentNode.parentNode.remove()
@@ -6669,15 +6704,20 @@ const casaVitini = {
                     selectorMenuGlobalFlotanteRenderizado.remove()
                 }
             }
-            // document.body.style.backgroundImage= "url(/componentes/imagenes/transparente.png)";
-            //                    document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
-
+            const pantallaDeTransicionRenderizada = document.querySelector("[instanciaUID=pantallaCarga]")
+            if (!pantallaDeTransicionRenderizada) {
+                const configuracionPantallaCarga = {
+                    identificadorVisual: "pantallaCargaDeTransicionEntreVistas",
+                    mensaje: "Cargando...",
+                    botonCancelar: "ocultar"
+                }
+                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(configuracionPantallaCarga)
+            }
 
             const elementosReset = document.querySelectorAll("#uiLogo, body, header, [componente=contenedorMenu], #botonMenuResponsivo")
             elementosReset.forEach((elementoReseteo) => {
                 elementoReseteo.removeAttribute("style")
             })
-
 
             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
             casaVitini.componentes.limpiarAdvertenciasInmersivas()
@@ -6712,35 +6752,18 @@ const casaVitini = {
             let vistaActual = document.getElementById("uiNavegacion").getAttribute("vistaActual")
             let vistaAnterior = document.getElementById("uiNavegacion").getAttribute("vistaActual")
             let tipoVista = document.querySelector("section:not([estado=obsoleto])")?.getAttribute("tipoVista")
-            let url = window.location.pathname;
+            let url = window.location.pathname.split("/");
 
-            url = url.split("/")
             delete url[0]
             delete url[1]
             delete url[2]
             url = url.filter((url) => url)
-
-
-            const main = document.querySelector('main');
-            main.setAttribute("instanciaUID", instanciaUID)
-            main.removeAttribute("zonaCSS")
-            main.removeAttribute("style")
-            main.innerHTML = null
-            main.style.position = "absolute"
-            main.style.height = "100%"
-            main.style.justifyContent = "center"
-            main.style.alignItems = "center"
-            //seccion.classList.add("difuminadoFondo")
-
-            const spinnerSimple = casaVitini.componentes.spinnerSimple()
-            main.appendChild(spinnerSimple)
 
             if (vista === "portada") {
                 document.querySelectorAll("[zona]").forEach(zona => {
                     zona.removeAttribute("style")
                 });
             }
-
 
             const controladorResposnivo = window.matchMedia("(max-width: 720px)").matches
             if (controladorResposnivo) {
@@ -6755,20 +6778,13 @@ const casaVitini = {
                 vista: vista
             };
 
-
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+            document.querySelector("[identificadorVisual=pantallaCargaDeTransicionEntreVistas]")?.remove()
             if (respuestaServidor?.error) {
-                document.querySelector("#uiLogo").removeAttribute("style")
-                document.querySelector("#botonMenuResponsivo").removeAttribute("style")
-                document.body.removeAttribute("style")
-                document.querySelectorAll("[zona]").forEach(zona => {
-                    zona.removeAttribute("style")
-                });
                 const seccionDestinoRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (!seccionDestinoRenderizada) {
                     return
                 }
-
                 const marcoError = document.createElement("div")
                 marcoError.classList.add("plaza_marcoError_seccion")
                 marcoError.innerText = respuestaServidor.error
@@ -6776,45 +6792,33 @@ const casaVitini = {
                 seccionDestinoRenderizada.appendChild(marcoError)
             }
             if (respuestaServidor?.ok) {
+                const main = document.querySelector('main');
+                main.setAttribute("instanciaUID", instanciaUID)
+                main.removeAttribute("zonaCSS")
+                main.removeAttribute("style")
+                main.innerHTML = null
+                document.querySelectorAll("[componente=advertenciaInmersiva]").forEach((advertencia) => {
+                    advertencia.remove()
+                })
                 await casaVitini.componentes.controladorEstadoIDX()
                 //await new Promise(resolve => setTimeout(resolve, 2000));
-
                 const seccionDestinoRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (!seccionDestinoRenderizada) {
                     return
                 }
 
-                const vistaHtml = respuestaServidor?.ok
-                //let constructorSeccion = document.createElement("section")
-                //constructorSeccion.insertAdjacentHTML("afterbegin", vistaHtml);
-                //constructorSeccion.style.scale = "0";
+                const codigo = respuestaServidor.ok
+                seccionDestinoRenderizada.innerHTML = codigo
 
-                seccionDestinoRenderizada.innerHTML = vistaHtml
-                seccionDestinoRenderizada.removeAttribute("style")
-                seccionDestinoRenderizada.removeAttribute("class")
-
-                document.body.removeAttribute("style")
-                document.body.removeAttribute("class")
-
-
-                let arranqueVistaPublica = seccionDestinoRenderizada?.querySelector("arranque")?.getAttribute("publico")
-                let arranqueVistaAdministrativa = seccionDestinoRenderizada?.querySelector("arranque")?.getAttribute("administracion")
-                // document.body.appendChild(constructorSeccion)
-                // let vistaDestino = document.querySelector("section:not([estado=obsoleto])")
-                // vistaDestino.style.scale = "1";
-                let url = window.location.pathname;
-                url = url.split("/")
-                url = url.filter(url => url);
+                const arranqueVistaPublica = seccionDestinoRenderizada?.querySelector("arranque")?.getAttribute("publico")
+                const arranqueVistaAdministrativa = seccionDestinoRenderizada?.querySelector("arranque")?.getAttribute("administracion")
 
                 let urlVista = respuestaServidor["url"]
-
-                let titulo
-                let estado = {}
 
                 // Vista = Vista.charAt(0).toUpperCase() + Vista.slice(1);
                 urlVista = urlVista === "/portada" ? "/" : urlVista;
                 urlVista = decodeURIComponent(urlVista);
-                titulo = 'Casa Vitini | ' + vista;
+                const titulo = 'Casa Vitini';
 
                 let controladorUrl;
 
@@ -6823,16 +6827,12 @@ const casaVitini = {
                 }
                 document.getElementById("uiNavegacion").setAttribute("vistaActual", vista)
                 vistaActual = vista === "portada" ? "" : vista;
-                // si la vista actual, tiene un vistaTipo=paginada, entonces se guarda en el historial otra cosa
-                estado = {
+
+                const estado = {
                     zona: vistaActual,
                     estadoInternoZona: "estado",
                     tipoCambio: "total"
                 }
-
-                let fondo
-                let primeraRama = vista.split("/")
-                primeraRama = primeraRama.filter(n => n)
 
                 const zona = respuestaServidor?.zona
                 const controladorZona = {
@@ -6855,13 +6855,11 @@ const casaVitini = {
                 if (tipoOrigen === "historial" && !controladorUrl) {
                     //  window.history.replaceState(Estado, Titulo, URLVista);
                     //  
-
                 }
-
                 if (arranqueVistaPublica) {
                     if (eval("typeof " + "casaVitini?.ui?.vistas?." + arranqueVistaPublica + "") === "function") {
-                        arranqueVistaPublica = "casaVitini.ui.vistas." + arranqueVistaPublica + "()"
-                        return eval(arranqueVistaPublica)
+                        const x = "casaVitini.ui.vistas." + arranqueVistaPublica + "()"
+                        return eval(x)
                     } else {
                         const info = "No existe el arranque de la vista"
                         casaVitini.ui.vistas.advertenciaInmersiva(info)
@@ -6870,8 +6868,8 @@ const casaVitini = {
 
                 if (arranqueVistaAdministrativa) {
                     if (eval("typeof " + "casaVitini?.administracion?." + arranqueVistaAdministrativa + "") === "function") {
-                        arranqueVistaAdministrativa = "casaVitini?.administracion?." + arranqueVistaAdministrativa + "()"
-                        return eval(arranqueVistaAdministrativa)
+                        const x = "casaVitini?.administracion?." + arranqueVistaAdministrativa + "()"
+                        return eval(x)
                     } else {
                         const info = "No existe el arranque de la vista"
                         casaVitini.ui.vistas.advertenciaInmersiva(info)
@@ -6986,11 +6984,9 @@ const casaVitini = {
                 }
                 return respuestaServidor
             } catch (error) {
-
                 if (error.name === 'AbortError') {
-
                 }
-
+                console.log(error.message)
                 if (error instanceof TypeError) {
                     return casaVitini.componentes.errorUI()
                 }
@@ -7005,25 +7001,93 @@ const casaVitini = {
             const directorioDelError = window.location.pathname
 
 
-            const reintento = setInterval(async () => {
-                const directorioActual = window.location.pathname
-                if (directorioDelError !== directorioActual) {
+            // const reintento = setInterval(async () => {
+            //     const directorioActual = window.location.pathname
+            //     if (directorioDelError !== directorioActual) {
+            //         clearInterval(reintento); // Detener la ejecución
+            //         return
+            //     }
+            //     // Tu lógica aquí
+            //     const entrada = {
+            //         vista: directorioDelError,
+            //         tipoOrigen: "menuNavegador"
+            //     }
+            //     await casaVitini.componentes.controladorVista(entrada)
+            //     const selectorContenedorError = document.querySelector(`[componente=contenedorError]`)
+            //     if (!selectorContenedorError) {
+            //         clearInterval(reintento); // Detener la ejecución
+            //     }
+            // }, 5000);
 
-                    clearInterval(reintento); // Detener la ejecución
-                    return
-                }
-                // Tu lógica aquí
-                const entrada = {
-                    vista: directorioDelError,
-                    tipoOrigen: "menuNavegador"
-                }
-                await casaVitini.componentes.controladorVista(entrada)
-                const selectorContenedorError = document.querySelector(`[componente=contenedorError]`)
-                if (!selectorContenedorError) {
-                    clearInterval(reintento); // Detener la ejecución
-                }
-            }, 5000);
+            const configuracionAdvertencia = {
+                mensaje: "Se ha producido un error en la red y no se ha podido comunicar con el servidor, si es por una causa circunstancial de la red, reintentalo y deberia funcionar. Comprueba que tienes acceso a la red. Por ejemplo, comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos es probable que el problema este en el servidor de Casa Vitini",
+                identificadorVisual: "errorConexion",
+                textoBoton: "Volver",
+                iconoSpinner: "no"
 
+            }
+            const mensaje = "Se ha producido un error en la red y no se ha podido comunicar con el servidor, si es por una causa circunstancial de la red, reintentalo y deberia funcionar. Comprueba que tienes acceso a la red. Por ejemplo, comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos es probable que el problema este en el servidor de Casa Vitini"
+            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(configuracionAdvertencia)
+
+            // const advertenciaInmersivaIU = document.createElement("div")
+            // advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
+            // advertenciaInmersivaIU.setAttribute("componente", "contenedorError")
+
+            // const contenedorAdvertenciaInmersiva = document.createElement("div")
+            // contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
+
+            // const contenidoAdvertenciaInmersiva = document.createElement("div")
+            // contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
+            // contenidoAdvertenciaInmersiva.setAttribute("espacio", "formularioCrearEnlaceDePago")
+
+            // const contenedorError = document.createElement("div")
+            // contenedorError.classList.add("casaVitini_componentes_contenedorError")
+            // contenedorError.setAttribute("instanciaUIDError", instanciaUID)
+
+            // const tituloError = document.createElement("div")
+            // tituloError.classList.add("negrita")
+            // tituloError.innerText = "No se puede establecer conexion con el servidor. Se reintentara cada 5 segundos..."
+            // contenedorError.appendChild(tituloError)
+
+            // const mensajeDelError = document.createElement("div")
+            // mensajeDelError.classList.add("casaVitini.componentes.menajeDelError")
+            // mensajeDelError.innerText = "Se ha producido un error en la red y no se ha podido comunicar con el servidor, si es por una causa circunstancial de la red reintentalo y deberia funcionar. Comprueba que tienes acceso a la red. Por ejemplo comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos es probable que el problema este en el servidor de Casa Vitini"
+            // contenedorError.appendChild(mensajeDelError)
+
+            // contenidoAdvertenciaInmersiva.appendChild(contenedorError)
+            // contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
+            // advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
+
+            // document.querySelector("main").appendChild(advertenciaInmersivaIU)
+        },
+        errorUI_noInvasivo: () => {
+            const selectorContenedorError = document.querySelector(`[componente=contenedorError]`)
+            if (selectorContenedorError) {
+                return
+            }
+            const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+            const directorioDelError = window.location.pathname
+
+
+            // const reintento = setInterval(async () => {
+            //     const directorioActual = window.location.pathname
+            //     if (directorioDelError !== directorioActual) {
+            //         clearInterval(reintento); // Detener la ejecución
+            //         return
+            //     }
+            //     // Tu lógica aquí
+            //     const entrada = {
+            //         vista: directorioDelError,
+            //         tipoOrigen: "menuNavegador"
+            //     }
+            //     await casaVitini.componentes.controladorVista(entrada)
+            //     const selectorContenedorError = document.querySelector(`[componente=contenedorError]`)
+            //     if (!selectorContenedorError) {
+            //         clearInterval(reintento); // Detener la ejecución
+            //     }
+            // }, 5000);
+            const mensaje = "Se ha producido un error en la red y no se ha podido comunicar con el servidor, si es por una causa circunstancial de la red, reintentalo y deberia funcionar. Comprueba que tienes acceso a la red. Por ejemplo, comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos es probable que el problema este en el servidor de Casa Vitini"
+            casaVitini.ui.vistas.advertenciaInmersivaSuperPuesta(mensaje)
 
             const advertenciaInmersivaIU = document.createElement("div")
             advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
@@ -7057,13 +7121,7 @@ const casaVitini = {
             advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
 
-            const seccion = document.querySelector("main")
-            seccion.removeAttribute("instanciaUID")
-            seccion.style.position = "absolute"
-            seccion.style.justifyContent = "center"
-            seccion.style.height = "100%"
-            seccion.innerHTML = null
-            document.body.appendChild(advertenciaInmersivaIU)
+            document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
 
         },
@@ -7178,8 +7236,6 @@ const casaVitini = {
             }
         },
         controladorNavegacion: (navegacion) => {
-
-
 
             const panelNavegacion = document.getElementById("navegadorResponsivo")
             const menuRenderizado = panelNavegacion.getAttribute("menuID")
