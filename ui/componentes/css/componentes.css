@@ -1709,12 +1709,8 @@
 }
 
 [zonaCSS=alojamiento] .bloqueSeccion {
-    background-color: rgba(255, 255, 255, 0.3);
-
+    margin: 10px;
     border-radius: 8px;
-
-
-
 }
 
 [zonaCSS=alojamiento] .tituloBloqueSeccion {
@@ -1759,9 +1755,9 @@
 }
 
 [zonaCSS=alojamiento] .bloqueApartamenteo {
-    border-radius: 6px;
+    border-radius: 16px;
     background-color: rgba(255, 255, 255, 0.3);
-    padding: 6px;
+    padding: 14px;
 
 
 }
@@ -1798,8 +1794,7 @@
     justify-content: center;
     align-items: stretch;
     /* margin-right: -4px; */
-    gap: 4px;
-    padding: 6px;
+    gap: 16px;
 }
 
 [zonaCSS="miCasa"] .vitiniIdLogin {
@@ -1917,8 +1912,9 @@
     border-radius: 10px;
 }
 
-.bloqueHorizontal {
-    border-radius: 10px;
+[zonaCSS=alojamiento] .bloqueHorizontal {
+    border-radius: 14px;
+    background-color: rgb(255 255 255 / 30%);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -1928,7 +1924,6 @@
 }
 
 [zonaCSS=alojamiento] .plaza_alojamiento_resumenReserva_contenedorTitualPago {
-    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 13px;
 }
 
@@ -4070,6 +4065,7 @@
 
 
 }
+
 [zonaCSS="miCasa"] .resertaDetallesPernoctantesSinAlojameinto {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
@@ -4398,9 +4394,7 @@
 }
 
 [zonaCSS=alojamiento] .infoResumenReserva {
-
-
-    margin: 8px;
+    margin: 16px;
     font-weight: normal;
 
 }
@@ -4850,6 +4844,7 @@
     text-align: center;
 
 }
+
 [zonaCSS="administracion/reservas/pendientesDeRevision"] .detallesReservaCancelarBoton {
     background: #00000036;
     padding: 8px;
@@ -8999,7 +8994,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 6px;
 }
 
-[zonaCSS=alojamiento] .usuariosCrearCuenta_campoUsuario {
+[zonaCSS=alojamiento] .selectorCama {
     border-radius: 10px;
     padding: 10px;
     border: none;
@@ -9007,8 +9002,14 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-
+    background: rgba(255, 255, 255, 0.3);
+    transition: background 250ms linear;
 }
+
+[zonaCSS=alojamiento] .selectorCama:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
 
 [zonaCSS="administracion/usuarios/nuevo"] .usuariosCrearCuenta_campoUsuario {
     border-radius: 10px;
@@ -10520,23 +10521,32 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 10px;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_resumenReserva_titular_campoTitular {
-
-
-    padding: 10px;
-    border-radius: 6px;
+[zonaCSS=alojamiento] .campoTitular {
+    padding: 20px;
+    border-radius: 16px;
     outline: none;
     border: none;
     background: rgba(255, 255, 255, 0.3);
-
+    transition: background 250ms linear;
 }
+
+[zonaCSS=alojamiento] .campoTitular:hover {
+    background: rgba(255, 255, 255, 0.7);
+    color: black;
+}
+
+[zonaCSS=alojamiento] .campoTitular::selection {
+    background: rgba(255, 255, 255);
+    color: black;
+}
+
 
 [zonaCSS=alojamiento] .plaza_alojamiento_resumenReserva_titular_contenedor {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 4px;
-    padding: 4px;
+    gap: 14px;
+    padding: 14px;
 }
 
 [zonaCSS=alojamiento] .plaza_alojamiento_resumenReserva_titular_informacion {
@@ -12003,9 +12013,9 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS=alojamiento] .plaza_resumenReserva_contenedorTotalAPagar {
     background: rgba(255, 255, 255, 0.3);
-    margin: 4px;
+    margin: 13px;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -12013,12 +12023,22 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS=alojamiento] .plaza_resumenReserva_totalInfo {
+[zonaCSS=alojamiento] .botonDespliegueDesgloseTotal {
     margin: 0px;
     font-weight: normal;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
+    transition: background 250ms linear;
+    padding: 10px;
+    border-radius: 16px;
+
+}
+
+
+[zonaCSS=alojamiento] .botonDespliegueDesgloseTotal:hover {
+    background: rgba(255, 255, 255, 0.7);
+
 }
 
 [zonaCSS=alojamiento] .plaza_resumenReserva_totalFinal {
@@ -12724,8 +12744,6 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS=alojamiento] .bloqueResumenReservaGlobal .formaDePago {
     padding: 10px;
-
-
     outline: none;
     border: none;
     border-radius: 12px;
@@ -12733,22 +12751,26 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS=alojamiento] .bloqueResumenReservaGlobal .botonConfirmar {
-    background: green;
+    background: white;
     padding: 20px;
-
-
     outline: none;
     border: none;
     border-radius: 12px;
-    margin: 4px;
+    margin: 14px;
     display: flex;
     flex-direction: column;
     align-content: center;
     align-items: center;
+    transition: background 250ms linear;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
 }
 
 [zonaCSS=alojamiento] .bloqueResumenReservaGlobal .botonConfirmar:hover {
-    background: #85d085;
+    background: blue;
+    color: white;
+
 
 }
 

@@ -1010,7 +1010,7 @@ const casaVitini = {
                             if (Object.entries(configuracionesCama).length > 1) {
 
                                 const selectorCama = document.createElement("select")
-                                selectorCama.classList.add("usuariosCrearCuenta_campoUsuario")
+                                selectorCama.classList.add("selectorCama")
                                 selectorCama.setAttribute("componente", "selectorCama")
                                 selectorCama.addEventListener("change", (e) => {
 
@@ -1080,9 +1080,9 @@ const casaVitini = {
                         bloqueApartamento.appendChild(contenedorHabitaciones)
                         bloqueConjuntoApartamentos.appendChild(bloqueApartamento)
                     }
-                    const botonModificarReserva = document.querySelector("[boton=modificarReserva]")
-                    botonModificarReserva.setAttribute("vista", "/alojamiento")
-                    botonModificarReserva.addEventListener("click", casaVitini.componentes.cambiarVista)
+                    // const botonModificarReserva = document.querySelector("[boton=modificarReserva]")
+                    // botonModificarReserva.setAttribute("vista", "/alojamiento")
+                    // botonModificarReserva.addEventListener("click", casaVitini.componentes.cambiarVista)
                     const botonPreConfirmar = document.querySelector("[boton=preConfirmar]")
                     botonPreConfirmar.addEventListener("click", casaVitini.ui.vistas.reservasNuevo.preConfirmar)
 
@@ -6712,10 +6712,7 @@ const casaVitini = {
                 casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(configuracionPantallaCarga)
             }
 
-            document.querySelectorAll("#uiLogo, body, header, [componente=contenedorMenu], #botonMenuResponsivo")
-                .forEach((elementoReseteo) => {
-                    elementoReseteo.removeAttribute("style")
-                })
+      
 
             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
             document.querySelector("main").setAttribute("instanciaUID", instanciaUID)
@@ -6783,6 +6780,11 @@ const casaVitini = {
             if (!contenedorVista) {
                 return
             }
+            document.querySelectorAll("#uiLogo, body, header, [componente=contenedorMenu], #botonMenuResponsivo")
+            .forEach((elementoReseteo) => {
+                elementoReseteo.removeAttribute("style")
+            })
+
             contenedorVista.removeAttribute("zonaCSS")
             contenedorVista.removeAttribute("style")
             contenedorVista.removeAttribute("rama")
@@ -6797,7 +6799,7 @@ const casaVitini = {
             }
             if (respuestaServidor?.ok) {
                 await casaVitini.componentes.controladorEstadoIDX()
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 250));
 
                 const codigo = respuestaServidor.ok
                 contenedorVista.innerHTML = null
