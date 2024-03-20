@@ -3,18 +3,17 @@
 
 <div class="marcoSeparador">
     <div class="espacioEntreElementos">
-        <div class="reservaDetallesBloqueFecha">
             <p class="infoCrearReservaAdministratia">Selecciona un rango con una fecha de entrada y una fecha de salida para ver los apartamentos disponibles en ese rango de fecha. Luego selecciona los apartamentos y pulsa en crear reserva. Tras pulsar en crear reserva podrás añadir el resto de los datos como los pernoctantes o los tipos de cama. Ahora lo relevante es confirmar que los apartamentos son reservables en el rango de fechas seleccionado.</p>
 
-        </div>
+   
         <div class="reservaDetallesBloqueFecha">
-
+            
             <div class="administracionReservaBloqueDual fechaEntradaElemento diaEntradaNuevo" componente="fechaEntrada"
                 calendario="entrada" contenedor="desplegarCalendario" paralizadorEvento="ocultadorCalendarios">
                 <p class="adminsitracionReservasTituloNombre marginCeroparaP componenteFechaEntrada desactivaEventos">
                     Fecha de entrada</p>
                 <p class="marginCeroparaP componenteFechaEntrada desactivaEventos" id="fechaEntrada"
-                fechaUI="fechaInicio">Seleccionar fecha de entrada</p>
+                fechaUI="fechaInicio">(Seleccionar)</p>
 
             </div>
             <div class="administracionReservaBloqueDual">
@@ -28,14 +27,14 @@
                     Fecha de salida</p>
 
                 <p class="marginCeroparaP componenteFechaSalida desactivaEventos" id="fechaSalida"
-                    fechaUI="fechaFin">Seleccionar fecha de salida</p>
+                    fechaUI="fechaFin">(Seleccionar)</p>
 
             </div>
         </div>
         <div class="administracion_reservas_crearReserva elementoOcultoInicialmente" componente="espacioApartamento">
         </div>
 
-        <div class="reservaDetallesBloqueFecha elementoOcultoInicialmente" componente="espacioBotonConfirmarReserva">
+        <div class="bloqueBotones elementoOcultoInicialmente" componente="espacioBotonConfirmarReserva">
             <div class="botonConfirmarCrearReservaNueva" componente="botonConfirmarReserva">Confirmar reserva y proceder a editarla</div>
         </div>
 

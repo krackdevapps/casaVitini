@@ -1197,7 +1197,7 @@ const casaVitini = {
                         contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                         advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                        document.body.appendChild(advertenciaInmersivaIU)
+                        document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
                         const destino = `[instanciaUID="${instanciaUID}"] [contenedor=espacioGlobalTotales]`
                         const desgloseTotales = {
@@ -2538,11 +2538,40 @@ const casaVitini = {
                             if (respuestaServidor?.usuario) {
                                 const usuarioIDX = respuestaServidor?.usuario
                                 const rol = respuestaServidor?.rol
+                                const cuentaVerificada = respuestaServidor?.cuentaVerificada
 
                                 const metadatosBanner = {
                                     usuarioIDX: usuarioIDX,
                                     rol: rol
                                 }
+
+                                let rolUI
+
+                                if (rol === "empleado") {
+                                    rolUI = "empleado"
+                                }
+                                if (rol === "usuario") {
+                                    rolUI = "usuario"
+                                }
+
+                                if (cuentaVerificada === "no" && rol !== "administrador") {
+                                    const infoCuentaNoVerificada = document.createElement("p")
+                                    infoCuentaNoVerificada.classList.add("infoCuenta")
+                                    infoCuentaNoVerificada.innerHTML = `Tu cuenta de ${rolUI} no está verificada. Para verificar tu cuenta, valida tu correo electrónico. Si no verificas tu cuenta de ${rolUI}, no podrás acceder a tus reservas, no podras recuperar tu cuenta en caso de olvido de la contraseña y la cuenta se eliminará pasadas 24h. Te hemos enviado un email con un enlace temporal para validar tu correo electrónico a la dirección de correo electrónico asociada a tu cuenta. Si necesitas que te reenviemos otra vez el email de verificación, entra en la sección de recuperación de cuentas yendo a Mi Casa > <a href="/micasa/recuperar_cuenta" class="enlace">Recuperar mi cuenta</a>`
+                                    marcoCuenta.appendChild(infoCuentaNoVerificada)
+
+                                }
+
+                                if (cuentaVerificada === "no" && rol === "administrador") {
+                                    const infoCuentaNoVerificada = document.createElement("p")
+                                    infoCuentaNoVerificada.classList.add("infoCuenta")
+                                    infoCuentaNoVerificada.innerHTML = `Tu cuenta administrativa no está verificada. Para verificar tu cuenta, valida tu correo electrónico. Si no verificas tu cuenta administrativa, aunque podras usar el panel de administracion, no podrás acceder a tus reservas personales y si olvidas tu contraseña no podras recuperar tu cuenta a menos que te pongas en contacto con otro administrador. Las cuentas administrativas no verificadas no caducan con el tiempo. Te hemos enviado un email con un enlace temporal para validar tu correo electrónico a la dirección de correo electrónico asociada a tu cuenta Administrativa. Si necesitas que te reenviemos otra vez el email de verificación, entra en la sección de recuperación de cuentas yendo a Mi Casa > <a href="/micasa/recuperar_cuenta" class="enlace">Recuperar mi cuenta</a>`
+                                    marcoCuenta.appendChild(infoCuentaNoVerificada)
+
+                                }
+
+
+
 
                                 const contenedorBanner = document.createElement("div")
                                 contenedorBanner.classList.add("miCasa_marcoIDX_contenedor")
@@ -2869,6 +2898,15 @@ const casaVitini = {
 
                         },
                         guardarCambios: async () => {
+                            const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                            const mensaje = "Actualizando tu datos..."
+                            const datosPantallaSuperpuesta = {
+                                instanciaUID: instanciaUID,
+                                mensaje: mensaje,
+                                botonCancelar: "ocultar"
+
+                            }
+                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const campos = [...document.querySelectorAll("[campo]")]
                             const datosParaActualizar = {
                                 zona: "miCasa/actualizarDatosUsuarioDesdeMiCasa",
@@ -2881,6 +2919,10 @@ const casaVitini = {
                             })
 
                             const respuestaServidor = await casaVitini.componentes.servidor(datosParaActualizar)
+                            const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+
+                            if (!pantallaDeCargaRenderizada) { return }
+                            pantallaDeCargaRenderizada.remove()
                             if (respuestaServidor?.error) {
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                             }
@@ -3039,7 +3081,15 @@ const casaVitini = {
 
                         },
                         cerraSessionUnica: async (sessions) => {
+                            const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                            const mensaje = "Cerrando la session seleccionada..."
+                            const datosPantallaSuperpuesta = {
+                                instanciaUID: instanciaUID,
+                                mensaje: mensaje,
+                                botonCancelar: "ocultar"
 
+                            }
+                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const sessionIDX = sessions.target.closest("[sessionIDX]")
                             const transaccion = {
                                 zona: "miCasa/cerrarSessionSelectivamenteDesdeMiCasa",
@@ -3047,6 +3097,10 @@ const casaVitini = {
                                 sessionIDX: sessionIDX.getAttribute("sessionIDX")
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                            const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+
+                            if (!pantallaDeCargaRenderizada) { return }
+                            pantallaDeCargaRenderizada.remove()
                             if (respuestaServidor?.error) {
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                             }
@@ -3067,12 +3121,25 @@ const casaVitini = {
 
                         },
                         cerrarTodasSessioneMenosUna: async () => {
+                            const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                            const mensaje = "Cerrando todas la sessiones menos esta..."
+                            const datosPantallaSuperpuesta = {
+                                instanciaUID: instanciaUID,
+                                mensaje: mensaje,
+                                botonCancelar: "ocultar"
 
+                            }
+                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const transaccion = {
                                 zona: "miCasa/cerrarSessionSelectivamenteDesdeMiCasa",
                                 tipoOperacion: "todasMenosActual",
                             }
+
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                            const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+
+                            if (!pantallaDeCargaRenderizada) { return }
+                            pantallaDeCargaRenderizada.remove()
                             if (respuestaServidor?.error) {
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                             }
@@ -3138,24 +3205,35 @@ const casaVitini = {
                                 botonCambiarClave.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.eliminarCuenta.portada.transactor)
                             },
                             transactor: async () => {
-                                const clave = document.querySelector("[campo=clave]").value
+                                const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                                const mensaje = "Eliminando tu VitiniID..."
+                                const datosPantallaSuperpuesta = {
+                                    instanciaUID: instanciaUID,
+                                    mensaje: mensaje,
+                                    botonCancelar: "ocultar"
 
+                                }
+                                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                                const clave = document.querySelector("[campo=clave]").value
                                 const transaccion = {
                                     zona: "miCasa/eliminarCuentaDesdeMiCasa",
                                     clave: clave
                                 }
+
                                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                                const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+
+                                if (!pantallaDeCargaRenderizada) { return }
+                                pantallaDeCargaRenderizada.remove()
                                 if (respuestaServidor?.error) {
                                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                                 }
                                 if (respuestaServidor?.ok) {
-
                                     const vista = {
-                                        "vista": "/micasa",
-                                        "tipoOrigen": "menuNavegador"
+                                        vista: "/micasa",
+                                        tipoOrigen: "menuNavegador"
                                     }
                                     await casaVitini.componentes.controladorVista(vista)
-
                                     const informacion = "Se ha elimiado tu cuenta correctamente. Sentimos que te vallas vuelve cuando quieras."
                                     casaVitini.ui.vistas.advertenciaInmersiva(informacion)
                                 }
@@ -3171,7 +3249,15 @@ const casaVitini = {
 
                         },
                         guardarCambios: async () => {
+                            const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                            const mensaje = "Actualizando tu VitiniID..."
+                            const datosPantallaSuperpuesta = {
+                                instanciaUID: instanciaUID,
+                                mensaje: mensaje,
+                                botonCancelar: "ocultar"
 
+                            }
+                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const nuevoIDX = document.querySelector("[campo=nuevoIDX]")
                             const datosParaActualizar = {
                                 zona: "miCasa/actualizarIDX",
@@ -3179,6 +3265,11 @@ const casaVitini = {
                             }
 
                             const respuestaServidor = await casaVitini.componentes.servidor(datosParaActualizar)
+                            const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+
+                            if (!pantallaDeCargaRenderizada) { return }
+                            pantallaDeCargaRenderizada.remove()
+
                             if (respuestaServidor?.error) {
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                             }
@@ -4668,7 +4759,7 @@ const casaVitini = {
                                 document.querySelector("[componente=estadoBusqueda]")?.remove()
 
                                 const estadoBusquedaUI = document.createElement("div")
-                                estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
+                                estadoBusquedaUI.classList.add("infoCuenta")
                                 estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
                                 estadoBusquedaUI.innerText = respuestaServidor.error
                                 espacioClientes.appendChild(estadoBusquedaUI)
@@ -4682,7 +4773,7 @@ const casaVitini = {
                                 document.querySelector("[componente=estadoBusqueda]")?.remove()
 
                                 const estadoBusquedaUI = document.createElement("div")
-                                estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
+                                estadoBusquedaUI.classList.add("infoCuenta")
                                 estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
                                 estadoBusquedaUI.innerText = "No se han encontrado clientes"
                                 espacioClientes.appendChild(estadoBusquedaUI)
@@ -5878,6 +5969,7 @@ const casaVitini = {
 
                 const instanciaUID = metadatos.instanciaUID
                 const mensaje = metadatos.mensaje ? metadatos.mensaje : "Espere..."
+                const botonCancelar = metadatos.botonCancelar ? metadatos.botoCancelar : "mostrar"
 
                 const advertenciaInmersivaUI = document.createElement("div")
                 advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersivaSuperpuesta")
@@ -5912,7 +6004,10 @@ const casaVitini = {
                     e.target.parentNode.parentNode.remove()
                 })
 
-                marcoElastico.appendChild(boton)
+                if (botonCancelar === "mostrar") {
+                    marcoElastico.appendChild(boton)
+                }
+
                 advertenciaInmersivaUI.appendChild(marcoElastico)
                 document.querySelector("main").appendChild(advertenciaInmersivaUI)
 
@@ -11909,9 +12004,6 @@ const casaVitini = {
     },
     IDX: {
         iniciarSession: async (IDX) => {
-
-
-
             const usuario = IDX.usuario
             const clave = IDX.clave
             const contenedorBotones = document.querySelector("[componente=contenedorBotones]")

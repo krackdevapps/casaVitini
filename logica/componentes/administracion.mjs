@@ -1254,9 +1254,9 @@ const administracion = {
                 const selectorCuadradoFechaSalida = document.querySelector("[calendario=salida]")
                 const selectorFechaSalidaUI = selectorCuadradoFechaSalida.querySelector("[fechaUI=fechaFin]")
                 selectorCuadradoFechaEntrada.removeAttribute("memoriaVolatil")
-                selectorFechaEntradaUI.innerText = "Seleccionar"
+                selectorFechaEntradaUI.innerText = "(Seleccionar)"
                 selectorCuadradoFechaSalida.removeAttribute("memoriaVolatil")
-                selectorFechaSalidaUI.innerText = "Seleccionar"
+                selectorFechaSalidaUI.innerText = "(Seleccionar)"
 
                 const selectorRangos = [...document.querySelectorAll(`[selectorRango]`)]
                 selectorRangos.map((selectorRango) => {
@@ -17169,10 +17169,11 @@ const administracion = {
         },
         mostrarImpuestosResueltos: async (listasImpuestos) => {
             const main = document.querySelector("main")
+            main.setAttribute("zonaCSS", "administracion/impuestos")
+
             const instanciaUID = main.getAttribute("instanciaUID")
             const granuladoURL = casaVitini.componentes.granuladorURL()
 
-            main.setAttribute("zonaCSS", "administracion/impuestos")
             const transaccion = {
                 zona: "administracion/impuestos/listaImpuestos",
                 origen: "url",
@@ -17180,8 +17181,15 @@ const administracion = {
                 ...listasImpuestos
 
             }
+            console.log("transaccion", transaccion)
             transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
-            if (transaccion.nombre_columna) {
+
+
+
+            if ((transaccion.nombre_columna)?.toLowerCase() === "impuesto_uid") {
+                transaccion.nombreColumna = "impuestoUID"
+                delete transaccion.nombre_columna
+            } else if (transaccion.nombre_columna) {
                 transaccion.nombreColumna = transaccion.nombre_columna.replace(/_([a-z])/g, (match, group) => group.toUpperCase());
                 delete transaccion.nombre_columna
             }
@@ -17216,6 +17224,26 @@ const administracion = {
             }
 
             const impuestos = respuestaServidor.impuestos
+
+            const primeraEnMayuscula = (palabra) => {
+                return palabra.charAt(0).toUpperCase() + palabra.slice(1);
+            }
+            for (const detallesDelImpuesto of impuestos) {
+
+                const tipoValor = detallesDelImpuesto.tipoValor
+                const aplicacionSobre = detallesDelImpuesto.aplicacionSobre
+                const estado = detallesDelImpuesto.estado
+
+                detallesDelImpuesto.tipoValor = primeraEnMayuscula(tipoValor)
+                detallesDelImpuesto.estado = primeraEnMayuscula(estado)
+                const aplicacionSobreUI = {
+                    totalNeto : "Total neto",
+                    totalReservaNeto: "Total reserva neto"
+                }
+                detallesDelImpuesto.aplicacionSobre = aplicacionSobreUI[aplicacionSobre]
+                
+           }
+
             const sentidoColumna = respuestaServidor.sentidoColumna
             const nombreColumna = respuestaServidor.nombreColumna
             const pagina = respuestaServidor.pagina
@@ -17224,12 +17252,12 @@ const administracion = {
             const columnasGrid = [
                 {
                     columnaUI: "UID",
-                    columnaIDV: "idv",
+                    columnaIDV: "impuestoUID",
                     columnaClase: "idColumna"
                 },
                 {
                     columnaUI: "Impuesto",
-                    columnaIDV: "impuesto",
+                    columnaIDV: "nombre",
                     columnaClase: "entradaColumna"
                 },
                 {
@@ -17248,8 +17276,8 @@ const administracion = {
                     columnaClase: "pagoColumna"
                 },
                 {
-                    columnaUI: "Moneda",
-                    columnaIDV: "moneda",
+                    columnaUI: "Estado",
+                    columnaIDV: "estado",
                     columnaClase: "pagoColumna"
                 }
             ]
@@ -17292,7 +17320,7 @@ const administracion = {
                 metodoFila: "casaVitini.administracion.impuestos.resolverFila",
                 mascaraHref: {
                     urlStatica: "/administracion/impuestos/",
-                    parametro: "idv"
+                    parametro: "impuestoUID"
                 },
                 //mascaraURL: constructorURLFinal
 
@@ -17315,10 +17343,6 @@ const administracion = {
 
             casaVitini.componentes.ui.paginador(metadatosPaginador)
 
-
-
-
-
             transaccion.tipoConstruccionGrid = "soloLista"
             const titulo = "ADminstar reservas"
             const estado = {
@@ -17335,8 +17359,6 @@ const administracion = {
             if (origen === "botonNumeroPagina" || origen === "tituloColumna") {
                 window.history.pushState(estado, titulo, constructorURLFinal);
             }
-
-
 
         },
         resolverFila: (transaccion) => {
@@ -17362,17 +17384,26 @@ const administracion = {
 
             if (respuestaServidor?.ok) {
 
-                let detallesImpuesto = respuestaServidor?.ok
-                let impuestoUID = detallesImpuesto.impuestoUID
-                let nombreImpuesto = detallesImpuesto.nombreImpuesto
-                let tipoImpositivo = detallesImpuesto.tipoImpositivo
+                const detallesImpuesto = respuestaServidor?.ok
+                const impuestoUID = detallesImpuesto.impuestoUID
+                const nombre = detallesImpuesto.nombre
+                const tipoValor = detallesImpuesto.tipoValor
+                const tipoImpositivo = detallesImpuesto.tipoImpositivo
+                const aplicacionSobre = detallesImpuesto.aplicacionSobre
+                const estado = detallesImpuesto.estado
 
-                let tipoValorUI = detallesImpuesto.tipoValorUI
-                let tipoValorIDV = detallesImpuesto.tipoValorIDV
-                let aplicacionSobreUI = detallesImpuesto.aplicacionSobreUI
-                let aplicacionSobreIDV = detallesImpuesto.aplicacionSobreIDV
-                let monedaUI = detallesImpuesto.monedaUI
-                let monedaIDV = detallesImpuesto.monedaIDV
+                const primeraEnMayuscula = (palabra) => {
+                    return palabra.charAt(0).toUpperCase() + palabra.slice(1);
+                }
+
+                let aplicacionSobreUI
+                if (aplicacionSobre === "totalNeto") {
+                    aplicacionSobreUI = "Total neto"
+                }
+                if (aplicacionSobre === "totalReservaNeto") {
+                    aplicacionSobreUI = "Total reserva neto"
+                }
+
 
                 let selectorEspacioPreciosEImpuestos = document.querySelector("[componente=impuestos]")
 
@@ -17384,7 +17415,7 @@ const administracion = {
                 let nombreImpuestoUI = document.createElement("p")
                 nombreImpuestoUI.classList.add("detalleImpuestoNombre")
                 nombreImpuestoUI.setAttribute("detalleImpuesto", "nombreImpuesto")
-                nombreImpuestoUI.innerText = nombreImpuesto
+                nombreImpuestoUI.innerText = nombre
                 bloqueDetallesImpuesto.appendChild(nombreImpuestoUI)
 
                 let bloqueDato = document.createElement("div")
@@ -17417,9 +17448,9 @@ const administracion = {
                 datoLectura = document.createElement("p")
                 datoLectura.classList.add("detalleImpuestoDatoLectura")
                 datoLectura.setAttribute("detalleImpuesto", "tipoValor")
-                datoLectura.setAttribute("tipoValorIDV", tipoValorIDV)
+                datoLectura.setAttribute("tipoValor", tipoValor)
 
-                datoLectura.innerText = tipoValorUI
+                datoLectura.innerText = primeraEnMayuscula(tipoValor)
                 bloqueDato.appendChild(datoLectura)
                 bloqueDetallesImpuesto.appendChild(bloqueDato)
 
@@ -17435,9 +17466,28 @@ const administracion = {
                 datoLectura = document.createElement("p")
                 datoLectura.classList.add("detalleImpuestoDatoLectura")
                 datoLectura.setAttribute("detalleImpuesto", "aplicacionSobre")
-                datoLectura.setAttribute("aplicacionSobreIDV", aplicacionSobreIDV)
+                datoLectura.setAttribute("aplicacionSobre", aplicacionSobre)
 
                 datoLectura.innerText = aplicacionSobreUI
+                bloqueDato.appendChild(datoLectura)
+                bloqueDetallesImpuesto.appendChild(bloqueDato)
+
+
+                bloqueDato = document.createElement("div")
+                bloqueDato.classList.add("detalleImpuestoBloqueDato")
+                bloqueDato.setAttribute("bloqueDato", "estado")
+
+
+                tituloDato = document.createElement("p")
+                tituloDato.classList.add("detalleImpuestoTituloDato")
+                tituloDato.innerText = "Estado del impuesto"
+                bloqueDato.appendChild(tituloDato)
+
+                datoLectura = document.createElement("p")
+                datoLectura.classList.add("detalleImpuestoDatoLectura")
+                datoLectura.setAttribute("detalleImpuesto", "estado")
+                datoLectura.setAttribute("estado", estado)
+                datoLectura.innerText = primeraEnMayuscula(estado)
                 bloqueDato.appendChild(datoLectura)
                 bloqueDetallesImpuesto.appendChild(bloqueDato)
 
@@ -17446,18 +17496,18 @@ const administracion = {
                 bloqueDato.setAttribute("bloqueDato", "moneda")
 
 
-                tituloDato = document.createElement("p")
-                tituloDato.classList.add("detalleImpuestoTituloDato")
-                tituloDato.innerText = "Moneda"
-                bloqueDato.appendChild(tituloDato)
+                // tituloDato = document.createElement("p")
+                // tituloDato.classList.add("detalleImpuestoTituloDato")
+                // tituloDato.innerText = "Moneda"
+                // bloqueDato.appendChild(tituloDato)
 
-                datoLectura = document.createElement("p")
-                datoLectura.classList.add("detalleImpuestoDatoLectura")
-                datoLectura.setAttribute("detalleImpuesto", "moneda")
-                datoLectura.setAttribute("monedaIDV", monedaIDV)
-                datoLectura.innerText = monedaUI
-                bloqueDato.appendChild(datoLectura)
-                bloqueDetallesImpuesto.appendChild(bloqueDato)
+                // datoLectura = document.createElement("p")
+                // datoLectura.classList.add("detalleImpuestoDatoLectura")
+                // datoLectura.setAttribute("detalleImpuesto", "moneda")
+                // datoLectura.setAttribute("monedaIDV", monedaIDV)
+                // datoLectura.innerText = monedaUI
+                // bloqueDato.appendChild(datoLectura)
+                // bloqueDetallesImpuesto.appendChild(bloqueDato)
 
                 selectorEspacioPreciosEImpuestos.appendChild(bloqueDetallesImpuesto)
 
@@ -17508,143 +17558,155 @@ const administracion = {
             document.querySelector("[boton=guardarCambios]").classList.remove("elementoOcultoInicialmente")
             document.querySelector("[boton=cancelarCambios]").classList.remove("elementoOcultoInicialmente")
             document.querySelector("[boton=eliminarImpuesto]").classList.remove("elementoOcultoInicialmente")
-            const impuestoUID = document.querySelector("[impuestoUID]").getAttribute("impuestoUID")
-            const transaccion = {
-                zona: "administracion/impuestos/opcionesEditarImpuesto",
-                impuestoUID: Number(impuestoUID)
-            }
 
-            const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
-
-            if (respuestaServidor?.error) {
-                return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
-            }
-
-
-            if (respuestaServidor?.ok) {
-                let opcionesTipoValor = respuestaServidor?.ok.tipoValor
-                let opcionesAplicacionSobre = respuestaServidor?.ok.aplicacionSobre
-                let opcionesMoneda = respuestaServidor?.ok.moneda
-
-                let selectorDatoLectura = [...document.querySelectorAll("[detalleImpuesto]")]
-                selectorDatoLectura.map((detalleImpuesto) => {
-                    detalleImpuesto.style.display = "none"
-                    let nombreDetalles = detalleImpuesto.getAttribute("detalleImpuesto")
-                    let datoDetalle = detalleImpuesto.innerText
-                    let campoEditable = document.createElement("input")
-                    campoEditable.classList.add("detalleImpuestoCampoEditable")
-                    campoEditable.setAttribute("componente", "campoEditable")
-                    campoEditable.setAttribute("campoEditable", nombreDetalles)
-                    campoEditable.setAttribute("datoActual", datoDetalle)
-                    campoEditable.placeholder = datoDetalle
-
-                    if (nombreDetalles === "nombreImpuesto") {
-                        let selectorBloqueDetalles = document.querySelector("[componente=bloqueDetalles")
-                        let selectorPrimerBloqueDAtos = document.querySelector("[bloqueDato=tipoImpositivo]")
-                        selectorBloqueDetalles.insertBefore(campoEditable, selectorPrimerBloqueDAtos);
-                    }
-
-                    if (nombreDetalles === "tipoValor") {
-                        let tipoValorIDV = detalleImpuesto.getAttribute("tipoValorIDV")
-                        let contenedorOpciones = document.createElement("select")
-                        contenedorOpciones.classList.add("detalleImpuestoSelectorLista")
-                        contenedorOpciones.setAttribute("componente", "campoEditable")
-                        contenedorOpciones.setAttribute("campoEditable", nombreDetalles)
-                        contenedorOpciones.setAttribute("datoActual", tipoValorIDV)
-
-                        opcionesTipoValor.map((opcionTipoValor) => {
-                            let tipoValorIDV = opcionTipoValor.tipoValorIDV
-                            let tipoValorUI = opcionTipoValor.tipoValorUI
-                            let simbolo = opcionTipoValor.simbolo
-
-                            let opcion = document.createElement("option");
-                            opcion.value = tipoValorIDV;
-                            opcion.text = tipoValorUI;
-                            opcion.setAttribute("opcion", tipoValorIDV)
-                            contenedorOpciones.add(opcion);
-                        })
-
-                        contenedorOpciones.value = tipoValorIDV;
-
-                        let selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
-                        selectorBloqueDato.appendChild(contenedorOpciones)
-                        if (nombreDetalles === "tipoImpositivo") {
-                            let selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
-                            selectorBloqueDato.appendChild(campoEditable)
-                        }
-                    }
+            const opcionesTipoValor = [
+                {
+                    tipoValorIDV: "tasa",
+                    tipoValorUI: "Tasa"
+                }, {
+                    tipoValorIDV: "porcentaje",
+                    tipoValorUI: "Porcentaje"
+                }
+            ]
+            const opcionesAplicacionSobre = [
+                {
+                    aplicacionIDV: "totalNeto",
+                    aplicacionUI: "Total neto"
+                }, {
+                    aplicacionIDV: "totalReservaNeto",
+                    aplicacionUI: "Total reserva neto"
+                }
+            ]
+            const listaEstados = [
+                {
+                    estadoIDV: "activado",
+                    estadoUI: "Activado"
+                }, {
+                    estadoIDV: "desactivado",
+                    estadoUI: "Desactivado"
+                }
+            ]
+            const selectorDatoLectura = [...document.querySelectorAll("[detalleImpuesto]")]
+            selectorDatoLectura.map((detalleImpuesto) => {
+                detalleImpuesto.style.display = "none"
+                const nombreDetalles = detalleImpuesto.getAttribute("detalleImpuesto")
+                const datoDetalle = detalleImpuesto.innerText
+                const campoEditable = document.createElement("input")
+                campoEditable.classList.add("detalleImpuestoCampoEditable")
+                campoEditable.setAttribute("componente", "campoEditable")
+                campoEditable.setAttribute("campoEditable", nombreDetalles)
+                campoEditable.setAttribute("datoActual", datoDetalle)
+                campoEditable.placeholder = datoDetalle
+                campoEditable.value = datoDetalle
 
 
-                    if (nombreDetalles === "aplicacionSobre") {
-                        let aplicacionSobreIDV = detalleImpuesto.getAttribute("aplicacionSobreIDV")
-                        let contenedorOpciones = document.createElement("select")
-                        contenedorOpciones.classList.add("detalleImpuestoSelectorLista")
-                        contenedorOpciones.setAttribute("componente", "campoEditable")
-                        contenedorOpciones.setAttribute("campoEditable", nombreDetalles)
-                        contenedorOpciones.setAttribute("datoActual", aplicacionSobreIDV)
+                if (nombreDetalles === "nombreImpuesto") {
+                    const selectorBloqueDetalles = document.querySelector("[componente=bloqueDetalles")
+                    const selectorPrimerBloqueDAtos = document.querySelector("[bloqueDato=tipoImpositivo]")
+                    campoEditable.classList.add("nombreImpuestoCampo")
+                    selectorBloqueDetalles.insertBefore(campoEditable, selectorPrimerBloqueDAtos);
+                }
 
+                if (nombreDetalles === "tipoValor") {
+                    const tipoValorIDV_actual = detalleImpuesto.getAttribute("tipoValor")
 
-                        opcionesAplicacionSobre.map((opcionAplicacionSobre) => {
-                            let aplicacionIDV = opcionAplicacionSobre.aplicacionIDV
-                            let aplicacionUI = opcionAplicacionSobre.aplicacionUI
+                    const contenedorOpciones = document.createElement("select")
+                    contenedorOpciones.classList.add("detalleImpuestoSelectorLista")
+                    contenedorOpciones.setAttribute("componente", "campoEditable")
+                    contenedorOpciones.setAttribute("campoEditable", nombreDetalles)
+                    contenedorOpciones.setAttribute("datoActual", tipoValorIDV_actual)
 
-                            let opcion = document.createElement("option");
-                            opcion.value = aplicacionIDV;
-                            opcion.text = aplicacionUI;
-                            opcion.setAttribute("opcion", aplicacionIDV)
-                            contenedorOpciones.add(opcion);
+                    opcionesTipoValor.map((opcionTipoValor) => {
+                        const tipoValorIDV = opcionTipoValor.tipoValorIDV
+                        const tipoValorUI = opcionTipoValor.tipoValorUI
 
-                        })
-                        contenedorOpciones.value = aplicacionSobreIDV;
+                        const opcion = document.createElement("option");
+                        opcion.value = tipoValorIDV;
+                        opcion.text = tipoValorUI;
+                        opcion.setAttribute("opcion", tipoValorIDV)
+                        contenedorOpciones.add(opcion);
+                    })
 
-                        let selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
-                        selectorBloqueDato.appendChild(contenedorOpciones)
-                        if (nombreDetalles === "tipoImpositivo") {
-                            let selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
-                            selectorBloqueDato.appendChild(campoEditable)
-                        }
+                    contenedorOpciones.value = tipoValorIDV_actual;
 
-
-                    }
-
-                    if (nombreDetalles === "moneda") {
-                        let monedaIDV = detalleImpuesto.getAttribute("monedaIDV")
-
-                        let contenedorOpciones = document.createElement("select")
-                        contenedorOpciones.classList.add("detalleImpuestoSelectorLista")
-                        contenedorOpciones.setAttribute("componente", "campoEditable")
-                        contenedorOpciones.setAttribute("campoEditable", nombreDetalles)
-                        contenedorOpciones.setAttribute("datoActual", monedaIDV)
-
-                        opcionesMoneda.map((opcionMoneda) => {
-                            let monedaIDV = opcionMoneda.monedaIDV
-                            let monedaUI = opcionMoneda.monedaUI
-                            let simbolo = opcionMoneda.simbolo
-
-                            let opcion = document.createElement("option");
-                            opcion.value = monedaIDV;
-                            opcion.text = `${monedaUI} (${simbolo})`;
-                            opcion.setAttribute("opcion", monedaIDV)
-                            contenedorOpciones.add(opcion);
-                        })
-                        contenedorOpciones.value = monedaIDV;
-
-                        let selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
-                        selectorBloqueDato.appendChild(contenedorOpciones)
-                        if (nombreDetalles === "tipoImpositivo") {
-                            let selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
-                            selectorBloqueDato.appendChild(campoEditable)
-                        }
-
-                    }
-
+                    const selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
+                    selectorBloqueDato.appendChild(contenedorOpciones)
                     if (nombreDetalles === "tipoImpositivo") {
-                        let selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
+                        const selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
                         selectorBloqueDato.appendChild(campoEditable)
                     }
-                })
-            }
+                }
+
+
+                if (nombreDetalles === "aplicacionSobre") {
+                    const aplicacionSobreIDV_actual = detalleImpuesto.getAttribute("aplicacionSobre")
+                    const contenedorOpciones = document.createElement("select")
+                    contenedorOpciones.classList.add("detalleImpuestoSelectorLista")
+                    contenedorOpciones.setAttribute("componente", "campoEditable")
+                    contenedorOpciones.setAttribute("campoEditable", nombreDetalles)
+                    contenedorOpciones.setAttribute("datoActual", aplicacionSobreIDV_actual)
+
+
+                    opcionesAplicacionSobre.map((opcionAplicacionSobre) => {
+                        const aplicacionIDV = opcionAplicacionSobre.aplicacionIDV
+                        const aplicacionUI = opcionAplicacionSobre.aplicacionUI
+
+                        const opcion = document.createElement("option");
+                        opcion.value = aplicacionIDV;
+                        opcion.text = aplicacionUI;
+                        opcion.setAttribute("opcion", aplicacionIDV)
+                        contenedorOpciones.add(opcion);
+
+                    })
+                    contenedorOpciones.value = aplicacionSobreIDV_actual;
+
+                    const selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
+                    selectorBloqueDato.appendChild(contenedorOpciones)
+                    if (nombreDetalles === "tipoImpositivo") {
+                        const selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
+                        selectorBloqueDato.appendChild(campoEditable)
+                    }
+
+
+                }
+
+                if (nombreDetalles === "estado") {
+                    const estadoIDV_Actual = detalleImpuesto.getAttribute("estado")
+
+                    const contenedorOpciones = document.createElement("select")
+                    contenedorOpciones.classList.add("detalleImpuestoSelectorLista")
+                    contenedorOpciones.setAttribute("componente", "campoEditable")
+                    contenedorOpciones.setAttribute("campoEditable", nombreDetalles)
+                    contenedorOpciones.setAttribute("datoActual", estadoIDV_Actual)
+
+                    listaEstados.map((estado) => {
+                        const estadoIDV = estado.estadoIDV
+                        const estadoUI = estado.estadoUI
+
+                        const opcion = document.createElement("option");
+                        opcion.value = estadoIDV;
+                        opcion.text = `${estadoUI}`;
+                        opcion.setAttribute("opcion", estadoIDV)
+                        contenedorOpciones.add(opcion);
+                    })
+                    contenedorOpciones.value = estadoIDV_Actual;
+
+                    const selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
+                    selectorBloqueDato.appendChild(contenedorOpciones)
+                    if (nombreDetalles === "tipoImpositivo") {
+                        const selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
+                        selectorBloqueDato.appendChild(campoEditable)
+                    }
+
+                }
+
+
+                if (nombreDetalles === "tipoImpositivo") {
+                    const selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
+                    selectorBloqueDato.appendChild(campoEditable)
+                }
+            })
+
 
         },
         cancelarCambiosImpuesto: () => {
@@ -17680,7 +17742,7 @@ const administracion = {
 
             const transaccion = {
                 zona: "administracion/impuestos/guardarModificacionImpuesto",
-                "impuestoUID": Number(impuestoUID)
+                impuestoUID: Number(impuestoUID)
             }
 
             const selectorCamposEditables = [...document.querySelectorAll("[componente=campoEditable]")]
@@ -17694,53 +17756,62 @@ const administracion = {
 
                 }
             })
-
+            console.log("impuersto", transaccion)
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
             const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
             if (!instanciaRenderizada) { return }
             instanciaRenderizada.remove()
-
             if (respuestaServidor?.error) {
                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
             }
 
             if (respuestaServidor?.ok) {
-                let detalleImpuestoActualizado = respuestaServidor?.detallesImpuesto
+                const detalleImpuestoActualizado = respuestaServidor?.detallesImpuesto
 
-                let nombreImpuesto = detalleImpuestoActualizado.nombreImpuesto
-                let tipoImpositivo = detalleImpuestoActualizado.tipoImpositivo
-                let tipoValorIDV = detalleImpuestoActualizado.tipoValorIDV
-                let tipoValorUI = detalleImpuestoActualizado.tipoValorUI
-                let aplicacionSobreIDV = detalleImpuestoActualizado.aplicacionSobreIDV
-                let aplicacionSobreUI = detalleImpuestoActualizado.aplicacionSobreUI
-                let monedaIDV = detalleImpuestoActualizado.monedaIDV
-                let monedaUI = detalleImpuestoActualizado.monedaUI
+                const nombre = detalleImpuestoActualizado.nombre
+                const impuestoUID = detalleImpuestoActualizado.impuestoUID
+                const tipoImpositivo = detalleImpuestoActualizado.tipoImpositivo
+                const tipoValor = detalleImpuestoActualizado.tipoValor
+                const estado = detalleImpuestoActualizado.estado
+                const aplicacionSobre = detalleImpuestoActualizado.aplicacionSobre
 
-                let selectorCamposEditables = [...document.querySelectorAll("[componente=campoEditable]")]
+
+                const primeraEnMayuscula = (palabra) => {
+                    return palabra.charAt(0).toUpperCase() + palabra.slice(1);
+                }
+                let aplicacionSobreUI
+                if (aplicacionSobre === "totalNeto") {
+                    aplicacionSobreUI = "Total neto"
+                }
+                if (aplicacionSobre === "totalReservaNeto") {
+                    aplicacionSobreUI = "Total reserva neto"
+                }
+
+                const selectorCamposEditables = [...document.querySelectorAll("[componente=campoEditable]")]
                 selectorCamposEditables.map(campoEditable => campoEditable.remove())
 
 
-                let selectorNombreImpuesto = document.querySelector("[detalleImpuesto=nombreImpuesto]")
+                const selectorNombreImpuesto = document.querySelector("[detalleImpuesto=nombreImpuesto]")
                 //selectorNombreImpuesto.setAttribute("detalleImpuesto", nombreImpuesto)
-                selectorNombreImpuesto.innerText = nombreImpuesto
+                selectorNombreImpuesto.innerText = nombre
 
-                let selectotipoImpositivo = document.querySelector("[detalleImpuesto=tipoImpositivo]")
+                const selectotipoImpositivo = document.querySelector("[detalleImpuesto=tipoImpositivo]")
                 //        selectotipoImpositivo.setAttribute("detalleImpuesto", tipoImpositivo)
                 selectotipoImpositivo.innerText = tipoImpositivo
 
-                let selectortipoValor = document.querySelector("[detalleImpuesto=tipoValor]")
-                selectortipoValor.setAttribute("tipoValorIDV", tipoValorIDV)
-                selectortipoValor.innerText = tipoValorUI
+                const selectortipoValor = document.querySelector("[detalleImpuesto=tipoValor]")
+                selectortipoValor.setAttribute("tipoValor", tipoValor)
+                selectortipoValor.innerText = primeraEnMayuscula(tipoValor)
 
-                let selectoraplicacionSobre = document.querySelector("[detalleImpuesto=aplicacionSobre]")
-                selectoraplicacionSobre.setAttribute("aplicacionSobreIDV", aplicacionSobreIDV)
+                const selectoraplicacionSobre = document.querySelector("[detalleImpuesto=aplicacionSobre]")
+                selectoraplicacionSobre.setAttribute("aplicacionSobre", aplicacionSobre)
                 selectoraplicacionSobre.innerText = aplicacionSobreUI
 
-                let selectorMoneda = document.querySelector("[detalleImpuesto=moneda]")
-                selectorMoneda.setAttribute("monedaIDV", monedaIDV)
-                selectorMoneda.innerText = monedaUI
+                const selectorMoneda = document.querySelector("[detalleImpuesto=estado]")
+                selectorMoneda.setAttribute("estado", estado)
+                selectorMoneda.innerText = primeraEnMayuscula(estado)
 
-                let selectorDatoLectura = [...document.querySelectorAll("[detalleImpuesto]")]
+                const selectorDatoLectura = [...document.querySelectorAll("[detalleImpuesto]")]
                 selectorDatoLectura.map((detalleImpuesto) => {
                     detalleImpuesto.removeAttribute("style")
                 })
@@ -17923,7 +17994,7 @@ const administracion = {
                         opcion.setAttribute("opcion", monedaIDV)
                         contenedorOpciones.add(opcion);
                     })
-                    bloqueBloqueoApartamentos.appendChild(contenedorOpciones)
+                    //bloqueBloqueoApartamentos.appendChild(contenedorOpciones)
                     contenedorNuevoImpuesto.appendChild(bloqueBloqueoApartamentos)
 
                     const bloqueBotones = document.createElement("div")
@@ -25376,7 +25447,7 @@ const administracion = {
                             contenedorEntidadDatos.appendChild(bloqueApartamentoIDV)
 
                             const superBloqueCaracteristicas = document.createElement("div")
-                            superBloqueCaracteristicas.classList.add("confAlojamiento_entidades_crearEntidad_bloqueTitulo")
+                            superBloqueCaracteristicas.classList.add("contenedorCaracteristicas")
 
                             const infoSuperficie = document.createElement("div")
                             infoSuperficie.classList.add("confAlojamiento_entidades_crearEntidad_info")
@@ -25401,7 +25472,7 @@ const administracion = {
                             botonAnadirCaracteristica.innerText = "Añadir caracteristica"
                             botonAnadirCaracteristica.addEventListener("click", () => {
                                 const selectorContenedorCaracteristicas = document.querySelector("[contenedor=caracteristicas]")
-                                const filaCaracteristicaUI =  casaVitini.administracion.arquitectura_del_alojamiento.entidades.editarEntidad.caracteristicasUI()
+                                const filaCaracteristicaUI = casaVitini.administracion.arquitectura_del_alojamiento.entidades.editarEntidad.caracteristicasUI()
                                 selectorContenedorCaracteristicas.appendChild(filaCaracteristicaUI)
 
                             })

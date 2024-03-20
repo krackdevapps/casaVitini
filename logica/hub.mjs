@@ -622,9 +622,9 @@ const puerto = async (entrada, salida) => {
                 const fechaActual_ISO = DateTime.utc().toISO();
                 const eliminarCuentasNoVefificadas = `
                     DELETE FROM usuarios
-                    WHERE "fechaCaducidadCuentaNoVerificada" < $1;
+                    WHERE "fechaCaducidadCuentaNoVerificada" < $1 AND rol <> $2;
                     `
-                await conexion.query(eliminarCuentasNoVefificadas, [fechaActual_ISO])
+                await conexion.query(eliminarCuentasNoVefificadas, [fechaActual_ISO, "administrador"])
             } catch (error) {
                 throw error
             }
@@ -2699,17 +2699,10 @@ const puerto = async (entrada, salida) => {
                     } else {
                         validadoresCompartidos.claves.minimoRequisitos(claveNueva)
                     }
-
                     if (!claveConfirmada) {
                         const error = "Vuelve a escribir tu contrasena de nuevo"
                         throw new Error(error)
                     }
-
-
-
-
-
-
                     if (claveNueva !== claveConfirmada) {
                         const error = "La contrasenas no coinciden, revisa la contrasenas escritas"
                         throw new Error(error)
@@ -2723,6 +2716,7 @@ const puerto = async (entrada, salida) => {
                         throw new Error(error)
                     }
                     await componentes.eliminarCuentasNoVerificadas()
+                    await componentes.borrarCuentasCaducadas()
 
                     await conexion.query('BEGIN'); // Inicio de la transacción
                     const validarNuevoUsuario = `
@@ -2733,7 +2727,7 @@ const puerto = async (entrada, salida) => {
                         `
                     const resuelveValidarNuevoUsaurio = await conexion.query(validarNuevoUsuario, [usuarioIDX])
                     if (resuelveValidarNuevoUsaurio.rowCount > 0) {
-                        const error = "El nombre de usuario no esta disponbile, escoge otro"
+                        const error = "El nombre de usuario no esta disponible, escoge otro"
                         throw new Error(error)
                     }
                     const validarEmail = `
@@ -2795,7 +2789,7 @@ const puerto = async (entrada, salida) => {
                     }
                     const codigoAleatorioUnico = await controlCodigo();
                     const fechaActualUTC = DateTime.utc();
-                    const fechaCaducidadCuentaNoVerifucada = fechaActualUTC.plus({ hours: 1 });
+                    const fechaCaducidadCuentaNoVerificada = fechaActualUTC.plus({ hours: 24 });
 
                     const estadoCuenta = "activado"
                     const cuentaVerificada = "no"
@@ -2823,7 +2817,7 @@ const puerto = async (entrada, salida) => {
                         estadoCuenta,
                         cuentaVerificada,
                         codigoAleatorioUnico,
-                        fechaCaducidadCuentaNoVerifucada,
+                        fechaCaducidadCuentaNoVerificada,
                         nuevaSal,
                         hashCreado
                     ]
@@ -3060,10 +3054,7 @@ const puerto = async (entrada, salida) => {
                         ]
                         const resuelveActualizarDatosUsuario = await conexion.query(actualizarDatosUsuario, datos)
 
-
-
                         if (resuelveNuevoCorreoPorVerifical.rowCount === 0 && email.length > 0) {
-
                             const volverAVerificarCuenta = `
                             UPDATE 
                                 usuarios
@@ -3210,26 +3201,41 @@ const puerto = async (entrada, salida) => {
                         const resolverMailVerificado = await conexion.query(comprobarMailVerificado, [IDX])
                         const estadoCuentaVerificada = resolverMailVerificado.rows[0].cuentaVerificada
                         if (estadoCuentaVerificada !== "si") {
-                            const error = "Tienes que verificar tu dirección de correo electronico para poder acceder a la reservas asociadas a tu direcíon de correo electroníco. Para ello pulsa en verificar tu correo electronico."
+                            const error = "Tienes que verificar tu dirección de correo electronico para poder acceder a la reservas asociadas a tu direcíon de correo electroníco."
                             throw new Error(error)
                         }
 
                         const uidClientesArray = []
-                        const reservaPorTitularPool = []
                         // Buscar el email verificado, en titulares poll y titulares vitini
                         const consultaClientes = `
-                            SELECT 
-                                uid
-                            FROM
-                                clientes
-                            WHERE
-                                email = $1`
+                          SELECT 
+                              uid
+                          FROM
+                              clientes
+                          WHERE
+                              email = $1`
                         // Ojo por que puede que se deba pasar el numero en number y no en cadena
                         const clientesSeleccionados = await conexion.query(consultaClientes, [email])
                         clientesSeleccionados.rows.map((cliente) => {
                             uidClientesArray.push(cliente.uid);
                         })
 
+
+                        const reservaUIDS_seleccionadas = []
+
+                        const selecionarReservaUIDParaSelecionarReservas = `                       
+                        SELECT 
+                            "reservaUID"
+                        FROM
+                            "reservaTitulares"
+                        WHERE
+                            "titularUID" = ANY($1::int[])`
+                        // Ojo por que puede que se deba pasar el numero en number y no en cadena
+                        const reservasUIDS_porClientes = await conexion.query(selecionarReservaUIDParaSelecionarReservas, [uidClientesArray])
+
+                        for (const reservaUID of reservasUIDS_porClientes.rows) {
+                            reservaUIDS_seleccionadas.push(reservaUID.reservaUID)
+                        }
 
                         const consultaClientesPool = `                       
                         SELECT 
@@ -3239,11 +3245,11 @@ const puerto = async (entrada, salida) => {
                         WHERE
                             "emailTitular" = $1`
                         // Ojo por que puede que se deba pasar el numero en number y no en cadena
-                        const clientesPoolSeleccionados = await conexion.query(consultaClientesPool, [email])
+                        const reservasUIDS_porClientes_pool = await conexion.query(consultaClientesPool, [email])
+                        for (const reservaUID of reservasUIDS_porClientes_pool.rows) {
+                            reservaUIDS_seleccionadas.push(reservaUID.reserva)
+                        }
 
-                        clientesPoolSeleccionados.rows.map((titularPool) => {
-                            reservaPorTitularPool.push(titularPool.reserva);
-                        })
 
                         const validadores = {
                             nombreColumna: async (nombreColumna) => {
@@ -3309,6 +3315,9 @@ const puerto = async (entrada, salida) => {
                                 `
                         }
 
+
+
+
                         // extraer las reservasa asociadas a esos titulares
                         const obtenerDetallesReserva = `
                         SELECT 
@@ -3322,19 +3331,16 @@ const puerto = async (entrada, salida) => {
                         FROM
                                 reservas
                         WHERE
-                            ($1::int[] IS NOT NULL AND titular = ANY($1::int[])) 
-                            OR
-                            ($2::int[] IS NOT NULL AND reserva = ANY($2::int[]))
+                            ($1::int[] IS NOT NULL AND reserva = ANY($1::int[])) 
                         ${ordenColumnaSQL}
                         LIMIT
-                            $3
+                            $2
                         OFFSET
-                            $4;`;
+                            $3;`;
                         // Ojo por que puede que se deba pasar el numero en number y no en cadena
 
                         const datosListaReservas = [
-                            uidClientesArray,
-                            reservaPorTitularPool,
+                            reservaUIDS_seleccionadas,
                             numeroPorPagina,
                             paginaActualSQL
 
@@ -3603,9 +3609,9 @@ const puerto = async (entrada, salida) => {
                             "datosDeUsuario" 
                         WHERE 
                             "usuarioIDX" = $1`
-                        const resolverObtenerDatosUsuario = await conexion.query(obtenerDatosUsuario, [IDX])
-                        const email = resolverObtenerDatosUsuario.rows[0].email
-                        const estadoCorreo = resolverObtenerDatosUsuario.rows[0].estadoCorreo
+                        const resolverObteDatosUsuario = await conexion.query(obtenerDatosUsuario, [IDX])
+                        const email = resolverObteDatosUsuario.rows[0].email
+                        const estadoCorreo = resolverObteDatosUsuario.rows[0].estadoCorreo
                         if (!email) {
                             const error = "Se necesita que definas tu dirección de correo elecroníco en Mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo eletroníco que usastes para confirmar la reserva. Es decir debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de correo electronico y confirmarlo con el correo de confirmacion que te enviaremos. Una vez hecho eso podras ver tus reservas"
                             throw new Error(error)
@@ -3621,7 +3627,7 @@ const puerto = async (entrada, salida) => {
                         const resolverMailVerificado = await conexion.query(comprobarMailVerificado, [IDX])
                         const estadoCuentaVerificada = resolverMailVerificado.rows[0].cuentaVerificada
                         if (estadoCuentaVerificada !== "si") {
-                            const error = "Tienes que verificar tu dirección de correo electronico para poder acceder a la reservas asociadas a tu direcíon de correo electroníco. Para ello pulsa en verificar tu correo electronico."
+                            const error = "Tienes que verificar tu dirección de correo electronico para poder acceder a las reservas asociadas a tu direcíon de correo electroníco. Para ello pulsa en verificar tu correo electronico."
                             throw new Error(error)
                         }
                         const validarExistenciaReserva = `
@@ -3632,54 +3638,64 @@ const puerto = async (entrada, salida) => {
                             "estadoReserva",
                             "estadoPago",
                             origen,
-                            creacion,
-                            titular
+                            creacion
                         FROM 
                             reservas
                         WHERE
                             reserva = $1`
                         const resuelveValidarExistenciaReserva = await conexion.query(validarExistenciaReserva, [reservaUID])
                         if (resuelveValidarExistenciaReserva.rowCount === 0) {
-                            const error = "No existe la reserva que quieres cancelar"
+                            const error = "No existe la reserva"
                             throw new Error(error)
                         }
 
-                        if (resuelveValidarExistenciaReserva.rowCount === 1) {
-                            const titularPool = resuelveValidarExistenciaReserva.rows[0].titularPool
-                            const titular = resuelveValidarExistenciaReserva.rows[0].titular
-
-                            if (titular) {
-                                const consultaTitular = `
-                                SELECT
-                                    email
-                                FROM 
-                                    clientes
-                                WHERE
-                                    uid = $1`
-                                const resuelveValidarExistenciaReserva = await conexion.query(consultaTitular, [titular])
-                                const mailTitular = resuelveValidarExistenciaReserva.rows[0].email
-                                if (mailTitular !== email) {
-                                    const error = "No tienes acceso a esta reserva"
-                                    throw new Error(error)
-                                }
-                            }
-
-                            if (titularPool) {
-                                const consultaTitular = `
+                        // La reserva existe asi que se busca si tiene un titular con esa direcion de correo electronico
+                        let controlAcceso = "no"
+                        const consultaTitularPool = `
                                 SELECT
                                     "emailTitular"
                                 FROM 
                                     "poolTitularesReserva"
                                 WHERE
-                                    uid = $1`
-                                const resuelveValidarExistenciaReserva = await conexion.query(consultaTitular, [titularPool])
-                                const mailTitular = resuelveValidarExistenciaReserva.rows[0].emailTitular
-                                if (mailTitular !== email) {
-                                    const error = "No tienes acceso a esta reserva"
-                                    throw new Error(error)
-                                }
-                            }
+                                    reserva = $1
+                                    AND
+                                    "emailTitular" = $2
+                                    `
+                        const controlAccesoTitularPool = await conexion.query(consultaTitularPool, [reservaUID, email])
+                        if (controlAccesoTitularPool.rowCount === 1) {
+                            controlAcceso = "si"
+                        }
 
+                        const consultaEnlace = `
+                        SELECT
+                            "titularUID"
+                        FROM 
+                            "reservaTitulares"
+                        WHERE
+                            "reservaUID" = $1`
+                        const resuelveEnlaceTitular = await conexion.query(consultaEnlace, [reservaUID])
+
+                        if (resuelveEnlaceTitular.rowCount === 1) {
+                            const titularUID = resuelveEnlaceTitular.rows[0].titularUID
+                            const consultaTitular = `
+                            SELECT
+                                email
+                            FROM 
+                                clientes
+                            WHERE
+                                uid = $1`
+                            const resuelveTitular = await conexion.query(consultaTitular, [titularUID])
+
+                            const mailTitular = resuelveTitular.rows[0].email
+                            if (mailTitular === email) {
+                                controlAcceso = "si"
+                            }
+                        }
+                        if (controlAcceso === "no") {
+                            const error = "No tienes acceso a esta reserva"
+                            throw new Error(error)
+                        }
+                        if (controlAcceso === "si") {
                             const metadatos = {
                                 reservaUID: reservaUID,
                                 // solo: solo
@@ -3687,14 +3703,12 @@ const puerto = async (entrada, salida) => {
                             const resuelveDetallesReserva = await detallesReserva(metadatos)
                             delete resuelveDetallesReserva.reserva.origen
                             salida.json(resuelveDetallesReserva)
-
                         }
 
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 },
@@ -8096,7 +8110,7 @@ const puerto = async (entrada, salida) => {
                                     "reservaTitulares"
                                 WHERE 
                                     "reservaUID" = $1;`
-                   
+
                             const resuelveActualizarTitular = await conexion.query(consultaActualizarTitular, [reservaUID])
                             if (resuelveActualizarTitular.rowCount === 0) {
                                 const error = "No se ha podido actualizar el titular de la reserva"
@@ -8157,7 +8171,7 @@ const puerto = async (entrada, salida) => {
                                 telefono: telefono,
                                 correoElectronico: correoElectronico,
                             }
-    
+
                             const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoClientePorValidar)
                             const datosNuevoCliente = {
                                 nombre: datosValidados.nombre,
@@ -11052,12 +11066,12 @@ const puerto = async (entrada, salida) => {
                         // si hay nombre columna validarlo
                         const listarImpuestos = `
                         SELECT
-                        idv,
-                        impuesto,
+                        "impuestoUID",
+                        nombre,
                         "tipoImpositivo",
                         "tipoValor",
                         "aplicacionSobre",
-                        "moneda",
+                        estado,
                         COUNT(*) OVER() as total_filas
                         FROM 
                         impuestos
@@ -11086,9 +11100,6 @@ const puerto = async (entrada, salida) => {
                         ok.pagina = pagina
                         ok.impuestos = impuestosEncontradoas
 
-
-
-
                         salida.json(ok)
                     } catch (errorCapturado) {
                         const error = {
@@ -11112,26 +11123,16 @@ const puerto = async (entrada, salida) => {
 
                         const validarImpuesto = `
                         SELECT
-                        i.impuesto AS "nombreImpuesto",
-                        i.idv AS "impuestoUID",
-                        i.impuesto,
-                        i."tipoImpositivo",
-                        i."tipoValor" AS "tipoValorIDV",
-                        itv."tipoValorUI" AS "tipoValorUI",
-                        i."aplicacionSobre" AS "aplicacionSobreIDV",
-                        ias."aplicacionUI" AS "aplicacionSobreUI",
-                        i."moneda" AS "monedaIDV",
-                        mon."monedaUI" AS "monedaUI"
+                        nombre,
+                        "impuestoUID",
+                        "tipoImpositivo",
+                        "tipoValor",
+                        "aplicacionSobre",
+                        "estado"
                         FROM
-                        impuestos i
-                        JOIN
-                        "impuestoTipoValor" itv ON i."tipoValor" = itv."tipoValorIDV"
-                        JOIN
-                        "impuestosAplicacion" ias ON i."aplicacionSobre" = ias."aplicacionIDV"
-                        JOIN
-                        "monedas" mon ON i."moneda" = mon."monedaIDV"
+                        impuestos
                         WHERE
-                        i.idv = $1;
+                        "impuestoUID" = $1;
                         `
                         const resuelveValidarImpuesto = await conexion.query(validarImpuesto, [impuestoUID])
                         if (resuelveValidarImpuesto.rowCount === 0) {
@@ -11139,12 +11140,10 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         const perfilImpuesto = resuelveValidarImpuesto.rows[0]
-
                         const ok = {
-                            "ok": perfilImpuesto
+                            ok: perfilImpuesto
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
@@ -11164,11 +11163,11 @@ const puerto = async (entrada, salida) => {
 
                         try {
                             const impuestoUID = entrada.body.impuestoUID
-                            let nombreImpuesto = entrada.body.nombreImpuesto
-                            let tipoImpositivo = entrada.body.tipoImpositivo
-                            let tipoValor = entrada.body.tipoValor
-                            let aplicacionSobre = entrada.body.aplicacionSobre
-                            let moneda = entrada.body.moneda
+                            const nombreImpuesto = entrada.body.nombreImpuesto
+                            const tipoImpositivo = entrada.body.tipoImpositivo
+                            const tipoValor = entrada.body.tipoValor
+                            const aplicacionSobre = entrada.body.aplicacionSobre
+                            const estado = entrada.body.estado
 
                             if (typeof impuestoUID !== "number" || !Number.isInteger(impuestoUID) || impuestoUID <= 0) {
                                 const error = "El campo 'impuestoUID' debe ser un tipo numero, entero y positivo"
@@ -11180,7 +11179,8 @@ const puerto = async (entrada, salida) => {
                                 const error = "El campo nombreImpuesto solo puede ser un una cadena de minúsculas"
                                 throw new Error(error)
                             }
-                            const filtroTipoImpositivo = /^\d+(\.\d{2})?$/;
+                            const filtroTipoImpositivo = /^\d+\.\d{2}$/;
+
                             if (tipoImpositivo?.length > 0 && (typeof tipoImpositivo !== "string" || !filtroTipoImpositivo.test(tipoImpositivo))) {
                                 const error = "El campo tipoImpositivo solo puede ser una cadena con un numero y dos decimlaes"
                                 throw new Error(error)
@@ -11196,13 +11196,12 @@ const puerto = async (entrada, salida) => {
                                 const error = "El campo aplicacionSobre solo puede ser un una cadena de minúsculas y numeros sin espacios"
                                 throw new Error(error)
                             }
-                            if (moneda?.length > 0 && !filtroCadenaSinEspacio.test(moneda)) {
-                                const error = "El campo moneda solo puede ser un una cadena de minúsculas y numeros sin espacios"
+                            if (estado?.length > 0 && estado !== "desactivado" && estado !== "activado") {
+                                const error = "El estado de un impuesto solo puede ser activado o desactivado"
                                 throw new Error(error)
                             }
 
                             if (tipoValor) {
-
                                 const validarTipoValor = `
                             SELECT 
                             "tipoValorIDV"
@@ -11230,80 +11229,51 @@ const puerto = async (entrada, salida) => {
                                 }
                             }
 
-                            if (moneda) {
-
-                                const validarMoneda = `
-                            SELECT 
-                            "monedaIDV"
-                            FROM monedas
-                            WHERE "monedaIDV" = $1
-                            `
-                                const resuelveValidarMoneda = await conexion.query(validarMoneda, [moneda])
-                                if (resuelveValidarMoneda.rowCount === 0) {
-                                    const error = "No existe la moneda, verifica el campo moneda"
-                                    throw new Error(error)
-                                }
-                            }
-
-
                             const validarImpuestoYActualizar = `
-                        UPDATE impuestos
-                        SET 
-                        impuesto = COALESCE($1, impuesto),
-                        "tipoImpositivo" = COALESCE($2, "tipoImpositivo"),
-                        "tipoValor" = COALESCE($3, "tipoValor"),
-                        "aplicacionSobre" = COALESCE($4, "aplicacionSobre"),
-                        moneda = COALESCE($5, moneda)
-                        WHERE idv = $6
-                        RETURNING
-                        impuesto,
-                        "tipoImpositivo",
-                        "tipoValor",
-                        "aplicacionSobre",
-                        moneda
-                        `
-                            const resuelveValidarImpuesto = await conexion.query(validarImpuestoYActualizar, [nombreImpuesto, tipoImpositivo, tipoValor, aplicacionSobre, moneda, impuestoUID])
+                            UPDATE impuestos
+                            SET 
+                            nombre = COALESCE($1, nombre),
+                            "tipoImpositivo" = COALESCE($2, "tipoImpositivo"),
+                            "tipoValor" = COALESCE($3, "tipoValor"),
+                            "aplicacionSobre" = COALESCE($4, "aplicacionSobre"),
+                            estado = COALESCE($5, estado)
+                            WHERE "impuestoUID" = $6
+                            RETURNING
+                            "impuestoUID",
+                            "tipoImpositivo",
+                            "tipoValor",
+                            "aplicacionSobre",
+                            estado
+                            `
+                            const resuelveValidarImpuesto = await conexion.query(validarImpuestoYActualizar, [nombreImpuesto, tipoImpositivo, tipoValor, aplicacionSobre, estado, impuestoUID])
                             if (resuelveValidarImpuesto.rowCount === 0) {
                                 const error = "No existe el perfil del impuesto"
                                 throw new Error(error)
                             }
 
                             const validarImpuesto = `
-                        SELECT
-                        i.impuesto AS "nombreImpuesto",
-                        i.idv AS "impuestoUID",
-                        i."tipoImpositivo",
-                        i."tipoValor" AS "tipoValorIDV",
-                        itv."tipoValorUI" AS "tipoValorUI",
-                        i."aplicacionSobre" AS "aplicacionSobreIDV",
-                        ias."aplicacionUI" AS "aplicacionSobreUI",
-                        i."moneda" AS "monedaIDV",
-                        mon."monedaUI" AS "monedaUI"
-                        FROM
-                        impuestos i
-                        JOIN
-                        "impuestoTipoValor" itv ON i."tipoValor" = itv."tipoValorIDV"
-                        JOIN
-                        "impuestosAplicacion" ias ON i."aplicacionSobre" = ias."aplicacionIDV"
-                        JOIN
-                        "monedas" mon ON i."moneda" = mon."monedaIDV"
-                        WHERE
-                        i.idv = $1;
-                        `
+                            SELECT
+                            nombre,
+                            "impuestoUID",
+                            "tipoImpositivo",
+                            "tipoValor",
+                            estado,
+                            "aplicacionSobre"
+                            FROM
+                            impuestos
+                            WHERE
+                            "impuestoUID" = $1;
+                            `
                             const resuelveObtenerDetallesImpuesto = await conexion.query(validarImpuesto, [impuestoUID])
                             if (resuelveObtenerDetallesImpuesto.rowCount === 0) {
                                 const error = "No existe el perfil del impuesto"
                                 throw new Error(error)
                             }
 
-
                             const perfilImpuesto = resuelveObtenerDetallesImpuesto.rows[0]
-
-
-
                             const ok = {
-                                "ok": "El impuesto se ha actualizado correctamente",
-                                "detallesImpuesto": perfilImpuesto
+                                ok: "El impuesto se ha actualizado correctamente",
+                                detallesImpuesto: perfilImpuesto
                             }
                             salida.json(ok)
 
@@ -11311,7 +11281,6 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
                             mutex.release();
@@ -11321,25 +11290,6 @@ const puerto = async (entrada, salida) => {
                 },
                 opcionesEditarImpuesto: async () => {
                     try {
-                        const impuestoUID = entrada.body.impuestoUID
-
-                        if (typeof impuestoUID !== "number" || !Number.isInteger(impuestoUID) || impuestoUID <= 0) {
-                            const error = "El campo 'impuestoUID' debe ser un tipo numero, entero y positivo"
-                            throw new Error(error)
-                        }
-
-                        const validarImpuesto = `
-                        SELECT
-                        "tipoValor", "aplicacionSobre", moneda
-                        FROM 
-                        impuestos
-                        WHERE idv = $1
-                        `
-                        const resuelveValidarImpuesto = await conexion.query(validarImpuesto, [impuestoUID])
-                        if (resuelveValidarImpuesto.rowCount === 0) {
-                            const error = "No existe el perfil del impuesto"
-                            throw new Error(error)
-                        }
 
                         const opcionesTipoValor = []
                         const opcionesAplicacionSobre = []
@@ -11364,20 +11314,20 @@ const puerto = async (entrada, salida) => {
                             opcionesAplicacionSobre.push(...resuelveValidarAplicacionSobre.rows);
                         }
 
-                        const validarMoneda = `
-                        SELECT 
-                        "monedaIDV", "monedaUI", simbolo
-                        FROM monedas
-                        `
-                        const resuelveValidarMoneda = await conexion.query(validarMoneda)
-                        if (resuelveValidarMoneda.rowCount > 0) {
-                            opcionesMonedas.push(...resuelveValidarMoneda.rows);
-                        }
+                        // const validarMoneda = `
+                        // SELECT 
+                        // "monedaIDV", "monedaUI", simbolo
+                        // FROM monedas
+                        // `
+                        // const resuelveValidarMoneda = await conexion.query(validarMoneda)
+                        // if (resuelveValidarMoneda.rowCount > 0) {
+                        //     opcionesMonedas.push(...resuelveValidarMoneda.rows);
+                        // }
 
                         const detallesImpuesto = {
                             tipoValor: opcionesTipoValor,
                             aplicacionSobre: opcionesAplicacionSobre,
-                            moneda: opcionesMonedas
+                            //moneda: opcionesMonedas
                         }
 
                         const ok = {
@@ -11404,7 +11354,6 @@ const puerto = async (entrada, salida) => {
                     },
                     X: async () => {
                         await mutex.acquire();
-
                         try {
                             const impuestoUID = entrada.body.impuestoUID
                             if (typeof impuestoUID !== "number" || !Number.isInteger(impuestoUID) || impuestoUID <= 0) {
@@ -11413,16 +11362,16 @@ const puerto = async (entrada, salida) => {
                             }
 
                             const validarYEliminarImpuesto = `
-                        DELETE FROM impuestos
-                        WHERE idv = $1;
-                        `
+                            DELETE FROM impuestos
+                            WHERE "impuestoUID" = $1;
+                            `
                             const resuelveValidarYEliminarImpuesto = await conexion.query(validarYEliminarImpuesto, [impuestoUID])
                             if (resuelveValidarYEliminarImpuesto.rowCount === 0) {
                                 const error = "No existe el perfil del impuesto que deseas eliminar"
                                 throw new Error(error)
                             }
                             const ok = {
-                                "ok": "Perfil del impuesto eliminado"
+                                ok: "Perfil del impuesto eliminado"
                             }
                             salida.json(ok)
 
@@ -11430,13 +11379,10 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
                             mutex.release();
-
                         }
-
                     }
                 },
                 crearNuevoImpuesto: {
@@ -11460,7 +11406,7 @@ const puerto = async (entrada, salida) => {
                                 const error = "El campo nombreImpuesto solo puede ser un una cadena de minúsculas"
                                 throw new Error(error)
                             }
-                            const filtroTipoImpositivo = /^\d+(\.\d{2})?$/;
+                            const filtroTipoImpositivo = /^\d+\.\d{2}$/;
                             if (!tipoImpositivo || (typeof tipoImpositivo !== "string" || !filtroTipoImpositivo.test(tipoImpositivo))) {
                                 const error = "El campo tipoImpositivo solo puede ser una cadena con un numero y dos decimlaes"
                                 throw new Error(error)
@@ -11475,10 +11421,10 @@ const puerto = async (entrada, salida) => {
                                 const error = "El campo aplicacionSobre solo puede ser un una cadena de minúsculas y numeros sin espacios"
                                 throw new Error(error)
                             }
-                            if (!moneda || !filtroCadenaSinEspacio.test(moneda)) {
-                                const error = "El campo moneda solo puede ser un una cadena de minúsculas y numeros sin espacios"
-                                throw new Error(error)
-                            }
+                            // if (!moneda || !filtroCadenaSinEspacio.test(moneda)) {
+                            //     const error = "El campo moneda solo puede ser un una cadena de minúsculas y numeros sin espacios"
+                            //     throw new Error(error)
+                            // }
 
                             if (tipoValor) {
 
@@ -11509,54 +11455,56 @@ const puerto = async (entrada, salida) => {
                                 }
                             }
 
-                            if (moneda) {
-
-                                const validarMoneda = `
-                            SELECT 
-                            "monedaIDV"
-                            FROM monedas
-                            WHERE "monedaIDV" = $1
-                            `
-                                const resuelveValidarMoneda = await conexion.query(validarMoneda, [moneda])
-                                if (resuelveValidarMoneda.rowCount === 0) {
-                                    const error = "No existe la moneda, verifica el campo moneda"
-                                    throw new Error(error)
-                                }
-                            }
+                            // if (moneda) {
+                            //     const validarMoneda = `
+                            // SELECT 
+                            // "monedaIDV"
+                            // FROM monedas
+                            // WHERE "monedaIDV" = $1
+                            // `
+                            //     const resuelveValidarMoneda = await conexion.query(validarMoneda, [moneda])
+                            //     if (resuelveValidarMoneda.rowCount === 0) {
+                            //         const error = "No existe la moneda, verifica el campo moneda"
+                            //         throw new Error(error)
+                            //     }
+                            // }
 
 
                             const validarImpuestoYActualizar = `
-                        INSERT INTO impuestos
-                        (
-                        impuesto,
-                        "tipoImpositivo",
-                        "tipoValor",
-                        "aplicacionSobre",
-                        moneda
-                        )
-                        VALUES ($1, $2, $3, $4, $5)
-                        RETURNING idv
-                        `
-                            const resuelveValidarImpuesto = await conexion.query(validarImpuestoYActualizar, [nombreImpuesto, tipoImpositivo, tipoValor, aplicacionSobre, moneda])
+                            INSERT INTO impuestos
+                            (
+                            nombre,
+                            "tipoImpositivo",
+                            "tipoValor",
+                            "aplicacionSobre",
+                            estado
+                            )
+                            VALUES ($1, $2, $3, $4, $5)
+                            RETURNING "impuestoUID"
+                            `
+                            const nuevoImpuesto = [
+                                nombreImpuesto,
+                                tipoImpositivo,
+                                tipoValor,
+                                aplicacionSobre,
+                                "desactivado"
+                            ]
+                            const resuelveValidarImpuesto = await conexion.query(validarImpuestoYActualizar, nuevoImpuesto)
                             const nuevoUIDImpuesto = resuelveValidarImpuesto.rows[0].idv
 
-
                             const ok = {
-                                "ok": "Sea creado el nuevo impuesto",
-                                "nuevoImpuestoUID": nuevoUIDImpuesto
+                                ok: "Se ha creado el nuevo impuesto",
+                                nuevoImpuestoUID: nuevoUIDImpuesto
                             }
                             salida.json(ok)
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
                             mutex.release();
                         }
-
-
                     }
                 },
                 opcionesCrearImpuesto: {
