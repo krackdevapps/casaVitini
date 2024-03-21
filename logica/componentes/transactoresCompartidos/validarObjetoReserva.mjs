@@ -5,6 +5,10 @@ import { codigoZonaHoraria } from './codigoZonaHoraria.mjs';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs'
 import { obtenerParametroConfiguracion } from './obtenerParametroConfiguracion.mjs';
 import { limitesReservaPublica } from './limitesReservaPublica.mjs';
+import { resolverApartamentoUI } from './resolverApartamentoUI.mjs'
+import { resolverCamaUI } from './resolverCamaUI.mjs';
+import { resolverHabitacionUI } from './resolverHabitacionUI.mjs';
+
 
 const validarObjetoReserva = async (reserva) => {
 
@@ -30,7 +34,7 @@ const validarObjetoReserva = async (reserva) => {
             .toUpperCase()
             .replaceAll("  ", " ");
         if (!nombreTitular || typeof nombreTitular !== "string" || nombreTitular.length > 50) {
-            const error = "El campo nombreTitular solo aceptar minúsculas, mayúsculas, numeros y espacios. Tambien debe de tener menos de 50 caracteres."
+            const error = "Por favor escribe el nombre del titular de la reserva"
             throw new Error(error)
         }
         reserva.datosTitular.nombreTitular = nombreTitular
@@ -40,7 +44,7 @@ const validarObjetoReserva = async (reserva) => {
             .trim()
             .toUpperCase()
         if (!pasaporteTitular || typeof pasaporteTitular !== "string" || pasaporteTitular.length > 50) {
-            const error = "El campo pasaporteTitular solo aceptar minúsculas, mayúsculas, numeros y espacios. Tambien debe de tener menos de 50 caracteres."
+            const error = "Por favor escribe el numero de pasaporte del titular de la reserva si este es de fuera de nicaragua o el documento de identidad nacional."
             throw new Error(error)
         }
         reserva.datosTitular.pasaporteTitular = pasaporteTitular
@@ -51,7 +55,7 @@ const validarObjetoReserva = async (reserva) => {
             .replace(/[^0-9]/g, "")
             .trim()
         if (!telefonoTitular || typeof telefonoTitular !== "string" || telefonoTitular.length > 50) {
-            const error = "El campo telefonTitular solo acepta numeros y un + para el codigo internacional. Tambien debe de tener menos de 50 caracteres."
+            const error = "Por favor escribe el numero de telefono del titular de la reserva para que podamos ponernos en contacto si fuera necesario."
             throw new Error(error)
         }
         reserva.datosTitular.telefonoTitular = telefonoTitular
@@ -61,7 +65,7 @@ const validarObjetoReserva = async (reserva) => {
             .trim()
             .toLowerCase()
         if (!correoTitular || typeof correoTitular !== "string" || correoTitular.length > 50 || !filtroCorreoElectronico.test(correoTitular)) {
-            const error = "el campo de correo electronico no cumple con el formato esperado"
+            const error = "Por favor escribe un correo electroníco valido. Sea tan amable de cerciorarse que este tenga el formado adecuado. Un correo electroníco tiene un formato como este usurario_de_ejemplo@servidor_de_ejemplo.zona_de_ejemplo"
             throw new Error(error)
         }
         const validarDominio = (correo) => {
@@ -146,8 +150,9 @@ const validarObjetoReserva = async (reserva) => {
                 throw new Error(error)
             }
 
-            if (!apartamentosDisponibles.includes(apartamentoIDV)) {
-                const error = `Atencion, el apartamento con identificador visual '${apartamentoIDV}' no esta disponible para reservar`
+            if (!apartamentosDisponibles.includes(apartamentoIDV)) {               
+                const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+                const error = `Atencion, sentimos informar que el '${apartamentoUI}' no esta disponible para reservar`
                 throw new Error(error)
             }
 
@@ -188,7 +193,9 @@ const validarObjetoReserva = async (reserva) => {
                     throw new Error(error)
                 }
                 if (!habitacionesSoloIDV.includes(habitacionIDVPorValidar)) {
-                    const error = `El apartmento ${apartamentoIDV} contiene una habitacion que no existe, concretamente la habitacion ${habitacionIDVPorValidar}`
+                    const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+
+                    const error = `El ${apartamentoUI} contiene una habitacion que no existe, concretamente la habitacion ${habitacionIDVPorValidar}`
                     throw new Error(error)
                 }
             }
@@ -197,7 +204,11 @@ const validarObjetoReserva = async (reserva) => {
                 const habitacionUID = habitacionesEstructura[habitacionIDV]
                 const camaIDV = habitacion[1]?.camaSeleccionada?.camaIDV
                 if (!camaIDV || !filtroCadenaMinusculasSinEspacios.test(camaIDV)) {
-                    const error = `el campo camaIDV solo puede ser letras minúsculas, numeros y sin espacios. Revisa la cama de la habitacion ${habitacionIDV} del apartamento ${apartamentoIDV}`
+                    const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+                    console.log("habitacionIDV", habitacionIDV)
+                    const habitacionUI = await resolverHabitacionUI(habitacionIDV)                  
+
+                    const error = `Por favor selecciona el tipo de cama de la ${habitacionUI} del apartamento ${apartamentoUI}`
                     throw new Error(error)
                 }
                 const consultaCamasDeHabitacion = `
