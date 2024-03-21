@@ -34,7 +34,7 @@ const validarObjetoReserva = async (reserva) => {
             .toUpperCase()
             .replaceAll("  ", " ");
         if (!nombreTitular || typeof nombreTitular !== "string" || nombreTitular.length > 50) {
-            const error = "Por favor escribe el nombre del titular de la reserva"
+            const error = "Por favor escribe el nombre del titular de la reserva."
             throw new Error(error)
         }
         reserva.datosTitular.nombreTitular = nombreTitular
