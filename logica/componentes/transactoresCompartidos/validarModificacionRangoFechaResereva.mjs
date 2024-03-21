@@ -79,7 +79,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
         const mesReservaSalida = fechaSalidaReserva_ISO.split("-")[1]
         const anoReservaSalida = fechaSalidaReserva_ISO.split("-")[0]
 
-
         const consultaAlojamientoReservaActual = `
         SELECT 
         apartamento
@@ -135,7 +134,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
         };
 
         if (sentidoRango === "pasado") {
-
             const fechaSeleccionadaParaPasado_Objeto = DateTime.fromObject({
                 year: anoCalenddrio,
                 month: mesCalendario, day: 1
@@ -198,7 +196,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 contenedorBloqueosEncontrados.push(estructura)
             }
 
-
             const contenedorReservaEncontradas = []
             // extraer las reservas dentro del rango
             const consultaReservas = `
@@ -223,7 +220,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     r.reserva, r.entrada, r.salida;
                                 `
             const resuelveConsultaReservas = await conexion.query(consultaReservas, [fechaEntradaReserva_ISO, fechaSeleccionadaParaPasado_ISO, reserva, apartamentosReservaActual])
-
             for (const detallesReserva of resuelveConsultaReservas.rows) {
                 const reserva = detallesReserva.reserva
                 const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
@@ -291,7 +287,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
                 const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
                 return (fechaInicioEvento_ISO <= fechaFinRango_entradaReserva_objeto) && (fechaFinEvento_ISO >= fechaInicioRango_objeto)
-
             })
 
             const contenedorGlobal = [
