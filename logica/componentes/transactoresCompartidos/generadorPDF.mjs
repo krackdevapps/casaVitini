@@ -361,9 +361,16 @@ const generadorPDF3 = async (reserva) => {
         // Obtener la diferencia en días
         console.log("fechaEntrada_objeto", fechaEntrada_objeto.toISO(), "fechaSalida_objeto", fechaSalida_objeto.toISO())
         const numeroDeDias = (fechaSalida_objeto.diff(fechaEntrada_objeto, "days").days) + 1;
-        const numeroDeNoches = new Decimal(numeroDeDias).minus(1)
+        const numeroDeNoches = new Decimal(numeroDeDias).minus(1).toString()
 
+        let nochesUI
+        console.log("nuermo", typeof numeroDeNoches, numeroDeNoches)
+        if (numeroDeNoches === "1") {
+            nochesUI = numeroDeNoches + ' Noche'
+        } else {
+            nochesUI = numeroDeNoches + ' Noches'
 
+        }
 
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
@@ -518,7 +525,7 @@ const generadorPDF3 = async (reserva) => {
 
                                     },
                                     {
-                                        text: numeroDeNoches + ' Noches',
+                                        text: nochesUI,
                                         //  style: 'celdaTablaGlobalReserva',
                                         alignment: 'center'
 
@@ -837,17 +844,25 @@ const generadorPDF3 = async (reserva) => {
 
 
         const mensaje1 = {
-            text: 'Este documento tan solo es un resumen de su reserva con la información global de la reserva y los totales más relevantes. Si desea un desglose en detalle puede acceder a casavitini.com con su cuenta de usuario. Puede registrar su cuenta gratuitamente en casavitini.com/micasa/crear_nueva_cuenta. Recuerde usar la misma dirección de correo electrónico que uso para confirmar su reserva. ',
+            text: 'ste documento es solo un resumen de su reserva con la información global de la reserva y los totales más relevantes. Si desea un desglose detallado, puede acceder a casavitini.com con su cuenta de usuario. Puede registrar su cuenta gratuitamente en https://casavitini.com/micasa/crear_nueva_cuenta. Recuerde usar la misma dirección de correo electrónico que utilizó para confirmar su reserva.',
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje1)
 
         const mensaje2 = {
-            text: 'Este documetno es meramente informativo. Para realizar el checkin es necesario algun tipo de documento identificativo como un pasaporte o un documento nacional de identidad.',
+            text: 'Si necesita ponerse en contacto con nosotros, puede enviarnos un email a casavitini@casavitini.com, tambien puede encontrar mas métodos de contacto en https://casavitini.com/contacto.',
             style: 'textoSimple'
         }
 
         docDefinition.content.push(mensaje2)
+
+
+        const mensaje3 = {
+            text: 'Este documento es meramente informativo. Para realizar el check-in, es necesario presentar algún tipo de documento identificativo, como un pasaporte o un documento nacional de identidad.',
+            style: 'textoSimple'
+        }
+
+        docDefinition.content.push(mensaje3)
 
 
 
