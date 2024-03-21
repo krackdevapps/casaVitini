@@ -217,7 +217,7 @@
     position: fixed;
     bottom: 15px;
     display: flex;
-
+    z-index: 5;
 
 }
 
@@ -14065,7 +14065,7 @@ grid-template-columns: 0.5fr 1.5fr;
     min-height: 100%;
     width: auto;
     height: auto;
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

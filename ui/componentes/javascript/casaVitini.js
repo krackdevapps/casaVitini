@@ -3,12 +3,23 @@ const casaVitini = {
         vistas: {
             portada: {
                 arranque: () => {
-                   // document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
+                    // document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
+                    // document.body.style.height = "auto"
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
+                    const body = document.body
+                    body.style.height = "100%"
+                  
+                  
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "portada")
-                    //main.style.flex = "1"
-                    main.style.height = "100%"
+                    main.style.width = "100%";
+                    main.style.maxWidth = "100%";
+                    main.style.height = "100%";
+                    main.style.overflow = "hidden";
+                    main.style.position = "absolute";
+
+                    const titulo = main.querySelector("[componente=titulo]")
+                    titulo.style.marginTop = "100px"
 
                 },
             },
