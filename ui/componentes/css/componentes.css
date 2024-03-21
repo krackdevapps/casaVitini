@@ -18,6 +18,7 @@
     font-size: 54px;
     font-weight: bold;
     color: #0000009e;
+    z-index: 5;
 }
 
 .plaza_marcoError_seccion {
@@ -277,6 +278,7 @@
     transition: all 250ms;
     text-decoration: none;
     color: black;
+    z-index: 5;
 }
 
 .conenedorReserva:hover {
@@ -8415,6 +8417,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-items: stretch;
     align-content: center;
     align-items: center;
+    transition: all 250ms linear;
     justify-content: center;
 }
 
@@ -13396,6 +13399,14 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
+[zonaCSS=conozcanos] .conozcanos .fondoInicio {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/componentes/imagenes/f5.jpeg");
+
+}
+
 [zonaCSS=conozcanos] .conozcanos .fondo1 {
     background-position: center center;
     background-size: cover;
@@ -13938,7 +13949,13 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
+[zonaCSS=conozcanos] .contenedorParalax .fondoInicio {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/componentes/imagenes/f5.jpeg");
 
+}
 
 [zonaCSS=conozcanos] .contenedorParalax .fondo1 {
     background-position: center center;
@@ -14043,12 +14060,12 @@ grid-template-columns: 0.5fr 1.5fr;
 
 /* fin paralaje diseño 2*/
 
-[zonaCSS=conozcanos] .videoPresentacion{ 
+[zonaCSS=portada] .videoPresentacion{ 
     min-width: 100%;
     min-height: 100%;
     width: auto;
     height: auto;
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

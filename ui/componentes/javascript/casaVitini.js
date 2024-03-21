@@ -3,7 +3,7 @@ const casaVitini = {
         vistas: {
             portada: {
                 arranque: () => {
-                    document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
+                   // document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "portada")
@@ -6380,7 +6380,7 @@ const casaVitini = {
                 arranque: () => {
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "conozcanos")
-                    document.querySelector("#uiLogo").style.filter = "invert(1)"
+                    //document.querySelector("#uiLogo").style.filter = "invert(1)"
                     const header = document.querySelector("header")
 
                     const controladorAnchoRestante = () => {
