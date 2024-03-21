@@ -29787,7 +29787,7 @@ const administracion = {
             const calendario = {}
             const ultimoDirectorio = granuladoURL.directorios[granuladoURL.directorios.length - 1]
             // document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
-            document.body.classList.add("fondoConDesenfoque")
+            // document.body.classList.add("fondoConDesenfoque")
             // Llama a la función al cargar la página y en eventos que puedan cambiar la altura del div
             // window.removeEventListener("resize", casaVitini.administracion.calendario.controlVertical);
             // window.addEventListener('resize', casaVitini.administracion.calendario.controlVertical);

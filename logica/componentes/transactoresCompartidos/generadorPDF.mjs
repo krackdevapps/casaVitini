@@ -359,8 +359,9 @@ const generadorPDF3 = async (reserva) => {
         const fechaSalida_objeto = DateTime.fromISO(fechaSalida_ISO);
 
         // Obtener la diferencia en días
-        const numeroDeDiasConNoche = fechaSalida_objeto.diff(fechaEntrada_objeto, "days").days;
-        const numeroDeNoches = new Decimal(numeroDeDiasConNoche).minus(1)
+        console.log("fechaEntrada_objeto", fechaEntrada_objeto.toISO(), "fechaSalida_objeto", fechaSalida_objeto.toISO())
+        const numeroDeDias = (fechaSalida_objeto.diff(fechaEntrada_objeto, "days").days) + 1;
+        const numeroDeNoches = new Decimal(numeroDeDias).minus(1)
 
 
 
@@ -511,7 +512,7 @@ const generadorPDF3 = async (reserva) => {
                                 [
 
                                     {
-                                        text: numeroDeDiasConNoche + ' Días',
+                                        text: numeroDeDias + ' Días',
                                         colSpan: 2,
                                         alignment: 'center'
 

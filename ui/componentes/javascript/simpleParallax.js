@@ -87,7 +87,6 @@
                 }
                 ));
             var i = function () {
-                console.log("insertion", window)
                 return Element.prototype.closest && "IntersectionObserver" in window
             };
             function r(t, e) {
@@ -293,7 +292,6 @@
                                 root: null,
                                 threshold: this.buildThresholdList()
                             };
-                            console.log("observador", this.element)
                             this.observer = new IntersectionObserver(this.intersectionObserverCallback.bind(this), t),
                                 this.observer.observe(this.element)
                             this.observer.disconnect();
@@ -468,7 +466,6 @@
                                 this.lastPosition !== s.positions.top ? (s.setViewportBottom(),
                                     T.forEach((function (e) {
                                         t.proceedElement(e)
-                                        console.log("hola2", e)
                                     }
                                     )),
                                     g = window.requestAnimationFrame(this.proceedRequestAnimationFrame),

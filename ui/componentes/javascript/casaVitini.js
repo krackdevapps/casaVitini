@@ -7,9 +7,8 @@ const casaVitini = {
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "portada")
-                    //main.style.flex = "0"
+                    //main.style.flex = "1"
                     main.style.height = "100%"
-
 
                 },
             },
@@ -543,7 +542,7 @@ const casaVitini = {
 
 
                             if (!fechaEntradaVolatil_Humana) {
-                                const error = "Selecciona una fecha de entrada pulsando en el cuadrado de fecha de entrada y seleccionando la fecha en el calendario flotante"
+                                const error = "Por favor, selecciona la fecha de entrada haciendo clic en el recuadro correspondiente y elige la fecha deseada en el calendario desplegable."
                                 return casaVitini.ui.vistas.advertenciaInmersiva(error)
                             }
                             if (!fechaSalidaVolatil_Humana) {
@@ -894,7 +893,7 @@ const casaVitini = {
                 resumenReserva: async () => {
                     document.body.style.background = "rgb(214 192 157)"
                     const main = document.querySelector("main")
-                    main.setAttribute("zonaCSS", "alojamiento")
+                    main.setAttribute("zonaCSS", "alojamiento/resumen")
 
                     const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
 
@@ -1173,10 +1172,12 @@ const casaVitini = {
                         contenidoAdvertenciaInmersiva.setAttribute("contenedor", "contenidoAdvertenciaInmersiva")
 
                         const contenedorDesgloseTotales = document.createElement("div")
-                        contenedorDesgloseTotales.classList.add("administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion")
+                        contenedorDesgloseTotales.setAttribute("globalUI", "desgloseTotales")
+                        contenedorDesgloseTotales.classList.add("marco")
+
 
                         const testInfo = document.createElement("div")
-                        testInfo.classList.add("plaza_resumenReserva_textoInfo")
+                        testInfo.classList.add("textoJustificado")
                         testInfo.innerText = "A continuación, se presentan los detalles del desglose completo del importe total de la reserva. Aquí encontrarás una explicación detallada de cada componente que contribuye al costo total. Este desglose incluye los diversos cargos, impuestos u otros conceptos asociados con tu reserva. Revisar estos detalles te proporcionará una comprensión transparente de los costos involucrados en tu elección de alojamiento. ¡Estamos comprometidos a brindarte la información necesaria para que tu experiencia de reserva sea clara y sin sorpresas!"
                         contenedorDesgloseTotales.appendChild(testInfo)
 
@@ -1722,7 +1723,7 @@ const casaVitini = {
                             estadoInternoZona: "estado",
                             tipoCambio: "total"
                         }
-                        const titulo = "Casa Vitini | Reserva confirmada"
+                        const titulo = "Casa Vitini"
                         window.history.replaceState(estado, titulo, url);
                         return casaVitini.ui.vistas.reservasNuevo.reservaConfirmada.UI()
                     },
@@ -1732,8 +1733,10 @@ const casaVitini = {
 
 
                             if (detallesReserva) {
-                                document.body.style.background = "rgb(214 192 157)"
 
+                                document.body.style.background = "rgb(214 192 157)"
+                                const main = document.querySelector("main")
+                                main.setAttribute("zonaCSS", "alojamiento/reserva_confirmada")
 
                                 const obtenerPDF = async (enlaceUID) => {
 
@@ -2130,6 +2133,7 @@ const casaVitini = {
                                     contenidoAdvertenciaInmersiva.setAttribute("globalUI", "marcoInmersivo")
 
                                     const contenedorDesgloseTotales = document.createElement("div")
+                                    contenedorDesgloseTotales.setAttribute("globalUI", "desgloseTotales")
                                     contenedorDesgloseTotales.classList.add("marco")
 
                                     const testInfo = document.createElement("div")
@@ -2152,7 +2156,7 @@ const casaVitini = {
                                     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                                     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
 
-                                    document.body.appendChild(advertenciaInmersivaIU)
+                                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
 
                                     const destino = `[instanciaUID="${instanciaUID}"] [contenedor=espacioGlobalTotales]`
                                     const desgloseTotales = {
@@ -6395,8 +6399,6 @@ const casaVitini = {
                     observador.observe(header);
 
 
-
-
                     // Agregar evento de desplazamiento
                     window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
                     window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
@@ -6406,7 +6408,7 @@ const casaVitini = {
 
                     const grupoImagenesPalarax = document.querySelectorAll('[imagenParalaje=imagen]');
                     casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador = new simpleParallax(grupoImagenesPalarax, {
-                        delay: 0,
+                        delay: 10,
                         orientation: 'down',
                         scale: 1.3,
                         overflow: false,
