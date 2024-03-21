@@ -1060,7 +1060,7 @@
 }
 
 @media (max-width: 720px) {
-    [zonaCSS=alojamiento]  .plaza_alojamiento_marcoFechaCompartido {
+    [zonaCSS=alojamiento] .plaza_alojamiento_marcoFechaCompartido {
         flex-direction: column;
 
     }
@@ -2114,11 +2114,8 @@
 }
 
 [zonaCSS="administracion"] .tituloContextoAdministracion {
-
     background-color: rgba(255, 255, 255, 0.4);
     padding: 10px;
-
-
     border-radius: 14px;
     text-decoration: none;
     color: black;
@@ -2133,13 +2130,13 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-
 }
 
-.tituloContextoAdministracion:hover {
-    background-color: rgba(0, 0, 0, 0.45);
-    color: white;
-}
+    [zonaCSS="administracion"] .tituloContextoAdministracion:hover {
+        background-color: rgba(0, 0, 0, 0.45);
+        color: white;
+    }
+
 
 .marcoEspaciador {
     background-color: rgba(255, 255, 255, 0.52);
@@ -7044,7 +7041,7 @@
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     }
 
-    [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"]  .administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos {
+    [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos {
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     }
 }
@@ -14060,7 +14057,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 /* fin paralaje diseño 2*/
 
-[zonaCSS=portada] .videoPresentacion{ 
+[zonaCSS=portada] .videoPresentacion {
     min-width: 100%;
     min-height: 100%;
     width: auto;

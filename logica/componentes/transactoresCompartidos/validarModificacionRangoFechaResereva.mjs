@@ -272,8 +272,8 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                         if (rangoInterno) {
                             const estructura = {
                                 apartamentoIDV: apartamentoIDV,
-                                fechaEntrada_ISO: fechaFinal,
-                                fechaSalida_ISO: fechaInicio,
+                                fechaEntrada_ISO: fechaInicio,
+                                fechaSalida_ISO: fechaFinal,
                                 tipoElemento: "eventoCalendarioSincronizado",
                                 nombreEvento: nombreEvento,
                                 descripcion: descripcion,
@@ -300,13 +300,14 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 ...contenedorEventosCalendariosSincronizados_enRango,
             ]
             const contenedorDeEventosQueDejanSinRangoDisponible = []
-
-
+            console.log("contenedorDeEventosQueDejanSinRangoDisponible", contenedorDeEventosQueDejanSinRangoDisponible)
             // Ojo: lo que se es haciendo aqui en este loop no es ver cuales estan dentro del mes, eso ya esta hecho, aquí lo que se mira es silos eventos estan enganchados al a fecha de entrad de la reserva para ver en primera instancia si hay algun tipo de rango disponbile
             for (const detallesDelEvento of contenedorGlobal) {
                 const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
                 const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
                 const tipoElemento = detallesDelEvento.tipoElemento
+                console.log("detallesDelEvento", detallesDelEvento)
+
                 if ((tipoElemento === "reserva" || tipoElemento === "eventoSincronizado")
                     &&
                     (fechaInicioEvento_ISO < fechaFinRango_entradaReserva_objeto && fechaFinRango_entradaReserva_objeto <= fechaFinEvento_ISO)) {

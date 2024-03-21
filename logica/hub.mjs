@@ -43,6 +43,8 @@ import axios from 'axios';
 const mutex = new Mutex();
 import ICAL from 'ical.js';
 import { apartamentosOcupadosHoy } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb.mjs';
+import { apartamentosOcupadosHoy_paraSitaucion } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs';
+
 import { eventosDelApartamento } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/eventosDelApartamento.mjs';
 import { eventosCalendarioPorUID } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/eventosCalendarioPorUID.mjs';
 import { obtenerTodosLosCalendarios } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/obtenerTodosLosCalendarios.mjs';
@@ -56,6 +58,8 @@ import { obtenerParametroConfiguracion } from './componentes/transactoresCompart
 import { obtenerDetallesOferta } from './componentes/sistemaDeOfertas/obtenerDetallesOferta.mjs';
 import { interruptor } from './componentes/transactoresCompartidos/interruptor.mjs';
 import { horaEntradaSalida } from './componentes/transactoresCompartidos/horaEntradaSalida.mjs';
+
+
 const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
 const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
 const arranque = async (entrada, salida) => {
@@ -8805,9 +8809,9 @@ const puerto = async (entrada, salida) => {
                         to_char(entrada, 'DD/MM/YYYY') as "entradaHumano", 
                         to_char(salida, 'DD/MM/YYYY') as "salidaHumano"
                         FROM reservas
-                        WHERE entrada <= $1::DATE AND salida >= $1::DATE; 
+                        WHERE (entrada <= $1::DATE AND salida >= $1::DATE) AND "estadoReserva" <> $2; 
                         `
-                        const resuelveConsultaReservasHoy = await conexion.query(consultaReservasHoy, [fechaActualTZ])
+                        const resuelveConsultaReservasHoy = await conexion.query(consultaReservasHoy, [fechaActualTZ, "cancelada"])
                         const ok = {}
 
                         if (resuelveConsultaReservasHoy.rowCount === 0) {
@@ -8924,8 +8928,9 @@ const puerto = async (entrada, salida) => {
                         }
 
                         // buscar reservas en el dia actual
+                        
 
-                        const eventosCalendarios_airbnb = await apartamentosOcupadosHoy(fechaActualTZ)
+                        const eventosCalendarios_airbnb = await apartamentosOcupadosHoy_paraSitaucion(fechaActualTZ)
 
                         for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnb) {
                             /*
