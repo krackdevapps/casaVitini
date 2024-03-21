@@ -6414,8 +6414,8 @@ const casaVitini = {
                     window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
                     window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
 
-                    // window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
-                    // window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
+                     window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
+                     window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
 
                     const grupoImagenesPalarax = document.querySelectorAll('[imagenParalaje=imagen]');
                     casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador = new simpleParallax(grupoImagenesPalarax, {
