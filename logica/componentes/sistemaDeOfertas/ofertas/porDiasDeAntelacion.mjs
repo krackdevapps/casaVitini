@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { codigoZonaHoraria } from "../../transactoresCompartidos/codigoZonaHoraria.mjs";
+import { codigoZonaHoraria } from "../../sistema/codigoZonaHoraria.mjs";
 import Decimal from "decimal.js";
 import { conexion } from "../../db.mjs";
 import { validadoresCompartidos } from "../../validadoresCompartidos.mjs";

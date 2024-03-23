@@ -4,7 +4,7 @@ import { porDiasDeReserva } from "./ofertas/porDiasDeReserva.mjs"
 import { porRangoDeFechas } from './ofertas/porRangoDeFechas.mjs'
 import { porDiasDeAntelacion } from './ofertas/porDiasDeAntelacion.mjs'
 import Decimal from "decimal.js"
-import { codigoZonaHoraria } from "../transactoresCompartidos/codigoZonaHoraria.mjs"
+import { codigoZonaHoraria } from "../sistema/codigoZonaHoraria.mjs"
 import { DateTime } from "luxon"
 const sistemaDeOfertas = async (reserva) => {
     

@@ -1,6 +1,6 @@
 import { DateTime } from "luxon"
 import { conexion } from "./db.mjs"
-import { codigoZonaHoraria } from "./transactoresCompartidos/codigoZonaHoraria.mjs"
+import { codigoZonaHoraria } from "./sistema/codigoZonaHoraria.mjs"
 const validadoresCompartidos = {
     clientes: {
         nuevoCliente: async (cliente) => {

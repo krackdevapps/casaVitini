@@ -4,55 +4,55 @@ import { writeFile } from 'fs/promises';
 import { Mutex, tryAcquire } from 'async-mutex';
 import { clienteSquare } from "./componentes/squareClient.mjs";
 import { v4 as uuidv4 } from "uuid";
-import { validarObjetoReserva } from './componentes/transactoresCompartidos/validarObjetoReserva.mjs';
-import { validarObjetoReservaSoloFormato } from './componentes/transactoresCompartidos/validarObjetoReservaSoloFormato.mjs';
-import { cambiarVista } from './componentes/transactoresCompartidos/cambiarVista.mjs';
-import { configuracionApartamento } from './componentes/transactoresCompartidos/configuracionApartamento.mjs';
-import { precioReserva } from './componentes/transactoresCompartidos/precioReserva.mjs';
-import { insertarReserva } from './componentes/transactoresCompartidos/insertarReserva.mjs';
-import { estadoHabitacionesApartamento } from './componentes/transactoresCompartidos/estadoHabitacionesApartamento.mjs'
-import { validarModificacionRangoFechaResereva } from './componentes/transactoresCompartidos/validarModificacionRangoFechaResereva.mjs'
-import { bloquearApartamentos } from './componentes/transactoresCompartidos/bloquearApartamentos.mjs'
-import { resolverMoneda } from './componentes/transactoresCompartidos/resolverMoneda.mjs';
-import { precioBaseApartamento } from './componentes/transactoresCompartidos/precioBaseApartamento.mjs';
-import { precioRangoApartamento } from './componentes/transactoresCompartidos/precioRangoApartamento.mjs';
-import { insertarTotalesReserva } from './componentes/transactoresCompartidos/insertarTotalesReserva.mjs';
-import { detallesReserva } from './componentes/transactoresCompartidos/detallesReserva.mjs';
-import { resolverApartamentoUI } from './componentes/transactoresCompartidos/resolverApartamentoUI.mjs'
-import { vitiniCrypto } from './componentes/transactoresCompartidos/vitiniCrypto.mjs';
+import { validarObjetoReserva } from './componentes/sistema/validarObjetoReserva.mjs';
+import { validarObjetoReservaSoloFormato } from './componentes/sistema/validarObjetoReservaSoloFormato.mjs';
+import { cambiarVista } from './componentes/sistema/cambiarVista.mjs';
+import { configuracionApartamento } from './componentes/sistema/configuracionApartamento.mjs';
+import { precioReserva } from './componentes/sistema/precioReserva.mjs';
+import { insertarReserva } from './componentes/sistema/insertarReserva.mjs';
+import { estadoHabitacionesApartamento } from './componentes/sistema/estadoHabitacionesApartamento.mjs'
+import { validarModificacionRangoFechaResereva } from './componentes/sistema/validarModificacionRangoFechaResereva.mjs'
+import { bloquearApartamentos } from './componentes/sistema/bloquearApartamentos.mjs'
+import { resolverMoneda } from './componentes/sistema/resolverMoneda.mjs';
+import { precioBaseApartamento } from './componentes/sistema/precioBaseApartamento.mjs';
+import { precioRangoApartamento } from './componentes/sistema/precioRangoApartamento.mjs';
+import { insertarTotalesReserva } from './componentes/sistema/insertarTotalesReserva.mjs';
+import { detallesReserva } from './componentes/sistema/detallesReserva.mjs';
+import { resolverApartamentoUI } from './componentes/sistema/resolverApartamentoUI.mjs'
+import { vitiniCrypto } from './componentes/sistema/vitiniCrypto.mjs';
 import { administracionUI } from './componentes/administracion.mjs';
-import { controlCaducidadEnlacesDePago } from './componentes/transactoresCompartidos/controlCaducidadEnlacesDePago.mjs';
+import { controlCaducidadEnlacesDePago } from './componentes/sistema/controlCaducidadEnlacesDePago.mjs';
 import { zonasHorarias } from "./componentes/zonasHorarias.mjs"
 import { utilidades } from './componentes/utilidades.mjs';
 import Decimal from 'decimal.js';
-import { insertarCliente } from './componentes/transactoresCompartidos/insertarCliente.mjs';
-import { codigoZonaHoraria } from './componentes/transactoresCompartidos/codigoZonaHoraria.mjs';
+import { insertarCliente } from './componentes/sistema/insertarCliente.mjs';
+import { codigoZonaHoraria } from './componentes/sistema/codigoZonaHoraria.mjs';
 import { DateTime } from 'luxon';
-import { generadorPDF3 } from './componentes/transactoresCompartidos/generadorPDF.mjs';
+import { generadorPDF3 } from './componentes/sistema/generadorPDF.mjs';
 import { validadoresCompartidos } from './componentes/validadoresCompartidos.mjs';
-import { actualizarEstadoPago } from './componentes/transactoresCompartidos/actualizarEstadoPago.mjs';
-import { obtenerTotalReembolsado } from './componentes/transactoresCompartidos/obtenerTotalReembolsado.mjs';
-import { enviarMail } from './componentes/transactoresCompartidos/enviarMail.mjs';
-import { enviarEmailReservaConfirmaada } from './componentes/transactoresCompartidos/enviarEmailReservaConfirmada.mjs';
-import { enviarEmailAlCrearCuentaNueva } from './componentes/transactoresCompartidos/enviarEmailAlCrearCuentaNueva.mjs';
+import { actualizarEstadoPago } from './componentes/sistema/actualizarEstadoPago.mjs';
+import { obtenerTotalReembolsado } from './componentes/sistema/obtenerTotalReembolsado.mjs';
+import { enviarMail } from './componentes/sistema/enviarMail.mjs';
+import { enviarEmailReservaConfirmaada } from './componentes/sistema/enviarEmailReservaConfirmada.mjs';
+import { enviarEmailAlCrearCuentaNueva } from './componentes/sistema/enviarEmailAlCrearCuentaNueva.mjs';
 import validator from 'validator';
 import axios from 'axios';
 const mutex = new Mutex();
 import ICAL from 'ical.js';
-import { apartamentosOcupadosHoy_paraSitaucion } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs';
-import { eventosDelApartamento } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/eventosDelApartamento.mjs';
-import { obtenerTodosLosCalendarios } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/obtenerTodosLosCalendarios.mjs';
-import { eventosReservas } from './componentes/transactoresCompartidos/calendarios/capas/eventosReservas.mjs';
-import { eventosTodosLosApartamentos } from './componentes/transactoresCompartidos/calendarios/capas/eventosTodosLosApartamentos.mjs';
-import { eventosTodosLosBloqueos } from './componentes/transactoresCompartidos/calendarios/capas/eventosTodosLosBloqueos.mjs';
-import { eventosPorApartamneto } from './componentes/transactoresCompartidos/calendarios/capas/eventosPorApartamento.mjs';
-import { eventosPorApartamentoAirbnb } from './componentes/transactoresCompartidos/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs';
-import { exportarClendario } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/exportarCalendario.mjs';
-import { obtenerParametroConfiguracion } from './componentes/transactoresCompartidos/obtenerParametroConfiguracion.mjs';
+import { apartamentosOcupadosHoy_paraSitaucion } from './componentes/sistema/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs';
+import { eventosDelApartamento } from './componentes/sistema/calendariosSincronizados/airbnb/eventosDelApartamento.mjs';
+import { obtenerTodosLosCalendarios } from './componentes/sistema/calendariosSincronizados/airbnb/obtenerTodosLosCalendarios.mjs';
+import { eventosReservas } from './componentes/sistema/calendarios/capas/eventosReservas.mjs';
+import { eventosTodosLosApartamentos } from './componentes/sistema/calendarios/capas/eventosTodosLosApartamentos.mjs';
+import { eventosTodosLosBloqueos } from './componentes/sistema/calendarios/capas/eventosTodosLosBloqueos.mjs';
+import { eventosPorApartamneto } from './componentes/sistema/calendarios/capas/eventosPorApartamento.mjs';
+import { eventosPorApartamentoAirbnb } from './componentes/sistema/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs';
+import { exportarClendario } from './componentes/sistema/calendariosSincronizados/airbnb/exportarCalendario.mjs';
+import { obtenerParametroConfiguracion } from './componentes/sistema/obtenerParametroConfiguracion.mjs';
 import { obtenerDetallesOferta } from './componentes/sistemaDeOfertas/obtenerDetallesOferta.mjs';
-import { interruptor } from './componentes/transactoresCompartidos/interruptor.mjs';
-import { horaEntradaSalida } from './componentes/transactoresCompartidos/horaEntradaSalida.mjs';
-import { apartamentosPorRango } from './componentes/transactoresCompartidos/selectoresCompartidos/apartamentosPorRango.mjs';
+import { interruptor } from './componentes/sistema/interruptor.mjs';
+import { horaEntradaSalida } from './componentes/sistema/horaEntradaSalida.mjs';
+import { apartamentosPorRango } from './componentes/sistema/selectoresCompartidos/apartamentosPorRango.mjs';
 const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
 const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
 const arranque = async (entrada, salida) => {
