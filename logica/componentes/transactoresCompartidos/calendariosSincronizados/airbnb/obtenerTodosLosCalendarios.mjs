@@ -1,10 +1,8 @@
 import axios from 'axios';
 import ICAL from 'ical.js';
 import { conexion } from '../../../db.mjs';
-
 const obtenerTodosLosCalendarios = async () => {
     try {
-
         const consultaSelecionaCalendario = `
         SELECT 
         uid,
@@ -27,19 +25,16 @@ const obtenerTodosLosCalendarios = async () => {
             const url = detallesDelCalendario.url
             let calendarioDatos = detallesDelCalendario.dataIcal
             const apartamentoIDV = detallesDelCalendario.apartamentoIDV
-
             const estructura = {
                 apartamentoIDV: apartamentoIDV,
                 nombreCalendario: nombre,
                 calendarioRaw: calendarioDatos
             }
-
             try {
                 const calendarioData = await axios.get(url);
                 const calendarioRaw = calendarioData.data
                 const jcalData = ICAL.parse(calendarioRaw);
                 const jcal = new ICAL.Component(jcalData);
-
                 if (jcal?.name.toLowerCase() !== 'vcalendar') {
                     throw new Error(errorDeFormato)
                 }
@@ -68,15 +63,12 @@ const obtenerTodosLosCalendarios = async () => {
             const jcalData = ICAL.parse(calendarioDatos);
             const jcal = new ICAL.Component(jcalData);
             const eventosCalenario = jcal.jCal[2]
-
             const calendarioObjeto = []
             eventosCalenario.forEach((event) => {
                 const detallesEventoSinFormatear = event[1]
                 // console.log("detallesEventoSinFormatear", detallesEventoSinFormatear)
-
                 const eventoObjeto = {}
                 detallesEventoSinFormatear.forEach((detallesEvento) => {
-
                     const idCajon = detallesEvento[0]
                     if (idCajon === "categories") {
                         eventoObjeto.categoriaEvento = detallesEvento[3]
@@ -84,7 +76,6 @@ const obtenerTodosLosCalendarios = async () => {
                     if (idCajon === "summary") {
                         eventoObjeto.nombreEvento = detallesEvento[3]
                     }
-
                     if (idCajon === "dtstart") {
                         eventoObjeto.fechaInicio = detallesEvento[3]
                     }
@@ -118,7 +109,6 @@ const obtenerTodosLosCalendarios = async () => {
         throw error
     }
 }
-
 export {
     obtenerTodosLosCalendarios
 }

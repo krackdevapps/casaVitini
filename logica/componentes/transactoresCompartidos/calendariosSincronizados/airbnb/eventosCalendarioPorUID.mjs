@@ -1,7 +1,6 @@
 import axios from 'axios';
 import ICAL from 'ical.js';
 import { conexion } from '../../../db.mjs';
-
 const eventosCalendarioPorUID = async (calendarioUID) => {
     try {
         const filtroCadena = /^[0-9]+$/;
@@ -9,7 +8,6 @@ const eventosCalendarioPorUID = async (calendarioUID) => {
             const error = "Hay que definir la calendarioUID, solo se admiten numeros sin espacios.";
             throw new Error(error);
         }
-
         const consultaSelecionaCalendario = `
         SELECT 
         uid,
@@ -26,27 +24,22 @@ const eventosCalendarioPorUID = async (calendarioUID) => {
         const ok = {
             calendariosPorApartamento: []
         }
-
         if (resuelveSelecionarCalendario.rowCount > 0) {
             const errorDeFormato = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb"
             const calendariosDelApartamento = resuelveSelecionarCalendario.rows[0]
             const calendarioUID = calendariosDelApartamento.uid
             const url = calendariosDelApartamento.url
-
             const nombre = calendariosDelApartamento.nombre
             let calendarioDatos = calendariosDelApartamento.dataIcal
             ok.apartamentoIDV = calendariosDelApartamento.apartamentoIDV
-
             const estructura = {
                 calendarioRaw: calendarioDatos
             }
-
             try {
                 const calendarioData = await axios.get(url);
                 const calendarioRaw = calendarioData.data
                 const jcalData = ICAL.parse(calendarioRaw);
                 const jcal = new ICAL.Component(jcalData);
-
                 if (jcal?.name.toLowerCase() !== 'vcalendar') {
                     throw new Error(errorDeFormato)
                 }
@@ -74,15 +67,12 @@ const eventosCalendarioPorUID = async (calendarioUID) => {
             const jcalData = ICAL.parse(calendarioDatos);
             const jcal = new ICAL.Component(jcalData);
             const eventosCalenario = jcal.jCal[2]
-
             const calendarioObjeto = []
             eventosCalenario.forEach((event) => {
                 const detallesEventoSinFormatear = event[1]
                 // console.log("detallesEventoSinFormatear", detallesEventoSinFormatear)
-
                 const eventoObjeto = {}
                 detallesEventoSinFormatear.forEach((detallesEvento) => {
-
                     const idCajon = detallesEvento[0]
                     if (idCajon === "categories") {
                         eventoObjeto.categoriaEvento = detallesEvento[3]
@@ -90,7 +80,6 @@ const eventosCalendarioPorUID = async (calendarioUID) => {
                     if (idCajon === "summary") {
                         eventoObjeto.nombreEvento = detallesEvento[3]
                     }
-
                     if (idCajon === "dtstart") {
                         eventoObjeto.fechaInicio = detallesEvento[3]
                     }
@@ -117,14 +106,12 @@ const eventosCalendarioPorUID = async (calendarioUID) => {
             });
             estructura.calendarioObjeto = calendarioObjeto
             ok.calendariosPorApartamento.push(estructura)
-
         }
         return ok
     } catch (error) {
         throw error
     }
 }
-
 export {
     eventosCalendarioPorUID
 }

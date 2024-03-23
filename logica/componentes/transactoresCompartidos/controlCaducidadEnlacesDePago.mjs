@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon';
 import { conexion } from '../db.mjs';
 import { codigoZonaHoraria } from './codigoZonaHoraria.mjs';
-
 const controlCaducidadEnlacesDePago = async () => {
     try {
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
@@ -24,8 +23,6 @@ const controlCaducidadEnlacesDePago = async () => {
         throw error
     }
 }
-
-
 export {
     controlCaducidadEnlacesDePago
 }

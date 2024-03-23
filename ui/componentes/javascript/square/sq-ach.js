@@ -2,7 +2,6 @@ async function ACHPay(buttonEl) {
   const accountHolderNameEl = document.getElementById('ach-account-holder-name');
   const achMessageEl = document.getElementById('ach-message');
   const achWrapperEl = document.getElementById('ach-wrapper');
-
   let ach;
   try {
     ach = await window.payments.ach();
@@ -14,21 +13,17 @@ async function ACHPay(buttonEl) {
       achMessageEl.innerText = 'ACH payment is not supported by your account';
       accountHolderNameEl.disabled = true;
     }
-
     // if we can't load ACH, we shouldn't bind events for the button
     return;
   }
-
   async function eventHandler(event) {
     const accountHolderName = accountHolderNameEl.value.trim()
     if (accountHolderName === '') {
       achMessageEl.innerText = 'Please input full name';
       return;
     }
-
     // Clear any existing messages
     window.paymentFlowMessageEl.innerText = '';
-
     try {
       const result = await ach.tokenize({
         accountHolderName,
@@ -45,6 +40,5 @@ async function ACHPay(buttonEl) {
       }
     }
   }
-
   buttonEl.addEventListener('click', eventHandler);
 }

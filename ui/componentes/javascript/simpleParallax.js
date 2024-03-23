@@ -504,7 +504,6 @@
                                 )),
                                 T.length || (window.cancelAnimationFrame(g),
                                     window.removeEventListener("resize", this.refresh),
-
                                     w = !1)
                         }
                     }]) && v(e.prototype, n),

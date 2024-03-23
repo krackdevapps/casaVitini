@@ -1,7 +1,6 @@
 import { DateTime } from "luxon"
 import { conexion } from "./db.mjs"
 import { codigoZonaHoraria } from "./transactoresCompartidos/codigoZonaHoraria.mjs"
-
 const validadoresCompartidos = {
     clientes: {
         nuevoCliente: async (cliente) => {
@@ -22,7 +21,6 @@ const validadoresCompartidos = {
                     nombre = nombre.trim();
                     nombre = nombre.replace(/\s+/g, ' ');
                     nombre = nombre.toUpperCase();
-
                 } else {
                     const error = "el campo 'nombre' es obligatorio."
                     throw new Error(error)
@@ -35,7 +33,6 @@ const validadoresCompartidos = {
                     primerApellido = primerApellido.trim();
                     primerApellido = primerApellido.replace(/\s+/g, ' ');
                     primerApellido = primerApellido.toUpperCase();
-
                 }
                 if (segundoApellido?.length > 0) {
                     if (!filtroCadena.test(segundoApellido)) {
@@ -45,7 +42,6 @@ const validadoresCompartidos = {
                     segundoApellido = segundoApellido.trim();
                     segundoApellido = segundoApellido.replace(/\s+/g, ' ');
                     segundoApellido = segundoApellido.toUpperCase();
-
                 }
                 if (pasaporte?.length > 0) {
                     if (!filtroCadena.test(pasaporte)) {
@@ -55,8 +51,6 @@ const validadoresCompartidos = {
                     pasaporte = pasaporte.trim();
                     pasaporte = pasaporte.replace(/\s+/g, ' ');
                     pasaporte = pasaporte.toUpperCase();
-
-
                 } else {
                     const error = "el campo 'pasaporte' es obligatorio."
                     throw new Error(error)
@@ -67,7 +61,6 @@ const validadoresCompartidos = {
                         const error = "el campo 'telefono' solo puede una cadena con un numero, entero y positivo. Si estas escribiendo un numero internacional, sustituya el signo mas del incio por dos ceros"
                         throw new Error(error)
                     }
-
                     telefono = telefono.trim();
                     telefono = telefono.replace(/\s+/g, '');
                 }
@@ -99,7 +92,6 @@ const validadoresCompartidos = {
                 if (notas?.length > 0) {
                     notas = notas.replace(/[^A-Za-z\s\d.,!?]/g, '');
                 }
-
                 const consultaPasaporte = `
                 SELECT 
                 nombre,
@@ -109,16 +101,13 @@ const validadoresCompartidos = {
                 WHERE pasaporte = $1;
                 `
                 const resuelveUnicidadPasaporte = await conexion.query(consultaPasaporte, [pasaporte])
-
                 if (resuelveUnicidadPasaporte.rowCount > 0) {
                     const nombreClienteExistente = resuelveUnicidadPasaporte.rows[0].nombre
                     const primerApellidoClienteExistente = resuelveUnicidadPasaporte.rows[0].primerApellido
                     const segundoApellidoClienteExistente = resuelveUnicidadPasaporte.rows[0].segundoApellido
-
                     const error = `Ya existe un cliente con ese pasaporte: ${nombreClienteExistente} ${primerApellidoClienteExistente} ${segundoApellidoClienteExistente}`
                     throw new Error(error)
                 }
-
                 const datosValidados = {
                     nombre: nombre,
                     primerApellido: primerApellido,
@@ -126,7 +115,6 @@ const validadoresCompartidos = {
                     pasaporte: pasaporte,
                     telefono: telefono,
                     correoElectronico: correoElectronico,
-
                 }
                 if (notas) {
                     datosValidados.notas = notas
@@ -137,7 +125,6 @@ const validadoresCompartidos = {
             }
         },
         actualizarCliente: async (cliente) => {
-
             try {
                 let nombre = cliente.nombre
                 let primerApellido = cliente.primerApellido
@@ -155,7 +142,6 @@ const validadoresCompartidos = {
                     nombre = nombre.trim();
                     nombre = nombre.replace(/\s+/g, ' ');
                     nombre = nombre.toUpperCase();
-
                 }
                 if (primerApellido?.length > 0) {
                     if (!filtroCadena.test(primerApellido)) {
@@ -165,7 +151,6 @@ const validadoresCompartidos = {
                     primerApellido = primerApellido.trim();
                     primerApellido = primerApellido.replace(/\s+/g, ' ');
                     primerApellido = primerApellido.toUpperCase();
-
                 }
                 if (segundoApellido?.length > 0) {
                     if (!filtroCadena.test(segundoApellido)) {
@@ -175,11 +160,9 @@ const validadoresCompartidos = {
                     segundoApellido = segundoApellido.trim();
                     segundoApellido = segundoApellido.replace(/\s+/g, ' ');
                     segundoApellido = segundoApellido.toUpperCase();
-
                 }
                 if (pasaporte?.length > 0) {
                     const filtroPasaporte = /^[a-zA-Z0-9]+$/;
-
                     if (!filtroPasaporte.test(pasaporte)) {
                         const error = "el campo 'pasaporte' solo puede ser letras minúsculas, masculas y numeros."
                         throw new Error(error)
@@ -187,8 +170,6 @@ const validadoresCompartidos = {
                     pasaporte = pasaporte.trim();
                     pasaporte = pasaporte.replace(/\s+/g, ' ');
                     pasaporte = pasaporte.toUpperCase();
-
-
                 }
                 if (telefono) {
                     const filtroTelefono = /^\d+$/
@@ -196,7 +177,6 @@ const validadoresCompartidos = {
                         const error = "el campo 'telefono' solo puede una cadena con un numero, entero y positivo. Si estas escribiendo un numero internacional, sustituya el signo mas del incio por dos ceros"
                         throw new Error(error)
                     }
-
                     telefono = telefono.trim();
                     telefono = telefono.replace(/\s+/g, '');
                 }
@@ -212,7 +192,6 @@ const validadoresCompartidos = {
                 if (notas?.length > 0) {
                     notas = notas.replace(/[^A-Za-z\s\d.,!?]/g, '');
                 }
-
                 const consultaPasaporte = `
                 SELECT 
                 nombre,
@@ -222,17 +201,13 @@ const validadoresCompartidos = {
                 WHERE pasaporte = $1;
                 `
                 const resuelveUnicidadPasaporte = await conexion.query(consultaPasaporte, [pasaporte])
-
                 if (resuelveUnicidadPasaporte.rowCount > 0) {
                     const nombreClienteExistente = resuelveUnicidadPasaporte.rows[0].nombre
                     const primerApellidoClienteExistente = resuelveUnicidadPasaporte.rows[0].primerApellido
                     const segundoApellidoClienteExistente = resuelveUnicidadPasaporte.rows[0].segundoApellido
-
                     const error = `Ya existe un cliente con ese pasaporte: ${nombreClienteExistente} ${primerApellidoClienteExistente} ${segundoApellidoClienteExistente}`
                     throw new Error(error)
                 }
-
-
                 const consultaCorreo = `
                 SELECT 
                 nombre,
@@ -242,7 +217,6 @@ const validadoresCompartidos = {
                 WHERE email = $1;
                 `
                 const resuelveUnicidadCorreo = await conexion.query(consultaCorreo, [correoElectronico])
-
                 if (resuelveUnicidadCorreo.rowCount > 0) {
                     const nombreClienteExistente = resuelveUnicidadCorreo.rows[0].nombre
                     const primerApellidoClienteExistente = resuelveUnicidadCorreo.rows[0].primerApellido
@@ -258,19 +232,16 @@ const validadoresCompartidos = {
                     telefono: telefono,
                     correoElectronico: correoElectronico,
                     notas: notas
-
                 }
                 return datosValidados
             } catch (error) {
                 throw error
             }
-
         },
     },
     usuarios: {
         actualizarDatos: async (datosUsuario) => {
             try {
-
                 const usuarioIDX = datosUsuario.usuarioIDX
                 let nombre = datosUsuario.nombre
                 let primerApellido = datosUsuario.primerApellido
@@ -278,19 +249,15 @@ const validadoresCompartidos = {
                 let pasaporte = datosUsuario.pasaporte
                 let telefono = datosUsuario.telefono
                 let email = datosUsuario.email
-
                 const filtroCantidad = /^\d+\.\d{2}$/;
                 const filtro_minúsculas_Mayusculas_numeros_espacios = /^[a-zA-Z0-9\s]+$/;
                 const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
                 const filtroNumeros = /^[0-9]+$/;
-
                 const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
-
                 if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
                     const error = "El campo usuarioIDX solo admite minúsculas y numeros"
                     throw new Error(error)
                 }
-
                 if (nombre) {
                     nombre = nombre.trim();
                     nombre = nombre.replace(/\s+/g, "");
@@ -300,8 +267,6 @@ const validadoresCompartidos = {
                         throw new Error(error)
                     }
                 }
-
-
                 if (primerApellido) {
                     primerApellido = primerApellido.trim();
                     primerApellido = primerApellido.replace(/\s+/g, "");
@@ -311,7 +276,6 @@ const validadoresCompartidos = {
                         throw new Error(error)
                     }
                 }
-
                 if (segundoApellido) {
                     segundoApellido = segundoApellido.trim();
                     segundoApellido = segundoApellido.replace(/\s+/g, "");
@@ -321,20 +285,16 @@ const validadoresCompartidos = {
                         throw new Error(error)
                     }
                 }
-
                 if (pasaporte?.length > 0) {
                     pasaporte = pasaporte.trim();
                     pasaporte = pasaporte.replace(/\s+/g, "");
                     pasaporte = pasaporte.toUpperCase();
                     const filtroPasaporte = /^[a-zA-Z0-9]+$/;
-
                     if (!filtroPasaporte.test(pasaporte)) {
                         const error = "el campo 'pasaporte' solo puede ser letras minúsculas, masculas y numeros."
                         throw new Error(error)
                     }
-
                 }
-
                 if (telefono) {
                     telefono = telefono.trim();
                     telefono = telefono.replace(/\s+/g, '');
@@ -343,10 +303,7 @@ const validadoresCompartidos = {
                         const error = "el campo 'telefono' solo puede una cadena con un numero, entero y positivo. Si estas escribiendo un numero internacional, sustituya el signo mas del incio por dos ceros"
                         throw new Error(error)
                     }
-
-
                 }
-
                 if (email) {
                     email = email.trim();
                     email = email.replace(/\s+/g, '');
@@ -356,9 +313,7 @@ const validadoresCompartidos = {
                         const error = "El campo email no tiene le formato correcto, por ejemplo usuario@servidor.zona"
                         throw new Error(error)
                     }
-
                 }
-
                 // validar existencia de correo
                 const consultaControlCorreo = `
                 SELECT 
@@ -371,7 +326,6 @@ const validadoresCompartidos = {
                     const usuarioExistente = resuelveUnicidadCorreo.rows[0].usuarioIDX
                     const error = `Ya existe un usuario con el correo electroníco que estas intentando guardar: ${usuarioExistente}`
                     throw new Error(error)
-
                 }
                 // validar existencia de pasaporte
                 const consultaControlPasaporte = `
@@ -386,10 +340,7 @@ const validadoresCompartidos = {
                     const error = `Ya existe un usuario con el pasaporte que estas intentando guardar: ${usuarioExistente}`
                     throw new Error(error)
                 }
-
-
                 const salidaValidada = {
-
                     usuarioIDX: usuarioIDX,
                     nombre: nombre,
                     primerApellido: primerApellido,
@@ -399,7 +350,6 @@ const validadoresCompartidos = {
                     email: email,
                 }
                 return salidaValidada
-
             } catch (error) {
                 throw error
             }
@@ -417,7 +367,6 @@ const validadoresCompartidos = {
                     const error = "La fecha no cumple el formato ISO esperado"
                     throw new Error(error)
                 }
-
                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                 const fechaControl = DateTime.fromISO(fechaISO, { zone: zonaHoraria }).isValid;
                 if (!fechaControl) {
@@ -427,7 +376,6 @@ const validadoresCompartidos = {
                 return "ok"
             } catch (error) {
                 throw error
-
             }
         },
         validarFecha_Humana: async (fecha_Humana) => {
@@ -441,15 +389,11 @@ const validadoresCompartidos = {
                     const error = "La fecha no cumple el formato Humano esperado"
                     throw new Error(error)
                 }
-
                 const fechaArreglo = fecha_Humana.split("/")
-
                 const dia = fechaArreglo[0]
                 const mes = fechaArreglo[1]
                 const ano = fechaArreglo[2]
-
                 const fecha_ISO = `${ano}-${mes}-${dia}`
-
                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                 //const fechaControl = DateTime.fromISO(fecha_ISO, { zone: zonaHoraria }).isValid;
                 const fechaControl = DateTime.fromObject({
@@ -457,12 +401,10 @@ const validadoresCompartidos = {
                     month: mes,
                     year: ano
                 }, { zone: zonaHoraria }).isValid;
-
                 if (!fechaControl) {
                     const error = "La fecha no es valida, representacion no terraquea"
                     throw new Error(error)
                 }
-
                 const estructura = {
                     fechaGranulada: {
                         dia: dia,
@@ -470,16 +412,12 @@ const validadoresCompartidos = {
                         ano: ano,
                     },
                     fecha_ISO: fecha_ISO
-
                 }
                 return estructura
             } catch (error) {
                 throw error
             }
-
         }
-
-
     },
     reservas: {
         validarReserva: async (reservaUID) => {
@@ -517,19 +455,16 @@ const validadoresCompartidos = {
                 if (resolverNombreApartamento.rowCount === 0) {
                     const error = "No existe el apartamentoIDV para resolver"
                     throw new new Error(error)
-
                 }
                 const apartamentoUI = resolverNombreApartamento.rows[0].apartamentoUI
                 return apartamentoUI
             } catch (error) {
                 throw error
             }
-
         }
     },
     claves: {
         minimoRequisitos: (clave) => {
-
             try {
                 if (clave.length < 12) {
                     const error = "La contraseña debe de tener un minimo de 12 caracteres"
@@ -538,11 +473,9 @@ const validadoresCompartidos = {
                 let tieneMayuscula = false;
                 let tieneNumero = false;
                 let tieneCaracterEspecial = false;
-
                 // Verifica cada carácter de la clave
                 for (var i = 0; i < clave.length; i++) {
                     var caracter = clave.charAt(i);
-
                     // Verifica si el carácter es una mayúscula
                     if (caracter >= "A" && caracter <= "Z") {
                         tieneMayuscula = true;
@@ -560,12 +493,10 @@ const validadoresCompartidos = {
                     const error = "Por favor ponga como minimo una mayuscula en su contraseña"
                     throw new Error(error)
                 }
-
                 if (!tieneNumero) {
                     const error = "Por favor ponga como minimo un numero en su contraseña"
                     throw new Error(error)
                 }
-
                 if (!tieneCaracterEspecial) {
                     const error = "Por favor ponga como minimo un caracter especial en su contraseña, como por ejemplo: ! @ # $ % ^ & * ( ) _ +"
                     throw new Error(error)
@@ -573,15 +504,9 @@ const validadoresCompartidos = {
             } catch (errorCapturado) {
                 throw errorCapturado
             }
-
-
         }
     }
-
-
-
 }
-
 export {
     validadoresCompartidos
 }

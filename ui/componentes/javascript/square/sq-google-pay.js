@@ -5,11 +5,9 @@ async function GooglePay(buttonEl) {
   );
   const googlePay = await payments.googlePay(paymentRequest);
   await googlePay.attach(buttonEl);
-
   async function eventHandler(event) {
     // Clear any existing messages
     window.paymentFlowMessageEl.innerText = '';
-
     try {
       const result = await googlePay.tokenize();
       if (result.status === 'OK') {
@@ -24,6 +22,5 @@ async function GooglePay(buttonEl) {
       }
     }
   }
-
   buttonEl.addEventListener('click', eventHandler);
 }

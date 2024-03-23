@@ -1,5 +1,4 @@
 import { conexion } from '../db.mjs';
-
 const resolverMoneda = async (moneda) => {
     try {
         const monedaIDV = moneda
@@ -20,33 +19,19 @@ const resolverMoneda = async (moneda) => {
             const error = "No existe la moneda"
             throw new Error(error)
         }
-
-
         const detallesMoneda = resuelveSeleccionarMoneda.rows[0]
-
         monedaIDV = detallesMoneda.monedaIDV
         const monedaUI = detallesMoneda.monedaUI
         const simbolo = detallesMoneda.simbolo
-
         const ok = {
             "monedaIDV": monedaIDV,
             "monedaUI": monedaUI,
             "simbolo": simbolo
         }
         return ok
-
-
     } catch (error) {
         throw error;
     }
-
-
-
-
-
-
-
-
 }
 export {
     resolverMoneda

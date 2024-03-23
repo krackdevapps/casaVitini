@@ -330,17 +330,13 @@ const generadorPDF3 = async (reserva) => {
             }
         }
         //console.log("datosGlobales", reserva)
-
         const datosGlobales = reserva.reserva
-
         const numeroReserva = datosGlobales.reserva
         const fechaEntrada_humana = reserva.reserva.entrada
         const fechaSalida_humana = reserva.reserva.salida
-
         const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_humana)).fecha_ISO
         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_humana)).fecha_ISO
         console.log("generando")
-
         const estadoReserva = reserva.reserva.estadoReserva
         const estadoPAgo = reserva.reserva.estadoPago
         if (!reserva.reserva.titular) {
@@ -351,27 +347,20 @@ const generadorPDF3 = async (reserva) => {
         const pasaporteTitular = reserva.reserva.titular.pasaporteTitular || ""
         const telefonoTitular = reserva.reserva.titular.telefonoTitular || ""
         const emailTitular = reserva.reserva.titular.emailTitular || ""
-
         // Definir dos fechasc
-
-
         const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada_ISO);
         const fechaSalida_objeto = DateTime.fromISO(fechaSalida_ISO);
-
         // Obtener la diferencia en días
         console.log("fechaEntrada_objeto", fechaEntrada_objeto.toISO(), "fechaSalida_objeto", fechaSalida_objeto.toISO())
         const numeroDeDias = (fechaSalida_objeto.diff(fechaEntrada_objeto, "days").days) + 1;
         const numeroDeNoches = new Decimal(numeroDeDias).minus(1).toString()
-
         let nochesUI
         console.log("nuermo", typeof numeroDeNoches, numeroDeNoches)
         if (numeroDeNoches === "1") {
             nochesUI = numeroDeNoches + ' Noche'
         } else {
             nochesUI = numeroDeNoches + ' Noches'
-
         }
-
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
         const fonts = {
@@ -380,10 +369,6 @@ const generadorPDF3 = async (reserva) => {
                 bold: require.resolve('../../../componentes/pdf/fuentes/roboto-bold.ttf'),
             },
         };
-
-
-
-
         const docDefinition = {
             header: {
                 alignment: 'justify',
@@ -396,7 +381,6 @@ const generadorPDF3 = async (reserva) => {
                     {
                         text: numeroReserva,
                         style: "tituloReserva"
-
                     }
                 ]
             },
@@ -408,9 +392,7 @@ const generadorPDF3 = async (reserva) => {
                     }
                 ]
             },
-
             content: [
-
                 {
                     style: 'tablaTitular',
                     layout: 'headerLineOnly',
@@ -423,42 +405,32 @@ const generadorPDF3 = async (reserva) => {
                                     text: nombreTitular,
                                     style: 'apartamentoNombre',
                                 },
-
                             ],
                             [
                                 {
                                     text: pasaporteTitular,
                                     style: 'apartamentoNombre',
                                 },
-
                             ],
                             [
                                 {
                                     text: emailTitular,
                                     style: 'apartamentoNombre',
                                 },
-
                             ],
                             [
                                 {
                                     text: telefonoTitular,
                                     style: 'apartamentoNombre',
                                 },
-
                             ],
                         ]
                     },
-
                 },
-
-
-
-
                 {
                     style: 'tablaGlobalReserva',
                     layout: 'lightHorizontalLines',
                     table: {
-
                         widths: ['*', '*', '*'],
                         body: [
                             [
@@ -468,7 +440,6 @@ const generadorPDF3 = async (reserva) => {
                                         style: 'tituloColumna',
                                         colSpan: 2,
                                         alignment: 'center'
-
                                     }
                                 ],
                                 [
@@ -477,7 +448,6 @@ const generadorPDF3 = async (reserva) => {
                                         style: 'tituloColumna',
                                         colSpan: 2,
                                         alignment: 'center'
-
                                     }
                                 ],
                                 [
@@ -486,21 +456,16 @@ const generadorPDF3 = async (reserva) => {
                                         style: 'tituloColumna',
                                         colSpan: 2,
                                         alignment: 'center'
-
                                     }
                                 ]
                             ],
                             [
-
-
                                 [
-
                                     {
                                         text: fechaEntrada_humana,
                                         style: 'celdaTablaGlobalReserva',
                                         colSpan: 2,
                                         alignment: 'center'
-
                                     },
                                     /*  {
                                           text: 'Hora de entrada'
@@ -517,31 +482,23 @@ const generadorPDF3 = async (reserva) => {
                                       }*/
                                 ],
                                 [
-
                                     {
                                         text: numeroDeDias + ' Días',
                                         colSpan: 2,
                                         alignment: 'center'
-
                                     },
                                     {
                                         text: nochesUI,
                                         //  style: 'celdaTablaGlobalReserva',
                                         alignment: 'center'
-
                                     }
-
-
                                 ],
-
                                 [
-
                                     {
                                         text: fechaSalida_humana,
                                         style: 'celdaTablaGlobalReserva',
                                         colSpan: 2,
                                         alignment: 'center'
-
                                     },
                                     /* 
                                     {
@@ -559,14 +516,10 @@ const generadorPDF3 = async (reserva) => {
                                       }
                                       */
                                 ]
-
                             ]
                         ]
-
                     }
                 },
-
-
             ],
             pageSize: 'A4',
             pageMargins: [20, 70, 20, 20],
@@ -577,29 +530,23 @@ const generadorPDF3 = async (reserva) => {
                 },
                 cabecera: {
                     margin: [10, 10, 10, 10]
-
                 },
                 tituloReserva: {
                     fontSize: 16,
                     bold: true,
                     margin: [5, 15, 14, 10],
                     alignment: "right"
-
                 },
                 apartamentoNombre: {
                     fontSize: 8,
                     bold: true,
                     alignment: "left"
-
                 },
-
                 valorTotal: {
                     fontSize: 8,
                     bold: true,
                     alignment: "right",
                     margin: [0, 0, 0, 0],
-
-
                 },
                 subheader: {
                     fontSize: 16,
@@ -651,19 +598,12 @@ const generadorPDF3 = async (reserva) => {
             defaultStyle: {
                 columnGap: 0
             }
-
         };
-
-
-
-
         const totalesPorApartamento = reserva.desgloseFinanciero.totalesPorApartamento
         if (totalesPorApartamento.length > 0) {
-
             const tablaFormatoPDFMake = {
                 style: 'tablaTotales',
                 layout: 'lightHorizontalLines',
-
                 table: {
                     widths: ['*', 100],
                     body: [
@@ -681,8 +621,6 @@ const generadorPDF3 = async (reserva) => {
                                 }
                             ]
                         ],
-
-
                     ]
                 }
             }
@@ -695,32 +633,24 @@ const generadorPDF3 = async (reserva) => {
                             text: apartamentoUI,
                             style: 'apartamentoNombre',
                         },
-
                     ],
                     [
                         {
                             text: totalNetoRango + '$',
                             style: 'valorTotal',
                         },
-
                     ],
                 ]
                 tablaFormatoPDFMake.table.body.push(fila)
             }
-
             docDefinition.content.push(tablaFormatoPDFMake)
         }
-
-
-
         const ofertasAplicadas = reserva.desgloseFinanciero.ofertas
         const impuestos = reserva.desgloseFinanciero.impuestos
         if (impuestos.length > 0) {
-
             const tablaFormatoPDFMake = {
                 style: 'tablaTotales',
                 layout: 'lightHorizontalLines',
-
                 table: {
                     widths: ['*', 100],
                     body: [
@@ -738,8 +668,6 @@ const generadorPDF3 = async (reserva) => {
                                 }
                             ]
                         ],
-
-
                     ]
                 }
             }
@@ -748,7 +676,6 @@ const generadorPDF3 = async (reserva) => {
                 const tipoImpositivo = detallesImpuesto.tipoImpositivo
                 const tipoValor = detallesImpuesto.tipoValor
                 const calculoImpuestoPorcentaje = detallesImpuesto.calculoImpuestoPorcentaje
-
                 let valorFinal
                 if (tipoValor === "tasa") {
                     valorFinal = tipoImpositivo + "$"
@@ -762,19 +689,16 @@ const generadorPDF3 = async (reserva) => {
                             text: nombreImpuesto,
                             style: 'apartamentoNombre',
                         },
-
                     ],
                     [
                         {
                             text: valorFinal,
                             style: 'valorTotal',
                         },
-
                     ],
                 ]
                 tablaFormatoPDFMake.table.body.push(fila)
             }
-
             docDefinition.content.push(tablaFormatoPDFMake)
         }
         const totales = reserva.desgloseFinanciero.totales
@@ -786,16 +710,13 @@ const generadorPDF3 = async (reserva) => {
             totalImpuestos: "Total impuestos aplicados",
             totalConImpuestos: "Total bruto final a pagar",
         }
-
         if (!totales.totalDescuentos) {
             delete totales.totalDescuentos
             delete totales.totalReservaNetoSinOfertas
         }
-
         const tablaTotales = {
             style: 'tablaTotales',
             layout: 'lightHorizontalLines',
-
             table: {
                 widths: ['*', 100],
                 body: [
@@ -813,8 +734,6 @@ const generadorPDF3 = async (reserva) => {
                             }
                         ]
                     ],
-
-
                 ]
             }
         }
@@ -826,100 +745,52 @@ const generadorPDF3 = async (reserva) => {
                         text: nombreTotalUI,
                         style: 'apartamentoNombre',
                     },
-
                 ],
                 [
                     {
                         text: valorTotal + "$",
                         style: 'valorTotal',
                     },
-
                 ],
             ]
             tablaTotales.table.body.push(fila)
-
         }
-
         docDefinition.content.push(tablaTotales)
-
-
         const mensaje1 = {
             text: 'ste documento es solo un resumen de su reserva con la información global de la reserva y los totales más relevantes. Si desea un desglose detallado, puede acceder a casavitini.com con su cuenta de usuario. Puede registrar su cuenta gratuitamente en https://casavitini.com/micasa/crear_nueva_cuenta. Recuerde usar la misma dirección de correo electrónico que utilizó para confirmar su reserva.',
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje1)
-
         const mensaje2 = {
             text: 'Si necesita ponerse en contacto con nosotros, puede enviarnos un email a casavitini@casavitini.com, tambien puede encontrar mas métodos de contacto en https://casavitini.com/contacto.',
             style: 'textoSimple'
         }
-
         docDefinition.content.push(mensaje2)
-
-
         const mensaje3 = {
             text: 'Este documento es meramente informativo. Para realizar el check-in, es necesario presentar algún tipo de documento identificativo, como un pasaporte o un documento nacional de identidad.',
             style: 'textoSimple'
         }
-
         docDefinition.content.push(mensaje3)
-
-
-
-
-
         // Totales por noche
-
         // Ofertas aplicadas
-
-
-
         // Totales
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         const generarPDF = async (docDefinition) => {
             return new Promise((resolve, reject) => {
                 const printer = new pdfmake(fonts);
-
                 const pdf = printer.createPdfKitDocument(docDefinition);
                 const chunks = [];
-
                 pdf.on('data', chunk => {
                     chunks.push(chunk);
                 });
-
                 pdf.on('end', () => {
                     const archivo = Buffer.concat(chunks);
                     // Puedes hacer lo que necesites con 'archivo' antes de resolver la promesa
                     // Por ejemplo, guardar en un archivo, enviar como respuesta HTTP, etc.
                     resolve(archivo);
                 });
-
                 pdf.on('error', error => {
                     reject(error);
                 });
-
                 pdf.end();
             });
         };
@@ -928,11 +799,7 @@ const generadorPDF3 = async (reserva) => {
     } catch (error) {
         throw error
     }
-
-
 }
-
 export {
     generadorPDF3
 }
-

@@ -1,13 +1,10 @@
 import { conexion } from "../../db.mjs"
-
 const reservasPorRango_y_apartamentos = async (metadatos) => {
     try {
-
         const fechaInicioRango_ISO = metadatos.fechaSalidaReserva_ISO
         const fechaFinRango_USO = metadatos.fechaSeleccionadaParaFuturo_ISO
         const reservaUID = metadatos.reservaUID
         const apartamentosIDV_array = metadatos.apartamentosIDV_array
-
         const consultaReservas = `
         SELECT 
         r.reserva,        
@@ -43,14 +40,13 @@ const reservasPorRango_y_apartamentos = async (metadatos) => {
         )   
         GROUP BY
         r.reserva, r.entrada, r.salida; `
-
         const resuelveConsultaReservas = await conexion.query(consultaReservas, [fechaInicioRango_ISO, fechaFinRango_USO, reservaUID, apartamentosIDV_array])
+        console.log("reesuelveContrularReserva", resuelveConsultaReservas.rows)
         return resuelveConsultaReservas.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }
 }
-
 export {
     reservasPorRango_y_apartamentos
 }

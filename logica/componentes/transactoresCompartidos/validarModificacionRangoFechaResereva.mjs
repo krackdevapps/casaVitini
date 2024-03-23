@@ -6,24 +6,18 @@ import { codigoZonaHoraria } from './codigoZonaHoraria.mjs';
 import { selectorRangoUniversal } from './selectoresCompartidos/selectorRangoUniversal.mjs';
 import { bloqueosPorRango_apartamentoIDV } from './selectoresCompartidos/bloqueosPorRango_apartamentoIDV.mjs';
 import { reservasPorRango_y_apartamentos } from './selectoresCompartidos/reservasPorRango_y_apartamentos.mjs';
-
-
 const validarModificacionRangoFechaResereva = async (metadatos) => {
     try {
-
         const reserva = metadatos.reserva
         const mesCalendario = metadatos.mesCalendario.padStart(2, '0');
         const anoCalendario = metadatos.anoCalendario.padStart(2, '0');
         const sentidoRango = metadatos.sentidoRango
-
         const regexMes = /^\d{2}$/;
         const regexAno = /^\d{4,}$/;
-
         if (!regexAno.test(anoCalendario)) {
             const error = "El año (anoCalenadrio) debe de ser una cadena de cuatro digitos. Por ejemplo el año uno se escribiria 0001"
             throw new Error(error)
         }
-
         if (!regexMes.test(mesCalendario)) {
             const error = "El mes (mesCalendario) debe de ser una cadena de dos digitos, por ejemplo el mes de enero se escribe 01"
             throw new Error(error)
@@ -63,25 +57,19 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             const error = "No existe la reserva"
             throw new Error(error)
         }
-
         const estadoPago = resuelveConsultaDatosReservaActual.rows[0].estadoPago
         if (estadoPago === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada"
             throw new Error(error)
         }
-
         const fechaEntradaReserva_ISO = resuelveConsultaDatosReservaActual.rows[0].fechaEntrada_ISO
         const fechaSalidaReserva_ISO = resuelveConsultaDatosReservaActual.rows[0].fechaSalida_ISO
-
         const fechaEntradaReserva_Objeto = DateTime.fromISO(fechaEntradaReserva_ISO)
         const fechaSalidaReserva_Objeto = DateTime.fromISO(fechaSalidaReserva_ISO)
-
         const mesReservaEntrada = fechaEntradaReserva_ISO.split("-")[1]
         const anoReservaEntrada = fechaEntradaReserva_ISO.split("-")[0]
-
         const mesReservaSalida = fechaSalidaReserva_ISO.split("-")[1]
         const anoReservaSalida = fechaSalidaReserva_ISO.split("-")[0]
-
         const consultaAlojamientoReservaActual = `
         SELECT 
         apartamento
@@ -97,11 +85,9 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
         const apartamentosReservaActual = resuelveConsultaAlojamientoReservaActual.rows.map((apartamento) => {
             return apartamento.apartamento
         })
-
         const reservaActual = {
             apartamentos: apartamentosReservaActual
         }
-
         const apartamentosConConfiguracionDisponible = []
         // consulta apartamentos NO diponibles en configuracion global
         const estadoNoDisponibleApartamento = "disponible"
@@ -111,25 +97,20 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             WHERE "estadoConfiguracion" = $1
             `
         const resuelveConsultaApartamentosNoDisponibles = await conexion.query(consultaApartamentosNoDispopnbiles, [estadoNoDisponibleApartamento])
-
         resuelveConsultaApartamentosNoDisponibles.rows.map((apartamentoConConfiguracionDisponible) => {
             apartamentosConConfiguracionDisponible.push(apartamentoConConfiguracionDisponible.apartamentoIDV)
         })
-
         const controlConfiguracionAlojamiento = apartamentosReservaActual.every(apto => apartamentosConConfiguracionDisponible.includes(apto));
         if (!controlConfiguracionAlojamiento) {
             const error = "No se puede comprobar la elasticidad del rango de esta reserva por que hay apartamentos que no existen en la configuracion de alojamiento. Dicho de otra manera, esta reserva tiene apartamentos que ya no existen como configuracion de alojamiento. Puede que esta reserva se hiciera cuando existian unas configuraciones de alojamiento que ahora ya no existen."
             throw new Error(error)
         }
-
-
         if (sentidoRango === "pasado") {
             const fechaSeleccionadaParaPasado_Objeto = DateTime.fromObject({
                 year: anoCalendario,
                 month: mesCalendario, day: 1
             })
                 .minus({ months: 1 }).endOf('month')
-
             const fechaSeleccionadaParaPasado_ISO = fechaSeleccionadaParaPasado_Objeto.toISODate().toString()
             console.log("mesPAsado", fechaSeleccionadaParaPasado_ISO)
             if (anoReservaSalida < anoCalendario || mesReservaSalida < mesCalendario && anoReservaSalida === anoCalendario) {
@@ -137,8 +118,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 throw new Error(error)
             }
             /// No se tiene en en cuenta los apartamentos, solo busca bloqueos a sacoa partir de la fecha
-
-
             const configuracionBloqueos = {
                 fechaInicioRango_ISO: fechaSeleccionadaParaPasado_ISO,
                 fechaFinRango_ISO: fechaEntradaReserva_ISO,
@@ -149,7 +128,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 ],
             }
             const bloqueosSeleccionados = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
-
             // const consultaBloqueos = `
             // SELECT 
             // uid,
@@ -190,7 +168,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             // const resuelveBloqueos = await conexion.query(consultaBloqueos, [fechaSeleccionadaParaPasado_ISO, fechaEntradaReserva_ISO, apartamentosReservaActual])
             // console.log("w")
             const contenedorBloqueosEncontrados = []
-
             for (const detallesDelBloqueo of bloqueosSeleccionados) {
                 const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada_ISO
                 const fechaSalidaBloqueo_ISO = detallesDelBloqueo.fechaSalida_ISO
@@ -198,7 +175,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 const bloqueoUID = detallesDelBloqueo.uid
                 const motivo = detallesDelBloqueo.motivo
                 const tipoBloqueo = detallesDelBloqueo.tipoBloqueo
-
                 const estructura = {
                     fechaEntrada_ISO: fechaEntradaBloqueo_ISO,
                     fechaSalida_ISO: fechaSalidaBloqueo_ISO,
@@ -207,14 +183,10 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     apartamentoIDV: apartamento,
                     tipoBloqueo: tipoBloqueo,
                     motivo: motivo || "(Sin motivo espeficado en el bloqueo)"
-
                 }
                 contenedorBloqueosEncontrados.push(estructura)
             }
-
             const contenedorReservaEncontradas = []
-
-
             const configuracionReservas = {
                 fechaInicioRango_ISO: fechaSeleccionadaParaPasado_ISO,
                 fechaFinRango_USO: fechaEntradaReserva_ISO,
@@ -222,7 +194,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 apartamentosIDV_array: apartamentosReservaActual,
             }
             const reservasSeleccionadas = await reservasPorRango_y_apartamentos(configuracionReservas)
-
             // // extraer las reservas dentro del rango
             // const consultaReservas = `
             //     SELECT 
@@ -267,7 +238,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
                 const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
                 const apartamentos = detallesReserva.apartamentos
-
                 const estructura = {
                     fechaEntrada_ISO: fechaEntrada_ISO,
                     fechaSalida_ISO: fechaSalida_ISO,
@@ -276,16 +246,13 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     apartamentos: apartamentos
                 }
                 contenedorReservaEncontradas.push(estructura)
-
             }
-
             // En base a los apartamentos de la reserva se impoirtan los calendarios que funcionan por apartmento
             const calendariosSincronizados = []
             for (const apartamentoIDV of apartamentosReservaActual) {
                 const eventosCalendarioPorIDV = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV)
                 calendariosSincronizados.push(eventosCalendarioPorIDV)
             }
-
             // Buscar solo los eventos del mismo mes
             const contenedorEventosCalendariosSincronizados = []
             // Iteramos el array con todos los grupos por apartamentoIDV
@@ -298,12 +265,10 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     const eventosCalendario = eventosDelCalendario.calendarioObjeto
                     // Iteramos por cada evento
                     for (const detallesDelEvento of eventosCalendario) {
-
                         const fechaFinal = detallesDelEvento.fechaFinal
                         const fechaInicio = detallesDelEvento.fechaInicio
                         const nombreEvento = detallesDelEvento.nombreEvento
                         const descripcion = detallesDelEvento.descripcion
-
                         const rangoInterno = selectorRangoUniversal({
                             fechaInicio_rango_ISO: fechaSeleccionadaParaPasado_ISO,
                             fechaFin_rango_ISO: fechaEntradaReserva_ISO,
@@ -323,15 +288,12 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                                 tipoElemento: "eventoSincronizado"
                             }
                             contenedorEventosCalendariosSincronizados.push(estructura)
-
                             console.log("eventosAceptados", estructura)
                         }
                     }
                 }
             }
-
             const fechaFinRango_entradaReserva_objeto = DateTime.fromISO(fechaEntradaReserva_ISO);
-
             const contenedorGlobal = [
                 ...contenedorBloqueosEncontrados,
                 ...contenedorReservaEncontradas,
@@ -343,7 +305,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
                 const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
                 const tipoElemento = detallesDelEvento.tipoElemento
-
                 if ((tipoElemento === "reserva" || tipoElemento === "eventoSincronizado")
                     &&
                     (
@@ -367,7 +328,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     }
                 }
             }
-
             if (contenedorDeEventosQueDejanSinRangoDisponible.length) {
                 const ok = {
                     ok: "noHayRangoPasado",
@@ -376,7 +336,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 }
                 return ok
             }
-
             // Aqui se mira si habiendo algo de rango disponible. Aqui entonces se mira cuanto rango disponbile hay en el mes solicitaado
             const contenedorQueDejanRangoDisponbile = []
             for (const detallesDelEvento of contenedorGlobal) {
@@ -413,7 +372,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     }
                 }
             }
-
             if (contenedorQueDejanRangoDisponbile.length) {
                 const eventosOrdenadorPorFechaDeSalida = contenedorQueDejanRangoDisponbile.sort((evento1, evento2) => {
                     const fechaSalidaA = DateTime.fromISO(evento1.fechaSalida_ISO); // Convertir fecha de salida del evento 1 a objeto DateTime
@@ -427,12 +385,10 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                         return 0; // Si las fechas de salida son iguales, no hay cambio en el orden
                     }
                 });
-
                 // Hay mas de un evento con la fecha mas cercana?
                 let fechaMasCercana = eventosOrdenadorPorFechaDeSalida[0].fechaSalida_ISO
                 let sePermiteElMismoDia = "si"
                 for (const detallesDeLosEventosOrdenados of eventosOrdenadorPorFechaDeSalida) {
-
                     const fechaPorBuscar = detallesDeLosEventosOrdenados.fechaSalida_ISO
                     const tipoElemento = detallesDeLosEventosOrdenados.tipoElemento
                     if (fechaMasCercana === fechaPorBuscar &&
@@ -440,7 +396,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                         sePermiteElMismoDia = "no"
                     }
                 }
-
                 const ok = {
                     ok: "rangoPasadoLimitado",
                     limitePasado: fechaMasCercana,
@@ -448,7 +403,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     comportamiento: "No se ha restado un dia por que es un bloqueo",
                     detallesDeLosEventosBloqueantes: eventosOrdenadorPorFechaDeSalida
                 }
-
                 if (sePermiteElMismoDia === "si") {
                     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                     ok.limitePasado = DateTime.fromISO(fechaMasCercana, { zone: zonaHoraria }).minus({ days: 1 }).toISODate()
@@ -456,13 +410,11 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 }
                 return ok
             }
-
             const ok = {
                 ok: "rangoPasadoLibre"
             }
             return ok
         }
-
         if (sentidoRango === "futuro") {
             const fechaSeleccionadaParaFuturo_Objeto = DateTime.fromObject({
                 year: anoCalendario,
@@ -471,13 +423,10 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 .plus({ months: 1 })
             const fechaSeleccionadaParaFuturo_ISO = fechaSeleccionadaParaFuturo_Objeto.toISODate().toString()
             console.log("fechaSeleccionadaParaFuturo_ISO", fechaSeleccionadaParaFuturo_ISO)
-
             if ((anoReservaEntrada > anoCalendario) || (mesReservaEntrada > mesCalendario && anoReservaEntrada === anoCalendario)) {
                 const error = "El mes de salida seleccionado no puede ser inferior a al mes de la fecha de entrada de la reserva"
                 throw new Error(error)
             }
-
-
             const configuracionBloqueos = {
                 fechaInicioRango_ISO: fechaSalidaReserva_ISO,
                 fechaFinRango_ISO: fechaSeleccionadaParaFuturo_ISO,
@@ -488,10 +437,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 ],
             }
             const bloqueosSeleccionados = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
-
-
-
-
             // const consultaBloqueos = `
             // SELECT 
             // uid,
@@ -532,7 +477,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             //    ("tipoBloqueo" = 'permanente')
             // );`
             // const resuelveBloqueos = await conexion.query(consultaBloqueos, [fechaSalidaReserva_ISO, fechaSeleccionadaParaFuturo_ISO, apartamentosReservaActual])
-
             const contenedorBloqueosEncontrados = []
             for (const detallesDelBloqueo of bloqueosSeleccionados) {
                 const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada_ISO
@@ -541,7 +485,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 const bloqueoUID = detallesDelBloqueo.uid
                 const motivo = detallesDelBloqueo.motivo
                 const tipoBloqueo = detallesDelBloqueo.tipoBloqueo
-
                 const estructura = {
                     fechaEntrada_ISO: fechaEntradaBloqueo_ISO,
                     fechaSalida_ISO: fechaSalidaBloqueo_ISO,
@@ -550,15 +493,10 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     apartamentoIDV: apartamento,
                     tipoBloqueo: tipoBloqueo,
                     motivo: motivo || "(Sin motivo espeficado en el bloqueo)"
-
                 }
                 contenedorBloqueosEncontrados.push(estructura)
-
             }
-
             const contenedorReservaEncontradas = []
-
-
             const configuracionReservas = {
                 fechaInicioRango_ISO: fechaSalidaReserva_ISO,
                 fechaFinRango_USO: fechaSeleccionadaParaFuturo_ISO,
@@ -566,7 +504,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 apartamentosIDV_array: apartamentosReservaActual,
             }
             const reservasSeleccionadas = await reservasPorRango_y_apartamentos(configuracionReservas)
-
             // const consultaReservas = `
             //       SELECT 
             //       r.reserva,
@@ -602,15 +539,12 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             //       )   
             //   GROUP BY
             //       r.reserva, r.entrada, r.salida; `
-
             // const resuelveConsultaReservas = await conexion.query(consultaReservas, [fechaSalidaReserva_ISO, fechaSeleccionadaParaFuturo_ISO, reserva, apartamentosReservaActual])
-
             for (const detallesReserva of reservasSeleccionadas) {
                 const reserva = detallesReserva.reserva
                 const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
                 const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
                 const apartamentos = detallesReserva.apartamentos
-
                 const estructura = {
                     fechaEntrada_ISO: fechaEntrada_ISO,
                     fechaSalida_ISO: fechaSalida_ISO,
@@ -620,7 +554,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 }
                 contenedorReservaEncontradas.push(estructura)
             }
-
             // En base a los apartamentos de la reserva se impoirtan los calendarios que funcionan por apartmento
             const calendariosSincronizados = []
             for (const apartamentoIDV of apartamentosReservaActual) {
@@ -633,19 +566,15 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 // Dentro de cada apartamentoIDV hay un grupo de calendarios
                 const apartamentoIDV = contenedorCalendariosPorIDV.apartamentoIDV
                 const calendariosPorApartamento = contenedorCalendariosPorIDV.calendariosPorApartamento
-
                 // Obtenemos todos los eventos como objetos por calendario
                 for (const eventosDelCalendario of calendariosPorApartamento) {
                     const eventosCalendario = eventosDelCalendario.calendarioObjeto
-
                     // Iteramos por cada evento
                     for (const detallesDelEvento of eventosCalendario) {
-
                         const fechaFinal = detallesDelEvento.fechaFinal
                         const fechaInicio = detallesDelEvento.fechaInicio
                         const nombreEvento = detallesDelEvento.nombreEvento
                         const descripcion = detallesDelEvento.descripcion
-
                         const rangoInterno = selectorRangoUniversal({
                             fechaInicio_rango_ISO: fechaSalidaReserva_ISO,
                             fechaFin_rango_ISO: fechaSeleccionadaParaFuturo_ISO,
@@ -653,7 +582,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                             fechaFin_elemento_ISO: fechaFinal,
                             tipoLimite: "noIncluido"
                         })
-
                         if (rangoInterno) {
                             const estructura = {
                                 apartamentoIDV: apartamentoIDV,
@@ -669,17 +597,13 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     }
                 }
             }
-
             const fechaInicioRango_salidaReserva_objeto = DateTime.fromISO(fechaSalidaReserva_ISO);
-
             const contenedorGlobal = [
                 ...contenedorBloqueosEncontrados,
                 ...contenedorReservaEncontradas,
                 ...contenedorEventosCalendariosSincronizados,
             ]
-
             const contenedorDeEventosQueDejanSinRangoDisponible = []
-
             for (const detallesDelEvento of contenedorGlobal) {
                 const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
                 const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
@@ -702,7 +626,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     }
                 }
             }
-
             if (contenedorDeEventosQueDejanSinRangoDisponible.length) {
                 const ok = {
                     ok: "noHayRangoFuturo",
@@ -717,10 +640,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
                 const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
                 const tipoElemento = detallesDelEvento.tipoElemento
-
-
                 if (tipoElemento === "reserva" || tipoElemento === "eventoSincronizado") {
-
                     const eventoBloqueanteDeRango = selectorRangoUniversal({
                         fechaInicio_rango_ISO: fechaSalidaReserva_ISO,
                         fechaFin_rango_ISO: fechaSeleccionadaParaFuturo_ISO,
@@ -731,10 +651,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     if (eventoBloqueanteDeRango) {
                         contenedorQueDejanRangoDisponbile.push(detallesDelEvento)
                     }
-
                 }
-
-
                 if (tipoElemento === "bloqueo") {
                     const tipoBloqueo = detallesDelEvento.tipoBloqueo
                     if (tipoBloqueo === "rangoTemporal") {
@@ -753,7 +670,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     }
                 }
             }
-
             if (contenedorQueDejanRangoDisponbile.length) {
                 const eventosOrdenadorPorFechaDeEntrada = contenedorQueDejanRangoDisponbile.sort((evento1, evento2) => {
                     const fechaEntradaA = DateTime.fromISO(evento1.fechaEntrada_ISO); // Convertir fecha de salida del evento 1 a objeto DateTime
@@ -767,11 +683,9 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                         return 0; // Si las fechas de salida son iguales, no hay cambio en el orden
                     }
                 });
-
                 let fechaMasCercana = eventosOrdenadorPorFechaDeEntrada[0].fechaEntrada_ISO
                 let sePermiteElMismoDia = "si"
                 for (const detallesDeLosEventosOrdenados of eventosOrdenadorPorFechaDeEntrada) {
-
                     const fechaPorBuscar = detallesDeLosEventosOrdenados.fechaEntrada_ISO
                     const tipoElemento = detallesDeLosEventosOrdenados.tipoElemento
                     if (fechaMasCercana === fechaPorBuscar &&
@@ -779,7 +693,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                         sePermiteElMismoDia = "no"
                     }
                 }
-
                 const ok = {
                     ok: "rangoFuturoLimitado",
                     limiteFuturo: fechaMasCercana,
@@ -803,7 +716,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
         throw error;
     }
 }
-
 export {
     validarModificacionRangoFechaResereva
 };

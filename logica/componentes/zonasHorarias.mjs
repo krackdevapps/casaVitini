@@ -597,7 +597,6 @@ const listaZonasHorarias = [
     "WET",
     "Zulu"
 ]
-
 const zonasHorarias = () => {
     return listaZonasHorarias
 }

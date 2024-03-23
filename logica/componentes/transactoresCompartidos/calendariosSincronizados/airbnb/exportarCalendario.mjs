@@ -1,5 +1,4 @@
 import ical from 'ical-generator';
-
 const exportarClendario = async (eventos) => {
     const cal = ical();
     cal.prodId("//Casas Vitini//Calendario v1.0//EN")
@@ -25,11 +24,9 @@ const exportarClendario = async (eventos) => {
             description: evento.description
         });
         
-
     });
     return cal.toString();
 }
-
 export {
     exportarClendario
 }

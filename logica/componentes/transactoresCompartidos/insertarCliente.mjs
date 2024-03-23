@@ -1,6 +1,5 @@
 import { conexion } from "../db.mjs";
 import { validadoresCompartidos } from "../validadoresCompartidos.mjs";
-
 const insertarCliente = async (nuevoCliente) => {
     try {
         const nombre = nuevoCliente.nombre
@@ -50,14 +49,12 @@ const insertarCliente = async (nuevoCliente) => {
         }
         if (resuelveInsertarCliente.rowCount === 1) {
             const nuevoCliente = resuelveInsertarCliente.rows[0]
-
             return nuevoCliente
         }
     } catch (error) {
         throw error
     }
 }
-
 export {
     insertarCliente
 }

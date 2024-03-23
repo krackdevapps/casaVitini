@@ -1,10 +1,5 @@
 import { conexion } from "../db.mjs"
-
-
-
-
 const obtenerDetallesOferta = async (ofertaUID) => {
-
     try {
         if (!ofertaUID || typeof ofertaUID !== "number" || !Number.isInteger(ofertaUID) || ofertaUID <= 0) {
             const error = "El campo 'ofertaUID' debe ser un tipo numero, entero y positivo"
@@ -46,12 +41,10 @@ const obtenerDetallesOferta = async (ofertaUID) => {
             const error = "No existe ninguna reserva con ese UID"
             throw new Error(error)
         }
-
         if (resuelveConsultaDetallesOferta.rowCount === 1) {
             if (oferta.tipoOfertaIDV === "porNumeroDeApartamentos" || oferta.tipoOfertaIDV === "porDiasDeAntelacion" || oferta.tipoOfertaIDV === "porDiasDeReserva" || oferta.tipoOfertaIDV === "porRangoDeFechas") {
                 return oferta
             }
-
             if (oferta.tipoOfertaIDV === "porApartamentosEspecificos") {
                 const detallesOferta = oferta
                 detallesOferta["apartamentosDedicados"] = []
@@ -68,12 +61,9 @@ const obtenerDetallesOferta = async (ofertaUID) => {
                 WHERE oferta = $1
                 `
                 const resuelveDetallesApartamentosDedicados = await conexion.query(detallesApartamentosDedicados, [oferta.uid])
-
                 if (resuelveDetallesApartamentosDedicados.rowCount > 0) {
-
                     const apartamentosDedicados = resuelveDetallesApartamentosDedicados.rows
                     detallesOferta["apartamentosDedicados"] = []
-
                     apartamentosDedicados.map((apartamento) => {
                         const apartamentoIDV = apartamento.apartamentoIDV
                         const apartamentoUI = apartamento.apartamentoUI
@@ -84,7 +74,6 @@ const obtenerDetallesOferta = async (ofertaUID) => {
                             apartamentoUI: apartamentoUI,
                             tipoDescuento: tipoDescuentoApartamento,
                             cantidadApartamento: cantidadApartamento
-
                         }
                         detallesOferta["apartamentosDedicados"].push(detallesApartamentoDedicado)
                     })
@@ -92,13 +81,10 @@ const obtenerDetallesOferta = async (ofertaUID) => {
                 return detallesOferta
             }
         }
-
     } catch (errorCapturado) {
         throw errorCapturado
     }
-
 }
-
 export {
     obtenerDetallesOferta
 }

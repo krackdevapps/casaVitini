@@ -1,11 +1,8 @@
 import { conexion } from "../../db.mjs"
-
 const reservasPorRango = async (metadatos) => {
     try {
-
         const fechaIncioRango_ISO = metadatos.fechaIncioRango_ISO
         const fechaFinRango_ISO = metadatos.fechaFinRango_ISO
-
         const consultaReservas = `
         SELECT reserva 
         FROM reservas  
@@ -27,7 +24,7 @@ const reservasPorRango = async (metadatos) => {
         ))
         AND "estadoReserva" <> 'cancelada';`
         const resuelveRreservas = await conexion.query(consultaReservas, [fechaIncioRango_ISO, fechaFinRango_ISO])
-        resuelveRreservas.rows
+        return resuelveRreservas.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

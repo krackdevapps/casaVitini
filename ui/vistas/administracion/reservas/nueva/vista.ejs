@@ -1,10 +1,8 @@
 <arranque administracion="reservas.nuevaReserva.arranque"></arranque>
 <p class="titulo">Anadir nueva reserva</p>
-
 <div class="marcoSeparador">
     <div class="espacioEntreElementos">
             <p class="infoCrearReservaAdministratia">Selecciona un rango con una fecha de entrada y una fecha de salida para ver los apartamentos disponibles en ese rango de fecha. Luego selecciona los apartamentos y pulsa en crear reserva. Tras pulsar en crear reserva podrás añadir el resto de los datos como los pernoctantes o los tipos de cama. Ahora lo relevante es confirmar que los apartamentos son reservables en el rango de fechas seleccionado.</p>
-
    
         <div class="reservaDetallesBloqueFecha">
             
@@ -14,7 +12,6 @@
                     Fecha de entrada</p>
                 <p class="marginCeroparaP componenteFechaEntrada desactivaEventos" id="fechaEntrada"
                 fechaUI="fechaInicio">(Seleccionar)</p>
-
             </div>
             <div class="administracionReservaBloqueDual">
                 <p class="botonBuscarAlojamiento" componente="botonBuscarAlojamiento">
@@ -25,21 +22,14 @@
                 calendario="salida" contenedor="desplegarCalendario"  paralizadorEvento="ocultadorCalendarios">
                 <p class="adminsitracionReservasTituloNombre marginCeroparaP componenteFechaSalida desactivaEventos">
                     Fecha de salida</p>
-
                 <p class="marginCeroparaP componenteFechaSalida desactivaEventos" id="fechaSalida"
                     fechaUI="fechaFin">(Seleccionar)</p>
-
             </div>
         </div>
         <div class="administracion_reservas_crearReserva elementoOcultoInicialmente" componente="espacioApartamento">
         </div>
-
         <div class="bloqueBotones elementoOcultoInicialmente" componente="espacioBotonConfirmarReserva">
             <div class="botonConfirmarCrearReservaNueva" componente="botonConfirmarReserva">Confirmar reserva y proceder a editarla</div>
         </div>
-
-
-
-
     </div>
 </div>

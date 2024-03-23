@@ -2,7 +2,6 @@ import pkg from 'pg';
 import dotenv from "dotenv";
 dotenv.config();
 const { Pool } = pkg;
-
 let BaseDeDatos
 const entorno = process.env.ENTORNO_DB
 if (entorno === "nativo") {
@@ -41,7 +40,6 @@ if (entorno === "docker") {
           },
         */
     }
-
 }
 const conexion = new Pool(BaseDeDatos);
 conexion.on('error', (error) => {
@@ -49,7 +47,3 @@ conexion.on('error', (error) => {
     // Puedes tomar acciones adicionales aquí, como intentar reconectar o cerrar la aplicación
   });
 export { conexion };
-
-
-
-

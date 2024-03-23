@@ -2,16 +2,12 @@ import { DateTime } from "luxon";
 import Decimal from "decimal.js";
 import { conexion } from "../../db.mjs";
 import { validadoresCompartidos } from "../../validadoresCompartidos.mjs";
-
 const porDiasDeReserva = async (reserva) => {
     try {
-
         const fechaEntradaReserva_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(reserva.fechas.entrada)).fecha_ISO
         const fechaSalidaReserva_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(reserva.fechas.salida)).fecha_ISO
         const totalReservaNeto = new Decimal(reserva.desgloseFinanciero.totales.totalReservaNeto)
-
         const fechaActualTZ =  reserva.fechas.fechaActualProcesada_ISO
-
         const estadoOfertaActivado = "activada"
         const consulta = `
         SELECT 
@@ -35,7 +31,6 @@ const porDiasDeReserva = async (reserva) => {
         const ofertasTipo = "porDiasDeReserva";
         const ofertasEncontradas = await conexion.query(consulta, [fechaActualTZ, estadoOfertaActivado, ofertasTipo]);
         const ofertasSeleccionadas = []
-
         for (const detallesOferta of ofertasEncontradas.rows) {
             const simboloNumero = detallesOferta.simboloNumero
             const numero = detallesOferta.numero
@@ -43,8 +38,6 @@ const porDiasDeReserva = async (reserva) => {
             const tipoDescuento = detallesOferta.tipoDescuento
             const cantidad = detallesOferta.cantidad
             const tipoOferta = detallesOferta.tipoOferta
-
-
             const ofertaEstructuraFinal = {
                 nombreOferta: nombreOferta,
                 tipoDescuento: tipoDescuento,
@@ -53,11 +46,9 @@ const porDiasDeReserva = async (reserva) => {
                 simboloNumero: simboloNumero,
                 tipoOferta:tipoOferta
             }
-
             const fechaEntradaReservaObjeto = DateTime.fromISO(fechaEntradaReserva_ISO);
             const fechaSalidaReservaObjeto = DateTime.fromISO(fechaSalidaReserva_ISO);
             const diasDeLaReserva = Math.floor(fechaSalidaReservaObjeto.diff(fechaEntradaReservaObjeto, 'days').days);
-
             let descuentoUI
             if (tipoDescuento === "porcentaje") {
                 descuentoUI = `del ${cantidad}%`
@@ -65,7 +56,6 @@ const porDiasDeReserva = async (reserva) => {
             if (tipoDescuento === "cantidadFija") {
                 descuentoUI = `de ${cantidad}$`
             }
-
             if (simboloNumero === "aPartirDe" && numero <= diasDeLaReserva) {
                 ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de duración o mas.`
                 ofertasSeleccionadas.push(ofertaEstructuraFinal)
@@ -74,38 +64,29 @@ const porDiasDeReserva = async (reserva) => {
                 ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de duración concretament.`
                 ofertasSeleccionadas.push(ofertaEstructuraFinal)
             }
-
         }
-
         let descuentoGlobal = new Decimal("0.00")
         for (const detallesOferta of ofertasSeleccionadas) {
             const tipoDescuento = detallesOferta.tipoDescuento
             const cantidad = new Decimal(detallesOferta.cantidad)
-
             if (tipoDescuento === "cantidadFija") {
                 descuentoGlobal = descuentoGlobal.plus(cantidad)
                 detallesOferta.descuento = `${descuentoGlobal}`
-
             }
             if (tipoDescuento === "porcentaje") {
                 descuentoGlobal = cantidad.dividedBy(100).times(totalReservaNeto)
                 detallesOferta.descuento = `${descuentoGlobal}`
             }
-
         }
-
         const estructuraSaliente = {
             porDiasDeReserva: ofertasSeleccionadas,
             descuentoGlobal: descuentoGlobal
         }
         return estructuraSaliente
-
     } catch (error) {
         throw error
     }
 }
-
-
 export {
     porDiasDeReserva
 }

@@ -1,6 +1,5 @@
 import Decimal from "decimal.js"
 import { conexion } from "../db.mjs"
-
 const actualizarEstadoPago = async (reservaUID) => {
     try {
         // Seleccionar el total
@@ -12,7 +11,6 @@ const actualizarEstadoPago = async (reservaUID) => {
              WHERE 
              reserva = $1;`
         const resuelveConsultaTotal = await conexion.query(consultaTotal, [reservaUID])
-
         const totalReserva = resuelveConsultaTotal.rows[0].totalConImpuestos
         
         // Seleccionar todos los pagos
@@ -26,16 +24,13 @@ const actualizarEstadoPago = async (reservaUID) => {
              `
         const resuelveConsultaPagos = await conexion.query(consultaPagos, [reservaUID])
         const pagosEntonctrados = resuelveConsultaPagos.rows
-
         const pagos = pagosEntonctrados.map((pago) => {
             return pago.cantidad
         })
         let totalPagado = "0"
-
         for (const pago of pagos) {
             totalPagado = new Decimal(totalPagado).plus(pago)
         }
-
         const faltantePorPagar = new Decimal(totalReserva).minus(totalPagado)
         const totalPagadoDecimal = new Decimal(totalPagado);
         const faltantePorPagarDecimal = new Decimal(faltantePorPagar);

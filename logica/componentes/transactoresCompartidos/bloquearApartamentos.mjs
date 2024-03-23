@@ -1,29 +1,22 @@
 import { conexion } from '../db.mjs';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
-
 const bloquearApartamentos = async (metadatos) => {
-
     try {
-
         const reserva = metadatos.reserva
         const apartamentoUID = metadatos.apartamentoUID
         const tipoBloqueo = metadatos.tipoBloqueo
         const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
         const fechaSalida_ISO = metadatos.fechaSalida_ISO
-
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
-
         if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
             const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo"
             throw new Error(error)
         }
-
         if (typeof apartamentoUID !== "number" || !Number.isInteger(apartamentoUID) || apartamentoUID <= 0) {
             const error = "El campo 'apartamentoUID' debe ser un tipo numero, entero y positivo"
             throw new Error(error)
         }
-
         if (tipoBloqueo !== "rangoTemporal" && tipoBloqueo !== "permanente" && tipoBloqueo !== "sinBloqueo") {
             const error = "El campo 'tipoBloqueo' solo puede ser rangoTemporal, permanente, sinBloqueo"
             throw new Error(error)
@@ -38,7 +31,6 @@ const bloquearApartamentos = async (metadatos) => {
             const error = "No existe al reserva"
             throw new Error(error)
         }
-
         const validarApartamento = `
         SELECT 
         apartamento 
@@ -55,7 +47,6 @@ const bloquearApartamentos = async (metadatos) => {
         const motivo = `Bloqueo producido por eliminar este apartamento de la reserva ${reserva}`
         if (tipoBloqueo === "rangoTemporal") {
             
-
             const insertaBloqueoApartamento = `
             INSERT INTO 
             "bloqueosApartamentos"
@@ -69,7 +60,6 @@ const bloquearApartamentos = async (metadatos) => {
             )
             VALUES ($1,$2,$3,$4,$5,$6)
             `
-
             const datosBloqueo = [
                 apartamentoIDV,
                 tipoBloqueo,
@@ -84,7 +74,6 @@ const bloquearApartamentos = async (metadatos) => {
                 throw new Error(error)
             }
         }
-
         if (tipoBloqueo === "permanente") {
             let insertaBloqueoApartamento = `
             INSERT INTO 
@@ -108,7 +97,6 @@ const bloquearApartamentos = async (metadatos) => {
                 let error = "No se ha podido aplicar el bloqeuo indefinido"
                 throw new Error(error)
             }
-
         }
         let ok
         if (tipoBloqueo === "rangoTemporal") {
@@ -127,12 +115,10 @@ const bloquearApartamentos = async (metadatos) => {
             }
         }
         return ok
-
     } catch (error) {
         throw error;
     }
 }
-
 export {
     bloquearApartamentos
 };

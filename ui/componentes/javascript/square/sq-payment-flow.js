@@ -1,38 +1,28 @@
 async function SquarePaymentFlow() {
   // Create card payment object and attach to page
   CardPay(document.getElementById('card-container'), document.getElementById('card-button'));
-
   // Create Apple pay instance
   //ApplePay(document.getElementById('apple-pay-button'));
-
   // Create Google pay instance
   GooglePay(document.getElementById('google-pay-button'));
-
   // Create ACH payment
   //ACHPay(document.getElementById('ach-button'));
 }
 window.payments = Square.payments(window.applicationId, window.locationId);
-
 window.paymentFlowMessageEl = document.getElementById('payment-flow-message');
-
 window.showSuccess = function (message) {
   window.paymentFlowMessageEl.classList.add('success');
   window.paymentFlowMessageEl.classList.remove('error');
   window.paymentFlowMessageEl.innerText = message;
-
 }
-
 window.showError = function (message) {
   window.paymentFlowMessageEl.classList.add('error');
   window.paymentFlowMessageEl.classList.remove('success');
   window.paymentFlowMessageEl.innerText = message;
-
 }
-
 window.createPayment = async function (token, verificationToken) {
   casaVitini.componentes.flujoPagoUI.infoDuranteFlujo()
   console.log("Se Inicia el pago")
-
   // Aqui se deberua recoger el objeto reserva e intergrarlo en el objeto que hay dentro de dataJsonString
   const destinoDinamico = document.querySelector("[pasarelaZonaDePago]")?.getAttribute("pasarelaZonaDePago")
   if (!destinoDinamico) {
@@ -46,7 +36,6 @@ window.createPayment = async function (token, verificationToken) {
     const pasaporteTitular = document.querySelector("[campo=pasaporteTitular]").value
     const correoTitular = document.querySelector("[campo=correoTitular]").value
     const telefonoTitular = document.querySelector("[campo=telefonoTitular]").value
-
     const datosTitular = {
       nombreTitular: nombreTitular,
       pasaporteTitular: pasaporteTitular,
@@ -57,17 +46,13 @@ window.createPayment = async function (token, verificationToken) {
     console.info("reservaLocal", reservaLocal)
     acoplador.zona = "plaza/reservas/confirmarReserva"
     acoplador.reserva = reservaLocal
-
   }
   console.log("destinoDinamico", destinoDinamico)
-
   if (destinoDinamico === "enlaceDePago") {
     console.log("enlacesDedpago",)
-
     const enlaceUID = document.querySelector("[pagoUID]").getAttribute("pagoUID")
     acoplador.zona = "plaza/enlaceDePago/realizarPago"
     acoplador.enlaceUID = enlaceUID
-
   }
   const squareMetadatos = {
     token,
@@ -76,7 +61,6 @@ window.createPayment = async function (token, verificationToken) {
   const dataJsonString = {
     ...squareMetadatos,
     ...acoplador,
-
   };
   if (verificationToken !== undefined) {
     dataJsonString.verificationToken = verificationToken;
@@ -92,7 +76,6 @@ window.createPayment = async function (token, verificationToken) {
     });
     const data = await response.json();
     console.info("respuesta >>>>>>>", data)
-
     if (data.error) {
       await casaVitini.componentes.square.crearSesionPago(instanciaUID)
       console.info("error zona 1 >>>", data.error)
@@ -103,7 +86,6 @@ window.createPayment = async function (token, verificationToken) {
       console.info("error zona 2 >>>", data.error)
       await casaVitini.componentes.square.crearSesionPago(instanciaUID)
       if (data.errors[0].detail) {
-
         return casaVitini.componentes.flujoPagoUI.errorInfo(data.errors[0].detail)
         window.showError(data.errors[0].detail);
       }
@@ -116,7 +98,6 @@ window.createPayment = async function (token, verificationToken) {
         const x = eval(data.x)
         window.showSuccess('Pago realizado correctmente y reserva confirmada!');
         console.info("data", data)
-
         // Verificar si la función existe
         if (typeof x === 'function') {
           // Ejecutar la función si existe
@@ -133,11 +114,9 @@ window.createPayment = async function (token, verificationToken) {
     console.error('Error capturado:', error.message);
     console.error('Error capturado:', error.result);
     console.error('Error capturado:', error);
-
     // salida.json(error.result);
   }
 }
-
 // Hardcoded for testing purpose, only used for Apple Pay and Google Pay
 window.getPaymentRequest = function () {
   return {
@@ -167,5 +146,4 @@ window.getPaymentRequest = function () {
     total: { amount: '1.00', label: 'Total', pending: false },
   };
 };
-
 SquarePaymentFlow();

@@ -1,7 +1,5 @@
 import ICAL from 'ical.js';
 import axios from 'axios';
-
-
 const calendarioDatos = `
 BEGIN:VCALENDAR
 PRODID;X-RICAL-TZSOURCE=TZINFO:-//Airbnb Inc//Hosting Calendar 0.8.8//EN
@@ -38,29 +36,23 @@ UID:6fec1092d3fa-90e91084f31dc44707cf607d39e5112d@airbnb.com
 SUMMARY:Airbnb (Not available)
 END:VEVENT
 END:VCALENDAR
-
 `
 try {
     // Realiza la solicitud HTTP para obtener el contenido del archivo ical
     const urlCalenario = "https://www.airbnb.com/calendar/ical/995007946836346231.ics?s=0fa56c34dc7f49041f097b2635be11f6&locale=es"
     const response = await axios.get(urlCalenario);
-
     // Parsea el contenido usando ical.js
     const jcalData = ICAL.parse(response.data);
     const comp = new ICAL.Component(jcalData);
-
     const eventosCalenario = comp.jCal[2]
     //console.log("eventosCalenario",eventosCalenario)
-
     // Itera array los eventos en el componente VCALENDAR
     const arrayFinal = []
     eventosCalenario.forEach((event) => {
         const detallesEventoSinFormatear = event[1]
         // console.log("detallesEventoSinFormatear", detallesEventoSinFormatear)
-
         const eventoObjeto = {}
         detallesEventoSinFormatear.forEach((detallesEvento) => {
-
             const idCajon = detallesEvento[0]
             if (idCajon === "categories") {
                 eventoObjeto.categoriaEvento = detallesEvento[3]
@@ -68,7 +60,6 @@ try {
             if (idCajon === "summary") {
                 eventoObjeto.nombreEvento = detallesEvento[3]
             }
-
             if (idCajon === "dtstart") {
                 eventoObjeto.fechaInicio = detallesEvento[3]
             }
@@ -93,13 +84,9 @@ try {
         })
         arrayFinal.push(eventoObjeto)
     });
-
     console.log(arrayFinal)
 } catch (error) {
     console.error('Error al obtener el archivo ical:', error.message);
     throw error; // Re-lanza el error para que el llamador pueda manejarlo si es necesario
 }
-
-
-
 // test de sincronizacion

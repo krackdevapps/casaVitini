@@ -1,18 +1,14 @@
 import Decimal from 'decimal.js';
 import { conexion } from '../db.mjs';
 import { resolverApartamentoUI } from './resolverApartamentoUI.mjs'
-
 // Los precios de los apartamentos, van asociados a fechas
 const precioBaseApartamento = async (apartamentoIDV) => {
     try {
         const filtroCadena = /^[a-z0-9]+$/;
-
         if (typeof apartamentoIDV !== "string" || !filtroCadena.test(apartamentoIDV)) {
             const error = "El campo apartamentoIDV solo puede ser un una cadena de minúsculas y numeros, ni siquera espacios"
             throw new Error(error)
         }
-
-
         const validarApartamento = `
         SELECT
         "apartamentoIDV"
@@ -27,10 +23,8 @@ const precioBaseApartamento = async (apartamentoIDV) => {
         }
         const detallesApartamento = {}
         const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
         detallesApartamento.apartamentoUI = apartamentoUI
         detallesApartamento.apartamentoIDV = apartamentoIDV
-
         const listarPrecioApartamento = `
         SELECT
         uid, apartamento, precio, moneda
@@ -51,12 +45,10 @@ const precioBaseApartamento = async (apartamentoIDV) => {
             `
             const resuelveInsertaNuevoPerfilPrecio = await conexion.query(insertarNuevoPerfilPrecio, [apartamentoIDV, precioInicial, moneda])
             precioNetoApartamentoPorDia = resuelveInsertaNuevoPerfilPrecio.rows[0].precio
-
         } else {
             precioNetoApartamentoPorDia = resuelveListarPrecioApartamento.rows[0].precio
         }
         detallesApartamento.precioNetoPorDia = precioNetoApartamentoPorDia
-
         const seleccionarImpuestos = `
         SELECT
         nombre, "tipoImpositivo", "tipoValor"
@@ -71,11 +63,9 @@ const precioBaseApartamento = async (apartamentoIDV) => {
             detallesApartamento.impuestos = []
             const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
             let impuestosFinal
-
             let sumaTotalImpuestos = "0.00"
             impuestosEncontrados.map((detalleImpuesto) => {
                 const tipoImpositivo = new Decimal(detalleImpuesto.tipoImpositivo)
-
                 const nombreImpuesto = detalleImpuesto.nombre 
                 const tipoValor = detalleImpuesto.tipoValor
                 impuestosFinal = {
@@ -85,7 +75,6 @@ const precioBaseApartamento = async (apartamentoIDV) => {
                 }
                 if (tipoValor === "porcentaje") {
                     const resultadoApliacado = new Decimal(precioNetoApartamentoPorDia).times(tipoImpositivo.dividedBy(100))
-
                     sumaTotalImpuestos = new Decimal(sumaTotalImpuestos).plus(resultadoApliacado)
                     impuestosFinal.totalImpuesto = resultadoApliacado.toDecimalPlaces(2).toString();
                 }
@@ -95,43 +84,14 @@ const precioBaseApartamento = async (apartamentoIDV) => {
                 }
                 (detallesApartamento.impuestos).push(impuestosFinal)
             })
-
             let totalDiaBruto = new Decimal(sumaTotalImpuestos).plus(precioNetoApartamentoPorDia).toDecimalPlaces(2).toString()
-
             detallesApartamento.totalImpuestos = new Decimal(sumaTotalImpuestos).toDecimalPlaces(2).toString()
             detallesApartamento.totalBrutoPordia = totalDiaBruto;
         }
-
-
         return detallesApartamento
-
     } catch (errorCapturado) {
         throw errorCapturado
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 export {
     precioBaseApartamento

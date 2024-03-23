@@ -1,6 +1,4 @@
 import { Conexion } from './db.mjs';
-
-
 // Crear una tabla para almacenar las sesiones
 const createTable = async () => {
   try {
@@ -17,7 +15,6 @@ const createTable = async () => {
   }
   
 };
-
 // Borrar las sesiones caducadas
 const pruneSessions = async () => {
   try {
@@ -29,7 +26,6 @@ const pruneSessions = async () => {
     
   }
 };
-
 // Almacenar la sesión en la base de datos
 const storeSession = async (sid, sess, expire) => {
   try {
@@ -43,7 +39,6 @@ const storeSession = async (sid, sess, expire) => {
     
   }
 };
-
 // Obtener la sesión de la base de datos
 const getSession = async (sid) => {
   try {
@@ -53,13 +48,11 @@ const getSession = async (sid) => {
         AND expire > NOW();`,
       [sid]
     );
-
     return result.rows[0].sess;
   } catch (error) {
     
   }
 };
-
 // Borrar la sesión de la base de datos
 const deleteSession = async (sid) => {
   try {
@@ -72,7 +65,6 @@ const deleteSession = async (sid) => {
     
   }
 };
-
 // Exportar todas las funciones
 module.exports = {
   createTable,

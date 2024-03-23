@@ -4,14 +4,12 @@
     font-weight: normal;
     font-style: normal;
 }
-
 @font-face {
     font-family: vitiniFuente;
     src: url(/componentes/fuentes/segoe/Segoe_UI_Bold.ttf) format('truetype');
     font-weight: bold;
     font-style: normal;
 }
-
 * {
     font-family: vitiniFuente, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     /*font-family: Tahoma, vitiniFuente;*/
@@ -21,8 +19,6 @@
     border: 0;
     box-sizing: border-box;
 }
-
-
 .uiPanelGlobal {
     background-color: rgba(161, 161, 161, 0);
     padding: 0px;
@@ -39,8 +35,6 @@
     /* position: fixed; */
     width: 100%;
 }
-
-
 .fondo {
     background: rgb(97, 97, 97);
     height: 100vh;
@@ -51,13 +45,10 @@
     transition: all 250ms;
     margin: 0px;
 }
-
 #uiLogo {
     /* background: rgba(255, 255, 255, 0.2);*/
     border-radius: 20px;
-
     font-size: 16px;
-
     font-weight: bold;
     height: fit-content;
     width: fit-content;
@@ -83,15 +74,11 @@
     border: 1px solid transparent;
     padding: 10px;
     z-index: 1000;
-
 }
-
 #imgLogo {
     background: transparent;
     pointer-events: none;
-
 }
-
 .uiNavegacion {
     background-color: rgba(255, 255, 255, 0.4);
     border-radius: 30px;
@@ -105,11 +92,8 @@
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
 }
-
 .uiCategoria {
     border: 0px none;
-
-
     padding-top: 8px;
     padding-bottom: 8px;
     padding-left: 20px;
@@ -129,11 +113,9 @@
     justify-content: center;
     align-items: center;
 }
-
 .uiCategoriaMenu {
     border: 0px none;
     text-align: center;
-
     font-size: 14px;
     padding-top: 6px;
     padding-bottom: 6px;
@@ -144,16 +126,10 @@
     cursor: default;
     pointer-events: none;
 }
-
 .iconoMenu {
     width: 20px;
     height: 20px;
 }
-
-
-
-
-
 body {
     background: rgba(0, 0, 0, 0.2);
     background-image: url(/componentes/imagenes/transparente.png);
@@ -172,9 +148,7 @@ body {
     /*padding-bottom: env(safe-area-inset-bottom);*/
     /* min-height: -webkit-fill-available; */
     -webkit-tap-highlight-color: transparent;
-
 }
-
 main {
     display: flex;
     align-content: center;
@@ -187,21 +161,17 @@ main {
     margin: 0px;
     width: 100%;
 }
-
 header {
     width: 100%;
 }
-
 @keyframes AnimacionSueave {
     0% {
         transform: scale(0)
     }
-
     100% {
         transform: scale(1)
     }
 }
-
 .contenedorFondo {
     /*background: wheat;*/
     background-image: url(/componentes/imagenes/fotos/2.jpeg);
@@ -215,18 +185,9 @@ header {
     background-attachment: fixed;
     background-attachment: scroll
         /*  background-position: 100% 100%;*/
-
-
-
-
 }
-
-
-
-
 .tintadoVinculo {
     color: black;
-
     border-radius: 20px;
     /* height: fit-content; */
     /* width: fit-content; */
@@ -236,7 +197,6 @@ header {
     cursor: default;
     -webkit-tap-highlight-color: transparent;
 }
-
 .marcoVinculoLogo {
     color: black;
     text-decoration: none;
@@ -247,9 +207,6 @@ header {
     pointer-events: all;
     z-index: 1000;
 }
-
-
-
 .marcoNavegacion {
     display: flex;
     flex-direction: row;
@@ -262,18 +219,13 @@ header {
     background: transparent;
     transition: all 250ms linear;
 }
-
 @media (max-width: 720px) {
     .globa_marcoNavegacion_desenfoque {
         -webkit-backdrop-filter: blur(50px);
         backdrop-filter: blur(50px);
         background: rgba(255, 255, 255, 0.4);
     }
-
-
 }
-
-
 .uiMenuResponsivo {
     transition: all 250ms;
     background-color: rgba(255, 255, 255, 0.4);
@@ -295,12 +247,10 @@ header {
     opacity: 0;
     transition: all 1000ms;
 }
-
 .uiMenuResponsivoDesplegado {
     transition: all 250ms;
     background-color: rgba(255, 255, 255, 0.5);
     text-align: center;
-
     /* font-size: 14px; */
     border-radius: 10px;
     width: 10px;
@@ -321,33 +271,26 @@ header {
     padding-left: 30px;
 padding-right: 30px;
 }
-
 .uiMenuResponsivoDesplegado:hover {
     color: white;
 }
-
 @media (max-width: 850px) {
-
     .uiMenuResponsivo {
         display: none;
     }
-
     .uiMenuResponsivoDesplegado {
         display: block;
     }
-
     #imgLogo {
         background: transparent;
         pointer-events: none;
         width: 140px;
         transition: all 500ms linear;
     }
-
     .uiPanelGlobal {
         align-items: center;
     }
 }
-
 .uiMenuGlobalResponsivo {
     display: flex;
     background-color: aqua;
@@ -374,20 +317,17 @@ padding-right: 30px;
     padding: 6px;
     z-index: 1000;
 }
-
 .enlaceInvisibleMenu {
     text-decoration: none;
     text-decoration-line: none;
     text-decoration-color: white;
 }
-
 .enlaceInvisibleMenu:visited {
     text-decoration: none;
     text-decoration-line: none;
     color: white;
     text-decoration-color: white;
 }
-
 .contenedorMenu {
     display: flex;
     align-items: center;
@@ -400,8 +340,6 @@ padding-right: 30px;
     right: 2px;
     z-index: 1000;
 }
-
 #errorVista {
     margin-top: 100px;
-
 }

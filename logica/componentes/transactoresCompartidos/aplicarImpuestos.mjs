@@ -1,10 +1,8 @@
 import Decimal from 'decimal.js';
 import { conexion } from '../db.mjs';
 Decimal.set({ precision: 50 });
-
 const aplicarImpuestos = async (totalNetoEntrada) => {
     try {
-
         const totalNeto = new Decimal(totalNetoEntrada)
         const cosultaImpuestosReserva = `
         SELECT nombre, "tipoImpositivo", "tipoValor"
@@ -39,8 +37,6 @@ const aplicarImpuestos = async (totalNetoEntrada) => {
             // objetoImpuesto[impuestoNombre] = presentacionImpuesto
             objetoImpuestos.push(presentacionImpuesto)
         }
-
-
         const estructoraFinal = {
             impuestos: objetoImpuestos,
             sumaImpuestos: sumaImpuestos
@@ -50,7 +46,6 @@ const aplicarImpuestos = async (totalNetoEntrada) => {
         throw error
     }
 }
-
 export {
     aplicarImpuestos
 }

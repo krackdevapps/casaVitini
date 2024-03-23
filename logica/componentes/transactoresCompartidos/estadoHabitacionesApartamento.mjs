@@ -1,5 +1,4 @@
 import { conexion } from '../db.mjs';
-
 const estadoHabitacionesApartamento = async (transacion) => {
     try {
         let reserva = transacion.reserva
@@ -16,7 +15,6 @@ const estadoHabitacionesApartamento = async (transacion) => {
             const error = "No existe el apartamento dentro de esta reserva"
             throw new Error(error)
         }
-
         const habitcionesApartamentoEnReserva = `
         SELECT habitacion
         FROM "reservaHabitaciones"
@@ -38,11 +36,9 @@ const estadoHabitacionesApartamento = async (transacion) => {
             if (configuracionHabitacionesApartamento.length > 0) {
                 let habitacionesDelApartamentoPreProcesado = configuracionHabitacionesApartamento
                 let habitacionesDelApartamentoDeLaReservaPreProcesado = habitacionesApartamentoReserva
-
                 let habitacionesDelApartamentoPostProcesado = []
                 let habitacionesDelApartamentoDeLaReservaPostProcesado = []
                 habitacionesDelApartamentoPreProcesado.map((habitacionPreProcesda) => {
-
                     let habitacionPostProcesada = habitacionPreProcesda.habitacion
                     habitacionesDelApartamentoPostProcesado.push(habitacionPostProcesada)
                 })

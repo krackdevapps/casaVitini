@@ -1,12 +1,9 @@
-
 import nodemailer from 'nodemailer'
 import { generadorPDF3 } from './generadorPDF.mjs';
 import fs from 'fs';
 import dotenv from "dotenv";
-
 const enviarMail = async (entrada) => {
     try {
-
         const filtroCorreo = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
         const filtroComillas = /['"]/;
         // Vigital aqui
@@ -14,7 +11,6 @@ const enviarMail = async (entrada) => {
         const origen = entrada.origen;
         const asunto = entrada.asunto;
         const mensaje = entrada.mensaje;
-
         if (!filtroCorreo.test(destino)) {
             const error = "La dirección de destino no tiene un formato correcto"
             throw new Error(error)
@@ -36,7 +32,6 @@ const enviarMail = async (entrada) => {
                 rejectUnauthorized: true,
             },
         })
-
         const composicionDelMensaje = {
             from: origen,
             to: destino,
@@ -52,8 +47,6 @@ const enviarMail = async (entrada) => {
                    content: pdf,
                },
            ]*/
-
-
         const mensajeCompositor = await transporte.sendMail(composicionDelMensaje)
         console.log(mensajeCompositor)
         return mensajeCompositor
@@ -61,7 +54,6 @@ const enviarMail = async (entrada) => {
         console.log("Error envio email:", error.message)
         throw error
     }
-
 }
 export {
     enviarMail

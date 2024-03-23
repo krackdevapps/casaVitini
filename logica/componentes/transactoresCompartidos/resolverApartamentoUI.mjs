@@ -10,7 +10,6 @@ const resolverApartamentoUI = async (apartamentoIDV) => {
     } catch (error) {
         throw error;
     }
-
 }
 export {
     resolverApartamentoUI

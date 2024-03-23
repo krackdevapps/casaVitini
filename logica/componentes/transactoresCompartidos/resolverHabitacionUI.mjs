@@ -10,7 +10,6 @@ const resolverHabitacionUI = async (habitacionIDV) => {
     } catch (error) {
         throw error;
     }
-
 }
 export {
     resolverHabitacionUI

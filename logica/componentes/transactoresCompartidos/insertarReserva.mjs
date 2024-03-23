@@ -2,30 +2,23 @@ import { DateTime } from 'luxon';
 import { conexion } from '../db.mjs';
 import { insertarTotalesReserva } from './insertarTotalesReserva.mjs';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
-
 const insertarReserva = async (reserva) => {
-
     try {
         const fechaEntrada_Humano = reserva.entrada
         const fechaSalida_Humano = reserva.salida
         
         const fechaEntrada_ISO =  (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_Humano)).fecha_ISO
         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_Humano)).fecha_ISO
-
         const estadoReserva = "confirmada"
         const estadoPago = "noPagado"
         const origen = "cliente"
-
         const fechaReserva = DateTime.utc().toISO()
         const alojamiento = reserva.alojamiento
-
         const titularReservaPool = reserva.datosTitular.nombreTitular
         const pasaporteTitularPool = reserva.datosTitular.pasaporteTitular
         const correoTitular = reserva.datosTitular.correoTitular
         const telefonoTitular = reserva.datosTitular.telefonoTitular
-
         await conexion.query('BEGIN'); // Inicio de la transacción
-
         const consultaReserva = `
         INSERT INTO
         reservas
@@ -51,7 +44,6 @@ const insertarReserva = async (reserva) => {
         ]
         const insertarReserva = await conexion.query(consultaReserva, datosReservas)
         const reservaUID = insertarReserva.rows[0].reserva;
-
         const cosultaInsertarTitularPool = `
             INSERT INTO
             "poolTitularesReserva"
@@ -77,7 +69,6 @@ const insertarReserva = async (reserva) => {
             throw new Error(error)
         }
         
-
         for (const apartamentoConfiguracion in alojamiento) {
             const apartamento = apartamentoConfiguracion
             const habitaciones = alojamiento[apartamentoConfiguracion].habitaciones
@@ -114,7 +105,6 @@ const insertarReserva = async (reserva) => {
             const insertaApartamento = await conexion.query(consultaInsertarApartamento, datosInsertarApartamento)
             const apartamentoUID = insertaApartamento.rows[0].uid
             
-
             for (const habitacionConfiguracion in habitaciones) {
                 const habitacion = habitacionConfiguracion
                 const camaIDV = habitaciones[habitacion].camaSeleccionada.camaIDV
@@ -153,7 +143,6 @@ const insertarReserva = async (reserva) => {
                 ]
                 const insertaHabitacion = await conexion.query(consultaInsertarHabitacion, datosInsertarHabitacion)
                 const habitacionUID = insertaHabitacion.rows[0].uid
-
                 const consultaNombreCama = `
                 SELECT 
                 "camaUI" 
@@ -192,11 +181,9 @@ const insertarReserva = async (reserva) => {
                 for (const pernoctantePool of pernoctantesPool) {
                     let pernoctanteNombre = pernoctantePool.nombre
                     let pernoctantePasaporte = pernoctantePool.pasaporte
-
                     if (pernoctanteNombre || pernoctantePasaporte) {
                         pernoctanteNombre = pernoctanteNombre ? pernoctanteNombre : "(Sin nombre)"
                         pernoctantePasaporte = pernoctantePasaporte ? pernoctantePasaporte : "(Sin pasaporte)"
-
                         const consultaReservasPernoctante = `
                         INSERT INTO 
                         "reservaPernoctantes" 
@@ -213,7 +200,6 @@ const insertarReserva = async (reserva) => {
                         ]
                         const reservasPernoctante = await conexion.query(consultaReservasPernoctante, datosReservarPernoctantes)
                         const pernoctanteUID = reservasPernoctante.rows[0].pernoctanteUID
-
                         const consultaPernoctantePool = `
                         INSERT INTO
                         "poolClientes"
@@ -230,16 +216,13 @@ const insertarReserva = async (reserva) => {
                             pernoctanteNombre,
                             pernoctantePasaporte,
                             pernoctanteUID
-
                         ]
                         await conexion.query(consultaPernoctantePool, datosPernoctantePool)
-
                     }
                 }*/
             }
         }
         
-
         const transaccion = {
             tipoProcesadorPrecio: "objeto",
             reserva: reserva,
@@ -247,9 +230,7 @@ const insertarReserva = async (reserva) => {
         }
         await insertarTotalesReserva(transaccion)
         
-
         //resolverPrecio = resolverPrecio.ok
-
         await conexion.query('COMMIT'); // Confirmar la transacción
         const ok = {
             ok: "reserva insertada con exito",

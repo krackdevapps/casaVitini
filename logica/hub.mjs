@@ -9,12 +9,10 @@ import { validarObjetoReservaSoloFormato } from './componentes/transactoresCompa
 import { cambiarVista } from './componentes/transactoresCompartidos/cambiarVista.mjs';
 import { configuracionApartamento } from './componentes/transactoresCompartidos/configuracionApartamento.mjs';
 import { precioReserva } from './componentes/transactoresCompartidos/precioReserva.mjs';
-import { apartamentosDisponiblesPublico } from './componentes/transactoresCompartidos/apartamentosDisponiblesPublico.mjs';
 import { insertarReserva } from './componentes/transactoresCompartidos/insertarReserva.mjs';
 import { estadoHabitacionesApartamento } from './componentes/transactoresCompartidos/estadoHabitacionesApartamento.mjs'
 import { validarModificacionRangoFechaResereva } from './componentes/transactoresCompartidos/validarModificacionRangoFechaResereva.mjs'
 import { bloquearApartamentos } from './componentes/transactoresCompartidos/bloquearApartamentos.mjs'
-import { apartamentosDisponiblesAdministracion } from './componentes/transactoresCompartidos/apartamentosDisponiblesAdministracion.mjs';
 import { resolverMoneda } from './componentes/transactoresCompartidos/resolverMoneda.mjs';
 import { precioBaseApartamento } from './componentes/transactoresCompartidos/precioBaseApartamento.mjs';
 import { precioRangoApartamento } from './componentes/transactoresCompartidos/precioRangoApartamento.mjs';
@@ -28,7 +26,6 @@ import { zonasHorarias } from "./componentes/zonasHorarias.mjs"
 import { utilidades } from './componentes/utilidades.mjs';
 import Decimal from 'decimal.js';
 import { insertarCliente } from './componentes/transactoresCompartidos/insertarCliente.mjs';
-import { constants } from 'fs/promises';
 import { codigoZonaHoraria } from './componentes/transactoresCompartidos/codigoZonaHoraria.mjs';
 import { DateTime } from 'luxon';
 import { generadorPDF3 } from './componentes/transactoresCompartidos/generadorPDF.mjs';
@@ -42,11 +39,8 @@ import validator from 'validator';
 import axios from 'axios';
 const mutex = new Mutex();
 import ICAL from 'ical.js';
-import { apartamentosOcupadosHoy } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb.mjs';
 import { apartamentosOcupadosHoy_paraSitaucion } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs';
-
 import { eventosDelApartamento } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/eventosDelApartamento.mjs';
-import { eventosCalendarioPorUID } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/eventosCalendarioPorUID.mjs';
 import { obtenerTodosLosCalendarios } from './componentes/transactoresCompartidos/calendariosSincronizados/airbnb/obtenerTodosLosCalendarios.mjs';
 import { eventosReservas } from './componentes/transactoresCompartidos/calendarios/capas/eventosReservas.mjs';
 import { eventosTodosLosApartamentos } from './componentes/transactoresCompartidos/calendarios/capas/eventosTodosLosApartamentos.mjs';
@@ -58,15 +52,13 @@ import { obtenerParametroConfiguracion } from './componentes/transactoresCompart
 import { obtenerDetallesOferta } from './componentes/sistemaDeOfertas/obtenerDetallesOferta.mjs';
 import { interruptor } from './componentes/transactoresCompartidos/interruptor.mjs';
 import { horaEntradaSalida } from './componentes/transactoresCompartidos/horaEntradaSalida.mjs';
-
-
+import { apartamentosPorRango } from './componentes/transactoresCompartidos/selectoresCompartidos/apartamentosPorRango.mjs';
 const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
 const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
 const arranque = async (entrada, salida) => {
     salida.render('constructorV1', {
         'vistaGlobal': '../global/navegacion.ejs'
     });
-
 }
 class vitiniSysError extends Error {
     constructor(errorObjeto) {
@@ -74,7 +66,6 @@ class vitiniSysError extends Error {
         this.objeto = errorObjeto;
     }
 }
-
 const puerto = async (entrada, salida) => {
     const componentes = {
         dicionarios: {
@@ -99,7 +90,6 @@ const puerto = async (entrada, salida) => {
                     const currency = locationResponse.result.location.currency;
                     const country = locationResponse.result.location.country;
                     const idempotencyKey = uuidv4();
-
                     const clienteMetadatos = {
                         squareApplicationId: SQUARE_APPLICATION_ID,
                         squareLocationId: SQUARE_LOCATION_ID,
@@ -111,7 +101,6 @@ const puerto = async (entrada, salida) => {
                 } catch (errorCapturado) {
                     throw errorCapturado
                 }
-
             },
             detallesDelPago: async (pagoUID) => {
                 try {
@@ -121,7 +110,6 @@ const puerto = async (entrada, salida) => {
                     }, 4);
                     const detallesDelPagoOL = JSON.parse(result)
                     return detallesDelPagoOL
-
                 } catch (errorCapturado) {
                     throw errorCapturado
                 }
@@ -137,7 +125,6 @@ const puerto = async (entrada, salida) => {
                 } catch (errorCapturado) {
                     throw errorCapturado
                 }
-
             },
             detallesDelReembolso: async (reembolsoUID) => {
                 try {
@@ -159,12 +146,9 @@ const puerto = async (entrada, salida) => {
                     }, 4);
                     const reembolsoOL = JSON.parse(result)
                     return reembolsoOL
-
                 } catch (errorCapturado) {
                     throw errorCapturado
-
                 }
-
             }
         },
         control: {
@@ -192,7 +176,6 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                             const identificadoresRembolsosDeEstaTransacion = detallesDelPagoSquare?.refundIds
-
                             for (const reembolsoUID of identificadoresRembolsosDeEstaTransacion) {
                                 const detallesDelReembolsoOL = await componentes.pasarela.detallesDelReembolso(reembolsoUID)
                                 if (detallesDelReembolsoOL.error) {
@@ -203,7 +186,6 @@ const puerto = async (entrada, salida) => {
                                 const cantidad = utilidades.deFormatoSquareAFormatoSQL(detallesDelReembolsoOL.amountMoney.amount)
                                 const creacionUTC = detallesDelReembolsoOL.createdAt
                                 const actualizacionUTC = detallesDelReembolsoOL.updatedAt
-
                                 const validarExistenciaReembolsoPasarela = `
                                     SELECT
                                         "reembolsoUID"
@@ -212,7 +194,6 @@ const puerto = async (entrada, salida) => {
                                     WHERE 
                                         "pagoUID" = $1 AND "reembolsoUIDPasarela" = $2;`
                                 const resuelveValidarExistenciaReembolsoPasarela = await conexion.query(validarExistenciaReembolsoPasarela, [pagoUID, reembolsoUID])
-
                                 if (resuelveValidarExistenciaReembolsoPasarela.rowCount === 0) {
                                     const insertarReembolso = `
                                         INSERT INTO
@@ -229,8 +210,6 @@ const puerto = async (entrada, salida) => {
                                         VALUES 
                                             ($1,$2,$3,$4,$5,$6,$7)
                                         `
-
-
                                     const datosNuevoReembolso = [
                                         pagoUID,
                                         cantidad,
@@ -241,10 +220,8 @@ const puerto = async (entrada, salida) => {
                                         actualizacionUTC,
                                     ]
                                     await conexion.query(insertarReembolso, datosNuevoReembolso)
-
                                 }
                                 if (resuelveValidarExistenciaReembolsoPasarela.rowCount === 1) {
-
                                     const actualizarReembolsoPasarela = `
                                         UPDATE
                                             "reservaReembolsos"
@@ -253,40 +230,31 @@ const puerto = async (entrada, salida) => {
                                             "plataformaDePago" = $2,
                                             estado = $3,
                                             "fechaCreacion" = $4,
-                                            "fechaActualizacion" = $5
+                                            "fechaActualizacion" =
                                         WHERE 
                                         "pagoUID" = $6 AND "reembolsoUIDPasarela" = $7;
                                         `
-
                                     const datosActualizarReembolso = [
                                         cantidad,
                                         plataformaDePago,
                                         estadoReembolso,
                                         creacionUTC,
                                         actualizacionUTC,
-
                                         pagoUID,
                                         reembolsoUID,
                                     ]
                                     await conexion.query(actualizarReembolsoPasarela, datosActualizarReembolso)
                                 }
-
                             }
-
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             return error
                         }
-
                     },
                     actualizarSOLOreembolsoDesdeSquare: async (reembolsoUID) => {
-
                         try {
-
                             const validarReembolso = `
                             SELECT
                                 "pagoUID",
@@ -308,7 +276,6 @@ const puerto = async (entrada, salida) => {
                             const detallesDelReembolso = resuelveValidarReembolso.rows[0]
                             const pagoUID = detallesDelReembolso.pagoUID
                             const plataformaDePago = detallesDelReembolso.plataformaDePago
-
                             if (plataformaDePago !== "pasarela") {
                                 const error = "El reembolso no es de pasarela"
                                 throw new Error(error)
@@ -318,20 +285,15 @@ const puerto = async (entrada, salida) => {
                                 const error = "El reembolso de pasarela no tiene un idenfiticador de Square"
                                 throw new Error(error)
                             }
-
                             const detallesDelReembolsoOL = await componentes.pasarela.detallesDelReembolso(reembolsoUIDPasarela)
                             if (detallesDelReembolsoOL.error) {
                                 const error = `La pasarela no ha respondido con los detalles del reembolso ${reembolsoUIDPasarela} actualizados, esto son datos de la copia no actualizada en casa vitini`
                                 throw new Error(error)
-
                             }
                             const estadoReembolso = detallesDelReembolsoOL.status
-
                             const cantidad = utilidades.deFormatoSquareAFormatoSQL(detallesDelReembolsoOL.amountMoney.amount)
                             const creacionUTC = detallesDelReembolsoOL.createdAt
                             const actualizacionUTC = detallesDelReembolsoOL.updatedAt
-
-
                             const actualizarReembolsoPasarela = `
                                         UPDATE
                                             "reservaReembolsos"
@@ -344,38 +306,30 @@ const puerto = async (entrada, salida) => {
                                         WHERE 
                                         "reembolsoUID" = $6;
                                         `
-
                             const datosActualizarReembolso = [
                                 cantidad,
                                 plataformaDePago,
                                 estadoReembolso,
                                 creacionUTC,
                                 actualizacionUTC,
-
                                 reembolsoUID,
                             ]
                             await conexion.query(actualizarReembolsoPasarela, datosActualizarReembolso)
-
                             const ok = {
                                 ok: "Se ha actualziad correctamente los datos del reembolso en la pasarela"
                             }
                             return ok
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             return error
                         }
-
                     },
                     estadoDelPago: async (reservaUID) => {
-
                         try {
                             await validadoresCompartidos.reservas.validarReserva(reservaUID)
                             await actualizarEstadoPago(reservaUID)
-
                         } catch (errorCapturado) {
                             throw errorCapturado
                         }
@@ -408,8 +362,6 @@ const puerto = async (entrada, salida) => {
                                 const error = `Esta reserva no tiene totales calculados`
                                 // throw new Error(error)
                             }
-
-
                             const totalConImpuestos = resuelveConsultaTotales.rows[0]?.totalConImpuestos ?
                                 resuelveConsultaTotales.rows[0].totalConImpuestos : "0.00"
                             const totalConImpuestosDecimal = new Decimal(totalConImpuestos)
@@ -438,10 +390,8 @@ const puerto = async (entrada, salida) => {
                                                 "pagoUID" DESC;`
                             const resuelveConsultaListaDePagos = await conexion.query(consultaListaPagos, [reservaUID])
                             if (resuelveConsultaListaDePagos.rowCount === 0) {
-
                             }
                             if (resuelveConsultaListaDePagos.rowCount > 0) {
-
                                 const pagosDeLaReserva = resuelveConsultaListaDePagos.rows
                                 let pagoResultadoFinal = 0.00
                                 for (const detallesDelPago of pagosDeLaReserva) {
@@ -449,7 +399,6 @@ const puerto = async (entrada, salida) => {
                                     const plataformaDePago = detallesDelPago.plataformaDePago
                                     const pagoUIDPasarela = detallesDelPago.pagoUIDPasarela
                                     const cantidadDelPago = new Decimal(detallesDelPago.cantidad)
-
                                     const consultaReembolsos = `
                                         SELECT
                                             cantidad
@@ -457,14 +406,11 @@ const puerto = async (entrada, salida) => {
                                             "reservaReembolsos"
                                         WHERE 
                                             "pagoUID" = $1;`
-
-
                                     const resuelveConsultaReembolsos = await conexion.query(consultaReembolsos, [pagoUID])
                                     if (resuelveConsultaReembolsos.rowCount === 0) {
                                         ok.pagos.push(detallesDelPago)
                                         pagoResultadoFinal = cantidadDelPago.plus(pagoResultadoFinal)
                                     }
-
                                     if (resuelveConsultaReembolsos.rowCount > 0) {
                                         if (plataformaDePago === "pasarela") {
                                             const actualizarReembolsos = await componentes.administracion.reservas.transacciones.actualizarReembolsosDelPagoDesdeSquare(pagoUID, pagoUIDPasarela)
@@ -472,7 +418,6 @@ const puerto = async (entrada, salida) => {
                                                 ok.estadoPasarela = actualizarReembolsos.error
                                             }
                                         }
-
                                         const reembolsosDelPago = resuelveConsultaReembolsos.rows
                                         let sumaDeLoReembolsado = 0
                                         for (const detallesDelReembolso of reembolsosDelPago) {
@@ -489,36 +434,23 @@ const puerto = async (entrada, salida) => {
                                         if (Number(cantidadDelPago) < Number(sumaDeLoReembolsado)) {
                                             reembolsado = "superadamente"
                                         }
-
-
                                         detallesDelPago.sumaDeLoReembolsado = sumaDeLoReembolsado.toFixed(2)
                                         detallesDelPago.reembolsado = reembolsado
-
                                         let diferenciaDelPago = cantidadDelPago.minus(sumaDeLoReembolsado)
                                         diferenciaDelPago = new Decimal(diferenciaDelPago)
                                         pagoResultadoFinal = diferenciaDelPago.plus(pagoResultadoFinal)
                                         ok.pagos.push(detallesDelPago)
-
                                     }
                                     const faltantePorPagar = totalConImpuestosDecimal.minus(pagoResultadoFinal)
                                     ok.totalPagado = pagoResultadoFinal.toFixed(2)
                                     ok.faltantePorPagar = faltantePorPagar.toFixed(2)
-
-
                                 }
-
-
-
                             }
                             return ok
-
-
                         } catch (errorCapturado) {
                             throw errorCapturado
                         }
-
                     },
-
                 },
                 horasSalidaEntrada: async () => {
                     try {
@@ -531,7 +463,6 @@ const puerto = async (entrada, salida) => {
                         WHERE 
                             "configuracionUID" IN ($1, $2, $3);
                        `;
-
                         const configuracionUID = [
                             "horaEntradaTZ",
                             "horaSalidaTZ",
@@ -545,15 +476,12 @@ const puerto = async (entrada, salida) => {
                             const valor = parConfirmacion.valor
                             estructuraFinal[configuracionUID] = valor
                         }
-
                         return estructuraFinal
-
                     } catch (errorCapturado) {
                         throw errorCapturado
                     }
                 },
             }
-
         },
         gestionEnlacesPDF: {
             crearEnlacePDF: async (reservaUID) => {
@@ -573,13 +501,11 @@ const puerto = async (entrada, salida) => {
                     const fechaActual = DateTime.utc();
                     const fechaFutura = fechaActual.plus({ days: 2 });
                     const fechaCaducidad = fechaFutura.toISO();
-
                     // Ver si existe el enlace se borra
                     const consultaCaducidadEnlaces = `
                     DELETE FROM "enlacesPdf"
                     WHERE "reservaUID" = $1;`
                     await conexion.query(consultaCaducidadEnlaces, [reservaUID])
-
                     const consultaCrearEnlace = `
                     INSERT INTO
                     "enlacesPdf"
@@ -599,10 +525,8 @@ const puerto = async (entrada, salida) => {
                     ]
                     const reseulveEnlaces = await conexion.query(consultaCrearEnlace, datosEnlace)
                     const enlacePDF = reseulveEnlaces.rows[0].enlace
-
                     await conexion.query('COMMIT'); // Confirmar la transacción
                     return enlacePDF
-
                 } catch (error) {
                     await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
                     throw error
@@ -615,7 +539,6 @@ const puerto = async (entrada, salida) => {
                     DELETE FROM "enlacesPdf"
                     WHERE caducidad < $1;`
                     await conexion.query(consultaCaducidadEnlaces, [fechaActual])
-
                 } catch (error) {
                     throw error
                 }
@@ -645,8 +568,6 @@ const puerto = async (entrada, salida) => {
                 throw error
             }
         },
-
-
     }
     const casaVitini = {
         IDX: async () => {
@@ -675,7 +596,6 @@ const puerto = async (entrada, salida) => {
                         suma: async (numeroIntentosActuales, IDX_) => {
                             try {
                                 const intento = numeroIntentosActuales + 1
-
                                 const actualizarIntentos = `
                                 UPDATE 
                                     usuarios
@@ -686,9 +606,7 @@ const puerto = async (entrada, salida) => {
                                 RETURNING
                                     intentos;`
                                 const resuelveIntento = await conexion.query(actualizarIntentos, [intento, IDX_])
-
                                 return resuelveIntento.rows[0].intentos
-
                             } catch (error) {
                                 throw error
                             }
@@ -709,7 +627,6 @@ const puerto = async (entrada, salida) => {
                             }
                         }
                     }
-
                     // Se valida si existe el usuario
                     const consultaControlIDX = `
                     SELECT
@@ -726,13 +643,11 @@ const puerto = async (entrada, salida) => {
                     usuario = $1
                     `
                     const resuelveControlIDX = await conexion.query(consultaControlIDX, [usuario])
-
                     if (resuelveControlIDX.rowCount === 0) {
                         const error = "Datos de identificacíon incorrectos"
                         throw new Error(error)
                     }
                     // Se recupera el hash y la sal
-
                     const IDX_ = resuelveControlIDX.rows[0].usuario
                     const rol = resuelveControlIDX.rows[0].rol
                     const sal = resuelveControlIDX.rows[0].sal
@@ -742,12 +657,10 @@ const puerto = async (entrada, salida) => {
                     const intentos = resuelveControlIDX.rows[0].intentos || 0
                     const ip = entrada.socket.remoteAddress;
                     const userAgent = entrada.get('User-Agent');
-
                     if (intentos >= intentosMaximos) {
                         const error = "1Cuenta bloqueada tras 10 intentos. Recupera tu cuenta con tu correo."
                         throw new Error(error)
                     }
-
                     const metadatos = {
                         sentido: "comparar",
                         clavePlana: clave,
@@ -755,7 +668,6 @@ const puerto = async (entrada, salida) => {
                         claveHash: claveHash
                     }
                     const controlClave = vitiniCrypto(metadatos)
-
                     if (!controlClave) {
                         const intentoActual = await controladorIntentos.suma(intentos, IDX_)
                         if (intentoActual >= intentosMaximos) {
@@ -772,7 +684,6 @@ const puerto = async (entrada, salida) => {
                         throw new Error(error)
                     }
                     const fechaActualISO = DateTime.utc().toISO();
-
                     const actualizarUltimoLogin = `
                     UPDATE usuarios
                     SET 
@@ -781,13 +692,11 @@ const puerto = async (entrada, salida) => {
                         usuario = $2;
                     `
                     await conexion.query(actualizarUltimoLogin, [fechaActualISO, usuario])
-
                     entrada.session.usuario = IDX_;
                     entrada.session.IDX = IDX_;
                     entrada.session.rol = rol
                     entrada.session.ip = ip
                     entrada.session.userAgent = userAgent
-
                     const ok = {
                         ok: IDX_,
                         rol: rol,
@@ -795,7 +704,6 @@ const puerto = async (entrada, salida) => {
                     }
                     salida.json(ok)
                 }
-
                 if (IDX === "desconectar") {
                     entrada.session.destroy();
                     salida.clearCookie("VitiniID");
@@ -805,8 +713,6 @@ const puerto = async (entrada, salida) => {
                     salida.json(respuesta);
                 }
                 if (IDX === "estado") {
-
-
                     const usuario = entrada.session?.usuario;
                     const rol = entrada.session?.rol
                     const respuesta = {}
@@ -847,7 +753,6 @@ const puerto = async (entrada, salida) => {
                     if (!vista) {
                         const error = "Tienes que definir 'Vista' con el nombre de la vista"
                         throw new Error(error)
-
                     }
                     vista = vista.replace(/[^A-Za-z0-9_\-/=:]/g, '');
                     const transaccion = {
@@ -864,51 +769,38 @@ const puerto = async (entrada, salida) => {
                     } else {
                         error.error = "noExisteLaVista"
                     }
-
                     salida.json(error)
                 }
             },
             calendario: async () => {
                 try {
                     let tipo = entrada.body.tipo
-
                     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                     const tiempoZH = DateTime.now().setZone(zonaHoraria);
-
                     const diaHoyTZ = tiempoZH.day
                     const mesPresenteTZ = tiempoZH.month
                     const anoPresenteTZ = tiempoZH.year
-
                     if (tipo === "actual") {
-
                         const anoActual = anoPresenteTZ;
                         const mesActual = mesPresenteTZ;
                         const diaActual = diaHoyTZ;
-
                         const posicionDia1 = tiempoZH.set({ day: 1 }).weekday
                         const numeroDeDiasPorMes = tiempoZH.daysInMonth;
-
-
                         const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva")
                         const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva")
                         const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva")
-
-
                         const estructuraGlobal_DiasAntelacion = {}
                         const primeraFechaDisponible = tiempoZH.plus({ day: diasAntelacionReserva }).toObject();
-
                         for (let index = 0; index < diasAntelacionReserva; index++) {
                             const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
                             const anoObjeto = String(fechaAntelacionObjeto.year)
                             const mesObjeto = String(fechaAntelacionObjeto.month)
                             const diaObjeto = String(fechaAntelacionObjeto.day)
-
                             estructuraGlobal_DiasAntelacion[anoObjeto] ||= {};
                             const estructuraAno = estructuraGlobal_DiasAntelacion[anoObjeto]
                             estructuraAno[mesObjeto] ||= {}
                             const estructuraMes = estructuraAno[mesObjeto]
                             estructuraMes[diaObjeto] ||= true
-
                         }
                         const fechaLimiteFuturo = tiempoZH.plus({ day: limiteFuturoReserva }).toObject();
                         const estructuraGlobal_limiteFuturo = {
@@ -916,7 +808,6 @@ const puerto = async (entrada, salida) => {
                             mes: fechaLimiteFuturo.month,
                             dia: fechaLimiteFuturo.day,
                         }
-
                         const respuesta = {
                             calendario: "ok",
                             ano: anoActual,
@@ -946,12 +837,10 @@ const puerto = async (entrada, salida) => {
                             const error = "H el 'Mes' y el 'Ano' tienen que ser numeros y no cadenas, es decir numeros a saco sin comillas"
                             throw new Error(error)
                         }
-
                         if (mes < 1 || mes > 12) {
                             const error = "El mes solo puede ser un campo entre 1 y 12"
                             throw new Error(error)
                         }
-
                         if (ano < 1 || ano > 9999) {
                             const error = "El ano solo puede ser un numero entre 1 y 9999"
                             throw new Error(error)
@@ -959,77 +848,56 @@ const puerto = async (entrada, salida) => {
                         // Limite del presente
                         const anoActual = anoPresenteTZ;
                         const mesActual = mesPresenteTZ
-
                         if (anoActual > ano) {
                             calendario.tiempo = "pasado"
                             calendario.detalleTemporal = "pasadoPorAno"
                         }
-
                         if (anoActual === ano && mesActual > mes) {
                             calendario.tiempo = "pasado"
                             calendario.detalleTemporal = "pasadoPorMes"
-
                         }
                         let tiempoConfig
-
                         if (anoActual === ano && mesActual === mes) {
                             tiempoConfig = "presente"
                             calendario.tiempo = "presente"
-
-
                         }
                         if (anoActual < ano) {
                             tiempoConfig = "futuroPorAno"
                             calendario.tiempo = "futuro"
                             calendario.detalleTemporal = "futuroPorAno"
-
                         }
                         if (anoActual === ano && mesActual < mes) {
                             calendario.tiempo = "futuro"
                             calendario.detalleTemporal = "futuroPorMes"
-
                         }
-
                         if (tiempoConfig === "presente") {
                             const diaActual = diaHoyTZ
                             calendario.dia = diaActual
                         }
-
                         const fecha = DateTime.fromObject({ year: ano, month: mes, day: 1 });
                         const numeroDeDiasPorMes = fecha.daysInMonth;
                         const posicionDiaComienzoMes = fecha.weekday
-
                         calendario.calendario = "ok"
                         calendario.ano = ano
                         calendario.mes = mes
                         // Calendario["Tiempo"] = Tiempo
                         calendario.numeroDiasPorMes = numeroDeDiasPorMes
                         calendario.posicionDia1 = posicionDiaComienzoMes
-
-
-
                         const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva")
                         const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva")
                         const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva")
-
-
                         const estructuraGlobal_DiasAntelacion = {}
                         const primeraFechaDisponible = tiempoZH.plus({ day: diasAntelacionReserva }).toObject();
-
                         for (let index = 0; index < diasAntelacionReserva; index++) {
                             const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
-
                             const anoObjeto = String(fechaAntelacionObjeto.year)
                             const mesObjeto = String(fechaAntelacionObjeto.month)
                             const diaObjeto = String(fechaAntelacionObjeto.day)
-
                             estructuraGlobal_DiasAntelacion[anoObjeto] ||= {};
-
                             const estructuraAno = estructuraGlobal_DiasAntelacion[anoObjeto]
                             estructuraAno[mesObjeto] ||= {}
                             const estructuraMes = estructuraAno[mesObjeto]
                             estructuraMes[diaObjeto] ||= true
-
                         }
                         const fechaLimiteFuturo = tiempoZH.plus({ day: limiteFuturoReserva }).toObject();
                         const estructuraGlobal_limiteFuturo = {
@@ -1047,45 +915,31 @@ const puerto = async (entrada, salida) => {
                                 ano: primeraFechaDisponible.year
                             }
                         }
-
                         salida.json(calendario)
-
                     }
                     /*
                     if (tipo === "actualConDiasDeAntelacion") {
-
                         const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva")
                         const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva")
                         const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva")
-
-
                         const fechaActualTZConDiasDeAntelacion = tiempoZH.plus({ day: diasAntelacionReserva })
-
                         const anoActualConDiasDeAntelacion = fechaActualTZConDiasDeAntelacion.year;
                         const mesActualConDiasDeAntelacion = fechaActualTZConDiasDeAntelacion.month;
                         const diaActualConDiasDeAntelacion = fechaActualTZConDiasDeAntelacion.day;
-
                         const posicionDia1 = fechaActualTZConDiasDeAntelacion.set({ day: 1 }).weekday
                         const numeroDeDiasPorMes = fechaActualTZConDiasDeAntelacion.daysInMonth;
-
-
                         const estructuraGlobal_DiasAntelacion = {}
                         const primeraFechaDisponible = tiempoZH.plus({ day: diasAntelacionReserva }).toObject();
-
                         for (let index = 0; index < diasAntelacionReserva; index++) {
                             const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
-
                             const anoObjeto = String(fechaAntelacionObjeto.year)
                             const mesObjeto = String(fechaAntelacionObjeto.month)
                             const diaObjeto = String(fechaAntelacionObjeto.day)
-
                             estructuraGlobal_DiasAntelacion[anoObjeto] ||= {};
-
                             const estructuraAno = estructuraGlobal_DiasAntelacion[anoObjeto]
                             estructuraAno[mesObjeto] ||= {}
                             const estructuraMes = estructuraAno[mesObjeto]
                             estructuraMes[diaObjeto] ||= true
-
                         }
                         const fechaLimiteFuturo = tiempoZH.plus({ day: limiteFuturoReserva }).toObject();
                         const estructuraGlobal_limiteFuturo = {
@@ -1093,7 +947,6 @@ const puerto = async (entrada, salida) => {
                             mes: fechaLimiteFuturo.month,
                             dia: fechaLimiteFuturo.day,
                         }
-
                         let tiempoFinal
                         if (anoActualConDiasDeAntelacion > anoPresenteTZ) {
                             tiempoFinal = "futuro"
@@ -1104,7 +957,6 @@ const puerto = async (entrada, salida) => {
                                 tiempoFinal = "futuro"
                             }
                         }
-
                         const respuesta = {
                             calendario: "ok",
                             ano: anoActualConDiasDeAntelacion,
@@ -1127,7 +979,6 @@ const puerto = async (entrada, salida) => {
                         salida.json(respuesta)
                     }
                     */
-
                 } catch (errorCapturado) {
                     const error = {
                         error: errorCapturado.message
@@ -1140,13 +991,11 @@ const puerto = async (entrada, salida) => {
                     const tipoProcesadorPrecio = entrada.body.tipoProcesadorPrecio
                     const reserva = entrada.body.reserva
                     const rolActual = entrada.session.rol
-
                     if (tipoProcesadorPrecio !== "objeto" && tipoProcesadorPrecio !== "uid") {
                         const error = "El campo 'tipoProcesadorPrecio' solo puede ser objeto o uid"
                         throw new Error(error)
                     }
                     if (tipoProcesadorPrecio !== "objeto" && rolActual !== "administrador") {
-
                         const error = "El componente precioReserva solo ofrece informacion de reserva por UID a cuentas con rol administrativo"
                         throw new Error(error)
                     }
@@ -1157,21 +1006,15 @@ const puerto = async (entrada, salida) => {
                         tipoProcesadorPrecio: tipoProcesadorPrecio,
                         reserva: reserva
                     }
-
-
                     const transaccionInterna = await precioReserva(transaccion)
-
                     salida.json(transaccionInterna)
                 } catch (errorCapturado) {
                     const error = {
                         error: errorCapturado.message
                     }
-
                     salida.json(error)
                 } finally {
-
                 }
-
             },
             pasarela: {
                 squareConstruyeCliente: async () => {
@@ -1180,8 +1023,6 @@ const puerto = async (entrada, salida) => {
                         const currency = locationResponse.result.location.currency;
                         const country = locationResponse.result.location.country;
                         const idempotencyKey = uuidv4();
-
-
                         const clienteMetadatos = {
                             squareApplicationId: SQUARE_APPLICATION_ID,
                             squareLocationId: SQUARE_LOCATION_ID,
@@ -1194,27 +1035,21 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
-
                 },
                 bluesnap: {
                     generarToken: async () => {
-
                         const entornoApi = process.env.BLUESNAP_ENTORNO
                         const blueSnapUser = process.env.BLUESNAP_USER
                         const blueSnapPass = process.env.BLUESNAP_PASS
                         const authBase64 = Buffer.from(`${blueSnapUser}:${blueSnapPass}`).toString('base64');
-
                         let url
                         if (entornoApi === "sandbox") {
                             url = 'https://sandbox.bluesnap.com/services/2/payment-fields-tokens';
-
                         }
                         if (entornoApi === "pro") {
                             url = 'https://ws.bluesnap.com/services/2/payment-fields-tokens';
-
                         }
                         const headers = {
                             'Content-Type': 'application/json',
@@ -1225,40 +1060,29 @@ const puerto = async (entrada, salida) => {
                         const data = {
                             // Tu payload JSON aquí
                         };
-
                         try {
                             const response = await axios.post(url, data, { headers });
                             const location = response.headers.location
-
                             const locationUrlArray = location.split("/")
                             const tokenFronURL = locationUrlArray[locationUrlArray.length - 1]
                             const token = tokenFronURL
-
                             const ok = {
                                 token: token
                             }
                             salida.json(ok)
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     }
-
-
-
                 }
-
             },
             pdf: async () => {
                 try {
-
                     const nombreEnlace = entrada.body.enlace
                     const filtroTextoSimple = /^[a-zA-Z0-9\s]+$/;
-
                     if (!filtroTextoSimple.test(nombreEnlace)) {
                         const error = "el campo 'nombreEnlace' solo puede ser una cadena de letras minúsculas y numeros sin espacios."
                         throw new Error(error)
@@ -1273,13 +1097,10 @@ const puerto = async (entrada, salida) => {
                     enlace = $1
                     `
                     const resuelveValidarEnlace = await conexion.query(consultaValidarEnlace, [nombreEnlace])
-
                     if (resuelveValidarEnlace.rowCount === 0) {
                         const error = "No existe el enlace para generar el PDF"
                         throw new Error(error)
                     }
-
-
                     const reservaUID = resuelveValidarEnlace.rows[0].reservaUID
                     const datosDetallesReserva = {
                         reservaUID: reservaUID
@@ -1290,7 +1111,6 @@ const puerto = async (entrada, salida) => {
                     salida.setHeader('Content-Disposition', 'attachment; filename=documento.pdf');
                     salida.send(pdf);
                 } catch (errorCapturado) {
-
                     const error = {
                         error: errorCapturado.message
                     }
@@ -1298,7 +1118,6 @@ const puerto = async (entrada, salida) => {
                 }
             },
             diasOcupadosTotalmentePorMes: async () => {
-
                 try {
                     const mes = entrada.body.mes
                     const ano = entrada.body.ano
@@ -1306,42 +1125,33 @@ const puerto = async (entrada, salida) => {
                         const error = "El campo 'mes' solo puede ser un numero entero y positivo entre el 1 y el 12"
                         throw new Error(error)
                     }
-
                     if (typeof ano !== "number" || !Number.isInteger(ano) || ano < 0) {
                         const error = "El campo 'ano' solo puede ser un numero entero y positivo y superior a 0"
                         throw new Error(error)
                     }
-
                     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                     const tiempoZH = DateTime.now().setZone(zonaHoraria);
-
                     const anoActual = tiempoZH.year
                     const mesActual = tiempoZH.month
-
                     const contructorMes = DateTime.fromObject({ year: ano, month: mes, day: 1 });
                     // Obtén el último día del mes
                     const ultimoDiaDelMes = contructorMes.endOf("month");
                     // Extrae el número del último día del mes
                     const numeroUltimoDia = ultimoDiaDelMes.day;
-
-
                     const rol = entrada.session.rol
                     const rolAdministrador = "administrador"
                     const rolEmpleado = "empleado"
-
                     if (anoActual > ano) {
                         if (rol !== rolAdministrador && rol !== rolEmpleado) {
                             const error = "Este componete solo proporciona informacion de fechas anteriores a la actual con una cuenta de tipo Administrador o Empleado"
                             throw new Error(error)
                         }
-
                     } else if (anoActual === ano && mesActual > mes) {
                         if (rol !== rolAdministrador && rol !== rolEmpleado) {
                             const error = "Este componete solo proporciona informacion de fechas anteriores a la actual con una cuenta de tipo Administrador o Empleado"
                             throw new Error(error)
                         }
                     }
-
                     const estadoReservaCancelada = "cancelada"
                     const reservarEnEseMes = `
                     SELECT 
@@ -1369,7 +1179,6 @@ const puerto = async (entrada, salida) => {
                    `
                     const resuelveReservarEnEseMes = await conexion.query(reservarEnEseMes, [mes, ano, estadoReservaCancelada])
                     const reservasCoincidentes = resuelveReservarEnEseMes.rows
-
                     // Cuantos apartamentos disponibles existen
                     const consultaApartamentosDisponibles = `
                     SELECT 
@@ -1386,13 +1195,11 @@ const puerto = async (entrada, salida) => {
                         throw new Error(error)
                     }
                     const apartamentosDisponiblesPorFormatear = resuelveConsultaApartamentosDisponibles.rows
-
                     const apartamentosDisponbiles = []
                     const apartamentosConfiguradosDisponibles = []
                     apartamentosDisponiblesPorFormatear.map((apartamento) => {
                         apartamentosConfiguradosDisponibles.push(apartamento.apartamentoIDV)
                     })
-
                     const consultaApartamentosBloqueados = ` 
                     SELECT 
                     apartamento,
@@ -1424,30 +1231,22 @@ const puerto = async (entrada, salida) => {
                     const bloqueoPermanente = "permanente"
                     const resuelveApartamentosBloqueados = await conexion.query(consultaApartamentosBloqueados, [mes, ano, bloqueoPermanente, bloqueoTemporal])
                     const bloqueosCoincidentes = resuelveApartamentosBloqueados.rows
-
-
                     // Seleccionar apartamentos bloqueados
                     const obtenerFechasInternas = (fechaEntrada_ISO, fechaSalida_ISO) => {
-
                         const fechasInternas = [];
                         let fechaActual = DateTime.fromISO(fechaEntrada_ISO)
                         const fechaFin = DateTime.fromISO(fechaSalida_ISO)
-
                         while (fechaActual <= fechaFin) {
                             const diaInterno = fechaActual.day;
                             const mesInterno = fechaActual.month;
                             const anoInterno = fechaActual.year;
-
-
                             const diaFinal = diaInterno.toString()
                             if (mes === mesInterno && ano === anoInterno) {
                                 fechasInternas.push(diaInterno);
                             }
-
                             // Incrementa la fecha actual en un día
                             fechaActual = fechaActual.plus({ days: 1 });
                         }
-
                         return fechasInternas;
                     }
                     const objetoFechasInternas = {}
@@ -1461,19 +1260,14 @@ const puerto = async (entrada, salida) => {
                         `
                         const resuelveConsultaApartamentosPorReserva = await conexion.query(consultaApartamentosPorReserva, [reservaUID])
                         if (resuelveConsultaApartamentosPorReserva.rowCount > 0) {
-
                             const apartamentosPorReservaObjetoCompleto = resuelveConsultaApartamentosPorReserva.rows
                             const apartamentosPorReservaArray = []
                             apartamentosPorReservaObjetoCompleto.map((apartamento) => {
                                 apartamentosPorReservaArray.push(apartamento.apartamento)
                             })
-
                             const fechaEntrada_ISO = reservaCoincidente.fechaEntrada_ISO
                             const fechaSalida_ISO = reservaCoincidente.fechaSalida_ISO
-
-
                             const fechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO);
-
                             fechasInternas.map((fechaInterna) => {
                                 if (!objetoFechasInternas[fechaInterna]?.apartamentos) {
                                     const detalleDia = {
@@ -1483,16 +1277,13 @@ const puerto = async (entrada, salida) => {
                                     }
                                     objetoFechasInternas[fechaInterna] = detalleDia
                                 } else {
-
                                     let arrayExistente = objetoFechasInternas[fechaInterna].apartamentos
                                     const arrayFusion = Array.from(new Set(arrayExistente.concat(apartamentosPorReservaArray)));
                                     objetoFechasInternas[fechaInterna].apartamentos = arrayFusion
                                 }
-
                             })
                         }
                     }
-
                     for (const bloqueoCoincidente of bloqueosCoincidentes) {
                         const bloqueoUID = bloqueoCoincidente.uid
                         const apartamentoIDV = bloqueoCoincidente.apartamento
@@ -1501,10 +1292,7 @@ const puerto = async (entrada, salida) => {
                         const tipoBloqueo = bloqueoCoincidente.tipoBloqueo
                         if (tipoBloqueo === "rangoTemporal") {
                             const fechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO);
-
-
                             fechasInternas.map((fechaInterna) => {
-
                                 if (!objetoFechasInternas[fechaInterna]?.apartamentos) {
                                     const detalleDia = {
                                         fecha: `${fechaInterna}/${mes}/${ano}`,
@@ -1519,18 +1307,13 @@ const puerto = async (entrada, salida) => {
                                     }
                                     //objetoFechasInternas[fechaInterna].apartamentos = arrayExistente
                                 }
-
                             })
                         }
                         if (tipoBloqueo === "permanente") {
                             // EL error esta en que anoActual es el ano del presetne y no del año que se le solicita
                             const fechaInicioDelMes_ISO = `${ano}-${String(mes).padStart(2, "0")}-01`
                             const fechaFinDelMes_ISO = `${ano}-${String(mes).padStart(2, "0")}-${String(numeroUltimoDia).padStart(2, "0")}`
-
-
                             const fechasInternas = obtenerFechasInternas(fechaInicioDelMes_ISO, fechaFinDelMes_ISO);
-
-
                             fechasInternas.map((fechaInterna) => {
                                 if (!objetoFechasInternas[fechaInterna]?.apartamentos) {
                                     const detalleDia = {
@@ -1546,29 +1329,20 @@ const puerto = async (entrada, salida) => {
                                     }
                                     //objetoFechasInternas[fechaInterna].apartamentos = arrayExistente
                                 }
-
                             })
-
                         }
-
-
-
-
                     }
-
                     // Sacar todos los uid de los calendarios
                     const calendariosSincronizadosAirbnb = (await obtenerTodosLosCalendarios()).calendariosSincronizados
                     for (const detallesDelCalendario of calendariosSincronizadosAirbnb) {
                         const apartamentoIDV = detallesDelCalendario.apartamentoIDV
                         const nombreCalendario = detallesDelCalendario.nombreCalendario
                         const calendarioObjeto = detallesDelCalendario.calendarioObjeto
-
                         for (const detallesDelEvento of calendarioObjeto) {
                             const fechaInicioEvento_ISO = detallesDelEvento.fechaInicio
                             const fechaFinalEvento_ISO = detallesDelEvento.fechaFinal
                             const apartamentosPorReservaArray = [apartamentoIDV]
                             const fechasInternas = obtenerFechasInternas(fechaInicioEvento_ISO, fechaFinalEvento_ISO);
-
                             fechasInternas.map((fechaInterna) => {
                                 if (!objetoFechasInternas[fechaInterna]?.apartamentos) {
                                     const detalleDia = {
@@ -1578,22 +1352,16 @@ const puerto = async (entrada, salida) => {
                                     }
                                     objetoFechasInternas[fechaInterna] = detalleDia
                                 } else {
-
                                     let arrayExistente = objetoFechasInternas[fechaInterna].apartamentos
                                     const arrayFusion = Array.from(new Set(arrayExistente.concat(apartamentosPorReservaArray)));
                                     objetoFechasInternas[fechaInterna].apartamentos = arrayFusion
                                 }
-
                             })
                         }
                     }
-
-
                     // Y  por calendario, procesar los eventos
                     // Obtener los objetos de los dias de los calendarios sincronizados
                     // Pasarlo por fechas intenras e agregar con el sistema que impide duplicados
-
-
                     const controlEstadoDia = (apartamentosConfiguradosDisponibles, apartamentosEncontradosNoDisponibles) => {
                         apartamentosConfiguradosDisponibles.sort();
                         apartamentosEncontradosNoDisponibles.sort()
@@ -1609,37 +1377,27 @@ const puerto = async (entrada, salida) => {
                             return "diaCompleto"
                         }
                     }
-
-
                     for (const [fechaDia, detallesDia] of Object.entries(objetoFechasInternas)) {
                         const apartamentosEncontradosNoDisponibles = detallesDia.apartamentos
                         detallesDia.estadoDia = controlEstadoDia(apartamentosConfiguradosDisponibles, apartamentosEncontradosNoDisponibles)
                     }
-
                     const respuestaFinal = {
                         mes: mes,
                         dias: objetoFechasInternas
-
                     }
                     const objetofinal = {
                         ok: respuestaFinal
                     }
-
                     salida.json(objetofinal)
-
                 } catch (errorCapturado) {
                     const error = {
                         error: errorCapturado.message
                     }
-
                     salida.json(error)
-
                 } finally {
-
                 }
             },
             fechaLocal: async () => {
-
                 try {
                     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                     const tiempoZH = DateTime.now().setZone(zonaHoraria);
@@ -1649,7 +1407,6 @@ const puerto = async (entrada, salida) => {
                     const ano = tiempoZH.year
                     const hora = tiempoZH.hour
                     const minuto = tiempoZH.minute
-
                     const estructura = {
                         zonaHoraria: zonaHoraria,
                         dia: dia,
@@ -1666,19 +1423,15 @@ const puerto = async (entrada, salida) => {
                     }
                     salida.json(error)
                 }
-
             },
             imagenDelApartamento: async () => {
-
                 try {
                     const apartamentoIDV = entrada.body.apartamentoIDV
                     const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-
                     if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
                         const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres"
                         throw new Error(error)
                     }
-
                     const consultaApartamento = `
                     SELECT imagen
                     FROM "configuracionApartamento" 
@@ -1688,32 +1441,25 @@ const puerto = async (entrada, salida) => {
                         const error = "No existe ningun apartamento con ese identificador visua, revisa el apartamentoIDV"
                         throw new Error(error)
                     }
-
                     const ok = {
                         ok: "Imagen de apartamento PNG en base64",
                         imagen: resuelveApartamento.rows[0].imagen
                     }
-
-
                     salida.json(ok)
                 } catch (errorCapturado) {
                     const error = {
                         error: errorCapturado.message
                     }
-
                     salida.json(error)
                 }
-
             },
-
-
-
         },
         plaza: {
             reservas: {
                 confirmarReserva: async () => {
+                    salida.end()
+                    return
                     await mutex.acquire();
-
                     try {
                         const reserva = entrada.body.reserva
                         await conexion.query('BEGIN');
@@ -1727,11 +1473,8 @@ const puerto = async (entrada, salida) => {
                             tipoProcesadorPrecio: "objeto",
                             reserva: reserva
                         }
-
                         const resuelvePrecioReserva = await precioReserva(metadatos);
                         const totalConImpuestos = resuelvePrecioReserva.ok.desgloseFinanciero.totales.totalConImpuestos
-
-
                         if (!totalConImpuestos) {
                             const error = "Debido a un error inesperado no se ha podido obtener el precio final"
                             throw new Error(error)
@@ -1739,7 +1482,6 @@ const puerto = async (entrada, salida) => {
                         const precioBrutoFinal = totalConImpuestos.replaceAll(".", "")
                         const token = entrada.body.token;
                         const idempotencyKey = entrada.body.idempotencyKey;
-
                         const moduloPagoEstado = "activado"
                         if (!token || !idempotencyKey) {
                             const error = "Falta el token o el idempotencyKey por lo tanto se cancela el proceso de pago"
@@ -1749,7 +1491,6 @@ const puerto = async (entrada, salida) => {
                         }
                         const locationResponse = await clienteSquare.locationsApi.retrieveLocation(SQUARE_LOCATION_ID);
                         const currency = locationResponse.result.location.currency;
-
                         const pago = {
                             idempotencyKey,
                             verificationToken: entrada.body.verificationToken,
@@ -1759,7 +1500,6 @@ const puerto = async (entrada, salida) => {
                                 currency
                             }
                         };
-
                         const resolverPago = await componentes.pasarela.crearPago(pago)
                         const resolvertInsertarReserva = await insertarReserva(reserva)
                         const reservaUID = resolvertInsertarReserva.reservaUID
@@ -1770,7 +1510,6 @@ const puerto = async (entrada, salida) => {
                         const fechaDePago = resolverPago.createdAt
                         const pagoUIDPasarela = resolverPago.id
                         const plataformaDePago = "pasarela"
-
                         const asociarPago =
                             `
                             INSERT INTO
@@ -1798,37 +1537,29 @@ const puerto = async (entrada, salida) => {
                         ]
                         await conexion.query(asociarPago, datosPago)
                         await actualizarEstadoPago(reservaUID)
-
                         if (resolvertInsertarReserva.ok) {
                             const metadatos = {
                                 reservaUID: reservaUID,
                                 solo: "globalYFinanciera"
                             }
-
                             const resolverDetallesReserva = await detallesReserva(metadatos)
                             const enlacePDF = await componentes.gestionEnlacesPDF.crearEnlacePDF(reservaUID)
                             resolverDetallesReserva.enlacePDF = enlacePDF
-
                             const ok = {
                                 ok: "Reserva confirmada y pagada",
                                 x: "casaVitini.ui.vistas.reservasNuevo.reservaConfirmada.sustitutorObjetos",
                                 detalles: resolverDetallesReserva
-
                             }
                             salida.json(ok)
                         }
                         await conexion.query('COMMIT');
                         // Si hay un error en el envio del email, este no escala, se queda local.
-
                         enviarEmailReservaConfirmaada(reservaUID)
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK');
                         const errorFinal = {};
                         if (errorCapturado.message && !errorCapturado.errors) {
                             errorFinal.error = errorCapturado.message
-
-
                         }
                         if (errorCapturado.errors) {
                             errorFinal.error = errorCapturado.errors[0].detail
@@ -1839,7 +1570,6 @@ const puerto = async (entrada, salida) => {
                     }
                 },
                 preConfirmarReserva: async () => {
-
                     await mutex.acquire();
                     try {
                         if (!await interruptor("aceptarReservasPublicas")) {
@@ -1891,37 +1621,35 @@ const puerto = async (entrada, salida) => {
                         }
                         const fechaEntrada = entrada.body.entrada
                         const fechaSalida = entrada.body.salida
-
                         if (!fechaEntrada) {
                             const error = "falta definir el campo 'entrada'"
                             throw new Error(error)
                         }
-
                         if (!fechaSalida) {
                             const error = "falta definir el campo 'salida'"
                             throw new Error(error)
                         }
-
                         const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)).fecha_ISO
                         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida)).fecha_ISO
                         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                         const tiempoZH = DateTime.now().setZone(zonaHoraria);
                         const fechaActual_ISO = tiempoZH.toISODate()
-
                         const fechaEntrad_objeto = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
                         if (fechaEntrad_objeto < tiempoZH.startOf('day')) {
                             const error = "La fecha de entrada no puede ser inferior a la fecha actual. Solo se pueden hacer reservas a partir de hoy"
                             throw new Error(error)
                         }
-
-                        const fecha = {
+                        const rol = entrada.session.rol
+                        const configuracionApartamentosPorRango = {
                             fechaEntrada_ISO: fechaEntrada_ISO,
-                            fechaSalida_ISO: fechaSalida_ISO
+                            fechaSalida_ISO: fechaSalida_ISO,
+                            rol: rol,
+                            origen: "plaza"
                         }
                         await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
-                        const resuelveADP = await apartamentosDisponiblesPublico(fecha)
+                        //const resuelveADP = await apartamentosDisponiblesPublico(fecha)
+                        const resuelveADP = await apartamentosPorRango(configuracionApartamentosPorRango)
                         const apartamentosDisponiblesEntonctrados = resuelveADP.apartamentosDisponibles
-
                         const resuelveCA = await configuracionApartamento(apartamentosDisponiblesEntonctrados)
                         const estructuraFinal = {}
                         estructuraFinal.apartamentosDisponibles = resuelveCA.configuracionApartamento
@@ -1931,9 +1659,7 @@ const puerto = async (entrada, salida) => {
                             fechaSalida_ISO: fechaSalida_ISO,
                             apartamentosIDVArreglo: apartamentosDisponiblesEntonctrados
                         }
-
                         const resolverPrecioApartamento = await precioRangoApartamento(metadatos)
-
                         // Aquí se borra metadatos, pero ojo cuidado por que en precioReserva se necesita. Así que solo se borra de aquí
                         delete resolverPrecioApartamento.metadatos
                         estructuraFinal.desgloseFinanciero = resolverPrecioApartamento
@@ -1941,32 +1667,23 @@ const puerto = async (entrada, salida) => {
                             ok: estructuraFinal
                         }
                         salida.json(ok)
-
-
                     } catch (errorCapturado) {
-
                         const error = {
                             error: errorCapturado.message
                         }
-
-
                         salida.json(error)
                     }
-
                 },
-
             },
             enlaceDePago: {
                 obtenerPago: async () => {
                     try {
                         const pagoUID = entrada.body.pagoUID
                         const filtroCadena = /^[a-z0-9]+$/;
-
                         if (!pagoUID || !filtroCadena.test(pagoUID)) {
                             const error = "el codigo de un enlace de pago solo puede ser una cadena de minuscuals y numeros y ya esta"
                             throw new Error(error)
                         }
-
                         const consultaDetallesEnlace = `
                         SELECT
                         "nombreEnlace", 
@@ -1979,42 +1696,28 @@ const puerto = async (entrada, salida) => {
                         FROM "enlacesDePago"
                         WHERE codigo = $1;`
                         const resuelveConsultaDetallesEnlace = await conexion.query(consultaDetallesEnlace, [pagoUID])
-
                         if (resuelveConsultaDetallesEnlace.rowCount === 0) {
                             const error = "No existe ningún pago con este identificador de pago, por favro revisa que el identificador de pago sea correcto y no halla caducado"
                             throw new Error(error)
                         }
-
                         if (resuelveConsultaDetallesEnlace.rowCount === 1) {
-
-
-
-
-
                             const detallesEnlace = resuelveConsultaDetallesEnlace.rows[0]
-
-
                             const estadoPago = detallesEnlace.estadoPago
                             if (estadoPago === "pagado") {
                                 const error = "Este enlace de pago esta pagado"
                                 throw new Error(error)
-
                             }
-
                             const codigo = detallesEnlace.codigo
                             const reserva = detallesEnlace.reserva
                             const cantidadPagoParcial = detallesEnlace.cantidad
-
                             const consultaEstadoPago = `
                             SELECT
                             "estadoPago",
                             "estadoReserva"
                             FROM reservas
                             WHERE reserva = $1;`
-
                             const resuelveConsultaEstadoPago = await conexion.query(consultaEstadoPago, [reserva])
                             const estadoReserva = resuelveConsultaEstadoPago.rows[0].estadoReserva
-
                             if (estadoReserva === "cancelada") {
                                 const error = "La reserva esta cancelada"
                                 throw new Error(error)
@@ -2044,52 +1747,37 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                             const estructuraTotales = resuelveConsultaTotalesReserva.rows[0]
-
                             const sumaImpuestos = new Decimal(estructuraTotales.totalImpuestos)
                             const totalNeto = new Decimal(estructuraTotales.totalReservaNeto)
                             const proporcion = new Decimal(cantidadPagoParcial).times(100).dividedBy(totalNeto).times(sumaImpuestos.dividedBy(100));
-
-
                             const calcularProporcionNetoImpuestosPagoParcial = (precioNetoReserva, impuestosReserva, cantidadPago) => {
                                 // Convierte los valores a objetos Decimal para mayor precisión
                                 const precioNetoDecimal = new Decimal(precioNetoReserva);
                                 const impuestosDecimal = new Decimal(impuestosReserva);
                                 const cantidadPagoDecimal = new Decimal(cantidadPago);
-
                                 // Calcula el precio bruto sumando el precio neto y los impuestos
                                 const precioBruto = precioNetoDecimal.plus(impuestosDecimal);
-
                                 // Calcula la proporción que representa la cantidad del pago con respecto al precio bruto
                                 const proporcionPago = cantidadPagoDecimal.div(precioBruto);
-
                                 // Calcula el precio neto correspondiente a la cantidad del pago
                                 const precioNetoPago = precioNetoDecimal.times(proporcionPago);
-
                                 // Calcula los impuestos correspondientes a la cantidad del pago
                                 const impuestosPago = impuestosDecimal.times(proporcionPago);
-
                                 // Devuelve los resultados como objetos Decimal
                                 // Redondea los resultados a dos decimales
                                 const precioNetoRedondeado = precioNetoPago.toDecimalPlaces(2);
                                 const impuestosRedondeados = impuestosPago.toDecimalPlaces(2);
-
                                 // Devuelve los resultados redondeados como strings
                                 return {
                                     precioNetoPago: precioNetoRedondeado.toString(),
                                     impuestosPago: impuestosRedondeados.toString(),
                                 };
                             }
-
-
-
                             // Ejemplo de uso
                             const precioNetoReserva = 122;
                             const impuestosReserva = 18; // Por ejemplo
                             const cantidadPago = 50;
-
                             const resultadoCalculado = calcularProporcionNetoImpuestosPagoParcial(estructuraTotales.totalReservaNeto, estructuraTotales.totalImpuestos, cantidadPagoParcial);
-
-
                             const estructuraEnlace = {
                                 codigo: codigo,
                                 reserva: reserva,
@@ -2109,18 +1797,14 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 },
                 realizarPago: async () => {
                     await mutex.acquire();
-
                     try {
-
                         const enlaceUID = entrada.body.enlaceUID
                         const filtroCadena = /^[a-z0-9]+$/;
-
                         if (!enlaceUID || !filtroCadena.test(enlaceUID)) {
                             const error = "el codigo de un enlace de pago solo puede ser una cadena de minuscuals y numeros y ya esta"
                             throw new Error(error)
@@ -2138,7 +1822,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe ningún pago con este identificador de pago, por favro revisa que el identificador de pago sea correcto y no halla caducado"
                             throw new Error(error)
                         }
-
                         if (resuelveConsultaDetallesEnlace.rowCount === 1) {
                             const detallesEnlace = resuelveConsultaDetallesEnlace.rows[0]
                             const reserva = detallesEnlace.reserva
@@ -2148,21 +1831,17 @@ const puerto = async (entrada, salida) => {
                                 const error = "Este enlace de pago ya esta pagado"
                                 throw new Error(error)
                             }
-
                             const consultaEstadoPago = `
                             SELECT
                             "estadoPago",
                             "estadoReserva"
                             FROM reservas
                             WHERE reserva = $1;`
-
                             const resuelveConsultaEstadoPago = await conexion.query(consultaEstadoPago, [reserva])
                             const estadoReserva = resuelveConsultaEstadoPago.rows[0].estadoReserva
-
                             if (estadoReserva === "cancelada") {
                                 const error = "La reserva esta cancelada"
                                 throw new Error(error)
-
                             }
                             const totalConImpuestosIDV = "totalConImpuestos"
                             const consultaTotalesReserva = `
@@ -2175,13 +1854,11 @@ const puerto = async (entrada, salida) => {
                                 const error = "Esta reserva no tiene totales"
                                 throw new Error(error)
                             }
-
                             const totalConImpuestosFormatoFinal = Number(totalPago.replaceAll(".", ""))
                             const token = entrada.body.token;
                             const idempotencyKey = entrada.body.idempotencyKey;
                             const locationResponse = await clienteSquare.locationsApi.retrieveLocation(SQUARE_LOCATION_ID);
                             const currency = locationResponse.result.location.currency;
-
                             // Charge the customer's card
                             const pago = {
                                 idempotencyKey,
@@ -2192,9 +1869,7 @@ const puerto = async (entrada, salida) => {
                                     currency
                                 }
                             };
-
                             const detallesDelPago = await componentes.pasarela.crearPago(pago)
-
                             const tarjeta = detallesDelPago.cardDetails.card.cardBrand
                             const tarjetaDigitos = detallesDelPago.cardDetails.card.last4
                             const pagoUIDPasarela = detallesDelPago.id
@@ -2202,7 +1877,6 @@ const puerto = async (entrada, salida) => {
                             const cantidadConPunto = utilidades.deFormatoSquareAFormatoSQL(cantidadSinPunto)
                             const fechaDePago = detallesDelPago.createdAt
                             const plataformaDePago = "pasarela"
-
                             const asociarPago = `
                             INSERT INTO
                             "reservaPagos"
@@ -2243,16 +1917,12 @@ const puerto = async (entrada, salida) => {
                                 estadoPagado,
                                 enlaceUID
                             ]
-
                             await conexion.query(actualizarEstadoPagoEnlaces, actualizarDatos)
                             await actualizarEstadoPago(reserva)
-
-
                             const detalles = {
                                 pagoUID: pagoUID,
                                 mensaje: "Pago realizado correctamente"
                             }
-
                             const ok = {
                                 ok: "Pago realizado correctamente",
                                 x: "casaVitini.ui.vistas.pagos.pagoConfirmado",
@@ -2268,7 +1938,6 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             errorFinal = error
                         }
                         if (errorCapturado.errors) {
@@ -2277,10 +1946,8 @@ const puerto = async (entrada, salida) => {
                         salida.json(errorFinal)
                     } finally {
                         mutex.release();
-
                     }
                 }
-
             }
         },
         miCasa: {
@@ -2288,8 +1955,6 @@ const puerto = async (entrada, salida) => {
                 IDX: {},
                 X: async () => {
                     try {
-
-
                         const session = entrada.session
                         const usuarioIDX = entrada.session.usuario
                         if (!session || !usuarioIDX) {
@@ -2312,27 +1977,13 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe ninguna session activa para este usuario"
                             throw new Error(error)
                         }
-
-
-
-
-
-
-
-
-
-
                         const calcularTiempoRestante = (fechaObjetivo) => {
                             const ahora = DateTime.utc(); // Fecha actual en UTC
                             const caducidad = DateTime.fromISO(fechaObjetivo, { zone: 'utc' });
-
-
                             if (caducidad <= ahora) {
                                 return "Esta session esta caducada y si no se hace una nueva peticion en la proxima hora con el id de session de esta se destruira";
                             }
-
                             const diferencia = caducidad.diff(ahora);
-
                             if (diferencia.as('days') >= 2) {
                                 return `Quedan ${Math.floor(diferencia.as('days'))} días`;
                             } else if (diferencia.as('hours') >= 1) {
@@ -2341,8 +1992,6 @@ const puerto = async (entrada, salida) => {
                                 return `Quedan ${Math.floor(diferencia.as('minutes'))} minutos`;
                             }
                         };
-
-
                         const sessionesActivas = resuelveConsultaSessionesActivas.rows
                         sessionesActivas.map((detallesSession) => {
                             const fechaUTC_ISO = detallesSession.caducidadUTC
@@ -2352,27 +2001,21 @@ const puerto = async (entrada, salida) => {
                             detallesSession.tiempoRestante = calcularTiempoRestante(fechaUTC_ISO);
                             const ipFormateada = detallesSession.ip.split(":")[detallesSession.ip.split(":").length - 1]
                             detallesSession.ip = ipFormateada
-
                         })
-
                         const ok = {
                             ok: "Sessiones activas",
                             sessionIDX: entrada.sessionID,
                             sessionesActivas: sessionesActivas
                         }
                         salida.json(ok)
-
                         await conexion.query('COMMIT');
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK');
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 }
             },
@@ -2391,7 +2034,6 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo tipoOperacion necesita especificar si es cerrarUna o todasMenosUna"
                             throw new Error(error)
                         }
-
                         if (tipoOperacion === "cerrarUna") {
                             const sessionIDX = entrada.body.sessionIDX
                             const filtroSessionIDX = /^[a-zA-Z0-9_-]+$/
@@ -2399,7 +2041,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "El campo sessionIDX solo admite minúsculas, mayúsculas, numeros y nada mas"
                                 throw new Error(error)
                             }
-
                             const cerrarSessionSelectivamente = `
                             DELETE FROM sessiones
                             WHERE sid = $1 AND sess->> 'usuario' = $2;
@@ -2417,8 +2058,6 @@ const puerto = async (entrada, salida) => {
                                 salida.json(ok)
                             }
                         }
-
-
                         if (tipoOperacion === "todasMenosActual") {
                             const sessionIDXActual = entrada.sessionID
                             const cerrarSessionTodasMenosActual = `
@@ -2437,26 +2076,15 @@ const puerto = async (entrada, salida) => {
                                 }
                                 salida.json(ok)
                             }
-
-
-
-
                         }
-
-
-
-
                         // await conexion.query('COMMIT');
                     } catch (errorCapturado) {
                         // await conexion.query('ROLLBACK');
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 }
             },
@@ -2465,13 +2093,10 @@ const puerto = async (entrada, salida) => {
                 X: async () => {
                     try {
                         const usuarioIDX = entrada.session.usuario
-
                         const claveActual = entrada.body.claveActual
                         const claveNueva = entrada.body.claveNueva
                         const claveConfirmada = entrada.body.claveConfirmada
-
                         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-
                         if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
                             const error = "El campo usuarioIDX solo admite minúsculas y numeros"
                             throw new Error(error)
@@ -2490,17 +2115,14 @@ const puerto = async (entrada, salida) => {
                             const error = "Confirma la nueva contrasena antes de cambiarla"
                             throw new Error(error)
                         }
-
                         if (claveNueva !== claveConfirmada) {
                             const error = "No has escrito dos veces la misma nueva contrasena, revisa las claves que has escrito y cerciorate que ambas claves nueva son iguales"
                             throw new Error(error)
                         }
-
                         if (claveNueva === claveActual) {
                             const error = "Has escrito una clave nueva que es la misma que la actual. Por favor revisa lo campos."
                             throw new Error(error)
                         }
-
                         //Obtener claveActual guardada, el hash
                         const obtenerClaveActualHASH = `
                         SELECT 
@@ -2514,10 +2136,8 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe el usuarios"
                             throw new Error(error)
                         }
-
                         const claveActualHASH = resuelveObtenerClaveActualHASH.rows[0].clave
                         const sal = resuelveObtenerClaveActualHASH.rows[0].sal
-
                         const metadatos = {
                             sentido: "comparar",
                             clavePlana: claveActual,
@@ -2529,17 +2149,13 @@ const puerto = async (entrada, salida) => {
                             const error = "Revisa la contrasena actual que has escrito por que no es correcta por lo tanto no se puede cambiar la contrasena"
                             throw new Error(error)
                         }
-
                         const cryptoData = {
                             sentido: "cifrar",
                             clavePlana: claveNueva
                         }
-
                         const retorno = vitiniCrypto(cryptoData)
                         const nuevaSal = retorno.nuevaSal
                         const hashCreado = retorno.hashCreado
-
-
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         const actualizarClave = `
                         UPDATE usuarios
@@ -2564,14 +2180,11 @@ const puerto = async (entrada, salida) => {
                         await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 }
             },
@@ -2581,7 +2194,6 @@ const puerto = async (entrada, salida) => {
                     try {
                         const usuarioIDX = entrada.session.usuario
                         const clave = entrada.body.clave
-
                         if (!usuarioIDX) {
                             const error = "Tienes que estar identificado"
                             throw new Error(error)
@@ -2604,11 +2216,8 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe el usuario"
                             throw new Error(error)
                         }
-
-
                         const claveActualHASH = resuelveObtenerClaveActualHASH.rows[0].clave
                         const sal = resuelveObtenerClaveActualHASH.rows[0].sal
-
                         const metadatos = {
                             sentido: "comparar",
                             clavePlana: clave,
@@ -2620,11 +2229,9 @@ const puerto = async (entrada, salida) => {
                             const error = "Revisa la contrasena actual que has escrito por que no es correcta por lo tanto no se puede eliminar tu cuenta"
                             throw new Error(error)
                         }
-
                         // Validar si es un usuario administrador
                         const rol = resuelveObtenerClaveActualHASH.rows[0].rol
                         const rolAdministrador = "administrador"
-
                         if (rol === rolAdministrador) {
                             const validarUltimoAdministrador = `
                             SELECT 
@@ -2638,15 +2245,6 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-
-
-
-
-
-
-
-
-
                         const eliminarCuenta = `
                         DELETE FROM usuarios
                         WHERE usuario = $1;
@@ -2669,10 +2267,8 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 }
             },
@@ -2682,7 +2278,6 @@ const puerto = async (entrada, salida) => {
                     let email = entrada.body.email
                     const claveNueva = entrada.body.claveNueva
                     const claveConfirmada = entrada.body.claveConfirmada
-
                     const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
                     if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
                         const error = "El campo usuarioIDX solo admite minúsculas y numeros y nada mas"
@@ -2696,7 +2291,6 @@ const puerto = async (entrada, salida) => {
                         const error = "el campo de correo electronico no cumple con el formato esperado"
                         throw new Error(error)
                     }
-
                     if (!claveNueva) {
                         const error = "Escribe tu contrasena, no has escrito tu contrasena"
                         throw new Error(error)
@@ -2721,7 +2315,6 @@ const puerto = async (entrada, salida) => {
                     }
                     await componentes.eliminarCuentasNoVerificadas()
                     await componentes.borrarCuentasCaducadas()
-
                     await conexion.query('BEGIN'); // Inicio de la transacción
                     const validarNuevoUsuario = `
                         SELECT 
@@ -2745,28 +2338,22 @@ const puerto = async (entrada, salida) => {
                         const error = "El correo electronico ya existe, recupera tu cuenta de usuarios o escoge otro correo electronico"
                         throw new Error(error)
                     }
-
                     const cryptoData = {
                         sentido: "cifrar",
                         clavePlana: claveNueva
                     }
-
                     const retorno = vitiniCrypto(cryptoData)
                     const nuevaSal = retorno.nuevaSal
                     const hashCreado = retorno.hashCreado
-
-
                     const generarCadenaAleatoria = (longitud) => {
                         const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
                         let cadenaAleatoria = '';
-
                         for (let i = 0; i < longitud; i++) {
                             const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
                             cadenaAleatoria += caracteres.charAt(indiceAleatorio);
                         }
                         return cadenaAleatoria;
                     }
-
                     const validarCodigo = async (codigoAleatorio) => {
                         const validarCodigoAleatorio = `
                         SELECT
@@ -2778,7 +2365,6 @@ const puerto = async (entrada, salida) => {
                             return true
                         }
                     }
-
                     const controlCodigo = async () => {
                         const longitudCodigo = 100; // Puedes ajustar la longitud según tus necesidades
                         let codigoGenerado;
@@ -2787,14 +2373,12 @@ const puerto = async (entrada, salida) => {
                             codigoGenerado = generarCadenaAleatoria(longitudCodigo);
                             codigoExiste = await validarCodigo(codigoGenerado);
                         } while (codigoExiste);
-
                         // En este punto, tenemos un código único que no existe en la base de datos
                         return codigoGenerado;
                     }
                     const codigoAleatorioUnico = await controlCodigo();
                     const fechaActualUTC = DateTime.utc();
                     const fechaCaducidadCuentaNoVerificada = fechaActualUTC.plus({ hours: 24 });
-
                     const estadoCuenta = "activado"
                     const cuentaVerificada = "no"
                     const rol = "cliente"
@@ -2830,7 +2414,6 @@ const puerto = async (entrada, salida) => {
                         const error = "No se ha insertado el nuevo usuario en la base de datos"
                         throw new Error(error)
                     }
-
                     const crearNuevosDatosUsuario = `
                         INSERT INTO "datosDeUsuario"
                         (
@@ -2851,28 +2434,18 @@ const puerto = async (entrada, salida) => {
                     }
                     salida.json(ok)
                     await conexion.query('COMMIT');
-
                     const datosVerificacion = {
                         email: email,
                         codigoVerificacion: codigoAleatorioUnico
                     }
-
                     enviarEmailAlCrearCuentaNueva(datosVerificacion)
-
-
-
-
-
-
                 } catch (errorCapturado) {
                     await conexion.query('ROLLBACK');
-
                     const error = {
                         error: errorCapturado.message
                     }
                     salida.json(error)
                 } finally {
-
                 }
             },
             datosPersonalesDesdeMiCasa: {
@@ -2884,7 +2457,6 @@ const puerto = async (entrada, salida) => {
                             const error = "Necesitar identifcarte para ver tus datos personales"
                             throw new Error(error)
                         }
-
                         const consultaDetallesUsuario = `
                         SELECT 
                         ddu."usuarioIDX", 
@@ -2901,29 +2473,23 @@ const puerto = async (entrada, salida) => {
                         JOIN usuarios u ON ddu."usuarioIDX" = u.usuario
                         WHERE 
                         ddu."usuarioIDX" = $1;`
-
                         const resolverConsultaDetallesUsuario = await conexion.query(consultaDetallesUsuario, [usuarioIDX])
                         if (resolverConsultaDetallesUsuario.rowCount === 0) {
                             const error = "No existe ningun usuario con ese IDX"
                             throw new Error(error)
                         }
-
                         const detallesCliente = resolverConsultaDetallesUsuario.rows[0]
                         const ok = {
                             ok: detallesCliente
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
-
                 }
             },
             actualizarDatosUsuarioDesdeMiCasa: {
@@ -2937,11 +2503,9 @@ const puerto = async (entrada, salida) => {
                         let pasaporte = entrada.body.pasaporte
                         let telefono = entrada.body.telefono
                         let email = entrada.body.email
-
                         const filtro_minúsculas_Mayusculas_numeros_espacios = /^[a-zA-Z0-9\s]+$/;
                         const filtroNumeros = /^[0-9]+$/;
                         const filtroCadena = /^[a-zA-Z0-9\s]+$/;
-
                         if (!usuarioIDX) {
                             const error = "Identificate para actualizar los datos personales de tu cuenta"
                             throw new Error(error)
@@ -2983,7 +2547,6 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-
                         if (telefono) {
                             telefono = telefono.trim();
                             telefono = telefono.replace(/\s+/g, '');
@@ -2993,7 +2556,6 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-
                         if (email) {
                             email = email.toLowerCase()
                             email = email.replace(/\s+/g, '');
@@ -3027,8 +2589,6 @@ const puerto = async (entrada, salida) => {
                             AND
                             email = $2`
                         const resuelveNuevoCorreoPorVerifical = await conexion.query(controlNuevoCorreoPorVerifical, [usuarioIDX, email])
-
-
                         const actualizarDatosUsuario = `
                         UPDATE "datosDeUsuario"
                         SET 
@@ -3057,7 +2617,6 @@ const puerto = async (entrada, salida) => {
                             usuarioIDX,
                         ]
                         const resuelveActualizarDatosUsuario = await conexion.query(actualizarDatosUsuario, datos)
-
                         if (resuelveNuevoCorreoPorVerifical.rowCount === 0 && email.length > 0) {
                             const volverAVerificarCuenta = `
                             UPDATE 
@@ -3081,10 +2640,8 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 }
             },
@@ -3094,7 +2651,6 @@ const puerto = async (entrada, salida) => {
                     try {
                         const usuarioIDX = entrada.session.usuario
                         let nuevoIDX = entrada.body.nuevoIDX
-
                         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
                         nuevoIDX = nuevoIDX.toLowerCase();
                         if (!nuevoIDX || !filtro_minúsculas_numeros.test(nuevoIDX)) {
@@ -3121,11 +2677,8 @@ const puerto = async (entrada, salida) => {
                         if (resuelveActualizarIDX.rowCount === 0) {
                             const error = "No existe el nombre de usuario"
                             throw new Error(error)
-
                         }
-
                         if (resuelveActualizarIDX.rowCount === 1) {
-
                             const actualizarSessionesActivas = `
                             UPDATE sessiones
                             SET sess = jsonb_set(sess::jsonb, '{usuario}', $1::jsonb)::json
@@ -3139,19 +2692,15 @@ const puerto = async (entrada, salida) => {
                                 usuarioIDX: IDXEstablecido
                             }
                             salida.json(ok)
-
                         }
                         await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 }
             },
@@ -3165,19 +2714,16 @@ const puerto = async (entrada, salida) => {
                         let nombreColumna = entrada.body.nombreColumna
                         let sentidoColumna = entrada.body.sentidoColumna
                         const filtroNumerosEnteros = /^[0-9]+$/;
-
                         if (typeof paginaActual !== "number" || !Number.isInteger(paginaActual) || paginaActual <= 0) {
                             const error = "Debe de especificarse la clave 'paginaActual' y su valor debe de ser numerico, entero, positivo y mayor a cero."
                             throw new Error(error)
                         }
-
                         // if (!numeroDeReservasPorPagina || !filtroNumerosEnteros.test(numeroDeReservasPorPagina)) {
                         //     const error = "El campo de numeroDeReservasPorPagina solo admite una cadena con numeros enteros y positivos"
                         //     throw new Error(error)
                         // }
                         const paginaActualSQL = Number((paginaActual - 1) + "0");
                         const numeroPorPagina = 10
-
                         // Comprobar si la cuenta tiene un email
                         const obtenerDatosUsuario = `
                         SELECT 
@@ -3208,7 +2754,6 @@ const puerto = async (entrada, salida) => {
                             const error = "Tienes que verificar tu dirección de correo electronico para poder acceder a la reservas asociadas a tu direcíon de correo electroníco."
                             throw new Error(error)
                         }
-
                         const uidClientesArray = []
                         // Buscar el email verificado, en titulares poll y titulares vitini
                         const consultaClientes = `
@@ -3223,10 +2768,7 @@ const puerto = async (entrada, salida) => {
                         clientesSeleccionados.rows.map((cliente) => {
                             uidClientesArray.push(cliente.uid);
                         })
-
-
                         const reservaUIDS_seleccionadas = []
-
                         const selecionarReservaUIDParaSelecionarReservas = `                       
                         SELECT 
                             "reservaUID"
@@ -3236,11 +2778,9 @@ const puerto = async (entrada, salida) => {
                             "titularUID" = ANY($1::int[])`
                         // Ojo por que puede que se deba pasar el numero en number y no en cadena
                         const reservasUIDS_porClientes = await conexion.query(selecionarReservaUIDParaSelecionarReservas, [uidClientesArray])
-
                         for (const reservaUID of reservasUIDS_porClientes.rows) {
                             reservaUIDS_seleccionadas.push(reservaUID.reservaUID)
                         }
-
                         const consultaClientesPool = `                       
                         SELECT 
                             reserva
@@ -3253,8 +2793,6 @@ const puerto = async (entrada, salida) => {
                         for (const reservaUID of reservasUIDS_porClientes_pool.rows) {
                             reservaUIDS_seleccionadas.push(reservaUID.reserva)
                         }
-
-
                         const validadores = {
                             nombreColumna: async (nombreColumna) => {
                                 const filtronombreColumna = /^[a-zA-Z]+$/;
@@ -3274,14 +2812,11 @@ const puerto = async (entrada, salida) => {
                                         'pasaporteTitular',
                                         'emailTitular'
                                     ];
-
                                     if (!miArray.includes(nombreColumna)) {
                                         const error = "No existe el nombre de la columna que quieres ordenar"
                                         throw new Error(error)
                                     }
-
                                 }
-
                             },
                             sentidoColumna: (sentidoColumna) => {
                                 let sentidoColumnaSQL
@@ -3293,7 +2828,6 @@ const puerto = async (entrada, salida) => {
                                 if (sentidoColumnaPreVal === "ascendente") {
                                     sentidoColumnaSQL = "ASC"
                                 }
-
                                 if (sentidoColumnaPreVal === "descendente") {
                                     sentidoColumnaSQL = "DESC"
                                 }
@@ -3310,7 +2844,6 @@ const puerto = async (entrada, salida) => {
                             sentidoColumnaSQL = (validadores.sentidoColumna(sentidoColumna)).sentidoColumnaSQL
                             sentidoColumna = (validadores.sentidoColumna(sentidoColumna)).sentidoColumna
                         }
-
                         let ordenColumnaSQL = ""
                         if (nombreColumna) {
                             ordenColumnaSQL = `
@@ -3318,10 +2851,6 @@ const puerto = async (entrada, salida) => {
                                 "${nombreColumna}" ${sentidoColumnaSQL} 
                                 `
                         }
-
-
-
-
                         // extraer las reservasa asociadas a esos titulares
                         const obtenerDetallesReserva = `
                         SELECT 
@@ -3342,38 +2871,30 @@ const puerto = async (entrada, salida) => {
                         OFFSET
                             $3;`;
                         // Ojo por que puede que se deba pasar el numero en number y no en cadena
-
                         const datosListaReservas = [
                             reservaUIDS_seleccionadas,
                             numeroPorPagina,
                             paginaActualSQL
-
                         ]
                         const resolverObtenerReservas = await conexion.query(obtenerDetallesReserva, datosListaReservas)
                         const consultaConteoTotalFilas = resolverObtenerReservas?.rows[0]?.total_filas ? resolverObtenerReservas.rows[0].total_filas : 0
                         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
-
                         if (resolverObtenerReservas.rowCount === 0) {
                             const error = `No hay ninguna reserva realizada y confirmada con la dirección de correo electronico ${email}`
                             throw new Error(error)
                         }
                         if (resolverObtenerReservas.rowCount > 0) {
-
                             for (const detallesFila of resolverObtenerReservas.rows) {
                                 delete detallesFila.total_filas
                             }
-
                             const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
                             const reservasEncontradas = resolverObtenerReservas.rows
-
                             const ok = {
                                 ok: "Aqui tienes tus reservas",
                                 pagina: Number(paginaActual),
                                 paginasTotales: totalPaginas,
                                 totalReservas: Number(consultaConteoTotalFilas),
-
                             }
-
                             if (nombreColumna) {
                                 ok.nombreColumna = nombreColumna
                                 ok.sentidoColumna = sentidoColumna
@@ -3385,17 +2906,13 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
-
                 },
                 cancelarReserva: async () => {
-
                     try {
                         const IDX = entrada.session.IDX
                         const reservaUID = entrada.body.reservaUID
-
                         const filtroNumerosEnteros = /^[0-9]+$/;
                         if (!reservaUID || !filtroNumerosEnteros.test(reservaUID)) {
                             const error = "El campo de reservaUID solo admite una cadena con numeros enteros y positivos"
@@ -3411,7 +2928,6 @@ const puerto = async (entrada, salida) => {
                             "usuarioIDX" = $1`
                         const resolverObtenerDatosUsuario = await conexion.query(obtenerDatosUsuario, [IDX])
                         const email = resolverObtenerDatosUsuario.rows[0].email
-
                         const validarExistenciaReserva = `
                         SELECT
                         reserva
@@ -3428,7 +2944,6 @@ const puerto = async (entrada, salida) => {
                         if (resuelveValidarExistenciaReserva.rowCount === 1) {
                             const detallesReserva = resuelveValidarExistenciaReserva.rows[0]
                             const estadoReserva = detallesReserva.estadoReserva
-
                             if (estadoReserva === "cancelada") {
                                 const error = "Esta reserva ya esta cancelada"
                                 throw new Error(error)
@@ -3443,7 +2958,6 @@ const puerto = async (entrada, salida) => {
                                 reserva = $2 AND email = $3
                             `
                             await conexion.query(cancelarReserva, [estadoCancelada, reservaUID, email])
-
                             const plataformaDePagoPasarela = "pasarela"
                             const obtenerPagosSinPasarela = `
                             SELECT
@@ -3469,7 +2983,6 @@ const puerto = async (entrada, salida) => {
                                         pagoUID: pagoUID,
                                         plataformaDePago: plataformaDePago
                                     }
-
                                     const creaNotificacionDeReembolso = `
                                     INSERT INTO notificaciones
                                     (
@@ -3485,10 +2998,8 @@ const puerto = async (entrada, salida) => {
                                         IDX
                                     ]
                                     await conexion.query(creaNotificacionDeReembolso, datosNotificacion)
-
                                 }
                                 ok.reembolsoManual = "Se ha notificado de los reembolso de esta reserva para que se procesa con ellos"
-
                             }
                             const obtenerPagosPasarelaReserva = `
                             SELECT
@@ -3508,9 +3019,6 @@ const puerto = async (entrada, salida) => {
                                     const pagoUIDPasarela = detallesReembolso.pagoUIDPasarela
                                     let cantidad = detallesReembolso.cantidad
                                     const moneda = "USD"
-
-
-
                                     const detallesDelPago = await componentes.pasarela.detallesDelPago(pagoUIDPasarela)
                                     if (detallesDelPago.error) {
                                         const errorUID = detallesDelPago.error.errors[0].code
@@ -3529,10 +3037,7 @@ const puerto = async (entrada, salida) => {
                                     let totalAReembolsar = cantidadPagoPasarela
                                     if (reembolsadoYa) {
                                         const restantePorReesmbolar = cantidadPagoPasarela - reembolsadoYa
-
                                         if (restantePorReesmbolar > 0) {
-
-
                                             const reembolsoDetalles = {
                                                 idempotencyKey: uuidv4(),
                                                 amountMoney: {
@@ -3544,9 +3049,6 @@ const puerto = async (entrada, salida) => {
                                             const procesadorReembolso = await componentes.pasarela.crearReenbolso(reembolsoDetalles)
                                             if (procesadorReembolso.error) {
                                                 const errorUID = procesadorReembolso.error?.errors[0]?.code
-
-
-
                                                 let error
                                                 switch (errorUID) {
                                                     case "REFUND_AMOUNT_INVALID":
@@ -3564,33 +3066,24 @@ const puerto = async (entrada, salida) => {
                                                 }
                                             }
                                             infoReembolsosPasarela = "rembolsado"
-
                                         }
-
                                         totalAReembolsar = restantePorReesmbolar
                                     }
-
-
                                 }
                                 if (infoReembolsosPasarela === "reembolsado") {
                                     ok.reembolsoPasarela = "Se ha reembolsado todos los pagos asociados a esta reserva hechos desde la pasarela"
                                 }
-
                             }
-
                             salida.json(ok)
                         }
-
                         await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
-
                 },
                 detallesReserva: async () => {
                     try {
@@ -3600,7 +3093,6 @@ const puerto = async (entrada, salida) => {
                             const error = "Se necesita un id de 'reserva'"
                             throw new Error(error)
                         }
-
                         if (typeof reservaUID !== "number" || !Number.isInteger(reservaUID) || reservaUID <= 0) {
                             let error = "Se ha definico correctamente  la clave 'reserva' pero el valor de esta debe de ser un numero positivo, si has escrito un numero positivo, revisa que en el objeto no este numero no este envuelvo entre comillas"
                             throw new Error(error)
@@ -3652,7 +3144,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe la reserva"
                             throw new Error(error)
                         }
-
                         // La reserva existe asi que se busca si tiene un titular con esa direcion de correo electronico
                         let controlAcceso = "no"
                         const consultaTitularPool = `
@@ -3669,7 +3160,6 @@ const puerto = async (entrada, salida) => {
                         if (controlAccesoTitularPool.rowCount === 1) {
                             controlAcceso = "si"
                         }
-
                         const consultaEnlace = `
                         SELECT
                             "titularUID"
@@ -3678,7 +3168,6 @@ const puerto = async (entrada, salida) => {
                         WHERE
                             "reservaUID" = $1`
                         const resuelveEnlaceTitular = await conexion.query(consultaEnlace, [reservaUID])
-
                         if (resuelveEnlaceTitular.rowCount === 1) {
                             const titularUID = resuelveEnlaceTitular.rows[0].titularUID
                             const consultaTitular = `
@@ -3689,7 +3178,6 @@ const puerto = async (entrada, salida) => {
                             WHERE
                                 uid = $1`
                             const resuelveTitular = await conexion.query(consultaTitular, [titularUID])
-
                             const mailTitular = resuelveTitular.rows[0].email
                             if (mailTitular === email) {
                                 controlAcceso = "si"
@@ -3708,7 +3196,6 @@ const puerto = async (entrada, salida) => {
                             delete resuelveDetallesReserva.reserva.origen
                             salida.json(resuelveDetallesReserva)
                         }
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
@@ -3716,7 +3203,6 @@ const puerto = async (entrada, salida) => {
                         salida.json(error)
                     }
                 },
-
             },
             recuperarCuenta: {
                 enviarCorreo: async () => {
@@ -3730,11 +3216,9 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo de correo electrónico no cumple con el formato esperado, por favor revisalo."
                             throw new Error(error)
                         }
-
                         const generarCadenaAleatoria = (longitud) => {
                             const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
                             let cadenaAleatoria = '';
-
                             for (let i = 0; i < longitud; i++) {
                                 const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
                                 cadenaAleatoria += caracteres.charAt(indiceAleatorio);
@@ -3748,12 +3232,10 @@ const puerto = async (entrada, salida) => {
                             FROM "enlaceDeRecuperacionCuenta"
                             WHERE codigo = $1;`
                             const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [codigoAleatorio])
-
                             if (resuelveValidarCodigoAleatorio.rowCount > 0) {
                                 return true
                             }
                         }
-
                         const controlCodigo = async () => {
                             const longitudCodigo = 100; // Puedes ajustar la longitud según tus necesidades
                             let codigoGenerado;
@@ -3769,7 +3251,6 @@ const puerto = async (entrada, salida) => {
                         const fechaActualUTC = DateTime.utc();
                         const fechaCaducidadUTC = fechaActualUTC.plus({ hours: 1 });
                         const hostActual = process.env.HOST
-
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         const consultaRecuperarCuenta =
                             `
@@ -3781,10 +3262,8 @@ const puerto = async (entrada, salida) => {
                         if (resuelveActualizarIDX.rowCount === 0) {
                             const error = "La dirección de correo electrònico no consta en nínguna cuenta de usuario. Registrate y crea tu VitiniID si lo neceistas."
                             throw new Error(error)
-
                         }
                         const usuarioIDX = resuelveActualizarIDX.rows[0].usuarioIDX
-
                         // Comporbar si es una recuperacion de contraseña o una verificacion de email
                         const consultaEstadoVerificacionCuenta =
                             `
@@ -3803,7 +3282,6 @@ const puerto = async (entrada, salida) => {
                         }
                         const estadoVerificacion = resuelveEstadoVerificacion.rows[0].cuentaVerificada
                         const usuario = resuelveEstadoVerificacion.rows[0].usuario
-
                         if (estadoVerificacion !== "si") {
                             const actualizarCodigoVerificacion = `
                             UPDATE 
@@ -3820,14 +3298,12 @@ const puerto = async (entrada, salida) => {
                                 usuario
                             ]
                             await conexion.query(actualizarCodigoVerificacion, datosRestablecimiento)
-
                             // Contruimos el mensaje
                             const origen = process.env.CORREO_DIRRECION_DE_ORIGEN_RECUPERACION
                             const destino = email
                             const asunto = "Verifica tu VitiniID"
                             const mensaje = `<html>Aquí tíenes el enlace de verificación. Los enlaces de verificación tienen una validez de una hora desde que se generan.
                              <a href="https://casavitini.com/micasa/verificar_cuenta/${codigoGenerado}">Verificar mi VtiniID</a></html>`
-
                             const composicionDelMensaje = {
                                 origen: origen,
                                 destino: destino,
@@ -3846,7 +3322,6 @@ const puerto = async (entrada, salida) => {
                                 DELETE FROM "enlaceDeRecuperacionCuenta"
                                 WHERE usuario = $1;`
                                 await conexion.query(borrarEnlacesAntiguos, [usuarioIDX])
-
                                 const consultaCrearEnlace = `
                                 INSERT INTO "enlaceDeRecuperacionCuenta"
                                 (
@@ -3860,20 +3335,17 @@ const puerto = async (entrada, salida) => {
                                 codigo
                                 `
                                 await conexion.query(consultaCrearEnlace, [usuarioIDX, codigoGenerado, fechaCaducidadUTC])
-
                                 // Contruimos el mensaje
                                 const origen = "admin@macos.local"
                                 const destino = email
                                 const asunto = "Recuperar tu VitiniID"
                                 const mensaje = `<html>Aquí tíenes el enlace para recupera tu cuenta. Este enlace tiene una duracion de 30 minutos. <a href="https://${hostActual}/micasa/recuperar_cuenta/${codigoGenerado}">Recuperar mi cuenta</a></html>`
-
                                 const composicionDelMensaje = {
                                     origen: origen,
                                     destino: destino,
                                     asunto: asunto,
                                     mensaje: mensaje,
                                 }
-
                                 // Enviamos el mensaje
                                 const resultadoEnvio = await enviarMail(composicionDelMensaje)
                                 const ok = {
@@ -3882,7 +3354,6 @@ const puerto = async (entrada, salida) => {
                                 salida.json(ok)
                             }
                         }
-
                         await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
@@ -3890,17 +3361,14 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 validarCodigo: async () => {
                     try {
                         const codigo = entrada.body.codigo
                         const filtroCadena = /^[a-z0-9]+$/;
-
                         if (!codigo || !filtroCadena.test(codigo)) {
                             const error = "Los codigo de recuperacion de cuentas solo pueden contener minuscular y numeros"
                             throw new Error(error)
@@ -3924,7 +3392,6 @@ const puerto = async (entrada, salida) => {
                             const error = "El codigo que has introducido no existe. Si estas intentando recuperar tu cuenta, recuerda que los codigos con de un solo uso y duran una hora. Si has generado varios codigos, solo es valido el mas nuevo. Si generas por ejemplo tres codigo. Solo es valido el codigo mas nuevo."
                             throw new Error(error)
                         }
-
                         if (resuelveValidarCodigo.rowCount === 1) {
                             const usuario = resuelveValidarCodigo.rows[0].usuario
                             const ok = {
@@ -3940,10 +3407,8 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 restablecerClave: async () => {
@@ -3956,12 +3421,10 @@ const puerto = async (entrada, salida) => {
                             const error = "Los codigo de recuperacion de cuentas solo pueden contener minuscular y numeros"
                             throw new Error(error)
                         }
-
                         if (!clave || (clave !== claveConfirmada)) {
                             const error = "Las claves no coinciden. Por favor escribe tu nueva clave dos veces."
                             throw new Error(error)
                         }
-
                         const fechaActual_ISO = DateTime.utc().toISO();
                         const eliminarEnlacesCaducados = `
                         DELETE FROM "enlaceDeRecuperacionCuenta"
@@ -3981,19 +3444,15 @@ const puerto = async (entrada, salida) => {
                             const error = "El codigo que has introducido no existe. Si estas intentando recuperar tu cuenta, recuerda que los codigos con de un solo uso y duran una hora. Si has generado varios codigos, solo es valido el mas nuevo. Si generas por ejemplo tres codigo. Solo es valido el codigo mas nuevo."
                             throw new Error(error)
                         }
-
                         if (resuelveValidarCodigo.rowCount === 1) {
                             const usuario = resuelveValidarCodigo.rows[0].usuario
-
                             const cryptoData = {
                                 sentido: "cifrar",
                                 clavePlana: clave
                             }
-
                             const retorno = vitiniCrypto(cryptoData)
                             const nuevaSal = retorno.nuevaSal
                             const hashCreado = retorno.hashCreado
-
                             const restablecerClave = `
                             UPDATE 
                             usuarios
@@ -4027,10 +3486,8 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
             },
@@ -4038,13 +3495,11 @@ const puerto = async (entrada, salida) => {
                 try {
                     const codigo = entrada.body.codigo
                     const filtroCadena = /^[a-z0-9]+$/;
-
                     if (!codigo || !filtroCadena.test(codigo)) {
                         const error = "Los codigo de verificacion de cuentas solo pueden contener minuscular y numeros"
                         throw new Error(error)
                     }
                     await componentes.eliminarCuentasNoVerificadas()
-
                     await conexion.query('BEGIN'); // Inicio de la transacción   
                     const estadoVerificado = "si"
                     const consultaValidarCodigo =
@@ -4065,7 +3520,6 @@ const puerto = async (entrada, salida) => {
                         const error = "El codigo que has introducino no existe"
                         throw new Error(error)
                     }
-
                     if (resuelveValidarCodigo.rowCount === 1) {
                         const usuario = resuelveValidarCodigo.rows[0].usuario
                         const ok = {
@@ -4081,15 +3535,10 @@ const puerto = async (entrada, salida) => {
                     const error = {
                         error: errorCapturado.message
                     }
-
                     salida.json(error)
                 } finally {
-
                 }
             },
-
-
-
         },
         administracion: {
             IDX: {
@@ -4104,7 +3553,6 @@ const puerto = async (entrada, salida) => {
                         let pagina = entrada.body.pagina
                         let nombreColumna = entrada.body.nombreColumna
                         let sentidoColumna = entrada.body.sentidoColumna
-
                         const validadores = {
                             nombreColumna: async (nombreColumna) => {
                                 const filtronombreColumna = /^[a-zA-Z]+$/;
@@ -4124,15 +3572,11 @@ const puerto = async (entrada, salida) => {
                                         'pasaporteTitular',
                                         'emailTitular'
                                     ];
-
                                     if (!miArray.includes(nombreColumna)) {
                                         const error = "No existe el nombre de la columna que quieres ordenar"
                                         throw new Error(error)
                                     }
-
-
                                 }
-
                             },
                             sentidoColumna: (sentidoColumna) => {
                                 let sentidoColumnaSQL
@@ -4144,7 +3588,6 @@ const puerto = async (entrada, salida) => {
                                 if (sentidoColumnaPreVal === "ascendente") {
                                     sentidoColumnaSQL = "ASC"
                                 }
-
                                 if (sentidoColumnaPreVal === "descendente") {
                                     sentidoColumnaSQL = "DESC"
                                 }
@@ -4156,7 +3599,6 @@ const puerto = async (entrada, salida) => {
                             },
                             validarFechaEntrada: (fecha) => {
                                 const filtroFecha = /^(0?[1-9]|[1-2][0-9]|3[0-1])\/(0?[1-9]|1[0-2])\/\d{4}$/;
-
                                 if (!filtroFecha.test(fecha)) {
                                     const error = "La fecha de entrada no cumple el criterio de formato"
                                     throw new Error(error)
@@ -4164,41 +3606,33 @@ const puerto = async (entrada, salida) => {
                             },
                             validarFechaSalida: (fecha) => {
                                 const filtroFecha = /^(0?[1-9]|[1-2][0-9]|3[0-1])\/(0?[1-9]|1[0-2])\/\d{4}$/;
-
                                 if (!filtroFecha.test(fecha)) {
                                     const error = "La fecha de salida no cumple el criterio de formato"
                                     throw new Error(error)
                                 }
                             }
                         }
-
                         if (typeof pagina !== "number" || !Number.isInteger(pagina) || pagina <= 0) {
                             const error = "Debe de especificarse la clave 'pagina' y su valor debe de ser numerico, entero, positivo y mayor a cero."
                             throw new Error(error)
                         }
-
                         const tipoConsulta = entrada.body.tipoConsulta
                         let numeroPagina = Number((pagina - 1) + "0");
-
                         let numeroPorPagina = 10
                         if (tipoConsulta !== "hoy" && tipoConsulta !== "rango" && tipoConsulta !== "porTerminos") {
                             const error = "Hay que especificar el tipo de consulta, si es hoy, rango o porTerminos, revisa los parametros de tu busqueda"
                             throw new Error(error)
                         }
-
                         if (tipoConsulta === "hoy") {
                             const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                             const tiempoZH = DateTime.now().setZone(zonaHoraria);
                             const fechaActualTZ = tiempoZH.toISODate()
-
                             const dia = String(tiempoZH.day).padStart("2", "0")
                             const mes = String(tiempoZH.month).padStart("2", "0")
                             const ano = tiempoZH.year
-
                             //const numeroPagina = pagina - 1
                             const numeroPorPagina = 10
                             const fechaFormato_Humano = dia + "/" + mes + "/" + ano
-
                             const consultaHoy = `
                             SELECT 
                                 r.reserva,
@@ -4235,18 +3669,14 @@ const puerto = async (entrada, salida) => {
                             OFFSET $3;
                             `
                             const consultaReservasHoy = await conexion.query(consultaHoy, [fechaActualTZ, numeroPorPagina, numeroPagina])
-
                             const consultaConteoTotalFilas = consultaReservasHoy?.rows[0]?.total_filas ? consultaReservasHoy.rows[0].total_filas : 0
                             const reservasEncontradas = consultaReservasHoy.rows
-
                             for (const detallesFila of reservasEncontradas) {
                                 delete detallesFila.total_filas
                             }
                             const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
                             const corretorNumeroPagina = String(numeroPagina).replace("0", "")
-
                             const Respuesta = {
-
                                 tipoConsulta: "rango",
                                 tipoCoincidencia: "porFechaDeEntrada",
                                 pagina: Number(1),
@@ -4256,7 +3686,6 @@ const puerto = async (entrada, salida) => {
                                 nombreColumna: "entrada",
                                 sentidoColumna: "ascendente",
                                 reservas: reservasEncontradas
-
                             }
                             salida.json(Respuesta)
                         }
@@ -4271,15 +3700,12 @@ const puerto = async (entrada, salida) => {
                                 const error = "Falta especificar el tipo de coincidencia, por favor selecciona el tipo de coincidencia para poder realizar la busqueda"
                                 throw new Error(error)
                             }
-
                             let sentidoColumnaSQL
-
                             if (nombreColumna) {
                                 await validadores.nombreColumna(nombreColumna)
                                 sentidoColumnaSQL = (validadores.sentidoColumna(sentidoColumna)).sentidoColumnaSQL
                                 sentidoColumna = (validadores.sentidoColumna(sentidoColumna)).sentidoColumna
                             }
-
                             let ordenColumnaSQL = ""
                             if (nombreColumna) {
                                 ordenColumnaSQL = `
@@ -4287,7 +3713,6 @@ const puerto = async (entrada, salida) => {
                                     "${nombreColumna}" ${sentidoColumnaSQL} 
                                     `
                             }
-
                             if (tipoCoincidencia === "cualquieraQueCoincida") {
                                 if (!fechaEntrada) {
                                     const error = "Falta determinar la 'fechaEntrada'"
@@ -4304,15 +3729,12 @@ const puerto = async (entrada, salida) => {
                                     const fechaISO8601 = `${anio}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
                                     return fechaISO8601;
                                 };
-
                                 const fechaEntradaReservaControl = new Date(convertirFechaISO8601(fechaEntrada));
                                 const fechaSalidaReservaControl = new Date(convertirFechaISO8601(fechaSalida));
                                 if (fechaSalidaReservaControl <= fechaEntradaReservaControl) {
                                     const error = "La fecha de entrada seleccionada es igual o superior a la fecha de salida de la reserva"
                                     throw new Error(error)
                                 }
-
-
                                 const consultaConstructor = `
                                     SELECT
                                     r.reserva,
@@ -4359,15 +3781,12 @@ const puerto = async (entrada, salida) => {
                                 const consultaReservas = await conexion.query(consultaConstructor, [fechaEntradaReservaControl, fechaSalidaReservaControl, numeroPorPagina, numeroPagina])
                                 const consultaConteoTotalFilas = consultaReservas?.rows[0]?.total_filas ? consultaReservas.rows[0].total_filas : 0
                                 const reservasEncontradas = consultaReservas.rows
-
                                 for (const detallesFila of reservasEncontradas) {
                                     delete detallesFila.total_filas
-
                                 }
                                 const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
                                 const corretorNumeroPagina = String(numeroPagina).replace("0", "")
                                 const ok = {
-
                                     tipoCoincidencia: "cualquieraQueCoincida",
                                     totalReservas: Number(consultaConteoTotalFilas),
                                     paginasTotales: totalPaginas,
@@ -4378,13 +3797,10 @@ const puerto = async (entrada, salida) => {
                                     nombreColumna: nombreColumna,
                                     sentidoColumna: sentidoColumna,
                                     reservas: reservasEncontradas
-
                                 }
                                 salida.json(ok)
                             }
                             if (tipoCoincidencia === "soloDentroDelRango") {
-
-
                                 if (!fechaEntrada) {
                                     const error = "Falta determinar la 'fechaEntrada'"
                                     throw new Error(error)
@@ -4393,20 +3809,14 @@ const puerto = async (entrada, salida) => {
                                     const error = "Falta determinar la 'fechaSalida'"
                                     throw new Error(error)
                                 }
-
                                 const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)).fecha_ISO
                                 const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida)).fecha_ISO
-
-
                                 const fechaEntradaReservaControl = DateTime.fromISO(fechaEntrada_ISO)
                                 const fechaSalidaReservaControl = DateTime.fromISO(fechaSalida_ISO)
-
                                 if (fechaSalidaReservaControl <= fechaEntradaReservaControl) {
-
                                     const error = "La fecha de entrada seleccionada es igual o superior a la fecha de salida de la reserva"
                                     throw new Error(error)
                                 }
-
                                 const consultaConstructor = `
                                     SELECT
                                         r.reserva,
@@ -4419,7 +3829,6 @@ const puerto = async (entrada, salida) => {
                                             WHEN ptr.uid IS NOT NULL THEN 
                                                 CONCAT_WS(' ', ptr."nombreTitular", '(pool)')
                                         END AS "nombreCompleto",
-
                                         CASE 
                                             WHEN c.uid IS NOT NULL THEN 
                                                 c.pasaporte
@@ -4455,12 +3864,10 @@ const puerto = async (entrada, salida) => {
                                 const reservasEncontradas = consultaReservas.rows
                                 for (const detallesFila of reservasEncontradas) {
                                     delete detallesFila.total_filas
-
                                 }
                                 const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
                                 const corretorNumeroPagina = String(numeroPagina).replace("0", "")
                                 const ok = {
-
                                     tipoCoincidencia: "soloDentroDelRango",
                                     totalReservas: Number(consultaConteoTotalFilas),
                                     paginasTotales: totalPaginas,
@@ -4471,7 +3878,6 @@ const puerto = async (entrada, salida) => {
                                     nombreColumna: nombreColumna,
                                     sentidoColumna: sentidoColumna,
                                     reservas: reservasEncontradas
-
                                 }
                                 salida.json(ok)
                             }
@@ -4481,7 +3887,6 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                                 const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)).fecha_ISO
-
                                 const consultaConstructor = `
                                 SELECT
                                     r.reserva,
@@ -4508,7 +3913,6 @@ const puerto = async (entrada, salida) => {
                                         WHEN ptr.uid IS NOT NULL THEN 
                                             CONCAT_WS(' ', ptr."emailTitular", '(pool)')
                                     END AS "emailTitular",
-
                                     to_char(r.creacion, 'DD/MM/YYYY') as creacion,
                                     COUNT(*) OVER() as total_filas
                                         FROM 
@@ -4529,7 +3933,6 @@ const puerto = async (entrada, salida) => {
                                 const reservasEncontradas = consultaReservas.rows
                                 for (const detallesFila of reservasEncontradas) {
                                     delete detallesFila.total_filas
-
                                 }
                                 const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
                                 const corretorNumeroPagina = String(numeroPagina).replace("0", "")
@@ -4544,7 +3947,6 @@ const puerto = async (entrada, salida) => {
                                     nombreColumna: nombreColumna,
                                     sentidoColumna: sentidoColumna,
                                     reservas: reservasEncontradas
-
                                 }
                                 salida.json(ok)
                             }
@@ -4553,9 +3955,7 @@ const puerto = async (entrada, salida) => {
                                     const error = "Falta determinar la 'fechaSalida'"
                                     throw new Error(error)
                                 }
-
                                 const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida)).fecha_ISO
-
                                 const consultaConstructor = `
                                     SELECT
                                         r.reserva,
@@ -4568,14 +3968,12 @@ const puerto = async (entrada, salida) => {
                                             WHEN ptr.uid IS NOT NULL THEN 
                                                 CONCAT_WS(' ', ptr."nombreTitular", '(pool)')
                                         END AS "nombreCompleto",
-
                                         CASE 
                                             WHEN c.uid IS NOT NULL THEN 
                                                 c.pasaporte
                                             WHEN ptr.uid IS NOT NULL THEN 
                                                 CONCAT_WS(' ', ptr."pasaporteTitular", '(pool)')
                                         END AS "pasaporteTitular",
-
                                         CASE 
                                             WHEN c.uid IS NOT NULL THEN 
                                                 c.email
@@ -4607,7 +4005,6 @@ const puerto = async (entrada, salida) => {
                                 const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
                                 const corretorNumeroPagina = String(numeroPagina).replace("0", "")
                                 const ok = {
-
                                     tipoCoincidencia: "porFechaDeSalida",
                                     totalReservas: Number(consultaConteoTotalFilas),
                                     paginasTotales: totalPaginas,
@@ -4618,11 +4015,9 @@ const puerto = async (entrada, salida) => {
                                     nombreColumna: nombreColumna,
                                     sentidoColumna: sentidoColumna,
                                     reservas: reservasEncontradas
-
                                 }
                                 salida.json(ok)
                             }
-
                         }
                         if (tipoConsulta === "porTerminos") {
                             let termino = entrada.body.termino
@@ -4684,9 +4079,7 @@ const puerto = async (entrada, salida) => {
                                 END                              
                              )
                             `
-
                             let ordenamientoFinal
-
                             if (nombreColumna || sentidoColumna) {
                                 await validadores.nombreColumna(nombreColumna)
                                 const sentidoColumnaSQL = (validadores.sentidoColumna(sentidoColumna)).sentidoColumnaSQL
@@ -4697,9 +4090,6 @@ const puerto = async (entrada, salida) => {
                             } else {
                                 ordenamientoFinal = ordenamientoPorRelevancia
                             }
-
-
-
                             const consultaConstructorV2 = `                         
                             SELECT 
                                 r.reserva,
@@ -4726,7 +4116,6 @@ const puerto = async (entrada, salida) => {
                                     WHEN ptr.uid IS NOT NULL THEN 
                                         CONCAT_WS(' ', ptr."emailTitular", '(pool)')
                                 END AS "emailTitular",
-
                                 to_char(r.creacion, 'DD/MM/YYYY') as creacion,
                                 COUNT(*) OVER() as total_filas
                             FROM 
@@ -4759,44 +4148,33 @@ const puerto = async (entrada, salida) => {
                             OFFSET $3;                     
                             `
                             const consultaReservas = await conexion.query(consultaConstructorV2, [terminosFormateados, numeroPorPagina, numeroPagina])
-
                             const consultaConteoTotalFilas = consultaReservas?.rows[0]?.total_filas ? consultaReservas.rows[0].total_filas : 0
                             const reservasEncontradas = consultaReservas.rows
                             for (const detallesFila of reservasEncontradas) {
                                 delete detallesFila.total_filas
-
                             }
-
                             const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
                             const corretorNumeroPagina = String(numeroPagina).replace("0", "")
-
                             estructuraFinal.pagina = 1
                             estructuraFinal.totalReservas = Number(consultaConteoTotalFilas)
                             estructuraFinal.paginasTotales = totalPaginas
                             estructuraFinal.pagina = Number(corretorNumeroPagina) + 1
                             estructuraFinal.reservas = reservasEncontradas
                             estructuraFinal.termino = termino
-
                             salida.json(estructuraFinal)
                         }
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
-
-
                 },
                 detallesReserva: async () => {
                     try {
                         const reservaUID = entrada.body.reserva
                         const solo = entrada.body.solo
-
                         if (!reservaUID) {
                             const error = "Se necesita un id de 'reserva'"
                             throw new Error(error)
@@ -4806,7 +4184,6 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         if (solo) {
-
                             if (solo !== "detallesAlojamiento" &&
                                 solo !== "desgloseTotal" &&
                                 solo !== "informacionGlobal" &&
@@ -4816,7 +4193,6 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-
                         const metadatos = {
                             reservaUID: reservaUID,
                             solo: solo
@@ -4827,7 +4203,6 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 },
@@ -4838,8 +4213,6 @@ const puerto = async (entrada, salida) => {
                         const reservaUID = entrada.body.reservaUID
                         const pernoctanteUID = entrada.body.pernoctanteUID
                         const clienteUID = entrada.body.clienteUID
-
-
                         const reserva = await validadoresCompartidos.reservas.validarReserva(reservaUID)
                         if (typeof pernoctanteUID !== "number" || !Number.isInteger(pernoctanteUID) || pernoctanteUID <= 0) {
                             const error = "El campo 'pernoctanteUID' debe ser un tipo numero, entero y positivo"
@@ -4849,15 +4222,11 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo 'clienteUID' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
                         }
-
-
-
                         if (reserva.estadoReserva === "cancelada") {
                             const error = "La reserva no se puede modificar por que esta cancelada"
                             throw new Error(error)
                         }
                         await conexion.query('BEGIN'); // Inicio de la transacción
-
                         // validar cliente
                         const validacionCliente = `
                           SELECT 
@@ -4876,15 +4245,11 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe el cliente"
                             throw new Error(error)
                         }
-
                         const nombre = resuelveValidacionCliente.rows[0].nombre
                         const primerApellido = resuelveValidacionCliente.rows[0].primerApellido || ""
                         const segundoApellido = resuelveValidacionCliente.rows[0].segundoApellido || ""
                         const nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`
                         const pasaporte = resuelveValidacionCliente.rows[0].segundoApellido
-
-
-
                         // No se puede anadir un pernoctante ya existen a la reserva, proponer moverlo de habitacion
                         const validacionUnicidadPernoctante = `
                           SELECT 
@@ -4897,9 +4262,6 @@ const puerto = async (entrada, salida) => {
                             const error = "Este cliente ya es un pernoctante dentro de esta reserva, mejor muevalo de habitacion"
                             throw new Error(error)
                         }
-
-
-
                         const consultaFechaFeserva = `
                         SELECT 
                         to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
@@ -4907,10 +4269,8 @@ const puerto = async (entrada, salida) => {
                         FROM reservas 
                         WHERE reserva = $1;`
                         const resuelveFechas = await conexion.query(consultaFechaFeserva, [reservaUID])
-
                         const fechaEntrada_ISO = resuelveFechas.rows[0].fechaEntrada_ISO
                         const fechaSalida_ISO = resuelveFechas.rows[0].fechaSalida_ISO
-
                         const estadoReservaCancelado = "cancelada"
                         const consultaReservasRangoInteracion = `
                         SELECT reserva 
@@ -4933,16 +4293,10 @@ const puerto = async (entrada, salida) => {
                                 }
                             }
                         }
-
-
                         if (interruptorClienteEncontrado === "encontrado") {
                             const error = "Este cliente no se puede anadir a esta reserva por que esta en otra reserva cuyo rango de fecha coincide con esta, dicho de otra manera, si se anadiese este cliente en esta reserva, puede que en un dia o en mas de un dia este cliente estaria asignado a un apartmento distingo en fechas coincidentes"
                             throw new Error(error)
                         }
-
-
-
-
                         const cambiarClientePoolPorCliente = `
                         UPDATE "reservaPernoctantes"
                         SET "clienteUID" = $1
@@ -4956,15 +4310,11 @@ const puerto = async (entrada, salida) => {
                             const error = "revisa los parametros que introduces por que aunque estan escritos en el formato correcto pero no son correctos"
                             throw new Error(error)
                         }
-
-
                         const eliminarClientePool = `
                         DELETE FROM "poolClientes"
                         WHERE "pernoctanteUID" = $1;`
                         await conexion.query(eliminarClientePool, [pernoctanteUID])
-
                         await conexion.query('COMMIT'); // Confirmar la transacción
-
                         const ok = {
                             ok: "Se ha acualizado el pernoctante correctamente",
                             pernoctanteUID: pernoctanteUID,
@@ -4973,19 +4323,15 @@ const puerto = async (entrada, salida) => {
                             pasaporte: pasaporte
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
                         bloqueoCambiarTipoClienteEnReserva();
                     }
-
                 },
                 cambiarPernoctanteDeHabitacion: async () => {
                     const mutex = new Mutex();
@@ -4994,7 +4340,6 @@ const puerto = async (entrada, salida) => {
                         const reserva = entrada.body.reserva
                         const habitacionDestino = entrada.body.habitacionDestino
                         const pernoctanteUID = entrada.body.pernoctanteUID
-
                         const validacionReserva = `
                         SELECT 
                         reserva, "estadoReserva", "estadoPago"
@@ -5010,7 +4355,6 @@ const puerto = async (entrada, salida) => {
                             const error = "La reserva no se puede modificar por que esta cancelada"
                             throw new Error(error)
                         }
-
                         if (resuelveValidacionReserva.rows[0].estadoPago === "pagado") {
                             const error = "La reserva no se puede modificar por que esta pagada"
                             throw new Error(error)
@@ -5019,7 +4363,6 @@ const puerto = async (entrada, salida) => {
                             const error = "La reserva no se puede modificar por que esta reembolsada"
                             throw new Error(error)
                         }
-
                         const consultaExistenciaCliente = `
                         SELECT 
                         "pernoctanteUID" 
@@ -5057,33 +4400,25 @@ const puerto = async (entrada, salida) => {
                         if (actualizaClientePoolDestino.rowCount === 0) {
                             const error = "Ha ocurrido un error al intentar actualiza el cliente pool en el destino"
                             throw new Error(error)
-
                         }
-
                         if (actualizaClientePoolDestino.rowCount === 1) {
                             const ok = {
                                 ok: "Se ha cambiado correctamente al pernoctante de alojamiento dentro de la reserva "
                             }
                             salida.json(ok)
                         }
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                         bloqueoCambiarPernoctanteHabitacion()
                     }
-
-
                 },
                 cambiarCamaHabitacion: async () => {
                     const mutex = new Mutex();
                     const bloqueoCambiarCamaHabitacion = await mutex.acquire();
-
                     try {
                         const reserva = entrada.body.reserva
                         const habitacion = entrada.body.habitacion
@@ -5117,7 +4452,6 @@ const puerto = async (entrada, salida) => {
                             const error = "La reserva no se puede modificar por que esta cancelada"
                             throw new Error(error)
                         }
-
                         if (resuelveValidacionReserva.rows[0].estadoPago === "pagado") {
                             const error = "La reserva no se puede modificar por que esta pagada"
                             throw new Error(error)
@@ -5147,14 +4481,12 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         // Valida que la cama existe dentro de la reserva
-
                         const resolucionNombreCama = await conexion.query(`SELECT "camaUI" FROM camas WHERE cama = $1`, [nuevaCama])
                         if (resolucionNombreCama.rowCount === 0) {
                             const error = "No existe el identificador de la camaIDV"
                             throw new Error(error)
                         }
                         const camaUI = resolucionNombreCama.rows[0].camaUI
-
                         const consultaExistenciaCama = `
                         SELECT uid 
                         FROM "reservaCamas" 
@@ -5200,19 +4532,15 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                         bloqueoCambiarCamaHabitacion()
                     }
                 },
                 listarTipoCamasHabitacion: async () => {
-
                     try {
                         const apartamento = entrada.body.apartamento
                         const habitacion = entrada.body.habitacion
-
                         const filtroCadena = /^[A-Za-z\s\d]+$/;
                         if (!apartamento || !filtroCadena.test(apartamento)) {
                             const error = "Se necesita un 'apartamento' que sea un string con letras y espacios, nada mas"
@@ -5222,7 +4550,6 @@ const puerto = async (entrada, salida) => {
                             const error = "Se necesita un 'habitacion' que sea un string con letras y espacios, nada mas"
                             throw new Error(error)
                         }
-
                         const consultaControlApartamento = `
                         SELECT uid 
                         FROM "configuracionHabitacionesDelApartamento" 
@@ -5246,21 +4573,17 @@ const puerto = async (entrada, salida) => {
                             const camasResueltas = []
                             for (const camaPorResolver of configuracionCamasHabitacion.rows) {
                                 const camaIDV = camaPorResolver.cama
-
                                 const consultaResolucionNombresCamas = `
                                 SELECT "camaUI", cama
                                 FROM camas 
                                 WHERE cama = $1;`
                                 const resolucionNombresCamas = await conexion.query(consultaResolucionNombresCamas, [camaIDV])
                                 const nombresCamas = resolucionNombresCamas.rows[0]
-
                                 const camaResuelta = {
                                     cama: nombresCamas.cama,
                                     camaUI: nombresCamas.camaUI
-
                                 }
                                 camasResueltas.push(camaResuelta)
-
                             }
                             const ok = {
                                 camasDisponibles: camasResueltas,
@@ -5271,23 +4594,18 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error);
                     } finally {
-
                     }
-
                 },
                 apartamentosDisponiblesAdministracion: async () => {
                     try {
                         const fechaEntrada = entrada.body.entrada
                         const fechaSalida = entrada.body.salida
-
                         if (!fechaEntrada) {
                             const error = "falta definir el campo 'entrada'"
                             throw new Error(error)
                         }
-
                         if (!fechaSalida) {
                             const error = "falta definir el campo 'salida'"
                             throw new Error(error)
@@ -5297,51 +4615,43 @@ const puerto = async (entrada, salida) => {
                             const error = "el formato fecha de entrada no esta correctametne formateado"
                             throw new Error(error)
                         }
-
                         if (!filtroFecha.test(fechaSalida)) {
                             const error = "el formato fecha de salida no esta correctametne formateado"
                             throw new Error(error)
-
                         }
-
                         const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)).fecha_ISO
                         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida)).fecha_ISO
-
-                        const fecha = {
+                        const rol = entrada.session.rol
+                        const configuracionApartamentosPorRango = {
                             fechaEntrada_ISO: fechaEntrada_ISO,
-                            fechaSalida_ISO: fechaSalida_ISO
+                            fechaSalida_ISO: fechaSalida_ISO,
+                            rol: rol,
+                            origen: "administracion"
                         }
-
-                        const transactor = await apartamentosDisponiblesAdministracion(fecha)
+                        const transactor = await apartamentosPorRango(configuracionApartamentosPorRango)
                         if (transactor) {
                             const ok = {
                                 ok: transactor
                             }
                             salida.json(ok)
-
                         }
                         salida.end()
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
-
                 },
                 apartamentosDisponiblesParaAnadirAReserva: async () => {
                     try {
                         const fechaEntrada = entrada.body.entrada
                         const fechaSalida = entrada.body.salida
-
                         if (!fechaEntrada) {
                             const error = "falta definir el campo 'entrada'"
                             throw new Error(error)
                         }
-
                         if (!fechaSalida) {
                             const error = "falta definir el campo 'salida'"
                             throw new Error(error)
@@ -5351,25 +4661,22 @@ const puerto = async (entrada, salida) => {
                             const error = "el formato fecha de entrada no esta correctametne formateado"
                             throw new Error(error)
                         }
-
                         if (!filtroFecha.test(fechaSalida)) {
                             const error = "el formato fecha de salida no esta correctametne formateado"
                             throw new Error(error)
-
                         }
-
                         const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)).fecha_ISO
                         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida)).fecha_ISO
-
-                        const fecha = {
+                        const rol = entrada.session.rol
+                        const configuracionApartamentosPorRango = {
                             fechaEntrada_ISO: fechaEntrada_ISO,
-                            fechaSalida_ISO: fechaSalida_ISO
+                            fechaSalida_ISO: fechaSalida_ISO,
+                            rol: rol,
+                            origen: "administracion"
                         }
-
-                        const transactor = await apartamentosDisponiblesAdministracion(fecha)
+                        const transactor = await apartamentosPorRango(configuracionApartamentosPorRango)
                         const apartamentosDisponbilesIDV = transactor.apartamentosDisponibles
                         const apartamentosNoDisponiblesIDV = transactor.apartamentosNoDisponibles
-
                         const estructuraFinal = {
                             apartamentosDisponibles: [],
                             apartamentosNoDisponibles: []
@@ -5382,7 +4689,6 @@ const puerto = async (entrada, salida) => {
                             }
                             estructuraFinal.apartamentosDisponibles.push(detalleApartamento)
                         }
-
                         for (const apartamentoIDV of apartamentosNoDisponiblesIDV) {
                             const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
                             const detalleApartamento = {
@@ -5391,27 +4697,20 @@ const puerto = async (entrada, salida) => {
                             }
                             estructuraFinal.apartamentosNoDisponibles.push(detalleApartamento)
                         }
-
-
-
                         if (transactor) {
                             const ok = {
                                 ok: estructuraFinal
                             }
                             salida.json(ok)
-
                         }
                         salida.end()
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
-
                 },
                 configuracionApartamento: async () => {
                     try {
@@ -5422,10 +4721,8 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 insertarDatosFinancierosReservaExistente: async () => {
@@ -5453,12 +4750,9 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
-
                 },
                 estadoHabitacionesApartamento: async () => {
                     try {
@@ -5509,11 +4803,9 @@ const puerto = async (entrada, salida) => {
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
-
                         }
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 anadirHabitacionAlApartamentoEnReserva: async () => {
@@ -5551,9 +4843,6 @@ const puerto = async (entrada, salida) => {
                             const error = "La reserva no se puede modificar por que esta cancelada"
                             throw new Error(error)
                         }
-
-
-
                         // Mira las habitaciones diponbiles para anadira este apartamento
                         const transaccionInterna = {
                             "apartamento": apartamento,
@@ -5568,15 +4857,12 @@ const puerto = async (entrada, salida) => {
                         if (habitacionesResuelvas.length > 0) {
                             for (const habitacionResuelta of habitacionesResuelvas) {
                                 if (habitacion === habitacionResuelta) {
-
                                     const resolucionNombreHabitacion = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacion])
                                     if (resolucionNombreHabitacion.rowCount === 0) {
                                         const error = "No existe el identificador de la habitacionIDV"
                                         throw new Error(error)
                                     }
                                     const habitacionUI = resolucionNombreHabitacion.rows[0].habitacionUI
-
-
                                     const consultaInsertaHabitacion = `
                                     INSERT INTO "reservaHabitaciones"
                                     (
@@ -5595,7 +4881,6 @@ const puerto = async (entrada, salida) => {
                                         }
                                         return salida.json(ok)
                                     }
-
                                 }
                             }
                             let error = {
@@ -5607,13 +4892,10 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                         bloqueoaAnadirHabitacionAlApartamentoEnReserva()
                     }
-
                 },
                 anadirApartamentoReserva: async () => {
                     const mutex = new Mutex();
@@ -5625,7 +4907,6 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
                         }
-
                         const filtroCadena = /^[a-z0-9]+$/;
                         if (!filtroCadena.test(apartamento) || typeof apartamento !== "string") {
                             const error = "el campo 'apartamento' solo puede ser una cadena de letras minúsculas y numeros."
@@ -5643,7 +4924,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe el nombre del apartamento, revisa el nombre escrito"
                             throw new Error(error)
                         }
-
                         // valida reserva y obten fechas
                         const validacionReserva = `
                         SELECT 
@@ -5663,9 +4943,6 @@ const puerto = async (entrada, salida) => {
                             const error = "La reserva no se puede modificar por que esta cancelada"
                             throw new Error(error)
                         }
-
-
-
                         const fechaEntrada_ISO = resuelveValidacionReserva.rows[0].fechaEntrada_ISO
                         const fechaSalida_ISO = resuelveValidacionReserva.rows[0].fechaSalida_ISO
                         // ACABAR ESTA SENTENCIA DE ABAJO--
@@ -5681,15 +4958,14 @@ const puerto = async (entrada, salida) => {
                             const error = "El apartamento ya existe en la reserva"
                             throw new Error(error)
                         }
-
-                        // Validar que el apartamento esta diponbiles en el modo normal, sacando las fechas de la reserva
-                        const transacion = {
+                        const rol = entrada.session.rol
+                        const configuracionApartamentosPorRango = {
                             fechaEntrada_ISO: fechaEntrada_ISO,
-                            fechaSalida_ISO: fechaSalida_ISO
-
+                            fechaSalida_ISO: fechaSalida_ISO,
+                            rol: rol,
+                            origen: "administracion"
                         }
-                        const resuelveApartamentosDisponibles = await apartamentosDisponiblesAdministracion(transacion)
-
+                        const resuelveApartamentosDisponibles = await apartamentosPorRango(configuracionApartamentosPorRango)
                         const apartamentosDisponiblesResueltos = resuelveApartamentosDisponibles.apartamentosDisponibles
                         if (apartamentosDisponiblesResueltos.length === 0) {
                             const error = "No hay ningun apartamento disponbile para las fechas de la reserva"
@@ -5714,14 +4990,11 @@ const puerto = async (entrada, salida) => {
                                 `
                             const resuelveInsertarApartamento = await conexion.query(insertarApartamento, [reserva, apartamento, apartamentoUI])
                             if (resuelveInsertarApartamento.rowCount === 1) {
-
                                 const transaccionPrecioReserva = {
                                     tipoProcesadorPrecio: "uid",
                                     reservaUID: reserva
                                 }
                                 await insertarTotalesReserva(transaccionPrecioReserva)
-
-
                                 const ok = {
                                     ok: "apartamento anadido correctamente",
                                     apartamentoIDV: apartamento,
@@ -5730,18 +5003,14 @@ const puerto = async (entrada, salida) => {
                                 }
                                 salida.json(ok)
                             }
-
-
                         }
                         // En el modo forzoso el apartamento entra igual
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                         bloqueoAnadirApartamentoReserva()
                     }
                 },
@@ -5749,7 +5018,6 @@ const puerto = async (entrada, salida) => {
                     const mutex = new Mutex();
                     const bloqueoEliminarApartamentoReserva = await mutex.acquire();
                     try {
-
                         const reserva = entrada.body.reserva
                         // apartamentoUID
                         const apartamento = entrada.body.apartamento
@@ -5762,13 +5030,11 @@ const puerto = async (entrada, salida) => {
                             const error = "el campo 'apartamento' solo puede un numero, entero y positivo"
                             throw new Error(error)
                         }
-
                         if (tipoBloqueo !== "permanente" && tipoBloqueo !== "rangoTemporal" && tipoBloqueo !== "sinBloqueo") {
                             const error = "El campo 'tipoBloqueo' solo puede ser 'permanente', 'rangoTemporal', 'sinBloquo'"
                             throw new Error(error)
                         }
                         await conexion.query('BEGIN'); // Inicio de la transacción
-
                         // Comprobar que la reserva exisste
                         const validacionReserva = `
                         SELECT 
@@ -5797,11 +5063,8 @@ const puerto = async (entrada, salida) => {
                         `
                         const resuelveValidarExistenciaTotales = await conexion.query(validarExistenciaTotales, [reserva])
                         let estadoInfomracionFinanciera = "actualizar"
-
-
                         const fechaEntrada_ISO = resuelveValidacionReserva.rows[0].fechaEntrada_ISO
                         const fechaSalida_ISO = resuelveValidacionReserva.rows[0].fechaSalida_ISO
-
                         const metadatos = {
                             reserva: reserva,
                             apartamentoUID: apartamento,
@@ -5810,7 +5073,6 @@ const puerto = async (entrada, salida) => {
                             fechaSalida_ISO: fechaSalida_ISO
                         }
                         await bloquearApartamentos(metadatos)
-
                         const eliminaApartamentoReserva = `
                         DELETE 
                         FROM 
@@ -5821,9 +5083,7 @@ const puerto = async (entrada, salida) => {
                             reserva = $2;
                         `
                         const resuelveEliminaApartamentoReserva = await conexion.query(eliminaApartamentoReserva, [apartamento, reserva])
-
                         if (resuelveEliminaApartamentoReserva.rowCount === 1) {
-
                             const consultaNumeroDeApartamentos = `
                             SELECT 
                             *
@@ -5839,7 +5099,6 @@ const puerto = async (entrada, salida) => {
                                     'DELETE FROM "reservaTotalesPorApartamento" WHERE reserva = $1;',
                                     'DELETE FROM "reservaTotalesPorNoche" WHERE reserva = $1;'
                                 ];
-
                                 for (const query of eliminaApartamentoReservaQueries) {
                                     await conexion.query(query, [reserva]);
                                 }
@@ -5852,7 +5111,6 @@ const puerto = async (entrada, salida) => {
                                 await insertarTotalesReserva(transaccionPrecioReserva)
                             }
                             await conexion.query('COMMIT'); // Confirmar la transacción
-
                             const ok = {};
                             ok.estadoDesgloseFinanciero = estadoInfomracionFinanciera
                             if (tipoBloqueo === "rangoTemporal") {
@@ -5866,29 +5124,20 @@ const puerto = async (entrada, salida) => {
                             }
                             salida.json(ok)
                         }
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                         bloqueoEliminarApartamentoReserva()
                     }
-
-
-
-
                 },
                 eliminarHabitacionReserva: async () => {
                     const mutex = new Mutex();
                     const bloqueoEliminarHabitacionReserva = await mutex.acquire();
                     try {
-
                         let reserva = entrada.body.reserva
                         // apartamentoUID
                         let habitacion = entrada.body.habitacion
@@ -5921,7 +5170,6 @@ const puerto = async (entrada, salida) => {
                             const error = "La reserva no se puede modificar por que esta cancelada"
                             throw new Error(error)
                         }
-
                         if (resuelveValidacionReserva.rows[0].estadoPago === "pagado") {
                             const error = "La reserva no se puede modificar por que esta pagada"
                             throw new Error(error)
@@ -5965,7 +5213,6 @@ const puerto = async (entrada, salida) => {
                             WHERE reserva = $1 AND habitacion = $2;
                             `
                             await conexion.query(desasignaPernoctanteDeHabitacion, [reserva, habitacion])
-
                             ok = {
                                 "ok": "Se ha eliminado al habitacion correctamente pero los pernoctantes que contenia siguen asignados a la reserva"
                             }
@@ -5975,10 +5222,8 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                         bloqueoEliminarHabitacionReserva()
                     }
                 },
@@ -6002,7 +5247,6 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         await conexion.query('BEGIN'); // Inicio de la transacción
-
                         // Comprobar que la reserva exisste
                         const validacionReserva = `
                         SELECT 
@@ -6023,7 +5267,6 @@ const puerto = async (entrada, salida) => {
                             const error = "La reserva no se puede modificar por que esta cancelada"
                             throw new Error(error)
                         }
-
                         // validar habitacion
                         const validacionHabitacion = `
                         SELECT 
@@ -6048,7 +5291,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe el cliente"
                             throw new Error(error)
                         }
-
                         // No se puede anadir un pernoctante ya existen a la reserva, proponer moverlo de habitacion
                         const validacionUnicidadPernoctante = `
                         SELECT 
@@ -6083,17 +5325,13 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         await conexion.query('COMMIT'); // Confirmar la transacción
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                         bloqueoAnadirPernoctanteHabitacion()
                     }
                 },
@@ -6113,12 +5351,10 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
                         }
-
                         if (typeof habitacionUID !== "number" || !Number.isInteger(habitacionUID) || habitacionUID <= 0) {
                             const error = "el campo 'habitacionUID' solo puede un numero, entero y positivo"
                             throw new Error(error)
                         }
-
                         // Comprobar que la reserva exisste
                         const validacionReserva = `
                         SELECT 
@@ -6135,7 +5371,6 @@ const puerto = async (entrada, salida) => {
                             const error = "La reserva no se puede modificar por que esta cancelada"
                             throw new Error(error)
                         }
-
                         // validar habitacion
                         const validacionHabitacion = `
                         SELECT 
@@ -6148,7 +5383,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe la habitacion dentro de esta reserva"
                             throw new Error(error)
                         }
-
                         const nuevoClientePorValidar = {
                             nombre: nombre,
                             primerApellido: primerApellido,
@@ -6157,7 +5391,6 @@ const puerto = async (entrada, salida) => {
                             telefono: telefono,
                             correoElectronico: correoElectronico,
                         }
-
                         const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoClientePorValidar)
                         const datosNuevoCliente = {
                             nombre: datosValidados.nombre,
@@ -6167,10 +5400,8 @@ const puerto = async (entrada, salida) => {
                             telefono: datosValidados.telefono,
                             correoElectronico: datosValidados.correoElectronico
                         }
-
                         const nuevoClienteInsertado = await insertarCliente(datosNuevoCliente)
                         const nuevoUIDCliente = nuevoClienteInsertado.uid
-
                         const insertarPernoctante = `
                         INSERT INTO 
                         "reservaPernoctantes"
@@ -6208,10 +5439,8 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                         bloqueoCrearClienteDesdeReservaYAnadirloAreserva()
                     }
                 },
@@ -6235,7 +5464,6 @@ const puerto = async (entrada, salida) => {
                             const error = "el campo 'pernoctanteUID' solo puede un numero, entero y positivo"
                             throw new Error(error)
                         }
-
                         const nuevoClienteParaValidar = {
                             nombre: nombre,
                             primerApellido: primerApellido,
@@ -6245,7 +5473,6 @@ const puerto = async (entrada, salida) => {
                             correoElectronico: correoElectronico,
                             //notas: notas,
                         }
-
                         const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoClienteParaValidar)
                         nombre = datosValidados.nombre
                         primerApellido = datosValidados.primerApellido
@@ -6253,7 +5480,6 @@ const puerto = async (entrada, salida) => {
                         pasaporte = datosValidados.pasaporte
                         telefono = datosValidados.telefono
                         correoElectronico = datosValidados.correoElectronico
-
                         // Comprobar que la reserva exisste
                         const validacionReserva = `
                         SELECT 
@@ -6270,7 +5496,6 @@ const puerto = async (entrada, salida) => {
                             const error = "La reserva no se puede modificar por que esta cancelada"
                             throw new Error(error)
                         }
-
                         // validar pernoctante y extraer el UID del clientePool
                         const validacionPernoctante = `
                         SELECT 
@@ -6291,7 +5516,6 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         const ok = {}
-
                         const datosNuevoCliente = {
                             nombre: nombre,
                             primerApellido: primerApellido,
@@ -6303,7 +5527,6 @@ const puerto = async (entrada, salida) => {
                         }
                         const nuevoCliente = await insertarCliente(datosNuevoCliente)
                         const nuevoUIDCliente = nuevoCliente.uid
-
                         // Borrar clientePool
                         const eliminarClientePool = `
                         DELETE FROM "poolClientes"
@@ -6340,14 +5563,12 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
                         bloqueoGuardarNuevoClienteYSustituirloPorElClientePoolActual()
                     }
                 },
                 eliminarPernoctanteReserva: async () => {
-
                     const mutex = new Mutex();
                     const bloqueoEliminarPernoctanteReserva = await mutex.acquire();
                     try {
@@ -6367,7 +5588,6 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         await conexion.query('BEGIN'); // Inicio de la transacción
-
                         // Comprobar que la reserva exisste
                         const validacionReserva = `
                         SELECT 
@@ -6403,7 +5623,6 @@ const puerto = async (entrada, salida) => {
                             WHERE "pernoctanteUID" = $1;
                             `
                         await conexion.query(eliminaClientePool, [pernoctanteUID])
-
                         let sentenciaDinamica;
                         if (tipoElinacion === "habitacion") {
                             sentenciaDinamica = `
@@ -6438,17 +5657,13 @@ const puerto = async (entrada, salida) => {
                             salida.json(ok)
                         }
                         await conexion.query('COMMIT'); // Confirmar la transacción
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                         bloqueoEliminarPernoctanteReserva()
                     }
                 },
@@ -6468,33 +5683,26 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo 'sentidoRango' solo puede ser pasado o futuro"
                             throw new Error(error)
                         }
-
                         const regexMes = /^\d{2}$/;
                         const regexAno = /^\d{4,}$/;
-
                         if (!regexAno.test(anoCalendario)) {
                             const error = "El año (anoCalenadrio) debe de ser una cadena de cuatro digitos. Por ejemplo el año uno se escribiria 0001"
                             throw new Error(error)
                         }
-
                         if (!regexMes.test(mesCalendario)) {
                             const error = "El mes (mesCalendario) debe de ser una cadena de dos digitos, por ejemplo el mes de enero se escribe 01"
                             throw new Error(error)
                         }
-
                         const mesNumeroControl = parseInt(mesCalendario, 10);
                         const anoNumeroControl = parseInt(anoCalendario, 10);
                         if (mesNumeroControl < 1 && mesNumeroControl > 12 && anoNumeroControl < 2000) {
                             const error = "Revisa los datos de mes por que debe de ser un numero del 1 al 12"
                             throw new Error(error)
                         }
-
                         if (anoNumeroControl < 2000 || anoNumeroControl > 5000) {
                             const error = "El año no puede ser inferior a 2000 ni superior a 5000"
                             throw new Error(error)
-
                         }
-
                         const metadatos = {
                             reserva: reserva,
                             sentidoRango: sentidoRango,
@@ -6516,7 +5724,6 @@ const puerto = async (entrada, salida) => {
                             const error = "La reserva no se puede modificar por que esta cancelada"
                             throw new Error(error)
                         }
-
                         const transaccionInterna = await validarModificacionRangoFechaResereva(metadatos)
                         const ok = {
                             ok: transaccionInterna
@@ -6528,7 +5735,6 @@ const puerto = async (entrada, salida) => {
                         }
                         salida.json(error)
                     } finally {
-
                         bloqueoModificarFechaReserva()
                     }
                 },
@@ -6562,10 +5768,8 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 confirmarModificarFechaReserva: async () => {
@@ -6575,8 +5779,6 @@ const puerto = async (entrada, salida) => {
                         const reserva = entrada.body.reserva
                         const sentidoRango = entrada.body.sentidoRango
                         const fechaSolicitada_ISO = entrada.body.fechaSolicitada_ISO
-
-
                         if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
                             const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
@@ -6589,10 +5791,7 @@ const puerto = async (entrada, salida) => {
                         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                         const fechaSolicitada_objeto = DateTime.fromISO(fechaSolicitada_ISO, { zone: zonaHoraria })
                         const fechaSolicitada_array = fechaSolicitada_ISO.split("-")
-
                         await conexion.query('BEGIN'); // Inicio de la transacción
-
-
                         const mesSeleccionado = fechaSolicitada_array[1]
                         const anoSeleccionado = fechaSolicitada_array[0]
                         const validacionReserva = `
@@ -6617,23 +5816,17 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         const detallesReserva = resuelveValidacionReserva.rows[0]
-
                         const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
                         const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria })
-
                         const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
                         const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria })
-
                         const metadatos = {
                             reserva: reserva,
                             mesCalendario: mesSeleccionado,
                             anoCalendario: anoSeleccionado,
                             sentidoRango: sentidoRango
                         }
-
                         if (sentidoRango === "pasado") {
-
-
                             if (fechaSalida_Objeto <= fechaSolicitada_objeto) {
                                 const mensajeSinPasado = "La fecha nueva fecha de entrada solicitada no puede ser igual o superior a la fecha de salida de la reserva."
                                 throw new Error(mensajeSinPasado)
@@ -6644,10 +5837,7 @@ const puerto = async (entrada, salida) => {
                                 tipoProcesadorPrecio: "uid",
                                 reservaUID: reserva
                             }
-
                             const mensajeSinPasado = "No se puede aplicar esa fecha de entrada a la reserva por que en base a los apartamentos de esa reserva no hay dias libres. Puedes ver a continuacíon lo eventos que lo impiden."
-
-
                             if (codigoFinal === "noHayRangoPasado") {
                                 const objetoPRueba = {
                                     detallesDelError: mensajeSinPasado,
@@ -6655,12 +5845,10 @@ const puerto = async (entrada, salida) => {
                                 }
                                 throw new vitiniSysError(objetoPRueba)
                             }
-
                             if (codigoFinal === "rangoPasadoLimitado") {
                                 const detallesDelLimite = transaccionInterna.limitePasado
                                 const fechaLimitePasado_ISO = detallesDelLimite.fecha_ISO
                                 const fechaLimitePasado_Objeto = DateTime.fromISO(fechaLimitePasado_ISO);
-
                                 if (fechaSolicitada_objeto <= fechaLimitePasado_Objeto) {
                                     const objetoPRueba = {
                                         detallesDelError: mensajeSinPasado,
@@ -6668,9 +5856,7 @@ const puerto = async (entrada, salida) => {
                                     }
                                     throw new vitiniSysError(objetoPRueba)
                                 }
-
                             }
-
                             const actualizarModificacionFechaEntradaReserva = `
                             UPDATE reservas
                             SET entrada = $1
@@ -6682,7 +5868,6 @@ const puerto = async (entrada, salida) => {
                             if (resuelveActualizarModificacionFechaEntradaReserva.rowCount === 1) {
                                 const nuevaFechaEntrada = resuelveActualizarModificacionFechaEntradaReserva.rows[0].fechaEntrada_ISO
                                 await insertarTotalesReserva(transaccionPrecioReserva)
-
                                 const ok = {
                                     ok: "Se ha actualizado correctamente la fecha de entrada en la reserva",
                                     sentidoRango: "pasado",
@@ -6703,7 +5888,6 @@ const puerto = async (entrada, salida) => {
                                 reservaUID: reserva
                             }
                             const mensajeSinFuturo = "No se puede seleccionar esa fecha de salida. Con los apartamentos existentes en la reserva no se puede por que hay otros eventos que lo impiden. Puedes ver los eventos que lo impiden detallados a continuación."
-
                             if (codigoFinal === "noHayRangoFuturo") {
                                 const objetoPRueba = {
                                     detallesDelError: mensajeSinFuturo,
@@ -6722,7 +5906,6 @@ const puerto = async (entrada, salida) => {
                                     throw new vitiniSysError(objetoPRueba)
                                 }
                             }
-
                             const actualizarModificacionFechaEntradaReserva = `
                             UPDATE reservas
                             SET salida = $1
@@ -6741,9 +5924,7 @@ const puerto = async (entrada, salida) => {
                                 salida.json(ok)
                             }
                         }
-
                         await conexion.query('COMMIT'); // Confirmar la transacción
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
                         const error = {}
@@ -6753,9 +5934,7 @@ const puerto = async (entrada, salida) => {
                             error.error = errorCapturado.message
                         }
                         salida.json(error)
-
                     } finally {
-
                         bloqueoConfirmarModificarFechaReserva()
                     }
                 },
@@ -6789,7 +5968,6 @@ const puerto = async (entrada, salida) => {
                         `
                         await conexion.query(eliminarEnlacesDePago, [reserva])
                         const fechaCancelacion = new Date()
-
                         const fechaEntrada_ISO = resuelveValidacionReserva.rows[0].fechaEntrada_ISO
                         const fechaSalida_ISO = resuelveValidacionReserva.rows[0].fechaSalida_ISO
                         // extraer todos los apartamentos de la reserva
@@ -6850,20 +6028,15 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
-
                     } finally {
-
                     }
                 },
                 eliminarIrreversiblementeReserva: async () => {
                     await mutex.acquire();
-
                     try {
                         const reserva = entrada.body.reserva
                         const clave = entrada.body.clave
-
                         if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
                             const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
@@ -6872,10 +6045,8 @@ const puerto = async (entrada, salida) => {
                             const error = "No has enviado la clave de tu usuario para confirmar la operacion"
                             throw new Error(error)
                         }
-
                         const usuarioIDX = entrada.session.usuario
                         await conexion.query('BEGIN'); // Inicio de la transacción
-
                         const obtenerClaveActualHASH = `
                         SELECT 
                         clave,
@@ -6891,8 +6062,6 @@ const puerto = async (entrada, salida) => {
                         }
                         const claveActualHASH = resuelveVitniID.rows[0].clave
                         const sal = resuelveVitniID.rows[0].sal
-
-
                         const metadatos = {
                             sentido: "comparar",
                             clavePlana: clave,
@@ -6922,8 +6091,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe la reserva, revisa el identificador de la reserva por que el que has enviado no existe"
                             throw new Error(error)
                         }
-
-
                         const consultaElimianrReserva = `
                         DELETE FROM reservas
                         WHERE reserva = $1;
@@ -6940,15 +6107,12 @@ const puerto = async (entrada, salida) => {
                             salida.json(ok)
                         }
                         await conexion.query('COMMIT'); // Confirmar la transacción
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
-
                     } finally {
                         mutex.release()
                     }
@@ -6959,25 +6123,19 @@ const puerto = async (entrada, salida) => {
                         const fechaEntrada = entrada.body.fechaEntrada
                         const fechaSalida = entrada.body.fechaSalida
                         const apartamentos = entrada.body.apartamentos
-
-
                         // Control validez fecha
                         const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)).fecha_ISO
                         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida)).fecha_ISO
-
                         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
-
                         if (!Array.isArray(apartamentos)) {
                             const error = "el campo 'apartamentos' debe de ser un array"
                             throw new Error(error)
                         }
-
                         const fechaControl_Entrada = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria }).isValid;
                         if (!fechaControl_Entrada) {
                             const error = "LA fecha de entrada no es valida"
                             throw new Error(error)
                         }
-
                         const fechaControl_Salida = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria }).isValid;
                         if (!fechaControl_Salida) {
                             const error = "LA fecha de salida no es valida"
@@ -7000,7 +6158,6 @@ const puerto = async (entrada, salida) => {
                             const error = "El tamano de posiciones del array de apartamentos es demasiado grande"
                             throw new Error(error)
                         }
-
                         // Formateo fecha mucho ojo que los anglosajones tiene el formato mes/dia/ano y queremos usar dia/mes/ano y el objeto date de javascript por cojones usa ese formato
                         const fechaEntradaEnArreglo = fechaEntrada.split("/")
                         const fechaSalidaEnArreglo = fechaSalida.split("/")
@@ -7008,27 +6165,26 @@ const puerto = async (entrada, salida) => {
                         const constructorFechaSalidaFormatoMDA = `${fechaSalidaEnArreglo[1]}/${fechaSalidaEnArreglo[0]}/${fechaSalidaEnArreglo[2]}`
                         const controlFechaEntrada = new Date(constructorFechaEntradaFormatoMDA); // El formato es día/mes/ano
                         const controlFechaSalida = new Date(constructorFechaSalidaFormatoMDA);
-
                         // validacion: la fecha de entrada no puede ser superior a la fecha de salida y al mimso tiempo la fecha de salida no puede ser inferior a la fecha de entrada
                         if (controlFechaEntrada >= controlFechaSalida) {
                             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
                             throw new Error(error)
                         }
-
                         const filtroApartamentoIDV = /^[a-z0-9]+$/;
                         for (const apartamento of apartamentos) {
-
                             if (!filtroApartamentoIDV.test(apartamento)) {
                                 const error = "Hay un apartamentoIDV dentro del array que no cumple los requisitos."
                                 throw new Error(error)
                             }
                         }
-                        // validar que los apartamentos que se existen estan disponbiles para las fechas
-                        const transacion = {
+                        const rol = entrada.session.rol
+                        const configuracionApartamentosPorRango = {
                             fechaEntrada_ISO: fechaEntrada_ISO,
-                            fechaSalida_ISO: fechaSalida_ISO
+                            fechaSalida_ISO: fechaSalida_ISO,
+                            rol: rol,
+                            origen: "administracion"
                         }
-                        const resuelveApartamentosDisponibles = await apartamentosDisponiblesAdministracion(transacion)
+                        const resuelveApartamentosDisponibles = await apartamentosPorRango(configuracionApartamentosPorRango)
                         const apartamentosDisponibles = resuelveApartamentosDisponibles.apartamentosDisponibles
                         if (apartamentosDisponibles.length === 0) {
                             const error = "No hay ningun apartamento disponible para estas fechas"
@@ -7038,17 +6194,13 @@ const puerto = async (entrada, salida) => {
                             const validarApartamentosDisonbiles = (apartamentosSolicitados, apartamentosDisponibles) => {
                                 return apartamentosSolicitados.every(apartamento => apartamentosDisponibles.includes(apartamento));
                             }
-
                             const controlApartamentosDisponibles = validarApartamentosDisonbiles(apartamentos, apartamentosDisponibles);
                             if (!controlApartamentosDisponibles) {
                                 const error = "Los apartamentos solicitados para este rango de fechas no estan disponbiles."
                                 throw new Error(error)
                             }
-
                             const formatoFechaEntradaDMA = `${fechaEntradaEnArreglo[0]}/${fechaEntradaEnArreglo[1]}/${fechaEntradaEnArreglo[2]}`
                             const formatoFechaSalidaDMA = `${fechaSalidaEnArreglo[0]}/${fechaSalidaEnArreglo[1]}/${fechaSalidaEnArreglo[2]}`
-
-
                             const formatearFechaDesdeISO8601 = (cadenaISO8601) => {
                                 // Importantisimo
                                 // Esto se usa para poner un cero si el numero de dia o de mes es 9 o menor para evitar la interpretacion de JS que resta 1 al numero en la interpretacion de fechas
@@ -7058,10 +6210,8 @@ const puerto = async (entrada, salida) => {
                                 const day = fecha.getDate().toString().padStart(2, '0');
                                 return `${year}-${month}-${day}`;
                             };
-
                             const fechaEntradaReservaISO8610 = new Date(formatearFechaDesdeISO8601(`${fechaEntradaEnArreglo[2]}-${fechaEntradaEnArreglo[1]}-${fechaEntradaEnArreglo[0]}`)).toISOString().split('T')[0];
                             const fechaSalidaReservaISO8610 = new Date(formatearFechaDesdeISO8601(`${fechaSalidaEnArreglo[2]}-${fechaSalidaEnArreglo[1]}-${fechaSalidaEnArreglo[0]}`)).toISOString().split('T')[0];
-
                             // insertar fila reserva y en la tabla reservarAartametnos insertar las correspondientes filas
                             const estadoReserva = "confirmada";
                             const origen = "administracion";
@@ -7086,7 +6236,6 @@ const puerto = async (entrada, salida) => {
                             const reservaUIDNuevo = resuelveInsertarReserva.rows[0].reserva;
                             for (const apartamento of apartamentos) {
                                 const apartamentoUI = await resolverApartamentoUI(apartamento)
-
                                 const InsertarApartamento = `
                                 INSERT INTO
                                 "reservaApartamentos"
@@ -7108,24 +6257,18 @@ const puerto = async (entrada, salida) => {
                                 reservaUID: Number(reservaUIDNuevo)
                             }
                             await insertarTotalesReserva(transaccionPrecioReserva)
-
-
-
                             await conexion.query('COMMIT'); // Confirmar la transacción
                             const ok = {
                                 ok: "Se ha anadido al reserva vacia",
                                 reservaUID: reservaUIDNuevo
                             }
                             salida.json(ok)
-
                         }
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
                         mutex.release();
@@ -7154,7 +6297,6 @@ const puerto = async (entrada, salida) => {
                             const totalReserva = detallesPagosReserva.totalReserva
                             const totalPagado = detallesPagosReserva.totalPagado
                             let totalCobrado = 0
-
                             const pagosDeLaReserva = detallesPagosReserva.pagos
                             for (const detallesDelPago of pagosDeLaReserva) {
                                 const cantidadDelPago = detallesDelPago.cantidad
@@ -7209,7 +6351,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "No existe ningún pago con ese pagoUID"
                                 throw new Error(error)
                             }
-
                             if (reseulveValidarPago.rowCount === 1) {
                                 // Determinar tipo de pago
                                 const detallesDelPago = reseulveValidarPago.rows[0]
@@ -7220,16 +6361,13 @@ const puerto = async (entrada, salida) => {
                                     detallesDelPago: detallesDelPago,
                                     deglosePorReembolso: []
                                 }
-
                                 if (plataformaDePagoControl === "pasarela") {
                                     const pagoUIDPasarela = detallesDelPago.pagoUIDPasarela
-
                                     const actualizarReembolsos = await componentes.administracion.reservas.transacciones.actualizarReembolsosDelPagoDesdeSquare(pagoUID, pagoUIDPasarela)
                                     if (actualizarReembolsos?.error) {
                                         ok.estadoPasarela = actualizarReembolsos.error
                                     }
                                 }
-
                                 const consultaReembolsos = `
                                     SELECT
                                         "reembolsoUID",
@@ -7246,13 +6384,10 @@ const puerto = async (entrada, salida) => {
                                     ORDER BY
                                         "reembolsoUID" DESC;`
                                 const resuelveConsultaReembolsos = await conexion.query(consultaReembolsos, [pagoUID])
-
-
                                 if (resuelveConsultaReembolsos.rowCount > 0) {
                                     const reembolsosDelPago = resuelveConsultaReembolsos.rows
                                     let sumaDeLoReembolsado = 0
                                     for (const detallesDelReembolso of reembolsosDelPago) {
-
                                         const reembolsoUID = detallesDelReembolso.reembolsoUID
                                         const plataformaDePagoObtenida = detallesDelReembolso.plataformaDePago
                                         const cantidadDelReembolso = new Decimal(detallesDelReembolso.cantidad)
@@ -7260,12 +6395,9 @@ const puerto = async (entrada, salida) => {
                                         const Estado = detallesDelReembolso.Estado
                                         const fechaCreacion = detallesDelReembolso.fechaCreacion
                                         const fechaActualizacion = detallesDelReembolso.fechaActualizacion
-
                                         const fechaCreacionUTC = utilidades.convertirFechaHaciaISO8601(fechaCreacion)
                                         const creacionESP = utilidades.deUTCaZonaHoraria(fechaCreacionUTC, "Europe/Madrid")
                                         const creacionNIC = utilidades.deUTCaZonaHoraria(fechaCreacionUTC, "America/Managua")
-
-
                                         // Revisa esto por que se deben de pasr como cadena
                                         sumaDeLoReembolsado = cantidadDelReembolso.plus(sumaDeLoReembolsado)
                                         const estructuraReembolso = {
@@ -7278,19 +6410,14 @@ const puerto = async (entrada, salida) => {
                                             fechaCreacionMadrid: creacionESP,
                                             fechaCreacionNicaragua: creacionNIC
                                         }
-
                                         if (fechaActualizacion) {
                                             const fechaActualizacionUTC = utilidades.convertirFechaHaciaISO8601(fechaActualizacion)
                                             const actualizacionESP = utilidades.deUTCaZonaHoraria(fechaActualizacionUTC, "Europe/Madrid")
                                             const actualizacionNIC = utilidades.deUTCaZonaHoraria(fechaActualizacionUTC, "America/Managua")
-
                                             estructuraReembolso.fechaActualizacionUTC = fechaActualizacion
                                             estructuraReembolso.fechaActualizacionMadrid = actualizacionESP
                                             estructuraReembolso.fechaActualizacionNicaragua = actualizacionNIC
-
                                         }
-
-
                                         ok.deglosePorReembolso.push(estructuraReembolso)
                                     }
                                     let reembolsado
@@ -7306,18 +6433,14 @@ const puerto = async (entrada, salida) => {
                                     ok.detallesDelPago.sumaDeLoReembolsado = sumaDeLoReembolsado.toFixed(2)
                                     ok.detallesDelPago.reembolsado = reembolsado
                                 }
-
                                 //ok.deglosePorReembolso.push(detallesDelPago)
-
                                 salida.json(ok)
                             }
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
-
                         }
                     },
                     detallesDelReembolso: async () => {
@@ -7328,13 +6451,10 @@ const puerto = async (entrada, salida) => {
                                 const error = "el campo 'reembolsoUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios."
                                 throw new Error(error)
                             }
-
                             const actualizarReembolso = await componentes.administracion.reservas.transacciones.actualizarSOLOreembolsoDesdeSquare(reembolsoUID)
-
                             if (actualizarReembolso.error) {
                                 throw new Error(actualizarReembolso.error)
                             }
-
                             const validarReembolso = `
                             SELECT
                                 "pagoUID",
@@ -7353,10 +6473,8 @@ const puerto = async (entrada, salida) => {
                                 const error = "No existe ningún reembolso con ese reembolsoUID"
                                 throw new Error(error)
                             }
-
                             if (reseulveValidarReembolso.rowCount === 1) {
                                 const detallesDelReembolso = reseulveValidarReembolso.rows[0]
-
                                 const pagoUID = detallesDelReembolso.pagoUID
                                 const cantidad = detallesDelReembolso.cantidad
                                 const plataformaDePag = detallesDelReembolso.plataformaDePag
@@ -7380,9 +6498,7 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
-
                         }
                     },
                     realizarReembolso: async () => {
@@ -7394,16 +6510,13 @@ const puerto = async (entrada, salida) => {
                             let tipoReembolso = entrada.body.tipoReembolso
                             let plataformaDePagoEntrada = entrada.body.plataformaDePagoEntrada
                             plataformaDePagoEntrada.toLowerCase()
-
                             if (palabra !== "reembolso") {
                                 const error = "Escriba la palabra reembolso en le campo de confirmacion"
                                 throw new Error(error)
                             }
-
                             const filtroTotal = /^\d+\.\d{2}$/;
                             const filtroNumerosEnteros = /^[0-9]+$/;
                             const filtroDecimales = /^\d+\.\d{2}$/;
-
                             if (!reservaUID || !filtroNumerosEnteros.test(reservaUID)) {
                                 const error = "el campo 'reservaUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios."
                                 throw new Error(error)
@@ -7416,7 +6529,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "el campo 'tipoReembolso' solo puede ser porPorcentaje o porCantidad."
                                 // throw new Error(error)
                             }
-
                             if (!cantidad || !filtroDecimales.test(cantidad)) {
                                 const error = "LA cantida del reembolso solo puede ser una cadena con un numero don dos decimales separados por punto"
                                 throw new Error(error)
@@ -7426,8 +6538,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "Selecciona eltipo de plataforma en la que se va ha hacer el reembolso, por ejemplo pasarela, tarjeta, efectivo o cheque"
                                 throw new Error(error)
                             }
-
-
                             const detallesReserva = await validadoresCompartidos.reservas.validarReserva(reservaUID)
                             const estadoReserva = detallesReserva.estadoReserva
                             const estadoPago = detallesReserva.estadoPago
@@ -7435,7 +6545,6 @@ const puerto = async (entrada, salida) => {
                                 // const error = "No se puede hacer un reembolso de un pago asociado a una resera no pagada"
                                 // throw new Error(error)
                             }
-
                             const validarPago = `
                             SELECT
                             "pagoUID",
@@ -7459,13 +6568,11 @@ const puerto = async (entrada, salida) => {
                                 let estadoReembolso
                                 let fechaCreacion
                                 let fechaActualizacion
-
                                 const moneda = "USD"
                                 if (Number(controlTotalPago) < Number(cantidad)) {
                                     const error = `El valor del reembolso ${cantidad} supera el valor total del pago ${controlTotalPago} que se quiere reembolsar.`
                                     throw new Error(error)
                                 }
-
                                 // controlar que el reembolso no sea superior al maximo  reembolsable teniendo en cuenta todos los reembolsos ya realizados de cualquuier tipo
                                 const consultaReembolsosDelPago = `
                                 SELECT
@@ -7474,37 +6581,24 @@ const puerto = async (entrada, salida) => {
                                 WHERE "pagoUID" = $1`
                                 const reembolsosDelPago = await conexion.query(consultaReembolsosDelPago, [pagoUID])
                                 if (reembolsosDelPago.rowCount > 0) {
-
                                     let totalReembolsado = 0
                                     const reembolsos = reembolsosDelPago.rows
-
                                     reembolsos.map((detallesDelReembolso) => {
                                         const cantidadDelReembolso = detallesDelReembolso.cantidad
-
-
-
                                         totalReembolsado = new Decimal(totalReembolsado).plus(cantidadDelReembolso)
                                     })
-
-
                                     const totalReembolsable = new Decimal(controlTotalPago).minus(totalReembolsado)
-
-
-
                                     if (Number(cantidad) >= Number(totalReembolsable)) {
                                         const error = `El valor del reembolso ${cantidad} supera el valor total reembolsable de este pago (${totalReembolsable}). Recuerda que no puedes realizar un reembolso que supere la cantidad reembolsable del pago. Ten encuenta el resto de reembolsos a la hora de hacer un reembolso mas de este pago`
                                         throw new Error(error)
                                     }
                                 }
-
                                 if (plataformaDePagoEntrada === "pasarela" && plataformaDePago !== "pasarela") {
                                     const error = `No se puede enviar este reembolso a la pasarela por que este pago no se hizo por la pasarela. Para realizar un reembolso a atraves de la pasarela el pago del cual forma parte el reembolso tiene que haberse producidop por la pasarea.`
                                     throw new Error(error)
                                 }
-
                                 if (plataformaDePago === "pasarela" && plataformaDePagoEntrada === "pasarela") {
                                     const totalFormatoSquare = Number(cantidad.replace(".", ""))
-
                                     const reembolsoDetalles = {
                                         idempotencyKey: uuidv4(),
                                         amountMoney: {
@@ -7538,12 +6632,10 @@ const puerto = async (entrada, salida) => {
                                     fechaCreacion = procesadorReembolso.createdAt
                                     fechaActualizacion = procesadorReembolso.updatedAt
                                 }
-
                                 if (plataformaDePagoEntrada !== "pasarela") {
                                     fechaCreacion = new Date()
                                 }
                                 // Si es pago es de pasarela, enviar el reembolso a la pasarelaa y luego proseguir norma
-
                                 const insertarReembolso = `
                                 INSERT INTO
                                     "reservaReembolsos"
@@ -7572,11 +6664,9 @@ const puerto = async (entrada, salida) => {
                                 ]
                                 const resuelveInsertarReembolso = await conexion.query(insertarReembolso, datosNuevoReembolso)
                                 const reembolsoUID = resuelveInsertarReembolso.rows[0].reembolsoUID
-
                                 const ok = {
                                     reembolsoUID: reembolsoUID
                                 }
-
                                 if (plataformaDePagoEntrada === "pasarela") {
                                     ok.ok = "Se ha guardado el reembolso en la base de datos y enviado con exito a la pasarela. El dinero del reembolso se esta reembolsando a traves de la pasarela"
                                 } else {
@@ -7594,7 +6684,6 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorFinal
                             }
-
                             salida.json(error)
                         }
                     },
@@ -7607,24 +6696,18 @@ const puerto = async (entrada, salida) => {
                             //let pagadorPasaporte = entrada.body.pagadorPasaporte
                             let chequeUID = entrada.body.chequeUID
                             let transferenciaUID = entrada.body.transferenciaUID
-
                             let pagoUIDPasarela = entrada.body.pagoUIDPasarela
                             let tarjetaUltimos = entrada.body.tarjetaUltimos
-
                             const filtroCadena = /^[a-zA-Z0-9\s]+$/;
                             const filtroCadenaSinEspacios = /^[a-zA-Z0-9]+$/;
                             const filtro4Numeros = /^\d{4}$/;
-
                             const filtroNumeros = /^[0-9]+$/;
                             const filtroDecimales = /^\d+\.\d{2}$/;
-
                             if (!plataformaDePago || !filtroCadena.test(plataformaDePago)) {
                                 const error = "El campo plataformaDePago solo admite minúsculas y mayuscuas"
                                 throw new Error(error)
                             }
-
                             await validadoresCompartidos.reservas.validarReserva(reservaUID)
-
                             const validadores = {
                                 cantidad: (cantidad) => {
                                     if (!cantidad || !filtroDecimales.test(cantidad)) {
@@ -7676,12 +6759,8 @@ const puerto = async (entrada, salida) => {
                                     }
                                     return tarjetaUltimos
                                 },
-
                             }
-
-
                             const fechaActual = new Date()
-
                             const sql = {
                                 insertarPago: async (datosDelNuevoPago) => {
                                     try {
@@ -7698,7 +6777,6 @@ const puerto = async (entrada, salida) => {
                                         "fechaPago",
                                         "chequeUID",
                                         "transferenciaUID"
-
                                         )
                                         VALUES 
                                         ($1, $2, $3, $4, $5, $6, $7, $8, $9)
@@ -7711,7 +6789,6 @@ const puerto = async (entrada, salida) => {
                                         "fechaPago"::TEXT AS "fechaPago",
                                         "chequeUID",
                                         "transferenciaUID"
-
                                         `
                                         const datosPago = [
                                             datosDelNuevoPago.plataformaDePago,
@@ -7723,26 +6800,22 @@ const puerto = async (entrada, salida) => {
                                             datosDelNuevoPago.fechaPago,
                                             datosDelNuevoPago.chequeUID,
                                             datosDelNuevoPago.transferenciaUID
-
                                         ]
                                         const consulta = await conexion.query(asociarPago, datosPago)
                                         return consulta.rows[0]
                                     } catch (errorCapturado) {
                                         throw errorCapturado
                                     }
-
                                 }
                             }
                             const estructuraFinal = {}
                             let nuevoPago
                             let pagoUID
-
                             switch (plataformaDePago) {
                                 case 'efectivo':
                                     cantidad = validadores.cantidad(cantidad)
                                     //pagadorNombre = validadores.pagadorNombre(pagadorNombre)
                                     //pagadorPasaporte = validadores.pagadorPasaporte(pagadorPasaporte)
-
                                     nuevoPago = {
                                         plataformaDePago: plataformaDePago,
                                         //tarjeta: tarjeta,
@@ -7755,18 +6828,14 @@ const puerto = async (entrada, salida) => {
                                         //pagadorPasaporte: pagadorPasaporte
                                     }
                                     pagoUID = await sql.insertarPago(nuevoPago)
-
                                     estructuraFinal.ok = "Se ha insertado el nuevo pago en efectivo"
                                     estructuraFinal.detallesDelPago = pagoUID
-
                                     break;
                                 case 'cheque':
-
                                     cantidad = validadores.cantidad(cantidad)
                                     //pagadorNombre = validadores.pagadorNombre(pagadorNombre)
                                     //pagadorPasaporte = validadores.pagadorPasaporte(pagadorPasaporte)
                                     chequeUID = validadores.chequeUID(chequeUID)
-
                                     nuevoPago = {
                                         plataformaDePago: plataformaDePago,
                                         //tarjeta: tarjeta,
@@ -7780,20 +6849,14 @@ const puerto = async (entrada, salida) => {
                                         chequeUID: chequeUID
                                     }
                                     pagoUID = await sql.insertarPago(nuevoPago)
-
                                     estructuraFinal.ok = "Se ha insertado el nuevo pago en cheque"
                                     estructuraFinal.detallesDelPago = pagoUID
-
-
-
                                     break;
                                 case 'transferenciaBancaria':
-
                                     cantidad = validadores.cantidad(cantidad)
                                     //pagadorNombre = validadores.pagadorNombre(pagadorNombre)
                                     //pagadorPasaporte = validadores.pagadorPasaporte(pagadorPasaporte)
                                     transferenciaUID = validadores.transferenciaUID(transferenciaUID)
-
                                     nuevoPago = {
                                         plataformaDePago: plataformaDePago,
                                         //tarjeta: tarjeta,
@@ -7807,20 +6870,14 @@ const puerto = async (entrada, salida) => {
                                         transferenciaUID: transferenciaUID
                                     }
                                     pagoUID = await sql.insertarPago(nuevoPago)
-
                                     estructuraFinal.ok = "Se ha insertado el nuevo pago en cheque"
                                     estructuraFinal.detallesDelPago = pagoUID
-
-
-
                                     break;
                                 case 'pasarela':
                                     // Aqui solo se asocia el pago con el id de la pasarela, por que para lo otro estan los enlaces de pago
                                     //pagadorNombre = validadores.pagadorNombre(pagadorNombre)
                                     //pagadorPasaporte = validadores.pagadorPasaporte(pagadorPasaporte)
-
                                     pagoUIDPasarela = validadores.pagoUIDPasarela(pagoUIDPasarela)
-
                                     const consultaUIDUnico = `
                                     SELECT 
                                     "pagoUIDPasarela"
@@ -7832,7 +6889,6 @@ const puerto = async (entrada, salida) => {
                                         const error = "Ya existe este id del pago asociado a esta reserva"
                                         throw new Error(error)
                                     }
-
                                     const detallesDelPago = await componentes.pasarela.detallesDelPago(pagoUIDPasarela)
                                     if (detallesDelPago.error) {
                                         const errorUID = detallesDelPago.error.errors[0].code
@@ -7853,7 +6909,6 @@ const puerto = async (entrada, salida) => {
                                     const tarjeta = detallesDelPago.cardDetails.card.cardBrand
                                     const tarjetaDigitos = detallesDelPago.cardDetails.card.last4
                                     const fechaPago = detallesDelPago.createdAt
-
                                     nuevoPago = {
                                         plataformaDePago: plataformaDePago,
                                         tarjeta: tarjeta,
@@ -7865,20 +6920,15 @@ const puerto = async (entrada, salida) => {
                                         //pagadorNombre: pagadorNombre,
                                         //pagadorPasaporte: pagadorPasaporte
                                     }
-
                                     pagoUID = await sql.insertarPago(nuevoPago)
-
                                     estructuraFinal.ok = "Se ha insertado los datos importados de la pasarela"
                                     estructuraFinal.detallesDelPago = pagoUID
                                     break;
                                 case 'tarjeta':
-
-
                                     cantidad = validadores.cantidad(cantidad)
                                     //pagadorNombre = validadores.pagadorNombre(pagadorNombre)
                                     //pagadorPasaporte = validadores.pagadorPasaporte(pagadorPasaporte)
                                     tarjetaUltimos = validadores.tarjetaUltimos(tarjetaUltimos)
-
                                     nuevoPago = {
                                         plataformaDePago: plataformaDePago,
                                         //tarjeta: tarjeta,
@@ -7892,14 +6942,12 @@ const puerto = async (entrada, salida) => {
                                         tarjetaDigitos: tarjetaUltimos
                                     }
                                     pagoUID = await sql.insertarPago(nuevoPago)
-
                                     estructuraFinal.ok = "Se ha insertado el nuevo pago hecho con tarjeta de manera externa como en un TPV"
                                     estructuraFinal.detallesDelPago = pagoUID
                                     break;
                                 default:
                                     const error = "El campo plataformaDePago solo admite una cadena mayúsculas y minúsculas sin espacios. Las plataformas de pagos son tarjeta, efectivo, pasarela y tranferenciaBancaria"
                                     throw new Error(error)
-
                             }
                             await actualizarEstadoPago(reservaUID)
                             salida.json(estructuraFinal)
@@ -7907,7 +6955,6 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     },
@@ -7932,7 +6979,6 @@ const puerto = async (entrada, salida) => {
                             WHERE "pagoUID" = $1 AND reserva = $2;
                             `
                             await conexion.query(consultaEliminarPago, [pagoUID, reservaUID])
-
                             // Importante esto al afinal
                             await actualizarEstadoPago(reservaUID)
                             await conexion.query('COMMIT'); // Confirmar la transacción
@@ -7946,7 +6992,6 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     },
@@ -7973,7 +7018,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "No se encuentra el reembolso con ese identificador, revisa el reembolsoUID"
                                 throw new Error(error)
                             }
-
                             if (resuelveEliminarReembolso.rowCount === 1) {
                                 const ok = {
                                     ok: "Se ha eliminado irreversiblemente el el reembolso",
@@ -7982,13 +7026,11 @@ const puerto = async (entrada, salida) => {
                                 salida.json(ok)
                             }
                             await conexion.query('COMMIT'); // Confirmar la transacción
-
                         } catch (errorCapturado) {
                             await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     }
@@ -7998,7 +7040,6 @@ const puerto = async (entrada, salida) => {
                         try {
                             const clienteUID = entrada.body.clienteUID
                             const reservaUID = entrada.body.reservaUID
-
                             if (typeof clienteUID !== "number" || !Number.isInteger(clienteUID) || clienteUID <= 0) {
                                 const error = "el campo 'clienteUID' solo puede un numero, entero y positivo"
                                 throw new Error(error)
@@ -8007,7 +7048,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "el campo 'reservaUID' solo puede un numero, entero y positivo"
                                 throw new Error(error)
                             }
-
                             const validarCliente = `
                             SELECT
                             uid,
@@ -8026,7 +7066,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "No existe el cliente"
                                 throw new Error(error)
                             }
-
                             if (resuelveValidarCliente.rowCount === 1) {
                                 const consultaElimintarTitularPool = `
                                 DELETE FROM 
@@ -8035,7 +7074,6 @@ const puerto = async (entrada, salida) => {
                                 reserva = $1;
                                 `
                                 await conexion.query(consultaElimintarTitularPool, [reservaUID])
-
                                 const eliminaTitular = `
                                 DELETE FROM 
                                 "reservaTitulares"
@@ -8043,17 +7081,14 @@ const puerto = async (entrada, salida) => {
                                 "reservaUID" = $1;
                                 `
                                 await conexion.query(eliminaTitular, [reservaUID])
-
                                 const nombre = resuelveValidarCliente.rows[0].nombre
                                 const primerApellido = resuelveValidarCliente.rows[0].primerApellido ? resuelveValidarCliente.rows[0].primerApellido : ""
                                 const segundoApellido = resuelveValidarCliente.rows[0].segundoApellido ? resuelveValidarCliente.rows[0].segundoApellido : ""
                                 const pasaporte = resuelveValidarCliente.rows[0].pasaporte
                                 const email = resuelveValidarCliente.rows[0].email ? resuelveValidarCliente.rows[0].email : ""
                                 const telefono = resuelveValidarCliente.rows[0].telefono ? resuelveValidarCliente.rows[0].telefono : ""
-
                                 const nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`
                                 await validadoresCompartidos.reservas.validarReserva(reservaUID)
-
                                 const consultaActualizarTitular = `
                                 INSERT INTO "reservaTitulares"
                                 (
@@ -8066,12 +7101,10 @@ const puerto = async (entrada, salida) => {
                                     reservaUID
                                 ]
                                 const resuelveActualizarTitular = await conexion.query(consultaActualizarTitular, datosParaActualizar)
-
                                 if (resuelveActualizarTitular.rowCount === 0) {
                                     const error = "No se ha podido actualizar el titular de la reserva"
                                     throw new Error(error)
                                 }
-
                                 const ok = {
                                     ok: "Se ha actualizado correctamente el titular en la reserva",
                                     clienteUID: clienteUID,
@@ -8084,14 +7117,11 @@ const puerto = async (entrada, salida) => {
                                     pasaporte: pasaporte
                                 }
                                 salida.json(ok)
-
                             }
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     },
@@ -8099,7 +7129,6 @@ const puerto = async (entrada, salida) => {
                         try {
                             const reservaUID = entrada.body.reservaUID
                             await validadoresCompartidos.reservas.validarReserva(reservaUID)
-
                             const consultaElimintarTitularPool = `
                                 DELETE FROM 
                                     "poolTitularesReserva"
@@ -8107,13 +7136,11 @@ const puerto = async (entrada, salida) => {
                                     reserva = $1;
                             `
                             await conexion.query(consultaElimintarTitularPool, [reservaUID])
-
                             const consultaActualizarTitular = `
                                 DELETE FROM
                                     "reservaTitulares"
                                 WHERE 
                                     "reservaUID" = $1;`
-
                             const resuelveActualizarTitular = await conexion.query(consultaActualizarTitular, [reservaUID])
                             if (resuelveActualizarTitular.rowCount === 0) {
                                 const error = "No se ha podido actualizar el titular de la reserva"
@@ -8123,22 +7150,16 @@ const puerto = async (entrada, salida) => {
                                 ok: "Se ha eliminado el titular de la reserva, la reserva ahora no tiene titular"
                             }
                             salida.json(ok)
-
-
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     },
                     crearTitular: async () => {
                         try {
-
                             const reservaUID = entrada.body.reservaUID
-
                             let nombre = entrada.body.nombre
                             let primerApellido = entrada.body.primerApellido
                             let segundoApellido = entrada.body.segundoApellido
@@ -8147,16 +7168,13 @@ const puerto = async (entrada, salida) => {
                             let correoElectronico = entrada.body.correo
                             let notas = entrada.body?.notas
                             await conexion.query('BEGIN'); // Inicio de la transacción
-
                             const reserva = await validadoresCompartidos.reservas.validarReserva(reservaUID)
-
                             const consultaElimintarTitularPool = `
                             DELETE FROM 
                             "poolTitularesReserva"
                             WHERE
                             reserva = $1;`
                             await conexion.query(consultaElimintarTitularPool, [reservaUID])
-
                             const eliminaTitular = `
                             DELETE FROM 
                             "reservaTitulares"
@@ -8164,8 +7182,6 @@ const puerto = async (entrada, salida) => {
                             "reservaUID" = $1;
                             `
                             await conexion.query(eliminaTitular, [reservaUID])
-
-
                             const nuevoClientePorValidar = {
                                 nombre: nombre,
                                 primerApellido: primerApellido,
@@ -8174,7 +7190,6 @@ const puerto = async (entrada, salida) => {
                                 telefono: telefono,
                                 correoElectronico: correoElectronico,
                             }
-
                             const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoClientePorValidar)
                             const datosNuevoCliente = {
                                 nombre: datosValidados.nombre,
@@ -8184,9 +7199,7 @@ const puerto = async (entrada, salida) => {
                                 telefono: datosValidados.telefono,
                                 correoElectronico: datosValidados.correoElectronico
                             }
-
                             const nuevoCliente = await insertarCliente(datosNuevoCliente)
-
                             const clienteUID = nuevoCliente.uid
                             const nombre_ = datosValidados.nombre
                             const primerApellido_ = datosValidados.primerApellido ? datosValidados.primerApellido : ""
@@ -8194,7 +7207,6 @@ const puerto = async (entrada, salida) => {
                             const email_ = datosValidados.email ? datosValidados.email : ""
                             const pasaporte_ = datosValidados.pasaporte
                             const telefono_ = datosValidados.telefono ? datosValidados.telefono : ""
-
                             const nombreCompleto = `${nombre_} ${primerApellido_} ${segundoApellido_}`
                             // Asociar nuevo cliente como titular
                             const consultaInsertaTitularReserva = `
@@ -8229,7 +7241,6 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     }
@@ -8243,16 +7254,13 @@ const puerto = async (entrada, salida) => {
                         }
                         const reserva = await detallesReserva(metadatos)
                         const pdf = await generadorPDF3(reserva)
-
                         salida.setHeader('Content-Type', 'application/pdf');
                         salida.setHeader('Content-Disposition', 'attachment; filename=documento.pdf');
                         salida.send(pdf);
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 },
@@ -8260,13 +7268,11 @@ const puerto = async (entrada, salida) => {
                     try {
                         const reservaUID = entrada.body.reservaUID
                         await validadoresCompartidos.reservas.validarReserva(reservaUID)
-
                         const pernoctanteUID = entrada.body.pernoctanteUID
                         if (typeof pernoctanteUID !== "number" || !Number.isInteger(pernoctanteUID) || pernoctanteUID <= 0) {
                             const error = "El campo 'pernoctanteUID' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
                         }
-
                         const validarPernoctante = `
                         SELECT 
                         "clienteUID"
@@ -8296,33 +7302,26 @@ const puerto = async (entrada, salida) => {
                                 const resuelveClientePool = await conexion.query(datosClientePool, [pernoctanteUID])
                                 const nombreCompleto = resuelveClientePool.rows[0].nombreCompleto
                                 const pasaporte = resuelveClientePool.rows[0].pasaporte
-
                                 const ok = {
                                     pernoctanteUID: pernoctanteUID,
                                     nombreCompleto: nombreCompleto,
                                     pasaporte: pasaporte
-
                                 }
                                 salida.json(ok)
-
                             }
-
                         }
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 confirmarFechaCheckIn: async () => {
                     try {
                         const pernoctantaUID = entrada.body.pernoctanteUID
                         const fechaCheckIn = entrada.body.fechaCheckIn
-
                         if (typeof pernoctantaUID !== "number" || !Number.isInteger(pernoctantaUID) || pernoctantaUID <= 0) {
                             const error = "El campo 'pernoctantaUID' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
@@ -8330,7 +7329,6 @@ const puerto = async (entrada, salida) => {
                         const fechaCheckIn_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaCheckIn)).fecha_ISO
                         const fechaCheckIn_Objeto = DateTime.fromISO(fechaCheckIn_ISO)
                         await conexion.query('BEGIN'); // Inicio de la transacción
-
                         // Validar pernoctanteUID
                         const validarPernoctante = `
                         SELECT 
@@ -8353,7 +7351,6 @@ const puerto = async (entrada, salida) => {
                         }
                         const reservaUID = resuelvePernoctante.rows[0].reserva
                         const checkoutAdelantado_ISO = resuelvePernoctante.rows[0].checkoutAdelantado_ISO
-
                         const fechasReserva = `
                         SELECT 
                         "estadoReserva",
@@ -8375,18 +7372,14 @@ const puerto = async (entrada, salida) => {
                             const error = "No se puede alterar una fecha de checkin de una reserva cancelada"
                             throw new Error(error)
                         }
-
                         const fechaEntrada_ISO = resuelveReserva.rows[0].fechaEntrada_ISO
                         const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO)
-
                         const fechaSalida_ISO = resuelveReserva.rows[0].fechaSalida_ISO
                         const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO)
-
                         if (fechaCheckIn_Objeto < fechaEntrada_Objeto) {
                             const error = "La fecha de Checkin no puede ser inferior a la fecha de entrada de la reserva"
                             throw new Error(error)
                         }
-
                         if (checkoutAdelantado_ISO) {
                             const checkoutAdelantado_Objeto = DateTime.fromISO(checkoutAdelantado_ISO)
                             if (fechaCheckIn_Objeto >= checkoutAdelantado_Objeto) {
@@ -8394,12 +7387,10 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-
                         if (fechaCheckIn_Objeto >= fechaSalida_Objeto) {
                             const error = "La fecha de Checkin no puede ser igual o superior a la fecha de salida de la reserva"
                             throw new Error(error)
                         }
-
                         const actualizerFechaCheckIn = `
                         UPDATE "reservaPernoctantes"
                         SET
@@ -8407,37 +7398,29 @@ const puerto = async (entrada, salida) => {
                         WHERE
                           "pernoctanteUID" = $2;
                         `
-
                         const actualizarCheckIn = await conexion.query(actualizerFechaCheckIn, [fechaCheckIn_ISO, pernoctantaUID])
                         if (actualizarCheckIn.rowCount === 0) {
                             const error = "No se ha podido actualziar la fecha de checkin"
                             throw new Error(error)
                         }
-
                         await conexion.query('COMMIT'); // Confirmar la transacción
                         const ok = {
                             ok: "Se ha actualizado la fecha de checkin correctamente",
                             fechaCheckIn: fechaCheckIn
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
-
                     } finally {
-
                     }
                 },
                 eliminarCheckIN: async () => {
                     try {
                         const pernoctantaUID = entrada.body.pernoctanteUID
-
                         if (typeof pernoctantaUID !== "number" || !Number.isInteger(pernoctantaUID) || pernoctantaUID <= 0) {
                             const error = "El campo 'pernoctantaUID' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
@@ -8457,7 +7440,6 @@ const puerto = async (entrada, salida) => {
                         }
                         // Validar que el pernoctatne sea cliente y no cliente pool
                         const reservaUID = resuelvePernoctante.rows[0].reserva
-
                         const fechasReserva = `
                         SELECT 
                         "estadoReserva"
@@ -8477,7 +7459,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No se puede alterar una fecha de checkin de una reserva cancelada"
                             throw new Error(error)
                         }
-
                         const actualizerFechaCheckIn = `
                         UPDATE "reservaPernoctantes"
                         SET
@@ -8496,25 +7477,19 @@ const puerto = async (entrada, salida) => {
                             ok: "Se ha eliminado la fecha de checkin correctamente"
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
-
                     } finally {
-
                     }
                 },
                 confirmarFechaCheckOutAdelantado: async () => {
                     try {
                         const pernoctantaUID = entrada.body.pernoctanteUID
                         const fechaCheckOut = entrada.body.fechaCheckOut
-
                         if (typeof pernoctantaUID !== "number" || !Number.isInteger(pernoctantaUID) || pernoctantaUID <= 0) {
                             const error = "El campo 'pernoctantaUID' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
@@ -8522,7 +7497,6 @@ const puerto = async (entrada, salida) => {
                         const fechaCheckOut_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaCheckOut)).fecha_ISO
                         const fechaCheckOut_Objeto = DateTime.fromISO(fechaCheckOut_ISO)
                         await conexion.query('BEGIN'); // Inicio de la transacción
-
                         // Validar pernoctanteUID
                         const validarPernoctante = `
                         SELECT 
@@ -8545,11 +7519,9 @@ const puerto = async (entrada, salida) => {
                         }
                         const reservaUID = resuelvePernoctante.rows[0].reserva
                         const fechaCheckIn_ISO = resuelvePernoctante.rows[0].fechaCheckIn_ISO
-
                         if (!fechaCheckIn_ISO) {
                             const error = "No puedes determinar un checkout adelantado a un pernoctante que no ha reazliado el checkin. Primero realiza el checkin"
                             throw new Error(error)
-
                         }
                         const fechasReserva = `
                         SELECT 
@@ -8572,18 +7544,14 @@ const puerto = async (entrada, salida) => {
                             const error = "No se puede alterar una fecha de checkin de una reserva cancelada"
                             throw new Error(error)
                         }
-
                         const fechaEntrada_ISO = resuelveReserva.rows[0].fechaEntrada_ISO
                         const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO)
-
                         const fechaSalida_ISO = resuelveReserva.rows[0].fechaSalida_ISO
                         const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO)
-
                         if (fechaCheckOut_Objeto >= fechaSalida_Objeto) {
                             const error = "La fecha de Checkout adelantado no puede ser superior o igual a la fecha de salida de la reserva, si el checkout se hace el mismo dia que finaliza la reserva no hace falta has un checkout adelantado"
                             throw new Error(error)
                         }
-
                         if (fechaCheckIn_ISO) {
                             const fechaCheckIn_Objeto = DateTime.fromISO(fechaCheckIn_ISO)
                             if (fechaCheckIn_Objeto >= fechaCheckOut_Objeto) {
@@ -8591,13 +7559,10 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-
                         if (fechaCheckOut_Objeto <= fechaEntrada_Objeto) {
                             const error = "La fecha de Checkout no puede ser inferior o igual a la fecha de entrada de la reserva"
                             throw new Error(error)
                         }
-
-
                         const actualizerFechaCheckOut = `
                         UPDATE "reservaPernoctantes"
                         SET
@@ -8605,37 +7570,29 @@ const puerto = async (entrada, salida) => {
                         WHERE
                           "pernoctanteUID" = $2;
                         `
-
                         const actualizarCheckOut = await conexion.query(actualizerFechaCheckOut, [fechaCheckOut_ISO, pernoctantaUID])
                         if (actualizarCheckOut.rowCount === 0) {
                             const error = "No se ha podido actualziar la fecha de checkout"
                             throw new Error(error)
                         }
-
                         await conexion.query('COMMIT'); // Confirmar la transacción
                         const ok = {
                             ok: "Se ha actualizado la fecha de checkin correctamente",
                             fechaCheckOut: fechaCheckOut
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
-
                     } finally {
-
                     }
                 },
                 eliminarCheckOutAdelantado: async () => {
                     try {
                         const pernoctantaUID = entrada.body.pernoctanteUID
-
                         if (typeof pernoctantaUID !== "number" || !Number.isInteger(pernoctantaUID) || pernoctantaUID <= 0) {
                             const error = "El campo 'pernoctantaUID' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
@@ -8655,7 +7612,6 @@ const puerto = async (entrada, salida) => {
                         }
                         // Validar que el pernoctatne sea cliente y no cliente pool
                         const reservaUID = resuelvePernoctante.rows[0].reserva
-
                         const fechasReserva = `
                         SELECT 
                         "estadoReserva"
@@ -8675,7 +7631,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No se puede alterar una fecha de checkin de una reserva cancelada"
                             throw new Error(error)
                         }
-
                         const actualizerFechaCheckOut = `
                         UPDATE "reservaPernoctantes"
                         SET
@@ -8693,18 +7648,13 @@ const puerto = async (entrada, salida) => {
                             ok: "Se ha eliminado la fecha de checkin correctamente"
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
-
                     } finally {
-
                     }
                 },
                 pendientes_de_revision: {
@@ -8733,20 +7683,16 @@ const puerto = async (entrada, salida) => {
                             "noPagado",
                             "confirmada"
                         ]
-
                         const resuelveReservasPendientes = await conexion.query(obtenerReservas, parametrosDeBusqueda)
                         const reservasPendientes = resuelveReservasPendientes.rows
-
                         const ok = {
                             ok: "Aquí tienes las reservas de origen publico pendientes por revisar",
                             reservas: []
                         }
-
                         if (resuelveReservasPendientes.rowCount > 0) {
                             ok.reservas.push(...reservasPendientes)
                         }
                         salida.json(ok)
-
                     }
                 }
             },
@@ -8769,37 +7715,28 @@ const puerto = async (entrada, salida) => {
                             const error = "No hay apartamentos configurados"
                             throw new Error(error)
                         }
-
                         resuelveConsultaEstadoApartamentos = resuelveConsultaEstadoApartamentos.rows
                         for (const apartamento of resuelveConsultaEstadoApartamentos) {
                             const apartamentoIDV = apartamento.apartamentoIDV
                             const estadoApartamento = apartamento.estadoConfiguracion
-
                             const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
                             apartamentosObjeto[apartamentoIDV] = {
                                 apartamentoUI: apartamentoUI,
                                 estadoApartamento: estadoApartamento,
                                 reservas: [],
                                 estadoPernoctacion: "libre"
                             }
-
                         }
-
                         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                         const tiempoZH = DateTime.now().setZone(zonaHoraria);
-
                         const fechaActualCompletaTZ = tiempoZH.toISO()
                         const fechaActualTZ = tiempoZH.toISODate()
                         const fechaActualUTC = DateTime.now().toUTC().toISODate();
-
                         const diaHoyTZ = tiempoZH.day
                         const mesPresenteTZ = tiempoZH.month
                         const anoPresenteTZ = tiempoZH.year
-
                         const horaPresenteTZ = tiempoZH.hour
                         const minutoPresenteTZ = tiempoZH.minute
-
                         const consultaReservasHoy = `
                         SELECT 
                         reserva, 
@@ -8812,39 +7749,29 @@ const puerto = async (entrada, salida) => {
                         `
                         const resuelveConsultaReservasHoy = await conexion.query(consultaReservasHoy, [fechaActualTZ, "cancelada"])
                         const ok = {}
-
                         if (resuelveConsultaReservasHoy.rowCount === 0) {
                             ok.ok = apartamentosObjeto
                         }
                         if (resuelveConsultaReservasHoy.rowCount > 0) {
                             const reservasHoy = resuelveConsultaReservasHoy.rows
-
                             const horasSalidaEntrada = await componentes.administracion.reservas.horasSalidaEntrada()
                             const horaEntradaTZ = horasSalidaEntrada.horaEntradaTZ
                             const horaSalidaTZ = horasSalidaEntrada.horaSalidaTZ
-
                             //ok.fechaUTC = fechaActualUTC;
                             ok.fechaTZ = `${diaHoyTZ}/${mesPresenteTZ}/${anoPresenteTZ}`
                             ok.horaTZ = `${horaPresenteTZ}:${minutoPresenteTZ}`
                             ok.horaEntrada = horaEntradaTZ
                             ok.horaSalida = horaSalidaTZ
-
                             for (const reservaDetalles of reservasHoy) {
-
                                 const reservaUID = reservaDetalles.reserva
-
                                 // Fecha de la base de datos
                                 const fechaEntradaReservaISO = reservaDetalles.fechaEntrada_ISO
                                 const fechaSalidaReservaISO = reservaDetalles.fechaSalida_ISO
-
                                 const fechaEntradaReservaHumano = reservaDetalles.entradaHumano
                                 const fechaSalidaReservaHumano = reservaDetalles.salidaHumano
-
-
                                 // Formatos fecha
                                 const fechaConHoraEntradaFormato_ISO_ZH = DateTime.fromISO(`${fechaEntradaReservaISO}T${horaEntradaTZ}`, { zone: zonaHoraria }).toISO();
                                 const fechaConHoraSalidaFormato_ISO_ZH = DateTime.fromISO(`${fechaSalidaReservaISO}T${horaSalidaTZ}`, { zone: zonaHoraria }).toISO();
-
                                 const consultaApartamentos = `
                                 SELECT 
                                 apartamento
@@ -8856,15 +7783,12 @@ const puerto = async (entrada, salida) => {
                                 if (resuelveConsultaApartamentos.rowCount > 0) {
                                     const apartamentosResueltos = resuelveConsultaApartamentos.rows
                                     apartamentosResueltos.map((apartamento) => {
-
                                         if (apartamentosObjeto[apartamento.apartamento]) {
                                             apartamentosObjeto[apartamento.apartamento].estadoPernoctacion = "ocupado"
                                         }
-
                                         const tiempoRestante = utilidades.calcularTiempoRestanteEnFormatoISO(fechaConHoraSalidaFormato_ISO_ZH, fechaActualCompletaTZ)
                                         const cantidadDias = utilidades.calcularDiferenciaEnDias(fechaConHoraEntradaFormato_ISO_ZH, fechaConHoraSalidaFormato_ISO_ZH)
                                         const porcentajeTranscurrido = utilidades.calcularPorcentajeTranscurridoUTC(fechaConHoraEntradaFormato_ISO_ZH, fechaConHoraSalidaFormato_ISO_ZH, fechaActualCompletaTZ)
-
                                         let porcentajeFinal = porcentajeTranscurrido
                                         if (porcentajeTranscurrido >= 100) {
                                             porcentajeFinal = "100"
@@ -8875,44 +7799,35 @@ const puerto = async (entrada, salida) => {
                                         const diaEntrada = utilidades.comparadorFechasStringDDMMAAAA(fechaEntradaReservaISO, fechaActualTZ)
                                         const diaSalida = utilidades.comparadorFechasStringDDMMAAAA(fechaSalidaReservaISO, fechaActualTZ)
                                         let identificadoDiaLimite = "diaInterno"
-
                                         if (diaEntrada) {
                                             identificadoDiaLimite = "diaDeEntrada"
                                         }
                                         if (diaSalida) {
                                             identificadoDiaLimite = "diaDeSalida"
                                         }
-
                                         let numeroDiaReservaUI
                                         if (cantidadDias.diasDiferencia > 1) {
                                             numeroDiaReservaUI = cantidadDias.diasDiferencia.toFixed(0) + " días"
                                         }
                                         if (cantidadDias.diasDiferencia === 1) {
                                             numeroDiaReservaUI = cantidadDias.diasDiferencia.toFixed(0) + " día y " + cantidadDias.horasDiferencia.toFixed(0) + " horas"
-
                                         }
                                         if (cantidadDias.diasDiferencia === 0) {
                                             if (cantidadDias.horasDiferencia > 1) {
                                                 numeroDiaReservaUI = cantidadDias.horasDiferencia.toFixed(0) + " horas"
-
                                             }
                                             if (cantidadDias.horasDiferencia === 1) {
                                                 numeroDiaReservaUI = cantidadDias.horasDiferencia.toFixed(0) + " hora"
-
                                             }
                                             if (cantidadDias.horasDiferencia === 0) {
                                                 numeroDiaReservaUI = "menos de una hora"
-
                                             }
-
                                         }
                                         const detalleReservaApartamento = {
                                             reserva: reservaUID,
                                             diaLimite: identificadoDiaLimite,
-
                                             fechaEntrada: fechaEntradaReservaHumano,
                                             fechaSalida: fechaSalidaReservaHumano,
-
                                             porcentajeTranscurrido: porcentajeFinal + '%',
                                             tiempoRestante: tiempoRestante,
                                             numeroDiasReserva: numeroDiaReservaUI
@@ -8925,12 +7840,8 @@ const puerto = async (entrada, salida) => {
                             }
                             ok.ok = apartamentosObjeto
                         }
-
                         // buscar reservas en el dia actual
-                        
-
                         const eventosCalendarios_airbnb = await apartamentosOcupadosHoy_paraSitaucion(fechaActualTZ)
-
                         for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnb) {
                             /*
                             {
@@ -8945,7 +7856,6 @@ const puerto = async (entrada, salida) => {
                                   ]
                                 }
                             */
-
                             const apartamentoIDV_destino = calendariosSincronizadosAirbnb.apartamentoIDV
                             const eventosDelApartamento = calendariosSincronizadosAirbnb.eventos
                             ok.ok[apartamentoIDV_destino].calendariosSincronizados = {}
@@ -8954,30 +7864,24 @@ const puerto = async (entrada, salida) => {
                             ok.ok[apartamentoIDV_destino].estadoPernoctacion = "ocupado"
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
-
                 },
                 detallesSituacionApartamento: async () => {
                     try {
                         const apartamentoIDV = entrada.body.apartamentoIDV
                         const filtroCadena = /^[a-z0-9]+$/;
-
                         if (!apartamentoIDV || !filtroCadena.test(apartamentoIDV)) {
                             const error = "el campo 'apartmentoIDV' solo puede ser letras minúsculas y numeros. sin pesacios"
                             throw new Error(error)
                         }
-
                         // Validar que existe el apartamento
                         const detalleApartamento = {}
                         const estadoDisonible = "disponible"
-
                         const validarApartamento = `
                         SELECT 
                         "apartamentoIDV",
@@ -8991,26 +7895,19 @@ const puerto = async (entrada, salida) => {
                         if (consultaValidarApartamento.rowCount === 0) {
                             const error = "No existe el apartamento"
                             throw new Error(error)
-
                         }
                         const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
                         // Ver las reservas que existen hoy
-
                         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                         const tiempoZH = DateTime.now().setZone(zonaHoraria);
-
                         const fechaActualCompletaTZ = tiempoZH.toISO()
                         const fechaActualTZ = tiempoZH.toISODate()
                         const fechaActualUTC = DateTime.now().toUTC().toISODate();
-
                         const diaHoyTZ = tiempoZH.day
                         const mesPresenteTZ = tiempoZH.month
                         const anoPresenteTZ = tiempoZH.year
-
                         const horaPresenteTZ = tiempoZH.hour
                         const minutoPresenteTZ = tiempoZH.minute
-
                         const horasSalidaEntrada = await componentes.administracion.reservas.horasSalidaEntrada()
                         //const zonaHoraria = horasSalidaEntrada.zonaHoraria
                         const horaEntradaTZ = horasSalidaEntrada.horaEntradaTZ
@@ -9024,7 +7921,6 @@ const puerto = async (entrada, salida) => {
                             estadoPernoctacion: "libre",
                             reservas: []
                         }
-
                         const consultaReservasHoy = `
                         SELECT 
                         to_char(entrada, 'YYYY-MM-DD') as "entradaISO", 
@@ -9038,23 +7934,16 @@ const puerto = async (entrada, salida) => {
                         const resuelveConsultaReservasHoy = await conexion.query(consultaReservasHoy, [fechaActualTZ])
                         if (resuelveConsultaReservasHoy.rowCount > 0) {
                             const reservasEncontradasHoy = resuelveConsultaReservasHoy.rows
-
                             for (const reserva of reservasEncontradasHoy) {
-
                                 const reservaUID = reserva.reserva
-
                                 // Fecha de la base de datos
                                 const fechaEntradaReservaISO = reserva.entradaISO
                                 const fechaSalidaReservaISO = reserva.salidaISO
-
                                 const fechaEntradaReservaHumano = reserva.entradaHumano
                                 const fechaSalidaReservaHumano = reserva.salidaHumano
-
                                 // Formatos fecha
                                 const fechaConHoraEntradaFormato_ISO_ZH = DateTime.fromISO(`${fechaEntradaReservaISO}T${horaEntradaTZ}`, { zone: zonaHoraria }).toISO();
                                 const fechaConHoraSalidaFormato_ISO_ZH = DateTime.fromISO(`${fechaSalidaReservaISO}T${horaSalidaTZ}`, { zone: zonaHoraria }).toISO();
-
-
                                 const consultaApartamentosReserva = `
                                 SELECT 
                                 uid
@@ -9063,13 +7952,9 @@ const puerto = async (entrada, salida) => {
                                 `
                                 const resuelveConsultaApartamentosReserva = await conexion.query(consultaApartamentosReserva, [reservaUID, apartamentoIDV])
                                 if (resuelveConsultaApartamentosReserva.rowCount > 0) {
-
-
                                     const tiempoRestante = utilidades.calcularTiempoRestanteEnFormatoISO(fechaConHoraSalidaFormato_ISO_ZH, fechaActualCompletaTZ)
                                     const cantidadDias = utilidades.calcularDiferenciaEnDias(fechaEntradaReservaISO, fechaSalidaReservaISO)
                                     const porcentajeTranscurrido = utilidades.calcularPorcentajeTranscurridoUTC(fechaConHoraEntradaFormato_ISO_ZH, fechaConHoraSalidaFormato_ISO_ZH, fechaActualCompletaTZ)
-
-
                                     let porcentajeFinal = porcentajeTranscurrido
                                     if (porcentajeTranscurrido >= 100) {
                                         porcentajeFinal = "100"
@@ -9080,20 +7965,17 @@ const puerto = async (entrada, salida) => {
                                     const diaEntrada = utilidades.comparadorFechasStringDDMMAAAA(fechaEntradaReservaISO, fechaActualTZ)
                                     const diaSalida = utilidades.comparadorFechasStringDDMMAAAA(fechaSalidaReservaISO, fechaActualTZ)
                                     let identificadoDiaLimite = "diaInterno"
-
                                     if (diaEntrada) {
                                         identificadoDiaLimite = "diaDeEntrada"
                                     }
                                     if (diaSalida) {
                                         identificadoDiaLimite = "diaDeSalida"
                                     }
-
                                     const estructuraReserva = {
                                         reservaUID: reservaUID,
                                         fechaEntrada: fechaEntradaReservaHumano,
                                         fechaSalida: fechaSalidaReservaHumano,
                                         diaLimite: identificadoDiaLimite,
-
                                         tiempoRestante: tiempoRestante,
                                         cantidadDias: cantidadDias,
                                         porcentajeTranscurrido: porcentajeFinal + '%',
@@ -9101,7 +7983,6 @@ const puerto = async (entrada, salida) => {
                                     }
                                     objetoFinal.estadoPernoctacion = "ocupado"
                                     const apartamentoUID = resuelveConsultaApartamentosReserva.rows[0].uid
-
                                     // Extraer las habitaciones
                                     const consultaHabitaciones = `
                                     SELECT 
@@ -9110,15 +7991,11 @@ const puerto = async (entrada, salida) => {
                                     WHERE reserva = $1 AND apartamento = $2 ; 
                                     `
                                     const resuelveConsultaHabitaciones = await conexion.query(consultaHabitaciones, [reservaUID, apartamentoUID])
-
                                     if (resuelveConsultaHabitaciones.rowCount > 0) {
                                         const habitaciones = resuelveConsultaHabitaciones.rows
-
                                         for (const habitacion of habitaciones) {
-
                                             const habitacionUID = habitacion.uid
                                             const habitacionIDV = habitacion.habitacion
-
                                             const resolverHabitacionUI = `
                                             SELECT 
                                             "habitacionUI"
@@ -9142,7 +8019,6 @@ const puerto = async (entrada, salida) => {
                                             WHERE reserva = $1 AND habitacion = $2 ; 
                                             `
                                             const resuelveConsultaPernoctanesHabitacion = await conexion.query(consultaPernoctanesHabitacion, [reservaUID, habitacionUID])
-
                                             if (resuelveConsultaPernoctanesHabitacion.rowCount > 0) {
                                                 const pernoctantes = resuelveConsultaPernoctanesHabitacion.rows
                                                 const pernoctantesObjetoTemporal = []
@@ -9169,14 +8045,12 @@ const puerto = async (entrada, salida) => {
                                                         const pasaporte = datosCliente.pasaporte
                                                         const constructorNombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`
                                                         const uid = resuelveResolverDatosPernoctante.rows[0].uid
-
                                                         const detallesPernoctante = {
                                                             nombreCompleto: constructorNombreCompleto.trim(),
                                                             tipoPernoctante: "cliente",
                                                             pasaporte: pasaporte,
                                                             uidCliente: uid
                                                         }
-
                                                         if (fechaCheckIn_ISO) {
                                                             const fechaCheckIn_array = fechaCheckIn_ISO.split("-")
                                                             const fechaCheckIn_humano = `${fechaCheckIn_array[2]}/${fechaCheckIn_array[1]}/${fechaCheckIn_array[0]}`
@@ -9186,10 +8060,8 @@ const puerto = async (entrada, salida) => {
                                                             const fechaCheckOutAdelantado_array = fechaCheckOutAdelantado_ISO.split("-")
                                                             const fechaCheckOut_humano = `${fechaCheckOutAdelantado_array[2]}/${fechaCheckOutAdelantado_array[1]}/${fechaCheckOutAdelantado_array[0]}`
                                                             detallesPernoctante.fechaCheckOut = fechaCheckOut_humano
-
                                                         }
                                                         pernoctantesObjetoTemporal.push(detallesPernoctante)
-
                                                     } else {
                                                         const pernoctanteUID = pernoctante.pernoctanteUID
                                                         const resolverDatosPernoctante = `
@@ -9204,14 +8076,11 @@ const puerto = async (entrada, salida) => {
                                                         const nombreCompleto = resuelveResolverDatosPernoctante.rows[0].nombreCompleto
                                                         const uid = resuelveResolverDatosPernoctante.rows[0].uid
                                                         const pasaporte = resuelveResolverDatosPernoctante.rows[0].pasaporte
-
-
                                                         const detallesPernoctante = {
                                                             nombreCompleto: nombreCompleto,
                                                             tipoPernoctante: "clientePool",
                                                             pasaporte: pasaporte,
                                                             uidCliente: uid
-
                                                         }
                                                         pernoctantesObjetoTemporal.push(detallesPernoctante)
                                                     }
@@ -9222,33 +8091,22 @@ const puerto = async (entrada, salida) => {
                                         }
                                     }
                                     objetoFinal.reservas.push(estructuraReserva)
-
                                 }
-
                             }
-
-
                         }
-
-
-
                         // Calendarios sincronizados
                         const datosAirbnb = {
                             apartamentoIDV: apartamentoIDV,
                             fechaHoy_ISO: fechaActualTZ
                         }
                         const eventosSincronizadosAirbnb = await eventosDelApartamento(datosAirbnb)
-
                         objetoFinal.calendariosSincronizados = {}
-
                         objetoFinal.calendariosSincronizados.airbnb = {
                             eventos: eventosSincronizadosAirbnb.eventos
                         }
-
                         if (eventosSincronizadosAirbnb.eventos.length > 0) {
                             objetoFinal.estadoPernoctacion = "ocupado"
                         }
-
                         const ok = {
                             ok: objetoFinal
                         }
@@ -9257,7 +8115,6 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
                     }
@@ -9294,19 +8151,15 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                                 const listaZonasHorarias = zonasHorarias()
-
                                 const ok = {
                                     ok: resuelveConfiguracionGlobal.rows[0],
                                     listaZonasHorarias: listaZonasHorarias
                                 }
                                 salida.json(ok)
-
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -9320,39 +8173,27 @@ const puerto = async (entrada, salida) => {
                         X: async () => {
                             try {
                                 const zonaHoraria = entrada.body.zonaHoraria
-
                                 const filtroZonaHoraria = /^[a-zA-Z0-9\/_\-+]+$/;
                                 const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;
-
                                 if (!zonaHoraria || !filtroZonaHoraria.test(zonaHoraria)) {
                                     const error = "el campo 'zonaHorarial' solo puede ser letras minúsculas, mayúsculas, guiones bajos y medios, signo mac y numeros"
                                     throw new Error(error)
                                 }
-
-
-
-
                                 // Validar que la zona horarai exista
                                 const validarZonaHoraria = (zonaHorariaAValidar) => {
                                     let resultadoFinal = "no"
                                     const listaZonasHorarias = zonasHorarias()
-
                                     for (const zonaHoraria of listaZonasHorarias) {
-
                                         if (zonaHoraria === zonaHorariaAValidar) {
                                             resultadoFinal = "si"
                                         }
                                     }
-
                                     return resultadoFinal
                                 }
-
                                 if (validarZonaHoraria(zonaHoraria) === "no") {
                                     const error = "el campo 'zonaHorariaGlobal' no existe"
                                     throw new Error(error)
                                 }
-
-
                                 await conexion.query('BEGIN'); // Inicio de la transacción
                                 const actualizarConfiguracionGlobal = `
                                         UPDATE "configuracionGlobal"
@@ -9370,19 +8211,16 @@ const puerto = async (entrada, salida) => {
                                     const error = "No se ha podido actualizar la configuracion, reintentalo"
                                     throw new Error(error)
                                 }
-
                                 await conexion.query('COMMIT'); // Confirmar la transacción
                                 const ok = {
                                     ok: "Se ha actualizado correctamente la configuracion"
                                 }
                                 salida.json(ok)
-
                             } catch (errorCapturado) {
                                 await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -9407,7 +8245,6 @@ const puerto = async (entrada, salida) => {
                                 WHERE 
                                     "configuracionUID" IN ($1, $2);
                                `;
-
                                 const configuracionUID = [
                                     "horaEntradaTZ",
                                     "horaSalidaTZ",
@@ -9424,16 +8261,11 @@ const puerto = async (entrada, salida) => {
                                     const valor = parConfiguracion.valor
                                     ok.ok[configuracionUID] = valor
                                 }
-
-
                                 salida.json(ok)
-
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -9448,36 +8280,26 @@ const puerto = async (entrada, salida) => {
                             try {
                                 const horaEntradaTZ = entrada.body.horaEntradaTZ
                                 const horaSalidaTZ = entrada.body.horaSalidaTZ
-
                                 const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;
-
-
                                 if (!horaEntradaTZ || !filtroHora.test(horaEntradaTZ)) {
                                     const error = "La hora de entrada debe de ser 00:00 y no puede ser superior a 23:59, si quieres poner la hora por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35"
                                     throw new Error(error)
                                 }
-
                                 if (!horaSalidaTZ || !filtroHora.test(horaSalidaTZ)) {
                                     const error = "el campo 'horaEntradaTZ' debe de ser 00:00 y no puede ser superior a 23:59,si quieres poner la hora por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35"
                                     throw new Error(error)
                                 }
-
                                 // Parsear las cadenas de hora a objetos DateTime de Luxon
                                 const horaEntradaControl = DateTime.fromFormat(horaEntradaTZ, 'HH:mm');
                                 const horaSalidaControl = DateTime.fromFormat(horaSalidaTZ, 'HH:mm');
-
                                 // Comparar las horas
                                 if (horaSalidaControl >= horaEntradaControl) {
                                     const error = "La hora de entrada no puede ser anterior o igual a la hora de salida. Los pernoctantes primero salen del apartamento a su hora de salida y luego los nuevos pernoctantes entran en el apartamento a su hora de entrada. Por eso la hora de entrada tiene que ser mas tarde que al hora de salida. Por que primero salen del apartamento ocupado, el apartmento entonces pasa a estar libre y luego entran los nuevo pernoctantes al apartamento ahora libre de los anteriores pernoctantes."
                                     throw new Error(error)
                                 }
-
-
-
                                 await conexion.query('BEGIN'); // Inicio de la transacción
                                 const configuracionUID_horaEntradaTZ = "horaEntradaTZ"
                                 const configuracionUID_horaSalidaTZ = "horaSalidaTZ"
-
                                 const actualizarConfiguracionGlobal = `
                                 UPDATE "configuracionGlobal"
                                 SET
@@ -9489,7 +8311,6 @@ const puerto = async (entrada, salida) => {
                                 WHERE
                                     "configuracionUID" IN ($2, $4);
                                 `;
-
                                 const nuevaConfiguracion = [
                                     horaEntradaTZ,
                                     configuracionUID_horaEntradaTZ,
@@ -9501,19 +8322,16 @@ const puerto = async (entrada, salida) => {
                                     const error = "No se ha podido actualizar la configuracion, reintentalo"
                                     throw new Error(error)
                                 }
-
                                 await conexion.query('COMMIT'); // Confirmar la transacción
                                 const ok = {
                                     ok: "Se ha actualizado correctamente la configuracion"
                                 }
                                 salida.json(ok)
-
                             } catch (errorCapturado) {
                                 await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -9531,7 +8349,6 @@ const puerto = async (entrada, salida) => {
                             try {
                                 const plataformaCalendarios = entrada.body.plataformaCalendarios
                                 const filtroCadena = /^[a-z0-9]+$/;
-
                                 if (!plataformaCalendarios || !filtroCadena.test(plataformaCalendarios)) {
                                     const error = "Hay que definir la plataformaCalendarios, solo se admiten minusculas y numeros sin espacios."
                                     throw new Error(error)
@@ -9554,25 +8371,20 @@ const puerto = async (entrada, salida) => {
                                     `
                                 const resuelveCalendariosSincronizados = await conexion.query(consultaConfiguracion, [plataformaCalendarios])
                                 if (resuelveCalendariosSincronizados.rowCount > 0) {
-
                                     for (const detallesDelCalendario of resuelveCalendariosSincronizados.rows) {
                                         const apartamentoIDV = detallesDelCalendario.apartamentoIDV
                                         const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
                                         detallesDelCalendario.apartamentoUI = apartamentoUI
                                     }
-
                                     ok.ok = resuelveCalendariosSincronizados.rows
                                 }
                                 salida.json(ok)
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
-
                         }
                     },
                     detallesDelCalendario: {
@@ -9586,7 +8398,6 @@ const puerto = async (entrada, salida) => {
                             try {
                                 const calendarioUID = entrada.body.calendarioUID
                                 const filtroNumeros = /^[0-9]+$/;
-
                                 if (!calendarioUID || !filtroNumeros.test(calendarioUID)) {
                                     const error = "Hay que definir la calendarioUID, solo se admiten numeros sin espacios."
                                     throw new Error(error)
@@ -9609,7 +8420,6 @@ const puerto = async (entrada, salida) => {
                                     `
                                 const resuelveCalendariosSincronizados = await conexion.query(consultaConfiguracion, [calendarioUID])
                                 if (resuelveCalendariosSincronizados.rowCount > 0) {
-
                                     for (const detallesDelCalendario of resuelveCalendariosSincronizados.rows) {
                                         const apartamentoIDV = detallesDelCalendario.apartamentoIDV
                                         const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
@@ -9621,15 +8431,12 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                                 salida.json(ok)
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
-
                         }
                     },
                     airbnb: {
@@ -9644,11 +8451,9 @@ const puerto = async (entrada, salida) => {
                                     let nombre = entrada.body.nombre
                                     const apartamentoIDV = entrada.body.apartamentoIDV
                                     const url = entrada.body.url
-
                                     const filtroCadenaIDV = /^[a-z0-9]+$/;
                                     const filtroCadenaUI = /^[a-zA-Z0-9\s]+$/;
                                     const filtroURL = /^https:\/\/[^\s/$.?#].[^\s]*$/;
-
                                     if (!nombre || !filtroCadenaUI.test(nombre)) {
                                         const error = "Hay que definir el nombre solo se admiten minusculas, mayusculas, numeros y espacios"
                                         throw new Error(error)
@@ -9666,7 +8471,6 @@ const puerto = async (entrada, salida) => {
                                         const error = "La url no cumple con el formato esperado, por favor revisa la url"
                                         throw new Error(error)
                                     }
-
                                     // Tambien hay que validar que exista el apartmentoIDV, que no esta hecho
                                     const validarApartamentoIDV = `
                                     SELECT
@@ -9680,37 +8484,28 @@ const puerto = async (entrada, salida) => {
                                         const error = "No existe el identificador de apartamento, verifica el apartamentoIDV"
                                         throw new Error(error)
                                     }
-
                                     const controlDominio = new URL(url);
                                     const dominiofinal = controlDominio.hostname;
                                     if (dominiofinal !== "www.airbnb.com" && dominiofinal !== "airbnb.com") {
                                         const error = "La url o el dominio no son los esperados. Revisa el formato de la url y el dominio. Solo se acepta el dominio airbnb.com"
                                         throw new Error(error)
                                     }
-
                                     const errorDeFormado = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb"
                                     let calendarioRaw
-
                                     try {
                                         const maxContentLengthBytes = 10 * 1024 * 1024; // 10 MB
-
                                         const calendarioData = await axios.get(url, {
                                             maxContentLength: maxContentLengthBytes,
                                         }); calendarioRaw = calendarioData.data
                                         const jcalData = ICAL.parse(calendarioRaw); // Intenta analizar el contenido como datos jCal
                                         const jcal = new ICAL.Component(jcalData); // Crea un componente jCal
-
                                         // Verifica si el componente es un calendario (VCALENDAR)
                                         if (jcal?.name.toLowerCase() !== 'vcalendar') {
-
                                             throw new Error(errorDeFormado)
                                         }
                                     } catch (errorCapturado) {
-
-
                                         throw new Error(errorDeFormado)
                                     }
-
                                     const generarCadenaAleatoria = (longitud) => {
                                         const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
                                         let cadenaAleatoria = '';
@@ -9727,12 +8522,10 @@ const puerto = async (entrada, salida) => {
                                         FROM "calendariosSincronizados"
                                         WHERE "uidPublico" = $1;`
                                         const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [codigoAleatorio])
-
                                         if (resuelveValidarCodigoAleatorio.rowCount > 0) {
                                             return true
                                         }
                                     }
-
                                     const controlCodigo = async () => {
                                         const longitudCodigo = 100; // Puedes ajustar la longitud según tus necesidades
                                         let codigoGenerado;
@@ -9745,7 +8538,6 @@ const puerto = async (entrada, salida) => {
                                         return codigoGenerado;
                                     }
                                     const codigoAleatorioUnico = await controlCodigo();
-
                                     const plataformaOrigen = "airbnb"
                                     const consultaConfiguracion = `
                                     INSERT INTO "calendariosSincronizados"
@@ -9775,15 +8567,12 @@ const puerto = async (entrada, salida) => {
                                         nuevoUID: nuevoUID
                                     }
                                     salida.json(ok)
-
                                 } catch (errorCapturado) {
                                     const error = {
                                         error: errorCapturado.message
                                     }
-
                                     salida.json(error)
                                 }
-
                             }
                         },
                         actualizarCalendario: {
@@ -9798,19 +8587,14 @@ const puerto = async (entrada, salida) => {
                                     let nombre = entrada.body.nombre || null;
                                     const apartamentoIDV = entrada.body.apartamentoIDV || null;
                                     let url = entrada.body.url || null;
-
                                     const filtroCadenaNumeros = /^[0-9]+$/;
                                     const filtroCadena_m_ss_n = /^[a-z0-9]+$/;
-
                                     const filtroCadena_m_M_cs_n = /^[a-zA-Z0-9\s]+$/;
                                     const filtroURL = /^https:\/\/[^\s/$.?#].[^\s]*$/;
-
-
                                     if (!calendarioUID || !filtroCadenaNumeros.test(calendarioUID)) {
                                         const error = "Hay que definir la calendarioUID, solo se admiten numeros sin espacios.";
                                         throw new Error(error);
                                     }
-
                                     const consultaSelecionaCalendario = `
                                     SELECT 
                                     uid
@@ -9823,7 +8607,6 @@ const puerto = async (entrada, salida) => {
                                         const error = "No existe el calendario que quieres actualizar, por favor revisa el identificado calendarioUID que has introducido.";
                                         throw new Error(error);
                                     }
-
                                     if (nombre) {
                                         nombre = nombre.trim()
                                         if (!filtroCadena_m_M_cs_n.test(nombre)) {
@@ -9831,7 +8614,6 @@ const puerto = async (entrada, salida) => {
                                             throw new Error(error);
                                         }
                                     }
-
                                     if (apartamentoIDV) {
                                         if (!filtroCadena_m_ss_n.test(apartamentoIDV)) {
                                             const error = "Hay que definir la nombre, solo se admiten minusculas y numeros.";
@@ -9851,44 +8633,32 @@ const puerto = async (entrada, salida) => {
                                             throw new Error(error);
                                         }
                                     }
-
                                     let calendarioRaw = null
                                     if (url) {
-
                                         if (!filtroURL.test(url)) {
                                             const error = "Hay que definir el url y que esta cumpla el formato de url";
                                             throw new Error(error);
                                         }
-
                                         const controlDominio = new URL(url);
                                         const dominiofinal = controlDominio.hostname;
                                         if (dominiofinal !== "www.airbnb.com" && dominiofinal !== "airbnb.com") {
                                             const error = "La url o el dominio no son los esperados. Revisa el formato de la url y el dominio. Solo se acepta el dominio airbnb.com";
                                             throw new Error(error);
                                         }
-
                                         const errorDeFormado = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb"
-
-
                                         try {
-
                                             const calendarioData = await axios.get(url);
                                             calendarioRaw = calendarioData.data
                                             const jcalData = ICAL.parse(calendarioRaw); // Intenta analizar el contenido como datos jCal
                                             const jcal = new ICAL.Component(jcalData); // Crea un componente jCal
-
                                             // Verifica si el componente es un calendario (VCALENDAR)
                                             if (jcal?.name.toLowerCase() !== 'vcalendar') {
-
                                                 throw new Error(errorDeFormado)
                                             }
                                         } catch (errorCapturado) {
-
-
                                             throw new Error(errorDeFormado)
                                         }
                                     }
-
                                     const actualizarCliente = `
                                     UPDATE "calendariosSincronizados"
                                     SET 
@@ -9896,7 +8666,6 @@ const puerto = async (entrada, salida) => {
                                     url = COALESCE($2, url),
                                     "apartamentoIDV" = COALESCE($3, "apartamentoIDV"),
                                     "dataIcal" = COALESCE($4, "dataIcal")
-
                                     WHERE uid = $5;
                                     `;
                                     const datosParaActualizar = [
@@ -9911,22 +8680,17 @@ const puerto = async (entrada, salida) => {
                                         const error = "Los datos se han enviado a la base de datos pero el servido de base de datos infomra que no se ha actualizado el calendario vuelve a intentarlo mas tarde. Discule las molestias";
                                         throw new Error(error);
                                     }
-
                                     const ok = {
                                         ok: "Se ha actualizado correctamente el calendario"
                                     };
                                     salida.json(ok);
-
                                 } catch (errorCapturado) {
                                     const error = {
                                         error: errorCapturado.message
                                     };
-
                                     salida.json(error);
                                 }
-
                             }
-
                         },
                         eliminarCalendario: {
                             IDX: {
@@ -9938,12 +8702,10 @@ const puerto = async (entrada, salida) => {
                                 try {
                                     const calendarioUID = entrada.body.calendarioUID;
                                     const filtroCadenaNumeros = /^[0-9]+$/;
-
                                     if (!calendarioUID || !filtroCadenaNumeros.test(calendarioUID)) {
                                         const error = "Hay que definir la calendarioUID, solo se admiten numeros sin espacios.";
                                         throw new Error(error);
                                     }
-
                                     const consultaSelecionaCalendario = `
                                     SELECT 
                                     uid
@@ -9956,7 +8718,6 @@ const puerto = async (entrada, salida) => {
                                         const error = "No existe el calendario que quieres borrar, por favor revisa el identificado calendarioUID que has introducido.";
                                         throw new Error(error);
                                     }
-
                                     const consultaEliminar = `
                                     DELETE FROM "calendariosSincronizados"
                                     WHERE uid = $1;
@@ -9972,18 +8733,13 @@ const puerto = async (entrada, salida) => {
                                         const error = "Se ha enviado la información a la base de datos pero esta informa que no ha eliminado el calendario.";
                                         throw new Error(error);
                                     }
-
-
                                 } catch (errorCapturado) {
                                     const error = {
                                         error: errorCapturado.message
                                     };
-
                                     salida.json(error);
                                 }
-
                             }
-
                         },
                         exportarCalendario: {
                             IDX: {
@@ -9995,12 +8751,10 @@ const puerto = async (entrada, salida) => {
                                 try {
                                     const calendarioUID = entrada.body.calendarioUID;
                                     const filtroCadenaNumeros = /^[0-9]+$/;
-
                                     if (!calendarioUID || !filtroCadenaNumeros.test(calendarioUID)) {
                                         const error = "Hay que definir la calendarioUID, solo se admiten numeros sin espacios.";
                                         throw new Error(error);
                                     }
-
                                     const consultaSelecionaCalendario = `
                                     SELECT 
                                     uid
@@ -10013,35 +8767,19 @@ const puerto = async (entrada, salida) => {
                                         const error = "No existe el calendario que quieres borrar, por favor revisa el identificado calendarioUID que has introducido.";
                                         throw new Error(error);
                                     }
-
-
-
-
-
                                     // Obtener las las reservas
                                     // Verificar que el apartmento este en esa reserva
                                     // añadirlo a una array
                                     // parsearlo en formato ical
-
-
                                 } catch (errorCapturado) {
                                     const error = {
                                         error: errorCapturado.message
                                     };
-
                                     salida.json(error);
                                 }
-
                             }
-
-
                         }
-
                     }
-
-
-
-
                 },
                 limitesReservaPublica: {
                     obtenerConfiguracion: {
@@ -10062,7 +8800,6 @@ const puerto = async (entrada, salida) => {
                                 WHERE 
                                     "configuracionUID" IN ($1, $2, $3);
                                `;
-
                                 const configuracionUID = [
                                     "diasAntelacionReserva",
                                     "limiteFuturoReserva",
@@ -10080,16 +8817,11 @@ const puerto = async (entrada, salida) => {
                                     const valor = parConfiguracion.valor
                                     ok.ok[configuracionUID] = valor
                                 }
-
-
                                 salida.json(ok)
-
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -10105,9 +8837,7 @@ const puerto = async (entrada, salida) => {
                                 const diasAntelacionReserva = entrada.body.diasAntelacionReserva
                                 const limiteFuturoReserva = entrada.body.limiteFuturoReserva
                                 const diasMaximosReserva = entrada.body.diasMaximosReserva
-
                                 const filtroNumero = /^\d+$/;
-
                                 if (!diasAntelacionReserva || !filtroNumero.test(diasAntelacionReserva)) {
                                     const error = "El campo diasAntelacionReserva solo acepta numeros"
                                     throw new Error(error)
@@ -10124,7 +8854,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "Los dias de antelacion no pueden ser iguales o superiores a los dias del limiteFuturoReserva por que entonces no se permiten reservas de mas de 0 dias"
                                     throw new Error(error)
                                 }
-
                                 if (0 === Number(limiteFuturoReserva)) {
                                     const error = "El limite futuro no puede ser de 0, por que entonces no se permite reservas de mas de 0 dias."
                                     throw new Error(error)
@@ -10133,21 +8862,15 @@ const puerto = async (entrada, salida) => {
                                     const error = "No puedes determinar que el numero maximo de días de las reservas publicas sea de 0."
                                     throw new Error(error)
                                 }
-
-
                                 const maximoDiasDuracionReserva = Number(limiteFuturoReserva) - Number(diasAntelacionReserva)
                                 if (Number(diasMaximosReserva) > Number(maximoDiasDuracionReserva)) {
                                     const error = `En base la configuracíon que solicitas, es decir en base a los dias minimos de antelación establecidos y el limite futuro de dias, las reservas tendrian un maximo de ${maximoDiasDuracionReserva} días de duracíon, por lo tanto no puedes establecer mas días de duracíon que eso. Es decir o escoges poner menos dias de duración maximo para una reserva o ampliar los limites anteriores.`
                                     throw new Error(error)
                                 }
-
-
-
                                 await conexion.query('BEGIN'); // Inicio de la transacción
                                 const configuracionUID_diasAntelacionReserva = "diasAntelacionReserva"
                                 const configuracionUID_limiteFuturoReserva = "limiteFuturoReserva"
                                 const configuracionUID_diasMaximosReserva = "diasMaximosReserva"
-
                                 const actualizarConfiguracionGlobal = `
                                 UPDATE "configuracionGlobal"
                                 SET
@@ -10160,7 +8883,6 @@ const puerto = async (entrada, salida) => {
                                 WHERE
                                     "configuracionUID" IN ($2, $4, $6);
                                 `;
-
                                 const nuevaConfiguracion = [
                                     diasAntelacionReserva,
                                     configuracionUID_diasAntelacionReserva,
@@ -10174,19 +8896,16 @@ const puerto = async (entrada, salida) => {
                                     const error = "No se ha podido actualizar la configuracion, reintentalo"
                                     throw new Error(error)
                                 }
-
                                 await conexion.query('COMMIT'); // Confirmar la transacción
                                 const ok = {
                                     ok: "Se ha actualizado correctamente la configuracion"
                                 }
                                 salida.json(ok)
-
                             } catch (errorCapturado) {
                                 await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -10202,9 +8921,6 @@ const puerto = async (entrada, salida) => {
                         },
                         X: async () => {
                             try {
-
-
-
                                 const consultaConfiguracionGlobal = `
                                 SELECT 
                                     estado,
@@ -10212,7 +8928,6 @@ const puerto = async (entrada, salida) => {
                                 FROM 
                                     "interruptoresGlobales";
                                `;
-
                                 const resuelveConfiguracionGlobal = await conexion.query(consultaConfiguracionGlobal)
                                 if (resuelveConfiguracionGlobal.rowCount === 0) {
                                     const error = "No hay configuraciones globales con estos parametros"
@@ -10226,13 +8941,10 @@ const puerto = async (entrada, salida) => {
                                     ok.ok[interruptorIDV] = estado
                                 }
                                 salida.json(ok)
-
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -10247,7 +8959,6 @@ const puerto = async (entrada, salida) => {
                             try {
                                 const interruptorIDV = entrada.body.interruptorIDV
                                 const estado = entrada.body.estado
-
                                 const filtroIDV = /^[a-zA-Z0-9]+$/;
                                 if (!interruptorIDV || !filtroIDV.test(interruptorIDV)) {
                                     const error = "El interruptorIDV solo puede ser una cadena que acepta numeros, minusculas y mayusculas"
@@ -10259,7 +8970,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "El estado solo puede ser activado o desactivado"
                                     throw new Error(error)
                                 }
-
                                 const validarInterruptorIDV = `
                                 SELECT 
                                     "interruptorIDV"
@@ -10268,7 +8978,6 @@ const puerto = async (entrada, salida) => {
                                 WHERE 
                                     "interruptorIDV" = $1;
                                `;
-
                                 const resuelveConfiguracionGlobal = await conexion.query(validarInterruptorIDV, [interruptorIDV])
                                 if (resuelveConfiguracionGlobal.rowCount === 0) {
                                     const error = "No existe ningun interruptor con ese indentificador visual"
@@ -10283,7 +8992,6 @@ const puerto = async (entrada, salida) => {
                                 WHERE
                                     "interruptorIDV" = $2
                                     RETURNING *;`;
-
                                 const nuevoEstado = [
                                     estado,
                                     interruptorIDV
@@ -10301,19 +9009,16 @@ const puerto = async (entrada, salida) => {
                                     estado: estadoNuevo
                                 }
                                 salida.json(ok)
-
                             } catch (errorCapturado) {
                                 await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
                     }
                 },
-
             },
             clientes: {
                 IDX: {
@@ -10324,7 +9029,6 @@ const puerto = async (entrada, salida) => {
                 },
                 buscar: async () => {
                     try {
-
                         let buscar = entrada.body.buscar;
                         let tipoBusqueda = entrada.body.tipoBusqueda
                         let nombreColumna = entrada.body.nombreColumna
@@ -10332,7 +9036,6 @@ const puerto = async (entrada, salida) => {
                         if (tipoBusqueda !== "rapido") {
                             tipoBusqueda = null;
                         }
-
                         if (!buscar || typeof buscar !== "string") {
                             let error = "se tiene que espeficiar 'buscar' y lo que se desea buscar"
                             throw new Error(error)
@@ -10343,11 +9046,9 @@ const puerto = async (entrada, salida) => {
                             const error = "En 'pagina' solo se aceptan numero enteros superiores a cero y positivos. Nada de decimales"
                             throw new Error(error)
                         }
-
                         let condicionComplejaSQLOrdenarResultadosComoSegundaCondicion = ""
                         let nombreColumnaSentidoUI
                         let nombreColumnaUI
-
                         if (nombreColumna) {
                             const filtronombreColumna = /^[a-zA-Z]+$/;
                             if (!filtronombreColumna.test(nombreColumna)) {
@@ -10364,9 +9065,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "No existe el nombre de la columna en la tabla clientes"
                                 throw new Error(error)
                             }
-
-
-
                             // OJO con la coma, OJO LA COMA ES IMPORTANTISMA!!!!!!!!
                             //!!!!!!!
                             if (sentidoColumna !== "descendente" && sentidoColumna !== "ascendente") {
@@ -10381,11 +9079,8 @@ const puerto = async (entrada, salida) => {
                                 nombreColumnaSentidoUI = "descendente"
                             }
                             // nombreColumnaUI = nombreColumna.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
-
                             condicionComplejaSQLOrdenarResultadosComoSegundaCondicion = `,"${nombreColumna}" ${sentidoColumna}`
                         }
-
-
                         const terminoBuscar = buscar.split(" ")
                         let terminosFormateados = []
                         terminoBuscar.map((termino) => {
@@ -10432,9 +9127,7 @@ const puerto = async (entrada, salida) => {
                             ) 
                             ${condicionComplejaSQLOrdenarResultadosComoSegundaCondicion}
                         LIMIT $2 OFFSET $3;`
-
                         let consultaReservas = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina, numeroPagina])
-
                         consultaReservas = consultaReservas.rows
                         let consultaConteoTotalFilas = consultaReservas[0]?.totalClientes ? consultaReservas[0].totalClientes : 0
                         if (tipoBusqueda === "rapido") {
@@ -10442,7 +9135,6 @@ const puerto = async (entrada, salida) => {
                                 delete cliente.Telefono
                                 delete cliente.email
                                 delete cliente.notas
-
                             })
                         }
                         consultaReservas.map((cliente) => {
@@ -10460,26 +9152,20 @@ const puerto = async (entrada, salida) => {
                             Respuesta["nombreColumna"] = nombreColumna
                             Respuesta["sentidoColumna"] = nombreColumnaSentidoUI
                         }
-
                         Respuesta["clientes"] = consultaReservas
-
                         salida.json(Respuesta)
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         return salida.json(error)
                     } finally {
-
                     }
-
                 },
                 crearCliente: async () => {
                     const mutex = new Mutex();
                     const bloqueoCrearCliente = await mutex.acquire();
                     try {
-
                         let nombre = entrada.body.nombre
                         let primerApellido = entrada.body.primerApellido
                         let segundoApellido = entrada.body.segundoApellido
@@ -10487,7 +9173,6 @@ const puerto = async (entrada, salida) => {
                         let telefono = entrada.body.telefono
                         let correoElectronico = entrada.body.correo
                         let notas = entrada.body.notas
-
                         const nuevoCliente = {
                             nombre: nombre,
                             primerApellido: primerApellido,
@@ -10497,7 +9182,6 @@ const puerto = async (entrada, salida) => {
                             correoElectronico: correoElectronico,
                             notas: notas,
                         }
-
                         const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoCliente)
                         nombre = datosValidados.nombre
                         primerApellido = datosValidados.primerApellido
@@ -10506,9 +9190,6 @@ const puerto = async (entrada, salida) => {
                         telefono = datosValidados.telefono
                         correoElectronico = datosValidados.correoElectronico
                         notas = datosValidados.notas
-
-
-
                         const nuevoUIDCliente = await insertarCliente(nuevoCliente)
                         if (nuevoUIDCliente) {
                             const ok = {
@@ -10520,21 +9201,14 @@ const puerto = async (entrada, salida) => {
                             const error = "Ha ocurrido un error interno y no se ha podido obtener el nuevo UID de cliente"
                             throw new Error(error)
                         }
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                         bloqueoCrearCliente()
                     }
-
-
-
-
                 },
                 detallesCliente: async () => {
                     try {
@@ -10562,26 +9236,20 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe ningun clinete con ese UID"
                             throw new Error(error)
                         }
-
                         let detallesCliente = resolverConsultaDetallesCliente.rows[0]
                         let ok = {
                             "ok": detallesCliente
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
-
                 },
                 modificarCliente: async () => {
-
                     const mutex = new Mutex();
                     const bloqueoModificarClinete = await mutex.acquire();
                     try {
@@ -10593,7 +9261,6 @@ const puerto = async (entrada, salida) => {
                         let telefono = entrada.body.telefono
                         let correoElectronico = entrada.body.email
                         let notas = entrada.body.notas
-
                         if (!cliente || !Number.isInteger(cliente)) {
                             const error = "El campo cliente solo puede ser un numero positivo y entero que haga referencia al UID del cliente"
                             throw new Error(error)
@@ -10615,8 +9282,6 @@ const puerto = async (entrada, salida) => {
                         telefono = datosValidados.telefono
                         correoElectronico = datosValidados.correoElectronico
                         notas = datosValidados.notas
-
-
                         const validarCliente = `
                         SELECT
                         uid
@@ -10628,13 +9293,7 @@ const puerto = async (entrada, salida) => {
                         if (resuelveValidarCliente.rowCount === 0) {
                             const error = "No existe el cliente"
                             throw new Error(error)
-
                         }
-
-
-
-
-
                         const actualizarCliente = `
                         UPDATE clientes
                         SET 
@@ -10665,19 +9324,14 @@ const puerto = async (entrada, salida) => {
                             detallesCliente: resuelveActualizarCliente.rows
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                         bloqueoModificarClinete()
                     }
-
-
                 },
                 reservasDelCliente: async () => {
                     try {
@@ -10693,7 +9347,6 @@ const puerto = async (entrada, salida) => {
                             const error = "En 'pagina' solo se aceptan numero enteros superiores a cero y positivos. Nada de decimales"
                             throw new Error(error)
                         }
-
                         const validadores = {
                             nombreColumna: async (nombreColumna) => {
                                 const filtronombreColumna = /^[a-zA-Z]+$/;
@@ -10711,13 +9364,11 @@ const puerto = async (entrada, salida) => {
                                     const miArray = [
                                         'como'
                                     ];
-
                                     if (!miArray.includes(nombreColumna)) {
                                         const error = "No existe el nombre de la columna que quieres ordenar"
                                         throw new Error(error)
                                     }
                                 }
-
                             },
                             sentidoColumna: (sentidoColumna) => {
                                 let sentidoColumnaSQL
@@ -10729,7 +9380,6 @@ const puerto = async (entrada, salida) => {
                                 if (sentidoColumnaPreVal === "ascendente") {
                                     sentidoColumnaSQL = "ASC"
                                 }
-
                                 if (sentidoColumnaPreVal === "descendente") {
                                     sentidoColumnaSQL = "DESC"
                                 }
@@ -10741,7 +9391,6 @@ const puerto = async (entrada, salida) => {
                             },
                             validarFechaEntrada: (fecha) => {
                                 const filtroFecha = /^(0?[1-9]|[1-2][0-9]|3[0-1])\/(0?[1-9]|1[0-2])\/\d{4}$/;
-
                                 if (!filtroFecha.test(fecha)) {
                                     const error = "La fecha de entrada no cumple el criterio de formato"
                                     throw new Error(error)
@@ -10749,22 +9398,18 @@ const puerto = async (entrada, salida) => {
                             },
                             validarFechaSalida: (fecha) => {
                                 const filtroFecha = /^(0?[1-9]|[1-2][0-9]|3[0-1])\/(0?[1-9]|1[0-2])\/\d{4}$/;
-
                                 if (!filtroFecha.test(fecha)) {
                                     const error = "La fecha de salida no cumple el criterio de formato"
                                     throw new Error(error)
                                 }
                             }
                         }
-
                         let sentidoColumnaSQL
-
                         if (nombreColumna) {
                             await validadores.nombreColumna(nombreColumna)
                             sentidoColumnaSQL = (validadores.sentidoColumna(sentidoColumna)).sentidoColumnaSQL
                             sentidoColumna = (validadores.sentidoColumna(sentidoColumna)).sentidoColumna
                         }
-
                         let ordenColumnaSQL = ""
                         if (nombreColumna) {
                             ordenColumnaSQL = `
@@ -10772,10 +9417,8 @@ const puerto = async (entrada, salida) => {
                                     "${nombreColumna}" ${sentidoColumnaSQL} 
                                     `
                         }
-
                         const comoTitularPreProcesado = []
                         const comoPernoctantePreProcesado = []
-
                         const consultaComoTitular = `
                         SELECT 
                         reserva
@@ -10791,7 +9434,6 @@ const puerto = async (entrada, salida) => {
                                 comoTitularPreProcesado.push(uid)
                             })
                         }
-
                         const consultaComoPernoctante = `
                         SELECT 
                         reserva
@@ -10807,7 +9449,6 @@ const puerto = async (entrada, salida) => {
                                 comoPernoctantePreProcesado.push(reserva)
                             })
                         }
-
                         const encontrarRepetidosEliminar = (comoTitular, comoPernoctante) => {
                             // Crear conjuntos a partir de los arrays
                             const set1 = new Set(comoTitular);
@@ -10825,18 +9466,13 @@ const puerto = async (entrada, salida) => {
                             };
                             return estructuraFinal;
                         }
-
                         const reservasEstructuradas = encontrarRepetidosEliminar(comoTitularPreProcesado, comoPernoctantePreProcesado)
-
                         const UIDSreservasComoTitular = reservasEstructuradas.comoTitular
                         const UIDSreservasComoPernoctante = reservasEstructuradas.comoPernoctante
                         const UIDSreservasComoAmbos = reservasEstructuradas.comoAmbos
                         const numeroPaginaSQL = Number((pagina - 1) + "0");
-
                         const reservasClasificadas = []
                         const numeroPorPagina = 10
-
-
                         const consultaFusionada = `
                         WITH resultados AS (
                             SELECT 
@@ -10880,13 +9516,11 @@ const puerto = async (entrada, salida) => {
                             salida,
                             COUNT(*) OVER ()::text as total_filas
                             -- ROW_NUMBER() OVER (PARTITION BY reserva ORDER BY reserva) as fila_duplicada
-
                         FROM resultados
                         ${ordenColumnaSQL}
                         LIMIT $4 OFFSET $5;
                         
                         `
-
                         const parametrosConsulta = [
                             UIDSreservasComoTitular,
                             UIDSreservasComoPernoctante,
@@ -10894,7 +9528,6 @@ const puerto = async (entrada, salida) => {
                             numeroPorPagina,
                             numeroPaginaSQL
                         ]
-
                         const resuelveConsulta = await conexion.query(consultaFusionada, parametrosConsulta)
                         if (resuelveConsulta.rowCount > 0) {
                             reservasClasificadas.push(...resuelveConsulta.rows)
@@ -10904,7 +9537,6 @@ const puerto = async (entrada, salida) => {
                             delete detallesFila.total_filas
                         }
                         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
-
                         const estructuraFinal = {
                             ok: "Reservas del cliente encontradas",
                             totalReservas: Number(consultaConteoTotalFilas),
@@ -10919,14 +9551,12 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 },
                 eliminar: async () => {
                     try {
                         const clienteUID = entrada.body.clienteUID
-
                         if (!clienteUID || !Number.isInteger(clienteUID)) {
                             const error = "El campo cliente solo puede ser un numero positivo y entero que haga referencia al UID del cliente"
                             throw new Error(error)
@@ -10960,15 +9590,11 @@ const puerto = async (entrada, salida) => {
                                 }
                                 salida.json(ok)
                             }
-
-
                         }
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 }
@@ -11005,14 +9631,11 @@ const puerto = async (entrada, salida) => {
                                         'pasaporteTitular',
                                         'emailTitular'
                                     ];
-
                                     if (!miArray.includes(nombreColumna)) {
                                         const error = "No existe el nombre de la columna que quieres ordenar"
                                         throw new Error(error)
                                     }
-
                                 }
-
                             },
                             sentidoColumna: (sentidoColumna) => {
                                 let sentidoColumnaSQL
@@ -11024,7 +9647,6 @@ const puerto = async (entrada, salida) => {
                                 if (sentidoColumnaPreVal === "ascendente") {
                                     sentidoColumnaSQL = "ASC"
                                 }
-
                                 if (sentidoColumnaPreVal === "descendente") {
                                     sentidoColumnaSQL = "DESC"
                                 }
@@ -11034,11 +9656,7 @@ const puerto = async (entrada, salida) => {
                                 }
                                 return estructuraFinal
                             }
-
                         }
-
-
-
                         // Si hay nombre columna que halla sentido
                         let nombreColumna = entrada.body.nombreColumna
                         let sentidoColumna = entrada.body.sentidoColumna
@@ -11047,9 +9665,7 @@ const puerto = async (entrada, salida) => {
                             const error = "Debe de especificarse la clave 'pagina' y su valor debe de ser numerico, entero, positivo y mayor a cero."
                             throw new Error(error)
                         }
-
                         const numeroPagina = Number((pagina - 1) + "0");
-
                         let ordenamientoFinal
                         const ok = {}
                         if (nombreColumna || sentidoColumna) {
@@ -11065,7 +9681,6 @@ const puerto = async (entrada, salida) => {
                         } else {
                             ordenamientoFinal = ""
                         }
-
                         const numeroPorPagina = 10
                         // si hay nombre columna validarlo
                         const listarImpuestos = `
@@ -11091,7 +9706,6 @@ const puerto = async (entrada, salida) => {
                         const consultaConteoTotalFilas = resuelvelistarImpuestos?.rows[0]?.total_filas ? resuelvelistarImpuestos.rows[0].total_filas : 0
                         const impuestosEncontradoas = resuelvelistarImpuestos.rows
                         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
-
                         for (const detallesFila of impuestosEncontradoas) {
                             delete detallesFila.total_filas
                         }
@@ -11103,28 +9717,22 @@ const puerto = async (entrada, salida) => {
                         ok.paginasTotales = totalPaginas
                         ok.pagina = pagina
                         ok.impuestos = impuestosEncontradoas
-
                         salida.json(ok)
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
-
                 },
                 detalleImpuesto: async () => {
                     try {
                         const impuestoUID = entrada.body.impuestoUID
-
                         if (!impuestoUID || typeof impuestoUID !== "number" || !Number.isInteger(impuestoUID) || impuestoUID <= 0) {
                             const error = "El campo 'impuestoUID' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
                         }
-
                         const validarImpuesto = `
                         SELECT
                         nombre,
@@ -11152,7 +9760,6 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 },
@@ -11164,7 +9771,6 @@ const puerto = async (entrada, salida) => {
                     },
                     X: async () => {
                         await mutex.acquire();
-
                         try {
                             const impuestoUID = entrada.body.impuestoUID
                             const nombreImpuesto = entrada.body.nombreImpuesto
@@ -11172,19 +9778,16 @@ const puerto = async (entrada, salida) => {
                             const tipoValor = entrada.body.tipoValor
                             const aplicacionSobre = entrada.body.aplicacionSobre
                             const estado = entrada.body.estado
-
                             if (typeof impuestoUID !== "number" || !Number.isInteger(impuestoUID) || impuestoUID <= 0) {
                                 const error = "El campo 'impuestoUID' debe ser un tipo numero, entero y positivo"
                                 throw new Error(error)
                             }
-
                             const filtroCadena = /^[a-zA-Z0-9 ]+$/;
                             if (nombreImpuesto?.length > 0 && !filtroCadena.test(nombreImpuesto)) {
                                 const error = "El campo nombreImpuesto solo puede ser un una cadena de minúsculas"
                                 throw new Error(error)
                             }
                             const filtroTipoImpositivo = /^\d+\.\d{2}$/;
-
                             if (tipoImpositivo?.length > 0 && (typeof tipoImpositivo !== "string" || !filtroTipoImpositivo.test(tipoImpositivo))) {
                                 const error = "El campo tipoImpositivo solo puede ser una cadena con un numero y dos decimlaes"
                                 throw new Error(error)
@@ -11195,7 +9798,6 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                             const filtroCadena_mMN = /^[a-zA-Z0-9]+$/;
-
                             if (aplicacionSobre?.length > 0 && !filtroCadena_mMN.test(aplicacionSobre)) {
                                 const error = "El campo aplicacionSobre solo puede ser un una cadena de minúsculas y numeros sin espacios"
                                 throw new Error(error)
@@ -11204,7 +9806,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "El estado de un impuesto solo puede ser activado o desactivado"
                                 throw new Error(error)
                             }
-
                             if (tipoValor) {
                                 const validarTipoValor = `
                             SELECT 
@@ -11218,7 +9819,6 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                             }
-
                             if (aplicacionSobre) {
                                 const validarAplicacionSobre = `
                             SELECT 
@@ -11232,7 +9832,6 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                             }
-
                             const validarImpuestoYActualizar = `
                             UPDATE impuestos
                             SET 
@@ -11254,7 +9853,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "No existe el perfil del impuesto"
                                 throw new Error(error)
                             }
-
                             const validarImpuesto = `
                             SELECT
                             nombre,
@@ -11273,14 +9871,12 @@ const puerto = async (entrada, salida) => {
                                 const error = "No existe el perfil del impuesto"
                                 throw new Error(error)
                             }
-
                             const perfilImpuesto = resuelveObtenerDetallesImpuesto.rows[0]
                             const ok = {
                                 ok: "El impuesto se ha actualizado correctamente",
                                 detallesImpuesto: perfilImpuesto
                             }
                             salida.json(ok)
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
@@ -11289,16 +9885,13 @@ const puerto = async (entrada, salida) => {
                         } finally {
                             mutex.release();
                         }
-
                     }
                 },
                 opcionesEditarImpuesto: async () => {
                     try {
-
                         const opcionesTipoValor = []
                         const opcionesAplicacionSobre = []
                         const opcionesMonedas = []
-
                         const validarTipoValor = `
                         SELECT 
                         "tipoValorIDV", "tipoValorUI", simbolo
@@ -11317,7 +9910,6 @@ const puerto = async (entrada, salida) => {
                         if (resuelveValidarAplicacionSobre.rowCount > 0) {
                             opcionesAplicacionSobre.push(...resuelveValidarAplicacionSobre.rows);
                         }
-
                         // const validarMoneda = `
                         // SELECT 
                         // "monedaIDV", "monedaUI", simbolo
@@ -11327,28 +9919,22 @@ const puerto = async (entrada, salida) => {
                         // if (resuelveValidarMoneda.rowCount > 0) {
                         //     opcionesMonedas.push(...resuelveValidarMoneda.rows);
                         // }
-
                         const detallesImpuesto = {
                             tipoValor: opcionesTipoValor,
                             aplicacionSobre: opcionesAplicacionSobre,
                             //moneda: opcionesMonedas
                         }
-
                         const ok = {
                             ok: detallesImpuesto
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
-
                 },
                 eliminarPerfilImpuesto: {
                     IDX: {
@@ -11364,7 +9950,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "El campo 'impuestoUID' debe ser un tipo numero, entero y positivo"
                                 throw new Error(error)
                             }
-
                             const validarYEliminarImpuesto = `
                             DELETE FROM impuestos
                             WHERE "impuestoUID" = $1;
@@ -11378,7 +9963,6 @@ const puerto = async (entrada, salida) => {
                                 ok: "Perfil del impuesto eliminado"
                             }
                             salida.json(ok)
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
@@ -11397,14 +9981,12 @@ const puerto = async (entrada, salida) => {
                     },
                     X: async () => {
                         await mutex.acquire();
-
                         try {
                             const nombreImpuesto = entrada.body.nombreImpuesto
                             const tipoImpositivo = entrada.body.tipoImpositivo
                             const tipoValor = entrada.body.tipoValor
                             const aplicacionSobre = entrada.body.aplicacionSobre
                             const moneda = entrada.body.moneda
-
                             const filtroCadena = /^[a-zA-Z0-9 ]+$/;
                             if (!nombreImpuesto || !filtroCadena.test(nombreImpuesto)) {
                                 const error = "El campo nombreImpuesto solo puede ser un una cadena de minúsculas"
@@ -11429,9 +10011,7 @@ const puerto = async (entrada, salida) => {
                             //     const error = "El campo moneda solo puede ser un una cadena de minúsculas y numeros sin espacios"
                             //     throw new Error(error)
                             // }
-
                             if (tipoValor) {
-
                                 const validarTipoValor = `
                             SELECT 
                             "tipoValorIDV"
@@ -11444,7 +10024,6 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                             }
-
                             if (aplicacionSobre) {
                                 const validarAplicacionSobre = `
                             SELECT 
@@ -11458,7 +10037,6 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                             }
-
                             // if (moneda) {
                             //     const validarMoneda = `
                             // SELECT 
@@ -11472,8 +10050,6 @@ const puerto = async (entrada, salida) => {
                             //         throw new Error(error)
                             //     }
                             // }
-
-
                             const validarImpuestoYActualizar = `
                             INSERT INTO impuestos
                             (
@@ -11495,7 +10071,6 @@ const puerto = async (entrada, salida) => {
                             ]
                             const resuelveValidarImpuesto = await conexion.query(validarImpuestoYActualizar, nuevoImpuesto)
                             const nuevoUIDImpuesto = resuelveValidarImpuesto.rows[0].idv
-
                             const ok = {
                                 ok: "Se ha creado el nuevo impuesto",
                                 nuevoImpuestoUID: nuevoUIDImpuesto
@@ -11522,7 +10097,6 @@ const puerto = async (entrada, salida) => {
                             let opcionesTipoValor = []
                             let opcionesAplicacionSobre = []
                             let opcionesMonedas = []
-
                             const validarTipoValor = `
                         SELECT 
                         "tipoValorIDV", "tipoValorUI", simbolo
@@ -11530,9 +10104,7 @@ const puerto = async (entrada, salida) => {
                         `
                             const resuelveValidarTipoValor = await conexion.query(validarTipoValor)
                             if (resuelveValidarTipoValor.rowCount > 0) {
-
                                 opcionesTipoValor = resuelveValidarTipoValor.rows
-
                             }
                             const validarAplicacionSobre = `
                         SELECT 
@@ -11542,9 +10114,7 @@ const puerto = async (entrada, salida) => {
                             const resuelveValidarAplicacionSobre = await conexion.query(validarAplicacionSobre)
                             if (resuelveValidarAplicacionSobre.rowCount > 0) {
                                 opcionesAplicacionSobre = resuelveValidarAplicacionSobre.rows
-
                             }
-
                             const validarMoneda = `
                         SELECT 
                         "monedaIDV", "monedaUI", simbolo
@@ -11554,29 +10124,22 @@ const puerto = async (entrada, salida) => {
                             if (resuelveValidarMoneda.rowCount > 0) {
                                 opcionesMonedas = resuelveValidarMoneda.rows
                             }
-
-
                             const detallesImpuesto = {
                                 "tipoValor": opcionesTipoValor,
                                 "aplicacionSobre": opcionesAplicacionSobre,
                                 "moneda": opcionesMonedas
                             }
-
                             const ok = {
                                 "ok": detallesImpuesto
                             }
                             salida.json(ok)
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
-
                         }
-
                     }
                 }
             },
@@ -11590,7 +10153,6 @@ const puerto = async (entrada, salida) => {
                     },
                     X: async () => {
                         try {
-
                             const apartamentos = `
                             SELECT
                             "apartamentoIDV"
@@ -11602,9 +10164,7 @@ const puerto = async (entrada, salida) => {
                                 const error = "No hay ningun apartamento en el sistema"
                                 throw new Error(error)
                             }
-
                             const apartamentosEncontrados = resuelveApartamentos.rows
-
                             const seleccionarImpuestos = `
                             SELECT
                             nombre, "tipoImpositivo", "tipoValor"
@@ -11617,14 +10177,11 @@ const puerto = async (entrada, salida) => {
                             const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto", "activado"])
                             const objetoFInal = []
                             for (const apartamentoEncotrado of apartamentosEncontrados) {
-
                                 const apartamentoIDV = apartamentoEncotrado.apartamentoIDV
                                 const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
                                 const apartamento = {
                                     "apartamento": apartamentoIDV,
                                     "apartamentoUI": apartamentoUI
-
                                 }
                                 const listarPreciosApartamentos = `
                                 SELECT
@@ -11633,10 +10190,8 @@ const puerto = async (entrada, salida) => {
                                 "preciosApartamentos"
                                 WHERE apartamento = $1
                                 `
-
                                 const resuelveListarPreciosApartamentos = await conexion.query(listarPreciosApartamentos, [apartamentoIDV])
                                 if (resuelveListarPreciosApartamentos.rowCount === 1) {
-
                                     const precioEncontrados = resuelveListarPreciosApartamentos.rows[0]
                                     const precioApartamento = precioEncontrados.precio
                                     const moneda = precioEncontrados.moneda
@@ -11644,14 +10199,11 @@ const puerto = async (entrada, salida) => {
                                     apartamento["uid"] = uidPrecio
                                     apartamento["precio"] = precioApartamento
                                     apartamento["moneda"] = moneda
-
-
                                     if (resuelveSeleccionarImpuestos.rowCount > 0) {
                                         const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
                                         apartamento["totalImpuestos"] = 0.00
                                         let sumaTotalImpuestos = 0.00
                                         impuestosEncontrados.map((detalleImpuesto) => {
-
                                             const tipoImpositivo = detalleImpuesto.tipoImpositivo
                                             const tipoValor = detalleImpuesto.tipoValor
                                             if (tipoValor === "porcentaje") {
@@ -11661,18 +10213,15 @@ const puerto = async (entrada, salida) => {
                                             if (tipoValor === "tasa") {
                                                 sumaTotalImpuestos += parseFloat(tipoImpositivo)
                                             }
-
                                         })
                                         apartamento["totalImpuestos"] = Number(sumaTotalImpuestos).toFixed(2)
-
                                         let totalDiaBruto = Number(sumaTotalImpuestos) + Number(precioApartamento)
                                         totalDiaBruto = totalDiaBruto.toFixed(2)
                                         apartamento["totalDiaBruto"] = totalDiaBruto
-
                                     }
                                 }
                                 objetoFInal.push(apartamento)
-                           }
+                            }
                             const ok = {
                                 ok: objetoFInal
                             }
@@ -11681,12 +10230,9 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
-
                         }
-
                     }
                 },
                 detallePrecioBaseApartamento: {
@@ -11700,12 +10246,10 @@ const puerto = async (entrada, salida) => {
                         try {
                             const apartamentoIDV = entrada.body.apartamentoIDV
                             const filtroCadena = /^[a-z0-9]+$/;
-
                             if (typeof apartamentoIDV !== "string" || !filtroCadena.test(apartamentoIDV)) {
                                 const error = "El campo apartamentoIDV solo puede ser un una cadena de minúsculas y numeros, ni siquera espacios"
                                 throw new Error(error)
                             }
-
                             const transaccionInterna = await precioBaseApartamento(apartamentoIDV)
                             transaccionInterna.precioNetoPorDia = new Decimal(transaccionInterna.precioNetoPorDia).toFixed(2)
                             transaccionInterna.totalImpuestos = new Decimal(transaccionInterna.totalImpuestos).toFixed(2)
@@ -11724,10 +10268,8 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
-
                         }
                     }
                 },
@@ -11736,30 +10278,23 @@ const puerto = async (entrada, salida) => {
                         ROL: ["administrador"]
                     },
                     X: async () => {
-
                         try {
                             const apartamentoIDV = entrada.body.apartamentoIDV
                             const filtroCadena = /^[a-z0-9]+$/;
                             const propuestaPrecio = entrada.body.propuestaPrecio
-
                             if (typeof apartamentoIDV !== "string") {
                                 const error = "El campo apartamentoIDV debe de ser una cadena"
                                 throw new Error(error)
                             }
-
-
                             if (!filtroCadena.test(apartamentoIDV)) {
                                 const error = "El campo apartamentoIDV solo puede ser un una cadena de minúsculas y numeros, ni siquera espacios"
                                 throw new Error(error)
                             }
-
-
                             const filtroPropuestaPrecio = /^\d+(\.\d{2})?$/;
                             if (!filtroPropuestaPrecio.test(propuestaPrecio)) {
                                 const error = "El campo propuestaPrecio solo puede ser un numero con dos decimales y nada mas, los decimales deben de separarse con un punto y no una coma"
                                 throw new Error(error)
                             }
-
                             const validarApartamento = `
                         SELECT
                         "apartamentoIDV"
@@ -11774,11 +10309,8 @@ const puerto = async (entrada, salida) => {
                             }
                             const detallesApartamento = {}
                             const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
                             detallesApartamento.apartamentoUI = apartamentoUI
                             detallesApartamento.apartamentoIDV = apartamentoIDV
-
-
                             const precioNetoApartamentoPorDia = propuestaPrecio
                             detallesApartamento.precioNetoPorDiaPropuesto = precioNetoApartamentoPorDia
                             const seleccionarImpuestos = `
@@ -11795,7 +10327,6 @@ const puerto = async (entrada, salida) => {
                                 detallesApartamento.impuestos = []
                                 const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
                                 let impuestosFinal
-
                                 let sumaTotalImpuestos = 0.00
                                 impuestosEncontrados.map((detalleImpuesto) => {
                                     const tipoImpositivo = detalleImpuesto.tipoImpositivo
@@ -11805,8 +10336,6 @@ const puerto = async (entrada, salida) => {
                                         "nombreImpuesto": nombreImpuesto,
                                         "tipoImpositivo": tipoImpositivo,
                                         "tipoValor": tipoValor,
-
-
                                     }
                                     if (tipoValor === "porcentaje") {
                                         const resultadoApliacado = (precioNetoApartamentoPorDia * (tipoImpositivo / 100)).toFixed(2);
@@ -11816,22 +10345,14 @@ const puerto = async (entrada, salida) => {
                                     if (tipoValor === "tasa") {
                                         sumaTotalImpuestos += parseFloat(tipoImpositivo)
                                         impuestosFinal.totalImpuesto = tipoImpositivo
-
                                     }
                                     (detallesApartamento.impuestos).push(impuestosFinal)
-
                                 })
-
                                 let totalDiaBruto = Number(sumaTotalImpuestos) + Number(precioNetoApartamentoPorDia)
-
                                 totalDiaBruto = totalDiaBruto.toFixed(2)
                                 detallesApartamento.totalImpuestos = sumaTotalImpuestos
                                 detallesApartamento.totalBrutoPordia = totalDiaBruto;
-
-
                             }
-
-
                             const ok = {
                                 ok: detallesApartamento
                             }
@@ -11840,12 +10361,9 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
-
                         }
-
                     }
                 },
                 establecerNuevoPrecioApartamento: {
@@ -11854,11 +10372,9 @@ const puerto = async (entrada, salida) => {
                     },
                     X: async () => {
                         await mutex.acquire();
-
                         try {
                             const apartamentoIDV = entrada.body.apartamentoIDV
                             const nuevoPrecio = entrada.body.nuevoPrecio
-
                             if (typeof apartamentoIDV !== "string") {
                                 const error = "El campo apartamentoIDV debe de ser una cadena"
                                 throw new Error(error)
@@ -11869,14 +10385,10 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                             const filtroPropuestaPrecio = /^\d+\.\d{2}$/;
-
-
-
                             if (!filtroPropuestaPrecio.test(nuevoPrecio)) {
                                 const error = "El campo nuevoPrecio solo puede ser un numero con dos decimales y nada mas, los decimales deben de separarse con un punto y no una coma"
                                 throw new Error(error)
                             }
-
                             const validarApartamento = `
                         SELECT
                         "apartamentoIDV", "estadoConfiguracion"
@@ -11893,15 +10405,10 @@ const puerto = async (entrada, salida) => {
                                 const error = "No se puede puede establecer un precio a este apartmento cuadno la configuracion esta en modo disponible. Primero desactive la configuracion del apartmento dejandola en estado No disponible y luego podra hacer las modificaciones que necesite"
                                 throw new Error(error)
                             }
-
-
                             const detallesApartamento = {}
                             const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
-
                             detallesApartamento.apartamentoUI = apartamentoUI
                             detallesApartamento.apartamentoIDV = apartamentoIDV
-
                             const insertarNuevoPrecioApartamento = `
                         UPDATE "preciosApartamentos"
                         SET precio = $1
@@ -11911,9 +10418,7 @@ const puerto = async (entrada, salida) => {
                             if (resuelveInsertarNuevoPrecioApartamento.rowCount === 0) {
                                 const error = "No existe ningun perfil de precio que actualizar para este apartamento"
                                 throw new Error(error)
-
                             }
-
                             const listarPrecioApartamento = `
                         SELECT
                         uid, apartamento, precio, moneda
@@ -11942,7 +10447,6 @@ const puerto = async (entrada, salida) => {
                                 detallesApartamento.impuestos = []
                                 const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
                                 let impuestosFinal
-
                                 let sumaTotalImpuestos = 0.00
                                 impuestosEncontrados.map((detalleImpuesto) => {
                                     const tipoImpositivo = detalleImpuesto.tipoImpositivo
@@ -11952,8 +10456,6 @@ const puerto = async (entrada, salida) => {
                                         "nombreImpuesto": nombreImpuesto,
                                         "tipoImpositivo": tipoImpositivo,
                                         "tipoValor": tipoValor,
-
-
                                     }
                                     if (tipoValor === "porcentaje") {
                                         const resultadoApliacado = (precioNetoApartamentoPorDia * (tipoImpositivo / 100)).toFixed(2);
@@ -11963,22 +10465,14 @@ const puerto = async (entrada, salida) => {
                                     if (tipoValor === "tasa") {
                                         sumaTotalImpuestos += parseFloat(tipoImpositivo)
                                         impuestosFinal.totalImpuesto = tipoImpositivo
-
                                     }
                                     (detallesApartamento.impuestos).push(impuestosFinal)
-
                                 })
-
                                 let totalDiaBruto = Number(sumaTotalImpuestos) + Number(precioNetoApartamentoPorDia)
-
                                 totalDiaBruto = totalDiaBruto.toFixed(2)
                                 detallesApartamento.totalImpuestos = sumaTotalImpuestos.toFixed(2)
                                 detallesApartamento.totalBrutoPordia = totalDiaBruto;
-
-
                             }
-
-
                             const ok = {
                                 "ok": detallesApartamento
                             }
@@ -11987,13 +10481,10 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
                             mutex.release();
-
                         }
-
                     }
                 },
                 eliminarPerfilPrecioApartamento: {
@@ -12002,10 +10493,8 @@ const puerto = async (entrada, salida) => {
                     },
                     X: async () => {
                         await mutex.acquire();
-
                         try {
                             const apartamentoIDV = entrada.body.apartamentoIDV
-
                             if (typeof apartamentoIDV !== "string") {
                                 const error = "El campo apartamentoIDV debe de ser una cadena"
                                 throw new Error(error)
@@ -12015,7 +10504,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "El campo apartamentoIDV solo puede ser un una cadena de minúsculas y numeros, ni siquera espacios"
                                 throw new Error(error)
                             }
-
                             const validarApartamento = `
                         SELECT
                         "apartamentoIDV", 
@@ -12042,21 +10530,17 @@ const puerto = async (entrada, salida) => {
                                 const error = "No hay ningun perfil de precio que elimintar de este apartamento"
                                 throw new Error(error)
                             }
-
                             const ok = {
                                 "ok": "Se ha eliminado correctamnte el perfil de apartamento"
                             }
-
                             salida.json(ok)
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
                             mutex.release();
-
                         }
                     }
                 },
@@ -12065,7 +10549,6 @@ const puerto = async (entrada, salida) => {
                         ROL: ["administrador"]
                     },
                     X: async () => {
-
                         try {
                             let monedaIDV = entrada.body.monedaIDV
                             const filtroCadena = /^[a-z]+$/;
@@ -12073,21 +10556,15 @@ const puerto = async (entrada, salida) => {
                                 const error = "El campo monedaIDV solo puede ser un una cadena de minúsculas"
                                 throw new Error(error)
                             }
-
                             const transaccionInterna = await resolverMoneda(monedaIDV)
                             salida.json(transaccionInterna)
-
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
-
                         }
-
                     }
                 }
             },
@@ -12103,7 +10580,6 @@ const puerto = async (entrada, salida) => {
                     },
                     X: async () => {
                         await mutex.acquire();
-
                         try {
                             const nombreOferta = entrada.body.nombreOferta
                             const fechaInicio = entrada.body.fechaInicio
@@ -12115,30 +10591,21 @@ const puerto = async (entrada, salida) => {
                             const apartamentosSeleccionados = entrada.body.apartamentosSeleccionados
                             const simboloNumero = entrada.body.simboloNumero
                             const numero = entrada.body.numero
-
                             const filtroCantidad = /^\d+(\.\d{1,2})?$/;
                             const filtroNombre = /^[^'"]+$/;
-
                             const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
-
-
                             if (!nombreOferta || !filtroNombre.test(nombreOferta)) {
                                 const error = "El campo nombreOferta no admice comillas simples o dobles"
                                 throw new Error(error)
                             }
-
                             const fechaInicio_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaInicio)).fecha_ISO
                             const fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin)).fecha_ISO
-
                             const fechaInicio_objeto = DateTime.fromISO(fechaInicio_ISO)
                             const fechaFin_objeto = DateTime.fromISO(fechaFin_ISO)
-
                             if (fechaInicio_objeto > fechaFin_objeto) {
                                 const error = "La fecha de inicio de la oferta no puede ser inferior a la fecha del fin de la oferta"
                                 throw new Error(error)
                             }
-
-
                             if (tipoOferta !== "porNumeroDeApartamentos" &&
                                 tipoOferta !== "porApartamentosEspecificos" &&
                                 tipoOferta !== "porDiasDeAntelacion" &&
@@ -12148,7 +10615,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "No se reconoce el tipo de oferta"
                                 throw new Error(error)
                             }
-
                             // Validar nombre unico oferta
                             const validarNombreOfertaUnico = `
                                 SELECT "nombreOferta"
@@ -12168,9 +10634,7 @@ const puerto = async (entrada, salida) => {
                             WHERE ("fechaInicio" <= $1 AND "fechaFin" >= $2) AND "tipoDescuento" = $3;
                             `
                                 const resuelveControlPrecioEstablecido = await conexion.query(controlPrecioEstablecido, [fechaInicio_ISO, fechaFin_ISO, tipoDescuento]);
-
                             }
-
                             const validadores = {
                                 numero: (numero) => {
                                     numero = Number(numero)
@@ -12203,7 +10667,6 @@ const puerto = async (entrada, salida) => {
                                         throw new Error(error);
                                     }
                                     cantidad = Number(cantidad)
-
                                 },
                                 controlLimitePorcentaje: (tipoDescuento, cantidad) => {
                                     if (tipoDescuento === "porcentaje" && new Decimal(cantidad).greaterThan(100)) {
@@ -12212,26 +10675,19 @@ const puerto = async (entrada, salida) => {
                                     }
                                 }
                             }
-
                             await conexion.query('BEGIN'); // Inicio de la transacción
                             const inertarOfertaValidada = async (metadatos) => {
-
-
                                 try {
-
                                     const nombreOferta = metadatos.nombreOferta
                                     const fechaInicio_ISO = metadatos.fechaInicio_ISO
                                     const fechaFin_ISO = metadatos.fechaFin_ISO
-
                                     const simboloNumero = metadatos.simboloNumero
                                     const numero = metadatos.numero
-
                                     const contextoAplicacion = metadatos.contextoAplicacion
                                     const estadoInicalDesactivado = "desactivada"
                                     const tipoOferta = metadatos.tipoOferta
                                     const cantidad = metadatos.cantidad
                                     const tipoDescuento = metadatos.tipoDescuento
-
                                     const crearOfertaDesactivada = `
                                     INSERT INTO ofertas
                                     (
@@ -12288,21 +10744,13 @@ const puerto = async (entrada, salida) => {
                                 } catch (error) {
                                     throw error
                                 }
-
-
                             }
-
                             if (tipoOferta === "porNumeroDeApartamentos") {
-
                                 validadores.simboloNumero(simboloNumero)
                                 validadores.numero(numero)
                                 validadores.cantidad(cantidad)
                                 validadores.tipoDescuento(tipoDescuento)
                                 validadores.controlLimitePorcentaje(tipoDescuento, cantidad)
-
-
-
-
                                 const oferta = {
                                     nombreOferta: nombreOferta,
                                     fechaInicio_ISO: fechaInicio_ISO,
@@ -12315,7 +10763,6 @@ const puerto = async (entrada, salida) => {
                                 }
                                 const resolutor = await inertarOfertaValidada(oferta)
                                 salida.json(resolutor)
-
                             }
                             if (tipoOferta === "porApartamentosEspecificos") {
                                 const filtroCadena = /^[a-zA-Z0-9]+$/;
@@ -12328,14 +10775,11 @@ const puerto = async (entrada, salida) => {
                                     const error = "Anada al menos un apartmento dedicado"
                                     throw new Error(error)
                                 }
-
-
                                 validadores.contextoAplicacion(contextoAplicacion)
                                 if (contextoAplicacion === "totalNetoReserva") {
                                     validadores.cantidad(cantidad)
                                     validadores.tipoDescuento(tipoDescuento)
                                     validadores.controlLimitePorcentaje(tipoDescuento, cantidad)
-
                                 }
                                 for (const apartamentoSeleccionado of apartamentosSeleccionados) {
                                     const apartamentoIDV = apartamentoSeleccionado.apartamentoIDV
@@ -12351,7 +10795,6 @@ const puerto = async (entrada, salida) => {
                                         throw new Error(error)
                                     }
                                     if (contextoAplicacion === "totalNetoApartmentoDedicado") {
-
                                         if (!tipoDescuentoApartamento || (tipoDescuentoApartamento !== "cantidadFija" && tipoDescuentoApartamento !== "porcentaje") && tipoDescuentoApartamento !== "precioEstablecido") {
                                             const error = `El apartamento ${apartamentoUI} debe de tener un tipo de descuente seleccionado, revisa los apartamentos para ver si en alguno falta un tipo de descuente`
                                             throw new Error(error)
@@ -12361,10 +10804,8 @@ const puerto = async (entrada, salida) => {
                                             throw new Error(error);
                                         }
                                         validadores.controlLimitePorcentaje(tipoDescuentoApartamento, cantidadPorApartamento)
-
                                     }
                                 }
-
                                 // No pueden existir dos apartamentos o mas iguales
                                 const apartamentosSeleccionadosPreProcesados = apartamentosSeleccionados.map((detallesApartamento) => { return detallesApartamento.apartamentoIDV })
                                 const apartamentosSeleccionadosUnicos = new Set(apartamentosSeleccionadosPreProcesados);
@@ -12374,8 +10815,6 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                                 // que los identificadores no existan.
-
-
                                 const consultaValidarApartamentoIDV = `
                             SELECT
                             "apartamentoIDV"
@@ -12387,18 +10826,12 @@ const puerto = async (entrada, salida) => {
                                 const resuelveConsultaValidarApartamentoIDV = await conexion.query(consultaValidarApartamentoIDV, [apartamentosSeleccionadosPreProcesados])
                                 // Extraer los valores encontrados en la base de datos
                                 const apartamentosIDVEncontrados = resuelveConsultaValidarApartamentoIDV.rows.map(row => row.apartamentoIDV);
-
                                 // Encontrar las cadenas que no coincidieron
                                 const cadenasNoCoincidentes = apartamentosSeleccionadosPreProcesados.filter(apartamentoIDV => !apartamentosIDVEncontrados.includes(apartamentoIDV));
                                 if (cadenasNoCoincidentes.length > 0) {
                                     const error = `Se hace referencia a identificadores visuales de apartamentos que no existen. Por favor revisa los identificadores de los apartamentos a lo que quieres aplicar una oferta por que no existen`
                                     throw new Error(error);
-
                                 }
-
-
-
-
                                 if (contextoAplicacion === "totalNetoApartmentoDedicado") {
                                     cantidad = null
                                 }
@@ -12413,7 +10846,6 @@ const puerto = async (entrada, salida) => {
                                 }
                                 const resolutor = await inertarOfertaValidada(oferta)
                                 const nuevoUIDOferta = resolutor.nuevoUIDOferta
-
                                 for (const apartamentoDedicado of apartamentosSeleccionados) {
                                     const apartamentoIDV = apartamentoDedicado.apartamentoIDV
                                     let tipoDescuento = null
@@ -12446,24 +10878,19 @@ const puerto = async (entrada, salida) => {
                                         cantidadPorApartamento
                                     ]
                                     await conexion.query(ofertaApartamentosDedicados, detallesApartamentoDedicado)
-
                                 }
                                 const ok = {
                                     "ok": "La oferta se ha creado bien",
                                     "nuevoUIDOferta": nuevoUIDOferta
                                 }
                                 salida.json(ok)
-
                             }
                             if (tipoOferta === "porDiasDeAntelacion") {
-
                                 validadores.simboloNumero(simboloNumero)
                                 validadores.numero(numero)
                                 validadores.cantidad(cantidad)
                                 validadores.tipoDescuento(tipoDescuento)
                                 validadores.controlLimitePorcentaje(tipoDescuento, cantidad)
-
-
                                 const oferta = {
                                     nombreOferta: nombreOferta,
                                     fechaInicio_ISO: fechaInicio_ISO,
@@ -12484,9 +10911,6 @@ const puerto = async (entrada, salida) => {
                                 validadores.cantidad(cantidad)
                                 validadores.tipoDescuento(tipoDescuento)
                                 validadores.controlLimitePorcentaje(tipoDescuento, cantidad)
-
-
-
                                 //    simboloNumero = entrada.body.simboloNumero
                                 const oferta = {
                                     nombreOferta: nombreOferta,
@@ -12501,12 +10925,10 @@ const puerto = async (entrada, salida) => {
                                 }
                                 const resolutor = await inertarOfertaValidada(oferta)
                                 salida.json(resolutor)
-
                             }
                             if (tipoOferta === "porRangoDeFechas") {
                                 validadores.tipoDescuento(tipoDescuento)
                                 validadores.cantidad(cantidad)
-
                                 const oferta = {
                                     nombreOferta: nombreOferta,
                                     fechaInicio_ISO: fechaInicio_ISO,
@@ -12518,19 +10940,15 @@ const puerto = async (entrada, salida) => {
                                 const resolutor = await inertarOfertaValidada(oferta)
                                 salida.json(resolutor)
                             }
-
                             await conexion.query('COMMIT'); // Confirmar la transacción
                         } catch (errorCapturado) {
                             await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
                             mutex.release();
-
                         }
                     }
                 },
@@ -12561,17 +10979,13 @@ const puerto = async (entrada, salida) => {
                             }
                             salida.json(ok)
                         }
-
                         if (resuelveListarOfertas.rowCount > 0) {
                             const ofertas = resuelveListarOfertas.rows
                             for (const ofertaDetalles of ofertas) {
                                 const uid = ofertaDetalles.uid
                                 const tipoOferta = ofertaDetalles.tipoOferta
                                 const descuentoAplicadoA = ofertaDetalles.descuentoAplicadoA
-
                                 if (tipoOferta === "porApartamentosEspecificos") {
-
-
                                     //Arreglar esto, esto esta bien es una resolucion en modo joint
                                     const detallesApartamentosDedicados = `
                                     SELECT
@@ -12589,7 +11003,6 @@ const puerto = async (entrada, salida) => {
                                     if (resuelveDetallesApartamentosDedicados.rowCount === 0) {
                                         ofertaDetalles.apartamentosDedicados = []
                                     }
-
                                     if (resuelveDetallesApartamentosDedicados.rowCount > 0) {
                                         const apartamentosDedicados = resuelveDetallesApartamentosDedicados.rows
                                         ofertaDetalles.apartamentosDedicados = []
@@ -12603,32 +11016,25 @@ const puerto = async (entrada, salida) => {
                                                 apartamentoUI: apartamentoUI,
                                                 tipoDescuento: tipoDescuentoApartamento,
                                                 cantidadApartamento: cantidadApartamento
-
                                             }
                                             ofertaDetalles.apartamentosDedicados.push(detallesApartamentoDedicado)
                                         })
                                     }
                                 }
                             }
-
                             const ok = {
                                 ok: ofertas
                             }
                             salida.json(ok)
                         }
-
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
-
                 },
                 detallesOferta: async () => {
-
                     try {
                         const ofertaUID = entrada.body.ofertaUID
                         if (!ofertaUID || typeof ofertaUID !== "number" || !Number.isInteger(ofertaUID) || ofertaUID <= 0) {
@@ -12636,7 +11042,6 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         const detallesOferta = await obtenerDetallesOferta(ofertaUID)
-
                         const ok = {
                             ok: detallesOferta
                         }
@@ -12645,12 +11050,9 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
-
                 },
-
                 opcionesCrearOferta: async () => {
                     try {
                         const opcionesCrearOferta = {}
@@ -12661,7 +11063,6 @@ const puerto = async (entrada, salida) => {
                         "ofertasAplicacion";`
                         const resuelveListaAplicacionOferta = await conexion.query(listaAplicacionOferta)
                         opcionesCrearOferta.aplicacionSobre = resuelveListaAplicacionOferta.rows
-
                         const listaTipoOfertas = `
                         SELECT
                         "tipoOfertaIDV", "tipoOfertaUI"
@@ -12669,7 +11070,6 @@ const puerto = async (entrada, salida) => {
                         "ofertasTipo";`
                         const resuelveListaTipoOfertas = await conexion.query(listaTipoOfertas)
                         opcionesCrearOferta.tipoOfertas = resuelveListaTipoOfertas.rows
-
                         const listaTipoDescuento = `
                         SELECT
                         "tipoDescuentoIDV", "tipoDescuentoUI"
@@ -12677,22 +11077,17 @@ const puerto = async (entrada, salida) => {
                         "ofertasTipoDescuento";`
                         const resuelveListaTipoDescuento = await conexion.query(listaTipoDescuento)
                         opcionesCrearOferta.tipoDescuento = resuelveListaTipoDescuento.rows
-
                         const ok = {
                             ok: opcionesCrearOferta
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
-
                 },
                 actualizarOferta: {
                     IDX: {
@@ -12716,8 +11111,6 @@ const puerto = async (entrada, salida) => {
                             const apartamentosSeleccionados = entrada.body.apartamentosSeleccionados;
                             const filtroCantidad = /^\d+\.\d{2}$/;
                             const filtroNombre = /^[^'"]+$/;
-
-
                             if (!ofertaUID || !Number.isInteger(ofertaUID) || ofertaUID <= 0) {
                                 const error = "El campo ofertaUID tiene que ser un numero, positivo y entero"
                                 throw new Error(error)
@@ -12726,18 +11119,14 @@ const puerto = async (entrada, salida) => {
                                 const error = "El campo nombreOferta no admice comillas simples o dobles"
                                 throw new Error(error)
                             }
-
                             const fechaInicio_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaInicio)).fecha_ISO
                             const fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin)).fecha_ISO
-
                             const fechaInicio_objeto = DateTime.fromISO(fechaInicio_ISO)
                             const fechaFin_objeto = DateTime.fromISO(fechaFin_ISO)
-
                             if (fechaInicio_objeto > fechaFin_objeto) {
                                 const error = "La fecha de inicio de la oferta no puede ser inferior a la fecha del fin de la oferta"
                                 throw new Error(error)
                             }
-
                             if (tipoOferta !== "porNumeroDeApartamentos" &&
                                 tipoOferta !== "porApartamentosEspecificos" &&
                                 tipoOferta !== "porDiasDeAntelacion" &&
@@ -12746,7 +11135,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "No se reconoce el tipo de oferta"
                                 throw new Error(error)
                             }
-
                             const validadoresLocales = {
                                 numero: (numero) => {
                                     numero = Number(numero)
@@ -12786,7 +11174,6 @@ const puerto = async (entrada, salida) => {
                                     }
                                 }
                             }
-
                             // Validar existencia de la oferta y estado
                             const validarNombreOfertaUnico = `
                                 SELECT 
@@ -12799,12 +11186,10 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                             const estadoOferta = consultaValidarNombreOfertaUnico.rows[0].estadoOferta
-
                             if (estadoOferta === "activada") {
                                 const error = "No se puede modificar una oferta activa. Primero desactiva con el boton de estado."
                                 throw new Error(error)
                             }
-
                             const consultaActualizarCompartido = async (metadatos) => {
                                 const nombreOferta = metadatos.nombreOferta
                                 const fechaInicio_ISO = metadatos.fechaInicio_ISO
@@ -12816,7 +11201,6 @@ const puerto = async (entrada, salida) => {
                                 const cantidad = metadatos.cantidad ? metadatos.cantidad : null
                                 const tipoDescuento = metadatos.tipoDescuento
                                 const ofertaUID = metadatos.ofertaUID
-
                                 const actualizarOferta = `
                                    UPDATE ofertas
                                    SET
@@ -12843,32 +11227,25 @@ const puerto = async (entrada, salida) => {
                                     ofertaUID
                                 ]
                                 const resuelve = await conexion.query(actualizarOferta, datos)
-
                                 return resuelve.rows[0]
                             }
-
                             const eliminaPerfilApartamentoEspecificos = async (ofertaUID) => {
                                 const eliminarApartamentosDedicados = `
                             DELETE FROM "ofertasApartamentos"
                             WHERE oferta = $1;`
                                 await conexion.query(eliminarApartamentosDedicados, [ofertaUID])
                             }
-
                             await conexion.query('BEGIN'); // Inicio de la transacción
                             // validadoresCompartidos.contextoAplicacion(contextoAplicacion)
                             if (tipoOferta === "porNumeroDeApartamentos" ||
                                 tipoOferta === "porDiasDeAntelacion" ||
                                 tipoOferta === "porDiasDeReserva") {
-
                                 validadoresLocales.cantidad(cantidad)
                                 cantidad = Number(cantidad)
                                 validadoresLocales.tipoDescuento(tipoDescuento)
                                 validadoresLocales.numero(numero)
                                 validadoresLocales.simboloNumero(simboloNumero)
                                 validadoresLocales.controlLimitePorcentaje(tipoDescuento, cantidad)
-
-
-
                                 eliminaPerfilApartamentoEspecificos(ofertaUID)
                                 const metadatos = {
                                     nombreOferta: nombreOferta,
@@ -12887,18 +11264,14 @@ const puerto = async (entrada, salida) => {
                                 const ok = {
                                     ok: "Se ha acualizado correctamente la oferta",
                                     detallesOferta: await obtenerDetallesOferta(ofertaUID)
-
                                 }
                                 salida.json(ok)
                             }
-
                             if (tipoOferta === "porRangoDeFechas") {
                                 validadoresLocales.cantidad(cantidad)
                                 cantidad = Number(cantidad)
                                 validadoresLocales.tipoDescuento(tipoDescuento)
                                 validadoresLocales.controlLimitePorcentaje(tipoDescuento, cantidad)
-
-
                                 await eliminaPerfilApartamentoEspecificos(ofertaUID)
                                 const metadatos = {
                                     nombreOferta: nombreOferta,
@@ -12914,31 +11287,24 @@ const puerto = async (entrada, salida) => {
                                 }
                                 await consultaActualizarCompartido(metadatos)
                                 await conexion.query('COMMIT');
-
                                 const ok = {
                                     ok: "Se ha acualizado correctamente la oferta"
                                 }
                                 salida.json(ok)
                             }
-
                             if (tipoOferta === "porApartamentosEspecificos") {
                                 validadoresLocales.contextoAplicacion(contextoAplicacion)
-
                                 const filtroCadena = /^[a-zA-Z0-9]+$/;
                                 const filtroCadenaUI = /^[a-zA-Z0-9\s]+$/;
-
                                 if (contextoAplicacion === "totalNetoReserva") {
                                     validadoresLocales.cantidad(cantidad)
                                     cantidad = Number(cantidad)
                                     validadoresLocales.tipoDescuento(tipoDescuento)
                                     validadoresLocales.controlLimitePorcentaje(tipoDescuento, cantidad)
-
                                 }
                                 if (contextoAplicacion === "totalNetoApartmentoDedicado") {
-
                                 }
                                 await eliminaPerfilApartamentoEspecificos(ofertaUID)
-
                                 const metadatos = {
                                     nombreOferta: nombreOferta,
                                     fechaInicio_ISO: fechaInicio_ISO,
@@ -12950,7 +11316,6 @@ const puerto = async (entrada, salida) => {
                                     ofertaUID: ofertaUID,
                                 }
                                 await consultaActualizarCompartido(metadatos)
-
                                 if (typeof apartamentosSeleccionados !== 'object' && !Array.isArray(apartamentosSeleccionados)) {
                                     const error = "El campo apartamentosSeleccionados solo admite un arreglo"
                                     throw new Error(error)
@@ -12959,7 +11324,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "Anada al menos un apartmento dedicado"
                                     throw new Error(error)
                                 }
-
                                 for (const apartamentoSeleccionado of apartamentosSeleccionados) {
                                     const apartamentoIDV = apartamentoSeleccionado.apartamentoIDV
                                     const apartamentoUI = apartamentoSeleccionado.apartamentoUI
@@ -12983,9 +11347,7 @@ const puerto = async (entrada, salida) => {
                                             throw new Error(error);
                                         }
                                         validadoresLocales.controlLimitePorcentaje(tipoDescuentoApartamento, cantidadPorApartamento)
-
                                     }
-
                                 }
                                 for (const apartamentoDedicado of apartamentosSeleccionados) {
                                     const apartamentoIDV = apartamentoDedicado.apartamentoIDV
@@ -12995,7 +11357,6 @@ const puerto = async (entrada, salida) => {
                                         tipoDescuento = apartamentoDedicado.tipoDescuento
                                         cantidadPorApartamento = apartamentoDedicado.cantidad
                                     }
-
                                     const ofertaApartamentosDedicados = `
                                         INSERT INTO "ofertasApartamentos"
                                         (
@@ -13018,7 +11379,6 @@ const puerto = async (entrada, salida) => {
                                         tipoDescuento,
                                         Number(cantidadPorApartamento)
                                     ]
-
                                     await conexion.query(ofertaApartamentosDedicados, detallesApartamentoDedicado)
                                 }
                                 await conexion.query('COMMIT');
@@ -13032,12 +11392,9 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
-
                             mutex.release();
-
                         }
                     }
                 },
@@ -13049,12 +11406,10 @@ const puerto = async (entrada, salida) => {
                     },
                     X: async () => {
                         await mutex.acquire();
-
                         try {
                             const ofertaUID = entrada.body.ofertaUID
                             const estadoOferta = entrada.body.estadoOferta
                             const filtroCadena = /^[a-z]+$/;
-
                             if (!ofertaUID || !Number.isInteger(ofertaUID) || ofertaUID <= 0) {
                                 const error = "El campo ofertaUID tiene que ser un numero, positivo y entero"
                                 throw new Error(error)
@@ -13086,7 +11441,6 @@ const puerto = async (entrada, salida) => {
                                 estadoOferta,
                             ]
                             const resuelveEstadoOferta = await conexion.query(actualizarEstadoOferta, datos)
-
                             const ok = {
                                 "ok": "El estado de la oferta se ha actualziado correctamente",
                                 "estadoOferta": resuelveEstadoOferta.rows[0].estadoOferta
@@ -13095,15 +11449,12 @@ const puerto = async (entrada, salida) => {
                             await conexion.query('COMMIT'); // Confirmar la transacción
                         } catch (errorCapturado) {
                             await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
                             mutex.release();
-
                         }
                     }
                 },
@@ -13115,7 +11466,6 @@ const puerto = async (entrada, salida) => {
                     },
                     X: async () => {
                         await mutex.acquire();
-
                         try {
                             const ofertaUID = entrada.body.ofertaUID
                             if (!ofertaUID || !Number.isInteger(ofertaUID) || ofertaUID <= 0) {
@@ -13146,15 +11496,12 @@ const puerto = async (entrada, salida) => {
                             await conexion.query('COMMIT'); // Confirmar la transacción
                         } catch (errorCapturado) {
                             await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         } finally {
                             mutex.release();
-
                         }
                     }
                 }
@@ -13190,26 +11537,21 @@ const puerto = async (entrada, salida) => {
                             }
                             salida.json(ok)
                         }
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
-
                 },
                 crearComportamiento: async () => {
                     await mutex.acquire();
-
                     try {
                         const nombreComportamiento = entrada.body.nombreComportamiento
                         const fechaInicio = entrada.body.fechaInicio
                         const fechaFin = entrada.body.fechaFin
                         const comportamientos = entrada.body.comportamientos
                         const filtroCantidad = /^\d+\.\d{2}$/;
-
                         const filtroNombre = /^[a-zA-Z0-9\s]+$/;
                         const filtroCadenaSinEspacui = /^[a-z0-9]+$/;
                         if (!nombreComportamiento || !filtroNombre.test(nombreComportamiento)) {
@@ -13225,52 +11567,37 @@ const puerto = async (entrada, salida) => {
                             const error = "el formato fecha de fin no esta correctametne formateado debe ser una cadena asi 00/00/0000"
                             throw new Error(error)
                         }
-
-
                         const fechaInicioArreglo = fechaInicio.split("/")
                         const diaEntrada = fechaInicioArreglo[0]
                         const mesEntrada = fechaInicioArreglo[1]
                         const anoEntrada = fechaInicioArreglo[2]
-
                         const fechaFinArreglo = fechaFin.split("/")
                         const diaSalida = fechaFinArreglo[0]
                         const mesSalida = fechaFinArreglo[1]
                         const anoSalida = fechaFinArreglo[2]
-
                         const fechaInicio_ISO = `${anoEntrada}-${mesEntrada}-${diaEntrada}`
                         const fechaFin_ISO = `${anoSalida}-${mesSalida}-${diaSalida}`
-
-
                         const fechaInicio_Objeto = new Date(fechaInicio_ISO); // El formato es día/mes/ano
                         const fechaFin_Objeto = new Date(fechaFin_ISO);
-
-
                         // validacion: la fecha de entrada no puede ser superior a la fecha de salida y al mimso tiempo la fecha de salida no puede ser inferior a la fecha de entrada
                         if (fechaInicio_Objeto > fechaFin_Objeto) {
                             const error = "La fecha de entrada no puede ser superior que la fecha de salida, si pueden ser iguales para hacer un comportamiento de un solo dia"
                             throw new Error(error)
                         }
-
-
                         if (typeof comportamientos !== 'object' && !Array.isArray(comportamientos)) {
                             const error = "El campo comportamientos solo admite un arreglo"
                             throw new Error(error)
                         }
-
                         if (comportamientos.length === 0) {
                             const error = "Añada al menos un apartmento dedicado"
                             throw new Error(error)
                         }
-
-
                         if (comportamientos.length === 0) {
                             const error = "Anada al menos un apartmento dedicado"
                             throw new Error(error)
                         } else {
                             const identificadoresVisualesEnArray = []
                             comportamientos.forEach((apart) => {
-
-
                                 if (typeof apart !== "object" || Array.isArray(apart) || apart === null) {
                                     const error = "Dentro del array de apartamentos se esperaba un objeto"
                                     throw new Error(error)
@@ -13279,30 +11606,21 @@ const puerto = async (entrada, salida) => {
                                 identificadoresVisualesEnArray.push(apartamentoIDV_preProcesado)
                             })
                             const identificadoresVisualesRepetidos = identificadoresVisualesEnArray.filter((elem, index) => identificadoresVisualesEnArray.indexOf(elem) !== index);
-
-
                             if (identificadoresVisualesRepetidos.length > 0) {
                                 const error = "Existen identificadores visuales repetidos en el array de apartamentos"
                                 throw new Error(error)
                             }
                         }
-
-
-
                         await conexion.query('BEGIN'); // Inicio de la transacción
-
-
                         const apartamentosArreglo = []
                         for (const comportamiento of comportamientos) {
                             const apartamentoIDV = comportamiento.apartamentoIDV
                             const cantidad = comportamiento.cantidad
                             const simbolo = comportamiento.simbolo
-
                             if (!apartamentoIDV || typeof apartamentoIDV !== "string" || !filtroCadenaSinEspacui.test(apartamentoIDV)) {
                                 const error = "El campo apartamentoIDV solo admite minúsculas, numeros y espacios"
                                 throw new Error(error)
                             }
-
                             const validarApartamentoIDV = `
                                   SELECT 
                                   "apartamentoIDV"
@@ -13316,7 +11634,6 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                             const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
                             if (!simbolo || typeof simbolo !== "string" ||
                                 (
                                     simbolo !== "aumentoPorcentaje" &&
@@ -13328,20 +11645,16 @@ const puerto = async (entrada, salida) => {
                                 const error = `El campo simbolo de ${apartamentoUI} solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido`
                                 throw new Error(error)
                             }
-
                             if (!cantidad || typeof cantidad !== "string" || !filtroCantidad.test(cantidad)) {
                                 const error = `El campo cantidad del ${apartamentoUI} solo admite una cadena con un numero con dos decimales separados por punto, es decir 00.00`
                                 throw new Error(error)
                             }
-
                             if (cantidad === "00.00") {
                                 const error = "No se puede asignar una cantidad de cero"
                                 throw new Error(error)
                             }
                             apartamentosArreglo.push(apartamentoIDV)
                         }
-
-
                         // Validar nombre unico oferta
                         const validarNombreComportamiento = `
                         SELECT "nombreComportamiento"
@@ -13353,22 +11666,16 @@ const puerto = async (entrada, salida) => {
                             const error = "Ya existe un nombre exactamente igual a este comportamiento de precio, por favor elige otro nombre con el fin de evitar confusiones"
                             throw new Error(error)
                         }
-
-
                         const validarEspacioTemporalUnico = `
                         SELECT uid 
                         FROM "comportamientoPrecios" 
                         WHERE "fechaInicio" <= $1::DATE AND "fechaFinal" >= $2::DATE;`
-
-
                         const resuelveVevalidarEspacioTemporalUnico = await conexion.query(validarEspacioTemporalUnico, [fechaFin_ISO, fechaInicio_ISO])
                         if (resuelveVevalidarEspacioTemporalUnico.rowCount > 0) {
                             const detallesApartamentosEntontradosPorValidas = []
                             const comportamientoPreciosCocheTemporalPorAnalizar = resuelveVevalidarEspacioTemporalUnico.rows
-
                             for (const apartmentosEnComportamiento of comportamientoPreciosCocheTemporalPorAnalizar) {
                                 const UIDComportamientoChoque = apartmentosEnComportamiento.uid
-
                                 const seleccionarApartamentosPorComportamiento = `
                                 SELECT
                                 cpa."apartamentoIDV", 
@@ -13383,18 +11690,13 @@ const puerto = async (entrada, salida) => {
                                 "comportamientoPrecios" cp ON cpa."comportamientoUID" = cp.uid
                                 WHERE "comportamientoUID" = $1;`
                                 const resuelveSeleccionarApartamentosPorComportamiento = await conexion.query(seleccionarApartamentosPorComportamiento, [UIDComportamientoChoque])
-
-
                                 if (resuelveSeleccionarApartamentosPorComportamiento.rowCount > 0) {
-
                                     // Aqui falta un loop
                                     const apartamentoExistentes = resuelveSeleccionarApartamentosPorComportamiento.rows
                                     apartamentoExistentes.map((apartamentoExistente) => {
-
                                         const apartamentoIDVEntonctrado = apartamentoExistente.apartamentoIDV
                                         const apartamentoUIEncontrado = apartamentoExistente.apartamentoUI
                                         const nombreComportamiento = apartamentoExistente.nombreComportamiento
-
                                         const apartamentoCoincidenteDetalles = {
                                             apartamentoIDV: apartamentoIDVEntonctrado,
                                             apartamentoUI: apartamentoUIEncontrado,
@@ -13404,7 +11706,6 @@ const puerto = async (entrada, salida) => {
                                     })
                                 }
                             }
-
                             const coincidenciasExistentes = []
                             for (const detalleApartemtno of comportamientos) {
                                 const apartamentoIDVSolicitante = detalleApartemtno.apartamentoIDV
@@ -13426,22 +11727,18 @@ const puerto = async (entrada, salida) => {
                             coincidenciasExistentes.map((coincidencia) => {
                                 const apartamentoUI = coincidencia.apartamentoUI
                                 const nombreComportamiento = coincidencia.nombreComportamiento
-
                                 if (coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento]) {
                                     coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento].push(apartamentoUI)
                                 } else {
                                     coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento] = []
                                     coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento].push(apartamentoUI)
                                 }
-
                             })
-
                             const infoFinal = []
                             for (const coincidenciaAgrupada of Object.entries(coincidenciaAgrupdasPorNombreComportamiento)) {
                                 const nombreComportamiento = coincidenciaAgrupada[0]
                                 const apartamentosCoincidentes = coincidenciaAgrupada[1].join(", ")
                                 infoFinal.push(`${nombreComportamiento} (${apartamentosCoincidentes})`)
-
                             }
                             infoFinal.join(", ")
                             if (coincidenciasExistentes.length > 0) {
@@ -13449,10 +11746,7 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-
-
                         const estadoInicalDesactivado = "desactivado"
-
                         const crearComportamiento = `
                         INSERT INTO "comportamientoPrecios"
                         (
@@ -13477,17 +11771,12 @@ const puerto = async (entrada, salida) => {
                             estadoInicalDesactivado
                         ]
                         const resuelveCrearComportamiento = await conexion.query(crearComportamiento, datos)
-
-
                         if (resuelveCrearComportamiento.rowCount === 1) {
                             const nuevoUIDComportamiento = resuelveCrearComportamiento.rows[0].uid
-
                             for (const comportamiento of comportamientos) {
                                 const apartamentoIDV = comportamiento.apartamentoIDV
                                 let cantidad = comportamiento.cantidad
                                 const simbolo = comportamiento.simbolo
-
-
                                 const insertarComportamiento = `
                                 INSERT INTO "comportamientoPreciosApartamentos"
                                 (
@@ -13528,15 +11817,12 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
                         mutex.release();
-
                     }
                 },
                 detallesComportamiento: async () => {
-
                     try {
                         let comportamientoUID = entrada.body.comportamientoUID
                         if (!comportamientoUID || typeof comportamientoUID !== "number" || !Number.isInteger(comportamientoUID) || comportamientoUID <= 0) {
@@ -13568,7 +11854,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe ninguna comportamiento de precio con ese UID"
                             throw new Error(error)
                         }
-
                         if (resuelveConsultaDetallesComportamiento.rowCount === 1) {
                             detallesComportamiento["apartamentos"] = []
                             const detallesApartamentosDedicados = `
@@ -13608,21 +11893,16 @@ const puerto = async (entrada, salida) => {
                                 ok: detallesComportamiento
                             }
                             salida.json(ok)
-
                         }
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
-
                 },
                 actualizarComportamiento: async () => {
                     await mutex.acquire();
-
                     try {
                         const nombreComportamiento = entrada.body.nombreComportamiento
                         const fechaInicio = entrada.body.fechaInicio
@@ -13632,7 +11912,6 @@ const puerto = async (entrada, salida) => {
                         const filtroCantidad = /^\d+\.\d{2}$/;
                         const filtroNombre = /^[a-zA-Z0-9\s]+$/;
                         const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
-
                         if (!comportamientoUID || !Number.isInteger(comportamientoUID) || comportamientoUID <= 0) {
                             const error = "El campo comportamientoUID tiene que ser un numero, positivo y entero"
                             throw new Error(error)
@@ -13650,20 +11929,16 @@ const puerto = async (entrada, salida) => {
                             const error = "el formato fecha de fin no esta correctametne formateado debe ser una cadena asi 00/00/0000"
                             throw new Error(error)
                         }
-
                         if (typeof comportamientos !== 'object' && !Array.isArray(comportamientos)) {
                             const error = "El campo comportamientos solo admite un arreglo"
                             throw new Error(error)
                         }
-
                         if (comportamientos.length === 0) {
                             const error = "Anada al menos un apartmento dedicado"
                             throw new Error(error)
                         } else {
                             const identificadoresVisualesEnArray = []
                             comportamientos.forEach((apart) => {
-
-
                                 if (typeof apart !== "object" || Array.isArray(apart) || apart === null) {
                                     const error = "Dentro del array de apartamentos se esperaba un objeto"
                                     throw new Error(error)
@@ -13672,31 +11947,23 @@ const puerto = async (entrada, salida) => {
                                 identificadoresVisualesEnArray.push(apartamentoIDV_preProcesado)
                             })
                             const identificadoresVisualesRepetidos = identificadoresVisualesEnArray.filter((elem, index) => identificadoresVisualesEnArray.indexOf(elem) !== index);
-
-
                             if (identificadoresVisualesRepetidos.length > 0) {
                                 const error = "Existen identificadores visuales repetidos en el array de apartamentos"
                                 throw new Error(error)
                             }
                         }
-
-
                         const fechaInicioArreglo = fechaInicio.split("/")
                         const diaEntrada = fechaInicioArreglo[0]
                         const mesEntrada = fechaInicioArreglo[1]
                         const anoEntrada = fechaInicioArreglo[2]
-
                         const fechaFinArreglo = fechaFinal.split("/")
                         const diaSalida = fechaFinArreglo[0]
                         const mesSalida = fechaFinArreglo[1]
                         const anoSalida = fechaFinArreglo[2]
-
                         const fechaInicio_ISO = `${anoEntrada}-${mesEntrada}-${diaEntrada}`
                         const fechaFin_ISO = `${anoSalida}-${mesSalida}-${diaSalida}`
-
                         const fechaInicio_Objeto = new Date(fechaInicio_ISO); // El formato es día/mes/ano
                         const fechaFin_Objeto = new Date(fechaFin_ISO);
-
                         if (fechaInicio_Objeto > fechaFin_Objeto) {
                             const error = "La fecha de entrada no puede ser superior que la fecha de salida"
                             throw new Error(error)
@@ -13705,7 +11972,6 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo comportamientos solo admite un arreglo"
                             throw new Error(error)
                         }
-
                         if (comportamientos.length === 0) {
                             const error = "Anada al menos un apartmento dedicado"
                             throw new Error(error)
@@ -13715,7 +11981,6 @@ const puerto = async (entrada, salida) => {
                             const apartamentoIDV = comportamiento.apartamentoIDV
                             const cantidad = comportamiento.cantidad
                             const simbolo = comportamiento.simbolo
-
                             if (!apartamentoIDV || typeof apartamentoIDV !== "string" || !filtroCadenaSinEspacio.test(apartamentoIDV)) {
                                 const error = "El campo apartamentoIDV solo admite minúsculas, numeros y espacios"
                                 throw new Error(error)
@@ -13735,7 +12000,6 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                             const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
                             if (!simbolo || typeof simbolo !== "string" ||
                                 (
                                     simbolo !== "aumentoPorcentaje" &&
@@ -13744,24 +12008,19 @@ const puerto = async (entrada, salida) => {
                                     simbolo !== "reducirPorcentaje" &&
                                     simbolo !== "precioEstablecido"
                                 )) {
-
                                 const error = `El campo simbolo de ${apartamentoUI} solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido`
                                 throw new Error(error)
                             }
-
-
                             if (!cantidad || typeof cantidad !== "string" || !filtroCantidad.test(cantidad)) {
                                 const error = `El campo cantidad del ${apartamentoUI} solo admite una cadena con un numero con dos decimales separados por punto, es decir 00.00`
                                 throw new Error(error)
                             }
-
                             if (cantidad === "00.00") {
                                 const error = "No se puede asignar una cantidad de cero"
                                 throw new Error(error)
                             }
                             apartamentosArreglo.push(apartamentoIDV)
                         }
-
                         // Validar nombre unico oferta
                         const validarComportamiento = `
                         SELECT 
@@ -13784,15 +12043,12 @@ const puerto = async (entrada, salida) => {
                         SELECT uid 
                         FROM "comportamientoPrecios" 
                         WHERE "fechaInicio" <= $1::DATE AND "fechaFinal" >= $2::DATE AND uid <> $3;`
-
                         const resuelveVevalidarEspacioTemporalUnico = await conexion.query(validarEspacioTemporalUnico, [fechaFin_ISO, fechaInicio_ISO, comportamientoUID])
                         if (resuelveVevalidarEspacioTemporalUnico.rowCount > 0) {
                             const detallesApartamentosEntontradosPorValidas = []
                             const comportamientoPreciosCocheTemporalPorAnalizar = resuelveVevalidarEspacioTemporalUnico.rows
-
                             for (const apartmentosEnComportamiento of comportamientoPreciosCocheTemporalPorAnalizar) {
                                 const UIDComportamientoChoque = apartmentosEnComportamiento.uid
-
                                 const seleccionarApartamentosPorComportamiento = `
                                 SELECT
                                 cpa."apartamentoIDV", 
@@ -13808,37 +12064,28 @@ const puerto = async (entrada, salida) => {
                                 WHERE "comportamientoUID" = $1;`
                                 const resuelveSeleccionarApartamentosPorComportamiento = await conexion.query(seleccionarApartamentosPorComportamiento, [UIDComportamientoChoque])
                                 if (resuelveSeleccionarApartamentosPorComportamiento.rowCount > 0) {
-
                                     const apartamentoExistentes = resuelveSeleccionarApartamentosPorComportamiento.rows
                                     apartamentoExistentes.map((apartamentoExistente) => {
-
                                         const apartamentoIDVEntonctrado = apartamentoExistente.apartamentoIDV
                                         const apartamentoUIEncontrado = apartamentoExistente.apartamentoUI
                                         const nombreComportamiento = apartamentoExistente.nombreComportamiento
-
                                         const apartamentoCoincidenteDetalles = {
                                             apartamentoIDV: apartamentoIDVEntonctrado,
                                             apartamentoUI: apartamentoUIEncontrado,
                                             nombreComportamiento: nombreComportamiento,
                                         }
                                         detallesApartamentosEntontradosPorValidas.push(apartamentoCoincidenteDetalles)
-
                                     })
                                 }
                             }
-
                             const coincidenciasExistentes = []
-
                             for (const detalleApartemtno of comportamientos) {
                                 const apartamentoIDVSolicitante = detalleApartemtno.apartamentoIDV
-
                                 for (const detalleApartamentoYaExistente of detallesApartamentosEntontradosPorValidas) {
                                     const apartamentoIDVExistente = detalleApartamentoYaExistente.apartamentoIDV
                                     const nombreComportamiento = detalleApartamentoYaExistente.nombreComportamiento
                                     const apartamentoUIExistente = detalleApartamentoYaExistente.apartamentoUI
-
                                     if (apartamentoIDVSolicitante === apartamentoIDVExistente) {
-
                                         const apartamentoImposibleDeGuardar = {
                                             apartamentoIDV: apartamentoIDVExistente,
                                             apartamentoUI: apartamentoUIExistente,
@@ -13848,20 +12095,16 @@ const puerto = async (entrada, salida) => {
                                     }
                                 }
                             }
-
                             const coincidenciaAgrupdasPorNombreComportamiento = {}
-
                             coincidenciasExistentes.map((coincidencia) => {
                                 const apartamentoUI = coincidencia.apartamentoUI
                                 const nombreComportamiento = coincidencia.nombreComportamiento
-
                                 if (coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento]) {
                                     coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento].push(apartamentoUI)
                                 } else {
                                     coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento] = []
                                     coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento].push(apartamentoUI)
                                 }
-
                             })
                             const infoFinal = []
                             for (const coincidenciaAgrupada of Object.entries(coincidenciaAgrupdasPorNombreComportamiento)) {
@@ -13875,7 +12118,6 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         const actualizarComportamiento = `
                         UPDATE "comportamientoPrecios"
@@ -13891,7 +12133,6 @@ const puerto = async (entrada, salida) => {
                         ]
                         const resuelveActualizarComportamiento = await conexion.query(actualizarComportamiento, datos)
                         if (resuelveActualizarComportamiento.rowCount === 1) {
-
                             const eliminarComportamiento = `
                             DELETE FROM "comportamientoPreciosApartamentos"
                             WHERE "comportamientoUID" = $1 ;
@@ -13900,11 +12141,9 @@ const puerto = async (entrada, salida) => {
                             const filtroCadenaSinEspacui = /^[a-z0-9]+$/;
                             const apartamentosInsertados = []
                             for (const comportamiento of comportamientos) {
-
                                 const apartamentoIDV = comportamiento.apartamentoIDV
                                 const simbolo = comportamiento.simbolo
                                 let cantidadPorApartamento = comportamiento.cantidad
-
                                 if (!apartamentoIDV || !filtroCadenaSinEspacui.test(apartamentoIDV)) {
                                     const error = "El campo apartamentoIDV solo admite minúsculas, numeros y espacios"
                                     throw new Error(error)
@@ -13920,18 +12159,15 @@ const puerto = async (entrada, salida) => {
                                     const error = "El campo simbolo solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido"
                                     throw new Error(error)
                                 }
-
                                 if (!cantidadPorApartamento || !filtroCantidad.test(cantidadPorApartamento)) {
                                     const error = "El campo cantidad solo admite una cadena con un numero con dos decimales separados por punto. Asegurate de escribir los decimales"
                                     throw new Error(error)
                                 }
-
                                 cantidadPorApartamento = Number(cantidadPorApartamento)
                                 if (cantidadPorApartamento === 0) {
                                     const error = "No se puede asignar una cantidad de cero por seguridad"
                                     throw new Error(error)
                                 }
-
                                 const actualizarComportamientoDedicado = `
                                     INSERT INTO "comportamientoPreciosApartamentos"
                                 (
@@ -13955,17 +12191,13 @@ const puerto = async (entrada, salida) => {
                                     simbolo,
                                     cantidadPorApartamento,
                                     comportamientoUID
-
                                 ]
-
                                 const resuelveApartamento = await conexion.query(actualizarComportamientoDedicado, comportamientoDedicado)
                                 apartamentosInsertados.push(resuelveApartamento.rows[0])
-
                                 for (const detallesDelComportamiento of apartamentosInsertados) {
                                     const apartamentoIDV__ = detallesDelComportamiento.apartamentoIDV
                                     detallesDelComportamiento.apartamentoUI = await resolverApartamentoUI(apartamentoIDV__)
                                 }
-
                             }
                             await conexion.query('COMMIT'); // Confirmar la transacción
                             const ok = {
@@ -13976,20 +12208,16 @@ const puerto = async (entrada, salida) => {
                         }
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
                         mutex.release();
-
                     }
                 },
                 eliminarComportamiento: async () => {
                     await mutex.acquire();
-
                     try {
                         const comportamientoUID = entrada.body.comportamientoUID
                         if (!comportamientoUID || !Number.isInteger(comportamientoUID) || comportamientoUID <= 0) {
@@ -14019,29 +12247,23 @@ const puerto = async (entrada, salida) => {
                             }
                             salida.json(ok)
                         }
-
                         await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
                         mutex.release();
-
                     }
                 },
                 actualizarEstadoComportamiento: async () => {
                     await mutex.acquire();
-
                     try {
                         const comportamientoUID = entrada.body.comportamientoUID
                         const estadoPropuesto = entrada.body.estadoPropuesto
                         const filtroCadena = /^[a-z]+$/;
-
                         if (!comportamientoUID || !Number.isInteger(comportamientoUID) || comportamientoUID <= 0) {
                             const error = "El campo comportamientoUID tiene que ser un numero, positivo y entero"
                             throw new Error(error)
@@ -14073,7 +12295,6 @@ const puerto = async (entrada, salida) => {
                             comportamientoUID
                         ]
                         const resuelveEstadoOferta = await conexion.query(actualizarEstadoOferta, datos)
-
                         const ok = {
                             ok: "El estado del comportamiento se ha actualziado correctamente",
                             estadoComportamiento: resuelveEstadoOferta.rows[0].estado
@@ -14082,15 +12303,12 @@ const puerto = async (entrada, salida) => {
                         await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
                         mutex.release();
-
                     }
                 },
                 precioRangoApartamentos: async () => {
@@ -14098,9 +12316,7 @@ const puerto = async (entrada, salida) => {
                         const fechaEntrada = entrada.body.fechaEntrada
                         const fechaSalida = entrada.body.fechaSalida
                         const apartamentosIDVArreglo = entrada.body.apartamentosIDVArreglo
-
                         const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
-
                         const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
                         if (!filtroFecha.test(fechaEntrada)) {
                             const error = "el formato fecha de inicio no esta correctametne formateado debe ser una cadena asi 00/00/0000"
@@ -14110,17 +12326,14 @@ const puerto = async (entrada, salida) => {
                             const error = "el formato fecha de fin no esta correctametne formateado debe ser una cadena asi 00/00/0000"
                             throw new Error(error)
                         }
-
                         if (typeof apartamentosIDVArreglo !== 'object' && !Array.isArray(apartamentosIDVArreglo)) {
                             const error = "El campo apartamentosIDVArreglo solo admite un arreglo"
                             throw new Error(error)
                         }
-
                         if (apartamentosIDVArreglo.length === 0) {
                             const error = "Anada al menos un apartmentoIDV en el arreglo"
                             throw new Error(error)
                         }
-
                         for (const apartamentoIDV of apartamentosIDVArreglo) {
                             if (!filtroCadenaSinEspacio.test(apartamentoIDV)) {
                                 const error = "El identificador visual del apartmento, el apartmentoIDV solo puede estar hecho de minuscuals y numeros y nada mas, ni espacios"
@@ -14132,23 +12345,17 @@ const puerto = async (entrada, salida) => {
                             fechaSalida: fechaSalida,
                             apartamentosIDVArreglo: apartamentosIDVArreglo
                         }
-
                         const preciosApartamentosResuelos = await precioRangoApartamento(metadatos)
-
                         const ok = {
                             ok: preciosApartamentosResuelos
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
-
                     }
-
                 }
             },
             bloqueos: {
@@ -14165,7 +12372,6 @@ const puerto = async (entrada, salida) => {
                     X: async () => {
                         try {
                             await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
-
                             const consultaApartamentosConBloqueo = `
                         SELECT
                         uid,
@@ -14185,12 +12391,10 @@ const puerto = async (entrada, salida) => {
                                 bloqueosEncontrados.map((detalleBloqueo) => {
                                     const apartamento = detalleBloqueo.apartamento
                                     apartamentosEncontradosConDuplicados.push(apartamento)
-
                                 })
                                 const apartamentosEncontrados = [...new Set(apartamentosEncontradosConDuplicados)];
                                 const estructuraSalidaFinal = []
                                 for (const apartamento of apartamentosEncontrados) {
-
                                     const apartamentoUI = await resolverApartamentoUI(apartamento)
                                     const conteoDeBloqueosPorApartamento = `
                                 SELECT
@@ -14213,11 +12417,8 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
-
                         }
-
                     }
                 },
                 listaBloquoeosDelApartamento: {
@@ -14236,9 +12437,7 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                             await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
-
                             const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
                             const consultaDetallesBloqueoApartamento = `
                         SELECT
                         uid,
@@ -14252,11 +12451,9 @@ const puerto = async (entrada, salida) => {
                         WHERE apartamento = $1;`
                             const resuelveBloqueosPorApartmento = await conexion.query(consultaDetallesBloqueoApartamento, [apartamentoIDV])
                             const ok = {}
-
                             if (resuelveBloqueosPorApartmento.rowCount === 0) {
                                 ok.ok = "No hay ningun bloqueo para el apartamento " + apartamentoUI
                             }
-
                             if (resuelveBloqueosPorApartmento.rowCount > 0) {
                                 const bloqueosEncontradosDelApartamento = resuelveBloqueosPorApartmento.rows
                                 const bloqueosDelApartamentoEntonctrado = []
@@ -14267,7 +12464,6 @@ const puerto = async (entrada, salida) => {
                                     const salida = bloqueoDelApartamento.salida
                                     const motivo = bloqueoDelApartamento.motivo
                                     const zona = bloqueoDelApartamento.zona
-
                                     const estructuraBloqueo = {
                                         uidBloqueo: uidBloqueo,
                                         tipoBloqueo: tipoBloqueo,
@@ -14287,11 +12483,8 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
-
                         }
-
                     }
                 },
                 detallesDelBloqueo: {
@@ -14310,15 +12503,12 @@ const puerto = async (entrada, salida) => {
                                 const error = "el campo 'apartmentoIDV' solo puede ser una cadena de letras minúsculas y numeros sin espacios."
                                 throw new Error(error)
                             }
-
                             if (typeof bloqueoUID !== "number" || !Number.isInteger(bloqueoUID) && bloqueoUID <= 0) {
                                 const error = "la clave 'bloqueoUID' debe de tener un dato tipo 'number', positivo y entero"
                                 throw new Error(error)
                             }
                             await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
-
                             const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
                             const consultaDetallesBloqueo = `
                         SELECT
                         uid,
@@ -14331,22 +12521,18 @@ const puerto = async (entrada, salida) => {
                         FROM "bloqueosApartamentos"
                         WHERE apartamento = $1 AND uid = $2;`
                             const resuelveConsultaDetallesBloqueo = await conexion.query(consultaDetallesBloqueo, [apartamentoIDV, bloqueoUID])
-
                             if (resuelveConsultaDetallesBloqueo.rowCount === 0) {
                                 const error = "No existe el bloqueo, comprueba el apartamentoIDV y el bloqueoUID"
                                 throw new Error(error)
                             }
-
                             if (resuelveConsultaDetallesBloqueo.rowCount === 1) {
                                 const bloqueosEncontradosDelApartamento = resuelveConsultaDetallesBloqueo.rows[0]
-
                                 const uidBloqueo = bloqueosEncontradosDelApartamento.uid
                                 const tipoBloqueo = bloqueosEncontradosDelApartamento.tipoBloqueo
                                 const entrada = bloqueosEncontradosDelApartamento.entrada
                                 const salida_ = bloqueosEncontradosDelApartamento.salida
                                 const motivo = bloqueosEncontradosDelApartamento.motivo
                                 const zona = bloqueosEncontradosDelApartamento.zona
-
                                 const estructuraBloqueo = {
                                     uidBloqueo: uidBloqueo,
                                     tipoBloqueo: tipoBloqueo,
@@ -14360,14 +12546,11 @@ const puerto = async (entrada, salida) => {
                                 ok.apartamentoUI = apartamentoUI
                                 ok.ok = estructuraBloqueo
                                 salida.json(ok)
-
                             }
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     }
@@ -14385,7 +12568,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "la clave 'bloqueoUID' debe de tener un dato tipo 'number', positivo y entero"
                                 throw new Error(error)
                             }
-
                             const seleccionarBloqueo = await conexion.query(`SELECT uid, apartamento FROM "bloqueosApartamentos" WHERE uid = $1`, [bloqueoUID])
                             if (seleccionarBloqueo.rowCount === 0) {
                                 const error = "No existe el bloqueo que se desea eliminar"
@@ -14394,7 +12576,6 @@ const puerto = async (entrada, salida) => {
                             const apartmamentoIDV = seleccionarBloqueo.rows[0].apartamento
                             const ContarBloqueosPorApartamento = await conexion.query(`SELECT apartamento FROM "bloqueosApartamentos" WHERE apartamento = $1`, [apartmamentoIDV])
                             let tipoDeRetroceso
-
                             if (ContarBloqueosPorApartamento.rowCount === 1) {
                                 tipoDeRetroceso = "aPortada"
                             }
@@ -14421,18 +12602,15 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     }
                 },
                 eliminarBloqueoCaducado: async () => {
                     try {
-
                         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                         const tiempoZH = DateTime.now().setZone(zonaHoraria);
                         const fechaActual_ISO = tiempoZH.toISODate()
-
                         const eliminarBloqueo = `
                         DELETE FROM "bloqueosApartamentos"
                         WHERE salida < $1;
@@ -14452,16 +12630,12 @@ const puerto = async (entrada, salida) => {
                         try {
                             const bloqueoUID = entrada.body.bloqueoUID
                             const tipoBloqueo = entrada.body.tipoBloqueo
-
-
                             const motivo = entrada.body.motivo
                             const zona = entrada.body.zonaBloqueo
-
                             if (typeof bloqueoUID !== "number" || !Number.isInteger(bloqueoUID) && bloqueoUID <= 0) {
                                 const error = "la clave 'bloqueoUID' debe de tener un dato tipo 'number', positivo y entero"
                                 throw new Error(error)
                             }
-
                             if (tipoBloqueo !== "permanente" && tipoBloqueo !== "rangoTemporal") {
                                 const error = "tipoBloqueo solo puede ser permanente o rangoTemporal"
                                 throw new Error(error)
@@ -14470,39 +12644,28 @@ const puerto = async (entrada, salida) => {
                                 const error = "zona solo puede ser global, publico o privado"
                                 throw new Error(error)
                             }
-
                             const filtroTextoSimple = /^[^'"]+$/;
-
                             const validarFechaInicioSuperiorFechaFinal = async (fechaInicio_ISO, fechaFin_ISO) => {
                                 const fechaInicio_Objeto = DateTime.fromISO(fechaInicio_ISO)
                                 const fechaFin_Objeto = DateTime.fromISO(fechaFin_ISO)
-
                                 if (fechaInicio_Objeto > fechaFin_Objeto) {
                                     const error = "La fecha de inicio del bloqueo no puede ser inferior a la fecha de fin del bloqueo, si puede ser igual para determinar un solo dia"
                                     throw new Error(error)
                                 }
-
                                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                                 const tiempoZH = DateTime.now().setZone(zonaHoraria).startOf('day');
                                 const fechaFin_TZ_Objeto = DateTime.fromISO(fechaFin_ISO, { zone: zonaHoraria });
-
-
                                 if (tiempoZH > fechaFin_TZ_Objeto) {
                                     const error = "La fecha de fin del bloqueo no puede ser inferior a la fecha actual porque estarías creando un bloqueo enteramente en el pasado. Puedes crear un bloqueo que empieza en el pasado, pero debe que acabar en el futuro o en hoy. Los bloqueo que acaban en el pasado son automaticamente borrados por ser bloqueos caducos."
                                     throw new Error(error)
                                 }
-
                             }
-
                             await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
-
                             let fechaInicio_ISO = null
                             let fechaFin_ISO = null
                             if (tipoBloqueo === "rangoTemporal") {
                                 const fechaInicio_Humano = entrada.body.fechaInicio
                                 const fechaFin_Humano = entrada.body.fechaFin
-
-
                                 const consultaFechasBloqueoActual = `
                             SELECT
                             to_char(entrada, 'DD/MM/YYYY') as "fechaInicioBloqueo_ISO", 
@@ -14514,33 +12677,24 @@ const puerto = async (entrada, salida) => {
                                 const validarFechaInicioExistente = await conexion.query(consultaFechasBloqueoActual, [bloqueoUID])
                                 const fechaInicioBloqueo_ISO = validarFechaInicioExistente.rows[0].fechaInicioBloqueo_ISO
                                 const fechaFinBloqueo_ISO = validarFechaInicioExistente.rows[0].fechaFinBloqueo_ISO
-
-
-
                                 if (fechaInicio_Humano !== null) {
                                     fechaInicio_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaInicio_Humano)).fecha_ISO
                                     await validarFechaInicioSuperiorFechaFinal(fechaInicio_ISO, fechaFinBloqueo_ISO)
-
                                 }
                                 if (fechaFin_Humano !== null) {
                                     fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin_Humano)).fecha_ISO
                                     await validarFechaInicioSuperiorFechaFinal(fechaInicioBloqueo_ISO, fechaFin_ISO)
-
                                 }
-
                             }
-
                             if (motivo && !filtroTextoSimple.test(motivo)) {
                                 const error = "Por temas de seguridad ahora mismo en el campo motivo, solo pueden aceptarse minúsculas, mayúsculas, espacio y numeros. Mas adelante se aceptaran todos los caracteres"
                                 throw new Error(error)
                             }
-
                             const seleccionarBloqueo = await conexion.query(`SELECT uid FROM "bloqueosApartamentos" WHERE uid = $1`, [bloqueoUID])
                             if (seleccionarBloqueo.rowCount === 0) {
                                 const error = "No existe el bloqueo, revisa el bloqueoUID"
                                 throw new Error(error)
                             }
-
                             const modificarBloqueo = `
                         UPDATE "bloqueosApartamentos"
                         SET 
@@ -14551,7 +12705,6 @@ const puerto = async (entrada, salida) => {
                         zona = COALESCE($5, zona)
                         WHERE uid = $6;
                         `
-
                             const datosParaActualizar = [
                                 tipoBloqueo,
                                 fechaInicio_ISO,
@@ -14575,7 +12728,6 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     }
@@ -14592,15 +12744,12 @@ const puerto = async (entrada, salida) => {
                             let tipoBloqueo = entrada.body.tipoBloqueo
                             let motivo = entrada.body.motivo
                             let zonaUI = entrada.body.zonaUI
-
-
                             const filtroApartamentoIDV = /^[a-z0-9]+$/;
                             if (!apartamentoIDV || typeof apartamentoIDV !== "string" || !filtroApartamentoIDV.test(apartamentoIDV)) {
                                 const error = "el campo 'apartmentoIDV' solo puede ser letras minúsculas y numeros. Sin pesacios en formato cadena"
                                 throw new Error(error)
                             }
                             await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
-
                             const validarApartamenotIDV = `
                         SELECT
                         *
@@ -14611,7 +12760,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "No existe el identificador del apartamento"
                                 throw new Error(error)
                             }
-
                             if (tipoBloqueo !== "permanente" && tipoBloqueo !== "rangoTemporal") {
                                 const error = "tipoBloqueo solo puede ser permanente o rangoTemporal"
                                 throw new Error(error)
@@ -14626,39 +12774,30 @@ const puerto = async (entrada, salida) => {
                             if (tipoBloqueo === "rangoTemporal") {
                                 const fechaInicio = entrada.body.fechaInicio
                                 const fechaFin = entrada.body.fechaFin
-
                                 fechaInicio_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaInicio)).fecha_ISO
                                 fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin)).fecha_ISO
-
                                 const fechaInicio_Objeto = DateTime.fromISO(fechaInicio_ISO);
                                 const fechaFin_Objeto = DateTime.fromISO(fechaFin_ISO);
-
                                 if (fechaInicio_Objeto > fechaFin_Objeto) {
                                     const error = "La fecha de inicio del bloqueo no puede ser inferior a la fecha de fin del bloqueo, si puede ser igual para determinar un solo día."
                                     throw new Error(error)
                                 }
-
                                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                                 const tiempoZH = DateTime.now().setZone(zonaHoraria).startOf('day');
                                 const fechaFin_TZ_Objeto = DateTime.fromISO(fechaFin_ISO, { zone: zonaHoraria });
-
-
                                 if (tiempoZH > fechaFin_TZ_Objeto) {
                                     const error = "La fecha de fin del bloqueo no puede ser inferior a la fecha actual porque estarías creando un bloqueo enteramente en el pasado. Puedes crear un bloqueo que empieza en el pasado, pero debe que acabar en el futuro o en hoy. Los bloqueo que acaban en el pasado son automaticamente borrados por ser bloqueos caducos."
                                     throw new Error(error)
                                 }
                             }
-
                             if (motivo) {
                                 if (!filtroTextoSimple.test(motivo)) {
                                     const error = "Por temas de seguridad ahora mismo en el campo motivo, solo pueden aceptarse minúsculas, mayúsculas, espacio y números. Mas adelante se aceptarán todos los caracteres."
                                     throw new Error(error)
                                 }
-
                             } else {
                                 motivo = null
                             }
-
                             const insertarNuevoBloqueo = `
                             INSERT INTO "bloqueosApartamentos"
                             (
@@ -14684,7 +12823,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "No se ha podido insertar el nuevo bloqueo"
                                 throw new Error(error)
                             }
-
                             if (resuelveInsertarNuevoBloqueo.rowCount === 1) {
                                 const nuevoUIDBloqueo = resuelveInsertarNuevoBloqueo.rows[0].uid
                                 const ok = {
@@ -14694,12 +12832,10 @@ const puerto = async (entrada, salida) => {
                                 }
                                 salida.json(ok)
                             }
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     }
@@ -14709,7 +12845,6 @@ const puerto = async (entrada, salida) => {
                 obtenerEnlaces: async () => {
                     try {
                         await controlCaducidadEnlacesDePago()
-
                         const consultaEnlaces = `
                         SELECT
                         "nombreEnlace", 
@@ -14729,7 +12864,6 @@ const puerto = async (entrada, salida) => {
                         }
                         if (resuelveConsultaEnlaces.rowCount > 0) {
                             const enlacesGenerados = resuelveConsultaEnlaces.rows
-
                             for (const detallesEnlace of enlacesGenerados) {
                                 const nombreEnlace = detallesEnlace.nombreEnlace
                                 const enlaceUID = detallesEnlace.enlaceUID
@@ -14753,7 +12887,6 @@ const puerto = async (entrada, salida) => {
                                 if (resuelveConsultaPrecioCentralizado.rowCount === 1) {
                                     precio = resuelveConsultaPrecioCentralizado.rows[0].totalConImpuestos
                                 }
-
                                 const estructuraFinal = {
                                     enlaceUID: enlaceUID,
                                     nombreEnlace: nombreEnlace,
@@ -14766,16 +12899,13 @@ const puerto = async (entrada, salida) => {
                                 }
                                 ok.ok.push(estructuraFinal)
                             }
-
                         }
                         salida.json(ok)
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
-
                     }
                 },
                 detallesDelEnlace: async () => {
@@ -14787,7 +12917,6 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         await controlCaducidadEnlacesDePago()
-
                         const consultaDetallesEnlace = `
                         SELECT
                         "nombreEnlace", 
@@ -14799,7 +12928,6 @@ const puerto = async (entrada, salida) => {
                         FROM "enlacesDePago"
                         WHERE "enlaceUID" = $1;`
                         const resuelveConsultaDetallesEnlace = await conexion.query(consultaDetallesEnlace, [enlaceUID])
-
                         if (resuelveConsultaDetallesEnlace.rowCount === 0) {
                             const error = "noExisteElEnlace"
                             throw new Error(error)
@@ -14812,23 +12940,16 @@ const puerto = async (entrada, salida) => {
                             const reserva = detallesEnlace.reserva
                             const cantidad = detallesEnlace.cantidad
                             const caducidad = detallesEnlace.caducidad
-
-
                             const caducidadUTC = utilidades.convertirFechaUTCaHumano(caducidad)
-
-
                             const caducidadMadrid = utilidades.deUTCaZonaHoraria(caducidad, "Europe/Madrid")
                             const caducidadNicaragua = utilidades.deUTCaZonaHoraria(caducidad, "America/Managua")
-
                             const consultaEstadoPago = `
                             SELECT
                             "estadoPago"
                             FROM reservas
                             WHERE reserva = $1;`
-
                             const resuelveConsultaEstadoPago = await conexion.query(consultaEstadoPago, [reserva])
                             const estadoPago = resuelveConsultaEstadoPago.rows[0].estadoPago
-
                             const ok = {
                                 ok: {
                                     enlaceUID: enlaceUID,
@@ -14852,20 +12973,17 @@ const puerto = async (entrada, salida) => {
                         } else {
                             error.error = errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 },
                 eliminarEnlace: async () => {
                     try {
                         const enlaceUID = entrada.body.enlaceUID
-
                         const filtroCadena = /^[0-9]+$/;
                         if (!enlaceUID || !filtroCadena.test(enlaceUID)) {
                             const error = "el campo 'enlaceUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios."
                             throw new Error(error)
                         }
-
                         const seleccionarEnlace = await conexion.query(`SELECT reserva FROM "enlacesDePago" WHERE "enlaceUID" = $1`, [enlaceUID])
                         if (seleccionarEnlace.rowCount === 0) {
                             const error = "No existe el enlace de pago"
@@ -14890,7 +13008,6 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 },
@@ -14901,14 +13018,11 @@ const puerto = async (entrada, salida) => {
                         const cantidad = entrada.body.cantidad
                         let horasCaducidad = entrada.body.horasCaducidad
                         const descripcion = entrada.body.descripcion
-
                         const filtroCadena = /^[0-9]+$/;
-
                         if (!enlaceUID || !filtroCadena.test(enlaceUID)) {
                             const error = "el campo 'enlaceUID' solo puede ser una cadena de numeros."
                             throw new Error(error)
                         }
-
                         const filtroTextoSimple = /^[a-zA-Z0-9\s]+$/;
                         if (!nombreEnlace || !filtroTextoSimple.test(nombreEnlace)) {
                             const error = "el campo 'nombreEnlace' solo puede ser una cadena de letras minúsculas y numeros sin espacios."
@@ -14920,7 +13034,6 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-
                         if (horasCaducidad) {
                             if (!filtroCadena.test(horasCaducidad)) {
                                 const error = "el campo cantidad solo puede ser una cadena de numeros con dos decimales separados por punto, ejemplo 10.00."
@@ -14934,7 +13047,6 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         await controlCaducidadEnlacesDePago()
-
                         const validarEnlaceUID = await conexion.query(`SELECT reserva FROM "enlacesDePago" WHERE "enlaceUID" = $1`, [enlaceUID])
                         if (validarEnlaceUID.rowCount === 0) {
                             const error = "No existe el enlace de pago verifica el enlaceUID"
@@ -14950,7 +13062,6 @@ const puerto = async (entrada, salida) => {
                         caducidad = $4
                         WHERE reserva = $5;
                         `
-
                         const datosParaActualizar = [
                             nombreEnlace,
                             descripcion,
@@ -14972,7 +13083,6 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 },
@@ -14982,11 +13092,9 @@ const puerto = async (entrada, salida) => {
                         const reservaUID = entrada.body.reservaUID
                         const cantidad = entrada.body.cantidad
                         let horasCaducidad = entrada.body.horasCaducidad
-
                         const filtroCadena = /^[0-9]+$/;
                         const filtroDecimales = /^\d+\.\d{2}$/;
                         const filtroTextoSimple = /^[a-zA-Z0-9\s]+$/;
-
                         if (horasCaducidad) {
                             if (!filtroCadena.test(horasCaducidad)) {
                                 const error = "el campo cantidad solo puede ser una cadena de numeros con dos decimales separados por punto, ejemplo 10.00."
@@ -14995,7 +13103,6 @@ const puerto = async (entrada, salida) => {
                         } else {
                             horasCaducidad = 72
                         }
-
                         if (!cantidad || !filtroDecimales.test(cantidad)) {
                             const error = "el campo cantidad solo puede ser una cadena de numeros con dos decimales separados por punto, ejemplo 10.00."
                             throw new Error(error)
@@ -15008,7 +13115,6 @@ const puerto = async (entrada, salida) => {
                         } else {
                             nombreEnlace = `Enlace de pago de la reserva ${reservaUID}`
                         }
-
                         const descripcion = entrada.body.descripcion
                         if (descripcion) {
                             if (!filtroTextoSimple.test(descripcion)) {
@@ -15018,7 +13124,6 @@ const puerto = async (entrada, salida) => {
                         }
                         await controlCaducidadEnlacesDePago()
                         const resuelveValidarReserva = await validadoresCompartidos.reservas.validarReserva(reservaUID)
-
                         const estadoReserva = resuelveValidarReserva.estadoReserva
                         const estadoPago = resuelveValidarReserva.estadoPago
                         if (estadoReserva === "cancelada") {
@@ -15029,18 +13134,15 @@ const puerto = async (entrada, salida) => {
                             const error = "No se puede generar un enlace de pago una reserva que no esta confirmada por que entonces el cliente podria pagar una reserva cuyo alojamiento no esta garantizado, reservado sin pagar vamos"
                             throw new Error(error)
                         }
-
                         const generarCadenaAleatoria = (longitud) => {
                             const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
                             let cadenaAleatoria = '';
-
                             for (let i = 0; i < longitud; i++) {
                                 const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
                                 cadenaAleatoria += caracteres.charAt(indiceAleatorio);
                             }
                             return cadenaAleatoria;
                         }
-
                         const validarCodigo = async (codigoAleatorio) => {
                             const validarCodigoAleatorio = `
                             SELECT
@@ -15048,12 +13150,10 @@ const puerto = async (entrada, salida) => {
                             FROM "enlacesDePago"
                             WHERE codigo = $1;`
                             const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [codigoAleatorio])
-
                             if (resuelveValidarCodigoAleatorio.rowCount === 1) {
                                 return true
                             }
                         }
-
                         const controlCodigo = async () => {
                             const longitudCodigo = 100; // Puedes ajustar la longitud según tus necesidades
                             let codigoGenerado;
@@ -15062,13 +13162,10 @@ const puerto = async (entrada, salida) => {
                                 codigoGenerado = generarCadenaAleatoria(longitudCodigo);
                                 codigoExiste = await validarCodigo(codigoGenerado);
                             } while (codigoExiste);
-
                             // En este punto, tenemos un código único que no existe en la base de datos
                             return codigoGenerado;
                         }
-
                         const codigoAleatorioUnico = await controlCodigo();
-
                         const fechaActual = new Date();
                         const fechaDeCaducidad = new Date(fechaActual.getTime() + (horasCaducidad * 60 * 60 * 1000));
                         const estadoPagoInicial = "noPagado"
@@ -15104,7 +13201,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No se ha podido insertar el nuevo enlace, reintentalo"
                             throw new Error(error)
                         }
-
                         if (resuelveInsertarEnlace.rowCount === 1) {
                             const enlaceUID = resuelveInsertarEnlace.rows[0].enlaceUID
                             const nombreEnlace = resuelveInsertarEnlace.rows[0].nombreEnlace
@@ -15119,16 +13215,13 @@ const puerto = async (entrada, salida) => {
                             }
                             salida.json(ok)
                         }
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 }
-
             },
             arquitectura: {
                 entidades: {
@@ -15179,7 +13272,6 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     },
@@ -15199,26 +13291,18 @@ const puerto = async (entrada, salida) => {
                                 }
                                 salida.json(ok)
                             }
-
                             if (resuleveConsultaApartamento.rowCount > 0) {
                                 const apartamentoEntidades = resuleveConsultaApartamento.rows
-
                                 apartamentoEntidades.map((detallesApartamento) => {
                                     const apartamentoIDV = detallesApartamento.apartamento
                                     const apartamentoUI = detallesApartamento.apartamento
                                     estructuraApartamentosObjeto[apartamentoIDV] = apartamentoUI
-
-
                                 })
-
                                 const apartamentosComoEntidades_formatoArrayString = []
-
                                 apartamentoEntidades.map((detallesDelApartamento) => {
                                     const apartamentoIDV = detallesDelApartamento.apartamento
                                     apartamentosComoEntidades_formatoArrayString.push(apartamentoIDV)
                                 })
-
-
                                 const consultaConfiguraciones = `
                                 SELECT
                                 "apartamentoIDV"
@@ -15226,23 +13310,13 @@ const puerto = async (entrada, salida) => {
                                 ;`
                                 const resuelveConsultaApartamento = await conexion.query(consultaConfiguraciones)
                                 const apartamentoConfiguraciones = resuelveConsultaApartamento.rows
-
                                 const apartamentosIDVConfiguraciones_formatoArrayString = []
-
                                 apartamentoConfiguraciones.map((detallesapartamento) => {
                                     const apartamentoIDV = detallesapartamento.apartamentoIDV
                                     apartamentosIDVConfiguraciones_formatoArrayString.push(apartamentoIDV)
-
-
                                 })
-
-
-
-
                                 const apartamentosDisponiblesParaConfigurar = apartamentosComoEntidades_formatoArrayString.filter(entidad => !apartamentosIDVConfiguraciones_formatoArrayString.includes(entidad));
-
                                 const estructuraFinal = []
-
                                 for (const apartamentoDisponible of apartamentosDisponiblesParaConfigurar) {
                                     if (estructuraApartamentosObjeto[apartamentoDisponible]) {
                                         const estructuraFinalObjeto = {
@@ -15251,28 +13325,17 @@ const puerto = async (entrada, salida) => {
                                         }
                                         estructuraFinal.push(estructuraFinalObjeto)
                                     }
-
                                 }
                                 const ok = {
                                     "ok": "Apartamento especificos disponbiles",
                                     "apartamentosComoEntidadesDisponibles": estructuraFinal
                                 }
                                 salida.json(ok)
-
-
                             }
-
-
-
-
-
-
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     },
@@ -15280,13 +13343,10 @@ const puerto = async (entrada, salida) => {
                         try {
                             const tipoEntidad = entrada.body.tipoEntidad
                             const entidadIDV = entrada.body.entidadIDV
-
                             const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
                             const filtroCadenaMinusculasMayusculasSinEspacios = /^[a-zA-Z0-9]+$/;
                             const filtroCadenaMinusculasConEspacios = /^[a-z0-9\s]+$/i;
                             const filtroCadenaMinusculasMayusculasYEspacios = /^[a-zA-Z0-9\s]+$/;
-
-
                             if (!tipoEntidad || !filtroCadenaMinusculasSinEspacios.test(tipoEntidad)) {
                                 const error = "el campo 'tipoEntidad' solo puede ser letras minúsculas y numeros. sin pesacios"
                                 throw new Error(error)
@@ -15295,8 +13355,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "el campo 'entidadIDV' solo puede ser letras minúsculas, numeros y sin espacios"
                                 throw new Error(error)
                             }
-
-
                             if (tipoEntidad === "apartamento") {
                                 const consultaDetalles = `
                                 SELECT 
@@ -15308,7 +13366,6 @@ const puerto = async (entrada, salida) => {
                                 if (resuelveConsultaDetalles.rowCount === 0) {
                                     const error = "No existe el apartamento"
                                     throw new Error(error)
-
                                 }
                                 if (resuelveConsultaDetalles.rowCount === 1) {
                                     const consultaCaracteristicas = `
@@ -15324,7 +13381,6 @@ const puerto = async (entrada, salida) => {
                                     salida.json(ok)
                                 }
                             }
-
                             if (tipoEntidad === "habitacion") {
                                 const consultaDetalles = `
                                 SELECT 
@@ -15336,7 +13392,6 @@ const puerto = async (entrada, salida) => {
                                 if (resuelveConsultaDetalles.rowCount === 0) {
                                     const error = "No existe la habitacion"
                                     throw new Error(error)
-
                                 }
                                 if (resuelveConsultaDetalles.rowCount === 1) {
                                     const ok = {
@@ -15355,7 +13410,6 @@ const puerto = async (entrada, salida) => {
                                 WHERE cama = $1;`
                                 const resuelveConsultaDetalles = await conexion.query(consultaDetalles, [entidadIDV])
                                 if (resuelveConsultaDetalles.rowCount === 0) {
-
                                     const error = "No existe la cama"
                                     throw new Error(error)
                                 }
@@ -15370,39 +13424,23 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
-
-
-
-
-
-
-
-
                     },
                     crearEntidadAlojamiento: async () => {
                         try {
                             const tipoEntidad = entrada.body.tipoEntidad
-
                             const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
                             const filtroCadenaMinusculasMayusculasSinEspacios = /^[a-zA-Z0-9]+$/;
                             const filtroCadenaMinusculasConEspacios = /^[a-z0-9\s]+$/i;
                             const filtroCadenaMinusculasMayusculasYEspacios = /^[a-zA-Z0-9\s]+$/;
-
-
                             if (!tipoEntidad || !filtroCadenaMinusculasSinEspacios.test(tipoEntidad)) {
                                 const error = "el campo 'tipoEntidad' solo puede ser letras minúsculas y numeros. sin pesacios"
                                 throw new Error(error)
                             }
-
                             if (tipoEntidad === "apartamento") {
-
                                 let apartamentoIDV = entrada.body.apartamentoIDV
                                 let apartamentoUI = entrada.body.apartamentoUI
-
-
                                 apartamentoUI = apartamentoUI.replace(/['"]/g, '');
                                 if (!apartamentoUI || !filtroCadenaMinusculasSinEspacios.test(apartamentoUI) || apartamentoUI.length > 50) {
                                     const error = "el campo 'apartamentoUI' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres"
@@ -15410,13 +13448,9 @@ const puerto = async (entrada, salida) => {
                                 }
                                 if (!apartamentoIDV) {
                                     apartamentoIDV = apartamentoUI.replace(/[^a-z0-9]/g, '');
-
                                 } else {
                                     apartamentoIDV = apartamentoIDV.replace(/[^a-z0-9]/g, '');
                                 }
-
-
-
                                 const validarCodigo = async (apartamentoIDV) => {
                                     const validarCodigoAleatorio = `
                                     SELECT
@@ -15424,18 +13458,15 @@ const puerto = async (entrada, salida) => {
                                     FROM apartamentos
                                     WHERE apartamento = $1;`
                                     const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [apartamentoIDV])
-
                                     if (resuelveValidarCodigoAleatorio.rowCount === 1) {
                                         return true
                                     }
                                 }
-
                                 const controlApartamentoIDV = async (apartamentoIDV) => {
                                     let codigoGenerado = apartamentoIDV;
                                     let codigoExiste;
                                     do {
                                         codigoExiste = await validarCodigo(codigoGenerado);
-
                                         if (codigoExiste) {
                                             // Si el código ya existe, agrega un cero al final y vuelve a verificar
                                             codigoGenerado = codigoGenerado + "0";
@@ -15443,12 +13474,7 @@ const puerto = async (entrada, salida) => {
                                     } while (codigoExiste);
                                     return codigoGenerado
                                 }
-
                                 apartamentoIDV = await controlApartamentoIDV(apartamentoIDV);
-
-
-
-
                                 const validarIDV = `
                                 SELECT 
                                 *
@@ -15460,8 +13486,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "Ya existe un identificador visual igual que el apartamento que propones, escoge otro"
                                     throw new Error(error)
                                 }
-
-
                                 const validarUI = `
                                 SELECT 
                                 *
@@ -15473,8 +13497,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "Ya existe un apartamento con ese nombre, por tema de legibilidad escoge otro"
                                     throw new Error(error)
                                 }
-
-
                                 const crearEntidad = `
                                 INSERT INTO apartamentos
                                 (
@@ -15505,26 +13527,19 @@ const puerto = async (entrada, salida) => {
                                     salida.json(ok)
                                 }
                             }
-
                             if (tipoEntidad === "habitacion") {
-
                                 let habitacionIDV = entrada.body.habitacionIDV
                                 let habitacionUI = entrada.body.habitacionUI
-
                                 habitacionUI = habitacionUI.replace(/['"]/g, '');
                                 if (!habitacionUI || !filtroCadenaMinusculasSinEspacios.test(habitacionUI) || habitacionUI.length > 50) {
                                     const error = "el campo 'habitacionUI' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres"
                                     throw new Error(error)
                                 }
-
                                 if (!habitacionIDV) {
                                     habitacionIDV = habitacionUI.replace(/[^a-z0-9]/g, '');
-
                                 } else {
                                     habitacionIDV = habitacionIDV.replace(/[^a-z0-9]/g, '');
                                 }
-
-
                                 const validarCodigo = async (habitacionIDV) => {
                                     const validarCodigoAleatorio = `
                                     SELECT
@@ -15532,18 +13547,15 @@ const puerto = async (entrada, salida) => {
                                     FROM habitaciones
                                     WHERE habitacion = $1;`
                                     const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [habitacionIDV])
-
                                     if (resuelveValidarCodigoAleatorio.rowCount === 1) {
                                         return true
                                     }
                                 }
-
                                 const controlHabitacionIDV = async (habitacionIDV) => {
                                     let codigoGenerado = habitacionIDV;
                                     let codigoExiste;
                                     do {
                                         codigoExiste = await validarCodigo(codigoGenerado);
-
                                         if (codigoExiste) {
                                             // Si el código ya existe, agrega un cero al final y vuelve a verificar
                                             codigoGenerado = codigoGenerado + "0";
@@ -15551,12 +13563,7 @@ const puerto = async (entrada, salida) => {
                                     } while (codigoExiste);
                                     return codigoGenerado
                                 }
-
                                 habitacionIDV = await controlHabitacionIDV(habitacionIDV);
-
-
-
-
                                 const validarIDV = `
                                 SELECT 
                                 *
@@ -15568,8 +13575,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "Ya existe un identificador visual igual que el que propones, escoge otro"
                                     throw new Error(error)
                                 }
-
-
                                 const validarUI = `
                                 SELECT 
                                 *
@@ -15581,8 +13586,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "Ya existe un nombre de la habitacion exactamente igual, por tema de legibilidad escoge otro"
                                     throw new Error(error)
                                 }
-
-
                                 const crearEntidad = `
                                 INSERT INTO habitaciones
                                 (
@@ -15617,20 +13620,16 @@ const puerto = async (entrada, salida) => {
                                 let camaIDV = entrada.body.camaIDV
                                 let camaUI = entrada.body.camaUI
                                 let capacidad = entrada.body.capacidad
-
                                 camaUI = camaUI.replace(/['"]/g, '');
                                 if (!camaUI || !filtroCadenaMinusculasSinEspacios.test(camaUI) || camaUI.length > 50) {
                                     const error = "el campo 'camaUI' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres."
                                     throw new Error(error)
                                 }
-
                                 if (!camaIDV) {
                                     camaIDV = camaUI.replace(/[^a-z0-9]/g, '');
-
                                 } else {
                                     camaIDV = camaIDV.replace(/[^a-z0-9]/g, '');
                                 }
-
                                 const validarCodigo = async (camaIDV) => {
                                     const validarCodigoAleatorio = `
                                     SELECT
@@ -15638,18 +13637,15 @@ const puerto = async (entrada, salida) => {
                                     FROM camas
                                     WHERE cama = $1;`
                                     const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [camaIDV])
-
                                     if (resuelveValidarCodigoAleatorio.rowCount === 1) {
                                         return true
                                     }
                                 }
-
                                 const controlCamaIDV = async (camaIDV) => {
                                     let codigoGenerado = camaIDV;
                                     let codigoExiste;
                                     do {
                                         codigoExiste = await validarCodigo(codigoGenerado);
-
                                         if (codigoExiste) {
                                             // Si el código ya existe, agrega un cero al final y vuelve a verificar
                                             codigoGenerado = codigoGenerado + "0";
@@ -15657,9 +13653,7 @@ const puerto = async (entrada, salida) => {
                                     } while (codigoExiste);
                                     return codigoGenerado
                                 }
-
                                 camaIDV = await controlCamaIDV(camaIDV);
-
                                 const filtroSoloNumeros = /^\d+$/;
                                 if (filtroSoloNumeros.test(capacidad)) {
                                     capacidad = parseInt(capacidad);
@@ -15668,8 +13662,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "el campo 'capacidad' solo puede ser numeros, entero y positivo"
                                     throw new Error(error)
                                 }
-
-
                                 const validarIDV = `
                                 SELECT 
                                 *
@@ -15681,7 +13673,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "Ya existe un identificador visual igual que la cama que propones, escoge otro"
                                     throw new Error(error)
                                 }
-
                                 const validarUI = `
                                 SELECT 
                                 *
@@ -15693,7 +13684,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "Ya existe una cama con ese nombre, por tema de legibilidad escoge otro"
                                     throw new Error(error)
                                 }
-
                                 const crearEntidad = `
                                 INSERT INTO camas
                                 (
@@ -15727,16 +13717,10 @@ const puerto = async (entrada, salida) => {
                                     salida.json(ok)
                                 }
                             }
-
-
-
-
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     },
@@ -15744,12 +13728,10 @@ const puerto = async (entrada, salida) => {
                         try {
                             const tipoEntidad = entrada.body.tipoEntidad
                             const entidadIDV = entrada.body.entidadIDV
-
                             const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
                             const filtroCadenaMinusculasMayusculasSinEspacios = /^[a-zA-Z0-9]+$/;
                             const filtroCadenaMinusculasConEspacios = /^[a-z0-9\s]+$/i;
                             const filtroCadenaMinusculasMayusculasYEspacios = /^[a-zA-Z0-9\s]+$/;
-
                             if (!tipoEntidad || !filtroCadenaMinusculasSinEspacios.test(tipoEntidad)) {
                                 const error = "el campo 'tipoEntidad' solo puede ser letras minúsculas y numeros. sin pesacios"
                                 throw new Error(error)
@@ -15758,13 +13740,10 @@ const puerto = async (entrada, salida) => {
                                 const error = "el campo 'entidadIDV' solo puede ser letras minúsculas, numeros y sin espacios"
                                 throw new Error(error)
                             }
-
                             if (tipoEntidad === "apartamento") {
-
                                 const apartamentoIDV = entrada.body.apartamentoIDV
                                 let apartamentoUI = entrada.body.apartamentoUI
                                 const caracteristicas = entrada.body.caracteristicas
-
                                 if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV) || apartamentoIDV.length > 50) {
                                     const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres."
                                     throw new Error(error)
@@ -15776,24 +13755,17 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                                 */
-
-
                                 if (!Array.isArray(caracteristicas)) {
                                     const error = "el campo 'caractaristicas' solo puede ser un array"
                                     throw new Error(error)
                                 }
                                 const filtroCaracteristica = /^[a-zA-Z0-9\s.,_\-\u00F1ñ]+$/u;
-
                                 for (const caractaristica of caracteristicas) {
                                     if (!filtroCaracteristica.test(caractaristica)) {
                                         const error = "Revisa las caracteristicas por que hay una que no cumple con el formato esperado. Recuerda que los campo de caracteristicas solo aceptan mayusculas, minusculas, numeros, espacios, puntos, comas, guion bajo y medio y nada mas"
                                         throw new Error(error)
                                     }
                                 }
-
-
-
-
                                 const validarIDV = `
                                 SELECT 
                                 *
@@ -15805,7 +13777,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe el apartamento, revisa el apartamentopIDV"
                                     throw new Error(error)
                                 }
-
                                 // Comprobar que no existe el nuevo IDV
                                 if (entidadIDV !== apartamentoIDV) {
                                     const validarNuevoIDV = `
@@ -15820,7 +13791,6 @@ const puerto = async (entrada, salida) => {
                                         throw new Error(error)
                                     }
                                 }
-
                                 const guardarCambios = `
                                 UPDATE apartamentos
                                 SET 
@@ -15839,23 +13809,18 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                                 if (resuelveGuardarCambios.rowCount === 1) {
-
                                     const eliminarEntidad = `
                                     DELETE FROM "apartamentosCaracteristicas"
                                     WHERE "apartamentoIDV" = $1;
                                     `
                                     await conexion.query(eliminarEntidad, [apartamentoIDV])
-
                                     if (caracteristicas.length > 0) {
-
                                         const insertarCaracteristicas = `
                                         INSERT INTO "apartamentosCaracteristicas" (caracteristica, "apartamentoIDV")
                                         SELECT unnest($1::text[]), $2
                                         `;
-
                                         await conexion.query(insertarCaracteristicas, [caracteristicas, apartamentoIDV])
                                     }
-
                                     const ok = {
                                         ok: "Se ha actualizado correctamente el apartamento"
                                     }
@@ -15863,10 +13828,8 @@ const puerto = async (entrada, salida) => {
                                 }
                             }
                             if (tipoEntidad === "habitacion") {
-
                                 const habitacionIDV = entrada.body.habitacionIDV
                                 let habitacionUI = entrada.body.habitacionUI
-
                                 if (!habitacionIDV || !filtroCadenaMinusculasSinEspacios.test(habitacionIDV) || habitacionIDV.length > 50) {
                                     const error = "el campo 'habitacionIDV' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres"
                                     throw new Error(error)
@@ -15889,7 +13852,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe la habitacion, revisa el habitacionIDV"
                                     throw new Error(error)
                                 }
-
                                 // Comprobar que no existe el nuevo IDV
                                 if (entidadIDV !== habitacionIDV) {
                                     const validarNuevoIDV = `
@@ -15904,7 +13866,6 @@ const puerto = async (entrada, salida) => {
                                         throw new Error(error)
                                     }
                                 }
-
                                 const guardarCambios = `
                                 UPDATE habitaciones
                                 SET 
@@ -15933,11 +13894,6 @@ const puerto = async (entrada, salida) => {
                                 const camaIDV = entrada.body.camaIDV
                                 let camaUI = entrada.body.camaUI
                                 let capacidad = entrada.body.capacidad
-
-
-
-
-
                                 if (!camaIDV || !filtroCadenaMinusculasSinEspacios.test(camaIDV) || camaIDV.length > 50) {
                                     const error = "el campo 'camaIDV' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres"
                                     throw new Error(error)
@@ -15957,8 +13913,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "el campo 'capacidad' solo puede ser numeros, entero y positivo"
                                     throw new Error(error)
                                 }
-
-
                                 const validarIDV = `
                                 SELECT 
                                 *
@@ -15970,7 +13924,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe la habitacion, revisa el habitacionIDV"
                                     throw new Error(error)
                                 }
-
                                 // Comprobar que no existe el nuevo IDV
                                 if (entidadIDV !== camaIDV) {
                                     const validarNuevoIDV = `
@@ -15985,7 +13938,6 @@ const puerto = async (entrada, salida) => {
                                         throw new Error(error)
                                     }
                                 }
-
                                 const guardarCambios = `
                                 UPDATE camas
                                 SET 
@@ -16016,7 +13968,6 @@ const puerto = async (entrada, salida) => {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     },
@@ -16024,11 +13975,8 @@ const puerto = async (entrada, salida) => {
                         try {
                             const tipoEntidad = entrada.body.tipoEntidad
                             const entidadIDV = entrada.body.entidadIDV
-
                             const filtroCadenaSinEspacios = /^[a-z0-9]+$/;
                             const filtroCadenaConEspacios = /^[a-z0-9\s]+$/i;
-
-
                             if (!tipoEntidad || !filtroCadenaSinEspacios.test(tipoEntidad)) {
                                 const error = "el campo 'tipoEntidad' solo puede ser letras minúsculas y numeros. sin pesacios"
                                 throw new Error(error)
@@ -16037,9 +13985,7 @@ const puerto = async (entrada, salida) => {
                                 const error = "el campo 'entidadIDV' solo puede ser letras minúsculas y numeros. sin pesacios"
                                 throw new Error(error)
                             }
-
                             if (tipoEntidad === "apartamento") {
-
                                 const validarIDV = `
                                 SELECT 
                                 *
@@ -16051,7 +13997,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe el apartamento que desea borrar, revisa el apartamentoIDV"
                                     throw new Error(error)
                                 }
-
                                 const eliminarEntidad = `
                                 DELETE FROM apartamentos
                                 WHERE apartamento = $1;
@@ -16067,11 +14012,8 @@ const puerto = async (entrada, salida) => {
                                     }
                                     salida.json(ok)
                                 }
-
                             }
-
                             if (tipoEntidad === "habitacion") {
-
                                 const validarIDV = `
                                 SELECT 
                                 *
@@ -16083,7 +14025,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe la habitacion, revisa el habitacionIDV"
                                     throw new Error(error)
                                 }
-
                                 const eliminarEntidad = `
                                 DELETE FROM habitaciones
                                 WHERE habitacion = $1;
@@ -16099,9 +14040,6 @@ const puerto = async (entrada, salida) => {
                                     }
                                     salida.json(ok)
                                 }
-
-
-
                             }
                             if (tipoEntidad === "cama") {
                                 const validarIDV = `
@@ -16115,7 +14053,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe la cama, revisa el camaIDV"
                                     throw new Error(error)
                                 }
-
                                 const eliminarEntidad = `
                                 DELETE FROM camas
                                 WHERE cama = $1;
@@ -16131,18 +14068,11 @@ const puerto = async (entrada, salida) => {
                                     }
                                     salida.json(ok)
                                 }
-
                             }
-
-
-
-
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             salida.json(error)
                         }
                     }
@@ -16169,31 +14099,25 @@ const puerto = async (entrada, salida) => {
                                 if (resuelveSeleccionaApartamentos.rowCount > 0) {
                                     const apartamentoEntidad = resuelveSeleccionaApartamentos.rows
                                     for (const detallesDelApartamento of apartamentoEntidad) {
-
                                         const apartamentoIDV = detallesDelApartamento.apartamentoIDV
                                         const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
                                         const estadoConfiguracion = detallesDelApartamento.estadoConfiguracion
-
                                         const estructuraFinal = {
                                             apartamentoIDV: apartamentoIDV,
                                             apartamentoUI: apartamentoUI,
                                             estadoConfiguracion: estadoConfiguracion
                                         }
                                         apartamentosConConfiguracion.push(estructuraFinal)
-
-
                                     }
                                 }
                                 const ok = {
                                     ok: apartamentosConConfiguracion
                                 }
                                 salida.json(ok)
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -16205,15 +14129,11 @@ const puerto = async (entrada, salida) => {
                         X: async () => {
                             try {
                                 const apartamentoIDV = entrada.body.apartamentoIDV
-
                                 const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-
                                 if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
                                     const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
                                     throw new Error(error)
                                 }
-
-
                                 const consultaPerfilConfiguracion = `
                             SELECT 
                             uid,
@@ -16229,10 +14149,8 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                                 if (resuelveConsultaPerfilConfiguracion.rowCount > 0) {
-
                                     const estadoConfiguracion = resuelveConsultaPerfilConfiguracion.rows[0].estadoConfiguracion
                                     const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
                                     const consultaHabitaciones = `
                                 SELECT 
                                 uid,
@@ -16243,13 +14161,10 @@ const puerto = async (entrada, salida) => {
                                 `
                                     const resuelveConsultaHabitaciones = await conexion.query(consultaHabitaciones, [apartamentoIDV])
                                     const habitacionesEncontradas = resuelveConsultaHabitaciones.rows
-
-
                                     for (const detalleHabitacion of habitacionesEncontradas) {
                                         const uidHabitacion = detalleHabitacion.uid
                                         const apartamentoIDV = detalleHabitacion.apartamento
                                         const habitacionIDV = detalleHabitacion.habitacion
-
                                         const resolucionNombreHabitacion = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
                                         if (resolucionNombreHabitacion.rowCount === 0) {
                                             const error = "No existe el identificador de la habitacionIDV"
@@ -16257,8 +14172,6 @@ const puerto = async (entrada, salida) => {
                                         }
                                         const habitacionUI = resolucionNombreHabitacion.rows[0].habitacionUI
                                         detalleHabitacion.habitacionUI = habitacionUI
-
-
                                         const consultaCamas = `
                                     SELECT
                                     uid,
@@ -16272,36 +14185,27 @@ const puerto = async (entrada, salida) => {
                                         const resolverConsultaCamas = await conexion.query(consultaCamas, [uidHabitacion])
                                         detalleHabitacion.camas = []
                                         if (resolverConsultaCamas.rowCount > 0) {
-
-
                                             const camasEntontradas = resolverConsultaCamas.rows
                                             for (const detallesCama of camasEntontradas) {
-
                                                 const uidCama = detallesCama.uid
                                                 const camaIDV = detallesCama.cama
-
                                                 const resolucionNombreCama = await conexion.query(`SELECT "camaUI", capacidad FROM camas WHERE cama = $1`, [camaIDV])
                                                 if (resolucionNombreCama.rowCount === 0) {
                                                     const error = "No existe el identificador de la camaIDV"
                                                     throw new Error(error)
                                                 }
-
                                                 const camaUI = resolucionNombreCama.rows[0].camaUI
                                                 const capacidad = resolucionNombreCama.rows[0].capacidad
-
                                                 const estructuraCama = {
                                                     uid: uidCama,
                                                     camaIDV: camaIDV,
                                                     camaUI: camaUI,
                                                     capacidad: capacidad
-
                                                 }
                                                 detalleHabitacion.camas.push(estructuraCama)
-
                                             }
                                         }
                                     }
-
                                     const ok = {
                                         ok: habitacionesEncontradas,
                                         apartamentoIDV: apartamentoIDV,
@@ -16309,23 +14213,13 @@ const puerto = async (entrada, salida) => {
                                         estadoConfiguracion: estadoConfiguracion,
                                     }
                                     salida.json(ok)
-
-
-
                                 }
-
-
-
-
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
-
                         }
                     },
                     obtenerImagenConfiguracionAdministracion: {
@@ -16336,7 +14230,6 @@ const puerto = async (entrada, salida) => {
                             try {
                                 const apartamentoIDV = entrada.body.apartamentoIDV
                                 const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-
                                 if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
                                     const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
                                     throw new Error(error)
@@ -16355,24 +14248,18 @@ const puerto = async (entrada, salida) => {
                                 }
                                 if (resuelveConsultaPerfilConfiguracion.rowCount === 1) {
                                     const imagen = resuelveConsultaPerfilConfiguracion.rows[0].imagen
-
                                     const ok = {
                                         ok: "Imagen de la configuracion adminsitrativa del apartamento, png codificado en base64",
                                         imagen: imagen
                                     }
                                     salida.json(ok)
-
                                 }
-
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
-
                         }
                     },
                     listarHabitacionesDisponbilesApartamentoConfiguracion: {
@@ -16383,12 +14270,10 @@ const puerto = async (entrada, salida) => {
                             try {
                                 const apartamentoIDV = entrada.body.apartamentoIDV
                                 const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-
                                 if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
                                     const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
                                     throw new Error(error)
                                 }
-
                                 const consultaDetallesConfiguracion = `
                             SELECT 
                             *
@@ -16403,11 +14288,7 @@ const puerto = async (entrada, salida) => {
                                     const error = "No hay ninguna configuracion disponible para este apartamento"
                                     throw new Error(error)
                                 }
-
-
                                 if (resuelveConsultaDetallesConfiguracion.rowCount > 0) {
-
-
                                     const consultaHabitacionesEnConfiguracion = await conexion.query(`SELECT habitacion FROM "configuracionHabitacionesDelApartamento" WHERE apartamento = $1`, [apartamentoIDV])
                                     const habitacionesEnConfiguracionArrayLimpio = []
                                     const habitacionesEnConfiguracion = consultaHabitacionesEnConfiguracion.rows
@@ -16415,8 +14296,6 @@ const puerto = async (entrada, salida) => {
                                         const habitacionIDV = detalleHabitacion.habitacion
                                         habitacionesEnConfiguracionArrayLimpio.push(habitacionIDV)
                                     }
-
-
                                     const resuelveHabitacionesComoEntidad = await conexion.query(`SELECT habitacion, "habitacionUI" FROM habitaciones`)
                                     const habitacionesComoEntidad = resuelveHabitacionesComoEntidad.rows
                                     const habitacionComoEntidadArrayLimpio = []
@@ -16424,52 +14303,31 @@ const puerto = async (entrada, salida) => {
                                     for (const detalleHabitacion of habitacionesComoEntidad) {
                                         const habitacionUI = detalleHabitacion.habitacionUI
                                         const habitacionIDV = detalleHabitacion.habitacion
-
                                         habitacionComoEntidadArrayLimpio.push(habitacionIDV)
-
                                         habitacionesComoEntidadEstructuraFinal[habitacionIDV] = habitacionUI
-
                                     }
-
-
                                     const habitacionesDisponiblesNoInsertadas = habitacionComoEntidadArrayLimpio.filter(entidad => !habitacionesEnConfiguracionArrayLimpio.includes(entidad));
-
                                     const estructuraFinal = []
-
                                     for (const habitacionDisponible of habitacionesDisponiblesNoInsertadas) {
                                         if (habitacionesComoEntidadEstructuraFinal[habitacionDisponible]) {
-
                                             const estructuraFinalObjeto = {
                                                 habitacionIDV: habitacionDisponible,
                                                 habitacionUI: habitacionesComoEntidadEstructuraFinal[habitacionDisponible]
-
                                             }
-
                                             estructuraFinal.push(estructuraFinalObjeto)
-
                                         }
-
                                     }
                                     const ok = {
                                         ok: estructuraFinal
                                     }
                                     salida.json(ok)
-
                                 }
-
-
-
-
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
-
-
                         }
                     },
                     addHabitacionToConfiguracionApartamento: {
@@ -16481,17 +14339,14 @@ const puerto = async (entrada, salida) => {
                                 const apartamentoIDV = entrada.body.apartamentoIDV
                                 const habitacionIDV = entrada.body.habitacionIDV
                                 const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-
                                 if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
                                     const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
                                     throw new Error(error)
                                 }
-
                                 if (!habitacionIDV || !filtroCadenaMinusculasSinEspacios.test(habitacionIDV)) {
                                     const error = "el campo 'habitacionIDV' solo puede ser letras minúsculas, numeros y sin espacios"
                                     throw new Error(error)
                                 }
-
                                 const consultaApartamento = `
                             SELECT 
                             "estadoConfiguracion"
@@ -16507,27 +14362,19 @@ const puerto = async (entrada, salida) => {
                                     const error = "No se puede anadir una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
                                     throw new Error(error)
                                 }
-
-
                                 if (resuelveConsultaApartamento.rowCount === 1) {
-
-
                                     const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-
-
                                     const resolucionNombreHabitacion = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
                                     if (resolucionNombreHabitacion.rowCount === 0) {
                                         const error = "No existe el identificador visual de la habitacion"
                                         throw new Error(error)
                                     }
                                     const habitacionUI = resolucionNombreHabitacion.rows[0].habitacionUI
-
                                     const validarInexistenciaHabitacionEnConfiguracionDeApartamento = await conexion.query(`SELECT * FROM "configuracionHabitacionesDelApartamento" WHERE apartamento = $1 AND habitacion = $2 `, [apartamentoIDV, habitacionIDV])
                                     if (validarInexistenciaHabitacionEnConfiguracionDeApartamento.rowCount === 1) {
                                         const error = `Ya existe la ${habitacionUI} en esta configuracion del ${apartamentoUI}`
                                         throw new Error(error)
                                     }
-
                                     const insertarHabitacion = `
                                 INSERT INTO "configuracionHabitacionesDelApartamento"
                                 (
@@ -16541,7 +14388,6 @@ const puerto = async (entrada, salida) => {
                                         const error = `Se han pasado las validaciones pero la base de datos no ha insertado el registro`
                                         throw new Error(error)
                                     }
-
                                     if (resuelveInsertarHabitacion.rowCount === 1) {
                                         const ok = {
                                             ok: "Se ha insertado correctament la nueva habitacion",
@@ -16552,17 +14398,12 @@ const puerto = async (entrada, salida) => {
                                         salida.json(ok)
                                     }
                                 }
-
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
-
-
                         }
                     },
                     listarCamasDisponbilesApartamentoConfiguracion: {
@@ -16573,12 +14414,10 @@ const puerto = async (entrada, salida) => {
                             try {
                                 const habitacionUID = entrada.body.habitacionUID
                                 const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-
                                 if (!habitacionUID || !Number.isInteger(habitacionUID) || habitacionUID < 0) {
                                     const error = "el campo 'habitacionUID' solo puede ser numeros"
                                     throw new Error(error)
                                 }
-
                                 const validarHabitacionUID = `
                             SELECT 
                             habitacion
@@ -16595,11 +14434,7 @@ const puerto = async (entrada, salida) => {
                                     }
                                     salida.json(ok)
                                 }
-
-
                                 if (resuelveConsultaDetallesConfiguracion.rowCount > 0) {
-
-
                                     const consultaCamasEnHabitacion = await conexion.query(`SELECT cama FROM "configuracionCamasEnHabitacion" WHERE habitacion = $1`, [habitacionUID])
                                     const camasArrayLimpioEnHabitacion = []
                                     const camasEncontradasEnHabitacion = consultaCamasEnHabitacion.rows
@@ -16607,8 +14442,6 @@ const puerto = async (entrada, salida) => {
                                         const camaIDV = detalleHabitacion.cama
                                         camasArrayLimpioEnHabitacion.push(camaIDV)
                                     }
-
-
                                     const resuelveCamasComoEntidad = await conexion.query(`SELECT cama, "camaUI" FROM camas`)
                                     const camasComoEntidad = resuelveCamasComoEntidad.rows
                                     const camasComoEntidadArrayLimpio = []
@@ -16616,15 +14449,11 @@ const puerto = async (entrada, salida) => {
                                     for (const detalleHabitacion of camasComoEntidad) {
                                         const camaUI = detalleHabitacion.camaUI
                                         const camaIDV = detalleHabitacion.cama
-
                                         camasComoEntidadArrayLimpio.push(camaIDV)
                                         camasComoEntidadEstructuraFinal[camaIDV] = camaUI
-
                                     }
-
                                     const camasDisponiblesNoInsertadas = camasComoEntidadArrayLimpio.filter(entidad => !camasArrayLimpioEnHabitacion.includes(entidad));
                                     const estructuraFinal = []
-
                                     for (const camaDisponible of camasDisponiblesNoInsertadas) {
                                         if (camasComoEntidadEstructuraFinal[camaDisponible]) {
                                             const estructuraFinalObjeto = {
@@ -16633,28 +14462,18 @@ const puerto = async (entrada, salida) => {
                                             }
                                             estructuraFinal.push(estructuraFinalObjeto)
                                         }
-
                                     }
                                     const ok = {
                                         ok: estructuraFinal
                                     }
                                     salida.json(ok)
-
                                 }
-
-
-
-
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
-
-
                         }
                     },
                     addCamaToConfiguracionApartamentoHabitacion: {
@@ -16666,17 +14485,14 @@ const puerto = async (entrada, salida) => {
                                 const camaIDV = entrada.body.camaIDV;
                                 const habitacionUID = entrada.body.habitacionUID;
                                 const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-
                                 if (!camaIDV || !filtroCadenaMinusculasSinEspacios.test(camaIDV)) {
                                     const error = "el campo 'camaIDV' solo puede ser letras minúsculas, numeros y sin espacios"
                                     throw new Error(error)
                                 }
-
                                 if (!habitacionUID || !Number.isInteger(habitacionUID) || habitacionUID < 0) {
                                     const error = "el campo 'habitacionUID' solo puede ser numeros"
                                     throw new Error(error)
                                 }
-
                                 // validar la cama
                                 const consultaCamaIDV = `
                             SELECT
@@ -16693,8 +14509,6 @@ const puerto = async (entrada, salida) => {
                                 }
                                 const camaUI = resuelveConsultaCamaIDV.rows[0].camaUI
                                 const capacidad = resuelveConsultaCamaIDV.rows[0].capacidad
-
-
                                 const consultaHabitacion = `
                             SELECT 
                             habitacion, apartamento
@@ -16719,20 +14533,13 @@ const puerto = async (entrada, salida) => {
                                         const error = "No se puede anadir una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
                                         throw new Error(error)
                                     }
-
-
-
-
                                     const habitacionIDV = resuelveConsultaHabitacion.rows[0].habitacion
-
                                     const resuelveCamasEnHabitacion = await conexion.query(`SELECT cama FROM "configuracionCamasEnHabitacion" WHERE habitacion = $1 AND cama = $2 `, [habitacionUID, camaIDV])
                                     if (resuelveCamasEnHabitacion.rowCount > 0) {
                                         const error = "Esta cama ya existe"
                                         throw new Error(error)
                                     }
-
                                     if (resuelveCamasEnHabitacion.rowCount === 0) {
-
                                         const insertarCamaEnHabitacion = `
                                     INSERT INTO "configuracionCamasEnHabitacion"
                                     (
@@ -16746,7 +14553,6 @@ const puerto = async (entrada, salida) => {
                                             const error = `Se han pasado las validaciones pero la base de datos no ha insertado el registro`
                                             throw new Error(error)
                                         }
-
                                         if (resuelveInsertarHabitacion.rowCount === 1) {
                                             const nuevoUID = resuelveInsertarHabitacion.rows[0].uid
                                             const ok = {
@@ -16758,26 +14564,14 @@ const puerto = async (entrada, salida) => {
                                             }
                                             salida.json(ok)
                                         }
-
-
-
                                     }
-
-
-
-
                                 }
-
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
-
-
                         }
                     },
                     eliminarHabitacionDeConfiguracionDeAlojamiento: {
@@ -16787,12 +14581,10 @@ const puerto = async (entrada, salida) => {
                         X: async () => {
                             try {
                                 const habitacionUID = entrada.body.habitacionUID
-
                                 if (!habitacionUID || !Number.isInteger(habitacionUID) || habitacionUID < 0) {
                                     const error = "el campo 'habitacionUID' solo puede ser numeros"
                                     throw new Error(error)
                                 }
-
                                 const validarHabitacionUID = `
                                 SELECT 
                                 apartamento
@@ -16804,7 +14596,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe la habitacion, revisa el habitacionUID"
                                     throw new Error(error)
                                 }
-
                                 const apartamentoIDV = resuelveValidarHabitacionUID.rows[0].apartamento
                                 const consultaApartamento = `
                             SELECT 
@@ -16817,8 +14608,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No se puede eliminar una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
                                     throw new Error(error)
                                 }
-
-
                                 const eliminarHabitacion = `
                                 DELETE FROM "configuracionHabitacionesDelApartamento"
                                 WHERE uid = $1;
@@ -16834,12 +14623,10 @@ const puerto = async (entrada, salida) => {
                                     }
                                     salida.json(ok)
                                 }
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -16851,12 +14638,10 @@ const puerto = async (entrada, salida) => {
                         X: async () => {
                             try {
                                 const camaUID = entrada.body.camaUID
-
                                 if (!camaUID || !Number.isInteger(camaUID) || camaUID < 0) {
                                     const error = "el campo 'camaUID' solo puede ser numeros"
                                     throw new Error(error)
                                 }
-
                                 const validarHabitacionUID = `
                                 SELECT 
                                 habitacion
@@ -16868,7 +14653,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe la cama, revisa el camaUID"
                                     throw new Error(error)
                                 }
-
                                 const habitacionUID = resuelveValidarHabitacionUID.rows[0].habitacion
                                 const consultaIntermediaEscaleraHaciaArriba = `
                             SELECT 
@@ -16889,11 +14673,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No se puede eliminar una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama"
                                     throw new Error(error)
                                 }
-
-
-
-
-
                                 const eliminarCama = `
                                 DELETE FROM "configuracionCamasEnHabitacion"
                                 WHERE uid = $1;
@@ -16909,12 +14688,10 @@ const puerto = async (entrada, salida) => {
                                     }
                                     salida.json(ok)
                                 }
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -16927,12 +14704,10 @@ const puerto = async (entrada, salida) => {
                             try {
                                 const apartamentoIDV = entrada.body.apartamentoIDV
                                 const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-
                                 if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
                                     const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios"
                                     throw new Error(error)
                                 }
-
                                 const validarApartamentoUID = `
                                 SELECT 
                                 *
@@ -16944,7 +14719,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe el perfil de configuracion del apartamento"
                                     throw new Error(error)
                                 }
-
                                 const eliminarConfiguracionDeApartamento = `
                                 DELETE FROM "configuracionApartamento"
                                 WHERE "apartamentoIDV" = $1
@@ -16960,12 +14734,10 @@ const puerto = async (entrada, salida) => {
                                     }
                                     salida.json(ok)
                                 }
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -16982,7 +14754,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres"
                                     throw new Error(error)
                                 }
-
                                 const validarIDV = `
                                 SELECT 
                                 "apartamentoUI"
@@ -16994,7 +14765,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon"
                                     throw new Error(error)
                                 }
-
                                 const validarUnicidadConfigurativa = `
                                 SELECT 
                                 *
@@ -17006,7 +14776,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "Ya existe una configuracion para la entidad del apartamento por favor selecciona otro apartamento como entidad"
                                     throw new Error(error)
                                 }
-
                                 const estadoInicial = "nodisponible"
                                 const crearConfiguracion = `
                                 INSERT INTO "configuracionApartamento"
@@ -17033,15 +14802,10 @@ const puerto = async (entrada, salida) => {
                                     }
                                     salida.json(ok)
                                 }
-
-
-
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -17059,13 +14823,10 @@ const puerto = async (entrada, salida) => {
                                     const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios"
                                     throw new Error(error)
                                 }
-
-
                                 if (!nuevoEstado || !filtroCadenaMinusculasSinEspacios.test(nuevoEstado)) {
                                     const error = "el campo 'nuevoEstado' solo puede ser letras minúsculas, numeros y sin pesacios"
                                     throw new Error(error)
                                 }
-
                                 const validarIDV = `
                                 SELECT 
                                 "estadoConfiguracion"
@@ -17089,7 +14850,6 @@ const puerto = async (entrada, salida) => {
                                     const error = "Revisa el estado que has introducido por que no se conoce este estado para la configuracion del apartamento"
                                     throw new Error(error)
                                 }
-
                                 if (nuevoEstado === "disponible") {
                                     // Mirar que el apartamento tenga al menos una habitacion
                                     const consultaHabitaciones = `
@@ -17106,61 +14866,41 @@ const puerto = async (entrada, salida) => {
                                     }
                                     // Mirar que todas las habitaciones tengan una cama asignada
                                     if (resuelveConsultaHabitaciones.rowCount > 0) {
-
                                         const habitacionesSinCama = []
                                         const habitacionesEnConfiguracion = resuelveConsultaHabitaciones.rows
                                         for (const detalleHabitacion of habitacionesEnConfiguracion) {
                                             const habitacionUID = detalleHabitacion.uid
                                             const habitacionIDV = detalleHabitacion.habitacion
-
                                             const resolucionHabitacionUI = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
                                             if (resolucionHabitacionUI.rowCount === 0) {
                                                 const error = "No existe el identificador del apartamentoIDV"
                                                 throw new Error(error)
                                             }
                                             const habitacionUI = resolucionHabitacionUI.rows[0].habitacionUI
-
                                             const selectorHabitacionAsignada = await conexion.query(`SELECT "cama" FROM "configuracionCamasEnHabitacion" WHERE habitacion = $1`, [habitacionUID])
                                             if (selectorHabitacionAsignada.rowCount === 0) {
                                                 habitacionesSinCama.push(habitacionUI)
                                             }
                                         }
-
                                         if (habitacionesSinCama.length > 0) {
                                             let funsionArray = habitacionesSinCama.join(", "); // Fusiona los elementos con comas
                                             funsionArray = funsionArray.replace(/,([^,]*)$/, ' y $1');
                                             const error = `No se puede establecer el estado disponible por que la configuracion no es valida. Por favor revisa las camas asignadas ne las habitaciones. En las habitaciones ${funsionArray} no hay una sola cama signada como opcion. Por favor asigna la camas`
                                             throw new Error(error)
-
                                         }
-
                                     }
-
                                     // Mira que tenga un perfil de precio creado y superiro 0
                                     const consultaPerfilPrecio = await conexion.query(`SELECT precio FROM "preciosApartamentos" WHERE apartamento = $1`, [apartamentoIDV])
                                     if (consultaPerfilPrecio.rowCount === 0) {
                                         const error = "La configuración no es válida. No se puede establecer en disponible por que esta configuración no tiene asignado un perfil de precio para poder calcular los impuestos. Por favor establece un perfil de precio para esta configuración."
                                         throw new Error(error)
                                     }
-
                                     if (consultaPerfilPrecio.rows[0].precio <= 0) {
                                         const error = "El apartamento tiene una configuracion correcta y tambien tiene un perfil de precio pero en el perfil de precio hay establecido 0.00 como precio base y no esta permitido."
                                         throw new Error(error)
                                     }
-
-
                                     // No puede haber un estado disponible con precio base en 0.00
-
-
-
-
-
-
-
-
                                 }
-
-
                                 const actualizarEstadoConfiguracion = `
                             UPDATE "configuracionApartamento"
                             SET "estadoConfiguracion" = $1
@@ -17178,12 +14918,10 @@ const puerto = async (entrada, salida) => {
                                     }
                                     salida.json(ok)
                                 }
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -17196,19 +14934,16 @@ const puerto = async (entrada, salida) => {
                             try {
                                 const apartamentoIDV = entrada.body.apartamentoIDV
                                 const contenidoArchivo = entrada.body.contenidoArchivo
-
                                 const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
                                 if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
                                     const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios"
                                     throw new Error(error)
                                 }
-
                                 const filtroBase64 = /^[A-Za-z0-9+/=]+$/;
                                 if (typeof contenidoArchivo !== "string" || !filtroBase64.test(contenidoArchivo)) {
                                     const error = "El campo contenido archivo solo acepta archivos codificados en base64";
                                     throw new Error(error);
                                 }
-
                                 const esImagenPNG = (contenidoArchivo) => {
                                     const binarioMagicoPNG = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
                                     // Decodifica la cadena base64 a un buffer
@@ -17216,19 +14951,16 @@ const puerto = async (entrada, salida) => {
                                     // Compara los primeros 8 bytes del buffer con el binario mágico
                                     return buffer.subarray(0, 8).compare(binarioMagicoPNG) === 0;
                                 }
-
                                 const esImagenTIFF = (contenidoArchivo) => {
                                     const binarioMagicoTIFF = Buffer.from([73, 73, 42, 0]); // Puedes ajustar estos valores según el formato TIFF que estés buscando
                                     const buffer = Buffer.from(contenidoArchivo, 'base64');
                                     return buffer.subarray(0, 4).compare(binarioMagicoTIFF) === 0 || buffer.subarray(0, 4).compare(Buffer.from([77, 77, 0, 42])) === 0; // Otro formato posible
                                 };
-
                                 const esImagenJPEG = (contenidoArchivo) => {
                                     const binarioMagicoJPEG = Buffer.from([255, 216, 255]);
                                     const buffer = Buffer.from(contenidoArchivo, 'base64');
                                     return buffer.subarray(0, 3).compare(binarioMagicoJPEG) === 0;
                                 };
-
                                 if (esImagenPNG(contenidoArchivo)) {
                                 } else if (esImagenTIFF(contenidoArchivo)) {
                                 } else if (esImagenJPEG(contenidoArchivo)) {
@@ -17236,9 +14968,7 @@ const puerto = async (entrada, salida) => {
                                     const error = "Solo se acetan imagenes PNG, TIFF, JPEG y JPG.";
                                     throw new Error(error);
                                 }
-
                                 await conexion.query('BEGIN'); // Inicio de la transacción
-
                                 const validarIDV = `
                                 SELECT 
                                 "estadoConfiguracion"
@@ -17250,12 +14980,10 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon"
                                     throw new Error(error)
                                 }
-
                                 if (resuelveValidarIDV.rows[0].estadoConfiguracion === "disponible") {
                                     const error = "No se puede actualizar la imagen de una configuracion de apartamento cuando esta disponbile,cambie el estado primero"
                                     throw new Error(error)
                                 }
-
                                 const actualizarImagenConfiguracion = `
                             UPDATE "configuracionApartamento"
                             SET imagen = $1
@@ -17274,14 +15002,11 @@ const puerto = async (entrada, salida) => {
                                     salida.json(ok)
                                 }
                                 await conexion.query('COMMIT'); // Confirmar la transacción
-
                             } catch (errorCapturado) {
                                 await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
@@ -17293,13 +15018,11 @@ const puerto = async (entrada, salida) => {
                         X: async () => {
                             try {
                                 const apartamentoIDV = entrada.body.apartamentoIDV
-
                                 const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
                                 if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
                                     const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios"
                                     throw new Error(error)
                                 }
-
                                 const validarIDV = `
                                 SELECT 
                                 "estadoConfiguracion"
@@ -17311,12 +15034,10 @@ const puerto = async (entrada, salida) => {
                                     const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon"
                                     throw new Error(error)
                                 }
-
                                 if (resuelveValidarIDV.rows[0].estadoConfiguracion === "disponible") {
                                     const error = "No se puede actualizar la imagen de una configuracion de apartamento cuando esta disponbile,cambie el estado primero"
                                     throw new Error(error)
                                 }
-
                                 const actualizarImagenConfiguracion = `
                             UPDATE "configuracionApartamento"
                             SET imagen = NULL
@@ -17333,18 +15054,15 @@ const puerto = async (entrada, salida) => {
                                     }
                                     salida.json(ok)
                                 }
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 salida.json(error)
                             }
                         }
                     }
                 },
-
             },
             usuarios: {
                 IDX: {
@@ -17352,11 +15070,9 @@ const puerto = async (entrada, salida) => {
                 },
                 buscarUsuarios: async () => {
                     try {
-
                         const buscar = entrada.body.buscar;
                         const nombreColumna = entrada.body.nombreColumna
                         let sentidoColumna = entrada.body.sentidoColumna
-
                         if (!buscar) {
                             let error = "se tiene que espeficiar 'buscar' y lo que se desea buscar"
                             throw new Error(error)
@@ -17367,7 +15083,6 @@ const puerto = async (entrada, salida) => {
                             const error = "En 'pagina' solo se aceptan numero enteros superiores a cero y positivos. Nada de decimales"
                             throw new Error(error)
                         }
-
                         let condicionComplejaSQLOrdenarResultadosComoSegundaCondicion = ""
                         let nombreColumnaSentidoUI
                         let nombreColumnaUI
@@ -17387,7 +15102,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "No existe el nombre de la columna que quieres ordenar"
                                 throw new Error(error)
                             }
-
                             // OJO con la coma, OJO LA COMA ES IMPORTANTISMA!!!!!!!!
                             //!!!!!!!
                             if (sentidoColumna !== "descendente" && sentidoColumna !== "ascendente") {
@@ -17404,9 +15118,6 @@ const puerto = async (entrada, salida) => {
                             nombreColumnaUI = nombreColumna
                             condicionComplejaSQLOrdenarResultadosComoSegundaCondicion = `,"${nombreColumna}" ${sentidoColumna}`
                         }
-
-
-
                         const terminoBuscar = buscar.split(" ")
                         const terminosFormateados = []
                         terminoBuscar.map((termino) => {
@@ -17467,11 +15178,9 @@ const puerto = async (entrada, salida) => {
                             ) DESC
                             ${condicionComplejaSQLOrdenarResultadosComoSegundaCondicion}
                         LIMIT $2 OFFSET $3;`
-
                         const consultaUsuarios = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina, numeroPagina])
                         const usuariosEncontrados = consultaUsuarios.rows
                         const consultaConteoTotalFilas = usuariosEncontrados[0]?.totalUsuarios ? usuariosEncontrados[0].totalUsuarios : 0
-
                         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
                         const corretorNumeroPagina = String(numeroPagina).replace("0", "")
                         const Respuesta = {
@@ -17485,25 +15194,18 @@ const puerto = async (entrada, salida) => {
                             Respuesta.nombreColumna
                             Respuesta.sentidoColumna = nombreColumnaSentidoUI
                         }
-
                         usuariosEncontrados.map((detallesUsuario) => {
                             delete detallesUsuario.totalUsuarios
                         })
-
-
                         Respuesta.usuarios = usuariosEncontrados
-
                         salida.json(Respuesta)
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         return salida.json(error)
                     } finally {
-
                     }
-
                 },
                 datosCuentaIDX: async () => {
                     try {
@@ -17513,7 +15215,6 @@ const puerto = async (entrada, salida) => {
                             const error = "el campo 'usuarioIDX' solo puede ser letras minúsculas, numeros y sin pesacios"
                             throw new Error(error)
                         }
-
                         const consultaDetallesUsuario = `
                         SELECT 
                         usuario, 
@@ -17528,24 +15229,18 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe ningun usuario con ese IDX"
                             throw new Error(error)
                         }
-
                         const detallesCliente = resolverConsultaDetallesUsuario.rows[0]
                         const ok = {
                             ok: detallesCliente
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
-
                         salida.json(error)
                     } finally {
-
                     }
-
                 },
                 detallesUsuario: async () => {
                     try {
@@ -17555,8 +15250,6 @@ const puerto = async (entrada, salida) => {
                             const error = "el campo 'usuarioIDX' solo puede ser letras minúsculas, numeros y sin pesacios"
                             throw new Error(error)
                         }
-
-
                         const consultaDetallesUsuario = `
                         SELECT 
                         ddu."usuarioIDX", 
@@ -17573,29 +15266,23 @@ const puerto = async (entrada, salida) => {
                         JOIN usuarios u ON ddu."usuarioIDX" = u.usuario
                         WHERE 
                         ddu."usuarioIDX" = $1;`
-
                         const resolverConsultaDetallesUsuario = await conexion.query(consultaDetallesUsuario, [usuarioIDX])
                         if (resolverConsultaDetallesUsuario.rowCount === 0) {
                             const error = "No existe ningun usuario con ese IDX"
                             throw new Error(error)
                         }
-
                         const detallesCliente = resolverConsultaDetallesUsuario.rows[0]
                         const ok = {
                             ok: detallesCliente
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
-
                 },
                 actualizarDatosUsuarioDesdeAdministracion: async () => {
                     try {
@@ -17606,7 +15293,6 @@ const puerto = async (entrada, salida) => {
                         let pasaporte = entrada.body.pasaporte
                         let telefono = entrada.body.telefono
                         let email = entrada.body.email
-
                         const validarDatosUsuario = {
                             usuarioIDX: usuarioIDX,
                             nombre: nombre,
@@ -17616,7 +15302,6 @@ const puerto = async (entrada, salida) => {
                             telefono: telefono,
                             email: email
                         }
-
                         const datosValidados = await validadoresCompartidos.usuarios.actualizarDatos(validarDatosUsuario)
                         usuarioIDX = datosValidados.usuarioIDX
                         nombre = datosValidados.nombre
@@ -17625,9 +15310,6 @@ const puerto = async (entrada, salida) => {
                         pasaporte = datosValidados.pasaporte
                         telefono = datosValidados.telefono
                         email = datosValidados.email
-
-
-
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         // validar existencia de contrasena
                         const validarUsuario = `
@@ -17641,7 +15323,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe el usuario"
                             throw new Error(error)
                         }
-
                         const actualizarDatosUsuario2 = `
                         UPDATE "datosDeUsuario"
                         SET 
@@ -17669,12 +15350,9 @@ const puerto = async (entrada, salida) => {
                             email,
                             usuarioIDX,
                         ]
-
                         const resuelveActualizarDatosUsuario2 = await conexion.query(actualizarDatosUsuario2, datos)
-
                         if (resuelveActualizarDatosUsuario2.rowCount === 1) {
                             const datosActualizados = resuelveActualizarDatosUsuario2.rows
-
                             const ok = {
                                 ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
                                 datosActualizados: datosActualizados
@@ -17684,32 +15362,26 @@ const puerto = async (entrada, salida) => {
                         await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 actualizarIDXAdministracion: async () => {
                     try {
                         const usuarioIDX = entrada.body.usuarioIDX
                         let nuevoIDX = entrada.body.nuevoIDX
-
                         const filtroCantidad = /^\d+\.\d{2}$/;
                         const filtro_minúsculas_Mayusculas_numeros_espacios = /^[a-zA-Z0-9\s]+$/;
                         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
                         const filtroNumeros = /^[0-9]+$/;
                         const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
-
                         if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
                             const error = "El campo usuarioIDX solo admite minúsculas y numeros"
                             throw new Error(error)
                         }
-
                         nuevoIDX = nuevoIDX.toLowerCase();
                         if (!nuevoIDX || !filtro_minúsculas_numeros.test(nuevoIDX)) {
                             const error = "El campo nuevoIDX solo admite minúsculas y numeros"
@@ -17735,11 +15407,8 @@ const puerto = async (entrada, salida) => {
                         if (resuelveActualizarIDX.rowCount === 0) {
                             const error = "No existe el nombre de usuario"
                             throw new Error(error)
-
                         }
-
                         if (resuelveActualizarIDX.rowCount === 1) {
-
                             const actualizarSessionesActivas = `
                             UPDATE sessiones
                             SET sess = jsonb_set(sess::jsonb, '{usuario}', $1::jsonb)::json
@@ -17753,19 +15422,15 @@ const puerto = async (entrada, salida) => {
                                 usuarioIDX: IDXEstablecido
                             }
                             salida.json(ok)
-
                         }
                         await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 actualizarClaveUsuarioAdministracion: async () => {
@@ -17773,16 +15438,11 @@ const puerto = async (entrada, salida) => {
                         const usuarioIDX = entrada.body.usuarioIDX
                         const claveNueva = entrada.body.claveNueva
                         const claveNuevaDos = entrada.body.claveNuevaDos
-
                         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-
-
                         if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
                             const error = "El campo usuarioIDX solo admite minúsculas y numeros"
                             throw new Error(error)
                         }
-
-
                         if (claveNueva !== claveNuevaDos) {
                             const error = "No has escrito dos veces la misma nueva contrasena"
                             throw new Error(error)
@@ -17793,12 +15453,9 @@ const puerto = async (entrada, salida) => {
                             sentido: "cifrar",
                             clavePlana: claveNueva
                         }
-
                         const retorno = vitiniCrypto(cryptoData)
                         const nuevaSal = retorno.nuevaSal
                         const hashCreado = retorno.hashCreado
-
-
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         const actualizarClave = `
                         UPDATE usuarios
@@ -17826,29 +15483,23 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 actualizarEstadoCuentaDesdeAdministracion: async () => {
                     try {
                         const usuarioIDX = entrada.body.usuarioIDX
                         const nuevoEstado = entrada.body.nuevoEstado
-
                         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
                         if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
                             const error = "El campo usuarioIDX solo admite minúsculas y numeros"
                             throw new Error(error)
                         }
-
                         if (nuevoEstado !== "activado" && nuevoEstado !== "desactivado") {
                             const error = "El campo nuevoEstado solo puede ser activado o desactivado"
                             throw new Error(error)
                         }
-
-
                         // validar existencia de contrasena
                         const validarClave = `
                         SELECT 
@@ -17861,9 +15512,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No se puede activar una cuenta que carece de contrasena, por favor establece una contrasena primero"
                             throw new Error(error)
                         }
-
-
-
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         const actualizarEstadoCuenta = `
                         UPDATE usuarios
@@ -17882,25 +15530,13 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         if (resuelveEstadoCuenta.rowCount === 1) {
-
                             if (nuevoEstado !== "desactivado") {
                                 const cerrarSessiones = `
                                 DELETE FROM sessiones
                                 WHERE sess->> 'usuario' = $1;
                                 `
                                 await conexion.query(cerrarSessiones, [usuarioIDX])
-
                             }
-
-
-
-
-
-
-
-
-
-
                             const ok = {
                                 ok: "Se ha actualizado el estado de la cuenta",
                                 estadoCuenta: nuevoEstado
@@ -17910,14 +15546,11 @@ const puerto = async (entrada, salida) => {
                         await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 eliminarCuentaDesdeAdministracion: async () => {
@@ -17928,7 +15561,6 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo usuarioIDX solo admite minúsculas y numeros"
                             throw new Error(error)
                         }
-
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         // Validar si es un usuario administrador
                         const validarTipoCuenta = `
@@ -17940,7 +15572,6 @@ const puerto = async (entrada, salida) => {
                         const resuelveValidarTipoCuenta = await conexion.query(validarTipoCuenta, [usuarioIDX])
                         const rol = resuelveValidarTipoCuenta.rows[0].rol
                         const rolAdministrador = "administrador"
-
                         if (rol === rolAdministrador) {
                             const validarUltimoAdministrador = `
                             SELECT 
@@ -17954,16 +15585,11 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-
-
                         const cerrarSessiones = `
                         DELETE FROM sessiones
                         WHERE sess->> 'usuario' = $1;
                         `
                         await conexion.query(cerrarSessiones, [usuarioIDX])
-
-
-
                         const eliminarCuenta = `
                         DELETE FROM usuarios
                         WHERE usuario = $1;
@@ -17982,14 +15608,11 @@ const puerto = async (entrada, salida) => {
                         await conexion.query('COMMIT');
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK');
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 crearCuentaDesdeAdministracion: async () => {
@@ -17997,28 +15620,23 @@ const puerto = async (entrada, salida) => {
                         const usuarioIDX = entrada.body.usuarioIDX
                         const clave = entrada.body.clave
                         const rol = entrada.body.rol
-
                         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
                         if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
                             const error = "El campo usuarioIDX solo admite minúsculas y numeros y nada mas"
                             throw new Error(error)
                         }
-
                         if (usuarioIDX === "crear" || usuarioIDX === "buscador") {
                             const error = "El nombre de usuario no esta disponbile, escoge otro"
                             throw new Error(error)
                         }
-
                         if (!rol) {
                             const error = "Selecciona un rol para la nueva cuenta de usuario"
                             throw new Error(error)
                         }
-
                         if (!filtro_minúsculas_numeros.test(rol)) {
                             const error = "El campo rol solo admite minúsculas y numeros y nada mas"
                             throw new Error(error)
                         }
-
                         // validar rol
                         const validarRol = `
                         SELECT 
@@ -18031,8 +15649,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe el rol, revisa el rol introducido"
                             throw new Error(error)
                         }
-
-
                         // comporbar que no exista la el usuario
                         const validarNuevoUsuario = `
                         SELECT 
@@ -18048,12 +15664,10 @@ const puerto = async (entrada, salida) => {
                         await componentes.eliminarCuentasNoVerificadas()
                         const estadoCuenta = "desactivado"
                         await conexion.query('BEGIN'); // Inicio de la transacción
-
                         const cryptoData = {
                             sentido: "cifrar",
                             clavePlana: clave
                         }
-
                         const retorno = vitiniCrypto(cryptoData)
                         const nuevaSal = retorno.nuevaSal
                         const hashCreado = retorno.hashCreado
@@ -18104,18 +15718,14 @@ const puerto = async (entrada, salida) => {
                             usuarioIDX: resuelveCrearNuevoUsuario.rows[0].usuario
                         }
                         salida.json(ok)
-
                         await conexion.query('COMMIT');
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK');
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 },
                 obtenerRoles: async () => {
@@ -18136,26 +15746,19 @@ const puerto = async (entrada, salida) => {
                             ok: roles
                         }
                         salida.json(ok)
-
                     } catch (errorCapturado) {
                         const error = {
                             error: errorCapturado.message
                         }
-
-
                         salida.json(error)
                     } finally {
-
                     }
-
                 },
                 actualizarRolCuenta: async () => {
                     try {
                         const usuarioIDX = entrada.body.usuarioIDX
                         const nuevoRol = entrada.body.nuevoRol
-
                         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-
                         if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
                             const error = "El campo usuarioIDX solo admite minúsculas y numeros"
                             throw new Error(error)
@@ -18165,7 +15768,6 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         await conexion.query('BEGIN'); // Inicio de la transacción
-
                         // Validas usaurios
                         const validarUsuario = `
                         SELECT 
@@ -18178,7 +15780,6 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe el usuarios"
                             throw new Error(error)
                         }
-
                         // Validar rol
                         const validarRol = `
                         SELECT 
@@ -18194,7 +15795,6 @@ const puerto = async (entrada, salida) => {
                         }
                         const rolUI = resuelveValidarRol.rows[0].rolUI
                         const rolIDV = resuelveValidarRol.rows[0].rol
-
                         // Validar que el usuario que hace el cambio sea administrador
                         const IDXActor = entrada.session.usuario
                         const validarIDXActor = `
@@ -18208,14 +15808,11 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe el usuario de origen que intenta realizar esta operacion."
                             throw new Error(error)
                         }
-
                         const rolActor = resuelveValidarIDXActor.rows[0].rol
                         if (rolActor !== "administrador") {
                             const error = "No estas autorizado a realizar un cambio de rol. Solo los Administradores pueden realizar cambios de rol"
                             throw new Error(error)
-
                         }
-
                         const actualizarRol = `
                         UPDATE
                         usuarios
@@ -18229,33 +15826,26 @@ const puerto = async (entrada, salida) => {
                             const error = "No se ha podido actualizar el rol de este usuario"
                             throw new Error(error)
                         }
-
-
                         // Actualizar la fila sessiones
                         const consultaActualizarSessionesActuales = `
                         UPDATE sessiones
                         SET sess = jsonb_set(sess::jsonb, '{rol}', to_jsonb($2::text))
                         WHERE sess->>'usuario' = $1;`;
                         await conexion.query(consultaActualizarSessionesActuales, [usuarioIDX, nuevoRol])
-
                         const ok = {
                             ok: "Se ha actualizado el rol en esta cuenta",
                             rolIDV: rolIDV,
                             rolUI: rolUI
                         }
                         salida.json(ok)
-
                         await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
-
                     }
                 }
             },
@@ -18288,14 +15878,11 @@ const puerto = async (entrada, salida) => {
                         }
                         salida.json(error)
                     } finally {
-
                     }
                 },
-
                 UI: async () => {
                     try {
                         const administracionJS = administracionUI()
-
                         const ok = {
                             ok: administracionJS
                         }
@@ -18304,12 +15891,10 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
                 },
                 calculadora: () => {
-
                     try {
                         const numero1 = entrada.body.numero1
                         const numero2 = entrada.body.numero2
@@ -18322,7 +15907,6 @@ const puerto = async (entrada, salida) => {
                             const operadoresValidos = ['+', '-', '*', '/', '%'];
                             return operadoresValidos.includes(operador);
                         }
-
                         if (!validarNumero(numero1) || !validarNumero(numero2)) {
                             const error = 'Entrada no válida. Por favor, ingrese números enteros o con hasta dos decimales.';
                             throw new Error(error)
@@ -18330,7 +15914,6 @@ const puerto = async (entrada, salida) => {
                         if (!validarOperador(operador)) {
                             const error = 'Operador no válido. Los operadores válidos son +, -, *, /.';
                             throw new Error(error)
-
                         }
                         const resultado = utilidades.calculadora(numero1, numero2, operador)
                         const ok = {
@@ -18341,23 +15924,13 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     }
-
-
-
-
-
-
-
                 },
                 crearEnlacesPDF: async () => {
-
                     try {
                         const reserva = entrada.body.reserva
                         const enlaces = await componentes.gestionEnlacesPDF.crearEnlacePDF(reserva)
-
                         const ok = {
                             ok: "ok",
                             enlaces: enlaces
@@ -18369,10 +15942,7 @@ const puerto = async (entrada, salida) => {
                         }
                         salida.json(error)
                     }
-
-
                 }
-
             },
             calendario: {
                 capas: {
@@ -18380,7 +15950,6 @@ const puerto = async (entrada, salida) => {
                         try {
                             const fecha = entrada.body.fecha
                             const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
-
                             if (!filtroFecha.test(fecha)) {
                                 const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante."
                                 throw new Error(error)
@@ -18391,12 +15960,10 @@ const puerto = async (entrada, salida) => {
                                 ...eventos
                             }
                             salida.json(ok)
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             return salida.json(error)
                         }
                     },
@@ -18404,24 +15971,20 @@ const puerto = async (entrada, salida) => {
                         try {
                             const fecha = entrada.body.fecha
                             const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
-
                             if (!filtroFecha.test(fecha)) {
                                 const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante."
                                 throw new Error(error)
                             }
-
                             const eventos = await eventosTodosLosApartamentos(fecha)
                             const ok = {
                                 ok: "Aqui tienes todos los apartamentos de este mes",
                                 ...eventos
                             }
                             salida.json(ok)
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             return salida.json(error)
                         }
                     },
@@ -18429,25 +15992,21 @@ const puerto = async (entrada, salida) => {
                         try {
                             const fecha = entrada.body.fecha
                             const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
-
                             if (!filtroFecha.test(fecha)) {
                                 const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante."
                                 throw new Error(error)
                             }
                             await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
                             const eventos = await eventosTodosLosBloqueos(fecha)
-
                             const ok = {
                                 ok: "Aqui tienes todos los apartamentos de este mes",
                                 ...eventos
                             }
                             salida.json(ok)
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             return salida.json(error)
                         }
                     },
@@ -18456,7 +16015,6 @@ const puerto = async (entrada, salida) => {
                             const fecha = entrada.body.fecha
                             const apartamentoIDV = entrada.body.apartamentoIDV
                             const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
-
                             if (!filtroFecha.test(fecha)) {
                                 const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante."
                                 throw new Error(error)
@@ -18477,17 +16035,14 @@ const puerto = async (entrada, salida) => {
                                 ...eventos
                             }
                             salida.json(ok)
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             return salida.json(error)
                         }
                     },
                     global: async () => {
-
                         try {
                             const fecha = entrada.body.fecha
                             const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
@@ -18509,37 +16064,28 @@ const puerto = async (entrada, salida) => {
                                 return calendarioObjeto
                             }
                             const mesPorDias = constructorObjetoPorDias(fecha)
-
                             const estructuraGlobal = {
                                 eventosMes: mesPorDias,
                                 eventosEnDetalles: []
                             }
-
                             const eventosReservas_ = await eventosReservas(fecha)
-
                             for (const [fechaDia, contenedorEventos] of Object.entries(eventosReservas_.eventosMes)) {
                                 const selectorDia = estructuraGlobal.eventosMes[fechaDia]
                                 selectorDia.push(...contenedorEventos)
                             }
                             estructuraGlobal.eventosEnDetalles.push(...eventosReservas_.eventosEnDetalle)
-
-
                             const eventosTodosLosApartamentos_ = await eventosTodosLosApartamentos(fecha)
                             for (const [fechaDia, contenedorEventos] of Object.entries(eventosTodosLosApartamentos_.eventosMes)) {
                                 const selectorDia = estructuraGlobal.eventosMes[fechaDia]
                                 selectorDia.push(...contenedorEventos)
                             }
                             estructuraGlobal.eventosEnDetalles.push(...eventosTodosLosApartamentos_.eventosEnDetalle)
-
-
                             const eventosTodosLosBloqueos_ = await eventosTodosLosBloqueos(fecha)
                             for (const [fechaDia, contenedorEventos] of Object.entries(eventosTodosLosBloqueos_.eventosMes)) {
                                 const selectorDia = estructuraGlobal.eventosMes[fechaDia]
                                 selectorDia.push(...contenedorEventos)
                             }
                             estructuraGlobal.eventosEnDetalles.push(...eventosTodosLosBloqueos_.eventosEnDetalle)
-
-
                             // Obtengo todo los uids de los calendarios sincronizados en un objeto y lo itero
                             const plataformaAibnb = "airbnb"
                             const obtenerUIDCalendriosSincronizadosAirbnb = `
@@ -18549,17 +16095,14 @@ const puerto = async (entrada, salida) => {
                             `
                             const calendariosSincronizadosAirbnbUIDS = await conexion.query(obtenerUIDCalendriosSincronizadosAirbnb, [plataformaAibnb])
                             if (calendariosSincronizadosAirbnbUIDS.rowCount > 0) {
-
                                 const calendariosUIDS = calendariosSincronizadosAirbnbUIDS.rows.map((calendario) => {
                                     return calendario.uid
                                 })
-
                                 for (const calendarioUID of calendariosUIDS) {
                                     const metadatosEventos = {
                                         fecha: fecha,
                                         calendarioUID: String(calendarioUID)
                                     }
-
                                     const eventosPorApartamentoAirbnb_ = await eventosPorApartamentoAirbnb(metadatosEventos)
                                     for (const [fechaDia, contenedorEventos] of Object.entries(eventosPorApartamentoAirbnb_.eventosMes)) {
                                         const selectorDia = estructuraGlobal.eventosMes[fechaDia]
@@ -18568,17 +16111,13 @@ const puerto = async (entrada, salida) => {
                                     estructuraGlobal.eventosEnDetalles.push(...eventosPorApartamentoAirbnb_.eventosEnDetalle)
                                 }
                             }
-
                             salida.json(estructuraGlobal)
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             return salida.json(error)
                         }
-
-
                     },
                     multiCapa: async () => {
                         try {
@@ -18590,7 +16129,6 @@ const puerto = async (entrada, salida) => {
                                 const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante."
                                 throw new Error(error)
                             }
-
                             if (!capas) {
                                 const error = "Falta determinar capas, debe de ser un array con las cadenas de las capasIDV"
                                 throw new Error(error)
@@ -18628,7 +16166,6 @@ const puerto = async (entrada, salida) => {
                                 eventosMes: mesPorDias,
                                 eventosEnDetalle: []
                             }
-
                             const capasComoComponentes = {
                                 reservas: async () => {
                                     const eventosReservas_ = await eventosReservas(fecha)
@@ -18648,7 +16185,6 @@ const puerto = async (entrada, salida) => {
                                 },
                                 todosLosBloqueos: async () => {
                                     await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
-
                                     const eventosTodosLosBloqueos_ = await eventosTodosLosBloqueos(fecha)
                                     for (const [fechaDia, contenedorEventos] of Object.entries(eventosTodosLosBloqueos_.eventosMes)) {
                                         const selectorDia = estructuraGlobal.eventosMes[fechaDia]
@@ -18673,7 +16209,6 @@ const puerto = async (entrada, salida) => {
                                         const error = "Los identificadores visuales de los apartamentos solo pueden contener, minusculas, mayusculas y numeros"
                                         throw new Error(error)
                                     }
-
                                     // Validar que le nombre del apartamento existe como tal
                                     const obtenerApartamentosIDV = `
                                         SELECT "apartamentoIDV"
@@ -18684,9 +16219,7 @@ const puerto = async (entrada, salida) => {
                                         const apartamentosIDVValidos = resuelveApartamentosIDV.rows.map((apartamentoIDV) => {
                                             return apartamentoIDV.apartamentoIDV
                                         })
-
                                         const controlApartamentosF2 = apartamentosIDV.every(apartamentosIDV => apartamentosIDVValidos.includes(apartamentosIDV));
-
                                         if (!controlApartamentosF2) {
                                             const elementosFaltantes = apartamentosIDV.filter(apartamentosIDV => !apartamentosIDVValidos.includes(apartamentosIDV));
                                             let error
@@ -18702,7 +16235,6 @@ const puerto = async (entrada, salida) => {
                                             }
                                             throw new Error(error)
                                         }
-
                                         for (const apartamentoIDV of apartamentosIDV) {
                                             const metadatosEventos = {
                                                 fecha: fecha,
@@ -18716,8 +16248,6 @@ const puerto = async (entrada, salida) => {
                                             estructuraGlobal.eventosEnDetalle.push(...eventos.eventosEnDetalle)
                                         }
                                     }
-
-
                                 },
                                 todoAirbnb: async () => {
                                     // Obtengo todo los uids de los calendarios sincronizados en un objeto y lo itero
@@ -18729,17 +16259,14 @@ const puerto = async (entrada, salida) => {
                                        `
                                     const calendariosSincronizadosAirbnbUIDS = await conexion.query(obtenerUIDCalendriosSincronizadosAirbnb, [plataformaAibnb])
                                     if (calendariosSincronizadosAirbnbUIDS.rowCount > 0) {
-
                                         const calendariosUIDS = calendariosSincronizadosAirbnbUIDS.rows.map((calendario) => {
                                             return calendario.uid
                                         })
-
                                         for (const calendarioUID of calendariosUIDS) {
                                             const metadatosEventos = {
                                                 fecha: fecha,
                                                 calendarioUID: String(calendarioUID)
                                             }
-
                                             const eventosPorApartamentoAirbnb_ = await eventosPorApartamentoAirbnb(metadatosEventos)
                                             for (const [fechaDia, contenedorEventos] of Object.entries(eventosPorApartamentoAirbnb_.eventosMes)) {
                                                 const selectorDia = estructuraGlobal.eventosMes[fechaDia]
@@ -18750,9 +16277,7 @@ const puerto = async (entrada, salida) => {
                                     }
                                 },
                                 calendariosAirbnb: async () => {
-
                                     const calendariosUID = contenedorCapas.capasCompuestas.calendariosAirbnb
-
                                     const filtroCadena = /^[0-9]+$/;
                                     if (!calendariosUID) {
                                         const error = "Falta determinar calendariosUID, debe de ser un array con las cadenas de los calendariosUID de airbnb"
@@ -18768,12 +16293,10 @@ const puerto = async (entrada, salida) => {
                                         }
                                         return filtroCapa.test(cadena);
                                     });
-
                                     if (!controlCalendariosUID) {
                                         const error = "Los identificadores visuales de los calendariod de airbnb solo pueden ser cadenas que contengan contener numeros"
                                         throw new Error(error)
                                     }
-
                                     // Validar que le nombre del apartamento existe como tal
                                     const plataformaOrigen = "airbnb"
                                     const obtenerCalendariosUID = `
@@ -18783,13 +16306,10 @@ const puerto = async (entrada, salida) => {
                                         `
                                     const resuelveCalendariosUID = await conexion.query(obtenerCalendariosUID, [plataformaOrigen])
                                     if (resuelveCalendariosUID.rowCount > 0) {
-
                                         const calendariosUIDValidos = resuelveCalendariosUID.rows.map((calendarioUID) => {
                                             return String(calendarioUID.uid)
                                         })
-
                                         const controlCalendariosF2 = calendariosUID.every(calendariosUID => calendariosUIDValidos.includes(calendariosUID));
-
                                         if (!controlCalendariosF2) {
                                             const elementosFaltantes = calendariosUID.filter(calendariosUID => !calendariosUIDValidos.includes(calendariosUID));
                                             let error
@@ -18816,11 +16336,8 @@ const puerto = async (entrada, salida) => {
                                                 selectorDia.push(...contenedorEventos)
                                             }
                                             estructuraGlobal.eventosEnDetalle.push(...eventos.eventosEnDetalle)
-
                                         }
                                     }
-
-
                                 },
                                 global: async () => {
                                     await capasComoComponentes.reservas()
@@ -18831,7 +16348,6 @@ const puerto = async (entrada, salida) => {
                             }
                             const capasDisponibles = Object.keys(capasComoComponentes)
                             const todosPresentes = capas.every(capa => capasDisponibles.includes(capa));
-
                             if (!todosPresentes) {
                                 const elementosFaltantes = capas.filter(capa => !capasDisponibles.includes(capa));
                                 let error
@@ -18868,7 +16384,6 @@ const puerto = async (entrada, salida) => {
                                 const fecha = entrada.body.fecha
                                 const calendarioUID = entrada.body.calendarioUID
                                 const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
-
                                 if (!filtroFecha.test(fecha)) {
                                     const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante."
                                     throw new Error(error)
@@ -18878,25 +16393,20 @@ const puerto = async (entrada, salida) => {
                                     const error = "el campo 'calendarioUID' solo puede ser una cadena de letras minúsculas y numeros."
                                     throw new Error(error)
                                 }
-
                                 const metadatosEventos = {
                                     fecha: fecha,
                                     calendarioUID: calendarioUID
                                 }
                                 const eventos = await eventosPorApartamentoAirbnb(metadatosEventos)
-
                                 const ok = {
                                     ok: "Aqui tienes las reservas de este mes",
                                     ...eventos
-
                                 }
                                 salida.json(ok)
-
                             } catch (errorCapturado) {
                                 const error = {
                                     error: errorCapturado.message
                                 }
-
                                 return salida.json(error)
                             }
                         }
@@ -18905,7 +16415,6 @@ const puerto = async (entrada, salida) => {
                 obtenerNombresCalendarios: {
                     airbnb: async () => {
                         try {
-
                             const ok = {
                                 ok: "Lista con metadtos de los calendarios sincronizados de airbnb",
                                 calendariosSincronizados: []
@@ -18921,21 +16430,16 @@ const puerto = async (entrada, salida) => {
                             WHERE 
                                 "plataformaOrigen" = $1;`
                             const resuelveCalendarios = await conexion.query(consultaCalendarios, [plataformaOrigen])
-
                             for (const detallesDelCalendario of resuelveCalendarios.rows) {
                                 const apartamentoIDV = detallesDelCalendario.apartamentoIDV
                                 detallesDelCalendario.apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
                             }
-
                             ok.calendariosSincronizados = [...resuelveCalendarios.rows]
-
                             salida.json(ok)
-
                         } catch (errorCapturado) {
                             const error = {
                                 error: errorCapturado.message
                             }
-
                             return salida.json(error)
                         }
                     }
@@ -18954,7 +16458,6 @@ const puerto = async (entrada, salida) => {
             const error = "Las rutas de la zonas solo admiten minusculas y mayusculas junto con barras, nada mas ni siqueira espacios"
             throw new Error(error)
         }
-
         let arbol = zona.split("/")
         arbol = arbol.filter(rama => rama.trim() !== "");
         if (!arbol) {
@@ -18967,7 +16470,6 @@ const puerto = async (entrada, salida) => {
             if (arbolVolatil.hasOwnProperty(rama)) {
                 const controlIDX = arbolVolatil[rama]
                 if (controlIDX.hasOwnProperty("IDX")) {
-
                     const usuarioIDX = entrada.session.usuario
                     // Primero estas idenfiticao o no
                     if (!usuarioIDX) {
@@ -18982,7 +16484,6 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                     }
-
                 }
                 arbolVolatil = arbolVolatil[rama]
             } else {
@@ -19022,12 +16523,10 @@ const puerto = async (entrada, salida) => {
             estructuraFinal.tipo = "rutaDeZonaIncompatible"
             estructuraFinal.mensaje = errorCapturado.message
         }
-
         salida.json(estructuraFinal)
     };
     salida.end()
 }
-
 const calendarios_compartidos = async (entrada, salida) => {
     try {
         const url = entrada.url.toLowerCase()
@@ -19041,8 +16540,6 @@ const calendarios_compartidos = async (entrada, salida) => {
             .filter(url => url.trim() !== "calendarios_compartidos")
             .filter(url => url.trim() !== "")
         const calendarioUID = urlArray[0];
-
-
         //Verificara que existe el calendarios
         // ENFOQUE ERRONEO ->> Hay que mostrar los eventos de CASAVITINI por apartmento durante un año a partir de hoy!!!!!! por que este calendario es para sincronizar con las otras plataformas
         const consultaConfiguracion = `
@@ -19062,45 +16559,33 @@ const calendarios_compartidos = async (entrada, salida) => {
         if (resuelveCalendariosSincronizados.rowCount === 0) {
             salida.status(404).end();
         }
-
         if (resuelveCalendariosSincronizados.rowCount === 1) {
-
             const detallesDelCalendario = resuelveCalendariosSincronizados.rows[0]
             const apartamentoIDV = detallesDelCalendario.apartamentoIDV
             const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
             detallesDelCalendario.apartamentoUI = apartamentoUI
             const datosCalendario = resuelveCalendariosSincronizados.rows
-
             const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
             const tiempoZH = DateTime.now().setZone(zonaHoraria);
             const fechaActual_ISO = tiempoZH.toISODate()
             const fechaLimite = tiempoZH.plus({ days: 360 }).toISODate();
             const fechaInicio = DateTime.fromISO(fechaActual_ISO);
             const fechaFin = DateTime.fromISO(fechaLimite);
-
             const matrizHoraEntradaSalida = await horaEntradaSalida()
-
-
             const generarFechasEnRango = (fechaInicio, fechaFin) => {
                 const fechasEnRango = [];
                 let fechaActual = fechaInicio;
-
                 while (fechaActual <= fechaFin) {
                     fechasEnRango.push(fechaActual.toISODate());
                     fechaActual = fechaActual.plus({ days: 1 });
                 }
                 return fechasEnRango;
             }
-
             const arrayFechas = generarFechasEnRango(fechaInicio, fechaFin)
             const objetoFechas = {}
-
             for (const fecha of arrayFechas) {
                 objetoFechas[fecha] = {}
-
             }
-
-
             // Primero buscamso si hay bloqueos permanentes
             // si no hay procedemos a buscar bloquoeos temporales y reservas
             const bloqueoPermanente = "permanente"
@@ -19113,23 +16598,19 @@ const calendarios_compartidos = async (entrada, salida) => {
             const resuelveBloqueosPermanentes = await conexion.query(consultaBloqueosPermanentes, [bloqueoPermanente, apartamentoIDV])
             const bloqueosPermamentes = resuelveBloqueosPermanentes.rows
             const eventos = []
-
             if (bloqueosPermamentes.length > 0) {
                 for (const detallesdelBloqueo of bloqueosPermamentes) {
                     const bloqueoUID = detallesdelBloqueo.uid
-
                     const estructuraEVENTO = {
                         start: fechaInicio,
                         end: fechaFin,
                         summary: 'Bloqueo permanente en casavitini.com',
                         description: `Detalles del bloqueo: https://casavitini.com/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
-
                     }
                     eventos.push(estructuraEVENTO)
                 }
             } else {
                 const bloqueoTemporal = "rangoTemporal"
-
                 const apartamenosBloqueadosTemporalmente = `
                 SELECT 
                 uid,
@@ -19148,17 +16629,12 @@ const calendarios_compartidos = async (entrada, salida) => {
                 ]
                 const resuelveBloqueosTemporales = await conexion
                     .query(apartamenosBloqueadosTemporalmente, datosConsultaBloqueos)
-
                 const bloqueosTemporales = resuelveBloqueosTemporales.rows
-
                 for (const detalleDelBloqueo of bloqueosTemporales) {
                     const fechaEntradaBloqueo_ISO = detalleDelBloqueo.entrada
                     const fechaSalidaBloqueo_ISO = detalleDelBloqueo.salida
                     const bloqueoUID = detalleDelBloqueo.uid
-
-
                     // Aqui hay que hacer que no muestre la hora
-
                     const fechaEntrada_objeto = (DateTime.fromObject({
                         year: fechaEntradaBloqueo_ISO.split("-")[0],
                         month: fechaEntradaBloqueo_ISO.split("-")[1],
@@ -19168,8 +16644,6 @@ const calendarios_compartidos = async (entrada, salida) => {
                     }, {
                         zone: zonaHoraria
                     }))
-
-
                     const fechaSalida_objeto = (DateTime.fromObject({
                         year: fechaSalidaBloqueo_ISO.split("-")[0],
                         month: fechaSalidaBloqueo_ISO.split("-")[1],
@@ -19177,13 +16651,9 @@ const calendarios_compartidos = async (entrada, salida) => {
                         hour: "23",
                         minute: "59",
                         second: "59"
-
                     }, {
                         zone: zonaHoraria
                     }))
-
-
-
                     const estructuraEVENTO = {
                         start: fechaEntrada_objeto.toISO(),
                         end: fechaSalida_objeto.toISO(),
@@ -19192,7 +16662,6 @@ const calendarios_compartidos = async (entrada, salida) => {
                     }
                     eventos.push(estructuraEVENTO)
                 }
-
                 const consultaReservas = `
                 SELECT 
                 reserva,
@@ -19203,14 +16672,11 @@ const calendarios_compartidos = async (entrada, salida) => {
                 entrada < $2::DATE AND
                 salida > $1::DATE    
                 AND "estadoReserva" <> 'cancelada';`
-
                 const resuelveReservas = await conexion.query(consultaReservas, [fechaActual_ISO, fechaLimite])
                 for (const detallesReserva of resuelveReservas.rows) {
                     const reservaUID = detallesReserva.reserva
                     const fechaEntrada_ISO = detallesReserva.entrada
                     const fechaSalida_ISO = detallesReserva.salida
-
-
                     const fechaEntrada_objeto = (DateTime.fromObject({
                         year: fechaEntrada_ISO.split("-")[0],
                         month: fechaEntrada_ISO.split("-")[1],
@@ -19220,8 +16686,6 @@ const calendarios_compartidos = async (entrada, salida) => {
                     }, {
                         zone: zonaHoraria
                     }))
-
-
                     const fechaSalida_objeto = (DateTime.fromObject({
                         year: fechaSalida_ISO.split("-")[0],
                         month: fechaSalida_ISO.split("-")[1],
@@ -19231,10 +16695,6 @@ const calendarios_compartidos = async (entrada, salida) => {
                     }, {
                         zone: zonaHoraria
                     }))
-
-
-
-
                     const consultaApartamentoEnReserva = `
                     SELECT apartamento 
                     FROM "reservaApartamentos" 
@@ -19242,13 +16702,11 @@ const calendarios_compartidos = async (entrada, salida) => {
                     const resuelveApartamento = await conexion.query(consultaApartamentoEnReserva, [reservaUID, apartamentoIDV])
                     // 
                     // Aqui esta el error
-
                     const apartamentosDeLaReserva = resuelveApartamento.rows
                     for (const apartamentos of apartamentosDeLaReserva) {
                         if (apartamentos.apartamento === apartamentoIDV) {
                             const estructuraEVENTO = {
                                 //start: DateTime.fromISO(fechaEntrada_ISO+"T000000Z").toISODate(),
-
                                 start: fechaEntrada_objeto.toISO(),
                                 end: fechaSalida_objeto.toISO(),
                                 summary: `${apartamentoUI} de la reserva ${reservaUID} en casavitini.com`,
@@ -19257,7 +16715,6 @@ const calendarios_compartidos = async (entrada, salida) => {
                             eventos.push(estructuraEVENTO)
                         }
                     }
-
                     if (resuelveApartamento.rows === 1) {
                         // Esto esta mal por que y no se añade con le push por que si hay uno se va a iterar el loop de arriba y luego esto.
                         const evento = {
@@ -19269,29 +16726,12 @@ const calendarios_compartidos = async (entrada, salida) => {
                         // eventos.push(evento)
                     }
                 }
-
-
-
-
-
-
             }
-
             const exportarCalendario_ = await exportarClendario(eventos)
             const icalData = exportarCalendario_
             salida.attachment('eventos.ics');
             salida.send(icalData);
-
-
-
         }
-
-
-
-
-
-
-
     } catch (errorCapturado) {
         const error = {
             error: errorCapturado.message
@@ -19299,12 +16739,8 @@ const calendarios_compartidos = async (entrada, salida) => {
         salida.json(error)
     }
 }
-
-
 export default {
     arranque,
     calendarios_compartidos,
     puerto
 }
-
-

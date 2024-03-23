@@ -1,14 +1,10 @@
 import { conexion } from "../../db.mjs"
-
 const bloqueosPorRango_apartamentoIDV = async (metadatos) => {
-
     try {
-
         const fechaInicioRango_ISO = metadatos.fechaInicioRango_ISO
         const fechaFinRango_ISO = metadatos.fechaFinRango_ISO
-        const apartamentoIDV = metadatos.apartamentoIDV
+        const apartamentoIDV = metadatos.apartamentoIDV || []
         const zonaBloqueo_array = metadatos.zonaBloqueo_array
-
         const consultaBloqueos = `
           SELECT 
           uid,
@@ -51,7 +47,6 @@ const bloqueosPorRango_apartamentoIDV = async (metadatos) => {
     } catch (errorCapturado) {
         throw errorCapturado
     }
-
 }
 export {
     bloqueosPorRango_apartamentoIDV

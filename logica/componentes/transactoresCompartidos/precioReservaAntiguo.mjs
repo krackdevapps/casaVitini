@@ -21,13 +21,11 @@ const precioReserva = async (reserva) => {
         let resuelveConsutaPrecios = await conexion.query(consultaPrecios, [apartamento])
         resuelveConsutaPrecios = resuelveConsutaPrecios.rows[0]
         totalNeto = totalNeto + Number(resuelveConsutaPrecios.precio)
-
         const obtenerApartamentoUI = `
         SELECT "apartamentoUI" 
         FROM apartamentos
         WHERE apartamento = $1;`
         let resuelveObtenerApartamentoUI = await conexion.query(obtenerApartamentoUI, [apartamento])
-
         const precioApartamento = {
             "apartamentoUI": resuelveObtenerApartamentoUI.rows[0].apartamentoUI,
             "apartamentoIDV": apartamento,

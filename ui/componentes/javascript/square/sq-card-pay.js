@@ -14,14 +14,12 @@ async function verifyBuyer(payments, token) {
     currencyCode: 'GBP',
     intent: 'CHARGE',
   };
-
   const verificationResults = await payments.verifyBuyer(
     token,
     verificationDetails
   );
   return verificationResults.token;
 }
-
 async function CardPay(fieldEl, buttonEl) {
   // Create a card payment object and attach to page
   const card = await window.payments.card({
@@ -35,10 +33,8 @@ async function CardPay(fieldEl, buttonEl) {
     }
   });
   await card.attach(fieldEl);
-
   async function eventHandler(event) {
     // Clear any existing messages
-
     console.info(">>> Se inicia el procesod de pago")
     window.paymentFlowMessageEl.innerText = '';
     const destinoDinamico = document.querySelector("[pasarelaZonaDePago]")?.getAttribute("pasarelaZonaDePago")
@@ -46,7 +42,6 @@ async function CardPay(fieldEl, buttonEl) {
       const error = "sq-cardpay necesita un elmeneto pasarela=zonaDePago donde se defina el objeto"
       return casaVitini.ui.vistas.advertenciaInmersiva(error)
     }
-
     if (destinoDinamico === "confirmarReserva") {
       try {
         casaVitini.ui.vistas.reservasNuevo.controlPrevioEnvioDatos()
@@ -54,13 +49,10 @@ async function CardPay(fieldEl, buttonEl) {
         return casaVitini.ui.vistas.advertenciaInmersiva(error.message)
       }
     }
-
-
     try {
       casaVitini.componentes.flujoPagoUI.desplegarUI()
       const result = await card.tokenize();
       const verificationToken = await verifyBuyer(window.payments, result.token);
-
       if (result.status === 'OK') {
         // Use global method from sq-payment-flow.js
         window.createPayment(
@@ -74,7 +66,6 @@ async function CardPay(fieldEl, buttonEl) {
         casaVitini.componentes.limpiarAdvertenciasInmersivas()
         console.log("error1")
         //window.showError(`Error: ${e.message}`);
-
       } else {
         console.log("error2")
         const errorGenerico = "Ha ocurrido un error"
@@ -83,6 +74,5 @@ async function CardPay(fieldEl, buttonEl) {
       }
     }
   }
-
   buttonEl.addEventListener('click', eventHandler);
 }

@@ -1,5 +1,4 @@
 import { conexion } from '../db.mjs';
-
 const detallesReserva = async (metadatos) => {
     try {
         const reservaUID = metadatos.reservaUID
@@ -11,9 +10,7 @@ const detallesReserva = async (metadatos) => {
         if (typeof reservaUID !== "number" || !Number.isInteger(reservaUID) || reservaUID <= 0) {
             const error = "Se ha definido correctamente la clave 'reserva' pero el valor de esta debe de ser un numero positivo, si has escrito un numero positivo, revisa que en el objeto no este numero no este envuelvo entre comillas"
             throw new Error(error)
-
         }
-
         const reserva = {}
         // Hay que pasar las fecha a TZ antes de imprimir
         const reservaConsulta = `
@@ -33,9 +30,7 @@ const detallesReserva = async (metadatos) => {
             const error = "No existe el ID de la reserva"
             throw new Error(error)
         }
-
         const informacionGlobal = async () => {
-
             const detallesGlobalesReserva = reservaRespuesta.rows[0]
             const consultaTitular = `
             SELECT
@@ -44,7 +39,6 @@ const detallesReserva = async (metadatos) => {
             WHERE "reservaUID" = $1`
             const resuelveTitularVitini = await conexion.query(consultaTitular, [reservaUID])
             const titularUID = resuelveTitularVitini.rows[0]?.titularUID
-
             if (titularUID) {
                 const consultaElimintarTitularPool = `
                 DELETE FROM 
@@ -53,7 +47,6 @@ const detallesReserva = async (metadatos) => {
                 reserva = $1;
                 `
                 await conexion.query(consultaElimintarTitularPool, [reservaUID])
-
                 const consultaTitular = `
                 SELECT
                 nombre,
@@ -65,7 +58,6 @@ const detallesReserva = async (metadatos) => {
                 FROM clientes
                 WHERE uid = $1`
                 const resuelveTitular = await conexion.query(consultaTitular, [titularUID])
-
                 if (resuelveTitular.rowCount === 1) {
                     const detallesTitular = resuelveTitular.rows[0]
                     const nombre = detallesTitular.nombre
@@ -75,7 +67,6 @@ const detallesReserva = async (metadatos) => {
                     const pasaporteTitular = detallesTitular.pasaporte
                     const emailTitular = detallesTitular.email
                     const telefonoTitular = detallesTitular.telefono
-
                     const estructuraTitular = {
                         clienteUID: titularUID,
                         nombreTitular: nombreTitular,
@@ -87,7 +78,6 @@ const detallesReserva = async (metadatos) => {
                     detallesGlobalesReserva.titular = estructuraTitular
                 }
             } else {
-
                 const consultaTitularPool = `
                 SELECT
                 "nombreTitular",
@@ -103,7 +93,6 @@ const detallesReserva = async (metadatos) => {
                     const pasaporteTitular = detallesTitularPool.pasaporteTitular
                     const emailTitular = detallesTitularPool.emailTitular
                     const telefonoTitular = detallesTitularPool.telefonoTitular
-
                     const estructuraTitularPool = {
                         nombreTitular: nombreTitular,
                         pasaporteTitular: pasaporteTitular,
@@ -116,11 +105,8 @@ const detallesReserva = async (metadatos) => {
             }
             delete detallesGlobalesReserva.titularPool
             // delete detallesGlobalesReserva.titular
-
-
             const fechaCreacion = detallesGlobalesReserva.fechaCreacion
             const fechaCreacionFormatoHumano =
-
                 reserva.reserva = reservaRespuesta.rows[0]
         }
         const recuperarClientes = async (reservaUID, habitacionUID) => {
@@ -156,7 +142,6 @@ const detallesReserva = async (metadatos) => {
                         WHERE
                         "pernoctanteUID" = $1;`
                         await conexion.query(consultaEliminarPernoctantePool, [pernoctanteUID])
-
                         const estructura = {
                             clienteUID: clienteUID,
                             pernoctanteUID: pernoctanteUID,
@@ -183,10 +168,8 @@ const detallesReserva = async (metadatos) => {
                         }
                     }
                 }
-
             }
             for (const detallesPernoctanteUID of pernoctantesUIDS) {
-
                 const clienteUID = detallesPernoctanteUID.clienteUID
                 const pernoctanteUID = detallesPernoctanteUID.pernoctanteUID
                 const fechaCheckIn = detallesPernoctanteUID.fechaCheckIn || null
@@ -208,10 +191,8 @@ const detallesReserva = async (metadatos) => {
                     if (cliente) {
                         const primeroApellido = cliente.primerApellido ? cliente.primerApellido : ""
                         const segundoApellido = cliente.segundoApellido ? cliente.segundoApellido : ""
-
                         const nombreCliente = cliente.nombre + " " + primeroApellido + " " + segundoApellido
                         const pasaporteCliente = cliente.pasaporte
-
                         const estructuraPernoctante = {
                             clienteUID: clienteUID,
                             pernoctanteUID: pernoctanteUID,
@@ -223,10 +204,8 @@ const detallesReserva = async (metadatos) => {
                         estructuraFinal.pernoctantes.push(estructuraPernoctante)
                     }
                 }
-
             }
             for (const detallesPernoctantePoolUID of pernoctantesPoolUIDS) {
-
                 const clientePoolUID = detallesPernoctantePoolUID.clientePoolUID
                 const pernoctanteUID = detallesPernoctantePoolUID.pernoctanteUID
                 const consultaClientesPool = `
@@ -240,9 +219,7 @@ const detallesReserva = async (metadatos) => {
                 `
                 const recuperarDatosClientePool = await conexion.query(consultaClientesPool, [clientePoolUID])
                 if (recuperarDatosClientePool.rowCount === 1) {
-
                     const detallesClientePool = recuperarDatosClientePool.rows[0]
-
                     const nombreCompleto = detallesClientePool.nombreCompleto
                     const pasaporte = detallesClientePool.pasaporte
                     const estructuraPernoctante = {
@@ -261,7 +238,6 @@ const detallesReserva = async (metadatos) => {
                 pernoctantes: [],
                 pernoctantesPool: []
             }
-
             const consultaPernoctante = `
             SELECT 
             "pernoctanteUID", 
@@ -275,7 +251,6 @@ const detallesReserva = async (metadatos) => {
             WHERE 
             reserva = $1 AND habitacion IS NULL;
             `
-
             const recuperarPernoctantes = await conexion.query(consultaPernoctante, [reservaUID])
             const clienteUIDS = []
             const clientePoolUIDS = []
@@ -287,8 +262,6 @@ const detallesReserva = async (metadatos) => {
                     const clientePoolUID = detallesCliente.clientePoolUID
                     const fechaCheckIn = detallesCliente.fechaCheckIn
                     const fechaCheckOutAdelantado = detallesCliente.fechaCheckOutAdelantado
-
-
                     if (clienteUID) {
                         const estructura = {
                             clienteUID: clienteUID,
@@ -297,7 +270,6 @@ const detallesReserva = async (metadatos) => {
                             fechaCheckIn:fechaCheckIn,
                             fechaCheckOutAdelantado:fechaCheckOutAdelantado,
                         }
-
                         clienteUIDS.push(estructura)
                     }
                     if (clientePoolUID) {
@@ -309,15 +281,12 @@ const detallesReserva = async (metadatos) => {
                         clientePoolUIDS.push(estructura)
                     }
                 }
-
             }
-
             for (const detallesClienteUID of clienteUIDS) {
                 const pernoctanteUID = detallesClienteUID.pernoctanteUID
                 const clienteUID = detallesClienteUID.clienteUID
                 const fechaCheckIn = detallesClienteUID.fechaCheckIn
                 const fechaCheckOutAdelantado = detallesClienteUID.fechaCheckOutAdelantado
-
                 const consultaClientes = `
                 SELECT
                 nombre,
@@ -329,19 +298,16 @@ const detallesReserva = async (metadatos) => {
                 WHERE 
                 uid = $1
                 `
-
                 const recuperarDatosCliente = await conexion.query(consultaClientes, [clienteUID])
                 if (recuperarDatosCliente.rowCount === 1) {
                     const cliente = recuperarDatosCliente.rows[0]
                     if (cliente) {
                         let primeroApellido = cliente.primerApellido ? cliente.primerApellido : ""
                         let segundoApellido = cliente.segundoApellido ? cliente.segundoApellido : ""
-
                         let nombreCliente = cliente.nombre + " " + primeroApellido + " " + segundoApellido
                         nombreCliente = nombreCliente.trim();
                         nombreCliente = nombreCliente.replace(/\s+/g, ' ');
                         let pasaporteCliente = cliente["pasaporte"]
-
                         const estructuraPernoctante = {
                             clienteUID: clienteUID,
                             pernoctanteUID: pernoctanteUID,
@@ -353,14 +319,10 @@ const detallesReserva = async (metadatos) => {
                         estructuraFinal.pernoctantes.push(estructuraPernoctante)
                     }
                 }
-
             }
-
             for (const detallesClientePoolUID of clientePoolUIDS) {
-
                 const pernoctanteUID = detallesClientePoolUID.pernoctanteUID
                 const clientePoolUID = detallesClientePoolUID.clientePoolUID
-
                 const consultaClientesPool = `
                 SELECT
                 "nombreCompleto",
@@ -370,13 +332,9 @@ const detallesReserva = async (metadatos) => {
                 WHERE 
                 uid = $1
                 `
-
                 const recuperarDatosClientePool = await conexion.query(consultaClientesPool, [clientePoolUID])
-
                 if (recuperarDatosClientePool.rowCount === 1) {
-
                     const detallesClientePool = recuperarDatosClientePool.rows[0]
-
                     const nombreCompleto = detallesClientePool.nombreCompleto
                     const pasaporte = detallesClientePool.pasaporte
                     const estructuraPernoctante = {
@@ -386,12 +344,9 @@ const detallesReserva = async (metadatos) => {
                         pasaportePernoctante: pasaporte
                     }
                     estructuraFinal.pernoctantesPool.push(estructuraPernoctante)
-
                 }
-
             }
             return estructuraFinal
-
         }
         const detallesAlojamiento = async () => {
             const recuperarApartamentos = await conexion.query(`SELECT uid, apartamento, "apartamentoUI" FROM "reservaApartamentos" WHERE reserva = $1`, [reservaUID])
@@ -399,7 +354,6 @@ const detallesReserva = async (metadatos) => {
             reserva["alojamiento"] = {}
             if (apartamentos.length === 0) {
                 reserva["alojamiento"] = {}
-
             }
             const habitacionObjeto = {}
             const apartamentosIndiceOrdenado = []
@@ -407,7 +361,6 @@ const detallesReserva = async (metadatos) => {
                 apartamentosIndiceOrdenado.push(apartamento.apartamento)
             })
             apartamentosIndiceOrdenado.sort()
-
             const apartamenosOrdenados = []
             apartamentosIndiceOrdenado.map((apartamentoIndice) => {
                 apartamentos.map((apartamento) => {
@@ -417,33 +370,23 @@ const detallesReserva = async (metadatos) => {
                 })
             })
             for (const apartamento of apartamenosOrdenados) {
-
                 const apartamentoUID = apartamento["uid"]
                 const apartamentoIDV = apartamento["apartamento"]
                 const apartamentoUI = apartamento["apartamentoUI"]
-
                 reserva["alojamiento"][apartamentoIDV] = {}
                 reserva["alojamiento"][apartamentoIDV]["apartamentoUI"] = apartamentoUI
-
-
                 const recuperarHabitaciones = await conexion.query(`SELECT uid, habitacion, "habitacionUI" FROM "reservaHabitaciones" WHERE apartamento = $1`, [apartamentoUID])
                 const habitaciones = recuperarHabitaciones.rows
                 const habitacionObjeto = {}
-
                 reserva["alojamiento"][apartamentoIDV]["apartamentoUID"] = apartamentoUID
                 reserva["alojamiento"][apartamentoIDV]["habitaciones"] = {}
-
                 for (const habitacion of habitaciones) {
-
                     const habitacionUID = habitacion["uid"]
                     const habitacionIDV = habitacion["habitacion"]
                     const habitacionUI = habitacion["habitacionUI"]
-
                     habitacionObjeto[habitacionIDV] = {}
                     reserva["alojamiento"][apartamentoIDV]["habitaciones"][habitacionIDV] = {}
                     reserva["alojamiento"][apartamentoIDV]["habitaciones"][habitacionIDV]["habitacionUI"] = habitacionUI
-
-
                     const recuperarCama = await conexion.query(`SELECT uid, cama, "camaUI" FROM "reservaCamas" WHERE habitacion = $1`, [habitacionUID])
                     if (recuperarCama.rowCount > 0) {
                         const camaIDV = recuperarCama.rows[0]["cama"]
@@ -452,27 +395,18 @@ const detallesReserva = async (metadatos) => {
                         reserva["alojamiento"][apartamentoIDV]["habitaciones"][habitacionIDV]["camaUI"] = camaUI
                         reserva["alojamiento"][apartamentoIDV]["habitaciones"][habitacionIDV]["camaIDV"] = camaIDV
                         reserva["alojamiento"][apartamentoIDV]["habitaciones"][habitacionIDV]["camaUID"] = camaUID
-
                     }
                     if (recuperarCama.rowCount === 0) {
                         reserva["alojamiento"][apartamentoIDV]["habitaciones"][habitacionIDV]["camaUI"] = "Sin cama asignada"
                     }
                     reserva["alojamiento"][apartamentoIDV]["habitaciones"][habitacionIDV]["habitacionUID"] = habitacionUID
-
                     const pernoctanesEnHabitacion = await recuperarClientes(reservaUID, habitacionUID)
-
                     reserva["alojamiento"][apartamentoIDV]["habitaciones"][habitacionIDV]["pernoctantes"] = pernoctanesEnHabitacion
-
                 }
-
             }
-
             const pernoctantesSinHabitacion = await recuperarClientesSinHabitacionAsignada(reservaUID)
             reserva["pernoctantesSinHabitacion"] = pernoctantesSinHabitacion
             //Aqui pernoctantes sin alojamiento
-
-
-
         };
         const pernoctantes = async () => {
             const consultaPernoctnates = `
@@ -489,7 +423,6 @@ const detallesReserva = async (metadatos) => {
             const recuperarPernoctantes = await conexion.query(consultaPernoctnates, [reservaUID])
             const arrayPernoctantes = []
             for (const pernoctante of recuperarPernoctantes.rows) {
-
                 const pernoctanteUID = pernoctante.pernoctanteUID // UID como pernoctante no como clinete
                 const clienteUID = pernoctante.clienteUID
                 const habitacionAsociada = pernoctante.habitacion
@@ -499,14 +432,12 @@ const detallesReserva = async (metadatos) => {
                 let pasaorteCliente;
                 const datosPernoctante = {}
                 if (clienteUID) {
-
                     const consultaEliminarPernoctantePool = `
                     DELETE FROM
                     "poolClientes"
                     WHERE
                     "pernoctanteUID" = $1;`
                     await conexion.query(consultaEliminarPernoctantePool, [pernoctanteUID])
-
                     tipoPernoctante = "cliente"
                     const consultaDatosCliente = [
                         `SELECT
@@ -525,7 +456,6 @@ const detallesReserva = async (metadatos) => {
                     const segundoApellido = detallesDelCliente.segundoApellido ? detallesDelCliente.segundoApellido : ""
                     nombreCliente = detallesDelCliente.nombre + " " + primeroApellido + " " + segundoApellido
                     pasaorteCliente = detallesDelCliente.pasaporte
-
                 } else {
                     tipoPernoctante = "clientePool"
                     const consultaClientePool = `
@@ -536,7 +466,6 @@ const detallesReserva = async (metadatos) => {
                     "poolClientes" 
                     WHERE 
                     "pernoctanteUID" = $1;`
-
                     const recuperarDatosCliente = await conexion.query(consultaClientePool, pernoctanteUID)
                     const detallesClientePool = recuperarDatosCliente.rows[0]
                     nombreCliente = detallesClientePool.nombreCompleto
@@ -552,17 +481,14 @@ const detallesReserva = async (metadatos) => {
                 arrayPernoctantes.push(datosPernoctante)
             }
             reserva.pernoctantes = arrayPernoctantes
-
         }
         const desgloseTotal = async () => {
-
             reserva.desgloseFinanciero = {}
             reserva.desgloseFinanciero.totalesPorNoche = []
             reserva.desgloseFinanciero.totalesPorApartamento = []
             reserva.desgloseFinanciero.ofertas = []
             reserva.desgloseFinanciero.impuestos = []
             reserva.desgloseFinanciero.totales = []
-
             const seleccionarTotalesPorNoche = `
         SELECT
         to_char("fechaDiaConNoche", 'FMDD/FMMM/YYYY') as "fechaDiaConNoche", 
@@ -579,7 +505,6 @@ const detallesReserva = async (metadatos) => {
             } else {
                 reserva.desgloseFinanciero.totalesPorNoche = resuelveSeleccionarTotalesPorNoche.rows
             }
-
             const seleccionarTotalesPorApartamento = `
         SELECT
         "apartamentoIDV",
@@ -593,12 +518,10 @@ const detallesReserva = async (metadatos) => {
             const resuelveSeleccionarTotalesPorApartamento = await conexion.query(seleccionarTotalesPorApartamento, [reservaUID])
             if (resuelveSeleccionarTotalesPorApartamento.rowCount === 0) {
                 const error = "Esta reserva no informacion sobre los totales por apartamento"
-
                 reserva.desgloseFinanciero.totalesPorApartamento = []
             } else {
                 reserva.desgloseFinanciero.totalesPorApartamento = resuelveSeleccionarTotalesPorApartamento.rows
             }
-
             const seleccionarOfertas = `
             SELECT
             "nombreOferta",
@@ -626,7 +549,6 @@ const detallesReserva = async (metadatos) => {
                             delete oferta.tipoDescuento
                             delete oferta.cantidad
                         }
-
                         oferta.apartamentosEspecificos = oferta.detallesOferta
                         delete oferta.detallesOferta
                     }
@@ -637,23 +559,15 @@ const detallesReserva = async (metadatos) => {
                     contenedorTipoOferta[tipoOferta].push(oferta)
                 }
                 const contenedorFinalFormateado = []
-
                 for (const contenedor of Object.entries(contenedorTipoOferta)) {
-
                     const tipoOferta = contenedor[0]
                     const contenedorOfertas = contenedor[1]
-
                     const estructuraContenedor = {}
                     estructuraContenedor[tipoOferta] = contenedorOfertas
-
                     contenedorFinalFormateado.push(estructuraContenedor)
-
                 }
-
-
                 reserva.desgloseFinanciero.ofertas = contenedorFinalFormateado
             }
-
             const seleccionarImpuestos = `
         SELECT
         "nombreImpuesto",
@@ -667,12 +581,10 @@ const detallesReserva = async (metadatos) => {
             const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, [reservaUID])
             if (resuelveSeleccionarImpuestos.rowCount === 0) {
                 const error = "Esta reserva no tiene informacion sobre los impuestos"
-
                 reserva.desgloseFinanciero.impuestos = []
             } else {
                 reserva.desgloseFinanciero.impuestos = resuelveSeleccionarImpuestos.rows
             }
-
             /*
             promedioNetoPorNoche
             totalReservaNetoSinOfertas
@@ -701,11 +613,7 @@ const detallesReserva = async (metadatos) => {
             } else {
                 reserva.desgloseFinanciero.totales = resuelveSeleccionarTotales.rows[0]
             }
-
-
-
         };
-
         switch (solo) {
             case "informacionGlobal":
                 await informacionGlobal();
@@ -734,7 +642,6 @@ const detallesReserva = async (metadatos) => {
         throw error
     }
 }
-
 export {
     detallesReserva
 };

@@ -9,9 +9,7 @@ const config = {
   accessToken: SQUARE_ACCESS_TOKEN,
   // userAgentDetail: "sample_app_node_payment" // Remove or replace this detail when building your own app
 }
-
 // Configure instance of Square client
 const clienteSquare = new Client(config)
-
 //module.exports = defaultClient
 export { clienteSquare };

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,9 +11,6 @@
       padding: 0;
       scroll-behavior: smooth;
     }
-
-
-
     .contenedorParalax .parallax {
       height: 100vh;
       display: flex;
@@ -24,16 +20,13 @@
       overflow: hidden;
       flex-direction: column;
     }
-
     .contenedorParalax .parallax img {
       max-width: none;
       width: auto;
       height: 100%;
       /* Hace que la imagen sea más alta para el efecto de desplazamiento */
     
-
     }
-
     .contenedorParalax .imagenParalaje {
       max-width: none;
       width: auto;
@@ -43,25 +36,21 @@
       left: 50%;
       background-size: cover;
     }
-
     .parallax_comenzado {
       background-color: aqua;
       height: 100vh;
       width: 100vw;
     }
-
     @keyframes entrada {
       from {
         /* opacity: 0;  */
     transform: translate3d(0, 0, 0);
       }
-
       to {
         /* opacity: 1; */
         transform: translate3d(0, 50%, 0);
       }
     }
-
     [imagenParalaje="imagen"] {
       view-timeline-name: --entradaImagen;
     animation-timeline: --entradaImagen;
@@ -72,13 +61,10 @@
     /* animation-range: entry 0% cover 30%; */
     animation-range: entry 100% cover 100%;
     }
-
-
     /* 
     [imagenParalaje="imagen"] {
       view-timeline-name: --salidaImagen;
       animation-timeline: --salidaImagen;
-
       animation-name: appear;
       animation-fill-mode: both;
       animation-duration: 1ms;
@@ -88,16 +74,12 @@
     */
   </style>
 </head>
-
 <body>
-
   <div class="contenedorParalax">
-
     <div class="parallax_comenzado" contenedorParalaje="paralaje">
       <img src="test.jpg" alt="Example Image" class="imagenParalaje" imagenParalaje="imagen">
     </div>
     <div class="texto">
-
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit cumque
       facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit
@@ -137,7 +119,6 @@
     </div>
  
     <div class="texto">
-
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit cumque
       facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit
@@ -176,7 +157,6 @@
       aspernatur?
     </div>
     <div class="texto">
-
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit cumque
       facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit
@@ -214,7 +194,6 @@
       cumque facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur?
     </div>   <div class="texto">
-
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit cumque
       facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit
@@ -252,7 +231,6 @@
       cumque facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur?
     </div>   <div class="texto">
-
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit cumque
       facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit
@@ -290,7 +268,6 @@
       cumque facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur?
     </div>   <div class="texto">
-
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit cumque
       facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit
@@ -328,7 +305,6 @@
       cumque facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur?
     </div>   <div class="texto">
-
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit cumque
       facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil consequuntur. Porro, est odit
@@ -366,7 +342,6 @@
       cumque facere eos asperiores itaque voluptates exercitationem repellendus doloribus, ut minima esse et nulla sed
       aspernatur?
     </div>
-
   </div>
   <!-- 
   <script>
@@ -375,64 +350,47 @@
       /*
       const parallax = document.querySelector('[contenedor=test]');
       const scrollPosition = window.pageYOffset / 2;
-
   
-
       console.log("scrollPosition", scrollPosition)
       parallax.style.transform = 'translate3d(0, ' + scrollPosition + 'px ,0)';
-
       */
-
       // Segundo bloque
       const contenedoresPalaraje = document.querySelectorAll("[contenedorParalaje]")
       contenedoresPalaraje.forEach((contenedorParalaje) => {
         const parallaxContainer2 = contenedorParalaje;
         const parallaxImage2 = contenedorParalaje.querySelector('[imagenParalaje]');
         const textoAnimado = contenedorParalaje.querySelector('[elemento=textoAnimado]');
-
         const containerRect2 = parallaxContainer2.getBoundingClientRect();
-
         const scrollPosition2 = window.pageYOffset;
         const parallaxTop2 = parallaxContainer2.offsetTop;
         const parallaxHeight2 = parallaxContainer2.offsetHeight;
         const parallaxVisibleHeight2 = Math.min(window.innerHeight, parallaxTop2 + parallaxHeight2) - Math.max(0, containerRect2.top);
         const conCero = Math.min(window.innerHeight, parallaxTop2 + parallaxHeight2) - (containerRect2.top + parallaxHeight2);
-
         const translateY_2 = (scrollPosition2 - containerRect2.top) * 0.5;
         const maxTranslateY = parallaxVisibleHeight2 - parallaxHeight2;
-
         const translateY = Math.max(-maxTranslateY, Math.min(0, translateY_2)) / 2;
         const translateY_sincero = Math.max(-maxTranslateY, translateY_2) / 2;
-
-
         if (containerRect2.top < 0 && containerRect2.bottom < window.innerHeight) {
           parallaxImage2.style.transform = 'translate3d(0 ,' + (conCero / 2) + 'px ,0)';
           if (textoAnimado) {
             textoAnimado.style.transform = 'translate3d(0 ,-' + (conCero) + 'px ,0)';
           }
-
           console.log("imagen yendose")
         } else if (containerRect2.top < window.innerHeight && containerRect2.bottom > 0) {
           parallaxImage2.style.transform = 'translate3d(0 ,-' + translateY + 'px ,0)';
           if (textoAnimado) {
             textoAnimado.style.transform = 'translate3d(0 ,' + (translateY * 2) + 'px ,0)';
           }
-
  
-
           console.log("imagen viniendo")
         } else {
           parallaxImage2.style.transform = 'translateY(0)';
           console.log("imagen no visible antes")
         }
-
       })
-
-
     }
     window.addEventListener('scroll', controladorParalaje);
     controladorParalaje();
   </script> -->
 </body>
-
 </html>

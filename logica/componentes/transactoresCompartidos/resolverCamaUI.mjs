@@ -10,7 +10,6 @@ const resolverCamaUI = async (camaIDV) => {
     } catch (error) {
         throw error;
     }
-
 }
 export {
     resolverCamaUI

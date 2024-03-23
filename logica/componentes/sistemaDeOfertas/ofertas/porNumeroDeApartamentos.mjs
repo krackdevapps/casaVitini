@@ -1,19 +1,13 @@
 import Decimal from "decimal.js";
 import { conexion } from "../../db.mjs";
-
 const porNumeroDeApartamentos = async (reserva) => {
     try {
         const fechaActualTZ = reserva.fechas.fechaActualProcesada_ISO
-
         const estadoOfertaActivado = "activada"
-
         const totalReservaNeto = new Decimal(reserva.desgloseFinanciero.totales.totalReservaNeto)
         const numeroApartamentos = reserva.desgloseFinanciero.totalesPorApartamento.length
-
-
         const ofertasSeleccionadas = []
         let descuentoGlobal = 0
-
         const consultaOfertas = `
         SELECT 
         uid,
@@ -31,7 +25,6 @@ const porNumeroDeApartamentos = async (reserva) => {
         WHERE $1 BETWEEN "fechaInicio" AND "fechaFin"
         AND "estadoOferta" = $2
         AND "tipoOferta" = $3`;
-
         const ofertaTipo = "porNumeroDeApartamentos";
         const ofertasEncontradas = await conexion.query(consultaOfertas, [fechaActualTZ, estadoOfertaActivado, ofertaTipo]);
         // 
@@ -43,7 +36,6 @@ const porNumeroDeApartamentos = async (reserva) => {
             const nombreOferta = detallesOferta.nombreOferta
             const tipoDescuento = detallesOferta.tipoDescuento
             const cantidad = new Decimal(detallesOferta.cantidad)
-
             const estructuraOferta = {
                 nombreOferta: nombreOferta,
                 tipoDescuento: tipoDescuento,
@@ -54,19 +46,15 @@ const porNumeroDeApartamentos = async (reserva) => {
                 estructuraOferta.definicion = `Oferta aplicada a reserva con ${numero} o mas apartamentos`
                 ofertasSeleccionadas.push(estructuraOferta)
             }
-
             if (simboloNumero === "numeroExacto" && numero === numeroApartamentos) {
                 estructuraOferta.definicion = `Oferta aplicada a reserva con ${numero} apartamentos`
                 ofertasSeleccionadas.push(estructuraOferta)
             }
         }
-
         // Calculo ofertas
         for (const detallesOferta of ofertasSeleccionadas) {
-
             const tipoDescuento = detallesOferta.tipoDescuento
             const cantidad = new Decimal(detallesOferta.cantidad)
-
             if (tipoDescuento === "cantidadFija") {
                 descuentoGlobal = cantidad.plus(descuentoGlobal);
                 detallesOferta.descuento = cantidad.toFixed(2) + "$"
@@ -76,20 +64,15 @@ const porNumeroDeApartamentos = async (reserva) => {
                 detallesOferta.descuento = descuentoGlobal.toFixed(2)
             }
         }
-
         const estructuraSaliente = {
             porNumeroDeApartamentos: ofertasSeleccionadas,
             descuentoGlobal: descuentoGlobal
         }
-
         return estructuraSaliente
-
     } catch (error) {
         throw error
     }
 }
-
-
 export {
     porNumeroDeApartamentos
 }

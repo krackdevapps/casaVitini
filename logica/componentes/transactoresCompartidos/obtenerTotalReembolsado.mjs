@@ -1,11 +1,9 @@
 import Decimal from "decimal.js"
 import { validadoresCompartidos } from "../validadoresCompartidos.mjs"
 import { conexion } from "../db.mjs"
-
 const obtenerTotalReembolsado = async (reservaUID) => {
     try {
         await validadoresCompartidos.reservas.validarReserva(reservaUID)
-
         // Obtener todos los pagoUID de la reserva
         const consultaPagosReserva = `
         SELECT
@@ -38,12 +36,10 @@ const obtenerTotalReembolsado = async (reservaUID) => {
             }
         
         return totalReembolsado
-
     } catch (error) {
         throw error
     }
 }
-
 export {
     obtenerTotalReembolsado
 }

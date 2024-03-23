@@ -1,6 +1,5 @@
 import fs from 'fs';
 import { constrainedMemory } from 'process';
-
 const cambiarVista = async (transaccion) => {
     try {
         let vista = transaccion.vista
@@ -10,24 +9,18 @@ const cambiarVista = async (transaccion) => {
         const rolIDX = transaccion.rol
         let selectorRama = './ui/vistas'
         let urlResuelta = "";
-
         // si solo hay adminitracion
-
         let zona = arbol[0].toLowerCase()
         if (arbol.length > 1 && arbol[0].toLowerCase() === "administracion") {
             zona = arbol[1].toLowerCase()
         }
-
         const controlFiltro = /^[a-z0-9_]+$/;
         let portal
         for (let rama of arbol) {
             rama = rama.toLowerCase()
-
-
             if (controlFiltro.test(rama)) {
                 selectorRama = selectorRama + "/" + rama
                 if (fs.existsSync(selectorRama)) {
-
                     const archivoIDX = selectorRama + "/IDX"
                     if (fs.existsSync(archivoIDX)) {
                         if (!usuarioIDX) {
@@ -39,7 +32,6 @@ const cambiarVista = async (transaccion) => {
                         roles = roles.replaceAll(" ", "")
                         roles = roles.split(",")
                         roles = roles.filter(espacio => espacio)
-
                         if (roles.length > 0 && !roles.includes(rolIDX)) {
                             portal = "ROL"
                             urlResuelta = ""
@@ -58,25 +50,18 @@ const cambiarVista = async (transaccion) => {
         let parametros = []
         let urlResueltoParseador = urlResuelta.split("/")
         urlResueltoParseador = urlResueltoParseador.filter(rama => rama)
-
         arbol.map((parametroPorResolver, posicion) => {
             parametroPorResolver = parametroPorResolver.toLowerCase()
             if (parametroPorResolver !== urlResueltoParseador[posicion]) {
                 parametros.push(parametroPorResolver)
             }
         })
-
         parametros = "/" + parametros.join("/")
         parametros = parametros !== "/" ? parametros : ""
-
         const urlResultaConParametros = urlResuelta + parametros
-
-
-
         urlResuelta = urlResuelta === "/micasa/portal" ? "" : urlResuelta
         urlResuelta = urlResuelta === "/micasa/rol" ? "" : urlResuelta
         let vistaSelector = "./ui/vistas" + urlResuelta + "/vista.ejs"
-
         if (urlResuelta === "/micasa") {
             if (usuarioIDX) {
                 vistaSelector = "./ui/vistas/micasa/portal/portada.ejs"
@@ -90,7 +75,6 @@ const cambiarVista = async (transaccion) => {
         if (portal === "ROL") {
             vistaSelector = "./ui/vistas/micasa/rol/vista.ejs"
         }
-
         if (fs.existsSync(vistaSelector)) {
             const vistaCodigo = fs.readFileSync(vistaSelector, 'utf-8');
             const ok = {
@@ -98,7 +82,6 @@ const cambiarVista = async (transaccion) => {
                 url: urlResultaConParametros,
                 ok: vistaCodigo
             }
-
             return ok
         } else {
             const error = "noExisteLaVista"
@@ -107,10 +90,7 @@ const cambiarVista = async (transaccion) => {
     } catch (error) {
         throw error;
     }
-
 }
-
-
 export {
     cambiarVista
 };
