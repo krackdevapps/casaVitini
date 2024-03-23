@@ -8,8 +8,8 @@ const casaVitini = {
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
                     const body = document.body
                     body.style.height = "100%"
-                  
-                  
+
+
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "portada")
                     main.style.width = "100%";
@@ -26,11 +26,14 @@ const casaVitini = {
             reservasNuevo: {
                 arranque: async () => {
                     //document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
-                    document.body.style.background = "rgb(214 192 157)"
+                    //document.body.style.backgroundImage = 'url("/componentes/imagenes/fotos/image00020.jpeg")';
+                    //document.body.style.background = "rgb(214 192 157)"
+                    document.body.style.height = "auto"
+
                     const granuladoURL = casaVitini.componentes.granuladorURL()
                     const directorios = granuladoURL.directorios[granuladoURL.directorios.length - 1]
                     const main = document.querySelector("main")
-                    main.style.height = "100%"
+                    //main.style.height = "100%"
                     main.setAttribute("zonaCSS", "alojamiento")
 
                     if (directorios === "alojamiento") {
@@ -69,8 +72,7 @@ const casaVitini = {
                     const tituloUI = document.createElement("p")
                     tituloUI.classList.add("titulo")
                     tituloUI.innerText = "Alojamiento"
-                    main.appendChild(tituloUI);
-
+                   // main.appendChild(tituloUI);
                     // Contenedor principal
                     const marcoElasticoRelativo = document.createElement('div');
                     marcoElasticoRelativo.setAttribute('class', 'marcoElasticoRelativo');
@@ -2452,10 +2454,10 @@ const casaVitini = {
             miCasa: {
                 arranque: () => {
                     // document.body.style.backgroundImage = "url(/componentes/imagenes/loginFondo.jpg)"
-                    //document.body.style.backgroundImage = 'url("/componentes/imagenes/playa.jpg")';
                     //document.body.classList.add("fondoConDesenfoque")
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "miCasa")
+                    document.body.style.height = "auto"
                     document.querySelector("[boton=iniciarSession]").addEventListener("click", () => {
                         casaVitini.ui.vistas.miCasa.botonIniciarSession("iniciarSession")
                     })
@@ -6414,8 +6416,8 @@ const casaVitini = {
                     window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
                     window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
 
-                     window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
-                     window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
+                    window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
+                    window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
 
                     const grupoImagenesPalarax = document.querySelectorAll('[imagenParalaje=imagen]');
                     casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador = new simpleParallax(grupoImagenesPalarax, {
@@ -8478,7 +8480,6 @@ const casaVitini = {
                     const mesSalidaReserva_decimal = parseInt(fechaSalidaReservaArray[1], 10)
                     const anoSalidaReserva_decimal = parseInt(fechaSalidaReservaArray[2], 10)
 
-
                     const fechaEntradaReserva = document.querySelector("[calendario=entrada][fechaEntrada]")?.getAttribute("fechaEntrada").split("/")
 
                     const diaEntradaReserva_decimal = parseInt(fechaEntradaReserva[0], 10)
@@ -8502,7 +8503,6 @@ const casaVitini = {
                         const fechaMesAno = new Date(anoActual, mesActual - 1);
                         return fechaMesAno >= inicioMesAno && fechaMesAno <= finMesAno;
                     };
-
 
                     const controlLimitePasado = {
                         zona: "administracion/reservas/obtenerElasticidadDelRango",
@@ -8739,7 +8739,7 @@ const casaVitini = {
                     }
 
                     const fechaLimiteFuturo = {}
-                    if (resolverLimiteFuturo.ok === "rangoPasadoLibre") {
+                    if (resolverLimiteFuturo.ok === "rangoFuturoLibre") {
                         infoCalendario.innerText = "Todo el mes disponible para seleccionar la nueva fecha de salida de esta reserva"
                     }
                     if (resolverLimiteFuturo.limiteFuturo) {

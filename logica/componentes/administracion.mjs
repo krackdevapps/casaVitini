@@ -7636,7 +7636,7 @@ const administracion = {
 
                                 const botonCrearReembolso = document.createElement("div")
                                 botonCrearReembolso.classList.add("administracion_reservas_detallesReserva_transacciones_reembolsos_botonV1")
-                                botonCrearReembolso.innerText = "Crear un reembolso 55"
+                                botonCrearReembolso.innerText = "Crear un reembolso"
                                 botonCrearReembolso.addEventListener("click", () => {
                                     ocultaPanales()
                                     const selectorContenedorReembolso = document.querySelector("[contenedor=nuevoReembolso]")
@@ -8398,6 +8398,8 @@ const administracion = {
                         UI: (metadatos) => {
 
                             const mostrarContenedorTipoPago = (opcion) => {
+                                const selectorInfo = document.querySelector("[componente=advertenciaInmersiva] [componente=infoDesplegable]")
+                                selectorInfo?.remove()
                                 const selectorTodosLosContenedorTipoPago = [...document.querySelectorAll(`[componente=advertenciaInmersiva] [contenedorTipoPago]`)]
                                 selectorTodosLosContenedorTipoPago.map((contenedorTipoPago) => {
                                     contenedorTipoPago.removeAttribute("style")
@@ -8423,7 +8425,7 @@ const administracion = {
 
                             const contenidoAdvertenciaInmersiva = document.createElement("div")
                             contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
-                            contenidoAdvertenciaInmersiva.setAttribute("espacio", "formularioCrearEnlaceDePago")
+                            contenidoAdvertenciaInmersiva.setAttribute("espacio", "formularioCrearPagoManual")
 
                             const titulo = document.createElement("p")
                             titulo.classList.add("detallesReservaTituloCancelarReserva")
@@ -8460,7 +8462,6 @@ const administracion = {
                             opcion.text = "Transferencia bancaria";
                             selectorTipoDePago.add(opcion);
 
-
                             opcion = document.createElement("option");
                             opcion.value = "tarjeta";
                             opcion.text = "Tarjeta TPV";
@@ -8482,6 +8483,12 @@ const administracion = {
 
                             const contenedorTipoPago = document.createElement("div")
                             contenedorTipoPago.classList.add("administracion_reservas_detalleReserva_pagoManual_contenedorTipoPago")
+
+                            const infoDesplegable = document.createElement("p")
+                            infoDesplegable.classList.add("info")
+                            infoDesplegable.setAttribute("componente", "infoDesplegable")
+                            infoDesplegable.innerText = "Selecciona el tipo de plataforma de pago en el desplegable"
+                            contenedorTipoPago.appendChild(infoDesplegable)
 
                             const contenedorEfectivo = casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.crearPagoManual.contenedoresTipoPago.efectivo()
                             contenedorTipoPago.appendChild(contenedorEfectivo)
@@ -9078,9 +9085,9 @@ const administracion = {
 
                         const infoEliminarReserva = document.createElement("div")
                         infoEliminarReserva.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                        infoEliminarReserva.style.marginTop = "50px"
+                        //infoEliminarReserva.style.marginTop = "50px"
 
-                        infoEliminarReserva.innerText = "También puedes eliminar irreversiblemente una reserva. La eliminación irreversible de una reserva borra la información de la reserva, así como los pagos asociados a la reserva y toda la información relacionada con la reserva. A diferencia de la cancelación los datos dejaran de estar disponibles."
+                        infoEliminarReserva.innerText = "También puedes eliminar irreversiblemente una reserva. La eliminación irreversible de una reserva borra la información de la reserva, así como los pagos asociados a la reserva y toda la información relacionada con la reserva, menos los datos de los clientes y titulares que permanencen disponible para otras reservas. A diferencia de la cancelación los datos de la reserva dejaran de estar disponibles."
                         bloqueBotones.appendChild(infoEliminarReserva)
 
                         const botonEliminarReserva = document.createElement("div")
@@ -9181,10 +9188,7 @@ const administracion = {
                         UI: () => {
                             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
 
-
-
-
-                            const selectorContenedorOpcionesCancelacion = document.querySelector("[contenedor=opcionesCancelacion]")
+                           const selectorContenedorOpcionesCancelacion = document.querySelector("[contenedor=opcionesCancelacion]")
                             selectorContenedorOpcionesCancelacion.style.transition = "background 500ms"
                             selectorContenedorOpcionesCancelacion.style.background = "rgba(255, 0, 0, 0.3)"
                             selectorContenedorOpcionesCancelacion.setAttribute("instanciaUID", instanciaUID)
@@ -9216,7 +9220,7 @@ const administracion = {
 
                             const tituloBloquoApartamentos = document.createElement("div")
                             tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                            tituloBloquoApartamentos.innerText = "Eliminar irreversiblemente una reserva elimina de la base de datos la información de la reserva, los alojamientos asociados, los pernoctantes de la reserva, los pagos y los reembolsos. Esta eliminación es irreversible. Los datos desaparecerán de la base de datos y si no existen en una copia de seguridad no serán recuperables. Si solo desea cancelar una reserva para liberar los apartamentos y hacer que deje de tener vigencia, cancélela y podrá seguir teniendo acceso a los datos de esta sin que tenga vigencia pernoctativa."
+                            tituloBloquoApartamentos.innerText = "Eliminar irreversiblemente una reserva elimina de la base de datos la información de la reserva, los alojamientos asociados, los pernoctantes y el titular de la reserva (pero no sus datos como cliente), los pagos y los reembolsos. Esta eliminación es irreversible. Los datos desaparecerán de la base de datos y si no existen en una copia de seguridad no serán recuperables. Si solo desea cancelar una reserva para liberar los apartamentos y hacer que deje de tener vigencia, cancélela y podrá seguir teniendo acceso a los datos de esta sin que tenga vigencia pernoctativa y ocupacional."
                             bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
 
 
@@ -9231,8 +9235,6 @@ const administracion = {
                             campo.type = "password"
                             campo.placeholder = "Escriba la contraseña de su VitiniID"
                             bloqueBloqueoApartamentos.appendChild(campo)
-
-
 
                             contenedorCancelacion.appendChild(bloqueBloqueoApartamentos)
 
@@ -9250,9 +9252,6 @@ const administracion = {
                             })
                             bloqueBloqueoApartamentos.appendChild(botonCancelar)
                             contenedorCancelacion.appendChild(bloqueBotones)
-
-
-
 
                             selectorContenido.appendChild(contenedorCancelacion)
                             // selectorContenido.appendChild(selectorContenedorOpcionesCancelacion)
@@ -29646,7 +29645,7 @@ const administracion = {
 
                 const informacionCuenta = document.createElement("div")
                 informacionCuenta.classList.add("usuariosCrearCuenta_informacion")
-                informacionCuenta.innerText = `Escriba el nombre de usuario de la nueva cuenta, este será el VitiniID de la nueva cuenta. Luego pulse en el botón crear cuenta y tras crearse la cuenta ira al panel de la cuenta creada donde podrá seguir con las modificaciones pertinentes. Las nuevas cuentas se crean sin contraseña, deberá establecer una en el panel de la cuenta tras crearla. Una vez establezca la contraseña deberá activar la cuenta.`
+                informacionCuenta.innerText = `Escriba el nombre de usuario de la nueva cuenta, este será el VitiniID de la nueva cuenta. Luego pulse en el botón crear cuenta y tras crearse la cuenta ira al panel de la cuenta creada donde podrá seguir con las modificaciones pertinentes. Una vez establezca la contraseña deberá activar la cuenta.`
                 contenedorGlobal.appendChild(informacionCuenta)
 
                 const campoNuevoUsuario = document.createElement("input")

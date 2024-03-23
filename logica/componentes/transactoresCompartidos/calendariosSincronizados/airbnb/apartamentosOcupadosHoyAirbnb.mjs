@@ -1,6 +1,6 @@
 import { conexion } from "../../../db.mjs"
+import { selectorRangoUniversal } from "../../selectoresCompartidos/selectorRangoUniversal.mjs"
 import { sincronizarCalendariosAirbnbPorIDV } from "./sincronizarCalendariosAirbnbPorIDV.mjs"
-import { verificarRangoContenidoAirbnb } from "./verificarRangoContenidoAirbnb.mjs"
 
 const apartamentosOcupadosHoy = async (fechaHoy_ISO) => {
     // Obtener todo los calendarios de airbnb que coinciden con hoy, o las fecha que se le pase. Este script es diferente a apartamentosOcupadosAirbnb y por tanto estos dos script deben exsite y no son reutilizables.
@@ -39,12 +39,14 @@ const apartamentosOcupadosHoy = async (fechaHoy_ISO) => {
                 const fechaInicioComparar = detallesDelCalendario.fechaInicio
                 const fechaFinalComparar = detallesDelCalendario.fechaFinal
                 //console.log("detallesEvento", detallesDelCalendario)
-                const controlOcupacional = verificarRangoContenidoAirbnb(
-                    fechaHoy_ISO,
-                    fechaHoy_ISO,
-                    fechaInicioComparar,
-                    fechaFinalComparar
-                )
+                
+                const controlOcupacional = selectorRangoUniversal({
+                    fechaInicio_rango_ISO: fechaHoy_ISO,
+                    fechaFin_rango_ISO: fechaHoy_ISO,
+                    fechaInicio_elemento_ISO: fechaInicioComparar,
+                    fechaFin_elemento_ISO: fechaFinalComparar,
+                    tipoLimite: "noIncluido"
+                })
                 if (controlOcupacional === "ocupado") {
                     //apartamentosOcupados.push(apartamentoIDV)
                     detallesDelApartamento.eventos.push(detallesDelCalendario)

@@ -171,6 +171,8 @@ body {
     overflow-y: scroll;
     /*padding-bottom: env(safe-area-inset-bottom);*/
     /* min-height: -webkit-fill-available; */
+    -webkit-tap-highlight-color: transparent;
+
 }
 
 main {

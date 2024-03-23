@@ -1,5 +1,5 @@
+import { selectorRangoUniversal } from "../../selectoresCompartidos/selectorRangoUniversal.mjs"
 import { sincronizarCalendariosAirbnbPorIDV } from "./sincronizarCalendariosAirbnbPorIDV.mjs"
-import { verificarRangoContenidoAirbnb } from "./verificarRangoContenidoAirbnb.mjs"
 
 const eventosDelApartamento = async (datos) => {
     // AL LORO DESCOMENTAR LO DE ABAJO CUANDO SE ACABEN LAS PRUEBAS!!!!!
@@ -24,12 +24,14 @@ const eventosDelApartamento = async (datos) => {
             const fechaInicioComparar = detallesDelCalendario.fechaInicio
             const fechaFinalComparar = detallesDelCalendario.fechaFinal
             //console.log("detallesEvento", detallesDelCalendario)
-            const controlOcupacional = verificarRangoContenidoAirbnb(
-                fechaHoy_ISO,
-                fechaHoy_ISO,
-                fechaInicioComparar,
-                fechaFinalComparar
-            )
+  
+            const controlOcupacional = selectorRangoUniversal({
+                fechaInicio_rango_ISO: fechaHoy_ISO,
+                fechaFin_rango_ISO: fechaHoy_ISO,
+                fechaInicio_elemento_ISO: fechaInicioComparar,
+                fechaFin_elemento_ISO: fechaFinalComparar,
+                tipoLimite: "noIncluido"
+            })
             if (controlOcupacional === "ocupado") {
                 //apartamentosOcupados.push(apartamentoIDV)
                 detallesDelApartamento.eventos.push(detallesDelCalendario)

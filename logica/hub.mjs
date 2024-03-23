@@ -6526,7 +6526,6 @@ const puerto = async (entrada, salida) => {
                         const error = {
                             error: errorCapturado.message
                         }
-
                         salida.json(error)
                     } finally {
 
@@ -6703,7 +6702,7 @@ const puerto = async (entrada, salida) => {
                                 tipoProcesadorPrecio: "uid",
                                 reservaUID: reserva
                             }
-                            const mensajeSinFuturo = "No se puede seleccionar esa fecha de salida. Con los apartamentos existentes en la reserva no se puede por que hay otro eventos que lo impiden. Puedes ver los eventos que lo impiden detallados a continuación."
+                            const mensajeSinFuturo = "No se puede seleccionar esa fecha de salida. Con los apartamentos existentes en la reserva no se puede por que hay otros eventos que lo impiden. Puedes ver los eventos que lo impiden detallados a continuación."
 
                             if (codigoFinal === "noHayRangoFuturo") {
                                 const objetoPRueba = {

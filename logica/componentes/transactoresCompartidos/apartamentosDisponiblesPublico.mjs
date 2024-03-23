@@ -3,7 +3,6 @@ import { conexion } from '../db.mjs';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
 import { apartamentosOcupadosAirbnb } from './calendariosSincronizados/airbnb/apartamentosOcudaosAirbnb.mjs';
 import { sincronizarCalendariosAirbnbPorIDV } from './calendariosSincronizados/airbnb/sincronizarCalendariosAirbnbPorIDV.mjs';
-import { verificarRangoContenidoAirbnb } from './calendariosSincronizados/airbnb/verificarRangoContenidoAirbnb.mjs';
 import { codigoZonaHoraria } from './codigoZonaHoraria.mjs';
 
 const apartamentosDisponiblesPublico = async (fecha) => {
@@ -15,7 +14,7 @@ const apartamentosDisponiblesPublico = async (fecha) => {
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
 
         const fechaEntradaReserva_Objeto = DateTime.fromISO(fechaEntrada_ISO); // El formato es día/mes/ano
-        const fechaSalidaReserva_Objeto =  DateTime.fromISO(fechaSalida_ISO);
+        const fechaSalidaReserva_Objeto = DateTime.fromISO(fechaSalida_ISO);
 
         if (fechaEntradaReserva_Objeto >= fechaSalidaReserva_Objeto) {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
@@ -27,30 +26,54 @@ const apartamentosDisponiblesPublico = async (fecha) => {
         const zonaBloqueoGlobal = "global"
         const consultaReservas = `
             SELECT reserva 
-            FROM reservas 
-            WHERE 
-            entrada < $1::DATE AND
-            salida > $2::DATE    
+            FROM reservas  
+            WHERE                     
+            ((
+                -- Caso 1: Evento totalmente dentro del rango
+                entrada >= $1::DATE AND salida <= $2::DATE
+            )
+            OR
+            (
+                -- Caso 2: Evento parcialmente dentro del rango
+                (entrada < $1::DATE AND salida > $1::DATE)
+                OR (entrada < $2::DATE AND salida > $2::DATE)
+            )
+            OR
+            (
+                -- Caso 3: Evento atraviesa el rango
+                entrada < $1::DATE AND salida > $2::DATE
+            ))
             AND "estadoReserva" <> 'cancelada';`
 
-        const resuelveReservas = await conexion.query(consultaReservas, [fechaSalida_ISO, fechaEntrada_ISO])
+        const resuelveReservas = await conexion.query(consultaReservas, [fechaEntrada_ISO, fechaSalida_ISO])
         const reservas = resuelveReservas.rows
-
         const apartamentosNoDiponbilesV2 = []
         const bloqueoTemporal = "rangoTemporal"
         const apartamenosBloqueadosTemporalmente = `
         SELECT apartamento 
         FROM "bloqueosApartamentos" 
-        WHERE 
-        "tipoBloqueo" = $1 AND
-        entrada <= $2::DATE AND
-        salida >= $3::DATE AND
-        ("zona" = $4 OR "zona" = $5);`
-        const resuelveApartamentosBloqueadosTemporalmente = await conexion.query(apartamenosBloqueadosTemporalmente, [bloqueoTemporal, fechaSalida_ISO, fechaEntrada_ISO, zonaBloqueoPublico, zonaBloqueoGlobal])
+        WHERE                     
+        ((
+            -- Caso 1: Evento totalmente dentro del rango
+            entrada >= $1::DATE AND salida <= $2::DATE
+        )
+        OR
+        (
+            -- Caso 2: Evento parcialmente dentro del rango
+            (entrada < $1::DATE AND salida > $1::DATE)
+            OR (entrada < $2::DATE AND salida > $2::DATE)
+        )
+        OR
+        (
+            -- Caso 3: Evento atraviesa el rango
+            entrada < $1::DATE AND salida > $2::DATE
+        ))
+        AND "tipoBloqueo" = $3
+        AND ("zona" = $4 OR "zona" = $5);`
+        const resuelveApartamentosBloqueadosTemporalmente = await conexion.query(apartamenosBloqueadosTemporalmente, [fechaEntrada_ISO, fechaSalida_ISO , bloqueoTemporal, zonaBloqueoPublico, zonaBloqueoGlobal])
         resuelveApartamentosBloqueadosTemporalmente.rows.map((apartamento) => {
             apartamentosNoDiponbilesV2.push(apartamento.apartamento)
         })
-
         const bloqueoIndefinido = "permanente"
         const apartamenosBloqueadosIndefinidamente = `
         SELECT apartamento 
@@ -123,7 +146,7 @@ const apartamentosDisponiblesPublico = async (fecha) => {
 
             }
         }
-     
+
         const ok = {
             apartamentosNoDisponibles: apartamentosNoDisponiblesArray,
             apartamentosDisponibles: apartamentosDisponiblesFinal,

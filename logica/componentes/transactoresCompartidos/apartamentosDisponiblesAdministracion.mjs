@@ -1,14 +1,15 @@
 import { DateTime } from 'luxon';
 import { conexion } from '../db.mjs';
-import { verificarRangoContenidoAirbnb } from './calendariosSincronizados/airbnb/verificarRangoContenidoAirbnb.mjs';
-import { sincronizarCalendariosAirbnbPorIDV } from './calendariosSincronizados/airbnb/sincronizarCalendariosAirbnbPorIDV.mjs';
 import { apartamentosOcupadosAirbnb } from './calendariosSincronizados/airbnb/apartamentosOcudaosAirbnb.mjs';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
+import { reservasPorRango } from './selectoresCompartidos/reservasPorRango.mjs';
+import { bloqueosPorRango_apartamentoIDV } from './selectoresCompartidos/bloqueosPorRango_apartamentoIDV.mjs';
 
 
-const apartamentosDisponiblesAdministracion = async (fecha) => {
-    const fechaEntrada_ISO = fecha.fechaEntrada_ISO
-    const fechaSalida_ISO = fecha.fechaSalida_ISO
+const apartamentosDisponiblesAdministracion = async (metadatos) => {
+    const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
+    const fechaSalida_ISO = metadatos.fechaSalida_ISO
+    const apartamentosIDV = metadatos.apartamentosIDV
     try {
 
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
@@ -24,51 +25,28 @@ const apartamentosDisponiblesAdministracion = async (fecha) => {
 
         const apartamentosDisponiblesArray = []
         const apartamentoDisponiblesFinal = []
-        const zonaBloqueoPrivado = "privado"
-        const zonaBloqueoGlobal = "global"
-        const consultaReservas = `
-            SELECT reserva 
-            FROM reservas 
-            WHERE entrada < $1::DATE AND salida > $2::DATE
-            AND "estadoReserva" <> 'cancelada';`
 
+        const configuracionReservas = {
+            fechaIncioRango_ISO: fechaEntrada_ISO,
+            fechaFinRango_ISO: fechaSalida_ISO,
+        }
+        const reservas = await reservasPorRango(configuracionReservas)
+ 
+        const apartametnosIDVBloqueoados = []
 
+        const configuracionBloqueos = {
+            fechaInicioRango_ISO: fechaEntrada_ISO,
+            fechaFinRango_ISO: fechaSalida_ISO,
+            apartamentoIDV: apartamentosIDV,
+            zonaBloqueo_array: ["privado", "global"],
+        }
+        const bloqueos = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
 
-        const resuelveRreservas = await conexion.query(consultaReservas, [fechaSalida_ISO, fechaEntrada_ISO])
-        const reservas = resuelveRreservas.rows
-
-        const apartamentosNoDiponbilesV2 = []
-
-        const bloqueoTemporal = "rangoTemporal"
-
-        const apartamenosBloqueadosTemporalmente = `
-        SELECT apartamento 
-        FROM "bloqueosApartamentos" 
-        WHERE 
-        "tipoBloqueo" = $1 AND
-        entrada <= $2::DATE AND
-        salida >= $3::DATE AND
-        ("zona" = $4 OR "zona" = $5);`
-        const resuelveApartamentosBloqueadosTemporalmente = await conexion.query
-            (apartamenosBloqueadosTemporalmente, [bloqueoTemporal, fechaSalida_ISO, fechaEntrada_ISO, zonaBloqueoPrivado, zonaBloqueoGlobal])
-        resuelveApartamentosBloqueadosTemporalmente.rows.map((apartamento) => {
-            apartamentosNoDiponbilesV2.push(apartamento.apartamento)
+        bloqueos.map((apartamento) => {
+            apartametnosIDVBloqueoados.push(apartamento.apartamento)
         })
 
-        const bloqueoIndefinido = "permanente"
-        const apartamenosBloqueadosIndefinidamente = `
-        SELECT apartamento 
-        FROM "bloqueosApartamentos" 
-        WHERE 
-        "tipoBloqueo" = $1 AND
-        ("zona" = $2 OR "zona" = $3);`
-        const resuelveApartamenosBloqueadosIndefinidamente = await conexion.query(apartamenosBloqueadosIndefinidamente, [bloqueoIndefinido, zonaBloqueoPrivado, zonaBloqueoGlobal])
-        resuelveApartamenosBloqueadosIndefinidamente.rows.map((apartamento) => {
-            apartamentosNoDiponbilesV2.push(apartamento.apartamento)
-        })
-
-
-        for (let reserva of reservas) {
+        for (const reserva of reservas) {
             const reservaUID = reserva["reserva"]
             const consultaApartamentosNoDisponibles = `
                 SELECT apartamento 
@@ -79,7 +57,7 @@ const apartamentosDisponiblesAdministracion = async (fecha) => {
             if (ApartamentosNoDisponibles.rows.length > 0) {
                 ApartamentosNoDisponibles.rows.map((apartamento) => {
                     const apartamentoIDV = apartamento.apartamento
-                    apartamentosNoDiponbilesV2.push(apartamentoIDV)
+                    apartametnosIDVBloqueoados.push(apartamentoIDV)
                 })
             }
         }
@@ -104,14 +82,14 @@ const apartamentosDisponiblesAdministracion = async (fecha) => {
         const resuelveConsultaApartamentosNoDisponibles = await conexion.query(consultaApartamentosNoDispopnbiles, [estadoNoDisponibleApartamento])
         if (resuelveConsultaApartamentosNoDisponibles.rowCount > 0) {
             resuelveConsultaApartamentosNoDisponibles.rows.map((apartamentoNoDisponible) => {
-                apartamentosNoDiponbilesV2.push(apartamentoNoDisponible.apartamentoIDV)
+                apartametnosIDVBloqueoados.push(apartamentoNoDisponible.apartamentoIDV)
             })
         }
 
         apartamentosDisponibles.rows.map((apartamento) => {
             apartamentosDisponiblesArray.push(apartamento.apartamentoIDV)
         })
-        const apartamentosNoDisponiblesArray = Array.from(new Set(apartamentosNoDiponbilesV2));
+        const apartamentosNoDisponiblesArray = Array.from(new Set(apartametnosIDVBloqueoados));
         const apartamentosDisponiblesFinal = apartamentosDisponiblesArray.filter(apartamento => !apartamentosNoDisponiblesArray.includes(apartamento));
 
         const datosAirbnb = {
@@ -119,7 +97,7 @@ const apartamentosDisponiblesAdministracion = async (fecha) => {
             fechaSalida_ISO: fechaSalida_ISO,
             apartamentosDisponibles: apartamentosDisponiblesFinal,
         }
-        
+
         const apartamentosOcupadosPorEliminar_Airbnb = await apartamentosOcupadosAirbnb(datosAirbnb)
 
         for (const apartamentoIDV of apartamentosOcupadosPorEliminar_Airbnb) {
@@ -127,10 +105,9 @@ const apartamentosDisponiblesAdministracion = async (fecha) => {
             if (elementoParaBorrar !== -1) {
                 apartamentosDisponiblesFinal.splice(elementoParaBorrar, 1);
                 apartamentosNoDisponiblesArray.push(apartamentoIDV)
-
             }
         }
-       
+
         const ok = {
             apartamentosNoDisponibles: apartamentosNoDisponiblesArray,
             apartamentosDisponibles: apartamentosDisponiblesFinal,
@@ -140,10 +117,7 @@ const apartamentosDisponiblesAdministracion = async (fecha) => {
     } catch (error) {
         throw error;
     }
-
 }
-
-
 
 export {
     apartamentosDisponiblesAdministracion

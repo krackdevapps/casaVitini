@@ -336,7 +336,7 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     padding: 0px;
-    margin: 0px;
+    margin: 2px;
     flex: 1;
     grid-template-rows: 0.01fr auto;
 }
@@ -436,8 +436,8 @@
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_inicioFinal {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 9px;
+    margin-right: 9px;
     height: 40px;
     display: flex;
     flex-direction: column;
@@ -461,7 +461,7 @@
     background: rgba(255, 255, 255, 0.3);
     border-bottom-left-radius: 10px;
     border-top-left-radius: 10px;
-    margin-left: 10px;
+    margin-left: 9px;
     height: 40px;
     display: flex;
     flex-direction: column;
@@ -484,7 +484,7 @@
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_finalSolo {
     background: rgba(255, 255, 255, 0.3);
-    margin-right: 10px;
+    margin-right: 9px;
     border-bottom-right-radius: 10px;
     border-top-right-radius: 10px;
     height: 40px;
@@ -3136,7 +3136,7 @@
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesTituloTipoCama:hover {
-    background: #0040ff;
+    background: rgba(0, 0, 0, 0.3);
     color: white;
 }
 
@@ -4133,16 +4133,12 @@
     flex-direction: column;
 }
 
-
 [zonaCSS="administracion/reservas/detallesReserva"] .resertaDetallesPernoctantesSinAlojameinto {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     margin: 0px;
-    max-width: 1920px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-
-
     display: flex;
     justify-items: stretch;
     justify-content: center;
@@ -4150,11 +4146,7 @@
     align-items: stretch;
     gap: 0px;
     flex-direction: column;
-
 }
-
-
-
 
 [zonaCSS="miCasa"] .administracion_reservas_detallesReservas_tituloPernoctantesSinHabitacion {
     display: flex;
@@ -4500,13 +4492,13 @@
 [zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_bloque {
     padding: 4px;
     border-radius: 12px;
-    gap: 4px;
+    gap: 6px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
     /* background: #bababa; */
-    border: 1px solid rgba(0, 0, 0, 0.4);
+    /* border: 1px solid rgba(0, 0, 0, 0.4); */
 }
 
 [zonaCSS="miCasa"] .reserva_resumen_desglose_porNoche {
@@ -4662,13 +4654,13 @@
 
 [zonaCSS="administracion/reservas/detallesReserva"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
     border-radius: 12px;
-    gap: 4px;
-    row-gap: 4px;
-    column-gap: 4px;
+    gap: 6px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
+    background: #0000001a;
+    padding: 6px;
 }
 
 [zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
@@ -4932,12 +4924,21 @@
 [zonaCSS="administracion/reservas/detallesReserva"] .detallesReservaCancelarReservabloqueBotones {
     /* width: 100%; */
     display: flex;
-    gap: 4px;
+    gap: 6px;
     justify-items: stretch;
     justify-content: center;
     align-content: center;
     border-radius: 12px;
     flex-direction: column;
+}
+[zonaCSS="administracion/reservas/detallesReserva"] [espacio=formularioCrearPagoManual] .info {
+     display: flex;
+     gap: 6px;
+     justify-items: stretch;
+     justify-content: center;
+     align-content: center;
+     flex-direction: column;
+     align-items: center;
 }
 
 [zonaCSS="administracion/impuestos/detalles"] .detallesReservaCancelarReservabloqueBotones {
@@ -5161,6 +5162,13 @@
 
 }
 
+[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
 [zonaCSS=alojamiento] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
     display: flex;
     gap: 6px;
@@ -5822,7 +5830,16 @@
     flex-wrap: nowrap;
     gap: 6px;
 }
-
+[zonaCSS="administracion/precios/detalles"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin: 10px
+}
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .espacioComportamiento {
     display: flex;
     flex-direction: column;
@@ -6254,15 +6271,24 @@
 
 [zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoBloqueHorizontal {
 
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    display: flex;
     grid-gap: 6px;
-    grid-auto-rows: minmax(auto, auto);
+    
     padding: 0px;
-    justify-items: stretch;
+    justify-items: center;
     justify-content: center;
     align-content: center;
+}
+
+
+@media (max-width: 720px) {
+
+    [zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoBloqueHorizontal {
+
+        flex-direction: column;
+    }
+    
+
 }
 
 [zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoDetallesApartmento {
@@ -6272,7 +6298,7 @@
     align-content: stretch;
     flex-wrap: nowrap;
     border-radius: 16px;
-
+    flex: 1;
     padding: 6px;
     gap: 6px;
     background: rgba(255, 255, 255, 0.3);
@@ -6344,9 +6370,9 @@
     padding: 6px;
 }
 
-.preciosEImpuestosDetalleApartamentoDetallesBloqueBotones {
+[zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoDetallesBloqueBotones {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
     grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
     padding: 0px;
@@ -9560,17 +9586,29 @@ grid-template-columns: 0.5fr 1.5fr;
 
 /* Inicio css animacion carga */
 
+/* Orignial */
 
-
-.lds-spinner {
+/* .lds-spinner {
     display: inline-block;
     position: relative;
     width: 25px;
-    /* Ancho de 25px */
     height: 25px;
-    /* Altura de 25px */
     padding: 10px;
     transform: translate(-50%, -50%);
+
+} 
+*/
+
+.lds-spinner {
+    display: flex;
+    position: relative;
+    width: 25px;
+    height: 25px;
+    padding: 10px;
+    transform: translate(-50%, -50%);
+    margin: 20px;
+    align-items: center;
+
 
 }
 
@@ -9772,8 +9810,6 @@ grid-template-columns: 0.5fr 1.5fr;
 [zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reembolso_campoConfirmacion {
     padding: 9px;
 
-
-    /* font-weight: bold; */
     outline: none;
     border: none;
     border-radius: 10px;
@@ -9860,8 +9896,6 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reembolso_campo {
-
-    font-weight: bold;
     padding: 10px;
     border-radius: 10px;
     outline: none;
@@ -9947,13 +9981,11 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
 [zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_transacciones_bloqueGlobal {
-    background: rgba(255, 255, 255, 0.3);
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    padding: 5px;
     border-radius: 7px;
-    gap: 4px;
+    gap: 6px;
     align-content: center;
     align-items: stretch;
 }
@@ -10038,7 +10070,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 11px;
     text-decoration: none;
     cursor: default;
-    /* background: rgba(255, 255, 255, 0.6);*/
+     background: rgba(255, 255, 255, 0.6);
     user-select: none;
     -webkit-user-select: none;
 }
@@ -10052,14 +10084,14 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     flex-wrap: nowrap;
     border-radius: 11px;
-    gap: 4px;
+    gap: 6px;
     align-items: stretch;
     align-content: flex-start;
     justify-content: space-around;
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reservaDetalles_transacciones_bloqueDetallesDelPago {
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    /* border: 1px solid rgba(0, 0, 0, 0.1); */
     padding: 10px;
     border-radius: 9px;
     display: flex;
@@ -10067,10 +10099,11 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: nowrap;
     align-items: stretch;
     gap: 4px;
+    background: #0000001c;
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reservaDetalles_transacciones_bloqueDetallesDelPago:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.3);
 
 }
 
@@ -10595,12 +10628,12 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
-    font-weight: bold;
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorBotones {
     border-radius: 12px;
-    gap: 6px;
+    gap: 10px;
+    padding: 10px;
     display: flex;
     justify-content: center;
 }
@@ -10629,11 +10662,11 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
 }
 
-.administracion_reservas_detallesReserva_transacciones_pagoManual_contenedorTipoPago {
+[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_transacciones_pagoManual_contenedorTipoPago {
     display: none;
     flex-direction: column;
     align-items: stretch;
-    gap: 4px;
+    gap: 6px;
 }
 
 
@@ -10702,9 +10735,9 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 4px;
+    gap: 10px;
     background: rgb(255 0 0 / 0.3);
-    padding: 4px;
+    padding: 10px;
     border-radius: 10px;
 }
 
@@ -11879,7 +11912,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia.diaParcial::before {
-    background-color: rgba(255, 214, 0, 0.5);
+    background-color: rgb(255 214 0 / 72%);
 }
 
 
@@ -11888,7 +11921,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia.diaDisponible::before {
-    background-color: rgba(19, 255, 0, 0.2);
+    background-color: rgba(87 197 78 / 86%);
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia.diaDeHoy::before {
@@ -12445,7 +12478,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     border-radius: 20px;
     padding: 6px;
-    gap: 6px;
+    gap: 0px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
 
