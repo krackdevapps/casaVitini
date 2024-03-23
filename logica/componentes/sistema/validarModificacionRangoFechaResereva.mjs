@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon';
 import { conexion } from '../db.mjs';
 import { sincronizarCalendariosAirbnbPorIDV } from './calendariosSincronizados/airbnb/sincronizarCalendariosAirbnbPorIDV.mjs';
-import ICAL from 'ical.js';
 import { codigoZonaHoraria } from './codigoZonaHoraria.mjs';
 import { selectorRangoUniversal } from './selectoresCompartidos/selectorRangoUniversal.mjs';
 import { bloqueosPorRango_apartamentoIDV } from './selectoresCompartidos/bloqueosPorRango_apartamentoIDV.mjs';
@@ -85,9 +84,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
         const apartamentosReservaActual = resuelveConsultaAlojamientoReservaActual.rows.map((apartamento) => {
             return apartamento.apartamento
         })
-        const reservaActual = {
-            apartamentos: apartamentosReservaActual
-        }
         const apartamentosConConfiguracionDisponible = []
         // consulta apartamentos NO diponibles en configuracion global
         const estadoNoDisponibleApartamento = "disponible"
@@ -112,7 +108,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             })
                 .minus({ months: 1 }).endOf('month')
             const fechaSeleccionadaParaPasado_ISO = fechaSeleccionadaParaPasado_Objeto.toISODate().toString()
-            console.log("mesPAsado", fechaSeleccionadaParaPasado_ISO)
             if (anoReservaSalida < anoCalendario || mesReservaSalida < mesCalendario && anoReservaSalida === anoCalendario) {
                 const error = "El mes de entrada seleccionado no puede ser igual o superior a al mes de fecha de salida de la reserva"
                 throw new Error(error)
@@ -128,45 +123,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 ],
             }
             const bloqueosSeleccionados = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
-            // const consultaBloqueos = `
-            // SELECT 
-            // uid,
-            // apartamento,
-            // "tipoBloqueo",
-            // "zona",
-            // motivo,
-            // to_char(entrada, 'DD/MM/YYYY') as entrada, 
-            // to_char(salida, 'DD/MM/YYYY') as salida,
-            // to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-            // to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"  
-            // FROM "bloqueosApartamentos" 
-            // WHERE                     
-            // apartamento = ANY($3)
-            // AND
-            // (
-            //  (   (
-            //         -- Caso 1: Evento totalmente dentro del rango
-            //         (entrada <= $1::DATE AND salida >= $2::DATE)
-            //     )
-            //     OR
-            //     (
-            //         -- Caso 2: Evento parcialmente dentro del rango
-            //         (entrada < $1::DATE AND salida > $1::DATE)
-            //         OR (entrada < $2::DATE AND salida > $2::DATE)
-            //     )
-            //     OR
-            //     (
-            //         -- Caso 3: Evento que atraviesa el rango
-            //         (entrada < $1::DATE AND salida > $2::DATE)
-            //     )
-            //     AND
-            //     (zona = 'global' OR zona = 'privado')
-            //     OR 
-            //     ("tipoBloqueo" = 'permanente')
-            //     )
-            // );`
-            // const resuelveBloqueos = await conexion.query(consultaBloqueos, [fechaSeleccionadaParaPasado_ISO, fechaEntradaReserva_ISO, apartamentosReservaActual])
-            // console.log("w")
+            
             const contenedorBloqueosEncontrados = []
             for (const detallesDelBloqueo of bloqueosSeleccionados) {
                 const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada_ISO
@@ -189,49 +146,14 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             const contenedorReservaEncontradas = []
             const configuracionReservas = {
                 fechaInicioRango_ISO: fechaSeleccionadaParaPasado_ISO,
-                fechaFinRango_USO: fechaEntradaReserva_ISO,
+                fechaFinRango_ISO: fechaEntradaReserva_ISO,
                 reservaUID: reserva,
                 apartamentosIDV_array: apartamentosReservaActual,
             }
+            console.log("1 - configuracionReservas", configuracionReservas)
+            console.log("____________________________________________________________")
             const reservasSeleccionadas = await reservasPorRango_y_apartamentos(configuracionReservas)
-            // // extraer las reservas dentro del rango
-            // const consultaReservas = `
-            //     SELECT 
-            //         r.reserva,
-            //         to_char(r.entrada, 'YYYY-MM-DD') AS "fechaEntrada_ISO", 
-            //         to_char(r.salida, 'YYYY-MM-DD') AS "fechaSalida_ISO",
-            //         ARRAY_AGG(ra.apartamento) AS apartamentos
-            //     FROM reservas r
-            //     JOIN "reservaApartamentos" ra ON r.reserva = ra.reserva
-            //     WHERE                     
-            //         ((
-            //             -- Caso 1: Evento totalmente dentro del rango
-            //             r.entrada >= $1::DATE AND r.salida <= $2::DATE
-            //         )
-            //         OR
-            //         (
-            //             -- Caso 2: Evento parcialmente dentro del rango
-            //             (r.entrada < $1::DATE AND r.salida > $1::DATE)
-            //             OR (r.entrada < $2::DATE AND r.salida > $2::DATE)
-            //         )
-            //         OR
-            //         (
-            //             -- Caso 3: Evento atraviesa el rango
-            //             r.entrada < $1::DATE AND r.salida > $2::DATE
-            //         ))
-            //         AND r.reserva <> $3 
-            //         AND r."estadoReserva" <> 'cancelada'
-            //         AND r.reserva IN (
-            //             SELECT reserva
-            //             FROM "reservaApartamentos" 
-            //             WHERE apartamento = ANY($4)
-            //         )     
-            //     GROUP BY
-            //         r.reserva, r.entrada, r.salida;
-            //                     `
-            // const resuelveConsultaReservas = await conexion.query(consultaReservas, [fechaSeleccionadaParaPasado_ISO, fechaEntradaReserva_ISO, reserva, apartamentosReservaActual])
-         
-         
+            console.log("2 - reservasSeleccionadas", reservasSeleccionadas)
          
             for (const detallesReserva of reservasSeleccionadas) {
                 const reserva = detallesReserva.reserva
@@ -276,7 +198,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                             fechaFin_elemento_ISO: fechaFinal,
                             tipoLimite: "noIncluido"
                         })
-                        console.log("rangoInterno", rangoInterno)
                         if (rangoInterno) {
                             const estructura = {
                                 apartamentoIDV: apartamentoIDV,
@@ -437,46 +358,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 ],
             }
             const bloqueosSeleccionados = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
-            // const consultaBloqueos = `
-            // SELECT 
-            // uid,
-            // apartamento,
-            // "tipoBloqueo",
-            // "zona",
-            // motivo,
-            // to_char(entrada, 'DD/MM/YYYY') as entrada, 
-            // to_char(salida, 'DD/MM/YYYY') as salida,
-            // to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-            // to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"    
-            // FROM 
-            //     "bloqueosApartamentos" 
-            // WHERE   
-            // apartamento = ANY($3) 
-            // AND    
-            // (
-            //   (
-            //       (
-            //         -- Caso 1: Evento totalmente dentro del rango
-            //         (entrada <= $1::DATE AND salida >= $2::DATE)
-            //     )
-            //     OR
-            //     (
-            //         -- Caso 2: Evento parcialmente dentro del rango
-            //         (entrada < $1::DATE AND salida > $1::DATE)
-            //         OR (entrada < $2::DATE AND salida > $2::DATE)
-            //     )
-            //     OR
-            //     (
-            //         -- Caso 3: Evento que atraviesa el rango
-            //         (entrada < $1::DATE AND salida > $2::DATE)
-            //     )
-            //     AND 
-            //     (zona = 'global' OR zona = 'privado')
-            //    )
-            //    OR 
-            //    ("tipoBloqueo" = 'permanente')
-            // );`
-            // const resuelveBloqueos = await conexion.query(consultaBloqueos, [fechaSalidaReserva_ISO, fechaSeleccionadaParaFuturo_ISO, apartamentosReservaActual])
+          
             const contenedorBloqueosEncontrados = []
             for (const detallesDelBloqueo of bloqueosSeleccionados) {
                 const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada_ISO
@@ -504,42 +386,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 apartamentosIDV_array: apartamentosReservaActual,
             }
             const reservasSeleccionadas = await reservasPorRango_y_apartamentos(configuracionReservas)
-            // const consultaReservas = `
-            //       SELECT 
-            //       r.reserva,
-            //       to_char(r.entrada, 'YYYY-MM-DD') AS "fechaEntrada_ISO", 
-            //       to_char(r.salida, 'YYYY-MM-DD') AS "fechaSalida_ISO",
-            //       ARRAY_AGG(ra.apartamento) AS apartamentos    
-            //   FROM 
-            //       reservas r
-            //   JOIN 
-            //       "reservaApartamentos" ra ON r.reserva = ra.reserva
-            //   WHERE               
-            //       (
-            //           -- Caso 1: Evento totalmente dentro del rango
-            //           r.entrada >= $1::DATE AND r.salida <= $2::DATE
-            //       )
-            //       OR
-            //       (
-            //           -- Caso 2: Evento parcialmente dentro del rango
-            //           (r.entrada < $1::DATE AND r.salida > $1::DATE)
-            //           OR (r.entrada < $2::DATE AND r.salida > $2::DATE)
-            //       )
-            //       OR
-            //       (
-            //           -- Caso 3: Evento atraviesa el rango
-            //           r.entrada < $1::DATE AND r.salida > $2::DATE
-            //       )
-            //       AND r.reserva <> $3 
-            //       AND r."estadoReserva" <> 'cancelada'
-            //       AND r.reserva IN (
-            //           SELECT reserva
-            //           FROM "reservaApartamentos" 
-            //           WHERE apartamento = ANY($4)
-            //       )   
-            //   GROUP BY
-            //       r.reserva, r.entrada, r.salida; `
-            // const resuelveConsultaReservas = await conexion.query(consultaReservas, [fechaSalidaReserva_ISO, fechaSeleccionadaParaFuturo_ISO, reserva, apartamentosReservaActual])
+        
             for (const detallesReserva of reservasSeleccionadas) {
                 const reserva = detallesReserva.reserva
                 const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO

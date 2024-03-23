@@ -7,21 +7,23 @@ const reservasPorRango = async (metadatos) => {
         SELECT reserva 
         FROM reservas  
         WHERE                     
-        ((
-            -- Caso 1: Evento totalmente dentro del rango
-            entrada >= $1::DATE AND salida <= $2::DATE
-        )
-        OR
         (
-            -- Caso 2: Evento parcialmente dentro del rango
-            (entrada < $1::DATE AND salida > $1::DATE)
-            OR (entrada < $2::DATE AND salida > $2::DATE)
+            (
+                -- Caso 1: Evento totalmente dentro del rango
+                entrada >= $1::DATE AND salida <= $2::DATE
+            )
+            OR
+            (
+                -- Caso 2: Evento parcialmente dentro del rango
+                (entrada < $1::DATE AND salida > $1::DATE)
+                OR (entrada < $2::DATE AND salida > $2::DATE)
+            )
+            OR
+            (
+                -- Caso 3: Evento atraviesa el rango
+                entrada < $1::DATE AND salida > $2::DATE
+            )
         )
-        OR
-        (
-            -- Caso 3: Evento atraviesa el rango
-            entrada < $1::DATE AND salida > $2::DATE
-        ))
         AND "estadoReserva" <> 'cancelada';`
         const resuelveRreservas = await conexion.query(consultaReservas, [fechaIncioRango_ISO, fechaFinRango_ISO])
         return resuelveRreservas.rows
