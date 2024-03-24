@@ -343,7 +343,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             })
                 .plus({ months: 1 })
             const fechaSeleccionadaParaFuturo_ISO = fechaSeleccionadaParaFuturo_Objeto.toISODate().toString()
-            console.log("fechaSeleccionadaParaFuturo_ISO", fechaSeleccionadaParaFuturo_ISO)
             if ((anoReservaEntrada > anoCalendario) || (mesReservaEntrada > mesCalendario && anoReservaEntrada === anoCalendario)) {
                 const error = "El mes de salida seleccionado no puede ser inferior a al mes de la fecha de entrada de la reserva"
                 throw new Error(error)
@@ -381,12 +380,14 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             const contenedorReservaEncontradas = []
             const configuracionReservas = {
                 fechaInicioRango_ISO: fechaSalidaReserva_ISO,
-                fechaFinRango_USO: fechaSeleccionadaParaFuturo_ISO,
+                fechaFinRango_ISO: fechaSeleccionadaParaFuturo_ISO,
                 reservaUID: reserva,
                 apartamentosIDV_array: apartamentosReservaActual,
             }
+            console.log("configuracionReservas",configuracionReservas)
+
             const reservasSeleccionadas = await reservasPorRango_y_apartamentos(configuracionReservas)
-        
+            console.log("reservasSeleccionadas",reservasSeleccionadas)
             for (const detallesReserva of reservasSeleccionadas) {
                 const reserva = detallesReserva.reserva
                 const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO

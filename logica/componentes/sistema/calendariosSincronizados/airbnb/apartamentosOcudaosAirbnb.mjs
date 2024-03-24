@@ -15,6 +15,13 @@ const apartamentosOcupadosAirbnb = async (datos) => {
             for (const detallesDelCalendario of calendariosObjetoDelApartamento) {
                 const fechaInicioComparar = detallesDelCalendario.fechaInicio
                 const fechaFinalComparar = detallesDelCalendario.fechaFinal
+                console.log("test", {
+                    fechaInicio_rango_ISO: fechaEntrada_ISO,
+                    fechaFin_rango_ISO: fechaSalida_ISO,
+                    fechaInicio_elemento_ISO: fechaInicioComparar,
+                    fechaFin_elemento_ISO: fechaFinalComparar,
+                    tipoLimite: "noIncluido"
+                })
                 const controlOcupacional = selectorRangoUniversal({
                     fechaInicio_rango_ISO: fechaEntrada_ISO,
                     fechaFin_rango_ISO: fechaSalida_ISO,

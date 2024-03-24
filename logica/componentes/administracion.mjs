@@ -24118,7 +24118,7 @@ const administracion = {
                 bloqueDia.setAttribute("componente", "diaVacio")
                 const numeroDiaUI = document.createElement("div")
                 numeroDiaUI.classList.add("administracion_calendario_numeroDiaUI")
-                numeroDiaUI.innerText = "VACIO"
+                //numeroDiaUI.innerText = "VACIO"
                 bloqueDia.appendChild(numeroDiaUI)
                 marcoMes?.appendChild(bloqueDia)
             }

@@ -1639,6 +1639,7 @@ const puerto = async (entrada, salida) => {
                             const error = "La fecha de entrada no puede ser inferior a la fecha actual. Solo se pueden hacer reservas a partir de hoy"
                             throw new Error(error)
                         }
+                        await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
                         const rol = entrada.session.rol
                         const configuracionApartamentosPorRango = {
                             fechaEntrada_ISO: fechaEntrada_ISO,
@@ -1646,18 +1647,18 @@ const puerto = async (entrada, salida) => {
                             rol: rol,
                             origen: "plaza"
                         }
-                        await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
                         //const resuelveADP = await apartamentosDisponiblesPublico(fecha)
                         const resuelveADP = await apartamentosPorRango(configuracionApartamentosPorRango)
-                        const apartamentosDisponiblesEntonctrados = resuelveADP.apartamentosDisponibles
-                        const resuelveCA = await configuracionApartamento(apartamentosDisponiblesEntonctrados)
+                        console.log("resuelveADP", resuelveADP)
+                        const apartamentosDisponiblesEntcontrados = resuelveADP.apartamentosDisponibles
+                        const resuelveCA = await configuracionApartamento(apartamentosDisponiblesEntcontrados)
                         const estructuraFinal = {}
                         estructuraFinal.apartamentosDisponibles = resuelveCA.configuracionApartamento
                         // Aqui se deberia mostra la media del precio en relacion con las fechas
                         const metadatos = {
                             fechaEntrada_ISO: fechaEntrada_ISO,
                             fechaSalida_ISO: fechaSalida_ISO,
-                            apartamentosIDVArreglo: apartamentosDisponiblesEntonctrados
+                            apartamentosIDVArreglo: apartamentosDisponiblesEntcontrados
                         }
                         const resolverPrecioApartamento = await precioRangoApartamento(metadatos)
                         // Aquí se borra metadatos, pero ojo cuidado por que en precioReserva se necesita. Así que solo se borra de aquí
@@ -4629,6 +4630,7 @@ const puerto = async (entrada, salida) => {
                             origen: "administracion"
                         }
                         const transactor = await apartamentosPorRango(configuracionApartamentosPorRango)
+                        console.log("transactor", transactor)
                         if (transactor) {
                             const ok = {
                                 ok: transactor

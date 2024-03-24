@@ -9624,7 +9624,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background-color: rgba(87 197 78 / 86%);
 }
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia.diaDeHoy::before {
-    border: 3px solid ghostwhite;
+    border: 3px solid rgb(0 0 0 / 50%);
 }
 [zonaCSS="administracion/calendario"] .administracion_calendario_reservaUIInicio {
     background: rgba(255, 255, 255, 0.3);

@@ -40,7 +40,6 @@ const apartamentosPorRango = async (metadatos) => {
         ) {
             configuracionBloqueos.zonaBloqueo_array = ["privado", "global"]
         }
-        console.log("configuracionBloqueos", configuracionBloqueos)
         const bloqueos = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
         bloqueos.map((apartamento) => {
             apartametnosIDVBloqueoados.push(apartamento.apartamento)
@@ -93,6 +92,8 @@ const apartamentosPorRango = async (metadatos) => {
             apartamentosDisponibles: apartamentosDisponiblesFinal,
         }
         const apartamentosOcupadosPorEliminar_Airbnb = await apartamentosOcupadosAirbnb(datosAirbnb)
+        console.log("apartamentosOcupadosPorEliminar_Airbnb", apartamentosOcupadosPorEliminar_Airbnb)
+
         for (const apartamentoIDV of apartamentosOcupadosPorEliminar_Airbnb) {
             const elementoParaBorrar = apartamentosDisponiblesFinal.indexOf(apartamentoIDV);
             if (elementoParaBorrar !== -1) {

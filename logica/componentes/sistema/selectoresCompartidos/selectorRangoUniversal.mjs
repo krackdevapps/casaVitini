@@ -14,24 +14,34 @@ const selectorRangoUniversal = (metadatos) => {
         const finRango = DateTime.fromISO(fechaFin_rango_ISO)
         const inicioElemento = DateTime.fromISO(fechaInicio_elemento_ISO)
         const finElemento = DateTime.fromISO(fechaFin_elemento_ISO)
-        // Caso 1: Evento totalmente dentro del rango
-        if ( finElemento>= inicioRango &&  inicioElemento<= finRango) {
-            return true;
-        }
+
         if (tipoLimite === "incluido") {
             // Caso 2: Evento parcialmente dentro del rango
-            if ( finElemento<= finRango &&  inicioElemento>= inicioRango) {
+            if (finElemento <= finRango && inicioElemento >= inicioRango) {
+                console.log("1")
+                return true;
+                
+            }
+            if (finElemento >= inicioRango && inicioElemento <= finRango) {
+                console.log("01")
                 return true;
             }
         }
         if (tipoLimite === "noIncluido") {
             // Caso 2: Evento parcialmente dentro del rango
-            if ( finElemento< finRango &&  inicioElemento> inicioRango) {
+            if (finElemento < finRango && inicioElemento > inicioRango) {
+                console.log("1")
+                return true;
+            }
+            if (finElemento > inicioRango && inicioElemento < finRango) {
+                console.log("02")
                 return true;
             }
         }
         // Caso 3: Evento atraviesa el rango
-        if ( finElemento< finElemento &&  inicioElemento> finRango) {
+        if (finElemento < finElemento && inicioElemento > finRango) {
+            
+            console.log("3")
             return true;
         }
         return false;
