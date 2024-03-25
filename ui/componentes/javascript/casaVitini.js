@@ -22,8 +22,9 @@ const casaVitini = {
             reservasNuevo: {
                 arranque: async () => {
                     //document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
-                    //document.body.style.backgroundImage = 'url("/componentes/imagenes/fotos/image00020.jpeg")';
+                    document.body.style.backgroundImage = 'url("/componentes/imagenes/test/image00061.jpeg")';
                     //document.body.style.background = "rgb(214 192 157)"
+                    document.querySelector("#uiLogo").style.filter = "invert(1)"
                     document.body.style.height = "auto"
                     const granuladoURL = casaVitini.componentes.granuladorURL()
                     const directorios = granuladoURL.directorios[granuladoURL.directorios.length - 1]
@@ -63,7 +64,7 @@ const casaVitini = {
                     const tituloUI = document.createElement("p")
                     tituloUI.classList.add("titulo")
                     tituloUI.innerText = "Alojamiento"
-                   // main.appendChild(tituloUI);
+                    // main.appendChild(tituloUI);
                     // Contenedor principal
                     const marcoElasticoRelativo = document.createElement('div');
                     marcoElasticoRelativo.setAttribute('class', 'marcoElasticoRelativo');
@@ -160,6 +161,7 @@ const casaVitini = {
                     botonBorrarBusquedaAlojamiento.setAttribute("componente", "botonBorrarBusquedaAlojamiento")
                     botonBorrarBusquedaAlojamiento.innerText = "Borrar búsqueda de alojamiento "
                     botonBorrarBusquedaAlojamiento.addEventListener("click", (e) => {
+                        document.body.style.backgroundImage = 'url("/componentes/imagenes/test/image00061.jpeg")';
                         document.body.removeAttribute("class")
                         document.querySelector("[calendario=entrada]").classList.add("parpadeaFondo")
                         document.querySelector("[calendario=salida]").classList.remove("parpadeaFondo")
@@ -458,6 +460,8 @@ const casaVitini = {
                             document.addEventListener("click", casaVitini.componentes.ocultarElementos)
                         }
                         if (componente === "botonDisponibilidad") {
+                            document.body.removeAttribute("style")
+
                             casaVitini.componentes.ocultarElementos()
                             let reservaLocal = JSON.parse(localStorage.getItem("reserva"))
                             let seccion = document.querySelector("section:not([estado=obsoleto])")
@@ -4647,7 +4651,7 @@ const casaVitini = {
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "contacto")
                     document.body.style.backgroundImage = 'url("/componentes/imagenes/contacto.jpg")';
-                    document.querySelector("#uiLogo").style.filter = "invert(1)"
+                    // document.querySelector("#uiLogo").style.filter = "invert(1)"
                     document.querySelector("#botonMenuResponsivo").style.filter = "invert(1)"
                     //document.body.classList.add("fondoConDesenfoque")
                 },
@@ -5014,6 +5018,13 @@ const casaVitini = {
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "conozcanos")
                     //document.querySelector("#uiLogo").style.filter = "invert(1)"
+
+                    // Crear un elemento script
+                    const scriptElement = document.createElement('script');
+                    // Asignar el atributo src
+                    scriptElement.src = "/componentes/javascript/simpleParallax.js";
+                    main.appendChild(scriptElement);
+
                     const header = document.querySelector("header")
                     const controladorAnchoRestante = () => {
                         const selectorAranqueConozcano = document.querySelector("[zonaUID=conozcanos]")
@@ -5033,13 +5044,37 @@ const casaVitini = {
                     window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
                     window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
                     window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
-                    const grupoImagenesPalarax = document.querySelectorAll('[imagenParalaje=imagen]');
-                    casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador = new simpleParallax(grupoImagenesPalarax, {
-                        delay: 10,
-                        orientation: 'down',
-                        scale: 1.3,
-                        overflow: false,
-                    });
+
+
+                    const loadScript = async (url) => {
+                        return new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = url;
+                            script.onload = () => resolve(script);
+                            script.onerror = () => reject(new Error(`Error al cargar el script ${url}`));
+                            document.querySelector('main').appendChild(script);
+                        });
+                    };
+
+                    const arranqueParallax = async () => {
+                        try {
+                            const scriptElement = await loadScript("/componentes/javascript/simpleParallax.js");
+                            const grupoImagenesPalarax = document.querySelectorAll('[imagenParalaje=imagen]');
+                            casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador = new simpleParallax(grupoImagenesPalarax, {
+                                delay: 10,
+                                orientation: 'down',
+                                scale: 1.3,
+                                overflow: false,
+                            });
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    };
+
+                    arranqueParallax();
+
+
+
                 },
                 controladorIconoMouse: () => {
                     const iconoRaton = document.querySelector("[icono=mouse]")
@@ -5545,10 +5580,9 @@ const casaVitini = {
             if (selectorContenedorError) {
                 return
             }
+            casaVitini.componentes.limpiarTodoElementoVolatil()
+
             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
-            document.querySelectorAll("[tipoMenu=volatil]").forEach((menu) => {
-                menu.removeAttribute("style")
-            })
             const mensaje = "Se ha producido un error en la red y no se ha podido comunicar con el servidor, si es por una causa circunstancial de la red, reintentalo y deberia funcionar. Comprueba que tienes acceso a la red. Por ejemplo, comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos es probable que el problema este en el servidor de Casa Vitini"
             const advertenciaInmersivaUI = document.createElement("div")
             advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersivaSuperpuesta")
@@ -8465,10 +8499,17 @@ const casaVitini = {
             })
         },
         limpiarTodoElementoVolatil: () => {
+            casaVitini.componentes.limpiarAdvertenciasInmersivas()
             document.querySelectorAll("[componente=menuVolatil]").forEach((menuVolatil) => {
                 menuVolatil.remove()
             })
+            document.querySelectorAll("[componente=advertenciaIntegrada]").forEach((menuVolatil) => {
+                menuVolatil.remove()
+
+            })
+
         },
+
         iconoProceso: () => {
             // Crea el elemento div con la clase "iconoProceso"
             const iconoProcesoDiv = document.createElement('div');
@@ -9341,6 +9382,52 @@ const casaVitini = {
                 contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
                 contenidoAdvertenciaInmersiva.setAttribute("contenedor", "contenidoAdvertenciaInmersiva")
                 contenidoAdvertenciaInmersiva.setAttribute("destino", "inyector")
+                contenidoAdvertenciaInmersiva.setAttribute("componente", "constructor")
+
+                contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
+                pantallaInmersivaPersonalizadaUI.appendChild(contenedorAdvertenciaInmersiva)
+                return pantallaInmersivaPersonalizadaUI
+            },
+            pantallaInmersivaPersonalizadaMoldeada: () => {
+                document.body.style.overflow = 'hidden';
+                const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                const pantallaInmersivaPersonalizadaUI = document.createElement("div")
+                pantallaInmersivaPersonalizadaUI.setAttribute("class", "advertenciaInmersiva")
+                pantallaInmersivaPersonalizadaUI.setAttribute("componente", "advertenciaInmersiva")
+                pantallaInmersivaPersonalizadaUI.setAttribute("instanciaUID", instanciaUID)
+                const contenedorAdvertenciaInmersiva = document.createElement("div")
+                contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
+                const contenidoAdvertenciaInmersiva = document.createElement("div")
+                contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
+                contenidoAdvertenciaInmersiva.setAttribute("contenedor", "contenidoAdvertenciaInmersiva")
+                contenidoAdvertenciaInmersiva.setAttribute("destino", "inyector")
+                contenidoAdvertenciaInmersiva.setAttribute("componente", "constructor")
+
+                const tituloUI = document.createElement("p")
+                tituloUI.classList.add("titulo")
+                tituloUI.setAttribute("componente", "titulo")
+                contenidoAdvertenciaInmersiva.appendChild(tituloUI)
+
+
+                const mensajeUI = document.createElement("div")
+                mensajeUI.classList.add("mensajeUI")
+                mensajeUI.setAttribute("componente", "mensajeUI")
+                contenidoAdvertenciaInmersiva.appendChild(mensajeUI)
+
+                const botonAceptar = document.createElement("div")
+                botonAceptar.classList.add("boton")
+                botonAceptar.setAttribute("boton", "aceptar")
+                botonAceptar.addEventListener("click", casaVitini.administracion.precios.eliminarPerfilPrecio.confirmarEliminarPrecio)
+                contenidoAdvertenciaInmersiva.appendChild(botonAceptar)
+
+                const botonCancelar = document.createElement("div")
+                botonCancelar.classList.add("boton")
+                botonCancelar.setAttribute("boton", "cancelar")
+                botonCancelar.addEventListener("click", () => {
+                    return casaVitini.componentes.limpiarAdvertenciasInmersivas()
+                })
+                contenidoAdvertenciaInmersiva.appendChild(botonCancelar)
+
                 contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                 pantallaInmersivaPersonalizadaUI.appendChild(contenedorAdvertenciaInmersiva)
                 return pantallaInmersivaPersonalizadaUI

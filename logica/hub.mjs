@@ -342,6 +342,8 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                             await validadoresCompartidos.reservas.validarReserva(reservaUID)
+                            const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
+
                             /*
                             promedioNetoPorNoche
                             totalReservaNetoSinOfertas
@@ -378,7 +380,7 @@ const puerto = async (entrada, salida) => {
                                                 "tarjetaDigitos",
                                                 "pagoUIDPasarela",
                                                 "tarjetaDigitos",
-                                                to_char("fechaPago", 'DD/MM/YYYY') as "fechaPago", 
+                                                to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPagoUTC_ISO", 
                                                 tarjeta,
                                                 "chequeUID",
                                                 cantidad
@@ -398,6 +400,12 @@ const puerto = async (entrada, salida) => {
                                     const pagoUID = detallesDelPago.pagoUID
                                     const plataformaDePago = detallesDelPago.plataformaDePago
                                     const pagoUIDPasarela = detallesDelPago.pagoUIDPasarela
+                                    const fechaPagoUTC_ISO = detallesDelPago.fechaPagoUTC_ISO
+                                    const fechaPagoTZ_ISO = DateTime.fromISO(fechaPagoUTC_ISO, { zone: 'utc' })
+                                        .setZone(zonaHoraria)
+                                        .toISO()
+                                    detallesDelPago.fechaPagoTZ_ISO = fechaPagoTZ_ISO
+
                                     const cantidadDelPago = new Decimal(detallesDelPago.cantidad)
                                     const consultaReembolsos = `
                                         SELECT
@@ -1649,7 +1657,6 @@ const puerto = async (entrada, salida) => {
                         }
                         //const resuelveADP = await apartamentosDisponiblesPublico(fecha)
                         const resuelveADP = await apartamentosPorRango(configuracionApartamentosPorRango)
-                        console.log("resuelveADP", resuelveADP)
                         const apartamentosDisponiblesEntcontrados = resuelveADP.apartamentosDisponibles
                         const resuelveCA = await configuracionApartamento(apartamentosDisponiblesEntcontrados)
                         const estructuraFinal = {}
@@ -4630,7 +4637,6 @@ const puerto = async (entrada, salida) => {
                             origen: "administracion"
                         }
                         const transactor = await apartamentosPorRango(configuracionApartamentosPorRango)
-                        console.log("transactor", transactor)
                         if (transactor) {
                             const ok = {
                                 ok: transactor
@@ -5829,6 +5835,9 @@ const puerto = async (entrada, salida) => {
                             sentidoRango: sentidoRango
                         }
                         if (sentidoRango === "pasado") {
+                            console.log("pasado")
+                            console.log(fechaEntrada_Objeto.toISO(), fechaSolicitada_objeto.toISO())
+
                             if (fechaSalida_Objeto <= fechaSolicitada_objeto) {
                                 const mensajeSinPasado = "La fecha nueva fecha de entrada solicitada no puede ser igual o superior a la fecha de salida de la reserva."
                                 throw new Error(mensajeSinPasado)
@@ -5840,23 +5849,32 @@ const puerto = async (entrada, salida) => {
                                 reservaUID: reserva
                             }
                             const mensajeSinPasado = "No se puede aplicar esa fecha de entrada a la reserva por que en base a los apartamentos de esa reserva no hay dias libres. Puedes ver a continuacíon lo eventos que lo impiden."
-                            if (codigoFinal === "noHayRangoPasado") {
-                                const objetoPRueba = {
+                            console.log("pasado 2", codigoFinal)
+
+                            if (
+                                (codigoFinal === "noHayRangoPasado")
+                                &&
+                                (fechaEntrada_Objeto > fechaSolicitada_objeto)
+                            ) {
+                                const estructura = {
                                     detallesDelError: mensajeSinPasado,
                                     ...transaccionInterna
                                 }
-                                throw new vitiniSysError(objetoPRueba)
+                                throw new vitiniSysError(estructura)
                             }
-                            if (codigoFinal === "rangoPasadoLimitado") {
-                                const detallesDelLimite = transaccionInterna.limitePasado
-                                const fechaLimitePasado_ISO = detallesDelLimite.fecha_ISO
-                                const fechaLimitePasado_Objeto = DateTime.fromISO(fechaLimitePasado_ISO);
-                                if (fechaSolicitada_objeto <= fechaLimitePasado_Objeto) {
-                                    const objetoPRueba = {
+
+                            if (
+                                (codigoFinal === "rangoPasadoLimitado")
+                                &&
+                                (fechaEntrada_Objeto > fechaSolicitada_objeto)
+                            ) {
+                                const fechaLimite_objeto = DateTime.fromISO(transaccionInterna.limitePasado)
+                                if (fechaLimite_objeto > fechaSolicitada_objeto) {
+                                    const estructura = {
                                         detallesDelError: mensajeSinPasado,
                                         ...transaccionInterna
                                     }
-                                    throw new vitiniSysError(objetoPRueba)
+                                    throw new vitiniSysError(estructura)
                                 }
                             }
                             const actualizarModificacionFechaEntradaReserva = `
@@ -5890,24 +5908,35 @@ const puerto = async (entrada, salida) => {
                                 reservaUID: reserva
                             }
                             const mensajeSinFuturo = "No se puede seleccionar esa fecha de salida. Con los apartamentos existentes en la reserva no se puede por que hay otros eventos que lo impiden. Puedes ver los eventos que lo impiden detallados a continuación."
-                            if (codigoFinal === "noHayRangoFuturo") {
-                                const objetoPRueba = {
+                            if (
+                                (codigoFinal === "noHayRangoFuturo")
+                                &&
+                                (fechaSalida_Objeto < fechaSolicitada_objeto)
+                            ) {
+                                const estructura = {
                                     detallesDelError: mensajeSinFuturo,
                                     ...transaccionInterna
                                 }
-                                throw new vitiniSysError(objetoPRueba)
+                                throw new vitiniSysError(estructura)
                             }
-                            if (codigoFinal === "rangoFuturoLimitado") {
-                                const detallesDelLimite = transaccionInterna.limiteFuturo
-                                const fechaLimiteFuturo_Objeto = DateTime.fromISO(detallesDelLimite);
-                                if (fechaLimiteFuturo_Objeto <= fechaSolicitada_objeto) {
-                                    const objetoPRueba = {
+
+                            if (
+                                (codigoFinal === "rangoFuturoLimitado")
+                                &&
+                                (fechaSalida_Objeto < fechaSolicitada_objeto)
+                            ) {
+                                const fechaLimite_objeto = DateTime.fromISO(transaccionInterna.limiteFuturo)
+                                if (fechaLimite_objeto <= fechaSolicitada_objeto) {
+                                    const estructura = {
                                         detallesDelError: mensajeSinFuturo,
                                         ...transaccionInterna
                                     }
-                                    throw new vitiniSysError(objetoPRueba)
+                                    throw new vitiniSysError(estructura)
                                 }
+
+
                             }
+
                             const actualizarModificacionFechaEntradaReserva = `
                             UPDATE reservas
                             SET salida = $1
@@ -6341,7 +6370,7 @@ const puerto = async (entrada, salida) => {
                                 "pagoUID",
                                 "pagoUIDPasarela",
                                 "tarjetaDigitos",
-                                "fechaPago"::text AS "fechaPago",
+                                to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPagoUTC_ISO", 
                                 tarjeta,
                                 cantidad
                             FROM 
@@ -6349,6 +6378,7 @@ const puerto = async (entrada, salida) => {
                             WHERE 
                                 "pagoUID" = $1;`
                             const reseulveValidarPago = await conexion.query(validarPago, [pagoUID])
+                            console.log("eee")
                             if (reseulveValidarPago.rowCount === 0) {
                                 const error = "No existe ningún pago con ese pagoUID"
                                 throw new Error(error)
@@ -6358,6 +6388,14 @@ const puerto = async (entrada, salida) => {
                                 const detallesDelPago = reseulveValidarPago.rows[0]
                                 const plataformaDePagoControl = detallesDelPago.plataformaDePago
                                 const cantidadDelPago = detallesDelPago.cantidad
+                                const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
+                                const fechaPagoUTC_ISO = detallesDelPago.fechaPagoUTC_ISO
+                                const fechaPagoTZ_ISO = DateTime.fromISO(fechaPagoUTC_ISO, { zone: 'utc' })
+                                    .setZone(zonaHoraria)
+                                    .toISO()
+                                detallesDelPago.fechaPagoTZ_ISO = fechaPagoTZ_ISO
+
+
                                 const ok = {
                                     ok: "Aqui tienes los pagos de esta reserva",
                                     detallesDelPago: detallesDelPago,
@@ -6377,8 +6415,8 @@ const puerto = async (entrada, salida) => {
                                         "plataformaDePago",
                                         "reembolsoUIDPasarela",
                                         estado,
-                                        "fechaCreacion"::text AS "fechaCreacion",
-                                        "fechaActualizacion"::text AS "fechaActualizacion"
+                                        to_char("fechaCreacion", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaCreacionUTC_ISO", 
+                                        to_char("fechaActualizacion", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaActualizacionUTC_ISO"
                                     FROM 
                                         "reservaReembolsos"
                                     WHERE 
@@ -6394,31 +6432,29 @@ const puerto = async (entrada, salida) => {
                                         const plataformaDePagoObtenida = detallesDelReembolso.plataformaDePago
                                         const cantidadDelReembolso = new Decimal(detallesDelReembolso.cantidad)
                                         const reembolsoUIDPasarela = detallesDelReembolso.reembolsoUIDPasarela
-                                        const Estado = detallesDelReembolso.Estado
-                                        const fechaCreacion = detallesDelReembolso.fechaCreacion
-                                        const fechaActualizacion = detallesDelReembolso.fechaActualizacion
-                                        const fechaCreacionUTC = utilidades.convertirFechaHaciaISO8601(fechaCreacion)
-                                        const creacionESP = utilidades.deUTCaZonaHoraria(fechaCreacionUTC, "Europe/Madrid")
-                                        const creacionNIC = utilidades.deUTCaZonaHoraria(fechaCreacionUTC, "America/Managua")
-                                        // Revisa esto por que se deben de pasr como cadena
+                                        const estado = detallesDelReembolso.estado
                                         sumaDeLoReembolsado = cantidadDelReembolso.plus(sumaDeLoReembolsado)
+                                        
+                                        const fechaCreacionUTC_ISO = detallesDelReembolso.fechaCreacionUTC_ISO
+                                        const fechaCreacionTZ_ISO = DateTime.fromISO(fechaCreacionUTC_ISO, { zone: 'utc' })
+                                            .setZone(zonaHoraria)
+                                            .toISO()
+                                        detallesDelReembolso.fechaCreacionTZ_ISO = fechaCreacionTZ_ISO
+                                        const fechaActualizacionUTC_ISO = detallesDelReembolso.fechaActualizacionUTC_ISO
+                                        const fechaActualizacionTZ_ISO = DateTime.fromISO(fechaActualizacionUTC_ISO, { zone: 'utc' })
+                                            .setZone(zonaHoraria)
+                                            .toISO()
+                                        detallesDelReembolso.fechaActualizacionTZ_ISO = fechaActualizacionTZ_ISO
                                         const estructuraReembolso = {
                                             reembolsoUID: reembolsoUID,
                                             plataformaDePago: plataformaDePagoObtenida,
                                             cantidad: cantidadDelReembolso,
                                             reembolsoUIDPasarela: reembolsoUIDPasarela,
-                                            Estado: Estado,
-                                            fechaCreacionUTC: fechaCreacion,
-                                            fechaCreacionMadrid: creacionESP,
-                                            fechaCreacionNicaragua: creacionNIC
-                                        }
-                                        if (fechaActualizacion) {
-                                            const fechaActualizacionUTC = utilidades.convertirFechaHaciaISO8601(fechaActualizacion)
-                                            const actualizacionESP = utilidades.deUTCaZonaHoraria(fechaActualizacionUTC, "Europe/Madrid")
-                                            const actualizacionNIC = utilidades.deUTCaZonaHoraria(fechaActualizacionUTC, "America/Managua")
-                                            estructuraReembolso.fechaActualizacionUTC = fechaActualizacion
-                                            estructuraReembolso.fechaActualizacionMadrid = actualizacionESP
-                                            estructuraReembolso.fechaActualizacionNicaragua = actualizacionNIC
+                                            estado: estado,
+                                            fechaCreacionUTC_ISO: fechaCreacionUTC_ISO,
+                                            fechaCreacionTZ_ISO: fechaCreacionTZ_ISO,
+                                            fechaActualizacionUTC_ISO: fechaActualizacionUTC_ISO,
+                                            fechaActualizacionTZ_ISO: fechaActualizacionTZ_ISO,
                                         }
                                         ok.deglosePorReembolso.push(estructuraReembolso)
                                     }
@@ -6635,7 +6671,7 @@ const puerto = async (entrada, salida) => {
                                     fechaActualizacion = procesadorReembolso.updatedAt
                                 }
                                 if (plataformaDePagoEntrada !== "pasarela") {
-                                    fechaCreacion = new Date()
+                                    fechaCreacion = DateTime.utc().toISO()
                                 }
                                 // Si es pago es de pasarela, enviar el reembolso a la pasarelaa y luego proseguir norma
                                 const insertarReembolso = `
@@ -6762,7 +6798,7 @@ const puerto = async (entrada, salida) => {
                                     return tarjetaUltimos
                                 },
                             }
-                            const fechaActual = new Date()
+                            const fechaActual = DateTime.utc().toISO()
                             const sql = {
                                 insertarPago: async (datosDelNuevoPago) => {
                                     try {
@@ -6788,7 +6824,7 @@ const puerto = async (entrada, salida) => {
                                         "tarjetaDigitos",
                                         "pagoUIDPasarela",
                                         cantidad,
-                                        "fechaPago"::TEXT AS "fechaPago",
+                                        to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPagoUTC_ISO", 
                                         "chequeUID",
                                         "transferenciaUID"
                                         `
@@ -6804,7 +6840,15 @@ const puerto = async (entrada, salida) => {
                                             datosDelNuevoPago.transferenciaUID
                                         ]
                                         const consulta = await conexion.query(asociarPago, datosPago)
-                                        return consulta.rows[0]
+                                        const detallesDelPagoNuevo = consulta.rows[0]
+                                        const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
+                                        const fechaPagoUTC_ISO = detallesDelPagoNuevo.fechaPagoUTC_ISO
+                                        const fechaPagoTZ_ISO = DateTime.fromISO(fechaPagoUTC_ISO, { zone: 'utc' })
+                                            .setZone(zonaHoraria)
+                                            .toISO()
+                                        detallesDelPagoNuevo.fechaPagoTZ_ISO = fechaPagoTZ_ISO
+
+                                        return detallesDelPagoNuevo
                                     } catch (errorCapturado) {
                                         throw errorCapturado
                                     }
@@ -6966,7 +7010,7 @@ const puerto = async (entrada, salida) => {
                             const pagoUID = entrada.body.pagoUID
                             const reservaUID = entrada.body.reservaUID
                             if (palabra !== "eliminar") {
-                                const error = "Necesario escribir la la palabra eliminar para confirmar"
+                                const error = "Necesario escribir la la palabra eliminar para confirmar la eliminación y evitar falsos clicks"
                                 throw new Error(error)
                             }
                             const filtroPagoUID = /^\d+$/
@@ -7002,7 +7046,7 @@ const puerto = async (entrada, salida) => {
                             const palabra = entrada.body.palabra
                             const reembolsoUID = entrada.body.reembolsoUID
                             if (palabra !== "eliminar") {
-                                const error = "Necesario escribir la la palabra eliminar para confirmar"
+                                const error = "Necesario escribir la la palabra eliminar para confirmar el reembolso y evitar falsos clicks."
                                 throw new Error(error)
                             }
                             const filtroPagoUID = /^\d+$/
@@ -12572,7 +12616,7 @@ const puerto = async (entrada, salida) => {
                             }
                             const seleccionarBloqueo = await conexion.query(`SELECT uid, apartamento FROM "bloqueosApartamentos" WHERE uid = $1`, [bloqueoUID])
                             if (seleccionarBloqueo.rowCount === 0) {
-                                const error = "No existe el bloqueo que se desea eliminar"
+                                const error = "No existe el bloqueo que se quiere eliminar."
                                 throw new Error(error)
                             }
                             const apartmamentoIDV = seleccionarBloqueo.rows[0].apartamento
@@ -12585,9 +12629,9 @@ const puerto = async (entrada, salida) => {
                                 tipoDeRetroceso = "aApartamento"
                             }
                             const eliminarBloqueo = `
-                        DELETE FROM "bloqueosApartamentos"
-                        WHERE uid = $1;
-                        `
+                                DELETE FROM "bloqueosApartamentos"
+                                WHERE uid = $1;
+                                `
                             const resuelveEliminarBloqueo = await conexion.query(eliminarBloqueo, [bloqueoUID])
                             if (resuelveEliminarBloqueo.rowCount === 0) {
                                 const error = "No se ha eliminado el bloqueo"
@@ -12665,6 +12709,11 @@ const puerto = async (entrada, salida) => {
                             await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
                             let fechaInicio_ISO = null
                             let fechaFin_ISO = null
+                            const seleccionarBloqueo = await conexion.query(`SELECT uid FROM "bloqueosApartamentos" WHERE uid = $1`, [bloqueoUID])
+                            if (seleccionarBloqueo.rowCount === 0) {
+                                const error = "No existe el bloqueo, revisa el bloqueoUID"
+                                throw new Error(error)
+                            }
                             if (tipoBloqueo === "rangoTemporal") {
                                 const fechaInicio_Humano = entrada.body.fechaInicio
                                 const fechaFin_Humano = entrada.body.fechaFin
@@ -12692,11 +12741,7 @@ const puerto = async (entrada, salida) => {
                                 const error = "Por temas de seguridad ahora mismo en el campo motivo, solo pueden aceptarse minúsculas, mayúsculas, espacio y numeros. Mas adelante se aceptaran todos los caracteres"
                                 throw new Error(error)
                             }
-                            const seleccionarBloqueo = await conexion.query(`SELECT uid FROM "bloqueosApartamentos" WHERE uid = $1`, [bloqueoUID])
-                            if (seleccionarBloqueo.rowCount === 0) {
-                                const error = "No existe el bloqueo, revisa el bloqueoUID"
-                                throw new Error(error)
-                            }
+
                             const modificarBloqueo = `
                         UPDATE "bloqueosApartamentos"
                         SET 

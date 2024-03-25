@@ -7,7 +7,7 @@ import { bloqueosPorRango_apartamentoIDV } from './bloqueosPorRango_apartamentoI
 const apartamentosPorRango = async (metadatos) => {
     const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
     const fechaSalida_ISO = metadatos.fechaSalida_ISO
-    const apartamentosIDV = metadatos.apartamentosIDV || []
+    const apartamentosIDV = metadatos.apartamentosIDV
     const origen = metadatos.origen || "plaza"
     const rol = metadatos.rol || ""
     try {
@@ -25,7 +25,6 @@ const apartamentosPorRango = async (metadatos) => {
             fechaFinRango_ISO: fechaSalida_ISO,
         }
         const reservas = await reservasPorRango(configuracionReservas)
-        console.log("reserevas", reservas)
         const apartametnosIDVBloqueoados = []
         const configuracionBloqueos = {
             fechaInicioRango_ISO: fechaEntrada_ISO,
@@ -40,7 +39,10 @@ const apartamentosPorRango = async (metadatos) => {
         ) {
             configuracionBloqueos.zonaBloqueo_array = ["privado", "global"]
         }
+        console.log("entrtada", configuracionBloqueos)
+
         const bloqueos = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
+        console.log("bloqueos", bloqueos)
         bloqueos.map((apartamento) => {
             apartametnosIDVBloqueoados.push(apartamento.apartamento)
         })

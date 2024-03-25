@@ -123,7 +123,6 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 ],
             }
             const bloqueosSeleccionados = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
-            
             const contenedorBloqueosEncontrados = []
             for (const detallesDelBloqueo of bloqueosSeleccionados) {
                 const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada_ISO
@@ -150,10 +149,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 reservaUID: reserva,
                 apartamentosIDV_array: apartamentosReservaActual,
             }
-            console.log("1 - configuracionReservas", configuracionReservas)
-            console.log("____________________________________________________________")
             const reservasSeleccionadas = await reservasPorRango_y_apartamentos(configuracionReservas)
-            console.log("2 - reservasSeleccionadas", reservasSeleccionadas)
          
             for (const detallesReserva of reservasSeleccionadas) {
                 const reserva = detallesReserva.reserva
@@ -322,7 +318,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     limitePasado: fechaMasCercana,
                     origen: eventosOrdenadorPorFechaDeSalida[0].tipoElemento,
                     comportamiento: "No se ha restado un dia por que es un bloqueo",
-                    detallesDeLosEventosBloqueantes: eventosOrdenadorPorFechaDeSalida
+                    eventos: eventosOrdenadorPorFechaDeSalida
                 }
                 if (sePermiteElMismoDia === "si") {
                     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
@@ -384,10 +380,8 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 reservaUID: reserva,
                 apartamentosIDV_array: apartamentosReservaActual,
             }
-            console.log("configuracionReservas",configuracionReservas)
 
             const reservasSeleccionadas = await reservasPorRango_y_apartamentos(configuracionReservas)
-            console.log("reservasSeleccionadas",reservasSeleccionadas)
             for (const detallesReserva of reservasSeleccionadas) {
                 const reserva = detallesReserva.reserva
                 const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
@@ -546,7 +540,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     limiteFuturo: fechaMasCercana,
                     origen: eventosOrdenadorPorFechaDeEntrada[0].tipoElemento,
                     comportamiento: "No se ha sumado un dia por que es un bloqueo",
-                    detallesDeLosEventosBloqueantes: eventosOrdenadorPorFechaDeEntrada
+                    eventos: eventosOrdenadorPorFechaDeEntrada
                 }
                 if (sePermiteElMismoDia === "si") {
                     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria

@@ -1334,7 +1334,6 @@ const administracion = {
                     selectorBloqueEspacioApartamentos.innerHTML = null
                     const advertenciaInmersivaUI = document.createElement("div")
                     advertenciaInmersivaUI.setAttribute("class", "advertenciaIntegrada")
-                    advertenciaInmersivaUI.setAttribute("pantallaSuperpuesta", "pantallaCargaSuperpuesta")
                     advertenciaInmersivaUI.setAttribute("componente", "advertenciaIntegrada")
                     const marcoElastico = document.createElement("div")
                     marcoElastico.classList.add("marcoElasticoError")
@@ -1344,7 +1343,10 @@ const administracion = {
                     for (let i = 0; i < 12; i++) {
                         const div = document.createElement('div');
                         spinnerContainer.appendChild(div);
+
+
                     }
+
                     marcoElastico.appendChild(spinnerContainer)
                     const info = document.createElement("div")
                     info.setAttribute("class", "advertenciaInfoFlujoPago")
@@ -1373,8 +1375,10 @@ const administracion = {
                     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                     if (!instanciaRenderizada) {
                         return
+
                     }
                     if (respuestaServidor?.error) {
+                        console.log('instanciaRenderizada.querySelector("[componente=advertenciaIntegrada]")', instanciaRenderizada.querySelector("[componente=advertenciaIntegrada]"))
                         instanciaRenderizada.querySelector("[componente=advertenciaIntegrada]").remove()
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
@@ -1559,7 +1563,6 @@ const administracion = {
                     if (respuestaServidor?.ok) {
                         const apartamentosDisponbiles = respuestaServidor?.ok.apartamentosDisponibles
                         const apartamentosNoDisponibles = respuestaServidor?.ok.apartamentosNoDisponibles
-                        console.log("respuestaServidor", respuestaServidor)
                         if (apartamentosDisponbiles.length > 0) {
                             const bloqueApartamentos = document.createElement("div")
                             bloqueApartamentos.classList.add("reservaDetalles_menu_apartamentosDipsonbiles")
@@ -2564,7 +2567,6 @@ const administracion = {
                     if (respuestaServidor?.ok) {
                         const selectorAnadirPernoctanteRedenrizada = document.querySelector(`[habitacionUID="${habitacionUID}"] [componente=anadirPernoctanteUI]`)
                         selectorAnadirPernoctanteRedenrizada?.remove()
-                        console.log("respuesta", respuestaServidor)
                         const datosNuevoCliente = respuestaServidor.datosNuevoCliente
                         const nombre = datosNuevoCliente.nombre
                         const primerApellido = datosNuevoCliente.primerApellido ? datosNuevoCliente.primerApellido : ""
@@ -4089,7 +4091,7 @@ const administracion = {
                 const pantallaDeCargaRenderizada = document.querySelector(`[componente=advertenciaInmersiva][instanciaUID="${instanciaUID_pantallaDeCarga}"]`)
                 if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
                     const detallesError = respuestaServidor?.error
-                    const detallesDeLosEventosBloqueantes = detallesError.detallesDeLosEventosBloqueantes
+                    const eventos = detallesError.eventos
                     casaVitini.componentes.limpiarAdvertenciasInmersivas()
                     const contenedorError = document.createElement("div")
                     contenedorError.classList.add("contenedorErrorPropuesta")
@@ -4107,7 +4109,7 @@ const administracion = {
                     infoPropuesta.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
                     infoPropuesta.innerText = mensajes[sentidoRango][1]
                     contenedorError.appendChild(infoPropuesta)
-                    for (const detallesDelEvento of detallesDeLosEventosBloqueantes) {
+                    for (const detallesDelEvento of eventos) {
                         const fechaEntrada_ISO = detallesDelEvento.fechaEntrada_ISO
                         const fechaSalida_ISO = detallesDelEvento.fechaSalida_ISO
                         const fechaEntrada_array = fechaEntrada_ISO.split("-")
@@ -4170,7 +4172,7 @@ const administracion = {
                     }
                     const mensajeError = casaVitini.componentes.ui.pantallaInmersivaPersonalizada()
                     mensajeError.querySelector("[contenedor=contenidoAdvertenciaInmersiva]").appendChild(contenedorError)
-                    document.body.appendChild(mensajeError)
+                    document.querySelector("main").appendChild(mensajeError)
                     pantallaDeCargaRenderizada.remove()
                     // falta la pantalla de error con los elementos
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -5594,7 +5596,8 @@ const administracion = {
                                         plataformaDePago: detallesDelPago.plataformaDePago,
                                         pagoUIDPasarela: detallesDelPago.pagoUIDPasarela,
                                         tarjetaDigitos: detallesDelPago.tarjetaDigitos,
-                                        fechaPago: detallesDelPago.fechaPago,
+                                        fechaPagoUTC_ISO: detallesDelPago.fechaPagoUTC_ISO,
+                                        fechaPagoTZ_ISO: detallesDelPago.fechaPagoTZ_ISO,
                                         tarjeta: detallesDelPago.tarjeta,
                                         cantidad: detallesDelPago.cantidad,
                                         sumaDeLoReembolsado: detallesDelPago.sumaDeLoReembolsado,
@@ -5744,13 +5747,25 @@ const administracion = {
                             const plataformaDePago = metadatos.plataformaDePago
                             const pagoUIDPasarela = metadatos.pagoUIDPasarela
                             const tarjetaDigitos = metadatos.tarjetaDigitos
-                            const fechaPago = metadatos.fechaPago
+                            const fechaPagoUTC_ISO = metadatos.fechaPagoUTC_ISO
+                            const fechaPagoTZ_ISO = metadatos.fechaPagoTZ_ISO
                             const tarjeta = metadatos.tarjeta
                             const cantidad = metadatos.cantidad
                             const sumaDeLoReembolsado = metadatos.sumaDeLoReembolsado
                             const reembolsado = metadatos.reembolsado
                             const chequeUID = metadatos.chequeUID
                             const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
+
+                            const fechaPagoUTC_objeto = fechaPagoUTC_ISO.split("T")
+                            const fechaUTC_array = fechaPagoUTC_objeto[0].split("-")
+                            const horaUTC_array = fechaPagoUTC_objeto[1].split("-")[0]
+                            const fechaPagoUTC_humana = `${fechaUTC_array[2]}/${fechaUTC_array[1]}/${fechaUTC_array[0]} ${horaUTC_array}`
+
+                            const fechaPagoTZ_objeto = fechaPagoTZ_ISO.split("T")
+                            const fechaTZ_array = fechaPagoTZ_objeto[0].split("-")
+                            const horaTZ_array = fechaPagoTZ_objeto[1].split("-")[0]
+                            const fechaPagoTZ_humana = `${fechaTZ_array[2]}/${fechaTZ_array[1]}/${fechaTZ_array[0]} ${horaTZ_array}`
+
                             const plataformaDePagoUI = {
                                 efectivo: "Efectivo",
                                 transferenciaBancaria: "Transferencia bancaria",
@@ -5761,12 +5776,11 @@ const administracion = {
                             const bloqueDetallesDelPago = document.createElement("div")
                             bloqueDetallesDelPago.classList.add("reservaDetalles_transacciones_bloqueDetallesDelPago")
                             bloqueDetallesDelPago.setAttribute("pagoUID", pagoUID)
-                            bloqueDetallesDelPago.addEventListener("click", (e) => {
+                            bloqueDetallesDelPago.addEventListener("click", () => {
                                 const metadatos = {
                                     pagoUID: pagoUID,
                                     instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones
                                 }
-                                console.log("00", instanciaUID_contenedorDinamicoTransacciones)
                                 casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.detallesDelPago.UI(metadatos)
                             })
                             // PagoUID
@@ -5825,17 +5839,30 @@ const administracion = {
                             if (plataformaDePago === "pasarela") {
                                 bloqueDetallesDelPago.appendChild(bloqueInfoDato)
                             }
-                            // Fecha de pago 
+                            // Fecha de pago UTC
                             bloqueInfoDato = document.createElement("div")
                             bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
                             bloqueInfo = document.createElement("div")
                             bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
                             bloqueInfo.classList.add("negrita")
-                            bloqueInfo.innerText = "Fecha del pago"
+                            bloqueInfo.innerText = "Fecha del pago en UTC"
                             bloqueInfoDato.appendChild(bloqueInfo)
                             bloqueDato = document.createElement("div")
                             bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                            bloqueDato.innerText = fechaPago
+                            bloqueDato.innerText = fechaPagoUTC_humana
+                            bloqueInfoDato.appendChild(bloqueDato)
+                            bloqueDetallesDelPago.appendChild(bloqueInfoDato)
+                            // Fecha de pago TZ
+                            bloqueInfoDato = document.createElement("div")
+                            bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
+                            bloqueInfo = document.createElement("div")
+                            bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
+                            bloqueInfo.classList.add("negrita")
+                            bloqueInfo.innerText = "Fecha del pago en hora local"
+                            bloqueInfoDato.appendChild(bloqueInfo)
+                            bloqueDato = document.createElement("div")
+                            bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
+                            bloqueDato.innerText = fechaPagoTZ_humana
                             bloqueInfoDato.appendChild(bloqueDato)
                             bloqueDetallesDelPago.appendChild(bloqueInfoDato)
                             // Cantidad del pago 
@@ -5991,7 +6018,20 @@ const administracion = {
                                 const pagoUID = detallesDelPago.pagoUID
                                 const pagoUIDPasarela = detallesDelPago.pagoUIDPasarela
                                 const tarjetaDigitos = detallesDelPago.tarjetaDigitos
-                                const fechaPago = detallesDelPago.fechaPago
+                                const fechaPagoUTC_ISO = detallesDelPago.fechaPagoUTC_ISO
+                                const fechaPagoTZ_ISO = detallesDelPago.fechaPagoTZ_ISO
+
+                                const fechaPagoUTC_objeto = fechaPagoUTC_ISO.split("T")
+                                const fechaUTC_array = fechaPagoUTC_objeto[0].split("-")
+                                const horaUTC_array = fechaPagoUTC_objeto[1].split("-")[0]
+                                const fechaPagoUTC_humana = `${fechaUTC_array[2]}/${fechaUTC_array[1]}/${fechaUTC_array[0]} ${horaUTC_array}`
+
+                                const fechaPagoTZ_objeto = fechaPagoTZ_ISO.split("T")
+                                const fechaTZ_array = fechaPagoTZ_objeto[0].split("-")
+                                const horaTZ_array = fechaPagoTZ_objeto[1].split("-")[0]
+                                const fechaPagoTZ_humana = `${fechaTZ_array[2]}/${fechaTZ_array[1]}/${fechaTZ_array[0]} ${horaTZ_array}`
+
+
                                 const tarjeta = detallesDelPago.tarjeta
                                 const cantidad = detallesDelPago.cantidad
                                 const sumaDeLoReembolsado = detallesDelPago.sumaDeLoReembolsado
@@ -6068,17 +6108,30 @@ const administracion = {
                                 if (plataformaDePago === "pasarela") {
                                     bloqueDetallesDelPago.appendChild(bloqueInfoDato)
                                 }
-                                // Fecha de pago 
+                                // Fecha de pago UTC
                                 bloqueInfoDato = document.createElement("div")
                                 bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
                                 bloqueInfo = document.createElement("div")
                                 bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
                                 bloqueInfo.classList.add("negrita")
-                                bloqueInfo.innerText = "Fecha del pago"
+                                bloqueInfo.innerText = "Fecha del pago UTC"
                                 bloqueInfoDato.appendChild(bloqueInfo)
                                 bloqueDato = document.createElement("div")
                                 bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                                bloqueDato.innerText = fechaPago
+                                bloqueDato.innerText = fechaPagoUTC_humana
+                                bloqueInfoDato.appendChild(bloqueDato)
+                                bloqueDetallesDelPago.appendChild(bloqueInfoDato)
+                                // Fecha de pago TZ
+                                bloqueInfoDato = document.createElement("div")
+                                bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
+                                bloqueInfo = document.createElement("div")
+                                bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
+                                bloqueInfo.classList.add("negrita")
+                                bloqueInfo.innerText = "Fecha del pago hora local"
+                                bloqueInfoDato.appendChild(bloqueInfo)
+                                bloqueDato = document.createElement("div")
+                                bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
+                                bloqueDato.innerText = fechaPagoTZ_humana
                                 bloqueInfoDato.appendChild(bloqueDato)
                                 bloqueDetallesDelPago.appendChild(bloqueInfoDato)
                                 // Cantidad del pago 
@@ -6171,7 +6224,7 @@ const administracion = {
                                 }
                                 const botonOpcionesReembolsoUI = (metadatos) => {
                                     const botonEliminarReembolso = document.createElement("div")
-                                    botonEliminarReembolso.classList.add("administracion_reservas_detallesReserva_transacciones_reembolsos_botonV1")
+                                    botonEliminarReembolso.classList.add("boton_opciones_reembolso_v2")
                                     botonEliminarReembolso.innerText = "Opciones del reembolso"
                                     botonEliminarReembolso.addEventListener("click", () => {
                                         opcionesReembolsoUI(metadatos)
@@ -6208,7 +6261,7 @@ const administracion = {
                                     campoPalabra.placeholder = "Escribe la palabra eliminar"
                                     selectorReembolso.appendChild(campoPalabra)
                                     const botonEliminarReembolso = document.createElement("div")
-                                    botonEliminarReembolso.classList.add("administracion_reservas_detallesReserva_transacciones_reembolsos_botonV1")
+                                    botonEliminarReembolso.classList.add("boton_opciones_reembolso_v2")
                                     botonEliminarReembolso.innerText = "Confirmar la eliminacíon irreversible del reembolso"
                                     botonEliminarReembolso.addEventListener("click", () => {
                                         const metadatosEliminarReembolso = {
@@ -6220,7 +6273,7 @@ const administracion = {
                                     })
                                     selectorReembolso.appendChild(botonEliminarReembolso)
                                     const botonCerrarOpcionesDeReembolso = document.createElement("div")
-                                    botonCerrarOpcionesDeReembolso.classList.add("administracion_reservas_detallesReserva_transacciones_reembolsos_botonV1")
+                                    botonCerrarOpcionesDeReembolso.classList.add("boton_opciones_reembolso_v2")
                                     botonCerrarOpcionesDeReembolso.innerText = "Cerrar opciones del reembolso"
                                     botonCerrarOpcionesDeReembolso.addEventListener("click", () => {
                                         restaurarTodasLasOpcionesDeTodosLosReembolsos(pagoUID, instanciaUIDDetalleDelPago)
@@ -6232,12 +6285,36 @@ const administracion = {
                                     const plataformaDePago = detallesDelReembolso.plataformaDePago
                                     const cantidad = detallesDelReembolso.cantidad
                                     const reembolsoUIDPasarela = detallesDelReembolso.reembolsoUIDPasarela
-                                    const fechaCreacionUTC = detallesDelReembolso.fechaCreacionUTC
-                                    const fechaActualizacionUTC = detallesDelReembolso.fechaActualizacionUTC
-                                    const fechaCreacionMadrid = detallesDelReembolso.fechaCreacionMadrid
-                                    const fechaActualizacionMadrid = detallesDelReembolso.fechaActualizacionMadrid
-                                    const fechaCreacionNicaragua = detallesDelReembolso.fechaCreacionNicaragua
-                                    const fechaActualizacionNicaragua = detallesDelReembolso.fechaActualizacionNicaragua
+
+                                    const fechaCreacionUTC_ISO = detallesDelReembolso.fechaCreacionUTC_ISO
+                                    const fechaCreacionTZ_ISO = detallesDelReembolso.fechaCreacionTZ_ISO
+
+                                    const fechaActualizacionUTC_ISO = detallesDelReembolso.fechaActualizacionUTC_ISO
+                                    const fechaActualizacionTZ_ISO = detallesDelReembolso.fechaActualizacionTZ_ISO
+
+                                    const fechaCreacionUTC_objeto = fechaCreacionUTC_ISO.split("T")
+                                    const fechaCreacionUTC_array = fechaCreacionUTC_objeto[0].split("-")
+                                    const horaCreacionUTC_array = fechaCreacionUTC_objeto[1].split("-")[0]
+                                    const fechaCreacionUTC_humana = `${fechaCreacionUTC_array[2]}/${fechaCreacionUTC_array[1]}/${fechaCreacionUTC_array[0]} ${horaCreacionUTC_array}`
+
+                                    const fechaCreacionTZ_objeto = fechaCreacionTZ_ISO.split("T")
+                                    const fechaCreacionTZ_array = fechaCreacionTZ_objeto[0].split("-")
+                                    const horaCreacionTZ_array = fechaCreacionTZ_objeto[1].split("-")[0]
+                                    const fechaCreacionTZ_humana = `${fechaCreacionTZ_array[2]}/${fechaCreacionTZ_array[1]}/${fechaCreacionTZ_array[0]} ${horaCreacionTZ_array}`
+
+
+                                    const fechaActualizacionUTC_objeto = fechaActualizacionUTC_ISO?.split("T") || []
+                                    const fechaActualizacionUTC_array = fechaActualizacionUTC_objeto[0]?.split("-") || []
+                                    const horaActualizacionUTC_array = fechaActualizacionUTC_objeto[1]?.split("-")[0] || []
+                                    const fechaActualizacionUTC_humana = `${fechaActualizacionUTC_array[2]}/${fechaActualizacionUTC_array[1]}/${fechaActualizacionUTC_array[0]} ${horaActualizacionUTC_array}`
+
+                                    const fechaActualizacionTZ_objeto = fechaActualizacionTZ_ISO?.split("T") || []
+                                    const fechaActualizacionTZ_array = fechaActualizacionTZ_objeto[0]?.split("-") || []
+                                    const horaActualizacionTZ_array = fechaActualizacionTZ_objeto[1]?.split("-")[0] || []
+                                    const fechaActualizacionTZ_humana = `${fechaActualizacionTZ_array[2]}/${fechaActualizacionTZ_array[1]}/${fechaActualizacionTZ_array[0]} ${horaActualizacionTZ_array}`
+
+
+
                                     const contenedorRembolsoEnDetalle = document.createElement("div")
                                     contenedorRembolsoEnDetalle.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle")
                                     contenedorRembolsoEnDetalle.setAttribute("reembolsoUID", reembolsoUID)
@@ -6297,24 +6374,53 @@ const administracion = {
                                     bloqueDato = document.createElement("div")
                                     bloqueDato.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueDato")
                                     bloqueDato.classList.add("negrita")
-                                    bloqueDato.innerText = fechaCreacionUTC
+                                    bloqueDato.innerText = fechaCreacionUTC_humana
                                     bloque.appendChild(bloqueDato)
                                     contenedorRembolsoEnDetalle.appendChild(bloque)
-                                    // fechaActualizacionUTC
-                                    const fechaActualizacionReembolso = document.createElement("div")
-                                    fechaActualizacionReembolso.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloque")
+                                    // fechaCreacion hora local
+                                    bloque = document.createElement("div")
+                                    bloque.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloque")
                                     bloqueTitulo = document.createElement("div")
                                     bloqueTitulo.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueTitulo")
-                                    bloqueTitulo.innerText = "Fecha de actualizacíon UTC"
-                                    fechaActualizacionReembolso.appendChild(bloqueTitulo)
+                                    bloqueTitulo.innerText = "Fecha de creacíon hora local"
+                                    bloque.appendChild(bloqueTitulo)
                                     bloqueDato = document.createElement("div")
                                     bloqueDato.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueDato")
                                     bloqueDato.classList.add("negrita")
-                                    bloqueDato.innerText = fechaActualizacionUTC
-                                    fechaActualizacionReembolso.appendChild(bloqueDato)
+                                    bloqueDato.innerText = fechaCreacionTZ_humana
+                                    bloque.appendChild(bloqueDato)
+                                    contenedorRembolsoEnDetalle.appendChild(bloque)
+                                    // fechaActualizacionUTC
+                                    bloque = document.createElement("div")
+                                    bloque.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloque")
+                                    bloqueTitulo = document.createElement("div")
+                                    bloqueTitulo.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueTitulo")
+                                    bloqueTitulo.innerText = "Fecha de actualizacíon UTC"
+                                    bloque.appendChild(bloqueTitulo)
+                                    bloqueDato = document.createElement("div")
+                                    bloqueDato.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueDato")
+                                    bloqueDato.classList.add("negrita")
+                                    bloqueDato.innerText = fechaActualizacionUTC_humana
+                                    bloque.appendChild(bloqueDato)
                                     if (plataformaDePago === "pasarela") {
-                                        contenedorRembolsoEnDetalle.appendChild(fechaActualizacionReembolso)
+                                        contenedorRembolsoEnDetalle.appendChild(bloque)
                                     }
+                                    // fechaActualizacion hora local
+                                    bloque = document.createElement("div")
+                                    bloque.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloque")
+                                    bloqueTitulo = document.createElement("div")
+                                    bloqueTitulo.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueTitulo")
+                                    bloqueTitulo.innerText = "Fecha de actualizacíon UTC"
+                                    bloque.appendChild(bloqueTitulo)
+                                    bloqueDato = document.createElement("div")
+                                    bloqueDato.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueDato")
+                                    bloqueDato.classList.add("negrita")
+                                    bloqueDato.innerText = fechaActualizacionTZ_humana
+                                    bloque.appendChild(bloqueDato)
+                                    if (plataformaDePago === "pasarela") {
+                                        contenedorRembolsoEnDetalle.appendChild(bloque)
+                                    }
+
                                     const contenedorBotones = document.createElement("div")
                                     contenedorBotones.classList.add("administracion_reservas_detallesReserva_transacciones_reembolsos_detallesReembolso_contenedorBotones")
                                     contenedorBotones.setAttribute("contenedor", "opcionesDelReembolso")
@@ -6895,7 +7001,8 @@ const administracion = {
                                         tarjetaDigitos: detallesDelPago.tarjetaDigitos,
                                         pagoUIDPasarela: detallesDelPago.pagoUIDPasarela,
                                         cantidad: detallesDelPago.cantidad,
-                                        fechaPago: detallesDelPago.fechaPago,
+                                        fechaPagoUTC_ISO: detallesDelPago.fechaPagoUTC_ISO,
+                                        fechaPagoTZ_ISO: detallesDelPago.fechaPagoTZ_ISO,
                                         chequeUID: detallesDelPago.chequeUID,
                                         instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones
                                     }
@@ -7071,6 +7178,7 @@ const administracion = {
                                 return casaVitini.ui.vistas.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
                             }
                             if (respuestaServidor?.ok) {
+                                document.body.removeAttribute("style")
                                 document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"]`)?.remove()
                                 const selectorContenedorTransacciones = document.querySelector(`main[instanciaUID="${instanciaUID_reserva}"]`)
                                 selectorContenedorTransacciones.querySelector(`[contenedor=listaDePagos]`).querySelector(`[pagoUID="${pagoUID}"]`)?.remove()
@@ -7349,7 +7457,7 @@ const administracion = {
                     eliminarReservaIrreversiblemente: {
                         UI: () => {
                             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
-                           const selectorContenedorOpcionesCancelacion = document.querySelector("[contenedor=opcionesCancelacion]")
+                            const selectorContenedorOpcionesCancelacion = document.querySelector("[contenedor=opcionesCancelacion]")
                             selectorContenedorOpcionesCancelacion.style.transition = "background 500ms"
                             selectorContenedorOpcionesCancelacion.style.background = "rgba(255, 0, 0, 0.3)"
                             selectorContenedorOpcionesCancelacion.setAttribute("instanciaUID", instanciaUID)
@@ -11424,6 +11532,8 @@ const administracion = {
             airbnb: {
                 crearCalendario: {
                     arranque: async () => {
+                        const main = document.querySelector("main")
+                        main.setAttribute("zonaCSS", "administracion/configuracion")
                         const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
                         const selectorEspacioFormulario = document.querySelector("[componente=espacioFormulario_Airbnb]")
                         selectorEspacioFormulario.innerHTML = null
@@ -13354,43 +13464,21 @@ const administracion = {
         },
         eliminarPerfilPrecio: {
             UI: () => {
-                const advertenciaInmersivaIU = document.createElement("div")
-                advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                const contenedorAdvertenciaInmersiva = document.createElement("div")
-                contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                const tituloCancelarReserva = document.createElement("p")
-                tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                tituloCancelarReserva.innerText = "Confirmar la eliminacíon del perfil del precio del apartamento"
-                contenedorAdvertenciaInmersiva.appendChild(tituloCancelarReserva)
-                const bloqueBloqueoApartamentos = document.createElement("div")
-                bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
-                const tituloBloquoApartamentos = document.createElement("div")
-                tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                tituloBloquoApartamentos.innerText = "Vas a eliminar el perfil del precio de un apartamento, su aplicacion sera inmediata e impedira reservar el apartamento por que no se pueden reservar apartamento sin precio. Si estar de acuerdo con esta operacion confirma cuando quieras de lo contrailer cancela este proceso"
-                bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
-                contenedorAdvertenciaInmersiva.appendChild(bloqueBloqueoApartamentos)
-                const bloqueBotones = document.createElement("div")
-                bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
-                const botonCancelar = document.createElement("div")
-                botonCancelar.classList.add("detallesReservaCancelarBoton")
-                botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
-                botonCancelar.innerText = "Comfirmar la eliminacion"
-                botonCancelar.addEventListener("click", casaVitini.administracion.precios.eliminarPerfilPrecio.confirmarEliminarPrecio)
-                bloqueBotones.appendChild(botonCancelar)
-                const botonCancelarProcesoCancelacion = document.createElement("div")
-                botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion "
-                botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                    let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                    selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                        advertenciaInmersiva.remove()
-                    })
-                })
-                bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
-                contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
-                advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                document.body.appendChild(advertenciaInmersivaIU)
+                const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
+                const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+
+                const titulo = constructor.querySelector("[componente=titulo]")
+                titulo.innerText = "Confirmar la eliminacíon del perfil del precio del apartamento"
+                const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                mensaje.innerText = "Vas a eliminar el perfil del precio de un apartamento, su aplicacion sera inmediata e impedira reservar el apartamento por que no se pueden reservar apartamento sin precio. Si estar de acuerdo con esta operacion confirma cuando quieras de lo contrailer cancela este proceso"
+
+                const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                botonAceptar.innerText = "Comfirmar la eliminacion"
+                botonAceptar.addEventListener("click", casaVitini.administracion.precios.eliminarPerfilPrecio.confirmarEliminarPrecio)
+                const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                botonCancelar.innerText = "Cancelar la eliminacion"
+
+                document.querySelector("main").appendChild(pantallaInmersiva)
             },
             confirmarEliminarPrecio: async () => {
                 const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
@@ -13523,12 +13611,12 @@ const administracion = {
                 detallesDelImpuesto.tipoValor = primeraEnMayuscula(tipoValor)
                 detallesDelImpuesto.estado = primeraEnMayuscula(estado)
                 const aplicacionSobreUI = {
-                    totalNeto : "Total neto",
+                    totalNeto: "Total neto",
                     totalReservaNeto: "Total reserva neto"
                 }
                 detallesDelImpuesto.aplicacionSobre = aplicacionSobreUI[aplicacionSobre]
-                
-           }
+
+            }
             const sentidoColumna = respuestaServidor.sentidoColumna
             const nombreColumna = respuestaServidor.nombreColumna
             const pagina = respuestaServidor.pagina
@@ -18939,19 +19027,19 @@ const administracion = {
             },
             controladorBotonesGlobales: {
                 // Crear es para la seccion de crear
-                "crear": () => {
+                crear: () => {
                     const selectorContendorGlobal = document.querySelector("[componente=contenedorGlobal]")
                     const botonesGlobalesUI = casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.botonesDetallesBloqueoUI("crear")
                     selectorContendorGlobal.append(botonesGlobalesUI)
                 },
-                "modificar": () => {
+                modificar: () => {
                     const selectorContendorGlobal = document.querySelector("[componente=contenedorGlobal]")
                     const botonesGlobalesUI = casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.botonesDetallesBloqueoUI("modificar")
                     selectorContendorGlobal.append(botonesGlobalesUI)
                     const selectorContendorBloqueo = document.querySelector("[componente=contenedorDelBloqueo]")
                     selectorContendorBloqueo.style.pointerEvents = "none"
                 },
-                "guardarEliminar": () => {
+                guardarEliminar: () => {
                     const selectorContendorGlobal = document.querySelector("[componente=contenedorGlobal]")
                     const botonesGlobalesUI = casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.botonesDetallesBloqueoUI("guardarEliminar")
                     selectorContendorGlobal.append(botonesGlobalesUI)
@@ -18973,10 +19061,8 @@ const administracion = {
                 const tipoBloqueo = selectorTipoBloqueo.value
                 const selectorZona = document.querySelector("[datoBloqueo=zonaUI]")
                 const zona = selectorZona.value
-                const selectorFechaFin = document.querySelector("[datoBloqueo=fechaFin]")
-                const fechaFin = selectorFechaFin?.getAttribute("fechaFinPropuesta") || null
-                const selectorFechaInicio = document.querySelector("[datoBloqueo=fechaInicio]")
-                const fechaInicio = selectorFechaInicio?.getAttribute("fechaInicioPropuesta") || null
+                const fechaInicio = document.querySelector("[calendario=entrada").getAttribute("memoriaVolatil")
+                const fechaFin = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
                 const selectorMotivo = document.querySelector("[datoBloqueo=motivoUI]")
                 const motivo = selectorMotivo.value || null
                 const transaccion = {
@@ -18988,6 +19074,7 @@ const administracion = {
                     fechaFin: fechaFin,
                     motivo: motivo
                 }
+                console.log("transaccion", transaccion)
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                 if (!instanciaRenderizada) { return }
@@ -19070,7 +19157,9 @@ const administracion = {
                     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                     if (!instanciaRenderizada) { return }
                     instanciaRenderizada.remove()
+                    console.log("> respuestaServidor", respuestaServidor)
                     if (respuestaServidor?.error) {
+                        casaVitini.componentes.limpiarAdvertenciasInmersivas()
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
@@ -20644,7 +20733,7 @@ const administracion = {
                         bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
                         contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
                         advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                        document.body.appendChild(advertenciaInmersivaIU)
+                        document.querySelector("main").appendChild(advertenciaInmersivaIU)
                     },
                     confirmar: async () => {
                         const tipoEntidad = document.querySelector("[tipoEntidad]").getAttribute("tipoEntidad")
@@ -20798,6 +20887,7 @@ const administracion = {
                     const apartamentoIDV = IDV[0]
                     const selectorTitulo = document.querySelector(" [componente=titulo]")
                     selectorTitulo.innerText = "Configuración del apartamento"
+                    document.querySelector("[componente=espacioConfiguracionDelAlojamiento]").style.gap = "0"
                     const selectorEspacioConfiguracion = document.querySelector("[componente=espacioConfiguracionDelAlojamiento]")
                     const transaccion = {
                         zona: "administracion/arquitectura/configuraciones/detalleConfiguracionAlojamiento",
@@ -21217,6 +21307,8 @@ const administracion = {
                 },
                 eliminarHabitacion: {
                     UI: async (habitacion) => {
+                        document.body.style.overflow = "hidden"
+
                         const habitacionUID = habitacion.target.closest("[habitacionUID]").getAttribute("habitacionUID")
                         const advertenciaInmersivaIU = document.createElement("div")
                         advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
@@ -21247,10 +21339,8 @@ const administracion = {
                         botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
                         botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion de la habitacíon"
                         botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                            let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                                advertenciaInmersiva.remove()
-                            })
+                            return casaVitini.componentes.limpiarAdvertenciasInmersivas()
+
                         })
                         bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
                         contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
@@ -21292,6 +21382,8 @@ const administracion = {
                 },
                 eliminarCama: {
                     UI: async (cama) => {
+                        document.body.style.overflow = "hidden"
+
                         const camaUID = cama.target.closest("[camaUID]").getAttribute("camaUID")
                         const advertenciaInmersivaIU = document.createElement("div")
                         advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
@@ -21322,10 +21414,8 @@ const administracion = {
                         botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
                         botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion de la cama"
                         botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                            let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                                advertenciaInmersiva.remove()
-                            })
+                            return casaVitini.componentes.limpiarAdvertenciasInmersivas()
+
                         })
                         bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
                         contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
@@ -21371,6 +21461,7 @@ const administracion = {
                 },
                 actualizarEstadoConfiguracion: {
                     UI: async () => {
+                        document.body.style.overflow = "hidden"
                         const estadoActual = document.querySelector("[estadoActual]").getAttribute("estadoActual")
                         let tituloBoton
                         let valorBoton
@@ -21411,10 +21502,7 @@ const administracion = {
                         botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
                         botonCancelarProcesoCancelacion.innerText = "Cancelar el cambio de estado"
                         botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                            let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                                advertenciaInmersiva.remove()
-                            })
+                            return casaVitini.componentes.limpiarAdvertenciasInmersivas()
                         })
                         bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
                         contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
@@ -21459,10 +21547,7 @@ const administracion = {
                             }
                             const selectorEstadoActualUI = document.querySelector("[componente=estadoActualUI]")
                             selectorEstadoActualUI.innerText = estadoConfiguracionUI
-                            const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                                advertenciaInmersiva.remove()
-                            })
+                           casaVitini.componentes.limpiarAdvertenciasInmersivas()
                         }
                     }
                 },
@@ -21579,6 +21664,8 @@ const administracion = {
                     },
                     eliminarImagen: {
                         UI: async () => {
+                            document.body.style.overflow = 'hidden';
+
                             const advertenciaInmersivaIU = document.createElement("div")
                             advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
                             advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
@@ -21607,15 +21694,12 @@ const administracion = {
                             botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
                             botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion de la imagen"
                             botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                                let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                                    advertenciaInmersiva.remove()
-                                })
+                                return casaVitini.componentes.limpiarAdvertenciasInmersivas()
                             })
                             bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
                             contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
                             advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                            document.body.appendChild(advertenciaInmersivaIU)
+                            document.querySelector("main").appendChild(advertenciaInmersivaIU)
                         },
                         confirmar: async () => {
                             const apartamentoIDV = document.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")
