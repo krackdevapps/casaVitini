@@ -12039,6 +12039,194 @@ const administracion = {
                     selectorListaEstadosInterruptor.setAttribute("valorInicial", estado)
                 }
             }
+        },
+        mensajesEnPortada: {
+            arranque: async () => {
+                const main = document.querySelector("main")
+                main.setAttribute("zonaCSS", "administracion/configuracion/mensajessEnPortada")
+                const marcoElastico = document.querySelector("[componente=marcoElastico]")
+                const transaccion = {
+                    zona: "administracion/configuracion/mensajesEnPortada/obtenerMensajes"
+                }
+                const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                if (respuestaServidor?.error) {
+                    casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
+                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                }
+                if (respuestaServidor?.ok) {
+                    const mensajesEnPortada = respuestaServidor.ok
+
+                    const estados = {
+                        activado: "Activado",
+                        desactivado: "Desactivado"
+                    }
+                    const contenedorConfiguracionGlobal = document.createElement("div")
+                    contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
+                    const informacion = document.createElement("div")
+                    informacion.classList.add("administracion_configuracion_informacion")
+                    informacion.innerText = "Los mensajes en portada son textos que aparecen en portada."
+                    contenedorConfiguracionGlobal.appendChild(informacion)
+
+
+                    const contenedor = document.createElement("div")
+                    contenedor.classList.add("contenedor")
+
+                    const contenedorBotones = document.createElement("div")
+                    contenedorBotones.classList.add("contenedorBotones")
+
+                    const botonNuevoMensaje = document.createElement("div")
+                    botonNuevoMensaje.classList.add("botonNuevoMensaje")
+                    botonNuevoMensaje.innerText = "Nuevo mensaje en portada"
+                    contenedorBotones.appendChild(botonNuevoMensaje)
+
+
+                    contenedor.appendChild(contenedorBotones)
+
+                    const contenedorListaMensajes = document.createElement("div")
+                    contenedorListaMensajes.classList.add("contenedorListaMensajes")
+
+
+                    mensajesEnPortada.sort((a, b) => a.posicion - b.posicion);
+                    const numeroTotalMensajes = mensajesEnPortada.length
+
+                    for (const detallesDelMensaje of mensajesEnPortada) {
+                        const uid = detallesDelMensaje.uid
+                        const mensaje = detallesDelMensaje.mensaje
+                        const estado = detallesDelMensaje.estado
+                        const posicion = detallesDelMensaje.posicion || 0
+
+                        const contenedorMensaje = document.createElement("div")
+                        contenedorMensaje.classList.add("contenedorMensaje")
+                        contenedorMensaje.setAttribute("mensajeUID", uid)
+
+                        const estadoMensaje = document.createElement("div")
+                        estadoMensaje.innerText = estados[estado]
+                        contenedorMensaje.appendChild(estadoMensaje)
+
+                        const textoDelMensaje = document.createElement("div")
+                        textoDelMensaje.classList.add("textoDelMensaje")
+                        textoDelMensaje.innerText = mensaje
+                        contenedorMensaje.appendChild(textoDelMensaje)
+
+                        const selectorPosicion = document.createElement("select")
+                        selectorPosicion.classList.add("posicionMensaje")
+                        selectorPosicion.setAttribute("componente", "selectorPosicion")
+                        for (let index = 0; index < numeroTotalMensajes; index++) {
+                            const opcion = document.createElement("option");
+                            opcion.value = index;
+                            if (posicion === index) {
+                                opcion.text = "Posicion " + index;
+                                opcion.disabled = "true"
+                                opcion.selected = "true"
+                            } else {
+                                opcion.text = "Mover a la posicion " + index;
+                            }
+                            selectorPosicion.add(opcion);
+                        }
+                        contenedorMensaje.appendChild(selectorPosicion)
+
+                        const contenedorBotonesMensaje = document.createElement("div")
+                        contenedorBotonesMensaje.classList.add("contenedorBotonesMensaje")
+
+                        const botonModificar = document.createElement("div")
+                        botonModificar.classList.add("boton")
+                        botonModificar.innerText = "Modificar mensaje"
+                        contenedorBotonesMensaje.appendChild(botonModificar)
+
+                        const botonEliminar = document.createElement("div")
+                        botonEliminar.classList.add("boton")
+                        botonEliminar.innerText = "Eliminar mensaje"
+
+                        contenedorBotonesMensaje.appendChild(botonEliminar)
+
+                        contenedorMensaje.appendChild(contenedorBotonesMensaje)
+                        contenedorListaMensajes.appendChild(contenedorMensaje)
+                    }
+
+                    contenedor.appendChild(contenedorListaMensajes)
+                    marcoElastico.appendChild(contenedor)
+                }
+            },
+            cancelarCambios: () => {
+                const campos = [...document.querySelectorAll("[campo]")]
+                campos.map((campo) => {
+                    campo.value = campo.getAttribute("valorInicial")
+                })
+                const contenedorBotones = document.querySelector("[contenedor=botones]")
+                contenedorBotones.removeAttribute("style")
+            },
+            controlCampo: () => {
+                const campos = [...document.querySelectorAll("[campo]")]
+                let estadoFinal = null
+                campos.map((campo) => {
+                    if (campo.value !== campo.getAttribute("valorInicial")) {
+                        estadoFinal = "visible"
+                    }
+                })
+                const contenedorBotones = document.querySelector("[contenedor=botones]")
+                if (estadoFinal === "visible") {
+                    contenedorBotones.style.display = "flex"
+                } else {
+                    contenedorBotones.removeAttribute("style")
+                }
+            },
+            actualizarInterruptor: async (interruptor) => {
+                const seccionRenderizadaOrigen = document.querySelector("main")
+                const seccionUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
+                const interruptorIDV = interruptor.interruptorIDV
+                const estado = interruptor.estado
+                const selectorListaEstadosInterruptor = seccionRenderizadaOrigen.querySelector(`[interruptor=${interruptorIDV}]`)
+                const valorInicial = selectorListaEstadosInterruptor.getAttribute("valorInicial")
+                const estadoSoliciado = selectorListaEstadosInterruptor.querySelector(`option[value=${estado}]`)
+                let procesandoEstadoUI
+                if (estado === "activado") {
+                    procesandoEstadoUI = "Activando..."
+                }
+                if (estado === "desactivado") {
+                    procesandoEstadoUI = "Desactivando..."
+                }
+                estadoSoliciado.text = procesandoEstadoUI
+                const transacccion = {
+                    zona: "administracion/configuracion/interruptores/actualizarEstado",
+                    interruptorIDV: interruptorIDV,
+                    estado: estado
+                }
+                const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${seccionUID}"]`)
+                if (!seccionRenderizada) return
+                selectorListaEstadosInterruptor.removeAttribute("style")
+                if (respuestaServidor?.error) {
+                    let estadoInicialUI
+                    if (estado === "activado") {
+                        estadoInicialUI = "Activado"
+                    }
+                    if (estado === "desactivado") {
+                        estadoInicialUI = "Desactivado"
+                    }
+                    estadoSoliciado.text = estadoInicialUI
+                    selectorListaEstadosInterruptor.value = valorInicial
+                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                }
+                if (respuestaServidor?.ok) {
+                    let estadoFinalUI
+                    if (estado === "activado") {
+                        estadoFinalUI = "Activado"
+                    }
+                    if (estado === "desactivado") {
+                        estadoFinalUI = "Desactivado"
+                    }
+                    estadoSoliciado.text = estadoFinalUI
+                    selectorListaEstadosInterruptor.setAttribute("valorInicial", estado)
+                }
+            },
+            nuevo: {
+                arranque: () => {
+
+                    const main = document.querySelector("main")
+                    main.setAttribute("zonaCSS", "administracion/configuracion/mensajessEnPortada/nuevo")
+
+                }
+            }
         }
     },
     clientes: {
@@ -21547,7 +21735,7 @@ const administracion = {
                             }
                             const selectorEstadoActualUI = document.querySelector("[componente=estadoActualUI]")
                             selectorEstadoActualUI.innerText = estadoConfiguracionUI
-                           casaVitini.componentes.limpiarAdvertenciasInmersivas()
+                            casaVitini.componentes.limpiarAdvertenciasInmersivas()
                         }
                     }
                 },
