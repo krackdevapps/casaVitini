@@ -11403,9 +11403,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background-image: url("/componentes/imagenes/leonciudad.jpg");
 }
 [zonaCSS=conozcanos] .contenedorParalax .icon-scroll,
-[zonaCSS=conozcanos] .contenedorParalax .icon-scroll:before {
-    /* left: 50%; */
-}
+
 [zonaCSS=conozcanos] .contenedorParalax .icon-scroll {
     pointer-events: none;
     width: 40px;
