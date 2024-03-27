@@ -1956,6 +1956,39 @@ const puerto = async (entrada, salida) => {
                         mutex.release();
                     }
                 }
+            },
+            portada: {
+                obtenerMensajes: async () => {
+                    try {
+                        const consulta = `
+                            SELECT 
+                                mensaje,
+                                posicion
+                            FROM 
+                                "mensajesEnPortada"
+                            WHERE
+                                estado = $1;
+                           `;
+                        const resuelveMensajes = await conexion.query(consulta, ["activado"])
+                        const mensajes = resuelveMensajes.rows
+                        for (const detallesDelMensaje of mensajes) {
+                            const bufferObjPreDecode = Buffer.from(detallesDelMensaje.mensaje, "base64");
+                            detallesDelMensaje.mensaje = bufferObjPreDecode.toString("utf8");
+                        }
+                        mensajes.sort((a, b) => b.posicion - a.posicion);
+
+                        const ok = {
+                            ok: mensajes,
+                        }
+                        salida.json(ok)
+                    } catch (errorCapturado) {
+                        const error = {
+                            error: errorCapturado.message
+                        }
+                        salida.json(error)
+                    }
+
+                },
             }
         },
         miCasa: {
@@ -9086,9 +9119,57 @@ const puerto = async (entrada, salida) => {
                                `;
                                 const resuelveMensajes = await conexion.query(consulta)
                                 const mensajes = resuelveMensajes.rows
+                                for (const detallesDelMensaje of mensajes) {
+                                    const bufferObjPreDecode = Buffer.from(detallesDelMensaje.mensaje, "base64");
+                                    detallesDelMensaje.mensaje = bufferObjPreDecode.toString("utf8");
+                                }
                                 const ok = {
                                     ok: mensajes,
                                     numeroMensajes: resuelveMensajes.rowCount
+                                }
+                                salida.json(ok)
+                            } catch (errorCapturado) {
+                                const error = {
+                                    error: errorCapturado.message
+                                }
+                                salida.json(error)
+                            }
+                        }
+                    },
+                    detallesDelMensaje: {
+                        IDX: {
+                            ROL: [
+                                "administrador",
+                                "empleado"
+                            ]
+                        },
+                        X: async () => {
+                            try {
+                                const mensajeUID = entrada.body.mensajeUID
+                                const filtroIDV = /^[0-9]+$/;
+                                if (!mensajeUID || !filtroIDV.test(mensajeUID)) {
+                                    const error = "El mensajeUID solo puede ser una cadena que acepta numeros"
+                                    throw new Error(error)
+                                }
+                                const consulta = `
+                                SELECT 
+                                    uid,
+                                    mensaje,
+                                    estado,
+                                    posicion
+                                FROM 
+                                    "mensajesEnPortada"
+                                WHERE
+                                    uid = $1;
+                               `;
+                                const resuelveMensajes = await conexion.query(consulta, [mensajeUID])
+                                const detallesDelMensaje = resuelveMensajes.rows[0]
+
+
+                                const bufferObjPreDecode = Buffer.from(detallesDelMensaje.mensaje, "base64");
+                                detallesDelMensaje.mensaje = bufferObjPreDecode.toString("utf8");
+                                const ok = {
+                                    ok: detallesDelMensaje
                                 }
                                 salida.json(ok)
                             } catch (errorCapturado) {
@@ -9114,15 +9195,15 @@ const puerto = async (entrada, salida) => {
                                     const error = "El mensajeUID solo puede ser una cadena que acepta numeros"
                                     throw new Error(error)
                                 }
-                                const mensajeB64 = btoa(mensaje);
-
+                                const bufferObj = Buffer.from(mensaje, "utf8");
+                                const mensajeB64 = bufferObj.toString("base64");
                                 const validarUID = `
                                 SELECT 
                                     "estado"
                                 FROM 
-                                    "mensajeEnPortada"
+                                    "mensajesEnPortada"
                                 WHERE 
-                                    "mensajeUID" = $1;
+                                    uid = $1;
                                `;
                                 const resuelveValidacion = await conexion.query(validarUID, [mensajeUID])
                                 if (resuelveValidacion.rowCount === 0) {
@@ -9136,15 +9217,14 @@ const puerto = async (entrada, salida) => {
                                 }
                                 await conexion.query('BEGIN'); // Inicio de la transacción
 
-                                
+
                                 const actualizarMensaje = `
                                 UPDATE 
-                                    "mensajeEnPortada"
+                                    "mensajesEnPortada"
                                 SET
                                     mensaje = $1
                                 WHERE
-                                    "mensajeUID" = $2
-                                    RETURNING *;`;
+                                    uid = $2;`;
                                 const datosDelMensaje = [
                                     mensajeB64,
                                     mensajeUID
@@ -9154,12 +9234,207 @@ const puerto = async (entrada, salida) => {
                                     const error = "No se ha podido actualizar el mensaje por que no se ha encontrado"
                                     throw new Error(error)
                                 }
-                                const mensajeGuardado = resuelveEstado.rows[0].mensaje
                                 await conexion.query('COMMIT'); // Confirmar la transacción
                                 const ok = {
                                     ok: "Se ha actualizado correctamente el interruptor",
+                                    mensajeUID: mensajeUID
+                                }
+                                salida.json(ok)
+                            } catch (errorCapturado) {
+                                await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+                                const error = {
+                                    error: errorCapturado.message
+                                }
+                                salida.json(error)
+                            }
+                        }
+                    },
+                    actualizarEstado: {
+                        IDX: {
+                            ROL: [
+                                "administrador"
+                            ]
+                        },
+                        X: async () => {
+                            try {
+                                const mensajeUID = entrada.body.mensajeUID
+                                const estado = entrada.body.estado
+                                const filtroIDV = /^[0-9]+$/;
+                                if (!mensajeUID || !filtroIDV.test(mensajeUID)) {
+                                    const error = "El mensajeUID solo puede ser una cadena que acepta numeros"
+                                    throw new Error(error)
+                                }
+                                if (estado !== "activado" && estado !== "desactivado") {
+                                    const error = "El estado solo puede ser activado o desactivado"
+                                    throw new Error(error)
+                                }
+                                const validarUID = `
+                                SELECT 
+                                    "estado"
+                                FROM 
+                                    "mensajesEnPortada"
+                                WHERE 
+                                    uid = $1;
+                               `;
+                                const resuelveValidacion = await conexion.query(validarUID, [mensajeUID])
+                                if (resuelveValidacion.rowCount === 0) {
+                                    const error = "No existe ningun mensaje con ese UID"
+                                    throw new Error(error)
+                                }
+
+                                await conexion.query('BEGIN'); // Inicio de la transacción
+
+
+                                const actualizarMensaje = `
+                                UPDATE 
+                                    "mensajesEnPortada"
+                                SET
+                                    estado = $1
+                                WHERE
+                                    uid = $2;`;
+                                const resuelveActualizacion = await conexion.query(actualizarMensaje, [estado, mensajeUID])
+                                if (resuelveActualizacion.rowCount === 0) {
+                                    const error = "No se ha podido actualizar el mensaje por que no se ha encontrado"
+                                    throw new Error(error)
+                                }
+                                await conexion.query('COMMIT'); // Confirmar la transacción
+                                const ok = {
+                                    ok: "Se ha actualizado el estado correctamente",
                                     mensajeUID: mensajeUID,
-                                    mensaje: atob(mensajeGuardado)
+                                    estado: estado
+                                }
+                                salida.json(ok)
+                            } catch (errorCapturado) {
+                                await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+                                const error = {
+                                    error: errorCapturado.message
+                                }
+                                salida.json(error)
+                            }
+                        }
+                    },
+                    moverPosicion: {
+                        IDX: {
+                            ROL: [
+                                "administrador"
+                            ]
+                        },
+                        X: async () => {
+                            try {
+                                const mensajeUID = entrada.body.mensajeUID
+                                const nuevaPosicion = entrada.body.nuevaPosicion
+                                const filtroIDV = /^[0-9]+$/;
+                                if (!mensajeUID || !filtroIDV.test(mensajeUID)) {
+                                    const error = "El mensajeUID solo puede ser una cadena que acepta numeros, enteros y positivos"
+                                    throw new Error(error)
+                                }
+                                if (!nuevaPosicion || !filtroIDV.test(nuevaPosicion)) {
+                                    const error = "El nuevaPosicion solo puede ser una cadena que acepta numeros, enteros y positivos"
+                                    throw new Error(error)
+                                }
+                                const validarUID = `
+                                SELECT 
+                                    posicion,
+                                    mensaje,
+                                    estado
+                                FROM 
+                                    "mensajesEnPortada"
+                                WHERE 
+                                    uid = $1;
+                               `;
+                                const resuelveValidacion = await conexion.query(validarUID, [mensajeUID])
+                                if (resuelveValidacion.rowCount === 0) {
+                                    const error = "No existe ningun mensaje con ese UID"
+                                    throw new Error(error)
+                                }
+
+
+                                const posicionAntigua = resuelveValidacion.rows[0].posicion
+                                if (Number(posicionAntigua) === Number(nuevaPosicion)) {
+                                    const error = "El mensaje ya esta en esa posicion"
+                                    throw new Error(error)
+                                }
+                                const mensajeSeleccionado = {}
+                                const detallesMensajeSeleccionado = resuelveValidacion.rows[0]
+                                const mensajeSeleccionado_texto = detallesMensajeSeleccionado.mensaje
+                                const bufferObjPreDecode = Buffer.from(mensajeSeleccionado_texto, "base64");
+
+                                mensajeSeleccionado.uid = mensajeUID
+                                mensajeSeleccionado.mensaje = bufferObjPreDecode.toString("utf8");
+                                mensajeSeleccionado.estado = detallesMensajeSeleccionado.estado
+                                const validarMensajeAfectado = `
+                                SELECT 
+                                    uid,
+                                    mensaje,
+                                    estado, 
+                                    posicion
+                                FROM 
+                                    "mensajesEnPortada"
+                                WHERE 
+                                    posicion = $1;
+                               `;
+                                const resuelveMensajeAfectado = await conexion.query(validarMensajeAfectado, [nuevaPosicion])
+                                const detallesMensajeAfectado = resuelveMensajeAfectado.rows[0]
+                                console.log("mensaje afectado", resuelveMensajeAfectado.rows)
+
+                                const mensajeUIDAfectado = detallesMensajeAfectado.uid
+                                const mensajeUIDAfectado_mensaje = detallesMensajeAfectado.mensaje
+
+                                const buffer_mensajeAfectado = Buffer.from(mensajeUIDAfectado_mensaje, "base64");
+
+                                const mensajeAfectado = {
+                                    uid: String(mensajeUIDAfectado),
+                                    mensaje: buffer_mensajeAfectado.toString("utf8"),
+                                    estado: detallesMensajeAfectado.estado
+                                }
+                                await conexion.query('BEGIN'); // Inicio de la transacción
+                                if (resuelveMensajeAfectado.rowCount === 1) {
+                                    // Posicion de transccion
+                                    const ajustarPosicionTransitivaElementoAfectado = `
+                                      UPDATE 
+                                          "mensajesEnPortada"
+                                      SET 
+                                          posicion = $2
+                                      WHERE 
+                                          uid = $1
+                                      RETURNING
+                                        mensaje,
+                                        estado
+                                         `;
+                                    const resuelveMensajeSeleccionado = await conexion.query(ajustarPosicionTransitivaElementoAfectado, [mensajeUIDAfectado, 0]);
+
+
+                                }
+
+                                const actualizarMensajeActual = `
+                                UPDATE 
+                                    "mensajesEnPortada"
+                                SET
+                                    posicion = $1
+                                WHERE
+                                    uid = $2;`;
+
+                                await conexion.query(actualizarMensajeActual, [nuevaPosicion, mensajeUID])
+
+                                if (resuelveMensajeAfectado.rowCount === 1) {
+                                    // Posicion de final a elementoAfectado
+                                    const ajustarPosicionFinalElementoAfectado = `
+                                     UPDATE 
+                                         "mensajesEnPortada"
+                                     SET 
+                                         posicion = $2
+                                     WHERE 
+                                         uid = $1;
+                                      `;
+                                    await conexion.query(ajustarPosicionFinalElementoAfectado, [mensajeUIDAfectado, posicionAntigua]);
+                                }
+
+
+                                await conexion.query('COMMIT'); // Confirmar la transacción
+                                const ok = {
+                                    ok: "Se ha actualizado correctamente la posicion",
+                                    mensajeSeleccionado: mensajeSeleccionado,
+                                    mensajeAfectado: mensajeAfectado
                                 }
                                 salida.json(ok)
                             } catch (errorCapturado) {
@@ -9249,18 +9524,24 @@ const puerto = async (entrada, salida) => {
                         X: async () => {
                             try {
                                 const mensaje = entrada.body.mensaje
-                                const mensajeB64 = btoa(mensaje);
+                                if (!mensaje || typeof mensaje !== "string" || mensaje.length === 0) {
+                                    const error = "Por favor escriba un mensaje para guardar, este debe de ser una cadena de texto."
+                                    throw new Error(error)
+                                }
+
+                                const bufferObj = Buffer.from(mensaje, "utf8");
+                                const mensajeB64 = bufferObj.toString("base64");
+                                console.log("mensajeb64", mensajeB64)
 
                                 await conexion.query('BEGIN'); // Inicio de la transacción
-
                                 const consultaPosicionInicial = `
                                 SELECT 
                                     *
                                 FROM 
-                                    "mensajeEnPortada";
+                                    "mensajesEnPortada";
                                `;
                                 const resuelvePosicionInicial = await conexion.query(consultaPosicionInicial)
-                                const posicionInicial = resuelvePosicionInicial.rowCount
+                                const posicionInicial = resuelvePosicionInicial.rowCount + 1
 
                                 const estadoInicial = "desactivado"
                                 const crearMensaje = `
@@ -9273,9 +9554,13 @@ const puerto = async (entrada, salida) => {
                                 VALUES 
                                 ($1, $2, $3)
                                 RETURNING
-                                "mensajeUID"
+                                uid
                                 `
+                                console.log("test 1")
+
                                 const resuelveCreacion = await conexion.query(crearMensaje, [mensajeB64, estadoInicial, posicionInicial])
+                                console.log("test 2")
+
                                 if (resuelveCreacion.rowCount === 0) {
                                     const error = "No se ha podido insertar el mensaje"
                                     throw new Error(error)
@@ -9283,7 +9568,6 @@ const puerto = async (entrada, salida) => {
                                 const ok = {
                                     ok: "Se ha creado el nuevo mensaje",
                                     mensajeUID: resuelveCreacion.rows[0].mensajeUID,
-                                    mensaje: atob(resuelveCreacion.rows[0].mensaje)
                                 }
                                 salida.json(ok)
                                 await conexion.query('COMMIT');
@@ -9312,25 +9596,40 @@ const puerto = async (entrada, salida) => {
                                 }
                                 await conexion.query('BEGIN'); // Inicio de la transacción
                                 // Validar si es un usuario administrador
-                                const eliminaMensaje = `
+                                const validaMensaje = `
                                 SELECT 
-                                "mensajeUID"
+                                posicion
                                 FROM "mensajesEnPortada"
-                                WHERE "mensajeUID" = $1;
+                                WHERE uid = $1;
                                 `
-                                const resuelveEliminacion = await conexion.query(eliminaMensaje, [mensajeUID])
-                                if (resuelveEliminacion.rowCount === 0) {
+                                const resuelveValidacion = await conexion.query(validaMensaje, [mensajeUID])
+
+                                if (resuelveValidacion.rowCount === 0) {
                                     const error = "No se encuentra ningun mensaje con ese UID"
                                     throw new Error(error)
                                 }
+                                const posicion = resuelveValidacion.rows[0].posicion
+                                const consultaEliminacion = `
+                                DELETE FROM "mensajesEnPortada"
+                                WHERE uid = $1;
+                                `
+                                const resuelveEliminacion = await conexion.query(consultaEliminacion, [mensajeUID])
+                                // Ahora, puedes agregar la lógica para actualizar las filas restantes si es necesario
+                                const consultaActualizacion = `
+                                    UPDATE "mensajesEnPortada"
+                                    SET posicion = posicion - 1
+                                    WHERE posicion > $1; 
+                                `;
+                                await conexion.query(consultaActualizacion, [posicion]);
 
+                                await conexion.query('COMMIT');
                                 if (resuelveEliminacion.rowCount === 1) {
                                     const ok = {
                                         ok: "Se ha eliminado correctamente el mensaje de portada",
+                                        mensajeUID: mensajeUID
                                     }
                                     salida.json(ok)
                                 }
-                                await conexion.query('COMMIT');
                             } catch (errorCapturado) {
                                 await conexion.query('ROLLBACK');
                                 const error = {
@@ -9744,16 +10043,16 @@ const puerto = async (entrada, salida) => {
                         const comoPernoctantePreProcesado = []
                         const consultaComoTitular = `
                         SELECT 
-                        reserva
+                        "reservaUID"
                         FROM 
-                        reservas 
+                        "reservaTitulares" 
                         WHERE 
-                        titular = $1`
+                        "titularUID" = $1`
                         const resuelveConsultaComoTitular = await conexion.query(consultaComoTitular, [cliente])
                         if (resuelveConsultaComoTitular.rowCount > 0) {
                             const uidsComoTitular = resuelveConsultaComoTitular.rows
                             uidsComoTitular.map((detallesReserva) => {
-                                const uid = detallesReserva.reserva
+                                const uid = detallesReserva.reservaUID
                                 comoTitularPreProcesado.push(uid)
                             })
                         }

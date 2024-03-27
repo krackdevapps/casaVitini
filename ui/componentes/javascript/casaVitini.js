@@ -2,7 +2,7 @@ const casaVitini = {
     ui: {
         vistas: {
             portada: {
-                arranque: () => {
+                arranque:async () => {
                     // document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
                     // document.body.style.height = "auto"
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
@@ -14,9 +14,42 @@ const casaVitini = {
                     main.style.maxWidth = "100%";
                     main.style.height = "100%";
                     main.style.overflow = "hidden";
+                    main.style.gap = "6px"
                     main.style.position = "absolute";
                     const titulo = main.querySelector("[componente=titulo]")
                     titulo.style.marginTop = "100px"
+
+                    const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
+
+                    const transacccion = {
+                        zona: "plaza/portada/obtenerMensajes"
+                    }
+                    const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
+                    const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                    if (!seccionRenderizada) return
+                    if (respuestaServidor?.ok) {
+                        const mensajes = respuestaServidor.ok
+                        const titulo = seccionRenderizada.querySelector("[componente=titulo]")
+                        for (const detallesDelMensaje of mensajes) {
+                            const mensaje = detallesDelMensaje.mensaje
+
+                            const tituloUI = document.createElement("div")
+                            tituloUI.classList.add("tituloUI")
+                            tituloUI.innerText = mensaje
+
+
+
+
+
+                            titulo.insertAdjacentElement("afterend", tituloUI);
+
+                        }
+
+
+
+
+
+                    }
                 },
             },
             reservasNuevo: {
@@ -4651,7 +4684,7 @@ const casaVitini = {
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "contacto")
                     document.body.style.backgroundImage = 'url("/componentes/imagenes/contacto.jpg")';
-                    // document.querySelector("#uiLogo").style.filter = "invert(1)"
+                    document.querySelector("#uiLogo").style.filter = "invert(1)"
                     document.querySelector("#botonMenuResponsivo").style.filter = "invert(1)"
                     //document.body.classList.add("fondoConDesenfoque")
                 },
@@ -5387,8 +5420,9 @@ const casaVitini = {
                 vista: vista
             };
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+            console.log("respuestaServidor", respuestaServidor)
             const contenedorVista = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-            if (!contenedorVista) {
+            if (!contenedorVista || !respuestaServidor) {
                 return
             }
             document.querySelectorAll("#uiLogo, body, header, [componente=contenedorMenu], #botonMenuResponsivo")
@@ -5540,6 +5574,7 @@ const casaVitini = {
                 const servidor = await fetch(puerto, peticion);
                 const respuestaServidor = await servidor.json();
                 if (!respuestaServidor) {
+                    console.log("error 1")
                     return casaVitini.componentes.errorUI()
                 }
                 if (respuestaServidor.tipo === "IDX") {
@@ -5571,6 +5606,8 @@ const casaVitini = {
                 }
                 console.log(error.message)
                 if (error instanceof TypeError) {
+                    console.log("error 2")
+
                     return casaVitini.componentes.errorUI()
                 }
             }
@@ -5580,6 +5617,9 @@ const casaVitini = {
             if (selectorContenedorError) {
                 return
             }
+            document.querySelectorAll("[tipoMenu=volatil]").forEach((menu) => {
+                menu.removeAttribute("style")
+            })
             casaVitini.componentes.limpiarTodoElementoVolatil()
 
             const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
@@ -5615,6 +5655,7 @@ const casaVitini = {
             document.querySelector("main").appendChild(advertenciaInmersivaUI)
         },
         arranque: async () => {
+            window.addEventListener("popstate", casaVitini.componentes.navegacion)
             document.getElementById("botonMenuResponsivo").addEventListener("click", casaVitini.componentes.menuResponsivo)
             window.addEventListener("resize", casaVitini.componentes.limpiarTodoElementoVolatil)
             //  casaVitini.componentes.controlGlobalScroll()
@@ -9417,7 +9458,6 @@ const casaVitini = {
                 const botonAceptar = document.createElement("div")
                 botonAceptar.classList.add("boton")
                 botonAceptar.setAttribute("boton", "aceptar")
-                botonAceptar.addEventListener("click", casaVitini.administracion.precios.eliminarPerfilPrecio.confirmarEliminarPrecio)
                 contenidoAdvertenciaInmersiva.appendChild(botonAceptar)
 
                 const botonCancelar = document.createElement("div")
@@ -9778,4 +9818,3 @@ const casaVitini = {
     },
 }
 window.addEventListener("load", casaVitini.componentes.arranque)
-window.addEventListener("popstate", casaVitini.componentes.navegacion)

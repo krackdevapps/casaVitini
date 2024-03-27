@@ -201,6 +201,20 @@
     z-index: 5;
 }
 
+[zonaCSS=portada] .tituloUI {
+    margin: 0px;
+    padding: 10px;
+    color: black;
+    background: rgba(255, 255, 255, 0.3);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    align-items: center;
+    align-content: center;
+    flex-direction: row;
+    border-radius: 10px;
+    z-index: 10;
+}
+
 .espacioElastico {
     background-color: aqua;
 }
@@ -12370,38 +12384,76 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS=conozcanos] .texto111 {
-    -webkit-transform: translateY(0) translateZ(0) !important;
+    transform: translateY(0) translateZ(0) !important;
 }
 
-[zonaCSS=conozcanos] .conozcanos .fondoInicio {
+[zonaCSS=conozcanos] .fondoInicio {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/f5.jpeg");
+    background-image: url("/componentes/imagenes/zonas_comunes/image00009.jpeg");
+
 }
 
-[zonaCSS=conozcanos] .conozcanos .fondo1 {
+[zonaCSS=conozcanos] .fondo1 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/fotos/image00004.jpeg");
+    background-image: url("/componentes/imagenes/fotos/zonas_comunes/image00004.jpeg");
 }
 
-[zonaCSS=conozcanos] .conozcanos .fondo2 {
+[zonaCSS=conozcanos] .fondo2 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/leonciudad.jpg");
+    background-image: url("/componentes/imagenes/zonas_comunes/image00006.jpeg");
 }
 
-[zonaCSS=conozcanos] .conozcanos .fondo3 {
+[zonaCSS=conozcanos] .fondo3 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/componentes/imagenes/zonas_comunes/image00002.jpeg");
+}
+
+[zonaCSS=conozcanos] .fondo4 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/componentes/imagenes/montana.jpg");
+}
+
+
+
+[zonaCSS=conozcanos] .fondo5 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+ background-image: url("/componentes/imagenes/f5.jpeg"); 
+}
+
+[zonaCSS=conozcanos] .fondo6 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/componentes/imagenes/nic.jpeg");
+}
+
+[zonaCSS=conozcanos] .fondo7 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     background-image: url("/componentes/imagenes/fotos/image00016.jpeg");
 }
 
-[zonaCSS=conozcanos] .conozcanos .fondo4 {
+[zonaCSS=conozcanos] .fondo8 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/componentes/imagenes/montana.jpg");
+}
+
+[zonaCSS=conozcanos] .fondo8 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -12417,7 +12469,12 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-perspective: 300px;
     perspective: 300px;
     -webkit-perspective-origin-x: 100%;
-    perspective-origin-x: 100%;
+}
+
+[zonaCSS=conozcanos] .contenedorParalax .texto {
+    background: rgba(0, 0, 0, 0.16);
+    z-index: 2;
+    padding: 40px;
 }
 
 [zonaCSS=conozcanos] .conozcanos .parallax::-webkit-scrollbar {
@@ -12444,7 +12501,6 @@ grid-template-columns: 0.5fr 1.5fr;
     bottom: 0;
     width: 100vw;
     -webkit-transform-origin-x: 100%;
-    transform-origin-x: 100%;
 }
 
 /*Modifcaciones dev*/
@@ -12462,9 +12518,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: turquoise;
 }
 
-[zonaCSS=conozcanos] .conozcanos .parallax__group {
-    /*  width: 70vw;*/
-}
+
 
 /*fin modificaciones*/
 [zonaCSS=conozcanos] .conozcanos .capaFondoFinal {
@@ -12867,53 +12921,6 @@ grid-template-columns: 0.5fr 1.5fr;
     pointer-events: none;
 }
 
-[zonaCSS=conozcanos] .contenedorParalax .texto {
-    background: rgba(0, 0, 0, 0.16);
-    z-index: 2;
-    padding: 40px;
-}
-
-[zonaCSS=conozcanos] .contenedorParalax .fondoInicio {
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/f5.jpeg");
-}
-
-[zonaCSS=conozcanos] .contenedorParalax .fondo1 {
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/playa.jpg");
-}
-
-[zonaCSS=conozcanos] .contenedorParalax .fondo2 {
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/nic.jpeg");
-}
-
-[zonaCSS=conozcanos] .contenedorParalax .fondo3 {
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/fotos/image00016.jpeg");
-}
-
-[zonaCSS=conozcanos] .contenedorParalax .fondo4 {
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/montana.jpg");
-}
-
-[zonaCSS=conozcanos] .contenedorParalax .fondo5 {
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/leonciudad.jpg");
-}
 
 [zonaCSS=conozcanos] .contenedorParalax .icon-scroll,
 
@@ -12985,20 +12992,20 @@ grid-template-columns: 0.5fr 1.5fr;
     transform: translate(-50%, -50%);
 }
 
-[zonaCSS="administracion/configuracion/mensajessEnPortada"] .contenedor {
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedor {
     display: flex;
+    gap: 6px;
     flex-direction: column;
 }
 
-[zonaCSS="administracion/configuracion/mensajessEnPortada"] .contenedorBotones {
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorBotones {
     display: flex;
     flex-direction: column;
-    padding: 6px;
     align-items: flex-end;
 }
 
 
-[zonaCSS="administracion/configuracion/mensajessEnPortada"] .botonNuevoMensaje {
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .botonNuevoMensaje {
     display: flex;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -13006,62 +13013,94 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     padding: 10px;
     border-radius: 10px;
+    columns: black;
+    color: black;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
 }
 
-[zonaCSS="administracion/configuracion/mensajessEnPortada"] .contenedorListaMensajes {
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorListaMensajes {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-[zonaCSS="administracion/configuracion/mensajessEnPortada"] .contenedorMensaje {
-    display: flex;
-    background: #00000036;
-    flex-direction: column;
-    padding: 6px;
-    gap: 6px;
-    border-radius: 10px;
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje {
+    display: grid;
+    grid-template-columns: auto 200px;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    background: #d9dada;
+    margin: 0px;
+    border-radius: 16px;
 }
 
-[zonaCSS="administracion/configuracion/mensajessEnPortada"] .contenedorMensaje .textoDelMensaje {
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje .textoDelMensaje {
     display: flex;
-    background: #1f5f59;
     flex-direction: column;
-    padding: 6px;
+    padding: 10px;
 }
 
-[zonaCSS="administracion/configuracion/mensajessEnPortada"] .contenedorMensaje .posicionMensaje {
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje .selector {
     display: flex;
-    background: turquoise;
+    background: #ffffff5c;
     flex-direction: column;
     appearance: none;
     outline: none;
     border: none;
+    padding: 10px;
+    border-radius: 10px;
 }
 
-[zonaCSS="administracion/configuracion/mensajessEnPortada"] .contenedorMensaje .contenedorBotonesMensaje {
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje .contenedorBotonesMensaje {
     display: flex;
-    background: turquoise;
     flex-direction: column;
     gap: 6px;
-}
-
-[zonaCSS="administracion/configuracion/mensajessEnPortada"] .contenedorMensaje .contenedorBotonesMensaje .boton {
-    display: flex;
-    background: grey;
-    flex-direction: column;
-}
-
-[zonaCSS="administracion/configuracion/mensajessEnPortada/nuevo"] .textoDelMensaje {
-    background: white;
     padding: 6px;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje .contenedorBotonesMensaje .boton {
+    display: flex;
+    background: #ffffff5c;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje .contenedorBotonesMensaje .boton:hover {
+    background: white;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/detallesDelMensaje"] .contenedorDelMensaje {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-radius: 10px;
+}
+
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/nuevo"] .textoDelMensaje,
+[zonaCSS="administracion/configuracion/mensajesEnPortada/detallesDelMensaje"] .textoDelMensaje {
+    background: white;
+    padding: 10px;
     border-radius: 10px;
     outline: none;
     border: none;
+    min-height: 100px;
+    height: 100px;
+    width: 100%;
+    resize: vertical;
 }
 
 
-[zonaCSS="administracion/configuracion/mensajessEnPortada/nuevo"] .contenedorBotones {
+[zonaCSS="administracion/configuracion/mensajesEnPortada/nuevo"] .contenedorBotones,
+[zonaCSS="administracion/configuracion/mensajesEnPortada/detallesDelMensaje"] .contenedorBotones {
     display: flex;
     border-radius: 10px;
     outline: none;
@@ -13069,14 +13108,27 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
 }
 
-[zonaCSS="administracion/configuracion/mensajessEnPortada/nuevo"] .contenedorBotones .boton {
+[zonaCSS="administracion/configuracion/mensajesEnPortada/nuevo"] .contenedorBotones .boton,
+[zonaCSS="administracion/configuracion/mensajesEnPortada/detallesDelMensaje"] .contenedorBotones .boton {
     display: flex;
     padding: 10px;
     border-radius: 10px;
     outline: none;
     border: none;
-    background: white;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
     cursor: default;
     user-select: none;
+    transition: background 250ms linear;
     -webkit-user-select: none;
+}
+
+
+
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/nuevo"] .contenedorBotones .boton:hover,
+[zonaCSS="administracion/configuracion/mensajesEnPortada/detallesDelMensaje"] .contenedorBotones .boton:hover {
+    background: rgba(255, 255, 255, 0.6);
+
 }

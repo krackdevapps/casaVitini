@@ -12041,25 +12041,59 @@ const administracion = {
             }
         },
         mensajesEnPortada: {
+
             arranque: async () => {
                 const main = document.querySelector("main")
-                main.setAttribute("zonaCSS", "administracion/configuracion/mensajessEnPortada")
+                main.setAttribute("zonaCSS", "administracion/configuracion/mensajesEnPortada")
+                const instanciaUID = main.getAttribute("instanciaUID")
+                const granuladoURL = casaVitini.componentes.granuladorURL()
+                const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
+                if (comandoInicial === "mensajes_en_portada") {
+                    return casaVitini.administracion.configuracion.mensajesEnPortada.portadaUI()
+                }
+                const soloDigitos = /^\d+$/;
+                if (soloDigitos.test(comandoInicial)) {
+                    const transaccion = {
+                        zona: "administracion/configuracion/mensajesEnPortada/detallesDelMensaje",
+                        mensajeUID: comandoInicial
+                    }
+                    const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                    const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                    if (!seccionRenderizada) return
+                    if (respuestaServidor.error) {
+                        const titulo = document.querySelector(".titulo")
+                        titulo.innerText = "No existe ningún mensaje de portada con el identificador: " + comandoInicial
+                        return
+                    }
+                    main.setAttribute("zonaCSS", "administracion/configuracion/mensajesEnPortada/detallesDelMensaje")
+                    return casaVitini.administracion.configuracion.mensajesEnPortada.detallesDelMensaje.mensajeUI(respuestaServidor.ok)
+                }
+                const info = {
+                    titulo: "Impuesto inexistente",
+                    descripcion: "El impuesto al que hace referncia la URL no existe. Revisa el identifcador. Quizas fue un impuesto que tuvistes hace un tiempo y que borrastes"
+                }
+                return casaVitini.componentes.mensajeSimple(info)
+            },
+            portadaUI: async () => {
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
+                marcoElastico.innerHTML = null
+                const titulo = document.querySelector(".titulo")
+                titulo.innerText = "Mensajes en portada"
+
                 const transaccion = {
                     zona: "administracion/configuracion/mensajesEnPortada/obtenerMensajes"
                 }
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 if (respuestaServidor?.error) {
                     casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
-                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                    titulo.innerText = respuestaServidor?.error
+                    return
+
                 }
                 if (respuestaServidor?.ok) {
                     const mensajesEnPortada = respuestaServidor.ok
 
-                    const estados = {
-                        activado: "Activado",
-                        desactivado: "Desactivado"
-                    }
+
                     const contenedorConfiguracionGlobal = document.createElement("div")
                     contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
                     const informacion = document.createElement("div")
@@ -12067,85 +12101,163 @@ const administracion = {
                     informacion.innerText = "Los mensajes en portada son textos que aparecen en portada."
                     contenedorConfiguracionGlobal.appendChild(informacion)
 
-
                     const contenedor = document.createElement("div")
                     contenedor.classList.add("contenedor")
 
                     const contenedorBotones = document.createElement("div")
                     contenedorBotones.classList.add("contenedorBotones")
 
-                    const botonNuevoMensaje = document.createElement("div")
+                    const botonNuevoMensaje = document.createElement("a")
                     botonNuevoMensaje.classList.add("botonNuevoMensaje")
                     botonNuevoMensaje.innerText = "Nuevo mensaje en portada"
+                    botonNuevoMensaje.setAttribute("href", "/administracion/configuracion/mensajes_en_portada/nuevo")
+                    botonNuevoMensaje.setAttribute("vista", "/administracion/configuracion/mensajes_en_portada/nuevo")
+                    botonNuevoMensaje.addEventListener("click", casaVitini.componentes.cambiarVista)
                     contenedorBotones.appendChild(botonNuevoMensaje)
 
+                    contenedorBotones.appendChild(botonNuevoMensaje)
 
                     contenedor.appendChild(contenedorBotones)
 
                     const contenedorListaMensajes = document.createElement("div")
                     contenedorListaMensajes.classList.add("contenedorListaMensajes")
 
-
                     mensajesEnPortada.sort((a, b) => a.posicion - b.posicion);
                     const numeroTotalMensajes = mensajesEnPortada.length
+                    console.log("numeroTotalMentajes", numeroTotalMensajes, typeof numeroTotalMensajes)
 
+                    let posicionContenedor = 0
                     for (const detallesDelMensaje of mensajesEnPortada) {
+
                         const uid = detallesDelMensaje.uid
                         const mensaje = detallesDelMensaje.mensaje
                         const estado = detallesDelMensaje.estado
-                        const posicion = detallesDelMensaje.posicion || 0
+                        const posicion = detallesDelMensaje.posicion
 
-                        const contenedorMensaje = document.createElement("div")
-                        contenedorMensaje.classList.add("contenedorMensaje")
-                        contenedorMensaje.setAttribute("mensajeUID", uid)
-
-                        const estadoMensaje = document.createElement("div")
-                        estadoMensaje.innerText = estados[estado]
-                        contenedorMensaje.appendChild(estadoMensaje)
-
-                        const textoDelMensaje = document.createElement("div")
-                        textoDelMensaje.classList.add("textoDelMensaje")
-                        textoDelMensaje.innerText = mensaje
-                        contenedorMensaje.appendChild(textoDelMensaje)
-
-                        const selectorPosicion = document.createElement("select")
-                        selectorPosicion.classList.add("posicionMensaje")
-                        selectorPosicion.setAttribute("componente", "selectorPosicion")
-                        for (let index = 0; index < numeroTotalMensajes; index++) {
-                            const opcion = document.createElement("option");
-                            opcion.value = index;
-                            if (posicion === index) {
-                                opcion.text = "Posicion " + index;
-                                opcion.disabled = "true"
-                                opcion.selected = "true"
-                            } else {
-                                opcion.text = "Mover a la posicion " + index;
-                            }
-                            selectorPosicion.add(opcion);
+                        const configuracionMensaje = {
+                            uid: uid,
+                            mensaje: mensaje,
+                            estado: estado,
+                            posicion: posicion,
+                            numeroTotalMensajes: numeroTotalMensajes
                         }
-                        contenedorMensaje.appendChild(selectorPosicion)
+                        const mensajeUI = casaVitini.administracion.configuracion.mensajesEnPortada.mensajeUI(configuracionMensaje)
+                        posicionContenedor = posicionContenedor + 1
 
-                        const contenedorBotonesMensaje = document.createElement("div")
-                        contenedorBotonesMensaje.classList.add("contenedorBotonesMensaje")
+                        const contenedorDePosicion = document.createElement("div")
+                        contenedorDePosicion.classList.add("contenedorDePosicion")
+                        contenedorDePosicion.setAttribute("posicion", posicionContenedor)
 
-                        const botonModificar = document.createElement("div")
-                        botonModificar.classList.add("boton")
-                        botonModificar.innerText = "Modificar mensaje"
-                        contenedorBotonesMensaje.appendChild(botonModificar)
+                        contenedorDePosicion.appendChild(mensajeUI)
+                        contenedorListaMensajes.appendChild(contenedorDePosicion)
 
-                        const botonEliminar = document.createElement("div")
-                        botonEliminar.classList.add("boton")
-                        botonEliminar.innerText = "Eliminar mensaje"
-
-                        contenedorBotonesMensaje.appendChild(botonEliminar)
-
-                        contenedorMensaje.appendChild(contenedorBotonesMensaje)
-                        contenedorListaMensajes.appendChild(contenedorMensaje)
                     }
-
                     contenedor.appendChild(contenedorListaMensajes)
                     marcoElastico.appendChild(contenedor)
                 }
+            },
+            mensajeUI: (detallesDelMensaje) => {
+                const estados = {
+                    activado: "Activado",
+                    desactivado: "Desactivado"
+                }
+
+                const uid = detallesDelMensaje.uid
+                const mensaje = detallesDelMensaje.mensaje
+                const estado = detallesDelMensaje.estado
+                const posicion = Number(detallesDelMensaje.posicion)
+                const numeroTotalMensajes = detallesDelMensaje.numeroTotalMensajes
+                console.log(">>>>>>>> posicion", posicion, "numerottoal", numeroTotalMensajes)
+
+                const contenedorMensaje = document.createElement("div")
+                contenedorMensaje.classList.add("contenedorMensaje")
+                contenedorMensaje.setAttribute("mensajeUID", uid)
+
+                const textoDelMensaje = document.createElement("div")
+                textoDelMensaje.classList.add("textoDelMensaje")
+                textoDelMensaje.innerText = mensaje
+                contenedorMensaje.appendChild(textoDelMensaje)
+
+                const contenedorBotonesMensaje = document.createElement("div")
+                contenedorBotonesMensaje.classList.add("contenedorBotonesMensaje")
+
+                const selectorEstado = document.createElement("select")
+                selectorEstado.setAttribute("componente", "selectorEstado")
+                selectorEstado.setAttribute("valorInicial", estado)
+                selectorEstado.classList.add("selector")
+                selectorEstado.addEventListener("change", (e) => {
+                    const metadatos = {
+                        estadoSeleccionado: e.target.value,
+                        mensajeUID: uid
+                    }
+                    casaVitini.administracion.configuracion.mensajesEnPortada.actualizarEstado(metadatos)
+                })
+
+                const opcion = document.createElement("option");
+                opcion.text = "Seleccionar el estado del mensaje"
+                opcion.disabled = "true"
+                selectorEstado.add(opcion);
+
+                for (const [estadoIDV, estadoUI] of Object.entries(estados)) {
+                    const opcion = document.createElement("option");
+                    opcion.value = estadoIDV;
+                    opcion.text = estadoUI
+                    if (estadoIDV === estado) {
+                        opcion.selected = "true"
+                    }
+                    selectorEstado.add(opcion);
+                }
+
+                contenedorBotonesMensaje.appendChild(selectorEstado)
+
+                const selectorPosicion = document.createElement("select")
+                selectorPosicion.classList.add("selector")
+                selectorPosicion.setAttribute("componente", "selectorPosicion")
+                selectorPosicion.addEventListener("change", (e) => {
+                    const metadatos = {
+                        nuevaPosicion: e.target.value,
+                        mensajeUIDActual: uid
+                    }
+                    casaVitini.administracion.configuracion.mensajesEnPortada.moverPosicion(metadatos)
+                })
+
+                for (let index = 0; index < numeroTotalMensajes; index++) {
+                    const posicionLoop = index + 1
+                    const opcion = document.createElement("option");
+                    opcion.value = posicionLoop;
+                    if (posicion === posicionLoop) {
+                        opcion.text = "Posicion " + posicionLoop;
+                        opcion.disabled = "true"
+                        opcion.selected = "true"
+                    } else {
+                        opcion.text = "Mover a la posicion " + posicionLoop;
+                    }
+                    selectorPosicion.add(opcion);
+                }
+                contenedorBotonesMensaje.appendChild(selectorPosicion)
+
+                const botonModificar = document.createElement("div")
+                botonModificar.classList.add("boton")
+                botonModificar.innerText = "Modificar mensaje"
+                botonModificar.setAttribute("href", "/administracion/configuracion/mensajes_en_portada/" + uid)
+                botonModificar.setAttribute("vista", "/administracion/configuracion/mensajes_en_portada/" + uid)
+                botonModificar.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.traductorCambioVista)
+                contenedorBotonesMensaje.appendChild(botonModificar)
+
+                const botonEliminar = document.createElement("div")
+                botonEliminar.classList.add("boton")
+                botonEliminar.innerText = "Eliminar mensaje"
+                botonEliminar.addEventListener("click", () => {
+                    casaVitini.administracion.configuracion.mensajesEnPortada.eliminarMensaje.UI(uid)
+                })
+                contenedorBotonesMensaje.appendChild(botonModificar)
+
+                contenedorBotonesMensaje.appendChild(botonEliminar)
+
+                contenedorMensaje.appendChild(contenedorBotonesMensaje)
+                return contenedorMensaje
+
+
             },
             cancelarCambios: () => {
                 const campos = [...document.querySelectorAll("[campo]")]
@@ -12170,12 +12282,265 @@ const administracion = {
                     contenedorBotones.removeAttribute("style")
                 }
             },
-            actualizarInterruptor: async (interruptor) => {
+
+            nuevo: {
+                arranque: () => {
+                    const main = document.querySelector("main")
+                    main.setAttribute("zonaCSS", "administracion/configuracion/mensajesEnPortada/nuevo")
+                    const marcoElastico = document.querySelector("[componente=marcoElastico]")
+                    marcoElastico.style.padding = "6px"
+                    const botonCrearNuevoMensaje = document.querySelector("[boton=crearNuevoMensaje]")
+                    botonCrearNuevoMensaje.addEventListener("click", casaVitini.administracion.configuracion.mensajesEnPortada.nuevo.crearMensaje)
+                },
+                crearMensaje: async () => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const mensaje = document.querySelector("[componente=textoDelMensaje]").value
+                    const mensajeEsppera = "Creando nuevo mensaje en portada..."
+                    const datosPantallaSuperpuesta = {
+                        instanciaUID: instanciaUID,
+                        mensaje: mensajeEsppera
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    const transacccion = {
+                        zona: "administracion/configuracion/mensajesEnPortada/crearMensaje",
+                        mensaje: mensaje
+                    }
+
+                    console.log("transacccion", transacccion)
+
+                    const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
+                    const seccionRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    if (!seccionRenderizada) return
+                    seccionRenderizada.remove()
+                    if (respuestaServidor?.error) {
+                        return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                    }
+                    if (respuestaServidor?.ok) {
+                        const vistaFinal = `/administracion/configuracion/mensajes_en_portada`
+                        const navegacion = {
+                            vista: vistaFinal,
+                            tipoOrigen: "menuNavegador"
+                        }
+                        return casaVitini.componentes.controladorVista(navegacion)
+                    }
+                }
+            },
+            detallesDelMensaje: {
+                mensajeUI: (detallesDelMensaje) => {
+
+
+                    const titulo = document.querySelector("main .titulo")
+                    titulo.innerText = "Detalles del mensaje"
+
+                    const uid = detallesDelMensaje.uid
+                    const mensaje = detallesDelMensaje.mensaje
+                    console.log("mensaje", mensaje)
+                    const estado = detallesDelMensaje.estado
+                    const posicion = detallesDelMensaje.posicion
+
+                    const marcoElastico = document.querySelector("[componente=marcoElastico]")
+
+                    const contenedorMensaje = document.createElement("div")
+                    contenedorMensaje.classList.add("contenedorDelMensaje")
+                    contenedorMensaje.setAttribute("mensajeUID", uid)
+
+                    const textoDelMensaje = document.createElement("textarea")
+                    textoDelMensaje.classList.add("textoDelMensaje")
+                    textoDelMensaje.setAttribute("componente", "textoDelMensaje")
+                    textoDelMensaje.value = mensaje
+                    textoDelMensaje.placeholder = "Escribe el mensaje en portada aquí"
+                    contenedorMensaje.appendChild(textoDelMensaje)
+
+                    const contenedorBotones = document.createElement("div")
+                    contenedorBotones.classList.add("contenedorBotones")
+                    const botonGuardar = document.createElement("div")
+                    botonGuardar.classList.add("boton")
+                    botonGuardar.addEventListener("click", casaVitini.administracion.configuracion.mensajesEnPortada.detallesDelMensaje.guardarMensaje)
+                    botonGuardar.innerText = "Guardar mensaje"
+
+                    contenedorBotones.appendChild(botonGuardar)
+                    contenedorMensaje.appendChild(contenedorBotones)
+                    marcoElastico.appendChild(contenedorMensaje)
+
+
+
+                },
+                guardarMensaje: async () => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const mensajeUID = document.querySelector("[mensajeUID]").getAttribute("mensajeUID")
+                    const mensaje = document.querySelector("[componente=textoDelMensaje]").value
+                    const mensajeCarga = "Guardando mensaje..."
+                    const datosPantallaSuperpuesta = {
+                        instanciaUID: instanciaUID,
+                        mensaje: mensajeCarga
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    const transacccion = {
+                        zona: "administracion/configuracion/mensajesEnPortada/actualizarMensaje",
+                        mensaje: mensaje,
+                        mensajeUID: mensajeUID
+                    }
+                    const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
+                    const seccionRenderizada = document.querySelector(`main [instanciaUID="${instanciaUID}"]`)
+                    if (!seccionRenderizada) return
+                    seccionRenderizada.remove()
+                    if (respuestaServidor?.error) {
+                        return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                    }
+                    if (respuestaServidor?.ok) {
+                        const vistaFinal = `/administracion/configuracion/mensajes_en_portada`
+                        const navegacion = {
+                            vista: vistaFinal,
+                            tipoOrigen: "menuNavegador"
+                        }
+                        return casaVitini.componentes.controladorVista(navegacion)
+                    }
+                }
+            },
+            eliminarMensaje: {
+                UI: (mensajeUID) => {
+                    console.log("eee")
+                    const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
+                    const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+
+                    const titulo = constructor.querySelector("[componente=titulo]")
+                    titulo.innerText = "Confirmas la eliminacíon del mensaje de la portada"
+                    const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                    mensaje.innerText = "Vas a elimar este mensaje, no solo se borrara de la portada inmediatamente sino tambine se eliminara de Casa Vitini de manera irreversible. Si solo deseas que no aparezca puedes desactivarlo. Si por el contrario quieres eliminarlo, entonces esta en el lugar correcto."
+
+                    const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                    botonAceptar.innerText = "Comfirmar la eliminacion del mensaje"
+                    botonAceptar.addEventListener("click", () => {
+                        casaVitini.componentes.limpiarAdvertenciasInmersivas()
+                        return casaVitini.administracion.configuracion.mensajesEnPortada.eliminarMensaje.confirmar(mensajeUID)
+                    })
+                    const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                    botonCancelar.innerText = "Cancelar la eliminacion"
+                    document.querySelector("main").appendChild(pantallaInmersiva)
+                },
+                confirmar: async (mensajeUID) => {
+                    console.log("eeeeee")
+                    const instanciaUID_pantalaDeCarga = casaVitini.componentes.codigoFechaInstancia()
+                    const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
+                    const mensaje = "Eliminando el mensaje..."
+                    const datosPantallaSuperpuesta = {
+                        instanciaUID: instanciaUID_pantalaDeCarga,
+                        mensaje: mensaje
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    const transaccion = {
+                        zona: "administracion/configuracion/mensajesEnPortada/eliminarMensaje",
+                        mensajeUID: mensajeUID
+                    }
+                    const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                    console.log("eeeeee", respuestaServidor)
+
+                    const instanciaRenderizada = document.querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUID_pantalaDeCarga}"]`)
+                    instanciaRenderizada?.remove()
+                    if (respuestaServidor?.error) {
+                        if (!instanciaRenderizada) { return }
+                        casaVitini.componentes.limpiarAdvertenciasInmersivas()
+                        return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                    }
+                    if (respuestaServidor?.ok) {
+                        const instanciaMainRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                        if (!instanciaMainRenderizada) { return }
+                        const mensajeUID = respuestaServidor.mensajeUID
+                        instanciaMainRenderizada.querySelector(`[mensajeUID="${mensajeUID}"]`)?.remove()
+                       return casaVitini.administracion.configuracion.mensajesEnPortada.portadaUI()
+                    }
+                }
+            },
+            moverPosicion: async (o) => {
+                const nuevaPosicion = o.nuevaPosicion
+                const mensajeUIDActual = o.mensajeUIDActual
+                const posicionDelMensajeActual = document.querySelector(`[mensajeUID="${mensajeUIDActual}"]`)
+                    .closest("[posicion]").getAttribute("posicion")
+
+                const instanciaUID_pantalaDeCarga = casaVitini.componentes.codigoFechaInstancia()
+                const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
+                const mensaje = "Cambiando de posicion..."
+                const datosPantallaSuperpuesta = {
+                    instanciaUID: instanciaUID_pantalaDeCarga,
+                    mensaje: mensaje
+                }
+                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                const transaccion = {
+                    zona: "administracion/configuracion/mensajesEnPortada/moverPosicion",
+                    mensajeUID: mensajeUIDActual,
+                    nuevaPosicion: nuevaPosicion
+                }
+                console.log(transaccion)
+                const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+
+                const instanciaRenderizada = document.querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUID_pantalaDeCarga}"]`)
+                instanciaRenderizada?.remove()
+                if (respuestaServidor?.error) {
+                    if (!instanciaRenderizada) { return }
+                    casaVitini.componentes.limpiarAdvertenciasInmersivas()
+                    return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                }
+                if (respuestaServidor?.ok) {
+
+                    const instanciaMainRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                    if (!instanciaMainRenderizada) { return }
+                    const mensajeSeleccionado = respuestaServidor.mensajeSeleccionado
+                    const mensajeAfectado = respuestaServidor.mensajeAfectado
+
+                    // {
+                    //     "ok": "Se ha actualizado correctamente la posicion",
+                    //     "mensajeSeleccionado": {
+                    //         "uid": "19",
+                    //         "mensaje": "etyeyt"
+                    //     },
+                    //     "mensajeAfectado": {
+                    //         "uid": "21",
+                    //         "mensaje": "tyrtty"
+                    //     }
+                    // }
+
+
+                    const numeroTotalMensajes = document.querySelectorAll("[posicion]").length
+
+                    const contenedorSeleccionado = document.querySelector(`[posicion="${nuevaPosicion}"]`)
+                    contenedorSeleccionado.innerHTML = null
+
+                    const configuracionMensaje = {
+                        uid: mensajeSeleccionado.uid,
+                        mensaje: mensajeSeleccionado.mensaje,
+                        estado: mensajeSeleccionado.estado,
+                        posicion: nuevaPosicion,
+                        numeroTotalMensajes: numeroTotalMensajes
+                    }
+                    const mensajeUI_seleccionado = casaVitini.administracion.configuracion.mensajesEnPortada.mensajeUI(configuracionMensaje)
+                    contenedorSeleccionado.appendChild(mensajeUI_seleccionado)
+
+
+
+
+                    const contenedorAfectado = document.querySelector(`[posicion="${posicionDelMensajeActual}"]`)
+                    contenedorAfectado.innerHTML = null
+                    const configuracionMensajeAfectado = {
+                        uid: mensajeAfectado.uid,
+                        mensaje: mensajeAfectado.mensaje,
+                        estado: mensajeAfectado.estado,
+                        posicion: posicionDelMensajeActual,
+                        numeroTotalMensajes: numeroTotalMensajes
+                    }
+                    const mensajeUI_afectado = casaVitini.administracion.configuracion.mensajesEnPortada.mensajeUI(configuracionMensajeAfectado)
+                    contenedorAfectado.appendChild(mensajeUI_afectado)
+                }
+
+
+
+
+            },
+            actualizarEstado: async (interruptor) => {
                 const seccionRenderizadaOrigen = document.querySelector("main")
                 const seccionUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
-                const interruptorIDV = interruptor.interruptorIDV
-                const estado = interruptor.estado
-                const selectorListaEstadosInterruptor = seccionRenderizadaOrigen.querySelector(`[interruptor=${interruptorIDV}]`)
+                const mensajeUID = interruptor.mensajeUID
+                const estado = interruptor.estadoSeleccionado
+                const selectorListaEstadosInterruptor = seccionRenderizadaOrigen.querySelector(`[mensajeUID="${mensajeUID}"] [componente=selectorEstado]`)
                 const valorInicial = selectorListaEstadosInterruptor.getAttribute("valorInicial")
                 const estadoSoliciado = selectorListaEstadosInterruptor.querySelector(`option[value=${estado}]`)
                 let procesandoEstadoUI
@@ -12187,8 +12552,8 @@ const administracion = {
                 }
                 estadoSoliciado.text = procesandoEstadoUI
                 const transacccion = {
-                    zona: "administracion/configuracion/interruptores/actualizarEstado",
-                    interruptorIDV: interruptorIDV,
+                    zona: "administracion/configuracion/mensajesEnPortada/actualizarEstado",
+                    mensajeUID: mensajeUID,
                     estado: estado
                 }
                 const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
@@ -12210,6 +12575,7 @@ const administracion = {
                 if (respuestaServidor?.ok) {
                     let estadoFinalUI
                     if (estado === "activado") {
+
                         estadoFinalUI = "Activado"
                     }
                     if (estado === "desactivado") {
@@ -12217,14 +12583,6 @@ const administracion = {
                     }
                     estadoSoliciado.text = estadoFinalUI
                     selectorListaEstadosInterruptor.setAttribute("valorInicial", estado)
-                }
-            },
-            nuevo: {
-                arranque: () => {
-
-                    const main = document.querySelector("main")
-                    main.setAttribute("zonaCSS", "administracion/configuracion/mensajessEnPortada/nuevo")
-
                 }
             }
         }
