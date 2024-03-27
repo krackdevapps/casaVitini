@@ -10876,9 +10876,9 @@ const puerto = async (entrada, salida) => {
                             }
                             const transaccionInterna = await precioBaseApartamento(apartamentoIDV)
 
-                          //  transaccionInterna.precioNetoPorDia = new Decimal(transaccionInterna.precioNetoPorDia).toFixed(2)
-                          //  transaccionInterna.totalImpuestos = new Decimal(transaccionInterna.totalImpuestos).toFixed(2)
-                          //  transaccionInterna.totalBrutoPordia = new Decimal(transaccionInterna.totalBrutoPordia).toFixed(2)
+                            //  transaccionInterna.precioNetoPorDia = new Decimal(transaccionInterna.precioNetoPorDia).toFixed(2)
+                            //  transaccionInterna.totalImpuestos = new Decimal(transaccionInterna.totalImpuestos).toFixed(2)
+                            //  transaccionInterna.totalBrutoPordia = new Decimal(transaccionInterna.totalBrutoPordia).toFixed(2)
 
                             transaccionInterna.impuestos.map((impuesto) => {
                                 const tipoImpositivo = impuesto.tipoImpositivo
@@ -10941,6 +10941,10 @@ const puerto = async (entrada, salida) => {
                             detallesApartamento.apartamentoIDV = apartamentoIDV
                             const precioNetoApartamentoPorDia = propuestaPrecio
                             detallesApartamento.precioNetoPorDiaPropuesto = precioNetoApartamentoPorDia
+                            detallesApartamento.totalImpuestos = "0.00"
+                            detallesApartamento.totalBrutoPordia = precioNetoApartamentoPorDia;
+                            detallesApartamento.impuestos = []
+
                             const seleccionarImpuestos = `
                         SELECT
                         nombre, "tipoImpositivo", "tipoValor"
@@ -10952,7 +10956,6 @@ const puerto = async (entrada, salida) => {
                         `
                             const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto", "activado"])
                             if (resuelveSeleccionarImpuestos.rowCount > 0) {
-                                detallesApartamento.impuestos = []
                                 const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
                                 let impuestosFinal
                                 let sumaTotalImpuestos = 0.00
@@ -11062,7 +11065,9 @@ const puerto = async (entrada, salida) => {
                             const precioNetoApartamentoPorDia = resuelveListarPrecioApartamento.rows[0].precio
                             detallesApartamento.precioNetoPorDia = precioNetoApartamentoPorDia
                             detallesApartamento.totalImpuestos = "0.00"
-                            detallesApartamento.totalBrutoPordia =precioNetoApartamentoPorDia;
+                            detallesApartamento.totalBrutoPordia = precioNetoApartamentoPorDia;
+                            detallesApartamento.impuestos = []
+
                             const seleccionarImpuestos = `
                         SELECT
                         nombre, "tipoImpositivo", "tipoValor"
@@ -11074,8 +11079,7 @@ const puerto = async (entrada, salida) => {
                         `
                             const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto", "activado"])
                             if (resuelveSeleccionarImpuestos.rowCount > 0) {
-                                detallesApartamento.impuestos = []
-           
+
                                 const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
                                 let impuestosFinal
                                 let sumaTotalImpuestos = 0.00
