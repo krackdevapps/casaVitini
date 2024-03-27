@@ -15008,7 +15008,7 @@ const administracion = {
                             porDiasDeReserva: "Por dias de reserva",
                             porRangoDeFechas: "Por rango de fecha",
                         }
-                        textoDefinicionDescuento = `Esta oferta aplicara1 ${detalleDescuento} al total neto de la reserva`
+                        textoDefinicionDescuento = `Esta oferta aplicara ${detalleDescuento} al total neto de la reserva`
                         if (tipoOferta === "porNumeroDeApartamentos") {
                             if (simboloNumero === "numeroExacto") {
                                 textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva cuya fecha de entrada sea igual superior a ${fechaInicio} y fecha de salida sea inferior o igual a ${fechaFin} y se seleccionen ${numero} apartamentos en concreto, ni más ni menos `
@@ -15056,7 +15056,7 @@ const administracion = {
                                 apartamentosSeleccionados.push(apartamentoUI)
                             })
                             if (apartamentosSeleccionados.length === 1) {
-                                textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva entre el ${fechaInicio} y el ${fechaFin} y se seleccione el ${numero} en concreto.`
+                                textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva entre el ${fechaInicio} y el ${fechaFin} y se seleccione el ${apartamentosSeleccionados[0]} en concreto.`
                             }
                             if (apartamentosSeleccionados.length === 2) {
                                 textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva entre el ${fechaInicio} y el ${fechaFin} y se seleccione el ${apartamentosSeleccionados[0]} y el ${apartamentosSeleccionados[1]} en concreto.`
