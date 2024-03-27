@@ -11910,7 +11910,8 @@ const puerto = async (entrada, salida) => {
                                 await consultaActualizarCompartido(metadatos)
                                 await conexion.query('COMMIT');
                                 const ok = {
-                                    ok: "Se ha acualizado correctamente la oferta"
+                                    ok: "Se ha acualizado correctamente la oferta",
+                                    detallesOferta: await obtenerDetallesOferta(ofertaUID)
                                 }
                                 salida.json(ok)
                             }
@@ -12005,7 +12006,8 @@ const puerto = async (entrada, salida) => {
                                 }
                                 await conexion.query('COMMIT');
                                 const ok = {
-                                    ok: "La oferta  se ha actualizado bien junto con los apartamentos dedicados"
+                                    ok: "La oferta  se ha actualizado bien junto con los apartamentos dedicados",
+                                    detallesOferta: await obtenerDetallesOferta(ofertaUID)
                                 }
                                 salida.json(ok)
                             }
@@ -14065,7 +14067,7 @@ const puerto = async (entrada, salida) => {
                                 let apartamentoIDV = entrada.body.apartamentoIDV
                                 let apartamentoUI = entrada.body.apartamentoUI
                                 apartamentoUI = apartamentoUI.replace(/['"]/g, '');
-                                if (!apartamentoUI || !filtroCadenaMinusculasSinEspacios.test(apartamentoUI) || apartamentoUI.length > 50) {
+                                if (!apartamentoUI || !filtroCadenaMinusculasMayusculasYEspacios.test(apartamentoUI) || apartamentoUI.length > 50) {
                                     const error = "el campo 'apartamentoUI' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres"
                                     throw new Error(error)
                                 }
@@ -14382,7 +14384,7 @@ const puerto = async (entrada, salida) => {
                                     const error = "el campo 'caractaristicas' solo puede ser un array"
                                     throw new Error(error)
                                 }
-                                const filtroCaracteristica = /^[a-zA-Z0-9\s.,_\-\u00F1ñ]+$/u;
+                                const filtroCaracteristica = /^[a-zA-Z0-9\s.,:_\-\u00F1ñ]+$/u;
                                 for (const caractaristica of caracteristicas) {
                                     if (!filtroCaracteristica.test(caractaristica)) {
                                         const error = "Revisa las caracteristicas por que hay una que no cumple con el formato esperado. Recuerda que los campo de caracteristicas solo aceptan mayusculas, minusculas, numeros, espacios, puntos, comas, guion bajo y medio y nada mas"

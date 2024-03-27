@@ -7077,9 +7077,17 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: nowrap;
     align-content: center;
     justify-content: center;
-    height: 14px;
 }
 
+[zonaCSS="administracion/ofertas/ofertaUI"] .editarOfertaSoloLecturaUI {
+    border-radius: 14px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    padding:6px;
+}
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .editarOfertaSoloLecutraInfo {
     margin: 0px;
 }

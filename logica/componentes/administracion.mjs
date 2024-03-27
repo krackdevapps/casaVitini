@@ -16107,6 +16107,8 @@ const administracion = {
                 }
                 if (respuestaServidor?.ok) {
                     const detallesOferta = respuestaServidor.detallesOferta
+                    console.log("respuestaServidor", respuestaServidor)
+
                     const contenedorValoresIniciales = document.querySelector("[componente=espacioOfertas]")
                     contenedorValoresIniciales.setAttribute("valorInicial", JSON.stringify(detallesOferta))
                     const modo = {
@@ -16301,64 +16303,50 @@ const administracion = {
                 }
             },
             eliminarOferta: {
-                "UI": async () => {
-                    const advertenciaInmersivaIU = document.createElement("div")
-                    advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                    advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                    const contenedorAdvertenciaInmersiva = document.createElement("div")
-                    contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                    const tituloCancelarReserva = document.createElement("p")
-                    tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                    tituloCancelarReserva.innerText = "Confirmar eliminar reserva"
-                    contenedorAdvertenciaInmersiva.appendChild(tituloCancelarReserva)
-                    const bloqueBloqueoApartamentos = document.createElement("div")
-                    bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
-                    const tituloBloquoApartamentos = document.createElement("div")
-                    tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                    tituloBloquoApartamentos.innerText = "Var a eliminar la oferta y su aplicacion sera inmediata en los precios, ¿Estas de acuerdo?"
-                    bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
-                    contenedorAdvertenciaInmersiva.appendChild(bloqueBloqueoApartamentos)
-                    const bloqueBotones = document.createElement("div")
-                    bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
-                    const botonCancelar = document.createElement("div")
-                    botonCancelar.classList.add("detallesReservaCancelarBoton")
-                    botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
-                    botonCancelar.innerText = "Confirmar y eliminar oferta"
-                    botonCancelar.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.detallesOferta.eliminarOferta.confirmar)
-                    bloqueBotones.appendChild(botonCancelar)
-                    const botonCancelarProcesoCancelacion = document.createElement("div")
-                    botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                    botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion de la oferta"
-                    botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                        let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                        selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                            advertenciaInmersiva.remove()
-                        })
-                    })
-                    bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
-                    contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
-                    advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.body.appendChild(advertenciaInmersivaIU)
+                UI: async () => {
+
+                    const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
+                    const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+    
+                    const titulo = constructor.querySelector("[componente=titulo]")
+                    titulo.innerText = "Confirmar eliminar oferta"
+                    const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                    mensaje.innerText = "Var a eliminar la oferta y su aplicacion sera inmediata en los precios, ¿Estas de acuerdo?"
+    
+                    const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                    botonAceptar.innerText = "Comfirmar la eliminacion"
+                    botonAceptar.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.detallesOferta.eliminarOferta.confirmar)
+                    const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                    botonCancelar.innerText = "Cancelar la eliminacion"
+    
+                    document.querySelector("main").appendChild(pantallaInmersiva)
+
                 },
-                "confirmar": async () => {
-                    let ofertaUID = document.querySelector("[ofertaUID]").getAttribute("ofertaUID")
+                confirmar: async () => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const mensaje = "Eliminado el oferta..."
+                    const datosPantallaSuperpuesta = {
+                        instanciaUID: instanciaUID,
+                        mensaje: mensaje
+                    }
+                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    const ofertaUID = document.querySelector("[ofertaUID]").getAttribute("ofertaUID")
                     const transaccion = {
                         zona: "administracion/ofertas/eliminarOferta",
-                        "ofertaUID": Number(ofertaUID)
+                        ofertaUID: Number(ofertaUID)
                     }
-                    let respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                    const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    if (!instanciaRenderizada) { return }
+                    instanciaRenderizada.remove()
                     if (respuestaServidor?.error) {
-                        let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                        selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                            advertenciaInmersiva.remove()
-                        })
-                        return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                           return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
-                        let vista = `/administracion/gestion_de_ofertas`
-                        let navegacion = {
-                            "vista": vista,
-                            "tipoOrigen": "menuNavegador"
+                        const vista = `/administracion/gestion_de_ofertas`
+                        const navegacion = {
+                            vista: vista,
+                            tipoOrigen: "menuNavegador"
                         }
                         return casaVitini.componentes.controladorVista(navegacion)
                     }
