@@ -757,7 +757,7 @@ const generadorPDF3 = async (reserva) => {
         }
         docDefinition.content.push(tablaTotales)
         const mensaje1 = {
-            text: 'ste documento es solo un resumen de su reserva con la información global de la reserva y los totales más relevantes. Si desea un desglose detallado, puede acceder a casavitini.com con su cuenta de usuario. Puede registrar su cuenta gratuitamente en https://casavitini.com/micasa/crear_nueva_cuenta. Recuerde usar la misma dirección de correo electrónico que utilizó para confirmar su reserva.',
+            text: 'Este documento es solo un resumen de su reserva con la información global de la reserva y los totales más relevantes. Si desea un desglose detallado, puede acceder a casavitini.com con su cuenta de usuario. Puede registrar su cuenta gratuitamente en https://casavitini.com/micasa/crear_nueva_cuenta. Recuerde usar la misma dirección de correo electrónico que utilizó para confirmar su reserva.',
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje1)
