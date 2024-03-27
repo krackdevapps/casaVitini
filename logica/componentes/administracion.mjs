@@ -744,6 +744,9 @@ const administracion = {
                 //const resolverReservas = await casaVitini.administracion.reservas.buscador.resolverReservas(transaccion)
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                if (!respuestaServidor) {
+                    return
+                }
                 if (respuestaServidor?.error) {
                     document.querySelector("[componente=estadoBusqueda]")?.remove()
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -767,6 +770,7 @@ const administracion = {
                     window.history.replaceState(estado, titulo, zona);
                     return
                 }
+
                 document.querySelector("[componente=estadoBusqueda]")?.remove()
                 const reservas = respuestaServidor.reservas
                 const buscar = respuestaServidor.buscar
