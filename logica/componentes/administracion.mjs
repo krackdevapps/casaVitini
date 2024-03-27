@@ -12697,8 +12697,8 @@ const administracion = {
             }
         },
         buscadorUI: () => {
-            let espacioClientes = document.querySelector("[componente=espacioClientes]")
-            let campoBuscador = document.createElement("input")
+            const espacioClientes = document.querySelector("[componente=espacioClientes]")
+            const campoBuscador = document.createElement("input")
             campoBuscador.classList.add("campoBuscadorClientes")
             campoBuscador.setAttribute("componente", "zonaNavegacionPaginadaClientes")
             campoBuscador.setAttribute("componenteCampo", "buscadorPorId")
@@ -12707,6 +12707,8 @@ const administracion = {
             espacioClientes.appendChild(campoBuscador)
         },
         buscadorClientesPorCampo: async (cliente) => {
+            console.log("1")
+            const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
             const espacioClientes = document.querySelector("[componente=espacioClientes]")
             const terminoBusqueda = cliente.target.value
             document.querySelector("[componente=estadoBusqueda]")?.remove()
@@ -12748,12 +12750,18 @@ const administracion = {
                     buscar: terminoBusqueda,
                     origen: "botonMostrarClientes",
                     tipoConstruccionGrid: "total",
-                    granuladoURL: granuladorURL
+                    granuladoURL: granuladorURL,
+                    instanciaUID: instanciaUID
                 }
+                console.log("2")
+
                 return casaVitini.administracion.clientes.mostrarClientesResueltos(transaccion)
             }, 1500);
         },
         mostrarClientesResueltos: async (transaccion) => {
+            const instanciaUID = transaccion.instanciaUID
+            delete transaccion.instanciaUID
+
             const origen = transaccion.origen
             delete transaccion.origen
             const granuladoURL = casaVitini.componentes.granuladorURL()
@@ -12762,7 +12770,12 @@ const administracion = {
             delete transaccion.tipoConstruccionGrid
             const paginaTipo = transaccion.paginaTipo
             delete transaccion.paginaTipo
+
             const resolverClientes = await casaVitini.administracion.clientes.resolverClientes(transaccion)
+            const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+            if (!instanciaRenderizada) {
+                return
+            }
             if (resolverClientes.totalClientes === 0) {
                 const espacioClientes = document.querySelector("[componente=espacioClientes]")
                 document.querySelector("[gridUID=gridClientes]")?.remove()
@@ -12888,6 +12901,7 @@ const administracion = {
         },
         resolverClientes: async (transaccion) => {
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+ 
             if (respuestaServidor?.error) {
                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
             }
@@ -13116,6 +13130,8 @@ const administracion = {
                 }
             },
             mostrarReservasDelClienteResueltas: async (transaccion) => {
+                const instanciaUID = transaccion.instanciaUID
+                delete transaccion.instanciaUID
                 const origen = transaccion.origen
                 delete transaccion.origen
                 const granuladoURL = casaVitini.componentes.granuladorURL()
@@ -13123,6 +13139,11 @@ const administracion = {
                 const tipoConstruccionGrid = transaccion.tipoConstruccionGrid
                 delete transaccion.tipoConstruccionGrid
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                console.log("instanciaRenderizada", instanciaRenderizada)
+                if (!instanciaRenderizada) {
+                    return
+                }
                 if (respuestaServidor?.error) {
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                 }
