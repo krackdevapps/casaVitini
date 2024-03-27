@@ -25,7 +25,7 @@ process.on('uncaughtException', (error) => {
 });
 // Instancia express
 const app = express()
-//app.use(controlHttps);
+app.use(controlHttps);
 app.set('views', './ui/constructor');
 app.set('view engine', 'ejs');
 // Limta a 50mb la entrad de datos y a formato json
