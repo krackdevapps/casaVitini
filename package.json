@@ -13,6 +13,8 @@
   "author": "Lucas, Voldimor, Krackton",
   "license": "ISC",
   "dependencies": {
+    "@ionos-cloud/sdk-nodejs": "^6.1.4",
+    "@ionos-cloud/sdk-nodejs-cert-manager": "^1.0.1",
     "async-mutex": "^0.4.0",
     "axios": "^1.6.5",
     "body-parser": "^1.20.2",
