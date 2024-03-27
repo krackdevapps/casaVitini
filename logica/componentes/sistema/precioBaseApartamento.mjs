@@ -22,6 +22,8 @@ const precioBaseApartamento = async (apartamentoIDV) => {
             throw new Error(error)
         }
         const detallesApartamento = {}
+        detallesApartamento.impuestos = []
+        detallesApartamento.totalImpuestos = "0.00"
         const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
         detallesApartamento.apartamentoUI = apartamentoUI
         detallesApartamento.apartamentoIDV = apartamentoIDV
@@ -49,6 +51,8 @@ const precioBaseApartamento = async (apartamentoIDV) => {
             precioNetoApartamentoPorDia = resuelveListarPrecioApartamento.rows[0].precio
         }
         detallesApartamento.precioNetoPorDia = precioNetoApartamentoPorDia
+        detallesApartamento.totalBrutoPordia  =precioNetoApartamentoPorDia
+
         const seleccionarImpuestos = `
         SELECT
         nombre, "tipoImpositivo", "tipoValor"
@@ -60,7 +64,6 @@ const precioBaseApartamento = async (apartamentoIDV) => {
         `
         const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto", "activado"])
         if (resuelveSeleccionarImpuestos.rowCount > 0) {
-            detallesApartamento.impuestos = []
             const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
             let impuestosFinal
             let sumaTotalImpuestos = "0.00"

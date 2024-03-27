@@ -10322,7 +10322,7 @@ const puerto = async (entrada, salida) => {
                         const resuelvelistarImpuestos = await conexion.query(listarImpuestos, [numeroPorPagina, numeroPagina])
                         if (resuelvelistarImpuestos.rowCount === 0) {
                             const error = "No hay ningun impuesto en sl sistema"
-                           // throw new Error(error)
+                            // throw new Error(error)
                         }
                         const consultaConteoTotalFilas = resuelvelistarImpuestos?.rows[0]?.total_filas ? resuelvelistarImpuestos.rows[0].total_filas : 0
                         const impuestosEncontradoas = resuelvelistarImpuestos.rows
@@ -10820,6 +10820,9 @@ const puerto = async (entrada, salida) => {
                                     apartamento["uid"] = uidPrecio
                                     apartamento["precio"] = precioApartamento
                                     apartamento["moneda"] = moneda
+                                    apartamento["totalImpuestos"] = "0.00"
+                                    apartamento["totalDiaBruto"] = "0.00"
+
                                     if (resuelveSeleccionarImpuestos.rowCount > 0) {
                                         const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
                                         apartamento["totalImpuestos"] = 0.00
@@ -10872,15 +10875,19 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                             const transaccionInterna = await precioBaseApartamento(apartamentoIDV)
-                            transaccionInterna.precioNetoPorDia = new Decimal(transaccionInterna.precioNetoPorDia).toFixed(2)
-                            transaccionInterna.totalImpuestos = new Decimal(transaccionInterna.totalImpuestos).toFixed(2)
-                            transaccionInterna.totalBrutoPordia = new Decimal(transaccionInterna.totalBrutoPordia).toFixed(2)
+
+                          //  transaccionInterna.precioNetoPorDia = new Decimal(transaccionInterna.precioNetoPorDia).toFixed(2)
+                          //  transaccionInterna.totalImpuestos = new Decimal(transaccionInterna.totalImpuestos).toFixed(2)
+                          //  transaccionInterna.totalBrutoPordia = new Decimal(transaccionInterna.totalBrutoPordia).toFixed(2)
+
                             transaccionInterna.impuestos.map((impuesto) => {
                                 const tipoImpositivo = impuesto.tipoImpositivo
                                 const totalImpuesto = impuesto.totalImpuesto
                                 impuesto.tipoImpositivo = new Decimal(tipoImpositivo).toFixed(2)
                                 impuesto.totalImpuesto = new Decimal(totalImpuesto).toFixed(2)
                             })
+                            console.log("test1")
+
                             const ok = {
                                 ok: transaccionInterna
                             }
