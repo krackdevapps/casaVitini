@@ -1581,8 +1581,7 @@ const puerto = async (entrada, salida) => {
                     await mutex.acquire();
                     try {
                         if (!await interruptor("aceptarReservasPublicas")) {
-                            const error = "Casa Vitini en este momento no acepta preconfirmaciones de reservas a traves de este proceso. Por favor ponte en contacto con nosotros si quieres preconfirmar una reserva. Dirigete a la seccion contacto para obtener formas de contactar con nosotros. Gracias y disculpe las molestias"
-                            throw new Error(error)
+                            throw new Error(mensajesInterruptores.aceptarReservasPublicas)
                         }
                         const reserva = entrada.body.reserva
                         await conexion.query('BEGIN');
@@ -1624,8 +1623,8 @@ const puerto = async (entrada, salida) => {
                 apartamentosDisponiblesPublico: async () => {
                     try {
                         if (!await interruptor("aceptarReservasPublicas")) {
-                            const error = "Casa Vitini en este momento no acepta preconfirmaciones de reservas a traves de este proceso. Por favor ponte en contacto con nosotros si quieres preconfirmar una reserva. Dirigete a la seccion contacto para obtener formas de contactar con nosotros. Gracias y disculpe las molestias"
-                            throw new Error(error)
+                            throw new Error(mensajesInterruptores.aceptarReservasPublicas)
+
                         }
                         const fechaEntrada = entrada.body.entrada
                         const fechaSalida = entrada.body.salida
@@ -5868,8 +5867,8 @@ const puerto = async (entrada, salida) => {
                             sentidoRango: sentidoRango
                         }
                         if (sentidoRango === "pasado") {
-                            
-                            
+
+
 
                             if (fechaSalida_Objeto <= fechaSolicitada_objeto) {
                                 const mensajeSinPasado = "La fecha nueva fecha de entrada solicitada no puede ser igual o superior a la fecha de salida de la reserva."
@@ -5882,7 +5881,7 @@ const puerto = async (entrada, salida) => {
                                 reservaUID: reserva
                             }
                             const mensajeSinPasado = "No se puede aplicar esa fecha de entrada a la reserva por que en base a los apartamentos de esa reserva no hay dias libres. Puedes ver a continuacíon lo eventos que lo impiden."
-                            
+
 
                             if (
                                 (codigoFinal === "noHayRangoPasado")
@@ -6411,7 +6410,7 @@ const puerto = async (entrada, salida) => {
                             WHERE 
                                 "pagoUID" = $1;`
                             const reseulveValidarPago = await conexion.query(validarPago, [pagoUID])
-                            
+
                             if (reseulveValidarPago.rowCount === 0) {
                                 const error = "No existe ningún pago con ese pagoUID"
                                 throw new Error(error)
@@ -9375,7 +9374,7 @@ const puerto = async (entrada, salida) => {
                                `;
                                 const resuelveMensajeAfectado = await conexion.query(validarMensajeAfectado, [nuevaPosicion])
                                 const detallesMensajeAfectado = resuelveMensajeAfectado.rows[0]
-                                
+
 
                                 const mensajeUIDAfectado = detallesMensajeAfectado.uid
                                 const mensajeUIDAfectado_mensaje = detallesMensajeAfectado.mensaje
@@ -9531,7 +9530,7 @@ const puerto = async (entrada, salida) => {
 
                                 const bufferObj = Buffer.from(mensaje, "utf8");
                                 const mensajeB64 = bufferObj.toString("base64");
-                                
+
 
                                 await conexion.query('BEGIN'); // Inicio de la transacción
                                 const consultaPosicionInicial = `
@@ -9556,10 +9555,10 @@ const puerto = async (entrada, salida) => {
                                 RETURNING
                                 uid
                                 `
-                                
+
 
                                 const resuelveCreacion = await conexion.query(crearMensaje, [mensajeB64, estadoInicial, posicionInicial])
-                                
+
 
                                 if (resuelveCreacion.rowCount === 0) {
                                     const error = "No se ha podido insertar el mensaje"
@@ -15498,7 +15497,7 @@ const puerto = async (entrada, salida) => {
                                             const habitacionIDV = detalleHabitacion.habitacion
                                             const resolucionHabitacionUI = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
                                             if (resolucionHabitacionUI.rowCount === 0) {
-                                                const error = "No existe el identificador del apartamentoIDV"
+                                                const error = "No existe el identificador del apartamentoIDV 4"
                                                 throw new Error(error)
                                             }
                                             const habitacionUI = resolucionHabitacionUI.rows[0].habitacionUI
@@ -17072,6 +17071,9 @@ const puerto = async (entrada, salida) => {
             }
         }
     };
+    const mensajesInterruptores = {
+        aceptarReservasPublicas: "Casa Vitini en este momento no acepta confirmaciones de reservas a través de este proceso. Por favor, ponte en contacto con nosotros si deseas preconfirmar una reserva. Dirígete a la sección de contacto para obtener formas de comunicarte con nosotros. Pronto activaremos este método. Gracias y disculpa las molestias."
+    }
     try {
         const zona = entrada.body.zona
         if (!zona) {

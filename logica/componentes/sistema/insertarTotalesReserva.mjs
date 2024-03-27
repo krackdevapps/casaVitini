@@ -87,7 +87,7 @@ const insertarTotalesReserva = async (metadatos) => {
             const precioMedioNocheRango = detallesDelApartamentomo.precioMedioNocheRango
             const resolucionNombreApartamento = await conexion.query(`SELECT "apartamentoUI" FROM apartamentos WHERE apartamento = $1`, [apartamentoIDV])
             if (resolucionNombreApartamento.rowCount === 0) {
-                const error = "No existe el identificador del apartamentoIDV"
+                const error = "No existe el identificador del apartamentoIDV 2"
                 throw new Error(error)
             }
             const apartamentoUI = resolucionNombreApartamento.rows[0].apartamentoUI

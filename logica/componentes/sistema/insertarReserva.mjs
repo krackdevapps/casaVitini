@@ -81,7 +81,7 @@ const insertarReserva = async (reserva) => {
             apartamento = $1;`
             const resolucionNombreApartamento = await conexion.query(consultaNombreApartamento, [apartamento])
             if (resolucionNombreApartamento.rowCount === 0) {
-                const error = "No existe el identificador del apartamentoIDV"
+                const error = "No existe el identificador del apartamentoIDV 3"
                 throw new Error(error)
             }
             const apartamentoUI = resolucionNombreApartamento.rows[0].apartamentoUI
