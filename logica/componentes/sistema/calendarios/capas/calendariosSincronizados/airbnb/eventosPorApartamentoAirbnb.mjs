@@ -72,7 +72,7 @@ const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             delete detallesDelEvento.fechaFinal
             uidTemporalContador = uidTemporalContador + 1
             // Definir las fechas en formato ISO
-            detallesDelEvento.eventoUID = "calendarioAirbnbUID_" + calendarioUID +"_apartamentoIDV_" + apartamentoIDV + "_uidEvento_" + uidTemporalContador
+            detallesDelEvento.eventoUID = "calendarioAirbnbUID_" + calendarioUID + "_apartamentoIDV_" + apartamentoIDV + "_uidEvento_" + uidTemporalContador
             const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada_ISO);
             const fechaSalida_objeto = DateTime.fromISO(fechaSalida_ISO);
             const diferenciaEnDias = fechaSalida_objeto.diff(fechaEntrada_objeto, 'days').days;

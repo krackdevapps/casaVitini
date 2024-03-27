@@ -2,6 +2,7 @@ import { conexion } from '../db.mjs';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
 import { actualizarEstadoPago } from './actualizarEstadoPago.mjs';
 import { precioReserva } from './precioReserva.mjs';
+import { resolverApartamentoUI } from './resolverApartamentoUI.mjs';
 const insertarTotalesReserva = async (metadatos) => {
     try {
         const tipoProcesadorPrecio = metadatos.tipoProcesadorPrecio
@@ -48,7 +49,7 @@ const insertarTotalesReserva = async (metadatos) => {
             const fechaAno = fechaDiaConNoche_array[2]
             const fechaDiaConNoche_ISO = `${fechaAno}-${fechaMes}-${fechaDia}`
             await validadoresCompartidos.fechas.validarFecha_ISO(fechaDiaConNoche_ISO)
-            
+
             const precioNetoNoche = detallesDelDiaConNoche.precioNetoNoche
             const apartamentos = detallesDelDiaConNoche.apartamentos
             const insertarDetallePorDia = `
@@ -85,12 +86,8 @@ const insertarTotalesReserva = async (metadatos) => {
             const apartamentoIDV = detallesDelApartamentomo.apartamentoIDV
             const totalNetoRango = detallesDelApartamentomo.totalNetoRango
             const precioMedioNocheRango = detallesDelApartamentomo.precioMedioNocheRango
-            const resolucionNombreApartamento = await conexion.query(`SELECT "apartamentoUI" FROM apartamentos WHERE apartamento = $1`, [apartamentoIDV])
-            if (resolucionNombreApartamento.rowCount === 0) {
-                const error = "No existe el identificador del apartamentoIDV 2"
-                throw new Error(error)
-            }
-            const apartamentoUI = resolucionNombreApartamento.rows[0].apartamentoUI
+            const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+
             const insertarDetallePorApartamento = `
             INSERT INTO
             "reservaTotalesPorApartamento"
@@ -157,17 +154,17 @@ const insertarTotalesReserva = async (metadatos) => {
         await conexion.query(eliminaOfertasAplicadas, [reservaUID])
         const insertarOferta = async (oferta) => {
             try {
-                
+
                 const nombreOferta = oferta.nombreOferta
                 const tipoOferta = oferta.tipoOferta
                 const detallesOferta = oferta.detallesOferta
-                
+
                 const tipoDescuento = oferta.tipoDescuento
                 const cantidad = oferta.cantidad || null
                 const descuentoAplicadoA = oferta.descuentoAplicadoA
                 const definicion = oferta.definicion
                 const descuento = oferta.descuento || null
-                
+
                 // Revisar esto con el tema de los detallesOferta
                 const insertarOferta = `
                 INSERT INTO "reservaOfertas"
@@ -213,7 +210,7 @@ const insertarTotalesReserva = async (metadatos) => {
                 throw error
             }
         }
-        
+
         for (const contenedorOfertas of ofertas) {
             const porNumeroDeApartamentos = contenedorOfertas.porNumeroDeApartamentos
             const porDiasDeReserva = contenedorOfertas.porDiasDeReserva

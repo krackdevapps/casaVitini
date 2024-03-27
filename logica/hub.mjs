@@ -15497,7 +15497,7 @@ const puerto = async (entrada, salida) => {
                                             const habitacionIDV = detalleHabitacion.habitacion
                                             const resolucionHabitacionUI = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
                                             if (resolucionHabitacionUI.rowCount === 0) {
-                                                const error = "No existe el identificador del apartamentoIDV 4"
+                                                const error = "No existe el identificador de la habitacionIDV"
                                                 throw new Error(error)
                                             }
                                             const habitacionUI = resolucionHabitacionUI.rows[0].habitacionUI

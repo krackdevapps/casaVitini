@@ -6,8 +6,8 @@ const insertarReserva = async (reserva) => {
     try {
         const fechaEntrada_Humano = reserva.entrada
         const fechaSalida_Humano = reserva.salida
-        
-        const fechaEntrada_ISO =  (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_Humano)).fecha_ISO
+
+        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_Humano)).fecha_ISO
         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_Humano)).fecha_ISO
         const estadoReserva = "confirmada"
         const estadoPago = "noPagado"
@@ -68,23 +68,12 @@ const insertarReserva = async (reserva) => {
             const error = "No se ha podido insertar los datos del titular en la base de datos"
             throw new Error(error)
         }
-        
+
         for (const apartamentoConfiguracion in alojamiento) {
             const apartamento = apartamentoConfiguracion
             const habitaciones = alojamiento[apartamentoConfiguracion].habitaciones
-            const consultaNombreApartamento = `
-            SELECT
-            "apartamentoUI"
-            FROM
-            apartamentos
-            WHERE
-            apartamento = $1;`
-            const resolucionNombreApartamento = await conexion.query(consultaNombreApartamento, [apartamento])
-            if (resolucionNombreApartamento.rowCount === 0) {
-                const error = "No existe el identificador del apartamentoIDV 3"
-                throw new Error(error)
-            }
-            const apartamentoUI = resolucionNombreApartamento.rows[0].apartamentoUI
+
+            const apartamentoUI = await resolverApartamentoUI(apartamento)
             const consultaInsertarApartamento = `
             INSERT INTO
             "reservaApartamentos"
@@ -104,7 +93,7 @@ const insertarReserva = async (reserva) => {
             ]
             const insertaApartamento = await conexion.query(consultaInsertarApartamento, datosInsertarApartamento)
             const apartamentoUID = insertaApartamento.rows[0].uid
-            
+
             for (const habitacionConfiguracion in habitaciones) {
                 const habitacion = habitacionConfiguracion
                 const camaIDV = habitaciones[habitacion].camaSeleccionada.camaIDV
@@ -222,14 +211,14 @@ const insertarReserva = async (reserva) => {
                 }*/
             }
         }
-        
+
         const transaccion = {
             tipoProcesadorPrecio: "objeto",
             reserva: reserva,
             reservaUID: reservaUID
         }
         await insertarTotalesReserva(transaccion)
-        
+
         //resolverPrecio = resolverPrecio.ok
         await conexion.query('COMMIT'); // Confirmar la transacción
         const ok = {
