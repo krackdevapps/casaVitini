@@ -5868,8 +5868,8 @@ const puerto = async (entrada, salida) => {
                             sentidoRango: sentidoRango
                         }
                         if (sentidoRango === "pasado") {
-                            console.log("pasado")
-                            console.log(fechaEntrada_Objeto.toISO(), fechaSolicitada_objeto.toISO())
+                            
+                            
 
                             if (fechaSalida_Objeto <= fechaSolicitada_objeto) {
                                 const mensajeSinPasado = "La fecha nueva fecha de entrada solicitada no puede ser igual o superior a la fecha de salida de la reserva."
@@ -5882,7 +5882,7 @@ const puerto = async (entrada, salida) => {
                                 reservaUID: reserva
                             }
                             const mensajeSinPasado = "No se puede aplicar esa fecha de entrada a la reserva por que en base a los apartamentos de esa reserva no hay dias libres. Puedes ver a continuacíon lo eventos que lo impiden."
-                            console.log("pasado 2", codigoFinal)
+                            
 
                             if (
                                 (codigoFinal === "noHayRangoPasado")
@@ -6411,7 +6411,7 @@ const puerto = async (entrada, salida) => {
                             WHERE 
                                 "pagoUID" = $1;`
                             const reseulveValidarPago = await conexion.query(validarPago, [pagoUID])
-                            console.log("eee")
+                            
                             if (reseulveValidarPago.rowCount === 0) {
                                 const error = "No existe ningún pago con ese pagoUID"
                                 throw new Error(error)
@@ -9375,7 +9375,7 @@ const puerto = async (entrada, salida) => {
                                `;
                                 const resuelveMensajeAfectado = await conexion.query(validarMensajeAfectado, [nuevaPosicion])
                                 const detallesMensajeAfectado = resuelveMensajeAfectado.rows[0]
-                                console.log("mensaje afectado", resuelveMensajeAfectado.rows)
+                                
 
                                 const mensajeUIDAfectado = detallesMensajeAfectado.uid
                                 const mensajeUIDAfectado_mensaje = detallesMensajeAfectado.mensaje
@@ -9531,7 +9531,7 @@ const puerto = async (entrada, salida) => {
 
                                 const bufferObj = Buffer.from(mensaje, "utf8");
                                 const mensajeB64 = bufferObj.toString("base64");
-                                console.log("mensajeb64", mensajeB64)
+                                
 
                                 await conexion.query('BEGIN'); // Inicio de la transacción
                                 const consultaPosicionInicial = `
@@ -9556,10 +9556,10 @@ const puerto = async (entrada, salida) => {
                                 RETURNING
                                 uid
                                 `
-                                console.log("test 1")
+                                
 
                                 const resuelveCreacion = await conexion.query(crearMensaje, [mensajeB64, estadoInicial, posicionInicial])
-                                console.log("test 2")
+                                
 
                                 if (resuelveCreacion.rowCount === 0) {
                                     const error = "No se ha podido insertar el mensaje"

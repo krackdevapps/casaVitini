@@ -5420,7 +5420,7 @@ const casaVitini = {
                 vista: vista
             };
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-            console.log("respuestaServidor", respuestaServidor)
+            
             const contenedorVista = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
             if (!contenedorVista || !respuestaServidor) {
                 return
@@ -5574,7 +5574,7 @@ const casaVitini = {
                 const servidor = await fetch(puerto, peticion);
                 const respuestaServidor = await servidor.json();
                 if (!respuestaServidor) {
-                    console.log("error 1")
+                    
                     return casaVitini.componentes.errorUI()
                 }
                 if (respuestaServidor.tipo === "IDX") {
@@ -5604,9 +5604,9 @@ const casaVitini = {
             } catch (error) {
                 if (error.name === 'AbortError') {
                 }
-                console.log(error.message)
+                
                 if (error instanceof TypeError) {
-                    console.log("error 2")
+                    
 
                     return casaVitini.componentes.errorUI()
                 }
@@ -5657,7 +5657,7 @@ const casaVitini = {
         arranque: async () => {
             window.addEventListener("popstate", casaVitini.componentes.navegacion)
             document.getElementById("botonMenuResponsivo").addEventListener("click", casaVitini.componentes.menuResponsivo)
-            window.addEventListener("resize", casaVitini.componentes.limpiarTodoElementoVolatil)
+            //window.addEventListener("resize", casaVitini.componentes.limpiarTodoElementoVolatil)
             //  casaVitini.componentes.controlGlobalScroll()
             const vistas = document.querySelectorAll("[vista]")
             for (const vistaMenu of vistas) {

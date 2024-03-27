@@ -4092,15 +4092,14 @@
 }
 
 [zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_pago_bloque {
-    padding: 4px;
+    padding: 6px;
     border-radius: 12px;
-    gap: 4px;
+    gap: 6px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
-    /* background: #bababa; */
-    border: 1px solid rgba(0, 0, 0, 0.4);
+    background: #00000012;
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_bloque {
