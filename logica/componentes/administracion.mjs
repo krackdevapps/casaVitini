@@ -16053,8 +16053,18 @@ const administracion = {
                 espacioOfertasGlobal.appendChild(botonesModificarOferta)
             },
             guardarCambiosOferta: async (oferta) => {
+                const instanciaUID_pantallaEspera = casaVitini.componentes.codigoFechaInstancia()
+                const mensaje = "Actualizando oferta..."
+                const datosPantallaSuperpuesta = {
+                    instanciaUID: instanciaUID_pantallaEspera,
+                    mensaje: mensaje
+                }
+                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+
+
+
                 const ofertaUID = document.querySelector("[ofertaUID]").getAttribute("ofertaUID")
-                const seccionUID = document.querySelector("main").getAttribute("instanciaUID")
+                const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
                 const fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                 const fechaFin = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
                 const tipoOferta = document.querySelector("[ofertaEnPrimerPlano=Activado]").getAttribute("zonaOferta")
@@ -16100,8 +16110,11 @@ const administracion = {
                 })
                 transaccion["apartamentosSeleccionados"] = apartamentosSeleccionados
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                const seccionRenderizada = document.querySelector(`main[instanciaUID="${seccionUID}"]`)
+                const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (!seccionRenderizada) return
+                const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_pantallaEspera}"]`)
+                if (!instanciaRenderizada) { return }
+                instanciaRenderizada.remove()
                 if (respuestaServidor?.error) {
                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                 }
