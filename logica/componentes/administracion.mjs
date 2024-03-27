@@ -24461,7 +24461,7 @@ const administracion = {
                 const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizada()
                 const destino = pantallaInmersiva.querySelector("[destino=inyector]")
                 destino.appendChild(contenedorMenuCapas)
-                document.body.appendChild(pantallaInmersiva)
+                document.querySelector("main").appendChild(pantallaInmersiva)
                 const controladorSelectoresCapas = (selector) => {
                     const contenedorCapa = selector.target.closest("[capaUID]")
                     const todasLasCapas = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID]")
