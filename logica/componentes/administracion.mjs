@@ -685,6 +685,8 @@ const administracion = {
                 }
             },
             mostrarReservasResueltas: async (transaccion) => {
+                const instanciaUID = transaccion.instanciaUID
+                delete transaccion.instanciaUID
                 const origen = transaccion.origen
                 delete transaccion.origen
                 const tipoConstruccionGrid = transaccion.tipoConstruccionGrid
@@ -695,9 +697,9 @@ const administracion = {
                 const paginaTipo = transaccion.paginaTipo
                 delete transaccion.paginaTipo
                 const selectorCuadradoFechaEntrada = document.querySelector("[calendario=entrada]")
-                const selectorFechaEntradaUI = selectorCuadradoFechaEntrada.querySelector("[fechaUI=fechaInicio]")
+                const selectorFechaEntradaUI = selectorCuadradoFechaEntrada?.querySelector("[fechaUI=fechaInicio]")
                 const selectorCuadradoFechaSalida = document.querySelector("[calendario=salida]")
-                const selectorFechaSalidaUI = selectorCuadradoFechaSalida.querySelector("[fechaUI=fechaFin]")
+                const selectorFechaSalidaUI = selectorCuadradoFechaSalida?.querySelector("[fechaUI=fechaFin]")
                 if (transaccion.parametros?.rango) {
                     if (fechaEntrada) {
                         transaccion.fechaEntrada = fechaEntrada
@@ -744,6 +746,10 @@ const administracion = {
                 //const resolverReservas = await casaVitini.administracion.reservas.buscador.resolverReservas(transaccion)
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                if (!instanciaRenderizada) {
+                    return
+                }
                 if (!respuestaServidor) {
                     return
                 }
@@ -1002,6 +1008,7 @@ const administracion = {
                 casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(peticion)
             },
             buscadorReservas: (reserva) => {
+                const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
                 const espacioReservas = document.querySelector("[componente=marcoElastico]")
                 clearTimeout(casaVitini.componentes.temporizador);
                 document.querySelector("[componente=resultadosSinReservas]")?.remove()
@@ -1038,7 +1045,8 @@ const administracion = {
                         tipoConsulta: "porTerminos",
                         termino: terminoBusqueda,
                         origen: "botonMostrarReservas",
-                        tipoConstruccionGrid: "total"
+                        tipoConstruccionGrid: "total",
+                        instanciaUID: instanciaUID
                     }
                     casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(peticion);
                 }, 1500);
@@ -12901,7 +12909,7 @@ const administracion = {
         },
         resolverClientes: async (transaccion) => {
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
- 
+
             if (respuestaServidor?.error) {
                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
             }
