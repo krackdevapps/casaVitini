@@ -145,8 +145,8 @@ const detallesReserva = async (metadatos) => {
                         const estructura = {
                             clienteUID: clienteUID,
                             pernoctanteUID: pernoctanteUID,
-                            fechaCheckIn:fechaCheckIn,
-                            fechaCheckOutAdelantado:fechaCheckOutAdelantado
+                            fechaCheckIn: fechaCheckIn,
+                            fechaCheckOutAdelantado: fechaCheckOutAdelantado
                         }
                         pernoctantesUIDS.push(estructura)
                     } else {
@@ -198,8 +198,8 @@ const detallesReserva = async (metadatos) => {
                             pernoctanteUID: pernoctanteUID,
                             nombrePernoctante: nombreCliente,
                             pasaportePernoctante: pasaporteCliente,
-                            fechaCheckIn:fechaCheckIn,
-                            fechaCheckOutAdelantado:fechaCheckOutAdelantado
+                            fechaCheckIn: fechaCheckIn,
+                            fechaCheckOutAdelantado: fechaCheckOutAdelantado
                         }
                         estructuraFinal.pernoctantes.push(estructuraPernoctante)
                     }
@@ -267,8 +267,8 @@ const detallesReserva = async (metadatos) => {
                             clienteUID: clienteUID,
                             clientePoolUID: clientePoolUID,
                             pernoctanteUID: pernoctanteUID,
-                            fechaCheckIn:fechaCheckIn,
-                            fechaCheckOutAdelantado:fechaCheckOutAdelantado,
+                            fechaCheckIn: fechaCheckIn,
+                            fechaCheckOutAdelantado: fechaCheckOutAdelantado,
                         }
                         clienteUIDS.push(estructura)
                     }
@@ -313,8 +313,8 @@ const detallesReserva = async (metadatos) => {
                             pernoctanteUID: pernoctanteUID,
                             nombrePernoctante: nombreCliente,
                             pasaportePernoctante: pasaporteCliente,
-                            fechaCheckIn:fechaCheckIn,
-                            fechaCheckOutAdelantado:fechaCheckOutAdelantado
+                            fechaCheckIn: fechaCheckIn,
+                            fechaCheckOutAdelantado: fechaCheckOutAdelantado
                         }
                         estructuraFinal.pernoctantes.push(estructuraPernoctante)
                     }

@@ -6718,7 +6718,7 @@ const administracion = {
                             const botonConfirmar = document.createElement("div")
                             botonConfirmar.classList.add("detallesReservaCancelarBoton")
                             botonConfirmar.setAttribute("componente", "botonActualizarEnlace")
-                            botonConfirmar.innerText = "Realizar reembolso22"
+                            botonConfirmar.innerText = "Realizar reembolso"
                             botonConfirmar.addEventListener("click", () => {
                                 const metadatos = {
                                     pagoUID: pagoUID,

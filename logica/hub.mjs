@@ -420,12 +420,12 @@ const puerto = async (entrada, salida) => {
                                         pagoResultadoFinal = cantidadDelPago.plus(pagoResultadoFinal)
                                     }
                                     if (resuelveConsultaReembolsos.rowCount > 0) {
-                                        if (plataformaDePago === "pasarela") {
-                                            const actualizarReembolsos = await componentes.administracion.reservas.transacciones.actualizarReembolsosDelPagoDesdeSquare(pagoUID, pagoUIDPasarela)
-                                            if (actualizarReembolsos?.error) {
-                                                ok.estadoPasarela = actualizarReembolsos.error
-                                            }
-                                        }
+                                        // if (plataformaDePago === "pasarela") {
+                                        //     const actualizarReembolsos = await componentes.administracion.reservas.transacciones.actualizarReembolsosDelPagoDesdeSquare(pagoUID, pagoUIDPasarela)
+                                        //     if (actualizarReembolsos?.error) {
+                                        //         ok.estadoPasarela = actualizarReembolsos.error
+                                        //     }
+                                        // }
                                         const reembolsosDelPago = resuelveConsultaReembolsos.rows
                                         let sumaDeLoReembolsado = 0
                                         for (const detallesDelReembolso of reembolsosDelPago) {
@@ -1810,6 +1810,8 @@ const puerto = async (entrada, salida) => {
                 realizarPago: async () => {
                     await mutex.acquire();
                     try {
+                        const error = "Esta opcion esta actuamente deshabilitada"
+                        throw new Error(error)
                         const enlaceUID = entrada.body.enlaceUID
                         const filtroCadena = /^[a-z0-9]+$/;
                         if (!enlaceUID || !filtroCadena.test(enlaceUID)) {
@@ -6433,13 +6435,13 @@ const puerto = async (entrada, salida) => {
                                     detallesDelPago: detallesDelPago,
                                     deglosePorReembolso: []
                                 }
-                                if (plataformaDePagoControl === "pasarela") {
-                                    const pagoUIDPasarela = detallesDelPago.pagoUIDPasarela
-                                    const actualizarReembolsos = await componentes.administracion.reservas.transacciones.actualizarReembolsosDelPagoDesdeSquare(pagoUID, pagoUIDPasarela)
-                                    if (actualizarReembolsos?.error) {
-                                        ok.estadoPasarela = actualizarReembolsos.error
-                                    }
-                                }
+                                // if (plataformaDePagoControl === "pasarela") {
+                                //     const pagoUIDPasarela = detallesDelPago.pagoUIDPasarela
+                                //     const actualizarReembolsos = await componentes.administracion.reservas.transacciones.actualizarReembolsosDelPagoDesdeSquare(pagoUID, pagoUIDPasarela)
+                                //     if (actualizarReembolsos?.error) {
+                                //         ok.estadoPasarela = actualizarReembolsos.error
+                                //     }
+                                // }
                                 const consultaReembolsos = `
                                     SELECT
                                         "reembolsoUID",
@@ -6521,10 +6523,10 @@ const puerto = async (entrada, salida) => {
                                 const error = "el campo 'reembolsoUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios."
                                 throw new Error(error)
                             }
-                            const actualizarReembolso = await componentes.administracion.reservas.transacciones.actualizarSOLOreembolsoDesdeSquare(reembolsoUID)
-                            if (actualizarReembolso.error) {
-                                throw new Error(actualizarReembolso.error)
-                            }
+                            // const actualizarReembolso = await componentes.administracion.reservas.transacciones.actualizarSOLOreembolsoDesdeSquare(reembolsoUID)
+                            // if (actualizarReembolso.error) {
+                            //     throw new Error(actualizarReembolso.error)
+                            // }
                             const validarReembolso = `
                             SELECT
                                 "pagoUID",
@@ -6603,9 +6605,9 @@ const puerto = async (entrada, salida) => {
                                 const error = "LA cantida del reembolso solo puede ser una cadena con un numero don dos decimales separados por punto"
                                 throw new Error(error)
                             }
-                            const tipoDeReembolso = ["efectivo", "pasarela", "cheque", "tarjeta"];
+                            const tipoDeReembolso = ["efectivo", "cheque", "pasarela", "tarjeta"];
                             if (!tipoDeReembolso.some(palabra => plataformaDePagoEntrada.includes(palabra))) {
-                                const error = "Selecciona eltipo de plataforma en la que se va ha hacer el reembolso, por ejemplo pasarela, tarjeta, efectivo o cheque"
+                                const error = "Selecciona eltipo de plataforma en la que se va ha hacer el reembolso, por ejemplo, pasarela, tarjeta, efectivo o cheque"
                                 throw new Error(error)
                             }
                             const detallesReserva = await validadoresCompartidos.reservas.validarReserva(reservaUID)
@@ -6664,10 +6666,13 @@ const puerto = async (entrada, salida) => {
                                     }
                                 }
                                 if (plataformaDePagoEntrada === "pasarela" && plataformaDePago !== "pasarela") {
-                                    const error = `No se puede enviar este reembolso a la pasarela por que este pago no se hizo por la pasarela. Para realizar un reembolso a atraves de la pasarela el pago del cual forma parte el reembolso tiene que haberse producidop por la pasarea.`
+                                    const error = `No se puede enviar este reembolso a la pasarela por que este pago no se hizo por la pasarela. Para realizar un reembolso a atraves de la pasarela, el pago del cual forma parte el reembolso tiene que haberse producido por la pasarela.`
                                     throw new Error(error)
                                 }
                                 if (plataformaDePago === "pasarela" && plataformaDePagoEntrada === "pasarela") {
+                                    const error = `La opcionn de enviar un reembolso a la pasarela esta deshabilitada.`
+                                    throw new Error(error)
+
                                     const totalFormatoSquare = Number(cantidad.replace(".", ""))
                                     const reembolsoDetalles = {
                                         idempotencyKey: uuidv4(),
@@ -6774,7 +6779,7 @@ const puerto = async (entrada, salida) => {
                             const filtroNumeros = /^[0-9]+$/;
                             const filtroDecimales = /^\d+\.\d{2}$/;
                             if (!plataformaDePago || !filtroCadena.test(plataformaDePago)) {
-                                const error = "El campo plataformaDePago solo admite minúsculas y mayuscuas"
+                                const error = "El campo plataformaDePago solo admite minúsculas y mayusculas"
                                 throw new Error(error)
                             }
                             await validadoresCompartidos.reservas.validarReserva(reservaUID)
@@ -6952,6 +6957,8 @@ const puerto = async (entrada, salida) => {
                                     estructuraFinal.detallesDelPago = pagoUID
                                     break;
                                 case 'pasarela':
+                                    const deshabilitado = "La opcion de asociar un pago a la pasarela esta temporalmente deshabilitada"
+                                    throw new Error(deshabilitado);
                                     // Aqui solo se asocia el pago con el id de la pasarela, por que para lo otro estan los enlaces de pago
                                     //pagadorNombre = validadores.pagadorNombre(pagadorNombre)
                                     //pagadorPasaporte = validadores.pagadorPasaporte(pagadorPasaporte)
@@ -13733,6 +13740,8 @@ const puerto = async (entrada, salida) => {
                 },
                 crearNuevoEnlace: async () => {
                     try {
+                        const error = "Hasta que no se pueda habilitar una pasarela de pago, esta opcion esta deshabilitada."
+                        throw new Error(error)
                         let nombreEnlace = entrada.body.nombreEnlace
                         const reservaUID = entrada.body.reservaUID
                         const cantidad = entrada.body.cantidad
