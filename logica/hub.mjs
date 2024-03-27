@@ -7785,10 +7785,10 @@ const puerto = async (entrada, salida) => {
                         "estadoConfiguracion"
                         FROM 
                         "configuracionApartamento"
-                        WHERE "estadoConfiguracion" = $1
+                        -- WHERE "estadoConfiguracion" = $1
                         ORDER BY "apartamentoIDV" ASC
                         `
-                        let resuelveConsultaEstadoApartamentos = await conexion.query(consultaEstadoApartamentos, [estadoDisonible])
+                        let resuelveConsultaEstadoApartamentos = await conexion.query(consultaEstadoApartamentos)
                         if (resuelveConsultaEstadoApartamentos.rowCount === 0) {
                             const error = "No hay apartamentos configurados"
                             throw new Error(error)
@@ -7919,7 +7919,10 @@ const puerto = async (entrada, salida) => {
                             ok.ok = apartamentosObjeto
                         }
                         // buscar reservas en el dia actual
+                        console.log("test")
                         const eventosCalendarios_airbnb = await apartamentosOcupadosHoy_paraSitaucion(fechaActualTZ)
+                        console.log("test 1")
+
                         for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnb) {
                             /*
                             {
@@ -7936,10 +7939,14 @@ const puerto = async (entrada, salida) => {
                             */
                             const apartamentoIDV_destino = calendariosSincronizadosAirbnb.apartamentoIDV
                             const eventosDelApartamento = calendariosSincronizadosAirbnb.eventos
+                            console.log("test 2", eventosDelApartamento)
+                            console.log("apartamentoIDV_destino 2", apartamentoIDV_destino)
+
                             ok.ok[apartamentoIDV_destino].calendariosSincronizados = {}
                             ok.ok[apartamentoIDV_destino].calendariosSincronizados.airbnb = {}
                             ok.ok[apartamentoIDV_destino].calendariosSincronizados.airbnb.eventos = eventosDelApartamento
                             ok.ok[apartamentoIDV_destino].estadoPernoctacion = "ocupado"
+
                         }
                         salida.json(ok)
                     } catch (errorCapturado) {

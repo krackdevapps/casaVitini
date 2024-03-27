@@ -48,7 +48,7 @@ const administracion = {
                     delete transaccion.fecha_entrada
                     const selectorContenedorFecha = document.querySelector("[calendario=entrada]")
                     selectorContenedorFecha.setAttribute("memoriaVolatil", transaccion.fechaEntrada)
-                    
+
                     selectorContenedorFecha.querySelector("[fechaUI=fechaInicio]").innerText = transaccion.fechaEntrada
                 }
                 if (transaccion.fecha_salida) {
@@ -742,7 +742,7 @@ const administracion = {
                     selectorFechaSalidaUI.innerText = "Seleccionar"
                 }
                 //const resolverReservas = await casaVitini.administracion.reservas.buscador.resolverReservas(transaccion)
-                
+
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 if (respuestaServidor?.error) {
                     document.querySelector("[componente=estadoBusqueda]")?.remove()
@@ -1378,7 +1378,7 @@ const administracion = {
 
                     }
                     if (respuestaServidor?.error) {
-                        
+
                         instanciaRenderizada.querySelector("[componente=advertenciaIntegrada]").remove()
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
@@ -5975,7 +5975,7 @@ const administracion = {
                         UI: async (metadatos) => {
                             const pagoUID = metadatos.pagoUID
                             const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
-                            
+
                             document.body.style.overflow = 'hidden';
                             const instanciaUIDDetalleDelPago = casaVitini.componentes.codigoFechaInstancia()
                             const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
@@ -7113,7 +7113,7 @@ const administracion = {
                     eliminarPagoManual: {
                         UI: (metadatos) => {
                             const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
-                            
+
                             const instanciaUIDDetalleDelPago = metadatos.instanciaUIDDetalleDelPago
                             const contenedor = document.createElement("div")
                             contenedor.classList.add("administracion_reservas_detallesReserva_transacciones_eliminarPagoManual")
@@ -7236,7 +7236,7 @@ const administracion = {
                                 selectorTotalReservaEnPanelGlobal.innerHTML = totalReserva + "$"
                             }
                             if (!seleccionarInstancia) {
-                                
+
                                 return
                             }
                             selectorTotalReserva.innerHTML = totalReserva + "$"
@@ -10174,7 +10174,7 @@ const administracion = {
                 const mes = horaLocal.mes
                 const ano = horaLocal.ano
                 const hora = horaLocal.hora
-                const minuto = horaLocal.minuto
+                const minuto = String(horaLocal.minuto).padStart(2, "0")
                 const fechaISO = horaLocal.fechaISO
                 const fechaUI = `Hoy son las ${hora}:${minuto}, ${dia} del ${mes} del ${ano}`
                 const contenedorFecha = document.createElement("div")
@@ -10221,7 +10221,7 @@ const administracion = {
                         if (estadoApartamento === "disponible") {
                             estadoApartamento = "Disponible"
                         }
-                        if (estadoApartamento === "noDisponible") {
+                        if (estadoApartamento === "nodisponible") {
                             estadoApartamento = "No disponible"
                         }
                         if (estadoPernoctacion === "ocupado") {
@@ -12124,7 +12124,7 @@ const administracion = {
 
                     mensajesEnPortada.sort((a, b) => a.posicion - b.posicion);
                     const numeroTotalMensajes = mensajesEnPortada.length
-                    
+
 
                     let posicionContenedor = 0
                     for (const detallesDelMensaje of mensajesEnPortada) {
@@ -12167,7 +12167,7 @@ const administracion = {
                 const estado = detallesDelMensaje.estado
                 const posicion = Number(detallesDelMensaje.posicion)
                 const numeroTotalMensajes = detallesDelMensaje.numeroTotalMensajes
-                
+
 
                 const contenedorMensaje = document.createElement("div")
                 contenedorMensaje.classList.add("contenedorMensaje")
@@ -12306,7 +12306,7 @@ const administracion = {
                         mensaje: mensaje
                     }
 
-                    
+
 
                     const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
                     const seccionRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -12334,7 +12334,7 @@ const administracion = {
 
                     const uid = detallesDelMensaje.uid
                     const mensaje = detallesDelMensaje.mensaje
-                    
+
                     const estado = detallesDelMensaje.estado
                     const posicion = detallesDelMensaje.posicion
 
@@ -12399,7 +12399,7 @@ const administracion = {
             },
             eliminarMensaje: {
                 UI: (mensajeUID) => {
-                    
+
                     const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
                     const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
@@ -12419,7 +12419,7 @@ const administracion = {
                     document.querySelector("main").appendChild(pantallaInmersiva)
                 },
                 confirmar: async (mensajeUID) => {
-                    
+
                     const instanciaUID_pantalaDeCarga = casaVitini.componentes.codigoFechaInstancia()
                     const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
                     const mensaje = "Eliminando el mensaje..."
@@ -12433,7 +12433,7 @@ const administracion = {
                         mensajeUID: mensajeUID
                     }
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                    
+
 
                     const instanciaRenderizada = document.querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUID_pantalaDeCarga}"]`)
                     instanciaRenderizada?.remove()
@@ -12447,7 +12447,7 @@ const administracion = {
                         if (!instanciaMainRenderizada) { return }
                         const mensajeUID = respuestaServidor.mensajeUID
                         instanciaMainRenderizada.querySelector(`[mensajeUID="${mensajeUID}"]`)?.remove()
-                       return casaVitini.administracion.configuracion.mensajesEnPortada.portadaUI()
+                        return casaVitini.administracion.configuracion.mensajesEnPortada.portadaUI()
                     }
                 }
             },
@@ -12470,7 +12470,7 @@ const administracion = {
                     mensajeUID: mensajeUIDActual,
                     nuevaPosicion: nuevaPosicion
                 }
-                
+
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
 
                 const instanciaRenderizada = document.querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUID_pantalaDeCarga}"]`)
@@ -14112,7 +14112,7 @@ const administracion = {
                 tipoConstruccionGrid: "total",
                 ...listasImpuestos
             }
-            
+
             transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
             if ((transaccion.nombre_columna)?.toLowerCase() === "impuesto_uid") {
                 transaccion.nombreColumna = "impuestoUID"
@@ -14579,7 +14579,7 @@ const administracion = {
                     transaccion[nombreCampoEditable] = datoCampoEditable
                 }
             })
-            
+
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
             const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
             if (!instanciaRenderizada) { return }
@@ -14886,7 +14886,7 @@ const administracion = {
             return casaVitini.administracion.impuestos.mostrarImpuestosResueltos(transacccion)
         },
         ordenarPorColumna: async (columna) => {
-            
+
             const nombreColumna = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("nombreColumna")
             const selectorColumnasentido = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("sentidoColumna")
             const numeroPagina = columna.target.closest("[gridUID]").getAttribute("numeroPagina")
@@ -14896,7 +14896,7 @@ const administracion = {
                 tipoConstruccionGrid: "soloLista",
                 origen: "tituloColumna"
             }
-            
+
             if (selectorColumnasentido === "ascendente") {
                 transaccion.sentidoColumna = "descendente"
                 transaccion.nombreColumna = nombreColumna
@@ -16120,7 +16120,7 @@ const administracion = {
                 }
                 if (respuestaServidor?.ok) {
                     const detallesOferta = respuestaServidor.detallesOferta
-                    
+
 
                     const contenedorValoresIniciales = document.querySelector("[componente=espacioOfertas]")
                     contenedorValoresIniciales.setAttribute("valorInicial", JSON.stringify(detallesOferta))
@@ -16320,18 +16320,18 @@ const administracion = {
 
                     const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
                     const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
-    
+
                     const titulo = constructor.querySelector("[componente=titulo]")
                     titulo.innerText = "Confirmar eliminar oferta"
                     const mensaje = constructor.querySelector("[componente=mensajeUI]")
                     mensaje.innerText = "Var a eliminar la oferta y su aplicacion sera inmediata en los precios, ¿Estas de acuerdo?"
-    
+
                     const botonAceptar = constructor.querySelector("[boton=aceptar]")
                     botonAceptar.innerText = "Comfirmar la eliminacion"
                     botonAceptar.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.detallesOferta.eliminarOferta.confirmar)
                     const botonCancelar = constructor.querySelector("[boton=cancelar]")
                     botonCancelar.innerText = "Cancelar la eliminacion"
-    
+
                     document.querySelector("main").appendChild(pantallaInmersiva)
 
                 },
@@ -16353,7 +16353,7 @@ const administracion = {
                     if (!instanciaRenderizada) { return }
                     instanciaRenderizada.remove()
                     if (respuestaServidor?.error) {
-                           return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                        return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
                         const vista = `/administracion/gestion_de_ofertas`
@@ -19621,7 +19621,7 @@ const administracion = {
                     fechaFin: fechaFin,
                     motivo: motivo
                 }
-                
+
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                 if (!instanciaRenderizada) { return }
@@ -19704,7 +19704,7 @@ const administracion = {
                     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                     if (!instanciaRenderizada) { return }
                     instanciaRenderizada.remove()
-                    
+
                     if (respuestaServidor?.error) {
                         casaVitini.componentes.limpiarAdvertenciasInmersivas()
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -21142,7 +21142,7 @@ const administracion = {
                             const caracteristicasParseadas = caracteristicasApartamento ? JSON.parse(caracteristicasApartamento) : []
                             contenedorCaracteristicas.innerHTML = null
                             for (const caracteristica of caracteristicasParseadas) {
-                                
+
                                 const filaCaracteristicaUI = casaVitini.administracion.arquitectura_del_alojamiento.entidades.editarEntidad.caracteristicasUI(caracteristica.caracteristica)
                                 contenedorCaracteristicas.appendChild(filaCaracteristicaUI)
                             }
@@ -21198,7 +21198,7 @@ const administracion = {
                             campo.setAttribute("valorInicial", datoCampo)
                         })
                         const camposCaracteristicas = document.querySelectorAll("[campo=caracteristica]")
-                        
+
                         if (camposCaracteristicas.length > 0) {
                             const listaCaracteristicas = []
                             camposCaracteristicas.forEach((caracteristica) => {
@@ -21674,7 +21674,7 @@ const administracion = {
                         const selectorMenuRenderizado = document.querySelector(`[menuIDV=addCama][habitacionUID="${habitacionUID}"]`)
                         const selectorContenedorApartmento = document.querySelector("[apartamentoIDV]")
                         document.querySelector("[menuIDV=addHabitacion]")?.remove()
-                        
+
                         if (selectorMenuRenderizado) {
                             selectorMenuRenderizado.remove()
                             document.removeEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
