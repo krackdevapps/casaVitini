@@ -11061,6 +11061,8 @@ const puerto = async (entrada, salida) => {
                             }
                             const precioNetoApartamentoPorDia = resuelveListarPrecioApartamento.rows[0].precio
                             detallesApartamento.precioNetoPorDia = precioNetoApartamentoPorDia
+                            detallesApartamento.totalImpuestos = "0.00"
+                            detallesApartamento.totalBrutoPordia =precioNetoApartamentoPorDia;
                             const seleccionarImpuestos = `
                         SELECT
                         nombre, "tipoImpositivo", "tipoValor"
@@ -11073,6 +11075,7 @@ const puerto = async (entrada, salida) => {
                             const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto", "activado"])
                             if (resuelveSeleccionarImpuestos.rowCount > 0) {
                                 detallesApartamento.impuestos = []
+           
                                 const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
                                 let impuestosFinal
                                 let sumaTotalImpuestos = 0.00
