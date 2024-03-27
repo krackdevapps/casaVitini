@@ -10322,7 +10322,7 @@ const puerto = async (entrada, salida) => {
                         const resuelvelistarImpuestos = await conexion.query(listarImpuestos, [numeroPorPagina, numeroPagina])
                         if (resuelvelistarImpuestos.rowCount === 0) {
                             const error = "No hay ningun impuesto en sl sistema"
-                            throw new Error(error)
+                           // throw new Error(error)
                         }
                         const consultaConteoTotalFilas = resuelvelistarImpuestos?.rows[0]?.total_filas ? resuelvelistarImpuestos.rows[0].total_filas : 0
                         const impuestosEncontradoas = resuelvelistarImpuestos.rows
