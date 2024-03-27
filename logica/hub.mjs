@@ -7981,9 +7981,9 @@ const puerto = async (entrada, salida) => {
                         FROM
                         "configuracionApartamento"
                         WHERE
-                        "apartamentoIDV" = $1 AND "estadoConfiguracion" = $2
+                        "apartamentoIDV" = $1
                         `
-                        const consultaValidarApartamento = await conexion.query(validarApartamento, [apartamentoIDV, estadoDisonible])
+                        const consultaValidarApartamento = await conexion.query(validarApartamento, [apartamentoIDV])
                         if (consultaValidarApartamento.rowCount === 0) {
                             const error = "No existe el apartamento"
                             throw new Error(error)
