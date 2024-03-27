@@ -13621,7 +13621,7 @@ const administracion = {
                         bloqueDato.classList.add("precioEImpuestosBloqueDato")
                         datoUI = document.createElement("p")
                         datoUI.classList.add("precioEImpuestosOpcionApartamentoDato")
-                        datoUI.innerText = "Este apartamento tiene una configuracion de apartamento pero no tiene ningún perfil de precio creado, por lo tanto no esta disponible para reservar al ser un requistio para contruir una configuracion valida. Para crear un perfil de precio para este aparmtamento pulse aqui. Luego de establecer el precio habilite la configuracion yendo a la configuracion del apartmento y poniendola en disponible"
+                        datoUI.innerText = "Este apartamento tiene una configuracion de apartamento pero no tiene ningún perfil de precio creado, por lo tanto no esta disponible para reservar al ser un requisíto para construir una configuración valida."
                         bloqueDato.appendChild(datoUI)
                         bloqueApartamento.appendChild(bloqueDato)
                     }
