@@ -14071,9 +14071,9 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                                 if (!apartamentoIDV) {
-                                    apartamentoIDV = apartamentoUI.replace(/[^a-z0-9]/g, '');
+                                    apartamentoIDV = apartamentoUI.toLowerCase().replace(/[^a-z0-9]/g, '');
                                 } else {
-                                    apartamentoIDV = apartamentoIDV.replace(/[^a-z0-9]/g, '');
+                                    apartamentoIDV = apartamentoIDV.toLowerCase().replace(/[^a-z0-9]/g, '');
                                 }
                                 const validarCodigo = async (apartamentoIDV) => {
                                     const validarCodigoAleatorio = `

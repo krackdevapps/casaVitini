@@ -6429,6 +6429,15 @@
     padding: 10px;
     border-radius: 12px;
     margin: 0px;
+    cursor: default;
+    user-select: none;
+    transition: background 250ms linear;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .opcionTipoOFerta:hover {
+    background: #ffffffbc;
+
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaTitulo {
@@ -6471,6 +6480,9 @@
     flex-wrap: nowrap;
     border-radius: 12px;
     padding: 10px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .contenedorFecha {
@@ -6494,12 +6506,10 @@
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfeartaEspacioOpciones {
-    /* width: 100%; */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
     grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
-    padding: 4px;
     justify-items: stretch;
     justify-content: center;
     align-content: center;
@@ -6876,7 +6886,7 @@ grid-template-columns: 0.5fr 1.5fr;
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaMenuVolatilAnadirApartamento {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 20px 0px rgb(0 0 0 / 35%);
     display: flex;
     background: rgba(245, 245, 245, 0.3);
     position: absolute;
@@ -7084,8 +7094,9 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: nowrap;
     align-content: center;
     justify-content: center;
-    padding:6px;
+    padding: 6px;
 }
+
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .editarOfertaSoloLecutraInfo {
     margin: 0px;
 }
@@ -12435,7 +12446,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
- background-image: url("/componentes/imagenes/f5.jpeg"); 
+    background-image: url("/componentes/imagenes/f5.jpeg");
 }
 
 [zonaCSS=conozcanos] .fondo6 {
@@ -12478,7 +12489,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS=conozcanos] .contenedorParalax .texto {
-    background: rgba(0, 0, 0, 0.16);
+    background: white;
     z-index: 2;
     padding: 40px;
 }

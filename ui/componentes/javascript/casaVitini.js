@@ -5094,7 +5094,7 @@ const casaVitini = {
                             const scriptElement = await loadScript("/componentes/javascript/simpleParallax.js");
                             const grupoImagenesPalarax = document.querySelectorAll('[imagenParalaje=imagen]');
                             casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador = new simpleParallax(grupoImagenesPalarax, {
-                                delay: 10,
+                                delay: 1,
                                 orientation: 'down',
                                 scale: 1.3,
                                 overflow: false,
