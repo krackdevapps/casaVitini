@@ -13009,6 +13009,31 @@ grid-template-columns: 0.5fr 1.5fr;
     transform: translate(-50%, -50%);
 }
 
+/* Ocultar el icono de reproducción */
+[zonaCSS=portada] .videoPresentacion::-webkit-media-controls-start-playback-button {
+    display: none !important;
+}
+
+[zonaCSS=portada] .videoPresentacion::-webkit-media-controls-play-button {
+    display: none !important;
+}
+
+[zonaCSS=portada] .videoPresentacion::-webkit-media-controls-overlay-play-button {
+    display: none !important;
+}
+
+[zonaCSS=portada] .videoPresentacion::-webkit-media-controls-play-button-overlay {
+    display: none !important;
+}
+
+[zonaCSS=portada] .videoPresentacion::-webkit-media-controls {
+    visibility: hidden !important;
+}
+
+[zonaCSS=portada] .videoPresentacion ::-webkit-media-controls-enclosure {
+    visibility: hidden !important;
+}
+
 [zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedor {
     display: flex;
     gap: 6px;
