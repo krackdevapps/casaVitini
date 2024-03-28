@@ -982,6 +982,7 @@ const administracion = {
                 casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(peticion)
             },
             mostrarReservasPorRango: () => {
+                const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
                 const fechaEntrada = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                 const fechaSalida = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
                 const tipoRango = document.querySelector("[estadoSelecion=activado]")?.getAttribute("selectorRango")
@@ -1004,6 +1005,7 @@ const administracion = {
                     fechaSalida: fechaSalida,
                     origen: "botonMostrarReservas",
                     tipoConstruccionGrid: "total",
+                    instanciaUID: instanciaUID
                 }
                 casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(peticion)
             },
