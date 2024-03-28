@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import { conexion } from '../db.mjs';
 import { insertarTotalesReserva } from './insertarTotalesReserva.mjs';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
+import { resolverApartamentoUI } from './resolverApartamentoUI.mjs';
 const insertarReserva = async (reserva) => {
     try {
         const fechaEntrada_Humano = reserva.entrada
@@ -72,7 +73,7 @@ const insertarReserva = async (reserva) => {
         for (const apartamentoConfiguracion in alojamiento) {
             const apartamento = apartamentoConfiguracion
             const habitaciones = alojamiento[apartamentoConfiguracion].habitaciones
-
+            
             const apartamentoUI = await resolverApartamentoUI(apartamento)
             const consultaInsertarApartamento = `
             INSERT INTO
