@@ -22495,7 +22495,10 @@ const administracion = {
     },
     usuarios: {
         arranque: async () => {
+
             const main = document.querySelector("main")
+            const instanciaUID = main.getAttribute("instanciaUID")
+
             const granuladoURL = casaVitini.componentes.granuladorURL()
             const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
             if (comandoInicial === "usuarios" && !granuladoURL.parametros.buscar) {
@@ -22525,6 +22528,7 @@ const administracion = {
                     transaccion.sentidoColumna = transaccion.sentido_columna
                     delete transaccion.sentido_columna
                 }
+                transaccion.instanciaUID = instanciaUID
                 const campoBuscador = document.querySelector("[componente=zonaNavegacionPaginadaUsuarios]")
                 campoBuscador.value = transaccion.buscar
                 return casaVitini.administracion.usuarios.portada.mostrarUsuariosResueltos(transaccion)
@@ -22564,6 +22568,7 @@ const administracion = {
                 return respuestaServidor
             },
             buscadorUsuariosPorCampo: async (cliente) => {
+                const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
                 const espacioUsuarios = document.querySelector("[componente=espacioUsuarios]")
                 const terminoBusqueda = cliente.target.value
                 document.querySelector("[componente=estadoBusqueda]")?.remove()
@@ -22600,6 +22605,7 @@ const administracion = {
                         buscar: terminoBusqueda,
                         origen: "botonMostrarUsuarios",
                         tipoConstruccionGrid: "total",
+                        instanciaUID: instanciaUID
                     }
                     return casaVitini.administracion.usuarios.portada.mostrarUsuariosResueltos(transaccion)
                 }, 1500);
@@ -22752,6 +22758,8 @@ const administracion = {
                 }
             },
             mostrarUsuariosResueltos: async (transaccion) => {
+                const instanciaUID = transaccion.instanciaUID
+                delete transaccion.instanciaUID
                 const origen = transaccion.origen
                 delete transaccion.origen
                 const granuladoURL = casaVitini.componentes.granuladorURL()
@@ -22760,6 +22768,12 @@ const administracion = {
                 const paginaTipo = transaccion.paginaTipo
                 delete transaccion.paginaTipo
                 const resolverUsuarios = await casaVitini.administracion.usuarios.portada.resolverUsuarios(transaccion)
+                const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                if (!instanciaRenderizada || !resolverUsuarios) {
+                    return
+                }
+
+
                 if (resolverUsuarios.totalUsuarios === 0) {
                     const espacioClientes = document.querySelector("[componente=espacioUsuarios]")
                     document.querySelector("[gridUID=gridUsuarios]")?.remove()
