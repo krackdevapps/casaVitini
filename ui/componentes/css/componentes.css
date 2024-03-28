@@ -13007,6 +13007,7 @@ grid-template-columns: 0.5fr 1.5fr;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    pointer-events: none;
 }
 
 /* Ocultar el icono de reproducción */
