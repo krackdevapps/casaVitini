@@ -962,6 +962,8 @@ const administracion = {
                 casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(transaccion)
             },
             verReservasHoy: () => {
+                const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
+
                 const espacioReservas = document.querySelector("[componente=espacioReservas]")
                 document.querySelector("[componente=estadoBusqueda]")?.remove()
                 document.querySelector("[componenteID=gridReservas")?.remove()
@@ -978,6 +980,7 @@ const administracion = {
                     tipoConsulta: "hoy",
                     tipoConstruccionGrid: "total",
                     origen: "url",
+                    instanciaUID: instanciaUID
                 }
                 casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(peticion)
             },
