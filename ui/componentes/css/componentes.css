@@ -8449,7 +8449,6 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="administracion/usuarios/detallesDelUsuario"] .detallesUsuario_contenedorCampos {
-    background: rgba(255, 255, 255, 0.3);
     padding: 6px;
     border-radius: 16px;
     backdrop-filter: blur(50px);

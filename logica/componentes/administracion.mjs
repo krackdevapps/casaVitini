@@ -437,6 +437,8 @@ const administracion = {
                 }
             },
             cambiarPagina: (cambiarPagina) => {
+                const main = document.querySelector("main")
+                const instanciaUID = main.getAttribute("instanciaUID")
                 const gridUID = cambiarPagina.gridUID
                 const tipoBoton = cambiarPagina.componenteID
                 const gridEnlazado = document.querySelector(`[gridUID=${gridUID}]`)
@@ -451,7 +453,8 @@ const administracion = {
                     sentidoColumna: sentidoColumna,
                     buscar: terminoBusqueda,
                     tipoBusqueda: "rapido",
-                    paginaTipo: paginaTipo
+                    paginaTipo: paginaTipo,
+                    instanciaUID: instanciaUID
                 }
                 if (tipoBoton === "numeroPagina") {
                     const numeroPagina = cambiarPagina.numeroPagina
@@ -2288,7 +2291,7 @@ const administracion = {
                         // Cambiar habitacion
                         botonOpcionCliente = document.createElement("div")
                         botonOpcionCliente.classList.add("administracionReservasDetallesBotonOpcionCliente")
-                        botonOpcionCliente.innerText = "Asignar a una habitacion"
+                        botonOpcionCliente.innerText = "Asignar a una habitación"
                         botonOpcionCliente.setAttribute("componente", "botonOpcionClientePool")
                         botonOpcionCliente.addEventListener("click", () => {
                             casaVitini.administracion.reservas.detallesReserva.transactor.mostrasSelectorCambioPernoctanteHabitacion(pernoctanteUID)
@@ -13019,6 +13022,8 @@ const administracion = {
         },
         cambiarPagina: async (cambiarPagina) => {
             const gridUID = cambiarPagina.gridUID
+            const main = document.querySelector("main")
+            const instanciaUID = main.getAttribute("instanciaUID")
             const gridEnlazado = document.querySelector(`[gridUID=${gridUID}]`)
             const tipoBoton = cambiarPagina.componenteID
             const nombreColumna = gridEnlazado.getAttribute("nombreColumnaSeleccionada")
@@ -13035,6 +13040,7 @@ const administracion = {
                 tipoBusqueda: "rapido",
                 origen: "botonNumeroPagina",
                 paginaTipo: paginaTipo,
+                instanciaUID: instanciaUID,
                 granuladoURL: casaVitini.componentes.granuladorURL()
             }
             if (tipoBoton === "numeroPagina") {
@@ -14953,6 +14959,8 @@ const administracion = {
         cambiarPagina: async (cambiarPagina) => {
             const gridUID = cambiarPagina.gridUID
             const gridEnlazado = document.querySelector(`[gridUID=${gridUID}]`)
+            const main = document.querySelector("main")
+            const instanciaUID = main.getAttribute("instanciaUID")
             const tipoBoton = cambiarPagina.componenteID
             const nombreColumna = gridEnlazado.getAttribute("nombreColumnaSeleccionada")
             const sentidoColumna = gridEnlazado.getAttribute("sentidoColumna")
@@ -14963,6 +14971,7 @@ const administracion = {
                 sentidoColumna: sentidoColumna,
                 buscar: terminoBusqueda,
                 tipoBusqueda: "rapido",
+                instanciaUID: instanciaUID
             }
             if (tipoBoton === "numeroPagina") {
                 const numeroPagina = cambiarPagina.numeroPagina
@@ -22588,6 +22597,7 @@ const administracion = {
                     tipoBusqueda: "rapido",
                     tipoConstruccionGrid: "total",
                     origen: "url",
+                    instanciaUID: instanciaUID,
                     ...granuladoURL.parametros,
                 }
                 transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
@@ -22600,7 +22610,6 @@ const administracion = {
                     transaccion.sentidoColumna = transaccion.sentido_columna
                     delete transaccion.sentido_columna
                 }
-                transaccion.instanciaUID = instanciaUID
                 const campoBuscador = document.querySelector("[componente=zonaNavegacionPaginadaUsuarios]")
                 campoBuscador.value = transaccion.buscar
                 return casaVitini.administracion.usuarios.portada.mostrarUsuariosResueltos(transaccion)
@@ -22975,6 +22984,9 @@ const administracion = {
                 }
             },
             ordenarPorColumna: async (columna) => {
+                const main = document.querySelector("main")
+                const instanciaUID = main.getAttribute("instanciaUID")
+
                 const nombreColumna = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("nombreColumna")
                 const selectorColumnasentido = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("sentidoColumna")
                 const numeroPagina = columna.target.closest("[gridUID]").getAttribute("numeroPagina")
@@ -22986,7 +22998,8 @@ const administracion = {
                     pagina: Number(numeroPagina),
                     buscar: terminoBusqueda,
                     tipoConstruccionGrid: "soloLista",
-                    origen: "tituloColumna"
+                    origen: "tituloColumna",
+                    instanciaUID: instanciaUID
                 }
                 if (selectorColumnasentido === "ascendente") {
                     transaccion.sentidoColumna = "descendente"
@@ -22999,6 +23012,9 @@ const administracion = {
                 casaVitini.administracion.usuarios.portada.mostrarUsuariosResueltos(transaccion)
             },
             cambiarPagina: async (cambiarPagina) => {
+                const main = document.querySelector("main")
+                const instanciaUID = main.getAttribute("instanciaUID")
+
                 const gridUID = cambiarPagina.gridUID
                 const gridEnlazado = document.querySelector(`[gridUID=${gridUID}]`)
                 const tipoBoton = cambiarPagina.componenteID
@@ -23013,6 +23029,7 @@ const administracion = {
                     buscar: terminoBusqueda,
                     paginaTipo: paginaTipo,
                     tipoBusqueda: "rapido",
+                    instanciaUID: instanciaUID,
                 }
                 if (tipoBoton === "numeroPagina") {
                     const numeroPagina = cambiarPagina.numeroPagina
@@ -23121,7 +23138,7 @@ const administracion = {
                         contenedorOpciones.classList.add("detallesUsuario_contenedorOpciones")
                         const opcionInformacion = document.createElement("a")
                         opcionInformacion.classList.add("detallesUsuario_opcionInformacion")
-                        opcionInformacion.innerText = "Datos personales"
+                        opcionInformacion.innerText = "Sus datos personales"
                         opcionInformacion.setAttribute("href", `/administracion/usuarios/${usuarioIDX}/datos_personales`)
                         opcionInformacion.setAttribute("vista", `/administracion/usuarios/${usuarioIDX}/datos_personales`)
                         opcionInformacion.addEventListener("click", casaVitini.componentes.cambiarVista)
@@ -23131,21 +23148,21 @@ const administracion = {
                         opcionCambiarIDX.setAttribute("href", `/administracion/usuarios/${usuarioIDX}/modificar_idx`)
                         opcionCambiarIDX.setAttribute("vista", `/administracion/usuarios/${usuarioIDX}/modificar_idx`)
                         opcionCambiarIDX.addEventListener("click", casaVitini.componentes.cambiarVista)
-                        opcionCambiarIDX.innerText = "Modificar VitiniID"
+                        opcionCambiarIDX.innerText = "Modificar su VitiniID"
                         contenedorOpciones.appendChild(opcionCambiarIDX)
                         const opcionCambiarRol = document.createElement("a")
                         opcionCambiarRol.classList.add("detallesUsuario_opcionInformacion")
                         opcionCambiarRol.setAttribute("href", `/administracion/usuarios/${usuarioIDX}/rol`)
                         opcionCambiarRol.setAttribute("vista", `/administracion/usuarios/${usuarioIDX}/rol`)
                         opcionCambiarRol.addEventListener("click", casaVitini.componentes.cambiarVista)
-                        opcionCambiarRol.innerText = "Cambiar rol"
+                        opcionCambiarRol.innerText = "Cambiar su rol"
                         contenedorOpciones.appendChild(opcionCambiarRol)
                         const opcionClave = document.createElement("a")
                         opcionClave.classList.add("detallesUsuario_opcionInformacion")
                         opcionClave.setAttribute("href", `/administracion/usuarios/${usuarioIDX}/cambiar_clave`)
                         opcionClave.setAttribute("vista", `/administracion/usuarios/${usuarioIDX}/cambiar_clave`)
                         opcionClave.addEventListener("click", casaVitini.componentes.cambiarVista)
-                        opcionClave.innerText = "Cambiar contrasena"
+                        opcionClave.innerText = "Cambiar su contrasena"
                         contenedorOpciones.appendChild(opcionClave)
                         const opcionCambiarEstado = document.createElement("a")
                         opcionCambiarEstado.classList.add("detallesUsuario_opcionInformacion")
@@ -23156,7 +23173,7 @@ const administracion = {
                         const opcionEliminarCuenta = document.createElement("a")
                         opcionEliminarCuenta.classList.add("detallesUsuario_opcionInformacion")
                         opcionEliminarCuenta.addEventListener("click", casaVitini.administracion.usuarios.detallesUsuario.eliminarCuenta.UI)
-                        opcionEliminarCuenta.innerText = "Eliminar cuenta"
+                        opcionEliminarCuenta.innerText = "Eliminar su cuenta"
                         contenedorOpciones.appendChild(opcionEliminarCuenta)
                         espacioUsuario.appendChild(contenedorOpciones)
                     }
@@ -23725,44 +23742,24 @@ const administracion = {
                         textoDescriptivo = "¿Quieres Aactivar esta cuenta? El usuario de esta cuenta no podra volver a logearse con ella. Sus implicaciones son inmediatas"
                         valorBoton = "activado"
                     }
-                    const advertenciaInmersivaIU = document.createElement("div")
-                    advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                    advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                    const contenedorAdvertenciaInmersiva = document.createElement("div")
-                    contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                    const tituloCancelarReserva = document.createElement("p")
-                    tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                    tituloCancelarReserva.innerText = tituloInformativo
-                    contenedorAdvertenciaInmersiva.appendChild(tituloCancelarReserva)
-                    const bloqueBloqueoApartamentos = document.createElement("div")
-                    bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
-                    const tituloBloquoApartamentos = document.createElement("div")
-                    tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                    tituloBloquoApartamentos.innerText = textoDescriptivo
-                    bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
-                    contenedorAdvertenciaInmersiva.appendChild(bloqueBloqueoApartamentos)
-                    const bloqueBotones = document.createElement("div")
-                    bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
-                    const botonCancelar = document.createElement("div")
-                    botonCancelar.classList.add("detallesReservaCancelarBoton")
-                    botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
-                    botonCancelar.innerText = tituloBoton
-                    botonCancelar.setAttribute("nuevoEstado", valorBoton)
-                    botonCancelar.addEventListener("click", casaVitini.administracion.usuarios.detallesUsuario.cambiarEstadoCuenta.transactor)
-                    bloqueBotones.appendChild(botonCancelar)
-                    const botonCancelarProcesoCancelacion = document.createElement("div")
-                    botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                    botonCancelarProcesoCancelacion.innerText = "Cancelar el cambio de estado"
-                    botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                        let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                        selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                            advertenciaInmersiva.remove()
-                        })
-                    })
-                    bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
-                    contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
-                    advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
+
+
+                    const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
+                    const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+    
+                    const titulo = constructor.querySelector("[componente=titulo]")
+                    titulo.innerText = tituloInformativo
+                    const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                    mensaje.innerText = textoDescriptivo
+    
+                    const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                    botonAceptar.innerText =tituloBoton
+                    botonAceptar.setAttribute("nuevoEstado", valorBoton)
+                    botonAceptar.addEventListener("click",  casaVitini.administracion.usuarios.detallesUsuario.cambiarEstadoCuenta.transactor)
+                    const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                    botonCancelar.innerText = "Cancelar y volver"
+    
+                    document.querySelector("main").appendChild(pantallaInmersiva)
                 },
                 transactor: async (nuevoEstado) => {
                     const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
@@ -23811,44 +23808,23 @@ const administracion = {
             },
             eliminarCuenta: {
                 UI: async () => {
-                    const estadoCuentaActual = document.querySelector("[estadoCuenta]").getAttribute("estadoCuenta")
-                    const advertenciaInmersivaIU = document.createElement("div")
-                    advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                    advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                    const contenedorAdvertenciaInmersiva = document.createElement("div")
-                    contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                    const tituloCancelarReserva = document.createElement("p")
-                    tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                    tituloCancelarReserva.innerText = "Confirma la eliminacion de esta cuenta"
-                    contenedorAdvertenciaInmersiva.appendChild(tituloCancelarReserva)
-                    const bloqueBloqueoApartamentos = document.createElement("div")
-                    bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
-                    const tituloBloquoApartamentos = document.createElement("div")
-                    tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                    tituloBloquoApartamentos.innerText = "Si quieres elimianr esta cuenta confirma su eliminacion. Esta operacion es inmediata e irreversible. Una vez eliminada la cuenta sus datos con irrecuperables. Si deseas mantener los datos de esta cuenta pero a su vez congelar su funcionalidad es recomendable desactivar la cuenta antes que eliminarla"
-                    bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
-                    contenedorAdvertenciaInmersiva.appendChild(bloqueBloqueoApartamentos)
-                    const bloqueBotones = document.createElement("div")
-                    bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
-                    const botonCancelar = document.createElement("div")
-                    botonCancelar.classList.add("detallesReservaCancelarBoton")
-                    botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
-                    botonCancelar.innerText = "Confirmar y eliminar cuenta"
-                    botonCancelar.addEventListener("click", casaVitini.administracion.usuarios.detallesUsuario.eliminarCuenta.transactor)
-                    bloqueBotones.appendChild(botonCancelar)
-                    const botonCancelarProcesoCancelacion = document.createElement("div")
-                    botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                    botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion"
-                    botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                        let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                        selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                            advertenciaInmersiva.remove()
-                        })
-                    })
-                    bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
-                    contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
-                    advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
+
+                    const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
+                    const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+    
+                    const titulo = constructor.querySelector("[componente=titulo]")
+                    titulo.innerText = "Confirma la eliminación de esta cuenta"
+                    const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                    mensaje.innerText = "Si quieres eliminar esta cuenta confirma su eliminación. Esta operación es inmediata e irreversible. Una vez eliminada la cuenta, sus datos con irrecuperables. Si deseas mantener los datos de esta cuenta, pero a su vez congelar su funcionalidad es recomendable desactivar la cuenta antes que eliminarla"
+    
+                    const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                    botonAceptar.innerText = "Comfirmar la eliminacion de la cuenta"
+                    botonAceptar.addEventListener("click", casaVitini.administracion.usuarios.detallesUsuario.eliminarCuenta.transactor)
+                    const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                    botonCancelar.innerText = "Cancelar la eliminacion y volver"
+    
+                    document.querySelector("main").appendChild(pantallaInmersiva)
+
                 },
                 transactor: async () => {
                     const instanciaUID = casaVitini.componentes.codigoFechaInstancia()

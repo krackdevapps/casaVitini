@@ -8722,7 +8722,7 @@ const casaVitini = {
                     if (nombreColumna) {
                         const columnaSeleccionada = document.querySelector(`[gridUID=${gridUID}] [componenteGrid=celdaTituloColumna][nombreColumna=${nombreColumna}]`)
                         columnaSeleccionada.setAttribute("sentidoColumna", sentidoColumna)
-                        columnaSeleccionada.style.background = "pink"
+                        columnaSeleccionada.style.background = "grey"
                         const iconoColumna = document.createElement("img");
                         iconoColumna.src = icononombreColumna;
                         iconoColumna.alt = descripcionnombreColumna;
@@ -8743,7 +8743,7 @@ const casaVitini = {
                     columnaElemento.addEventListener("click", eval(metodoColumna))
                     if (nombreColumna === detallesColumna.columnaIDV) {
                         if (nombreColumna) {
-                            columnaElemento.style.background = "pink"
+                            columnaElemento.style.background = "grey"
                             columnaElemento.setAttribute("nombreColumna", detallesColumna.columnaIDV)
                             columnaElemento.setAttribute("sentidoColumna", sentidoColumna)
                             const iconoColumna = document.createElement("img");
