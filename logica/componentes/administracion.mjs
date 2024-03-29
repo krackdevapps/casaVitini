@@ -1617,15 +1617,23 @@ const administracion = {
             },
             transactor: {
                 opcionesApartamento: async (apartamento) => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+
                     const apartamentoIDV = apartamento.target.parentElement.getAttribute("apartamento")
                     const apartamentoUID = apartamento.target.parentElement.getAttribute("apartamentoUID")
                     const apartamentoUI = apartamento.target.innerText
                     const reserva = document.querySelector("[reserva]").getAttribute("reserva")
                     const selectorOpcionesApartamento = document.querySelector("[apartamentoOpciones='" + apartamentoIDV + "']")
                     if (selectorOpcionesApartamento) {
-                        return casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
+                        return casaVitini.componentes.ocultarMenusVolatiles()
                     }
-                    casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles();
+                    casaVitini.componentes.ocultarMenusVolatiles()
+                    screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    screen.orientation.addEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
+                    window.addEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
+                    window.addEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
+
                     const alturaDinamica = window.scrollY + apartamento.target.getBoundingClientRect().bottom;
                     const horizontalDinamicoJerarquico = casaVitini.componentes.medirPorJerarquiaDom.horizontal(apartamento.target);
                     const anchoDinamico = apartamento.target.getBoundingClientRect().width;
@@ -1633,18 +1641,30 @@ const administracion = {
                     opcionesApartamento.classList.add("panelOpcionesCambioCama")
                     opcionesApartamento.setAttribute("componente", "menuVolatil")
                     opcionesApartamento.setAttribute("apartamentoOpciones", apartamentoIDV)
+                    opcionesApartamento.setAttribute("instanciaUID", instanciaUID)
                     opcionesApartamento.style.top = (alturaDinamica + 4) + "px"
                     opcionesApartamento.style.left = (horizontalDinamicoJerarquico) + "px"
                     opcionesApartamento.style.width = anchoDinamico + "px"
                     opcionesApartamento.setAttribute("apartamentoUID_Menu", apartamentoUID)
+                    const spinnerUI = casaVitini.componentes.spinnerSimple()
+                    opcionesApartamento.appendChild(spinnerUI)
+
+                    document.querySelector("main").appendChild(opcionesApartamento)
+
                     let opcionApartamento
                     const transaccion = {
                         zona: "administracion/reservas/estadoHabitacionesApartamento",
                         reserva: Number(reserva),
                         apartamento: Number(apartamentoUID)
                     }
+
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                     if (respuestaServidor?.ok) {
+                        const menuVolatilRenderizado = document.querySelector(`[componente=menuVolatil][instanciaUID="${instanciaUID}"]`)
+                        if (!menuVolatilRenderizado) {
+                            return
+                        }
+                        menuVolatilRenderizado.innerHTML = null
                         const habitacionesApartamento = respuestaServidor?.ok
                         if (habitacionesApartamento.length === 0) {
                             opcionApartamento = document.createElement("p")
@@ -1745,8 +1765,167 @@ const administracion = {
                     opcionApartamento.classList.add("opcionCambioCama")
                     opcionApartamento.innerText = `Cerrar opciones de ${apartamentoUI}`
                     opcionesApartamento.appendChild(opcionApartamento)
-                    document.querySelector("main:not([Estado=Obsoleto]").appendChild(opcionesApartamento)
-                    document.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles)
+                },
+                opcionesHabitacion: async (habitacion) => {
+                    const habitacionIDV = habitacion.target.closest("[habitacionIDV]").getAttribute("habitacionIDV")
+                    const habitacionUID = habitacion.target.closest("[habitacionUID]").getAttribute("habitacionUID")
+                    const habitacionUI = habitacion.target.innerText
+                    const apartamentoIDV = habitacion.target.closest("[apartamento]").getAttribute("apartamento")
+                    const reserva = document.querySelector("[reserva]").getAttribute("reserva")
+                    const selectorOpcionesHabitacion = document.querySelector("[apartamentoOpcionesHabitacion='" + apartamentoIDV + "'][habitacionOpciones='" + habitacionIDV + "']")
+                    if (selectorOpcionesHabitacion) {
+                        return casaVitini.componentes.ocultarMenusVolatiles()
+                    }
+                    casaVitini.componentes.ocultarMenusVolatiles()
+                    screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    screen.orientation.addEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
+                    window.addEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
+                    window.addEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
+
+                    const alturaDinamica = window.scrollY + habitacion.target.getBoundingClientRect().bottom;
+                    const horizontalDinamicoJerarquico = casaVitini.componentes.medirPorJerarquiaDom.horizontal(habitacion.target);
+                    const anchoDinamico = habitacion.target.getBoundingClientRect().width;
+
+                    let opcionesHabitacion = document.createElement("div")
+                    opcionesHabitacion.classList.add("panelOpcionesCambioCama")
+                    opcionesHabitacion.setAttribute("componente", "menuVolatil")
+                    opcionesHabitacion.style.top = (alturaDinamica + 4) + "px"
+                    opcionesHabitacion.style.left = (horizontalDinamicoJerarquico) + "px"
+                    opcionesHabitacion.style.width = anchoDinamico + "px"
+
+                    let opcionHabitacion = document.createElement("p")
+                    opcionHabitacion.classList.add("opcionCambioCama")
+                    opcionHabitacion.innerText = `Anadir pernoctante en la ${habitacionUI}`
+                    opcionHabitacion.addEventListener("click", () => {
+                        const metadatosPernoctante = {
+                            habitacionUID: habitacionUID,
+                            origen: "habitacion"
+                        }
+                        casaVitini.administracion.reservas.detallesReserva.UIComponentes.anadirPernoctanteUI(metadatosPernoctante)
+                    })
+                    opcionesHabitacion.appendChild(opcionHabitacion)
+                    opcionHabitacion = document.createElement("p")
+                    opcionHabitacion.classList.add("opcionCambioCama")
+                    opcionHabitacion.innerText = `Eliminar la ${habitacionUI} pero mantener los pernoctantes que contiene asignados a esta reserva`
+                    opcionHabitacion.addEventListener("click", () => {
+                        const datosEliminacion = {
+                            opcionesPernoctantes: "conservar",
+                            habitacionUID: habitacionUID
+                        }
+                        casaVitini.administracion.reservas.detallesReserva.UIComponentes.propuestaEliminarHabitacionUI(datosEliminacion)
+                    })
+                    opcionesHabitacion.appendChild(opcionHabitacion)
+                    opcionHabitacion = document.createElement("p")
+                    opcionHabitacion.classList.add("opcionCambioCama")
+                    opcionHabitacion.innerText = `Eliminar la ${habitacionUI} y tambien los pernoctantes que contiene de la reserva`
+                    opcionHabitacion.addEventListener("click", () => {
+                        const datosEliminacion = {
+                            opcionesPernoctantes: "eliminar",
+                            habitacionUID: habitacionUID
+                        }
+                        casaVitini.administracion.reservas.detallesReserva.UIComponentes.propuestaEliminarHabitacionUI(datosEliminacion)
+                    })
+                    opcionesHabitacion.appendChild(opcionHabitacion)
+                    opcionHabitacion = document.createElement("p")
+                    opcionHabitacion.classList.add("opcionCambioCama")
+                    opcionHabitacion.innerText = `Cerrar opciones de la ${habitacionUI}`
+                    opcionesHabitacion.appendChild(opcionHabitacion)
+                    document.querySelector("main").appendChild(opcionesHabitacion)
+
+                },
+                anadirCama: async (elementoCama, metadatos) => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+
+                    // Cuidado, por que en este caso, no hay una construcion del elemento, solo se sobreescribe le nombre y el UID, este transacto no es como los demas, acuerdate
+                    const selectorOpcionesCamaRenderizado = document.querySelector("[apartamentoOpcionesCama='" + metadatos.apartamentoIDV + "'][habitacionOpcionesCama='" + metadatos.habitacionIDV + "']")
+                    if (selectorOpcionesCamaRenderizado) {
+                        return casaVitini.componentes.ocultarMenusVolatiles()
+
+                    }
+
+                    casaVitini.componentes.ocultarMenusVolatiles()
+                    screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    screen.orientation.addEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
+                    window.addEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
+                    window.addEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
+
+                    const alturaDinamica = window.scrollY + elementoCama.target.getBoundingClientRect().bottom;
+                    const horizontalDinamico = elementoCama.target.offsetLeft;
+                    const horizontalDinamicoJerarquico = casaVitini.componentes.medirPorJerarquiaDom.horizontal(elementoCama.target);
+                    const anchoDinamico = elementoCama.target.getBoundingClientRect().width;
+                    const opcionesCambioCama = document.createElement("div")
+                    opcionesCambioCama.classList.add("panelOpcionesCambioCama")
+                    opcionesCambioCama.setAttribute("componente", "menuVolatil")
+                    opcionesCambioCama.setAttribute("instanciaUID", instanciaUID)
+                    opcionesCambioCama.setAttribute("apartamentoOpcionesCama", metadatos.apartamentoIDV)
+                    opcionesCambioCama.setAttribute("habitacionOpcionesCama", metadatos.habitacionIDV)
+                    opcionesCambioCama.style.top = (alturaDinamica + 4) + "px"
+                    opcionesCambioCama.style.left = (horizontalDinamicoJerarquico) + "px"
+                    opcionesCambioCama.style.width = anchoDinamico + "px"
+                    const spinnerUI = casaVitini.componentes.spinnerSimple()
+                    opcionesCambioCama.appendChild(spinnerUI)
+                    document.querySelector("main").appendChild(opcionesCambioCama)
+
+                    const transaccion = {
+                        zona: "administracion/reservas/listarTipoCamasHabitacion",
+                        apartamento: metadatos.apartamentoIDV,
+                        habitacion: metadatos.habitacionIDV
+                    }
+                    const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                    if (respuestaServidor?.error) {
+                        return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                    }
+                    const menuVolatilRenderizado = document.querySelector(`[componente=menuVolatil][instanciaUID="${instanciaUID}"]`)
+                    if (!menuVolatilRenderizado) {
+                        return
+                    }
+                    menuVolatilRenderizado.innerHTML = null
+                    respuestaServidor.camasDisponibles.map(cama => {
+                        const camaIDV = cama.cama
+                        const camaUI = cama.camaUI
+                        const tipoCama = document.createElement("p")
+                        tipoCama.classList.add("opcionCambioCama")
+                        tipoCama.setAttribute("componente", "opcionesCama")
+                        tipoCama.setAttribute("camaIDV", camaIDV)
+                        tipoCama.innerText = camaUI
+                        tipoCama.addEventListener("click", async () => {
+                            const reserva = document.querySelector("[reserva]").getAttribute("reserva")
+                            const transaccion = {
+                                zona: "administracion/reservas/cambiarCamaHabitacion",
+                                reserva: Number(reserva),
+                                habitacion: Number(metadatos.habitacionUID),
+                                nuevaCama: camaIDV
+                            }
+                            const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                            const menuVolatilRenderizado = document.querySelector(`[componente=menuVolatil][instanciaUID="${instanciaUID}"]`)
+                            if (!menuVolatilRenderizado) {
+                                return
+                            }
+                            if (respuestaServidor?.error) {
+                                casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
+                                return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                            }
+                            if (respuestaServidor?.ok) {
+                                const nuevoUID = respuestaServidor?.nuevoUID
+                                const selectorTituloCama = document.querySelector(`[habitacionUID="${metadatos.habitacionUID}"] [contenedor=camaUI]`)
+                                selectorTituloCama.innerText = camaUI
+                                selectorTituloCama.setAttribute("camaIDV", camaIDV)
+                                if (nuevoUID) {
+                                    selectorTituloCama.setAttribute("camaUID", nuevoUID)
+                                }
+                                return casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
+                            }
+                        })
+                        opcionesCambioCama.appendChild(tipoCama)
+                    })
+                    const botonCerrar = document.createElement("p")
+                    botonCerrar.classList.add("opcionCambioCama")
+                    //botonCerrar.setAttribute("componente", "opcionesCama")
+                    //botonCerrar.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles)
+                    botonCerrar.innerText = "Cerrar opciones de cama"
+                    opcionesCambioCama.appendChild(botonCerrar)
                 },
                 anadirApartamento: async (apartamento) => {
                     const reserva = document.querySelector("[reserva]").getAttribute("reserva")
@@ -1810,7 +1989,9 @@ const administracion = {
                         apartamento: Number(apartamentoUID),
                         tipoBloqueo: tipoBloqueo
                     }
+                    console.log("transaccion", transaccion)
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                    console.log("respuestaServidor", respuestaServidor)
                     pantallaDeCargaRenderizada?.remove()
                     if (!pantallaDeCargaRenderizada) {
                         return
@@ -1861,66 +2042,6 @@ const administracion = {
                     if (respuestaServidor?.estadoDesgloseFinanciero === "actualizar") {
                         casaVitini.administracion.reservas.detallesReserva.calcularPrecioReserva()
                     }
-                },
-                opcionesHabitacion: async (habitacion) => {
-                    const habitacionIDV = habitacion.target.closest("[habitacionIDV]").getAttribute("habitacionIDV")
-                    const habitacionUID = habitacion.target.closest("[habitacionUID]").getAttribute("habitacionUID")
-                    const habitacionUI = habitacion.target.innerText
-                    const apartamentoIDV = habitacion.target.closest("[apartamento]").getAttribute("apartamento")
-                    const reserva = document.querySelector("[reserva]").getAttribute("reserva")
-                    const selectorOpcionesHabitacion = document.querySelector("[apartamentoOpcionesHabitacion='" + apartamentoIDV + "'][habitacionOpciones='" + habitacionIDV + "']")
-                    if (selectorOpcionesHabitacion) {
-                        return casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles();
-                    }
-                    casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles();
-                    const alturaDinamica = window.scrollY + habitacion.target.getBoundingClientRect().bottom;
-                    const horizontalDinamicoJerarquico = casaVitini.componentes.medirPorJerarquiaDom.horizontal(habitacion.target);
-                    const anchoDinamico = habitacion.target.getBoundingClientRect().width;
-                    const opcionesHabitacion = document.createElement("div")
-                    opcionesHabitacion.classList.add("panelOpcionesCambioCama")
-                    opcionesHabitacion.setAttribute("componente", "menuVolatil")
-                    opcionesHabitacion.style.top = (alturaDinamica + 4) + "px"
-                    opcionesHabitacion.style.left = (horizontalDinamicoJerarquico) + "px"
-                    opcionesHabitacion.style.width = anchoDinamico + "px"
-                    let opcionHabitacion = document.createElement("p")
-                    opcionHabitacion.classList.add("opcionCambioCama")
-                    opcionHabitacion.innerText = `Anadir pernoctante en la ${habitacionUI}`
-                    opcionHabitacion.addEventListener("click", () => {
-                        const metadatosPernoctante = {
-                            habitacionUID: habitacionUID,
-                            origen: "habitacion"
-                        }
-                        casaVitini.administracion.reservas.detallesReserva.UIComponentes.anadirPernoctanteUI(metadatosPernoctante)
-                    })
-                    opcionesHabitacion.appendChild(opcionHabitacion)
-                    opcionHabitacion = document.createElement("p")
-                    opcionHabitacion.classList.add("opcionCambioCama")
-                    opcionHabitacion.innerText = `Eliminar la ${habitacionUI} pero mantener los pernoctantes que contiene asignados a esta reserva`
-                    opcionHabitacion.addEventListener("click", () => {
-                        const datosEliminacion = {
-                            opcionesPernoctantes: "conservar",
-                            habitacionUID: habitacionUID
-                        }
-                        casaVitini.administracion.reservas.detallesReserva.UIComponentes.propuestaEliminarHabitacionUI(datosEliminacion)
-                    })
-                    opcionesHabitacion.appendChild(opcionHabitacion)
-                    opcionHabitacion = document.createElement("p")
-                    opcionHabitacion.classList.add("opcionCambioCama")
-                    opcionHabitacion.innerText = `Eliminar la ${habitacionUI} y tambien los pernoctantes que contiene de la reserva`
-                    opcionHabitacion.addEventListener("click", () => {
-                        const datosEliminacion = {
-                            opcionesPernoctantes: "eliminar",
-                            habitacionUID: habitacionUID
-                        }
-                        casaVitini.administracion.reservas.detallesReserva.UIComponentes.propuestaEliminarHabitacionUI(datosEliminacion)
-                    })
-                    opcionesHabitacion.appendChild(opcionHabitacion)
-                    opcionHabitacion = document.createElement("p")
-                    opcionHabitacion.classList.add("opcionCambioCama")
-                    opcionHabitacion.innerText = `Cerrar opciones de la ${habitacionUI}`
-                    opcionesHabitacion.appendChild(opcionHabitacion)
-                    document.querySelector("main:not([Estado=Obsoleto]").appendChild(opcionesHabitacion)
-                    document.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles)
                 },
                 eliminarHabitacion: async (datosElimiacion) => {
                     const reserva = document.querySelector("[reserva]").getAttribute("reserva")
@@ -1992,79 +2113,6 @@ const administracion = {
                         casaVitini.administracion.reservas.detallesReserva.transactor.controlEspacioPernoctantesSinAlojamiento()
                     }
                 },
-                anadirCama: async (elementoCama, metadatos) => {
-                    // Cuidado, por que en este caso, no hay una construcion del elemento, solo se sobreescribe le nombre y el UID, este transacto no es como los demas, acuerdate
-                    const selectorOpcionesCamaRenderizado = document.querySelector("[apartamentoOpcionesCama='" + metadatos.apartamentoIDV + "'][habitacionOpcionesCama='" + metadatos.habitacionIDV + "']")
-                    if (selectorOpcionesCamaRenderizado) {
-                        return casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
-                    }
-                    casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
-                    const alturaDinamica = window.scrollY + elementoCama.target.getBoundingClientRect().bottom;
-                    const horizontalDinamico = elementoCama.target.offsetLeft;
-                    const horizontalDinamicoJerarquico = casaVitini.componentes.medirPorJerarquiaDom.horizontal(elementoCama.target);
-                    const anchoDinamico = elementoCama.target.getBoundingClientRect().width;
-                    const opcionesCambioCama = document.createElement("div")
-                    opcionesCambioCama.classList.add("panelOpcionesCambioCama")
-                    opcionesCambioCama.setAttribute("componente", "menuVolatil")
-                    opcionesCambioCama.setAttribute("apartamentoOpcionesCama", metadatos.apartamentoIDV)
-                    opcionesCambioCama.setAttribute("habitacionOpcionesCama", metadatos.habitacionIDV)
-                    opcionesCambioCama.innerText = "Cargando opciones..."
-                    opcionesCambioCama.style.top = (alturaDinamica + 4) + "px"
-                    opcionesCambioCama.style.left = (horizontalDinamicoJerarquico) + "px"
-                    opcionesCambioCama.style.width = anchoDinamico + "px"
-                    const transaccion = {
-                        zona: "administracion/reservas/listarTipoCamasHabitacion",
-                        apartamento: metadatos.apartamentoIDV,
-                        habitacion: metadatos.habitacionIDV
-                    }
-                    const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                    if (respuestaServidor?.error) {
-                        return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
-                    }
-                    opcionesCambioCama.innerText = null
-                    respuestaServidor["camasDisponibles"].map(cama => {
-                        const camaIDV = cama.cama
-                        const camaUI = cama.camaUI
-                        const tipoCama = document.createElement("p")
-                        tipoCama.classList.add("opcionCambioCama")
-                        tipoCama.setAttribute("componente", "opcionesCama")
-                        tipoCama.setAttribute("camaIDV", camaIDV)
-                        tipoCama.innerText = camaUI
-                        tipoCama.addEventListener("click", async () => {
-                            const reserva = document.querySelector("[reserva]").getAttribute("reserva")
-                            const transaccion = {
-                                zona: "administracion/reservas/cambiarCamaHabitacion",
-                                reserva: Number(reserva),
-                                habitacion: Number(metadatos.habitacionUID),
-                                nuevaCama: camaIDV
-                            }
-                            const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                            if (respuestaServidor?.error) {
-                                casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
-                                return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
-                            }
-                            if (respuestaServidor?.ok) {
-                                const nuevoUID = respuestaServidor?.nuevoUID
-                                const selectorTituloCama = document.querySelector(`[habitacionUID="${metadatos.habitacionUID}"] [contenedor=camaUI]`)
-                                selectorTituloCama.innerText = camaUI
-                                selectorTituloCama.setAttribute("camaIDV", camaIDV)
-                                if (nuevoUID) {
-                                    selectorTituloCama.setAttribute("camaUID", nuevoUID)
-                                }
-                                return casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
-                            }
-                        })
-                        opcionesCambioCama.appendChild(tipoCama)
-                    })
-                    const botonCerrar = document.createElement("p")
-                    botonCerrar.classList.add("opcionCambioCama")
-                    //botonCerrar.setAttribute("componente", "opcionesCama")
-                    //botonCerrar.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles)
-                    botonCerrar.innerText = "Cerrar opciones de cama"
-                    opcionesCambioCama.appendChild(botonCerrar)
-                    document.querySelector("main:not([Estado=Obsoleto]").appendChild(opcionesCambioCama)
-                    document.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles)
-                },
                 mostrasSelectorCambioPernoctanteHabitacion: (pernoctanteUID) => {
                     const habitacionActual = document.querySelector(`[pernoctanteUID="${pernoctanteUID}"]`)?.closest("[habitacionUID]")?.getAttribute("habitacionUID")
                     const selectorHabitaciones = [...document.querySelectorAll("[habitacionIDV]")]
@@ -2096,9 +2144,15 @@ const administracion = {
                     }
                     const selectorOpcionesApartamento = document.querySelector(`[componente=menuVolatil][clienteUID="${clienteUID}"]`)
                     if (selectorOpcionesApartamento) {
-                        return casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
+                        return casaVitini.componentes.ocultarMenusVolatiles()
+
                     }
-                    casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
+                    casaVitini.componentes.ocultarMenusVolatiles()
+                    screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    screen.orientation.addEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
+                    window.addEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
+
                     const alturaDinamica = window.scrollY + pernoctanteElemento.getBoundingClientRect().bottom;
                     const horizontalDinamicoJerarquico = casaVitini.componentes.medirPorJerarquiaDom.horizontal(pernoctanteElemento);
                     let tipoCliente = pernoctanteElemento.getAttribute("tipoCliente")
@@ -2121,7 +2175,7 @@ const administracion = {
                     bloqueOpcionesCliente.setAttribute("pernoctanteUID", pernoctanteUID)
                     bloqueOpcionesCliente.setAttribute("tipoCliente", tipoCliente)
                     bloqueOpcionesCliente.style.top = (alturaDinamica + 4) + "px"
-                    bloqueOpcionesCliente.style.left = (horizontalDinamicoJerarquico + 4) + "px"
+                    bloqueOpcionesCliente.style.left = (horizontalDinamicoJerarquico) + "px"
                     if (tipoCliente === "cliente" && estadoAlojamiento === "alojado") {
                         const selectorCheckIn = document
                             .querySelector(`[pernoctanteUID="${pernoctanteUID}"]`).getAttribute("fechaCheckIn")
@@ -2130,7 +2184,7 @@ const administracion = {
                             botonRealizarCheckin.classList.add("administracionReservasDetallesBotonOpcionCliente")
                             botonRealizarCheckin.setAttribute("componente", "botonOpcionClientePool")
                             botonRealizarCheckin.setAttribute("tipoEliminacion", "habitacion")
-                            botonRealizarCheckin.innerText = "Modificar CheckIN"
+                            botonRealizarCheckin.innerText = "Modificar checkin"
                             botonRealizarCheckin.addEventListener("click", () => {
                                 casaVitini.administracion.reservas.detallesReserva.UIComponentes.checkin.UI(pernoctanteUID)
                             })
@@ -2139,7 +2193,7 @@ const administracion = {
                             botonCheckOutAdelantado.classList.add("administracionReservasDetallesBotonOpcionCliente")
                             botonCheckOutAdelantado.setAttribute("componente", "botonOpcionClientePool")
                             botonCheckOutAdelantado.setAttribute("tipoEliminacion", "habitacion")
-                            botonCheckOutAdelantado.innerText = "CheckOut Adelantado"
+                            botonCheckOutAdelantado.innerText = "Checkout Adelantado"
                             botonCheckOutAdelantado.addEventListener("click", () => {
                                 casaVitini.administracion.reservas.detallesReserva.UIComponentes.checkout.UI(pernoctanteUID)
                             })
@@ -2148,7 +2202,7 @@ const administracion = {
                             const botonRealizarCheckin = document.createElement("div")
                             botonRealizarCheckin.classList.add("administracionReservasDetallesBotonOpcionCliente")
                             botonRealizarCheckin.setAttribute("componente", "botonOpcionClientePool")
-                            botonRealizarCheckin.innerText = "Realizar Checkin"
+                            botonRealizarCheckin.innerText = ">>> Realizar checkin"
                             botonRealizarCheckin.addEventListener("click", () => {
                                 casaVitini.administracion.reservas.detallesReserva.UIComponentes.checkin.UI(pernoctanteUID)
                             })
@@ -2284,6 +2338,12 @@ const administracion = {
                     const pasaportePernoctante = pernoctante.querySelector(`[componente=pasaporte]`).innerText
                     const fechaCheckIn = pernoctante.getAttribute("fechaCheckIn")
                     const fechaCheckOutAdelantado = pernoctante.getAttribute("fechaCheckOut")
+                    document.querySelectorAll("[componente=botonMoverCliente]").forEach(botonMover => {
+                        botonMover.remove()
+                    })
+                    document.querySelectorAll("[componente=opcionesCliente]").forEach(opcionesCliente => {
+                        opcionesCliente.remove()
+                    })
                     const transaccion = {
                         zona: "administracion/reservas/cambiarPernoctanteDeHabitacion",
                         reserva: Number(reserva),
@@ -2295,12 +2355,6 @@ const administracion = {
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
-                        document.querySelectorAll("[componente=botonMoverCliente]").forEach(botonMover => {
-                            botonMover.remove()
-                        })
-                        document.querySelectorAll("[componente=opcionesCliente]").forEach(opcionesCliente => {
-                            opcionesCliente.remove()
-                        })
                         document.querySelector("[pernoctanteUID='" + pernoctanteUID + "']")
                             .remove()
                         const datoPernoctante = {
@@ -2313,17 +2367,17 @@ const administracion = {
                         }
                         const bloqueClienteMover = casaVitini.administracion.reservas.detallesReserva.UIComponentes.pernoctanteUI(datoPernoctante)
                         const datosNombre = {
-                            "nombreCompleto": nombrePernoctante
+                            nombreCompleto: nombrePernoctante
                         }
                         const pernoctanteNombreUI = casaVitini.administracion.reservas.detallesReserva.UIComponentes.pernoctanteNombreUI(datosNombre)
                         bloqueClienteMover.appendChild(pernoctanteNombreUI)
                         const datosPasaporte = {
-                            "pasaporte": pasaportePernoctante
+                            pasaporte: pasaportePernoctante
                         }
                         const pernoctantePasaporteUI = casaVitini.administracion.reservas.detallesReserva.UIComponentes.pernoctantePasaporteUI(datosPasaporte)
                         bloqueClienteMover.appendChild(pernoctantePasaporteUI)
                         const selectorHabitacionDestino = document.querySelector("[habitacionUID='" + habitacionUID + "']")
-                        selectorHabitacionDestino.appendChild(bloqueClienteMover)
+                        selectorHabitacionDestino?.appendChild(bloqueClienteMover)
                         casaVitini.administracion.reservas.detallesReserva.transactor.controlEspacioPernoctantesSinAlojamiento()
                     }
                 },
@@ -2582,9 +2636,11 @@ const administracion = {
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
+
+                        console.log("respuestaServidor", respuestaServidor)
                         const selectorAnadirPernoctanteRedenrizada = document.querySelector(`[habitacionUID="${habitacionUID}"] [componente=anadirPernoctanteUI]`)
                         selectorAnadirPernoctanteRedenrizada?.remove()
-                        const datosNuevoCliente = respuestaServidor.datosNuevoCliente
+                        const datosNuevoCliente = respuestaServidor.nuevoCliente
                         const nombre = datosNuevoCliente.nombre
                         const primerApellido = datosNuevoCliente.primerApellido ? datosNuevoCliente.primerApellido : ""
                         const segundoApellido = datosNuevoCliente.segundoApellido ? datosNuevoCliente.segundoApellido : ""
@@ -3561,7 +3617,7 @@ const administracion = {
                         contenedor.classList.add("administracion_reservas_detallesReservas_check_contenedor")
                         const tituloCancelarReserva = document.createElement("p")
                         tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                        tituloCancelarReserva.innerText = "Checkout Adelantado"
+                        tituloCancelarReserva.innerText = "Checkout adelantado"
                         contenedor.appendChild(tituloCancelarReserva)
                         const datosTitular = {
                             nombreCompleto: nombreCompleto,
@@ -4258,6 +4314,9 @@ const administracion = {
                     const fechaSalida = detallesDeLaReserva.salida
                     const totalReserva = desgloseFinanciero?.totales?.totalConImpuestos ? desgloseFinanciero.totales.totalConImpuestos + "$" : "Sin información"
                     //const totalRapidoGlobal = desgloseFinanciero.totales.totalConImpuestos
+                    const titulo = document.querySelector(".titulo")
+                    //titulo.innerText = "Reserva"
+                    titulo.remove()
                     let estadoReservaUI
                     if (estadoReserva === "cancelada") {
                         estadoReservaUI = "Cancelada"
@@ -4472,6 +4531,7 @@ const administracion = {
                     marcoMenuResponsivo.setAttribute('class', 'administracion_reserva_detallesReserva_marcoMenuResponsivo');
                     marcoMenuResponsivo.innerText = "Menu reserva"
                     marcoMenuResponsivo.addEventListener("click", () => {
+                        document.body.style.overflow = "hidden";
                         casaVitini.administracion.reservas.detallesReserva.desplegarMenuResponsivo(reservaUID)
                     })
                     contenedorCategoriasGlobales.appendChild(marcoMenuResponsivo);
@@ -4635,7 +4695,6 @@ const administracion = {
                 }
             },
             desplegarMenuResponsivo: (reservaUID) => {
-                document.body.style.overflow = 'hidden';
                 const advertenciaInmersivaIU = document.createElement("div")
                 advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
                 advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
@@ -4717,7 +4776,7 @@ const administracion = {
                             botonAnadirApartamento.setAttribute('componente', 'menuDesplegable');
                             botonAnadirApartamento.addEventListener("click",
                                 casaVitini.administracion.reservas.detallesReserva.abrirMenuReservas)
-                            botonAnadirApartamento.textContent = 'Anadir apartamento 1';
+                            botonAnadirApartamento.textContent = 'Añadir apartamento';
                             contenedorAlojamientoUI.appendChild(botonAnadirApartamento)
                             const espacioAlojamiento = document.createElement("div")
                             espacioAlojamiento.classList.add("reservasDetallesBloqueAlojamiennto")
@@ -7550,8 +7609,8 @@ const administracion = {
                                     vista: "/administracion",
                                     tipoOrigen: "menuNavegador"
                                 }
-                                casaVitini.componentes.controladorVista(entrada);
-                                return casaVitini.ui.vistas.advertenciaInmersivaSuperPuesta(respuestaServidor?.ok)
+                                await casaVitini.componentes.controladorVista(entrada);
+                                return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.ok)
                             }
                         }
                     },

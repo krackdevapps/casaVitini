@@ -5076,6 +5076,7 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo 'tipoBloqueo' solo puede ser 'permanente', 'rangoTemporal', 'sinBloquo'"
                             throw new Error(error)
                         }
+                        
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         // Comprobar que la reserva exisste
                         const validacionReserva = `
@@ -5112,7 +5113,8 @@ const puerto = async (entrada, salida) => {
                             apartamentoUID: apartamento,
                             tipoBloqueo: tipoBloqueo,
                             fechaEntrada_ISO: fechaEntrada_ISO,
-                            fechaSalida_ISO: fechaSalida_ISO
+                            fechaSalida_ISO: fechaSalida_ISO,
+                            zonaBloqueo: "publico"
                         }
                         await bloquearApartamentos(metadatos)
                         const eliminaApartamentoReserva = `

@@ -2,7 +2,7 @@ const casaVitini = {
     ui: {
         vistas: {
             portada: {
-                arranque:async () => {
+                arranque: async () => {
                     // document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
                     // document.body.style.height = "auto"
                     document.querySelector("[componente=botonCambiaVistaEnSection]").addEventListener("click", casaVitini.componentes.cambiarVista)
@@ -5420,7 +5420,7 @@ const casaVitini = {
                 vista: vista
             };
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-            
+
             const contenedorVista = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
             if (!contenedorVista || !respuestaServidor) {
                 return
@@ -5437,6 +5437,11 @@ const casaVitini = {
             window.removeEventListener("resize", casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador?.resizeIsDone);
             window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
             window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
+            window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
+            screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+
+            casaVitini.componentes.ocultarPorRotacion()
+
             if (respuestaServidor?.error) {
                 const marcoError = document.createElement("div")
                 marcoError.classList.add("plaza_marcoError_seccion")
@@ -5574,7 +5579,7 @@ const casaVitini = {
                 const servidor = await fetch(puerto, peticion);
                 const respuestaServidor = await servidor.json();
                 if (!respuestaServidor) {
-                    
+
                     return casaVitini.componentes.errorUI()
                 }
                 if (respuestaServidor.tipo === "IDX") {
@@ -5604,9 +5609,9 @@ const casaVitini = {
             } catch (error) {
                 if (error.name === 'AbortError') {
                 }
-                
+
                 if (error instanceof TypeError) {
-                    
+
 
                     return casaVitini.componentes.errorUI()
                 }
@@ -8507,10 +8512,16 @@ const casaVitini = {
             }
         },
         ocultarMenusVolatiles: (menuVolatil) => {
-            const componente = menuVolatil?.target.getAttribute("componente")
+            window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
+            window.removeEventListener("resize", casaVitini.componentes.ocultarMenusVolatiles)
+            screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+            console.log("rotacion")
+            const componente = menuVolatil?.target?.getAttribute("componente") || null
             if (componente === "menuDesplegable") {
                 return
             }
+            window.removeEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
+
             if (componente !== "menuVolatil") {
                 document.removeEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
                 const selectorMenusVolatiles = [...document.querySelectorAll("[componente=menuVolatil]")]
@@ -8521,8 +8532,8 @@ const casaVitini = {
             const selectoresErrorUI = [...document.querySelectorAll("[componente=errorUI]")]
             selectoresErrorUI.map((errorUI) => {
                 errorUI.remove()
-                document.removeEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
             })
+
         },
         ocultarMenusVolatilesPorRedimension: () => {
             const selectorMenusVolatiles = [...document.querySelectorAll("[componente=menuVolatil]")]
@@ -9728,6 +9739,73 @@ const casaVitini = {
                     }
                 }
             },
+        },
+        observador: {
+            menusFlotanes: (configuracion) => {
+                const elementoParaObservar = configuracion.elementoParaObservar
+                const elementoDestino = configuracion.elementoDestino
+
+                // Define una función para borrar la instancia del observador
+                const borrarInstancia = () => {
+                    if (instanciaDelObservador) {
+                        instanciaDelObservador.disconnect(); // Deja de observar el elemento
+                        instanciaDelObservador = null; // Limpia la referencia a la instancia del observador
+                    }
+                };
+
+                const selectorElementoOrigen = document.querySelector(elementoParaObservar);
+                let instanciaDelObservador; // Declara la variable fuera del alcance de la función observador
+                if (!selectorElementoOrigen) {
+                    const mensaje = "No se encuentra el elemento a observar";
+                    return casaVitini.ui.vistas.advertenciaInmersiva(mensaje);
+                }
+                const selectorElementoDestino = document.querySelector(elementoParaObservar);
+                if (!selectorElementoDestino) {
+                    const mensaje = "No se encuentra el elemento de destino";
+                    borrarInstancia()
+                    return casaVitini.ui.vistas.advertenciaInmersiva(mensaje);
+                }
+
+                instanciaDelObservador = new ResizeObserver(entries => {
+                    for (let entry of entries) {
+                        const { width, height, x, y } = entry.contentRect;
+                        const contenedorRetorno = {
+                            width: width,
+                            height: height,
+                            x: x,
+                            y: y
+                        }
+
+                        const altoMenuFlotante = y + height
+                        const ladoMenuFlotante = x
+
+                        console.log(`Element size: ${width}px x ${height}px`);
+                        console.log(`Element position: (${x}px, ${y}px)`);
+                        console.log(`Element posin: (${x}px, ${y}px)`);
+
+                    }
+                });
+                instanciaDelObservador.observe(selectorElementoOrigen);
+            }
+        },
+        controladores: {
+            anchoActualVentanad: window.innerWidth,
+            controlHorizotnalVetana: () => {
+                const currentWidth = window.innerWidth;
+                const previousWidth = casaVitini.componentes.controladores.anchoActualVentanad
+                // Verificar si el ancho ha cambiado
+                if (currentWidth !== previousWidth) {
+                    console.log('El ancho de la ventana ha cambiado');
+                    // Aquí puedes colocar el código que deseas ejecutar cuando el ancho cambia
+                    // Actualizar el valor del ancho anterior
+                    casaVitini.componentes.ocultarMenusVolatiles()
+                } else {
+                    console.log("el ancho de la ventana es el mismo")
+                }
+            }
+        },
+        ocultarPorRotacion: () => {
+            casaVitini.componentes.ocultarMenusVolatiles()
         }
     },
     IDX: {
@@ -9818,3 +9896,15 @@ const casaVitini = {
     },
 }
 window.addEventListener("load", casaVitini.componentes.arranque)
+
+const test = () => {
+    const configuracion = {
+        elementoParaObservar: "body",
+        elementoDestino: "main"
+    }
+    casaVitini.componentes.observador.menusFlotanes(configuracion)
+}
+
+const destino = (datos) => {
+    console.log("los datos son", datos)
+}

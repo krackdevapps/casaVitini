@@ -7,6 +7,8 @@ const bloquearApartamentos = async (metadatos) => {
         const tipoBloqueo = metadatos.tipoBloqueo
         const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
         const fechaSalida_ISO = metadatos.fechaSalida_ISO
+        const zonaBloqueo =  metadatos.zonaBloqueo
+
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
         if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
@@ -19,6 +21,10 @@ const bloquearApartamentos = async (metadatos) => {
         }
         if (tipoBloqueo !== "rangoTemporal" && tipoBloqueo !== "permanente" && tipoBloqueo !== "sinBloqueo") {
             const error = "El campo 'tipoBloqueo' solo puede ser rangoTemporal, permanente, sinBloqueo"
+            throw new Error(error)
+        }
+        if (zonaBloqueo !== "publico" && zonaBloqueo !== "privado" && zonaBloqueo !== "global") {
+            const error = "El campo 'zonaBloqueo' solo puede ser publico, privado, global"
             throw new Error(error)
         }
         const validarReserva = `
@@ -43,10 +49,9 @@ const bloquearApartamentos = async (metadatos) => {
         }
         const apartamentoIDV = resuelveValidarApartamento.rows[0].apartamento
         let estado = "disponible"
-        const zonaBloqueo = "global"
         const motivo = `Bloqueo producido por eliminar este apartamento de la reserva ${reserva}`
         if (tipoBloqueo === "rangoTemporal") {
-            
+
             const insertaBloqueoApartamento = `
             INSERT INTO 
             "bloqueosApartamentos"
@@ -68,6 +73,7 @@ const bloquearApartamentos = async (metadatos) => {
                 motivo,
                 zonaBloqueo
             ]
+            console.log(datosBloqueo, datosBloqueo)
             const resuelveinsertaBloqueoApartamento = await conexion.query(insertaBloqueoApartamento, datosBloqueo)
             if (resuelveinsertaBloqueoApartamento.rowCount === 0) {
                 const error = "No se ha podido aplicar el bloquo temporal"
@@ -75,7 +81,7 @@ const bloquearApartamentos = async (metadatos) => {
             }
         }
         if (tipoBloqueo === "permanente") {
-            let insertaBloqueoApartamento = `
+            const insertaBloqueoApartamento = `
             INSERT INTO 
             "bloqueosApartamentos"
             (
@@ -92,27 +98,24 @@ const bloquearApartamentos = async (metadatos) => {
                 motivo,
                 zonaBloqueo
             ]
-            let resuelveinsertaBloqueoApartamento = await conexion.query(insertaBloqueoApartamento, datosBloqueo)
+            const resuelveinsertaBloqueoApartamento = await conexion.query(insertaBloqueoApartamento, datosBloqueo)
             if (resuelveinsertaBloqueoApartamento.rowCount === 0) {
-                let error = "No se ha podido aplicar el bloqeuo indefinido"
+                const error = "No se ha podido aplicar el bloqeuo indefinido"
                 throw new Error(error)
             }
         }
-        let ok
+        const ok = {}
         if (tipoBloqueo === "rangoTemporal") {
-            ok = {
-                "ok": "Se ha eliminado el apartamento y aplicado el bloqueo temporal"
-            }
+            ok.ok = "Se ha eliminado el apartamento y aplicado el bloqueo temporal"
+
         }
         if (tipoBloqueo === "permanente") {
-            ok = {
-                "ok": "Se ha eliminado el apartamento y aplicado el bloqueo permanente"
-            }
+            ok.ok = "Se ha eliminado el apartamento y aplicado el bloqueo permanente"
+
         }
         if (tipoBloqueo === "sinBloqueo") {
-            ok = {
-                "ok": "Se ha eliminado el apartamento de la reserva y se ha liberado"
-            }
+            ok.ok = "Se ha eliminado el apartamento de la reserva y se ha liberado"
+
         }
         return ok
     } catch (error) {
