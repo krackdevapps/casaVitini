@@ -18,7 +18,7 @@ const administracion = {
                     zona: "administracion/reservas/listarReservas",
                     tipoConstruccionGrid: "total",
                     origen: "url",
-                    instanciaUID:instanciaUID,
+                    instanciaUID: instanciaUID,
                     ...granuladoURL.parametros,
                 }
                 transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
@@ -952,7 +952,7 @@ const administracion = {
                     pagina: Number(numeroPagina),
                     tipoConstruccionGrid: "soloLista",
                     origen: "tituloColumna",
-                    instanciaUID:instanciaUID
+                    instanciaUID: instanciaUID
                 }
                 console.log("transaccion", transaccion)
                 if (selectorColumnasentido === "ascendente") {
@@ -12676,6 +12676,8 @@ const administracion = {
             const granuladoURL = casaVitini.componentes.granuladorURL()
             const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
             const main = document.querySelector("main")
+            const instanciaUID = main.getAttribute("instanciaUID")
+
             if (comandoInicial === "clientes" && !granuladoURL.parametros.buscar) {
                 main.setAttribute("zonaCSS", "administracion/clientes/buscador")
                 casaVitini.administracion.clientes.buscadorUI()
@@ -12691,6 +12693,7 @@ const administracion = {
                     tipoBusqueda: "rapido",
                     tipoConstruccionGrid: "total",
                     origen: "url",
+                    instanciaUID: instanciaUID,
                     ...granuladoURL.parametros,
                     //granuladoURL: granuladorURL
                 }
@@ -12987,6 +12990,8 @@ const administracion = {
             return respuestaServidor
         },
         ordenarPorColumna: async (columna) => {
+            const main = document.querySelector("main")
+            const instanciaUID = main.getAttribute("instanciaUID")
             const nombreColumna = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("nombreColumna")
             const selectorColumnasentido = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("sentidoColumna")
             const numeroPagina = columna.target.closest("[gridUID]").getAttribute("numeroPagina")
@@ -12999,6 +13004,7 @@ const administracion = {
                 buscar: terminoBusqueda,
                 tipoConstruccionGrid: "soloLista",
                 origen: "tituloColumna",
+                instanciaUID: instanciaUID,
                 granuladoURL: casaVitini.componentes.granuladorURL()
             }
             if (selectorColumnasentido === "ascendente") {
