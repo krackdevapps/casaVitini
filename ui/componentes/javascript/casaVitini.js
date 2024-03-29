@@ -4193,7 +4193,7 @@ const casaVitini = {
                             botonInciarSession.addEventListener("click", casaVitini.componentes.cambiarVista)
                             marcoElastico.appendChild(botonInciarSession)
                             marcoElasticoRelatico.appendChild(marcoElastico)
-                            const seccion = document.querySelector("section")
+                            const seccion = document.querySelector("main")
                             seccion.innerHTML = null
                             seccion.appendChild(marcoElasticoRelatico)
                         },
@@ -4235,7 +4235,7 @@ const casaVitini = {
                             botonInciarSession.addEventListener("click", casaVitini.componentes.cambiarVista)
                             //marcoElastico.appendChild(botonInciarSession)
                             marcoElasticoRelatico.appendChild(marcoElastico)
-                            const seccion = document.querySelector("section")
+                            const seccion = document.querySelector("main")
                             seccion.innerHTML = null
                             seccion.appendChild(marcoElasticoRelatico)
                         },
@@ -4277,7 +4277,7 @@ const casaVitini = {
                             botonInciarSession.addEventListener("click", casaVitini.componentes.cambiarVista)
                             //marcoElastico.appendChild(botonInciarSession)
                             marcoElasticoRelatico.appendChild(marcoElastico)
-                            const seccion = document.querySelector("section")
+                            const seccion = document.querySelector("main")
                             seccion.innerHTML = null
                             seccion.appendChild(marcoElasticoRelatico)
                         },
@@ -4489,7 +4489,7 @@ const casaVitini = {
                             botonInciarSession.addEventListener("click", casaVitini.componentes.cambiarVista)
                             marcoElastico.appendChild(botonInciarSession)
                             marcoElasticoRelatico.appendChild(marcoElastico)
-                            const seccion = document.querySelector("section")
+                            const seccion = document.querySelector("main")
                             seccion.innerHTML = null
                             seccion.appendChild(marcoElasticoRelatico)
                         },
@@ -4531,7 +4531,7 @@ const casaVitini = {
                             botonInciarSession.addEventListener("click", casaVitini.componentes.cambiarVista)
                             //marcoElastico.appendChild(botonInciarSession)
                             marcoElasticoRelatico.appendChild(marcoElastico)
-                            const seccion = document.querySelector("section")
+                            const seccion = document.querySelector("main")
                             seccion.innerHTML = null
                             seccion.appendChild(marcoElasticoRelatico)
                         },
@@ -4573,7 +4573,7 @@ const casaVitini = {
                             botonInciarSession.addEventListener("click", casaVitini.componentes.cambiarVista)
                             //marcoElastico.appendChild(botonInciarSession)
                             marcoElasticoRelatico.appendChild(marcoElastico)
-                            const seccion = document.querySelector("section")
+                            const seccion = document.querySelector("main")
                             seccion.innerHTML = null
                             seccion.appendChild(marcoElasticoRelatico)
                         },
@@ -9896,15 +9896,3 @@ const casaVitini = {
     },
 }
 window.addEventListener("load", casaVitini.componentes.arranque)
-
-const test = () => {
-    const configuracion = {
-        elementoParaObservar: "body",
-        elementoDestino: "main"
-    }
-    casaVitini.componentes.observador.menusFlotanes(configuracion)
-}
-
-const destino = (datos) => {
-    console.log("los datos son", datos)
-}

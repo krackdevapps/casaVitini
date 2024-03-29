@@ -2,11 +2,10 @@ import { enviarMail } from "./enviarMail.mjs"
 import { generadorPDF3 } from "./generadorPDF.mjs"
 const enviarEmailAlCrearCuentaNueva = async (datosConfirmacion) => {
     try {
-        const emailDestino = datosConfirmacion.email
         const codigoVerificacion = datosConfirmacion.codigoVerificacion
         // Contruimos el mensaje
         const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
-        const destino = emailDestino
+        const destino = datosConfirmacion.email
         const asunto = "Confirma tu VitiniID"
         const mensaje = `<html>
         Tu cuenta en Casa Vitini se ha creado. Necesitamos que verifiques tu correo. Por favor pulsa en el enlace para verificar tu email. Si no verificas tu cuenta de correo no puedes acceder a la informacion de tu reserva y tu VitiniID sera eliminado en una hora.

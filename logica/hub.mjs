@@ -53,15 +53,9 @@ import { obtenerDetallesOferta } from './componentes/sistemaDeOfertas/obtenerDet
 import { interruptor } from './componentes/sistema/interruptor.mjs';
 import { horaEntradaSalida } from './componentes/sistema/horaEntradaSalida.mjs';
 import { apartamentosPorRango } from './componentes/sistema/selectoresCompartidos/apartamentosPorRango.mjs';
-import dotenv from "dotenv";
-dotenv.config();
 
 const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
 const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
-
-
-const correo__ = process.env.CORREO_DIRRECION_DE_ORIGEN
-console.log("correo1",correo__)
 
 const arranque = async (entrada, salida) => {
     salida.render('constructorV1', {
@@ -3387,7 +3381,7 @@ const puerto = async (entrada, salida) => {
                                 `
                                 await conexion.query(consultaCrearEnlace, [usuarioIDX, codigoGenerado, fechaCaducidadUTC])
                                 // Contruimos el mensaje
-                                const origen = "admin@macos.local"
+                                const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
                                 const destino = email
                                 const asunto = "Recuperar tu VitiniID"
                                 const mensaje = `<html>Aquí tíenes el enlace para recupera tu cuenta. Este enlace tiene una duracion de 30 minutos. <a href="https://${hostActual}/micasa/recuperar_cuenta/${codigoGenerado}">Recuperar mi cuenta</a></html>`
