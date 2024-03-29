@@ -16,7 +16,7 @@ const enviarEmailReservaConfirmaada = async (reservaUID) => {
         console.log("email destino", emailDestinoTitular)
         const hostActual = "localhost"
         // Contruimos el mensaje
-        const origen = process.env.CORREO_DIRRECION_DE_ORIGEN_RESERVAS
+        const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
         const destino = emailDestinoTitular
         const asunto = "Reserva confirmada"
         const mensaje = `<html>

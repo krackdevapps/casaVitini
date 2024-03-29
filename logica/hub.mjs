@@ -53,8 +53,16 @@ import { obtenerDetallesOferta } from './componentes/sistemaDeOfertas/obtenerDet
 import { interruptor } from './componentes/sistema/interruptor.mjs';
 import { horaEntradaSalida } from './componentes/sistema/horaEntradaSalida.mjs';
 import { apartamentosPorRango } from './componentes/sistema/selectoresCompartidos/apartamentosPorRango.mjs';
+import dotenv from "dotenv";
+dotenv.config();
+
 const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
 const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
+
+
+const correo__ = process.env.CORREO_DIRRECION_DE_ORIGEN
+console.log("correo1",correo__)
+
 const arranque = async (entrada, salida) => {
     salida.render('constructorV1', {
         'vistaGlobal': '../global/navegacion.ejs'
@@ -3341,7 +3349,8 @@ const puerto = async (entrada, salida) => {
                             ]
                             await conexion.query(actualizarCodigoVerificacion, datosRestablecimiento)
                             // Contruimos el mensaje
-                            const origen = process.env.CORREO_DIRRECION_DE_ORIGEN_RECUPERACION
+                            const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
+                            console.log("origen origen", origen)
                             const destino = email
                             const asunto = "Verifica tu VitiniID"
                             const mensaje = `<html>Aquí tíenes el enlace de verificación. Los enlaces de verificación tienen una validez de una hora desde que se generan.

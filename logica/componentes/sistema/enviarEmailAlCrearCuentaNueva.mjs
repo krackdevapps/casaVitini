@@ -5,7 +5,7 @@ const enviarEmailAlCrearCuentaNueva = async (datosConfirmacion) => {
         const emailDestino = datosConfirmacion.email
         const codigoVerificacion = datosConfirmacion.codigoVerificacion
         // Contruimos el mensaje
-        const origen = process.env.CORREO_DIRRECION_DE_ORIGEN_VERIFICACION
+        const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
         const destino = emailDestino
         const asunto = "Confirma tu VitiniID"
         const mensaje = `<html>
