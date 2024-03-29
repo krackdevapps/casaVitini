@@ -3,6 +3,8 @@ const administracion = {
         arranque: async () => {
             //   document.querySelector("main:not([estado=obsoleto])").setAttribute("tipoVista", "reservasPaginadas")
             const main = document.querySelector("main")
+            const instanciaUID = main.getAttribute("instanciaUID")
+
             const granuladoURL = casaVitini.componentes.granuladorURL()
             const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
             const directorios = granuladoURL.directorios
@@ -16,6 +18,7 @@ const administracion = {
                     zona: "administracion/reservas/listarReservas",
                     tipoConstruccionGrid: "total",
                     origen: "url",
+                    instanciaUID:instanciaUID,
                     ...granuladoURL.parametros,
                 }
                 transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
@@ -746,6 +749,7 @@ const administracion = {
                 //const resolverReservas = await casaVitini.administracion.reservas.buscador.resolverReservas(transaccion)
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                console.log("respuestaServidor", respuestaServidor)
                 const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (!instanciaRenderizada) {
                     return
@@ -916,7 +920,7 @@ const administracion = {
                 }
                 casaVitini.componentes.ui.paginador(metadatosPaginador)
                 transaccion.tipoConstruccionGrid = "soloLista"
-                const titulo = "ADminstar reservas"
+                const titulo = "Administar reservas"
                 const estado = {
                     zona: constructorURLFinal,
                     EstadoInternoZona: "estado",
@@ -936,6 +940,7 @@ const administracion = {
                 }
             },
             ordenarPorColumna: async (columna) => {
+                const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
                 const nombreColumna = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("nombreColumna")
                 const selectorColumnasentido = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("sentidoColumna")
                 const numeroPagina = columna.target.closest("[gridUID]").getAttribute("numeroPagina")
@@ -946,8 +951,10 @@ const administracion = {
                     zona: "administracion/reservas/listarReservas",
                     pagina: Number(numeroPagina),
                     tipoConstruccionGrid: "soloLista",
-                    origen: "tituloColumna"
+                    origen: "tituloColumna",
+                    instanciaUID:instanciaUID
                 }
+                console.log("transaccion", transaccion)
                 if (selectorColumnasentido === "ascendente") {
                     transaccion.sentidoColumna = "descendente"
                     transaccion.nombreColumna = nombreColumna
@@ -10517,7 +10524,7 @@ const administracion = {
                                 } else {
                                     const botonIrAlEvento = document.createElement("div")
                                     botonIrAlEvento.classList.add("sinInfo")
-                                    botonIrAlEvento.innerText = "Airbnb no proporciona ninguna informacion sobre este evento. Probablamente este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma. Para ver mas informacion de este evento por favor dirigase a la web de Airbnb por que Airbnb no proporciona ninguna forma de enlazar este evento."
+                                    botonIrAlEvento.innerText = "Airbnb no proporciona ninguna información sobre este evento. Probablemente este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma. Para ver más información de este evento por favor diríjase a la web de Airbnb porque Airbnb no proporciona ninguna forma de enlazar este evento. "
                                     contenedorEvento.appendChild(botonIrAlEvento)
                                 }
                                 apartamentoUI.appendChild(contenedorEvento)
@@ -10833,7 +10840,7 @@ const administracion = {
                         } else {
                             const botonIrAlEvento = document.createElement("div")
                             botonIrAlEvento.classList.add("sinInfo")
-                            botonIrAlEvento.innerText = "Airbnb no proporciona ninguna informacion sobre este evento. Probablamente este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma. Para ver mas informacion de este evento por favor dirigase a la web de Airbnb por que Airbnb no proporciona ninguna forma de enlazar este evento."
+                            botonIrAlEvento.innerText = "Airbnb no proporciona ninguna información sobre este evento. Probablemente este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma. Para ver más información de este evento por favor diríjase a la web de Airbnb porque Airbnb no proporciona ninguna forma de enlazar este evento."
                             contenedorEvento.appendChild(botonIrAlEvento)
                         }
                         espacioEventosAirbnb.appendChild(contenedorEvento)
@@ -12001,11 +12008,11 @@ const administracion = {
                     bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
                     tituloConfiguracion = document.createElement("div")
                     tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
-                    tituloConfiguracion.innerText = "Permitir reservas publicas"
+                    tituloConfiguracion.innerText = "Permitir reservas públicas"
                     bloqueConfiguracion.appendChild(tituloConfiguracion)
                     descripcionConfiguracion = document.createElement("div")
                     descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
-                    descripcionConfiguracion.innerText = "Este interruptor determina si se deben permitir reservas públicas ahora mismo. Sí el interruptor esta activado, personas en todo el mundo podran preconfirmar reservas desde Casa Vitini."
+                    descripcionConfiguracion.innerText = "Este interruptor determina si se deben permitir reservas públicas ahora mismo. Sí el interruptor esta activado, personas en todo el mundo podrán preconfirmar reservas desde Casa Vitini."
                     bloqueConfiguracion.appendChild(descripcionConfiguracion)
                     const io_aceptarReservasPublicas_UI = document.createElement("select")
                     io_aceptarReservasPublicas_UI.setAttribute("interruptor", "aceptarReservasPublicas")
@@ -14233,7 +14240,7 @@ const administracion = {
                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
             }
             if (respuestaServidor?.totalImpuestos === 0) {
-                const espacioClientes = document.querySelector("[componente=precios]")
+                const espacioClientes = document.querySelector("[componente=espacioImpuestos]")
                 document.querySelector("[gridUID=gridImpuestos]")?.remove()
                 document.querySelector("[componente=estadoBusqueda]")?.remove()
                 const estadoBusquedaUI = document.createElement("div")

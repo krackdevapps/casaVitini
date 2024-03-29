@@ -12139,7 +12139,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 10px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    background: rgba(255, 255, 255, 0.3);
+    background: rgb(255 255 255 / 72%);
     color: red;
 }
 

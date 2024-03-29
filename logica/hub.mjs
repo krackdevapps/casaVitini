@@ -8953,7 +8953,7 @@ const puerto = async (entrada, salida) => {
                                     throw new Error(error)
                                 }
                                 if (0 === Number(diasMaximosReserva)) {
-                                    const error = "No puedes determinar que el numero maximo de días de las reservas publicas sea de 0."
+                                    const error = "No puedes determinar que el numero maximo de días de las reservas públicas sea de 0."
                                     throw new Error(error)
                                 }
                                 const maximoDiasDuracionReserva = Number(limiteFuturoReserva) - Number(diasAntelacionReserva)
