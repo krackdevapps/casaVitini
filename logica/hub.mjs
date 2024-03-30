@@ -3294,7 +3294,7 @@ const puerto = async (entrada, salida) => {
                         const codigoGenerado = await controlCodigo()
                         const fechaActualUTC = DateTime.utc();
                         const fechaCaducidadUTC = fechaActualUTC.plus({ hours: 1 });
-                        const hostActual = process.env.HOST
+                        const hostActual = process.env.HOST_CASAVITINI
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         const consultaRecuperarCuenta =
                             `
@@ -3469,6 +3469,12 @@ const puerto = async (entrada, salida) => {
                         if (!clave || (clave !== claveConfirmada)) {
                             const error = "Las claves no coinciden. Por favor escribe tu nueva clave dos veces."
                             throw new Error(error)
+                        }
+                        if (!clave) {
+                            const error = "Escribe tu contrasena, no has escrito tu contrasena"
+                            throw new Error(error)
+                        } else {
+                            validadoresCompartidos.claves.minimoRequisitos(clave)
                         }
                         const fechaActual_ISO = DateTime.utc().toISO();
                         const eliminarEnlacesCaducados = `

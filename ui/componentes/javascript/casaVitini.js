@@ -4191,7 +4191,7 @@ const casaVitini = {
                             botonInciarSession.setAttribute("href", "/")
                             botonInciarSession.setAttribute("vista", "/")
                             botonInciarSession.addEventListener("click", casaVitini.componentes.cambiarVista)
-                            marcoElastico.appendChild(botonInciarSession)
+                            //marcoElastico.appendChild(botonInciarSession)
                             marcoElasticoRelatico.appendChild(marcoElastico)
                             const seccion = document.querySelector("main")
                             seccion.innerHTML = null
@@ -4315,7 +4315,7 @@ const casaVitini = {
                             })
                             botonEnviar.textContent = 'Reestablecer contraseña';
                             // Adjuntar elementos al DOM
-                            const secction = document.querySelector("section")
+                            const secction = document.querySelector("main")
                             secction.appendChild(titulo);
                             contenedorCrearCuenta.appendChild(texto);
                             contenedorCrearCuenta.appendChild(clave);
@@ -4383,6 +4383,8 @@ const casaVitini = {
                 },
                 verificarCuenta: {
                     arranque: async () => {
+                        const main = document.querySelector("main")
+                        main.setAttribute("zonaCSS", "miCasa")
                         const granuladoURL = casaVitini.componentes.granuladorURL()
                         const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
                         if (comandoInicial === "verificar_cuenta") {
@@ -4399,6 +4401,7 @@ const casaVitini = {
                                 return casaVitini.ui.vistas.miCasa.recuperarCuenta.ui.codigoErroneo()
                             }
                             if (respuestaServidor?.ok) {
+                                console.log("respuestaServidor.ok", respuestaServidor.ok)
                                 return casaVitini.ui.vistas.miCasa.recuperarCuenta.ui.cuentaVerificada(comandoInicial)
                             }
                         }
@@ -5438,9 +5441,9 @@ const casaVitini = {
             window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
             window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
             window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
-            screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+            screen.orientation?.removeEventListener("change", casaVitini.componentes.ocultarMenusVolatiles);
 
-            casaVitini.componentes.ocultarPorRotacion()
+            //casaVitini.componentes.ocultarPorRotacion()
 
             if (respuestaServidor?.error) {
                 const marcoError = document.createElement("div")
@@ -8514,7 +8517,7 @@ const casaVitini = {
         ocultarMenusVolatiles: (menuVolatil) => {
             window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
             window.removeEventListener("resize", casaVitini.componentes.ocultarMenusVolatiles)
-            screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+            screen.orientation?.removeEventListener("change", casaVitini.componentes.ocultarMenusVolatiles);
             console.log("rotacion")
             const componente = menuVolatil?.target?.getAttribute("componente") || null
             if (componente === "menuDesplegable") {
@@ -9804,9 +9807,6 @@ const casaVitini = {
                 }
             }
         },
-        ocultarPorRotacion: () => {
-            casaVitini.componentes.ocultarMenusVolatiles()
-        }
     },
     IDX: {
         iniciarSession: async (IDX) => {

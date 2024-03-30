@@ -1638,8 +1638,8 @@ const administracion = {
                         return casaVitini.componentes.ocultarMenusVolatiles()
                     }
                     casaVitini.componentes.ocultarMenusVolatiles()
-                    screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
-                    screen.orientation.addEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    screen.orientation?.removeEventListener("change", casaVitini.componentes.ocultarMenusVolatiles);
+                    screen.orientation?.addEventListener("change", casaVitini.componentes.ocultarMenusVolatiles);
                     window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
                     window.addEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
                     window.addEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
@@ -1787,8 +1787,8 @@ const administracion = {
                         return casaVitini.componentes.ocultarMenusVolatiles()
                     }
                     casaVitini.componentes.ocultarMenusVolatiles()
-                    screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
-                    screen.orientation.addEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    screen.orientation?.removeEventListener("change", casaVitini.componentes.ocultarMenusVolatiles);
+                    screen.orientation?.addEventListener("change", casaVitini.componentes.ocultarMenusVolatiles);
                     window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
                     window.addEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
                     window.addEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
@@ -1855,8 +1855,8 @@ const administracion = {
                     }
 
                     casaVitini.componentes.ocultarMenusVolatiles()
-                    screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
-                    screen.orientation.addEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    screen.orientation?.removeEventListener("change", casaVitini.componentes.ocultarMenusVolatiles);
+                    screen.orientation?.addEventListener("change", casaVitini.componentes.ocultarMenusVolatiles);
                     window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
                     window.addEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
                     window.addEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
@@ -2158,8 +2158,8 @@ const administracion = {
 
                     }
                     casaVitini.componentes.ocultarMenusVolatiles()
-                    screen.orientation.removeEventListener("change", casaVitini.componentes.ocultarPorRotacion);
-                    screen.orientation.addEventListener("change", casaVitini.componentes.ocultarPorRotacion);
+                    screen.orientation?.removeEventListener("change", casaVitini.componentes.ocultarMenusVolatiles);
+                    screen.orientation?.addEventListener("change", casaVitini.componentes.ocultarMenusVolatiles);
                     window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
                     window.addEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
 

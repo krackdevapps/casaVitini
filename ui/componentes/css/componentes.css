@@ -10402,10 +10402,9 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: stretch;
 }
 
-.plaza_reservas_reservaConfiramda_bannerV2 {
+[zonaCSS=miCasa] .plaza_reservas_reservaConfiramda_bannerV2 {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
     padding: 10px;
     user-select: none;
