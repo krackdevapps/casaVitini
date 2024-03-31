@@ -160,5 +160,5 @@ fs.watchFile(llave, (curr, prev) => {
 });
 
 Object.keys(process.env).forEach((key) => {
-  delete process.env[key];
+  //delete process.env[key];
 });
