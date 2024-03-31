@@ -11,6 +11,7 @@ import https from 'https';
 import controlHttps from './logica/componentes/controlHttps.mjs';
 import { conexion } from './logica/componentes/db.mjs';
 import { Configuration, InformationApi } from '@ionos-cloud/sdk-nodejs-cert-manager';
+import { exec } from "child_process"
 
 
 dotenv.config();
@@ -152,63 +153,12 @@ fs.watchFile(llave, (curr, prev) => {
   console.info('Los certificados han cambiado. Recargando...');
   const newOptions = {
     key: fs.readFileSync(llave),
-  //  cert: fs.readFileSync(certificado),
+    //  cert: fs.readFileSync(certificado),
   };
   servidorHTTPS.setSecureContext(newOptions);
   console.info('Servidor HTTPS actualizado');
 });
 
-// Inicio del la api
-
-
-// // Configura la autorización para Ionos Cloud Cert Manager
-// const config = new Configuration({
-//   username: process.env.IONOS_USER,
-//   password: process.env.IONOS_PASS,
-//    apiKey: 'TU_API_KEY'
-// });
-
-// const api_instance = new InformationApi(config);
-
-// // Obtiene la información de la API del servicio
-// api_instance.getInfo().then((response) => {
-//   console.log(response.data);
-
-//   // Ahora, aquí puedes continuar con el código para obtener los certificados SSL
-//   // de Ionos Cloud y crear el servidor HTTPS
-
-//   // Crea una instancia del cliente IonosCloud para obtener los certificados SSL
-//   const ionosClient = new ApiClient();
-//   ionosClient.authentications.basicAuth.username = process.env.IONOS_USER;
-//   ionosClient.authentications.basicAuth.password = process.env.IONOS_PASS;
-
-//   // Obtiene una instancia del servicio de SSL
-//   const sslApi = new sslApi(ionosClient);
-
-//   // Lee los certificados SSL de Ionos Cloud y crea el servidor HTTPS con ellos
-//   sslApi.sslCertsGet().then((response) => {
-//     const certificado = response.certificates[0].pemCertificate;
-//     const llave = response.certificates[0].privateKey;
-
-//     const options = {
-//       key: llave,
-//       cert: certificado
-//     };
-
-//     const servidorHTTPS = createServer(options, app).listen(puertoSec, (entrada, salida) => {
-//       console.info(">> Puerto seguro activo", puertoSec);
-//       infoEntornoDB();
-//       info();
-//     });
-//   }).catch((error) => {
-//     console.error('Error al obtener los certificados SSL de Ionos Cloud:', error);
-//   });
-// }).catch((error) => {
-//   console.error('Error al obtener información de la API del servicio:', error);
-// });
-
 Object.keys(process.env).forEach((key) => {
- // delete process.env[key];
+  delete process.env[key];
 });
-
-

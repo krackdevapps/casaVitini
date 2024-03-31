@@ -1,0 +1,8 @@
+#!/bin/bash
+ARG ENV_FILE
+set -a
+[ -f "$ENV_FILE" ] && . "$ENV_FILE"
+set +a
+
+node casaVitini.mjs
+
