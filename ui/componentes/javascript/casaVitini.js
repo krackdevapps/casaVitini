@@ -5423,7 +5423,6 @@ const casaVitini = {
                 vista: vista
             };
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
             const contenedorVista = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
             if (!contenedorVista || !respuestaServidor) {
                 return
@@ -5443,9 +5442,8 @@ const casaVitini = {
             window.removeEventListener("resize", casaVitini.componentes.controladores.controlHorizotnalVetana)
             screen.orientation?.removeEventListener("change", casaVitini.componentes.ocultarMenusVolatiles);
 
-            //casaVitini.componentes.ocultarPorRotacion()
-
             if (respuestaServidor?.error) {
+                contenedorVista.innerHTML = null
                 const marcoError = document.createElement("div")
                 marcoError.classList.add("plaza_marcoError_seccion")
                 marcoError.innerText = respuestaServidor.error
