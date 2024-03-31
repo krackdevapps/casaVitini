@@ -4401,8 +4401,15 @@ const casaVitini = {
                                 return casaVitini.ui.vistas.miCasa.recuperarCuenta.ui.codigoErroneo()
                             }
                             if (respuestaServidor?.ok) {
-                                console.log("respuestaServidor.ok", respuestaServidor.ok)
-                                return casaVitini.ui.vistas.miCasa.recuperarCuenta.ui.cuentaVerificada(comandoInicial)
+                                const titulo = document.createElement("div")
+                                titulo.classList.add("titulo")
+                                titulo.innerText = "Cuenta verificada"
+                                main.appendChild(titulo)
+
+                                const texto = document.createElement("div")
+                                texto.innerText = "Se ha vericado la cuenta correctamente, ya puedes usar tu cuenta para ver la reservas hechas"
+                                main.appendChild(texto)
+
                             }
                         }
                     },
