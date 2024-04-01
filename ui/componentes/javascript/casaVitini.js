@@ -109,7 +109,7 @@ const casaVitini = {
                     if (reservaConfirmadaLocal) {
                         // Añadir banner informativo
                         const contenedorBanner = document.createElement("a")
-                        contenedorBanner.classList.add("plaza_reservas_reservaConfiramda_banner")
+                        contenedorBanner.classList.add("plaza_reservas_reservaConfirmada_banner")
                         contenedorBanner.innerText = "Tienes una reserva guardada en la cache de tu navegador. Esta reserva se ha guardado tras confirmar tu reserva. Para ver los detalles de la confirmación pulsa aquí. Si borras la cache de tu navegador esta información desaparecerá. Si quieres un acceso persistente puedes crear un VitiniID desde MiCasa."
                         contenedorBanner.setAttribute("href", "/alojamiento/reserva_confirmada")
                         contenedorBanner.setAttribute("vista", "/alojamiento/reserva_confirmada")
@@ -782,7 +782,7 @@ const casaVitini = {
                         espacioConfirmarReserva.innerHTML = null
                         // Añadir banner informativo
                         const botonIrAReservaConfirmada = document.createElement("a")
-                        botonIrAReservaConfirmada.classList.add("plaza_reservas_reservaConfiramda_banner")
+                        botonIrAReservaConfirmada.classList.add("plaza_reservas_reservaConfirmada_banner")
                         botonIrAReservaConfirmada.innerText = "Tienes una reserva guardada en la cache de tu navegador. Esta reserva se ha guardado tras confirmar tu reserva. Para ver los detalles de la confirmación pulsa aquí. Si borras la cache de tu navegador esta información desaparecerá. Si quieres un acceso persistente puedes crear un VitiniID desde MiCasa."
                         botonIrAReservaConfirmada.setAttribute("href", "/alojamiento/reserva_confirmada")
                         botonIrAReservaConfirmada.setAttribute("vista", "/alojamiento/reserva_confirmada")
@@ -790,7 +790,7 @@ const casaVitini = {
                         espacioConfirmarReserva.appendChild(botonIrAReservaConfirmada)
                         // Añadir banner informativo
                         const botonIrAlInicioDelProcesoDeReserva = document.createElement("a")
-                        botonIrAlInicioDelProcesoDeReserva.classList.add("plaza_reservas_reservaConfiramda_banner")
+                        botonIrAlInicioDelProcesoDeReserva.classList.add("plaza_reservas_reservaConfirmada_banner")
                         botonIrAlInicioDelProcesoDeReserva.innerText = "Ir al incio del proceso de la reserva"
                         botonIrAlInicioDelProcesoDeReserva.setAttribute("href", "/alojamiento")
                         botonIrAlInicioDelProcesoDeReserva.setAttribute("vista", "/alojamiento")
@@ -1769,25 +1769,25 @@ const casaVitini = {
                                 marcoElastico.appendChild(titulo)
                                 // Añadir banner informativo
                                 const contenedorBanner = document.createElement("a")
-                                contenedorBanner.classList.add("plaza_reservas_reservaConfiramda_bannerV2")
+                                contenedorBanner.classList.add("plaza_reservas_reservaConfirmada_bannerV2")
                                 contenedorBanner.innerText = "Esta página muestra el resumen de tu reserva confirmada pero no encuentra ninguna reserva guardada en la cache local de tu navegador. Cuando haces una reserva los datos de la reserva luego de guardarse en el servidor de Casa Vitini, el sistema guarda una copia local en tu navegador. Esto se hace para la comodida del usuario. Para que pueda acceder al resumen de su reserva confiramda comodamente. Pero si el usuario borra la cache de navegador o esta se borra por la configuracion del navegador ya no se puede acceder a la reserva por que ya no existe en la cache del navegador. Si quieres vovler a ver el resumen de tu reserva tienes varias opciones. La mas comoda e inmediata es registrar una nueva cuenta en MiCasa para obtener tu VitiniID y poder acceder a tu cuenta de usuario donde podra ver tus reservas. Otra opcion es ponerte en contacto con nosotros. Para ellos ves al apartado Contacto donde podra obtener las distintas formas de contacto con nosotros y te responderemos lo antes posible. Ten en cuenta que debido a las zonas horaria si cuando nos llamas no estamos disponibles por la diferencia horaria puedes enviarnos un email o un mensaje instantaneo. La primera opcion, registrar una cuenta es una opcion instantanea y es la que te recomendamos."
                                 marcoElastico.appendChild(contenedorBanner)
                                 const botonIniciarReserva = document.createElement("a")
-                                botonIrARegistrarse.classList.add("plaza_reservas_reservaConfiramda_banner")
+                                botonIrARegistrarse.classList.add("plaza_reservas_reservaConfirmada_banner")
                                 botonIrARegistrarse.innerText = "Iniciar una nueva reserva"
                                 botonIrARegistrarse.setAttribute("href", "/alojamiento")
                                 botonIrARegistrarse.setAttribute("vista", "/alojamiento")
                                 botonIrARegistrarse.addEventListener("click", casaVitini.componentes.cambiarVista)
                                 marcoElastico.appendChild(botonIniciarReserva)
                                 const botonIrARegistrarse = document.createElement("a")
-                                botonIrARegistrarse.classList.add("plaza_reservas_reservaConfiramda_banner")
+                                botonIrARegistrarse.classList.add("plaza_reservas_reservaConfirmada_banner")
                                 botonIrARegistrarse.innerText = "Ir a crear una cuenta a MiCasa"
                                 botonIrARegistrarse.setAttribute("href", "/micasa/crear_nueva_cuenta")
                                 botonIrARegistrarse.setAttribute("vista", "/micasa/crear_nueva_cuenta")
                                 botonIrARegistrarse.addEventListener("click", casaVitini.componentes.cambiarVista)
                                 marcoElastico.appendChild(botonIrARegistrarse)
                                 const botonInciarSession = document.createElement("a")
-                                botonInciarSession.classList.add("plaza_reservas_reservaConfiramda_banner")
+                                botonInciarSession.classList.add("plaza_reservas_reservaConfirmada_banner")
                                 botonInciarSession.innerText = "Iniciar session con mi VitiniID en MiCasa"
                                 botonInciarSession.setAttribute("href", "/micasa")
                                 botonInciarSession.setAttribute("vista", "/micasa")
@@ -4030,7 +4030,7 @@ const casaVitini = {
                                     tipoOrigen: "menuNavegador"
                                 }
                                 await casaVitini.componentes.controladorVista(vista)
-                                const informacion = "Se ha creado la cuenta corractamente. Bienvenido a Casa Vitini."
+                                const informacion = "Se ha creado la cuenta correctamente. Bienvenido a Casa Vitini. Ya puedes iniciar sesión con tu VitiniID."
                                 casaVitini.ui.vistas.advertenciaInmersiva(informacion)
                             }
                         },
@@ -4168,25 +4168,25 @@ const casaVitini = {
                             marcoElastico.appendChild(titulo)
                             // Añadir banner informativo
                             const contenedorBanner = document.createElement("a")
-                            contenedorBanner.classList.add("plaza_reservas_reservaConfiramda_bannerV2")
-                            contenedorBanner.innerText = "El código de recuperación es erróneo. Revisa el código introducido. Recuerda que los códigos de recuperación tienen una validez de una hora desde que se generan, se usen o no. También recuerda que los códigos de recuperación son de un solo uso. Si has generado varios códigos de recuperación recuerda también solo es válido un código a la vez. Eso quiere decir que, si generaste varios códigos, el válido solo es el último código generado, el más nuevo."
+                            contenedorBanner.classList.add("plaza_reservas_reservaConfirmada_bannerV2")
+                            contenedorBanner.innerText = "El código de recuperación es erróneo. Revisa el código introducido. Recuerda que los códigos de recuperación tienen una validez de una hora desde que se generan, se usen o no. También recuerda que los códigos de recuperación son de un solo uso. Si has generado varios códigos de recuperación recuerda que también solo es válido un código a la vez. Eso quiere decir que si generaste varios códigos, el válido solo es el último código generado, el más nuevo."
                             marcoElastico.appendChild(contenedorBanner)
                             const botonIniciarReserva = document.createElement("a")
-                            botonIniciarReserva.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonIniciarReserva.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonIniciarReserva.innerText = "Ir a generar un nuevo código"
                             botonIniciarReserva.setAttribute("href", "/micasa/recuperar_cuenta")
                             botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
                             botonIniciarReserva.addEventListener("click", casaVitini.componentes.cambiarVista)
                             marcoElastico.appendChild(botonIniciarReserva)
                             const botonIrARegistrarse = document.createElement("a")
-                            botonIrARegistrarse.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonIrARegistrarse.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonIrARegistrarse.innerText = "Ir al portal de MiCasa"
                             botonIrARegistrarse.setAttribute("href", "/micasa")
                             botonIrARegistrarse.setAttribute("vista", "/micasa")
                             botonIrARegistrarse.addEventListener("click", casaVitini.componentes.cambiarVista)
                             marcoElastico.appendChild(botonIrARegistrarse)
                             const botonInciarSession = document.createElement("a")
-                            botonInciarSession.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonInciarSession.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonInciarSession.innerText = "Ir a la página principal"
                             botonInciarSession.setAttribute("href", "/")
                             botonInciarSession.setAttribute("vista", "/")
@@ -4214,21 +4214,21 @@ const casaVitini = {
                             contenedorBanner.innerText = "Se ha enviado un mensaje a tu buzón con un enlace temporal de una hora de duración para que puedas restablecer tu contraseña y recuperar el acceso a tu VitiniID."
                             marcoElastico.appendChild(contenedorBanner)
                             const botonIniciarReserva = document.createElement("a")
-                            botonIniciarReserva.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonIniciarReserva.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonIniciarReserva.innerText = "Volver a generar otro código (Acabo de olvidar la nueva clave)"
                             botonIniciarReserva.setAttribute("href", "/micasa/recuperar_cuenta")
                             botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
                             botonIniciarReserva.addEventListener("click", casaVitini.componentes.cambiarVista)
                             //marcoElastico.appendChild(botonIniciarReserva)
                             const botonIrARegistrarse = document.createElement("a")
-                            botonIrARegistrarse.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonIrARegistrarse.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonIrARegistrarse.innerText = "Ir al portal de MiCasa"
                             botonIrARegistrarse.setAttribute("href", "/micasa")
                             botonIrARegistrarse.setAttribute("vista", "/micasa")
                             botonIrARegistrarse.addEventListener("click", casaVitini.componentes.cambiarVista)
                             //marcoElastico.appendChild(botonIrARegistrarse)
                             const botonInciarSession = document.createElement("a")
-                            botonInciarSession.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonInciarSession.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonInciarSession.innerText = "Ir a la página principal"
                             botonInciarSession.setAttribute("href", "/")
                             botonInciarSession.setAttribute("vista", "/")
@@ -4256,21 +4256,21 @@ const casaVitini = {
                             contenedorBanner.innerText = "Se ha reestablecido tu contraseña. Ya puedes empezar a usarla."
                             marcoElastico.appendChild(contenedorBanner)
                             const botonIniciarReserva = document.createElement("a")
-                            botonIniciarReserva.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonIniciarReserva.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonIniciarReserva.innerText = "Volver a generar otro código (Acabo de olvidar la nueva clave)"
                             botonIniciarReserva.setAttribute("href", "/micasa/recuperar_cuenta")
                             botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
                             botonIniciarReserva.addEventListener("click", casaVitini.componentes.cambiarVista)
                             //marcoElastico.appendChild(botonIniciarReserva)
                             const botonIrARegistrarse = document.createElement("a")
-                            botonIrARegistrarse.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonIrARegistrarse.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonIrARegistrarse.innerText = "Ir al portal de MiCasa"
                             botonIrARegistrarse.setAttribute("href", "/micasa")
                             botonIrARegistrarse.setAttribute("vista", "/micasa")
                             botonIrARegistrarse.addEventListener("click", casaVitini.componentes.cambiarVista)
                             //marcoElastico.appendChild(botonIrARegistrarse)
                             const botonInciarSession = document.createElement("a")
-                            botonInciarSession.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonInciarSession.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonInciarSession.innerText = "Ir a la página principal"
                             botonInciarSession.setAttribute("href", "/")
                             botonInciarSession.setAttribute("vista", "/")
@@ -4417,7 +4417,7 @@ const casaVitini = {
                             marcoElastico.style.alignItems = "stretch"
                             marcoElastico.style.gap = "4px"
                             const botonRecuperarCuenta = document.createElement("a")
-                            botonRecuperarCuenta.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonRecuperarCuenta.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonRecuperarCuenta.innerText = "Ir a recuperar mi cuenta para mandar un enlace de verificación a mi correo"
                             botonRecuperarCuenta.setAttribute("href", "/micasa/recuperar_cuenta")
                             botonRecuperarCuenta.setAttribute("vista", "/micasa/recuperar_cuenta")
@@ -4466,11 +4466,11 @@ const casaVitini = {
                             marcoElastico.appendChild(titulo)
                             // Añadir banner informativo
                             const contenedorBanner = document.createElement("a")
-                            contenedorBanner.classList.add("plaza_reservas_reservaConfiramda_bannerV2")
+                            contenedorBanner.classList.add("plaza_reservas_reservaConfirmada_bannerV2")
                             contenedorBanner.innerText = "El código de verificacíon es erróneo. Revisa el código introducido."
                             marcoElastico.appendChild(contenedorBanner)
                             const botonIniciarReserva = document.createElement("a")
-                            botonIniciarReserva.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonIniciarReserva.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonIniciarReserva.innerText = "Ir a generar un nuevo código de verificación"
                             botonIniciarReserva.setAttribute("href", "/micasa/recuperar_cuenta")
                             botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
@@ -4494,19 +4494,19 @@ const casaVitini = {
                             marcoElastico.appendChild(titulo)
                             // Añadir banner informativo
                             const contenedorBanner = document.createElement("a")
-                            contenedorBanner.classList.add("plaza_reservas_reservaConfiramda_bannerV2")
+                            contenedorBanner.classList.add("plaza_reservas_reservaConfirmada_bannerV2")
                             contenedorBanner.innerText = "Se ha vericado la cuenta correctamente, ya puedes usar tu cuenta para ver la reservas hechas."
                             marcoElastico.appendChild(contenedorBanner)
     
                             const botonIrARegistrarse = document.createElement("a")
-                            botonIrARegistrarse.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonIrARegistrarse.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonIrARegistrarse.innerText = "Ir al portal de MiCasa"
                             botonIrARegistrarse.setAttribute("href", "/micasa")
                             botonIrARegistrarse.setAttribute("vista", "/micasa")
                             botonIrARegistrarse.addEventListener("click", casaVitini.componentes.cambiarVista)
                             marcoElastico.appendChild(botonIrARegistrarse)
                             const botonInciarSession = document.createElement("a")
-                            botonInciarSession.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonInciarSession.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonInciarSession.innerText = "Ir a la página principal"
                             botonInciarSession.setAttribute("href", "/")
                             botonInciarSession.setAttribute("vista", "/")

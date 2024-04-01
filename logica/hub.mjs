@@ -571,9 +571,10 @@ const puerto = async (entrada, salida) => {
         borrarCuentasCaducadas: async () => {
             try {
                 // recuerda las cuentas de administracion no caducan
+                // El resto a los seis meses desde el ultimo login
                 const consultaCuentaAntiguas = `
                 DELETE FROM usuarios
-                WHERE "ultimoLogin" <= NOW() - interval '6 months' AND rol <> $1;
+                WHERE "ultimoLogin" < NOW() - interval '6 months' AND rol <> $1;
                 `
                 await conexion.query(consultaCuentaAntiguas, ["administrador"])
             } catch (error) {
@@ -2325,8 +2326,14 @@ const puerto = async (entrada, salida) => {
                     const claveNueva = entrada.body.claveNueva
                     const claveConfirmada = entrada.body.claveConfirmada
                     const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-                    usuarioIDX = usuarioIDX.trim()
-                    if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
+                    if (!usuarioIDX) {
+                        const error = "Escribe un nombre de usuario"
+                        throw new Error(error)
+                    }
+                    usuarioIDX = usuarioIDX
+                        .trim()
+                        .toLowerCase()
+                    if (!filtro_minúsculas_numeros.test(usuarioIDX)) {
                         const error = "El campo usuarioIDX solo admite minúsculas y numeros y nada mas"
                         throw new Error(error)
                     }
@@ -2348,7 +2355,7 @@ const puerto = async (entrada, salida) => {
                         const error = "Vuelve a escribir tu contrasena de nuevo"
                         throw new Error(error)
                     }
-                    if (claveNueva !== claveConfirmada) {
+                    if (claveNueva.trim() !== claveConfirmada) {
                         const error = "La contrasenas no coinciden, revisa la contrasenas escritas"
                         throw new Error(error)
                     }
@@ -2358,7 +2365,7 @@ const puerto = async (entrada, salida) => {
                     }
 
                     if (claveNueva === usuarioIDX) {
-                        const error = "El nombre de usuario y la contrasena no pueden ser iguales"
+                        const error = "El nombre de usuario y la contrasena no pueden ser iguales por seguridad"
                         throw new Error(error)
                     }
                     await componentes.eliminarCuentasNoVerificadas()
@@ -7957,9 +7964,9 @@ const puerto = async (entrada, salida) => {
                             ok.ok = apartamentosObjeto
                         }
                         // buscar reservas en el dia actual
-                        
+
                         const eventosCalendarios_airbnb = await apartamentosOcupadosHoy_paraSitaucion(fechaActualTZ)
-                        
+
 
                         for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnb) {
                             /*
@@ -7977,8 +7984,8 @@ const puerto = async (entrada, salida) => {
                             */
                             const apartamentoIDV_destino = calendariosSincronizadosAirbnb.apartamentoIDV
                             const eventosDelApartamento = calendariosSincronizadosAirbnb.eventos
-                            
-                            
+
+
 
                             ok.ok[apartamentoIDV_destino].calendariosSincronizados = {}
                             ok.ok[apartamentoIDV_destino].calendariosSincronizados.airbnb = {}
@@ -10931,7 +10938,7 @@ const puerto = async (entrada, salida) => {
                                 impuesto.tipoImpositivo = new Decimal(tipoImpositivo).toFixed(2)
                                 impuesto.totalImpuesto = new Decimal(totalImpuesto).toFixed(2)
                             })
-                            
+
 
                             const ok = {
                                 ok: transaccionInterna

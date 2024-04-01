@@ -8150,6 +8150,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
+    
 }
 
 [zonaCSS="miCasa"] .detallesUsuario_esferaUsuario {
@@ -10402,7 +10403,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: stretch;
 }
 
-[zonaCSS=miCasa] .plaza_reservas_reservaConfiramda_bannerV2 {
+[zonaCSS=miCasa] .plaza_reservas_reservaConfirmada_bannerV2 {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     border-radius: 10px;
@@ -10413,6 +10414,7 @@ grid-template-columns: 0.5fr 1.5fr;
     color: black;
     cursor: default;
     transition: all 500ms;
+    text-align: center;
 }
 
 .plaza_miCasa_recuperarCuenta_contenedorInfo {
@@ -10431,7 +10433,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-.plaza_reservas_reservaConfiramda_banner {
+[zonaCSS=miCasa] .plaza_reservas_reservaConfirmada_banner {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
@@ -10448,7 +10450,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-.plaza_reservas_reservaConfiramda_banner:hover {
+[zonaCSS=miCasa] .plaza_reservas_reservaConfirmada_banner:hover {
     background: rgba(255, 255, 255, 0.8);
 }
 
