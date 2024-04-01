@@ -4398,11 +4398,10 @@ const casaVitini = {
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
                             if (respuestaServidor?.error) {
-                                return casaVitini.ui.vistas.miCasa.recuperarCuenta.ui.codigoErroneo()
+                                return casaVitini.ui.vistas.miCasa.verificarCuenta.ui.codigoErroneo()
                             }
                             if (respuestaServidor?.ok) {
-                                return casaVitini.ui.vistas.miCasa.recuperarCuenta.ui.cuentaVerificada()
-
+                                return casaVitini.ui.vistas.miCasa.verificarCuenta.ui.cuentaVerificada()
                             }
                         }
                     },
@@ -4541,7 +4540,7 @@ const casaVitini = {
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                             }
                             if (respuestaServidor?.ok && pantallaDeCargaRenderizada) {
-                                return casaVitini.ui.vistas.miCasa.recuperarCuenta.ui.cuentaVerificada()
+                                return casaVitini.ui.vistas.miCasa.verificarCuenta.ui.cuentaVerificada()
                             }
     
                         }
