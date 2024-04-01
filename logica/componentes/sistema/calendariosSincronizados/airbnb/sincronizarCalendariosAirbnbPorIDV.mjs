@@ -71,7 +71,7 @@ const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
                 const calendarioObjeto = []
                 eventosCalenario.forEach((event) => {
                     const detallesEventoSinFormatear = event[1]
-                    // console.log("detallesEventoSinFormatear", detallesEventoSinFormatear)
+                    // 
                     const eventoObjeto = {}
                     detallesEventoSinFormatear.forEach((detallesEvento) => {
                         const idCajon = detallesEvento[0]

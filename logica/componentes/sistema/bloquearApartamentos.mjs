@@ -73,7 +73,7 @@ const bloquearApartamentos = async (metadatos) => {
                 motivo,
                 zonaBloqueo
             ]
-            console.log(datosBloqueo, datosBloqueo)
+            
             const resuelveinsertaBloqueoApartamento = await conexion.query(insertaBloqueoApartamento, datosBloqueo)
             if (resuelveinsertaBloqueoApartamento.rowCount === 0) {
                 const error = "No se ha podido aplicar el bloquo temporal"

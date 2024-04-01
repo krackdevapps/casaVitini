@@ -62,7 +62,7 @@ const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
         const eventosSeleccionados = []
         let uidTemporalContador = 0
         const eventosCalendarioAirbnb = await eventosCalendarioPorUID(calendarioUID)
-        // console.log("eventosCalendarioAirbnb", eventosCalendarioAirbnb)
+        // 
         const arrayEventosAirbnb = eventosCalendarioAirbnb.calendariosPorApartamento[0].calendarioObjeto
         for (const detallesDelEvento of arrayEventosAirbnb) {
             const eventoUID = detallesDelEvento.uid

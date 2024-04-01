@@ -45,12 +45,12 @@ try {
     const jcalData = ICAL.parse(response.data);
     const comp = new ICAL.Component(jcalData);
     const eventosCalenario = comp.jCal[2]
-    //console.log("eventosCalenario",eventosCalenario)
+    //
     // Itera array los eventos en el componente VCALENDAR
     const arrayFinal = []
     eventosCalenario.forEach((event) => {
         const detallesEventoSinFormatear = event[1]
-        // console.log("detallesEventoSinFormatear", detallesEventoSinFormatear)
+        // 
         const eventoObjeto = {}
         detallesEventoSinFormatear.forEach((detallesEvento) => {
             const idCajon = detallesEvento[0]
@@ -84,7 +84,7 @@ try {
         })
         arrayFinal.push(eventoObjeto)
     });
-    console.log(arrayFinal)
+    
 } catch (error) {
     console.error('Error al obtener el archivo ical:', error.message);
     throw error; // Re-lanza el error para que el llamador pueda manejarlo si es necesario

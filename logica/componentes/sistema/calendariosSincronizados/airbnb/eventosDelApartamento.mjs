@@ -17,7 +17,7 @@ const eventosDelApartamento = async (datos) => {
         for (const detallesDelCalendario of calendariosObjetoDelApartamento) {
             const fechaInicioComparar = detallesDelCalendario.fechaInicio
             const fechaFinalComparar = detallesDelCalendario.fechaFinal
-            //console.log("detallesEvento", detallesDelCalendario)
+            //
   
             const controlOcupacional = selectorRangoUniversal({
                 fechaInicio_rango_ISO: fechaHoy_ISO,

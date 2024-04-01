@@ -56,7 +56,7 @@ const obtenerTodosLosCalendarios = async () => {
                 calendarioDatos = calendarioRaw
                 estructura.estadoSincronizacion = "sincronizado"
             } catch (errorCapturado) {
-                console.log("errorCapturado", errorCapturado.message)
+                
                 estructura.estadoSincronizacion = "noSincronizado"
             }
             const jcalData = ICAL.parse(calendarioDatos);
@@ -65,7 +65,7 @@ const obtenerTodosLosCalendarios = async () => {
             const calendarioObjeto = []
             eventosCalenario.forEach((event) => {
                 const detallesEventoSinFormatear = event[1]
-                // console.log("detallesEventoSinFormatear", detallesEventoSinFormatear)
+                // 
                 const eventoObjeto = {}
                 detallesEventoSinFormatear.forEach((detallesEvento) => {
                     const idCajon = detallesEvento[0]

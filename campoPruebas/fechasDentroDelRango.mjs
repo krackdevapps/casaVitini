@@ -13,7 +13,7 @@ const fechaMMYYYY = '01-2024';
 const rangoInicioISO = '2024-01-05';
 const rangoFinISO = '2024-02-02';
 if (controlRango(fechaMMYYYY, rangoInicioISO, rangoFinISO)) {
-    console.log(`${fechaMMYYYY} está dentro del rango.`);
+    
 } else {
-    console.log(`${fechaMMYYYY} está fuera del rango.`);
+    
 }

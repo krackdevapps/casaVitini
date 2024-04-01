@@ -31,7 +31,7 @@ const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
             for (const detallesDelCalendario of calendariosObjetoDelApartamento) {
                 const fechaInicioComparar = detallesDelCalendario.fechaInicio
                 const fechaFinalComparar = detallesDelCalendario.fechaFinal
-                //console.log("detallesEvento", detallesDelCalendario)
+                //
                     
                 const controlOcupacional = selectorRangoUniversal({
                     fechaInicio_rango_ISO: fechaHoy_ISO,
@@ -48,7 +48,7 @@ const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
         }
         eventosPorApartamento.push(detallesDelApartamento)
     }
-    console.log("final", eventosPorApartamento)
+    
     return eventosPorApartamento
 }
 export {

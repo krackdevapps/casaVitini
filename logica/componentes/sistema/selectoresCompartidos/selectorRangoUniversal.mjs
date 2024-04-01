@@ -18,30 +18,30 @@ const selectorRangoUniversal = (metadatos) => {
         if (tipoLimite === "incluido") {
             // Caso 2: Evento parcialmente dentro del rango
             if (finElemento <= finRango && inicioElemento >= inicioRango) {
-                console.log("1")
+                
                 return true;
                 
             }
             if (finElemento >= inicioRango && inicioElemento <= finRango) {
-                console.log("01")
+                
                 return true;
             }
         }
         if (tipoLimite === "noIncluido") {
             // Caso 2: Evento parcialmente dentro del rango
             if (finElemento < finRango && inicioElemento > inicioRango) {
-                console.log("1")
+                
                 return true;
             }
             if (finElemento > inicioRango && inicioElemento < finRango) {
-                console.log("02")
+                
                 return true;
             }
         }
         // Caso 3: Evento atraviesa el rango
         if (finElemento < finElemento && inicioElemento > finRango) {
             
-            console.log("3")
+            
             return true;
         }
         return false;

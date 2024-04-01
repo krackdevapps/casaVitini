@@ -206,7 +206,7 @@ const validarObjetoReserva = async (reserva) => {
                 const camaIDV = habitacion[1]?.camaSeleccionada?.camaIDV
                 if (!camaIDV || !filtroCadenaMinusculasSinEspacios.test(camaIDV)) {
                     const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
-                    console.log("habitacionIDV", habitacionIDV)
+                    
                     const habitacionUI = await resolverHabitacionUI(habitacionIDV)
                     const error = `Por favor selecciona el tipo de cama de la ${habitacionUI} del apartamento ${apartamentoUI}`
                     throw new Error(error)

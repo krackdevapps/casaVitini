@@ -22,7 +22,7 @@ window.showError = function (message) {
 }
 window.createPayment = async function (token, verificationToken) {
   casaVitini.componentes.flujoPagoUI.infoDuranteFlujo()
-  console.log("Se Inicia el pago")
+  
   // Aqui se deberua recoger el objeto reserva e intergrarlo en el objeto que hay dentro de dataJsonString
   const destinoDinamico = document.querySelector("[pasarelaZonaDePago]")?.getAttribute("pasarelaZonaDePago")
   if (!destinoDinamico) {
@@ -47,9 +47,9 @@ window.createPayment = async function (token, verificationToken) {
     acoplador.zona = "plaza/reservas/confirmarReserva"
     acoplador.reserva = reservaLocal
   }
-  console.log("destinoDinamico", destinoDinamico)
+  
   if (destinoDinamico === "enlaceDePago") {
-    console.log("enlacesDedpago",)
+    
     const enlaceUID = document.querySelector("[pagoUID]").getAttribute("pagoUID")
     acoplador.zona = "plaza/enlaceDePago/realizarPago"
     acoplador.enlaceUID = enlaceUID

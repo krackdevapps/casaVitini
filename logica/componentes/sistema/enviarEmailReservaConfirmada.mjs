@@ -12,8 +12,8 @@ const enviarEmailReservaConfirmada = async (reservaUID) => {
         const nombreCompletoTitularReserva = reserva.reserva.titular.nombreTitular
         const emailDestinoTitular = reserva.reserva.titular.emailTitular
         const numeroReserva = reserva.reserva.reserva
-        console.log("Numero de la reserva", numeroReserva)
-        console.log("email destino", emailDestinoTitular)
+        
+        
         const hostActual = "localhost"
         // Contruimos el mensaje
         const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
@@ -44,9 +44,9 @@ const enviarEmailReservaConfirmada = async (reservaUID) => {
         }
         // Enviamos el mensaje
         const resultado = await enviarMail(composicionDelMensaje)
-        console.log("envio", resultado)
+        
     } catch (error) {
-        console.log("enviarEmailError", error)
+        
         // manejar error de manera local
     }
 }

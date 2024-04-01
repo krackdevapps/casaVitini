@@ -23,4 +23,4 @@ const fechaFin = '2024-01-10';
 const fechaInicioComparar = '2024-01-02';
 const fechaFinComparar = '2024-01-11';
 const resultado = verificarRangoContenido(fechaInicio, fechaFin, fechaInicioComparar, fechaFinComparar);
-console.log(resultado);
+

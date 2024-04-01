@@ -557,7 +557,6 @@ const puerto = async (entrada, salida) => {
         eliminarCuentasNoVerificadas: async () => {
             try {
                 const fechaActual_ISO = DateTime.utc().toISO();
-                console.log("fechaActualLimite", fechaActual_ISO)
                 const eliminarCuentasNoVefificadas = `
                     DELETE FROM usuarios
                     WHERE "fechaCaducidadCuentaNoVerificada" < $1 
@@ -7958,9 +7957,9 @@ const puerto = async (entrada, salida) => {
                             ok.ok = apartamentosObjeto
                         }
                         // buscar reservas en el dia actual
-                        console.log("test")
+                        
                         const eventosCalendarios_airbnb = await apartamentosOcupadosHoy_paraSitaucion(fechaActualTZ)
-                        console.log("test 1")
+                        
 
                         for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnb) {
                             /*
@@ -7978,8 +7977,8 @@ const puerto = async (entrada, salida) => {
                             */
                             const apartamentoIDV_destino = calendariosSincronizadosAirbnb.apartamentoIDV
                             const eventosDelApartamento = calendariosSincronizadosAirbnb.eventos
-                            console.log("test 2", eventosDelApartamento)
-                            console.log("apartamentoIDV_destino 2", apartamentoIDV_destino)
+                            
+                            
 
                             ok.ok[apartamentoIDV_destino].calendariosSincronizados = {}
                             ok.ok[apartamentoIDV_destino].calendariosSincronizados.airbnb = {}
@@ -10932,7 +10931,7 @@ const puerto = async (entrada, salida) => {
                                 impuesto.tipoImpositivo = new Decimal(tipoImpositivo).toFixed(2)
                                 impuesto.totalImpuesto = new Decimal(totalImpuesto).toFixed(2)
                             })
-                            console.log("test1")
+                            
 
                             const ok = {
                                 ok: transaccionInterna

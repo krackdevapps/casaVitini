@@ -64,10 +64,10 @@ async function CardPay(fieldEl, buttonEl) {
       if (e.message) {
         casaVitini.componentes.flujoPagoUI.errorInfo(e.message)
         casaVitini.componentes.limpiarAdvertenciasInmersivas()
-        console.log("error1")
+        
         //window.showError(`Error: ${e.message}`);
       } else {
-        console.log("error2")
+        
         const errorGenerico = "Ha ocurrido un error"
         casaVitini.componentes.flujoPagoUI.errorInfo(errorGenerico)
         window.showError('Something went wrong');

@@ -752,7 +752,7 @@ const administracion = {
                 //const resolverReservas = await casaVitini.administracion.reservas.buscador.resolverReservas(transaccion)
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                console.log("respuestaServidor", respuestaServidor)
+                
                 const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (!instanciaRenderizada) {
                     return
@@ -957,7 +957,7 @@ const administracion = {
                     origen: "tituloColumna",
                     instanciaUID: instanciaUID
                 }
-                console.log("transaccion", transaccion)
+                
                 if (selectorColumnasentido === "ascendente") {
                     transaccion.sentidoColumna = "descendente"
                     transaccion.nombreColumna = nombreColumna
@@ -1999,9 +1999,9 @@ const administracion = {
                         apartamento: Number(apartamentoUID),
                         tipoBloqueo: tipoBloqueo
                     }
-                    console.log("transaccion", transaccion)
+                    
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                    console.log("respuestaServidor", respuestaServidor)
+                    
                     pantallaDeCargaRenderizada?.remove()
                     if (!pantallaDeCargaRenderizada) {
                         return
@@ -2647,7 +2647,7 @@ const administracion = {
                     }
                     if (respuestaServidor?.ok) {
 
-                        console.log("respuestaServidor", respuestaServidor)
+                        
                         const selectorAnadirPernoctanteRedenrizada = document.querySelector(`[habitacionUID="${habitacionUID}"] [componente=anadirPernoctanteUI]`)
                         selectorAnadirPernoctanteRedenrizada?.remove()
                         const datosNuevoCliente = respuestaServidor.nuevoCliente
@@ -12792,7 +12792,7 @@ const administracion = {
             espacioClientes.appendChild(campoBuscador)
         },
         buscadorClientesPorCampo: async (cliente) => {
-            console.log("1")
+            
             const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
             const espacioClientes = document.querySelector("[componente=espacioClientes]")
             const terminoBusqueda = cliente.target.value
@@ -12838,7 +12838,7 @@ const administracion = {
                     granuladoURL: granuladorURL,
                     instanciaUID: instanciaUID
                 }
-                console.log("2")
+                
 
                 return casaVitini.administracion.clientes.mostrarClientesResueltos(transaccion)
             }, 1500);
@@ -13231,7 +13231,7 @@ const administracion = {
                 delete transaccion.tipoConstruccionGrid
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-                console.log("instanciaRenderizada", instanciaRenderizada)
+                
                 if (!instanciaRenderizada) {
                     return
                 }

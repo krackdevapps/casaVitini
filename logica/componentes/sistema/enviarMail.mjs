@@ -13,12 +13,12 @@ const enviarMail = async (entrada) => {
         const origen = entrada.origen;
         const asunto = entrada.asunto;
         const mensaje = entrada.mensaje;
-        console.log("destino", destino)
+        
         if (!filtroCorreo.test(destino)) {
             const error = "La dirección de destino no tiene un formato correcto"
             throw new Error(error)
         }
-        console.log("origen", origen)
+        
 
         // if (!filtroCorreo.test(origen)) {
         //     const error = "La dirección de origen no tiene un formato correcto"
@@ -53,10 +53,10 @@ const enviarMail = async (entrada) => {
                },
            ]*/
         const mensajeCompositor = await transporte.sendMail(composicionDelMensaje)
-        console.log(mensajeCompositor)
+        
         return mensajeCompositor
     } catch (error) {
-        console.log("Error envio email:", error.message)
+        
         throw error
     }
 }

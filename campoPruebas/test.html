@@ -252,7 +252,7 @@
       const parallax = document.querySelector('[contenedor=test]');
       const scrollPosition = window.pageYOffset / 2;
   
-      console.log("scrollPosition", scrollPosition)
+      
       parallax.style.transform = 'translate3d(0, ' + scrollPosition + 'px ,0)';
       */
       // Segundo bloque
@@ -276,17 +276,17 @@
           if (textoAnimado) {
             textoAnimado.style.transform = 'translate3d(0 ,-' + (conCero) + 'px ,0)';
           }
-          console.log("imagen yendose")
+          
         } else if (containerRect2.top < window.innerHeight && containerRect2.bottom > 0) {
           parallaxImage2.style.transform = 'translate3d(0 ,-' + translateY + 'px ,0)';
           if (textoAnimado) {
             textoAnimado.style.transform = 'translate3d(0 ,' + (translateY * 2) + 'px ,0)';
           }
  
-          console.log("imagen viniendo")
+          
         } else {
           parallaxImage2.style.transform = 'translateY(0)';
-          console.log("imagen no visible antes")
+          
         }
       })
     }

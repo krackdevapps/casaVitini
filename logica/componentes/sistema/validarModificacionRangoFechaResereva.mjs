@@ -205,7 +205,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                                 tipoElemento: "eventoSincronizado"
                             }
                             contenedorEventosCalendariosSincronizados.push(estructura)
-                            console.log("eventosAceptados", estructura)
+                            
                         }
                     }
                 }

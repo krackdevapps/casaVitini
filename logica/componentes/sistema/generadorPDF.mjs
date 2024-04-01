@@ -329,14 +329,14 @@ const generadorPDF3 = async (reserva) => {
                 }
             }
         }
-        //console.log("datosGlobales", reserva)
+        //
         const datosGlobales = reserva.reserva
         const numeroReserva = datosGlobales.reserva
         const fechaEntrada_humana = reserva.reserva.entrada
         const fechaSalida_humana = reserva.reserva.salida
         const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_humana)).fecha_ISO
         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_humana)).fecha_ISO
-        console.log("generando")
+        
         const estadoReserva = reserva.reserva.estadoReserva
         const estadoPAgo = reserva.reserva.estadoPago
         if (!reserva.reserva.titular) {
@@ -351,11 +351,11 @@ const generadorPDF3 = async (reserva) => {
         const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada_ISO);
         const fechaSalida_objeto = DateTime.fromISO(fechaSalida_ISO);
         // Obtener la diferencia en días
-        console.log("fechaEntrada_objeto", fechaEntrada_objeto.toISO(), "fechaSalida_objeto", fechaSalida_objeto.toISO())
+        
         const numeroDeDias = (fechaSalida_objeto.diff(fechaEntrada_objeto, "days").days) + 1;
         const numeroDeNoches = new Decimal(numeroDeDias).minus(1).toString()
         let nochesUI
-        console.log("nuermo", typeof numeroDeNoches, numeroDeNoches)
+        
         if (numeroDeNoches === "1") {
             nochesUI = numeroDeNoches + ' Noche'
         } else {

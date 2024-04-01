@@ -49,7 +49,7 @@ const porDiasDeAntelacion = async (reserva) => {
                 cantidad: cantidad
             }
             const fechaEntrada_Objeto = DateTime.fromISO(fechaEntradaReserva_ISO, { zone: codigoZonaHoraria.zonaHoraria });
-            console.log("fechaActual_objeto", fechaActual_objeto)
+            
             const diasAntelacion = Math.floor(fechaEntrada_Objeto.diff(fechaActual_objeto, 'days').days);
             
             if (simboloNumero === "aPartirDe" && numero <= diasAntelacion) {
