@@ -20,10 +20,10 @@ const enviarMail = async (entrada) => {
         }
         console.log("origen", origen)
 
-        if (!filtroCorreo.test(origen)) {
-            const error = "La dirección de origen no tiene un formato correcto"
-            throw new Error(error)
-        }
+        // if (!filtroCorreo.test(origen)) {
+        //     const error = "La dirección de origen no tiene un formato correcto"
+        //     throw new Error(error)
+        // }
         const transporte = nodemailer.createTransport({
             host: process.env.CORREO_HOST_SERVIDOR_CORREO,
             port: process.env.CORREO_PUERTO_SMTP,

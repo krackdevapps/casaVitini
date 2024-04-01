@@ -2043,13 +2043,13 @@ const casaVitini = {
                                 if (cuentaVerificada === "no" && rol !== "administrador") {
                                     const infoCuentaNoVerificada = document.createElement("p")
                                     infoCuentaNoVerificada.classList.add("infoCuenta")
-                                    infoCuentaNoVerificada.innerHTML = `Tu cuenta de ${rolUI} no está verificada. Para verificar tu cuenta, valida tu correo electrónico. Si no verificas tu cuenta de ${rolUI}, no podrás acceder a tus reservas, no podras recuperar tu cuenta en caso de olvido de la contraseña y la cuenta se eliminará pasadas 24h. Te hemos enviado un email con un enlace temporal para validar tu correo electrónico a la dirección de correo electrónico asociada a tu cuenta. Si necesitas que te reenviemos otra vez el email de verificación, entra en la sección de recuperación de cuentas yendo a Mi Casa > <a href="/micasa/recuperar_cuenta" class="enlace">Recuperar mi cuenta</a>`
+                                    infoCuentaNoVerificada.innerHTML = `Tu cuenta de ${rolUI} no está verificada. Para verificar tu cuenta, valida tu correo electrónico. Si no verificas tu cuenta de ${rolUI}, no podrás acceder a tus reservas, no podras recuperar tu cuenta en caso de olvido de la contraseña y la cuenta se eliminará pasadas 24h. Si necesitas que te reenviemos otra vez el email de verificación, entra en la sección de recuperación de cuentas yendo a Mi Casa > <a href="/micasa/recuperar_cuenta" class="enlace">Recuperar mi cuenta</a>`
                                     marcoCuenta.appendChild(infoCuentaNoVerificada)
                                 }
                                 if (cuentaVerificada === "no" && rol === "administrador") {
                                     const infoCuentaNoVerificada = document.createElement("p")
                                     infoCuentaNoVerificada.classList.add("infoCuenta")
-                                    infoCuentaNoVerificada.innerHTML = `Tu cuenta administrativa no está verificada. Para verificar tu cuenta, valida tu correo electrónico. Si no verificas tu cuenta administrativa, aunque podras usar el panel de administracion, no podrás acceder a tus reservas personales y si olvidas tu contraseña no podras recuperar tu cuenta a menos que te pongas en contacto con otro administrador. Las cuentas administrativas no verificadas no caducan con el tiempo. Te hemos enviado un email con un enlace temporal para validar tu correo electrónico a la dirección de correo electrónico asociada a tu cuenta Administrativa. Si necesitas que te reenviemos otra vez el email de verificación, entra en la sección de recuperación de cuentas yendo a Mi Casa > <a href="/micasa/recuperar_cuenta" class="enlace">Recuperar mi cuenta</a>`
+                                    infoCuentaNoVerificada.innerHTML = `Tu cuenta administrativa no está verificada. Para verificar tu cuenta, valida tu correo electrónico. Si no verificas tu cuenta administrativa, aunque podras usar el panel de administracion, no podrás acceder a tus reservas personales y si olvidas tu contraseña no podras recuperar tu cuenta a menos que te pongas en contacto con otro administrador. Las cuentas administrativas no verificadas no caducan con el tiempo. Si necesitas que te reenviemos otra vez el email de verificación, entra en la sección de recuperación de cuentas yendo a Mi Casa > <a href="/micasa/recuperar_cuenta" class="enlace">Recuperar mi cuenta</a>`
                                     marcoCuenta.appendChild(infoCuentaNoVerificada)
                                 }
                                 const contenedorBanner = document.createElement("div")
@@ -4434,7 +4434,7 @@ const casaVitini = {
                             contenedorCrearCuenta.className = 'miCasa_crearCuenta_contenedorCrearCuenta';
                             const texto = document.createElement('p');
                             texto.className = 'texto paddgin6';
-                            texto.textContent = 'Cuando creas una cuenta en Casa Vitini, tienes que verificar tu VitiniID. Para ello tienes que acceder desde el enlace que se te envió al buzón de correo electrónico. Si ya no dispones de este enlace. Puedes volver a enviar otro enlace de verificación. Para ello ver al portal de inicio de sesión y pulsa en recuperar tu cuenta. Si tu cuenta no está verificada se te enviara un email de verificación. Cuando recivas el mensaje con el enlaces de verifiacion. Puedes hacer click en es enlaces o escribir en siguiente campo el enlaces de verificacíon.';
+                            texto.textContent = 'Cuando creas una cuenta en Casa Vitini, debes verificar tu VitiniID. Para ello, debes acceder desde el enlace que se te envió al buzón de correo electrónico. Si ya no dispones de este enlace, puedes solicitar otro enlace de verificación. Para hacerlo, ve al portal de inicio de sesión y haz clic en "Recuperar tu cuenta". Si tu cuenta no está verificada, se te enviará un correo electrónico de verificación. Cuando recibas el mensaje con los enlaces de verificación, puedes hacer clic en los enlaces o escribir aquí el código de verificación.';
                             const input = document.createElement('input');
                             input.type = 'text';
                             input.className = 'miCasa_crearCuenta_campo';
@@ -4649,13 +4649,21 @@ const casaVitini = {
                                 codigo: codigo.trim()
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
+                            casaVitini.componentes.limpiarAdvertenciasInmersivas()
+
                             if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
-                                casaVitini.componentes.limpiarAdvertenciasInmersivas()
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                             }
                             if (respuestaServidor?.ok && pantallaDeCargaRenderizada) {
-                                casaVitini.componentes.limpiarAdvertenciasInmersivas()
-                                return casaVitini.ui.vistas.miCasa.recuperarCuenta.ui.mensajeEnviado()
+                                const main = document.querySelector("main")
+                                main.innerHTML = null
+                                const titulo = document.createElement("div")
+                                titulo.classList.add("titulo")
+                                titulo.innerText = "Cuenta verificada"
+                                main.appendChild(titulo)
+                                const texto = document.createElement("p")
+                                texto.innerText = "Se ha verificado correctamente tu dirección de correo electrónico, ya puedes ver las reservas asociadas a esta direccíon de correo electrónico"
+                                main.appendChild(texto)
                             }
                         },
                         restablecerClave: async (codigo) => {

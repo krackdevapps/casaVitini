@@ -33,7 +33,7 @@ import { validadoresCompartidos } from './componentes/validadoresCompartidos.mjs
 import { actualizarEstadoPago } from './componentes/sistema/actualizarEstadoPago.mjs';
 import { obtenerTotalReembolsado } from './componentes/sistema/obtenerTotalReembolsado.mjs';
 import { enviarMail } from './componentes/sistema/enviarMail.mjs';
-import { enviarEmailReservaConfirmaada } from './componentes/sistema/enviarEmailReservaConfirmada.mjs';
+import { enviarEmailReservaConfirmada } from './componentes/sistema/enviarEmailReservaConfirmada.mjs';
 import { enviarEmailAlCrearCuentaNueva } from './componentes/sistema/enviarEmailAlCrearCuentaNueva.mjs';
 import validator from 'validator';
 import axios from 'axios';
@@ -557,11 +557,14 @@ const puerto = async (entrada, salida) => {
         eliminarCuentasNoVerificadas: async () => {
             try {
                 const fechaActual_ISO = DateTime.utc().toISO();
+                console.log("fechaActualLimite", fechaActual_ISO)
                 const eliminarCuentasNoVefificadas = `
                     DELETE FROM usuarios
-                    WHERE "fechaCaducidadCuentaNoVerificada" < $1 AND rol <> $2;
+                    WHERE "fechaCaducidadCuentaNoVerificada" < $1 
+                    AND rol <> $2
+                    AND "cuentaVerificada" <> $3;
                     `
-                await conexion.query(eliminarCuentasNoVefificadas, [fechaActual_ISO, "administrador"])
+                await conexion.query(eliminarCuentasNoVefificadas, [fechaActual_ISO, "administrador", "si"])
             } catch (error) {
                 throw error
             }
@@ -1564,7 +1567,7 @@ const puerto = async (entrada, salida) => {
                         }
                         await conexion.query('COMMIT');
                         // Si hay un error en el envio del email, este no escala, se queda local.
-                        enviarEmailReservaConfirmaada(reservaUID)
+                        enviarEmailReservaConfirmada(reservaUID)
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK');
                         const errorFinal = {};
@@ -1611,7 +1614,7 @@ const puerto = async (entrada, salida) => {
                             salida.json(ok)
                         }
                         await conexion.query('COMMIT');
-                        enviarEmailReservaConfirmaada(reservaUID)
+                        enviarEmailReservaConfirmada(reservaUID)
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK');
                         const error = {
@@ -2318,11 +2321,12 @@ const puerto = async (entrada, salida) => {
             },
             crearCuentaDesdeMiCasa: async () => {
                 try {
-                    const usuarioIDX = entrada.body.usuarioIDX
+                    let usuarioIDX = entrada.body.usuarioIDX
                     let email = entrada.body.email
                     const claveNueva = entrada.body.claveNueva
                     const claveConfirmada = entrada.body.claveConfirmada
                     const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
+                    usuarioIDX = usuarioIDX.trim()
                     if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
                         const error = "El campo usuarioIDX solo admite minúsculas y numeros y nada mas"
                         throw new Error(error)
@@ -2353,6 +2357,7 @@ const puerto = async (entrada, salida) => {
                         const error = "El nombre de usuario no esta disponbile, escoge otro"
                         throw new Error(error)
                     }
+
                     if (claveNueva === usuarioIDX) {
                         const error = "El nombre de usuario y la contrasena no pueden ser iguales"
                         throw new Error(error)
@@ -2422,7 +2427,7 @@ const puerto = async (entrada, salida) => {
                     }
                     const codigoAleatorioUnico = await controlCodigo();
                     const fechaActualUTC = DateTime.utc();
-                    const fechaCaducidadCuentaNoVerificada = fechaActualUTC.plus({ hours: 24 });
+                    const fechaCaducidadCuentaNoVerificada = fechaActualUTC.plus({ minutes: 30 });
                     const estadoCuenta = "activado"
                     const cuentaVerificada = "no"
                     const rol = "cliente"
@@ -2662,14 +2667,18 @@ const puerto = async (entrada, salida) => {
                         ]
                         const resuelveActualizarDatosUsuario = await conexion.query(actualizarDatosUsuario, datos)
                         if (resuelveNuevoCorreoPorVerifical.rowCount === 0 && email.length > 0) {
+                            const fechaActualUTC = DateTime.utc();
+                            const fechaCaducidadCuentaNoVerificada = fechaActualUTC.plus({ minutes: 30 });
+
                             const volverAVerificarCuenta = `
                             UPDATE 
                                 usuarios
                             SET 
-                                "cuentaVerificada" = $1
+                                "cuentaVerificada" = $1,
+                                "fechaCaducidadCuentaNoVerificada" =$2
                             WHERE 
-                                usuario = $2;`
-                            await conexion.query(volverAVerificarCuenta, ["no", usuarioIDX])
+                                usuario = $3;`
+                            await conexion.query(volverAVerificarCuenta, ["no", fechaCaducidadCuentaNoVerificada, usuarioIDX])
                         }
                         await conexion.query('COMMIT'); // Confirmar la transacción
                         if (resuelveActualizarDatosUsuario.rowCount === 1) {
@@ -3329,6 +3338,7 @@ const puerto = async (entrada, salida) => {
 
 
                         if (estadoVerificacion === "si") {
+                            // Cuenta verificada, se busca recuperar, es decir restablecer la clave
                             if (resuelveActualizarIDX.rowCount === 1) {
                                 const borrarEnlacesAntiguos = `
                                 DELETE FROM "enlaceDeRecuperacionCuenta"
@@ -3369,6 +3379,7 @@ const puerto = async (entrada, salida) => {
                                 salida.json(ok)
                             }
                         } else {
+                            // Cuenta NO verificada, se busca verificar el correo
                             const actualizarCodigoVerificacion = `
                             UPDATE 
                             usuarios
