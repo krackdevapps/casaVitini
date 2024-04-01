@@ -4405,148 +4405,149 @@ const casaVitini = {
 
                             }
                         }
+                    },
+                    ui: {
+                        portadaUI: () => {
+                            const titulo = document.createElement('p');
+                            titulo.className = 'titulo';
+                            titulo.textContent = 'Verifica tu cuenta con tu dirección de correo electrónico';
+                            const marcoElasticoRelativo = document.createElement('div');
+                            marcoElasticoRelativo.className = 'marcoElasticoRelativo';
+                            const marcoElastico = document.createElement('div');
+                            marcoElastico.className = 'marcoElastico';
+                            marcoElastico.style.alignItems = "stretch"
+                            marcoElastico.style.gap = "4px"
+                            const botonRecuperarCuenta = document.createElement("a")
+                            botonRecuperarCuenta.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonRecuperarCuenta.innerText = "Ir a recuperar mi cuenta para mandar un enlace de verificación a mi correo"
+                            botonRecuperarCuenta.setAttribute("href", "/micasa/recuperar_cuenta")
+                            botonRecuperarCuenta.setAttribute("vista", "/micasa/recuperar_cuenta")
+                            botonRecuperarCuenta.addEventListener("click", casaVitini.componentes.cambiarVista)
+                            const contenedorCrearCuenta = document.createElement('div');
+                            contenedorCrearCuenta.className = 'miCasa_crearCuenta_contenedorCrearCuenta';
+                            const texto = document.createElement('p');
+                            texto.className = 'texto paddgin6';
+                            texto.textContent = 'Cuando creas una cuenta en Casa Vitini, debes verificar tu VitiniID. Para ello, debes acceder desde el enlace que se te envió al buzón de correo electrónico. Si ya no dispones de este enlace, puedes solicitar otro enlace de verificación. Para hacerlo, ve al portal de inicio de sesión y haz clic en "Recuperar tu cuenta". Si tu cuenta no está verificada, se te enviará un correo electrónico de verificación. Cuando recibas el mensaje con los enlaces de verificación, puedes hacer clic en los enlaces o escribir aquí el código de verificación.';
+                            const input = document.createElement('input');
+                            input.type = 'text';
+                            input.className = 'miCasa_crearCuenta_campo';
+                            input.setAttribute('campo', 'codigoVerificacion');
+                            input.placeholder = 'Escribo aquí tu código de verificación';
+                            const contenedorBotones = document.createElement('div');
+                            contenedorBotones.className = 'miCuenta_cambioClave_contenedorBotones';
+                            const botonEnviar = document.createElement('div');
+                            botonEnviar.className = 'miCuenta_cambiarClave_botonV1';
+                            botonEnviar.setAttribute('componente', 'botonVerificarCodigo');
+                            botonEnviar.addEventListener("click", () => {
+                                casaVitini.ui.vistas.miCasa.verificarCuenta.transactores.verificarCodigo()
+                            })
+                            botonEnviar.textContent = 'Verificar código';
+                            // Adjuntar elementos al DOM
+                            const secction = document.querySelector("main")
+                            secction.appendChild(titulo);
+                            marcoElastico.appendChild(botonRecuperarCuenta);
+                            contenedorCrearCuenta.appendChild(texto);
+                            contenedorCrearCuenta.appendChild(input);
+                            contenedorBotones.appendChild(botonEnviar);
+                            contenedorCrearCuenta.appendChild(contenedorBotones);
+                            marcoElastico.appendChild(contenedorCrearCuenta);
+                            marcoElasticoRelativo.appendChild(marcoElastico);
+                            secction.appendChild(marcoElasticoRelativo);
+                        },
+                        codigoErroneo: () => {
+                            const marcoElasticoRelatico = document.createElement("div")
+                            marcoElasticoRelatico.classList.add("marcoElasticoRelativo")
+                            const marcoElastico = document.createElement("div")
+                            marcoElastico.classList.add("marcoElastico")
+                            marcoElastico.style.alignItems = "stretch"
+                            marcoElastico.style.gap = "4px"
+                            const titulo = document.createElement("div")
+                            titulo.classList.add("titulo")
+                            titulo.innerText = "El código de verificacíon es erróneo"
+                            marcoElastico.appendChild(titulo)
+                            // Añadir banner informativo
+                            const contenedorBanner = document.createElement("a")
+                            contenedorBanner.classList.add("plaza_reservas_reservaConfiramda_bannerV2")
+                            contenedorBanner.innerText = "El código de verificacíon es erróneo. Revisa el código introducido."
+                            marcoElastico.appendChild(contenedorBanner)
+                            const botonIniciarReserva = document.createElement("a")
+                            botonIniciarReserva.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonIniciarReserva.innerText = "Ir a generar un nuevo código de verificación"
+                            botonIniciarReserva.setAttribute("href", "/micasa/recuperar_cuenta")
+                            botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
+                            botonIniciarReserva.addEventListener("click", casaVitini.componentes.cambiarVista)
+                            marcoElastico.appendChild(botonIniciarReserva)
+                            marcoElasticoRelatico.appendChild(marcoElastico)
+                            const seccion = document.querySelector("main")
+                            seccion.innerHTML = null
+                            seccion.appendChild(marcoElasticoRelatico)
+                        },
+                        cuentaVerificada: () => {
+                            const marcoElasticoRelatico = document.createElement("div")
+                            marcoElasticoRelatico.classList.add("marcoElasticoRelativo")
+                            const marcoElastico = document.createElement("div")
+                            marcoElastico.classList.add("marcoElastico")
+                            marcoElastico.style.alignItems = "stretch"
+                            marcoElastico.style.gap = "4px"
+                            const titulo = document.createElement("div")
+                            titulo.classList.add("titulo")
+                            titulo.innerText = "Cuenta verificada"
+                            marcoElastico.appendChild(titulo)
+                            // Añadir banner informativo
+                            const contenedorBanner = document.createElement("a")
+                            contenedorBanner.classList.add("plaza_reservas_reservaConfiramda_bannerV2")
+                            contenedorBanner.innerText = "Se ha vericado la cuenta correctamente, ya puedes usar tu cuenta para ver la reservas hechas."
+                            marcoElastico.appendChild(contenedorBanner)
+    
+                            const botonIrARegistrarse = document.createElement("a")
+                            botonIrARegistrarse.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonIrARegistrarse.innerText = "Ir al portal de MiCasa"
+                            botonIrARegistrarse.setAttribute("href", "/micasa")
+                            botonIrARegistrarse.setAttribute("vista", "/micasa")
+                            botonIrARegistrarse.addEventListener("click", casaVitini.componentes.cambiarVista)
+                            marcoElastico.appendChild(botonIrARegistrarse)
+                            const botonInciarSession = document.createElement("a")
+                            botonInciarSession.classList.add("plaza_reservas_reservaConfiramda_banner")
+                            botonInciarSession.innerText = "Ir a la página principal"
+                            botonInciarSession.setAttribute("href", "/")
+                            botonInciarSession.setAttribute("vista", "/")
+                            botonInciarSession.addEventListener("click", casaVitini.componentes.cambiarVista)
+                            marcoElastico.appendChild(botonInciarSession)
+                            marcoElasticoRelatico.appendChild(marcoElastico)
+                            const seccion = document.querySelector("main")
+                            seccion.innerHTML = null
+                            seccion.appendChild(marcoElasticoRelatico)
+                        },
+                    },
+                    transactores: {
+                        verificarCodigo: async () => {
+                            const codigo = document.querySelector("[campo=codigoVerificacion]").value
+                            const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                            const mensaje = "Comprobando código de verificacion..."
+                            const datosPantallaSuperpuesta = {
+                                instanciaUID: instanciaUID,
+                                mensaje: mensaje
+                            }
+                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                            const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                            const transacccion = {
+                                zona: "miCasa/verificarCuenta",
+                                codigo: codigo.trim()
+                            }
+                            const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
+                            casaVitini.componentes.limpiarAdvertenciasInmersivas()
+    
+                            if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
+                                return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                            }
+                            if (respuestaServidor?.ok && pantallaDeCargaRenderizada) {
+                                return casaVitini.ui.vistas.miCasa.recuperarCuenta.ui.cuentaVerificada()
+                            }
+    
+                        }
                     }
                 },
-                ui: {
-                    portadaUI: () => {
-                        const titulo = document.createElement('p');
-                        titulo.className = 'titulo';
-                        titulo.textContent = 'Verifica tu cuenta con tu dirección de correo electrónico';
-                        const marcoElasticoRelativo = document.createElement('div');
-                        marcoElasticoRelativo.className = 'marcoElasticoRelativo';
-                        const marcoElastico = document.createElement('div');
-                        marcoElastico.className = 'marcoElastico';
-                        marcoElastico.style.alignItems = "stretch"
-                        marcoElastico.style.gap = "4px"
-                        const botonRecuperarCuenta = document.createElement("a")
-                        botonRecuperarCuenta.classList.add("plaza_reservas_reservaConfiramda_banner")
-                        botonRecuperarCuenta.innerText = "Ir a recuperar mi cuenta para mandar un enlace de verificación a mi correo"
-                        botonRecuperarCuenta.setAttribute("href", "/micasa/recuperar_cuenta")
-                        botonRecuperarCuenta.setAttribute("vista", "/micasa/recuperar_cuenta")
-                        botonRecuperarCuenta.addEventListener("click", casaVitini.componentes.cambiarVista)
-                        const contenedorCrearCuenta = document.createElement('div');
-                        contenedorCrearCuenta.className = 'miCasa_crearCuenta_contenedorCrearCuenta';
-                        const texto = document.createElement('p');
-                        texto.className = 'texto paddgin6';
-                        texto.textContent = 'Cuando creas una cuenta en Casa Vitini, debes verificar tu VitiniID. Para ello, debes acceder desde el enlace que se te envió al buzón de correo electrónico. Si ya no dispones de este enlace, puedes solicitar otro enlace de verificación. Para hacerlo, ve al portal de inicio de sesión y haz clic en "Recuperar tu cuenta". Si tu cuenta no está verificada, se te enviará un correo electrónico de verificación. Cuando recibas el mensaje con los enlaces de verificación, puedes hacer clic en los enlaces o escribir aquí el código de verificación.';
-                        const input = document.createElement('input');
-                        input.type = 'text';
-                        input.className = 'miCasa_crearCuenta_campo';
-                        input.setAttribute('campo', 'codigoVerificacion');
-                        input.placeholder = 'Escribo aquí tu código de verificación';
-                        const contenedorBotones = document.createElement('div');
-                        contenedorBotones.className = 'miCuenta_cambioClave_contenedorBotones';
-                        const botonEnviar = document.createElement('div');
-                        botonEnviar.className = 'miCuenta_cambiarClave_botonV1';
-                        botonEnviar.setAttribute('componente', 'botonVerificarCodigo');
-                        botonEnviar.addEventListener("click", () => {
-                            casaVitini.ui.vistas.miCasa.verificarCuenta.transactores.verificarCodigo()
-                        })
-                        botonEnviar.textContent = 'Verificar código';
-                        // Adjuntar elementos al DOM
-                        const secction = document.querySelector("main")
-                        secction.appendChild(titulo);
-                        marcoElastico.appendChild(botonRecuperarCuenta);
-                        contenedorCrearCuenta.appendChild(texto);
-                        contenedorCrearCuenta.appendChild(input);
-                        contenedorBotones.appendChild(botonEnviar);
-                        contenedorCrearCuenta.appendChild(contenedorBotones);
-                        marcoElastico.appendChild(contenedorCrearCuenta);
-                        marcoElasticoRelativo.appendChild(marcoElastico);
-                        secction.appendChild(marcoElasticoRelativo);
-                    },
-                    codigoErroneo: () => {
-                        const marcoElasticoRelatico = document.createElement("div")
-                        marcoElasticoRelatico.classList.add("marcoElasticoRelativo")
-                        const marcoElastico = document.createElement("div")
-                        marcoElastico.classList.add("marcoElastico")
-                        marcoElastico.style.alignItems = "stretch"
-                        marcoElastico.style.gap = "4px"
-                        const titulo = document.createElement("div")
-                        titulo.classList.add("titulo")
-                        titulo.innerText = "El código de verificacíon es erróneo"
-                        marcoElastico.appendChild(titulo)
-                        // Añadir banner informativo
-                        const contenedorBanner = document.createElement("a")
-                        contenedorBanner.classList.add("plaza_reservas_reservaConfiramda_bannerV2")
-                        contenedorBanner.innerText = "El código de verificacíon es erróneo. Revisa el código introducido."
-                        marcoElastico.appendChild(contenedorBanner)
-                        const botonIniciarReserva = document.createElement("a")
-                        botonIniciarReserva.classList.add("plaza_reservas_reservaConfiramda_banner")
-                        botonIniciarReserva.innerText = "Ir a generar un nuevo código de verificación"
-                        botonIniciarReserva.setAttribute("href", "/micasa/recuperar_cuenta")
-                        botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
-                        botonIniciarReserva.addEventListener("click", casaVitini.componentes.cambiarVista)
-                        marcoElastico.appendChild(botonIniciarReserva)
-                        marcoElasticoRelatico.appendChild(marcoElastico)
-                        const seccion = document.querySelector("main")
-                        seccion.innerHTML = null
-                        seccion.appendChild(marcoElasticoRelatico)
-                    },
-                    cuentaVerificada: () => {
-                        const marcoElasticoRelatico = document.createElement("div")
-                        marcoElasticoRelatico.classList.add("marcoElasticoRelativo")
-                        const marcoElastico = document.createElement("div")
-                        marcoElastico.classList.add("marcoElastico")
-                        marcoElastico.style.alignItems = "stretch"
-                        marcoElastico.style.gap = "4px"
-                        const titulo = document.createElement("div")
-                        titulo.classList.add("titulo")
-                        titulo.innerText = "Cuenta verificada"
-                        marcoElastico.appendChild(titulo)
-                        // Añadir banner informativo
-                        const contenedorBanner = document.createElement("a")
-                        contenedorBanner.classList.add("plaza_reservas_reservaConfiramda_bannerV2")
-                        contenedorBanner.innerText = "Se ha vericado la cuenta correctamente, ya puedes usar tu cuenta para ver la reservas hechas."
-                        marcoElastico.appendChild(contenedorBanner)
-
-                        const botonIrARegistrarse = document.createElement("a")
-                        botonIrARegistrarse.classList.add("plaza_reservas_reservaConfiramda_banner")
-                        botonIrARegistrarse.innerText = "Ir al portal de MiCasa"
-                        botonIrARegistrarse.setAttribute("href", "/micasa")
-                        botonIrARegistrarse.setAttribute("vista", "/micasa")
-                        botonIrARegistrarse.addEventListener("click", casaVitini.componentes.cambiarVista)
-                        marcoElastico.appendChild(botonIrARegistrarse)
-                        const botonInciarSession = document.createElement("a")
-                        botonInciarSession.classList.add("plaza_reservas_reservaConfiramda_banner")
-                        botonInciarSession.innerText = "Ir a la página principal"
-                        botonInciarSession.setAttribute("href", "/")
-                        botonInciarSession.setAttribute("vista", "/")
-                        botonInciarSession.addEventListener("click", casaVitini.componentes.cambiarVista)
-                        marcoElastico.appendChild(botonInciarSession)
-                        marcoElasticoRelatico.appendChild(marcoElastico)
-                        const seccion = document.querySelector("main")
-                        seccion.innerHTML = null
-                        seccion.appendChild(marcoElasticoRelatico)
-                    },
-                },
-                transactores: {
-                    verificarCodigo: async () => {
-                        const codigo = document.querySelector("[campo=codigoVerificacion]").value
-                        const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
-                        const mensaje = "Comprobando código de verificacion..."
-                        const datosPantallaSuperpuesta = {
-                            instanciaUID: instanciaUID,
-                            mensaje: mensaje
-                        }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                        const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                        const transacccion = {
-                            zona: "miCasa/verificarCuenta",
-                            codigo: codigo.trim()
-                        }
-                        const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
-                        casaVitini.componentes.limpiarAdvertenciasInmersivas()
-
-                        if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
-                            return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
-                        }
-                        if (respuestaServidor?.ok && pantallaDeCargaRenderizada) {
-                            return casaVitini.ui.vistas.miCasa.recuperarCuenta.ui.cuentaVerificada()
-                        }
-
-                    }
-                }
+              
             },
             contacto: {
                 arranque: () => {
