@@ -3344,11 +3344,14 @@ const puerto = async (entrada, salida) => {
                             await conexion.query(actualizarCodigoVerificacion, datosRestablecimiento)
                             // Contruimos el mensaje
                             const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
-                            console.log("origen origen", origen)
                             const destino = email
-                            const asunto = "Verifica tu VitiniID"
+                            const asunto = "Verifica tu mail"
                             const mensaje = `<html>Aquí tíenes el enlace de verificación. Los enlaces de verificación tienen una validez de una hora desde que se generan.
-                             <a href="https://casavitini.com/micasa/verificar_cuenta/${codigoGenerado}">Verificar mi VtiniID</a></html>`
+                            <br>
+                             <a href="https://casavitini.com/micasa/verificar_cuenta/${codigoGenerado}">Verificar mi mail</a>
+                             <br>
+                             Casa Vitini
+                             </html>`
                             const composicionDelMensaje = {
                                 origen: origen,
                                 destino: destino,
@@ -3434,7 +3437,7 @@ const puerto = async (entrada, salida) => {
                             `
                         const resuelveValidarCodigo = await conexion.query(consultaValidarCodigo, [codigo])
                         if (resuelveValidarCodigo.rowCount === 0) {
-                            const error = "El codigo que has introducido no existe. Si estas intentando recuperar tu cuenta, recuerda que los codigos con de un solo uso y duran una hora. Si has generado varios codigos, solo es valido el mas nuevo. Si generas por ejemplo tres codigo. Solo es valido el codigo mas nuevo."
+                            const error = "El código que has introducido no existe. Si estás intentando recuperar tu cuenta, recuerda que los códigos son de un solo uso y duran una hora. Si has generado varios códigos, solo es válido el más nuevo."
                             throw new Error(error)
                         }
                         if (resuelveValidarCodigo.rowCount === 1) {
@@ -3492,16 +3495,16 @@ const puerto = async (entrada, salida) => {
                             `
                         const resuelveValidarCodigo = await conexion.query(consultaValidarCodigo, [codigo])
                         if (resuelveValidarCodigo.rowCount === 0) {
-                            const error = "El codigo que has introducido no existe. Si estas intentando recuperar tu cuenta, recuerda que los codigos con de un solo uso y duran una hora. Si has generado varios codigos, solo es valido el mas nuevo. Si generas por ejemplo tres codigo. Solo es valido el codigo mas nuevo."
+                            const error = "El código que has introducido no existe. Si estás intentando recuperar tu cuenta, recuerda que los códigos son de un solo uso y duran una hora. Si has generado varios códigos, solo es válido el más nuevo."
                             throw new Error(error)
                         }
                         if (resuelveValidarCodigo.rowCount === 1) {
                             const usuario = resuelveValidarCodigo.rows[0].usuario
-                            const cryptoData = {
+                            const crypto = {
                                 sentido: "cifrar",
                                 clavePlana: clave
                             }
-                            const retorno = vitiniCrypto(cryptoData)
+                            const retorno = vitiniCrypto(crypto)
                             const nuevaSal = retorno.nuevaSal
                             const hashCreado = retorno.hashCreado
                             const restablecerClave = `

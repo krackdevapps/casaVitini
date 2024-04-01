@@ -6,13 +6,19 @@ const enviarEmailAlCrearCuentaNueva = async (datosConfirmacion) => {
         // Contruimos el mensaje
         const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
         const destino = datosConfirmacion.email
-        const asunto = "Confirma tu VitiniID"
+        const asunto = "Verifica tu cuenta"
         const mensaje = `<html>
-        Tu cuenta en Casa Vitini se ha creado. Necesitamos que verifiques tu correo. Por favor pulsa en el enlace para verificar tu email. Si no verificas tu cuenta de correo no puedes acceder a la informacion de tu reserva y tu VitiniID sera eliminado en una hora.
-        
-        Si no puedes acceder al enlaces de abajo entra en https://casavitini.com/micasa/verificar_cuenta e inserta el codigo temporal de verificación de un solo uso: ${codigoVerificacion}
-        Recuerda que el codigo de verificación dura una hora desde su emisión.
+        Tu cuenta en Casa Vitini se ha creado. Necesitamos que verifiques tu correo. Por favor pulsa en el enlace para verificar tu email. Si no verificas tu cuenta de correo no puedes acceder a la información de tu reserva y tu VitiniID será eliminado en una hora.
+        <br>
+        Recuerda que el código de verificación dura una hora desde su emisión. 
         <a href="https://casavitini.com/micasa/verificar_cuenta/${codigoVerificacion}">Verificar cuenta</a>
+        <br>
+        <br>
+        Si no puedes acceder al enlace de abajo entra en https://casavitini.com/micasa/verificar_cuenta e inserta el código temporal de verificación de un solo uso: ${codigoVerificacion}.
+        <br>
+        <br>
+        Casa Vitini
+        
         </html>`
         // const pdf = await generadorPDF3()
         const composicionDelMensaje = {
