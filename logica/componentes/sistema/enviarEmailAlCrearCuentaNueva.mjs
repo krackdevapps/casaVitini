@@ -14,7 +14,7 @@ const enviarEmailAlCrearCuentaNueva = async (datosConfirmacion) => {
         <a href="https://casavitini.com/micasa/verificar_cuenta/${codigoVerificacion}">Verificar cuenta</a>
         <br>
         <br>
-        Si no puedes acceder al enlace de abajo entra en https://casavitini.com/micasa/verificar_cuenta e inserta el código temporal de verificación de un solo uso: ${codigoVerificacion}.
+        Si no puedes acceder al enlace de abajo entra en https://casavitini.com/micasa/verificar_cuenta e inserta el código temporal de verificación de un solo uso: ${codigoVerificacion}
         <br>
         <br>
         Casa Vitini

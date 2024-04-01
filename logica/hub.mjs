@@ -3269,7 +3269,7 @@ const puerto = async (entrada, salida) => {
                             }
                             return cadenaAleatoria;
                         }
-                        const validarCodigo = async (codigoAleatorio) => {
+                        const validarQueElCodigoEsUnico = async (codigoAleatorio) => {
                             const validarCodigoAleatorio = `
                             SELECT
                             codigo
@@ -3286,7 +3286,7 @@ const puerto = async (entrada, salida) => {
                             let codigoExiste;
                             do {
                                 codigoGenerado = generarCadenaAleatoria(longitudCodigo);
-                                codigoExiste = await validarCodigo(codigoGenerado);
+                                codigoExiste = await validarQueElCodigoEsUnico(codigoGenerado);
                             } while (codigoExiste);
                             // En este punto, tenemos un código único que no existe en la base de datos
                             return codigoGenerado;
@@ -3326,45 +3326,9 @@ const puerto = async (entrada, salida) => {
                         }
                         const estadoVerificacion = resuelveEstadoVerificacion.rows[0].cuentaVerificada
                         const usuario = resuelveEstadoVerificacion.rows[0].usuario
-                        if (estadoVerificacion !== "si") {
-                            const actualizarCodigoVerificacion = `
-                            UPDATE 
-                            usuarios
-                            SET
-                            "codigoVerificacion" = $1,
-                            "fechaCaducidadCuentaNoVerificada" = $2
-                            WHERE
-                            usuario = $3;
-                            `
-                            const datosRestablecimiento = [
-                                codigoGenerado,
-                                fechaActualUTC,
-                                usuario
-                            ]
-                            await conexion.query(actualizarCodigoVerificacion, datosRestablecimiento)
-                            // Contruimos el mensaje
-                            const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
-                            const destino = email
-                            const asunto = "Verifica tu mail"
-                            const mensaje = `<html>Aquí tíenes el enlace de verificación. Los enlaces de verificación tienen una validez de una hora desde que se generan.
-                            <br>
-                             <a href="https://casavitini.com/micasa/verificar_cuenta/${codigoGenerado}">Verificar mi mail</a>
-                             <br>
-                             Casa Vitini
-                             </html>`
-                            const composicionDelMensaje = {
-                                origen: origen,
-                                destino: destino,
-                                asunto: asunto,
-                                mensaje: mensaje,
-                            }
-                            // Enviamos el mensaje
-                            const resultadoEnvio = await enviarMail(composicionDelMensaje)
-                            const ok = {
-                                ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para verificar tu VitiniID",
-                            }
-                            salida.json(ok)
-                        } else {
+
+
+                        if (estadoVerificacion === "si") {
                             if (resuelveActualizarIDX.rowCount === 1) {
                                 const borrarEnlacesAntiguos = `
                                 DELETE FROM "enlaceDeRecuperacionCuenta"
@@ -3387,7 +3351,10 @@ const puerto = async (entrada, salida) => {
                                 const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
                                 const destino = email
                                 const asunto = "Recuperar tu VitiniID"
-                                const mensaje = `<html>Aquí tíenes el enlace para recupera tu cuenta. Este enlace tiene una duracion de 30 minutos. <a href="https://${hostActual}/micasa/recuperar_cuenta/${codigoGenerado}">Recuperar mi cuenta</a></html>`
+                                const mensaje = `<html>Aquí tíenes el enlace para recuperar tu cuenta. Este enlace tiene una duración de 30 minutos. <a href="https://${hostActual}/micasa/recuperar_cuenta/${codigoGenerado}">Recuperar mi cuenta</a>
+                                <br>
+                                Casa Vitini
+                                </html>`
                                 const composicionDelMensaje = {
                                     origen: origen,
                                     destino: destino,
@@ -3401,7 +3368,47 @@ const puerto = async (entrada, salida) => {
                                 }
                                 salida.json(ok)
                             }
+                        } else {
+                            const actualizarCodigoVerificacion = `
+                            UPDATE 
+                            usuarios
+                            SET
+                            "codigoVerificacion" = $1,
+                            "fechaCaducidadCuentaNoVerificada" = $2
+                            WHERE
+                            usuario = $3;
+                            `
+                            const datosRestablecimiento = [
+                                codigoGenerado,
+                                fechaActualUTC,
+                                usuario
+                            ]
+                            await conexion.query(actualizarCodigoVerificacion, datosRestablecimiento)
+                            // Contruimos el mensaje
+                            const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
+                            const destino = email
+                            const asunto = "Verifica tu mail"
+                            const mensaje = `<html>Aquí tíenes el enlace de verificación. Los enlaces de verificación tienen una validez de una hora desde que se generan.
+                                <br>
+                                <a href="https://casavitini.com/micasa/verificar_cuenta/${codigoGenerado}">Verificar mi mail</a>
+                                <br>
+                                Casa Vitini
+                                </html>`
+                            const composicionDelMensaje = {
+                                origen: origen,
+                                destino: destino,
+                                asunto: asunto,
+                                mensaje: mensaje,
+                            }
+                            // Enviamos el mensaje
+                            const resultadoEnvio = await enviarMail(composicionDelMensaje)
+                            const ok = {
+                                ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para verificar tu VitiniID",
+                            }
+                            salida.json(ok)
                         }
+
+
                         await conexion.query('COMMIT'); // Confirmar la transacción
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
@@ -5088,7 +5095,7 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo 'tipoBloqueo' solo puede ser 'permanente', 'rangoTemporal', 'sinBloquo'"
                             throw new Error(error)
                         }
-                        
+
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         // Comprobar que la reserva exisste
                         const validacionReserva = `
