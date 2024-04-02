@@ -33,7 +33,7 @@ const porDiasDeReserva = async (reserva) => {
         const ofertasSeleccionadas = []
         for (const detallesOferta of ofertasEncontradas.rows) {
             const simboloNumero = detallesOferta.simboloNumero
-            const numero = detallesOferta.numero
+            const numero = Number(detallesOferta.numero)
             const nombreOferta = detallesOferta.nombreOferta
             const tipoDescuento = detallesOferta.tipoDescuento
             const cantidad = detallesOferta.cantidad

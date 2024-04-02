@@ -545,7 +545,7 @@ const detallesReserva = async (metadatos) => {
                         contenedorTipoOferta[tipoOferta] = []
                     }
                     if (tipoOferta === "porApartamentosEspecificos") {
-                        if (oferta.descuentoAplicadoA === "totalNetoApartmentoDedicado") {
+                        if (oferta.descuentoAplicadoA === "totalNetoApartamentoDedicado") {
                             delete oferta.tipoDescuento
                             delete oferta.cantidad
                         }

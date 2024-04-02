@@ -9008,7 +9008,7 @@ const casaVitini = {
                             definicionOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
                             definicionOfertaUI.innerText = definicion
                             contenedorIndividualOferta.appendChild(definicionOfertaUI)
-                            if (descuentoAplicadoA === "totalNetoApartmentoDedicado") {
+                            if (descuentoAplicadoA === "totalNetoApartamentoDedicado") {
                                 const apartamentosEspecificos = detallesOferta.apartamentosEspecificos
                                 const contenedorApartamentosEspecificos = document.createElement("div")
                                 contenedorApartamentosEspecificos.classList.add("componentes_ui_totales_ofertas_apartamentosEspecificos_contenedor")
@@ -9174,7 +9174,7 @@ const casaVitini = {
                             if (tipoDescuento === "porcentaje") {
                                 const tipoDescuentoUI = document.createElement("div")
                                 tipoDescuentoUI.classList.add("reserva_resumen_apartamentoIUTitulo")
-                                tipoDescuentoUI.innerText = "Descuento del " + cantidad + "% sobrel el neto de la reserva."
+                                tipoDescuentoUI.innerText = "Descuento del " + cantidad + "% sobre el neto de la reserva."
                                 contenedorIndividualOferta.appendChild(tipoDescuentoUI)
                             }
                             if (tipoDescuento === "cantidadFija") {

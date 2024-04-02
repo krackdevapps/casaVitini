@@ -128,15 +128,19 @@ const porApartamentosEspecificos = async (reserva) => {
                     descuento = totalReservaNeto.minus(cantidad)
                     detallesOferta.cantidad = cantidad.toFixed(2) + "$"
                     detallesOferta.descuento = descuento.toFixed(2) + "$"
+                    descuentoGlobal = descuentoGlobal.plus(descuento)
+
                 }
                 if (tipoDescuento === "porcentaje") {
                     descuento = cantidad.dividedBy(100).times(totalReservaNeto)
                     detallesOferta.cantidad = cantidad.toFixed(2)
                     detallesOferta.descuento = descuento.toFixed(2) + ` (${cantidad}%`
+                    descuentoGlobal = descuentoGlobal.plus(descuento)
+
                 }
                 detallesOferta.descuento = descuento.toFixed(2)
             }
-            if (descuentoAplicadoA === "totalNetoApartmentoDedicado") {
+            if (descuentoAplicadoA === "totalNetoApartamentoDedicado") {
                 const gruopoApartamentosUI_oferta = []
                 delete detallesOferta.descuento
                 for (const detallesApartamento of apartamentosEspecificos) {

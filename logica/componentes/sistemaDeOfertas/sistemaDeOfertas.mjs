@@ -7,14 +7,15 @@ import Decimal from "decimal.js"
 import { codigoZonaHoraria } from "../sistema/codigoZonaHoraria.mjs"
 import { DateTime } from "luxon"
 const sistemaDeOfertas = async (reserva) => {
-    
+
     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
     let fechaActualTZ
     if (reserva.fechas.creacion_ISO_UTC) {
-        fechaActualTZ = DateTime.fromISO(reserva.fechas.creacion_ISO_UTC).setZone(zonaHoraria).toISO();
+        fechaActualTZ = DateTime.fromISO(reserva.fechas.creacion_ISO_UTC).setZone(zonaHoraria).toISODate();
     } else {
         fechaActualTZ = DateTime.now().setZone(zonaHoraria).toISODate();
     }
+
     reserva.fechas.fechaActualProcesada_ISO = fechaActualTZ
     const contenedorOferta = []
     let descuentoTotal = new Decimal(0)
@@ -40,6 +41,7 @@ const sistemaDeOfertas = async (reserva) => {
         descuentoFinal: descuentoFinal
     }
     return estructura
+
 };
 export {
     sistemaDeOfertas

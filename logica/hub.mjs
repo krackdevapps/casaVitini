@@ -11343,7 +11343,7 @@ const puerto = async (entrada, salida) => {
                                     }
                                 },
                                 contextoAplicacion: (contextoAplicacion) => {
-                                    if (!contextoAplicacion || (contextoAplicacion !== "totalNetoReserva" && contextoAplicacion !== "totalNetoApartmentoDedicado")) {
+                                    if (!contextoAplicacion || (contextoAplicacion !== "totalNetoReserva" && contextoAplicacion !== "totalNetoApartamentoDedicado")) {
                                         const error = `El campo contexto de aplicacion solo puede ser, totalNetoReserva, totalNetoApartamentoDedicado`
                                         throw new Error(error)
                                     }
@@ -11481,7 +11481,7 @@ const puerto = async (entrada, salida) => {
                                         const error = "El campo apartamentoUI solo admite minúsculas, mayúsculas, numeros y espacios nada mas ni espacios"
                                         throw new Error(error)
                                     }
-                                    if (contextoAplicacion === "totalNetoApartmentoDedicado") {
+                                    if (contextoAplicacion === "totalNetoApartamentoDedicado") {
                                         if (!tipoDescuentoApartamento || (tipoDescuentoApartamento !== "cantidadFija" && tipoDescuentoApartamento !== "porcentaje") && tipoDescuentoApartamento !== "precioEstablecido") {
                                             const error = `El apartamento ${apartamentoUI} debe de tener un tipo de descuente seleccionado, revisa los apartamentos para ver si en alguno falta un tipo de descuente`
                                             throw new Error(error)
@@ -11519,7 +11519,7 @@ const puerto = async (entrada, salida) => {
                                     const error = `Se hace referencia a identificadores visuales de apartamentos que no existen. Por favor revisa los identificadores de los apartamentos a lo que quieres aplicar una oferta por que no existen`
                                     throw new Error(error);
                                 }
-                                if (contextoAplicacion === "totalNetoApartmentoDedicado") {
+                                if (contextoAplicacion === "totalNetoApartamentoDedicado") {
                                     cantidad = null
                                 }
                                 const oferta = {
@@ -11537,7 +11537,7 @@ const puerto = async (entrada, salida) => {
                                     const apartamentoIDV = apartamentoDedicado.apartamentoIDV
                                     let tipoDescuento = null
                                     let cantidadPorApartamento = null
-                                    if (contextoAplicacion === "totalNetoApartmentoDedicado") {
+                                    if (contextoAplicacion === "totalNetoApartamentoDedicado") {
                                         tipoDescuento = apartamentoDedicado.tipoDescuento
                                         cantidadPorApartamento = apartamentoDedicado.cantidad
                                         cantidadPorApartamento = Number(cantidadPorApartamento)
@@ -11843,7 +11843,7 @@ const puerto = async (entrada, salida) => {
                                     }
                                 },
                                 contextoAplicacion: (contextoAplicacion) => {
-                                    if (!contextoAplicacion || (contextoAplicacion !== "totalNetoReserva" && contextoAplicacion !== "totalNetoApartmentoDedicado")) {
+                                    if (!contextoAplicacion || (contextoAplicacion !== "totalNetoReserva" && contextoAplicacion !== "totalNetoApartamentoDedicado")) {
                                         const error = `El campo contexto de aplicacion solo puede ser, totalNetoReserva, totalNetoApartamentoDedicado`
                                         throw new Error(error)
                                     }
@@ -11990,7 +11990,7 @@ const puerto = async (entrada, salida) => {
                                     validadoresLocales.tipoDescuento(tipoDescuento)
                                     validadoresLocales.controlLimitePorcentaje(tipoDescuento, cantidad)
                                 }
-                                if (contextoAplicacion === "totalNetoApartmentoDedicado") {
+                                if (contextoAplicacion === "totalNetoApartamentoDedicado") {
                                 }
                                 await eliminaPerfilApartamentoEspecificos(ofertaUID)
                                 const metadatos = {
@@ -12025,7 +12025,7 @@ const puerto = async (entrada, salida) => {
                                         const error = "El campo apartamentoUI solo admite minúsculas, mayúsculas, numeros y espacios nada mas ni espacios"
                                         throw new Error(error)
                                     }
-                                    if (contextoAplicacion === "totalNetoApartmentoDedicado") {
+                                    if (contextoAplicacion === "totalNetoApartamentoDedicado") {
                                         if (!tipoDescuentoApartamento || (tipoDescuentoApartamento !== "cantidadFija" && tipoDescuentoApartamento !== "porcentaje") && tipoDescuentoApartamento !== "precioEstablecido") {
                                             const error = `El apartamento ${apartamentoUI} debe de tener un tipo de descuente seleccionado, revisa los apartamentos para ver si en alguno falta un tipo de descuente`
                                             throw new Error(error)
@@ -12041,7 +12041,7 @@ const puerto = async (entrada, salida) => {
                                     const apartamentoIDV = apartamentoDedicado.apartamentoIDV
                                     let tipoDescuento = null
                                     let cantidadPorApartamento = null
-                                    if (contextoAplicacion === "totalNetoApartmentoDedicado") {
+                                    if (contextoAplicacion === "totalNetoApartamentoDedicado") {
                                         tipoDescuento = apartamentoDedicado.tipoDescuento
                                         cantidadPorApartamento = apartamentoDedicado.cantidad
                                     }

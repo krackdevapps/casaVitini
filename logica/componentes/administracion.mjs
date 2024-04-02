@@ -15186,7 +15186,7 @@ const administracion = {
                                 textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva entre el ${fechaInicio} y el ${fechaFin} y se seleccione el ${funsionApartamentos} en concreto`
                             }
                         }
-                        if (descuentoAplicadoA === "totalNetoApartmentoDedicado") {
+                        if (descuentoAplicadoA === "totalNetoApartamentoDedicado") {
                             let apartamentosDedicados = detalleOferta.apartamentosDedicados
                             let mensajesDescuentoApartamentos = []
                             apartamentosDedicados.map((apartamento) => {
@@ -16013,7 +16013,7 @@ const administracion = {
                 })
                 // Luego despliega
                 let zonaDespliegue
-                if (opciones === "totalNetoApartmentoDedicado") {
+                if (opciones === "totalNetoApartamentoDedicado") {
                     zonaDespliegue = "descuentosDedicados"
                 }
                 if (opciones === "totalNetoApartmento") {
@@ -16143,7 +16143,7 @@ const administracion = {
                         document.querySelector(`[zonaOferta=${tipoOfertaIDV}] [campoOferta=tipoDescuento] [value=${tipoDescuentoIDV}]`).selected = true
                         document.querySelector(`[zonaOferta=${tipoOfertaIDV}] [campoOferta=cantidad]`).value = cantidad
                     }
-                    if (descuentoAplicadoAIDV === "totalNetoApartmentoDedicado") {
+                    if (descuentoAplicadoAIDV === "totalNetoApartamentoDedicado") {
                         document.querySelector(`[controladorDesliegue=descuentosDedicados]`).classList.remove("estadoInicialInvisible")
                     }
                     const apartamentosDedicados = detallesOferta.apartamentosDedicados
@@ -16365,7 +16365,7 @@ const administracion = {
                             document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=tipoDescuento] [value=${tipoDescuentoIDV_valorInicial}]`).selected = true
                             document.querySelector(`[zonaOferta=${tipoOfertaIDV_valorInicial}] [campoOferta=cantidad]`).value = cantidad_valorInicial
                         }
-                        if (descuentoAplicadoAIDV_valorInicial === "totalNetoApartmentoDedicado") {
+                        if (descuentoAplicadoAIDV_valorInicial === "totalNetoApartamentoDedicado") {
                             document.querySelector(`[controladorDesliegue=descuentosDedicados]`).classList.remove("estadoInicialInvisible")
                         }
                         const apartamentosDedicados = ofertaInicial.apartamentosDedicados
@@ -16780,10 +16780,10 @@ const administracion = {
                 optionPredeterminada_O3.disabled = true;
                 optionPredeterminada_O3.setAttribute('value', '');
                 optionPredeterminada_O3.textContent = '¿Donde se aplica el descuento de esta oferta?';
-                const optiontotalNetoApartmentoDedicado_O2 = document.createElement('option');
-                optiontotalNetoApartmentoDedicado_O2.value = 'totalNetoApartmentoDedicado';
-                optiontotalNetoApartmentoDedicado_O2.setAttribute("opcionesOferta", "descuentosDedicados")
-                optiontotalNetoApartmentoDedicado_O2.textContent = 'Aplicacion individual por apartamento';
+                const optiontotalNetoApartamentoDedicado_O2 = document.createElement('option');
+                optiontotalNetoApartamentoDedicado_O2.value = 'totalNetoApartamentoDedicado';
+                optiontotalNetoApartamentoDedicado_O2.setAttribute("opcionesOferta", "descuentosDedicados")
+                optiontotalNetoApartamentoDedicado_O2.textContent = 'Aplicacion individual por apartamento';
                 /*
                 const optiontotalNetoApartmento_O2 = document.createElement('option');
                 optiontotalNetoApartmento_O2.value = 'totalNetoApartmento';
@@ -16796,7 +16796,7 @@ const administracion = {
                 optiontotalNetoReserva_O3.textContent = 'Aplicacion al neto de la reserva';
                 // Agregar las opciones al select
                 selectPreciosEImpuestosbotonOpcionCrearNuevoImpuesto_3.appendChild(optionPredeterminada_O3);
-                selectPreciosEImpuestosbotonOpcionCrearNuevoImpuesto_3.appendChild(optiontotalNetoApartmentoDedicado_O2);
+                selectPreciosEImpuestosbotonOpcionCrearNuevoImpuesto_3.appendChild(optiontotalNetoApartamentoDedicado_O2);
                 //selectPreciosEImpuestosbotonOpcionCrearNuevoImpuesto_3.appendChild(optiontotalNetoApartmento_O2);
                 selectPreciosEImpuestosbotonOpcionCrearNuevoImpuesto_3.appendChild(optiontotalNetoReserva_O3);
                 divCrearOfertaConentenedor2_3.appendChild(selectPreciosEImpuestosbotonOpcionCrearNuevoImpuesto_3);
@@ -16960,7 +16960,7 @@ const administracion = {
                 // Crear el elemento p para el título de la primera opción
                 const pTituloOpcion1_O1 = document.createElement('p');
                 pTituloOpcion1_O1.classList.add('crearOfertaTituloOpcion');
-                pTituloOpcion1_O1.textContent = 'Determina cuántos dias debe tener la reserva en concreto o a partir de cuantos dias debe de tener la reserva';
+                pTituloOpcion1_O1.textContent = 'Determina cuántos dias con noche debe tener la reserva en concreto o a partir de cuantos dias con noche debe de tener la reserva';
                 // Crear el select para el tipo de descuento
                 const seleccionaTipoNumero = document.createElement('select');
                 seleccionaTipoNumero.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
@@ -16970,13 +16970,13 @@ const administracion = {
                 optionO1.selected = true;
                 optionO1.disabled = true;
                 optionO1.setAttribute('value', '');
-                optionO1.textContent = 'Selecciona si apartir de o un numero exacto de días';
+                optionO1.textContent = 'Selecciona si apartir de o un numero exacto de días con noche';
                 const optionO2 = document.createElement('option');
                 optionO2.value = 'numeroExacto';
-                optionO2.textContent = 'Con un numero exacto de días de de duración de la reserva';
+                optionO2.textContent = 'Con un numero exacto de días con noche de la reserva';
                 const opcion03 = document.createElement('option');
                 opcion03.value = 'aPartirDe';
-                opcion03.textContent = 'A partir de un numero exacto de de días de duración de la reserva';
+                opcion03.textContent = 'A partir de un numero exacto de de días noche de la reserva';
                 seleccionaTipoNumero.appendChild(optionO1);
                 seleccionaTipoNumero.appendChild(optionO2);
                 seleccionaTipoNumero.appendChild(opcion03);
@@ -18036,7 +18036,7 @@ const administracion = {
                 })
                 // Luego despliega
                 let zonaDespliegue
-                if (opciones === "totalNetoApartmentoDedicado") {
+                if (opciones === "totalNetoApartamentoDedicado") {
                     zonaDespliegue = "descuentosDedicados"
                 }
                 if (opciones === "totalNetoApartmento") {

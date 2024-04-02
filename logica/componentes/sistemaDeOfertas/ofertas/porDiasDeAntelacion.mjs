@@ -37,7 +37,7 @@ const porDiasDeAntelacion = async (reserva) => {
         
         for (const detallesOferta of ofertasEncontradas.rows) {
             const simboloNumero = detallesOferta.simboloNumero
-            const numero = detallesOferta.numero
+            const numero = Number(detallesOferta.numero)
             const nombreOferta = detallesOferta.nombreOferta
             const tipoDescuento = detallesOferta.tipoDescuento
             const cantidad = detallesOferta.cantidad
@@ -51,7 +51,6 @@ const porDiasDeAntelacion = async (reserva) => {
             const fechaEntrada_Objeto = DateTime.fromISO(fechaEntradaReserva_ISO, { zone: codigoZonaHoraria.zonaHoraria });
             
             const diasAntelacion = Math.floor(fechaEntrada_Objeto.diff(fechaActual_objeto, 'days').days);
-            
             if (simboloNumero === "aPartirDe" && numero <= diasAntelacion) {
                 ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de antelacion o mas `
                 ofertasSeleccionadas.push(ofertaEstructuraFinal)
@@ -66,8 +65,8 @@ const porDiasDeAntelacion = async (reserva) => {
             const tipoDescuento = detallesOferta.tipoDescuento
             const cantidad = new Decimal(detallesOferta.cantidad)
             if (tipoDescuento === "cantidadFija") {
-                descuentoGlobal = totalReservaNeto.minus(cantidad)
-                detallesOferta.descuento = `(${descuentoGlobal.toFixed(2)}`
+                descuentoGlobal = cantidad.plus(descuentoGlobal);
+                detallesOferta.descuento = `${descuentoGlobal.toFixed(2)}`
             }
             if (tipoDescuento === "porcentaje") {
                 descuentoGlobal = cantidad.dividedBy(100).times(totalReservaNeto)
@@ -78,6 +77,7 @@ const porDiasDeAntelacion = async (reserva) => {
             porDiasDeAntelacion: ofertasSeleccionadas,
             descuentoGlobal: descuentoGlobal
         }
+        console.log("estructuraSaliente", estructuraSaliente)
         return estructuraSaliente
     } catch (error) {
         throw error

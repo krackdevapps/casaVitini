@@ -194,7 +194,7 @@ const generadorPDF3 = async (reserva) => {
                             {
                                 nombreOferta: "Por apartamentos en especifico",
                                 tipoOferta: "porApartamentosEspecificos",
-                                descuentoAplicadoA: "totalNetoApartmentoDedicado",
+                                descuentoAplicadoA: "totalNetoApartamentoDedicado",
                                 apartamentosEspecificos: [
                                     {
                                         apartamentoIDV: "apartamento2",

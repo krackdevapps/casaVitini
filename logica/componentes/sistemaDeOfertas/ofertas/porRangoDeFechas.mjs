@@ -84,15 +84,17 @@ const porRangoDeFechas = async (reserva) => {
                     totalNetoNoche = totalNetoNoche.plus(precioNetoNoche)
                 }
                 if (tipoDescuento === "cantidadFija") {
-                    detalleDiaPorProcesar.descuento = totalNetoNoche.minus(cantidad).toFixed(2)
+                    detalleDiaPorProcesar.descuento =cantidad
                     descuento = descuento.plus(cantidad)
+                    detalleDiaPorProcesar.totaDiaNetoConOferta = totalNetoNoche.minus(cantidad).toFixed(2)
+
                 }
                 if (tipoDescuento === "porcentaje") {
                     const decuentoPorcentaje = cantidad.dividedBy(100).times(totalNetoNoche)
                     detalleDiaPorProcesar.descuento = decuentoPorcentaje.toFixed(2)
                     descuento = totalNetoNoche.plus(decuentoPorcentaje)
+                    detalleDiaPorProcesar.totaDiaNetoConOferta = totalNetoNoche.minus(detalleDiaPorProcesar.descuento).toFixed(2)
                 }
-                detalleDiaPorProcesar.totaDiaNetoConOferta = totalNetoNoche.minus(detalleDiaPorProcesar.descuento).toFixed(2)
                 detallesOferta.diasAfectados.push(detalleDiaPorProcesar)
             }
         }

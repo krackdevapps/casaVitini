@@ -5,7 +5,7 @@ const porNumeroDeApartamentos = async (reserva) => {
         const fechaActualTZ = reserva.fechas.fechaActualProcesada_ISO
         const estadoOfertaActivado = "activada"
         const totalReservaNeto = new Decimal(reserva.desgloseFinanciero.totales.totalReservaNeto)
-        const numeroApartamentos = reserva.desgloseFinanciero.totalesPorApartamento.length
+        const numeroApartamentos = Number(reserva.desgloseFinanciero.totalesPorApartamento.length)
         const ofertasSeleccionadas = []
         let descuentoGlobal = 0
         const consultaOfertas = `
@@ -27,12 +27,12 @@ const porNumeroDeApartamentos = async (reserva) => {
         AND "tipoOferta" = $3`;
         const ofertaTipo = "porNumeroDeApartamentos";
         const ofertasEncontradas = await conexion.query(consultaOfertas, [fechaActualTZ, estadoOfertaActivado, ofertaTipo]);
-        // 
+
         // Filtro Ofertas
         for (const detallesOferta of ofertasEncontradas.rows) {
             const tipoOferta = detallesOferta.tipoOferta
             const simboloNumero = detallesOferta.simboloNumero
-            const numero = detallesOferta.numero
+            const numero = Number(detallesOferta.numero)
             const nombreOferta = detallesOferta.nombreOferta
             const tipoDescuento = detallesOferta.tipoDescuento
             const cantidad = new Decimal(detallesOferta.cantidad)

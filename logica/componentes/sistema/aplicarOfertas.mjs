@@ -217,7 +217,7 @@ const aplicarOfertas = async (reservaPrecio) => {
                         ofertaEstructuraFinal.definicion = definicionUI
                         ofertasQueSeDebeAplicar.push(ofertaEstructuraFinal)
                     }
-                    if (descuentoAplicadoA === "totalNetoApartmentoDedicado") {
+                    if (descuentoAplicadoA === "totalNetoApartamentoDedicado") {
                         ofertaEstructuraFinal.definicion = `Oferta aplicada con descuentos indivudales por apartamento. Estos descuentos se aplican al neto de cada apartamamento por separado`
                         const arrayApartamentos = []
                         for (const detalleApartamento of apartamentosDedicadosOferta) {
@@ -501,7 +501,7 @@ const aplicarOfertas = async (reservaPrecio) => {
                     }
                     detalleOferta.descuentoRenderizado = descuentoRenderizado.toFixed(2)
                 }
-                if (descuentoAplicadoA === "totalNetoApartmentoDedicado") {
+                if (descuentoAplicadoA === "totalNetoApartamentoDedicado") {
                     for (const detalleApartamento of apartamentosEspecificos) {
                         const apartamentoIDV = detalleApartamento.apartamentoIDV
                         const tipoDescuento = detalleApartamento.tipoDescuento
