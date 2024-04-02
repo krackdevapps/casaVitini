@@ -10433,6 +10433,28 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
+[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_banner {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    transition: all 500ms;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_banner:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+
 [zonaCSS=miCasa] .plaza_reservas_reservaConfirmada_banner {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);

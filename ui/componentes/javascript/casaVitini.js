@@ -5229,6 +5229,7 @@ const casaVitini = {
                     selectorMenuGlobalFlotanteRenderizado.remove()
                 }
             }
+            casaVitini.componentes.ocultaMenuGlobalFlotante(entrada)
             const pantallaDeTransicionRenderizada = document.querySelector("[instanciaUID=pantallaCarga]")
             if (!pantallaDeTransicionRenderizada) {
                 const configuracionPantallaCarga = {
@@ -5599,7 +5600,7 @@ const casaVitini = {
                     menu.addEventListener("click", casaVitini.componentes.cambiarVista)
                 })
                 document.body.appendChild(menuGlobalFlotante)
-                document.addEventListener("click", casaVitini.componentes.ocultaMenuGlobalFlotante)
+                window.addEventListener("click", casaVitini.componentes.ocultaMenuGlobalFlotante)
                 window.addEventListener("resize", casaVitini.componentes.ocultaMenuGlobalFlotante)
                 window.addEventListener("scroll", casaVitini.componentes.ocultaMenuGlobalFlotante)
             }
@@ -5609,7 +5610,7 @@ const casaVitini = {
             if (origen !== "botonMenuResponsivo") {
                 const selectorMenuFlotanteRenderizado = document.querySelector("[componente=menuGlobalFlotante]")
                 selectorMenuFlotanteRenderizado?.remove()
-                document.removeEventListener("click", casaVitini.componentes.ocultaMenuGlobalFlotante)
+                window.removeEventListener("click", casaVitini.componentes.ocultaMenuGlobalFlotante)
                 window.removeEventListener("resize", casaVitini.componentes.ocultaMenuGlobalFlotante)
                 window.removeEventListener("scroll", casaVitini.componentes.ocultaMenuGlobalFlotante)
             }
