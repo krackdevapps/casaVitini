@@ -657,7 +657,7 @@ const puerto = async (entrada, salida) => {
                     `
                     const resuelveControlIDX = await conexion.query(consultaControlIDX, [usuario])
                     if (resuelveControlIDX.rowCount === 0) {
-                        const error = "Datos de identificacíon incorrectos"
+                        const error = "Datos de identificación incorrectos."
                         throw new Error(error)
                     }
                     // Se recupera el hash y la sal
@@ -687,7 +687,7 @@ const puerto = async (entrada, salida) => {
                             const error = "Cuenta bloqueada tras 10 intentos. Recupera tu cuenta con tu correo."
                             throw new Error(error)
                         } else {
-                            const error = "Datos de identificacíon incorrectos"
+                            const error = "Datos de identificación incorrectos."
                             throw new Error(error)
                         }
                     }
