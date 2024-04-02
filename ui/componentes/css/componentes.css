@@ -4212,11 +4212,33 @@
     border-radius: 10px;
 }
 
-[zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
+[zonaCSS="alojamiento/resumen"] .contenedorDiaConNoche {
     background-color: #ffffff73;
     padding: 10px;
     border-radius: 10px;
 }
+
+
+[zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
+    padding: 2px;
+    border-radius: 10px;
+}
+
+
+[zonaCSS="alojamiento/resumen"] .contenedorApartamento {
+    background-color: #ffffff73;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-content: column;
+    gap: 2px;
+    flex-direction: column;
+}
+
+[zonaCSS="alojamiento/resumen"] .textoDetallesPorApartamento {
+    padding: 0px;
+}
+
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_elemento {
     background-color: #ffffff73;
@@ -8150,7 +8172,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
-    
+
 }
 
 [zonaCSS="miCasa"] .detallesUsuario_esferaUsuario {
@@ -10743,9 +10765,8 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
 }
 
-.compomentes_ui_totales_ofertas_contenedorConjuntoOferta {
+[zonaCSS="alojamiento/resumen"] .compomentes_ui_totales_ofertas_contenedorConjuntoOferta {
     display: flex;
-    padding: 6px;
     flex-direction: column;
     gap: 10px;
 }
@@ -11414,7 +11435,6 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="alojamiento/resumen"] .plaza_resumenReserva_contenedorTotalAPagar {
-    background: rgba(255, 255, 255, 0.3);
     margin: 13px;
     padding: 10px;
     border-radius: 16px;
@@ -12122,7 +12142,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="alojamiento/resumen"] .bloqueResumenReservaGlobal .botonConfirmar {
-    background: white;
+    background: rgba(255, 255, 255, 0.3);
     padding: 20px;
     outline: none;
     border: none;
@@ -12138,7 +12158,8 @@ grid-template-columns: 0.5fr 1.5fr;
     cursor: default;
 }
 
-[zonaCSS=alojamiento] .bloqueResumenReservaGlobal .botonConfirmar:hover {
+[zonaCSS=alojamiento] .bloqueResumenReservaGlobal .botonConfirmar:hover,
+[zonaCSS="alojamiento/resumen"] .bloqueResumenReservaGlobal .botonConfirmar:hover {
     background: blue;
     color: white;
 }
@@ -12810,14 +12831,10 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS=instalaciones] .contenedorImagenVolatil {
-    /*cover o no cover,*/
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
-    /*background-color: whitesmoke;*/
-    /*border-radius: 8px;*/
     transition: all 250ms linear;
-    /* transition: top 1s, left 1s, right 1s, bottom 1s;*/
     position: relative;
 }
 
@@ -13191,4 +13208,12 @@ grid-template-columns: 0.5fr 1.5fr;
 [zonaCSS="administracion/configuracion/mensajesEnPortada/detallesDelMensaje"] .contenedorBotones .boton:hover {
     background: rgba(255, 255, 255, 0.6);
 
+}
+
+[zonaCSS="alojamiento/resumen"] .reserva_resumen_apartamentoIUTitulo {
+    padding: 0px;
+}
+
+[zonaCSS="alojamiento/resumen"] .contenedorTextoOferta {
+    padding: 4px;
 }

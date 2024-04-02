@@ -2342,7 +2342,7 @@ const puerto = async (entrada, salida) => {
                         .toLowerCase()
                         .trim()
                     if (!email || !filtroCorreoElectronico.test(email)) {
-                        const error = "el campo de correo electronico no cumple con el formato esperado"
+                        const error = "El campo de correo electrónico no cumple con el formato esperado"
                         throw new Error(error)
                     }
                     if (!claveNueva) {

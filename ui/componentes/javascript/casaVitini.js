@@ -1409,7 +1409,7 @@ const casaVitini = {
                             throw new Error(errorTelefono);
                         }
                         else if (!correoTitular || !filtroCorreoElectronico.test(correoTitular)) {
-                            const error = "el campo de correo electronico no cumple con el formato esperado, se espera un formato tal que asi: ejemplo@servidor.com"
+                            const error = "El campo de correo electrónico no cumple con el formato esperado, se espera un formato tal que asi: ejemplo@servidor.com"
                             throw new Error(error)
                         }
                     } catch (error) {
@@ -8868,7 +8868,7 @@ const casaVitini = {
                     const precioNetoNoche = detallePorNoche.precioNetoNoche
                     const apartamentosDetallesPorNoche = detallePorNoche.apartamentos
                     const apartamentoUI_ = document.createElement("div")
-                    apartamentoUI_.classList.add("reserva_resumen_desglose_pago_elemento")
+                    apartamentoUI_.classList.add("contenedorDiaConNoche")
                     const apartamentoUITitulo = document.createElement("div")
                     apartamentoUITitulo.classList.add("reserva_resumen_apartamentoIUTitulo")
                     apartamentoUITitulo.classList.add("negrita")
@@ -8917,18 +8917,18 @@ const casaVitini = {
                     const totalNetoApartamento = detalleDesglosePorApartamento.totalNetoRango
                     const precioNetoMedioPorNoche = detalleDesglosePorApartamento.precioMedioNocheRango
                     const apartamentoUI = document.createElement("div")
-                    apartamentoUI.classList.add("reserva_resumen_desglose_pago_elemento")
+                    apartamentoUI.classList.add("contenedorApartamento")
                     const apartamentoUITitulo = document.createElement("div")
-                    apartamentoUITitulo.classList.add("reserva_resumen_apartamentoIUTitulo")
+                    apartamentoUITitulo.classList.add("contenedorTextoOferta")
                     apartamentoUITitulo.classList.add("negrita")
                     apartamentoUITitulo.innerText = apartamentoUI_
                     apartamentoUI.appendChild(apartamentoUITitulo)
                     const apartamentoUIPrecioNetoTotal = document.createElement("div")
-                    apartamentoUIPrecioNetoTotal.classList.add("reserva_resumen_apartamentoUIPrecio")
+                    apartamentoUIPrecioNetoTotal.classList.add("textoDetallesPorApartamento")
                     apartamentoUIPrecioNetoTotal.innerText = "Total neto: " + totalNetoApartamento + "$"
                     apartamentoUI.appendChild(apartamentoUIPrecioNetoTotal)
                     const apartamentoUIPrecioPromedioPorNoche = document.createElement("div")
-                    apartamentoUIPrecioPromedioPorNoche.classList.add("reserva_resumen_apartamentoUIPrecio")
+                    apartamentoUIPrecioPromedioPorNoche.classList.add("textoDetallesPorApartamento")
                     apartamentoUIPrecioPromedioPorNoche.innerText = "Precio medio neto por noche: " + precioNetoMedioPorNoche + "$"
                     apartamentoUI.appendChild(apartamentoUIPrecioPromedioPorNoche)
                     alojamientoUI.appendChild(apartamentoUI)
@@ -8962,23 +8962,23 @@ const casaVitini = {
                             const nombreOferta = detallesReserva.nombreOferta
                             const descuento = detallesReserva.descuento
                             let nombreOfertaUI = document.createElement("div")
-                            nombreOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            nombreOfertaUI.classList.add("contenedorTextoOferta")
                             nombreOfertaUI.classList.add("negrita")
                             nombreOfertaUI.innerText = nombreOferta
                             contenedorIndividualOferta.appendChild(nombreOfertaUI)
                             const definicionOfertaUI = document.createElement("div")
-                            definicionOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            definicionOfertaUI.classList.add("contenedorTextoOferta")
                             definicionOfertaUI.innerText = definicion
                             contenedorIndividualOferta.appendChild(definicionOfertaUI)
                             if (tipoDescuento === "porcentaje") {
                                 const tipoDescuentoUI = document.createElement("div")
-                                tipoDescuentoUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                tipoDescuentoUI.classList.add("contenedorTextoOferta")
                                 tipoDescuentoUI.innerText = "Descuento del " + cantidad + simboloDescuento[tipoDescuento] + " rebajando el neto de la reserva en " + descuento + "$"
                                 contenedorIndividualOferta.appendChild(tipoDescuentoUI)
                             }
                             if (tipoDescuento === "cantidadFija") {
                                 const tipoDescuentoUI = document.createElement("div")
-                                tipoDescuentoUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                tipoDescuentoUI.classList.add("contenedorTextoOferta")
                                 tipoDescuentoUI.innerText = "Descuento del " + cantidad + simboloDescuento[tipoDescuento] + " sobre el neto de la reserva"
                                 contenedorIndividualOferta.appendChild(tipoDescuentoUI)
                             }
@@ -9000,12 +9000,12 @@ const casaVitini = {
                             const contenedorIndividualOferta = document.createElement("div")
                             contenedorIndividualOferta.classList.add("compomentes_ui_totales_ofertas_contenedorOferta")
                             const nombreOfertaUI = document.createElement("div")
-                            nombreOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            nombreOfertaUI.classList.add("contenedorTextoOferta")
                             nombreOfertaUI.classList.add("negrita")
                             nombreOfertaUI.innerText = nombreOferta
                             contenedorIndividualOferta.appendChild(nombreOfertaUI)
                             const definicionOfertaUI = document.createElement("div")
-                            definicionOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            definicionOfertaUI.classList.add("contenedorTextoOferta")
                             definicionOfertaUI.innerText = definicion
                             contenedorIndividualOferta.appendChild(definicionOfertaUI)
                             if (descuentoAplicadoA === "totalNetoApartamentoDedicado") {
@@ -9036,18 +9036,18 @@ const casaVitini = {
                             }
                             if (descuentoAplicadoA === "totalNetoReserva") {
                                 const descuentoOfertaUI = document.createElement("div")
-                                descuentoOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                descuentoOfertaUI.classList.add("contenedorTextoOferta")
                                 descuentoOfertaUI.innerText = descuentoOferta
                                 contenedorIndividualOferta.appendChild(descuentoOfertaUI)
                                 if (tipoDescuento === "porcentaje") {
                                     const tipoDescuentoUI = document.createElement("div")
-                                    tipoDescuentoUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                    tipoDescuentoUI.classList.add("contenedorTextoOferta")
                                     tipoDescuentoUI.innerText = "Descuento: " + cantidad + simboloDescuento[tipoDescuento]
                                     contenedorIndividualOferta.appendChild(tipoDescuentoUI)
                                 }
                                 if (tipoDescuento === "cantidadFija") {
                                     const tipoDescuentoUI = document.createElement("div")
-                                    tipoDescuentoUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                    tipoDescuentoUI.classList.add("contenedorTextoOferta")
                                     tipoDescuentoUI.innerText = "Descuento: " + cantidad + simboloDescuento[tipoDescuento]
                                     contenedorIndividualOferta.appendChild(tipoDescuentoUI)
                                 }
@@ -9071,28 +9071,28 @@ const casaVitini = {
                             const contenedorIndividualOferta = document.createElement("div")
                             contenedorIndividualOferta.classList.add("compomentes_ui_totales_ofertas_contenedorOferta")
                             const nombreOfertaUI = document.createElement("div")
-                            nombreOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            nombreOfertaUI.classList.add("contenedorTextoOferta")
                             nombreOfertaUI.classList.add("negrita")
                             nombreOfertaUI.innerText = nombreOferta
                             contenedorIndividualOferta.appendChild(nombreOfertaUI)
                             const definicionUI = document.createElement("div")
-                            definicionUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            definicionUI.classList.add("contenedorTextoOferta")
                             definicionUI.innerText = definicion
                             contenedorIndividualOferta.appendChild(definicionUI)
                             if (tipoDescuento === "porcentaje") {
                                 const tipoDescuentoUI = document.createElement("div")
-                                tipoDescuentoUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                tipoDescuentoUI.classList.add("contenedorTextoOferta")
                                 tipoDescuentoUI.innerText = "Descuento: " + cantidad + simboloDescuento[tipoDescuento] + " rebajando el neto de la reserva en " + descuento + "$"
                                 contenedorIndividualOferta.appendChild(tipoDescuentoUI)
                             }
                             if (tipoDescuento === "cantidadFija") {
                                 const tipoDescuentoUI = document.createElement("div")
-                                tipoDescuentoUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                tipoDescuentoUI.classList.add("contenedorTextoOferta")
                                 tipoDescuentoUI.innerText = "Descuento: " + cantidad + simboloDescuento[tipoDescuento]
                                 contenedorIndividualOferta.appendChild(tipoDescuentoUI)
                             }
                             const definicionOfertaUI = document.createElement("div")
-                            definicionOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            definicionOfertaUI.classList.add("contenedorTextoOferta")
                             definicionOfertaUI.innerText = definicion
                             //contenedorIndividualOferta.appendChild(definicionOfertaUI)
                             contenedorOfertaUI.appendChild(contenedorIndividualOferta)
@@ -9113,16 +9113,16 @@ const casaVitini = {
                             const contenedorIndividualOferta = document.createElement("div")
                             contenedorIndividualOferta.classList.add("compomentes_ui_totales_ofertas_contenedorOferta")
                             const nombreOfertaUI = document.createElement("div")
-                            nombreOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            nombreOfertaUI.classList.add("contenedorTextoOferta")
                             nombreOfertaUI.classList.add("negrita")
                             nombreOfertaUI.innerText = nombreOferta
                             contenedorIndividualOferta.appendChild(nombreOfertaUI)
                             const definicionOfertaUI = document.createElement("div")
-                            definicionOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            definicionOfertaUI.classList.add("contenedorTextoOferta")
                             definicionOfertaUI.innerText = definicion
                             contenedorIndividualOferta.appendChild(definicionOfertaUI)
                             const tipoDescuentoUI = document.createElement("div")
-                            tipoDescuentoUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            tipoDescuentoUI.classList.add("contenedorTextoOferta")
                             tipoDescuentoUI.innerText = "Descuento total de la oferta: " + descuento + "$"
                             contenedorIndividualOferta.appendChild(tipoDescuentoUI)
                             const contenedorDiasEspecificos = document.createElement("div")
@@ -9163,23 +9163,23 @@ const casaVitini = {
                             const contenedorIndividualOferta = document.createElement("div")
                             contenedorIndividualOferta.classList.add("compomentes_ui_totales_ofertas_contenedorOferta")
                             const nombreOfertaUI = document.createElement("div")
-                            nombreOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            nombreOfertaUI.classList.add("contenedorTextoOferta")
                             nombreOfertaUI.classList.add("negrita")
                             nombreOfertaUI.innerText = nombreOferta
                             contenedorIndividualOferta.appendChild(nombreOfertaUI)
                             const definicionOfertaUI = document.createElement("div")
-                            definicionOfertaUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            definicionOfertaUI.classList.add("contenedorTextoOferta")
                             definicionOfertaUI.innerText = definicion
                             contenedorIndividualOferta.appendChild(definicionOfertaUI)
                             if (tipoDescuento === "porcentaje") {
                                 const tipoDescuentoUI = document.createElement("div")
-                                tipoDescuentoUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                tipoDescuentoUI.classList.add("contenedorTextoOferta")
                                 tipoDescuentoUI.innerText = "Descuento del " + cantidad + "% sobre el neto de la reserva."
                                 contenedorIndividualOferta.appendChild(tipoDescuentoUI)
                             }
                             if (tipoDescuento === "cantidadFija") {
                                 const tipoDescuentoUI = document.createElement("div")
-                                tipoDescuentoUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                tipoDescuentoUI.classList.add("contenedorTextoOferta")
                                 tipoDescuentoUI.innerText = "Descuento de " + cantidad + "$ sobre el neto de la reserva"
                                 contenedorIndividualOferta.appendChild(tipoDescuentoUI)
                             }
