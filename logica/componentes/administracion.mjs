@@ -7531,7 +7531,7 @@ const administracion = {
                             reserva: Number(reserva),
                             tipoBloqueo: tipoBloqueo
                         }
-                        
+
                         const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                         const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaEspera}"]`)]
                         if (!selectorPantallaDeCarga) {
@@ -19099,7 +19099,7 @@ const administracion = {
                 const selectorEspacioBloqueos = document.querySelector("[componente=bloqueosTemporales]")
                 const transaccion = {
                     zona: "administracion/bloqueos/listaBloquoeosDelApartamento",
-                    "apartamentoIDV": apartamento
+                    apartamentoIDV: apartamento
                 }
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
@@ -19116,6 +19116,15 @@ const administracion = {
                     const apartamentoUI = respuestaServidor?.apartamentoUI
                     const bloqueos = respuestaServidor?.ok
                     selectorTitulo.innerText = "Bloqueos temporales del " + apartamentoUI
+                    if (bloqueos.length === 0) {
+
+                        const mensaje = document.createElement("p")
+                        mensaje.innerText = "El apartamento no tiene ningún bloqueo definido"
+                        seccionRenderizadaOrigen.appendChild(mensaje)
+
+                    }
+
+
                     bloqueos.map((detalleBloqueo) => {
                         const tipoBloqueo = detalleBloqueo.tipoBloqueo
                         const entrada = detalleBloqueo.entrada

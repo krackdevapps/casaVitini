@@ -13136,22 +13136,36 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                             await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado()
+
+                            const validarApartmento = `
+                            SELECT
+                            uid
+                            FROM "configuracionApartamento"
+                            WHERE "apartamentoIDV" = $1;`
+                            const resuelveValidarApartamentoIDV = await conexion.query(validarApartmento, [apartamentoIDV])
+                            if (resuelveValidarApartamentoIDV.rowCount === 0) {
+                                const error = "No existe ningún apartamento con el identicados visual apartmentoIDV que has pasado."
+                                throw new Error(error)
+                            }
+
                             const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
                             const consultaDetallesBloqueoApartamento = `
-                        SELECT
-                        uid,
-                        to_char(entrada, 'DD/MM/YYYY') as entrada, 
-                        to_char(salida, 'DD/MM/YYYY') as salida, 
-                        apartamento,
-                        "tipoBloqueo",
-                        motivo,
-                        zona
-                        FROM "bloqueosApartamentos"
-                        WHERE apartamento = $1;`
+                                SELECT
+                                uid,
+                                to_char(entrada, 'DD/MM/YYYY') as entrada, 
+                                to_char(salida, 'DD/MM/YYYY') as salida, 
+                                apartamento,
+                                "tipoBloqueo",
+                                motivo,
+                                zona
+                                FROM "bloqueosApartamentos"
+                                WHERE apartamento = $1;`
                             const resuelveBloqueosPorApartmento = await conexion.query(consultaDetallesBloqueoApartamento, [apartamentoIDV])
                             const ok = {}
                             if (resuelveBloqueosPorApartmento.rowCount === 0) {
-                                ok.ok = "No hay ningun bloqueo para el apartamento " + apartamentoUI
+                                ok.apartamentoIDV = apartamentoIDV
+                                ok.apartamentoUI = apartamentoUI
+                                ok.ok = []
                             }
                             if (resuelveBloqueosPorApartmento.rowCount > 0) {
                                 const bloqueosEncontradosDelApartamento = resuelveBloqueosPorApartmento.rows
