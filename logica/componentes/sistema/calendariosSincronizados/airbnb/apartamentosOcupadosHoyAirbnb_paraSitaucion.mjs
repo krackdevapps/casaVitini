@@ -14,7 +14,7 @@ const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
     `
     const resuelveCalendariosSincronizados = await conexion.query(consultaCalendariosSincronizados, [plataformaOrigen])
     const apartamentosIDVArray = resuelveCalendariosSincronizados.rows
-   // const fechaHoy_ISO = "2024-05-05"
+    // const fechaHoy_ISO = "2024-05-05"
     // Sincronizar y obtener los dtos
     const eventosPorApartamento = []
     for (const apartamentoIDV_porCalendario of apartamentosIDVArray) {
@@ -32,8 +32,8 @@ const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
                 const fechaInicioComparar = detallesDelCalendario.fechaInicio
                 const fechaFinalComparar = detallesDelCalendario.fechaFinal
                 //
-                    
-                const controlOcupacional = selectorRangoUniversal({
+
+                const controlOcupacional = await selectorRangoUniversal({
                     fechaInicio_rango_ISO: fechaHoy_ISO,
                     fechaFin_rango_ISO: fechaHoy_ISO,
                     fechaInicio_elemento_ISO: fechaInicioComparar,
@@ -48,7 +48,7 @@ const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
         }
         eventosPorApartamento.push(detallesDelApartamento)
     }
-    
+
     return eventosPorApartamento
 }
 export {

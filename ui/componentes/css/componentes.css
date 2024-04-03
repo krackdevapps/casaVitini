@@ -1357,9 +1357,10 @@
     color: white
 }
 
-.componentes_ui_totales_mensajeInfoSinInformacion {
+[zonaCSS="alojamiento/resumen"] .componentes_ui_totales_mensajeInfoSinInformacion {
     padding: 4px;
 }
+
 
 .plaza_alojamiento_contenedorApartmento_contenedorHabitaciones {
     display: flex;
@@ -4098,7 +4099,7 @@
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_bloque {
-    padding: 4px;
+    padding: 10px;
     border-radius: 12px;
     gap: 6px;
     display: flex;
@@ -4190,7 +4191,6 @@
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_titulo {
-    padding: 4px;
     font-weight: bold;
 }
 
@@ -4218,10 +4218,30 @@
     border-radius: 10px;
 }
 
+[zonaCSS="administracion/reservas/detallesReserva"] .contenedorDiaConNoche {
+    background-color: #ffffff73;
+    padding: 10px;
+    border-radius: 10px;
+}
 
 [zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
     padding: 2px;
     border-radius: 10px;
+}
+
+[zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
+    padding: 2px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/reservas/detallesReserva"] .contenedorApartamento {
+    background-color: #ffffff73;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-content: column;
+    gap: 2px;
+    flex-direction: column;
 }
 
 
@@ -4241,9 +4261,20 @@
 
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_elemento {
-    background-color: #ffffff73;
+    border-radius: 10px;
     padding: 10px;
     border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+[zonaCSS="administracion/reservas/detallesReserva"] .detalleDelTotal {
+    border-radius: 10px;
+    padding: 00px;
+}
+
+[zonaCSS="alojamiento/resumen"] .detalleDelTotal {
+    border-radius: 10px;
+    padding: 6px;
 }
 
 .reservas_detalles_infoDesgloseNo {
@@ -6786,9 +6817,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     align-content: center;
 */
-.ofertaUIBloqueOpcion {
-    border-radius: 8px;
-}
+
 
 [zonaCSS="administracion/enlacesDePago"] .ofertaUITituloOferta {
     padding: 8px;
@@ -6796,8 +6825,22 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="administracion/ofertas"] .ofertaUITituloOferta {
-    padding: 8px;
+    padding: 12px;
     margin: 0px;
+}
+
+[zonaCSS="administracion/reservas/detallesReserva"] .compomentes_ui_totales_ofertas_contenedorConjuntoOferta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/ofertas"] .ofertaUIBloqueOpcion {
+    border-radius: 8px;
+    padding: 6px;
 }
 
 [zonaCSS="administracion/comportamiento_de_precios"] .ofertaUITituloOferta {
@@ -10707,7 +10750,6 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS="administracion/reservas/detallesReserva"] .administracion_reserver_detallesReserva_contenedorDesgloseTotal {
     display: flex;
-    padding: 4px;
     flex-direction: column;
     align-items: stretch;
 }
@@ -11198,8 +11240,8 @@ grid-template-columns: 0.5fr 1.5fr;
     /* background-attachment: fixed; */
     /* background-attachment: scroll; */
     background-position: center center;
-    margin-left: 40px;
-    margin-right: 40px;
+    margin-left: 30px;
+    margin-right: 30px;
     height: 1025px;
 }
 
@@ -12527,7 +12569,6 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS=conozcanos] .contenedorParalax .texto {
-    background: white;
     z-index: 2;
     padding: 40px;
 }
@@ -12901,20 +12942,60 @@ grid-template-columns: 0.5fr 1.5fr;
     }
 }
 
+@keyframes appear {
+    from {
+        /* opacity: 0; */
+        /* bottom: 20vh; */
+        opacity: 0;
+        scale: 25%;
+    }
+
+    to {
+        /* opacity: 1; */
+        /* bottom: 80vh; */
+        opacity: 1;
+        scale: 100%;
+    }
+}
+
 [zonaCSS=instalaciones] [animacion="contenedorImagen"] {
     view-timeline-name: --image;
     view-timeline-axis: block;
     animation-timeline: --image;
     animation-name: show;
-    animation-range: entry 0% cover 30%;
+    animation-range: entry 0 cover 30%;
     animation-fill-mode: both;
 }
 
+
+[zonaCSS=conozcanos] .texto_v2_parallax {
+    font-size: 50px;
+    font-weight: bold;
+    color: white;
+    transform: translateX(-50%, -50%);
+    z-index: 10;
+    /* bottom: 40px; */
+    pointer-events: none;
+    position: absolute;
+    transition: all 500ms linear;
+
+}
+
+[zonaCSS=conozcanos] [animacion="contenedorTexto"] {
+    view-timeline-name: --text;
+    view-timeline-axis: block;
+    animation-timeline: --text;
+    animation-name: appear;
+    animation-range: entry 0% cover 50%;
+        animation-fill-mode: both;
+}
+
+
 /* Inicio paralaje diseño 2*/
 [zonaCSS=conozcanos] .contenedorParalax {
-    overflow: hidden;
     display: flex;
     flex-direction: column;
+    width: 90vw;
 }
 
 [zonaCSS=conozcanos] .contenedorParalax .parallax {
@@ -12958,7 +13039,17 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     align-items: center;
     position: relative;
+
+}
+
+[zonaCSS=conozcanos] .contenedorImagenNecesario {
+    /* height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; */
     overflow: hidden;
+    border-radius: 40px;
 }
 
 [zonaCSS=conozcanos] .contenedorParalax .texto_animado {
@@ -12970,6 +13061,7 @@ grid-template-columns: 0.5fr 1.5fr;
     position: absolute;
     bottom: 40px;
     pointer-events: none;
+    overflow: hidden;
 }
 
 

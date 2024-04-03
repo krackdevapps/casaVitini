@@ -18,8 +18,8 @@ const eventosDelApartamento = async (datos) => {
             const fechaInicioComparar = detallesDelCalendario.fechaInicio
             const fechaFinalComparar = detallesDelCalendario.fechaFinal
             //
-  
-            const controlOcupacional = selectorRangoUniversal({
+
+            const controlOcupacional = await selectorRangoUniversal({
                 fechaInicio_rango_ISO: fechaHoy_ISO,
                 fechaFin_rango_ISO: fechaHoy_ISO,
                 fechaInicio_elemento_ISO: fechaInicioComparar,

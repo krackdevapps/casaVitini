@@ -373,7 +373,7 @@ const validadoresCompartidos = {
                     const error = "LA fecha de entrada no es valida, representacion no terraquea"
                     throw new Error(error)
                 }
-                return "ok"
+                return true
             } catch (error) {
                 throw error
             }

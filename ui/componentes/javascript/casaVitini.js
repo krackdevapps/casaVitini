@@ -4917,35 +4917,39 @@ const casaVitini = {
             },
             conozcanos: {
                 arranque: () => {
+                    const body = document.body
+                    //body.style.background = "#e8e8e8"
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "conozcanos")
+                    main.style.paddingBottom = "4vh"
+
                     //document.querySelector("#uiLogo").style.filter = "invert(1)"
 
                     // Crear un elemento script
-                    const scriptElement = document.createElement('script');
-                    // Asignar el atributo src
-                    scriptElement.src = "/componentes/javascript/simpleParallax.js";
-                    main.appendChild(scriptElement);
+                    // const scriptElement = document.createElement('script');
+                    // // Asignar el atributo src
+                    // scriptElement.src = "/componentes/javascript/simpleParallax.js";
+                    // main.appendChild(scriptElement);
 
-                    const header = document.querySelector("header")
-                    const controladorAnchoRestante = () => {
-                        const selectorAranqueConozcano = document.querySelector("[zonaUID=conozcanos]")
-                        if (!selectorAranqueConozcano) {
-                            //  observador.disconnect();
-                            return
-                        }
-                        const anchoHeader = header.getBoundingClientRect().height
-                        const contenedoresPalaraje = document.querySelector("[contenedor=paralaje]")
-                        contenedoresPalaraje.style.marginTop = "-" + anchoHeader + "px"
-                    }
-                    controladorAnchoRestante()
-                    const observador = new ResizeObserver(controladorAnchoRestante)
-                    observador.observe(header);
-                    // Agregar evento de desplazamiento
-                    window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
-                    window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
-                    window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
-                    window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
+                    // const header = document.querySelector("header")
+                    // const controladorAnchoRestante = () => {
+                    //     const selectorAranqueConozcano = document.querySelector("[zonaUID=conozcanos]")
+                    //     if (!selectorAranqueConozcano) {
+                    //         //  observador.disconnect();
+                    //         return
+                    //     }
+                    //     const anchoHeader = header.getBoundingClientRect().height
+                    //     const contenedoresPalaraje = document.querySelector("[contenedor=paralaje]")
+                    //     contenedoresPalaraje.style.marginTop = "-" + anchoHeader + "px"
+                    // }
+                    // //controladorAnchoRestante()
+                    // //const observador = new ResizeObserver(controladorAnchoRestante)
+                    // //observador.observe(header);
+                    // // Agregar evento de desplazamiento
+                    // window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
+                    // //window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
+                    // window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
+                    // //window.addEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
 
 
                     const loadScript = async (url) => {
@@ -4963,9 +4967,9 @@ const casaVitini = {
                             const scriptElement = await loadScript("/componentes/javascript/simpleParallax.js");
                             const grupoImagenesPalarax = document.querySelectorAll('[imagenParalaje=imagen]');
                             casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador = new simpleParallax(grupoImagenesPalarax, {
-                                delay: 1,
+                                delay: 0,
                                 orientation: 'down',
-                                scale: 1.3,
+                                scale: 1.5,
                                 overflow: false,
                             });
                         } catch (error) {
@@ -9254,29 +9258,29 @@ const casaVitini = {
                 const totalReservaNetoSinDescuentos = totales.totalReservaNetoSinOfertas ? totales.totalReservaNetoSinOfertas + "$" : "No hay informacion del total de la reserva sin descuentos"
                 if (totales.totalReservaNeto) {
                     const totalReservaNetoDiaUI = document.createElement("div")
-                    totalReservaNetoDiaUI.classList.add("reserva_resumen_desglose_pago_elemento")
+                    totalReservaNetoDiaUI.classList.add("detalleDelTotal")
                     totalReservaNetoDiaUI.innerText = "Precio medio neto de la reserva por noche: " + totalPromedioNetoPorNoche
                     totalesUI.appendChild(totalReservaNetoDiaUI)
                     if (totales.totalDescuentos) {
                         const totalDescuentosAplicadosUI = document.createElement("div")
-                        totalDescuentosAplicadosUI.classList.add("reserva_resumen_desglose_pago_elemento")
+                        totalDescuentosAplicadosUI.classList.add("detalleDelTotal")
                         totalDescuentosAplicadosUI.innerText = "Descuento total por todas las ofertas aplicadas: " + totalDescuentos
                         totalesUI.appendChild(totalDescuentosAplicadosUI)
                         const totalReservaNetoSinOfertasUI = document.createElement("div")
-                        totalReservaNetoSinOfertasUI.classList.add("reserva_resumen_desglose_pago_elemento")
+                        totalReservaNetoSinOfertasUI.classList.add("detalleDelTotal")
                         totalReservaNetoSinOfertasUI.innerText = "Total neto sin ofertas aplicadas: " + totalReservaNetoSinDescuentos
                         totalesUI.appendChild(totalReservaNetoSinOfertasUI)
                     }
                     const totalReservaNetoUI = document.createElement("div")
-                    totalReservaNetoUI.classList.add("reserva_resumen_desglose_pago_elemento")
+                    totalReservaNetoUI.classList.add("detalleDelTotal")
                     totalReservaNetoUI.innerText = "Total reserva neto: " + totalReservaNeto
                     totalesUI.appendChild(totalReservaNetoUI)
                     const totalImpuestosUI = document.createElement("div")
-                    totalImpuestosUI.classList.add("reserva_resumen_desglose_pago_elemento")
+                    totalImpuestosUI.classList.add("detalleDelTotal")
                     totalImpuestosUI.innerText = "Total impuestos aplicados: " + totalImpuestos
                     totalesUI.appendChild(totalImpuestosUI)
                     const totalConImpuestosUI = document.createElement("div")
-                    totalConImpuestosUI.classList.add("reserva_resumen_desglose_pago_elemento")
+                    totalConImpuestosUI.classList.add("detalleDelTotal")
                     totalConImpuestosUI.classList.add("negrita")
                     totalConImpuestosUI.innerText = "Total final bruto a pagar: " + totales.totalConImpuestos + "$"
                     totalesUI.appendChild(totalConImpuestosUI)

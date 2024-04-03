@@ -13491,54 +13491,22 @@ const administracion = {
             },
             eliminarCliente: {
                 UI: () => {
-                    document.body.style.overflow = 'hidden';
-                    const advertenciaInmersivaIU = document.createElement("div")
-                    advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                    advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                    advertenciaInmersivaIU.setAttribute("contenedor", "opcionesCancelacion")
-                    const contenedorAdvertenciaInmersiva = document.createElement("div")
-                    contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                    const contenidoAdvertenciaInmersiva = document.createElement("div")
-                    contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
-                    contenidoAdvertenciaInmersiva.setAttribute("contenedor", "contenidoAdvertenciaInmersiva")
-                    const contenedorCancelacion = document.createElement("div")
-                    contenedorCancelacion.classList.add("administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion")
-                    const tituloCancelarReserva = document.createElement("p")
-                    tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                    tituloCancelarReserva.innerText = "Eliminar irreversiblemente al cliente"
-                    contenedorCancelacion.appendChild(tituloCancelarReserva)
-                    const botonCancelarProcesoCancelacion = document.createElement("div")
-                    botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                    botonCancelarProcesoCancelacion.innerText = "Cerrar y volver atras"
-                    botonCancelarProcesoCancelacion.addEventListener("click", casaVitini.componentes.limpiarAdvertenciasInmersivas)
-                    contenedorCancelacion.appendChild(botonCancelarProcesoCancelacion)
-                    const bloqueBloqueoApartamentos = document.createElement("div")
-                    bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
-                    const tituloBloquoApartamentos = document.createElement("div")
-                    tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                    tituloBloquoApartamentos.innerText = "Eliminar irreversiblemnete a un cliente elimina la informacion de este cliente en su ficha y en las reservas donde estuvo. Es decir desaparecera de las reservas donde estuvo este cliente."
-                    bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
-                    contenedorCancelacion.appendChild(bloqueBloqueoApartamentos)
-                    const bloqueBotones = document.createElement("div")
-                    bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
-                    const entradaPalabraCancelar = document.createElement("input")
-                    entradaPalabraCancelar.classList.add("detallesReservaCancelarEntradaTextoCancelar")
-                    entradaPalabraCancelar.placeholder = "Escriba la palabra cancelar"
-                    //  advertenciaInmersivaIU.appendChild(entradaPalabraCancelar)
-                    const infoBotonCancelar = document.createElement("div")
-                    infoBotonCancelar.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                    infoBotonCancelar.innerText = "Para que se habilite el boton tienes que seleccionar unas de las tres opciones de arriba."
-                    bloqueBloqueoApartamentos.appendChild(infoBotonCancelar)
-                    const botonCancelar = document.createElement("div")
-                    botonCancelar.classList.add("detallesReservaCancelarBoton")
-                    botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
-                    botonCancelar.innerText = "Confirmar y eliminar cliente"
-                    botonCancelar.addEventListener("click", casaVitini.administracion.clientes.detallesCliente.eliminarCliente.confirmar)
-                    bloqueBloqueoApartamentos.appendChild(botonCancelar)
-                    contenidoAdvertenciaInmersiva.appendChild(contenedorCancelacion)
-                    contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
-                    advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
+
+                    const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
+                    const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+    
+                    const titulo = constructor.querySelector("[componente=titulo]")
+                    titulo.innerText = "Eliminar irreversiblemente al cliente"
+                    const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                    mensaje.innerText = "Eliminar irreversiblemnete a un cliente elimina la informacion de este cliente en su ficha y en las reservas donde estuvo. Es decir desaparecera de las reservas donde estuvo este cliente."
+    
+                    const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                    botonAceptar.innerText = "Comfirmar la eliminacion del cliente"
+                    botonAceptar.addEventListener("click", casaVitini.administracion.clientes.detallesCliente.eliminarCliente.confirmar)
+                    const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                    botonCancelar.innerText = "Cancelar la eliminacion"
+    
+                    document.querySelector("main").appendChild(pantallaInmersiva)
                 },
                 confirmar: async () => {
                     const campoEditable = [...document.querySelectorAll("[componenteEditable]")]
@@ -14750,43 +14718,21 @@ const administracion = {
         },
         eliminarPerfilImpuestos: {
             UI: () => {
-                const advertenciaInmersivaIU = document.createElement("div")
-                advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                const contenedorAdvertenciaInmersiva = document.createElement("div")
-                contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                const tituloCancelarReserva = document.createElement("p")
-                tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                tituloCancelarReserva.innerText = "Elimiar impuesto"
-                contenedorAdvertenciaInmersiva.appendChild(tituloCancelarReserva)
-                const bloqueBloqueoApartamentos = document.createElement("div")
-                bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
-                const tituloBloquoApartamentos = document.createElement("div")
-                tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                tituloBloquoApartamentos.innerText = "Vas a eliminar un impuesto y su aplicacion sera inmediata en los precios de las reservas"
-                bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
-                contenedorAdvertenciaInmersiva.appendChild(bloqueBloqueoApartamentos)
-                const bloqueBotones = document.createElement("div")
-                bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
-                const botonCancelar = document.createElement("div")
-                botonCancelar.classList.add("detallesReservaCancelarBoton")
-                botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
-                botonCancelar.innerText = "Confirmar y eliminar impuesto"
-                botonCancelar.addEventListener("click", casaVitini.administracion.impuestos.eliminarPerfilImpuestos.confirmarEliminacion)
-                bloqueBotones.appendChild(botonCancelar)
-                const botonCancelarProcesoCancelacion = document.createElement("div")
-                botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion del impuesto"
-                botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                    let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                    selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                        advertenciaInmersiva.remove()
-                    })
-                })
-                bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
-                contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
-                advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                document.querySelector("main").appendChild(advertenciaInmersivaIU)
+                const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
+                const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+
+                const titulo = constructor.querySelector("[componente=titulo]")
+                titulo.innerText = "Confirmar la eliminacíon del perfil del impuesto"
+                const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                mensaje.innerText = "Vas a eliminar un impuesto y su aplicacion sera inmediata en los precios de las reservas"
+
+                const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                botonAceptar.innerText = "Comfirmar la eliminacion del impuesto"
+                botonAceptar.addEventListener("click", casaVitini.administracion.impuestos.eliminarPerfilImpuestos.confirmarEliminacion)
+                const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                botonCancelar.innerText = "Cancelar la eliminacion"
+
+                document.querySelector("main").appendChild(pantallaInmersiva)
             },
             confirmarEliminacion: async () => {
                 const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
@@ -15134,22 +15080,25 @@ const administracion = {
                             porDiasDeReserva: "Por dias de reserva",
                             porRangoDeFechas: "Por rango de fecha",
                         }
-                        textoDefinicionDescuento = `Esta oferta aplicara ${detalleDescuento} al total neto de la reserva`
                         if (tipoOferta === "porNumeroDeApartamentos") {
                             if (simboloNumero === "numeroExacto") {
-                                textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva cuya fecha de entrada sea igual superior a ${fechaInicio} y fecha de salida sea inferior o igual a ${fechaFin} y se seleccionen ${numero} apartamentos en concreto, ni más ni menos `
+                                textoDefinicionOferta = `Esta oferta se aplicará a toda reserva cuya fecha de creacion este entre el ${fechaInicio} y el ${fechaFin} y se seleccionen ${numero} apartamentos en concreto, ni más ni menos `
                             }
                             if (simboloNumero === "aPartirDe") {
-                                textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva cuya fecha de entrada sea igual superior a ${fechaInicio} y fecha de salida sea inferior o igual a ${fechaFin} y se seleccionen ${numero} apartamentos o mas `
+                                textoDefinicionOferta = `Esta oferta se aplicará a toda reserva cuya fecha de creacion este entre el ${fechaInicio} y el ${fechaFin} y se seleccionen ${numero} apartamentos o mas `
                             }
+                            textoDefinicionDescuento = `Esta oferta aplicara ${detalleDescuento} al total neto de la reserva`
+
                         }
                         if (tipoOferta === "porDiasDeAntelacion") {
                             if (simboloNumero === "numeroExacto") {
-                                textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva entre el ${fechaInicio} y el ${fechaFin} y cuya fecha de entrada tenga ${numero} días de antelación exactos `
+                                textoDefinicionOferta = `Esta oferta se aplicará a toda reserva cuya fecha de creacion este entre el ${fechaInicio} y el ${fechaFin} y cuya fecha de entrada tenga ${numero} días de antelación exactos `
                             }
                             if (simboloNumero === "aPartirDe") {
-                                textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva entre el ${fechaInicio} y el ${fechaFin} y cuya fecha de entrada tenga ${numero} días de antelación o mas `
+                                textoDefinicionOferta = `Esta oferta se aplicará a toda reserva cuya fecha de creacion este entre el ${fechaInicio} y el ${fechaFin} y cuya fecha de entrada tenga ${numero} días de antelación o mas `
                             }
+                            textoDefinicionDescuento = `Esta oferta aplicara ${detalleDescuento} al total neto de la reserva`
+
                         }
                         if (tipoOferta === "porDiasDeReserva") {
                             if (simboloNumero === "numeroExacto") {
@@ -15159,7 +15108,7 @@ const administracion = {
                                 } else {
                                     textoFinalDias = ` ${numero} días exactos`
                                 }
-                                textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva entre el ${fechaInicio} y el ${fechaFin} y la reserva tenga ${textoFinalDias}.`
+                                textoDefinicionOferta = `Esta oferta se aplicará a toda reserva cuya fecha de creacion este entre el ${fechaInicio} y el ${fechaFin} y la reserva tenga ${textoFinalDias}.`
                             }
                             if (simboloNumero === "aPartirDe") {
                                 let textoFinalDias
@@ -15168,11 +15117,15 @@ const administracion = {
                                 } else {
                                     textoFinalDias = ` ${numero} días o mas`
                                 }
-                                textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva entre el ${fechaInicio} y el ${fechaFin} y la reserva tenga ${textoFinalDias}`
+                                textoDefinicionOferta = `Esta oferta se aplicará a toda reserva cuya fecha de creacion este entre el ${fechaInicio} y el ${fechaFin} y la reserva tenga ${textoFinalDias}`
                             }
+                            textoDefinicionDescuento = `Esta oferta aplicara ${detalleDescuento} al total neto de la reserva`
+
                         }
                         if (tipoOferta === "porRangoDeFechas") {
-                            textoDefinicionOferta = `Esta oferta aplicara ${detalleDescuento} al total neto de cada día con noche de la reserva que este dentro del rango de esta oferta. Es decir, se aplicada un descuento al neto de cada día con noche de la reserva que este entre el ${fechaInicio} y el ${fechaFin}.`
+                            textoDefinicionOferta = `Esta oferta se aplicara al neto de todos dias con noche de una reserva que esten entre el el ${fechaInicio} y el ${fechaFin}. Dicho de otra manera, esa oferta se aplica a los dias que estan dentro del rango, incluyendo el inicio y el final del propio rango.`
+                            textoDefinicionDescuento = `Esta oferta aplicara ${detalleDescuento} al total neto de cada dia con noche de la reserva que este dentro del rango establecido en la oferta`
+
                         }
                         if (tipoOferta === "porApartamentosEspecificos") {
                             let apartamentosDedicados = detalleOferta.apartamentosDedicados
@@ -15182,37 +15135,44 @@ const administracion = {
                                 apartamentosSeleccionados.push(apartamentoUI)
                             })
                             if (apartamentosSeleccionados.length === 1) {
-                                textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva entre el ${fechaInicio} y el ${fechaFin} y se seleccione el ${apartamentosSeleccionados[0]} en concreto.`
+                                textoDefinicionOferta = `Esta oferta se aplicará a toda reserva cuya fecha de creacion este entre el ${fechaInicio} y el ${fechaFin} y se seleccione el ${apartamentosSeleccionados[0]} en concreto.`
                             }
                             if (apartamentosSeleccionados.length === 2) {
-                                textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva entre el ${fechaInicio} y el ${fechaFin} y se seleccione el ${apartamentosSeleccionados[0]} y el ${apartamentosSeleccionados[1]} en concreto.`
+                                textoDefinicionOferta = `Esta oferta se aplicará a toda reserva cuya fecha de creacion este entre el ${fechaInicio} y el ${fechaFin} y se seleccione el ${apartamentosSeleccionados[0]} y el ${apartamentosSeleccionados[1]} en concreto.`
                             }
                             if (apartamentosSeleccionados.length > 2) {
                                 let funsionApartamentos = apartamentosSeleccionados.join(", el "); // Fusiona los elementos con comas
                                 funsionApartamentos = funsionApartamentos.replace(/,([^,]*)$/, ' y $1');
-                                textoDefinicionOferta = `Esta oferta se aplicará cuando se realice una reserva entre el ${fechaInicio} y el ${fechaFin} y se seleccione el ${funsionApartamentos} en concreto`
+                                textoDefinicionOferta = `Esta oferta se aplicará a toda reserva cuya fecha de creacion este entre el ${fechaInicio} y el ${fechaFin} y se seleccione el ${funsionApartamentos} en concreto`
                             }
+                            if (descuentoAplicadoA === "totalNetoApartamentoDedicado") {
+                                let apartamentosDedicados = detalleOferta.apartamentosDedicados
+                                let mensajesDescuentoApartamentos = []
+                                apartamentosDedicados.map((apartamento) => {
+                                    let apartamentoUI = apartamento.apartamentoUI
+                                    let tipoDescuento = apartamento.tipoDescuento
+                                    let cantidadApartamento = apartamento.cantidadApartamento
+                                    let infoFinal;
+                                    if (tipoDescuento === "cantidadFija") {
+                                        infoFinal = `una rebaja fija de ${cantidadApartamento}$ al neto del ${apartamentoUI}`
+                                    }
+                                    if (tipoDescuento === "porcentaje") {
+                                        infoFinal = `un descuento de ${cantidadApartamento}% al neto del ${apartamentoUI}`
+                                    }
+                                    mensajesDescuentoApartamentos.push(infoFinal)
+                                })
+                                let funsionDescuentos = mensajesDescuentoApartamentos.join(", "); // Fusiona los elementos con comas
+                                funsionDescuentos = funsionDescuentos.replace(/,([^,]*)$/, ' y $1');
+                                textoDefinicionDescuento = `Esta oferta aplicara ${funsionDescuentos}`
+                            }
+                            if (descuentoAplicadoA === "totalNetoReserva") {
+                                textoDefinicionDescuento = `Esta oferta aplicara ${detalleDescuento} al total neto de la reserva`
+
+                            }
+
+
                         }
-                        if (descuentoAplicadoA === "totalNetoApartamentoDedicado") {
-                            let apartamentosDedicados = detalleOferta.apartamentosDedicados
-                            let mensajesDescuentoApartamentos = []
-                            apartamentosDedicados.map((apartamento) => {
-                                let apartamentoUI = apartamento.apartamentoUI
-                                let tipoDescuento = apartamento.tipoDescuento
-                                let cantidadApartamento = apartamento.cantidadApartamento
-                                let infoFinal;
-                                if (tipoDescuento === "cantidadFija") {
-                                    infoFinal = `una rebaja fija de ${cantidadApartamento}$ al neto del ${apartamentoUI}`
-                                }
-                                if (tipoDescuento === "porcentaje") {
-                                    infoFinal = `un descuento de ${cantidadApartamento}% al neto del ${apartamentoUI}`
-                                }
-                                mensajesDescuentoApartamentos.push(infoFinal)
-                            })
-                            let funsionDescuentos = mensajesDescuentoApartamentos.join(", "); // Fusiona los elementos con comas
-                            funsionDescuentos = funsionDescuentos.replace(/,([^,]*)$/, ' y $1');
-                            textoDefinicionDescuento = `Esta oferta aplicara ${funsionDescuentos}`
-                        }
+
                         const ofertaUI = document.createElement("a")
                         ofertaUI.classList.add("ofertaUI")
                         ofertaUI.setAttribute("ofertaUID", ofertaUID)
@@ -15277,7 +15237,7 @@ const administracion = {
                         bloqueOpcion.appendChild(tituloOpcion)
                         datoOpcion = document.createElement("p")
                         datoOpcion.classList.add("ofertaUIDatoOpcion")
-                        datoOpcion.innerText =  estadosOfertaUI[estadoOferta]
+                        datoOpcion.innerText = estadosOfertaUI[estadoOferta]
                         bloqueOpcion.appendChild(datoOpcion)
                         contenedorPropiedadesOferta.appendChild(bloqueOpcion)
                         contenedorGlobalOferta.appendChild(contenedorPropiedadesOferta)
@@ -18315,43 +18275,22 @@ const administracion = {
             },
             eliminarComportamiento: {
                 UI: async () => {
-                    const advertenciaInmersivaIU = document.createElement("div")
-                    advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                    advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                    const contenedorAdvertenciaInmersiva = document.createElement("div")
-                    contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                    const tituloCancelarReserva = document.createElement("p")
-                    tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                    tituloCancelarReserva.innerText = "Confirmar eliminar reserva"
-                    contenedorAdvertenciaInmersiva.appendChild(tituloCancelarReserva)
-                    const bloqueBloqueoApartamentos = document.createElement("div")
-                    bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
-                    const tituloBloquoApartamentos = document.createElement("div")
-                    tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                    tituloBloquoApartamentos.innerText = "Var a eliminar un comportamiento de precios configurado, ¿Estas de acuerdo?"
-                    bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
-                    contenedorAdvertenciaInmersiva.appendChild(bloqueBloqueoApartamentos)
-                    const bloqueBotones = document.createElement("div")
-                    bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
-                    const botonCancelar = document.createElement("div")
-                    botonCancelar.classList.add("detallesReservaCancelarBoton")
-                    botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
-                    botonCancelar.innerText = "Confirmar y eliminar comportamiento"
-                    botonCancelar.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.detallesComportamiento.eliminarComportamiento.confirmar)
-                    bloqueBotones.appendChild(botonCancelar)
-                    const botonCancelarProcesoCancelacion = document.createElement("div")
-                    botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                    botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion del comportamiento"
-                    botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                        let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                        selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                            advertenciaInmersiva.remove()
-                        })
-                    })
-                    bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
-                    contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
-                    advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
+                    const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
+                    const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+
+                    const titulo = constructor.querySelector("[componente=titulo]")
+                    titulo.innerText = "Confirmar la eliminacíon del comportamiento de precio"
+                    const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                    mensaje.innerText = "Var a eliminar un comportamiento de precios configurado, ¿Estas de acuerdo?"
+
+                    const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                    botonAceptar.innerText = "Comfirmar la eliminacion"
+                    botonAceptar.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.detallesComportamiento.eliminarComportamiento.confirmar)
+                    const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                    botonCancelar.innerText = "Cancelar la eliminacion"
+
+                    document.querySelector("main").appendChild(pantallaInmersiva)
+
                 },
                 confirmar: async () => {
                     const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
@@ -19774,43 +19713,23 @@ const administracion = {
             },
             eliminarBloqueo: {
                 UI: async () => {
-                    const advertenciaInmersivaIU = document.createElement("div")
-                    advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                    advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                    const contenedorAdvertenciaInmersiva = document.createElement("div")
-                    contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                    const tituloCancelarReserva = document.createElement("p")
-                    tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                    tituloCancelarReserva.innerText = "Confirmar eliminar el bloqueo"
-                    contenedorAdvertenciaInmersiva.appendChild(tituloCancelarReserva)
-                    const bloqueBloqueoApartamentos = document.createElement("div")
-                    bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
-                    const tituloBloquoApartamentos = document.createElement("div")
-                    tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                    tituloBloquoApartamentos.innerText = "Var a eliminar el bloqueo y sus implicaciones seran inmediatas, ¿Estas de acuerdo?"
-                    bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
-                    contenedorAdvertenciaInmersiva.appendChild(bloqueBloqueoApartamentos)
-                    const bloqueBotones = document.createElement("div")
-                    bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
-                    const botonCancelar = document.createElement("div")
-                    botonCancelar.classList.add("detallesReservaCancelarBoton")
-                    botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
-                    botonCancelar.innerText = "Confirmar y eliminar el bloqueo"
-                    botonCancelar.addEventListener("click", casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.eliminarBloqueo.confirmar)
-                    bloqueBotones.appendChild(botonCancelar)
-                    const botonCancelarProcesoCancelacion = document.createElement("div")
-                    botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                    botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion del bloqueo"
-                    botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                        let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                        selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                            advertenciaInmersiva.remove()
-                        })
-                    })
-                    bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
-                    contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
-                    advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                    document.querySelector("main").appendChild(advertenciaInmersivaIU)
+
+                    const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
+                    const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+    
+                    const titulo = constructor.querySelector("[componente=titulo]")
+                    titulo.innerText = "Confirmar eliminar el bloqueo"
+                    const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                    mensaje.innerText = "Var a eliminar el bloqueo y sus implicaciones seran inmediatas, ¿Estas de acuerdo?"
+    
+                    const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                    botonAceptar.innerText = "Comfirmar la eliminacion"
+                    botonAceptar.addEventListener("click", casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.eliminarBloqueo.confirmar)
+                    const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                    botonCancelar.innerText = "Cancelar la eliminacion"
+    
+                    document.querySelector("main").appendChild(pantallaInmersiva)
+
                 },
                 confirmar: async () => {
                     const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
@@ -21350,7 +21269,7 @@ const administracion = {
                     }
                 },
                 eliminarEntidad: {
-                    "UI": async () => {
+                    UI: async () => {
                         const tipoEntidad = document.querySelector("[tipoEntidad]").getAttribute("tipoEntidad")
                         let entidadUI
                         let textoDescriptivo
@@ -21370,43 +21289,22 @@ const administracion = {
                             tituloAdvertencia = "Confirmar eliminar la cama como entidad"
                             textoDescriptivo = "Vas a eliminar esta cama como entidad. Esto implica eliminar la cama como entidad y su existencia en las configuraciones de alojamiento. Esto implica que las habitaciones que contenian esta cama dejaran de mostrarla por su inexistencia. Sus implicaciones son inmediatas. ¿Quieres confirmar la eliminacion de esta cama como entidad?"
                         }
-                        const advertenciaInmersivaIU = document.createElement("div")
-                        advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                        advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                        const contenedorAdvertenciaInmersiva = document.createElement("div")
-                        contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                        const tituloCancelarReserva = document.createElement("p")
-                        tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                        tituloCancelarReserva.innerText = tituloAdvertencia
-                        contenedorAdvertenciaInmersiva.appendChild(tituloCancelarReserva)
-                        const bloqueBloqueoApartamentos = document.createElement("div")
-                        bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
-                        const tituloBloquoApartamentos = document.createElement("div")
-                        tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                        tituloBloquoApartamentos.innerText = textoDescriptivo
-                        bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
-                        contenedorAdvertenciaInmersiva.appendChild(bloqueBloqueoApartamentos)
-                        const bloqueBotones = document.createElement("div")
-                        bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
-                        const botonCancelar = document.createElement("div")
-                        botonCancelar.classList.add("detallesReservaCancelarBoton")
-                        botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
-                        botonCancelar.innerText = "Confirmar y eliminar la entidad"
-                        botonCancelar.addEventListener("click", casaVitini.administracion.arquitectura_del_alojamiento.entidades.editarEntidad.eliminarEntidad.confirmar)
-                        bloqueBotones.appendChild(botonCancelar)
-                        const botonCancelarProcesoCancelacion = document.createElement("div")
-                        botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                        botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion de la entidad"
-                        botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                            let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                                advertenciaInmersiva.remove()
-                            })
-                        })
-                        bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
-                        contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
-                        advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                        document.querySelector("main").appendChild(advertenciaInmersivaIU)
+                      
+                        const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
+                        const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+        
+                        const titulo = constructor.querySelector("[componente=titulo]")
+                        titulo.innerText = tituloAdvertencia
+                        const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                        mensaje.innerText = textoDescriptivo
+        
+                        const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                        botonAceptar.innerText = "Comfirmar la eliminacion"
+                        botonAceptar.addEventListener("click", casaVitini.administracion.arquitectura_del_alojamiento.entidades.editarEntidad.eliminarEntidad.confirmar)
+                        const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                        botonCancelar.innerText = "Cancelar la eliminacion"
+        
+                        document.querySelector("main").appendChild(pantallaInmersiva)
                     },
                     confirmar: async () => {
                         const tipoEntidad = document.querySelector("[tipoEntidad]").getAttribute("tipoEntidad")
@@ -21903,43 +21801,25 @@ const administracion = {
                 },
                 eliminarConfiguracion: {
                     UI: async () => {
-                        const advertenciaInmersivaIU = document.createElement("div")
-                        advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                        advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                        const contenedorAdvertenciaInmersiva = document.createElement("div")
-                        contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                        const tituloCancelarReserva = document.createElement("p")
-                        tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                        tituloCancelarReserva.innerText = "Eliminar configuracion del apartamento"
-                        contenedorAdvertenciaInmersiva.appendChild(tituloCancelarReserva)
-                        const bloqueBloqueoApartamentos = document.createElement("div")
-                        bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
-                        const tituloBloquoApartamentos = document.createElement("div")
-                        tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                        tituloBloquoApartamentos.innerText = "Confirma la eliminacíon de todo la configuracíon de apartamento. Esto implida la configuracion del apartamento, el perfil de precios y los bloqueos vigentes. Si este apartamento aparece en un comportamientos de precios, sera eliminado el apartamento del comportamiento de precios pero el resto del comportamiento seguira vigente a no ser que sea el unico apartamento en algun comportamiento de precios.Sus implicaciones seran inmediatas"
-                        bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
-                        contenedorAdvertenciaInmersiva.appendChild(bloqueBloqueoApartamentos)
-                        const bloqueBotones = document.createElement("div")
-                        bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
-                        const botonCancelar = document.createElement("div")
-                        botonCancelar.classList.add("detallesReservaCancelarBoton")
-                        botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
-                        botonCancelar.innerText = "Confirmar y eliminar la configuracíon"
-                        botonCancelar.addEventListener("click", casaVitini.administracion.arquitectura_del_alojamiento.configuraciones.detallesConfiguracion.eliminarConfiguracion.confirmar)
-                        bloqueBotones.appendChild(botonCancelar)
-                        const botonCancelarProcesoCancelacion = document.createElement("div")
-                        botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                        botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion de la configuracíon"
-                        botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                            let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
-                                advertenciaInmersiva.remove()
-                            })
-                        })
-                        bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
-                        contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
-                        advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                        document.querySelector("main").appendChild(advertenciaInmersivaIU)
+
+                        const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
+                        const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+        
+                        const titulo = constructor.querySelector("[componente=titulo]")
+                        titulo.innerText = "Eliminar configuración de alojamiento"
+                        const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                        mensaje.innerText = "Confirma la eliminacíon de todo la configuracíon de apartamento. Esto implida la configuracion del apartamento, el perfil de precios y los bloqueos vigentes. Si este apartamento aparece en un comportamientos de precios, sera eliminado el apartamento del comportamiento de precios pero el resto del comportamiento seguira vigente a no ser que sea el unico apartamento en algun comportamiento de precios.Sus implicaciones seran inmediatas"
+        
+                        const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                        botonAceptar.innerText = "Comfirmar la eliminacion"
+                        botonAceptar.addEventListener("click", casaVitini.administracion.arquitectura_del_alojamiento.configuraciones.detallesConfiguracion.eliminarConfiguracion.confirmar)
+                        const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                        botonCancelar.innerText = "Cancelar la eliminacion"
+        
+                        document.querySelector("main").appendChild(pantallaInmersiva)
+
+
+
                     },
                     confirmar: async () => {
                         const apartamentoIDV = document.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")

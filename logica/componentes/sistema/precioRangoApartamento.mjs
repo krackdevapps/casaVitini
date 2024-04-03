@@ -2,6 +2,9 @@ import { DateTime } from 'luxon';
 import { conexion } from '../db.mjs';
 import Decimal from 'decimal.js';
 import { aplicarImpuestos } from './aplicarImpuestos.mjs';
+import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
+import { selectorRangoUniversal } from './selectoresCompartidos/selectorRangoUniversal.mjs';
+
 // Pasas una fecha de entrad un fecha de salida y un apartmaento y te da todos el tema
 const constructorObjetoEstructuraPrecioDia = (fechaEntrada_ISO, fechaSalida_ISO) => {
     const arregloFechas = [];
@@ -13,13 +16,10 @@ const constructorObjetoEstructuraPrecioDia = (fechaEntrada_ISO, fechaSalida_ISO)
     }
     return arregloFechas;
 }
-const verificarFechaEnRango = (fechaEntrada_ISO, fechaSalida_ISO, fechaEspecifica_ISO) => {
-    const fechaInicio = DateTime.fromISO(fechaEntrada_ISO);
-    const fechaFin = DateTime.fromISO(fechaSalida_ISO);
-    const fechaVerificar = DateTime.fromISO(fechaEspecifica_ISO);
-    return fechaVerificar >= fechaInicio && fechaVerificar <= fechaFin;
-}
 const resolverComportamientosDePrecio = async (fechaEntrada_ISO, fechaSalida_ISO) => {
+    await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
+    await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
+
     const estructuraComportamientos = []
     const soloComportamientosActivados = "activado"
     const buscarComportamientoPrecio = `
@@ -73,7 +73,7 @@ const precioRangoApartamento = async (metadatos) => {
         const fechaSalida_ISO = metadatos.fechaSalida_ISO
         const apartamentosIDVArreglo = metadatos.apartamentosIDVArreglo
         const estructuraArregloDiasEnEspera = constructorObjetoEstructuraPrecioDia(fechaEntrada_ISO, fechaSalida_ISO);
-        
+
         const comportamientoEntonctradosPorProcesar = []
         const desglosePreciosBaseApartamentos = []
         const estructuraFinal = {}
@@ -118,9 +118,9 @@ const precioRangoApartamento = async (metadatos) => {
             }
             desglosePreciosBaseApartamentos.push(detalleApartamento)
         }
-        
+
         const comportamientosPorProcesarComoPerfiles = await resolverComportamientosDePrecio(fechaEntrada_ISO, fechaSalida_ISO)
-        
+
         // Borrar la ultima fecha por que se esta calculano noches no dias
         estructuraArregloDiasEnEspera.pop()
         const numeroNoches = estructuraArregloDiasEnEspera.length
@@ -129,12 +129,12 @@ const precioRangoApartamento = async (metadatos) => {
         for (const fechaISO of estructuraArregloDiasEnEspera) {
             const fechaObjeto = DateTime.fromISO(fechaISO)
             const dia = fechaObjeto.day;
-            
+
             const mes = fechaObjeto.month;
             const ano = fechaObjeto.year;
             const fechaDiaUI = `${dia}/${mes}/${ano}`
             //SUSTITUIDO POR FECHADIS
-            const fechaDia_ISO = `${ano}-${mes}-${dia}`
+            const fechaDia_ISO = `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")}`
             const estructuraDia = {
                 fechaDiaConNoche: fechaDiaUI,
                 precioNetoNoche: null,
@@ -158,11 +158,18 @@ const precioRangoApartamento = async (metadatos) => {
                         const fechaInicioComortamiento_Array = fechaIncioComportamiento_Humano.split("/")
                         const fehcaInicioComportamiento_ISO = `${fechaInicioComortamiento_Array[2]}-${fechaInicioComortamiento_Array[1]}-${fechaInicioComortamiento_Array[0]}`
                         const fechaFinalComportamiento_Array = fechaFinalComportamiento_Humano.split("/")
-                        
+
                         const fechaFinalComportamiento_ISO = `${fechaFinalComportamiento_Array[2]}-${fechaFinalComportamiento_Array[1]}-${fechaFinalComportamiento_Array[0]}`
-                      
-                        
-                        const controlRangoInterno = verificarFechaEnRango(fehcaInicioComportamiento_ISO, fechaFinalComportamiento_ISO, fechaDia_ISO)
+
+                        const controlRangoInterno = await selectorRangoUniversal({
+                            fechaInicio_rango_ISO: fehcaInicioComportamiento_ISO,
+                            fechaFin_rango_ISO: fechaFinalComportamiento_ISO,
+                            fechaInicio_elemento_ISO: fechaDia_ISO,
+                            fechaFin_elemento_ISO: fechaDia_ISO,
+                            tipoLimite: "incluido"
+                        })
+                        //Aqui esta el error tipio del selector de rango unidimensional
+
                         if (controlRangoInterno && apartamentoIDV === apartamentoIDVComportamiento) {
                             comportamientoEncontrado = "encontrado"
                             let precioFinalPorNoche
@@ -213,7 +220,7 @@ const precioRangoApartamento = async (metadatos) => {
                 estructuraDia.apartamentos.push(detalleApartamentoPorDia)
                 const totalNeto = estructuraFinal.metadatos.totalNeto ? estructuraFinal.metadatos.totalNeto : 0
                 estructuraFinal.metadatos.totalNeto = new Decimal(totalNeto).plus(detalleApartamentoPorDia.precioNetoNoche)
-                // Precio medie de la noche por apartmento
+                // Precio medie de la noche por apartamento
             }
             estructuraDia.precioNetoNoche = new Decimal(precioNetoNoche).isPositive() ? precioNetoNoche.toFixed(2) : "0.00";
             estructuraFinal.totalesPorNoche_Objeto[fechaDiaUI] = estructuraDia
@@ -222,9 +229,7 @@ const precioRangoApartamento = async (metadatos) => {
         for (const detalleGeneralApartamento of Object.entries(detallePorApartamentoPreFormato)) {
             const preTotalNetoRango = new Decimal(detalleGeneralApartamento[1].totalNetoRango)
             const prePrecioMedioNocheRango = preTotalNetoRango.dividedBy(numeroNoches)
-            //            ("detalleGeneralApartamento", detalleGeneralApartamento)
             detalleGeneralApartamento[1].totalNetoRango = preTotalNetoRango.toFixed(2)
-            //  
             detalleGeneralApartamento[1].precioMedioNocheRango = prePrecioMedioNocheRango.toFixed(2)
         }
         const totalNetoPreFormato = estructuraFinal.metadatos.totalNeto
@@ -234,7 +239,7 @@ const precioRangoApartamento = async (metadatos) => {
         for (const detallesPorNoche of Object.values(estructuraFinal.totalesPorNoche_Objeto)) {
             estructuraFinal.totalesPorNoche.push(detallesPorNoche)
         }
-        ( estructuraFinal.totalesPorNoche)
+        (estructuraFinal.totalesPorNoche)
         for (const detallesPorApartamento of Object.values(estructuraFinal.totalesPorApartamento_Objeto)) {
             estructuraFinal.totalesPorApartamento.push(detallesPorApartamento)
         }

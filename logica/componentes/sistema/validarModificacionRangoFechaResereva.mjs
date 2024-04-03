@@ -150,7 +150,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 apartamentosIDV_array: apartamentosReservaActual,
             }
             const reservasSeleccionadas = await reservasPorRango_y_apartamentos(configuracionReservas)
-         
+
             for (const detallesReserva of reservasSeleccionadas) {
                 const reserva = detallesReserva.reserva
                 const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
@@ -187,7 +187,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                         const fechaInicio = detallesDelEvento.fechaInicio
                         const nombreEvento = detallesDelEvento.nombreEvento
                         const descripcion = detallesDelEvento.descripcion
-                        const rangoInterno = selectorRangoUniversal({
+                        const rangoInterno = await selectorRangoUniversal({
                             fechaInicio_rango_ISO: fechaSeleccionadaParaPasado_ISO,
                             fechaFin_rango_ISO: fechaEntradaReserva_ISO,
                             fechaInicio_elemento_ISO: fechaInicio,
@@ -205,7 +205,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                                 tipoElemento: "eventoSincronizado"
                             }
                             contenedorEventosCalendariosSincronizados.push(estructura)
-                            
+
                         }
                     }
                 }
@@ -260,7 +260,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
                 const tipoElemento = detallesDelEvento.tipoElemento
                 if (tipoElemento === "reserva" || tipoElemento === "eventoSincronizado") {
-                    const eventoBloqueanteDeRango = selectorRangoUniversal({
+                    const eventoBloqueanteDeRango = await selectorRangoUniversal({
                         fechaInicio_rango_ISO: fechaSeleccionadaParaPasado_ISO,
                         fechaFin_rango_ISO: fechaEntradaReserva_ISO,
                         fechaInicio_elemento_ISO: fechaInicioEvento_ISO,
@@ -274,7 +274,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 if (tipoElemento === "bloqueo") {
                     const tipoBloqueo = detallesDelEvento.tipoBloqueo
                     if (tipoBloqueo === "rangoTemporal") {
-                        const eventoBloqueanteDeRango = selectorRangoUniversal({
+                        const eventoBloqueanteDeRango = await selectorRangoUniversal({
                             fechaInicio_rango_ISO: fechaSeleccionadaParaPasado_ISO,
                             fechaFin_rango_ISO: fechaEntradaReserva_ISO,
                             fechaInicio_elemento_ISO: fechaInicioEvento_ISO,
@@ -353,7 +353,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 ],
             }
             const bloqueosSeleccionados = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
-          
+
             const contenedorBloqueosEncontrados = []
             for (const detallesDelBloqueo of bloqueosSeleccionados) {
                 const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada_ISO
@@ -417,7 +417,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                         const fechaInicio = detallesDelEvento.fechaInicio
                         const nombreEvento = detallesDelEvento.nombreEvento
                         const descripcion = detallesDelEvento.descripcion
-                        const rangoInterno = selectorRangoUniversal({
+                        const rangoInterno = await selectorRangoUniversal({
                             fechaInicio_rango_ISO: fechaSalidaReserva_ISO,
                             fechaFin_rango_ISO: fechaSeleccionadaParaFuturo_ISO,
                             fechaInicio_elemento_ISO: fechaInicio,
@@ -483,7 +483,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
                 const tipoElemento = detallesDelEvento.tipoElemento
                 if (tipoElemento === "reserva" || tipoElemento === "eventoSincronizado") {
-                    const eventoBloqueanteDeRango = selectorRangoUniversal({
+                    const eventoBloqueanteDeRango = await selectorRangoUniversal({
                         fechaInicio_rango_ISO: fechaSalidaReserva_ISO,
                         fechaFin_rango_ISO: fechaSeleccionadaParaFuturo_ISO,
                         fechaInicio_elemento_ISO: fechaInicioEvento_ISO,
@@ -497,7 +497,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 if (tipoElemento === "bloqueo") {
                     const tipoBloqueo = detallesDelEvento.tipoBloqueo
                     if (tipoBloqueo === "rangoTemporal") {
-                        const eventoBloqueanteDeRango = selectorRangoUniversal({
+                        const eventoBloqueanteDeRango = await selectorRangoUniversal({
                             fechaInicio_rango_ISO: fechaSalidaReserva_ISO,
                             fechaFin_rango_ISO: fechaSeleccionadaParaFuturo_ISO,
                             fechaInicio_elemento_ISO: fechaInicioEvento_ISO,

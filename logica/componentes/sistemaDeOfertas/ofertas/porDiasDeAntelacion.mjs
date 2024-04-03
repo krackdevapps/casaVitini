@@ -77,7 +77,6 @@ const porDiasDeAntelacion = async (reserva) => {
             porDiasDeAntelacion: ofertasSeleccionadas,
             descuentoGlobal: descuentoGlobal
         }
-        console.log("estructuraSaliente", estructuraSaliente)
         return estructuraSaliente
     } catch (error) {
         throw error

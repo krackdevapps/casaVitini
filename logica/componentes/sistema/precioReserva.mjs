@@ -27,7 +27,7 @@ const calcularPrecioPorObjeto = async (reserva) => {
     precioFinal.fechas = {}
     precioFinal.fechas.entrada = fechaEntrada_Humano
     precioFinal.fechas.salida = fechaSalida_Humano
-    precioFinal.fechas.creacion_ISO_UTC =  reserva.creacion_ISO_UTC
+    precioFinal.fechas.creacion_ISO_UTC = reserva.creacion_ISO_UTC
     precioFinal.fechas.numeroDeDiasConNoche = numeroNoches
     delete desglosePrecioApartamentos.metadatos
     precioFinal.desgloseFinanciero = desglosePrecioApartamentos
@@ -77,7 +77,7 @@ const precioReserva = async (metadatos) => {
             let resuelveapartamentosReservas = await conexion.query(apartamentosReservas, [reserva])
             if (resuelveapartamentosReservas.rowCount === 0) {
                 const error = "Esta reserva no tiene apartamentos"
-               throw new Error(error)
+                throw new Error(error)
             }
             const apartamentosReserva1 = [];
             (resuelveapartamentosReservas.rows).map(apartamento => {
@@ -105,7 +105,7 @@ const precioReserva = async (metadatos) => {
         }
         const impuestos = await aplicarImpuestos(totalNeto)
         const totalImpuestos = impuestos.sumaImpuestos.toFixed(2)
-        
+
         resuelvePrecioReserva.desgloseFinanciero.impuestos = impuestos.impuestos
         resuelvePrecioReserva.desgloseFinanciero.totales.totalImpuestos = totalImpuestos
         const totalConImpuestos = totalNeto.plus(impuestos.sumaImpuestos)
