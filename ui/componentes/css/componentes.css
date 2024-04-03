@@ -12978,6 +12978,7 @@ grid-template-columns: 0.5fr 1.5fr;
     pointer-events: none;
     position: absolute;
     transition: all 500ms linear;
+    z-index: 101;
 
 }
 
