@@ -16032,9 +16032,11 @@ const administracion = {
                 const seccionRenderizada = document.querySelector(`main[instanciaUID="${seccionUID}"]`)
                 if (!seccionRenderizada) return
                 if (respuestaServidor?.error) {
-                    const titulo = document.querySelector(".titulo")
-                    titulo.innerText = "No existe la oferta 248"
-                    return
+                    const info = {
+                        titulo: "No existe ningúna oferta con ese identificador",
+                        descripcion: "Revisa el identificador por que esta oferta que buscas no existe. Quiza este identirficador existio y borrastes esta oferta."
+                    }
+                    return casaVitini.componentes.mensajeSimple(info)
                 }
                 if (respuestaServidor?.ok) {
                     const espacioOfertasGlobal = document.querySelector("[componente=espacioOfertas]")
@@ -20773,8 +20775,8 @@ const administracion = {
                         if (!seccionRenderizada) return
                         if (respuestaServidor?.error) {
                             const info = {
-                                titulo: "No existe ningun apartamento como entidad con ese identificador",
-                                descripcion: "No exita la entidad que buscas. Por favor revisa el identificador que soliticas por que este no existe. Quizas este identificador fue de una entidad de alojamiento que tuvistes en el pasado y que borrastes."
+                                titulo: "No existe ningún apartamento como entidad con ese identificadorIDV",
+                                descripcion: "No existe la entidad que buscas. Por favor revisa el identificadorIDV que soliticas por que este no existe. Quizas este identificador fue de una entidad de alojamiento que tuvistes en el pasado y que borrastes."
                             }
                             return casaVitini.componentes.mensajeSimple(info)
                         }

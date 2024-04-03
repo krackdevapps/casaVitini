@@ -8648,7 +8648,6 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 10px;
     flex-direction: column;
     padding: 10px;
-    border: 1px solid grey;
 }
 
 [zonaCSS="miCasa"] .miCasa_sessiones_textoIP {
@@ -8657,7 +8656,6 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 10px;
     flex-direction: column;
     padding: 10px;
-    border: 1px solid grey;
 }
 
 [zonaCSS="miCasa"] .miCasa_sessiones_texto {
@@ -13042,7 +13040,9 @@ grid-template-columns: 0.5fr 1.5fr;
     position: relative;
 
 }
-
+.mensajeDelError {
+    text-align: center;
+}
 [zonaCSS=conozcanos] .contenedorImagenNecesario {
     overflow: hidden;
     border-radius: 40px;

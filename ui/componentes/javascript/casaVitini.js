@@ -2376,7 +2376,7 @@ const casaVitini = {
                                         const sessionInfo = document.createElement("div")
                                         sessionInfo.classList.add("miCasa_sessiones_texto")
                                         sessionInfo.classList.add("negrita")
-                                        sessionInfo.innerText = "Session IDX " + sessionActual_UI
+                                        sessionInfo.innerText = "Vitini IDX " + sessionActual_UI
                                         contenedorSessionID.appendChild(sessionInfo)
                                         const sessionIDX_UI = document.createElement("div")
                                         sessionIDX_UI.classList.add("miCasa_sessiones_texto")
@@ -9442,7 +9442,7 @@ const casaVitini = {
             titulo.innerText = mensaje.titulo
             contenedorBloque.appendChild(titulo)
             const descripcion = document.createElement("div")
-            descripcion.classList.add("casaVitini.componentes.menajeDelError")
+            descripcion.classList.add("mensajeDelError")
             descripcion.innerText = mensaje.descripcion
             contenedorBloque.appendChild(descripcion)
             contenedorIntermedio.appendChild(contenedorBloque)
