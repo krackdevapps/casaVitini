@@ -13043,13 +13043,9 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS=conozcanos] .contenedorImagenNecesario {
-    /* height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative; */
     overflow: hidden;
     border-radius: 40px;
+    z-index: 100;
 }
 
 [zonaCSS=conozcanos] .contenedorParalax .texto_animado {
