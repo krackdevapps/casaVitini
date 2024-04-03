@@ -5150,7 +5150,8 @@ const puerto = async (entrada, salida) => {
                             tipoBloqueo: tipoBloqueo,
                             fechaEntrada_ISO: fechaEntrada_ISO,
                             fechaSalida_ISO: fechaSalida_ISO,
-                            zonaBloqueo: "publico"
+                            zonaBloqueo: "publico",
+                            origen: "eliminacionApartamentoDeReserva"
                         }
                         await bloquearApartamentos(metadatos)
                         const eliminaApartamentoReserva = `
@@ -6055,6 +6056,7 @@ const puerto = async (entrada, salida) => {
                         }
                         const validacionReserva = `
                         SELECT 
+                        "estadoReserva",
                         to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
                         to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"
                         FROM reservas
@@ -6065,6 +6067,12 @@ const puerto = async (entrada, salida) => {
                             const error = "No existe la reserva"
                             throw new Error(error)
                         }
+                        const estadoActualReserva = resuelveValidacionReserva.rows[0].estadoReserva
+                        if (estadoActualReserva === "cancelada") {
+                            const error = "La reserva ya esta cancelada"
+                            throw new Error(error)
+                        }
+
                         const eliminarEnlacesDePago = `
                         DELETE FROM "enlacesDePago"
                         WHERE reserva = $1;
@@ -6107,7 +6115,9 @@ const puerto = async (entrada, salida) => {
                                     apartamentoUID: apartamento.uid,
                                     tipoBloqueo: tipoBloqueo,
                                     fechaEntrada_ISO: fechaEntrada_ISO,
-                                    fechaSalida_ISO: fechaSalida_ISO
+                                    fechaSalida_ISO: fechaSalida_ISO,
+                                    zonaBloqueo: "publico",
+                                    origen: "cancelacionDeReserva"
                                 }
                                 await bloquearApartamentos(metadatos)
                             }

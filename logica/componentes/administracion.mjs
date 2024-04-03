@@ -7516,25 +7516,42 @@ const administracion = {
                         botonCancelar.removeAttribute("style")
                     },
                     confirmaCancelacion: async () => {
-                        let reserva = document.querySelector("[reserva]").getAttribute("reserva")
-                        let tipoBloqueo = document.querySelector("[componente=cancelarReservaOpcionBloqueo][estado=activo]").getAttribute("cancelarReservatipoBloqueo")
+                        const instanciaUID_pantallaEspera = casaVitini.componentes.codigoFechaInstancia()
+                        const metadatosPantallaCarga = {
+                            mensaje: "Cancelando reserva...",
+                            instanciaUID: instanciaUID_pantallaEspera,
+                        }
+                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
+
+
+                        const reserva = document.querySelector("[reserva]").getAttribute("reserva")
+                        const tipoBloqueo = document.querySelector("[componente=cancelarReservaOpcionBloqueo][estado=activo]").getAttribute("cancelarReservatipoBloqueo")
                         const transaccion = {
                             zona: "administracion/reservas/cancelarReserva",
                             reserva: Number(reserva),
                             tipoBloqueo: tipoBloqueo
                         }
-                        let respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                        
+                        const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                        const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaEspera}"]`)]
+                        if (!selectorPantallaDeCarga) {
+                            return
+                        }
+                        selectorPantallaDeCarga.forEach((pantalla) => {
+                            pantalla.remove()
+                        })
+
                         if (respuestaServidor?.error) {
                             casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
                             return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                         }
                         if (respuestaServidor?.ok) {
                             document.querySelector("[dataReserva=estado]").innerText = "Cancelada"
-                            let selectorBotonesInvisibles = [...document.querySelectorAll("[estadoInvisible=Cancelada]")]
+                            const selectorBotonesInvisibles = [...document.querySelectorAll("[estadoInvisible=Cancelada]")]
                             selectorBotonesInvisibles.map((boton) => {
                                 boton.classList.add("estadoInicialInvisible")
                             })
-                            let selectorAdvertenciaInmersiva = document.querySelector("[componente=advertenciaInmersiva]")
+                            const selectorAdvertenciaInmersiva = document.querySelector("[componente=advertenciaInmersiva]")
                             selectorAdvertenciaInmersiva.innerHTML = null
                             const titulo = document.createElement("p")
                             titulo.classList.add("detallesReservaTituloCancelarReserva")

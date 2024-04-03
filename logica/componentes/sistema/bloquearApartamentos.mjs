@@ -7,7 +7,9 @@ const bloquearApartamentos = async (metadatos) => {
         const tipoBloqueo = metadatos.tipoBloqueo
         const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
         const fechaSalida_ISO = metadatos.fechaSalida_ISO
-        const zonaBloqueo =  metadatos.zonaBloqueo
+        const zonaBloqueo = metadatos.zonaBloqueo
+        const origen = metadatos.origen
+
 
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
@@ -25,6 +27,10 @@ const bloquearApartamentos = async (metadatos) => {
         }
         if (zonaBloqueo !== "publico" && zonaBloqueo !== "privado" && zonaBloqueo !== "global") {
             const error = "El campo 'zonaBloqueo' solo puede ser publico, privado, global"
+            throw new Error(error)
+        }
+        if (origen !== "cancelacionDeReserva" && origen !== "eliminacionApartamentoDeReserva") {
+            const error = "El campo 'origen' solo puede ser cancelacionDeReserva o eliminacionApartamentoDeReserva"
             throw new Error(error)
         }
         const validarReserva = `
@@ -48,8 +54,14 @@ const bloquearApartamentos = async (metadatos) => {
             throw new Error(error)
         }
         const apartamentoIDV = resuelveValidarApartamento.rows[0].apartamento
-        let estado = "disponible"
-        const motivo = `Bloqueo producido por eliminar este apartamento de la reserva ${reserva}`
+        let motivoFinal
+
+        if (origen === "cancelacionDeReserva") {
+            motivoFinal = `Bloqueo producido por la cancelación de la reserva ${reserva}`
+        }
+        if (origen === "eliminacionApartamentoDeReserva") {
+            motivoFinal = `Bloqueo producido por eliminar este apartamento de la reserva ${reserva}`
+        }
         if (tipoBloqueo === "rangoTemporal") {
 
             const insertaBloqueoApartamento = `
@@ -70,10 +82,10 @@ const bloquearApartamentos = async (metadatos) => {
                 tipoBloqueo,
                 fechaEntrada_ISO,
                 fechaSalida_ISO,
-                motivo,
+                motivoFinal,
                 zonaBloqueo
             ]
-            
+
             const resuelveinsertaBloqueoApartamento = await conexion.query(insertaBloqueoApartamento, datosBloqueo)
             if (resuelveinsertaBloqueoApartamento.rowCount === 0) {
                 const error = "No se ha podido aplicar el bloquo temporal"
@@ -95,7 +107,7 @@ const bloquearApartamentos = async (metadatos) => {
             const datosBloqueo = [
                 apartamentoIDV,
                 tipoBloqueo,
-                motivo,
+                motivoFinal,
                 zonaBloqueo
             ]
             const resuelveinsertaBloqueoApartamento = await conexion.query(insertaBloqueoApartamento, datosBloqueo)
