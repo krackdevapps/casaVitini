@@ -13955,8 +13955,8 @@ const administracion = {
             let selectorApartamentoIDV = document.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")
             const transaccion = {
                 zona: "administracion/precios/previsualizarPrecioApartamento",
-                "apartamentoIDV": selectorApartamentoIDV,
-                "propuestaPrecio": Number(selectorCampoNuevoPrecio.value)
+                apartamentoIDV: selectorApartamentoIDV,
+                propuestaPrecio: selectorCampoNuevoPrecio.value
             }
             let respuestaServidor = await casaVitini.componentes.servidor(transaccion)
             if (respuestaServidor?.error) {

@@ -10972,6 +10972,7 @@ const puerto = async (entrada, salida) => {
                             const apartamentoIDV = entrada.body.apartamentoIDV
                             const filtroCadena = /^[a-z0-9]+$/;
                             const propuestaPrecio = entrada.body.propuestaPrecio
+                            console.log("prtopuesta", propuestaPrecio)
                             if (typeof apartamentoIDV !== "string") {
                                 const error = "El campo apartamentoIDV debe de ser una cadena"
                                 throw new Error(error)
@@ -10980,9 +10981,9 @@ const puerto = async (entrada, salida) => {
                                 const error = "El campo apartamentoIDV solo puede ser un una cadena de minúsculas y numeros, ni siquera espacios"
                                 throw new Error(error)
                             }
-                            const filtroPropuestaPrecio = /^\d+(\.\d{2})?$/;
+                            const filtroPropuestaPrecio = /^\d+\.\d{2}$/;
                             if (!filtroPropuestaPrecio.test(propuestaPrecio)) {
-                                const error = "El campo propuestaPrecio solo puede ser un numero con dos decimales y nada mas, los decimales deben de separarse con un punto y no una coma"
+                                const error = "El campo propuestaPrecio solo puede ser un numero con dos decimales y nada mas, los decimales deben de separarse con un punto y no una coma, por ejemplo si quieres poner un precio de 10, tienes que escribir 10.00"
                                 throw new Error(error)
                             }
                             const validarApartamento = `
