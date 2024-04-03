@@ -5666,11 +5666,9 @@ const administracion = {
                             bloqueDatosGenerales.appendChild(bloqueInfoDato)
                             bloqueTransacciones.appendChild(bloqueDatosGenerales)
                             if (pagos.length === 0) {
-                                const infoNoPagos = document.createElement("div")
-                                infoNoPagos.classList.add("reservaDetalles_transacciones_textoV1")
-                                infoNoPagos.setAttribute("contenedor", "infoNoPagos")
-                                infoNoPagos.innerText = "Esta reserva no tiene ningún pago. Los pagos que se realizen por la pasarela de pagos se mostraran automatícamente aquí. Sin enbargo si ha cobrado esta reserva por ejemplo en efectivo o con un TPV deberia de añadir un pago manual. No es obligatorio añadir un pago manual pero si quiere tener un seguimiento centralizado de todos los pago en esta reserva tiene esa opcíon."
-                                bloqueTransacciones.appendChild(infoNoPagos)
+                                const infoNoPagoUI = casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.UI.infoNoPagos()
+                                bloqueTransacciones.appendChild(infoNoPagoUI)
+
                             }
                             if (pagos.length > 0) {
                                 const bloqueListaDePagos = document.createElement("div")
@@ -5695,9 +5693,9 @@ const administracion = {
                                 }
                                 bloqueTransacciones.appendChild(bloqueListaDePagos)
                             }
-                            contenedorAdvertenciaInmersiva.appendChild(bloqueTransacciones)
                             const enlacePagoUIRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_contenedorDinamicoTransacciones}"]`)
                             enlacePagoUIRenderizada.innerHTML = null
+                            contenedorAdvertenciaInmersiva.appendChild(bloqueTransacciones)
                             enlacePagoUIRenderizada.appendChild(contenedorAdvertenciaInmersiva)
                         },
                         realizarReembolso_quienMeLlama: async () => {
@@ -5995,6 +5993,13 @@ const administracion = {
                                 bloqueDetallesDelPago.appendChild(bloqueChequeUID)
                             }
                             return bloqueDetallesDelPago
+                        },
+                        infoNoPagos: () => {
+                            const infoNoPagos = document.createElement("div")
+                            infoNoPagos.classList.add("reservaDetalles_transacciones_textoV1")
+                            infoNoPagos.setAttribute("contenedor", "infoNoPagos")
+                            infoNoPagos.innerText = "Esta reserva no tiene ningún pago. Los pagos que se realizen por la pasarela de pagos se mostraran automatícamente aquí. Sin enbargo si ha cobrado esta reserva por ejemplo en efectivo o con un TPV deberia de añadir un pago manual. No es obligatorio añadir un pago manual pero si quiere tener un seguimiento centralizado de todos los pago en esta reserva tiene esa opcíon."
+                            return infoNoPagos
                         }
                     },
                     arranque: async () => {
@@ -7266,8 +7271,15 @@ const administracion = {
                             if (respuestaServidor?.ok) {
                                 document.body.removeAttribute("style")
                                 document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"]`)?.remove()
-                                const selectorContenedorTransacciones = document.querySelector(`main[instanciaUID="${instanciaUID_reserva}"]`)
+                                const selectorContenedorTransacciones = document.querySelector(`[instanciaUID="${instanciaUID_contenedorDinamicoTransacciones}"]`)
                                 selectorContenedorTransacciones.querySelector(`[contenedor=listaDePagos]`).querySelector(`[pagoUID="${pagoUID}"]`)?.remove()
+                                const pagosRestantes = selectorContenedorTransacciones.querySelectorAll(`[contenedor=listaDePagos] [pagoUID]`)
+                                if (pagosRestantes.length === 0) {
+                                    selectorContenedorTransacciones.querySelector(`[contenedor=listaDePagos]`).remove()
+                                    const infoNoPagoUI = casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.UI.infoNoPagos()
+                                    selectorContenedorTransacciones.querySelector("[contenedor=transaccionesUI]").appendChild(infoNoPagoUI)
+                                }
+
                                 const datosActualizar = {
                                     reservaUID: reservaUID,
                                 }
@@ -13494,18 +13506,18 @@ const administracion = {
 
                     const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
                     const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
-    
+
                     const titulo = constructor.querySelector("[componente=titulo]")
                     titulo.innerText = "Eliminar irreversiblemente al cliente"
                     const mensaje = constructor.querySelector("[componente=mensajeUI]")
                     mensaje.innerText = "Eliminar irreversiblemnete a un cliente elimina la informacion de este cliente en su ficha y en las reservas donde estuvo. Es decir desaparecera de las reservas donde estuvo este cliente."
-    
+
                     const botonAceptar = constructor.querySelector("[boton=aceptar]")
                     botonAceptar.innerText = "Comfirmar la eliminacion del cliente"
                     botonAceptar.addEventListener("click", casaVitini.administracion.clientes.detallesCliente.eliminarCliente.confirmar)
                     const botonCancelar = constructor.querySelector("[boton=cancelar]")
                     botonCancelar.innerText = "Cancelar la eliminacion"
-    
+
                     document.querySelector("main").appendChild(pantallaInmersiva)
                 },
                 confirmar: async () => {
@@ -19716,18 +19728,18 @@ const administracion = {
 
                     const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
                     const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
-    
+
                     const titulo = constructor.querySelector("[componente=titulo]")
                     titulo.innerText = "Confirmar eliminar el bloqueo"
                     const mensaje = constructor.querySelector("[componente=mensajeUI]")
                     mensaje.innerText = "Var a eliminar el bloqueo y sus implicaciones seran inmediatas, ¿Estas de acuerdo?"
-    
+
                     const botonAceptar = constructor.querySelector("[boton=aceptar]")
                     botonAceptar.innerText = "Comfirmar la eliminacion"
                     botonAceptar.addEventListener("click", casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.eliminarBloqueo.confirmar)
                     const botonCancelar = constructor.querySelector("[boton=cancelar]")
                     botonCancelar.innerText = "Cancelar la eliminacion"
-    
+
                     document.querySelector("main").appendChild(pantallaInmersiva)
 
                 },
@@ -21289,21 +21301,21 @@ const administracion = {
                             tituloAdvertencia = "Confirmar eliminar la cama como entidad"
                             textoDescriptivo = "Vas a eliminar esta cama como entidad. Esto implica eliminar la cama como entidad y su existencia en las configuraciones de alojamiento. Esto implica que las habitaciones que contenian esta cama dejaran de mostrarla por su inexistencia. Sus implicaciones son inmediatas. ¿Quieres confirmar la eliminacion de esta cama como entidad?"
                         }
-                      
+
                         const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
                         const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
-        
+
                         const titulo = constructor.querySelector("[componente=titulo]")
                         titulo.innerText = tituloAdvertencia
                         const mensaje = constructor.querySelector("[componente=mensajeUI]")
                         mensaje.innerText = textoDescriptivo
-        
+
                         const botonAceptar = constructor.querySelector("[boton=aceptar]")
                         botonAceptar.innerText = "Comfirmar la eliminacion"
                         botonAceptar.addEventListener("click", casaVitini.administracion.arquitectura_del_alojamiento.entidades.editarEntidad.eliminarEntidad.confirmar)
                         const botonCancelar = constructor.querySelector("[boton=cancelar]")
                         botonCancelar.innerText = "Cancelar la eliminacion"
-        
+
                         document.querySelector("main").appendChild(pantallaInmersiva)
                     },
                     confirmar: async () => {
@@ -21804,18 +21816,18 @@ const administracion = {
 
                         const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizadaMoldeada()
                         const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
-        
+
                         const titulo = constructor.querySelector("[componente=titulo]")
                         titulo.innerText = "Eliminar configuración de alojamiento"
                         const mensaje = constructor.querySelector("[componente=mensajeUI]")
                         mensaje.innerText = "Confirma la eliminacíon de todo la configuracíon de apartamento. Esto implida la configuracion del apartamento, el perfil de precios y los bloqueos vigentes. Si este apartamento aparece en un comportamientos de precios, sera eliminado el apartamento del comportamiento de precios pero el resto del comportamiento seguira vigente a no ser que sea el unico apartamento en algun comportamiento de precios.Sus implicaciones seran inmediatas"
-        
+
                         const botonAceptar = constructor.querySelector("[boton=aceptar]")
                         botonAceptar.innerText = "Comfirmar la eliminacion"
                         botonAceptar.addEventListener("click", casaVitini.administracion.arquitectura_del_alojamiento.configuraciones.detallesConfiguracion.eliminarConfiguracion.confirmar)
                         const botonCancelar = constructor.querySelector("[boton=cancelar]")
                         botonCancelar.innerText = "Cancelar la eliminacion"
-        
+
                         document.querySelector("main").appendChild(pantallaInmersiva)
 
 
