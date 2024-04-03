@@ -2395,7 +2395,7 @@ const casaVitini = {
                                         contenedorCaducidad.classList.add("miCasa_sessiones_contenedorBloque")
                                         const caducidadInfo = document.createElement("div")
                                         caducidadInfo.classList.add("miCasa_sessiones_texto")
-                                        caducidadInfo.innerText = "Caducida de la session en hora UTC si no se produce una nueva peticion:"
+                                        caducidadInfo.innerText = "Caducida de la sessión en hora UTC si no se produce una nueva petición:"
                                         contenedorCaducidad.appendChild(caducidadInfo)
                                         const caducidadESP_UI = document.createElement("div")
                                         caducidadESP_UI.classList.add("miCasa_sessiones_texto")

@@ -19197,7 +19197,7 @@ const administracion = {
                         const tituloZonaUI = document.createElement("div")
                         tituloZonaUI.classList.add("litaBloqueos_tituloZona")
                         tituloZonaUI.classList.add("negrita")
-                        tituloZonaUI.innerText = "Contexto de aplicacion"
+                        tituloZonaUI.innerText = "Contexto de aplicación"
                         contenedorZonaUI.appendChild(tituloZonaUI)
                         let zonaDefinicionUI
                         if (zona === "privado") {
@@ -19338,7 +19338,7 @@ const administracion = {
                     const tituloZonaUI = document.createElement("div")
                     tituloZonaUI.classList.add("listaBloqueos_titulo")
                     tituloZonaUI.classList.add("negrita")
-                    tituloZonaUI.innerText = "Contexto de aplicacion"
+                    tituloZonaUI.innerText = "Contexto de aplicación"
                     contenedorZonaUI.appendChild(tituloZonaUI)
                     let zonaDefinicionUI
                     if (zona === "privado") {
@@ -20235,7 +20235,7 @@ const administracion = {
                 const tituloZonaUI = document.createElement("div")
                 tituloZonaUI.classList.add("litaBloqueos_tituloZona")
                 tituloZonaUI.classList.add("negrita")
-                tituloZonaUI.innerText = "Contexto de aplicacion"
+                tituloZonaUI.innerText = "Contexto de aplicación"
                 contenedorZonaUI.appendChild(tituloZonaUI)
                 const zonaUI = document.createElement("select")
                 zonaUI.classList.add("administracion_bloqueos_detallesBloqueo_listaSelec")

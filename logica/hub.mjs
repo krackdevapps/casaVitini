@@ -10511,7 +10511,7 @@ const puerto = async (entrada, salida) => {
                             `
                                 const resuelveValidarAplicacionSobre = await conexion.query(validarAplicacionSobre, [aplicacionSobre])
                                 if (resuelveValidarAplicacionSobre.rowCount === 0) {
-                                    const error = "No existe el contexto de aplicacion verifica el campor resuelveValidarAplicacionSobre"
+                                    const error = "No existe el contexto de aplicación verifica el campor resuelveValidarAplicacionSobre"
                                     throw new Error(error)
                                 }
                             }
@@ -10716,7 +10716,7 @@ const puerto = async (entrada, salida) => {
                             `
                                 const resuelveValidarAplicacionSobre = await conexion.query(validarAplicacionSobre, [aplicacionSobre])
                                 if (resuelveValidarAplicacionSobre.rowCount === 0) {
-                                    const error = "No existe el contexto de aplicacion verifica el campor resuelveValidarAplicacionSobre"
+                                    const error = "No existe el contexto de aplicación verifica el campor resuelveValidarAplicacionSobre"
                                     throw new Error(error)
                                 }
                             }
@@ -11354,7 +11354,7 @@ const puerto = async (entrada, salida) => {
                                 },
                                 contextoAplicacion: (contextoAplicacion) => {
                                     if (!contextoAplicacion || (contextoAplicacion !== "totalNetoReserva" && contextoAplicacion !== "totalNetoApartamentoDedicado")) {
-                                        const error = `El campo contexto de aplicacion solo puede ser, totalNetoReserva, totalNetoApartamentoDedicado`
+                                        const error = `El campo contexto de aplicación solo puede ser, totalNetoReserva, totalNetoApartamentoDedicado`
                                         throw new Error(error)
                                     }
                                 },
@@ -11854,7 +11854,7 @@ const puerto = async (entrada, salida) => {
                                 },
                                 contextoAplicacion: (contextoAplicacion) => {
                                     if (!contextoAplicacion || (contextoAplicacion !== "totalNetoReserva" && contextoAplicacion !== "totalNetoApartamentoDedicado")) {
-                                        const error = `El campo contexto de aplicacion solo puede ser, totalNetoReserva, totalNetoApartamentoDedicado`
+                                        const error = `El campo contexto de aplicación solo puede ser, totalNetoReserva, totalNetoApartamentoDedicado`
                                         throw new Error(error)
                                     }
                                 },
