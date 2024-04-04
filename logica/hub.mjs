@@ -595,8 +595,9 @@ const puerto = async (entrada, salida) => {
                 if (IDX === "conectar") {
                     const usuario = entrada.body.usuario
                     const filtroIDX = /^[a-z0-9_\-\.]+$/;
-                    if (!usuario || !filtroIDX.test(usuario)) {
-                        const error = "El campo usuarios solo admite minúsculas, numeros, guion medio, guion bajo y punto"
+                    const filtroCadena = /['"\\;\r\n<>\t\b]/g;
+                    if (!usuario || !filtroIDX.test(usuario) || filtroCadena.test(usuario)) {
+                        const error = "Datos de identificación incorrectos."
                         throw new Error(error)
                     }
                     const clave = entrada.body.clave
@@ -2326,6 +2327,8 @@ const puerto = async (entrada, salida) => {
                     const claveNueva = entrada.body.claveNueva
                     const claveConfirmada = entrada.body.claveConfirmada
                     const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
+                    const filtroCadena = /['"\\;\r\n<>\t\b]/g;
+
                     if (!usuarioIDX) {
                         const error = "Escribe un nombre de usuario"
                         throw new Error(error)
@@ -2333,6 +2336,8 @@ const puerto = async (entrada, salida) => {
                     usuarioIDX = usuarioIDX
                         .trim()
                         .toLowerCase()
+                        .replace(filtroCadena, '');
+
                     if (!filtro_minúsculas_numeros.test(usuarioIDX)) {
                         const error = "El campo usuarioIDX solo admite minúsculas y numeros y nada mas"
                         throw new Error(error)
@@ -2341,6 +2346,8 @@ const puerto = async (entrada, salida) => {
                     email = email
                         .toLowerCase()
                         .trim()
+                        .replace(filtroCadena, '');
+
                     if (!email || !filtroCorreoElectronico.test(email)) {
                         const error = "El campo de correo electrónico no cumple con el formato esperado"
                         throw new Error(error)
@@ -2549,76 +2556,90 @@ const puerto = async (entrada, salida) => {
             },
             actualizarDatosUsuarioDesdeMiCasa: {
                 IDX: {},
-                X: async () => {
+                _X: async () => {
                     try {
-                        const usuarioIDX = entrada.session.usuario
-                        let nombre = entrada.body.nombre
-                        let primerApellido = entrada.body.primerApellido
-                        let segundoApellido = entrada.body.segundoApellido
-                        let pasaporte = entrada.body.pasaporte
-                        let telefono = entrada.body.telefono
-                        let email = entrada.body.email
+                        const usuarioIDX = entrada.session.usuario;
+                        let nombre = entrada.body.nombre;
+                        let primerApellido = entrada.body.primerApellido;
+                        let segundoApellido = entrada.body.segundoApellido;
+                        let pasaporte = entrada.body.pasaporte;
+                        let telefono = entrada.body.telefono;
+                        let email = entrada.body.email;
                         const filtro_minúsculas_Mayusculas_numeros_espacios = /^[a-zA-Z0-9\s]+$/;
                         const filtroNumeros = /^[0-9]+$/;
                         const filtroCadena = /^[a-zA-Z0-9\s]+$/;
+                        const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+
                         if (!usuarioIDX) {
-                            const error = "Identificate para actualizar los datos personales de tu cuenta"
-                            throw new Error(error)
+                            const error = "Identificate para actualizar los datos personales de tu cuenta";
+                            throw new Error(error);
                         }
                         if (nombre?.length > 0) {
-                            nombre = nombre.trim();
-                            nombre = nombre.replace(/\s+/g, ' ');
-                            nombre = nombre.toUpperCase();
+                            nombre = nombre
+                                .trim()
+                                .replace(/\s+/g, ' ')
+                                .toUpperCase()
+                                .replace(filtroCadena_v2, '');
                             if (!filtroCadena.test(nombre)) {
-                                const error = "el campo 'nombre' solo puede ser letras minúsculas, masculas."
-                                throw new Error(error)
+                                const error = "el campo 'nombre' solo puede ser letras minúsculas, masculas.";
+                                throw new Error(error);
                             }
                         }
                         if (primerApellido?.length > 0) {
-                            primerApellido = primerApellido.trim();
-                            primerApellido = primerApellido.replace(/\s+/g, ' ');
-                            primerApellido = primerApellido.toUpperCase();
+                            primerApellido = primerApellido
+                                .trim()
+                                .replace(/\s+/g, ' ')
+                                .toUpperCase()
+                                .replace(filtroCadena_v2, '');
                             if (!filtroCadena.test(primerApellido)) {
-                                const error = "el campo 'primerApellido' solo puede ser letras minúsculas, masculas."
-                                throw new Error(error)
+                                const error = "el campo 'primerApellido' solo puede ser letras minúsculas, masculas.";
+                                throw new Error(error);
                             }
                         }
                         if (segundoApellido?.length > 0) {
-                            segundoApellido = segundoApellido.trim();
-                            segundoApellido = segundoApellido.replace(/\s+/g, ' ');
-                            segundoApellido = segundoApellido.toUpperCase();
+                            segundoApellido = segundoApellido
+                                .trim()
+                                .replace(/\s+/g, ' ')
+                                .toUpperCase()
+                                .replace(filtroCadena_v2, '');
                             if (!filtroCadena.test(segundoApellido)) {
-                                const error = "el campo 'segundoApellido' solo puede ser letras minúsculas, masculas."
-                                throw new Error(error)
+                                const error = "el campo 'segundoApellido' solo puede ser letras minúsculas, masculas.";
+                                throw new Error(error);
                             }
                         }
                         if (pasaporte?.length > 0) {
-                            pasaporte = pasaporte.trim();
-                            pasaporte = pasaporte.replace(/\s+/g, ' ');
-                            pasaporte = pasaporte.toUpperCase();
+                            pasaporte = pasaporte
+                                .trim()
+                                .replace(/\s+/g, ' ')
+                                .toUpperCase()
+                                .replace(filtroCadena_v2, '');
                             const filtroPasaporte = /^[a-zA-Z0-9]+$/;
                             if (!filtroPasaporte.test(pasaporte)) {
-                                const error = "el campo 'pasaporte' solo puede ser letras minúsculas, masculas y numeros."
-                                throw new Error(error)
+                                const error = "el campo 'pasaporte' solo puede ser letras minúsculas, masculas y numeros.";
+                                throw new Error(error);
                             }
                         }
                         if (telefono) {
-                            telefono = telefono.trim();
-                            telefono = telefono.replace(/\s+/g, '');
-                            const filtroTelefono = /^\d+$/
+                            telefono = telefono
+                                .trim()
+                                .replace(/\s+/g, '')
+                                .replace(filtroCadena_v2, '');
+                            const filtroTelefono = /^\d+$/;
                             if (!filtroTelefono.test(telefono)) {
-                                const error = "el campo 'telefono' solo puede una cadena con un numero, entero y positivo. Si estas escribiendo un numero internacional, sustituya el signo mas del incio por dos ceros"
-                                throw new Error(error)
+                                const error = "el campo 'telefono' solo puede una cadena con un numero, entero y positivo. Si estas escribiendo un numero internacional, sustituya el signo mas del incio por dos ceros";
+                                throw new Error(error);
                             }
                         }
                         if (email) {
-                            email = email.toLowerCase()
-                            email = email.replace(/\s+/g, '');
-                            email = email.trim();
+                            email = email
+                                .toLowerCase()
+                                .replace(/\s+/g, '')
+                                .trim()
+                                .replace(filtroCadena_v2, '');
                             const filtroEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                             if (!filtroEmail.test(email)) {
-                                const error = "El campo email no tiene le formato correcto, por ejemplo usuario@servidor.zona"
-                                throw new Error(error)
+                                const error = "El campo email no tiene le formato correcto, por ejemplo usuario@servidor.zona";
+                                throw new Error(error);
                             }
                         }
                         await conexion.query('BEGIN'); // Inicio de la transacción
@@ -2628,11 +2649,11 @@ const puerto = async (entrada, salida) => {
                         FROM 
                             "datosDeUsuario" 
                         WHERE 
-                            email = $1 AND "usuarioIDX" <> $2`
-                        const resolverObtenerDatosUsuario = await conexion.query(controlCorreo, [email, usuarioIDX])
+                            email = $1 AND "usuarioIDX" <> $2`;
+                        const resolverObtenerDatosUsuario = await conexion.query(controlCorreo, [email, usuarioIDX]);
                         if (resolverObtenerDatosUsuario.rowCount > 0) {
-                            const error = "Ya existe una cuenta con ese correo electroníco. Escoge otro correo. Si ese es tu unico correo puedes recuperar tu cuenta de usuario con ese correo."
-                            throw new Error(error)
+                            const error = "Ya existe una cuenta con ese correo electroníco. Escoge otro correo. Si ese es tu unico correo puedes recuperar tu cuenta de usuario con ese correo.";
+                            throw new Error(error);
                         }
                         const controlNuevoCorreoPorVerifical = `
                         SELECT 
@@ -2642,8 +2663,8 @@ const puerto = async (entrada, salida) => {
                         WHERE 
                             "usuarioIDX" = $1 
                             AND
-                            email = $2`
-                        const resuelveNuevoCorreoPorVerifical = await conexion.query(controlNuevoCorreoPorVerifical, [usuarioIDX, email])
+                            email = $2`;
+                        const resuelveNuevoCorreoPorVerifical = await conexion.query(controlNuevoCorreoPorVerifical, [usuarioIDX, email]);
                         const actualizarDatosUsuario = `
                         UPDATE "datosDeUsuario"
                         SET 
@@ -2661,7 +2682,7 @@ const puerto = async (entrada, salida) => {
                           "pasaporte",
                           "telefono",
                           "email";            
-                        `
+                        `;
                         const datos = [
                             nombre,
                             primerApellido,
@@ -2670,8 +2691,8 @@ const puerto = async (entrada, salida) => {
                             telefono,
                             email,
                             usuarioIDX,
-                        ]
-                        const resuelveActualizarDatosUsuario = await conexion.query(actualizarDatosUsuario, datos)
+                        ];
+                        const resuelveActualizarDatosUsuario = await conexion.query(actualizarDatosUsuario, datos);
                         if (resuelveNuevoCorreoPorVerifical.rowCount === 0 && email.length > 0) {
                             const fechaActualUTC = DateTime.utc();
                             const fechaCaducidadCuentaNoVerificada = fechaActualUTC.plus({ minutes: 30 });
@@ -2683,26 +2704,32 @@ const puerto = async (entrada, salida) => {
                                 "cuentaVerificada" = $1,
                                 "fechaCaducidadCuentaNoVerificada" =$2
                             WHERE 
-                                usuario = $3;`
-                            await conexion.query(volverAVerificarCuenta, ["no", fechaCaducidadCuentaNoVerificada, usuarioIDX])
+                                usuario = $3;`;
+                            await conexion.query(volverAVerificarCuenta, ["no", fechaCaducidadCuentaNoVerificada, usuarioIDX]);
                         }
                         await conexion.query('COMMIT'); // Confirmar la transacción
                         if (resuelveActualizarDatosUsuario.rowCount === 1) {
                             const ok = {
                                 ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
                                 datosActualizados: resuelveActualizarDatosUsuario.rows
-                            }
-                            salida.json(ok)
+                            };
+                            salida.json(ok);
                         }
                     } catch (errorCapturado) {
                         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
                         const error = {
                             error: errorCapturado.message
-                        }
-                        salida.json(error)
+                        };
+                        salida.json(error);
                     } finally {
                     }
-                }
+                },
+                get X() {
+                    return this._X;
+                },
+                set X(value) {
+                    this._X = value;
+                },
             },
             actualizarIDX: {
                 IDX: {},
@@ -2711,7 +2738,11 @@ const puerto = async (entrada, salida) => {
                         const usuarioIDX = entrada.session.usuario
                         let nuevoIDX = entrada.body.nuevoIDX
                         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-                        nuevoIDX = nuevoIDX.toLowerCase();
+                        const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+
+                        nuevoIDX = nuevoIDX
+                            .toLowerCase()
+                            .replace(filtroCadena_v2, '')
                         if (!nuevoIDX || !filtro_minúsculas_numeros.test(nuevoIDX)) {
                             const error = "El nuevo VitiniID solo admite minúsculas y numeros"
                             throw new Error(error)
@@ -3268,9 +3299,11 @@ const puerto = async (entrada, salida) => {
                     try {
                         let email = entrada.body.email
                         const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
+                        const filtroCadena = /['"\\;\r\n<>\t\b]/g;
                         email = email
                             .toLowerCase()
                             .trim()
+                            .replace(filtroCadena, '')
                         if (!email || !filtroCorreoElectronico.test(email)) {
                             const error = "El campo de correo electrónico no cumple con el formato esperado, por favor revisalo."
                             throw new Error(error)
@@ -3439,12 +3472,15 @@ const puerto = async (entrada, salida) => {
                 },
                 validarCodigo: async () => {
                     try {
-                        const codigo = entrada.body.codigo
+                        let codigo = entrada.body.codigo
                         const filtroCadena = /^[a-z0-9]+$/;
+                        const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+
                         if (!codigo || !filtroCadena.test(codigo)) {
                             const error = "Los codigo de recuperacion de cuentas solo pueden contener minuscular y numeros"
                             throw new Error(error)
                         }
+                        codigo = codigo.replace(filtroCadena, '')
                         const fechaActual_ISO = DateTime.utc().toISO();
                         const eliminarEnlacesCaducados = `
                         DELETE FROM "enlaceDeRecuperacionCuenta"
@@ -3571,12 +3607,16 @@ const puerto = async (entrada, salida) => {
             },
             verificarCuenta: async () => {
                 try {
-                    const codigo = entrada.body.codigo
+                    let codigo = entrada.body.codigo
                     const filtroCadena = /^[a-z0-9]+$/;
+                    const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+
                     if (!codigo || !filtroCadena.test(codigo)) {
                         const error = "Los codigo de verificacion de cuentas solo pueden contener minuscular y numeros"
                         throw new Error(error)
                     }
+                    codigo = codigo.replace(filtroCadena_v2, '')
+
                     await componentes.eliminarCuentasNoVerificadas()
                     await conexion.query('BEGIN'); // Inicio de la transacción   
                     const estadoVerificado = "si"
@@ -9866,14 +9906,7 @@ const puerto = async (entrada, salida) => {
                             notas: notas,
                         }
                         const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoCliente)
-                        nombre = datosValidados.nombre
-                        primerApellido = datosValidados.primerApellido
-                        segundoApellido = datosValidados.segundoApellido
-                        pasaporte = datosValidados.pasaporte
-                        telefono = datosValidados.telefono
-                        correoElectronico = datosValidados.correoElectronico
-                        notas = datosValidados.notas
-                        const nuevoUIDCliente = await insertarCliente(nuevoCliente)
+                        const nuevoUIDCliente = await insertarCliente(datosValidados)
                         if (nuevoUIDCliente) {
                             const ok = {
                                 ok: "Se ha anadido correctamente el cliente",
@@ -10456,7 +10489,7 @@ const puerto = async (entrada, salida) => {
                         await mutex.acquire();
                         try {
                             const impuestoUID = entrada.body.impuestoUID
-                            const nombreImpuesto = entrada.body.nombreImpuesto
+                            let nombreImpuesto = entrada.body.nombreImpuesto
                             const tipoImpositivo = entrada.body.tipoImpositivo
                             const tipoValor = entrada.body.tipoValor
                             const aplicacionSobre = entrada.body.aplicacionSobre
@@ -10465,11 +10498,20 @@ const puerto = async (entrada, salida) => {
                                 const error = "El campo 'impuestoUID' debe ser un tipo numero, entero y positivo"
                                 throw new Error(error)
                             }
-                            const filtroCadena = /^[a-zA-Z0-9 ]+$/;
-                            if (nombreImpuesto?.length > 0 && !filtroCadena.test(nombreImpuesto)) {
-                                const error = "El campo nombreImpuesto solo puede ser un una cadena de minúsculas"
-                                throw new Error(error)
+                            const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+                            if (nombreImpuesto) {
+                                if (typeof nombreImpuesto !== "string") {
+                                    const error = "El impuesto debe de ser una cadena"
+                                    throw new Error(error)
+                                }
+                                nombreImpuesto = nombreImpuesto.replace(filtroCadena_v2, '')
+                                if (nombreImpuesto.length === 0) {
+                                    const error = "Revisa el nombre, ningun caracter escrito en el campo pasaporte es valido"
+                                    throw new Error(error)
+                                }
                             }
+
+
                             const filtroTipoImpositivo = /^\d+\.\d{2}$/;
                             if (tipoImpositivo?.length > 0 && (typeof tipoImpositivo !== "string" || !filtroTipoImpositivo.test(tipoImpositivo))) {
                                 const error = "El campo tipoImpositivo solo puede ser una cadena con un numero y dos decimlaes"
@@ -10665,16 +10707,22 @@ const puerto = async (entrada, salida) => {
                     X: async () => {
                         await mutex.acquire();
                         try {
-                            const nombreImpuesto = entrada.body.nombreImpuesto
+                            let nombreImpuesto = entrada.body.nombreImpuesto
                             const tipoImpositivo = entrada.body.tipoImpositivo
                             const tipoValor = entrada.body.tipoValor
                             const aplicacionSobre = entrada.body.aplicacionSobre
-                            const moneda = entrada.body.moneda
-                            const filtroCadena = /^[a-zA-Z0-9 ]+$/;
-                            if (!nombreImpuesto || !filtroCadena.test(nombreImpuesto)) {
+                            const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+
+                            if (!nombreImpuesto) {
                                 const error = "El campo nombreImpuesto solo puede ser un una cadena de minúsculas"
                                 throw new Error(error)
                             }
+                            nombreImpuesto = nombreImpuesto.replace(filtroCadena_v2, '')
+                            if (nombreImpuesto.length === 0) {
+                                const error = "Revisa el nombre del impuesto, ningun caracter escrito en el campo pasaporte es valido"
+                                throw new Error(error)
+                            }
+
                             const filtroTipoImpositivo = /^\d+\.\d{2}$/;
                             if (!tipoImpositivo || (typeof tipoImpositivo !== "string" || !filtroTipoImpositivo.test(tipoImpositivo))) {
                                 const error = "El campo tipoImpositivo solo puede ser una cadena con un numero y dos decimlaes"
@@ -11279,7 +11327,7 @@ const puerto = async (entrada, salida) => {
                     X: async () => {
                         await mutex.acquire();
                         try {
-                            const nombreOferta = entrada.body.nombreOferta
+                            let nombreOferta = entrada.body.nombreOferta
                             const fechaInicio = entrada.body.fechaInicio
                             const fechaFin = entrada.body.fechaFin
                             const tipoOferta = entrada.body.tipoOferta
@@ -11290,12 +11338,17 @@ const puerto = async (entrada, salida) => {
                             const simboloNumero = entrada.body.simboloNumero
                             const numero = entrada.body.numero
                             const filtroCantidad = /^\d+(\.\d{1,2})?$/;
-                            const filtroNombre = /^[^'"]+$/;
+                            const filtroNombre = /['"\\;\r\n<>\t\b]/g;
                             const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
-                            if (!nombreOferta || !filtroNombre.test(nombreOferta)) {
+
+
+
+                            if (!nombreOferta) {
                                 const error = "El campo nombreOferta no admice comillas simples o dobles"
                                 throw new Error(error)
                             }
+                            nombreOferta = nombreOferta.replace(filtroNombre, '');
+
                             const fechaInicio_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaInicio)).fecha_ISO
                             const fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin)).fecha_ISO
                             const fechaInicio_objeto = DateTime.fromISO(fechaInicio_ISO)
@@ -11796,7 +11849,7 @@ const puerto = async (entrada, salida) => {
                     X: async () => {
                         await mutex.acquire();
                         try {
-                            const nombreOferta = entrada.body.nombreOferta;
+                            let nombreOferta = entrada.body.nombreOferta
                             const fechaInicio = entrada.body.fechaInicio;
                             const fechaFin = entrada.body.fechaFin;
                             const tipoOferta = entrada.body.tipoOferta;
@@ -11808,15 +11861,16 @@ const puerto = async (entrada, salida) => {
                             const contextoAplicacion = entrada.body.contextoAplicacion;
                             const apartamentosSeleccionados = entrada.body.apartamentosSeleccionados;
                             const filtroCantidad = /^\d+\.\d{2}$/;
-                            const filtroNombre = /^[^'"]+$/;
+                            const filtroCadena = /['"\\;\r\n<>\t\b]/g;
                             if (!ofertaUID || !Number.isInteger(ofertaUID) || ofertaUID <= 0) {
                                 const error = "El campo ofertaUID tiene que ser un numero, positivo y entero"
                                 throw new Error(error)
                             }
-                            if (!filtroNombre.test(nombreOferta)) {
+                            if (!nombreOferta) {
                                 const error = "El campo nombreOferta no admice comillas simples o dobles"
                                 throw new Error(error)
                             }
+                            nombreOferta = nombreOferta.replace(filtroCadena, '')
                             const fechaInicio_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaInicio)).fecha_ISO
                             const fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin)).fecha_ISO
                             const fechaInicio_objeto = DateTime.fromISO(fechaInicio_ISO)
@@ -12247,17 +12301,20 @@ const puerto = async (entrada, salida) => {
                 crearComportamiento: async () => {
                     await mutex.acquire();
                     try {
-                        const nombreComportamiento = entrada.body.nombreComportamiento
+                        let nombreComportamiento = entrada.body.nombreComportamiento
                         const fechaInicio = entrada.body.fechaInicio
                         const fechaFin = entrada.body.fechaFin
                         const comportamientos = entrada.body.comportamientos
                         const filtroCantidad = /^\d+\.\d{2}$/;
-                        const filtroNombre = /^[a-zA-Z0-9\s]+$/;
                         const filtroCadenaSinEspacui = /^[a-z0-9]+$/;
-                        if (!nombreComportamiento || !filtroNombre.test(nombreComportamiento)) {
+                        const filtroNombre = /['"\\;\r\n<>\t\b]/g;
+
+                        if (!nombreComportamiento) {
                             const error = "El campo nombreComportamiento solo admite minúsculas, mayúsculas, numeros y espacios"
                             throw new Error(error)
                         }
+                        nombreComportamiento = nombreComportamiento.replace(filtroNombre, '');
+
                         const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
                         if (!filtroFecha.test(fechaInicio)) {
                             const error = "el formato fecha de inicio no esta correctametne formateado debe ser una cadena asi 00/00/0000"
@@ -12604,22 +12661,24 @@ const puerto = async (entrada, salida) => {
                 actualizarComportamiento: async () => {
                     await mutex.acquire();
                     try {
-                        const nombreComportamiento = entrada.body.nombreComportamiento
+                        let nombreComportamiento = entrada.body.nombreComportamiento
                         const fechaInicio = entrada.body.fechaInicio
                         const fechaFinal = entrada.body.fechaFinal
                         const comportamientoUID = entrada.body.comportamientoUID
                         const comportamientos = entrada.body.comportamientos
                         const filtroCantidad = /^\d+\.\d{2}$/;
-                        const filtroNombre = /^[a-zA-Z0-9\s]+$/;
+                        const filtroNombre = /['"\\;\r\n<>\t\b]/g;
                         const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
                         if (!comportamientoUID || !Number.isInteger(comportamientoUID) || comportamientoUID <= 0) {
                             const error = "El campo comportamientoUID tiene que ser un numero, positivo y entero"
                             throw new Error(error)
                         }
-                        if (!nombreComportamiento || !filtroNombre.test(nombreComportamiento)) {
+                        if (!nombreComportamiento) {
                             const error = "El campo nombreComportamiento solo admite minúsculas, mayúsculas, numeros y espacios"
                             throw new Error(error)
                         }
+                        nombreComportamiento = nombreComportamiento.replace(filtroNombre, '');
+
                         const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
                         if (!filtroFecha.test(fechaInicio)) {
                             const error = "el formato fecha de inicio no esta correctametne formateado debe ser una cadena asi 00/00/0000"
@@ -12902,6 +12961,7 @@ const puerto = async (entrada, salida) => {
                             await conexion.query('COMMIT'); // Confirmar la transacción
                             const ok = {
                                 ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
+                                nombreComportamiento: nombreComportamiento,
                                 apartamentosDelComportamiento: apartamentosInsertados
                             }
                             salida.json(ok)

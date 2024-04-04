@@ -16169,7 +16169,7 @@ const administracion = {
                 const botonesModificarOferta = casaVitini.administracion.gestion_de_ofertas.componenteUI.botonesModificarOferta()
                 espacioOfertasGlobal.appendChild(botonesModificarOferta)
             },
-            guardarCambiosOferta: async (oferta) => {
+            guardarCambiosOferta: async () => {
                 const instanciaUID_pantallaEspera = casaVitini.componentes.codigoFechaInstancia()
                 const mensaje = "Actualizando oferta..."
                 const datosPantallaSuperpuesta = {
@@ -16177,8 +16177,6 @@ const administracion = {
                     mensaje: mensaje
                 }
                 casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-
-
 
                 const ofertaUID = document.querySelector("[ofertaUID]").getAttribute("ofertaUID")
                 const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
@@ -16237,7 +16235,9 @@ const administracion = {
                 }
                 if (respuestaServidor?.ok) {
                     const detallesOferta = respuestaServidor.detallesOferta
-
+                    const nombreOferta = detallesOferta.nombreOferta
+                    const campoNombreOferta = document.querySelector("[campoOferta=nombreOferta]")
+                    campoNombreOferta.innerText = nombreOferta
 
                     const contenedorValoresIniciales = document.querySelector("[componente=espacioOfertas]")
                     contenedorValoresIniciales.setAttribute("valorInicial", JSON.stringify(detallesOferta))
@@ -18137,8 +18137,8 @@ const administracion = {
                 casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                 const main = document.querySelector("main")
                 const comportamientoUID = document.querySelector("[comportamientoUID]").getAttribute("comportamientoUID")
-                const nombreComportamiento = document.querySelector("[campoOferta=nombreOferta]")
-                const nombreComportamiento_valor = nombreComportamiento.value
+                const nombreComportamiento_campo = document.querySelector("[campoOferta=nombreOferta]")
+                const nombreComportamiento_valor = nombreComportamiento_campo.value
                 const fechaInicio = document.querySelector("[calendario=entrada]")
                 const fechaInicio_valor = fechaInicio.getAttribute("memoriaVolatil")
                 const fechaFinal = document.querySelector("[calendario=salida]")
@@ -18172,7 +18172,9 @@ const administracion = {
                 }
                 if (respuestaServidor?.ok) {
                     const apartamentosDelComportameinto = respuestaServidor.apartamentosDelComportamiento
-                    nombreComportamiento.setAttribute("valorInicial", nombreComportamiento_valor)
+                    const nombreComportamiento = respuestaServidor.nombreComportamiento
+                    nombreComportamiento_campo.value = nombreComportamiento
+                    nombreComportamiento_campo.setAttribute("valorInicial", nombreComportamiento)
                     fechaInicio.setAttribute("valorInicial", fechaInicio_valor)
                     fechaFinal.setAttribute("valorInicial", fechaFinal_valor)
                     const contenedorApartamentosJSON = main.querySelector("[contenedor=apartamentos]")

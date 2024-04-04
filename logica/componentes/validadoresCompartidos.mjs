@@ -13,56 +13,64 @@ const validadoresCompartidos = {
                 let correoElectronico = cliente.correoElectronico
                 let notas = cliente?.notas
                 const filtroCadena = /^[a-zA-Z0-9\s\-_.]+$/;
+                const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+
                 if (nombre?.length > 0) {
-                    if (!filtroCadena.test(nombre)) {
-                        const error = "el campo 'nombre' solo puede ser letras minúsculas, masculas."
+                    nombre = nombre
+                        .replace(/\s+/g, ' ')
+                        .toUpperCase()
+                        .replace(filtroCadena, '')
+                        .replace(filtroCadena_v2, '')
+                        .trim()
+
+                    if (nombre.length === 0) {
+                        const error = "Revisa el nombre, ningun caracter escrito en el campo pasaporte es valido"
                         throw new Error(error)
                     }
-                    nombre = nombre.trim();
-                    nombre = nombre.replace(/\s+/g, ' ');
-                    nombre = nombre.toUpperCase();
+
                 } else {
-                    const error = "el campo 'nombre' es obligatorio."
+                    const error = "El nombre del cliente es obligatorio."
                     throw new Error(error)
                 }
                 if (primerApellido?.length > 0) {
-                    if (!filtroCadena.test(primerApellido)) {
-                        const error = "el campo 'primerApellido' solo puede ser letras minúsculas, masculas."
-                        throw new Error(error)
-                    }
-                    primerApellido = primerApellido.trim();
-                    primerApellido = primerApellido.replace(/\s+/g, ' ');
-                    primerApellido = primerApellido.toUpperCase();
+                    primerApellido = primerApellido
+                        .replace(/\s+/g, ' ')
+                        .toUpperCase()
+                        .replace(filtroCadena_v2, '')
+                        .trim()
+
                 }
                 if (segundoApellido?.length > 0) {
-                    if (!filtroCadena.test(segundoApellido)) {
-                        const error = "el campo 'segundoApellido' solo puede ser letras minúsculas, masculas."
-                        throw new Error(error)
-                    }
-                    segundoApellido = segundoApellido.trim();
-                    segundoApellido = segundoApellido.replace(/\s+/g, ' ');
-                    segundoApellido = segundoApellido.toUpperCase();
+                    segundoApellido = segundoApellido
+                        .replace(/\s+/g, ' ')
+                        .toUpperCase()
+                        .replace(filtroCadena_v2, '')
+                        .trim()
+
                 }
                 if (pasaporte?.length > 0) {
-                    if (!filtroCadena.test(pasaporte)) {
-                        const error = "el campo 'pasaporte' solo puede ser letras minúsculas, masculas y numeros."
+                    pasaporte = pasaporte
+                        .replace(/\s+/g, ' ')
+                        .toUpperCase()
+                        .replace(filtroCadena_v2, '')
+                        .trim()
+
+                    if (pasaporte.length === 0) {
+                        const error = "Revisa el pasaprote, ningun caracter escrito en el campo pasaporte es valido"
                         throw new Error(error)
                     }
-                    pasaporte = pasaporte.trim();
-                    pasaporte = pasaporte.replace(/\s+/g, ' ');
-                    pasaporte = pasaporte.toUpperCase();
+
                 } else {
-                    const error = "el campo 'pasaporte' es obligatorio."
+                    const error = "Escribe el pasaporte, es obligatorio."
                     throw new Error(error)
                 }
                 if (telefono) {
-                    const filtroTelefono = /^\d+$/
-                    if (!filtroTelefono.test(telefono)) {
-                        const error = "el campo 'telefono' solo puede una cadena con un numero, entero y positivo. Si estas escribiendo un numero internacional, sustituya el signo mas del incio por dos ceros"
-                        throw new Error(error)
-                    }
-                    telefono = telefono.trim();
-                    telefono = telefono.replace(/\s+/g, '');
+                    const filtroTelefono = /[^0-9]+/g
+                    telefono = telefono
+                        .replace(filtroTelefono, '')
+                        .replace(filtroCadena_v2, '')
+                        .trim()
+
                 }
                 if (correoElectronico?.length > 0) {
                     const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
@@ -70,8 +78,11 @@ const validadoresCompartidos = {
                         const error = "el campo 'correoElectronico' no cumple con el formato esperado, el formado esperado es asi como usuario@servidor.com"
                         throw new Error(error)
                     }
-                    correoElectronico = correoElectronico.trim();
-                    correoElectronico = correoElectronico.replace(/\s+/g, '');
+                    correoElectronico = correoElectronico
+                        .replace(/\s+/g, '')
+                        .replace(filtroCadena_v2, '')
+                        .trim()
+
                     const consultaCorreo = `
                     SELECT 
                     nombre,
@@ -90,7 +101,11 @@ const validadoresCompartidos = {
                     }
                 }
                 if (notas?.length > 0) {
-                    notas = notas.replace(/[^A-Za-z\s\d.,!?]/g, '');
+                    notas = notas
+                        .replace(/[^A-Za-z\s\d.,!?]/g, '')
+                        .replace(filtroCadena_v2, '')
+                        .trim()
+
                 }
                 const consultaPasaporte = `
                 SELECT 
@@ -134,51 +149,44 @@ const validadoresCompartidos = {
                 let correoElectronico = cliente.correoElectronico
                 let notas = cliente.notas
                 const filtroCadena = /^[a-zA-Z0-9\s]+$/;
+                const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+
                 if (nombre?.length > 0) {
-                    if (!filtroCadena.test(nombre)) {
-                        const error = "el campo 'nombre' solo puede ser letras minúsculas, masculas."
-                        throw new Error(error)
-                    }
-                    nombre = nombre.trim();
-                    nombre = nombre.replace(/\s+/g, ' ');
-                    nombre = nombre.toUpperCase();
+                    nombre = nombre
+                        .replace(/\s+/g, ' ')
+                        .toUpperCase()
+                        .replace(filtroCadena, '')
+                        .replace(filtroCadena_v2, '')
+                        .trim()
                 }
                 if (primerApellido?.length > 0) {
-                    if (!filtroCadena.test(primerApellido)) {
-                        const error = "el campo 'primerApellido' solo puede ser letras minúsculas, masculas."
-                        throw new Error(error)
-                    }
-                    primerApellido = primerApellido.trim();
-                    primerApellido = primerApellido.replace(/\s+/g, ' ');
-                    primerApellido = primerApellido.toUpperCase();
+                    primerApellido = primerApellido
+                        .replace(/\s+/g, ' ')
+                        .toUpperCase()
+                        .replace(filtroCadena_v2, '')
+                        .trim()
                 }
                 if (segundoApellido?.length > 0) {
-                    if (!filtroCadena.test(segundoApellido)) {
-                        const error = "el campo 'segundoApellido' solo puede ser letras minúsculas, masculas."
-                        throw new Error(error)
-                    }
-                    segundoApellido = segundoApellido.trim();
-                    segundoApellido = segundoApellido.replace(/\s+/g, ' ');
-                    segundoApellido = segundoApellido.toUpperCase();
+                    segundoApellido = segundoApellido
+                        .replace(/\s+/g, ' ')
+                        .toUpperCase()
+                        .replace(filtroCadena_v2, '')
+                        .trim()
+
                 }
                 if (pasaporte?.length > 0) {
-                    const filtroPasaporte = /^[a-zA-Z0-9]+$/;
-                    if (!filtroPasaporte.test(pasaporte)) {
-                        const error = "el campo 'pasaporte' solo puede ser letras minúsculas, masculas y numeros."
-                        throw new Error(error)
-                    }
-                    pasaporte = pasaporte.trim();
-                    pasaporte = pasaporte.replace(/\s+/g, ' ');
-                    pasaporte = pasaporte.toUpperCase();
+                    pasaporte = pasaporte
+                        .replace(/\s+/g, ' ')
+                        .toUpperCase()
+                        .replace(filtroCadena_v2, '')
+                        .trim()
                 }
                 if (telefono) {
-                    const filtroTelefono = /^\d+$/
-                    if (!filtroTelefono.test(telefono)) {
-                        const error = "el campo 'telefono' solo puede una cadena con un numero, entero y positivo. Si estas escribiendo un numero internacional, sustituya el signo mas del incio por dos ceros"
-                        throw new Error(error)
-                    }
-                    telefono = telefono.trim();
-                    telefono = telefono.replace(/\s+/g, '');
+                    const filtroTelefono = /[^0-9]+/g
+                    telefono = telefono
+                        .replace(filtroTelefono, '')
+                        .replace(filtroCadena_v2, '')
+                        .trim()
                 }
                 if (correoElectronico?.length > 0) {
                     const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
@@ -186,11 +194,17 @@ const validadoresCompartidos = {
                         const error = "el campo 'correoElectronico' no cumple con el formato esperado, el formado esperado es asi como usuario@servidor.com"
                         throw new Error(error)
                     }
-                    correoElectronico = correoElectronico.toLowerCase()
-                    correoElectronico = correoElectronico.trim();
+                    correoElectronico = correoElectronico
+                        .replace(/\s+/g, '')
+                        .replace(filtroCadena_v2, '')
+                        .trim()
+
                 }
                 if (notas?.length > 0) {
-                    notas = notas.replace(/[^A-Za-z\s\d.,!?]/g, '');
+                    notas = notas
+                        .replace(/[^A-Za-z\s\d.,!?]/g, '')
+                        .replace(filtroCadena_v2, '')
+                        .trim()
                 }
                 const consultaPasaporte = `
                 SELECT 
