@@ -757,9 +757,9 @@ const administracion = {
                     selectorFechaSalidaUI.innerText = "Seleccionar"
                 }
                 //const resolverReservas = await casaVitini.administracion.reservas.buscador.resolverReservas(transaccion)
-
+                console.log("transacion", transaccion)
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-
+                console.log("respuestaServidor", respuestaServidor)
                 const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (!instanciaRenderizada) {
                     return
@@ -783,11 +783,13 @@ const administracion = {
                     espacioClientes.appendChild(estadoBusquedaUI)
                     const titulo = "Buscador reservas"
                     const zona = "/administracion/reservas"
+                    // No se debe de actualizar el historial aqui por que los resultados de nada, es irrelevante
                     const estado = {
                         zona: zona,
+                        tipoCambio: "total",
                         EstadoInternoZona: "estado"
                     }
-                    window.history.replaceState(estado, titulo, zona);
+                    //window.history.replaceState(estado, titulo, zona);
                     return
                 }
 
@@ -13001,7 +13003,7 @@ const administracion = {
             }
             casaVitini.componentes.ui.paginador(metadatosPaginador)
             transaccion.tipoConstruccionGrid = "soloLista"
-            const titulo = "ADminstar reservas"
+            const titulo = "Casa Vitini"
             const estado = {
                 zona: constructorURLFinal,
                 EstadoInternoZona: "estado",

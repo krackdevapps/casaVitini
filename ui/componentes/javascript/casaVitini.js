@@ -5418,6 +5418,12 @@ const casaVitini = {
             let zona = (history.state)?.zona
             const tipoCambio = (history.state)?.tipoCambio
             const urlActual = window.location.pathname;
+
+            if (tipoCambio !== "total" && tipoCambio !== "parcial") {
+                const mensaje = "La funcion de navegacion necesita que el objeto tenga definido el tipoCambio en total o en parcial"
+                return casaVitini.ui.vistas.advertenciaInmersiva(mensaje)
+            }
+
             if (tipoCambio === "total") {
                 zona = zona ? zona : "portada"
                 const entrada = {
@@ -5437,7 +5443,7 @@ const casaVitini = {
                     funcionPersonalizada: funcionPersonalizada,
                     datosPaginacion: datosPaginacion
                 }
-                return casaVitini.componentes.controladorCambioPersonalziado(entrada)
+                return casaVitini.componentes.controladorCambioPersonalizado(entrada)
             }
         },
         temporizador: null,
@@ -5572,17 +5578,24 @@ const casaVitini = {
                 }
             })
         },
-        controladorCambioPersonalziado: (metadatos) => {
+        controladorCambioPersonalizado: (metadatos) => {
             const componenteExistente = metadatos.conpontenteExistente
             const componente = document.querySelector("[componente=" + componenteExistente + "]")
             if (componente) {
+                console.log("El elemento existe")
                 const funcionPersonalizada = metadatos.funcionPersonalizada
                 if (eval("typeof " + funcionPersonalizada) === "function") {
+                    const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
+                    metadatos.datosPaginacion.instanciaUID = instanciaUID
+
                     let datosPaginacion = metadatos.datosPaginacion
                     datosPaginacion = JSON.stringify(datosPaginacion);
-                    return eval(funcionPersonalizada + "(" + datosPaginacion + ");")
+                    eval(funcionPersonalizada + "(" + datosPaginacion + ");")
+                }else{
+                    console.log("el elemento no existe")
                 }
             } else {
+                console.log("el componente NO existe")
                 const zona = metadatos.zona
                 const entrada = {
                     vista: zona,
