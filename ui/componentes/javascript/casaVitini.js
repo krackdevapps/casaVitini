@@ -4125,13 +4125,14 @@ const casaVitini = {
                             marcoElasticoRelativo.className = 'marcoElasticoRelativo';
                             const marcoElastico = document.createElement('div');
                             marcoElastico.className = 'marcoElastico';
-                            const contenedorCrearCuenta = document.createElement('div');
+                            const contenedorCrearCuenta = document.createElement('form');
                             contenedorCrearCuenta.className = 'miCasa_crearCuenta_contenedorCrearCuenta';
                             const texto = document.createElement('p');
                             texto.className = 'texto paddgin6';
                             texto.textContent = 'Si olvidaste tu contraseña o por el contrario, creaste tu VitiniID pero no lo verificaste con tu cuenta de correo electrónico, por favor, proporciona la dirección de correo electrónico con la que creaste tu VitniniID. Te enviaremos un mensaje a tu buzón con un enlace temporal para restablecer tu contraseña o un enlace de verificación para verificar tu cuenta.';
                             const input = document.createElement('input');
-                            input.type = 'text';
+                            input.type = 'text'
+                            input.autocomplete = "email"
                             input.className = 'miCasa_crearCuenta_campo';
                             input.setAttribute('campo', 'email');
                             input.placeholder = 'Escribe tu direcíon de correo electroníco';
@@ -4290,7 +4291,7 @@ const casaVitini = {
                             marcoElasticoRelativo.className = 'marcoElasticoRelativo';
                             const marcoElastico = document.createElement('div');
                             marcoElastico.className = 'marcoElastico';
-                            const contenedorCrearCuenta = document.createElement('div');
+                            const contenedorCrearCuenta = document.createElement('form');
                             contenedorCrearCuenta.className = 'miCasa_crearCuenta_contenedorCrearCuenta';
                             const texto = document.createElement('p');
                             texto.className = 'texto paddgin6';
@@ -4298,11 +4299,13 @@ const casaVitini = {
                             const clave = document.createElement('input');
                             clave.type = 'password';
                             clave.className = 'miCasa_crearCuenta_campo';
+                            clave.autocomplete = "new-password"
                             clave.setAttribute('campo', 'clave');
                             clave.placeholder = 'Escribe tu nueva contraseña';
                             const claveConfirmada = document.createElement('input');
                             claveConfirmada.type = 'password';
                             claveConfirmada.className = 'miCasa_crearCuenta_campo';
+                            claveConfirmada.autocomplete = "new-password"
                             claveConfirmada.setAttribute('campo', 'claveConfirmada');
                             claveConfirmada.placeholder = 'Escribe de nuevo tu contraseña';
                             const contenedorBotones = document.createElement('div');
@@ -4497,7 +4500,7 @@ const casaVitini = {
                             contenedorBanner.classList.add("plaza_reservas_reservaConfirmada_bannerV2")
                             contenedorBanner.innerText = "Se ha vericado la cuenta correctamente, ya puedes usar tu cuenta para ver la reservas hechas."
                             marcoElastico.appendChild(contenedorBanner)
-    
+
                             const botonIrARegistrarse = document.createElement("a")
                             botonIrARegistrarse.classList.add("plaza_reservas_reservaConfirmada_banner")
                             botonIrARegistrarse.innerText = "Ir al portal de MiCasa"
@@ -4535,18 +4538,18 @@ const casaVitini = {
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(transacccion)
                             casaVitini.componentes.limpiarAdvertenciasInmersivas()
-    
+
                             if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                             }
                             if (respuestaServidor?.ok && pantallaDeCargaRenderizada) {
                                 return casaVitini.ui.vistas.miCasa.verificarCuenta.ui.cuentaVerificada()
                             }
-    
+
                         }
                     }
                 },
-              
+
             },
             contacto: {
                 arranque: () => {
