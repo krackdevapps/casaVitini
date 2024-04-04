@@ -3,19 +3,19 @@
 <div class="marcoElasticoRelativo">
     <div class="marcoElastico">
         <div class="marcoCuenta" componente="marcoCuenta">
-            <div class="miCuenta_cambiarClave_contenedor">
+            <form class="miCuenta_cambiarClave_contenedor">
                 <p class="miCuenta_cambiarClave_testo negrita">Cambiar clave de la cuenta</p>
                 <p class="miCuenta_cambiarClave_testo">Desde aquí puedes cambiar la clave de tu cuenta de usuario. Te recomendamos que utilices un generador de claves y que guardes y gestiones la clave desde un gestor de claves para mantener una mínima seguridad de tu cuenta.</p>
                 <input type="text" class="miCuenta_cambiarClave_campoClave"
-                    placeholder="Escriba la contraseña de la cuenta" campo="claveActual">
+                    placeholder="Escriba la contraseña de la cuenta" campo="claveActual" autocomplete="current-password">
                 <input type="text" class="miCuenta_cambiarClave_campoClave" placeholder="Escribe la nueva contraseña"
-                campo="claveNueva">
+                campo="claveNueva" autocomplete="new-password">
                 <input type="text" class="miCuenta_cambiarClave_campoClave"
-                    placeholder="Vuelve a escribir la nueva contraseña" campo="claveConfirmada">
+                    placeholder="Vuelve a escribir la nueva contraseña" campo="claveConfirmada"  autocomplete="new-password">
                 <div class="miCuenta_cambioClave_contenedorBotones">
                     <div class="miCuenta_cambiarClave_botonV1" componente="botonCambiarClave">Cambiar contraseña</div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

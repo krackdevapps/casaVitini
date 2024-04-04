@@ -83,6 +83,13 @@ const administracion = {
                 botonVerHoy.addEventListener("click", casaVitini.administracion.reservas.buscador.verReservasHoy)
                 botonVerHoy.innerText = "Ver entradas hoy"
                 contenedorBotonesGlobales.appendChild(botonVerHoy)
+                const botonReservasPendientes = document.createElement("a")
+                botonReservasPendientes.classList.add("adminitracion_reservas_contenedorBotonesGlobales")
+                botonReservasPendientes.innerText = "Reservas pendientes de revisión"
+                botonReservasPendientes.setAttribute("vista", "/administracion/reservas/pendientes_de_revision")
+                botonReservasPendientes.setAttribute("href", "/administracion/reservas/pendientes_de_revision")
+                botonReservasPendientes.addEventListener("click", casaVitini.componentes.cambiarVista)
+                contenedorBotonesGlobales.appendChild(botonReservasPendientes)
                 const botonCrearReserva = document.createElement("a")
                 botonCrearReserva.classList.add("adminitracion_reservas_contenedorBotonesGlobales")
                 botonCrearReserva.innerText = "Crear una nueva reserva"

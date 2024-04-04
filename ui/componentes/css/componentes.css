@@ -3515,7 +3515,6 @@
 
 .advertenciaInmersiva .boton:hover {
     background: #0044ff;
-    padding: 8px;
     border-radius: 8px;
     border-radius: 8px;
     text-align: center;
@@ -12166,9 +12165,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-.contenedorMenuCapas .boton:hover {
-    background: #00000030;
-}
+
 
 .espacioEventosAirbnb .sinInfo {
     padding: 4px;
@@ -12411,6 +12408,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     align-content: center;
     justify-content: center;
+    text-align: center;
 }
 
 [zonaCSS="alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal {
