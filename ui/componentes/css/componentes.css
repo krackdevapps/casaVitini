@@ -9748,7 +9748,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: flex-start;
 }
 
-.administracion_reservas_detallesReserfa_miscelanea_botonOpcion {
+[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserfa_miscelanea_botonOpcion {
     cursor: default;
     user-select: none;
     text-decoration: none;
@@ -9758,9 +9758,10 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
     transition: all 500ms linear;
     display: flex;
+    margin: 6px;
 }
 
-.administracion_reservas_detallesReserfa_miscelanea_botonOpcion:hover {
+[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserfa_miscelanea_botonOpcion:hover {
     background-color: rgba(255, 255, 255, 0.6);
 }
 

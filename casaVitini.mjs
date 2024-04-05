@@ -10,8 +10,6 @@ import dotenv from "dotenv";
 import https from 'https';
 import controlHttps from './logica/componentes/controlHttps.mjs';
 import { conexion } from './logica/componentes/db.mjs';
-import { Configuration, InformationApi } from '@ionos-cloud/sdk-nodejs-cert-manager';
-import { exec } from "child_process"
 
 
 dotenv.config();
