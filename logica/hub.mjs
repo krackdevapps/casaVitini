@@ -10911,8 +10911,8 @@ const puerto = async (entrada, salida) => {
                                 const apartamentoIDV = apartamentoEncotrado.apartamentoIDV
                                 const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
                                 const apartamento = {
-                                    "apartamento": apartamentoIDV,
-                                    "apartamentoUI": apartamentoUI
+                                    apartamento: apartamentoIDV,
+                                    apartamentoUI: apartamentoUI
                                 }
                                 const listarPreciosApartamentos = `
                                 SELECT
@@ -10927,15 +10927,15 @@ const puerto = async (entrada, salida) => {
                                     const precioApartamento = precioEncontrados.precio
                                     const moneda = precioEncontrados.moneda
                                     const uidPrecio = precioEncontrados.uid
-                                    apartamento["uid"] = uidPrecio
-                                    apartamento["precio"] = precioApartamento
-                                    apartamento["moneda"] = moneda
-                                    apartamento["totalImpuestos"] = "0.00"
-                                    apartamento["totalDiaBruto"] = "0.00"
+                                    apartamento.uid = uidPrecio
+                                    apartamento.precio = precioApartamento
+                                    apartamento.moneda = moneda
+                                    apartamento.totalImpuestos = "0.00"
+                                    apartamento.totalDiaBruto = precioApartamento
 
                                     if (resuelveSeleccionarImpuestos.rowCount > 0) {
                                         const impuestosEncontrados = resuelveSeleccionarImpuestos.rows
-                                        apartamento["totalImpuestos"] = 0.00
+                                        apartamento.totalImpuestos = 0.00
                                         let sumaTotalImpuestos = 0.00
                                         impuestosEncontrados.map((detalleImpuesto) => {
                                             const tipoImpositivo = detalleImpuesto.tipoImpositivo
@@ -10948,10 +10948,9 @@ const puerto = async (entrada, salida) => {
                                                 sumaTotalImpuestos += parseFloat(tipoImpositivo)
                                             }
                                         })
-                                        apartamento["totalImpuestos"] = Number(sumaTotalImpuestos).toFixed(2)
-                                        let totalDiaBruto = Number(sumaTotalImpuestos) + Number(precioApartamento)
-                                        totalDiaBruto = totalDiaBruto.toFixed(2)
-                                        apartamento["totalDiaBruto"] = totalDiaBruto
+                                        apartamento.totalImpuestos = Number(sumaTotalImpuestos).toFixed(2)
+                                        const totalDiaBruto = Number(sumaTotalImpuestos) + Number(precioApartamento)
+                                        apartamento.totalDiaBruto = totalDiaBruto.toFixed(2)
                                     }
                                 }
                                 objetoFInal.push(apartamento)
