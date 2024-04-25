@@ -1543,11 +1543,15 @@ const casaVitini = {
                                 marcoElastico.appendChild(titulo)
                                 const infoGlobal = document.createElement("div")
                                 infoGlobal.classList.add("plaza_reservas_reservaConfirmada_infoGlobal")
-                                infoGlobal.innerText = "Su reserva está preconfirmada y le estamos esperando. Aquí tiene los detalles de su reserva. Puede descargar un resumen de su reserva en formato de documento PDF. Su reserva se ha registrado junto a su correo electrónico. Si desea ver con más detalle su reserva puede crear una cuenta en MiCasa para poder ver todos los detalles de su reserva. Si necesita contactar con Casa Vitini puede encontrar toda la información de contacto en la sección Contacto. Se ha enviado una copia del resumen de su reserva a su dirección de correo electrónico."
+                                infoGlobal.innerText = "Su reserva está confirmada y le estamos esperando. Aquí tiene los detalles de su reserva. Puede descargar un resumen de su reserva en formato de documento PDF. Su reserva se ha registrado junto a su correo electrónico. Si desea ver con más detalle su reserva puede crear una cuenta en MiCasa para poder ver todos los detalles de su reserva. Si necesita contactar con Casa Vitini puede encontrar toda la información de contacto en la sección Contacto. Se ha enviado una copia del resumen de su reserva a su dirección de correo electrónico."
                                 marcoElastico.appendChild(infoGlobal)
                                 const infoIngreso = document.createElement("div")
                                 infoIngreso.classList.add("plaza_reservas_reservaConfirmada_infoIngreso")
-                                infoIngreso.innerHTML = "Por favor realize el ingreso del total de su reserva en la siguiente cuenta bancaria antes de 72 horas a partir de la preconfirmacion de su reserva, puede hacerlo en una transferencia o en varias. Sea tan amable de poner el numero de la reserva en el concepto de la transferencia.<br>Cuenta bancaria para realizar el ingreso:<br>000000000000000000000000"
+                                infoIngreso.innerHTML = `
+                                Por favor para pagar esta reserva, realiza el ingreso por transferencia bancaria en el numero de cuenta de abajo. Una vez hecho el pago, envia un comprobante de la transferencia a casavitini@casavitini.com indicando el numero de la reserva. Queremos recordarte que el plazo máximo para recibir el pago y mantener tu reserva activa es de siete días a partir de la fecha de la reserva.<br>
+                                Este plazo nos permite garantizar tu espacio y asegurarnos de que todo esté listo para tu llegada. Entendemos que a veces pueden surgir imprevistos, por lo que estamos aquí para ayudarte en caso de que necesites alguna asistencia adicional o tengas alguna pregunta sobre el proceso de pago. Nuestro objetivo es brindarte la mejor experiencia posible y asegurarnos de que disfrutes al máximo tu próxima estancia con nosotros.
+                               
+                                Sea tan amable de poner el numero de la reserva en el concepto de la transferencia.<br>Cuenta bancaria para realizar el ingreso:<br>000000000000000000000000`
                                 marcoElastico.appendChild(infoIngreso)
                                 const contenedor = document.createElement("div")
                                 contenedor.classList.add("plaza_reservas_reservaConfirmada_contenedor")
@@ -5199,9 +5203,36 @@ const casaVitini = {
                     })
                 }
             },
-            rol: {
-                arranque: () => {
-                    document.body.removeAttribute("style")
+            privacidad: {
+                arranque: async () => {
+                    const main = document.querySelector("main")
+                    main.setAttribute("zonaCSS", "privacidad")
+
+                    const contenedorBotones = casaVitini.componentes.privacidad.ui.contenedorSecciones()
+                    main.appendChild(contenedorBotones)
+
+                    const privacidad = casaVitini.componentes.privacidad.arranque()
+                    console.log("privacidad", privacidad)
+                    if (privacidad) {
+                     
+                    const contenedorDecision = casaVitini.componentes.privacidad.ui.contenedorDecision()
+                    main.appendChild(contenedorDecision)
+                    }
+        
+        
+
+
+                },
+                zonas: {
+                    arranque: async () => {
+                        const main = document.querySelector("main")
+                        main.setAttribute("zonaCSS", "privacidad/zonaCompartida")
+                        main.style.paddingLeft = "20px"
+                        main.style.paddingRight = "20px"
+
+
+
+                    }
                 }
             }
         },
@@ -5296,6 +5327,14 @@ const casaVitini = {
                 zona: "componentes/cambiarVista",
                 vista: vista
             };
+
+            const privacidad = casaVitini.componentes.privacidad.arranque(vista)
+            if (privacidad) {
+                transaccion.vista = "privacidad"
+            }
+
+
+
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
             const contenedorVista = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
             if (!contenedorVista || !respuestaServidor) {
@@ -5327,13 +5366,17 @@ const casaVitini = {
             if (respuestaServidor?.ok) {
                 await casaVitini.componentes.controladorEstadoIDX()
                 //await new Promise(resolve => setTimeout(resolve, 250));
+                document.documentElement.scrollTop = 0;
                 const codigo = respuestaServidor.ok
                 contenedorVista.innerHTML = null
                 contenedorVista.innerHTML = codigo
                 const arranqueVistaPublica = contenedorVista?.querySelector("arranque")?.getAttribute("publico")
                 const arranqueVistaAdministrativa = contenedorVista?.querySelector("arranque")?.getAttribute("administracion")
-                let urlVista = respuestaServidor["url"]
-                // Vista = Vista.charAt(0).toUpperCase() + Vista.slice(1);
+
+                let urlVista = respuestaServidor.url
+                if (privacidad) {
+                    urlVista = vista === "portada" ? "/" : vista;
+                }
                 urlVista = urlVista === "/portada" ? "/" : urlVista;
                 urlVista = decodeURIComponent(urlVista);
                 const titulo = 'Casa Vitini';
@@ -5416,13 +5459,8 @@ const casaVitini = {
         },
         navegacion: async (e) => {
             let zona = (history.state)?.zona
-            const tipoCambio = (history.state)?.tipoCambio
+            const tipoCambio = (history.state)?.tipoCambio || "parcial"
             const urlActual = window.location.pathname;
-
-            if (tipoCambio !== "total" && tipoCambio !== "parcial") {
-                const mensaje = "La funcion de navegacion necesita que el objeto tenga definido el tipoCambio en total o en parcial"
-                return casaVitini.ui.vistas.advertenciaInmersiva(mensaje)
-            }
 
             if (tipoCambio === "total") {
                 zona = zona ? zona : "portada"
@@ -5448,6 +5486,7 @@ const casaVitini = {
         },
         temporizador: null,
         servidor: async (transaccion) => {
+
             const puerto = '/puerto';
             const peticion = {
                 method: 'POST',
@@ -5542,21 +5581,26 @@ const casaVitini = {
         },
         arranque: async () => {
             window.addEventListener("popstate", casaVitini.componentes.navegacion)
+
             document.getElementById("botonMenuResponsivo").addEventListener("click", casaVitini.componentes.menuResponsivo)
-            //window.addEventListener("resize", casaVitini.componentes.limpiarTodoElementoVolatil)
+            window.addEventListener("resize", casaVitini.componentes.limpiarTodoElementoVolatil)
             //  casaVitini.componentes.controlGlobalScroll()
             const vistas = document.querySelectorAll("[vista]")
+
             for (const vistaMenu of vistas) {
                 vistaMenu.addEventListener("click", casaVitini.componentes.cambiarVista)
             }
+
             await casaVitini.componentes.controladorEstadoIDX()
             document.querySelector("#navegadorResponsivo").style.opacity = "1"
             const url = window.location.pathname;
+
             if (url === "/") {
                 return casaVitini.componentes.controladorVista("portada")
             } else {
                 return casaVitini.componentes.controladorVista(url)
             }
+
         },
         controlGlobalScroll: () => {
             const selectorBloqueMenusGlobales = document.querySelector("[componente=marcoNavegacion]")
@@ -5582,7 +5626,6 @@ const casaVitini = {
             const componenteExistente = metadatos.conpontenteExistente
             const componente = document.querySelector("[componente=" + componenteExistente + "]")
             if (componente) {
-                console.log("El elemento existe")
                 const funcionPersonalizada = metadatos.funcionPersonalizada
                 if (eval("typeof " + funcionPersonalizada) === "function") {
                     const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
@@ -5591,11 +5634,8 @@ const casaVitini = {
                     let datosPaginacion = metadatos.datosPaginacion
                     datosPaginacion = JSON.stringify(datosPaginacion);
                     eval(funcionPersonalizada + "(" + datosPaginacion + ");")
-                }else{
-                    console.log("el elemento no existe")
                 }
             } else {
-                console.log("el componente NO existe")
                 const zona = metadatos.zona
                 const entrada = {
                     vista: zona,
@@ -5787,6 +5827,7 @@ const casaVitini = {
         },
         controladorEstadoIDX: async () => {
             const IDX = await casaVitini.IDX.estadoSession()
+
             const estado = IDX?.estado || null
             const rol = IDX?.rol
             if (estado === "desconectado" || !estado) {
@@ -9692,6 +9733,124 @@ const casaVitini = {
                 }
             }
         },
+        privacidad: {
+            arranque: (vista) => {
+                const filtro = /privacidad(\/.*)?$/
+                console.log("vista que llega", vista)
+                const resultadoFiltro = filtro.test(vista)
+                if (vista && resultadoFiltro) {
+                    return false
+                }
+
+                const cookies = casaVitini.componentes.privacidad.obtenerCookies()
+                if (cookies.privacidad !== "consentimientoAceptado") {
+                    return true
+                }
+            },
+            obtenerCookies: () => {
+                const cookiesArray = document.cookie.split("; ")
+                const cookiesObjeto = {}
+
+                for (const cadenaDeLaCookie of cookiesArray) {
+                    const arrayPorCookie = cadenaDeLaCookie.split("=")
+                    const nombre = arrayPorCookie[0]
+                    const valor = arrayPorCookie[1]
+                    cookiesObjeto[nombre] = valor
+                }
+                return cookiesObjeto
+            }
+
+            ,
+            crearCookieConsentimiento: () => {
+                const fecha = new Date();
+                fecha.setTime(fecha.getTime() + (24 * 60 * 60 * 1000)); // 24 horas desde ahora
+                const expira = "expires=" + fecha.toUTCString();
+                document.cookie = "privacidad=consentimientoAceptado; " + expira + "; SameSite=Strict; path=/; Secure";
+            },
+            advertenciaPrivacidadInicial: () => {
+
+                const main = document.querySelector("main")
+                main.setAttribute("zonaCSS", "privacidad")
+
+                const titulo = document.createElement("p")
+                titulo.innerText = "Advertencia de privacidad y uso de cookies "
+                titulo.classList.add("titulo")
+                main.appendChild(titulo)
+
+                const resumenInicial = document.createElement("p")
+                resumenInicial.style.marginTop = "10px"
+                resumenInicial.innerText = `Este sitio web usa cookies propias y de terceros para soportar la navegación, mejorar la experiencia de usuario, personalizar el contenido y realizar análisis estadísticos sobre los hábitos de navegación.`
+                main.appendChild(resumenInicial)
+
+                const contenedorBotones = casaVitini.componentes.privacidad.ui.contenedorSecciones()
+                main.appendChild(contenedorBotones)
+
+                const contenedorDecision = casaVitini.componentes.privacidad.ui.contenedorDecision()
+                main.appendChild(contenedorDecision)
+
+
+            },
+            ui: {
+                contenedorSecciones: () => {
+
+                    const contenedorBotones = document.createElement("div")
+                    contenedorBotones.classList.add("contenedorBotonesInicial")
+
+                    const botonPoliticaCookies = document.createElement("a")
+                    botonPoliticaCookies.classList.add("botonPrivacidad")
+                    botonPoliticaCookies.innerText = "Política de cookies"
+                    botonPoliticaCookies.setAttribute("href", "/privacidad/cookies")
+                    botonPoliticaCookies.setAttribute("vista", "/privacidad/cookies")
+                    botonPoliticaCookies.addEventListener("click", casaVitini.componentes.cambiarVista)
+                    contenedorBotones.appendChild(botonPoliticaCookies)
+
+                    const botonPoliticaPrivacidad = document.createElement("a")
+                    botonPoliticaPrivacidad.classList.add("botonPrivacidad")
+                    botonPoliticaPrivacidad.innerText = "Política de privacidad"
+                    botonPoliticaPrivacidad.setAttribute("href", "/privacidad/politica_de_privacidad")
+                    botonPoliticaPrivacidad.setAttribute("vista", "/privacidad/politica_de_privacidad")
+                    botonPoliticaPrivacidad.addEventListener("click", casaVitini.componentes.cambiarVista)
+                    contenedorBotones.appendChild(botonPoliticaPrivacidad)
+
+                    const botonCondicionesDeUso = document.createElement("a")
+                    botonCondicionesDeUso.classList.add("botonPrivacidad")
+                    botonCondicionesDeUso.setAttribute("href", "/privacidad/condiciones_de_uso")
+                    botonCondicionesDeUso.setAttribute("vista", "/privacidad/condiciones_de_uso")
+                    botonCondicionesDeUso.addEventListener("click", casaVitini.componentes.cambiarVista)
+                    botonCondicionesDeUso.innerText = "Condiciones de uso"
+                    contenedorBotones.appendChild(botonCondicionesDeUso)
+
+                    return contenedorBotones
+                },
+                contenedorDecision: () => {
+                    const contenedorDecision = document.createElement("div")
+                    contenedorDecision.classList.add("contenedorDecision")
+
+                    const botonRechazar = document.createElement("a")
+                    botonRechazar.classList.add("botonPrivacidad")
+                    botonRechazar.innerText = "Rechazar todo"
+                    botonRechazar.addEventListener("click", () => {
+                        localStorage.clear()
+                        const cookies = casaVitini.componentes.privacidad.obtenerCookies()
+                        for (const [nombreCookies, valorCookie] of Object.entries(cookies)) {
+                            cookieStore.delete(nombreCookies)
+                        }
+                        window.location.href = "about:blank"
+                    })
+                    contenedorDecision.appendChild(botonRechazar)
+
+                    const botonAceptar = document.createElement("a")
+                    botonAceptar.classList.add("botonPrivacidad")
+                    botonAceptar.innerText = "Aceptar todo"
+                    botonAceptar.addEventListener("click", () => {
+                        casaVitini.componentes.privacidad.crearCookieConsentimiento()
+                        casaVitini.componentes.arranque()
+                    })
+                    contenedorDecision.appendChild(botonAceptar)
+                    return contenedorDecision
+                }
+            }
+        }
     },
     IDX: {
         iniciarSession: async (IDX) => {

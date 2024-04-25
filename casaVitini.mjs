@@ -11,7 +11,6 @@ import https from 'https';
 import controlHttps from './logica/componentes/controlHttps.mjs';
 import { conexion } from './logica/componentes/db.mjs';
 
-
 dotenv.config();
 const duracionGlobalSessionServidor = 60 * 60 // Recuerda esto es segundos
 const duracionGlobalSessionCliente = duracionGlobalSessionServidor * 1000 // Recuerda esto es en miliSegundos
@@ -60,7 +59,7 @@ const almacenSessiones = new (pgSession(session))({
   max: 100,
   maxAge: 1000,
   ttl: 1000,
-  errorLog: console.error,
+  errorLog: console.error
 })
 // Rutas Estaticas
 // Middleware personalizado para manejar la conexión a la base de datos
@@ -92,6 +91,7 @@ app.use(session({
   name: 'VitiniID',
   resave: false,
   saveUninitialized: false,
+  rolling: false,
   cookie: {
     secure: true,
     maxAge: duracionGlobalSessionCliente,
@@ -100,7 +100,6 @@ app.use(session({
     httpOnly: true,
     rolling: false,
   },
-  rolling: true,
 }));
 //app.use(controlBaseDeDatos);
 //Rutas dinamicas
