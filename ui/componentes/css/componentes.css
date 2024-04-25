@@ -13332,7 +13332,11 @@ grid-template-columns: 0.5fr 1.5fr;
     text-align: center;
     transition: all 250ms linear;
     text-decoration: none;
-    color: black
+    color: black;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
 }
 
 [zonaCSS="privacidad"] .botonPrivacidad:hover {
@@ -13355,10 +13359,20 @@ grid-template-columns: 0.5fr 1.5fr;
     width: 100%;
     gap: 10px;
     padding: 10px;
-    flex-direction: row;
     align-content: center;
     max-width: 720px;
 }
+[zonaCSS="privacidad"] .contenedorRevocar {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    padding: 10px;
+    flex-direction: row;
+    align-content: center;
+    max-width: 720px;
+    flex-wrap: wrap;
+}
+
 
 [zonaCSS="privacidad/zonaCompartida"] .tituloBloque {
     text-align: left;

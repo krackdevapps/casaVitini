@@ -5214,12 +5214,16 @@ const casaVitini = {
                     const privacidad = casaVitini.componentes.privacidad.arranque()
                     console.log("privacidad", privacidad)
                     if (privacidad) {
-                     
-                    const contenedorDecision = casaVitini.componentes.privacidad.ui.contenedorDecision()
-                    main.appendChild(contenedorDecision)
+                        console.log("true")
+                        const contenedorDecision = casaVitini.componentes.privacidad.ui.contenedorDecision()
+                        main.appendChild(contenedorDecision)
+                    }else{
+                        console.log("true")
+                        const revocarDecision = casaVitini.componentes.privacidad.ui.revocarDecision()
+                        main.appendChild(revocarDecision)
                     }
-        
-        
+
+
 
 
                 },
@@ -5230,6 +5234,19 @@ const casaVitini = {
                         main.style.paddingLeft = "20px"
                         main.style.paddingRight = "20px"
 
+
+                        const botones = [...document.querySelectorAll("[componente=boton]")]
+                        botones.map((boton) => {
+                            boton.addEventListener("click", (boton) => {
+                                boton.preventDefault()
+                                const vista = boton.target.getAttribute("vista")
+                                const navegacion = {
+                                    vista: vista,
+                                    tipoOrigen: "menuNavegador"
+                                }
+                                casaVitini.componentes.controladorVista(navegacion)
+                            })
+                        })
 
 
                     }
@@ -9825,6 +9842,7 @@ const casaVitini = {
                 contenedorDecision: () => {
                     const contenedorDecision = document.createElement("div")
                     contenedorDecision.classList.add("contenedorDecision")
+                    contenedorDecision.setAttribute("contenedor", "botones")
 
                     const botonRechazar = document.createElement("a")
                     botonRechazar.classList.add("botonPrivacidad")
@@ -9848,6 +9866,38 @@ const casaVitini = {
                     })
                     contenedorDecision.appendChild(botonAceptar)
                     return contenedorDecision
+                },
+                revocarDecision: () => {
+                    const contenedorDecision = document.createElement("div")
+                    contenedorDecision.classList.add("contenedorRevocar")
+                    contenedorDecision.setAttribute("contenedor", "botones")
+
+
+                    const textoInfo = document.createElement("div")
+                    textoInfo.classList.add("texto")
+                    textoInfo.innerText = "Ha aceptado las politicas de privacidad y condiciones de uso de Casa Vitini, si quiere puede revocarlas en cualquier momento borrando la cache de su navegador o pulsando en el boton de revocar de abajo."
+                    contenedorDecision.appendChild(textoInfo)
+
+                    const botonRechazar = document.createElement("a")
+                    botonRechazar.classList.add("botonPrivacidad")
+                    botonRechazar.innerText = "Revocar decisión y borrar cookies"
+                    botonRechazar.addEventListener("click", () => {
+                        localStorage.clear()
+                        const cookies = casaVitini.componentes.privacidad.obtenerCookies()
+                        for (const [nombreCookies, valorCookie] of Object.entries(cookies)) {
+                            cookieStore.delete(nombreCookies)
+                        }
+                        document.querySelector("[contenedor=botones]")?.remove()
+                        const main = document.querySelector("main")
+                        const contenedorDecision = casaVitini.componentes.privacidad.ui.contenedorDecision()
+                        main.appendChild(contenedorDecision)
+
+
+                    })
+                    contenedorDecision.appendChild(botonRechazar)
+                    return contenedorDecision
+
+
                 }
             }
         }
