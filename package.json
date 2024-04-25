@@ -1,7 +1,7 @@
 {
   "name": "casa_vitini",
   "version": "1.0.0",
-  "description": "Aplicacion paga gestionar reservas de Casa Vitini",
+  "description": "Aplicacion paga gestionar reservas",
   "main": "casaVitini.mjs",
   "scripts": {
     "arranqueLocal": "node casaVitini.mjs",
