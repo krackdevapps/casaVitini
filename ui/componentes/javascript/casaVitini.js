@@ -2518,7 +2518,6 @@ const casaVitini = {
                                     claveConfirmada: claveConfirmada
                                 }
                                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                                
                                 const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
                                 const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                                 if (!pantallaDeCargaRenderizada) { return }
