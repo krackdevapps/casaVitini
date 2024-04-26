@@ -2498,6 +2498,16 @@ const casaVitini = {
                                 botonCambiarClave.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.cambiarClave.portada.cambiarClaveTransactor)
                             },
                             cambiarClaveTransactor: async () => {
+                                const instanciaUIDPantallaDeCarga = casaVitini.componentes.codigoFechaInstancia()
+                                const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
+
+                                const mensaje = "Actualizando contraseña del usuario..."
+                                const datosPantallaSuperpuesta = {
+                                    instanciaUID: instanciaUIDPantallaDeCarga,
+                                    mensaje: mensaje
+                                }
+                                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+
                                 const claveActual = document.querySelector("[campo=claveActual]").value
                                 const claveNueva = document.querySelector("[campo=claveNueva]").value
                                 const claveConfirmada = document.querySelector("[campo=claveConfirmada]").value
@@ -2508,14 +2518,26 @@ const casaVitini = {
                                     claveConfirmada: claveConfirmada
                                 }
                                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                                
+                                const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
+                                const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                                if (!pantallaDeCargaRenderizada) { return }
+                                pantallaDeCargaRenderizada.remove()
+
                                 if (respuestaServidor?.error) {
                                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                                 }
                                 if (respuestaServidor?.ok) {
-                                    const campos = [...document.querySelectorAll("[campo]")]
-                                    campos.map((campo) => {
-                                        campo.value = null
-                                    })
+
+                                    instanciaRenderizada.querySelector("[componente=formulario]").remove()
+                                    const marcoCuenta = instanciaRenderizada.querySelector("[componente=marcoCuenta]")
+
+                                    const info = document.createElement("div")
+                                    info.classList.add("miCuenta_cambiarClave_testo")
+                                    info.classList.add("negrita")
+                                    info.innerText = "Se ha cambiado la clave correctamente, ya puede usarla. También se recomienda que revise las sesiones abiertas. Diríjase a Mi Casa > Sesiones"
+                                    marcoCuenta.appendChild(info)
+
                                 }
                             }
                         }
@@ -9269,12 +9291,18 @@ const casaVitini = {
                 if (controlContenido === "desplegar") {
                     contenedorDesgloseTotales.appendChild(ofertasUI)
                 }
+
+                
                 const impuestoUI = document.createElement("div")
                 impuestoUI.classList.add("reserva_resumen_desglose_pago_bloque")
                 const impuestoUITituloBloque = document.createElement("div")
                 impuestoUITituloBloque.classList.add("reserva_resumen_desglose_pago_titulo")
                 impuestoUITituloBloque.innerText = "Impuestos"
                 impuestoUI.appendChild(impuestoUITituloBloque)
+
+
+
+
                 if (desgloseImpuestos.length === 0) {
                     const info = document.createElement("div")
                     info.classList.add("componentes_ui_totales_mensajeInfoSinInformacion")
@@ -9316,7 +9344,12 @@ const casaVitini = {
                     }
                     impuestoUI.appendChild(impuestoUITitulo)
                 })
-                contenedorDesgloseTotales.appendChild(impuestoUI)
+
+
+                if (desgloseImpuestos.length > 0) {
+                    contenedorDesgloseTotales.appendChild(impuestoUI)
+                }
+
                 const totalesUI = document.createElement("div")
                 totalesUI.classList.add("reserva_resumen_desglose_pago_bloque")
                 const totalesUITituloBloque = document.createElement("div")

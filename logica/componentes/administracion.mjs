@@ -23620,36 +23620,40 @@ const administracion = {
                     }
                 },
                 guardarCambios: async () => {
-                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
-                    const mensaje = "Actualizando contraseña del usuario..."
+                    const usuarioIDX = document.querySelector("[usuarioIDX]").getAttribute("usuarioIDX")
+
+                    const instanciaUIDPantallaDeCarga = casaVitini.componentes.codigoFechaInstancia()
+                    const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
+                    const mensaje = `Actualizando contraseña del usuario ${usuarioIDX}...`
                     const datosPantallaSuperpuesta = {
-                        instanciaUID: instanciaUID,
+                        instanciaUID: instanciaUIDPantallaDeCarga,
                         mensaje: mensaje
                     }
                     casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                    const usuarioIDX = document.querySelector("[usuarioIDX]")
                     const claveNueva = document.querySelector("[componente=claveNueva]")
                     const claveNuevaDos = document.querySelector("[componente=claveNuevaDos]")
                     const datosParaActualizar = {
                         zona: "administracion/usuarios/actualizarClaveUsuarioAdministracion",
-                        usuarioIDX: usuarioIDX.getAttribute("usuarioIDX"),
+                        usuarioIDX: usuarioIDX,
                         claveNueva: claveNueva.value,
                         claveNuevaDos: claveNuevaDos.value
                     }
                     const respuestaServidor = await casaVitini.componentes.servidor(datosParaActualizar)
+                    const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
                     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                    if (!instanciaRenderizada) { return }
-                    instanciaRenderizada.remove()
+
+                    if (!pantallaDeCargaRenderizada) { return }
+                    pantallaDeCargaRenderizada.remove()
                     if (respuestaServidor?.error) {
-                        return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
+                        return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor.error)
                     }
                     if (respuestaServidor?.ok) {
-                        const campos = [...document.querySelectorAll("[campo]")]
-                        campos.map((campo) => {
-                            campo.value = null
+                        casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor.ok)
+                        const campos = instanciaRenderizada.querySelectorAll("[campo]")
+                        campos.forEach((campo) => {
+                            campo.value = ""
                         })
-                        const selectorContenedorBotones = document.querySelector("[componente=contenedorBotones]")
-                        selectorContenedorBotones.removeAttribute("style")
+
                     }
                 },
                 cancelarCambios: () => {
