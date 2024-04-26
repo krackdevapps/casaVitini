@@ -4,3 +4,5 @@
 node_modules
 ui/componentes/videos/*
 !ui/componentes/videos/
+certificadosSSL/*
+!certificadosSSL/
