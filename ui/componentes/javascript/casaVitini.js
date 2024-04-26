@@ -5238,7 +5238,7 @@ const casaVitini = {
                         console.log("true")
                         const contenedorDecision = casaVitini.componentes.privacidad.ui.contenedorDecision()
                         main.appendChild(contenedorDecision)
-                    }else{
+                    } else {
                         console.log("true")
                         const revocarDecision = casaVitini.componentes.privacidad.ui.revocarDecision()
                         main.appendChild(revocarDecision)
@@ -9291,7 +9291,7 @@ const casaVitini = {
                     contenedorDesgloseTotales.appendChild(ofertasUI)
                 }
 
-                
+
                 const impuestoUI = document.createElement("div")
                 impuestoUI.classList.add("reserva_resumen_desglose_pago_bloque")
                 const impuestoUITituloBloque = document.createElement("div")
@@ -9807,9 +9807,19 @@ const casaVitini = {
                     cookiesObjeto[nombre] = valor
                 }
                 return cookiesObjeto
-            }
-
-            ,
+            },
+            borrarCookies: () => {
+                localStorage.clear()
+                const cookies = casaVitini.componentes.privacidad.obtenerCookies()
+                console.log("cookies", cookies)
+                for (const [nombreCookies, valorCookie] of Object.entries(cookies)) {
+                    if ('cookieStore' in window) {
+                        cookieStore?.delete(nombreCookies)
+                    } else {
+                        document.cookie = nombreCookies + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    }
+                }
+            },
             crearCookieConsentimiento: () => {
                 const fecha = new Date();
                 fecha.setTime(fecha.getTime() + (24 * 60 * 60 * 1000)); // 24 horas desde ahora
@@ -9880,11 +9890,7 @@ const casaVitini = {
                     botonRechazar.classList.add("botonPrivacidad")
                     botonRechazar.innerText = "Rechazar todo"
                     botonRechazar.addEventListener("click", () => {
-                        localStorage.clear()
-                        const cookies = casaVitini.componentes.privacidad.obtenerCookies()
-                        for (const [nombreCookies, valorCookie] of Object.entries(cookies)) {
-                            cookieStore.delete(nombreCookies)
-                        }
+                        casaVitini.componentes.privacidad.borrarCookies()
                         window.location.href = "about:blank"
                     })
                     contenedorDecision.appendChild(botonRechazar)
@@ -9914,11 +9920,7 @@ const casaVitini = {
                     botonRechazar.classList.add("botonPrivacidad")
                     botonRechazar.innerText = "Revocar decisión y borrar cookies"
                     botonRechazar.addEventListener("click", () => {
-                        localStorage.clear()
-                        const cookies = casaVitini.componentes.privacidad.obtenerCookies()
-                        for (const [nombreCookies, valorCookie] of Object.entries(cookies)) {
-                            cookieStore.delete(nombreCookies)
-                        }
+                        casaVitini.componentes.privacidad.borrarCookies()
                         document.querySelector("[contenedor=botones]")?.remove()
                         const main = document.querySelector("main")
                         const contenedorDecision = casaVitini.componentes.privacidad.ui.contenedorDecision()
