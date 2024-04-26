@@ -2,7 +2,9 @@
 .VSCodeCounter/
 .DS_Store
 node_modules
+
 ui/componentes/videos/*
 !ui/componentes/videos/
-certificadosSSL/*
-!certificadosSSL/
+
+certificados_ssl/*
+!certificados_ssl/

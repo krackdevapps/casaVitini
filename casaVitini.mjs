@@ -135,8 +135,8 @@ const info = () => {
 app.listen(puerto, (entrada, Salida) => {
   console.info(">> Puerto inseguro activo:", puerto)
 })
-const certificado = 'certificadosSSL/IONOS/casavitini.com_ssl_certificate.cer'
-const llave = "certificadosSSL/IONOS/casavitini.com_private_key.key"
+const certificado = 'certificados_ssl/IONOS/casavitini.com_ssl_certificate.cer'
+const llave = "certificados_ssl/IONOS/casavitini.com_private_key.key"
 const options = {
   key: fs.readFileSync(llave),
   cert: fs.readFileSync(certificado),
