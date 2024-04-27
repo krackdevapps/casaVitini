@@ -8,3 +8,4 @@ ui/componentes/videos/*
 
 certificados_ssl/*
 !certificados_ssl/
+
