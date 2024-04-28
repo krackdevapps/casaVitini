@@ -134,28 +134,30 @@ const info = () => {
 }
 app.listen(puerto, (entrada, Salida) => {
   console.info(">> Puerto inseguro activo:", puerto)
+  info()
+
 })
-const certificado = 'certificados_ssl/IONOS/casavitini.com_ssl_certificate.cer'
-const llave = "certificados_ssl/IONOS/casavitini.com_private_key.key"
+const llave = process.env.CERTIFICADOS_KEY
+const cert = process.env.CERTIFICADOS_CERT
 const options = {
   key: fs.readFileSync(llave),
-  cert: fs.readFileSync(certificado),
+  cert: fs.readFileSync(cert),
 };
 const servidorHTTPS = https.createServer(options, app).listen(puertoSec, (entrada, salida) => {
   console.info(">> Puerto seguro activo", puertoSec)
   infoEntornoDB();
-  info();
+  info()
 });
+
 fs.watchFile(llave, (curr, prev) => {
   console.info('Los certificados han cambiado. Recargando...');
   const newOptions = {
     key: fs.readFileSync(llave),
-    //  cert: fs.readFileSync(certificado),
+    cert: fs.readFileSync(cert),
   };
   servidorHTTPS.setSecureContext(newOptions);
   console.info('Servidor HTTPS actualizado');
 });
-
 Object.keys(process.env).forEach((key) => {
   //delete process.env[key];
 });
