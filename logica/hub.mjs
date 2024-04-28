@@ -2519,31 +2519,60 @@ const puerto = async (entrada, salida) => {
                             const error = "Necesitar identifcarte para ver tus datos personales"
                             throw new Error(error)
                         }
+                        const ok = {
+                            ok: {}
+                        }
+                        const consultaRol = `
+                        SELECT 
+                        rol,
+                        "estadoCuenta"
+                        FROM 
+                        usuarios
+                        WHERE 
+                        usuario = $1;`
+                        const resolverUsuarioYRol = await conexion.query(consultaRol, [usuarioIDX])
+                        const rol = resolverUsuarioYRol.rows[0].rol
+                        const estadoCuenta = resolverUsuarioYRol.rows[0].estadoCuenta
+                        ok.ok.usuarioIDX = usuarioIDX
+                        ok.ok.rol = rol
+                        ok.ok.estadoCuenta = estadoCuenta
+
+
                         const consultaDetallesUsuario = `
                         SELECT 
-                        ddu."usuarioIDX", 
-                        ddu.nombre,
-                        ddu."primerApellido",
-                        ddu."segundoApellido",
-                        ddu.pasaporte,
-                        ddu.telefono,
-                        ddu.email,
-                        u.rol,
-                        u."estadoCuenta"
+                        nombre,
+                        "primerApellido",
+                        "segundoApellido",
+                        pasaporte,
+                        telefono,
+                        email
                         FROM 
-                        "datosDeUsuario" ddu
-                        JOIN usuarios u ON ddu."usuarioIDX" = u.usuario
+                        "datosDeUsuario"
                         WHERE 
-                        ddu."usuarioIDX" = $1;`
+                        "usuarioIDX" = $1;`
                         const resolverConsultaDetallesUsuario = await conexion.query(consultaDetallesUsuario, [usuarioIDX])
+                        let detallesCliente = resolverConsultaDetallesUsuario.rows[0]
                         if (resolverConsultaDetallesUsuario.rowCount === 0) {
-                            const error = "No existe ningun usuario con ese IDX"
-                            throw new Error(error)
+                            const crearDatosUsuario = `
+                            INSERT INTO "datosDeUsuario"
+                            (
+                            "usuarioIDX"
+                            )
+                            VALUES ($1) 
+                            RETURNING
+                            *
+                            `
+                            const resuelveCrearFicha = await conexion.query(crearDatosUsuario, [usuarioIDX])
+                            detallesCliente = resuelveCrearFicha.rows[0]
                         }
-                        const detallesCliente = resolverConsultaDetallesUsuario.rows[0]
-                        const ok = {
-                            ok: detallesCliente
+                        for (const [dato, valor] of Object.entries(detallesCliente)) {
+                            ok.ok[dato] = valor
                         }
+
+
+
+
+
                         salida.json(ok)
                     } catch (errorCapturado) {
                         const error = {
@@ -2556,7 +2585,7 @@ const puerto = async (entrada, salida) => {
             },
             actualizarDatosUsuarioDesdeMiCasa: {
                 IDX: {},
-                _X: async () => {
+                X: async () => {
                     try {
                         const usuarioIDX = entrada.session.usuario;
                         let nombre = entrada.body.nombre;
@@ -2723,13 +2752,7 @@ const puerto = async (entrada, salida) => {
                         salida.json(error);
                     } finally {
                     }
-                },
-                get X() {
-                    return this._X;
-                },
-                set X(value) {
-                    this._X = value;
-                },
+                }
             },
             actualizarIDX: {
                 IDX: {},
@@ -16026,31 +16049,56 @@ const puerto = async (entrada, salida) => {
                             const error = "el campo 'usuarioIDX' solo puede ser letras minúsculas, numeros y sin pesacios"
                             throw new Error(error)
                         }
+
+                        const ok = {
+                            ok: {}
+                        }
+                        const consultaRol = `
+                        SELECT 
+                        rol,
+                        "estadoCuenta"
+                        FROM 
+                        usuarios
+                        WHERE 
+                        usuario = $1;`
+                        const resolverUsuarioYRol = await conexion.query(consultaRol, [usuarioIDX])
+                        const rol = resolverUsuarioYRol.rows[0].rol
+                        const estadoCuenta = resolverUsuarioYRol.rows[0].estadoCuenta
+                        ok.ok.usuarioIDX = usuarioIDX
+                        ok.ok.rol = rol
+                        ok.ok.estadoCuenta = estadoCuenta
+
                         const consultaDetallesUsuario = `
                         SELECT 
-                        ddu."usuarioIDX", 
-                        ddu.nombre,
-                        ddu."primerApellido",
-                        ddu."segundoApellido",
-                        ddu.pasaporte,
-                        ddu.telefono,
-                        ddu.email,
-                        u.rol,
-                        u."estadoCuenta"
+                        nombre,
+                        "primerApellido",
+                        "segundoApellido",
+                        pasaporte,
+                        telefono,
+                        email
                         FROM 
-                        "datosDeUsuario" ddu
-                        JOIN usuarios u ON ddu."usuarioIDX" = u.usuario
+                        "datosDeUsuario"
                         WHERE 
-                        ddu."usuarioIDX" = $1;`
+                        "usuarioIDX" = $1;`
                         const resolverConsultaDetallesUsuario = await conexion.query(consultaDetallesUsuario, [usuarioIDX])
+                        let detallesCliente = resolverConsultaDetallesUsuario.rows[0]
                         if (resolverConsultaDetallesUsuario.rowCount === 0) {
-                            const error = "No existe ningun usuario con ese IDX"
-                            throw new Error(error)
+                            const crearDatosUsuario = `
+                            INSERT INTO "datosDeUsuario"
+                            (
+                            "usuarioIDX"
+                            )
+                            VALUES ($1) 
+                            RETURNING
+                            *
+                            `
+                            const resuelveCrearFicha = await conexion.query(crearDatosUsuario, [usuarioIDX])
+                            detallesCliente = resuelveCrearFicha.rows[0]
                         }
-                        const detallesCliente = resolverConsultaDetallesUsuario.rows[0]
-                        const ok = {
-                            ok: detallesCliente
+                        for (const [dato, valor] of Object.entries(detallesCliente)) {
+                            ok.ok[dato] = valor
                         }
+
                         salida.json(ok)
                     } catch (errorCapturado) {
                         const error = {
