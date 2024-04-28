@@ -1551,7 +1551,11 @@ const casaVitini = {
                                 Por favor para pagar esta reserva, realiza el ingreso por transferencia bancaria en el numero de cuenta de abajo. Una vez hecho el pago, envia un comprobante de la transferencia a casavitini@casavitini.com indicando el numero de la reserva. Queremos recordarte que el plazo máximo para recibir el pago y mantener tu reserva activa es de siete días a partir de la fecha de la reserva.<br>
                                 Este plazo nos permite garantizar tu espacio y asegurarnos de que todo esté listo para tu llegada. Entendemos que a veces pueden surgir imprevistos, por lo que estamos aquí para ayudarte en caso de que necesites alguna asistencia adicional o tengas alguna pregunta sobre el proceso de pago. Nuestro objetivo es brindarte la mejor experiencia posible y asegurarnos de que disfrutes al máximo tu próxima estancia con nosotros.
                                
-                                Sea tan amable de poner el numero de la reserva en el concepto de la transferencia.<br>Cuenta bancaria para realizar el ingreso:<br>000000000000000000000000`
+                                Sea tan amable de poner el numero de la reserva en el concepto de la transferencia.<br>Cuenta bancaria para realizar el ingreso:
+                                <br>Cuenta: 365712660
+                                <br>Swift: BAMCNIMAXXX / BAMCNIMA
+                                <br>Código portal: 11185`
+                                
                                 marcoElastico.appendChild(infoIngreso)
                                 const contenedor = document.createElement("div")
                                 contenedor.classList.add("plaza_reservas_reservaConfirmada_contenedor")
