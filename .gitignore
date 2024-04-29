@@ -3,7 +3,7 @@
 .DS_Store
 node_modules
 campopruebas
-
+campoPruebas
 ui/componentes/videos/*
 !ui/componentes/videos/
 
