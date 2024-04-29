@@ -26,7 +26,7 @@ const app = express()
 app.use(controlHttps);
 app.set('views', './ui/constructor');
 app.set('view engine', 'ejs');
-// Limta a 50mb la entrad de datos y a formato json
+// Limta a 50mb la entrada de datos y a formato json
 app.use(express.raw({ limit: '50mb' }));
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 413 && 'body' in err) {

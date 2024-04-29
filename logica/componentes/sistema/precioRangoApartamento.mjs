@@ -5,7 +5,7 @@ import { aplicarImpuestos } from './aplicarImpuestos.mjs';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
 import { selectorRangoUniversal } from './selectoresCompartidos/selectorRangoUniversal.mjs';
 
-// Pasas una fecha de entrad un fecha de salida y un apartmaento y te da todos el tema
+// Pasas una fecha de a un fecha de salida y un apartmaento y te da todos el tema
 const constructorObjetoEstructuraPrecioDia = (fechaEntrada_ISO, fechaSalida_ISO) => {
     const arregloFechas = [];
     let fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO); // Convertir la fecha de entrada a un objeto DateTime
