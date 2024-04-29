@@ -1,4 +1,5 @@
 # Casa Vitini App 
+Aplicación de gestión de reservas
  
 ### Características globales 
  
