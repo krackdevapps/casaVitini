@@ -35,7 +35,7 @@
   
 
 #### Implementación rápida en local para desarrollo 
-Si quieres probar la aplicación, aquí tienes dos enfoques. También tienes que rellenar el archivo de variables de entorno. Tiene un archivo SQL con la estructura de la base de datos vacía con un usuario administrador llamado adminy clave también admin, para poder acceder al panel de administración. 
+Si quieres probar la aplicación, aquí tienes dos enfoques. También tienes que rellenar el archivo de variables de entorno. Tiene un archivo SQL con la estructura de la base de datos vacía con un usuario administrador llamado `admin` y clave es `a`, para poder acceder al panel de administración. 
 
 1. Instala node y postgres en tu sistema.
 2. Importa la base de datos vacía de ejemplo en tu servidor postgres, el archivo está en ejemplos/basededatosvacia.sql 
