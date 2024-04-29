@@ -2,8 +2,8 @@
 .VSCodeCounter/
 .DS_Store
 node_modules
-campopruebas
-campoPruebas
+campo_pruebas
+
 ui/componentes/videos/*
 !ui/componentes/videos/
 
