@@ -45,7 +45,7 @@ Si quieres probar la aplicación, aquí tienes dos enfoques. También tienes que
 5. `node casavitini.mjs` o abre el archivo .workspace con Visual Studio Code y desde scripts de NPM` 
 
  
-### Anotaciones sobre la idiosincrasia del proyecto 
+<!-- ### Anotaciones sobre la idiosincrasia del proyecto 
 #### Esto ha sido un proyecto profesional en el cual he trabajado como desarrollador con otros miembros del equipo de Casa Vitini para realizar una aplicación diseñada para la gestión de la actividad de la Empresa. Debido a que he tenido que desarrollar una arquitectura global para el proyecto, quiero indicar una serie de puntos: 
  
 - Soy consciente que usar funciones flecha impide usar la palabra clave this, porque en este contexto, la función flecha no respeta el contexto de ejecución y this dentro de una función flecha hace referencia al contexto más alto, al objeto global en vez de su contexto local de ejecución. La razón por la que uso tanto este tipo de funciónes es porque me parece muy declarativa y si necesito usar this dentro de una función dentro de un objeto, pues entonces uso una función anónima, sino prefiero usar la función flecha. 
@@ -56,4 +56,4 @@ Si quieres probar la aplicación, aquí tienes dos enfoques. También tienes que
  
 - En JS es una buena práctica usar constantes si los valores no cambian a lo largo de la ejecución y por hacer un código más robusto entre otros aspectos. Según el consenso no escrito, las constantes se escriben en mayúsculas, pero prefiero escribirlas en camellcase porque me parecen más legibles. Entiendo que tampoco es mucho problema porque en js las constantes tienen la palabra reservada const delante y son fácilmente distinguibles. Aparte en ciertos IDES las marcan con colores propios. 
  
-- Considero que el proyecto al no ser tan grande no es necesario al menos de momento usar una arquitectura basada en capas, lo digo por el codigo SQL incrustado en el codigo del back, como patrones de arquitecturas limpias. Pero es algo en lo que soy consciente y si es necesario se aplicara en el futuro. 
+- Considero que el proyecto al no ser tan grande no es necesario al menos de momento usar una arquitectura basada en capas, lo digo por el codigo SQL incrustado en el codigo del back, como patrones de arquitecturas limpias. Pero es algo en lo que soy consciente y si es necesario se aplicara en el futuro.  -->
