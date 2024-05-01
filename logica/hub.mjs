@@ -4684,22 +4684,33 @@ const puerto = async (entrada, salida) => {
                         const habitacion = entrada.body.habitacion
                         const filtroCadena = /^[A-Za-z\s\d]+$/;
                         if (!apartamento || !filtroCadena.test(apartamento)) {
-                            const error = "Se necesita un 'apartamento' que sea un string con letras y espacios, nada mas"
+                            const error = "Se necesita un apartamento que sea un string con letras y espacios, nada mas"
                             throw new Error(error)
                         }
                         if (!habitacion || !filtroCadena.test(habitacion)) {
-                            const error = "Se necesita un 'habitacion' que sea un string con letras y espacios, nada mas"
+                            const error = "Se necesita un habitacion que sea un string con letras y espacios, nada mas"
                             throw new Error(error)
                         }
                         const consultaControlApartamento = `
                         SELECT uid 
                         FROM "configuracionHabitacionesDelApartamento" 
-                        WHERE apartamento = $1 AND habitacion = $2;`
-                        const controlConfiguracionApartamento = await conexion.query(consultaControlApartamento, [apartamento, habitacion])
+                        WHERE apartamento = $1;`
+                        const controlConfiguracionApartamento = await conexion.query(consultaControlApartamento, [apartamento])
                         if (controlConfiguracionApartamento.rowCount === 0) {
-                            const error = "No exista el apartamento o la habitacion en el"
+                            const error = "Ya no existe el apartamento como una configuración del apartamento. Si deseas volver a usar este apartamento, vuelve a crear la configuración del apartamento con el identificador visual: "+ apartamento
                             throw new Error(error)
                         }
+
+                        const consultaControlCamaDelApartamento = `
+                        SELECT uid 
+                        FROM "configuracionHabitacionesDelApartamento" 
+                        WHERE apartamento = $1 AND habitacion = $2;`
+                        const controlConfiguracionCama = await conexion.query(consultaControlCamaDelApartamento, [apartamento, habitacion])
+                        if (controlConfiguracionCama.rowCount === 0) {
+                            const error = `Dentro de la configuración de este apartamento ya no esta disponible esta habitación para seleccionar. Para recuperar esta habitación en la configuración de alojamiento, crea una habitación como entidad con el identificador visual ${habitacion} y añádela a la configuración del apartamento con el identificar visual ${apartamento}`
+                            throw new Error(error)
+                        }
+
                         if (controlConfiguracionApartamento.rowCount === 1) {
                             const configuracionApartamento = controlConfiguracionApartamento.rows[0]["uid"]
                             const consultaControlApartamento = `
@@ -4897,8 +4908,8 @@ const puerto = async (entrada, salida) => {
                 },
                 estadoHabitacionesApartamento: async () => {
                     try {
-                        let apartamento = entrada.body.apartamento
-                        let reserva = entrada.body.reserva
+                        const apartamento = entrada.body.apartamento
+                        const reserva = entrada.body.reserva
                         if (typeof apartamento !== "number" || !Number.isInteger(apartamento) || apartamento <= 0) {
                             const error = "El campo 'apartamento' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
@@ -4907,37 +4918,40 @@ const puerto = async (entrada, salida) => {
                             const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo"
                             throw new Error(error)
                         }
-                        let transaccionInterna = {
-                            "apartamento": apartamento,
-                            "reserva": reserva
+                        const transaccionInterna = {
+                            apartamento: apartamento,
+                            reserva: reserva
                         }
-                        let resuelveHabitaciones = await estadoHabitacionesApartamento(transaccionInterna)
-                        let habitacionesResuelvas = resuelveHabitaciones.ok
+                        const resuelveHabitaciones = await estadoHabitacionesApartamento(transaccionInterna)
+                        if (resuelveHabitaciones.info) {
+                           return salida.json(resuelveHabitaciones)
+                        }
+                        const habitacionesResuelvas = resuelveHabitaciones.ok
                         if (habitacionesResuelvas.length === 0) {
-                            let ok = {
-                                "ok": []
+                            const ok = {
+                                ok: []
                             }
                             salida.json(ok)
                         }
                         if (habitacionesResuelvas.length > 0) {
-                            let habitacionesProcesdas = []
+                            const habitacionesProcesdas = []
                             for (const habitacionPreProcesada of habitacionesResuelvas) {
                                 const consultaHabitacion = `
                                 SELECT habitacion, "habitacionUI"
                                 FROM habitaciones
                                 WHERE habitacion = $1
                                 `
-                                let resuelveHabitacion = await conexion.query(consultaHabitacion, [habitacionPreProcesada])
-                                let habitacionIDV = resuelveHabitacion.rows[0].habitacion
-                                let habitaconUI = resuelveHabitacion.rows[0].habitacionUI
-                                let habitacionResuelta = {
-                                    "habitacionIDV": habitacionIDV,
-                                    "habitacionUI": habitaconUI
+                                const resuelveHabitacion = await conexion.query(consultaHabitacion, [habitacionPreProcesada])
+                                const habitacionIDV = resuelveHabitacion.rows[0].habitacion
+                                const habitaconUI = resuelveHabitacion.rows[0].habitacionUI
+                                const habitacionResuelta = {
+                                    habitacionIDV: habitacionIDV,
+                                    habitacionUI: habitaconUI
                                 }
                                 habitacionesProcesdas.push(habitacionResuelta)
                             }
-                            let ok = {
-                                "ok": habitacionesProcesdas
+                            const ok = {
+                                ok: habitacionesProcesdas
                             }
                             salida.json(ok)
                         }
@@ -4946,8 +4960,7 @@ const puerto = async (entrada, salida) => {
                             error: errorCapturado.message
                         }
                         salida.json(error)
-                    } finally {
-                    }
+                    } 
                 },
                 anadirHabitacionAlApartamentoEnReserva: async () => {
                     const mutex = new Mutex();
@@ -4984,6 +4997,7 @@ const puerto = async (entrada, salida) => {
                             const error = "La reserva no se puede modificar por que esta cancelada"
                             throw new Error(error)
                         }
+
                         // Mira las habitaciones diponbiles para anadira este apartamento
                         const transaccionInterna = {
                             "apartamento": apartamento,
@@ -8716,7 +8730,7 @@ const puerto = async (entrada, salida) => {
                                             const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
                                             cadenaAleatoria += caracteres.charAt(indiceAleatorio);
                                         }
-                                        return cadenaAleatoria;
+                                        return cadenaAleatoria + ".ics";
                                     }
                                     const validarCodigo = async (codigoAleatorio) => {
                                         const validarCodigoAleatorio = `
@@ -14085,7 +14099,7 @@ const puerto = async (entrada, salida) => {
                             const resuleveConsultaApartamento = await conexion.query(consultaApartamento)
                             if (resuleveConsultaApartamento.rowCount === 0) {
                                 const ok = {
-                                    "ok": "No existe ningun apartamento como entidad, por favor crea uno para poder construir una configuracion de alojamiento sobre el",
+                                    ok: "No existe ningun apartamento como entidad, por favor crea uno para poder construir una configuracion de alojamiento sobre el",
                                     "apartamentosComoEntidadesDisponibles": []
                                 }
                                 salida.json(ok)
@@ -14094,7 +14108,7 @@ const puerto = async (entrada, salida) => {
                                 const apartamentoEntidades = resuleveConsultaApartamento.rows
                                 apartamentoEntidades.map((detallesApartamento) => {
                                     const apartamentoIDV = detallesApartamento.apartamento
-                                    const apartamentoUI = detallesApartamento.apartamento
+                                    const apartamentoUI = detallesApartamento.apartamentoUI
                                     estructuraApartamentosObjeto[apartamentoIDV] = apartamentoUI
                                 })
                                 const apartamentosComoEntidades_formatoArrayString = []
@@ -14126,8 +14140,8 @@ const puerto = async (entrada, salida) => {
                                     }
                                 }
                                 const ok = {
-                                    "ok": "Apartamento especificos disponbiles",
-                                    "apartamentosComoEntidadesDisponibles": estructuraFinal
+                                    ok: "Apartamento especificos disponibles",
+                                    apartamentosComoEntidadesDisponibles: estructuraFinal
                                 }
                                 salida.json(ok)
                             }
@@ -14231,8 +14245,7 @@ const puerto = async (entrada, salida) => {
                             const tipoEntidad = entrada.body.tipoEntidad
                             const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
                             const filtroCadenaMinusculasMayusculasSinEspacios = /^[a-zA-Z0-9]+$/;
-                            const filtroCadenaMinusculasConEspacios = /^[a-z0-9\s]+$/i;
-                            const filtroCadenaMinusculasMayusculasYEspacios = /^[a-zA-Z0-9\s]+$/;
+                            const filtroCadenaMinusculasConEspacios = /^[a-zA-Z0-9\s]+$/;
                             if (!tipoEntidad || !filtroCadenaMinusculasSinEspacios.test(tipoEntidad)) {
                                 const error = "el campo 'tipoEntidad' solo puede ser letras minúsculas y numeros. sin pesacios"
                                 throw new Error(error)
@@ -14241,7 +14254,7 @@ const puerto = async (entrada, salida) => {
                                 let apartamentoIDV = entrada.body.apartamentoIDV
                                 let apartamentoUI = entrada.body.apartamentoUI
                                 apartamentoUI = apartamentoUI.replace(/['"]/g, '');
-                                if (!apartamentoUI || !filtroCadenaMinusculasMayusculasYEspacios.test(apartamentoUI) || apartamentoUI.length > 50) {
+                                if (!apartamentoUI || !filtroCadenaMinusculasConEspacios.test(apartamentoUI) || apartamentoUI.length > 50) {
                                     const error = "el campo 'apartamentoUI' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres"
                                     throw new Error(error)
                                 }
@@ -14330,7 +14343,7 @@ const puerto = async (entrada, salida) => {
                                 let habitacionIDV = entrada.body.habitacionIDV
                                 let habitacionUI = entrada.body.habitacionUI
                                 habitacionUI = habitacionUI.replace(/['"]/g, '');
-                                if (!habitacionUI || !filtroCadenaMinusculasSinEspacios.test(habitacionUI) || habitacionUI.length > 50) {
+                                if (!habitacionUI || !filtroCadenaMinusculasConEspacios.test(habitacionUI) || habitacionUI.length > 50) {
                                     const error = "el campo 'habitacionUI' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres"
                                     throw new Error(error)
                                 }
@@ -14420,7 +14433,7 @@ const puerto = async (entrada, salida) => {
                                 let camaUI = entrada.body.camaUI
                                 let capacidad = entrada.body.capacidad
                                 camaUI = camaUI.replace(/['"]/g, '');
-                                if (!camaUI || !filtroCadenaMinusculasSinEspacios.test(camaUI) || camaUI.length > 50) {
+                                if (!camaUI || !filtroCadenaMinusculasConEspacios.test(camaUI) || camaUI.length > 50) {
                                     const error = "el campo 'camaUI' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres."
                                     throw new Error(error)
                                 }
@@ -14530,7 +14543,6 @@ const puerto = async (entrada, salida) => {
                             const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
                             const filtroCadenaMinusculasMayusculasSinEspacios = /^[a-zA-Z0-9]+$/;
                             const filtroCadenaMinusculasConEspacios = /^[a-z0-9\s]+$/i;
-                            const filtroCadenaMinusculasMayusculasYEspacios = /^[a-zA-Z0-9\s]+$/;
                             if (!tipoEntidad || !filtroCadenaMinusculasSinEspacios.test(tipoEntidad)) {
                                 const error = "el campo 'tipoEntidad' solo puede ser letras minúsculas y numeros. sin pesacios"
                                 throw new Error(error)
@@ -14543,7 +14555,7 @@ const puerto = async (entrada, salida) => {
                                 const apartamentoIDV = entrada.body.apartamentoIDV
                                 let apartamentoUI = entrada.body.apartamentoUI
                                 const caracteristicas = entrada.body.caracteristicas
-                                if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV) || apartamentoIDV.length > 50) {
+                                if (!apartamentoIDV || !filtroCadenaMinusculasMayusculasSinEspacios.test(apartamentoIDV) || apartamentoIDV.length > 50) {
                                     const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres."
                                     throw new Error(error)
                                 }
@@ -14629,7 +14641,7 @@ const puerto = async (entrada, salida) => {
                             if (tipoEntidad === "habitacion") {
                                 const habitacionIDV = entrada.body.habitacionIDV
                                 let habitacionUI = entrada.body.habitacionUI
-                                if (!habitacionIDV || !filtroCadenaMinusculasSinEspacios.test(habitacionIDV) || habitacionIDV.length > 50) {
+                                if (!habitacionIDV || !filtroCadenaMinusculasMayusculasSinEspacios.test(habitacionIDV) || habitacionIDV.length > 50) {
                                     const error = "el campo 'habitacionIDV' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres"
                                     throw new Error(error)
                                 }
@@ -14693,7 +14705,7 @@ const puerto = async (entrada, salida) => {
                                 const camaIDV = entrada.body.camaIDV
                                 let camaUI = entrada.body.camaUI
                                 let capacidad = entrada.body.capacidad
-                                if (!camaIDV || !filtroCadenaMinusculasSinEspacios.test(camaIDV) || camaIDV.length > 50) {
+                                if (!camaIDV || !filtroCadenaMinusculasMayusculasSinEspacios.test(camaIDV) || camaIDV.length > 50) {
                                     const error = "el campo 'camaIDV' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres"
                                     throw new Error(error)
                                 }
@@ -17357,7 +17369,7 @@ const puerto = async (entrada, salida) => {
 const calendarios_compartidos = async (entrada, salida) => {
     try {
         const url = entrada.url.toLowerCase()
-        const filtroUrl = /^[a-zA-Z0-9/_]+$/;
+        const filtroUrl = /^[a-zA-Z0-9/_./]+$/;
         if (!filtroUrl.test(url)) {
             const error = "La url no es valida"
             throw new Error(error)

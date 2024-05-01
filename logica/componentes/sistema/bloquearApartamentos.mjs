@@ -33,6 +33,7 @@ const bloquearApartamentos = async (metadatos) => {
             const error = "El campo 'origen' solo puede ser cancelacionDeReserva o eliminacionApartamentoDeReserva"
             throw new Error(error)
         }
+
         const validarReserva = `
         SELECT 
         reserva
@@ -54,6 +55,17 @@ const bloquearApartamentos = async (metadatos) => {
             throw new Error(error)
         }
         const apartamentoIDV = resuelveValidarApartamento.rows[0].apartamento
+        const validarConfiguracionApartamento = `
+        SELECT 
+        "apartamentoIDV"
+        FROM "configuracionApartamento" 
+        WHERE "apartamentoIDV" = $1;`
+        const resuelveValidarConfiguracionApartamento = await conexion.query(validarConfiguracionApartamento, [apartamentoIDV])
+        if (resuelveValidarConfiguracionApartamento.rowCount === 0) {
+            const error = "No existe el apartamento como configuracion, solo puede eliminarse de la reserva, pero sin bloqueo adquirido."
+            throw new Error(error)
+        }
+
         let motivoFinal
 
         if (origen === "cancelacionDeReserva") {

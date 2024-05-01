@@ -3382,8 +3382,7 @@
     overflow: hidden;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
 }
-
-.opcionCambioCama {
+[zonaCSS="administracion/reservas/detallesReserva"] .opcionCambioCama {
     background-color: rgba(255, 255, 255, 0.3);
     margin: 4px;
     padding: 8px;
@@ -3392,8 +3391,27 @@
     padding-left: 10px;
     border-radius: 6px;
 }
+[zonaCSS="administracion/reservas/detallesReserva"] .errorCategorialGlobal {
+    margin: 4px;
+    padding: 8px;
+    user-select: none;
+    cursor: default;
+    padding-left: 10px;
+    text-align: center;
+    border-radius: 6px;
+}
 
-.opcionCambioCama:hover {
+[zonaCSS="administracion/reservas/detallesReserva"] .opcionDeInformacion {
+    margin: 4px;
+    padding: 8px;
+    user-select: none;
+    cursor: default;
+    padding-left: 10px;
+    border-radius: 6px;
+}
+
+
+[zonaCSS="administracion/reservas/detallesReserva"] .opcionCambioCama:hover {
     background: #0040ff;
     color: white;
 }
@@ -5591,6 +5609,26 @@
     flex-direction: column;
     align-items: stretch;
 }
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .enlace {
+    display: flex;
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    color: black;
+    text-decoration: none;
+    cursor: default;
+    align-items: stretch;
+    background-color: #ffffff80;
+    padding: 10px;
+    border-radius: 14px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+
+
 
 [zonaCSS="administracion/clientes/buscador"] .buscadorClientesEstadoBusqueda {
     padding: 10px;
