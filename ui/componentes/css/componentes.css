@@ -3382,6 +3382,7 @@
     overflow: hidden;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
 }
+
 [zonaCSS="administracion/reservas/detallesReserva"] .opcionCambioCama {
     background-color: rgba(255, 255, 255, 0.3);
     margin: 4px;
@@ -3391,6 +3392,7 @@
     padding-left: 10px;
     border-radius: 6px;
 }
+
 [zonaCSS="administracion/reservas/detallesReserva"] .errorCategorialGlobal {
     margin: 4px;
     padding: 8px;
@@ -5609,6 +5611,7 @@
     flex-direction: column;
     align-items: stretch;
 }
+
 [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .enlace {
     display: flex;
     padding: 0px;
@@ -6188,6 +6191,49 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
+
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .selectorTipoComportamiento {
+    outline: none;
+    border: none;
+    padding: 6px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.3);
+    appearance: none;
+    backdrop-filter: blur(50px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+
+}
+
+
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .botonTipoComportamiento {
+    outline: none;
+    border: none;
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    appearance: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 250ms linear;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    
+}
+
+
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .botonTipoComportamiento:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+
+
+
 .contenedorAdvertencaiInmersiva {
     display: flex;
     /* max-width: 720px; */
@@ -6382,7 +6428,6 @@
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     border-radius: 13px;
-    display: flex;
     flex-direction: column;
     align-content: flex-start;
     align-items: stretch;
@@ -6391,7 +6436,49 @@
     gap: 6px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
+    display: none;
+    /* display: flex; */
 }
+
+
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .contenedorPorDias {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 13px;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+}
+ 
+
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .diaUI {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 13px;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    display: flex;
+    padding: 12px;
+    transition: background 250ms linear;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .diaUI:hover {
+    background: rgba(255, 255, 255, 0.6);
+
+}
+
 
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearComportamientoConentenedor__ {
     backdrop-filter: blur(50px);
@@ -6488,7 +6575,7 @@
     }
 }
 
-.crearOfertaContenedorHorizontal {
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaContenedorHorizontal {
     /*width: 100%; */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
@@ -6844,6 +6931,20 @@
     flex-direction: column;
 }
 
+
+[zonaCSS="administracion/comportamiento_de_precios"] .contenedorDiasSelecionados {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    gap: 6px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 @media (max-width: 720px) {
     [zonaCSS="administracion/ofertas"] .ofertaUIContenedorGlobalOferta {
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -6900,6 +7001,29 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="administracion/comportamiento_de_precios"] .comportamientoUIFechaContenedor {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+[zonaCSS="administracion/comportamiento_de_precios"] .diaSeleciconadoCelda {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+[zonaCSS="administracion/comportamiento_de_precios"] .contenedorDiasSeleccionados {
     background: rgba(0, 0, 0, 0.1);
     padding: 10px;
     border-radius: 16px;
@@ -13400,6 +13524,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
     max-width: 720px;
 }
+
 [zonaCSS="privacidad"] .contenedorRevocar {
     display: flex;
     width: 100%;
