@@ -12311,7 +12311,7 @@ const puerto = async (entrada, salida) => {
                         explicacion,
                         estado,
                         tipo,
-                        dias
+                        "diasArray"
                         FROM 
                         "comportamientoPrecios"
                         ORDER BY 
@@ -12324,7 +12324,9 @@ const puerto = async (entrada, salida) => {
                             salida.json(ok)
                         }
                         if (resuelveListaComportamientoPrecios.rowCount > 0) {
-                            ok.ok = resuelveListaComportamientoPrecios.rows
+
+                            const listaComportamientos = resuelveListaComportamientoPrecios.rows
+                            ok.ok = listaComportamientos
                             salida.json(ok)
                         }
                     } catch (errorCapturado) {
@@ -12340,12 +12342,12 @@ const puerto = async (entrada, salida) => {
                         let nombreComportamiento = entrada.body.nombreComportamiento
                         const fechaInicio = entrada.body.fechaInicio
                         const fechaFin = entrada.body.fechaFin
-                        const comportamientos = entrada.body.comportamientos
+                        const apartamentos = entrada.body.apartamentos
                         const filtroCantidad = /^\d+\.\d{2}$/;
                         const filtroCadenaSinEspacui = /^[a-z0-9]+$/;
                         const filtroNombre = /['"\\;\r\n<>\t\b]/g;
                         const tipo = entrada.body.tipo
-                        const diasSeleccionados = entrada.body.diasSeleccionados
+                        const diasArray = entrada.body.diasArray
 
                         if (!nombreComportamiento) {
                             const error = "El campo nombreComportamiento solo admite minúsculas, mayúsculas, numeros y espacios"
@@ -12391,20 +12393,20 @@ const puerto = async (entrada, salida) => {
                             }
 
                         }
-                        let diasCSV
+                        //let diasCSV
                         if (tipo === "porDias") {
-                            if (typeof diasSeleccionados !== 'object' && !Array.isArray(diasSeleccionados)) {
-                                const error = "El campo diasSeleccionados solo admite un arreglo"
+                            if (typeof diasArray !== 'object' && !Array.isArray(diasArray)) {
+                                const error = "El campo diasArray solo admite un arreglo"
                                 throw new Error(error)
                             }
-                            if (diasSeleccionados.length === 0) {
+                            if (diasArray.length === 0) {
                                 const error = "Seleccione al menos un dia por favor."
                                 throw new Error(error)
                             }
 
                             // Control elemento repetidos
                             const contador = {};
-                            for (const elemento of diasSeleccionados) {
+                            for (const elemento of diasArray) {
                                 if (typeof elemento !== "string") {
                                     const error = "En el array solo se esperan strings, revisa el array por que hay elemento que no son cadenas."
                                     throw new Error(error)
@@ -12419,29 +12421,29 @@ const puerto = async (entrada, salida) => {
                             }
 
                             const diasIDV = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"]
-                            const elementosNoEnArray = (diasSeleccionados, diasIDV) => {
-                                return diasSeleccionados.filter(elemento => !diasIDV.includes(elemento));
+                            const elementosNoEnArray = (diasArray, diasIDV) => {
+                                return diasArray.filter(elemento => !diasIDV.includes(elemento));
                             }
 
-                            const elementosNoEnArreglo2 = elementosNoEnArray(diasSeleccionados, diasIDV);
+                            const elementosNoEnArreglo2 = elementosNoEnArray(diasArray, diasIDV);
                             if (elementosNoEnArreglo2.length > 0) {
-                                const error = "En el array de diasSeleccionados no se reconoce: " + elementosNoEnArreglo2
+                                const error = "En el array de diasArray no se reconoce: " + elementosNoEnArreglo2
                                 throw new Error(error)
                             }
-                            diasCSV = diasSeleccionados.join(",")
+                            //diasCSV = diasArray.join(",")
                         }
 
 
-                        if (typeof comportamientos !== 'object' && !Array.isArray(comportamientos)) {
-                            const error = "El campo comportamientos solo admite un arreglo"
+                        if (typeof apartamentos !== 'object' && !Array.isArray(apartamentos)) {
+                            const error = "El campo apartamentos solo admite un arreglo"
                             throw new Error(error)
                         }
-                        if (comportamientos.length === 0) {
+                        if (apartamentos.length === 0) {
                             const error = "Anada al menos un apartmento dedicado"
                             throw new Error(error)
                         } else {
                             const identificadoresVisualesEnArray = []
-                            comportamientos.forEach((apart) => {
+                            apartamentos.forEach((apart) => {
                                 if (typeof apart !== "object" || Array.isArray(apart) || apart === null) {
                                     const error = "Dentro del array de apartamentos se esperaba un objeto"
                                     throw new Error(error)
@@ -12458,7 +12460,7 @@ const puerto = async (entrada, salida) => {
                         }
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         const apartamentosArreglo = []
-                        for (const comportamiento of comportamientos) {
+                        for (const comportamiento of apartamentos) {
                             const apartamentoIDV = comportamiento.apartamentoIDV
                             const cantidad = comportamiento.cantidad
                             const simbolo = comportamiento.simbolo
@@ -12511,7 +12513,7 @@ const puerto = async (entrada, salida) => {
                             const error = "Ya existe un nombre exactamente igual a este comportamiento de precio, por favor elige otro nombre con el fin de evitar confusiones"
                             throw new Error(error)
                         }
-
+                        // Validacion de unicidad por tipo
                         if (tipo === "porRango") {
                             const validarEspacioTemporalUnico = `
                             SELECT uid 
@@ -12554,7 +12556,7 @@ const puerto = async (entrada, salida) => {
                                     }
                                 }
                                 const coincidenciasExistentes = []
-                                for (const detalleApartemtno of comportamientos) {
+                                for (const detalleApartemtno of apartamentos) {
                                     const apartamentoIDVSolicitante = detalleApartemtno.apartamentoIDV
                                     for (const detalleApartamentoYaExistente of detallesApartamentosEntontradosPorValidas) {
                                         const apartamentoIDVExistente = detalleApartamentoYaExistente.apartamentoIDV
@@ -12594,7 +12596,85 @@ const puerto = async (entrada, salida) => {
                                 }
                             }
                         }
+                        if (tipo === "porDias") {
 
+                            // Escoger todos los comportamientos de precior por tipo porDias y que coincidan en al menos un dia en el array de dias
+                            const consultaComportamientosConMismosDias = `
+                            SELECT *
+                            FROM "comportamientoPrecios"
+                            WHERE 
+                            tipo = $1
+                            AND
+                            $2::text[] && "diasArray";
+                            `;
+                            const resuelveConsultaPorDias = await conexion.query(consultaComportamientosConMismosDias, ["porDias", diasArray])
+                            if (resuelveConsultaPorDias.rowCount > 0) {
+
+                                const comportamientosUIDParaComprobarApartamentos = []
+                                //    console.log("resuelve", resuelveConsultaPorDias.rows)
+
+                                for (const detallescomportamientos of resuelveConsultaPorDias.rows) {
+                                    const uid = detallescomportamientos.uid
+                                    comportamientosUIDParaComprobarApartamentos.push(uid)
+
+                                }
+
+                                const apartamentosIDV = []
+
+                                for (const detallesApartamento of apartamentos) {
+                                    apartamentosIDV.push(detallesApartamento.apartamentoIDV)
+
+                                }
+                                //console.log("comportamientosUIDParaComprobarApartamentos", comportamientosUIDParaComprobarApartamentos)
+                                //console.log("apartamentosIDV", apartamentosIDV)
+
+                                const consultaComportameintoConMismoApartamentos = `
+                                SELECT *
+                                FROM "comportamientoPreciosApartamentos"
+                                WHERE 
+                                "comportamientoUID" = ANY($1)
+                                AND
+                                "apartamentoIDV" = ANY($2)
+                                ;`
+                                const confConsulta = [
+                                    comportamientosUIDParaComprobarApartamentos,
+                                    apartamentosIDV
+                                ]
+                                const resuelveConsultaPorApartamentos = await conexion.query(consultaComportameintoConMismoApartamentos, confConsulta)
+                                if (resuelveConsultaPorApartamentos.rowCount > 0) {
+                                    const comportamientosUID_conDuplicados = []
+
+                                    const comportamientosCoincidentes = resuelveConsultaPorApartamentos.rows
+                                    for (const detallesComportamiento of comportamientosCoincidentes) {
+                                        
+                                        const uid_para_anadir = detallesComportamiento.comportamientoUID
+                                        comportamientosUID_conDuplicados.push(uid_para_anadir)
+                                    }
+
+                                    const setSinDuplicados = new Set(comportamientosUID_conDuplicados);                               
+                                    const comportamientosUID_definitivo_coincidentes = Array.from(setSinDuplicados);
+                                    console.log("con apartamentos encontrados", comportamientosUID_definitivo_coincidentes)
+
+
+
+                                    const error = "Ya existe un nombre exactamente igual a este comportamiento de precio, por favor elige otro nombre con el fin de evitar confusiones"
+                                    throw new Error(error)
+
+
+                                }
+
+
+
+                             
+                            }
+
+                            // Ver si al menos coincida un apartamento
+
+                            // Entonces no se puede
+
+
+
+                        }
 
 
                         const estadoInicalDesactivado = "desactivado"
@@ -12606,7 +12686,7 @@ const puerto = async (entrada, salida) => {
                             "fechaFinal",
                              estado,
                              tipo,
-                             dias
+                             "diasArray"
                         )
                         VALUES
                         (
@@ -12615,7 +12695,7 @@ const puerto = async (entrada, salida) => {
                             COALESCE($3::date, NULL),
                             COALESCE($4, NULL),
                             COALESCE($5, NULL),
-                            COALESCE($6, NULL)
+                            COALESCE($6::text[], NULL)
                         )
                         RETURNING uid;
                         `
@@ -12625,8 +12705,9 @@ const puerto = async (entrada, salida) => {
                             fechaFin_ISO,
                             estadoInicalDesactivado,
                             tipo,
-                            diasCSV
+                            diasArray
                         ]
+                        console.log("diasArray", typeof diasArray)
                         const resuelveCrearComportamiento = await conexion.query(crearComportamiento, datos)
                         if (resuelveCrearComportamiento.rowCount === 1) {
                             const nuevoUIDComportamiento = resuelveCrearComportamiento.rows[0].uid
@@ -12693,22 +12774,16 @@ const puerto = async (entrada, salida) => {
                         to_char("fechaFinal", 'DD/MM/YYYY') as "fechaFinal", 
                         "nombreComportamiento",
                         estado,
-                        tipo
+                        tipo,
+                        "diasArray"
                         FROM
                         "comportamientoPrecios" 
                         WHERE
                         uid = $1;
                         `
                         const resuelveConsultaDetallesComportamiento = await conexion.query(consultaDetallesComportamiento, [comportamientoUID])
-                        const detallesComportamiento = {
-                            uid: resuelveConsultaDetallesComportamiento.rows[0].uid,
-                            fechaInicio: resuelveConsultaDetallesComportamiento.rows[0].fechaInicio,
-                            fechaFinal: resuelveConsultaDetallesComportamiento.rows[0].fechaFinal,
-                            nombreComportamiento: resuelveConsultaDetallesComportamiento.rows[0].nombreComportamiento,
-                            estado: resuelveConsultaDetallesComportamiento.rows[0].estado,
-                            tipo: resuelveConsultaDetallesComportamiento.rows[0].tipo
+                        const detallesComportamiento = resuelveConsultaDetallesComportamiento.rows[0]
 
-                        }
                         if (resuelveConsultaDetallesComportamiento.rowCount === 0) {
                             const error = "No existe ninguna comportamiento de precio con ese UID"
                             throw new Error(error)
@@ -12765,9 +12840,12 @@ const puerto = async (entrada, salida) => {
                     try {
                         let nombreComportamiento = entrada.body.nombreComportamiento
                         const fechaInicio = entrada.body.fechaInicio
-                        const fechaFinal = entrada.body.fechaFinal
+                        const fechaFin = entrada.body.fechaFin
                         const comportamientoUID = entrada.body.comportamientoUID
-                        const comportamientos = entrada.body.comportamientos
+                        const apartamentos = entrada.body.apartamentos
+                        const tipo = entrada.body.tipo
+                        const diasArray = entrada.body.diasArray
+
                         const filtroCantidad = /^\d+\.\d{2}$/;
                         const filtroNombre = /['"\\;\r\n<>\t\b]/g;
                         const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
@@ -12780,26 +12858,91 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         nombreComportamiento = nombreComportamiento.replace(filtroNombre, '');
+                        if (tipo !== "porDias" && tipo !== "porRango") {
+                            const error = "Por favor determine si el tipo de bloqueo es porRango o porDias."
+                            throw new Error(error)
+                        }
+                        let fechaInicio_ISO
+                        let fechaFin_ISO
 
-                        const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
-                        if (!filtroFecha.test(fechaInicio)) {
-                            const error = "el formato fecha de inicio no esta correctametne formateado debe ser una cadena asi 00/00/0000"
+                        if (tipo === "porRango") {
+                            const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
+                            if (!filtroFecha.test(fechaInicio)) {
+                                const error = "el formato fecha de inicio no esta correctametne formateado debe ser una cadena asi 00/00/0000"
+                                throw new Error(error)
+                            }
+                            if (!filtroFecha.test(fechaFin)) {
+                                const error = "el formato fecha de fin no esta correctametne formateado debe ser una cadena asi 00/00/0000"
+                                throw new Error(error)
+                            }
+
+
+                            const fechaInicioArreglo = fechaInicio.split("/")
+                            const diaEntrada = fechaInicioArreglo[0]
+                            const mesEntrada = fechaInicioArreglo[1]
+                            const anoEntrada = fechaInicioArreglo[2]
+                            const fechaFinArreglo = fechaFin.split("/")
+                            const diaSalida = fechaFinArreglo[0]
+                            const mesSalida = fechaFinArreglo[1]
+                            const anoSalida = fechaFinArreglo[2]
+                            fechaInicio_ISO = `${anoEntrada}-${mesEntrada}-${diaEntrada}`
+                            fechaFin_ISO = `${anoSalida}-${mesSalida}-${diaSalida}`
+                            await validadoresCompartidos.fechas.validarFecha_ISO(fechaInicio_ISO)
+                            await validadoresCompartidos.fechas.validarFecha_ISO(fechaFin_ISO)
+                            const fechaInicio_Objeto = new Date(fechaInicio_ISO); // El formato es día/mes/ano
+                            const fechaFin_Objeto = new Date(fechaFin_ISO);
+                            if (fechaInicio_Objeto > fechaFin_Objeto) {
+                                const error = "La fecha de entrada no puede ser superior que la fecha de salida"
+                                throw new Error(error)
+                            }
+                        }
+                        if (tipo === "porDias") {
+                            if (typeof diasArray !== 'object' && !Array.isArray(diasArray)) {
+                                const error = "El campo diasArray solo admite un arreglo"
+                                throw new Error(error)
+                            }
+                            if (diasArray.length === 0) {
+                                const error = "Seleccione al menos un dia por favor."
+                                throw new Error(error)
+                            }
+
+                            // Control elemento repetidos
+                            const contador = {};
+                            for (const elemento of diasArray) {
+                                if (typeof elemento !== "string") {
+                                    const error = "En el array solo se esperan strings, revisa el array por que hay elemento que no son cadenas."
+                                    throw new Error(error)
+                                }
+                                const filtroElemento = String(elemento).toLocaleLowerCase()
+                                if (contador[filtroElemento]) {
+                                    const error = "En el array de diasArray no puede haber dos elementos repetidos"
+                                    throw new Error(error)
+                                } else {
+                                    contador[filtroElemento] = 1;
+                                }
+                            }
+
+                            const diasIDV = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"]
+                            const elementosNoEnArray = (diasArray, diasIDV) => {
+                                return diasArray.filter(elemento => !diasIDV.includes(elemento));
+                            }
+
+                            const elementosNoEnArreglo2 = elementosNoEnArray(diasArray, diasIDV);
+                            if (elementosNoEnArreglo2.length > 0) {
+                                const error = "En el array de diasSeleccionados no se reconoce: " + elementosNoEnArreglo2
+                                throw new Error(error)
+                            }
+                        }
+                        if (typeof apartamentos !== 'object' && !Array.isArray(apartamentos)) {
+                            const error = "El campo apartamentos solo admite un arreglo"
                             throw new Error(error)
                         }
-                        if (!filtroFecha.test(fechaFinal)) {
-                            const error = "el formato fecha de fin no esta correctametne formateado debe ser una cadena asi 00/00/0000"
-                            throw new Error(error)
-                        }
-                        if (typeof comportamientos !== 'object' && !Array.isArray(comportamientos)) {
-                            const error = "El campo comportamientos solo admite un arreglo"
-                            throw new Error(error)
-                        }
-                        if (comportamientos.length === 0) {
+                        if (apartamentos.length === 0) {
                             const error = "Anada al menos un apartmento dedicado"
                             throw new Error(error)
                         } else {
                             const identificadoresVisualesEnArray = []
-                            comportamientos.forEach((apart) => {
+                            apartamentos.forEach((apart) => {
                                 if (typeof apart !== "object" || Array.isArray(apart) || apart === null) {
                                     const error = "Dentro del array de apartamentos se esperaba un objeto"
                                     throw new Error(error)
@@ -12813,32 +12956,17 @@ const puerto = async (entrada, salida) => {
                                 throw new Error(error)
                             }
                         }
-                        const fechaInicioArreglo = fechaInicio.split("/")
-                        const diaEntrada = fechaInicioArreglo[0]
-                        const mesEntrada = fechaInicioArreglo[1]
-                        const anoEntrada = fechaInicioArreglo[2]
-                        const fechaFinArreglo = fechaFinal.split("/")
-                        const diaSalida = fechaFinArreglo[0]
-                        const mesSalida = fechaFinArreglo[1]
-                        const anoSalida = fechaFinArreglo[2]
-                        const fechaInicio_ISO = `${anoEntrada}-${mesEntrada}-${diaEntrada}`
-                        const fechaFin_ISO = `${anoSalida}-${mesSalida}-${diaSalida}`
-                        const fechaInicio_Objeto = new Date(fechaInicio_ISO); // El formato es día/mes/ano
-                        const fechaFin_Objeto = new Date(fechaFin_ISO);
-                        if (fechaInicio_Objeto > fechaFin_Objeto) {
-                            const error = "La fecha de entrada no puede ser superior que la fecha de salida"
+
+                        if (typeof apartamentos !== 'object' && !Array.isArray(apartamentos)) {
+                            const error = "El campo apartamentos solo admite un arreglo"
                             throw new Error(error)
                         }
-                        if (typeof comportamientos !== 'object' && !Array.isArray(comportamientos)) {
-                            const error = "El campo comportamientos solo admite un arreglo"
-                            throw new Error(error)
-                        }
-                        if (comportamientos.length === 0) {
+                        if (apartamentos.length === 0) {
                             const error = "Anada al menos un apartmento dedicado"
                             throw new Error(error)
                         }
                         const apartamentosArreglo = []
-                        for (const comportamiento of comportamientos) {
+                        for (const comportamiento of apartamentos) {
                             const apartamentoIDV = comportamiento.apartamentoIDV
                             const cantidad = comportamiento.cantidad
                             const simbolo = comportamiento.simbolo
@@ -12897,20 +13025,21 @@ const puerto = async (entrada, salida) => {
                         }
                         const estadoComportamiento = resuelveValidarComportamiento.rows[0].estado
                         if (estadoComportamiento === "activado") {
-                            const error = "No se puede modificar un comportamiento de precio que esta activa. Primero desativalos con el boton de estado"
+                            const error = "No se puede modificar un comportamiento de precio que esta activo. Primero desativalo con el boton de estado de color rojo en la parte superior izquierda, al lado del nombre."
                             throw new Error(error)
                         }
-                        const validarEspacioTemporalUnico = `
+                        if (tipo === "porRango") {
+                            const validarEspacioTemporalUnico = `
                         SELECT uid 
                         FROM "comportamientoPrecios" 
                         WHERE "fechaInicio" <= $1::DATE AND "fechaFinal" >= $2::DATE AND uid <> $3;`
-                        const resuelveVevalidarEspacioTemporalUnico = await conexion.query(validarEspacioTemporalUnico, [fechaFin_ISO, fechaInicio_ISO, comportamientoUID])
-                        if (resuelveVevalidarEspacioTemporalUnico.rowCount > 0) {
-                            const detallesApartamentosEntontradosPorValidas = []
-                            const comportamientoPreciosCocheTemporalPorAnalizar = resuelveVevalidarEspacioTemporalUnico.rows
-                            for (const apartmentosEnComportamiento of comportamientoPreciosCocheTemporalPorAnalizar) {
-                                const UIDComportamientoChoque = apartmentosEnComportamiento.uid
-                                const seleccionarApartamentosPorComportamiento = `
+                            const resuelveVevalidarEspacioTemporalUnico = await conexion.query(validarEspacioTemporalUnico, [fechaFin_ISO, fechaInicio_ISO, comportamientoUID])
+                            if (resuelveVevalidarEspacioTemporalUnico.rowCount > 0) {
+                                const detallesApartamentosEntontradosPorValidas = []
+                                const comportamientoPreciosCocheTemporalPorAnalizar = resuelveVevalidarEspacioTemporalUnico.rows
+                                for (const apartmentosEnComportamiento of comportamientoPreciosCocheTemporalPorAnalizar) {
+                                    const UIDComportamientoChoque = apartmentosEnComportamiento.uid
+                                    const seleccionarApartamentosPorComportamiento = `
                                 SELECT
                                 cpa."apartamentoIDV", 
                                 cpa.uid,
@@ -12923,73 +13052,81 @@ const puerto = async (entrada, salida) => {
                                 JOIN 
                                 "comportamientoPrecios" cp ON cpa."comportamientoUID" = cp.uid
                                 WHERE "comportamientoUID" = $1;`
-                                const resuelveSeleccionarApartamentosPorComportamiento = await conexion.query(seleccionarApartamentosPorComportamiento, [UIDComportamientoChoque])
-                                if (resuelveSeleccionarApartamentosPorComportamiento.rowCount > 0) {
-                                    const apartamentoExistentes = resuelveSeleccionarApartamentosPorComportamiento.rows
-                                    apartamentoExistentes.map((apartamentoExistente) => {
-                                        const apartamentoIDVEntonctrado = apartamentoExistente.apartamentoIDV
-                                        const apartamentoUIEncontrado = apartamentoExistente.apartamentoUI
-                                        const nombreComportamiento = apartamentoExistente.nombreComportamiento
-                                        const apartamentoCoincidenteDetalles = {
-                                            apartamentoIDV: apartamentoIDVEntonctrado,
-                                            apartamentoUI: apartamentoUIEncontrado,
-                                            nombreComportamiento: nombreComportamiento,
-                                        }
-                                        detallesApartamentosEntontradosPorValidas.push(apartamentoCoincidenteDetalles)
-                                    })
-                                }
-                            }
-                            const coincidenciasExistentes = []
-                            for (const detalleApartemtno of comportamientos) {
-                                const apartamentoIDVSolicitante = detalleApartemtno.apartamentoIDV
-                                for (const detalleApartamentoYaExistente of detallesApartamentosEntontradosPorValidas) {
-                                    const apartamentoIDVExistente = detalleApartamentoYaExistente.apartamentoIDV
-                                    const nombreComportamiento = detalleApartamentoYaExistente.nombreComportamiento
-                                    const apartamentoUIExistente = detalleApartamentoYaExistente.apartamentoUI
-                                    if (apartamentoIDVSolicitante === apartamentoIDVExistente) {
-                                        const apartamentoImposibleDeGuardar = {
-                                            apartamentoIDV: apartamentoIDVExistente,
-                                            apartamentoUI: apartamentoUIExistente,
-                                            nombreComportamiento: nombreComportamiento,
-                                        }
-                                        coincidenciasExistentes.push(apartamentoImposibleDeGuardar)
+                                    const resuelveSeleccionarApartamentosPorComportamiento = await conexion.query(seleccionarApartamentosPorComportamiento, [UIDComportamientoChoque])
+                                    if (resuelveSeleccionarApartamentosPorComportamiento.rowCount > 0) {
+                                        const apartamentoExistentes = resuelveSeleccionarApartamentosPorComportamiento.rows
+                                        apartamentoExistentes.map((apartamentoExistente) => {
+                                            const apartamentoIDVEntonctrado = apartamentoExistente.apartamentoIDV
+                                            const apartamentoUIEncontrado = apartamentoExistente.apartamentoUI
+                                            const nombreComportamiento = apartamentoExistente.nombreComportamiento
+                                            const apartamentoCoincidenteDetalles = {
+                                                apartamentoIDV: apartamentoIDVEntonctrado,
+                                                apartamentoUI: apartamentoUIEncontrado,
+                                                nombreComportamiento: nombreComportamiento,
+                                            }
+                                            detallesApartamentosEntontradosPorValidas.push(apartamentoCoincidenteDetalles)
+                                        })
                                     }
                                 }
-                            }
-                            const coincidenciaAgrupdasPorNombreComportamiento = {}
-                            coincidenciasExistentes.map((coincidencia) => {
-                                const apartamentoUI = coincidencia.apartamentoUI
-                                const nombreComportamiento = coincidencia.nombreComportamiento
-                                if (coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento]) {
-                                    coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento].push(apartamentoUI)
-                                } else {
-                                    coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento] = []
-                                    coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento].push(apartamentoUI)
+                                const coincidenciasExistentes = []
+                                for (const detalleApartemtno of apartamentos) {
+                                    const apartamentoIDVSolicitante = detalleApartemtno.apartamentoIDV
+                                    for (const detalleApartamentoYaExistente of detallesApartamentosEntontradosPorValidas) {
+                                        const apartamentoIDVExistente = detalleApartamentoYaExistente.apartamentoIDV
+                                        const nombreComportamiento = detalleApartamentoYaExistente.nombreComportamiento
+                                        const apartamentoUIExistente = detalleApartamentoYaExistente.apartamentoUI
+                                        if (apartamentoIDVSolicitante === apartamentoIDVExistente) {
+                                            const apartamentoImposibleDeGuardar = {
+                                                apartamentoIDV: apartamentoIDVExistente,
+                                                apartamentoUI: apartamentoUIExistente,
+                                                nombreComportamiento: nombreComportamiento,
+                                            }
+                                            coincidenciasExistentes.push(apartamentoImposibleDeGuardar)
+                                        }
+                                    }
                                 }
-                            })
-                            const infoFinal = []
-                            for (const coincidenciaAgrupada of Object.entries(coincidenciaAgrupdasPorNombreComportamiento)) {
-                                const nombreComportamiento = coincidenciaAgrupada[0]
-                                const apartamentosCoincidentes = coincidenciaAgrupada[1].join(", ")
-                                infoFinal.push(`${nombreComportamiento} (${apartamentosCoincidentes})`)
-                            }
-                            infoFinal.join(", ")
-                            if (coincidenciasExistentes.length > 0) {
-                                const error = `No se puede crear este comportamiento de precio por que hay apartamentos en este comportamiento que existen en otros comportamientos cuyos rangos de fechas se pisan. Concretamente en: ${infoFinal}`
-                                throw new Error(error)
+                                const coincidenciaAgrupdasPorNombreComportamiento = {}
+                                coincidenciasExistentes.map((coincidencia) => {
+                                    const apartamentoUI = coincidencia.apartamentoUI
+                                    const nombreComportamiento = coincidencia.nombreComportamiento
+                                    if (coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento]) {
+                                        coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento].push(apartamentoUI)
+                                    } else {
+                                        coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento] = []
+                                        coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento].push(apartamentoUI)
+                                    }
+                                })
+                                const infoFinal = []
+                                for (const coincidenciaAgrupada of Object.entries(coincidenciaAgrupdasPorNombreComportamiento)) {
+                                    const nombreComportamiento = coincidenciaAgrupada[0]
+                                    const apartamentosCoincidentes = coincidenciaAgrupada[1].join(", ")
+                                    infoFinal.push(`${nombreComportamiento} (${apartamentosCoincidentes})`)
+                                }
+                                infoFinal.join(", ")
+                                if (coincidenciasExistentes.length > 0) {
+                                    const error = `No se puede crear este comportamiento de precio por que hay apartamentos en este comportamiento que existen en otros comportamientos cuyos rangos de fechas se pisan. Concretamente en: ${infoFinal}`
+                                    throw new Error(error)
+                                }
                             }
                         }
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         const actualizarComportamiento = `
                         UPDATE "comportamientoPrecios"
-                        SET "nombreComportamiento" = $1, "fechaInicio" = $2 ,"fechaFinal" = $3
-                        WHERE uid = $4;
+                        SET 
+                        "nombreComportamiento" = $1,
+                        "fechaInicio" = $2,
+                        "fechaFinal" = $3,
+                        tipo = $4,
+                        "diasArray" = $5
+                        WHERE uid = $6;
             
                         `
                         const datos = [
                             nombreComportamiento,
                             fechaInicio_ISO,
                             fechaFin_ISO,
+                            tipo,
+                            diasArray,
                             comportamientoUID
                         ]
                         const resuelveActualizarComportamiento = await conexion.query(actualizarComportamiento, datos)
@@ -13001,7 +13138,7 @@ const puerto = async (entrada, salida) => {
                             await conexion.query(eliminarComportamiento, [comportamientoUID])
                             const filtroCadenaSinEspacui = /^[a-z0-9]+$/;
                             const apartamentosInsertados = []
-                            for (const comportamiento of comportamientos) {
+                            for (const comportamiento of apartamentos) {
                                 const apartamentoIDV = comportamiento.apartamentoIDV
                                 const simbolo = comportamiento.simbolo
                                 let cantidadPorApartamento = comportamiento.cantidad
