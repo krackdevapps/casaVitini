@@ -17946,7 +17946,7 @@ const administracion = {
                 const nombreComportamiento = document.querySelector("[campoOferta=nombreOferta]").value
                 const fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                 const fechaFin = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                const tipo = document.querySelector("[botonTipo][estado=activado]").getAttribute("botonTipo")
+                const tipo = document.querySelector("[botonTipo][estado=activado]")?.getAttribute("botonTipo")
                 const selectorDiasSeleccionados = document.querySelectorAll("[componente=diaUI][estado=activado]")
                 const diasSeleccionados = []
                 selectorDiasSeleccionados.forEach((diaSeleecionado) => {
@@ -17964,7 +17964,7 @@ const administracion = {
                     transaccion.fechaFin = fechaFin
                 }
                 if (tipo === "porDias") {
-                    transaccion.diaArray = diasSeleccionados
+                    transaccion.diasArray = diasSeleccionados
                 }
 
                 const selectoresApartamentos = [...document.querySelectorAll(`[descuentoDedicadoIDV]`)]
@@ -18286,10 +18286,13 @@ const administracion = {
                 const selectoresApartamentos = [...document.querySelectorAll(`[descuentoDedicadoIDV]`)]
                 selectoresApartamentos.map((apartamento) => {
                     const apartamentoIDV = apartamento.getAttribute("descuentoDedicadoIDV")
+                    const apartamentoUI = apartamento.getAttribute("descuentoDedicadoUI")
+
                     const cantidad = apartamento.querySelector("[campoapartamentoseleccionado=cantidad]").value
                     const simbolo = apartamento.querySelector("[campoapartamentoseleccionado=simbolo]").value
                     const apartamentoFinal = {
                         apartamentoIDV: apartamentoIDV,
+                        apartamentoUI:apartamentoUI,
                         cantidad: cantidad,
                         simbolo: simbolo
                     }

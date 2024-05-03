@@ -17,15 +17,15 @@ const evitarDuplicados = async (data) => {
                 const consulta = `
                     SELECT uid 
                     FROM "comportamientoPrecios" 
-                    WHERE "fechaInicio" <= $1::DATE AND "fechaFinal" >= $2::DATE;`
-                resuelveVevalidarEspacioTemporalUnico = await conexion.query(consulta, [fechaFin_ISO, fechaInicio_ISO])
+                    WHERE tipo = $1 AND "fechaInicio" <= $2::DATE AND "fechaFinal" >= $3::DATE;`
+                resuelveVevalidarEspacioTemporalUnico = await conexion.query(consulta, [tipo, fechaFin_ISO, fechaInicio_ISO])
             }
             if (transaccion === "actualizar") {
                 const consulta = `
                    SELECT uid 
                    FROM "comportamientoPrecios" 
-                   WHERE "fechaInicio" <= $1::DATE AND "fechaFinal" >= $2::DATE AND uid <> $3;`
-                resuelveVevalidarEspacioTemporalUnico = await conexion.query(consulta, [fechaFin_ISO, fechaInicio_ISO, comportamientoUID])
+                   WHERE tipo = $1 AND "fechaInicio" <= $2::DATE AND "fechaFinal" >= $3::DATE AND uid <> $3;`
+                resuelveVevalidarEspacioTemporalUnico = await conexion.query(consulta, [tipo, fechaFin_ISO, fechaInicio_ISO, comportamientoUID])
             }
 
             if (resuelveVevalidarEspacioTemporalUnico.rowCount > 0) {
@@ -116,7 +116,7 @@ const evitarDuplicados = async (data) => {
                     AND
                     $2::text[] && "diasArray";
                     `
-                resuelveConsultaPorDias = await conexion.query(consulta, ["porDias", diasArray])
+                resuelveConsultaPorDias = await conexion.query(consulta, [tipo, diasArray])
             }
             if (transaccion === "actualizar") {
                 const consulta = `
@@ -128,7 +128,7 @@ const evitarDuplicados = async (data) => {
                    $2::text[] && "diasArray"
                    AND uid <> $3;
                    `
-                resuelveConsultaPorDias = await conexion.query(consulta, ["porDias", diasArray, comportamientoUID])
+                resuelveConsultaPorDias = await conexion.query(consulta, [tipo, diasArray, comportamientoUID])
             }
 
 

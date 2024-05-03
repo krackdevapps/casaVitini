@@ -12341,14 +12341,12 @@ const puerto = async (entrada, salida) => {
                     await mutex.acquire();
                     try {
                         let nombreComportamiento = entrada.body.nombreComportamiento
-                        const fechaInicio = entrada.body.fechaInicio
-                        const fechaFin = entrada.body.fechaFin
+
                         const apartamentos = entrada.body.apartamentos
                         const filtroCantidad = /^\d+\.\d{2}$/;
                         const filtroCadenaSinEspacui = /^[a-z0-9]+$/;
                         const filtroNombre = /['"\\;\r\n<>\t\b]/g;
                         const tipo = entrada.body.tipo
-                        const diasArray = entrada.body.diasArray
 
                         if (!nombreComportamiento) {
                             const error = "El campo nombreComportamiento solo admite minúsculas, mayúsculas, numeros y espacios"
@@ -12361,8 +12359,13 @@ const puerto = async (entrada, salida) => {
                         }
                         let fechaInicio_ISO
                         let fechaFin_ISO
+                        let diasArray
+
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         if (tipo === "porRango") {
+                            const fechaInicio = entrada.body.fechaInicio
+                            const fechaFin = entrada.body.fechaFin
+
                             const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
                             if (!filtroFecha.test(fechaInicio)) {
                                 const error = "el formato fecha de inicio no esta correctametne formateado debe ser una cadena asi 00/00/0000"
@@ -12397,6 +12400,8 @@ const puerto = async (entrada, salida) => {
                         }
                         //let diasCSV
                         if (tipo === "porDias") {
+                            diasArray = entrada.body.diasArray
+
                             if (typeof diasArray !== 'object' && !Array.isArray(diasArray)) {
                                 const error = "El campo diasArray solo admite un arreglo"
                                 throw new Error(error)
@@ -12561,7 +12566,7 @@ const puerto = async (entrada, salida) => {
                         const resuelveCrearComportamiento = await conexion.query(crearComportamiento, datos)
                         if (resuelveCrearComportamiento.rowCount === 1) {
                             const nuevoUIDComportamiento = resuelveCrearComportamiento.rows[0].uid
-                            for (const comportamiento of comportamientos) {
+                            for (const comportamiento of apartamentos) {
                                 const apartamentoIDV = comportamiento.apartamentoIDV
                                 let cantidad = comportamiento.cantidad
                                 const simbolo = comportamiento.simbolo
@@ -12634,6 +12639,7 @@ const puerto = async (entrada, salida) => {
                         const resuelveConsultaDetallesComportamiento = await conexion.query(consultaDetallesComportamiento, [comportamientoUID])
                         const detallesComportamiento = resuelveConsultaDetallesComportamiento.rows[0]
 
+
                         if (resuelveConsultaDetallesComportamiento.rowCount === 0) {
                             const error = "No existe ninguna comportamiento de precio con ese UID"
                             throw new Error(error)
@@ -12689,12 +12695,10 @@ const puerto = async (entrada, salida) => {
                     await mutex.acquire();
                     try {
                         let nombreComportamiento = entrada.body.nombreComportamiento
-                        const fechaInicio = entrada.body.fechaInicio
-                        const fechaFin = entrada.body.fechaFin
+
                         const comportamientoUID = entrada.body.comportamientoUID
                         const apartamentos = entrada.body.apartamentos
                         const tipo = entrada.body.tipo
-                        const diasArray = entrada.body.diasArray
 
                         const filtroCantidad = /^\d+\.\d{2}$/;
                         const filtroNombre = /['"\\;\r\n<>\t\b]/g;
@@ -12714,9 +12718,13 @@ const puerto = async (entrada, salida) => {
                         }
                         let fechaInicio_ISO
                         let fechaFin_ISO
+                        let diasArray
                         await conexion.query('BEGIN'); // Inicio de la transacción
 
                         if (tipo === "porRango") {
+                            const fechaInicio = entrada.body.fechaInicio
+                            const fechaFin = entrada.body.fechaFin
+
                             const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
                             if (!filtroFecha.test(fechaInicio)) {
                                 const error = "el formato fecha de inicio no esta correctametne formateado debe ser una cadena asi 00/00/0000"
@@ -12748,6 +12756,8 @@ const puerto = async (entrada, salida) => {
                             }
                         }
                         if (tipo === "porDias") {
+                            diasArray = entrada.body.diasArray
+
                             if (typeof diasArray !== 'object' && !Array.isArray(diasArray)) {
                                 const error = "El campo diasArray solo admite un arreglo"
                                 throw new Error(error)
@@ -12898,8 +12908,8 @@ const puerto = async (entrada, salida) => {
                         "fechaFinal" = $3,
                         tipo = $4,
                         "diasArray" = $5
-                        WHERE uid = $6;
-            
+                        WHERE uid = $6
+                        RETURNING *;
                         `
                         const datos = [
                             nombreComportamiento,
@@ -12917,7 +12927,6 @@ const puerto = async (entrada, salida) => {
                             `
                             await conexion.query(eliminarComportamiento, [comportamientoUID])
                             const filtroCadenaSinEspacui = /^[a-z0-9]+$/;
-                            const apartamentosInsertados = []
                             for (const comportamiento of apartamentos) {
                                 const apartamentoIDV = comportamiento.apartamentoIDV
                                 const simbolo = comportamiento.simbolo
@@ -12970,18 +12979,11 @@ const puerto = async (entrada, salida) => {
                                     cantidadPorApartamento,
                                     comportamientoUID
                                 ]
-                                const resuelveApartamento = await conexion.query(actualizarComportamientoDedicado, comportamientoDedicado)
-                                apartamentosInsertados.push(resuelveApartamento.rows[0])
-                                for (const detallesDelComportamiento of apartamentosInsertados) {
-                                    const apartamentoIDV__ = detallesDelComportamiento.apartamentoIDV
-                                    detallesDelComportamiento.apartamentoUI = await resolverApartamentoUI(apartamentoIDV__)
-                                }
+                                await conexion.query(actualizarComportamientoDedicado, comportamientoDedicado)
                             }
                             await conexion.query('COMMIT'); // Confirmar la transacción
                             const ok = {
                                 ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
-                                nombreComportamiento: nombreComportamiento,
-                                apartamentosDelComportamiento: apartamentosInsertados
                             }
                             salida.json(ok)
                         }
