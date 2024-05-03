@@ -4,20 +4,20 @@ import { writeFile } from 'fs/promises';
 import { Mutex, tryAcquire } from 'async-mutex';
 import { clienteSquare } from "./componentes/squareClient.mjs";
 import { v4 as uuidv4 } from "uuid";
-import { validarObjetoReserva } from './componentes/sistema/validarObjetoReserva.mjs';
-import { validarObjetoReservaSoloFormato } from './componentes/sistema/validarObjetoReservaSoloFormato.mjs';
+import { validarObjetoReserva } from './componentes/sistema/sistemaDeReservas/validarObjetoReserva.mjs';
+import { validarObjetoReservaSoloFormato } from './componentes/sistema/sistemaDeReservas/validarObjetoReservaSoloFormato.mjs';
 import { cambiarVista } from './componentes/sistema/cambiarVista.mjs';
 import { configuracionApartamento } from './componentes/sistema/configuracionApartamento.mjs';
 import { precioReserva } from './componentes/sistema/sistemaDePrecios/precioReserva.mjs';
-import { insertarReserva } from './componentes/sistema/insertarReserva.mjs';
-import { estadoHabitacionesApartamento } from './componentes/sistema/estadoHabitacionesApartamento.mjs'
-import { validarModificacionRangoFechaResereva } from './componentes/sistema/validarModificacionRangoFechaResereva.mjs'
+import { insertarReserva } from './componentes/sistema/sistemaDeReservas/insertarReserva.mjs';
+import { estadoHabitacionesApartamento } from './componentes/sistema/sistemaDeReservas/estadoHabitacionesApartamento.mjs'
+import { validarModificacionRangoFechaResereva } from './componentes/sistema/validadores/validarModificacionRangoFechaResereva.mjs'
 import { bloquearApartamentos } from './componentes/sistema/bloquearApartamentos.mjs'
 import { resolverMoneda } from './componentes/sistema/resolverMoneda.mjs';
 import { precioBaseApartamento } from './componentes/sistema/sistemaDePrecios/precioBaseApartamento.mjs';
 import { precioRangoApartamento } from './componentes/sistema/sistemaDePrecios/precioRangoApartamento.mjs';
-import { insertarTotalesReserva } from './componentes/sistema/insertarTotalesReserva.mjs';
-import { detallesReserva } from './componentes/sistema/detallesReserva.mjs';
+import { insertarTotalesReserva } from './componentes/sistema/sistemaDeReservas/insertarTotalesReserva.mjs';
+import { detallesReserva } from './componentes/sistema/sistemaDeReservas/detallesReserva.mjs';
 import { resolverApartamentoUI } from './componentes/sistema/resolverApartamentoUI.mjs'
 import { vitiniCrypto } from './componentes/sistema/vitiniCrypto.mjs';
 import { administracionUI } from './componentes/administracion.mjs';
@@ -31,10 +31,10 @@ import { DateTime } from 'luxon';
 import { generadorPDF3 } from './componentes/sistema/generadorPDF.mjs';
 import { validadoresCompartidos } from './componentes/validadoresCompartidos.mjs';
 import { actualizarEstadoPago } from './componentes/sistema/sistemaDePrecios/actualizarEstadoPago.mjs';
-import { obtenerTotalReembolsado } from './componentes/sistema/obtenerTotalReembolsado.mjs';
-import { enviarMail } from './componentes/sistema/enviarMail.mjs';
-import { enviarEmailReservaConfirmada } from './componentes/sistema/enviarEmailReservaConfirmada.mjs';
-import { enviarEmailAlCrearCuentaNueva } from './componentes/sistema/enviarEmailAlCrearCuentaNueva.mjs';
+import { obtenerTotalReembolsado } from './componentes/sistema/sistemaDePrecios/obtenerTotalReembolsado.mjs';
+import { enviarMail } from './componentes/sistema/sistemaDeMail/enviarMail.mjs';
+import { enviarEmailReservaConfirmada } from './componentes/sistema/sistemaDeMail/enviarEmailReservaConfirmada.mjs';
+import { enviarEmailAlCrearCuentaNueva } from './componentes/sistema/sistemaDeMail/enviarEmailAlCrearCuentaNueva.mjs';
 import validator from 'validator';
 import axios from 'axios';
 const mutex = new Mutex();
@@ -53,7 +53,7 @@ import { obtenerDetallesOferta } from './componentes/sistema/sistemaDeOfertas/ob
 import { interruptor } from './componentes/sistema/interruptor.mjs';
 import { horaEntradaSalida } from './componentes/sistema/horaEntradaSalida.mjs';
 import { apartamentosPorRango } from './componentes/sistema/selectoresCompartidos/apartamentosPorRango.mjs';
-import { evitarDuplicados } from './componentes/sistema/comportamientoPrecios/evitarDuplicados.mjs';
+import { evitarDuplicados } from './componentes/sistema/sistemaDePrecios/comportamientoPrecios/evitarDuplicados.mjs';
 
 const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
 const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID

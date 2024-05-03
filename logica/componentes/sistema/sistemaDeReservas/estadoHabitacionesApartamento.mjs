@@ -1,4 +1,4 @@
-import { conexion } from '../db.mjs';
+import { conexion } from '../../db.mjs';
 const estadoHabitacionesApartamento = async (transacion) => {
     try {
         const reserva = transacion.reserva

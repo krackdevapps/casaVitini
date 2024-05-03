@@ -1,4 +1,4 @@
-import { conexion } from '../db.mjs';
+import { conexion } from '../../db.mjs';
 const detallesReserva = async (metadatos) => {
     try {
         const reservaUID = metadatos.reservaUID

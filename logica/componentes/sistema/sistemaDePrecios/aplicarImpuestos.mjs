@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { conexion } from '../db.mjs';
+import { conexion } from '../../db.mjs';
 Decimal.set({ precision: 50 });
 const aplicarImpuestos = async (totalNetoEntrada) => {
     try {

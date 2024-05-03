@@ -1,6 +1,6 @@
-import { detallesReserva } from "./detallesReserva.mjs"
+import { detallesReserva } from "../sistemaDeReservas/detallesReserva.mjs"
 import { enviarMail } from "./enviarMail.mjs"
-import { generadorPDF3 } from "./generadorPDF.mjs"
+import { generadorPDF3 } from "../generadorPDF.mjs"
 import dotenv from "dotenv";
 dotenv.config();
 const enviarEmailReservaConfirmada = async (reservaUID) => {

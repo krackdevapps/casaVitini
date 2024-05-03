@@ -1,6 +1,6 @@
 import Decimal from "decimal.js"
-import { validadoresCompartidos } from "../validadoresCompartidos.mjs"
-import { conexion } from "../db.mjs"
+import { validadoresCompartidos } from "../../validadoresCompartidos.mjs"
+import { conexion } from "../../db.mjs"
 const obtenerTotalReembolsado = async (reservaUID) => {
     try {
         await validadoresCompartidos.reservas.validarReserva(reservaUID)

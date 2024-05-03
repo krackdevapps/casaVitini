@@ -1,5 +1,4 @@
-import { conexion } from "../../db.mjs"
-
+import { conexion } from "../../../db.mjs"
 const evitarDuplicados = async (data) => {
     try {
         const comportamientoUID = data.comportamientoUID

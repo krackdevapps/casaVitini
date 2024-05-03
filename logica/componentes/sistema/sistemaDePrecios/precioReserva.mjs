@@ -1,7 +1,7 @@
 
-import { validarObjetoReservaSoloFormato } from '../validarObjetoReservaSoloFormato.mjs';
+import { validarObjetoReservaSoloFormato } from '../sistemaDeReservas/validarObjetoReservaSoloFormato.mjs';
 import { precioRangoApartamento } from './precioRangoApartamento.mjs';
-import { aplicarImpuestos } from '../aplicarImpuestos.mjs';
+import { aplicarImpuestos } from './aplicarImpuestos.mjs';
 import Decimal from 'decimal.js';
 import { validadoresCompartidos } from '../../validadoresCompartidos.mjs';
 import { sistemaDeOfertas } from '../../sistema/sistemaDeOfertas/sistemaDeOfertas.mjs';

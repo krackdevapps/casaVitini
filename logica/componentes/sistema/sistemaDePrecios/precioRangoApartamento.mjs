@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { conexion } from '../../db.mjs';
 import Decimal from 'decimal.js';
-import { aplicarImpuestos } from '../aplicarImpuestos.mjs';
+import { aplicarImpuestos } from './aplicarImpuestos.mjs';
 import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUniversal.mjs';
 import { resolverComportamientosDePrecio } from './resolverComportamientosDePrecio.mjs';
 
