@@ -2026,8 +2026,7 @@ const casaVitini = {
                             main.setAttribute("zonaCSS", "miCasa")
                             const marcoCuenta = document.querySelector("[componente=marcoCuenta]")
                             const metadatos = {
-                                zona: "IDX",
-                                IDX: "estado"
+                                zona: "IDX/estado"
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(metadatos)
                             if (respuestaServidor?.error) {
@@ -9955,8 +9954,7 @@ const casaVitini = {
             bloqueRespuesta.appendChild(circuloAnimado)
             bloqueRespuesta.appendChild(mensajeIniciando)
             const transaccion = {
-                zona: "IDX",
-                IDX: "conectar",
+                zona: "IDX/conectar",
                 usuario: usuario,
                 clave: clave
             };
@@ -9998,8 +9996,7 @@ const casaVitini = {
         cerrarSession: async () => {
             try {
                 const transaccion = {
-                    zona: "IDX",
-                    IDX: "desconectar"
+                    zona: "IDX/desconectar",
                 };
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 if (respuestaServidor?.error) {
@@ -10015,8 +10012,7 @@ const casaVitini = {
         },
         estadoSession: async () => {
             const transaccion = {
-                zona: "IDX",
-                IDX: "estado"
+                zona: "IDX/estado",
             }
             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
             // await casaVitini.componentes.controlCodigoAdministracion()
