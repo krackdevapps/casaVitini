@@ -1,4 +1,4 @@
-import { conexion } from "../db.mjs"
+import { conexion } from "../../db.mjs"
 const obtenerDetallesOferta = async (ofertaUID) => {
     try {
         if (!ofertaUID || typeof ofertaUID !== "number" || !Number.isInteger(ofertaUID) || ofertaUID <= 0) {

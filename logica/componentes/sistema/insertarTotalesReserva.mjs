@@ -1,7 +1,7 @@
 import { conexion } from '../db.mjs';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
-import { actualizarEstadoPago } from './actualizarEstadoPago.mjs';
-import { precioReserva } from './precioReserva.mjs';
+import { actualizarEstadoPago } from './sistemaDePrecios/actualizarEstadoPago.mjs';
+import { precioReserva } from './sistemaDePrecios/precioReserva.mjs';
 import { resolverApartamentoUI } from './resolverApartamentoUI.mjs';
 const insertarTotalesReserva = async (metadatos) => {
     try {

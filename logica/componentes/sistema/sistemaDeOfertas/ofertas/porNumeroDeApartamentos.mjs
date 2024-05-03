@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import { conexion } from "../../db.mjs";
+import { conexion } from "../../../db.mjs";
 const porNumeroDeApartamentos = async (reserva) => {
     try {
         const fechaActualTZ = reserva.fechas.fechaActualProcesada_ISO

@@ -1,6 +1,6 @@
 import Decimal from "decimal.js";
-import { conexion } from "../../db.mjs";
-import { validadoresCompartidos } from "../../validadoresCompartidos.mjs";
+import { conexion } from "../../../db.mjs";
+import { validadoresCompartidos } from "../../../validadoresCompartidos.mjs";
 const comprobarFechaEnRango = (fechaAComprobar_ISO, fechaInicio_ISO, fechaFin_ISO) => {
     const fechaObjetoAComprobar = new Date(fechaAComprobar_ISO);
     const fechaObjetoInicio = new Date(fechaInicio_ISO);

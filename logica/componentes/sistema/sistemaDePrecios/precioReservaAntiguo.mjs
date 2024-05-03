@@ -1,4 +1,4 @@
-import { conexion } from '../db.mjs';
+import { conexion } from '../../db.mjs';
 // Este modulo ofrece los precios de un objeto de reserva
 // MUY IMPORTANTE: El objeto reserva debe de estar validado con validarObjetoReserva()
 const precioReserva = async (reserva) => {

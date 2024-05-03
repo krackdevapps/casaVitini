@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 import { conexion } from '../db.mjs';
-import { codigoZonaHoraria } from './codigoZonaHoraria.mjs';
+import { codigoZonaHoraria } from '../sistema/codigoZonaHoraria.mjs';
 import { DateTime } from 'luxon';
 import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
 Decimal.set({ precision: 50 });

@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon';
-import { conexion } from '../db.mjs';
+import { conexion } from '../../db.mjs';
 import Decimal from 'decimal.js';
-import { aplicarImpuestos } from './aplicarImpuestos.mjs';
-import { selectorRangoUniversal } from './selectoresCompartidos/selectorRangoUniversal.mjs';
+import { aplicarImpuestos } from '../aplicarImpuestos.mjs';
+import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUniversal.mjs';
 import { resolverComportamientosDePrecio } from './resolverComportamientosDePrecio.mjs';
 
 // Pasas una fecha de a un fecha de salida y un apartmaento y te da todos el tema

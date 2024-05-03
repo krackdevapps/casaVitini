@@ -1,10 +1,11 @@
-import { conexion } from '../db.mjs';
-import { validarObjetoReservaSoloFormato } from './validarObjetoReservaSoloFormato.mjs';
+
+import { validarObjetoReservaSoloFormato } from '../validarObjetoReservaSoloFormato.mjs';
 import { precioRangoApartamento } from './precioRangoApartamento.mjs';
-import { aplicarImpuestos } from './aplicarImpuestos.mjs';
+import { aplicarImpuestos } from '../aplicarImpuestos.mjs';
 import Decimal from 'decimal.js';
-import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
-import { sistemaDeOfertas } from '../sistemaDeOfertas/sistemaDeOfertas.mjs';
+import { validadoresCompartidos } from '../../validadoresCompartidos.mjs';
+import { sistemaDeOfertas } from '../../sistema/sistemaDeOfertas/sistemaDeOfertas.mjs';
+import { conexion } from '../../db.mjs';
 Decimal.set({ precision: 100 });
 const calcularPrecioPorObjeto = async (reserva) => {
     await validarObjetoReservaSoloFormato(reserva);
