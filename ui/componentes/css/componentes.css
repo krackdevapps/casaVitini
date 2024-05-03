@@ -6818,9 +6818,6 @@
     color: black;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    /* max-width: 400px; */
-    /* width: 100%; */
-    gap: 10px;
     cursor: default;
     transition: all 500ms;
 }
@@ -6996,6 +6993,12 @@ grid-template-columns: 0.5fr 1.5fr;
     margin: 0px;
 }
 
+
+[zonaCSS="administracion/comportamiento_de_precios"] .contenedorTituloEstado {
+    padding: 6px;
+ 
+}
+
 [zonaCSS="administracion/ofertas"] .ofertaUIFechaContenedor {
     border-radius: 10px;
 }
@@ -7014,7 +7017,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS="administracion/comportamiento_de_precios"] .diaSeleciconadoCelda {
     background: rgba(0, 0, 0, 0.1);
-    padding: 12px;
+    padding: 16px;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -7022,6 +7025,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
     justify-content: center;
     flex-wrap: wrap;
+    font-weight: bold;
 }
 [zonaCSS="administracion/comportamiento_de_precios"] .contenedorDiasSeleccionados {
     background: rgba(0, 0, 0, 0.1);

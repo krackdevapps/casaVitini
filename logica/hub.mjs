@@ -12358,20 +12358,20 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         let fechaInicio_ISO
-                        let fechaFin_ISO
+                        let fechaFinal_ISO
                         let diasArray
 
                         await conexion.query('BEGIN'); // Inicio de la transacción
                         if (tipo === "porRango") {
                             const fechaInicio = entrada.body.fechaInicio
-                            const fechaFin = entrada.body.fechaFin
+                            const fechaFinal = entrada.body.fechaFinal
 
                             const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
                             if (!filtroFecha.test(fechaInicio)) {
                                 const error = "el formato fecha de inicio no esta correctametne formateado debe ser una cadena asi 00/00/0000"
                                 throw new Error(error)
                             }
-                            if (!filtroFecha.test(fechaFin)) {
+                            if (!filtroFecha.test(fechaFinal)) {
                                 const error = "el formato fecha de fin no esta correctametne formateado debe ser una cadena asi 00/00/0000"
                                 throw new Error(error)
                             }
@@ -12384,15 +12384,15 @@ const puerto = async (entrada, salida) => {
                             const mesSalida = fechaFinArreglo[1]
                             const anoSalida = fechaFinArreglo[2]
                             fechaInicio_ISO = `${anoEntrada}-${mesEntrada}-${diaEntrada}`
-                            fechaFin_ISO = `${anoSalida}-${mesSalida}-${diaSalida}`
+                            fechaFinal_ISO = `${anoSalida}-${mesSalida}-${diaSalida}`
                             await validadoresCompartidos.fechas.validarFecha_ISO(fechaInicio_ISO)
-                            await validadoresCompartidos.fechas.validarFecha_ISO(fechaFin_ISO)
+                            await validadoresCompartidos.fechas.validarFecha_ISO(fechaFinal_ISO)
 
 
                             const fechaInicio_Objeto = new Date(fechaInicio_ISO); // El formato es día/mes/ano
-                            const fechaFin_Objeto = new Date(fechaFin_ISO);
+                            const fechaFinal_Objeto = new Date(fechaFinal_ISO);
                             // validacion: la fecha de entrada no puede ser superior a la fecha de salida y al mimso tiempo la fecha de salida no puede ser inferior a la fecha de entrada
-                            if (fechaInicio_Objeto > fechaFin_Objeto) {
+                            if (fechaInicio_Objeto > fechaFinal_Objeto) {
                                 const error = "La fecha de entrada no puede ser superior que la fecha de salida, si pueden ser iguales para hacer un comportamiento de un solo dia"
                                 throw new Error(error)
                             }
@@ -12525,7 +12525,7 @@ const puerto = async (entrada, salida) => {
                             transaccion: "crear",
                             apartamentos: apartamentos,
                             fechaInicio_ISO: fechaInicio_ISO,
-                            fechaFin_ISO: fechaFin_ISO,
+                            fechaFinal_ISO: fechaFinal_ISO,
                             diasArray: diasArray
                         }
 
@@ -12557,7 +12557,7 @@ const puerto = async (entrada, salida) => {
                         const datos = [
                             nombreComportamiento,
                             fechaInicio_ISO,
-                            fechaFin_ISO,
+                            fechaFinal_ISO,
                             estadoInicalDesactivado,
                             tipo,
                             diasArray
@@ -12717,20 +12717,20 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         let fechaInicio_ISO
-                        let fechaFin_ISO
+                        let fechaFinal_ISO
                         let diasArray
                         await conexion.query('BEGIN'); // Inicio de la transacción
 
                         if (tipo === "porRango") {
                             const fechaInicio = entrada.body.fechaInicio
-                            const fechaFin = entrada.body.fechaFin
+                            const fechaFinal = entrada.body.fechaFinal
 
                             const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
                             if (!filtroFecha.test(fechaInicio)) {
                                 const error = "el formato fecha de inicio no esta correctametne formateado debe ser una cadena asi 00/00/0000"
                                 throw new Error(error)
                             }
-                            if (!filtroFecha.test(fechaFin)) {
+                            if (!filtroFecha.test(fechaFinal)) {
                                 const error = "el formato fecha de fin no esta correctametne formateado debe ser una cadena asi 00/00/0000"
                                 throw new Error(error)
                             }
@@ -12740,17 +12740,17 @@ const puerto = async (entrada, salida) => {
                             const diaEntrada = fechaInicioArreglo[0]
                             const mesEntrada = fechaInicioArreglo[1]
                             const anoEntrada = fechaInicioArreglo[2]
-                            const fechaFinArreglo = fechaFin.split("/")
+                            const fechaFinArreglo = fechaFinal.split("/")
                             const diaSalida = fechaFinArreglo[0]
                             const mesSalida = fechaFinArreglo[1]
                             const anoSalida = fechaFinArreglo[2]
                             fechaInicio_ISO = `${anoEntrada}-${mesEntrada}-${diaEntrada}`
-                            fechaFin_ISO = `${anoSalida}-${mesSalida}-${diaSalida}`
+                            fechaFinal_ISO = `${anoSalida}-${mesSalida}-${diaSalida}`
                             await validadoresCompartidos.fechas.validarFecha_ISO(fechaInicio_ISO)
-                            await validadoresCompartidos.fechas.validarFecha_ISO(fechaFin_ISO)
+                            await validadoresCompartidos.fechas.validarFecha_ISO(fechaFinal_ISO)
                             const fechaInicio_Objeto = new Date(fechaInicio_ISO); // El formato es día/mes/ano
-                            const fechaFin_Objeto = new Date(fechaFin_ISO);
-                            if (fechaInicio_Objeto > fechaFin_Objeto) {
+                            const fechaFinal_Objeto = new Date(fechaFinal_ISO);
+                            if (fechaInicio_Objeto > fechaFinal_Objeto) {
                                 const error = "La fecha de entrada no puede ser superior que la fecha de salida"
                                 throw new Error(error)
                             }
@@ -12890,11 +12890,12 @@ const puerto = async (entrada, salida) => {
                             throw new Error(error)
                         }
                         const dataEvitarDuplicados = {
+                            comportamientoUID: comportamientoUID,
                             tipo: tipo,
                             transaccion: "actualizar",
                             apartamentos: apartamentos,
                             fechaInicio_ISO: fechaInicio_ISO,
-                            fechaFin_ISO: fechaFin_ISO,
+                            fechaFinal_ISO: fechaFinal_ISO,
                             diasArray: diasArray
                         }
 
@@ -12914,7 +12915,7 @@ const puerto = async (entrada, salida) => {
                         const datos = [
                             nombreComportamiento,
                             fechaInicio_ISO,
-                            fechaFin_ISO,
+                            fechaFinal_ISO,
                             tipo,
                             diasArray,
                             comportamientoUID

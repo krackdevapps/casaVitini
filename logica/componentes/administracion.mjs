@@ -1597,16 +1597,16 @@ const administracion = {
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
-                        const apartamentosDisponbiles = respuestaServidor?.ok.apartamentosDisponibles
+                        const apartamentosDisponibles = respuestaServidor?.ok.apartamentosDisponibles
                         const apartamentosNoDisponibles = respuestaServidor?.ok.apartamentosNoDisponibles
-                        if (apartamentosDisponbiles.length > 0) {
+                        if (apartamentosDisponibles.length > 0) {
                             const bloqueApartamentos = document.createElement("div")
                             bloqueApartamentos.classList.add("reservaDetalles_menu_apartamentosDipsonbiles")
                             const tituloApartamentoComponenteUIs = document.createElement("div")
                             tituloApartamentoComponenteUIs.classList.add("reservaDetalles_menu_titutloapartamentosDisponibles")
                             tituloApartamentoComponenteUIs.innerText = "Apartamentos disponibles"
                             bloqueApartamentos.appendChild(tituloApartamentoComponenteUIs)
-                            for (const detallesApartamento of apartamentosDisponbiles) {
+                            for (const detallesApartamento of apartamentosDisponibles) {
                                 const apartamentoUI = document.createElement("div")
                                 apartamentoUI.classList.add("menuFlotanteOpcionAnadirApartamento")
                                 apartamentoUI.innerText = detallesApartamento.apartamentoUI
@@ -15869,7 +15869,7 @@ const administracion = {
                     return casaVitini.componentes.controladorVista(navegacion)
                 }
             },
-            apartamentosDisponbiles: async (apartamento) => {
+            apartamentosDisponibles: async (apartamento) => {
                 apartamento.preventDefault()
                 apartamento.stopPropagation()
                 let selectorApartamentoUIRenderizado = document.querySelector("[comMenu=menuVolatilApartamentoDisponbiles]")
@@ -15901,8 +15901,8 @@ const administracion = {
                 if (respuestaServidor?.ok) {
                     selectorApartamentoUIRenderizado = document.querySelector("[comMenu=menuVolatilApartamentoDisponbiles]")
                     selectorApartamentoUIRenderizado.innerHTML = null
-                    let apartamentosDisponbiles = respuestaServidor?.ok
-                    apartamentosDisponbiles.map((apartamentoDisponible) => {
+                    let apartamentosDisponibles = respuestaServidor?.ok
+                    apartamentosDisponibles.map((apartamentoDisponible) => {
                         let apartamentoIDV = apartamentoDisponible.apartamentoIDV
                         let apartamentoUI = apartamentoDisponible.apartamentoUI
                         let estadoUI = apartamentoDisponible.estadoUI
@@ -16795,7 +16795,7 @@ const administracion = {
                 pCrearOFertaBotonAnadirApartamento_3.classList.add('crearOFertaBotonAnadirApartamento');
                 pCrearOFertaBotonAnadirApartamento_3.setAttribute('componente', 'botonAnadirApartamentoOferta');
                 pCrearOFertaBotonAnadirApartamento_3.textContent = 'Anadir apartamento';
-                pCrearOFertaBotonAnadirApartamento_3.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.apartamentosDisponbiles)
+                pCrearOFertaBotonAnadirApartamento_3.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.apartamentosDisponibles)
                 divCrearOfertaConentenedor1_3.appendChild(pCrearOFertaBotonAnadirApartamento_3);
                 // Crear el div 'crearOfertaZonaAnadirApartamento' dentro del segundo div interno
                 const divCrearOfertaZonaAnadirApartamento_3 = document.createElement('div');
@@ -17314,7 +17314,7 @@ const administracion = {
             }
             const info = {
                 titulo: "No existe ninguna reserva con ese identificador",
-                descripcion: "La reserva que buscas con ese identificador no existe. Comprueba el identificador de la reserva"
+                descripcion: "No existe ningún comportamiento de precio con este identificador."
             }
             return casaVitini.componentes.mensajeSimple(info)
         },
@@ -17401,7 +17401,7 @@ const administracion = {
 
 
                         const descripcion = document.createElement("p")
-                        descripcion.classList.add("ofertaUITituloOferta")
+                        descripcion.classList.add("contenedorTituloEstado")
                         descripcion.innerText = descripcionObjeto[tipo]
                         comportamientoUI.appendChild(descripcion)
 
@@ -17945,7 +17945,7 @@ const administracion = {
                 casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                 const nombreComportamiento = document.querySelector("[campoOferta=nombreOferta]").value
                 const fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                const fechaFin = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                const fechaFinal = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
                 const tipo = document.querySelector("[botonTipo][estado=activado]")?.getAttribute("botonTipo")
                 const selectorDiasSeleccionados = document.querySelectorAll("[componente=diaUI][estado=activado]")
                 const diasSeleccionados = []
@@ -17961,7 +17961,7 @@ const administracion = {
                 }
                 if (tipo === "porRango") {
                     transaccion.fechaInicio = fechaInicio
-                    transaccion.fechaFin = fechaFin
+                    transaccion.fechaFinal = fechaFinal
                 }
                 if (tipo === "porDias") {
                     transaccion.diasArray = diasSeleccionados
@@ -17996,8 +17996,9 @@ const administracion = {
                     return casaVitini.componentes.controladorVista(navegacion)
                 }
             },
-            apartamentosDisponbiles: async (apartamento) => {
-                apartamento.preventDefault()
+            apartamentosDisponibles: async (apartamento) => {
+               // apartamento.preventDefault()
+               casaVitini.componentes.limpiarAdvertenciasInmersivas()
                 apartamento.stopPropagation()
                 const selectorMenuObsoleto = document.querySelector("[comMenu=menuVolatilApartamentoDisponbiles]")
                 if (selectorMenuObsoleto) {
@@ -18031,8 +18032,8 @@ const administracion = {
                 }
                 if (respuestaServidor?.ok) {
                     instanciaRenderizada.innerHTML = null
-                    const apartamentosDisponbiles = respuestaServidor?.ok
-                    apartamentosDisponbiles.map((apartamentoDisponible) => {
+                    const apartamentosDisponibles = respuestaServidor?.ok
+                    apartamentosDisponibles.map((apartamentoDisponible) => {
                         const apartamentoIDV = apartamentoDisponible.apartamentoIDV
                         const apartamentoUI = apartamentoDisponible.apartamentoUI
                         const estadoUI = apartamentoDisponible.estadoUI
@@ -18090,7 +18091,7 @@ const administracion = {
                 }
                 let descuentoDedicadoUI = await casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarOpcionesApartamento(opciones)
                 let zonaDescuentoDedicados = document.querySelector("[componente=comportamientoSuperBloque]")
-                document.querySelector("[componente=infoDescuentoDedicados]").style.display = "none"
+                //document.querySelector("[componente=infoDescuentoDedicados]").style.display = "none"
                 document.querySelector("[componente=comportamientoSuperBloque]").style.display = "grid"
                 zonaDescuentoDedicados.appendChild(descuentoDedicadoUI)
             },
@@ -18259,7 +18260,7 @@ const administracion = {
                 const nombreComportamiento_campo = document.querySelector("[campoOferta=nombreOferta]")
                 const nombreComportamiento_valor = nombreComportamiento_campo.value
                 const fechaInicio = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                const fechaFin = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                const fechaFinal = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
 
                 const tipo = document.querySelector("[botonTipo][estado=activado]").getAttribute("botonTipo")
                 const selectorDiasSeleccionados = document.querySelectorAll("[componente=diaUI][estado=activado]")
@@ -18277,7 +18278,7 @@ const administracion = {
                 }
                 if (tipo === "porRango") {
                     transaccion.fechaInicio = fechaInicio
-                    transaccion.fechaFin = fechaFin
+                    transaccion.fechaFinal = fechaFinal
                 }
                 if (tipo === "porDias") {
                     transaccion.diasArray = diasArray
@@ -18759,7 +18760,7 @@ const administracion = {
             pCrearOFertaBotonAnadirApartamento_31.classList.add('crearOFertaBotonAnadirApartamento');
             pCrearOFertaBotonAnadirApartamento_31.setAttribute('componente', 'botonAnadirApartamentoOferta');
             pCrearOFertaBotonAnadirApartamento_31.textContent = 'Anadir apartamento';
-            pCrearOFertaBotonAnadirApartamento_31.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.crearComportamiento.apartamentosDisponbiles)
+            pCrearOFertaBotonAnadirApartamento_31.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.crearComportamiento.apartamentosDisponibles)
             contenedorBotones.appendChild(pCrearOFertaBotonAnadirApartamento_31);
             divPrincipal.appendChild(contenedorBotones)
             // Crear el elemento div principal
@@ -19218,7 +19219,7 @@ const administracion = {
             pCrearOFertaBotonAnadirApartamento_31.classList.add('crearOFertaBotonAnadirApartamento');
             pCrearOFertaBotonAnadirApartamento_31.setAttribute('componente', 'botonAnadirApartamentoOferta');
             pCrearOFertaBotonAnadirApartamento_31.textContent = 'Anadir apartamento';
-            pCrearOFertaBotonAnadirApartamento_31.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.crearComportamiento.apartamentosDisponbiles)
+            pCrearOFertaBotonAnadirApartamento_31.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.crearComportamiento.apartamentosDisponibles)
             contenedorBotones.appendChild(pCrearOFertaBotonAnadirApartamento_31);
             divPrincipal.appendChild(contenedorBotones)
             // Crear el elemento div principal

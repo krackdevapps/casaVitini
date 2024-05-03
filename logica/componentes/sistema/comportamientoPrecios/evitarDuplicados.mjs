@@ -10,7 +10,7 @@ const evitarDuplicados = async (data) => {
         if (tipo === "porRango") {
 
             const fechaInicio_ISO = data.fechaInicio_ISO
-            const fechaFin_ISO = data.fechaFin_ISO
+            const fechaFinal_ISO = data.fechaFinal_ISO
 
             let resuelveVevalidarEspacioTemporalUnico
             if (transaccion === "crear") {
@@ -18,14 +18,14 @@ const evitarDuplicados = async (data) => {
                     SELECT uid 
                     FROM "comportamientoPrecios" 
                     WHERE tipo = $1 AND "fechaInicio" <= $2::DATE AND "fechaFinal" >= $3::DATE;`
-                resuelveVevalidarEspacioTemporalUnico = await conexion.query(consulta, [tipo, fechaFin_ISO, fechaInicio_ISO])
+                resuelveVevalidarEspacioTemporalUnico = await conexion.query(consulta, [tipo, fechaFinal_ISO, fechaInicio_ISO])
             }
             if (transaccion === "actualizar") {
                 const consulta = `
                    SELECT uid 
                    FROM "comportamientoPrecios" 
-                   WHERE tipo = $1 AND "fechaInicio" <= $2::DATE AND "fechaFinal" >= $3::DATE AND uid <> $3;`
-                resuelveVevalidarEspacioTemporalUnico = await conexion.query(consulta, [tipo, fechaFin_ISO, fechaInicio_ISO, comportamientoUID])
+                   WHERE tipo = $1 AND "fechaInicio" <= $2::DATE AND "fechaFinal" >= $3::DATE AND uid <> $4;`
+                resuelveVevalidarEspacioTemporalUnico = await conexion.query(consulta, [tipo, fechaFinal_ISO, fechaInicio_ISO, comportamientoUID])
             }
 
             if (resuelveVevalidarEspacioTemporalUnico.rowCount > 0) {
@@ -129,6 +129,7 @@ const evitarDuplicados = async (data) => {
                    AND uid <> $3;
                    `
                 resuelveConsultaPorDias = await conexion.query(consulta, [tipo, diasArray, comportamientoUID])
+                console.log("resuelveConsultaPorDias", resuelveConsultaPorDias.rows, [tipo, diasArray, comportamientoUID])
             }
 
 
