@@ -1,5 +1,5 @@
 import { conexion } from '../../db.mjs';
-import { validadoresCompartidos } from '../../validadoresCompartidos.mjs';
+import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 
 export const resolverComportamientosDePrecio = async (fechaEntrada_ISO, fechaSalida_ISO) => {
     await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO);

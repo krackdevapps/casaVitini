@@ -1,5 +1,5 @@
 import Decimal from "decimal.js"
-import { validadoresCompartidos } from "../../validadoresCompartidos.mjs"
+import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
 import { conexion } from "../../db.mjs"
 const obtenerTotalReembolsado = async (reservaUID) => {
     try {

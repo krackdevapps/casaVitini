@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../db.mjs";
-import { resolverApartamentoUI } from "../../resolverApartamentoUI.mjs";
+import { resolverApartamentoUI } from "../../sistemaDeResolucion/resolverApartamentoUI.mjs";
 const eventosPorApartamneto = async (metadatos) => {
     try {
         const fecha = metadatos.fecha

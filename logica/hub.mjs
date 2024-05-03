@@ -13,12 +13,12 @@ import { insertarReserva } from './componentes/sistema/sistemaDeReservas/inserta
 import { estadoHabitacionesApartamento } from './componentes/sistema/sistemaDeReservas/estadoHabitacionesApartamento.mjs'
 import { validarModificacionRangoFechaResereva } from './componentes/sistema/validadores/validarModificacionRangoFechaResereva.mjs'
 import { bloquearApartamentos } from './componentes/sistema/bloquearApartamentos.mjs'
-import { resolverMoneda } from './componentes/sistema/resolverMoneda.mjs';
+import { resolverMoneda } from './componentes/sistema/sistemaDeResolucion/resolverMoneda.mjs';
 import { precioBaseApartamento } from './componentes/sistema/sistemaDePrecios/precioBaseApartamento.mjs';
 import { precioRangoApartamento } from './componentes/sistema/sistemaDePrecios/precioRangoApartamento.mjs';
 import { insertarTotalesReserva } from './componentes/sistema/sistemaDeReservas/insertarTotalesReserva.mjs';
 import { detallesReserva } from './componentes/sistema/sistemaDeReservas/detallesReserva.mjs';
-import { resolverApartamentoUI } from './componentes/sistema/resolverApartamentoUI.mjs'
+import { resolverApartamentoUI } from './componentes/sistema/sistemaDeResolucion/resolverApartamentoUI.mjs'
 import { vitiniCrypto } from './componentes/sistema/vitiniCrypto.mjs';
 import { administracionUI } from './componentes/administracion.mjs';
 import { controlCaducidadEnlacesDePago } from './componentes/sistema/controlCaducidadEnlacesDePago.mjs';
@@ -29,7 +29,7 @@ import { insertarCliente } from './componentes/sistema/insertarCliente.mjs';
 import { codigoZonaHoraria } from './componentes/sistema/codigoZonaHoraria.mjs';
 import { DateTime } from 'luxon';
 import { generadorPDF3 } from './componentes/sistema/generadorPDF.mjs';
-import { validadoresCompartidos } from './componentes/validadoresCompartidos.mjs';
+import { validadoresCompartidos } from './componentes/sistema/validadores/validadoresCompartidos.mjs';
 import { actualizarEstadoPago } from './componentes/sistema/sistemaDePrecios/actualizarEstadoPago.mjs';
 import { obtenerTotalReembolsado } from './componentes/sistema/sistemaDePrecios/obtenerTotalReembolsado.mjs';
 import { enviarMail } from './componentes/sistema/sistemaDeMail/enviarMail.mjs';
@@ -50,7 +50,7 @@ import { eventosPorApartamentoAirbnb } from './componentes/sistema/calendarios/c
 import { exportarClendario } from './componentes/sistema/calendariosSincronizados/airbnb/exportarCalendario.mjs';
 import { obtenerParametroConfiguracion } from './componentes/sistema/obtenerParametroConfiguracion.mjs';
 import { obtenerDetallesOferta } from './componentes/sistema/sistemaDeOfertas/obtenerDetallesOferta.mjs';
-import { interruptor } from './componentes/sistema/interruptor.mjs';
+import { interruptor } from './componentes/sistema/configuracionGlobal/interruptor.mjs';
 import { horaEntradaSalida } from './componentes/sistema/horaEntradaSalida.mjs';
 import { apartamentosPorRango } from './componentes/sistema/selectoresCompartidos/apartamentosPorRango.mjs';
 import { evitarDuplicados } from './componentes/sistema/sistemaDePrecios/comportamientoPrecios/evitarDuplicados.mjs';

@@ -1,4 +1,4 @@
-import { conexion } from '../db.mjs';
+import { conexion } from '../../db.mjs';
 const interruptor = async (interruptorIDV) => {
     try {
         const consultaConfiguracionGlobal = `

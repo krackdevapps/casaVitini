@@ -1,5 +1,5 @@
 import { DateTime } from "luxon"
-import { validadoresCompartidos } from "../../validadoresCompartidos.mjs"
+import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
 const selectorRangoUniversal = async (metadatos) => {
     try {
         const fechaInicio_rango_ISO = metadatos.fechaInicio_rango_ISO

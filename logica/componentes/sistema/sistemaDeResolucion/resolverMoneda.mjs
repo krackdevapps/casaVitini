@@ -1,4 +1,4 @@
-import { conexion } from '../db.mjs';
+import { conexion } from '../../db.mjs';
 const resolverMoneda = async (moneda) => {
     try {
         const monedaIDV = moneda

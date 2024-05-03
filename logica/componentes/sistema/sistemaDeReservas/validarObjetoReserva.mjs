@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon';
 import { conexion } from '../../db.mjs';
 import { codigoZonaHoraria } from '../codigoZonaHoraria.mjs';
-import { validadoresCompartidos } from '../../validadoresCompartidos.mjs'
+import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs'
 import { limitesReservaPublica } from './limitesReservaPublica.mjs';
-import { resolverApartamentoUI } from '../resolverApartamentoUI.mjs'
-import { resolverHabitacionUI } from '../resolverHabitacionUI.mjs';
+import { resolverApartamentoUI } from '../sistemaDeResolucion/resolverApartamentoUI.mjs'
+import { resolverHabitacionUI } from '../sistemaDeResolucion/resolverHabitacionUI.mjs';
 import { apartamentosPorRango } from '../selectoresCompartidos/apartamentosPorRango.mjs';
 const validarObjetoReserva = async (reserva) => {
     try {

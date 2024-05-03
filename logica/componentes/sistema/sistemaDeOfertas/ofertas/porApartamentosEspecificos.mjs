@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import { validadoresCompartidos } from "../../../validadoresCompartidos.mjs";
+import { validadoresCompartidos } from "../../validadores/validadoresCompartidos.mjs";
 import { conexion } from "../../../db.mjs";
 const compararArraysStrings = (array1, array2) => {
     return array2.every(apartamento => array1.includes(apartamento));

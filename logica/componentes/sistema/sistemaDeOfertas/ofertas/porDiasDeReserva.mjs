@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import Decimal from "decimal.js";
 import { conexion } from "../../../db.mjs";
-import { validadoresCompartidos } from "../../../validadoresCompartidos.mjs";
+import { validadoresCompartidos } from "../../validadores/validadoresCompartidos.mjs";
 const porDiasDeReserva = async (reserva) => {
     try {
         const fechaEntradaReserva_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(reserva.fechas.entrada)).fecha_ISO

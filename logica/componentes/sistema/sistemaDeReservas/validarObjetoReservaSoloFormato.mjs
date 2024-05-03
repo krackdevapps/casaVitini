@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { conexion } from '../../db.mjs';
 import { codigoZonaHoraria } from '../codigoZonaHoraria.mjs';
-import { validadoresCompartidos } from '../../validadoresCompartidos.mjs';
+import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 const validarObjetoReservaSoloFormato = async (reserva) => {
     try {
         const fechaRegex = /^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4}$/;

@@ -102,10 +102,10 @@ const configuracionApartamento = async (apartamentos) => {
     } catch (error) {
         throw error;
     }
-    let OK = {
-        "configuracionApartamento": configuracion
+    const ok = {
+        configuracionApartamento: configuracion
     }
-    return OK
+    return ok
 }
 export {
     configuracionApartamento

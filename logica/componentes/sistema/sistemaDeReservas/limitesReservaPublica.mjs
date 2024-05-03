@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { validadoresCompartidos } from '../../validadoresCompartidos.mjs';
+import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { codigoZonaHoraria } from '../codigoZonaHoraria.mjs';
 import { obtenerParametroConfiguracion } from '../obtenerParametroConfiguracion.mjs';
 const limitesReservaPublica = async (fechas) => {

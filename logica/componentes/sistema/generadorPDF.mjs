@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { createRequire } from 'module';
-import { validadoresCompartidos } from '../validadoresCompartidos.mjs';
+import { validadoresCompartidos } from './validadores/validadoresCompartidos.mjs';
 import Decimal from 'decimal.js';
 import { DateTime } from 'luxon';
 const require = createRequire(import.meta.url);

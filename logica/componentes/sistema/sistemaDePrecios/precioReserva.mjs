@@ -3,7 +3,7 @@ import { validarObjetoReservaSoloFormato } from '../sistemaDeReservas/validarObj
 import { precioRangoApartamento } from './precioRangoApartamento.mjs';
 import { aplicarImpuestos } from './aplicarImpuestos.mjs';
 import Decimal from 'decimal.js';
-import { validadoresCompartidos } from '../../validadoresCompartidos.mjs';
+import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { sistemaDeOfertas } from '../../sistema/sistemaDeOfertas/sistemaDeOfertas.mjs';
 import { conexion } from '../../db.mjs';
 Decimal.set({ precision: 100 });

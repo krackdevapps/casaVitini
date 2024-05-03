@@ -1,4 +1,4 @@
-import { conexion } from '../db.mjs';
+import { conexion } from '../../db.mjs';
 const resolverApartamentoUI = async (apartamentoIDV) => {
     try {
         const resolucionNombreApartamento = await conexion.query(`SELECT "apartamentoUI" FROM apartamentos WHERE apartamento = $1`, [apartamentoIDV])

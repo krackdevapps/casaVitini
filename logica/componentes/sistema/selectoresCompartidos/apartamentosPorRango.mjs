@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { conexion } from '../../db.mjs';
 import { apartamentosOcupadosAirbnb } from '../calendariosSincronizados/airbnb/apartamentosOcudaosAirbnb.mjs';
-import { validadoresCompartidos } from '../../validadoresCompartidos.mjs';
+import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { reservasPorRango } from './reservasPorRango.mjs';
 import { bloqueosPorRango_apartamentoIDV } from './bloqueosPorRango_apartamentoIDV.mjs';
 const apartamentosPorRango = async (metadatos) => {
