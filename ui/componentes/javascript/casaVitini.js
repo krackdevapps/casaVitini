@@ -5237,13 +5237,10 @@ const casaVitini = {
                     main.appendChild(contenedorBotones)
 
                     const privacidad = casaVitini.componentes.privacidad.arranque()
-                    console.log("privacidad", privacidad)
                     if (privacidad) {
-                        console.log("true")
                         const contenedorDecision = casaVitini.componentes.privacidad.ui.contenedorDecision()
                         main.appendChild(contenedorDecision)
                     } else {
-                        console.log("true")
                         const revocarDecision = casaVitini.componentes.privacidad.ui.revocarDecision()
                         main.appendChild(revocarDecision)
                     }
@@ -5621,29 +5618,8 @@ const casaVitini = {
             advertenciaInmersivaUI.appendChild(marcoElastico)
             document.querySelector("main").appendChild(advertenciaInmersivaUI)
         },
-        arranque: async () => {
-            window.addEventListener("popstate", casaVitini.componentes.navegacion)
+   
 
-            document.getElementById("botonMenuResponsivo").addEventListener("click", casaVitini.componentes.menuResponsivo)
-            window.addEventListener("resize", casaVitini.componentes.limpiarTodoElementoVolatil)
-            //  casaVitini.componentes.controlGlobalScroll()
-            const vistas = document.querySelectorAll("[vista]")
-
-            for (const vistaMenu of vistas) {
-                vistaMenu.addEventListener("click", casaVitini.componentes.cambiarVista)
-            }
-
-            await casaVitini.componentes.controladorEstadoIDX()
-            document.querySelector("#navegadorResponsivo").style.opacity = "1"
-            const url = window.location.pathname;
-
-            if (url === "/") {
-                return casaVitini.componentes.controladorVista("portada")
-            } else {
-                return casaVitini.componentes.controladorVista(url)
-            }
-
-        },
         controlGlobalScroll: () => {
             const selectorBloqueMenusGlobales = document.querySelector("[componente=marcoNavegacion]")
             const selectorLogo = document.querySelector("[componente=logoCasaVitini]")
@@ -9789,7 +9765,6 @@ const casaVitini = {
         privacidad: {
             arranque: (vista) => {
                 const filtro = /privacidad(\/.*)?$/
-                console.log("vista que llega", vista)
                 const resultadoFiltro = filtro.test(vista)
                 if (vista && resultadoFiltro) {
                     return false
@@ -9815,7 +9790,6 @@ const casaVitini = {
             borrarCookies: () => {
                 localStorage.clear()
                 const cookies = casaVitini.componentes.privacidad.obtenerCookies()
-                console.log("cookies", cookies)
                 for (const [nombreCookies, valorCookie] of Object.entries(cookies)) {
                     if ('cookieStore' in window) {
                         cookieStore?.delete(nombreCookies)
@@ -9938,6 +9912,29 @@ const casaVitini = {
 
                 }
             }
+        },
+        arranque: async () => {
+            window.addEventListener("popstate", casaVitini.componentes.navegacion)
+            await casaVitini.componentes.controladorEstadoIDX()
+
+            document.getElementById("botonMenuResponsivo").addEventListener("click", casaVitini.componentes.menuResponsivo)
+            window.addEventListener("resize", casaVitini.componentes.limpiarTodoElementoVolatil)
+            //  casaVitini.componentes.controlGlobalScroll()
+            const vistas = document.querySelectorAll("[vista]")
+
+            for (const vistaMenu of vistas) {
+                vistaMenu.addEventListener("click", casaVitini.componentes.cambiarVista)
+            }
+
+            document.querySelector("#navegadorResponsivo").style.opacity = "1"
+            const url = window.location.pathname;
+
+            if (url === "/") {
+                return casaVitini.componentes.controladorVista("portada")
+            } else {
+                return casaVitini.componentes.controladorVista(url)
+            }
+
         }
     },
     IDX: {
@@ -10027,4 +10024,5 @@ const casaVitini = {
         },
     },
 }
-window.addEventListener("load", casaVitini.componentes.arranque)
+//window.addEventListener("load", casaVitini.componentes.arranque)
+casaVitini.componentes.arranque()

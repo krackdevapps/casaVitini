@@ -757,9 +757,7 @@ const administracion = {
                     selectorFechaSalidaUI.innerText = "Seleccionar"
                 }
                 //const resolverReservas = await casaVitini.administracion.reservas.buscador.resolverReservas(transaccion)
-                console.log("transacion", transaccion)
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                console.log("respuestaServidor", respuestaServidor)
                 const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (!instanciaRenderizada) {
                     return
@@ -1675,9 +1673,7 @@ const administracion = {
                         reserva: Number(reserva),
                         apartamento: Number(apartamentoUID)
                     }
-                    console.log("transaccion", transaccion)
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                    console.log("respuestaServidor", respuestaServidor)
                     const menuVolatilRenderizado = document.querySelector(`[componente=menuVolatil][instanciaUID="${instanciaUID}"]`)
                     if (!menuVolatilRenderizado) {
                         return
@@ -1704,7 +1700,6 @@ const administracion = {
                             return opcion
                         }
                         if (selector === "bloqueoPermanente") {
-                            console.log("weww")
                             const opcion = document.createElement("p")
                             opcion.classList.add("opcionCambioCama")
                             opcion.innerText = `Eliminar ${apartamentoUI} bloquearlo permanentemente. (Debera desbloquearlo manualmente el bloqueo permanente)`
@@ -17360,7 +17355,6 @@ const administracion = {
 
 
                     const comportamientosUI = (data) => {
-                        console.log("data", data)
                         const tipo = data.tipo
                         const uid = data.uid
                         const nombreComportamiento = data.nombreComportamiento
@@ -18216,7 +18210,6 @@ const administracion = {
                 }
                 if (respuestaServidor?.ok) {
                     const detalles = respuestaServidor?.ok
-                    console.log("detalles", detalles)
                     const uid = detalles.uid
                     const estado = detalles.estado
                     const espacioOfertas = document.querySelector("[componente=espacioOfertas]")
@@ -18283,7 +18276,6 @@ const administracion = {
                 if (tipo === "porDias") {
                     transaccion.diasArray = diasArray
                 }
-                console.log("transaccion", transaccion)
                 const selectoresApartamentos = [...document.querySelectorAll(`[descuentoDedicadoIDV]`)]
                 selectoresApartamentos.map((apartamento) => {
                     const apartamentoIDV = apartamento.getAttribute("descuentoDedicadoIDV")
@@ -22737,7 +22729,6 @@ const administracion = {
                     }
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                     const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-                    console.log("respuestaServidor", respuestaServidor)
                     if (!seccionRenderizada) return
 
                     if (respuestaServidor?.error) {

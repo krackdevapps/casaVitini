@@ -1,8 +1,8 @@
-import { Conexion } from './db.mjs';
+import { conexion } from './db.mjs';
 // Crear una tabla para almacenar las sesiones
 const createTable = async () => {
   try {
-    await Conexion.query(
+    await conexion.query(
       `CREATE TABLE IF NOT EXISTS session (
         sid varchar NOT NULL COLLATE "default",
         sess json NOT NULL,
@@ -18,7 +18,7 @@ const createTable = async () => {
 // Borrar las sesiones caducadas
 const pruneSessions = async () => {
   try {
-    await Conexion.query(
+    await conexion.query(
       `DELETE FROM session
         WHERE expire < NOW();`
     );
@@ -42,7 +42,7 @@ const storeSession = async (sid, sess, expire) => {
 // Obtener la sesión de la base de datos
 const getSession = async (sid) => {
   try {
-    const result = await Conexion.query(
+    const result = await conexion.query(
       `SELECT sess FROM session
         WHERE sid = $1
         AND expire > NOW();`,
@@ -56,7 +56,7 @@ const getSession = async (sid) => {
 // Borrar la sesión de la base de datos
 const deleteSession = async (sid) => {
   try {
-    await Conexion.query(
+    await conexion.query(
       `DELETE FROM session
         WHERE sid = $1;`,
       [sid]
@@ -66,10 +66,10 @@ const deleteSession = async (sid) => {
   }
 };
 // Exportar todas las funciones
-module.exports = {
+export {
   createTable,
   pruneSessions,
   storeSession,
   getSession,
   deleteSession
-};
+}
