@@ -24,6 +24,5 @@ export const obtenerRoles = async (entrada, salida) => {
             error: errorCapturado.message
         };
         salida.json(error);
-    } finally {
     }
 }

@@ -1,4 +1,6 @@
+import { DateTime } from "luxon";
 import { componentes } from "../componentes.mjs";
+import { conexion } from "../componentes/db.mjs";
 import { vitiniCrypto } from "../sistema/vitiniCrypto.mjs";
 
 export const IDX = async (entrada, salida) => {
