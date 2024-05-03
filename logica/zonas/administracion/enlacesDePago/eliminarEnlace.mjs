@@ -1,3 +1,4 @@
+import { conexion } from "../../../componentes/db.mjs";
 export const eliminarEnlace = async (entrada, salida) => {
                 try {
                     const enlaceUID = entrada.body.enlaceUID;

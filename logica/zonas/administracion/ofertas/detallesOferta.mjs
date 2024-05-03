@@ -1,3 +1,5 @@
+import { conexion } from "../../../componentes/db.mjs";
+import { obtenerDetallesOferta } from "../../../sistema/sistemaDeOfertas/obtenerDetallesOferta.mjs";
 export const detallesOferta = async (entrada, salida) => {
                 try {
                     const ofertaUID = entrada.body.ofertaUID;

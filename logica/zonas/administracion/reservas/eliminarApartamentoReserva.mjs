@@ -1,3 +1,8 @@
+import { Mutex } from "async-mutex";
+import { conexion } from "../../../componentes/db.mjs";
+import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/insertarTotalesReserva.mjs";
+
+
 export const eliminarApartamentoReserva = async (entrada, salida) => {
                 const mutex = new Mutex();
                 const bloqueoEliminarApartamentoReserva = await mutex.acquire();

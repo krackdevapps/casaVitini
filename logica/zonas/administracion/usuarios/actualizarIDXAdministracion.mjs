@@ -1,3 +1,7 @@
+import { componentes } from "../../../componentes.mjs";
+import { conexion } from "../../../componentes/db.mjs";
+
+
 export const actualizarIDXAdministracion = async (entrada, salida) => {
                 try {
                     const usuarioIDX = entrada.body.usuarioIDX;

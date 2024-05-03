@@ -1,3 +1,7 @@
+import { conexion } from "../../../componentes/db.mjs";
+import { utilidades } from "../../../componentes/utilidades.mjs";
+import { controlCaducidadEnlacesDePago } from "../../../sistema/controlCaducidadEnlacesDePago.mjs";
+
 export const detallesDelEnlace = async (entrada, salida) => {
                 try {
                     const enlaceUID = entrada.body.enlaceUID;

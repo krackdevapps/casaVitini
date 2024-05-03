@@ -1,3 +1,6 @@
+import { conexion } from "../../../componentes/db.mjs";
+
+conexion
 export const eliminarOferta = async (entrada, salida) => {
                 await mutex.acquire();
                 try {

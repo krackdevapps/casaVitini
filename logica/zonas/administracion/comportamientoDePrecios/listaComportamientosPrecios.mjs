@@ -1,3 +1,4 @@
+import { conexion } from "../../../componentes/db.mjs";
 export const listaComportamientosPrecios = async (entrada, salida) => {
                 try {
                     const listaComportamientoPrecios = `

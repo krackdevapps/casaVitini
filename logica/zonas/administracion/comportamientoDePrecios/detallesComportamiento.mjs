@@ -1,3 +1,6 @@
+import { conexion } from "../../../componentes/db.mjs";
+
+
 export const detallesComportamiento = async (entrada, salida) => {
                 try {
                     const comportamientoUID = entrada.body.comportamientoUID;

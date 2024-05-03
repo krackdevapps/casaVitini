@@ -1,3 +1,7 @@
+import { Mutex } from "async-mutex";
+import { conexion } from "../../../componentes/db.mjs";
+
+
 export const anadirPernoctanteHabitacion = async (entrada, salida) => {
                 const mutex = new Mutex();
                 const bloqueoAnadirPernoctanteHabitacion = await mutex.acquire();

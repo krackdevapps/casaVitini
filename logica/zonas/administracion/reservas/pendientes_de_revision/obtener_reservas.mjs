@@ -1,6 +1,7 @@
+import { conexion } from "../../../../componentes/db.mjs";
 export const obtener_reservas = async (entrada, salida) => {
-                    // Obtener todas las reservas no pagadas de origen cliente
-                    const obtenerReservas = `
+    // Obtener todas las reservas no pagadas de origen cliente
+    const obtenerReservas = `
                         SELECT
                             r.reserva,
                             to_char(r.entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
@@ -18,19 +19,19 @@ export const obtener_reservas = async (entrada, salida) => {
                         ORDER BY 
                             r.creacion ASC
                         ;`;
-                    const parametrosDeBusqueda = [
-                        "cliente",
-                        "noPagado",
-                        "confirmada"
-                    ];
-                    const resuelveReservasPendientes = await conexion.query(obtenerReservas, parametrosDeBusqueda);
-                    const reservasPendientes = resuelveReservasPendientes.rows;
-                    const ok = {
-                        ok: "Aquí tienes las reservas de origen publico pendientes por revisar",
-                        reservas: []
-                    };
-                    if (resuelveReservasPendientes.rowCount > 0) {
-                        ok.reservas.push(...reservasPendientes);
-                    }
-                    salida.json(ok);
-                }
+    const parametrosDeBusqueda = [
+        "cliente",
+        "noPagado",
+        "confirmada"
+    ];
+    const resuelveReservasPendientes = await conexion.query(obtenerReservas, parametrosDeBusqueda);
+    const reservasPendientes = resuelveReservasPendientes.rows;
+    const ok = {
+        ok: "Aquí tienes las reservas de origen publico pendientes por revisar",
+        reservas: []
+    };
+    if (resuelveReservasPendientes.rowCount > 0) {
+        ok.reservas.push(...reservasPendientes);
+    }
+    salida.json(ok);
+}

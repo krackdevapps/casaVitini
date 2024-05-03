@@ -1,3 +1,9 @@
+import Decimal from "decimal.js";
+import { componentes } from "../../../../componentes.mjs";
+import { obtenerTotalReembolsado } from "../../../../sistema/sistemaDePrecios/obtenerTotalReembolsado.mjs";
+import { detallesReserva } from "../../../../sistema/sistemaDeReservas/detallesReserva.mjs";
+
+
 export const obtenerPagosDeLaReserva = async (entrada, salida) => {
                     try {
                         const reservaUID = entrada.body.reservaUID;

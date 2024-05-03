@@ -1,3 +1,7 @@
+import { conexion } from "../../../componentes/db.mjs";
+import { eliminarBloqueoCaducado } from "./eliminarBloqueoCaducado.mjs";
+import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
+
 export const detallesDelBloqueo = async (entrada, salida) => {
                 try {
                     const apartamentoIDV = entrada.body.apartamentoIDV;
@@ -11,7 +15,7 @@ export const detallesDelBloqueo = async (entrada, salida) => {
                         const error = "la clave 'bloqueoUID' debe de tener un dato tipo 'number', positivo y entero";
                         throw new Error(error);
                     }
-                    await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado();
+                    await eliminarBloqueoCaducado();
                     const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
                     const consultaDetallesBloqueo = `
                             SELECT

@@ -1,3 +1,4 @@
+import { conexion } from "../../../componentes/db.mjs";
 export const eliminarComportamiento = async (entrada, salida) => {
                 await mutex.acquire();
                 try {

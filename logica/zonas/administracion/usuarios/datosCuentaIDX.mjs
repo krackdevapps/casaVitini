@@ -1,3 +1,5 @@
+import { conexion } from "../../../componentes/db.mjs";
+
 export const datosCuentaIDX = async (entrada, salida) => {
                 try {
                     const usuarioIDX = entrada.body.usuarioIDX;

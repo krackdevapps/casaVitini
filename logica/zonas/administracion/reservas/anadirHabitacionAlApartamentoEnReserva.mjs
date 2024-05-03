@@ -1,3 +1,6 @@
+import { conexion } from "../../../componentes/db.mjs";
+import { estadoHabitacionesApartamento } from "../../../sistema/sistemaDeReservas/estadoHabitacionesApartamento.mjs";
+
 export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) => {
                 const mutex = new Mutex();
                 const bloqueoaAnadirHabitacionAlApartamentoEnReserva = await mutex.acquire();

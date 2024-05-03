@@ -1,3 +1,10 @@
+import { DateTime } from "luxon";
+import { conexion } from "../../../componentes/db.mjs";
+import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
+import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
+import { componentes } from "../../../componentes.mjs";
+import { eventosDelApartamento } from "../../../sistema/calendariosSincronizados/airbnb/eventosDelApartamento.mjs";
+
 export const detallesSituacionApartamento = async (entrada, salida) => {
                 try {
                     const apartamentoIDV = entrada.body.apartamentoIDV;

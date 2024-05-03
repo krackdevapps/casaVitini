@@ -1,27 +1,28 @@
+import { conexion } from "../../../../componentes/db.mjs";
+
 export const crearMensaje = async (entrada, salida) => {
-                    try {
-                        const mensaje = entrada.body.mensaje;
-                        if (!mensaje || typeof mensaje !== "string" || mensaje.length === 0) {
-                            const error = "Por favor escriba un mensaje para guardar, este debe de ser una cadena de texto.";
-                            throw new Error(error);
-                        }
+    try {
+        const mensaje = entrada.body.mensaje;
+        if (!mensaje || typeof mensaje !== "string" || mensaje.length === 0) {
+            const error = "Por favor escriba un mensaje para guardar, este debe de ser una cadena de texto.";
+            throw new Error(error);
+        }
 
-                        const bufferObj = Buffer.from(mensaje, "utf8");
-                        const mensajeB64 = bufferObj.toString("base64");
+        const bufferObj = Buffer.from(mensaje, "utf8");
+        const mensajeB64 = bufferObj.toString("base64");
 
-
-                        await conexion.query('BEGIN'); // Inicio de la transacción
-                        const consultaPosicionInicial = `
+        await conexion.query('BEGIN'); // Inicio de la transacción
+        const consultaPosicionInicial = `
                                 SELECT 
                                     *
                                 FROM 
                                     "mensajesEnPortada";
                                `;
-                        const resuelvePosicionInicial = await conexion.query(consultaPosicionInicial);
-                        const posicionInicial = resuelvePosicionInicial.rowCount + 1;
+        const resuelvePosicionInicial = await conexion.query(consultaPosicionInicial);
+        const posicionInicial = resuelvePosicionInicial.rowCount + 1;
 
-                        const estadoInicial = "desactivado";
-                        const crearMensaje = `
+        const estadoInicial = "desactivado";
+        const crearMensaje = `
                                 INSERT INTO "mensajesEnPortada"
                                 (
                                 mensaje,
@@ -35,25 +36,25 @@ export const crearMensaje = async (entrada, salida) => {
                                 `;
 
 
-                        const resuelveCreacion = await conexion.query(crearMensaje, [mensajeB64, estadoInicial, posicionInicial]);
+        const resuelveCreacion = await conexion.query(crearMensaje, [mensajeB64, estadoInicial, posicionInicial]);
 
 
-                        if (resuelveCreacion.rowCount === 0) {
-                            const error = "No se ha podido insertar el mensaje";
-                            throw new Error(error);
-                        }
-                        const ok = {
-                            ok: "Se ha creado el nuevo mensaje",
-                            mensajeUID: resuelveCreacion.rows[0].mensajeUID,
-                        };
-                        salida.json(ok);
-                        await conexion.query('COMMIT');
-                    } catch (errorCapturado) {
-                        await conexion.query('ROLLBACK');
-                        const error = {
-                            error: errorCapturado.message
-                        };
-                        salida.json(error);
-                    }
+        if (resuelveCreacion.rowCount === 0) {
+            const error = "No se ha podido insertar el mensaje";
+            throw new Error(error);
+        }
+        const ok = {
+            ok: "Se ha creado el nuevo mensaje",
+            mensajeUID: resuelveCreacion.rows[0].mensajeUID,
+        };
+        salida.json(ok);
+        await conexion.query('COMMIT');
+    } catch (errorCapturado) {
+        await conexion.query('ROLLBACK');
+        const error = {
+            error: errorCapturado.message
+        };
+        salida.json(error);
+    }
 
-                }
+}
