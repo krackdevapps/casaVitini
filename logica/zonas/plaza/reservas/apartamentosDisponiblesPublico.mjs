@@ -6,11 +6,12 @@ import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apa
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
 import { precioRangoApartamento } from "../../../sistema/sistemaDePrecios/precioRangoApartamento.mjs";
+import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 
 export const apartamentosDisponiblesPublico = async (entrada, salida) => {
     try {
         if (!await interruptor("aceptarReservasPublicas")) {
-            throw new Error(mensajesInterruptores.aceptarReservasPublicas);
+            throw new Error(mensajesUI.aceptarReservasPublicas);
 
         }
         const fechaEntrada = entrada.body.entrada;
