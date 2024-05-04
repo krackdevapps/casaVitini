@@ -6223,7 +6223,7 @@
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
-    
+
 }
 
 
@@ -6454,7 +6454,7 @@
     flex-direction: row;
     justify-content: center;
 }
- 
+
 
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .diaUI {
     background: rgba(255, 255, 255, 0.3);
@@ -6996,7 +6996,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS="administracion/comportamiento_de_precios"] .contenedorTituloEstado {
     padding: 6px;
- 
+
 }
 
 [zonaCSS="administracion/ofertas"] .ofertaUIFechaContenedor {
@@ -7027,6 +7027,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: wrap;
     font-weight: bold;
 }
+
 [zonaCSS="administracion/comportamiento_de_precios"] .contenedorDiasSeleccionados {
     background: rgba(0, 0, 0, 0.1);
     padding: 10px;

@@ -1,8 +1,9 @@
-import { componentes } from "../../../componentes.mjs";
+import { crearEnlacePDF } from "../../../sistema/sistemaDePDF/crearEnlacePDF.mjs";
+
 export const crearEnlacesPDF = async (entrada, salida) => {
     try {
         const reserva = entrada.body.reserva;
-        const enlaces = await componentes.gestionEnlacesPDF.crearEnlacePDF(reserva);
+        const enlaces = await crearEnlacePDF(reserva);
         const ok = {
             ok: "ok",
             enlaces: enlaces

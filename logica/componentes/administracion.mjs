@@ -10328,19 +10328,19 @@ const administracion = {
             const horaLocalPeticion = {
                 zona: "componentes/fechaLocal"
             }
-            const horaLocal = await casaVitini.componentes.servidor(horaLocalPeticion)
-            if (horaLocal?.error) {
+            const respuestaServidor = await casaVitini.componentes.servidor(horaLocalPeticion)
+            if (respuestaServidor?.error) {
                 casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles()
                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
             }
-            if (horaLocal.fechaISO) {
+            if (respuestaServidor.fechaISO) {
                 const zonaHoraria = horaLocal.zonaHoraria
-                const dia = horaLocal.dia
-                const mes = horaLocal.mes
-                const ano = horaLocal.ano
-                const hora = horaLocal.hora
-                const minuto = String(horaLocal.minuto).padStart(2, "0")
-                const fechaISO = horaLocal.fechaISO
+                const dia = respuestaServidor.dia
+                const mes = respuestaServidor.mes
+                const ano = respuestaServidor.ano
+                const hora = respuestaServidor.hora
+                const minuto = String(respuestaServidor.minuto).padStart(2, "0")
+                const fechaISO = respuestaServidor.fechaISO
                 const fechaUI = `Hoy son las ${hora}:${minuto}, ${dia} del ${mes} del ${ano}`
                 const contenedorFecha = document.createElement("div")
                 contenedorFecha.classList.add("adminitracion_situacion_portada_contenedorFecha")

@@ -1,6 +1,6 @@
-import { componentes } from "../../../componentes.mjs";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { eliminarCuentasNoVerificadas } from "../../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 
 
 export const actualizarIDXAdministracion = async (entrada, salida) => {
@@ -26,7 +26,7 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
             const error = "El campo nuevoIDX solo admite minúsculas y numeros";
             throw new Error(error);
         }
-        await componentes.eliminarCuentasNoVerificadas();
+        await eliminarCuentasNoVerificadas();
         await conexion.query('BEGIN'); // Inicio de la transacción
         const actualizarIDX = `
                             UPDATE usuarios

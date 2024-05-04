@@ -1,12 +1,13 @@
 import { DateTime } from "luxon";
-import { componentes } from '../../componentes.1.mjs';
 import { conexion } from "../../componentes/db.mjs";
 import { vitiniCrypto } from "../../sistema/vitiniCrypto.mjs";
+import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
+import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
 
 export const conectar = async (entrada, salida) => {
     try {
-        await componentes.eliminarCuentasNoVerificadas();
-        await componentes.borrarCuentasCaducadas();
+        await eliminarCuentasNoVerificadas();
+        await borrarCuentasCaducadas();
 
         const usuario = entrada.body.usuario;
         const filtroIDX = /^[a-z0-9_\-\.]+$/;

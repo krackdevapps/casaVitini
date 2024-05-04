@@ -1,6 +1,6 @@
-import { componentes } from "../../../componentes.mjs";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { eliminarCuentasNoVerificadas } from "../../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { vitiniCrypto } from "../../../sistema/vitiniCrypto.mjs";
 
 
@@ -56,7 +56,7 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
             const error = "El nombre de usuario no esta disponbile, escoge otro";
             throw new Error(error);
         }
-        await componentes.eliminarCuentasNoVerificadas();
+        await eliminarCuentasNoVerificadas();
         const estadoCuenta = "desactivado";
         await conexion.query('BEGIN'); // Inicio de la transacción
         const cryptoData = {

@@ -3,9 +3,9 @@ import { conexion } from "../../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { codigoZonaHoraria } from "../../../../sistema/codigoZonaHoraria.mjs";
 import { utilidades } from "../../../../componentes/utilidades.mjs";
-import { componentes } from "../../../../componentes.mjs";
 import { actualizarEstadoPago } from "../../../../sistema/sistemaDePrecios/actualizarEstadoPago.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { detallesDelPago as detallesDelPago_square} from "../../../../componentes/pasarelas/square/detallesDelPago.mjs";
 
 export const crearPagoManual = async (entrada, salida) => {
     try {
@@ -225,7 +225,7 @@ export const crearPagoManual = async (entrada, salida) => {
                     const error = "Ya existe este id del pago asociado a esta reserva";
                     throw new Error(error);
                 }
-                const detallesDelPago = await componentes.pasarela.detallesDelPago(pagoUIDPasarela);
+                const detallesDelPago = await detallesDelPago_square(pagoUIDPasarela);
                 if (detallesDelPago.error) {
                     const errorUID = detallesDelPago.error.errors[0].code;
                     let error;

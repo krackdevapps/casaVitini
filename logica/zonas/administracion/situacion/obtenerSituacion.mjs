@@ -1,7 +1,6 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
 import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
-import { componentes } from "../../../componentes.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { apartamentosOcupadosHoy_paraSitaucion } from "../../../sistema/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";

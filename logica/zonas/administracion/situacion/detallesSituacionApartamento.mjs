@@ -2,9 +2,9 @@ import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
 import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
-import { componentes } from "../../../componentes.mjs";
 import { eventosDelApartamento } from "../../../sistema/calendariosSincronizados/airbnb/eventosDelApartamento.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracionGlobal/horasSalidaEntrada.mjs";
 
 export const detallesSituacionApartamento = async (entrada, salida) => {
     try {
@@ -49,7 +49,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         const anoPresenteTZ = tiempoZH.year;
         const horaPresenteTZ = tiempoZH.hour;
         const minutoPresenteTZ = tiempoZH.minute;
-        const horasSalidaEntrada = await componentes.administracion.reservas.horasSalidaEntrada();
+        const horasSalidaEntrada = await horasSalidaEntrada_();
         //const zonaHoraria = horasSalidaEntrada.zonaHoraria
         const horaEntradaTZ = horasSalidaEntrada.horaEntradaTZ;
         const horaSalidaTZ = horasSalidaEntrada.horaSalidaTZ;

@@ -1,10 +1,11 @@
-import { componentes } from "../../componentes.mjs";
+import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
+import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { conexion } from "../../componentes/db.mjs";
 
 export const estado = async (entrada, salida) => {
     try {
-        await componentes.eliminarCuentasNoVerificadas();
-        await componentes.borrarCuentasCaducadas();
+        await eliminarCuentasNoVerificadas();
+        await borrarCuentasCaducadas();
 
         const usuario = entrada.session?.usuario;
         const rol = entrada.session?.rol;

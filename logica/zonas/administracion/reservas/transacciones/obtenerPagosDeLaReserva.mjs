@@ -1,8 +1,8 @@
 import Decimal from "decimal.js";
-import { componentes } from "../../../../componentes.mjs";
 import { obtenerTotalReembolsado } from "../../../../sistema/sistemaDePrecios/obtenerTotalReembolsado.mjs";
 import { detallesReserva } from "../../../../sistema/sistemaDeReservas/detallesReserva.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { pagosDeLaReserva as pagosDeLaReserva_ } from "../../../../sistema/sistemaDeReservas/pagosDeLaReserva.mjs";
 
 
 export const obtenerPagosDeLaReserva = async (entrada, salida) => {
@@ -19,7 +19,7 @@ export const obtenerPagosDeLaReserva = async (entrada, salida) => {
             const error = "el campo 'reservaUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
             throw new Error(error);
         }
-        const detallesPagosReserva = await componentes.administracion.reservas.transacciones.pagosDeLaReserva(reservaUID);
+        const detallesPagosReserva = await pagosDeLaReserva_(reservaUID);
         const metadatos = {
             reservaUID: Number(reservaUID),
             solo: "informacionGlobal"
