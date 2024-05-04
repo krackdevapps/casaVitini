@@ -4,7 +4,7 @@ import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { IDX } from "../../../sistema/VitiniIDX/control.mjs";
 
-const control = IDX(entrada)
+
 
 
 export const listarReservas = async (entrada, salida) => {

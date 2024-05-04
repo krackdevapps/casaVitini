@@ -1,5 +1,3 @@
-
-
 export const IDX = (entrada) => {
     try {
         const grupos = {

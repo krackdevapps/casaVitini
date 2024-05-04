@@ -3,9 +3,10 @@ import { cambiarVista as cambiarVista_ } from "../../sistema/cambiarVista.mjs";
 export const cambiarVista = async (entrada, salida) => {
     try {
         let vista = entrada.body.vista;
+        console.log("vista", vista)
         if (!vista) {
             const error = "Tienes que definir 'Vista' con el nombre de la vista";
-            throw new Error(error);
+           throw new Error(error);
         }
         vista = vista.replace(/[^A-Za-z0-9_\-/=:]/g, '');
         const transaccion = {

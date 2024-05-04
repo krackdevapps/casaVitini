@@ -3,9 +3,9 @@ import { conexion } from "../../../componentes/db.mjs";
 import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
-import { vitiniSysError } from "../../../puerto.mjs";
 import { validarModificacionRangoFechaResereva } from "../../../sistema/validadores/validarModificacionRangoFechaResereva.mjs";
 import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/insertarTotalesReserva.mjs";
+import { vitiniSysError } from "../../componentes/vitiniSysError.mjs";
 
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
