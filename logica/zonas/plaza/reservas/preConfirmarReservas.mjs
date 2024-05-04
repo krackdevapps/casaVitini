@@ -4,7 +4,7 @@ import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/elim
 import { validarObjetoReserva } from "../../../sistema/sistemaDeReservas/validarObjetoReserva.mjs";
 import { insertarReserva } from "../../../sistema/sistemaDeReservas/insertarReserva.mjs";
 import { detallesReserva } from "../../../sistema/sistemaDeReservas/detallesReserva.mjs";
-import { componentes } from "../../../componentes.mjs";
+import { componentes } from '../../../componentes.1.mjs';
 import { enviarEmailReservaConfirmada } from "../../../sistema/sistemaDeMail/enviarEmailReservaConfirmada.mjs";
 import { actualizarEstadoPago } from "../../../sistema/sistemaDePrecios/actualizarEstadoPago.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";

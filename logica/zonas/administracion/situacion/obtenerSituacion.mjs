@@ -5,6 +5,7 @@ import { componentes } from "../../../componentes.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { apartamentosOcupadosHoy_paraSitaucion } from "../../../sistema/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { horasSalidaEntrada } from "../../../sistema/configuracionGlobal/horasSalidaEntrada.mjs";
 
 
 export const obtenerSituacion = async (entrada, salida) => {
@@ -70,7 +71,7 @@ export const obtenerSituacion = async (entrada, salida) => {
         }
         if (resuelveConsultaReservasHoy.rowCount > 0) {
             const reservasHoy = resuelveConsultaReservasHoy.rows;
-            const horasSalidaEntrada = await componentes.administracion.reservas.horasSalidaEntrada();
+            const horasSalidaEntrada = await horasSalidaEntrada();
             const horaEntradaTZ = horasSalidaEntrada.horaEntradaTZ;
             const horaSalidaTZ = horasSalidaEntrada.horaSalidaTZ;
             //ok.fechaUTC = fechaActualUTC;

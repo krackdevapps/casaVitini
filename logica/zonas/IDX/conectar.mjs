@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { componentes } from "../../componentes.mjs";
+import { componentes } from '../../componentes.1.mjs';
 import { conexion } from "../../componentes/db.mjs";
 import { vitiniCrypto } from "../../sistema/vitiniCrypto.mjs";
 

@@ -47,7 +47,7 @@ import { obtenerDetallesOferta } from './sistema/sistemaDeOfertas/obtenerDetalle
 import { interruptor } from './sistema/configuracionGlobal/interruptor.mjs';
 import { apartamentosPorRango } from './sistema/selectoresCompartidos/apartamentosPorRango.mjs';
 import { evitarDuplicados } from './sistema/sistemaDePrecios/comportamientoPrecios/evitarDuplicados.mjs';
-import { componentes } from './componentes.mjs';
+import { componentes } from './componentes.1.mjs';
 import { conexion } from './componentes/db.mjs';
 import { mensajesInterruptores } from './hub.mjs';
 
