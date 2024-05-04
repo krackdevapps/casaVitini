@@ -1,5 +1,8 @@
+import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
+
 export const eliminarPerfilPrecioApartamento = async (entrada, salida) => {
+    const mutex  = new Mutex()
     await mutex.acquire();
     try {
         const apartamentoIDV = entrada.body.apartamentoIDV;

@@ -14,7 +14,5 @@ export const resolverMoneda = async (entrada, salida) => {
             error: errorCapturado.message
         };
         salida.json(error);
-    } finally {
     }
-
 }

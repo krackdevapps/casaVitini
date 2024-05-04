@@ -1,7 +1,9 @@
+import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
 
 export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
+    const mutex = new Mutex()
     await mutex.acquire();
     try {
         const apartamentoIDV = entrada.body.apartamentoIDV;
