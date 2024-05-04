@@ -4,7 +4,8 @@ import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { apartamentosOcupadosHoy_paraSitaucion } from "../../../sistema/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { horasSalidaEntrada } from "../../../sistema/configuracionGlobal/horasSalidaEntrada.mjs";
+import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracionGlobal/horasSalidaEntrada.mjs";
+import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
 
 
 export const obtenerSituacion = async (entrada, salida) => {
@@ -70,7 +71,7 @@ export const obtenerSituacion = async (entrada, salida) => {
         }
         if (resuelveConsultaReservasHoy.rowCount > 0) {
             const reservasHoy = resuelveConsultaReservasHoy.rows;
-            const horasSalidaEntrada = await horasSalidaEntrada();
+            const horasSalidaEntrada = await horasSalidaEntrada_();
             const horaEntradaTZ = horasSalidaEntrada.horaEntradaTZ;
             const horaSalidaTZ = horasSalidaEntrada.horaSalidaTZ;
             //ok.fechaUTC = fechaActualUTC;

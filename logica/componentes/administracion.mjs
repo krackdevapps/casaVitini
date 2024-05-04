@@ -10334,7 +10334,7 @@ const administracion = {
                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
             }
             if (respuestaServidor.fechaISO) {
-                const zonaHoraria = horaLocal.zonaHoraria
+                const zonaHoraria = respuestaServidor.zonaHoraria
                 const dia = respuestaServidor.dia
                 const mes = respuestaServidor.mes
                 const ano = respuestaServidor.ano
