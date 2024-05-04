@@ -1,6 +1,7 @@
+import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
-import { mutex } from "../../../puerto.mjs";
 export const eliminarPerfilImpuesto = async (entrada, salida) => {
+    const mutex = new Mutex
     await mutex.acquire();
     try {
         const impuestoUID = entrada.body.impuestoUID;

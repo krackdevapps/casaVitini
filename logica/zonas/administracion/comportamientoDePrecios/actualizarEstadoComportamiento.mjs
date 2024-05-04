@@ -1,8 +1,10 @@
+import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
-import { mutex } from "../../../puerto.mjs";
-
+Mutex
 
 export const actualizarEstadoComportamiento = async (entrada, salida) => {
+    const mutex = new Mutex();
+
     await mutex.acquire();
     try {
         const comportamientoUID = entrada.body.comportamientoUID;

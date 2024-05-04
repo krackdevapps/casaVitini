@@ -1,3 +1,5 @@
+const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
+const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
 export const squareConstruyeCliente = async (entrada, salida) => {
     try {
         const locationResponse = await clienteSquare.locationsApi.retrieveLocation(SQUARE_LOCATION_ID);

@@ -1,11 +1,13 @@
+import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
-import { mutex } from "../../../puerto.mjs";
+
 import { evitarDuplicados } from "../../../sistema/sistemaDePrecios/comportamientoPrecios/evitarDuplicados.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const crearComportamiento = async (entrada, salida) => {
+    const mutex = new Mutex
     await mutex.acquire();
     try {
         let nombreComportamiento = entrada.body.nombreComportamiento;

@@ -5,10 +5,11 @@ import { utilidades } from './componentes/utilidades.mjs';
 import Decimal from 'decimal.js';                 
 import { DateTime } from 'luxon';
 import { actualizarEstadoPago } from './sistema/sistemaDePrecios/actualizarEstadoPago.mjs';
-import { SQUARE_LOCATION_ID, SQUARE_APPLICATION_ID } from './puerto.mjs';
 import { codigoZonaHoraria } from './sistema/codigoZonaHoraria.mjs';
 import { validadoresCompartidos } from './sistema/validadores/validadoresCompartidos.mjs';
 
+const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
+const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
 export const componentes = {
     dicionarios: {
         mensajes: {

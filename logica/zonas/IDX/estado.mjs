@@ -3,11 +3,6 @@ import { conexion } from "../../componentes/db.mjs";
 
 export const estado = async (entrada, salida) => {
     try {
-        const IDX = entrada.body.IDX
-        if (!IDX) {
-            const error = "Falta espeficiar la 'IDX', este puede ser conectar, desconectar y estado";
-            throw new Error(error);
-        }
         await componentes.eliminarCuentasNoVerificadas();
         await componentes.borrarCuentasCaducadas();
 

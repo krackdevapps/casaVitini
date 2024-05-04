@@ -1,12 +1,6 @@
 import { conexion } from './componentes/db.mjs';
 import fs from 'fs'
 import path from 'path';
-
-import { writeFile } from 'fs/promises';
-import { Mutex, tryAcquire } from 'async-mutex';
-export const mutex = new Mutex();
-export const SQUARE_LOCATION_ID = process.env.SQUARE_LOCATION_ID
-export const SQUARE_APPLICATION_ID = process.env.SQUARE_APPLICATION_ID
 export class vitiniSysError extends Error {
     constructor(errorObjeto) {
         super(JSON.stringify(errorObjeto));
@@ -255,7 +249,7 @@ const puerto = async (entrada, salida) => {
         }
         const ruta = arbol.join(".")
 
-        const contructorArbol = async (directorioZonas) => {
+        const contructorArbol = async (zonaBusqueda) => {
             const arbol = {}
             const cargarModulosDesdeDirectorio = async (rutaActual, ramas) => {
                 const entradas = await fs.promises.readdir(rutaActual, { withFileTypes: true })
@@ -271,12 +265,13 @@ const puerto = async (entrada, salida) => {
                     }
                 }
             }
-            await cargarModulosDesdeDirectorio(directorioZonas, arbol)
+            await cargarModulosDesdeDirectorio(zonaBusqueda, arbol)
             return arbol
         }
 
         const directorioZonas = './logica/zonas'
         const zonas = await contructorArbol(directorioZonas)
+        console.log("test", entrada)
 
         const exploradorArbol = (zonas, ruta) => {
             const partes = ruta.split('.')
@@ -296,6 +291,7 @@ const puerto = async (entrada, salida) => {
         const estructura = exploradorArbol(zonas, ruta)
         console.log("estructura", estructura)
         const X = estructura[arbol.pop()]
+        console.log("entrada", entrada)
         await X(entrada, salida)
     } catch (errorCapturado) {
         const error = {
