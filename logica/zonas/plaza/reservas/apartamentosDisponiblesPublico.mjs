@@ -1,3 +1,12 @@
+import { DateTime } from "luxon";
+import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
+import { configuracionApartamento } from "../../../sistema/configuracionApartamento.mjs";
+import { interruptor } from "../../../sistema/configuracionGlobal/interruptor.mjs";
+import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
+import { precioRangoApartamento } from "../../../sistema/sistemaDePrecios/precioRangoApartamento.mjs";
+
 export const apartamentosDisponiblesPublico = async (entrada, salida) => {
     try {
         if (!await interruptor("aceptarReservasPublicas")) {
@@ -24,7 +33,7 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
             const error = "La fecha de entrada no puede ser inferior a la fecha actual. Solo se pueden hacer reservas a partir de hoy";
             throw new Error(error);
         }
-        await casaVitini.administracion.bloqueos.eliminarBloqueoCaducado();
+        await eliminarBloqueoCaducado();
         const rol = entrada.session.rol;
         const configuracionApartamentosPorRango = {
             fechaEntrada_ISO: fechaEntrada_ISO,
