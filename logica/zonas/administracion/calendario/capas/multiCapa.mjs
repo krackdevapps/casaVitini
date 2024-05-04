@@ -6,6 +6,7 @@ import { eventosTodosLosBloqueos } from "../../../../sistema/calendarios/capas/e
 import { eventosPorApartamentoAirbnb } from "../../../../sistema/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
+import { DateTime } from "luxon";
 
 
 export const multiCapa = async (entrada, salida) => {
