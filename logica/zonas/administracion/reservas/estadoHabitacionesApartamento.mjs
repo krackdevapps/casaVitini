@@ -1,9 +1,18 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { estadoHabitacionesApartamento as estadoHabitacionesApartamento_ } from "../../../sistema/sistemaDeReservas/estadoHabitacionesApartamento.mjs";
 
 
 export const estadoHabitacionesApartamento = async (entrada, salida) => {
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+
         const apartamento = entrada.body.apartamento;
         const reserva = entrada.body.reserva;
         if (typeof apartamento !== "number" || !Number.isInteger(apartamento) || apartamento <= 0) {

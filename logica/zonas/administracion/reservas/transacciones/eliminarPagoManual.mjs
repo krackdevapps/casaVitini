@@ -1,10 +1,18 @@
 import { conexion } from "../../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { actualizarEstadoPago } from "../../../../sistema/sistemaDePrecios/actualizarEstadoPago.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const eliminarPagoManual = async (entrada, salida) => {
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
         const palabra = entrada.body.palabra;
         const pagoUID = entrada.body.pagoUID;
         const reservaUID = entrada.body.reservaUID;

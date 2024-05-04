@@ -1,7 +1,18 @@
 import { conexion } from "../../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+
 export const obtener_reservas = async (entrada, salida) => {
-    // Obtener todas las reservas no pagadas de origen cliente
-    const obtenerReservas = `
+
+    try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        // Obtener todas las reservas no pagadas de origen cliente
+        const obtenerReservas = `
                         SELECT
                             r.reserva,
                             to_char(r.entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
@@ -19,19 +30,26 @@ export const obtener_reservas = async (entrada, salida) => {
                         ORDER BY 
                             r.creacion ASC
                         ;`;
-    const parametrosDeBusqueda = [
-        "cliente",
-        "noPagado",
-        "confirmada"
-    ];
-    const resuelveReservasPendientes = await conexion.query(obtenerReservas, parametrosDeBusqueda);
-    const reservasPendientes = resuelveReservasPendientes.rows;
-    const ok = {
-        ok: "Aquí tienes las reservas de origen publico pendientes por revisar",
-        reservas: []
-    };
-    if (resuelveReservasPendientes.rowCount > 0) {
-        ok.reservas.push(...reservasPendientes);
+        const parametrosDeBusqueda = [
+            "cliente",
+            "noPagado",
+            "confirmada"
+        ];
+        const resuelveReservasPendientes = await conexion.query(obtenerReservas, parametrosDeBusqueda);
+        const reservasPendientes = resuelveReservasPendientes.rows;
+        const ok = {
+            ok: "Aquí tienes las reservas de origen publico pendientes por revisar",
+            reservas: []
+        };
+        if (resuelveReservasPendientes.rowCount > 0) {
+            ok.reservas.push(...reservasPendientes);
+        }
+        salida.json(ok);
+    } catch (errorCapturado) {
+        const error = {
+            error: errorCapturado.message
+        }
+        salida.json(error)
     }
-    salida.json(ok);
+
 }

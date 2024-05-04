@@ -1,8 +1,15 @@
 import Decimal from "decimal.js";
 import { precioBaseApartamento } from "../../../sistema/sistemaDePrecios/precioBaseApartamento.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const detallePrecioBaseApartamento = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
+
         const apartamentoIDV = entrada.body.apartamentoIDV;
         const filtroCadena = /^[a-z0-9]+$/;
         if (typeof apartamentoIDV !== "string" || !filtroCadena.test(apartamentoIDV)) {

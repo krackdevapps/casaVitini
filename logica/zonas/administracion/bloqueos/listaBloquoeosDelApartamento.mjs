@@ -1,9 +1,18 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
-import { eliminarBloqueoCaducado } from "./eliminarBloqueoCaducado.mjs";
 
 export const listaBloquoeosDelApartamento = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+
+
         const apartamentoIDV = entrada.body.apartamentoIDV;
         const filtroCadena = /^[a-z0-9]+$/;
         if (!filtroCadena.test(apartamentoIDV) || typeof apartamentoIDV !== "string") {

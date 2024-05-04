@@ -3,12 +3,19 @@ import { eventosPorApartamneto } from "../../../../sistema/calendarios/capas/eve
 import { eventosReservas } from "../../../../sistema/calendarios/capas/eventosReservas.mjs";
 import { eventosTodosLosApartamentos } from "../../../../sistema/calendarios/capas/eventosTodosLosApartamentos.mjs";
 import { eventosTodosLosBloqueos } from "../../../../sistema/calendarios/capas/eventosTodosLosBloqueos.mjs";
-import { eliminarBloqueoCaducado } from "../../bloqueos/eliminarBloqueoCaducado.mjs";
 import { eventosPorApartamentoAirbnb } from "../../../../sistema/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { eliminarBloqueoCaducado } from "../../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
 
 
 export const multiCapa = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
         const fecha = entrada.body.fecha;
         const contenedorCapas = entrada.body.contenedorCapas;
         const capas = contenedorCapas?.capas;

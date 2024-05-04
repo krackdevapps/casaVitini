@@ -1,6 +1,13 @@
 import { conexion } from "../../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+
 export const guardarConfiguracion = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const horaEntradaTZ = entrada.body.horaEntradaTZ;
         const horaSalidaTZ = entrada.body.horaSalidaTZ;
         const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;

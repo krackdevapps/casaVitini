@@ -1,9 +1,15 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/controlCaducidadEnlacesDePago.mjs";
 
 
 export const crearNuevoEnlace = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+        
         const error = "Hasta que no se pueda habilitar una pasarela de pago, esta opcion esta deshabilitada.";
         throw new Error(error);
         let nombreEnlace = entrada.body.nombreEnlace;

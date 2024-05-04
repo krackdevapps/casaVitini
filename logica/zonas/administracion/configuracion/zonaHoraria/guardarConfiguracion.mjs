@@ -1,7 +1,14 @@
 import { conexion } from "../../../../componentes/db.mjs";
+
 import { zonasHorarias } from "../../../../componentes/zonasHorarias.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 export const guardarConfiguracion = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+        
         const zonaHoraria = entrada.body.zonaHoraria;
         const filtroZonaHoraria = /^[a-zA-Z0-9\/_\-+]+$/;
         const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;

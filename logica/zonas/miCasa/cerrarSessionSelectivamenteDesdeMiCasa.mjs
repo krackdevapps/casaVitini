@@ -1,5 +1,13 @@
+import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
+
+
 export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        if (IDX.control()) return  
+
+
         const usuarioIDX = entrada.session.usuario;
         if (!usuarioIDX) {
             const error = "Tienes que identificarte para poder cerrar sessiones";

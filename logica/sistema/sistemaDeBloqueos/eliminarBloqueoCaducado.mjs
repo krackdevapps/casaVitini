@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
+import { codigoZonaHoraria } from "../codigoZonaHoraria.mjs";
 
 export const eliminarBloqueoCaducado = async (entrada, salida) => {
                 try {

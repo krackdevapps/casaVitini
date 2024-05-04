@@ -1,8 +1,21 @@
+import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { bloquearApartamentos } from "../../../sistema/bloquearApartamentos.mjs";
 
 export const cancelarReserva = async (entrada, salida) => {
+    let mutex
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        mutex = new Mutex();
+        await mutex.acquire();
+
         const reserva = entrada.body.reserva;
         const tipoBloqueo = entrada.body.tipoBloqueo;
         if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {

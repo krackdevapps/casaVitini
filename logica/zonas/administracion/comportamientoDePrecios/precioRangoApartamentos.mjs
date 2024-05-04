@@ -1,7 +1,13 @@
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { precioRangoApartamento } from "../../../sistema/sistemaDePrecios/precioRangoApartamento.mjs";
 
 export const precioRangoApartamentos = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const fechaEntrada = entrada.body.fechaEntrada;
         const fechaSalida = entrada.body.fechaSalida;
         const apartamentosIDVArreglo = entrada.body.apartamentosIDVArreglo;

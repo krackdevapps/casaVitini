@@ -6,11 +6,24 @@ import { eliminarBloqueoCaducado } from "../bloqueos/eliminarBloqueoCaducado.mjs
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
 import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/insertarTotalesReserva.mjs";
+import { Mutex } from "async-mutex";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
 export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
-    await mutex.acquire();
+    let mutex
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        mutex = new Mutex();
+        await mutex.acquire();
+
+
         const fechaEntrada = entrada.body.fechaEntrada;
         const fechaSalida = entrada.body.fechaSalida;
         const apartamentos = entrada.body.apartamentos;
@@ -162,6 +175,8 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         };
         salida.json(error);
     } finally {
-        mutex.release();
+        if (mutex) {
+            mutex.release();
+        }
     }
 }

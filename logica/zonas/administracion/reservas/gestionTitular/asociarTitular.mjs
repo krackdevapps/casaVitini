@@ -1,9 +1,15 @@
 import { conexion } from "../../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const asociarTitular = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
         const clienteUID = entrada.body.clienteUID;
         const reservaUID = entrada.body.reservaUID;
         if (typeof clienteUID !== "number" || !Number.isInteger(clienteUID) || clienteUID <= 0) {

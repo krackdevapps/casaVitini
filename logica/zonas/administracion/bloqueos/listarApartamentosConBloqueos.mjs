@@ -1,10 +1,17 @@
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
-import { eliminarBloqueoCaducado } from "./eliminarBloqueoCaducado.mjs";
 import { conexion } from "../../../componentes/db.mjs";
-
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
 
 export const listarApartamentosConBloqueos = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+
         await eliminarBloqueoCaducado();
         const consultaApartamentosConBloqueo = `
                             SELECT

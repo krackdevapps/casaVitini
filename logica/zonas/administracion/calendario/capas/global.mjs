@@ -1,4 +1,5 @@
 import { conexion } from "../../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { eventosPorApartamentoAirbnb } from "../../../../sistema/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs";
 import { eventosReservas } from "../../../../sistema/calendarios/capas/eventosReservas.mjs";
 import { eventosTodosLosApartamentos } from "../../../../sistema/calendarios/capas/eventosTodosLosApartamentos.mjs";
@@ -6,6 +7,12 @@ import { eventosTodosLosBloqueos } from "../../../../sistema/calendarios/capas/e
 
 export const global = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
         const fecha = entrada.body.fecha;
         const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
         if (!filtroFecha.test(fecha)) {

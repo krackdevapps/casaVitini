@@ -2,10 +2,15 @@ import Decimal from "decimal.js";
 import { conexion } from "../../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
-
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 export const realizarReembolso = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
         const reservaUID = entrada.body.reservaUID;
         let cantidad = entrada.body.cantidad;
         const pagoUID = entrada.body.pagoUID;

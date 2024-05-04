@@ -9,9 +9,18 @@ import { vitiniSysError } from "../../../sistema/vitiniSysError.mjs";
 
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
-    const mutex = new Mutex();
-    const bloqueoConfirmarModificarFechaReserva = await mutex.acquire();
+    let mutex
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        mutex = new Mutex();
+        await mutex.acquire();
+
         const reserva = entrada.body.reserva;
         const sentidoRango = entrada.body.sentidoRango;
         const fechaSolicitada_ISO = entrada.body.fechaSolicitada_ISO;
@@ -186,6 +195,8 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         }
         salida.json(error);
     } finally {
-        bloqueoConfirmarModificarFechaReserva();
+       if (mutex) {
+        mutex.release()
+       }
     }
 }

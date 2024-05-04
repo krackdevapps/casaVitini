@@ -1,9 +1,15 @@
 import ICAL from 'ical.js';
 import { conexion } from "../../../../../componentes/db.mjs";
+import { VitiniIDX } from '../../../../../sistema/VitiniIDX/control.mjs';
 
 
 export const actualizarCalendario = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+        
         const calendarioUID = entrada.body.calendarioUID;
         let nombre = entrada.body.nombre || null;
         const apartamentoIDV = entrada.body.apartamentoIDV || null;

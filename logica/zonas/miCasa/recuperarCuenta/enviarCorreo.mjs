@@ -1,3 +1,4 @@
+
 export const enviarCorreo = async (entrada, salida) => {
     try {
         let email = entrada.body.email;

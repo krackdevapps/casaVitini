@@ -1,9 +1,21 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+
 
 
 
 export const eliminarCheckOutAdelantado = async (entrada, salida) => {
     try {
+
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        
+
         const pernoctantaUID = entrada.body.pernoctanteUID;
         if (typeof pernoctantaUID !== "number" || !Number.isInteger(pernoctantaUID) || pernoctantaUID <= 0) {
             const error = "El campo 'pernoctantaUID' debe ser un tipo numero, entero y positivo";

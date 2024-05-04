@@ -1,7 +1,19 @@
+import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+
 export const crearNuevoImpuesto = async (entrada, salida) => {
-    await mutex.acquire();
+    let mutex
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
+
+        const mutex = new Mutex()
+        await mutex.acquire();
+
         let nombreImpuesto = entrada.body.nombreImpuesto;
         const tipoImpositivo = entrada.body.tipoImpositivo;
         const tipoValor = entrada.body.tipoValor;
@@ -108,7 +120,8 @@ export const crearNuevoImpuesto = async (entrada, salida) => {
         };
         salida.json(error);
     } finally {
-        mutex.release();
+        if (mutex) {
+            mutex.release();
+        }
     }
-
 }

@@ -1,11 +1,22 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+
 
 export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
-    const mutex = new Mutex()
-    await mutex.acquire();
+    let mutex
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
+
+        mutex = new Mutex()
+        await mutex.acquire();
+
         const apartamentoIDV = entrada.body.apartamentoIDV;
         const nuevoPrecio = entrada.body.nuevoPrecio;
         if (typeof apartamentoIDV !== "string") {
@@ -120,7 +131,10 @@ export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
         };
         salida.json(error);
     } finally {
-        mutex.release();
+        if (mutex) {
+            mutex.release();
+        }
+
     }
 
 }

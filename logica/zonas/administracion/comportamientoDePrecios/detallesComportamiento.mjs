@@ -1,8 +1,16 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
 export const detallesComportamiento = async (entrada, salida) => {
+
                 try {
+                    const session = entrada.session
+                    const IDX = new VitiniIDX(session, salida)
+                    IDX.administradores()
+                    IDX.empleados()
+                    if (IDX.control()) return
+
                     const comportamientoUID = entrada.body.comportamientoUID;
                     if (!comportamientoUID || typeof comportamientoUID !== "number" || !Number.isInteger(comportamientoUID) || comportamientoUID <= 0) {
                         const error = "El campo 'comportamientoUID' debe ser un tipo numero, entero y positivo";

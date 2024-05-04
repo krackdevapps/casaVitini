@@ -1,9 +1,16 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { vitiniCrypto } from "../../../sistema/vitiniCrypto.mjs";
 
 
 export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida) => {
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return  
+
         const usuarioIDX = entrada.body.usuarioIDX;
         const nuevoEstado = entrada.body.nuevoEstado;
         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;

@@ -1,8 +1,15 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
 export const actualizarRolCuenta = async (entrada, salida) => {
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const usuarioIDX = entrada.body.usuarioIDX;
         const nuevoRol = entrada.body.nuevoRol;
         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;

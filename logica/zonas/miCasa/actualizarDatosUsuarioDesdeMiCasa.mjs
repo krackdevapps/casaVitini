@@ -1,6 +1,15 @@
+import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
+
+
 export const actualizarDatosUsuarioDesdeMiCas = async (entrada, salida) => {
 
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        if (IDX.control()) return  
+
+
         const usuarioIDX = entrada.session.usuario;
         let nombre = entrada.body.nombre;
         let primerApellido = entrada.body.primerApellido;

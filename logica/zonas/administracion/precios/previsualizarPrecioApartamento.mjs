@@ -1,9 +1,16 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
 
 
 export const previsualizarPrecioApartamento = async (entrada, salida) => {
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const apartamentoIDV = entrada.body.apartamentoIDV;
         const filtroCadena = /^[a-z0-9]+$/;
         const propuestaPrecio = entrada.body.propuestaPrecio;

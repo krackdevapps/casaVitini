@@ -1,8 +1,14 @@
 
 import { conexion } from "../../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 export const modificarEntidadAlojamiento = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const tipoEntidad = entrada.body.tipoEntidad;
         const entidadIDV = entrada.body.entidadIDV;
         const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;

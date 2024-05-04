@@ -1,6 +1,13 @@
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+
+
 export const cancelarReserva = async (entrada, salida) => {
     try {
-        const IDX = entrada.session.IDX;
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        if (IDX.control()) return  
+
+        const usuario = entrada.session.usuario;
         const reservaUID = entrada.body.reservaUID;
         const filtroNumerosEnteros = /^[0-9]+$/;
         if (!reservaUID || !filtroNumerosEnteros.test(reservaUID)) {
@@ -15,7 +22,7 @@ export const cancelarReserva = async (entrada, salida) => {
                 "datosDeUsuario" 
             WHERE 
                 "usuarioIDX" = $1`;
-        const resolverObtenerDatosUsuario = await conexion.query(obtenerDatosUsuario, [IDX]);
+        const resolverObtenerDatosUsuario = await conexion.query(obtenerDatosUsuario, [usuario]);
         const email = resolverObtenerDatosUsuario.rows[0].email;
         const validarExistenciaReserva = `
             SELECT
@@ -84,7 +91,7 @@ export const cancelarReserva = async (entrada, salida) => {
                     const datosNotificacion = [
                         notificacionIDV,
                         objetoNotificacion,
-                        IDX
+                        usuario
                     ];
                     await conexion.query(creaNotificacionDeReembolso, datosNotificacion);
                 }

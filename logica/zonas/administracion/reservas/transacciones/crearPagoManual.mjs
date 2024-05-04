@@ -5,9 +5,16 @@ import { codigoZonaHoraria } from "../../../../sistema/codigoZonaHoraria.mjs";
 import { utilidades } from "../../../../componentes/utilidades.mjs";
 import { componentes } from "../../../../componentes.mjs";
 import { actualizarEstadoPago } from "../../../../sistema/sistemaDePrecios/actualizarEstadoPago.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 export const crearPagoManual = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+        
         const plataformaDePago = entrada.body.plataformaDePago;
         let cantidad = entrada.body.cantidad;
         const reservaUID = entrada.body.reservaUID;

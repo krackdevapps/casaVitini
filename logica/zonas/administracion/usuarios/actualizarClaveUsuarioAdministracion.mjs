@@ -1,10 +1,17 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../../sistema/vitiniCrypto.mjs";
 
 
 export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const usuarioIDX = entrada.body.usuarioIDX;
         const claveNueva = entrada.body.claveNueva;
         const claveNuevaDos = entrada.body.claveNuevaDos;

@@ -1,9 +1,15 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../componentes/db.mjs";
+import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 
 export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
     try {
-        const session = entrada.session;
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        if (IDX.control()) return  
+
+        
         const usuarioIDX = entrada.session.usuario;
         if (!session || !usuarioIDX) {
             const error = "Tienes que identificarte para ver las sessiones activas de tu cuenta";

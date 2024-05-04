@@ -1,9 +1,18 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+
 export const eliminarPerfilImpuesto = async (entrada, salida) => {
-    const mutex = new Mutex
-    await mutex.acquire();
+    let mutex
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
+        mutex = new Mutex
+        await mutex.acquire();
+
         const impuestoUID = entrada.body.impuestoUID;
         if (typeof impuestoUID !== "number" || !Number.isInteger(impuestoUID) || impuestoUID <= 0) {
             const error = "El campo 'impuestoUID' debe ser un tipo numero, entero y positivo";
@@ -28,7 +37,8 @@ export const eliminarPerfilImpuesto = async (entrada, salida) => {
         };
         salida.json(error);
     } finally {
-        mutex.release();
+        if (mutex) {
+            mutex.release();
+        }
     }
-
 }

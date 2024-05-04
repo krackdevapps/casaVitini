@@ -1,8 +1,15 @@
+import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
 import { eventosPorApartamentoAirbnb } from "../../../../../sistema/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs";
 
 
 export const airbnb = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
         const fecha = entrada.body.fecha;
         const calendarioUID = entrada.body.calendarioUID;
         const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;

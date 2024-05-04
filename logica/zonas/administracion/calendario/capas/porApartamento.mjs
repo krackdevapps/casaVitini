@@ -1,8 +1,16 @@
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { eventosPorApartamneto } from "../../../../sistema/calendarios/capas/eventosPorApartamento.mjs";
-import { eliminarBloqueoCaducado } from "../../bloqueos/eliminarBloqueoCaducado.mjs";
+import { eliminarBloqueoCaducado } from "../../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
+
 
 export const porApartamento = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+        
         const fecha = entrada.body.fecha;
         const apartamentoIDV = entrada.body.apartamentoIDV;
         const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;

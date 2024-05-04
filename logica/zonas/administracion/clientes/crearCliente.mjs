@@ -1,11 +1,22 @@
 import { Mutex } from "async-mutex";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { insertarCliente } from "../../../sistema/insertarCliente.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+
+
 
 export const crearCliente = async (entrada, salida) => {
     const mutex = new Mutex();
-    const bloqueoCrearCliente = await mutex.acquire();
+    let bloqueoCrearCliente
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        bloqueoCrearCliente = await mutex.acquire();
+
         let nombre = entrada.body.nombre;
         let primerApellido = entrada.body.primerApellido;
         let segundoApellido = entrada.body.segundoApellido;

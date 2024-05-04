@@ -1,7 +1,13 @@
 import { conexion } from "../../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const camaUID = entrada.body.camaUID;
         if (!camaUID || !Number.isInteger(camaUID) || camaUID < 0) {
             const error = "el campo 'camaUID' solo puede ser numeros";

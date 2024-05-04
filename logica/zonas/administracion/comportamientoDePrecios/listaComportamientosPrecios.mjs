@@ -1,7 +1,15 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+
 export const listaComportamientosPrecios = async (entrada, salida) => {
-                try {
-                    const listaComportamientoPrecios = `
+
+    try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
+        const listaComportamientoPrecios = `
                             SELECT
                             "nombreComportamiento",
                             uid,
@@ -16,22 +24,22 @@ export const listaComportamientosPrecios = async (entrada, salida) => {
                             ORDER BY 
                             "fechaInicio" ASC;
                             `;
-                    const resuelveListaComportamientoPrecios = await conexion.query(listaComportamientoPrecios);
-                    const ok = {};
-                    if (resuelveListaComportamientoPrecios.rowCount === 0) {
-                        ok.ok = "No hay comportamiento de precios configurados";
-                        salida.json(ok);
-                    }
-                    if (resuelveListaComportamientoPrecios.rowCount > 0) {
+        const resuelveListaComportamientoPrecios = await conexion.query(listaComportamientoPrecios);
+        const ok = {};
+        if (resuelveListaComportamientoPrecios.rowCount === 0) {
+            ok.ok = "No hay comportamiento de precios configurados";
+            salida.json(ok);
+        }
+        if (resuelveListaComportamientoPrecios.rowCount > 0) {
 
-                        const listaComportamientos = resuelveListaComportamientoPrecios.rows;
-                        ok.ok = listaComportamientos;
-                        salida.json(ok);
-                    }
-                } catch (errorCapturado) {
-                    const error = {
-                        error: errorCapturado.message
-                    };
-                    salida.json(error);
-                }
-            }
+            const listaComportamientos = resuelveListaComportamientoPrecios.rows;
+            ok.ok = listaComportamientos;
+            salida.json(ok);
+        }
+    } catch (errorCapturado) {
+        const error = {
+            error: errorCapturado.message
+        };
+        salida.json(error);
+    }
+}

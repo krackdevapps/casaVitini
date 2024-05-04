@@ -1,8 +1,18 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+
 export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
+
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+  
+
         const pernoctantaUID = entrada.body.pernoctanteUID;
         const fechaCheckOut = entrada.body.fechaCheckOut;
         if (typeof pernoctantaUID !== "number" || !Number.isInteger(pernoctantaUID) || pernoctantaUID <= 0) {

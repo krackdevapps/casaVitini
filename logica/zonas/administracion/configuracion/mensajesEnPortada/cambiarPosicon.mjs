@@ -1,8 +1,14 @@
 import { conexion } from "../../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 
 export const cambiarPosicon = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const mensajeUID = entrada.body.mensajeUID;
         const posicion = entrada.body.posicion;
         const filtroIDV = /^[0-9]+$/;

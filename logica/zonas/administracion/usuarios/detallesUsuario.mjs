@@ -1,17 +1,24 @@
 import { conexion } from "../../../componentes/db.mjs";
-export const detallesUsuario = async (entrada, salida) => {
-                try {
-                    const usuarioIDX = entrada.body.usuarioIDX;
-                    const filtroCadena = /^[a-z0-9]+$/;
-                    if (!usuarioIDX || !filtroCadena.test(usuarioIDX)) {
-                        const error = "el campo 'usuarioIDX' solo puede ser letras minúsculas, numeros y sin pesacios";
-                        throw new Error(error);
-                    }
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
-                    const ok = {
-                        ok: {}
-                    };
-                    const consultaRol = `
+export const detallesUsuario = async (entrada, salida) => {
+    try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
+        const usuarioIDX = entrada.body.usuarioIDX;
+        const filtroCadena = /^[a-z0-9]+$/;
+        if (!usuarioIDX || !filtroCadena.test(usuarioIDX)) {
+            const error = "el campo 'usuarioIDX' solo puede ser letras minúsculas, numeros y sin pesacios";
+            throw new Error(error);
+        }
+
+        const ok = {
+            ok: {}
+        };
+        const consultaRol = `
                             SELECT 
                             rol,
                             "estadoCuenta"
@@ -19,14 +26,14 @@ export const detallesUsuario = async (entrada, salida) => {
                             usuarios
                             WHERE 
                             usuario = $1;`;
-                    const resolverUsuarioYRol = await conexion.query(consultaRol, [usuarioIDX]);
-                    const rol = resolverUsuarioYRol.rows[0].rol;
-                    const estadoCuenta = resolverUsuarioYRol.rows[0].estadoCuenta;
-                    ok.ok.usuarioIDX = usuarioIDX;
-                    ok.ok.rol = rol;
-                    ok.ok.estadoCuenta = estadoCuenta;
+        const resolverUsuarioYRol = await conexion.query(consultaRol, [usuarioIDX]);
+        const rol = resolverUsuarioYRol.rows[0].rol;
+        const estadoCuenta = resolverUsuarioYRol.rows[0].estadoCuenta;
+        ok.ok.usuarioIDX = usuarioIDX;
+        ok.ok.rol = rol;
+        ok.ok.estadoCuenta = estadoCuenta;
 
-                    const consultaDetallesUsuario = `
+        const consultaDetallesUsuario = `
                             SELECT 
                             nombre,
                             "primerApellido",
@@ -38,10 +45,10 @@ export const detallesUsuario = async (entrada, salida) => {
                             "datosDeUsuario"
                             WHERE 
                             "usuarioIDX" = $1;`;
-                    const resolverConsultaDetallesUsuario = await conexion.query(consultaDetallesUsuario, [usuarioIDX]);
-                    let detallesCliente = resolverConsultaDetallesUsuario.rows[0];
-                    if (resolverConsultaDetallesUsuario.rowCount === 0) {
-                        const crearDatosUsuario = `
+        const resolverConsultaDetallesUsuario = await conexion.query(consultaDetallesUsuario, [usuarioIDX]);
+        let detallesCliente = resolverConsultaDetallesUsuario.rows[0];
+        if (resolverConsultaDetallesUsuario.rowCount === 0) {
+            const crearDatosUsuario = `
                                 INSERT INTO "datosDeUsuario"
                                 (
                                 "usuarioIDX"
@@ -50,19 +57,19 @@ export const detallesUsuario = async (entrada, salida) => {
                                 RETURNING
                                 *
                                 `;
-                        const resuelveCrearFicha = await conexion.query(crearDatosUsuario, [usuarioIDX]);
-                        detallesCliente = resuelveCrearFicha.rows[0];
-                    }
-                    for (const [dato, valor] of Object.entries(detallesCliente)) {
-                        ok.ok[dato] = valor;
-                    }
+            const resuelveCrearFicha = await conexion.query(crearDatosUsuario, [usuarioIDX]);
+            detallesCliente = resuelveCrearFicha.rows[0];
+        }
+        for (const [dato, valor] of Object.entries(detallesCliente)) {
+            ok.ok[dato] = valor;
+        }
 
-                    salida.json(ok);
-                } catch (errorCapturado) {
-                    const error = {
-                        error: errorCapturado.message
-                    };
-                    salida.json(error);
-                } finally {
-                }
-            }
+        salida.json(ok);
+    } catch (errorCapturado) {
+        const error = {
+            error: errorCapturado.message
+        };
+        salida.json(error);
+    } finally {
+    }
+}

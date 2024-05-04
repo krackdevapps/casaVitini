@@ -4,12 +4,22 @@ import { eliminarBloqueoCaducado } from "../bloqueos/eliminarBloqueoCaducado.mjs
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
 import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/insertarTotalesReserva.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
 export const anadirApartamentoReserva = async (entrada, salida) => {
-    const mutex = new Mutex();
-    const bloqueoAnadirApartamentoReserva = await mutex.acquire();
+    let mutex
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        mutex = new Mutex();
+        await mutex.acquire();
+
         const reserva = entrada.body.reserva;
         const apartamento = entrada.body.apartamento;
         if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
@@ -120,6 +130,8 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
         };
         salida.json(error);
     } finally {
-        bloqueoAnadirApartamentoReserva();
+        if (mutex) {
+            mutex.release()
+        }
     }
 }

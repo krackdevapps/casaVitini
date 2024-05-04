@@ -1,12 +1,20 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { validarModificacionRangoFechaResereva } from "../../../sistema/validadores/validarModificacionRangoFechaResereva.mjs";
-
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const obtenerElasticidadDelRango = async (entrada, salida) => {
-    const mutex = new Mutex();
-    const bloqueoModificarFechaReserva = await mutex.acquire();
+    let mutex
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        mutex = new Mutex()
+        await mutex.acquire()
+
         const reserva = entrada.body.reserva;
         const sentidoRango = entrada.body.sentidoRango;
         const mesCalendario = entrada.body.mesCalendario;
@@ -71,6 +79,8 @@ export const obtenerElasticidadDelRango = async (entrada, salida) => {
         };
         salida.json(error);
     } finally {
-        bloqueoModificarFechaReserva();
+        if (mutex) {
+            mutex.release()
+        }
     }
 }

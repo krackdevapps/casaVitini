@@ -1,6 +1,15 @@
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs"
+
 export const listarMisReservas = async (entrada, salida) => {
     try {
-        const IDX = entrada.session.IDX;
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        if (IDX.control()) return  
+
+
+
+        const usuario = entrada.session.usuario
         let paginaActual = entrada.body.pagina;
         // const numeroDeReservasPorPagina = entrada.body.numeroDeReservasPorPagina
         let nombreColumna = entrada.body.nombreColumna;
@@ -25,7 +34,7 @@ export const listarMisReservas = async (entrada, salida) => {
                 "datosDeUsuario" 
             WHERE 
                 "usuarioIDX" = $1`;
-        const resolverObtenerDatosUsuario = await conexion.query(obtenerDatosUsuario, [IDX]);
+        const resolverObtenerDatosUsuario = await conexion.query(obtenerDatosUsuario, [usuario]);
         const email = resolverObtenerDatosUsuario.rows[0].email;
         const estadoCorreo = resolverObtenerDatosUsuario.rows[0].estadoCorreo;
         if (!email) {

@@ -4,10 +4,17 @@ import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
 import { componentes } from "../../../componentes.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { apartamentosOcupadosHoy_paraSitaucion } from "../../../sistema/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
 export const obtenerSituacion = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
         const apartamentosObjeto = {};
         const estadoDisonible = "disponible";
         const consultaEstadoApartamentos = `

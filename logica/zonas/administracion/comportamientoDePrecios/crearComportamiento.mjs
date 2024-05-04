@@ -1,15 +1,22 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
-
 import { evitarDuplicados } from "../../../sistema/sistemaDePrecios/comportamientoPrecios/evitarDuplicados.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
 export const crearComportamiento = async (entrada, salida) => {
-    const mutex = new Mutex
-    await mutex.acquire();
+    let mutex;
     try {
+        await mutex.acquire();
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
+        mutex = new Mutex()
+        await mutex.acquire();
         let nombreComportamiento = entrada.body.nombreComportamiento;
 
         const apartamentos = entrada.body.apartamentos;
@@ -281,6 +288,8 @@ export const crearComportamiento = async (entrada, salida) => {
         };
         salida.json(error);
     } finally {
-        mutex.release();
+        if (mutex) {
+            mutex.release();
+        }
     }
 }

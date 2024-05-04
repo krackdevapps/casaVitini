@@ -1,3 +1,4 @@
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
@@ -5,6 +6,13 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 
 export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+
         const fechaEntrada = entrada.body.entrada;
         const fechaSalida = entrada.body.salida;
         if (!fechaEntrada) {

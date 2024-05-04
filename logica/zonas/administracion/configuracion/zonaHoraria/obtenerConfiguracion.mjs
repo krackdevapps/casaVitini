@@ -1,8 +1,14 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { zonasHorarias } from "../../../../componentes/zonasHorarias.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 export const obtenerConfiguracion = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const consultaConfiguracionGlobal = `
                             SELECT 
                             *

@@ -1,12 +1,20 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+
 export const detallesCliente = async (entrada, salida) => {
     try {
-        let cliente = entrada.body.cliente;
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        const cliente = entrada.body.cliente;
         if (!cliente || !Number.isInteger(cliente)) {
             const error = "El campo cliente solo puede ser un numero positivo y entero que haga referencia al UID del cliente";
             throw new Error(error);
         }
-        let consultaDetallesCliente = `
+        const consultaDetallesCliente = `
                             SELECT 
                             uid, 
                             nombre,
@@ -20,14 +28,14 @@ export const detallesCliente = async (entrada, salida) => {
                             clientes 
                             WHERE 
                             uid = $1`;
-        let resolverConsultaDetallesCliente = await conexion.query(consultaDetallesCliente, [cliente]);
+        const resolverConsultaDetallesCliente = await conexion.query(consultaDetallesCliente, [cliente]);
         if (resolverConsultaDetallesCliente.rowCount === 0) {
             const error = "No existe ningun clinete con ese UID";
             throw new Error(error);
         }
-        let detallesCliente = resolverConsultaDetallesCliente.rows[0];
-        let ok = {
-            "ok": detallesCliente
+        const detallesCliente = resolverConsultaDetallesCliente.rows[0];
+        const ok = {
+            ok: detallesCliente
         };
         salida.json(ok);
     } catch (errorCapturado) {

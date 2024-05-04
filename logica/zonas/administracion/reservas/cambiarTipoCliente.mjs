@@ -1,10 +1,20 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const cambiarTipoCliente = async (entrada, salida) => {
-    const mutex = new Mutex();
-    const bloqueoCambiarTipoClienteEnReserva = await mutex.acquire();
+    let mutex
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        mutex = new Mutex();
+        await mutex.acquire();
+
         const reservaUID = entrada.body.reservaUID;
         const pernoctanteUID = entrada.body.pernoctanteUID;
         const clienteUID = entrada.body.clienteUID;
@@ -127,6 +137,8 @@ export const cambiarTipoCliente = async (entrada, salida) => {
         };
         salida.json(error);
     } finally {
-        bloqueoCambiarTipoClienteEnReserva();
+        if (mutex) {
+            mutex.release()
+        }
     }
 }

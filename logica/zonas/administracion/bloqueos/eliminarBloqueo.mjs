@@ -1,7 +1,13 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const eliminarBloqueo = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+        
         const bloqueoUID = entrada.body.bloqueoUID;
         if (typeof bloqueoUID !== "number" || !Number.isInteger(bloqueoUID) && bloqueoUID <= 0) {
             const error = "la clave 'bloqueoUID' debe de tener un dato tipo 'number', positivo y entero";

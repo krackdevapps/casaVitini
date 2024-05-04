@@ -1,6 +1,13 @@
 import { conexion } from "../../../../componentes/db.mjs";
-export const guardarConfiguracion = async (entrada, salida) => {
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+
+export const guardarConfiguracion = async (entrada, salida) => {  
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const diasAntelacionReserva = entrada.body.diasAntelacionReserva;
         const limiteFuturoReserva = entrada.body.limiteFuturoReserva;
         const diasMaximosReserva = entrada.body.diasMaximosReserva;

@@ -1,7 +1,13 @@
 import { conexion } from "../../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 export const eliminarConfiguracionDeAlojamiento = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const apartamentoIDV = entrada.body.apartamentoIDV;
         const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
         if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {

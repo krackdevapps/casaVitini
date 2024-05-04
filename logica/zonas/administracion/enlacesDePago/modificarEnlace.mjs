@@ -1,9 +1,15 @@
-import { DateTime } from "luxon";
+
 import { conexion } from "../../../componentes/db.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/controlCaducidadEnlacesDePago.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const modificarEnlace = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const enlaceUID = entrada.body.enlaceUID;
         const nombreEnlace = entrada.body.nombreEnlace;
         const cantidad = entrada.body.cantidad;

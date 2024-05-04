@@ -1,6 +1,11 @@
+import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 export const actualizarIDX = async (entrada, salida) => {
-
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        if (IDX.control()) return  
+
+
         const usuarioIDX = entrada.session.usuario;
         let nuevoIDX = entrada.body.nuevoIDX;
         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;

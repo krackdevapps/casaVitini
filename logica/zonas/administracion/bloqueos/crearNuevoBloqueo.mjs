@@ -2,10 +2,17 @@ import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
 import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { eliminarBloqueoCaducado } from "./eliminarBloqueoCaducado.mjs";
+import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const crearNuevoBloqueo = async (entrada, salida) => {
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const apartamentoIDV = entrada.body.apartamentoIDV;
         let tipoBloqueo = entrada.body.tipoBloqueo;
         let motivo = entrada.body.motivo;

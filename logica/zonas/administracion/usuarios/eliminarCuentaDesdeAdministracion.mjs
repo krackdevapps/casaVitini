@@ -1,8 +1,13 @@
 import { conexion } from "../../../componentes/db.mjs";
-
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const eliminarCuentaDesdeAdministracion = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const usuarioIDX = entrada.body.usuarioIDX;
         const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
         if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {

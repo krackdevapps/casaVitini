@@ -23,7 +23,7 @@ export const apartamentosDisponiblesConfigurados = async (entrada, salida) => {
         salida.json(ok);
     } catch (errorCatpurado) {
         const error = {
-            error: errorCapurado.message
+            error: errorCatpurado.message
         };
         salida.json(error);
     } finally {

@@ -1,6 +1,16 @@
+import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
+
+
+
 export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
 
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        if (IDX.control()) return  
+
+
         const usuarioIDX = entrada.session.usuario;
         const claveActual = entrada.body.claveActual;
         const claveNueva = entrada.body.claveNueva;

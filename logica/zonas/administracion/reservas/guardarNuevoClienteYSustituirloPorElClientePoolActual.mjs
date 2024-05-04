@@ -2,12 +2,22 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { insertarCliente } from "../../../sistema/insertarCliente.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
 export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entrada, salida) => {
-    const mutex = new Mutex();
-    const bloqueoGuardarNuevoClienteYSustituirloPorElClientePoolActual = await mutex.acquire();
+    let mutex
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        mutex = new Mutex();
+        await mutex.acquire();
+
         const reserva = entrada.body.reserva;
         const pernoctanteUID = entrada.body.pernoctanteUID;
         let nombre = entrada.body.nombre;
@@ -124,6 +134,9 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
         };
         salida.json(error);
     } finally {
-        bloqueoGuardarNuevoClienteYSustituirloPorElClientePoolActual();
+        
+        if (mutex) {
+            mutex.release()
+        }
     }
 }

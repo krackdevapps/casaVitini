@@ -1,8 +1,15 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
 export const opcionesCrearOferta = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
+
         const opcionesCrearOferta = {};
         const listaAplicacionOferta = `
                             SELECT
@@ -34,6 +41,5 @@ export const opcionesCrearOferta = async (entrada, salida) => {
             error: errorCapturado.message
         };
         salida.json(error);
-    } finally {
-    }
+    } 
 }

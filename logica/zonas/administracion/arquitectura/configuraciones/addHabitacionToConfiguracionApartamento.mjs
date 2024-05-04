@@ -1,8 +1,15 @@
 import { resolverApartamentoUI } from "../../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs"
 import { conexion } from "../../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 export const addHabitacionToConfiguracionApartamento = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
+
         const apartamentoIDV = entrada.body.apartamentoIDV;
         const habitacionIDV = entrada.body.habitacionIDV;
         const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;

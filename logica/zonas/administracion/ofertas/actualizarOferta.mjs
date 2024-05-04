@@ -2,11 +2,21 @@ import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { obtenerDetallesOferta } from "../../../sistema/sistemaDeOfertas/obtenerDetallesOferta.mjs";
-
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { Mutex } from "async-mutex";
 
 export const actualizarOferta = async (entrada, salida) => {
-    await mutex.acquire();
+    let mutex
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
+        mutex = new Mutex()
+        await mutex.acquire()
+
         let nombreOferta = entrada.body.nombreOferta;
         const fechaInicio = entrada.body.fechaInicio;
         const fechaFin = entrada.body.fechaFin;
@@ -308,7 +318,8 @@ export const actualizarOferta = async (entrada, salida) => {
         };
         salida.json(error);
     } finally {
-        mutex.release();
+        if (mutex) {
+            mutex.release();
+        }
     }
-
 }

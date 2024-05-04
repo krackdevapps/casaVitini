@@ -1,12 +1,20 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
-Mutex
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+
 
 export const actualizarEstadoComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();
 
-    await mutex.acquire();
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
+        await mutex.acquire();
+
+        
         const comportamientoUID = entrada.body.comportamientoUID;
         const estadoPropuesto = entrada.body.estadoPropuesto;
         const filtroCadena = /^[a-z]+$/;

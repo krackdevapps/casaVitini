@@ -1,12 +1,21 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { vitiniCrypto } from "../../../sistema/vitiniCrypto.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const eliminarIrreversiblementeReserva = async (entrada, salida) => {
-    const mutex = new Mutex();
-    await mutex.acquire();
+    let mutex
 
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        mutex = new Mutex();
+        await mutex.acquire();
+
         const reserva = entrada.body.reserva;
         const clave = entrada.body.clave;
         if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
@@ -86,6 +95,8 @@ export const eliminarIrreversiblementeReserva = async (entrada, salida) => {
         };
         salida.json(error);
     } finally {
-        mutex.release();
+        if (mutex) {
+            mutex.release();
+        }
     }
 }

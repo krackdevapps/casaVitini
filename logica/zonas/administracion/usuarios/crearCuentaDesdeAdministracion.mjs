@@ -1,10 +1,17 @@
 import { componentes } from "../../../componentes.mjs";
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { vitiniCrypto } from "../../../sistema/vitiniCrypto.mjs";
 
 
 export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return  
+
         const usuarioIDX = entrada.body.usuarioIDX;
         const clave = entrada.body.clave;
         const rol = entrada.body.rol;

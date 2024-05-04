@@ -1,7 +1,13 @@
 import { conexion } from "../../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 export const actualizarMensaje = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        if (IDX.control()) return
+
         const mensajeUID = entrada.body.mensajeUID;
         const mensaje = entrada.body.mensaje;
         const filtroIDV = /^[0-9]+$/;

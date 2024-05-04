@@ -1,7 +1,18 @@
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { detallesReserva as detallesReserva_ } from "../../../sistema/sistemaDeReservas/detallesReserva.mjs";
 
 export const detallesReserva = async (entrada, salida) => {
     try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+        mutex = new Mutex();
+        await mutex.acquire();
+
         const reservaUID = entrada.body.reserva;
         const solo = entrada.body.solo;
         if (!reservaUID) {
