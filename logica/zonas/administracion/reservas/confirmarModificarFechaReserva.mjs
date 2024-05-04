@@ -5,7 +5,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { DateTime } from "luxon";
 import { validarModificacionRangoFechaResereva } from "../../../sistema/validadores/validarModificacionRangoFechaResereva.mjs";
 import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/insertarTotalesReserva.mjs";
-import { vitiniSysError } from "../../componentes/vitiniSysError.mjs";
+import { vitiniSysError } from "../../../sistema/vitiniSysError.mjs";
 
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {

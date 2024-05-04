@@ -269,7 +269,6 @@ const puerto = async (entrada, salida) => {
         const exploradorArbol = (zonas, ruta) => {
             const partes = ruta.split('.')
             let rama = zonas;
-
             for (const part of partes) {
                 if (rama && typeof rama === 'object' && rama.hasOwnProperty(part)) {
                     rama = rama[part]
@@ -283,101 +282,21 @@ const puerto = async (entrada, salida) => {
 
         const estructura = exploradorArbol(zonas, ruta)
         const X = estructura[arbol.pop()]
-        await X(entrada, salida)
+        if (typeof X !== "function") {
+            const error = "zonaInexistente"
+            throw new Error(error)
+        }
+        
+        return X(entrada, salida)
     } catch (errorCapturado) {
         const error = {
-            detail: errorCapturado,
+            //detail: errorCapturado,
             error: errorCapturado.message
         }
         salida.json(error);
     }
 }
 
-// const puerto1 = async (entrada, salida) => {
-//     try {
-//         const zona = entrada.body.zona;
-//         if (!zona) {
-//             const error = "zonaIndefinida";
-//             throw new Error(error);
-//         }
-//         const filtroZona = /^[a-zA-Z\/\-_]+$/;
-//         if (!filtroZona.test(zona)) {
-//             const error = "Las rutas de la zonas solo admiten minusculas y mayusculas junto con barras, nada mas ni siqueira espacios";
-//             throw new Error(error);
-//         }
-
-//         let arbol = zona.split("/");
-//         arbol = arbol.filter(rama => rama.trim() !== "");
-//         if (!arbol) {
-//             const error = "arbolNoDefinido";
-//             throw new Error(error);
-//         }
-
-//         let arbolVolatil = casaVitini;
-//         const rol = entrada.session?.rol;
-//         for (const rama of arbol) {
-//             if (arbolVolatil.hasOwnProperty(rama)) {
-//                 const controlIDX = arbolVolatil[rama];
-//                 console.log("idx", controlIDX.hasOwnProperty("IDX"))
-//                 if (controlIDX.hasOwnProperty("IDX")) {
-//                     const usuarioIDX = entrada.session.usuario;
-//                     console.log("usuarioIDX", usuarioIDX)
-//                     // Primero estas idenfiticao o no
-//                     if (!usuarioIDX) {
-//                         const error = "IDX";
-//                         throw new Error(error);
-//                     }
-//                     if (controlIDX.IDX.hasOwnProperty("ROL")) {
-//                         // Luego si tiene rol o no, Si tiene rol, cual
-//                         const roles = controlIDX.IDX.ROL;
-//                         if (!roles.includes(rol)) {
-//                             const error = "ROL";
-//                             throw new Error(error);
-//                         }
-//                     }
-//                 }
-//                 arbolVolatil = arbolVolatil[rama];
-//             } else {
-//                 const error = "zonaInexistente";
-//                 throw new Error(error);
-//             }
-//         }
-//         if (arbolVolatil.hasOwnProperty("IDX")) {
-//             arbolVolatil = arbolVolatil.X;
-//         }
-//         if (typeof arbolVolatil !== "function") {
-//             const error = "zonaSinEjecucion";
-//             throw new Error(error);
-//         }
-//         return await arbolVolatil(entrada, salida);
-//     } catch (errorCapturado) {
-//         const estructuraFinal = {};
-//         if (errorCapturado.message === "IDX") {
-//             estructuraFinal.tipo = "IDX";
-//             estructuraFinal.mensaje = "Tienes que identificarte para seguir";
-//         } else if (errorCapturado.message === "ROL") {
-//             estructuraFinal.tipo = "ROL";
-//             estructuraFinal.mensaje = "No estas autorizado, necesitas una cuenta de mas autoridad para acceder aqui";
-//         } else if (errorCapturado.message === "zonaInexistente") {
-//             estructuraFinal.tipo = "zonaInexistente";
-//             estructuraFinal.mensaje = "La zona no existe";
-//         } else if (errorCapturado.message === "zonaSinEjecucion") {
-//             estructuraFinal.tipo = "zonaSinEjecucion";
-//             estructuraFinal.mensaje = "La zona no es procesable";
-//         } else if (errorCapturado.message === "arbolNoDefinido") {
-//             estructuraFinal.tipo = "arbolNoDefinido";
-//             estructuraFinal.mensaje = "Ningun arbol definido";
-//         } else if (errorCapturado.message === "zonaIndefinida") {
-//             estructuraFinal.tipo = "zonaIndefinida";
-//             estructuraFinal.mensaje = "No se ha definido la zona";
-//         } else {
-//             estructuraFinal.tipo = "rutaDeZonaIncompatible";
-//             estructuraFinal.mensaje = errorCapturado.message;
-//         }
-//         salida.json(estructuraFinal);
-//     };
-
-// }
 export default {
     arranque,
     calendarios_compartidos,

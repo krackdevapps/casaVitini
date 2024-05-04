@@ -2,13 +2,18 @@ import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
 import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { IDX } from "../../../sistema/VitiniIDX/control.mjs";
-
-
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
 export const listarReservas = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+        
+
         let pagina = entrada.body.pagina;
         let nombreColumna = entrada.body.nombreColumna;
         let sentidoColumna = entrada.body.sentidoColumna;
@@ -625,8 +630,7 @@ export const listarReservas = async (entrada, salida) => {
     } catch (errorCapturado) {
         const error = {
             error: errorCapturado.message
-        };
+        }
         salida.json(error);
-    } finally {
     }
 }
