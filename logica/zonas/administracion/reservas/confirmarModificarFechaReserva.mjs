@@ -8,7 +8,6 @@ import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/inser
 import { vitiniSysError } from "../../../sistema/vitiniSysError.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
-
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
     let mutex
     try {

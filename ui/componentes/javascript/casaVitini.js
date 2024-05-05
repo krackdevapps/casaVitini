@@ -7329,8 +7329,8 @@ const casaVitini = {
                             if (diaSalidaReserva_decimal < diaFinal_decimal) {
                                 // bloqueDia.classList.add("calendarioDiaReserva")
                                 bloqueDia.setAttribute("estadoDia", "deshabilitado")
-                                bloqueDia.style.pointerEvents = "all"
-                                bloqueDia.addEventListener("click", eval(metodoSelectorDia))
+                                //bloqueDia.style.pointerEvents = "all"
+                                //bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                             }
                         } 
                         else if (mesInternoRango) {
@@ -7527,8 +7527,8 @@ const casaVitini = {
                             if (diaSalidaReserva_decimal < diaFinal_decimal) {
                                 // bloqueDia.classList.add("calendarioDiaReserva")
                                 bloqueDia.setAttribute("estadoDia", "deshabilitado")
-                                bloqueDia.style.pointerEvents = "all"
-                                bloqueDia.addEventListener("click", eval(metodoSelectorDia))
+                               // bloqueDia.style.pointerEvents = "all"
+                               // bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                             }
                         } 
                         else if (mesInternoRango) {
@@ -7552,7 +7552,7 @@ const casaVitini = {
                                     bloqueDia.innerText = "CI " + diaFinal_decimal
                                     bloqueDia.setAttribute("estadoDia", "deshabilitado")
                                 }
-                                if (diaCheckIn > diaFinal_decimal && diaSalidaReserva_decimal < diaFinal_decimal) {
+                                if (diaCheckIn > diaFinal_decimal && diaEntradaReserva_decimal < diaFinal_decimal) {
                                     bloqueDia.classList.remove("calendarioDiaReserva")
                                     bloqueDia.classList.remove("calendarioDiaDisponible")
                                     bloqueDia.classList.add("calendarioDiaNoDisponible")
