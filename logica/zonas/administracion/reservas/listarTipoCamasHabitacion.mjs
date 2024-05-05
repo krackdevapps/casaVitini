@@ -3,11 +3,12 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const listarTipoCamasHabitacion = async (entrada, salida) => {
     try {
+
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return  
+        if (IDX.control()) return
 
         const apartamento = entrada.body.apartamento;
         const habitacion = entrada.body.habitacion;
@@ -20,6 +21,7 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
             const error = "Se necesita un habitacion que sea un string con letras y espacios, nada mas";
             throw new Error(error);
         }
+
         const consultaControlApartamento = `
                         SELECT uid 
                         FROM "configuracionHabitacionesDelApartamento" 
@@ -35,13 +37,19 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
                         FROM "configuracionHabitacionesDelApartamento" 
                         WHERE apartamento = $1 AND habitacion = $2;`;
         const controlConfiguracionCama = await conexion.query(consultaControlCamaDelApartamento, [apartamento, habitacion]);
+
+
         if (controlConfiguracionCama.rowCount === 0) {
             const error = `Dentro de la configuración de este apartamento ya no esta disponible esta habitación para seleccionar. Para recuperar esta habitación en la configuración de alojamiento, crea una habitación como entidad con el identificador visual ${habitacion} y añádela a la configuración del apartamento con el identificar visual ${apartamento}`;
             throw new Error(error);
         }
+        console.log("antes 1",controlConfiguracionApartamento.rowCount)
 
-        if (controlConfiguracionApartamento.rowCount === 1) {
+        if (controlConfiguracionApartamento.rowCount > 0) {
+            console.log("antes2")
+
             const configuracionApartamento = controlConfiguracionApartamento.rows[0]["uid"];
+
             const consultaControlApartamento = `
                             SELECT cama
                             FROM "configuracionCamasEnHabitacion" 
@@ -51,6 +59,8 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
                 const error = "No existe ningun tipo de camas configuradas para esta habitacion";
                 throw new Error(error);
             }
+            console.log("despues3")
+
             const camasResueltas = [];
             for (const camaPorResolver of configuracionCamasHabitacion.rows) {
                 const camaIDV = camaPorResolver.cama;
@@ -66,16 +76,17 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
                 };
                 camasResueltas.push(camaResuelta);
             }
+
             const ok = {
-                camasDisponibles: camasResueltas,
-            };
+                camasDisponibles: camasResueltas
+            }
             salida.json(ok);
         }
+
     } catch (errorCapturado) {
         const error = {
             error: errorCapturado.message
-        };
+        }
         salida.json(error);
-    } finally {
     }
 }

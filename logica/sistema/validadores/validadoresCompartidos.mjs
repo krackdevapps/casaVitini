@@ -12,7 +12,7 @@ const validadoresCompartidos = {
                 let telefono = cliente.telefono
                 let correoElectronico = cliente.correoElectronico
                 let notas = cliente?.notas
-                const filtroCadena = /^[a-zA-Z0-9\s\-_.]+$/;
+                const filtroCadena = /[^a-zA-Z0-9\s\-_.]/g;
                 const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
 
                 if (nombre?.length > 0) {

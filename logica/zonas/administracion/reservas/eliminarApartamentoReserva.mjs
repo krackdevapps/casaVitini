@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/insertarTotalesReserva.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { bloquearApartamentos } from "../../../sistema/bloquearApartamentos.mjs";
 
 export const eliminarApartamentoReserva = async (entrada, salida) => {
     let mutex
@@ -65,16 +66,24 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
         let estadoInfomracionFinanciera = "actualizar";
         const fechaEntrada_ISO = resuelveValidacionReserva.rows[0].fechaEntrada_ISO;
         const fechaSalida_ISO = resuelveValidacionReserva.rows[0].fechaSalida_ISO;
-        const metadatos = {
-            reserva: reserva,
-            apartamentoUID: apartamento,
-            tipoBloqueo: tipoBloqueo,
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
-            zonaBloqueo: "publico",
-            origen: "eliminacionApartamentoDeReserva"
-        };
-        await bloquearApartamentos(metadatos);
+
+
+        if (tipoBloqueo === "permanente" || tipoBloqueo === "rangoTemporal") {
+            const metadatos = {
+                reserva: reserva,
+                apartamentoUID: apartamento,
+                tipoBloqueo: tipoBloqueo,
+                fechaEntrada_ISO: fechaEntrada_ISO,
+                fechaSalida_ISO: fechaSalida_ISO,
+                zonaBloqueo: "publico",
+                origen: "eliminacionApartamentoDeReserva"
+            };
+            await bloquearApartamentos(metadatos);
+
+        }
+
+
+
         const eliminaApartamentoReserva = `
                         DELETE 
                         FROM 

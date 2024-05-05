@@ -5645,12 +5645,18 @@ const casaVitini = {
             if (componente) {
                 const funcionPersonalizada = metadatos.funcionPersonalizada
                 if (eval("typeof " + funcionPersonalizada) === "function") {
-                    const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
-                    metadatos.datosPaginacion.instanciaUID = instanciaUID
-
                     let datosPaginacion = metadatos.datosPaginacion
-                    datosPaginacion = JSON.stringify(datosPaginacion);
-                    eval(funcionPersonalizada + "(" + datosPaginacion + ");")
+                    if (datosPaginacion) {
+                        // Mucho ojo! Si los datos provienen de paginacion o de otro sitio, como el controlador de categorias globales de los detallesUI de la reserva
+                        const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
+                        metadatos.datosPaginacion.instanciaUID = instanciaUID
+                        datosPaginacion = JSON.stringify(datosPaginacion)
+                        eval(funcionPersonalizada + "(" + datosPaginacion + ");")
+                    }else {
+                        // Los datos viene sin la llave datosPaginacion por que el objeto no se ha guardado con un paginador.
+                        eval(funcionPersonalizada + "();")
+                    }
+            
                 }
             } else {
                 const zona = metadatos.zona

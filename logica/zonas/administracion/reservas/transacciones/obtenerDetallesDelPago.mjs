@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { conexion } from "../../../../componentes/db.mjs";
 import { codigoZonaHoraria } from "../../../../sistema/codigoZonaHoraria.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import Decimal from "decimal.js";
 
 export const obtenerDetallesDelPago = async (entrada, salida) => {
     try {

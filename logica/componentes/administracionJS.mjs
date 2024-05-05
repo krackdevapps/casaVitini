@@ -1925,7 +1925,9 @@ const administracion = {
                         apartamento: metadatos.apartamentoIDV,
                         habitacion: metadatos.habitacionIDV
                     }
+                    console.log("transacion", transaccion)
                     const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                    console.log("respuestaServidor", respuestaServidor)
                     if (respuestaServidor?.error) {
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }

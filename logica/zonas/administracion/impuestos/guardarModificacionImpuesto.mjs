@@ -31,7 +31,7 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
             }
             nombreImpuesto = nombreImpuesto.replace(filtroCadena_v2, '');
             if (nombreImpuesto.length === 0) {
-                const error = "Revisa el nombre, ningun caracter escrito en el campo pasaporte es valido";
+                const error = "Revisa el nombre del impuesto, ningún caracter escrito en el campo pasaporte es valido";
                 throw new Error(error);
             }
         }
