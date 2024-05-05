@@ -6,6 +6,7 @@ import { DateTime } from "luxon";
 import { validarModificacionRangoFechaResereva } from "../../../sistema/validadores/validarModificacionRangoFechaResereva.mjs";
 import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/insertarTotalesReserva.mjs";
 import { vitiniSysError } from "../../../sistema/vitiniSysError.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {

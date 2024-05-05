@@ -6,6 +6,11 @@ const selectorRangoUniversal = async (metadatos) => {
         const fechaFin_rango_ISO = metadatos.fechaFin_rango_ISO
         const fechaInicio_elemento_ISO = metadatos.fechaInicio_elemento_ISO
         const fechaFin_elemento_ISO = metadatos.fechaFin_elemento_ISO
+        console.log(fechaInicio_rango_ISO)
+        console.log(fechaFin_rango_ISO)
+        console.log(fechaInicio_elemento_ISO)
+        console.log(fechaFin_elemento_ISO)
+
 
         try {
             await validadoresCompartidos.fechas.validarFecha_ISO(fechaInicio_rango_ISO)

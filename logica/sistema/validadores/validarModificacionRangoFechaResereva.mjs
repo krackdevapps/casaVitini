@@ -23,11 +23,11 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
         }
         const mesNumeroControl = parseInt(mesCalendario, 10);
         const anoNumeroControl = parseInt(anoCalendario, 10);
-        if (mesNumeroControl < 1 && mesNumeroControl > 12 && anoNumeroControl < 2000) {
+        if (mesNumeroControl < 1 && mesNumeroControl > 12 && anoNumeroControl < 1000) {
             const error = "Revisa los datos de mes por que debe de ser un numero del 1 al 12"
             throw new Error(error)
         }
-        if (anoNumeroControl < 2000 || anoNumeroControl > 5000) {
+        if (anoNumeroControl < 1000 || anoNumeroControl > 5000) {
             const error = "El año no puede ser inferior a 2000 ni superior a 5000"
             throw new Error(error)
         }
@@ -98,6 +98,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
         })
         const controlConfiguracionAlojamiento = apartamentosReservaActual.every(apto => apartamentosConConfiguracionDisponible.includes(apto));
         if (!controlConfiguracionAlojamiento) {
+            // 3h665h5h56
             const error = "No se puede comprobar la elasticidad del rango de esta reserva por que hay apartamentos que no existen en la configuracion de alojamiento. Dicho de otra manera, esta reserva tiene apartamentos que ya no existen como configuracion de alojamiento. Puede que esta reserva se hiciera cuando existian unas configuraciones de alojamiento que ahora ya no existen."
             throw new Error(error)
         }
@@ -256,8 +257,8 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             // Aqui se mira si habiendo algo de rango disponible. Aqui entonces se mira cuanto rango disponbile hay en el mes solicitaado
             const contenedorQueDejanRangoDisponbile = []
             for (const detallesDelEvento of contenedorGlobal) {
-                const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
-                const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
+                const fechaInicioEvento_ISO = detallesDelEvento.fechaEntrada_ISO
+                const fechaFinEvento_ISO = detallesDelEvento.fechaSalida_ISO
                 const tipoElemento = detallesDelEvento.tipoElemento
                 if (tipoElemento === "reserva" || tipoElemento === "eventoSincronizado") {
                     const eventoBloqueanteDeRango = await selectorRangoUniversal({
@@ -479,8 +480,8 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             // Aqui se mira si habiendo algo de rango disponible. Aqui entonces se mira cuanto rango disponbile hay
             const contenedorQueDejanRangoDisponbile = []
             for (const detallesDelEvento of contenedorGlobal) {
-                const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
-                const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
+                const fechaInicioEvento_ISO = detallesDelEvento.fechaEntrada_ISO
+                const fechaFinEvento_ISO = detallesDelEvento.fechaSalida_ISO
                 const tipoElemento = detallesDelEvento.tipoElemento
                 if (tipoElemento === "reserva" || tipoElemento === "eventoSincronizado") {
                     const eventoBloqueanteDeRango = await selectorRangoUniversal({
