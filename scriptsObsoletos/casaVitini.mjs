@@ -10531,7 +10531,7 @@ const casaVitini = {
                         const apartamentoIDV = entrada.body.apartamentoIDV;
                         const filtroCadena = /^[a-z0-9]+$/;
                         const propuestaPrecio = entrada.body.propuestaPrecio;
-                        console.log("prtopuesta", propuestaPrecio);
+                        
                         if (typeof apartamentoIDV !== "string") {
                             const error = "El campo apartamentoIDV debe de ser una cadena";
                             throw new Error(error);
@@ -12036,7 +12036,7 @@ const casaVitini = {
                         tipo,
                         diasArray
                     ];
-                    console.log("diasArray", typeof diasArray);
+                    
                     const resuelveCrearComportamiento = await conexion.query(crearComportamiento, datos);
                     if (resuelveCrearComportamiento.rowCount === 1) {
                         const nuevoUIDComportamiento = resuelveCrearComportamiento.rows[0].uid;
@@ -16183,7 +16183,7 @@ const casaVitini = {
             },
             UI: async (entrada, salida) => {
                 try {
-                    console.log("test");
+                    
                     const administracionJS = administracionUI();
                     const ok = {
                         ok: administracionJS

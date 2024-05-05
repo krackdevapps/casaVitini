@@ -13,7 +13,7 @@ export const listarEntidadesAlojamiento = async (entrada, salida) => {
 
         const estructuraFinal = {};
         const consultaApartamento = `
-                                SELECT4
+                                SELECT
                                 apartamento,
                                 "apartamentoUI"
                                 FROM apartamentos

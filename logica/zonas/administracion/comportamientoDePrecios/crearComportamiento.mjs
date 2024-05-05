@@ -238,7 +238,7 @@ export const crearComportamiento = async (entrada, salida) => {
             tipo,
             diasArray
         ];
-        console.log("diasArray", typeof diasArray);
+        
         const resuelveCrearComportamiento = await conexion.query(crearComportamiento, datos);
         if (resuelveCrearComportamiento.rowCount === 1) {
             const nuevoUIDComportamiento = resuelveCrearComportamiento.rows[0].uid;

@@ -4,6 +4,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { obtenerDetallesOferta } from "../../../sistema/sistemaDeOfertas/obtenerDetallesOferta.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { Mutex } from "async-mutex";
+import Decimal from "decimal.js";
 
 export const actualizarOferta = async (entrada, salida) => {
     let mutex

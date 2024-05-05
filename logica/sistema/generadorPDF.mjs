@@ -365,8 +365,8 @@ const generadorPDF3 = async (reserva) => {
         const __dirname = path.dirname(__filename);
         const fonts = {
             Roboto: {
-                normal: require.resolve('../../../componentes/pdf/fuentes/roboto-regular.ttf'),
-                bold: require.resolve('../../../componentes/pdf/fuentes/roboto-bold.ttf'),
+                normal: require.resolve('../../componentes/pdf/fuentes/roboto-regular.ttf'),
+                bold: require.resolve('../../componentes/pdf/fuentes/roboto-bold.ttf'),
             },
         };
         const docDefinition = {
@@ -375,7 +375,7 @@ const generadorPDF3 = async (reserva) => {
                 style: "cabecera",
                 columns: [
                     {
-                        image: require.resolve('../../../componentes/pdf/logo.png'),
+                        image: require.resolve('../../componentes/pdf/logo.png'),
                         width: 100
                     },
                     {

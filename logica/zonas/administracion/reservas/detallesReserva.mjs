@@ -1,6 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { detallesReserva as detallesReserva_ } from "../../../sistema/sistemaDeReservas/detallesReserva.mjs";
-
 export const detallesReserva = async (entrada, salida) => {
     try {
 
@@ -9,9 +8,7 @@ export const detallesReserva = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         if (IDX.control()) return
-
-        mutex = new Mutex();
-        await mutex.acquire();
+        console.log("test12")
 
         const reservaUID = entrada.body.reserva;
         const solo = entrada.body.solo;
@@ -23,6 +20,7 @@ export const detallesReserva = async (entrada, salida) => {
             const error = "Se ha definico correctamente  la clave 'reserva' pero el valor de esta debe de ser un numero positivo, si has escrito un numero positivo, revisa que en el objeto no este numero no este envuelvo entre comillas";
             throw new Error(error);
         }
+
         if (solo) {
             if (solo !== "detallesAlojamiento" &&
                 solo !== "desgloseTotal" &&

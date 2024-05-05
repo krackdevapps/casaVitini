@@ -26013,9 +26013,8 @@ const convertirFuncionesEnCadenas = (objeto) => {
         }
     }
 }
-const administracionUI = () => {
+export const administracionJS = () => {
     convertirFuncionesEnCadenas(administracion);
     const objetoComoJSON = JSON.stringify(administracion);
     return objetoComoJSON
 }
-export { administracionUI }

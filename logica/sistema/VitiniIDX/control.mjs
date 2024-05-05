@@ -20,7 +20,7 @@ export class VitiniIDX {
     control() {
         try {
             const VitiniIDX = this.usuario;
-            console.log("viti", VitiniIDX)
+            
             if (!VitiniIDX) {
                 const sysError = new Error("Mensaje de error")
                 const msgError = {
@@ -30,12 +30,12 @@ export class VitiniIDX {
                 const constructor = Object.assign(sysError, msgError)
                 throw constructor
             }
-            console.log("jis", this.contenedorGrupos)
+            
             if (this.contenedorGrupos.length > 0) {
-                console.log("mayorcero", this.contenedorGrupos.length)
+                
 
                 const rol = this.rol;
-                console.log("rol", rol)
+                
                 if (!this.contenedorGrupos.includes(rol)) {
                     const sysError = new Error("Mensaje de error")
                     const msgError = {

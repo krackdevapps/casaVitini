@@ -14,7 +14,7 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
         const apartamentoIDV = entrada.body.apartamentoIDV;
         const filtroCadena = /^[a-z0-9]+$/;
         const propuestaPrecio = entrada.body.propuestaPrecio;
-        console.log("prtopuesta", propuestaPrecio);
+        
         if (typeof apartamentoIDV !== "string") {
             const error = "El campo apartamentoIDV debe de ser una cadena";
             throw new Error(error);

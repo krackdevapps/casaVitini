@@ -1,3 +1,4 @@
+import { conexion } from "../../../componentes/db.mjs";
 export const obtenerMensajes = async (entrada, salida) => {
     try {
         const consulta = `

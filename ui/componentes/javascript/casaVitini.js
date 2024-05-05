@@ -5894,7 +5894,7 @@ const casaVitini = {
             }
             if (!casaVitini.administracion) {
                 const transaccion = {
-                    zona: "administracion/componentes/UI"
+                    zona: "administracion/componentes/administracionUI"
                 }
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                 if (respuestaServidor?.error) {
