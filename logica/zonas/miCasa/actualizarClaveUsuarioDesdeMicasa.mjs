@@ -1,39 +1,22 @@
+import { conexion } from "../../componentes/db.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
-
-
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+import { vitiniCrypto } from "../../sistema/vitiniCrypto.mjs";
 
 export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
-
     try {
-
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return  
-
+        if (IDX.control()) return
 
         const usuarioIDX = entrada.session.usuario;
         const claveActual = entrada.body.claveActual;
         const claveNueva = entrada.body.claveNueva;
         const claveConfirmada = entrada.body.claveConfirmada;
-        const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-        if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
-            const error = "El campo usuarioIDX solo admite minúsculas y numeros";
-            throw new Error(error);
-        }
-        if (!claveActual) {
-            const error = "No has escrito tu contrasena actual en el campo correspondiente";
-            throw new Error(error);
-        }
-        if (!claveNueva) {
-            const error = "Escribe la nueva contrasena en el campo correspondiente";
-            throw new Error(error);
-        } else {
-            validadoresCompartidos.claves.minimoRequisitos(claveNueva);
-        }
-        if (!claveConfirmada) {
-            const error = "Confirma la nueva contrasena antes de cambiarla";
-            throw new Error(error);
-        }
+
+        validadoresCompartidos.claves.minimoRequisitos(claveNueva);
+        validadoresCompartidos.claves.minimoRequisitos(claveConfirmada);
+
         if (claveNueva !== claveConfirmada) {
             const error = "No has escrito dos veces la misma nueva contrasena, revisa las claves que has escrito y cerciorate que ambas claves nueva son iguales";
             throw new Error(error);
@@ -42,7 +25,7 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
             const error = "Has escrito una clave nueva que es la misma que la actual. Por favor revisa lo campos.";
             throw new Error(error);
         }
-        //Obtener claveActual guardada, el hash
+        await conexion.query('COMMIT'); // Confirmar la transacción
         const obtenerClaveActualHASH = `
                 SELECT 
                 clave,
@@ -96,7 +79,6 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
             };
             salida.json(ok);
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
         const error = {

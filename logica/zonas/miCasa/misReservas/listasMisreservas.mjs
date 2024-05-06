@@ -1,28 +1,41 @@
+import { conexion } from "../../../componentes/db.mjs"
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs"
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs"
 
 export const listarMisReservas = async (entrada, salida) => {
     try {
 
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return  
-
-
+        if (IDX.control()) return
 
         const usuario = entrada.session.usuario
-        let paginaActual = entrada.body.pagina;
-        // const numeroDeReservasPorPagina = entrada.body.numeroDeReservasPorPagina
-        let nombreColumna = entrada.body.nombreColumna;
-        let sentidoColumna = entrada.body.sentidoColumna;
-        const filtroNumerosEnteros = /^[0-9]+$/;
-        if (typeof paginaActual !== "number" || !Number.isInteger(paginaActual) || paginaActual <= 0) {
-            const error = "Debe de especificarse la clave 'paginaActual' y su valor debe de ser numerico, entero, positivo y mayor a cero.";
-            throw new Error(error);
-        }
-        // if (!numeroDeReservasPorPagina || !filtroNumerosEnteros.test(numeroDeReservasPorPagina)) {
-        //     const error = "El campo de numeroDeReservasPorPagina solo admite una cadena con numeros enteros y positivos"
-        //     throw new Error(error)
-        // }
+        const paginaActual = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pagina,
+            nombreCampo: "El numero de página",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const nombreColumna = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreColumna,
+            nombreCampo: "El campo del nombre de la columna",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const sentidoColumna = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.sentidoColumna,
+            nombreCampo: "El campo del sentido de la columna",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         const paginaActualSQL = Number((paginaActual - 1) + "0");
         const numeroPorPagina = 10;
         // Comprobar si la cuenta tiene un email

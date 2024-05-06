@@ -1,17 +1,15 @@
+import { DateTime } from "luxon";
+import { conexion } from "../../../componentes/db.mjs";
+import { enviarMail } from "../../../sistema/sistemaDeMail/enviarMail.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+
 
 export const enviarCorreo = async (entrada, salida) => {
     try {
-        let email = entrada.body.email;
-        const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
-        const filtroCadena = /['"\\;\r\n<>\t\b]/g;
-        email = email
-            .toLowerCase()
-            .trim()
-            .replace(filtroCadena, '');
-        if (!email || !filtroCorreoElectronico.test(email)) {
-            const error = "El campo de correo electrónico no cumple con el formato esperado, por favor revisalo.";
-            throw new Error(error);
-        }
+
+        const email = validadoresCompartidos.tipos
+            .correoElectronico(entrada.body.email)
+
         const generarCadenaAleatoria = (longitud) => {
             const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let cadenaAleatoria = '';
@@ -113,7 +111,7 @@ export const enviarCorreo = async (entrada, salida) => {
                     mensaje: mensaje,
                 };
                 // Enviamos el mensaje
-                const resultadoEnvio = await enviarMail(composicionDelMensaje);
+                const resultadoEnvio = enviarMail(composicionDelMensaje);
                 const ok = {
                     ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para recuperar tu cuenta",
                 };
@@ -153,7 +151,8 @@ export const enviarCorreo = async (entrada, salida) => {
                 mensaje: mensaje,
             };
             // Enviamos el mensaje
-            const resultadoEnvio = await enviarMail(composicionDelMensaje);
+            await conexion.query('COMMIT'); // Confirmar la transacción
+            const resultadoEnvio = enviarMail(composicionDelMensaje);
             const ok = {
                 ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para verificar tu VitiniID",
             };
@@ -161,7 +160,6 @@ export const enviarCorreo = async (entrada, salida) => {
         }
 
 
-        await conexion.query('COMMIT'); // Confirmar la transacción
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
         console.info(errorCapturado.message);

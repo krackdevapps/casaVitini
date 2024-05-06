@@ -1,23 +1,29 @@
+import { DateTime } from "luxon";
+import { conexion } from "../../../componentes/db.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+
 export const restablecerClave = async (entrada, salida) => {
     try {
-        const codigo = entrada.body.codigo;
+        const codigo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.codigo,
+            nombreCampo: "El codigo de verificación",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         const clave = entrada.body.clave;
         const claveConfirmada = entrada.body.claveConfirmada;
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (!codigo || !filtroCadena.test(codigo)) {
-            const error = "Los codigo de recuperacion de cuentas solo pueden contener minuscular y numeros";
-            throw new Error(error);
-        }
-        if (!clave || (clave !== claveConfirmada)) {
+
+        validadoresCompartidos.claves.minimoRequisitos(clave);
+        validadoresCompartidos.claves.minimoRequisitos(claveConfirmada);
+        
+        if (clave !== claveConfirmada) {
             const error = "Las claves no coinciden. Por favor escribe tu nueva clave dos veces.";
             throw new Error(error);
         }
-        if (!clave) {
-            const error = "Escribe tu contrasena, no has escrito tu contrasena";
-            throw new Error(error);
-        } else {
-            validadoresCompartidos.claves.minimoRequisitos(clave);
-        }
+
         const fechaActual_ISO = DateTime.utc().toISO();
         const eliminarEnlacesCaducados = `
             DELETE FROM "enlaceDeRecuperacionCuenta"

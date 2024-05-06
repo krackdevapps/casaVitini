@@ -1,5 +1,6 @@
 import { conexion } from "../../componentes/db.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
+import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const actualizarIDX = async (entrada, salida) => {
@@ -18,7 +19,7 @@ export const actualizarIDX = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-        await componentes.eliminarCuentasNoVerificadas();
+        await eliminarCuentasNoVerificadas();
         await conexion.query('BEGIN'); // Inicio de la transacción
         const actualizarIDX = `
                         UPDATE usuarios
@@ -49,7 +50,7 @@ export const actualizarIDX = async (entrada, salida) => {
             await conexion.query(actualizarSessionesActivas, [nuevoIDX, usuarioIDX]);
             const IDXEstablecido = resuelveActualizarIDX.rows[0].usuario;
             const ok = {
-                "ok": "Se ha actualizado el IDX correctamente",
+                ok: "Se ha actualizado el IDX correctamente",
                 usuarioIDX: IDXEstablecido
             };
             salida.json(ok);

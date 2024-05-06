@@ -1,14 +1,18 @@
+import { DateTime } from "luxon";
+import { conexion } from "../../../componentes/db.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+
 export const validarCodigo = async (entrada, salida) => {
     try {
-        let codigo = entrada.body.codigo;
-        const filtroCadena = /^[a-z0-9]+$/;
-        const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+        const codigo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.codigo,
+            nombreCampo: "El codigo de verificación",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
 
-        if (!codigo || !filtroCadena.test(codigo)) {
-            const error = "Los codigo de recuperacion de cuentas solo pueden contener minuscular y numeros";
-            throw new Error(error);
-        }
-        codigo = codigo.replace(filtroCadena, '');
         const fechaActual_ISO = DateTime.utc().toISO();
         const eliminarEnlacesCaducados = `
             DELETE FROM "enlaceDeRecuperacionCuenta"

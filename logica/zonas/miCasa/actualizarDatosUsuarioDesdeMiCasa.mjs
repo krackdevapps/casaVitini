@@ -1,5 +1,7 @@
+import { DateTime } from "luxon";
+import { conexion } from "../../componentes/db.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
-
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const actualizarDatosUsuarioDesdeMiCas = async (entrada, salida) => {
 
@@ -7,93 +9,47 @@ export const actualizarDatosUsuarioDesdeMiCas = async (entrada, salida) => {
 
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return  
-
+        if (IDX.control()) return
 
         const usuarioIDX = entrada.session.usuario;
-        let nombre = entrada.body.nombre;
-        let primerApellido = entrada.body.primerApellido;
-        let segundoApellido = entrada.body.segundoApellido;
-        let pasaporte = entrada.body.pasaporte;
-        let telefono = entrada.body.telefono;
-        let email = entrada.body.email;
-        const filtro_minúsculas_Mayusculas_numeros_espacios = /^[a-zA-Z0-9\s]+$/;
-        const filtroNumeros = /^[0-9]+$/;
-        const filtroCadena = /^[a-zA-Z0-9\s]+$/;
-        const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
 
-        if (!usuarioIDX) {
-            const error = "Identificate para actualizar los datos personales de tu cuenta";
-            throw new Error(error);
-        }
-        if (nombre?.length > 0) {
-            nombre = nombre
-                .trim()
-                .replace(/\s+/g, ' ')
-                .toUpperCase()
-                .replace(filtroCadena_v2, '');
-            if (!filtroCadena.test(nombre)) {
-                const error = "el campo 'nombre' solo puede ser letras minúsculas, masculas.";
-                throw new Error(error);
-            }
-        }
-        if (primerApellido?.length > 0) {
-            primerApellido = primerApellido
-                .trim()
-                .replace(/\s+/g, ' ')
-                .toUpperCase()
-                .replace(filtroCadena_v2, '');
-            if (!filtroCadena.test(primerApellido)) {
-                const error = "el campo 'primerApellido' solo puede ser letras minúsculas, masculas.";
-                throw new Error(error);
-            }
-        }
-        if (segundoApellido?.length > 0) {
-            segundoApellido = segundoApellido
-                .trim()
-                .replace(/\s+/g, ' ')
-                .toUpperCase()
-                .replace(filtroCadena_v2, '');
-            if (!filtroCadena.test(segundoApellido)) {
-                const error = "el campo 'segundoApellido' solo puede ser letras minúsculas, masculas.";
-                throw new Error(error);
-            }
-        }
-        if (pasaporte?.length > 0) {
-            pasaporte = pasaporte
-                .trim()
-                .replace(/\s+/g, ' ')
-                .toUpperCase()
-                .replace(filtroCadena_v2, '');
-            const filtroPasaporte = /^[a-zA-Z0-9]+$/;
-            if (!filtroPasaporte.test(pasaporte)) {
-                const error = "el campo 'pasaporte' solo puede ser letras minúsculas, masculas y numeros.";
-                throw new Error(error);
-            }
-        }
-        if (telefono) {
-            telefono = telefono
-                .trim()
-                .replace(/\s+/g, '')
-                .replace(filtroCadena_v2, '');
-            const filtroTelefono = /^\d+$/;
-            if (!filtroTelefono.test(telefono)) {
-                const error = "el campo 'telefono' solo puede una cadena con un numero, entero y positivo. Si estas escribiendo un numero internacional, sustituya el signo mas del incio por dos ceros";
-                throw new Error(error);
-            }
-        }
-        if (email) {
-            email = email
-                .toLowerCase()
-                .replace(/\s+/g, '')
-                .trim()
-                .replace(filtroCadena_v2, '');
-            const filtroEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!filtroEmail.test(email)) {
-                const error = "El campo email no tiene le formato correcto, por ejemplo usuario@servidor.zona";
-                throw new Error(error);
-            }
-        }
+        const nombre = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombre,
+            nombreCampo: "El campo del nombre",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const primerApellido = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.primerApellido,
+            nombreCampo: "El campo del primer apellido",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const segundoApellido = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.segundoApellido,
+            nombreCampo: "El campo del segundo apellido",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const pasaporte = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.pasaporte,
+            nombreCampo: "El campo del pasaporte",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+            limpiezaEspaciosInternos: "si"
+        })
+
+        const email = validadoresCompartidos.tipos
+            .correoElectronico(entrada.body.email)
+        const telefono = validadoresCompartidos.tipos
+            .telefono(entrada.body.telefono)
+
         await conexion.query('BEGIN'); // Inicio de la transacción
         const controlCorreo = `
                 SELECT 

@@ -529,6 +529,8 @@ const validadoresCompartidos = {
             const filtro = configuracion.filtro
             const sePermiteVacio = configuracion.sePermiteVacio
             const limpiezaEspaciosAlrededor = configuracion.limpiezaEspaciosAlrededor
+            const limpiezaEspaciosInternos = configuracion.limpiezaEspaciosInternos || "no"
+            const limpiezaEspaciosInternosGrandes = configuracion.limpiezaEspaciosInternosGrandes || "no"
             const soloMinusculas = configuracion.soloMinusculas || "no"
             const soloMayusculas = configuracion.soloMayusculas || "no"
 
@@ -550,6 +552,26 @@ const validadoresCompartidos = {
                 const mensaje = `El validor de cadena esta mal configurado, limpiezaEspaciosAlrededor solo acepta si o no.`
                 throw new Error(mensaje)
             }
+            if (limpiezaEspaciosInternos &&
+                typeof limpiezaEspaciosInternos !== "string" &&
+                (limpiezaEspaciosInternos !== "si" && limpiezaEspaciosInternos !== "no")) {
+                const mensaje = `El validor de cadena esta mal configurado, limpiezaEspaciosInternos solo acepta si o no.`
+                throw new Error(mensaje)
+            }
+            if (limpiezaEspaciosInternos === "si") {
+                string = string.replaceAll(" ", "")
+            }
+
+            if (limpiezaEspaciosInternosGrandes &&
+                typeof limpiezaEspaciosInternosGrandes !== "string" &&
+                (limpiezaEspaciosInternosGrandes !== "si" && limpiezaEspaciosInternosGrandes !== "no")) {
+                const mensaje = `El validor de cadena esta mal configurado, limpiezaEspaciosInternosGrandes solo acepta si o no.`
+                throw new Error(mensaje)
+            }
+            if (limpiezaEspaciosInternosGrandes === "si") {
+                string = string.replace(/\s+/g, " ");
+            }
+
             if (soloMinusculas &&
                 typeof soloMayusculas !== "string" &&
                 (soloMinusculas !== "si" && soloMinusculas !== "no")) {
@@ -643,6 +665,7 @@ const validadoresCompartidos = {
             const filtro = configuracion.filtro
             const sePermiteVacio = configuracion.sePermiteVacio
             const limpiezaEspaciosAlrededor = configuracion.limpiezaEspaciosAlrededor
+            const sePermitenNegativos = configuracion.sePermitenNegativos
 
             if (!nombreCampo) {
                 const mensaje = `El validador de cadenas, necesito un nombre de campo.`
@@ -657,12 +680,25 @@ const validadoresCompartidos = {
                 const mensaje = `El validor de cadena esta mal configurado, sePermiteVacio solo acepta si o no y es obligatorio declararlo en la configuracíon.`
                 throw new Error(mensaje)
             }
+
             if (typeof limpiezaEspaciosAlrededor !== "string" &&
                 (limpiezaEspaciosAlrededor !== "si" && limpiezaEspaciosAlrededor !== "no")) {
                 const mensaje = `El validor de cadena esta mal configurado, limpiezaEspaciosAlrededor solo acepta si o no.`
                 throw new Error(mensaje)
             }
 
+            if (sePermitenNegativos &&
+                typeof sePermitenNegativos !== "string" &&
+                (sePermitenNegativos !== "si" && sePermitenNegativos !== "no")) {
+                const mensaje = `El validor de numero esta mal configurado, sePermitenNegativos solo acepta si o no.`
+                throw new Error(mensaje)
+            }
+            if (sePermitenNegativos === "no") {
+                if (number < 0) {
+                    const mensaje = `No se permiten numeros negativos, por favor revisalo.`
+                    throw new Error(mensaje)
+                }
+            }
 
             if (filtro === "numeroSimple") {
                 try {
@@ -686,33 +722,40 @@ const validadoresCompartidos = {
 
         },
         correoElectronico: (correoElectronico) => {
-
-            if (!correoElectronico) {
-                const error = "El campo de correo electroníco está vacío."
-                throw new Error(error)
+            try {
+                if (!correoElectronico) {
+                    const error = "El campo de correo electroníco está vacío."
+                    throw new Error(error)
+                }
+                if (typeof correoElectronico !== "string") {
+                    const error = "El campo de correo electroníco debe de ser una cadena"
+                    throw new Error(error)
+                }
+                const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
+                const cadenaCorreoLimpia = correoElectronico
+                    .trim()
+                    .toLowerCase()
+                if (!filtroCorreoElectronico.test(cadenaCorreoLimpia)) {
+                    const error = "El campo de correo electroníco no cumple con el formato esperado, el formato esperado es asi como usuario@servidor.com"
+                    throw new Error(error)
+                }
+                return cadenaCorreoLimpia
+            } catch (error) {
+                throw error
             }
-
-            const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
-            const cadenaCorreoLimpia = correoElectronico
-                .trim()
-                .toLowerCase()
-            if (typeof correoElectronico !== "string" ||
-                !filtroCorreoElectronico.test(cadenaCorreoLimpia)) {
-                const error = "El campo de correo electroníco no cumple con el formato esperado, el formato esperado es asi como usuario@servidor.com"
-                throw new Error(error)
-            }
-            return cadenaCorreoLimpia
 
         },
-        Telefono: class {
-            constructor(cadena) {
-                this.cadena = cadena
-            }
-
-            stricto() {
-                const telefono = this.cadena
+        telefono: (telefono) => {
+            try {
+                if (!telefono) {
+                    const error = "El campo del telefono está vacío."
+                    throw new Error(error)
+                }
+                if (typeof telefono !== "string") {
+                    const error = "el campo Telefono debe de ser una cadena."
+                    throw new Error(error)
+                }
                 const filtroTelefono = /[^0-9]+/g
-
                 const telefonoLimpio = telefono
                     .replace(/\s+/g, '')
                     .replace("+", '00')
@@ -723,6 +766,8 @@ const validadoresCompartidos = {
                     throw new Error(error)
                 }
                 return telefonoLimpio
+            } catch (error) {
+                throw error
             }
         }
     }
