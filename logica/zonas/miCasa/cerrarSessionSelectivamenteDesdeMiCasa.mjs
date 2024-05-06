@@ -1,19 +1,13 @@
+import { conexion } from "../../componentes/db.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
-
 
 export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return  
-
+        if (IDX.control()) return
 
         const usuarioIDX = entrada.session.usuario;
-        if (!usuarioIDX) {
-            const error = "Tienes que identificarte para poder cerrar sessiones";
-            //  throw new Error(error)
-        }
-        //  await conexion.query('BEGIN'); // Inicio de la transacción
         const tipoOperacion = entrada.body.tipoOperacion;
         if (tipoOperacion !== "cerrarUna" && tipoOperacion !== "todasMenosActual") {
             const error = "El campo tipoOperacion necesita especificar si es cerrarUna o todasMenosUna";
@@ -37,7 +31,7 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
             }
             if (resuelveCerrarSessionSelectivamente.rowCount === 1) {
                 const ok = {
-                    ok: "Se ha cerrado correctament la session",
+                    ok: "Se ha cerrado correctamente la session",
                     sessionAtual: entrada.sessionID
                 };
                 salida.json(ok);
@@ -69,6 +63,5 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
             error: errorCapturado.message
         };
         salida.json(error);
-    } finally {
     }
 }

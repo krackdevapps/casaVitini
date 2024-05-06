@@ -1,23 +1,23 @@
+import { conexion } from "../../componentes/db.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+
 export const actualizarIDX = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return  
+        if (IDX.control()) return
 
 
         const usuarioIDX = entrada.session.usuario;
-        let nuevoIDX = entrada.body.nuevoIDX;
-        const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-        const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
-
-        nuevoIDX = nuevoIDX
-            .toLowerCase()
-            .replace(filtroCadena_v2, '');
-        if (!nuevoIDX || !filtro_minúsculas_numeros.test(nuevoIDX)) {
-            const error = "El nuevo VitiniID solo admite minúsculas y numeros";
-            throw new Error(error);
-        }
+        const nuevoIDX = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.usuarioIDX,
+            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
         await componentes.eliminarCuentasNoVerificadas();
         await conexion.query('BEGIN'); // Inicio de la transacción
         const actualizarIDX = `

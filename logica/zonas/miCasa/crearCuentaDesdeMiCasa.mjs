@@ -1,49 +1,32 @@
-import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
+import { DateTime } from "luxon";
+import { conexion } from "../../componentes/db.mjs";
+import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
+import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
+import { enviarEmailAlCrearCuentaNueva } from "../../sistema/sistemaDeMail/enviarEmailAlCrearCuentaNueva.mjs";
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+import { vitiniCrypto } from "../../sistema/vitiniCrypto.mjs";
 
 
 export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return  
 
-
-        let usuarioIDX = entrada.body.usuarioIDX;
-        let email = entrada.body.email;
         const claveNueva = entrada.body.claveNueva;
         const claveConfirmada = entrada.body.claveConfirmada;
-        const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-        const filtroCadena = /['"\\;\r\n<>\t\b]/g;
 
-        if (!usuarioIDX) {
-            const error = "Escribe un nombre de usuario";
-            throw new Error(error);
-        }
-        usuarioIDX = usuarioIDX
-            .trim()
-            .toLowerCase()
-            .replace(filtroCadena, '');
+        const usuarioIDX = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.usuarioIDX,
+            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
 
-        if (!filtro_minúsculas_numeros.test(usuarioIDX)) {
-            const error = "El campo usuarioIDX solo admite minúsculas y numeros y nada mas";
-            throw new Error(error);
-        }
-        const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
-        email = email
-            .toLowerCase()
-            .trim()
-            .replace(filtroCadena, '');
+        const email = validadoresCompartidos.tipos
+            .correoElectronico(entrada.body.email)
 
-        if (!email || !filtroCorreoElectronico.test(email)) {
-            const error = "El campo de correo electrónico no cumple con el formato esperado";
-            throw new Error(error);
-        }
-        if (!claveNueva) {
-            const error = "Escribe tu contrasena, no has escrito tu contrasena";
-            throw new Error(error);
-        } else {
-            validadoresCompartidos.claves.minimoRequisitos(claveNueva);
-        }
+        validadoresCompartidos.claves.minimoRequisitos(claveNueva);
+
         if (!claveConfirmada) {
             const error = "Vuelve a escribir tu contrasena de nuevo";
             throw new Error(error);
@@ -58,11 +41,13 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
         }
 
         if (claveNueva === usuarioIDX) {
-            const error = "El nombre de usuario y la contrasena no pueden ser iguales por seguridad";
+            const error = "El nombre de usuario y la contrasena no pueden ser iguales por temas de seguridad.";
             throw new Error(error);
         }
-        await componentes.eliminarCuentasNoVerificadas();
-        await componentes.borrarCuentasCaducadas();
+
+
+        await eliminarCuentasNoVerificadas();
+        await borrarCuentasCaducadas();
         await conexion.query('BEGIN'); // Inicio de la transacción
         const validarNuevoUsuario = `
                 SELECT 

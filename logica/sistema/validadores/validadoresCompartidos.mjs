@@ -480,7 +480,9 @@ const validadoresCompartidos = {
     claves: {
         minimoRequisitos: (clave) => {
             try {
-                if (clave.length < 12) {
+                if (!clave &&
+                    typeof clave !== "srting" &&
+                    clave.length < 12) {
                     const error = "La contraseña debe de tener un minimo de 12 caracteres"
                     throw new Error(error)
                 }
@@ -562,7 +564,7 @@ const validadoresCompartidos = {
                 return string
             }
             if (string.length === 0 || string === "") {
-                const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros y los siguientes caracteres: _, -, . y /`
+                const mensaje = `${nombreCampo} esta vacío.`
                 throw new Error(mensaje)
             }
             if (limpiezaEspaciosAlrededor === "si") {
@@ -683,24 +685,24 @@ const validadoresCompartidos = {
 
 
         },
-        CorreoElectronico: class {
-            constructor(cadenaCorreo) {
-                this.cadenaCorreo = cadenaCorreo
+        correoElectronico: (correoElectronico) => {
+
+            if (!correoElectronico) {
+                const error = "El campo de correo electroníco está vacío."
+                throw new Error(error)
             }
 
-            stricto() {
-                const cadenaCorreo = this.cadenaCorreo
-                const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
-                const cadenaCorreoLimpia = cadenaCorreo
-                    .replace(/\s+/g, '')
-                    .trim()
-
-                if (!filtroCorreoElectronico.test(cadenaCorreoLimpia)) {
-                    const error = "el campo 'correoElectronico' no cumple con el formato esperado, el formado esperado es asi como usuario@servidor.com"
-                    throw new Error(error)
-                }
-                return cadenaCorreoLimpia
+            const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
+            const cadenaCorreoLimpia = correoElectronico
+                .trim()
+                .toLowerCase()
+            if (typeof correoElectronico !== "string" ||
+                !filtroCorreoElectronico.test(cadenaCorreoLimpia)) {
+                const error = "El campo de correo electroníco no cumple con el formato esperado, el formato esperado es asi como usuario@servidor.com"
+                throw new Error(error)
             }
+            return cadenaCorreoLimpia
+
         },
         Telefono: class {
             constructor(cadena) {
