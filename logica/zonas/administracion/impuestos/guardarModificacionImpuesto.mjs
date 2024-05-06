@@ -4,7 +4,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 export const guardarModificacionImpuesto = async (entrada, salida) => {
     let mutex
     try {
-    
+
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
@@ -35,7 +35,20 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
                 throw new Error(error);
             }
         }
-
+        // Validar si el nombre del impuesto es unico
+        const consultaNombreImpuesto = `
+           SELECT 
+           nombre
+           FROM impuestos
+           WHERE LOWER(nombre) = LOWER($1)
+           AND
+           "impuestoUID" <> $2
+           `;
+        const resuelveValidarNombreImpuesto = await conexion.query(consultaNombreImpuesto, [nombreImpuesto, impuestoUID]);
+        if (resuelveValidarNombreImpuesto.rowCount > 0) {
+            const error = "Ya existe un impuesto con ese nombre exacto. Por favor selecciona otro nombre para este impuesto con el fin de tener nombres unicos en los impuestos y poder distingirlos correctamente.";
+            throw new Error(error);
+        }
 
         const filtroTipoImpositivo = /^\d+\.\d{2}$/;
         if (tipoImpositivo?.length > 0 && (typeof tipoImpositivo !== "string" || !filtroTipoImpositivo.test(tipoImpositivo))) {

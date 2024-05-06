@@ -9439,6 +9439,10 @@ const casaVitini = {
                 mensajeUI.setAttribute("componente", "mensajeUI")
                 contenidoAdvertenciaInmersiva.appendChild(mensajeUI)
 
+                const contenedorEspacio = document.createElement("div")
+                contenedorEspacio.setAttribute("componente", "contenedor")
+                contenidoAdvertenciaInmersiva.appendChild(contenedorEspacio)
+
                 const botonAceptar = document.createElement("div")
                 botonAceptar.classList.add("boton")
                 botonAceptar.setAttribute("boton", "aceptar")

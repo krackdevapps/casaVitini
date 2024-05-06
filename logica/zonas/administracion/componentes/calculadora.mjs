@@ -1,6 +1,14 @@
 import { utilidades } from "../../../componentes/utilidades.mjs";
-export const calculadora = () => {
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+
+export const calculadora = (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
         const numero1 = entrada.body.numero1;
         const numero2 = entrada.body.numero2;
         const operador = entrada.body.operador;

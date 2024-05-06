@@ -49,6 +49,20 @@ export const crearNuevoImpuesto = async (entrada, salida) => {
         //     const error = "El campo moneda solo puede ser un una cadena de minúsculas y numeros sin espacios"
         //     throw new Error(error)
         // }
+
+        // Validar si el nombre del impuesto es unico
+        const consultaNombreImpuesto = `
+        SELECT 
+        nombre
+        FROM impuestos
+        WHERE LOWER(nombre) = LOWER($1)
+        `;
+        const resuelveValidarNombreImpuesto = await conexion.query(consultaNombreImpuesto, [nombreImpuesto]);
+        if (resuelveValidarNombreImpuesto.rowCount > 0 ) {
+            const error = "Ya existe un impuesto con ese nombre exacto. Por favor selecciona otro nombre para este impuesto con el fin de tener nombres unicos en los impuestos y poder distingirlos correctamente.";
+            throw new Error(error);
+        }
+
         if (tipoValor) {
             const validarTipoValor = `
                                 SELECT 

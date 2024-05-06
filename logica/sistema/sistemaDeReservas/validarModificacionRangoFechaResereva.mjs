@@ -5,6 +5,7 @@ import { codigoZonaHoraria } from '../codigoZonaHoraria.mjs';
 import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUniversal.mjs';
 import { bloqueosPorRango_apartamentoIDV } from '../selectoresCompartidos/bloqueosPorRango_apartamentoIDV.mjs';
 import { reservasPorRango_y_apartamentos } from '../selectoresCompartidos/reservasPorRango_y_apartamentos.mjs';
+import { resolverApartamentoUI } from '../sistemaDeResolucion/resolverApartamentoUI.mjs';
 const validarModificacionRangoFechaResereva = async (metadatos) => {
     try {
         const reserva = metadatos.reserva
@@ -75,34 +76,54 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
         FROM "reservaApartamentos" 
         WHERE reserva = $1;`
         const resuelveConsultaAlojamientoReservaActual = await conexion.query(consultaAlojamientoReservaActual, [reserva])
-        if (resuelveConsultaAlojamientoReservaActual.rowCount === 0) {
-            const ok = {
-                ok: "rangoPasadoLibre"
-            }
-            return ok
-        }
+
         const apartamentosReservaActual = resuelveConsultaAlojamientoReservaActual.rows.map((apartamento) => {
             return apartamento.apartamento
         })
         const apartamentosConConfiguracionDisponible = []
         // consulta apartamentos NO diponibles en configuracion global
-        const estadoNoDisponibleApartamento = "disponible"
+        const estadoDisponibleApartamento = "disponible"
         const consultaApartamentosNoDispopnbiles = `
             SELECT "apartamentoIDV" 
             FROM "configuracionApartamento" 
             WHERE "estadoConfiguracion" = $1
             `
-        const resuelveConsultaApartamentosNoDisponibles = await conexion.query(consultaApartamentosNoDispopnbiles, [estadoNoDisponibleApartamento])
+        const resuelveConsultaApartamentosNoDisponibles = await conexion.query(consultaApartamentosNoDispopnbiles, [estadoDisponibleApartamento])
         resuelveConsultaApartamentosNoDisponibles.rows.map((apartamentoConConfiguracionDisponible) => {
             apartamentosConConfiguracionDisponible.push(apartamentoConConfiguracionDisponible.apartamentoIDV)
         })
         const controlConfiguracionAlojamiento = apartamentosReservaActual.every(apto => apartamentosConConfiguracionDisponible.includes(apto));
+        console.log(apartamentosReservaActual, apartamentosConConfiguracionDisponible)
         if (!controlConfiguracionAlojamiento) {
             // 3h665h5h56
-            const error = "No se puede comprobar la elasticidad del rango de esta reserva por que hay apartamentos que no existen en la configuracion de alojamiento. Dicho de otra manera, esta reserva tiene apartamentos que ya no existen como configuracion de alojamiento. Puede que esta reserva se hiciera cuando existian unas configuraciones de alojamiento que ahora ya no existen."
+
+
+            const elementosNoComunes = apartamentosReservaActual.filter(elemento => !apartamentosConConfiguracionDisponible.includes(elemento));
+            const arrayStringsPrePresentacionDatos = []
+
+            for (const apartamentoIDV of elementosNoComunes) {
+                const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+                const nombreUI = `${apartamentoUI} (IDV: ${apartamentoIDV})`
+                arrayStringsPrePresentacionDatos.push(nombreUI)
+            }
+
+            console.log("apartamentos no existentes", elementosNoComunes)
+            const ultimoElemento = arrayStringsPrePresentacionDatos.pop();
+            const constructorCadenaFinalUI = arrayStringsPrePresentacionDatos.join(", ") + (arrayStringsPrePresentacionDatos.length > 0 ? " y " : "") + ultimoElemento;
+
+            const error = "No se puede comprobar la elasticidad del rango de esta reserva por que hay apartamentos que no existen en la configuración de alojamiento o están en No disponible. Dicho de otra manera, esta reserva tiene apartamentos que ya no existen como configuración de alojamiento o tienen un estado No disponible. Puede que esta reserva se hiciera cuando existían unas configuraciones de alojamiento que ahora ya no existen, concretamente hablamos de los apartamentos: " + constructorCadenaFinalUI
             throw new Error(error)
         }
         if (sentidoRango === "pasado") {
+
+            // cuidado con el primer rangoPasadoLibre, si no hay apartamentos en futuro tambien da rangoPasadolibre
+            // if (resuelveConsultaAlojamientoReservaActual.rowCount === 0) {
+            //     const ok = {
+            //         ok: "rangoPasadoLibre"
+            //     }
+            //     return ok
+            // }
+
             const fechaSeleccionadaParaPasado_Objeto = DateTime.fromObject({
                 year: anoCalendario,
                 month: mesCalendario, day: 1
@@ -397,7 +418,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 }
                 contenedorReservaEncontradas.push(estructura)
             }
-            // En base a los apartamentos de la reserva se impoirtan los calendarios que funcionan por apartmento
+            // En base a los apartamentos de la reserva se importan los calendarios que funcionan por apartamento
             const calendariosSincronizados = []
             for (const apartamentoIDV of apartamentosReservaActual) {
                 const eventosCalendarioPorIDV = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV)

@@ -1,6 +1,15 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+VitiniIDX
 export const apartamentosDisponiblesConfigurados = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        if (IDX.control()) return
+
+
         const apartamentosDisponiblesParaCrearOfertas = `
                             SELECT 
                             ca."apartamentoIDV",
@@ -26,6 +35,5 @@ export const apartamentosDisponiblesConfigurados = async (entrada, salida) => {
             error: errorCatpurado.message
         };
         salida.json(error);
-    } finally {
-    }
+    } 
 }
