@@ -519,6 +519,46 @@ const validadoresCompartidos = {
                 throw errorCapturado
             }
         }
+    },
+    tipos: {
+        filtroCadena: class {
+
+            constructor(string, nombreCampo) {
+                this.string = string
+                this.nombreCampo = nombreCampo
+            }
+
+            stricto() {
+                try {
+
+                    const nombreCampo = this.nombreCampo
+                    const string = this.string
+                    const filtro = /^[a-zA-Z0-9_\-\/\.]+$/;
+
+                    if (!nombreCampo) {
+                        const mensaje = `No se ha determinado el nombreCampo en el filtro de cadena del validados compartido`
+                        throw new Error(mensaje)
+                    }
+
+                    if (!filtro.test(string)) {
+                        const mensaje = `El campo ${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros y los siguientes caracteres: _, -, . y /`
+                        throw new Error(mensaje)
+                    }
+
+                } catch (errorCapturado) {
+                    throw errorCapturado
+                }
+            }
+
+            sustitucion() {
+                    const string = this.string
+                    const filtro = /[^a-zA-Z0-9_\-\/\.]/g;
+                    const cadenaFiltrada = string.replace(filtro, '');
+                    return cadenaFiltrada;
+            }
+
+
+        }
     }
 }
 export {
