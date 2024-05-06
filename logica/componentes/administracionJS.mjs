@@ -14994,22 +14994,27 @@ const casaVitini = {
                     const mensaje = "Creando nuevo impuesto..."
                     const datosPantallaSuperpuesta = {
                         instanciaUID: instanciaUID,
-                        mensaje: mensaje
+                        mensaje: mensaje,
+                        identificadorVisual: "pantallaDeCarga"
                     }
                     casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const transaccion = {
                         zona: "administracion/impuestos/crearNuevoImpuesto"
                     }
+
+                    let selectorCampos = [...document.querySelectorAll("[comNuevoImpuesto]")]
+                    selectorCampos.map((campoNuevoImpuesto) => {
+                        const nombreCampo = campoNuevoImpuesto.getAttribute("comNuevoImpuesto")
+                        const datoCampo = campoNuevoImpuesto.value
+                        transaccion[nombreCampo] = datoCampo
+                    })
+
+                    const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                     if (!instanciaRenderizada) { return }
                     instanciaRenderizada.remove()
-                    let selectorCampos = [...document.querySelectorAll("[comNuevoImpuesto]")]
-                    selectorCampos.map((campoNuevoImpuesto) => {
-                        let nombreCampo = campoNuevoImpuesto.getAttribute("comNuevoImpuesto")
-                        let datoCampo = campoNuevoImpuesto.value
-                        transaccion[nombreCampo] = datoCampo
-                    })
-                    let respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+
+
                     if (respuestaServidor?.error) {
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }

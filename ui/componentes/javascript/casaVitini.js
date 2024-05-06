@@ -1555,7 +1555,7 @@ const casaVitini = {
                                 <br>Cuenta: 365712660
                                 <br>Swift: BAMCNIMAXXX / BAMCNIMA
                                 <br>Código portal: 11185`
-                                
+
                                 marcoElastico.appendChild(infoIngreso)
                                 const contenedor = document.createElement("div")
                                 contenedor.classList.add("plaza_reservas_reservaConfirmada_contenedor")
@@ -4651,48 +4651,54 @@ const casaVitini = {
                 document.body.appendChild(advertenciaInmersivaUI)
             },
             pantallaDeCargaSuperPuesta: (metadatos) => {
-                const instanciaUID = metadatos.instanciaUID
-                const mensaje = metadatos.mensaje ? metadatos.mensaje : "Espere..."
-                const botonCancelar = metadatos.botonCancelar ? metadatos.botoCancelar : "mostrar"
-                const identificadorVisual = metadatos.identificadorVisual
-                const iconoSpinner = metadatos.iconoSpinner ? metadatos.iconoSpinner : "si"
-                const textoBoton = metadatos.textoBoton ? metadatos.textoBoton : "Cancelar"
-                const advertenciaInmersivaUI = document.createElement("div")
-                advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersivaSuperpuesta")
-                advertenciaInmersivaUI.setAttribute("identificadorVisual", identificadorVisual)
-                advertenciaInmersivaUI.setAttribute("pantallaSuperpuesta", "pantallaCargaSuperpuesta")
-                advertenciaInmersivaUI.setAttribute("componente", "advertenciaInmersiva")
-                advertenciaInmersivaUI.setAttribute("instanciaUID", instanciaUID)
-                const marcoElastico = document.createElement("div")
-                marcoElastico.classList.add("marcoElasticoError")
-                if (iconoSpinner === "si") {
-                    const spinnerContainer = document.createElement('div');
-                    spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
-                    spinnerContainer.classList.add("lds-spinner");
-                    for (let i = 0; i < 12; i++) {
-                        const div = document.createElement('div');
-                        spinnerContainer.appendChild(div);
+                try {
+                    const instanciaUID = metadatos.instanciaUID
+                    const mensaje = metadatos.mensaje ? metadatos.mensaje : "Espere..."
+                    const botonCancelar = metadatos.botonCancelar ? metadatos.botoCancelar : "mostrar"
+                    const identificadorVisual = metadatos.identificadorVisual
+                    const iconoSpinner = metadatos.iconoSpinner ? metadatos.iconoSpinner : "si"
+                    const textoBoton = metadatos.textoBoton ? metadatos.textoBoton : "Cancelar"
+
+
+                    const advertenciaInmersivaUI = document.createElement("div")
+                    advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersivaSuperpuesta")
+                    advertenciaInmersivaUI.setAttribute("identificadorVisual", identificadorVisual)
+                    advertenciaInmersivaUI.setAttribute("pantallaSuperpuesta", "pantallaCargaSuperpuesta")
+                    advertenciaInmersivaUI.setAttribute("componente", "advertenciaInmersiva")
+                    advertenciaInmersivaUI.setAttribute("instanciaUID", instanciaUID)
+                    const marcoElastico = document.createElement("div")
+                    marcoElastico.classList.add("marcoElasticoError")
+                    if (iconoSpinner === "si") {
+                        const spinnerContainer = document.createElement('div');
+                        spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
+                        spinnerContainer.classList.add("lds-spinner");
+                        for (let i = 0; i < 12; i++) {
+                            const div = document.createElement('div');
+                            spinnerContainer.appendChild(div);
+                        }
+                        marcoElastico.appendChild(spinnerContainer)
                     }
-                    marcoElastico.appendChild(spinnerContainer)
+                    const info = document.createElement("div")
+                    info.setAttribute("class", "advertenciaInfoFlujoPago")
+                    info.setAttribute("componente", "mensajeFlujoPasarela")
+                    info.innerText = mensaje
+                    marcoElastico.appendChild(info)
+                    const boton = document.createElement("div")
+                    boton.setAttribute("class", "errorBoton")
+                    boton.setAttribute("componente", "boton")
+                    boton.innerText = textoBoton
+                    boton.addEventListener("click", (e) => {
+                        document.body.style.removeProperty("overflow");
+                        e.target.parentNode.parentNode.remove()
+                    })
+                    if (botonCancelar === "mostrar") {
+                        marcoElastico.appendChild(boton)
+                    }
+                    advertenciaInmersivaUI.appendChild(marcoElastico)
+                    document.querySelector("main").appendChild(advertenciaInmersivaUI)
+                } catch (error) {
+                    casaVitini.ui.vistas.advertenciaInmersiva(error.message)
                 }
-                const info = document.createElement("div")
-                info.setAttribute("class", "advertenciaInfoFlujoPago")
-                info.setAttribute("componente", "mensajeFlujoPasarela")
-                info.innerText = mensaje
-                marcoElastico.appendChild(info)
-                const boton = document.createElement("div")
-                boton.setAttribute("class", "errorBoton")
-                boton.setAttribute("componente", "boton")
-                boton.innerText = textoBoton
-                boton.addEventListener("click", (e) => {
-                    document.body.style.removeProperty("overflow");
-                    e.target.parentNode.parentNode.remove()
-                })
-                if (botonCancelar === "mostrar") {
-                    marcoElastico.appendChild(boton)
-                }
-                advertenciaInmersivaUI.appendChild(marcoElastico)
-                document.querySelector("main").appendChild(advertenciaInmersivaUI)
             },
             pagos: {
                 portada: {
@@ -5617,7 +5623,7 @@ const casaVitini = {
             advertenciaInmersivaUI.appendChild(marcoElastico)
             document.querySelector("main").appendChild(advertenciaInmersivaUI)
         },
-   
+
 
         controlGlobalScroll: () => {
             const selectorBloqueMenusGlobales = document.querySelector("[componente=marcoNavegacion]")
@@ -5652,11 +5658,11 @@ const casaVitini = {
                         metadatos.datosPaginacion.instanciaUID = instanciaUID
                         datosPaginacion = JSON.stringify(datosPaginacion)
                         eval(funcionPersonalizada + "(" + datosPaginacion + ");")
-                    }else {
+                    } else {
                         // Los datos viene sin la llave datosPaginacion por que el objeto no se ha guardado con un paginador.
                         eval(funcionPersonalizada + "();")
                     }
-            
+
                 }
             } else {
                 const zona = metadatos.zona
@@ -7332,7 +7338,7 @@ const casaVitini = {
                                 //bloqueDia.style.pointerEvents = "all"
                                 //bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                             }
-                        } 
+                        }
                         else if (mesInternoRango) {
                             bloqueDia.classList.add("calendarioDiaReserva")
                             bloqueDia.style.pointerEvents = "all"
@@ -7527,10 +7533,10 @@ const casaVitini = {
                             if (diaSalidaReserva_decimal < diaFinal_decimal) {
                                 // bloqueDia.classList.add("calendarioDiaReserva")
                                 bloqueDia.setAttribute("estadoDia", "deshabilitado")
-                               // bloqueDia.style.pointerEvents = "all"
-                               // bloqueDia.addEventListener("click", eval(metodoSelectorDia))
+                                // bloqueDia.style.pointerEvents = "all"
+                                // bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                             }
-                        } 
+                        }
                         else if (mesInternoRango) {
                             console.log("mesInternoRango")
 
@@ -7561,7 +7567,7 @@ const casaVitini = {
                                 } else if (diaCheckIn > diaFinal_decimal) {
                                     bloqueDia.classList.remove("calendarioDiaReserva")
                                     bloqueDia.classList.remove("calendarioDiaDisponible")
-                                //    bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                    //    bloqueDia.classList.add("calendarioDiaNoDisponible")
                                     bloqueDia.style.pointerEvents = "none"
                                     bloqueDia.setAttribute("estadoDia", "deshabilitado")
                                 }
@@ -7583,7 +7589,7 @@ const casaVitini = {
                                 }
                             }
                         }
-                   
+
                         marcoMes.appendChild(bloqueDia)
                     }
                 }

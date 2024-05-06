@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const crearNuevoImpuesto = async (entrada, salida) => {
     let mutex
@@ -24,6 +25,9 @@ export const crearNuevoImpuesto = async (entrada, salida) => {
             const error = "El campo nombreImpuesto solo puede ser un una cadena de minúsculas";
             throw new Error(error);
         }
+
+        new validadoresCompartidos.tipos.filtroCadena(nombreImpuesto, "nombreImpuesto").stricto()
+        
         nombreImpuesto = nombreImpuesto.replace(filtroCadena_v2, '');
         if (nombreImpuesto.length === 0) {
             const error = "Revisa el nombre del impuesto, ningun caracter escrito en el campo pasaporte es valido";

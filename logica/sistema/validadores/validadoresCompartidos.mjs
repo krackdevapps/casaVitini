@@ -530,13 +530,12 @@ const validadoresCompartidos = {
 
             stricto() {
                 try {
-
                     const nombreCampo = this.nombreCampo
                     const string = this.string
                     const filtro = /^[a-zA-Z0-9_\-\/\.]+$/;
 
                     if (!nombreCampo) {
-                        const mensaje = `No se ha determinado el nombreCampo en el filtro de cadena del validados compartido`
+                        const mensaje = `No se ha determinado el nombreCampo en el filtro de cadena del validador compartido`
                         throw new Error(mensaje)
                     }
 
