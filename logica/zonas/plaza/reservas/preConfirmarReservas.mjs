@@ -9,8 +9,6 @@ import { actualizarEstadoPago } from "../../../sistema/sistemaDePrecios/actualiz
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 import { crearEnlacePDF } from "../../../sistema/sistemaDePDF/crearEnlacePDF.mjs";
 
-
-
 export const preConfirmarReserva = async (entrada, salida) => {
     const mutex = new Mutex()
     try {

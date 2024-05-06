@@ -8,19 +8,15 @@ export class VitiniIDX {
     administradores() {
         this.contenedorGrupos.push("administrador");
     }
-
     empleados() {
         this.contenedorGrupos.push("empleado");
     }
-
     clientes() {
         this.contenedorGrupos.push("cliente");
     }
-
     control() {
         try {
             const VitiniIDX = this.usuario;
-            
             if (!VitiniIDX) {
                 const sysError = new Error("Mensaje de error")
                 const msgError = {
@@ -30,18 +26,14 @@ export class VitiniIDX {
                 const constructor = Object.assign(sysError, msgError)
                 throw constructor
             }
-            
             if (this.contenedorGrupos.length > 0) {
-                
-
                 const rol = this.rol;
-                
                 if (!this.contenedorGrupos.includes(rol)) {
                     const sysError = new Error("Mensaje de error")
                     const msgError = {
                         tipo: "ROL",
                         mensaje: "No estás autorizado, necesitas una cuenta de más autoridad para acceder aquí"
-                    };
+                    }
                     const constructor = Object.assign(sysError, msgError)
                     throw constructor
                 }

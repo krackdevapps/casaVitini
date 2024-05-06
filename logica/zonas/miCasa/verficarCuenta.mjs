@@ -1,16 +1,20 @@
+import { conexion } from "../../componentes/db.mjs";
+import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+
 export const verificarCuenta = async (entrada, salida) => {
     try {
-        let codigo = entrada.body.codigo;
-        const filtroCadena = /^[a-z0-9]+$/;
-        const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+        const codigo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.codigo,
+            nombreCampo: "El tipo valor",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
 
-        if (!codigo || !filtroCadena.test(codigo)) {
-            const error = "Los codigo de verificacion de cuentas solo pueden contener minuscular y numeros";
-            throw new Error(error);
-        }
-        codigo = codigo.replace(filtroCadena_v2, '');
 
-        await componentes.eliminarCuentasNoVerificadas();
+        await eliminarCuentasNoVerificadas();
         await conexion.query('BEGIN'); // Inicio de la transacción   
         const estadoVerificado = "si";
         const consultaValidarCodigo = `

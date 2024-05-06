@@ -5,6 +5,9 @@ import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/reso
 import { eventosDelApartamento } from "../../../sistema/calendariosSincronizados/airbnb/eventosDelApartamento.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracionGlobal/horasSalidaEntrada.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { utilidades } from "../../../componentes/utilidades.mjs";
+
 
 export const detallesSituacionApartamento = async (entrada, salida) => {
     try {
@@ -14,15 +17,15 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (!apartamentoIDV || !filtroCadena.test(apartamentoIDV)) {
-            const error = "el campo 'apartmentoIDV' solo puede ser letras minúsculas y numeros. sin pesacios";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        console.log("apartamentoIDV", apartamentoIDV)
         // Validar que existe el apartamento
-        const detalleApartamento = {};
-        const estadoDisonible = "disponible";
         const validarApartamento = `
                         SELECT 
                         "apartamentoIDV",
@@ -43,14 +46,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaActualCompletaTZ = tiempoZH.toISO();
         const fechaActualTZ = tiempoZH.toISODate();
-        const fechaActualUTC = DateTime.now().toUTC().toISODate();
-        const diaHoyTZ = tiempoZH.day;
-        const mesPresenteTZ = tiempoZH.month;
-        const anoPresenteTZ = tiempoZH.year;
-        const horaPresenteTZ = tiempoZH.hour;
-        const minutoPresenteTZ = tiempoZH.minute;
         const horasSalidaEntrada = await horasSalidaEntrada_();
-        //const zonaHoraria = horasSalidaEntrada.zonaHoraria
         const horaEntradaTZ = horasSalidaEntrada.horaEntradaTZ;
         const horaSalidaTZ = horasSalidaEntrada.horaSalidaTZ;
         const objetoFinal = {

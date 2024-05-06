@@ -14662,11 +14662,11 @@ const casaVitini = {
                     campoEditable.setAttribute("componente", "campoEditable")
                     campoEditable.setAttribute("campoEditable", nombreDetalles)
                     campoEditable.setAttribute("datoActual", datoDetalle)
-                    campoEditable.placeholder = datoDetalle
                     campoEditable.value = datoDetalle
                     if (nombreDetalles === "nombreImpuesto") {
                         const selectorBloqueDetalles = document.querySelector("[componente=bloqueDetalles")
                         const selectorPrimerBloqueDAtos = document.querySelector("[bloqueDato=tipoImpositivo]")
+                        campoEditable.placeholder = "Escribe un nombre para el impuesto"
                         campoEditable.classList.add("nombreImpuestoCampo")
                         selectorBloqueDetalles.insertBefore(campoEditable, selectorPrimerBloqueDAtos);
                     }
@@ -14744,6 +14744,8 @@ const casaVitini = {
                     }
                     if (nombreDetalles === "tipoImpositivo") {
                         const selectorBloqueDato = document.querySelector(`[bloqueDato="${nombreDetalles}"]`)
+                        campoEditable.placeholder = "Escribe un tipo impositivo (00.00)"
+
                         selectorBloqueDato.appendChild(campoEditable)
                     }
                 })
@@ -14777,12 +14779,9 @@ const casaVitini = {
                 }
                 const selectorCamposEditables = [...document.querySelectorAll("[componente=campoEditable]")]
                 selectorCamposEditables.map(campoEditable => {
-                    let datoActual = campoEditable.getAttribute("datoActual")
-                    let nombreCampoEditable = campoEditable.getAttribute("campoEditable")
-                    let datoCampoEditable = campoEditable.value
-                    if (datoCampoEditable && datoCampoEditable !== datoActual) {
-                        transaccion[nombreCampoEditable] = datoCampoEditable
-                    }
+                    const nombreCampoEditable = campoEditable.getAttribute("campoEditable")
+                    const datoCampoEditable = campoEditable.value
+                    transaccion[nombreCampoEditable] = datoCampoEditable
                 })
 
                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)

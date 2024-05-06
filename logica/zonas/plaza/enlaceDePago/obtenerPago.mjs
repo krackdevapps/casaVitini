@@ -1,6 +1,14 @@
 export const obtenerPago = async (entrada, salida) => {
     try {
-        const pagoUID = entrada.body.pagoUID;
+        const pagoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.pagoUID,
+            nombreCampo: "El identificador universal del pago (pagoUID)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         const filtroCadena = /^[a-z0-9]+$/;
         if (!pagoUID || !filtroCadena.test(pagoUID)) {
             const error = "el codigo de un enlace de pago solo puede ser una cadena de minuscuals y numeros y ya esta";

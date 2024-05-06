@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 export const guardarModificacionImpuesto = async (entrada, salida) => {
     let mutex
     try {
@@ -13,28 +14,52 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
         mutex = new Mutex
         await mutex.acquire();
 
-        const impuestoUID = entrada.body.impuestoUID;
-        let nombreImpuesto = entrada.body.nombreImpuesto;
-        const tipoImpositivo = entrada.body.tipoImpositivo;
-        const tipoValor = entrada.body.tipoValor;
-        const aplicacionSobre = entrada.body.aplicacionSobre;
-        const estado = entrada.body.estado;
-        if (typeof impuestoUID !== "number" || !Number.isInteger(impuestoUID) || impuestoUID <= 0) {
-            const error = "El campo 'impuestoUID' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
-        if (nombreImpuesto) {
-            if (typeof nombreImpuesto !== "string") {
-                const error = "El impuesto debe de ser una cadena";
-                throw new Error(error);
-            }
-            nombreImpuesto = nombreImpuesto.replace(filtroCadena_v2, '');
-            if (nombreImpuesto.length === 0) {
-                const error = "Revisa el nombre del impuesto, ningún caracter escrito en el campo pasaporte es valido";
-                throw new Error(error);
-            }
-        }
+        const impuestoUID = validadoresCompartidos.tipos.numero({
+            number: entrada.body.impuestoUID,
+            nombreCampo: "El UID del impuesto",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const nombreImpuesto = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreImpuesto,
+            nombreCampo: "El nombre del impuesto",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const tipoImpositivo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoImpositivo,
+            nombreCampo: "El tipo impositivo",
+            filtro: "cadenaConNumerosConDosDecimales",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const tipoValor = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoValor,
+            nombreCampo: "El tipo valor",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const aplicacionSobre = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.aplicacionSobre,
+            nombreCampo: "El campo de la aplicacion sobre",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const estado = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.estado,
+            nombreCampo: "El campo de la aplicacion sobre",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+
         // Validar si el nombre del impuesto es unico
         const consultaNombreImpuesto = `
            SELECT 
@@ -50,21 +75,6 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
             throw new Error(error);
         }
 
-        const filtroTipoImpositivo = /^\d+\.\d{2}$/;
-        if (tipoImpositivo?.length > 0 && (typeof tipoImpositivo !== "string" || !filtroTipoImpositivo.test(tipoImpositivo))) {
-            const error = "El campo tipoImpositivo solo puede ser una cadena con un numero y dos decimlaes";
-            throw new Error(error);
-        }
-        const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
-        if (tipoValor?.length > 0 && !filtroCadenaSinEspacio.test(tipoValor)) {
-            const error = "El campo tipoValor solo puede ser un una cadena de minúsculas y numeros sin espacios";
-            throw new Error(error);
-        }
-        const filtroCadena_mMN = /^[a-zA-Z0-9]+$/;
-        if (aplicacionSobre?.length > 0 && !filtroCadena_mMN.test(aplicacionSobre)) {
-            const error = "El campo aplicacionSobre solo puede ser un una cadena de minúsculas y numeros sin espacios";
-            throw new Error(error);
-        }
         if (estado?.length > 0 && estado !== "desactivado" && estado !== "activado") {
             const error = "El estado de un impuesto solo puede ser activado o desactivado";
             throw new Error(error);

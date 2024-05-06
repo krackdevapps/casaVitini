@@ -11,48 +11,41 @@ export const crearNuevoImpuesto = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-
         const mutex = new Mutex()
         await mutex.acquire();
 
-        let nombreImpuesto = entrada.body.nombreImpuesto;
-        const tipoImpositivo = entrada.body.tipoImpositivo;
-        const tipoValor = entrada.body.tipoValor;
-        const aplicacionSobre = entrada.body.aplicacionSobre;
-        const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+        const nombreImpuesto = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreImpuesto,
+            nombreCampo: "El nombre del impuesto",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
 
-        if (!nombreImpuesto) {
-            const error = "El campo nombreImpuesto solo puede ser un una cadena de minúsculas";
-            throw new Error(error);
-        }
-
-        new validadoresCompartidos.tipos.filtroCadena(nombreImpuesto, "nombreImpuesto").stricto()
+        const tipoImpositivo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoImpositivo,
+            nombreCampo: "El tipo impositivo",
+            filtro: "cadenaConNumerosConDosDecimales",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
         
-        nombreImpuesto = nombreImpuesto.replace(filtroCadena_v2, '');
-        if (nombreImpuesto.length === 0) {
-            const error = "Revisa el nombre del impuesto, ningun caracter escrito en el campo pasaporte es valido";
-            throw new Error(error);
-        }
+        })
 
-        const filtroTipoImpositivo = /^\d+\.\d{2}$/;
-        if (!tipoImpositivo || (typeof tipoImpositivo !== "string" || !filtroTipoImpositivo.test(tipoImpositivo))) {
-            const error = "El campo tipoImpositivo solo puede ser una cadena con un numero y dos decimlaes";
-            throw new Error(error);
-        }
-        const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
-        if (!tipoValor || !filtroCadenaSinEspacio.test(tipoValor)) {
-            const error = "El campo tipoValor solo puede ser un una cadena de minúsculas y numeros sin espacios";
-            throw new Error(error);
-        }
-        const filtroCadena_mMN = /^[a-zA-Z0-9]+$/;
-        if (!aplicacionSobre || !filtroCadena_mMN.test(aplicacionSobre)) {
-            const error = "El campo aplicacionSobre solo puede ser un una cadena de minúsculas y numeros sin espacios";
-            throw new Error(error);
-        }
-        // if (!moneda || !filtroCadenaSinEspacio.test(moneda)) {
-        //     const error = "El campo moneda solo puede ser un una cadena de minúsculas y numeros sin espacios"
-        //     throw new Error(error)
-        // }
+        const tipoValor = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoValor,
+            nombreCampo: "El tipo valor",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const aplicacionSobre = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.aplicacionSobre,
+            nombreCampo: "El campo de la aplicacion sobre",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
 
         // Validar si el nombre del impuesto es unico
         const consultaNombreImpuesto = `
@@ -62,7 +55,7 @@ export const crearNuevoImpuesto = async (entrada, salida) => {
         WHERE LOWER(nombre) = LOWER($1)
         `;
         const resuelveValidarNombreImpuesto = await conexion.query(consultaNombreImpuesto, [nombreImpuesto]);
-        if (resuelveValidarNombreImpuesto.rowCount > 0 ) {
+        if (resuelveValidarNombreImpuesto.rowCount > 0) {
             const error = "Ya existe un impuesto con ese nombre exacto. Por favor selecciona otro nombre para este impuesto con el fin de tener nombres unicos en los impuestos y poder distingirlos correctamente.";
             throw new Error(error);
         }

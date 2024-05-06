@@ -521,42 +521,207 @@ const validadoresCompartidos = {
         }
     },
     tipos: {
-        filtroCadena: class {
+        cadena: (configuracion) => {
+            let string = configuracion.string
+            const nombreCampo = configuracion.nombreCampo
+            const filtro = configuracion.filtro
+            const sePermiteVacio = configuracion.sePermiteVacio
+            const limpiezaEspaciosAlrededor = configuracion.limpiezaEspaciosAlrededor
+            const soloMinusculas = configuracion.soloMinusculas || "no"
+            const soloMayusculas = configuracion.soloMayusculas || "no"
 
-            constructor(string, nombreCampo) {
-                this.string = string
-                this.nombreCampo = nombreCampo
+            if (!nombreCampo) {
+                const mensaje = `El validador de cadenas, necesito un nombre de campo.`
+                throw new Error(mensaje)
             }
-
-            stricto() {
+            if (typeof string !== "string") {
+                const mensaje = `${nombreCampo} debe de ser una cadena.`
+                throw new Error(mensaje)
+            }
+            if (typeof sePermiteVacio !== "string" &&
+                (sePermiteVacio !== "si" && sePermiteVacio !== "no")) {
+                const mensaje = `El validor de cadena esta mal configurado, sePermiteVacio solo acepta si o no y es obligatorio declararlo en la configuracíon.`
+                throw new Error(mensaje)
+            }
+            if (typeof limpiezaEspaciosAlrededor !== "string" &&
+                (limpiezaEspaciosAlrededor !== "si" && limpiezaEspaciosAlrededor !== "no")) {
+                const mensaje = `El validor de cadena esta mal configurado, limpiezaEspaciosAlrededor solo acepta si o no.`
+                throw new Error(mensaje)
+            }
+            if (soloMinusculas &&
+                typeof soloMayusculas !== "string" &&
+                (soloMinusculas !== "si" && soloMinusculas !== "no")) {
+                const mensaje = `El validor de cadena esta mal configurado, soloMinusculas solo acepta si o no.`
+                throw new Error(mensaje)
+            }
+            if (soloMayusculas !== "si" && soloMayusculas !== "no") {
+                const mensaje = `El validor de cadena esta mal configurado, soloMayusculas solo acepta si o no.`
+                throw new Error(mensaje)
+            }
+            if (sePermiteVacio === "si" && string === "") {
+                return string
+            }
+            if (string.length === 0 || string === "") {
+                const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros y los siguientes caracteres: _, -, . y /`
+                throw new Error(mensaje)
+            }
+            if (limpiezaEspaciosAlrededor === "si") {
+                string = string
+                    .replace(/\s+/g, ' ')
+                    .trim()
+            }
+            if (soloMinusculas === "si") {
+                string = string
+                    .toLowerCase()
+            }
+            if (soloMayusculas === "si") {
+                string = string
+                    .toLowerCase()
+            }
+            if (filtro === "strictoSinEspacios") {
                 try {
-                    const nombreCampo = this.nombreCampo
-                    const string = this.string
                     const filtro = /^[a-zA-Z0-9_\-\/\.]+$/;
-
-                    if (!nombreCampo) {
-                        const mensaje = `No se ha determinado el nombreCampo en el filtro de cadena del validador compartido`
+                    if (!filtro.test(string)) {
+                        const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros y los siguientes caracteres: _, -, . y /`
                         throw new Error(mensaje)
                     }
-
+                } catch (errorCapturado) {
+                    throw errorCapturado
+                }
+            } else if (filtro === "strictoIDV") {
+                try {
+                    const filtro = /^[a-zA-Z0-9]+$/;
                     if (!filtro.test(string)) {
-                        const mensaje = `El campo ${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros y los siguientes caracteres: _, -, . y /`
+                        const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas y numeros.`
+                        throw new Error(mensaje)
+                    }
+                } catch (errorCapturado) {
+                    throw errorCapturado
+                }
+            } else if (filtro === "strictoConEspacios") {
+                try {
+                    const filtro = /^[a-zA-Z0-9_ \-\/\.]+$/;
+                    if (!filtro.test(string)) {
+                        const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros, espacios y los siguientes caracteres: _, -, . y /`
                         throw new Error(mensaje)
                     }
 
                 } catch (errorCapturado) {
                     throw errorCapturado
                 }
+            } else if (filtro === "sustitucionSinEspacios") {
+                const string = this.string
+                const filtro = /[^a-zA-Z0-9_\-\/\.]/g;
+                stringLimpio = string.replace(filtro, '');
+            } else if (filtro === "sustitucionConEspacios") {
+                const string = this.string
+                const filtro = /^[a-zA-Z0-9_ \-\/\.]+$/;
+                stringLimpio = string.replace(filtro, '');
+            } else if (filtro === "cadenaConNumerosConDosDecimales") {
+                try {
+                    const filtro = /^\d+\.\d{2}$/
+                    if (!filtro.test(string)) {
+                        const mensaje = `${nombreCampo} solo acepta una cadena con numeros con dos decimales separados por punto, por ejemplo 00.00`
+                        throw new Error(mensaje)
+                    }
+                } catch (errorCapturado) {
+                    throw errorCapturado
+                }
+            } else {
+                const mensaje = `El validador de cadenas, necesito un identificador de filtro valido`
+                throw new Error(mensaje)
+            }
+            return string
+        },
+
+        numero: (configuracion) => {
+
+            let number = configuracion.number
+            const nombreCampo = configuracion.nombreCampo
+            const filtro = configuracion.filtro
+            const sePermiteVacio = configuracion.sePermiteVacio
+            const limpiezaEspaciosAlrededor = configuracion.limpiezaEspaciosAlrededor
+
+            if (!nombreCampo) {
+                const mensaje = `El validador de cadenas, necesito un nombre de campo.`
+                throw new Error(mensaje)
+            }
+            if (typeof number !== "number") {
+                const mensaje = `${nombreCampo} debe de ser un numero.`
+                throw new Error(mensaje)
+            }
+            if (typeof sePermiteVacio !== "string" &&
+                (sePermiteVacio !== "si" && sePermiteVacio !== "no")) {
+                const mensaje = `El validor de cadena esta mal configurado, sePermiteVacio solo acepta si o no y es obligatorio declararlo en la configuracíon.`
+                throw new Error(mensaje)
+            }
+            if (typeof limpiezaEspaciosAlrededor !== "string" &&
+                (limpiezaEspaciosAlrededor !== "si" && limpiezaEspaciosAlrededor !== "no")) {
+                const mensaje = `El validor de cadena esta mal configurado, limpiezaEspaciosAlrededor solo acepta si o no.`
+                throw new Error(mensaje)
             }
 
-            sustitucion() {
-                    const string = this.string
-                    const filtro = /[^a-zA-Z0-9_\-\/\.]/g;
-                    const cadenaFiltrada = string.replace(filtro, '');
-                    return cadenaFiltrada;
+
+            if (filtro === "numeroSimple") {
+                try {
+                    const filtro = /^[0-9]+$/;
+                    if (!filtro.test(number)) {
+                        const mensaje = `${nombreCampo} solo acepta numeros`
+                        throw new Error(mensaje)
+                    }
+
+                } catch (errorCapturado) {
+                    throw errorCapturado
+                }
+
+            } else {
+                const mensaje = `El validador de numeros, necesito un identificador de filtro valido`
+                throw new Error(mensaje)
+
+            }
+            return number
+
+
+        },
+        CorreoElectronico: class {
+            constructor(cadenaCorreo) {
+                this.cadenaCorreo = cadenaCorreo
             }
 
+            stricto() {
+                const cadenaCorreo = this.cadenaCorreo
+                const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
+                const cadenaCorreoLimpia = cadenaCorreo
+                    .replace(/\s+/g, '')
+                    .trim()
 
+                if (!filtroCorreoElectronico.test(cadenaCorreoLimpia)) {
+                    const error = "el campo 'correoElectronico' no cumple con el formato esperado, el formado esperado es asi como usuario@servidor.com"
+                    throw new Error(error)
+                }
+                return cadenaCorreoLimpia
+            }
+        },
+        Telefono: class {
+            constructor(cadena) {
+                this.cadena = cadena
+            }
+
+            stricto() {
+                const telefono = this.cadena
+                const filtroTelefono = /[^0-9]+/g
+
+                const telefonoLimpio = telefono
+                    .replace(/\s+/g, '')
+                    .replace("+", '00')
+                    .trim()
+
+                if (!filtroTelefono.test(telefonoLimpio)) {
+                    const error = "el campo Telefono no cumple con el formato esperado, el formado esperado es una cadena con numeros"
+                    throw new Error(error)
+                }
+                return telefonoLimpio
+            }
         }
     }
 }

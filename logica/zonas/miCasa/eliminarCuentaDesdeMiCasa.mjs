@@ -1,5 +1,6 @@
+import { conexion } from "../../componentes/db.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
-
+import { vitiniCrypto } from "../../sistema/vitiniCrypto.mjs";
 
 export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
     try {
@@ -7,13 +8,9 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         if (IDX.control()) return  
 
-
         const usuarioIDX = entrada.session.usuario;
         const clave = entrada.body.clave;
-        if (!usuarioIDX) {
-            const error = "Tienes que estar identificado";
-            throw new Error(error);
-        }
+
         if (!clave) {
             const error = "No has escrito tu contrasena. Es necesaria para eliminar tu cuenta";
             throw new Error(error);

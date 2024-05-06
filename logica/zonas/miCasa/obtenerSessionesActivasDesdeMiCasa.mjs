@@ -11,12 +11,7 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
 
         
         const usuarioIDX = entrada.session.usuario;
-        if (!session || !usuarioIDX) {
-            const error = "Tienes que identificarte para ver las sessiones activas de tu cuenta";
-            throw new Error(error);
-        }
         await conexion.query('BEGIN'); // Inicio de la transacción
-
 
         // validar rol
         const consultaSessionesActivas = `

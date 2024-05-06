@@ -4,6 +4,8 @@ export const confirmarReserva = async (entrada, salida) => {
     await mutex.acquire();
     try {
         const reserva = entrada.body.reserva;
+
+
         await conexion.query('BEGIN');
         const resuelveValidacionObjetoReserva = await validarObjetoReserva(reserva);
         if (!resuelveValidacionObjetoReserva.ok) {
