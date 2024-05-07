@@ -1,6 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const reservasDelCliente = async (entrada, salida) => {
     try {
@@ -9,19 +9,42 @@ export const reservasDelCliente = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         if (IDX.control()) return
+
+        const cliente = validadoresCompartidos.tipos.numero({
+            string: entrada.body.cliente,
+            nombreCampo: "El identificador universal del cliente (clienteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const nombreColumna = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreColumna,
+            nombreCampo: "El campo del nombre de la columna",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const sentidoColumna = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.sentidoColumna,
+            nombreCampo: "El campo del sentido de la columna",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+        const pagina = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pagina,
+            nombreCampo: "El numero de página",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
         
-        const cliente = entrada.body.cliente;
-        let nombreColumna = entrada.body.nombreColumna;
-        let sentidoColumna = entrada.body.sentidoColumna;
-        if (!cliente || !Number.isInteger(cliente) || cliente <= 0) {
-            const error = "El campo cliente solo puede ser un numero positivo y entero que haga referencia al UID del cliente";
-            throw new Error(error);
-        }
-        const pagina = entrada.body.pagina;
-        if (typeof pagina !== "number" || !Number.isInteger(pagina) || pagina <= 0) {
-            const error = "En 'pagina' solo se aceptan numero enteros superiores a cero y positivos. Nada de decimales";
-            throw new Error(error);
-        }
         const validadores = {
             nombreColumna: async (nombreColumna) => {
                 const filtronombreColumna = /^[a-zA-Z]+$/;

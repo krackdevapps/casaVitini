@@ -1,6 +1,7 @@
 import ICAL from 'ical.js';
 import { conexion } from '../../../../../componentes/db.mjs';
 import { VitiniIDX } from '../../../../../sistema/VitiniIDX/control.mjs';
+import { validadoresCompartidos } from '../../../../../sistema/validadores/validadoresCompartidos.mjs';
 
 export const crearCalendario = async (entrada, salida) => {
     try {
@@ -9,30 +10,30 @@ export const crearCalendario = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        let nombre = entrada.body.nombre;
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const url = entrada.body.url;
-        const filtroCadenaIDV = /^[a-z0-9]+$/;
-        const filtroCadenaUI = /^[a-zA-Z0-9\s]+$/;
-        const filtroURL = /^https:\/\/[^\s/$.?#].[^\s]*$/;
-        if (!nombre || !filtroCadenaUI.test(nombre)) {
-            const error = "Hay que definir el nombre solo se admiten minusculas, mayusculas, numeros y espacios";
-            throw new Error(error);
-        }
-        nombre = nombre.trim();
-        if (!apartamentoIDV || !filtroCadenaIDV.test(apartamentoIDV)) {
-            const error = "Hay que definir el apartamentoIDV solo se admiten minusculas, numeros y espacios";
-            throw new Error(error);
-        }
-        if (!url || !filtroURL.test(url)) {
-            const error = "Hay que definir el url y que esta cumpla el formato de url";
-            throw new Error(error);
-        }
-        if (!validator.isURL(url)) {
-            const error = "La url no cumple con el formato esperado, por favor revisa la url";
-            throw new Error(error);
-        }
-        // Tambien hay que validar que exista el apartmentoIDV, que no esta hecho
+        const nombre = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombre,
+            nombreCampo: "El campo del nombre",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        const url = validadoresCompartidos.tipos.url({
+            url: entrada.body.url,
+            nombreCampo: "El campo de la url del calendario",
+            arrayDeDominiosPermitidos: [
+                "www.airbnb.com",
+                "airbnb.com"
+            ]
+        })
+
         const validarApartamentoIDV = `
                                     SELECT
                                     "apartamentoIDV"
@@ -45,12 +46,7 @@ export const crearCalendario = async (entrada, salida) => {
             const error = "No existe el identificador de apartamento, verifica el apartamentoIDV";
             throw new Error(error);
         }
-        const controlDominio = new URL(url);
-        const dominiofinal = controlDominio.hostname;
-        if (dominiofinal !== "www.airbnb.com" && dominiofinal !== "airbnb.com") {
-            const error = "La url o el dominio no son los esperados. Revisa el formato de la url y el dominio. Solo se acepta el dominio airbnb.com";
-            throw new Error(error);
-        }
+   
         const errorDeFormado = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb";
         let calendarioRaw;
         try {

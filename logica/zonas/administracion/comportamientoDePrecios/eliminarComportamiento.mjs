@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const eliminarComportamiento = async (entrada, salida) => {
     let mutex
@@ -14,11 +15,15 @@ export const eliminarComportamiento = async (entrada, salida) => {
         mutex = new Mutex()
         await mutex.acquire();
 
-        const comportamientoUID = entrada.body.comportamientoUID;
-        if (!comportamientoUID || !Number.isInteger(comportamientoUID) || comportamientoUID <= 0) {
-            const error = "El campo ofertaUID tiene que ser un numero, positivo y entero";
-            throw new Error(error);
-        }
+    
+        const comportamientoUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.comportamientoUID,
+            nombreCampo: "El identificador universal de la habitación (habitacionUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
         // Validar nombre unico oferta
         const validarComportamiento = `
                             SELECT uid

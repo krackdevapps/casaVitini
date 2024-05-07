@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer'
-import { generadorPDF } from '../sistemaDePDF/';
 import fs from 'fs';
 import dotenv from "dotenv";
 dotenv.config();

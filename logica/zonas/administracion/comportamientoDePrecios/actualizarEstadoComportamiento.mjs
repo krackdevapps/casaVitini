@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const actualizarEstadoComportamiento = async (entrada, salida) => {
@@ -14,18 +15,24 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
 
         await mutex.acquire();
 
-        
-        const comportamientoUID = entrada.body.comportamientoUID;
-        const estadoPropuesto = entrada.body.estadoPropuesto;
-        const filtroCadena = /^[a-z]+$/;
-        if (!comportamientoUID || !Number.isInteger(comportamientoUID) || comportamientoUID <= 0) {
-            const error = "El campo comportamientoUID tiene que ser un numero, positivo y entero";
-            throw new Error(error);
-        }
-        if (!estadoPropuesto || !filtroCadena.test(estadoPropuesto) || (estadoPropuesto !== "activado" && estadoPropuesto !== "desactivado")) {
-            const error = "El campo estadoPropuesto solo admite minúsculas y nada mas, debe de ser un estado activado o desactivado";
-            throw new Error(error);
-        }
+        const comportamientoUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.comportamientoUID,
+            nombreCampo: "El identificador universal de la comportamiento (comportamientoUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const estadoPropuesto = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.estadoPropuesto,
+            nombreCampo: "El estadoPropuesto",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         // Validar nombre unico oferta
         const validarOferta = `
                             SELECT uid

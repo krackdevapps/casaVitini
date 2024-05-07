@@ -1,7 +1,7 @@
 import ICAL from 'ical.js';
 import { conexion } from "../../../../../componentes/db.mjs";
 import { VitiniIDX } from '../../../../../sistema/VitiniIDX/control.mjs';
-
+import { validadoresCompartidos } from '../../../../../sistema/validadores/validadoresCompartidos.mjs';
 
 export const actualizarCalendario = async (entrada, salida) => {
     try {
@@ -9,19 +9,39 @@ export const actualizarCalendario = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         if (IDX.control()) return
-        
-        const calendarioUID = entrada.body.calendarioUID;
-        let nombre = entrada.body.nombre || null;
-        const apartamentoIDV = entrada.body.apartamentoIDV || null;
-        let url = entrada.body.url || null;
-        const filtroCadenaNumeros = /^[0-9]+$/;
-        const filtroCadena_m_ss_n = /^[a-z0-9]+$/;
-        const filtroCadena_m_M_cs_n = /^[a-zA-Z0-9\s]+$/;
-        const filtroURL = /^https:\/\/[^\s/$.?#].[^\s]*$/;
-        if (!calendarioUID || !filtroCadenaNumeros.test(calendarioUID)) {
-            const error = "Hay que definir la calendarioUID, solo se admiten numeros sin espacios.";
-            throw new Error(error);
-        }
+
+        const calendarioUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.calendarioUID,
+            nombreCampo: "El campo nuevoPreci",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const nombre = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombre,
+            nombreCampo: "El campo del nombre",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        const url = validadoresCompartidos.tipos.url({
+            url: entrada.body.url,
+            nombreCampo: "El campo de la url del calendario",
+            arrayDeDominiosPermitidos: [
+                "www.airbnb.com",
+                "airbnb.com"
+            ]
+        })
+
+
         const consultaSelecionaCalendario = `
                                     SELECT 
                                     uid
@@ -34,44 +54,22 @@ export const actualizarCalendario = async (entrada, salida) => {
             const error = "No existe el calendario que quieres actualizar, por favor revisa el identificado calendarioUID que has introducido.";
             throw new Error(error);
         }
-        if (nombre) {
-            nombre = nombre.trim();
-            if (!filtroCadena_m_M_cs_n.test(nombre)) {
-                const error = "Hay que definir la nombre, solo se admiten mayusculas, minusculas, numeros y espacios.";
-                throw new Error(error);
-            }
-        }
-        if (apartamentoIDV) {
-            if (!filtroCadena_m_ss_n.test(apartamentoIDV)) {
-                const error = "Hay que definir la nombre, solo se admiten minusculas y numeros.";
-                throw new Error(error);
-            }
-            // Tambien hay que validar que exista el apartmentoIDV, que no esta hecho
-            const validarApartamentoIDV = `
+
+        const validarApartamentoIDV = `
                                             SELECT
                                             "apartamentoIDV"
                                             FROM 
                                             "configuracionApartamento"
                                             WHERE
                                             "apartamentoIDV" = $1`;
-            const resuelveValidarCliente = await conexion.query(validarApartamentoIDV, [apartamentoIDV]);
-            if (resuelveValidarCliente.rowCount === 0) {
-                const error = "No existe el identificador de apartamento, verifica el apartamentoIDV";
-                throw new Error(error);
-            }
+        const resuelveValidarCliente = await conexion.query(validarApartamentoIDV, [apartamentoIDV]);
+        if (resuelveValidarCliente.rowCount === 0) {
+            const error = "No existe el identificador de apartamento, verifica el apartamentoIDV";
+            throw new Error(error);
         }
+
         let calendarioRaw = null;
-        if (url) {
-            if (!filtroURL.test(url)) {
-                const error = "Hay que definir el url y que esta cumpla el formato de url";
-                throw new Error(error);
-            }
-            const controlDominio = new URL(url);
-            const dominiofinal = controlDominio.hostname;
-            if (dominiofinal !== "www.airbnb.com" && dominiofinal !== "airbnb.com") {
-                const error = "La url o el dominio no son los esperados. Revisa el formato de la url y el dominio. Solo se acepta el dominio airbnb.com";
-                throw new Error(error);
-            }
+        if (url) {         
             const errorDeFormado = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb";
             try {
                 const calendarioData = await axios.get(url);

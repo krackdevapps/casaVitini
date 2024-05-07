@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { eventosTodosLosBloqueos } from "../../../../sistema/calendarios/capas/eventosTodosLosBloqueos.mjs";
 import { eliminarBloqueoCaducado } from "../../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
-
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const todosLosBloqueos = async (entrada, salida) => {
     try {
@@ -12,11 +12,8 @@ export const todosLosBloqueos = async (entrada, salida) => {
         if (IDX.control()) return
 
         const fecha = entrada.body.fecha;
-        const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
-        if (!filtroFecha.test(fecha)) {
-            const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante.";
-            throw new Error(error);
-        }
+        validadoresCompartidos.fechas.fechaMesAno(fecha)
+
         await eliminarBloqueoCaducado();
         const eventos = await eventosTodosLosBloqueos(fecha);
         const ok = {

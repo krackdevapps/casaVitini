@@ -1,5 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { eventosTodosLosApartamentos } from "../../../../sistema/calendarios/capas/eventosTodosLosApartamentos.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const todosLosApartamentos = async (entrada, salida) => {
     try {
@@ -10,11 +11,8 @@ export const todosLosApartamentos = async (entrada, salida) => {
         if (IDX.control()) return
         
         const fecha = entrada.body.fecha;
-        const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
-        if (!filtroFecha.test(fecha)) {
-            const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante.";
-            throw new Error(error);
-        }
+        validadoresCompartidos.fechas.fechaMesAno(fecha)
+
         const eventos = await eventosTodosLosApartamentos(fecha);
         const ok = {
             ok: "Aqui tienes todos los apartamentos de este mes",

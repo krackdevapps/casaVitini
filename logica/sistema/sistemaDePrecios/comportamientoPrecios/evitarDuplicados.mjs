@@ -1,10 +1,45 @@
 import { conexion } from "../../../componentes/db.mjs"
+
 const evitarDuplicados = async (data) => {
     try {
         const comportamientoUID = data.comportamientoUID
+        const nombreComportamiento = date.nombreComportamiento
         const tipo = data.tipo
         const transaccion = data.transaccion
         const apartamentos = data.apartamentos
+
+        if (transaccion !== "crear" && transaccion !== "actualizar") {
+            const error = `El sistema de evitar duplicados necesita un tipo de transaccion para ver si es un operacion de creacion o actualziacion`
+            throw new Error(error)
+        }
+        let resuleveNombreUnico = 0
+        if (transaccion === "crear") {
+            const consultaNombreUnico = `
+            SELECT *
+            FROM "comportamientoPrecios"
+            WHERE 
+            lower("nombreComportamiento") = lower($1)
+            `
+            resuleveNombreUnico = await conexion.query(consultaNombreUnico, [nombreComportamiento])
+          
+        }
+        if (transaccion === "actualizar") {
+            const consultaNombreUnico = `
+            SELECT *
+            FROM "comportamientoPrecios"
+            WHERE 
+            lower("nombreComportamiento") = lower($1)
+            AND
+            uid <> $2
+            `
+            resuleveNombreUnico = await conexion.query(consultaNombreUnico, [consultaNombreUnico, comportamientoUID])
+        }
+        if (resuleveNombreUnico.rowCount > 0) {
+            const error = "El nombre que tratas de poner a este comportamiento de precio ya existe. Por favor con el fin de evitar confusiones e ilegibilidad, escoge otro nombre para este comportamiento de precio";
+            throw new Error(error);
+        }
+
+
 
         if (tipo === "porRango") {
 

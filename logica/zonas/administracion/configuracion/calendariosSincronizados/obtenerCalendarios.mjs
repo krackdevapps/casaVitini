@@ -1,6 +1,7 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { resolverApartamentoUI } from "../../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const obtenerCalendarios = async (entrada, salida) => {
     try {
@@ -9,12 +10,15 @@ export const obtenerCalendarios = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const plataformaCalendarios = entrada.body.plataformaCalendarios;
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (!plataformaCalendarios || !filtroCadena.test(plataformaCalendarios)) {
-            const error = "Hay que definir la plataformaCalendarios, solo se admiten minusculas y numeros sin espacios.";
-            throw new Error(error);
-        }
+        const plataformaCalendarios = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.plataformaCalendarios,
+            nombreCampo: "plataformaCalendarios",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         const ok = {
             ok: []
         };

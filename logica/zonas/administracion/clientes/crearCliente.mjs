@@ -3,8 +3,6 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { insertarCliente } from "../../../sistema/insertarCliente.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
-
-
 export const crearCliente = async (entrada, salida) => {
     const mutex = new Mutex();
     let bloqueoCrearCliente
@@ -17,23 +15,16 @@ export const crearCliente = async (entrada, salida) => {
 
         bloqueoCrearCliente = await mutex.acquire();
 
-        let nombre = entrada.body.nombre;
-        let primerApellido = entrada.body.primerApellido;
-        let segundoApellido = entrada.body.segundoApellido;
-        let pasaporte = entrada.body.pasaporte;
-        let telefono = entrada.body.telefono;
-        let correoElectronico = entrada.body.correo;
-        let notas = entrada.body.notas;
         const nuevoCliente = {
-            nombre: nombre,
-            primerApellido: primerApellido,
-            segundoApellido: segundoApellido,
-            pasaporte: pasaporte,
-            telefono: telefono,
-            correoElectronico: correoElectronico,
-            notas: notas,
+             nombre: entrada.body.nombre,
+            primerApellido: entrada.body.primerApellido,
+            segundoApellido: entrada.body.segundoApellido,
+            pasaporte: entrada.body.pasaporte,
+            telefono: entrada.body.telefono,
+            correoElectronico: entrada.body.correoElectronico,
+            notas: entrada.body.notas,
         };
-        const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoCliente);
+        const datosValidados = await validadoresCompartidos.clientes.validarCliente(nuevoCliente);
         const nuevoUIDCliente = await insertarCliente(datosValidados);
         if (nuevoUIDCliente) {
             const ok = {

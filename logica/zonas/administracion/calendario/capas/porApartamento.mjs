@@ -1,6 +1,7 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { eventosPorApartamneto } from "../../../../sistema/calendarios/capas/eventosPorApartamento.mjs";
 import { eliminarBloqueoCaducado } from "../../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const porApartamento = async (entrada, salida) => {
@@ -10,19 +11,19 @@ export const porApartamento = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         if (IDX.control()) return
-        
+
         const fecha = entrada.body.fecha;
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
-        if (!filtroFecha.test(fecha)) {
-            const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante.";
-            throw new Error(error);
-        }
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (!filtroCadena.test(apartamentoIDV) || typeof apartamentoIDV !== "string") {
-            const error = "el campo 'apartamentoIDV' solo puede ser una cadena de letras minúsculas y numeros.";
-            throw new Error(error);
-        }
+        validadoresCompartidos.fechas.fechaMesAno(fecha)
+
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         await eliminarBloqueoCaducado();
         const metadatosEventos = {
             fecha: fecha,

@@ -3,110 +3,56 @@ import { codigoZonaHoraria } from "../codigoZonaHoraria.mjs"
 import { conexion } from "../../componentes/db.mjs"
 const validadoresCompartidos = {
     clientes: {
-        nuevoCliente: async (cliente) => {
+        validarCliente: async (cliente) => {
             try {
-                let nombre = cliente.nombre
-                let primerApellido = cliente.primerApellido
-                let segundoApellido = cliente.segundoApellido
-                let pasaporte = cliente.pasaporte
-                let telefono = cliente.telefono
-                let correoElectronico = cliente.correoElectronico
-                let notas = cliente?.notas
-                const filtroCadena = /[^a-zA-Z0-9\s\-_.]/g;
-                const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
+                const nombre = validadoresCompartidos.tipos.cadena({
+                    string: cliente.nombre,
+                    nombreCampo: "El campo del nombre",
+                    filtro: "strictoConEspacios",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                    limpiezaEspaciosInternos: "si"
 
-                if (nombre?.length > 0) {
-                    nombre = nombre
-                        .replace(/\s+/g, ' ')
-                        .toUpperCase()
-                        .replace(filtroCadena, '')
-                        .replace(filtroCadena_v2, '')
-                        .trim()
+                })
+                const primerApellido = validadoresCompartidos.tipos.cadena({
+                    string: cliente.primerApellido,
+                    nombreCampo: "El campo del primer apellido",
+                    filtro: "strictoConEspacios",
+                    sePermiteVacio: "si",
+                    limpiezaEspaciosAlrededor: "si",
+                    limpiezaEspaciosInternos: "si"
 
-                    if (nombre.length === 0) {
-                        const error = "Revisa el nombre, ningun caracter escrito en el campo pasaporte es valido"
-                        throw new Error(error)
-                    }
+                })
+                const segundoApellido = validadoresCompartidos.tipos.cadena({
+                    string: cliente.segundoApellido,
+                    nombreCampo: "El campo del segundo apellido",
+                    filtro: "strictoConEspacios",
+                    sePermiteVacio: "si",
+                    limpiezaEspaciosAlrededor: "si",
+                    limpiezaEspaciosInternos: "si"
 
-                } else {
-                    const error = "El nombre del cliente es obligatorio."
-                    throw new Error(error)
-                }
-                if (primerApellido?.length > 0) {
-                    primerApellido = primerApellido
-                        .replace(/\s+/g, ' ')
-                        .toUpperCase()
-                        .replace(filtroCadena_v2, '')
-                        .trim()
+                })
+                const pasaporte = validadoresCompartidos.tipos.cadena({
+                    string: cliente.pasaporte,
+                    nombreCampo: "El campo del pasaporte",
+                    filtro: "strictoConEspacios",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                    limpiezaEspaciosInternos: "si"
+                })
+                const correoElectronico = validadoresCompartidos.tipos
+                    .correoElectronico(entrada.body.correoElectronico)
+                const telefono = validadoresCompartidos.tipos
+                    .telefono(entrada.body.telefono)
 
-                }
-                if (segundoApellido?.length > 0) {
-                    segundoApellido = segundoApellido
-                        .replace(/\s+/g, ' ')
-                        .toUpperCase()
-                        .replace(filtroCadena_v2, '')
-                        .trim()
+                const notas = validadoresCompartidos.tipos.cadena({
+                    string: cliente.notas,
+                    nombreCampo: "El campo de notas",
+                    filtro: "strictoConEspacios",
+                    sePermiteVacio: "si",
+                    limpiezaEspaciosAlrededor: "si",
+                })
 
-                }
-                if (pasaporte?.length > 0) {
-                    pasaporte = pasaporte
-                        .replace(/\s+/g, ' ')
-                        .toUpperCase()
-                        .replace(filtroCadena_v2, '')
-                        .trim()
-
-                    if (pasaporte.length === 0) {
-                        const error = "Revisa el pasaprote, ningun caracter escrito en el campo pasaporte es valido"
-                        throw new Error(error)
-                    }
-
-                } else {
-                    const error = "Escribe el pasaporte, es obligatorio."
-                    throw new Error(error)
-                }
-                if (telefono) {
-                    const filtroTelefono = /[^0-9]+/g
-                    telefono = telefono
-                        .replace(filtroTelefono, '')
-                        .replace(filtroCadena_v2, '')
-                        .trim()
-
-                }
-                if (correoElectronico?.length > 0) {
-                    const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
-                    if (!filtroCorreoElectronico.test(correoElectronico)) {
-                        const error = "el campo 'correoElectronico' no cumple con el formato esperado, el formado esperado es asi como usuario@servidor.com"
-                        throw new Error(error)
-                    }
-                    correoElectronico = correoElectronico
-                        .replace(/\s+/g, '')
-                        .replace(filtroCadena_v2, '')
-                        .trim()
-
-                    const consultaCorreo = `
-                    SELECT 
-                    nombre,
-                    "primerApellido",
-                    "segundoApellido"
-                    FROM clientes
-                    WHERE email = $1;
-                    `
-                    const resuelveUnicidadCorreo = await conexion.query(consultaCorreo, [correoElectronico])
-                    if (resuelveUnicidadCorreo.rowCount > 0) {
-                        const nombreClienteExistente = resuelveUnicidadCorreo.rows[0].nombre
-                        const primerApellidoClienteExistente = resuelveUnicidadCorreo.rows[0].primerApellido
-                        const segundoApellidoClienteExistente = resuelveUnicidadCorreo.rows[0].segundoApellido
-                        const error = `Ya existe un cliente con ese correo electronico: ${nombreClienteExistente} ${primerApellidoClienteExistente} ${segundoApellidoClienteExistente}`
-                        throw new Error(error)
-                    }
-                }
-                if (notas?.length > 0) {
-                    notas = notas
-                        .replace(/[^A-Za-z\s\d.,!?]/g, '')
-                        .replace(filtroCadena_v2, '')
-                        .trim()
-
-                }
                 const consultaPasaporte = `
                 SELECT 
                 nombre,
@@ -139,119 +85,7 @@ const validadoresCompartidos = {
                 throw error
             }
         },
-        actualizarCliente: async (cliente) => {
-            try {
-                let nombre = cliente.nombre
-                let primerApellido = cliente.primerApellido
-                let segundoApellido = cliente.segundoApellido
-                let pasaporte = cliente.pasaporte
-                let telefono = cliente.telefono
-                let correoElectronico = cliente.correoElectronico
-                let notas = cliente.notas
-                const filtroCadena = /^[a-zA-Z0-9\s]+$/;
-                const filtroCadena_v2 = /['"\\;\r\n<>\t\b]/g;
 
-                if (nombre?.length > 0) {
-                    nombre = nombre
-                        .replace(/\s+/g, ' ')
-                        .toUpperCase()
-                        .replace(filtroCadena, '')
-                        .replace(filtroCadena_v2, '')
-                        .trim()
-                }
-                if (primerApellido?.length > 0) {
-                    primerApellido = primerApellido
-                        .replace(/\s+/g, ' ')
-                        .toUpperCase()
-                        .replace(filtroCadena_v2, '')
-                        .trim()
-                }
-                if (segundoApellido?.length > 0) {
-                    segundoApellido = segundoApellido
-                        .replace(/\s+/g, ' ')
-                        .toUpperCase()
-                        .replace(filtroCadena_v2, '')
-                        .trim()
-
-                }
-                if (pasaporte?.length > 0) {
-                    pasaporte = pasaporte
-                        .replace(/\s+/g, ' ')
-                        .toUpperCase()
-                        .replace(filtroCadena_v2, '')
-                        .trim()
-                }
-                if (telefono) {
-                    const filtroTelefono = /[^0-9]+/g
-                    telefono = telefono
-                        .replace(filtroTelefono, '')
-                        .replace(filtroCadena_v2, '')
-                        .trim()
-                }
-                if (correoElectronico?.length > 0) {
-                    const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
-                    if (!filtroCorreoElectronico.test(correoElectronico)) {
-                        const error = "el campo 'correoElectronico' no cumple con el formato esperado, el formado esperado es asi como usuario@servidor.com"
-                        throw new Error(error)
-                    }
-                    correoElectronico = correoElectronico
-                        .replace(/\s+/g, '')
-                        .replace(filtroCadena_v2, '')
-                        .trim()
-
-                }
-                if (notas?.length > 0) {
-                    notas = notas
-                        .replace(/[^A-Za-z\s\d.,!?]/g, '')
-                        .replace(filtroCadena_v2, '')
-                        .trim()
-                }
-                const consultaPasaporte = `
-                SELECT 
-                nombre,
-                "primerApellido",
-                "segundoApellido"
-                FROM clientes
-                WHERE pasaporte = $1;
-                `
-                const resuelveUnicidadPasaporte = await conexion.query(consultaPasaporte, [pasaporte])
-                if (resuelveUnicidadPasaporte.rowCount > 0) {
-                    const nombreClienteExistente = resuelveUnicidadPasaporte.rows[0].nombre
-                    const primerApellidoClienteExistente = resuelveUnicidadPasaporte.rows[0].primerApellido
-                    const segundoApellidoClienteExistente = resuelveUnicidadPasaporte.rows[0].segundoApellido
-                    const error = `Ya existe un cliente con ese pasaporte: ${nombreClienteExistente} ${primerApellidoClienteExistente} ${segundoApellidoClienteExistente}`
-                    throw new Error(error)
-                }
-                const consultaCorreo = `
-                SELECT 
-                nombre,
-                "primerApellido",
-                "segundoApellido"
-                FROM clientes
-                WHERE email = $1;
-                `
-                const resuelveUnicidadCorreo = await conexion.query(consultaCorreo, [correoElectronico])
-                if (resuelveUnicidadCorreo.rowCount > 0) {
-                    const nombreClienteExistente = resuelveUnicidadCorreo.rows[0].nombre
-                    const primerApellidoClienteExistente = resuelveUnicidadCorreo.rows[0].primerApellido
-                    const segundoApellidoClienteExistente = resuelveUnicidadCorreo.rows[0].segundoApellido
-                    const error = `Ya existe un cliente con ese correo electronico: ${nombreClienteExistente} ${primerApellidoClienteExistente} ${segundoApellidoClienteExistente}`
-                    throw new Error(error)
-                }
-                const datosValidados = {
-                    nombre: nombre,
-                    primerApellido: primerApellido,
-                    segundoApellido: segundoApellido,
-                    pasaporte: pasaporte,
-                    telefono: telefono,
-                    correoElectronico: correoElectronico,
-                    notas: notas
-                }
-                return datosValidados
-            } catch (error) {
-                throw error
-            }
-        },
     },
     usuarios: {
         unicidadPasaporteYCorrreo: async (datosUsuario) => {
@@ -595,12 +429,29 @@ const validadoresCompartidos = {
                         const mensaje = `${nombreCampo} solo acepta una cadena con numeros con dos decimales separados por punto, por ejemplo 00.00`
                         throw new Error(mensaje)
                     }
+
+                    const impedirCero = configuracion.impedirCero
+                    if (typeof impedirCero !== "string" &&
+                        (impedirCero !== "si" && impedirCero !== "no")) {
+                        const mensaje = `El validor de cadena esta mal configurado, impedirCero solo acepta si o no.`
+                        throw new Error(mensaje)
+                    }
+
+                    if (impedirCero === "si") {
+                        const numero = parseFloat(string)
+                        if (numero === 0) {
+                            const mensaje = `${nombreCampo} no permite valores de cero.`
+                            throw new Error(mensaje)
+                        }
+                    }
+
                     const devuelveUnTipoNumber = configuracion.devuelveUnTipoNumber
                     if (typeof devuelveUnTipoNumber !== "string" &&
                         (devuelveUnTipoNumber !== "si" && devuelveUnTipoNumber !== "no")) {
                         const mensaje = `El validor de cadena esta mal configurado, devuelveUnTipoNumber solo acepta si o no.`
                         throw new Error(mensaje)
                     }
+
                     if (devuelveUnTipoNumber === "si") {
                         string = Number(string)
                     }
@@ -655,7 +506,6 @@ const validadoresCompartidos = {
             }
             return string
         },
-
         numero: (configuracion) => {
 
             let number = configuracion.number
@@ -773,14 +623,11 @@ const validadoresCompartidos = {
                 const array = configuracion.array
                 const nombreCampo = configuracion.nombreCampo
                 const filtro = configuracion.filtro
-
                 if (!nombreCampo) {
                     const mensaje = `El validador de arrays, necesito un nombre de campo.`
                     throw new Error(mensaje)
                 }
-                //verificar que es un array
-                // verificar que el array no esta vacio
-                if (!array.isArray(cajon) || cajon == null || cajon === undefined) {
+                if (!Array.isArray(array) || array == null || array === undefined) {
                     const error = `${nombreCampo} se esperaba un array`;
                     throw new Error(error);
                 }
@@ -788,20 +635,104 @@ const validadoresCompartidos = {
                     const error = `${nombreCampo} está array vacío`;
                     throw new Error(error);
                 }
-                if (filtro === "soloCadenas") {
+                if (filtro === "soloCadenasIDV") {
                     array.every((cadena, index) => {
                         validadoresCompartidos.tipos.cadena({
                             string: cadena,
                             nombreCampo: `En la posicion ${index} del array debe haber una cadena`,
                             filtro: "strictoIDV",
                             sePermiteVacio: "no",
+                            limpiezaEspaciosAlrededor: "si"
                         })
                     });
                 }
+
+                const noSePermitenDuplicados = configuracion.noSePermitenDuplicados
+                if (typeof noSePermitenDuplicados !== "string" &&
+                    (noSePermitenDuplicados !== "si" && noSePermitenDuplicados !== "no")) {
+                    const mensaje = `El validor de cadena esta mal configurado, noSePermitenDuplicados solo acepta si o no.`
+                    throw new Error(mensaje)
+                }
+                if (noSePermitenDuplicados === "si") {
+                    const arrayFiltrado = array.map((array) => {
+                        if (typeof elemento === "string") {
+                            return elemento.toLowerCase();
+                        } else {
+                            return elemento;
+                        }
+                    });
+                    const controlDuplicados = new Set(arrayFiltrado).size !== arrayFiltrado.length;
+                    if (controlDuplicados) {
+                        const error = `${nombreCampo} que es un arrayFiltrado, tiene duplicados y no deberia tener.`;
+                        throw new Error(error);
+                    }
+                }
+
+                return array
             } catch (error) {
                 throw error
             }
         },
+        objetoLiteral: (configuracion) => {
+            try {
+                const objetoLiteral = configuracion.objetoLiteral
+                const nombreCampo = configuracion.nombreCampo
+                const filtro = configuracion.filtro
+
+                if (!nombreCampo) {
+                    const mensaje = `El validador de objetos, necesito un nombre de campo.`
+                    throw new Error(mensaje)
+                }
+
+                const control = objetoLiteral !== null && typeof objetoLiteral === 'object' && objetoLiteral.constructor === Object;
+
+                console.log("control", control)
+                if (!control) {
+                    const error = `${nombreCampo} se esperara que fuera un objeto literal`;
+                    throw new Error(error);
+                }
+                return objetoLiteral
+            } catch (error) {
+                throw error
+
+            }
+        },
+        url: (configuracion) => {
+
+            const url = configuracion.url
+            const nombreCampo = configuracion.nombreCampo
+            const arrayDeDominiosPermitidos = configuracion.arrayDeDominiosPermitidos
+
+            if (!url) {
+                const error = `${nombreCampo} está vacío`;
+                throw new Error(error);
+            }
+            const filtroURL = /^https:\/\/[^\s/$.?#].[^\s]*$/;
+            if (!filtroURL.test(url)) {
+                const error = `${nombreCampo} no cumple con el formato esperado de una url.`;
+                throw new Error(error);
+            }
+            if (!validator.isURL(url)) {
+                const error = "La url no cumple con el formato esperado, por favor revisa la url";
+                throw new Error(error);
+            }
+            
+            if (arrayDeDominiosPermitidos) {
+                const arrayFiltrado = validadoresCompartidos.tipos.array({
+                    array: arrayDeDominiosPermitidos,
+                    nombreCampo: "El array de dominios permitidos dentro del tipo url",
+                    filtro: "soloCadenasIDV",
+                    noSePermitenDuplicados: "si"
+                })
+                const controlDominio = new URL(url);
+                const dominiofinal = controlDominio.hostname;
+                if (!arrayFiltrado.includes(dominiofinal)) {
+                    const error = "La url o el dominio no son los esperados. Revisa el formato de la url y el dominio. Solo se acepta el dominio airbnb.com";
+                    throw new Error(error);
+                }
+            }
+            return url
+        }
     }
 }
 export {

@@ -1,5 +1,5 @@
 import { enviarMail } from "./enviarMail.mjs"
-import { generadorPDF } from "./generadorPDF.mjs"
+import { generadorPDF } from "../sistemaDePDF/generadorPDF.mjs"
 const enviarEmailAlCrearCuentaNueva = async (datosConfirmacion) => {
     try {
         const codigoVerificacion = datosConfirmacion.codigoVerificacion

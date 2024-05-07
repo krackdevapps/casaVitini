@@ -3,6 +3,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { evitarDuplicados } from "../../../sistema/sistemaDePrecios/comportamientoPrecios/evitarDuplicados.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const actualizarComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -13,28 +14,42 @@ export const actualizarComportamiento = async (entrada, salida) => {
         if (IDX.control()) return
 
         await mutex.acquire();
-        let nombreComportamiento = entrada.body.nombreComportamiento;
+        const nombreComportamiento = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreComportamiento,
+            nombreCampo: "El campo del nombreComportamiento",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const comportamientoUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.comportamientoUID,
+            nombreCampo: "El identificador universal del compotamiento (comportamientoUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
 
-        const comportamientoUID = entrada.body.comportamientoUID;
-        const apartamentos = entrada.body.apartamentos;
-        const tipo = entrada.body.tipo;
+        const tipo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipo,
+            nombreCampo: "El tipo",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
 
-        const filtroCantidad = /^\d+\.\d{2}$/;
-        const filtroNombre = /['"\\;\r\n<>\t\b]/g;
-        const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
-        if (!comportamientoUID || !Number.isInteger(comportamientoUID) || comportamientoUID <= 0) {
-            const error = "El campo comportamientoUID tiene que ser un numero, positivo y entero";
-            throw new Error(error);
-        }
-        if (!nombreComportamiento) {
-            const error = "El campo nombreComportamiento solo admite minúsculas, mayúsculas, numeros y espacios";
-            throw new Error(error);
-        }
-        nombreComportamiento = nombreComportamiento.replace(filtroNombre, '');
         if (tipo !== "porDias" && tipo !== "porRango") {
             const error = "Por favor determine si el tipo de bloqueo es porRango o porDias.";
             throw new Error(error);
         }
+
+        const apartamentos = validadoresCompartidos.tipos.array({
+            array: entrada.body.apartamentos,
+            nombreCampo: "El array de apartamentos",
+            filtro: "soloCadenasIDV",
+            noSePermitenDuplicados: "si"
+        })
+
         let fechaInicio_ISO;
         let fechaFinal_ISO;
         let diasArray;
@@ -75,32 +90,13 @@ export const actualizarComportamiento = async (entrada, salida) => {
             }
         }
         if (tipo === "porDias") {
-            diasArray = entrada.body.diasArray;
-
-            if (typeof diasArray !== 'object' && !Array.isArray(diasArray)) {
-                const error = "El campo diasArray solo admite un arreglo";
-                throw new Error(error);
-            }
-            if (diasArray.length === 0) {
-                const error = "Seleccione al menos un dia por favor.";
-                throw new Error(error);
-            }
-
-            // Control elemento repetidos
-            const contador = {};
-            for (const elemento of diasArray) {
-                if (typeof elemento !== "string") {
-                    const error = "En el array solo se esperan strings, revisa el array por que hay elemento que no son cadenas.";
-                    throw new Error(error);
-                }
-                const filtroElemento = String(elemento).toLocaleLowerCase();
-                if (contador[filtroElemento]) {
-                    const error = "En el array de diasArray no puede haber dos elementos repetidos";
-                    throw new Error(error);
-                } else {
-                    contador[filtroElemento] = 1;
-                }
-            }
+            diasArray = validadoresCompartidos.tipos.array({
+                array: entrada.body.diasArray,
+                nombreCampo: "El diasArray",
+                filtro: "soloCadenasIDV",
+                nombreCompleto: "En diasArray",
+                noSePermitenDuplicados: "si"
+            })
 
             const diasIDV = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
             const elementosNoEnArray = (diasArray, diasIDV) => {
@@ -113,49 +109,55 @@ export const actualizarComportamiento = async (entrada, salida) => {
                 throw new Error(error);
             }
         }
-        if (typeof apartamentos !== 'object' && !Array.isArray(apartamentos)) {
-            const error = "El campo apartamentos solo admite un arreglo";
-            throw new Error(error);
-        }
-        if (apartamentos.length === 0) {
-            const error = "Anada al menos un apartmento dedicado";
-            throw new Error(error);
-        } else {
-            const identificadoresVisualesEnArray = [];
-            apartamentos.forEach((apart) => {
-                if (typeof apart !== "object" || Array.isArray(apart) || apart === null) {
-                    const error = "Dentro del array de apartamentos se esperaba un objeto";
-                    throw new Error(error);
-                }
-                const apartamentoIDV_preProcesado = apart.apartamentoIDV;
-                identificadoresVisualesEnArray.push(apartamentoIDV_preProcesado);
-            });
-            const identificadoresVisualesRepetidos = identificadoresVisualesEnArray.filter((elem, index) => identificadoresVisualesEnArray.indexOf(elem) !== index);
-            if (identificadoresVisualesRepetidos.length > 0) {
-                const error = "Existen identificadores visuales repetidos en el array de apartamentos";
-                throw new Error(error);
-            }
-        }
 
-        if (typeof apartamentos !== 'object' && !Array.isArray(apartamentos)) {
-            const error = "El campo apartamentos solo admite un arreglo";
-            throw new Error(error);
-        }
-        if (apartamentos.length === 0) {
-            const error = "Anada al menos un apartmento dedicado";
-            throw new Error(error);
-        }
+
+        const identificadoresVisualesEnArray = [];
+        apartamentos.forEach((apart) => {
+
+            validadoresCompartidos.tipos.objetoLiteral({
+                array: apart,
+                nombreCampo: "Dentro de array de apartamentos",
+                filtro: "soloCadenasIDV",
+                noSePermitenDuplicados: "si"
+            })
+            const apartamentoIDV_preProcesado = apart.apartamentoIDV;
+            identificadoresVisualesEnArray.push(apartamentoIDV_preProcesado);
+        });
+
+        validadoresCompartidos.tipos.array({
+            array: identificadoresVisualesEnArray,
+            nombreCampo: "El array de identificadoresVisualesEnArray",
+            filtro: "soloCadenasIDV",
+            noSePermitenDuplicados: "si"
+        })
+
         const apartamentosArreglo = [];
         for (const comportamiento of apartamentos) {
-            const apartamentoIDV = comportamiento.apartamentoIDV;
-            const cantidad = comportamiento.cantidad;
-            const simbolo = comportamiento.simbolo;
-            if (!apartamentoIDV || typeof apartamentoIDV !== "string" || !filtroCadenaSinEspacio.test(apartamentoIDV)) {
-                const error = "El campo apartamentoIDV solo admite minúsculas, numeros y espacios";
-                throw new Error(error);
-            }
+            const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+                string: comportamiento.apartamentoIDV,
+                nombreCampo: "El apartamentoIDV",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
+            const cantidad = validadoresCompartidos.tipos.cadena({
+                string: comportamiento.cantidad,
+                nombreCampo: "El campo cantidad",
+                filtro: "cadenaConNumerosConDosDecimales",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                impedirCero: "si"
+            })
+
+            const simbolo = validadoresCompartidos.tipos.cadena({
+                string: comportamiento.simbolo,
+                nombreCampo: "El simbolo",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
             //Validar existencia del apartamento
-            // Validar nombre unico oferta
             const validarApartamentoIDV = `
                                       SELECT 
                                       "apartamentoIDV"
@@ -169,23 +171,12 @@ export const actualizarComportamiento = async (entrada, salida) => {
                 throw new Error(error);
             }
             const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
-            if (!simbolo || typeof simbolo !== "string" ||
-                (
-                    simbolo !== "aumentoPorcentaje" &&
-                    simbolo !== "aumentoCantidad" &&
-                    simbolo !== "reducirCantidad" &&
-                    simbolo !== "reducirPorcentaje" &&
-                    simbolo !== "precioEstablecido"
-                )) {
+            if (simbolo !== "aumentoPorcentaje" &&
+                simbolo !== "aumentoCantidad" &&
+                simbolo !== "reducirCantidad" &&
+                simbolo !== "reducirPorcentaje" &&
+                simbolo !== "precioEstablecido") {
                 const error = `El campo simbolo de ${apartamentoUI} solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido`;
-                throw new Error(error);
-            }
-            if (!cantidad || typeof cantidad !== "string" || !filtroCantidad.test(cantidad)) {
-                const error = `El campo cantidad del ${apartamentoUI} solo admite una cadena con un numero con dos decimales separados por punto, es decir 00.00`;
-                throw new Error(error);
-            }
-            if (cantidad === "00.00") {
-                const error = "No se puede asignar una cantidad de cero";
                 throw new Error(error);
             }
             apartamentosArreglo.push(apartamentoIDV);
@@ -246,33 +237,38 @@ export const actualizarComportamiento = async (entrada, salida) => {
                                 WHERE "comportamientoUID" = $1 ;
                                 `;
             await conexion.query(eliminarComportamiento, [comportamientoUID]);
-            const filtroCadenaSinEspacui = /^[a-z0-9]+$/;
+
             for (const comportamiento of apartamentos) {
-                const apartamentoIDV = comportamiento.apartamentoIDV;
-                const simbolo = comportamiento.simbolo;
-                let cantidadPorApartamento = comportamiento.cantidad;
-                if (!apartamentoIDV || !filtroCadenaSinEspacui.test(apartamentoIDV)) {
-                    const error = "El campo apartamentoIDV solo admite minúsculas, numeros y espacios";
-                    throw new Error(error);
-                }
-                if (!simbolo ||
-                    (
-                        simbolo !== "aumentoPorcentaje" &&
-                        simbolo !== "aumentoCantidad" &&
-                        simbolo !== "reducirCantidad" &&
-                        simbolo !== "reducirPorcentaje" &&
-                        simbolo !== "precioEstablecido"
-                    )) {
+                const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+                    string: comportamiento.apartamentoIDV,
+                    nombreCampo: "El apartamentoIDV",
+                    filtro: "strictoIDV",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+                const simbolo = validadoresCompartidos.tipos.cadena({
+                    string: comportamiento.simbolo,
+                    nombreCampo: "El simbolo",
+                    filtro: "strictoIDV",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+                const cantidadPorApartamento = validadoresCompartidos.tipos.cadena({
+                    string: comportamiento.cantidad,
+                    nombreCampo: "El campo cantidad",
+                    filtro: "cadenaConNumerosConDosDecimales",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                    impedirCero: "si"
+
+                })
+
+                if (simbolo !== "aumentoPorcentaje" &&
+                    simbolo !== "aumentoCantidad" &&
+                    simbolo !== "reducirCantidad" &&
+                    simbolo !== "reducirPorcentaje" &&
+                    simbolo !== "precioEstablecido") {
                     const error = "El campo simbolo solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido";
-                    throw new Error(error);
-                }
-                if (!cantidadPorApartamento || !filtroCantidad.test(cantidadPorApartamento)) {
-                    const error = "El campo cantidad solo admite una cadena con un numero con dos decimales separados por punto. Asegurate de escribir los decimales";
-                    throw new Error(error);
-                }
-                cantidadPorApartamento = Number(cantidadPorApartamento);
-                if (cantidadPorApartamento === 0) {
-                    const error = "No se puede asignar una cantidad de cero por seguridad";
                     throw new Error(error);
                 }
                 const actualizarComportamientoDedicado = `

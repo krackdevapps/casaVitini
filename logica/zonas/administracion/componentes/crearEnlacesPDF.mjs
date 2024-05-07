@@ -1,5 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { crearEnlacePDF } from "../../../sistema/sistemaDePDF/crearEnlacePDF.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const crearEnlacesPDF = async (entrada, salida) => {
     try {
@@ -10,6 +11,8 @@ export const crearEnlacesPDF = async (entrada, salida) => {
         if (IDX.control()) return
 
         const reserva = entrada.body.reserva;
+        await validadoresCompartidos.reservas.validarReserva(reserva);
+        
         const enlaces = await crearEnlacePDF(reserva);
         const ok = {
             ok: "ok",

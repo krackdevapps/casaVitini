@@ -19,17 +19,19 @@ export const multiCapa = async (entrada, salida) => {
         if (IDX.control()) return
 
         const fecha = entrada.body.fecha;
-        validadoresCompartidos.fechas.fecha(fecha)
+        validadoresCompartidos.fechas.fechaMesAno(fecha)
 
-        const contenedorCapas = entrada.body.contenedorCapas;
-        
-        const capas = contenedorCapas?.capas;
-        validadoresCompartidos.tipos.array({
-            array: capas,
-            filtro: "soloCadenas",
+        const contenedorCapas = validadoresCompartidos.tipos.objetoLiteral({
+            objetoLiteral: entrada.body.contenedorCapas,
+            nombreCampo: "El campo de contenedorCapas",
+        })
+
+        const capas = validadoresCompartidos.tipos.array({
+            array: contenedorCapas?.capas,
+            nombreCampo: "El array de capas",
+            filtro: "soloCadenasIDV",
             nombreCompleto: "En el array del calendario multi capa"
         })
-        const filtroCapa = /^[a-zA-Z0-9]+$/;
 
         const constructorObjetoPorDias = (fecha) => {
             const fechaArray = fecha.split("-");
@@ -50,7 +52,7 @@ export const multiCapa = async (entrada, salida) => {
             eventosEnDetalle: []
         };
         const capasComoComponentes = {
-            reservas: async (entrada, salida) => {
+            reservas: async () => {
                 const eventosReservas_ = await eventosReservas(fecha);
                 for (const [fechaDia, contenedorEventos] of Object.entries(eventosReservas_.eventosMes)) {
                     const selectorDia = estructuraGlobal.eventosMes[fechaDia];
@@ -58,7 +60,7 @@ export const multiCapa = async (entrada, salida) => {
                 }
                 estructuraGlobal.eventosEnDetalle.push(...eventosReservas_.eventosEnDetalle);
             },
-            todosLosApartamentos: async (entrada, salida) => {
+            todosLosApartamentos: async () => {
                 const eventosTodosLosApartamentos_ = await eventosTodosLosApartamentos(fecha);
                 for (const [fechaDia, contenedorEventos] of Object.entries(eventosTodosLosApartamentos_.eventosMes)) {
                     const selectorDia = estructuraGlobal.eventosMes[fechaDia];
@@ -66,7 +68,7 @@ export const multiCapa = async (entrada, salida) => {
                 }
                 estructuraGlobal.eventosEnDetalle.push(...eventosTodosLosApartamentos_.eventosEnDetalle);
             },
-            todosLosBloqueos: async (entrada, salida) => {
+            todosLosBloqueos: async () => {
                 await eliminarBloqueoCaducado();
                 const eventosTodosLosBloqueos_ = await eventosTodosLosBloqueos(fecha);
                 for (const [fechaDia, contenedorEventos] of Object.entries(eventosTodosLosBloqueos_.eventosMes)) {
@@ -75,24 +77,14 @@ export const multiCapa = async (entrada, salida) => {
                 }
                 estructuraGlobal.eventosEnDetalle.push(...eventosTodosLosBloqueos_.eventosEnDetalle);
             },
-            porApartamento: async (entrada, salida) => {
-                const apartamentosIDV = contenedorCapas.capasCompuestas.porApartamento;
-                if (!Array.isArray(apartamentosIDV) || apartamentosIDV == null || apartamentosIDV === undefined) {
-                    const error = "El campo apartamentosIDV debe de ser un array con cadenas";
-                    throw new Error(error);
-                }
-                const filtroCapa = /^[a-zA-Z0-9]+$/;
-                const controlApartamentoIDV = apartamentosIDV.every(cadena => {
-                    if (typeof cadena !== "string") {
-                        return false;
-                    }
-                    return filtroCapa.test(cadena);
-                });
-                if (!controlApartamentoIDV) {
-                    const error = "Los identificadores visuales de los apartamentos solo pueden contener, minusculas, mayusculas y numeros";
-                    throw new Error(error);
-                }
-                // Validar que le nombre del apartamento existe como tal
+            porApartamento: async () => {
+                const apartamentosIDV = validadoresCompartidos.tipos.array({
+                    array: contenedorCapas.capasCompuestas.porApartamento,
+                    nombreCampo: "El array de capas",
+                    filtro: "soloCadenasIDV",
+                    nombreCompleto: "En el array de capasCompuestas porApartamento"
+                })
+
                 const obtenerApartamentosIDV = `
                                             SELECT "apartamentoIDV"
                                             FROM "configuracionApartamento"
@@ -132,7 +124,7 @@ export const multiCapa = async (entrada, salida) => {
                     }
                 }
             },
-            todoAirbnb: async (entrada, salida) => {
+            todoAirbnb: async () => {
                 // Obtengo todo los uids de los calendarios sincronizados en un objeto y lo itero
                 const plataformaAibnb = "airbnb";
                 const obtenerUIDCalendriosSincronizadosAirbnb = `
@@ -159,27 +151,13 @@ export const multiCapa = async (entrada, salida) => {
                     }
                 }
             },
-            calendariosAirbnb: async (entrada, salida) => {
-                const calendariosUID = contenedorCapas.capasCompuestas.calendariosAirbnb;
-                const filtroCadena = /^[0-9]+$/;
-                if (!calendariosUID) {
-                    const error = "Falta determinar calendariosUID, debe de ser un array con las cadenas de los calendariosUID de airbnb";
-                    throw new Error(error);
-                }
-                if (!Array.isArray(capas) || capas == null || capas === undefined) {
-                    const error = "El campo calendariosUID debe de ser un array con cadenas";
-                    throw new Error(error);
-                }
-                const controlCalendariosUID = calendariosUID.every(cadena => {
-                    if (typeof cadena !== "string") {
-                        return false;
-                    }
-                    return filtroCapa.test(cadena);
-                });
-                if (!controlCalendariosUID) {
-                    const error = "Los identificadores visuales de los calendariod de airbnb solo pueden ser cadenas que contengan contener numeros";
-                    throw new Error(error);
-                }
+            calendariosAirbnb: async () => {
+                const calendariosUID = validadoresCompartidos.tipos.array({
+                    array: contenedorCapas.capasCompuestas.calendariosAirbnb,
+                    nombreCampo: "El array de capasCompuesta de los calendarios Airbnbn",
+                    filtro: "soloCadenasIDV",
+                    nombreCompleto: "En el array del calendario multi capa"
+                })
                 // Validar que le nombre del apartamento existe como tal
                 const plataformaOrigen = "airbnb";
                 const obtenerCalendariosUID = `
@@ -222,7 +200,7 @@ export const multiCapa = async (entrada, salida) => {
                     }
                 }
             },
-            global: async (entrada, salida) => {
+            global: async () => {
                 await capasComoComponentes.reservas();
                 await capasComoComponentes.todosLosApartamentos();
                 await capasComoComponentes.todosLosBloqueos();

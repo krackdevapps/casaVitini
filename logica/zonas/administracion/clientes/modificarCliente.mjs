@@ -3,7 +3,6 @@ import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
-
 export const modificarCliente = async (entrada, salida) => {
     const mutex = new Mutex();
     let bloqueoModificarClinete
@@ -15,28 +14,25 @@ export const modificarCliente = async (entrada, salida) => {
         if (IDX.control()) return
 
         bloqueoModificarClinete = await mutex.acquire();
-        let cliente = entrada.body.cliente;
-        let nombre = entrada.body.nombre;
-        let primerApellido = entrada.body.primerApellido;
-        let segundoApellido = entrada.body.segundoApellido;
-        let pasaporte = entrada.body.pasaporte;
-        let telefono = entrada.body.telefono;
-        let correoElectronico = entrada.body.email;
-        let notas = entrada.body.notas;
-        if (!cliente || !Number.isInteger(cliente)) {
-            const error = "El campo cliente solo puede ser un numero positivo y entero que haga referencia al UID del cliente";
-            throw new Error(error);
-        }
-        const clienteParaValidar = {
-            nombre: nombre,
-            primerApellido: primerApellido,
-            segundoApellido: segundoApellido,
-            pasaporte: pasaporte,
-            telefono: telefono,
-            correoElectronico: correoElectronico,
-            notas: notas,
+        const cliente = validadoresCompartidos.tipos.numero({
+            string: entrada.body.cliente,
+            nombreCampo: "El identificador universal del cliente (clienteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const datosDelCliente = {
+            nombre: entrada.body.nombre,
+            primerApellido: entrada.body.primerApellido,
+            segundoApellido: entrada.body.segundoApellido,
+            pasaporte: entrada.body.pasaporte,
+            telefono: entrada.body.telefono,
+            correoElectronico: entrada.body.correoElectronico,
+            notas: entrada.body.notas,
         };
-        const datosValidados = await validadoresCompartidos.clientes.actualizarCliente(clienteParaValidar);
+        const datosValidados = await validadoresCompartidos.clientes.validarCliente(datosDelCliente);
         nombre = datosValidados.nombre;
         primerApellido = datosValidados.primerApellido;
         segundoApellido = datosValidados.segundoApellido;
@@ -76,7 +72,17 @@ export const modificarCliente = async (entrada, salida) => {
                             email,
                             notas;
                             `;
-        const resuelveActualizarCliente = await conexion.query(actualizarCliente, [nombre, primerApellido, segundoApellido, pasaporte, telefono, correoElectronico, notas, cliente]);
+        const datosCliente = [
+            nombre,
+            primerApellido,
+            segundoApellido,
+            pasaporte,
+            telefono,
+            correoElectronico,
+            notas,
+            cliente
+        ]
+        const resuelveActualizarCliente = await conexion.query(actualizarCliente, datosCliente);
         if (resuelveActualizarCliente.rowCount === 0) {
             const error = "No se ha actualizado el cliente por que la base de datos no ha entontrado al cliente";
             throw new Error(error);

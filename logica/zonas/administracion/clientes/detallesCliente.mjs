@@ -1,5 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const detallesCliente = async (entrada, salida) => {
     try {
@@ -9,11 +10,14 @@ export const detallesCliente = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        const cliente = entrada.body.cliente;
-        if (!cliente || !Number.isInteger(cliente)) {
-            const error = "El campo cliente solo puede ser un numero positivo y entero que haga referencia al UID del cliente";
-            throw new Error(error);
-        }
+        const cliente = validadoresCompartidos.tipos.numero({
+            string: entrada.body.cliente,
+            nombreCampo: "El identificador universal del cliente (clienteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
         const consultaDetallesCliente = `
                             SELECT 
                             uid, 

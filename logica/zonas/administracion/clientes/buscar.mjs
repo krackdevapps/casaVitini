@@ -1,5 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const buscar = async (entrada, salida) => {
@@ -10,23 +11,49 @@ export const buscar = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        let buscar = entrada.body.buscar;
-        let tipoBusqueda = entrada.body.tipoBusqueda;
-        let nombreColumna = entrada.body.nombreColumna;
-        let sentidoColumna = entrada.body.sentidoColumna;
+        const buscar = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.buscar,
+            nombreCampo: "El campo buscar esta vacío",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const tipoBusqueda = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoBusqueda,
+            nombreCampo: "El tipoBusqueda",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        const nombreColumna = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreColumna,
+            nombreCampo: "El campo del nombre de la columna",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const sentidoColumna = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.sentidoColumna,
+            nombreCampo: "El campo del sentido de la columna",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
         if (tipoBusqueda !== "rapido") {
             tipoBusqueda = null;
         }
-        if (!buscar || typeof buscar !== "string") {
-            let error = "se tiene que espeficiar 'buscar' y lo que se desea buscar";
-            throw new Error(error);
-        }
-        let Pagina = entrada.body["pagina"];
-        Pagina = Pagina ? Pagina : 1;
-        if (typeof Pagina !== "number" || !Number.isInteger(Pagina) || Pagina <= 0) {
-            const error = "En 'pagina' solo se aceptan numero enteros superiores a cero y positivos. Nada de decimales";
-            throw new Error(error);
-        }
+
+        const pagina = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pagina || 1,
+            nombreCampo: "El numero de página",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         let condicionComplejaSQLOrdenarResultadosComoSegundaCondicion = "";
         let nombreColumnaSentidoUI;
         let nombreColumnaUI;
@@ -63,13 +90,13 @@ export const buscar = async (entrada, salida) => {
             condicionComplejaSQLOrdenarResultadosComoSegundaCondicion = `,"${nombreColumna}" ${sentidoColumna}`;
         }
         const terminoBuscar = buscar.split(" ");
-        let terminosFormateados = [];
+        const terminosFormateados = [];
         terminoBuscar.map((termino) => {
             const terminoFinal = "%" + termino + "%";
             terminosFormateados.push(terminoFinal);
         });
         const numeroPorPagina = 10;
-        const numeroPagina = Number((Pagina - 1) + "0");
+        const numeroPagina = Number((pagina - 1) + "0");
         const consultaConstructor = `    
                                 SELECT *,
                                 COUNT(*) OVER() as "totalClientes"
@@ -107,9 +134,9 @@ export const buscar = async (entrada, salida) => {
                                 ) 
                                 ${condicionComplejaSQLOrdenarResultadosComoSegundaCondicion}
                             LIMIT $2 OFFSET $3;`;
-        let consultaReservas = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina, numeroPagina]);
-        consultaReservas = consultaReservas.rows;
-        let consultaConteoTotalFilas = consultaReservas[0]?.totalClientes ? consultaReservas[0].totalClientes : 0;
+        const resuelveConsultaReservas = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina, numeroPagina]);
+        const consultaReservas = resuelveConsultaReservas.rows;
+        const consultaConteoTotalFilas = consultaReservas[0]?.totalClientes ? consultaReservas[0].totalClientes : 0;
         if (tipoBusqueda === "rapido") {
             consultaReservas.map((cliente) => {
                 delete cliente.Telefono;
@@ -122,18 +149,18 @@ export const buscar = async (entrada, salida) => {
         });
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
         const corretorNumeroPagina = String(numeroPagina).replace("0", "");
-        const Respuesta = {
+        const respuesta = {
             buscar: buscar,
             totalClientes: consultaConteoTotalFilas,
             paginasTotales: totalPaginas,
             pagina: Number(corretorNumeroPagina) + 1,
         };
         if (nombreColumna) {
-            Respuesta["nombreColumna"] = nombreColumna;
-            Respuesta["sentidoColumna"] = nombreColumnaSentidoUI;
+            respuesta.nombreColumna = nombreColumna;
+            respuesta.sentidoColumna = nombreColumnaSentidoUI;
         }
-        Respuesta["clientes"] = consultaReservas;
-        salida.json(Respuesta);
+        respuesta.clientes = consultaReservas;
+        salida.json(respuesta);
     } catch (errorCapturado) {
         const error = {
             error: errorCapturado.message
