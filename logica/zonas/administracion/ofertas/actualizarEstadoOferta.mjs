@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const actualizarEstadoOferta = async (entrada, salida) => {
     let mutex
@@ -13,17 +14,23 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
         mutex = new Mutex()
         await mutex.acquire();
 
-        const ofertaUID = entrada.body.ofertaUID;
-        const estadoOferta = entrada.body.estadoOferta;
-        const filtroCadena = /^[a-z]+$/;
-        if (!ofertaUID || !Number.isInteger(ofertaUID) || ofertaUID <= 0) {
-            const error = "El campo ofertaUID tiene que ser un numero, positivo y entero";
-            throw new Error(error);
-        }
-        if (!estadoOferta || !filtroCadena.test(estadoOferta) || (estadoOferta !== "activada" && estadoOferta !== "desactivada")) {
-            const error = "El campo estadoOferta solo admite minúsculas y nada mas, debe de ser un estado activada o desactivada";
-            throw new Error(error);
-        }
+        const ofertaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.ofertaUID,
+            nombreCampo: "El campo ofertaUID ",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const estadoOferta = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.estadoOferta,
+            nombreCampo: "El campo estadoOferta",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         // Validar nombre unico oferta
         const validarOferta = `
                             SELECT uid

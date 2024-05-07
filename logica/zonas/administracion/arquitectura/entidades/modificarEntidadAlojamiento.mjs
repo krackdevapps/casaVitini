@@ -1,6 +1,7 @@
 
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const modificarEntidadAlojamiento = async (entrada, salida) => {
     try {
@@ -9,44 +10,57 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const tipoEntidad = entrada.body.tipoEntidad;
-        const entidadIDV = entrada.body.entidadIDV;
-        const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
+        const tipoEntidad = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoEntidad,
+            nombreCampo: "El tipoEntidad",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+        const entidadIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.entidadIDV,
+            nombreCampo: "El entidadIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+
         const filtroCadenaMinusculasMayusculasSinEspacios = /^[a-zA-Z0-9]+$/;
-        const filtroCadenaMinusculasConEspacios = /^[a-z0-9\s]+$/i;
-        if (!tipoEntidad || !filtroCadenaMinusculasSinEspacios.test(tipoEntidad)) {
-            const error = "el campo 'tipoEntidad' solo puede ser letras minúsculas y numeros. sin pesacios";
-            throw new Error(error);
-        }
-        if (!entidadIDV || !filtroCadenaMinusculasSinEspacios.test(entidadIDV)) {
-            const error = "el campo 'entidadIDV' solo puede ser letras minúsculas, numeros y sin espacios";
-            throw new Error(error);
-        }
+
         if (tipoEntidad === "apartamento") {
-            const apartamentoIDV = entrada.body.apartamentoIDV;
-            let apartamentoUI = entrada.body.apartamentoUI;
+            const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.apartamentoIDV,
+                nombreCampo: "El apartamentoIDV",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                soloMinusculas: "si"
+            })
+            const apartamentoUI = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.apartamentoUI,
+                nombreCampo: "El campo del apartamentoUI",
+                filtro: "strictoConEspacios",
+                sePermiteVacio: "si",
+                limpiezaEspaciosAlrededor: "si",
+            })
             const caracteristicas = entrada.body.caracteristicas;
-            if (!apartamentoIDV || !filtroCadenaMinusculasMayusculasSinEspacios.test(apartamentoIDV) || apartamentoIDV.length > 50) {
-                const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres.";
-                throw new Error(error);
-            }
-            apartamentoUI = apartamentoUI.replace(/['"]/g, '');
-            /*
-            if (!apartamentoUI || !filtroCadenaMinusculasMayusculasYEspacios.test(apartamentoUI)) {
-                const error = "el campo 'apartamentoUI' solo puede ser letras minúsculas, mayúsculas, numeros y espacios"
-                throw new Error(error)
-            }
-            */
+
             if (!Array.isArray(caracteristicas)) {
                 const error = "el campo 'caractaristicas' solo puede ser un array";
                 throw new Error(error);
             }
-            const filtroCaracteristica = /^[a-zA-Z0-9\s.,:_\-\u00F1ñ]+$/u;
             for (const caractaristica of caracteristicas) {
-                if (!filtroCaracteristica.test(caractaristica)) {
-                    const error = "Revisa las caracteristicas por que hay una que no cumple con el formato esperado. Recuerda que los campo de caracteristicas solo aceptan mayusculas, minusculas, numeros, espacios, puntos, comas, guion bajo y medio y nada mas";
-                    throw new Error(error);
-                }
+                const caractaristica_ = validadoresCompartidos.tipos.cadena({
+                    string: caractaristica,
+                    nombreCampo: "El campo caracteristicas",
+                    filtro: "strictoConEspacios",
+                    sePermiteVacio: "si",
+                    limpiezaEspaciosAlrededor: "si",
+                })
             }
             const validarIDV = `
                                     SELECT 
@@ -110,19 +124,23 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
             }
         }
         if (tipoEntidad === "habitacion") {
-            const habitacionIDV = entrada.body.habitacionIDV;
-            let habitacionUI = entrada.body.habitacionUI;
-            if (!habitacionIDV || !filtroCadenaMinusculasMayusculasSinEspacios.test(habitacionIDV) || habitacionIDV.length > 50) {
-                const error = "el campo 'habitacionIDV' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres";
-                throw new Error(error);
-            }
-            habitacionUI = habitacionUI.replace(/['"]/g, '');
-            /*
-            if (!habitacionUI || !filtroCadenaMinusculasMayusculasYEspacios.test(habitacionUI)) {
-                const error = "el campo 'habitacionUI' solo puede ser letras mayúsculas, minúsculas, numeros y espacios"
-                throw new Error(error)
-            }
-            */
+
+            const habitacionIDV = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.habitacionIDV,
+                nombreCampo: "El habitacionIDV",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                soloMinusculas: "si"
+            })
+            const habitacionUI = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.habitacionUI,
+                nombreCampo: "El campo habitacionUI",
+                filtro: "strictoConEspacios",
+                sePermiteVacio: "si",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
             const validarIDV = `
                                     SELECT 
                                     *
@@ -173,28 +191,32 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
             }
         }
         if (tipoEntidad === "cama") {
-            const camaIDV = entrada.body.camaIDV;
-            let camaUI = entrada.body.camaUI;
-            let capacidad = entrada.body.capacidad;
-            if (!camaIDV || !filtroCadenaMinusculasMayusculasSinEspacios.test(camaIDV) || camaIDV.length > 50) {
-                const error = "el campo 'camaIDV' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres";
-                throw new Error(error);
-            }
-            camaUI = camaUI.replace(/['"]/g, '');
-            /*
-            if (!camaUI || !filtroCadenaMinusculasMayusculasYEspacios.test(camaUI)) {
-                const error = "el campo 'camaUI' solo puede ser letras minúsculas, mayúsculas, numeros y espacios"
-                throw new Error(error)
-            }
-            */
-            const filtroSoloNumeros = /^\d+$/;
-            if (filtroSoloNumeros.test(capacidad)) {
-                capacidad = parseInt(capacidad);
-            }
-            if (!capacidad || !Number.isInteger(capacidad) || capacidad < 0) {
-                const error = "el campo 'capacidad' solo puede ser numeros, entero y positivo";
-                throw new Error(error);
-            }
+            const camaIDV = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.camaIDV,
+                nombreCampo: "El camaIDV",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                soloMinusculas: "si"
+            })
+            const camaUI = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.camaUI,
+                nombreCampo: "El campo del camaUI",
+                filtro: "strictoConEspacios",
+                sePermiteVacio: "si",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
+
+            const capacidad = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.capacidad,
+                nombreCampo: "El campo capacidad",
+                filtro: "cadenaConNumerosEnteros",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                devuelveUnTipoNumber: "si"
+            })
+
             const validarIDV = `
                                     SELECT 
                                     *

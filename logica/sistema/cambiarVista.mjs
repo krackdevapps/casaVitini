@@ -1,9 +1,8 @@
 import fs from 'fs';
 const cambiarVista = async (transaccion) => {
     try {
-        let vista = transaccion.vista
-        let arbol = vista.split("/")
-        arbol = arbol.filter(n => n)
+        const vista = transaccion.vista
+        const arbol = vista.split("/").filter(n => n)
         const usuarioIDX = transaccion.usuario
         const rolIDX = transaccion.rol
         let selectorRama = './ui/vistas'

@@ -13,15 +13,39 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        let tipoBloqueo = entrada.body.tipoBloqueo;
-        let motivo = entrada.body.motivo;
-        let zonaUI = entrada.body.zonaUI;
-        const filtroApartamentoIDV = /^[a-z0-9]+$/;
-        if (!apartamentoIDV || typeof apartamentoIDV !== "string" || !filtroApartamentoIDV.test(apartamentoIDV)) {
-            const error = "el campo 'apartmentoIDV' solo puede ser letras minúsculas y numeros. Sin pesacios en formato cadena";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        const tipoBloqueo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoBloqueo,
+            nombreCampo: "El tipoBloqueo",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        const motivo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.motivo,
+            nombreCampo: "El campo del motivo",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const zonaUI = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.zonaUI,
+            nombreCampo: "El zonaUI",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         await eliminarBloqueoCaducado()
         const validarApartamenotIDV = `
                             SELECT

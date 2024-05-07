@@ -9,7 +9,6 @@ export const opcionesCrearOferta = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-
         const opcionesCrearOferta = {};
         const listaAplicacionOferta = `
                             SELECT

@@ -1,5 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { generadorPDF3 } from "../../../sistema/generadorPDF.mjs";
+import { generadorPDF } from "../../../sistema/sistemaDePDF/generadorPDF.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { detallesReserva } from "../../../sistema/sistemaDeReservas/detallesReserva.mjs";
 
@@ -22,7 +22,7 @@ export const generarPdf = async (entrada, salida) => {
         const reserva = await detallesReserva(metadatos);
         console.log("despues")
 
-        const pdf = await generadorPDF3(reserva);
+        const pdf = await generadorPDF(reserva);
         salida.setHeader('Content-Type', 'application/pdf');
         salida.setHeader('Content-Disposition', 'attachment; filename=documento.pdf');
         salida.send(pdf);

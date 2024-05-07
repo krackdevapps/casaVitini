@@ -1,6 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarCuentasNoVerificadas } from "../../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const actualizarIDXAdministracion = async (entrada, salida) => {
@@ -10,22 +11,23 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const usuarioIDX = entrada.body.usuarioIDX;
-        let nuevoIDX = entrada.body.nuevoIDX;
-        const filtroCantidad = /^\d+\.\d{2}$/;
-        const filtro_minúsculas_Mayusculas_numeros_espacios = /^[a-zA-Z0-9\s]+$/;
-        const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-        const filtroNumeros = /^[0-9]+$/;
-        const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
-        if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
-            const error = "El campo usuarioIDX solo admite minúsculas y numeros";
-            throw new Error(error);
-        }
-        nuevoIDX = nuevoIDX.toLowerCase();
-        if (!nuevoIDX || !filtro_minúsculas_numeros.test(nuevoIDX)) {
-            const error = "El campo nuevoIDX solo admite minúsculas y numeros";
-            throw new Error(error);
-        }
+        const usuarioIDX = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.usuarioIDX,
+            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+        const nuevoIDX = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nuevoIDX,
+            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
         await eliminarCuentasNoVerificadas();
         await conexion.query('BEGIN'); // Inicio de la transacción
         const actualizarIDX = `

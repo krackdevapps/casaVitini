@@ -1,19 +1,26 @@
+import { conexion } from "../../../componentes/db.mjs";
+import { crearReenbolso } from "../../../componentes/pasarelas/square/crearReenbolso.mjs";
+import { detallesDelPago as detallesDelPago_ } from "../../../componentes/pasarelas/square/detallesDelPago.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const cancelarReserva = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return  
+        if (IDX.control()) return
 
         const usuario = entrada.session.usuario;
-        const reservaUID = entrada.body.reservaUID;
-        const filtroNumerosEnteros = /^[0-9]+$/;
-        if (!reservaUID || !filtroNumerosEnteros.test(reservaUID)) {
-            const error = "El campo de reservaUID solo admite una cadena con numeros enteros y positivos";
-            throw new Error(error);
-        }
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reser (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         await conexion.query('BEGIN'); // Inicio de la transacción
         const obtenerDatosUsuario = `
             SELECT 
@@ -115,7 +122,7 @@ export const cancelarReserva = async (entrada, salida) => {
                     const pagoUIDPasarela = detallesReembolso.pagoUIDPasarela;
                     let cantidad = detallesReembolso.cantidad;
                     const moneda = "USD";
-                    const detallesDelPago = await componentes.pasarela.detallesDelPago(pagoUIDPasarela);
+                    const detallesDelPago = await detallesDelPago_(pagoUIDPasarela);
                     if (detallesDelPago.error) {
                         const errorUID = detallesDelPago.error.errors[0].code;
                         let error;
@@ -142,7 +149,7 @@ export const cancelarReserva = async (entrada, salida) => {
                                 },
                                 paymentId: pagoUIDPasarela
                             };
-                            const procesadorReembolso = await componentes.pasarela.crearReenbolso(reembolsoDetalles);
+                            const procesadorReembolso = await crearReenbolso(reembolsoDetalles);
                             if (procesadorReembolso.error) {
                                 const errorUID = procesadorReembolso.error?.errors[0]?.code;
                                 let error;

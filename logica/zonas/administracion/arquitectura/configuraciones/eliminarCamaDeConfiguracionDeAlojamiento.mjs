@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) => {
     try {
@@ -8,11 +9,14 @@ export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) 
         IDX.administradores()
         if (IDX.control()) return
 
-        const camaUID = entrada.body.camaUID;
-        if (!camaUID || !Number.isInteger(camaUID) || camaUID < 0) {
-            const error = "el campo 'camaUID' solo puede ser numeros";
-            throw new Error(error);
-        }
+        const camaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.camaUID,
+            nombreCampo: "El identificador universal de la cama (camaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si"
+        })
+
         const validarHabitacionUID = `
                                     SELECT 
                                     habitacion

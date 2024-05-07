@@ -1,5 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const detalleImpuesto = async (entrada, salida) => {
     try {
@@ -8,12 +9,14 @@ export const detalleImpuesto = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-
-        const impuestoUID = entrada.body.impuestoUID;
-        if (!impuestoUID || typeof impuestoUID !== "number" || !Number.isInteger(impuestoUID) || impuestoUID <= 0) {
-            const error = "El campo 'impuestoUID' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
+        const impuestoUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.impuestoUID,
+            nombreCampo: "El identificador universal del impuesto (impuestoUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
         const validarImpuesto = `
                             SELECT
                             nombre,

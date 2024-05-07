@@ -1,5 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const eliminarEnlace = async (entrada, salida) => {
     try {
@@ -8,12 +9,15 @@ export const eliminarEnlace = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const enlaceUID = entrada.body.enlaceUID;
-        const filtroCadena = /^[0-9]+$/;
-        if (!enlaceUID || !filtroCadena.test(enlaceUID)) {
-            const error = "el campo 'enlaceUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
-            throw new Error(error);
-        }
+
+        const enlaceUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.enlaceUID,
+            nombreCampo: "El campo nuevoPreci",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         const seleccionarEnlace = await conexion.query(`SELECT reserva FROM "enlacesDePago" WHERE "enlaceUID" = $1`, [enlaceUID]);
         if (seleccionarEnlace.rowCount === 0) {
             const error = "No existe el enlace de pago";

@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entrada, salida) => {
     try {
@@ -9,12 +10,15 @@ export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entr
         if (IDX.control()) return
 
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-        if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-            const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+            
         const consultaDetallesConfiguracion = `
                                 SELECT 
                                 *

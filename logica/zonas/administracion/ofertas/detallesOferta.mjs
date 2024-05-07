@@ -1,6 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { obtenerDetallesOferta } from "../../../sistema/sistemaDeOfertas/obtenerDetallesOferta.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const detallesOferta = async (entrada, salida) => {
                 try {
@@ -9,11 +10,14 @@ export const detallesOferta = async (entrada, salida) => {
                     IDX.administradores()
                     if (IDX.control()) return
                     
-                    const ofertaUID = entrada.body.ofertaUID;
-                    if (!ofertaUID || typeof ofertaUID !== "number" || !Number.isInteger(ofertaUID) || ofertaUID <= 0) {
-                        const error = "El campo 'ofertaUID' debe ser un tipo numero, entero y positivo";
-                        throw new Error(error);
-                    }
+                    const ofertaUID = validadoresCompartidos.tipos.numero({
+                        string: entrada.body.ofertaUID,
+                        nombreCampo: "El identificador universal de la oferta (ofertaUID)",
+                        filtro: "numeroSimple",
+                        sePermiteVacio: "no",
+                        limpiezaEspaciosAlrededor: "si",
+                        sePermitenNegativos: "no"
+                    })
                     const detallesOferta = await obtenerDetallesOferta(ofertaUID);
                     const ok = {
                         ok: detallesOferta

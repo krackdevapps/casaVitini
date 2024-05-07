@@ -1,10 +1,25 @@
 import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../sistema/codigoZonaHoraria.mjs";
 import { obtenerParametroConfiguracion } from "../../sistema/obtenerParametroConfiguracion.mjs";
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+
 
 export const calendario = async (entrada, salida) => {
     try {
-        let tipo = entrada.body.tipo;
+        const tipo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipo,
+            nombreCampo: "El campo del tipo de calenadrio",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        if (tipo !== "actual" && tipo !== "personalizado") {
+            const error = "El campo de tipo solo puede ser actual o personalizado"
+            throw new Error(error)
+        }
+
+
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const diaHoyTZ = tiempoZH.day;
@@ -60,13 +75,21 @@ export const calendario = async (entrada, salida) => {
             salida.json(respuesta);
         }
         if (tipo === "personalizado") {
-            const ano = entrada.body.ano;
-            const mes = entrada.body.mes;
-            const calendario = {};
-            if (typeof ano !== 'number' || typeof mes !== 'number') {
-                const error = "H el 'Mes' y el 'Ano' tienen que ser numeros y no cadenas, es decir numeros a saco sin comillas";
-                throw new Error(error);
-            }
+            const ano = validadoresCompartidos.tipos.numero({
+                string: entrada.body.ano,
+                nombreCampo: "El campo del año",
+                filtro: "numeroSimple",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+            const mes = validadoresCompartidos.tipos.numero({
+                string: entrada.body.mes,
+                nombreCampo: "El campo del mes",
+                filtro: "numeroSimple",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
             if (mes < 1 || mes > 12) {
                 const error = "El mes solo puede ser un campo entre 1 y 12";
                 throw new Error(error);
@@ -75,6 +98,8 @@ export const calendario = async (entrada, salida) => {
                 const error = "El ano solo puede ser un numero entre 1 y 9999";
                 throw new Error(error);
             }
+            const calendario = {};
+
             // Limite del presente
             const anoActual = anoPresenteTZ;
             const mesActual = mesPresenteTZ;
@@ -147,68 +172,6 @@ export const calendario = async (entrada, salida) => {
             };
             salida.json(calendario);
         }
-        /*
-        if (tipo === "actualConDiasDeAntelacion") {
-            const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva")
-            const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva")
-            const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva")
-            const fechaActualTZConDiasDeAntelacion = tiempoZH.plus({ day: diasAntelacionReserva })
-            const anoActualConDiasDeAntelacion = fechaActualTZConDiasDeAntelacion.year;
-            const mesActualConDiasDeAntelacion = fechaActualTZConDiasDeAntelacion.month;
-            const diaActualConDiasDeAntelacion = fechaActualTZConDiasDeAntelacion.day;
-            const posicionDia1 = fechaActualTZConDiasDeAntelacion.set({ day: 1 }).weekday
-            const numeroDeDiasPorMes = fechaActualTZConDiasDeAntelacion.daysInMonth;
-            const estructuraGlobal_DiasAntelacion = {}
-            const primeraFechaDisponible = tiempoZH.plus({ day: diasAntelacionReserva }).toObject();
-            for (let index = 0; index < diasAntelacionReserva; index++) {
-                const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
-                const anoObjeto = String(fechaAntelacionObjeto.year)
-                const mesObjeto = String(fechaAntelacionObjeto.month)
-                const diaObjeto = String(fechaAntelacionObjeto.day)
-                estructuraGlobal_DiasAntelacion[anoObjeto] ||= {};
-                const estructuraAno = estructuraGlobal_DiasAntelacion[anoObjeto]
-                estructuraAno[mesObjeto] ||= {}
-                const estructuraMes = estructuraAno[mesObjeto]
-                estructuraMes[diaObjeto] ||= true
-            }
-            const fechaLimiteFuturo = tiempoZH.plus({ day: limiteFuturoReserva }).toObject();
-            const estructuraGlobal_limiteFuturo = {
-                ano: fechaLimiteFuturo.year,
-                mes: fechaLimiteFuturo.month,
-                dia: fechaLimiteFuturo.day,
-            }
-            let tiempoFinal
-            if (anoActualConDiasDeAntelacion > anoPresenteTZ) {
-                tiempoFinal = "futuro"
-            } else if (anoActualConDiasDeAntelacion === anoPresenteTZ) {
-                if (mesActualConDiasDeAntelacion === mesPresenteTZ) {
-                    tiempoFinal = "presente"
-                } else if (mesActualConDiasDeAntelacion > mesPresenteTZ) {
-                    tiempoFinal = "futuro"
-                }
-            }
-            const respuesta = {
-                calendario: "ok",
-                ano: anoActualConDiasDeAntelacion,
-                mes: mesActualConDiasDeAntelacion,
-                dia: diaActualConDiasDeAntelacion,
-                tiempo: tiempoFinal,
-                posicionDia1: posicionDia1,
-                numeroDiasPorMes: numeroDeDiasPorMes,
-                limites: {
-                    diasAntelacion: estructuraGlobal_DiasAntelacion,
-                    limiteFuturo: estructuraGlobal_limiteFuturo,
-                    diasMaximoReserva: diasMaximosReserva,
-                    primeraFechaDisponible: {
-                        dia: primeraFechaDisponible.day,
-                        mes: primeraFechaDisponible.month,
-                        ano: primeraFechaDisponible.year
-                    }
-                }
-            }
-            salida.json(respuesta)
-        }
-        */
     } catch (errorCapturado) {
         const error = {
             error: errorCapturado.message

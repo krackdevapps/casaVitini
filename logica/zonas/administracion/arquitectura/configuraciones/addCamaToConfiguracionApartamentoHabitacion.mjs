@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salida) => {
     try {
@@ -8,18 +9,24 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
         IDX.administradores()
         if (IDX.control()) return
 
+        const camaIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.camaIDV,
+            nombreCampo: "El camaIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
 
-        const camaIDV = entrada.body.camaIDV;
-        const habitacionUID = entrada.body.habitacionUID;
-        const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-        if (!camaIDV || !filtroCadenaMinusculasSinEspacios.test(camaIDV)) {
-            const error = "el campo 'camaIDV' solo puede ser letras minúsculas, numeros y sin espacios";
-            throw new Error(error);
-        }
-        if (!habitacionUID || !Number.isInteger(habitacionUID) || habitacionUID < 0) {
-            const error = "el campo 'habitacionUID' solo puede ser numeros";
-            throw new Error(error);
-        }
+        const habitacionUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.habitacionUID,
+            nombreCampo: "El identificador universal de la habitación (habitacionUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         // validar la cama
         const consultaCamaIDV = `
                                 SELECT

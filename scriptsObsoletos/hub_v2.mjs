@@ -25,7 +25,7 @@ import Decimal from 'decimal.js';
 import { insertarCliente } from '../logica/sistema/insertarCliente.mjs';
 import { codigoZonaHoraria } from '../logica/sistema/codigoZonaHoraria.mjs';
 import { DateTime } from 'luxon';
-import { generadorPDF3 } from '../logica/sistema/generadorPDF.mjs';
+import { generadorPDF } from '../logica/sistema/sistemaDePDF/generadorPDF.mjs';
 import { validadoresCompartidos } from '../logica/sistema/validadores/validadoresCompartidos.mjs';
 import { actualizarEstadoPago } from '../logica/sistema/sistemaDePrecios/actualizarEstadoPago.mjs';
 import { obtenerTotalReembolsado } from '../logica/sistema/sistemaDePrecios/obtenerTotalReembolsado.mjs';
@@ -3832,7 +3832,7 @@ const casaVitini = {
                         reservaUID: reservaUID
                     };
                     const reserva = await detallesReserva(metadatos);
-                    const pdf = await generadorPDF3(reserva);
+                    const pdf = await generadorPDF(reserva);
                     salida.setHeader('Content-Type', 'application/pdf');
                     salida.setHeader('Content-Disposition', 'attachment; filename=documento.pdf');
                     salida.send(pdf);

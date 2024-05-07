@@ -8,12 +8,14 @@ export const obtenerImagenConfiguracionAdministracion = async (entrada, salida) 
         IDX.empleados()
         if (IDX.control()) return
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-        if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-            const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
         const consultaPerfilConfiguracion = `
                                 SELECT 
                                 imagen

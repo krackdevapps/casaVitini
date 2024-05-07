@@ -254,91 +254,27 @@ const validadoresCompartidos = {
         },
     },
     usuarios: {
-        actualizarDatos: async (datosUsuario) => {
+        unicidadPasaporteYCorrreo: async (datosUsuario) => {
             try {
                 const usuarioIDX = datosUsuario.usuarioIDX
-                let nombre = datosUsuario.nombre
-                let primerApellido = datosUsuario.primerApellido
-                let segundoApellido = datosUsuario.segundoApellido
-                let pasaporte = datosUsuario.pasaporte
-                let telefono = datosUsuario.telefono
-                let email = datosUsuario.email
-                const filtroCantidad = /^\d+\.\d{2}$/;
-                const filtro_minúsculas_Mayusculas_numeros_espacios = /^[a-zA-Z0-9\s]+$/;
-                const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-                const filtroNumeros = /^[0-9]+$/;
-                const filtroCadenaSinEspacio = /^[a-z0-9]+$/;
-                if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
-                    const error = "El campo usuarioIDX solo admite minúsculas y numeros"
-                    throw new Error(error)
-                }
-                if (nombre) {
-                    nombre = nombre.trim();
-                    nombre = nombre.replace(/\s+/g, "");
-                    nombre = nombre.toUpperCase();
-                    if (!filtro_minúsculas_Mayusculas_numeros_espacios.test(nombre)) {
-                        const error = "El campo nombre solo admite mayúsculas, minúsculas, numeros y espacios"
-                        throw new Error(error)
-                    }
-                }
-                if (primerApellido) {
-                    primerApellido = primerApellido.trim();
-                    primerApellido = primerApellido.replace(/\s+/g, "");
-                    primerApellido = primerApellido.toUpperCase();
-                    if (!filtro_minúsculas_Mayusculas_numeros_espacios.test(primerApellido)) {
-                        const error = "El campo primerApellido solo admite mayúsculas, minúsculas, numeros y espacios"
-                        throw new Error(error)
-                    }
-                }
-                if (segundoApellido) {
-                    segundoApellido = segundoApellido.trim();
-                    segundoApellido = segundoApellido.replace(/\s+/g, "");
-                    segundoApellido = segundoApellido.toUpperCase();
-                    if (!filtro_minúsculas_Mayusculas_numeros_espacios.test(segundoApellido)) {
-                        const error = "El campo segundoApellido solo admite mayúsculas, minúsculas, numeros y espacios"
-                        throw new Error(error)
-                    }
-                }
-                if (pasaporte?.length > 0) {
-                    pasaporte = pasaporte.trim();
-                    pasaporte = pasaporte.replace(/\s+/g, "");
-                    pasaporte = pasaporte.toUpperCase();
-                    const filtroPasaporte = /^[a-zA-Z0-9]+$/;
-                    if (!filtroPasaporte.test(pasaporte)) {
-                        const error = "el campo 'pasaporte' solo puede ser letras minúsculas, masculas y numeros."
-                        throw new Error(error)
-                    }
-                }
-                if (telefono) {
-                    telefono = telefono.trim();
-                    telefono = telefono.replace(/\s+/g, '');
-                    const filtroTelefono = /^\d+$/
-                    if (!filtroTelefono.test(telefono)) {
-                        const error = "el campo 'telefono' solo puede una cadena con un numero, entero y positivo. Si estas escribiendo un numero internacional, sustituya el signo mas del incio por dos ceros"
-                        throw new Error(error)
-                    }
-                }
-                if (email) {
-                    email = email.trim();
-                    email = email.replace(/\s+/g, '');
-                    email = email.toLowerCase()
-                    const filtroEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                    if (!filtroEmail.test(email)) {
-                        const error = "El campo email no tiene le formato correcto, por ejemplo usuario@servidor.zona"
-                        throw new Error(error)
-                    }
-                }
+                const pasaporte = datosUsuario.pasaporte
+                const email = datosUsuario.email
+
                 // validar existencia de correo
                 const consultaControlCorreo = `
                 SELECT 
                 "usuarioIDX"
                 FROM "datosDeUsuario"
-                WHERE email = $1;
+                WHERE email = $1 AND "usuariosIDX" <> $2;
                 `
-                const resuelveUnicidadCorreo = await conexion.query(consultaControlCorreo, [email])
+                const resuelveUnicidadCorreo = await conexion.query(consultaControlCorreo, [email, usuarioIDX])
                 if (resuelveUnicidadCorreo.rowCount > 0) {
-                    const usuarioExistente = resuelveUnicidadCorreo.rows[0].usuarioIDX
-                    const error = `Ya existe un usuario con el correo electroníco que estas intentando guardar: ${usuarioExistente}`
+                    const usuariosExistentes = resuelveUnicidadCorreo.rows.map((usuario) => {
+                        return usuario.usuarioIDX
+                    })
+                    const ultimoElemento = usuariosExistentes.pop();
+                    const constructorCadenaFinalUI = usuariosExistentes.join(", ") + (usuariosExistentes.length > 0 ? " y " : "") + ultimoElemento;
+                    const error = `Ya existe un usuario con el correo electroníco que estas intentando guardar: ${constructorCadenaFinalUI}`
                     throw new Error(error)
                 }
                 // validar existencia de pasaporte
@@ -346,24 +282,19 @@ const validadoresCompartidos = {
                     SELECT 
                     "usuarioIDX"
                     FROM "datosDeUsuario"
-                    WHERE pasaporte = $1;
+                    WHERE pasaporte = $1 AND "usuariosIDX" <> $2;
                     `
-                const resuelveUnicidadPasaporte = await conexion.query(consultaControlPasaporte, [pasaporte])
+                const resuelveUnicidadPasaporte = await conexion.query(consultaControlPasaporte, [pasaporte, usuarioIDX])
                 if (resuelveUnicidadPasaporte.rowCount > 0) {
-                    const usuarioExistente = resuelveUnicidadPasaporte.rows[0].usuarioIDX
-                    const error = `Ya existe un usuario con el pasaporte que estas intentando guardar: ${usuarioExistente}`
+                    const usuariosExistentes = resuelveUnicidadPasaporte.rows.map((usuario) => {
+                        return usuario.usuarioIDX
+                    })
+                    const ultimoElemento = usuariosExistentes.pop();
+                    const constructorCadenaFinalUI = usuariosExistentes.join(", ") + (usuariosExistentes.length > 0 ? " y " : "") + ultimoElemento;
+                    const error = `Ya existe un usuario con el pasaporte que estas intentando guardar: ${constructorCadenaFinalUI}`
                     throw new Error(error)
                 }
-                const salidaValidada = {
-                    usuarioIDX: usuarioIDX,
-                    nombre: nombre,
-                    primerApellido: primerApellido,
-                    segundoApellido: segundoApellido,
-                    pasaporte: pasaporte,
-                    telefono: telefono,
-                    email: email,
-                }
-                return salidaValidada
+
             } catch (error) {
                 throw error
             }
@@ -428,6 +359,22 @@ const validadoresCompartidos = {
                     fecha_ISO: fecha_ISO
                 }
                 return estructura
+            } catch (error) {
+                throw error
+            }
+        },
+        fechaMesAno: async (fechaMesAno) => {
+            try {
+                if (typeof fechaMesAno !== "string") {
+                    const error = "La fecha no cumple el formato cadena esperado"
+                    throw new Error(error)
+                }
+                //Ojo por que esto es nes-ano:
+                const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
+                if (!filtroFecha.test(fechaMesAno)) {
+                    const error = "La fecha no cumple el formato especifico. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante. Por ejemplo 5-2024 o 10-2024";
+                    throw new Error(error);
+                }
             } catch (error) {
                 throw error
             }
@@ -624,7 +571,7 @@ const validadoresCompartidos = {
                 }
             } else if (filtro === "strictoConEspacios") {
                 try {
-                    const filtro = /^[a-zA-Z0-9_ \-\/\.]+$/;
+                    const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ]+$/;
                     if (!filtro.test(string)) {
                         const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros, espacios y los siguientes caracteres: _, -, . y /`
                         throw new Error(mensaje)
@@ -648,10 +595,61 @@ const validadoresCompartidos = {
                         const mensaje = `${nombreCampo} solo acepta una cadena con numeros con dos decimales separados por punto, por ejemplo 00.00`
                         throw new Error(mensaje)
                     }
+                    const devuelveUnTipoNumber = configuracion.devuelveUnTipoNumber
+                    if (typeof devuelveUnTipoNumber !== "string" &&
+                        (devuelveUnTipoNumber !== "si" && devuelveUnTipoNumber !== "no")) {
+                        const mensaje = `El validor de cadena esta mal configurado, devuelveUnTipoNumber solo acepta si o no.`
+                        throw new Error(mensaje)
+                    }
+                    if (devuelveUnTipoNumber === "si") {
+                        string = Number(string)
+                    }
+
                 } catch (errorCapturado) {
                     throw errorCapturado
                 }
-            } else {
+            } else if (filtro === "cadenaConNumerosEnteros") {
+                try {
+                    const filtro = /^[0-9]+$/
+                    if (!filtro.test(string)) {
+                        const mensaje = `${nombreCampo} solo acepta una cadena con numeros con dos decimales separados por punto, por ejemplo 00.00`
+                        throw new Error(mensaje)
+                    }
+                    const devuelveUnTipoNumber = configuracion.devuelveUnTipoNumber
+                    if (typeof devuelveUnTipoNumber !== "string" &&
+                        (devuelveUnTipoNumber !== "si" && devuelveUnTipoNumber !== "no")) {
+                        const mensaje = `El validor de cadena esta mal configurado, devuelveUnTipoNumber solo acepta si o no.`
+                        throw new Error(mensaje)
+                    }
+                    if (devuelveUnTipoNumber === "si") {
+                        string = Number(string)
+                    }
+
+                } catch (errorCapturado) {
+                    throw errorCapturado
+                }
+            } else if (filtro === "cadenaBase64") {
+                try {
+                    const filtro = /^[A-Za-z0-9+/=]+$/
+                    if (!filtro.test(string)) {
+                        const mensaje = `${nombreCampo} solo acepta una cadena en base 64`
+                        throw new Error(mensaje)
+                    }
+                } catch (errorCapturado) {
+                    throw errorCapturado
+                }
+            } else if (filtro === "url") {
+                try {
+                    const filtro = /^[A-Za-z0-9_\-/=:]*$/;
+                    if (!filtro.test(string)) {
+                        const mensaje = `${nombreCampo} solo acepta una cadena de minusculas, mayusculas, numeros y estos caracteres: _, \, -, /, = y :`
+                        throw new Error(mensaje)
+                    }
+                } catch (errorCapturado) {
+                    throw errorCapturado
+                }
+            }
+            else {
                 const mensaje = `El validador de cadenas, necesito un identificador de filtro valido`
                 throw new Error(mensaje)
             }
@@ -665,7 +663,7 @@ const validadoresCompartidos = {
             const filtro = configuracion.filtro
             const sePermiteVacio = configuracion.sePermiteVacio
             const limpiezaEspaciosAlrededor = configuracion.limpiezaEspaciosAlrededor
-            const sePermitenNegativos = configuracion.sePermitenNegativos
+            const sePermitenNegativos = configuracion.sePermitenNegativos || "no"
 
             if (!nombreCampo) {
                 const mensaje = `El validador de cadenas, necesito un nombre de campo.`
@@ -769,7 +767,41 @@ const validadoresCompartidos = {
             } catch (error) {
                 throw error
             }
-        }
+        },
+        array: (configuracion) => {
+            try {
+                const array = configuracion.array
+                const nombreCampo = configuracion.nombreCampo
+                const filtro = configuracion.filtro
+
+                if (!nombreCampo) {
+                    const mensaje = `El validador de arrays, necesito un nombre de campo.`
+                    throw new Error(mensaje)
+                }
+                //verificar que es un array
+                // verificar que el array no esta vacio
+                if (!array.isArray(cajon) || cajon == null || cajon === undefined) {
+                    const error = `${nombreCampo} se esperaba un array`;
+                    throw new Error(error);
+                }
+                if (array.length === 0) {
+                    const error = `${nombreCampo} está array vacío`;
+                    throw new Error(error);
+                }
+                if (filtro === "soloCadenas") {
+                    array.every((cadena, index) => {
+                        validadoresCompartidos.tipos.cadena({
+                            string: cadena,
+                            nombreCampo: `En la posicion ${index} del array debe haber una cadena`,
+                            filtro: "strictoIDV",
+                            sePermiteVacio: "no",
+                        })
+                    });
+                }
+            } catch (error) {
+                throw error
+            }
+        },
     }
 }
 export {

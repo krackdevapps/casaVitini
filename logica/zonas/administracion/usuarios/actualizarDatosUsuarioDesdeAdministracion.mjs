@@ -8,31 +8,58 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         if (IDX.control()) return
+        const usuarioIDX = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.usuarioIDX,
+            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
 
-        let usuarioIDX = entrada.body.usuarioIDX;
-        let nombre = entrada.body.nombre;
-        let primerApellido = entrada.body.primerApellido;
-        let segundoApellido = entrada.body.segundoApellido;
-        let pasaporte = entrada.body.pasaporte;
-        let telefono = entrada.body.telefono;
-        let email = entrada.body.email;
+        const nombre = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombre,
+            nombreCampo: "El campo del nombre",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const primerApellido = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.primerApellido,
+            nombreCampo: "El campo del primer apellido",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const segundoApellido = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.segundoApellido,
+            nombreCampo: "El campo del segundo apellido",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const pasaporte = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.pasaporte,
+            nombreCampo: "El campo del pasaporte",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+            limpiezaEspaciosInternos: "si"
+        })
+
+        const email = validadoresCompartidos.tipos
+            .correoElectronico(entrada.body.email)
+        const telefono = validadoresCompartidos.tipos
+            .telefono(entrada.body.telefono)
+
         const validarDatosUsuario = {
             usuarioIDX: usuarioIDX,
-            nombre: nombre,
-            primerApellido: primerApellido,
-            segundoApellido: segundoApellido,
             pasaporte: pasaporte,
-            telefono: telefono,
             email: email
         };
-        const datosValidados = await validadoresCompartidos.usuarios.actualizarDatos(validarDatosUsuario);
-        usuarioIDX = datosValidados.usuarioIDX;
-        nombre = datosValidados.nombre;
-        primerApellido = datosValidados.primerApellido;
-        segundoApellido = datosValidados.segundoApellido;
-        pasaporte = datosValidados.pasaporte;
-        telefono = datosValidados.telefono;
-        email = datosValidados.email;
+        await validadoresCompartidos.usuarios.unicidadPasaporteYCorrreo(validarDatosUsuario);
         await conexion.query('BEGIN'); // Inicio de la transacción
 
 

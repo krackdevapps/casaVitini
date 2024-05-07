@@ -1,5 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const detallesUsuario = async (entrada, salida) => {
     try {
@@ -7,13 +8,15 @@ export const detallesUsuario = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         if (IDX.control()) return
-
-        const usuarioIDX = entrada.body.usuarioIDX;
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (!usuarioIDX || !filtroCadena.test(usuarioIDX)) {
-            const error = "el campo 'usuarioIDX' solo puede ser letras minúsculas, numeros y sin pesacios";
-            throw new Error(error);
-        }
+   
+        const usuarioIDX = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.usuarioIDX,
+            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
 
         const ok = {
             ok: {}

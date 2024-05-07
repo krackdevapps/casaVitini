@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const eliminarConfiguracionDeAlojamiento = async (entrada, salida) => {
     try {
@@ -8,12 +9,15 @@ export const eliminarConfiguracionDeAlojamiento = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-        if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-            const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         const validarApartamentoUID = `
                                     SELECT 
                                     *
@@ -36,7 +40,7 @@ export const eliminarConfiguracionDeAlojamiento = async (entrada, salida) => {
         }
         if (resuelveEliminarApartamento.rowCount > 0) {
             const ok = {
-                "ok": "Se ha eliminado correctamente la configuracion de apartamento",
+                ok: "Se ha eliminado correctamente la configuracion de apartamento",
             };
             salida.json(ok);
         }

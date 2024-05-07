@@ -2,17 +2,31 @@ import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../sistema/codigoZonaHoraria.mjs";
 import { conexion } from "../../componentes/db.mjs";
 import { obtenerTodosLosCalendarios } from "../../sistema/calendariosSincronizados/airbnb/obtenerTodosLosCalendarios.mjs";
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
     try {
-        const mes = entrada.body.mes;
-        const ano = entrada.body.ano;
-        if (typeof mes !== "number" || !Number.isInteger(mes) || mes < 0 || mes > 12) {
+        const ano = validadoresCompartidos.tipos.numero({
+            string: entrada.body.ano,
+            nombreCampo: "El campo del año",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const mes = validadoresCompartidos.tipos.numero({
+            string: entrada.body.mes,
+            nombreCampo: "El campo del mes",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        if (mes < 0 || mes > 12) {
             const error = "El campo 'mes' solo puede ser un numero entero y positivo entre el 1 y el 12";
             throw new Error(error);
         }
-        if (typeof ano !== "number" || !Number.isInteger(ano) || ano < 0) {
+        if (ano < 0) {
             const error = "El campo 'ano' solo puede ser un numero entero y positivo y superior a 0";
             throw new Error(error);
         }

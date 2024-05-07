@@ -1,5 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const eliminarBloqueo = async (entrada, salida) => {
     try {
@@ -8,11 +9,16 @@ export const eliminarBloqueo = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
         
-        const bloqueoUID = entrada.body.bloqueoUID;
-        if (typeof bloqueoUID !== "number" || !Number.isInteger(bloqueoUID) && bloqueoUID <= 0) {
-            const error = "la clave 'bloqueoUID' debe de tener un dato tipo 'number', positivo y entero";
-            throw new Error(error);
-        }
+        const bloqueoUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.bloqueoUID,
+            nombreCampo: "El identificador universal de bloqueoUID",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no",
+            devuelveUnTipoNumber: "si"
+        })
+
         const seleccionarBloqueo = await conexion.query(`SELECT uid, apartamento FROM "bloqueosApartamentos" WHERE uid = $1`, [bloqueoUID]);
         if (seleccionarBloqueo.rowCount === 0) {
             const error = "No existe el bloqueo que se quiere eliminar.";

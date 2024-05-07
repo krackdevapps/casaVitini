@@ -8,13 +8,6 @@ export const listaImpuestos = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        /*
-        "totalReservas": 16,
-        "paginasTotales": 2,
-        "pagina": 1,
-        "nombreColumna": "entrada",
-        "sentidoColumna": "descendente",
-        */
         const validadores = {
             nombreColumna: async (nombreColumna) => {
                 const filtronombreColumna = /^[a-zA-Z]+$/;

@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const crearEntidadAlojamiento = async (entrada, salida) => {
     try {
@@ -9,27 +10,35 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
         if (IDX.control()) return
 
 
-        const tipoEntidad = entrada.body.tipoEntidad;
-        const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-        const filtroCadenaMinusculasMayusculasSinEspacios = /^[a-zA-Z0-9]+$/;
-        const filtroCadenaMinusculasConEspacios = /^[a-zA-Z0-9\s]+$/;
-        if (!tipoEntidad || !filtroCadenaMinusculasSinEspacios.test(tipoEntidad)) {
-            const error = "el campo 'tipoEntidad' solo puede ser letras minúsculas y numeros. sin pesacios";
-            throw new Error(error);
-        }
+        const tipoEntidad = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoEntidad,
+            nombreCampo: "El tipoEntidad",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "no",
+            soloMinusculas: "si"
+        })
+
+
         if (tipoEntidad === "apartamento") {
-            let apartamentoIDV = entrada.body.apartamentoIDV;
-            let apartamentoUI = entrada.body.apartamentoUI;
-            apartamentoUI = apartamentoUI.replace(/['"]/g, '');
-            if (!apartamentoUI || !filtroCadenaMinusculasConEspacios.test(apartamentoUI) || apartamentoUI.length > 50) {
-                const error = "el campo 'apartamentoUI' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres";
-                throw new Error(error);
-            }
-            if (!apartamentoIDV) {
-                apartamentoIDV = apartamentoUI.toLowerCase().replace(/[^a-z0-9]/g, '');
-            } else {
-                apartamentoIDV = apartamentoIDV.toLowerCase().replace(/[^a-z0-9]/g, '');
-            }
+            const apartamentoUI = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.apartamentoUI,
+                nombreCampo: "El campo del apartamentoUI",
+                filtro: "strictoConEspacios",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
+            const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.apartamentoIDV || apartamentoUI.toLowerCase().replace(/[^a-z0-9]/g, ''),
+                nombreCampo: "El apartamentoIDV",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                soloMinusculas: "si"
+            })
+
+
             const validarCodigo = async (apartamentoIDV) => {
                 const validarCodigoAleatorio = `
                                         SELECT
@@ -53,14 +62,14 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 } while (codigoExiste);
                 return codigoGenerado;
             };
-            apartamentoIDV = await controlApartamentoIDV(apartamentoIDV);
+            const apartamentoIDV_unico = await controlApartamentoIDV(apartamentoIDV);
             const validarIDV = `
                                     SELECT 
                                     *
                                     FROM apartamentos
                                     WHERE apartamento = $1
                                     `;
-            const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV]);
+            const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV_unico]);
             if (resuelveValidarIDV.rowCount === 1) {
                 const error = "Ya existe un identificador visual igual que el apartamento que propones, escoge otro";
                 throw new Error(error);
@@ -90,7 +99,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                                     RETURNING apartamento
                                     `;
             const matriozDatosNuevaEntidad = [
-                apartamentoIDV,
+                apartamentoIDV_unico,
                 apartamentoUI
             ];
             const resuelveCrearEntidad = await conexion.query(crearEntidad, matriozDatosNuevaEntidad);
@@ -107,18 +116,23 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             }
         }
         if (tipoEntidad === "habitacion") {
-            let habitacionIDV = entrada.body.habitacionIDV;
-            let habitacionUI = entrada.body.habitacionUI;
-            habitacionUI = habitacionUI.replace(/['"]/g, '');
-            if (!habitacionUI || !filtroCadenaMinusculasConEspacios.test(habitacionUI) || habitacionUI.length > 50) {
-                const error = "el campo 'habitacionUI' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres";
-                throw new Error(error);
-            }
-            if (!habitacionIDV) {
-                habitacionIDV = habitacionUI.replace(/[^a-z0-9]/g, '');
-            } else {
-                habitacionIDV = habitacionIDV.replace(/[^a-z0-9]/g, '');
-            }
+
+            const habitacionUI = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.habitacionUI,
+                nombreCampo: "El campo del habitacionUI",
+                filtro: "strictoConEspacios",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
+            const habitacionIDV = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.habitacionIDV || habitacionUI.toLowerCase().replace(/[^a-z0-9]/g, ''),
+                nombreCampo: "El habitacionIDV",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                soloMinusculas: "si"
+            })
             const validarCodigo = async (habitacionIDV) => {
                 const validarCodigoAleatorio = `
                                         SELECT
@@ -137,19 +151,19 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                     codigoExiste = await validarCodigo(codigoGenerado);
                     if (codigoExiste) {
                         // Si el código ya existe, agrega un cero al final y vuelve a verificar
-                        codigoGenerado = codigoGenerado + "0";
+                        codigoGenerado = codigoGenerado + "_0";
                     }
                 } while (codigoExiste);
                 return codigoGenerado;
             };
-            habitacionIDV = await controlHabitacionIDV(habitacionIDV);
+            const habitacionIDV_unico = await controlHabitacionIDV(habitacionIDV);
             const validarIDV = `
                                     SELECT 
                                     *
                                     FROM habitaciones
                                     WHERE habitacion = $1
                                     `;
-            const resuelveValidarIDV = await conexion.query(validarIDV, [habitacionIDV]);
+            const resuelveValidarIDV = await conexion.query(validarIDV, [habitacionIDV_unico]);
             if (resuelveValidarIDV.rowCount === 1) {
                 const error = "Ya existe un identificador visual igual que el que propones, escoge otro";
                 throw new Error(error);
@@ -179,10 +193,10 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                                     RETURNING habitacion
                                     `;
             const matriozDatosNuevaEntidad = [
-                habitacionIDV,
+                habitacionIDV_unico,
                 habitacionUI,
             ];
-            let resuelveCrearEntidad = await conexion.query(crearEntidad, matriozDatosNuevaEntidad);
+            const resuelveCrearEntidad = await conexion.query(crearEntidad, matriozDatosNuevaEntidad);
             if (resuelveCrearEntidad.rowCount === 0) {
                 const error = "No se ha podido crear la nueva entidad";
                 throw new Error(error);
@@ -196,19 +210,34 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             }
         }
         if (tipoEntidad === "cama") {
-            let camaIDV = entrada.body.camaIDV;
-            let camaUI = entrada.body.camaUI;
-            let capacidad = entrada.body.capacidad;
-            camaUI = camaUI.replace(/['"]/g, '');
-            if (!camaUI || !filtroCadenaMinusculasConEspacios.test(camaUI) || camaUI.length > 50) {
-                const error = "el campo 'camaUI' solo puede ser letras minúsculas, numeros y sin espacios. No puede tener mas de 50 caracteres.";
-                throw new Error(error);
-            }
-            if (!camaIDV) {
-                camaIDV = camaUI.replace(/[^a-z0-9]/g, '');
-            } else {
-                camaIDV = camaIDV.replace(/[^a-z0-9]/g, '');
-            }
+
+
+            const camaUI = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.camaUI,
+                nombreCampo: "El campo del camaUI",
+                filtro: "strictoConEspacios",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
+            const camaIDV = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.camaIDV || camaUI.toLowerCase().replace(/[^a-z0-9]/g, ''),
+                nombreCampo: "El camaIDV",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                soloMinusculas: "si"
+            })
+
+            const capacidad = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.capacidad,
+                nombreCampo: "El campo capacidad",
+                filtro: "cadenaConNumerosEnteros",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
+
             const validarCodigo = async (camaIDV) => {
                 const validarCodigoAleatorio = `
                                         SELECT
@@ -232,11 +261,8 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 } while (codigoExiste);
                 return codigoGenerado;
             };
-            camaIDV = await controlCamaIDV(camaIDV);
-            const filtroSoloNumeros = /^\d+$/;
-            if (filtroSoloNumeros.test(capacidad)) {
-                capacidad = parseInt(capacidad);
-            }
+            const camaIDV_unico = await controlCamaIDV(camaIDV);
+
             if (!capacidad || !Number.isInteger(capacidad) || capacidad < 0) {
                 const error = "el campo 'capacidad' solo puede ser numeros, entero y positivo";
                 throw new Error(error);
@@ -247,7 +273,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                                     FROM camas
                                     WHERE cama = $1
                                     `;
-            const resuelveValidarIDV = await conexion.query(validarIDV, [camaIDV]);
+            const resuelveValidarIDV = await conexion.query(validarIDV, [camaIDV_unico]);
             if (resuelveValidarIDV.rowCount === 1) {
                 const error = "Ya existe un identificador visual igual que la cama que propones, escoge otro";
                 throw new Error(error);
@@ -279,7 +305,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                                     RETURNING cama
                                     `;
             const matriozDatosNuevaEntidad = [
-                camaIDV,
+                camaIDV_unico,
                 camaUI,
                 capacidad
             ];

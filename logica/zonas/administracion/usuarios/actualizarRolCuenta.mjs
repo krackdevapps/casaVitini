@@ -1,6 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const actualizarRolCuenta = async (entrada, salida) => {
     try {
@@ -10,17 +10,24 @@ export const actualizarRolCuenta = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const usuarioIDX = entrada.body.usuarioIDX;
-        const nuevoRol = entrada.body.nuevoRol;
-        const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-        if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
-            const error = "El campo usuarioIDX solo admite minúsculas y numeros";
-            throw new Error(error);
-        }
-        if (!nuevoRol || !filtro_minúsculas_numeros.test(nuevoRol)) {
-            const error = "El rolIDX solo admine minúsculas y numeros y nada mas";
-            throw new Error(error);
-        }
+        const usuarioIDX = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.usuarioIDX,
+            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+        const nuevoRol = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nuevoRol,
+            nombreCampo: "El nombre del rol",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         await conexion.query('BEGIN'); // Inicio de la transacción
 
 

@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const eliminarPerfilPrecioApartamento = async (entrada, salida) => {
     let mutex
@@ -15,16 +16,14 @@ export const eliminarPerfilPrecioApartamento = async (entrada, salida) => {
         await mutex.acquire();
 
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        if (typeof apartamentoIDV !== "string") {
-            const error = "El campo apartamentoIDV debe de ser una cadena";
-            throw new Error(error);
-        }
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (!filtroCadena.test(apartamentoIDV)) {
-            const error = "El campo apartamentoIDV solo puede ser un una cadena de minúsculas y numeros, ni siquera espacios";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El campo apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         const validarApartamento = `
                             SELECT
                             "apartamentoIDV", 

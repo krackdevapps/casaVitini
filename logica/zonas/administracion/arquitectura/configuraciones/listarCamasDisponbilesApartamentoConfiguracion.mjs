@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, salida) => {
     try {
@@ -10,12 +11,15 @@ export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, sa
 
 
 
-        const habitacionUID = entrada.body.habitacionUID;
-        const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-        if (!habitacionUID || !Number.isInteger(habitacionUID) || habitacionUID < 0) {
-            const error = "el campo 'habitacionUID' solo puede ser numeros";
-            throw new Error(error);
-        }
+        const habitacionUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.habitacionUID,
+            nombreCampo: "El identificador universal de la habitación (habitacionUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })     
+
         const validarHabitacionUID = `
                                 SELECT 
                                 habitacion

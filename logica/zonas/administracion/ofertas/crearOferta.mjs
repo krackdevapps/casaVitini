@@ -18,27 +18,37 @@ export const crearOferta = async (entrada, salida) => {
         mutex = new Mutex()
         await mutex.acquire();
 
-        let nombreOferta = entrada.body.nombreOferta;
+        const nombreOferta = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreOferta,
+            nombreCampo: "El campo del nombre de la oferta",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
         const fechaInicio = entrada.body.fechaInicio;
         const fechaFin = entrada.body.fechaFin;
-        const tipoOferta = entrada.body.tipoOferta;
+        const tipoOferta = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoOferta,
+            nombreCampo: "El tipo de oferta",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
         const tipoDescuento = entrada.body.tipoDescuento ? entrada.body.tipoDescuento : null;
-        let cantidad = entrada.body.cantidad;
+        const cantidad = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.cantidad,
+            nombreCampo: "El campo cantidad",
+            filtro: "cadenaConNumerosConDosDecimales",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
+        })
         const contextoAplicacion = entrada.body.contextoAplicacion;
         const apartamentosSeleccionados = entrada.body.apartamentosSeleccionados;
         const simboloNumero = entrada.body.simboloNumero;
         const numero = entrada.body.numero;
         const filtroCantidad = /^\d+(\.\d{1,2})?$/;
-        const filtroNombre = /['"\\;\r\n<>\t\b]/g;
-        const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
 
-
-
-        if (!nombreOferta) {
-            const error = "El campo nombreOferta no admice comillas simples o dobles";
-            throw new Error(error);
-        }
-        nombreOferta = nombreOferta.replace(filtroNombre, '');
 
         const fechaInicio_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaInicio)).fecha_ISO;
         const fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin)).fecha_ISO;
@@ -102,14 +112,7 @@ export const crearOferta = async (entrada, salida) => {
                     throw new Error(error);
                 }
             },
-            cantidad: (cantidad) => {
-                if (!cantidad || !filtroCantidad.test(cantidad)) {
-                    const error = "El campo cantidad debe ser un número con un máximo de dos decimales separados por punto. Recuerda que number es sin comillas.";
-                    throw new Error(error);
-                }
-                cantidad = Number(cantidad);
-            },
-            controlLimitePorcentaje: (tipoDescuento, cantidad) => {
+             controlLimitePorcentaje: (tipoDescuento, cantidad) => {
                 if (tipoDescuento === "porcentaje" && new Decimal(cantidad).greaterThan(100)) {
                     const error = "Cuidado! No se puede acepatar un porcentaje superior a 100% por que sino la oferta podria generar numeros negativos.";
                     throw new Error(error);
@@ -189,7 +192,6 @@ export const crearOferta = async (entrada, salida) => {
         if (tipoOferta === "porNumeroDeApartamentos") {
             validadores.simboloNumero(simboloNumero);
             validadores.numero(numero);
-            validadores.cantidad(cantidad);
             validadores.tipoDescuento(tipoDescuento);
             validadores.controlLimitePorcentaje(tipoDescuento, cantidad);
             const oferta = {
@@ -218,7 +220,6 @@ export const crearOferta = async (entrada, salida) => {
             }
             validadores.contextoAplicacion(contextoAplicacion);
             if (contextoAplicacion === "totalNetoReserva") {
-                validadores.cantidad(cantidad);
                 validadores.tipoDescuento(tipoDescuento);
                 validadores.controlLimitePorcentaje(tipoDescuento, cantidad);
             }
@@ -329,7 +330,6 @@ export const crearOferta = async (entrada, salida) => {
         if (tipoOferta === "porDiasDeAntelacion") {
             validadores.simboloNumero(simboloNumero);
             validadores.numero(numero);
-            validadores.cantidad(cantidad);
             validadores.tipoDescuento(tipoDescuento);
             validadores.controlLimitePorcentaje(tipoDescuento, cantidad);
             const oferta = {
@@ -349,7 +349,6 @@ export const crearOferta = async (entrada, salida) => {
         if (tipoOferta === "porDiasDeReserva") {
             validadores.simboloNumero(simboloNumero);
             validadores.numero(numero);
-            validadores.cantidad(cantidad);
             validadores.tipoDescuento(tipoDescuento);
             validadores.controlLimitePorcentaje(tipoDescuento, cantidad);
             //    simboloNumero = entrada.body.simboloNumero
@@ -369,7 +368,6 @@ export const crearOferta = async (entrada, salida) => {
         }
         if (tipoOferta === "porRangoDeFechas") {
             validadores.tipoDescuento(tipoDescuento);
-            validadores.cantidad(cantidad);
             const oferta = {
                 nombreOferta: nombreOferta,
                 fechaInicio_ISO: fechaInicio_ISO,

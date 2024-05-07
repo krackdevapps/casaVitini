@@ -1,22 +1,24 @@
+import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-
+import { detallesReserva as detallesReserva_ } from "../../../sistema/sistemaDeReservas/detallesReserva.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const detallesReserva = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return  
+        if (IDX.control()) return
 
         const usuario = entrada.session.usuario;
-        const reservaUID = entrada.body.reservaUID;
-        if (!reservaUID) {
-            const error = "Se necesita un id de 'reserva'";
-            throw new Error(error);
-        }
-        if (typeof reservaUID !== "number" || !Number.isInteger(reservaUID) || reservaUID <= 0) {
-            let error = "Se ha definico correctamente  la clave 'reserva' pero el valor de esta debe de ser un numero positivo, si has escrito un numero positivo, revisa que en el objeto no este numero no este envuelvo entre comillas";
-            throw new Error(error);
-        }
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reser (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         const obtenerDatosUsuario = `
             SELECT 
                 email,
@@ -27,7 +29,6 @@ export const detallesReserva = async (entrada, salida) => {
                 "usuarioIDX" = $1`;
         const resolverObteDatosUsuario = await conexion.query(obtenerDatosUsuario, [usuario]);
         const email = resolverObteDatosUsuario.rows[0].email;
-        const estadoCorreo = resolverObteDatosUsuario.rows[0].estadoCorreo;
         if (!email) {
             const error = "Se necesita que definas tu dirección de correo elecroníco en Mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo eletroníco que usastes para confirmar la reserva. Es decir debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de correo electronico y confirmarlo con el correo de confirmacion que te enviaremos. Una vez hecho eso podras ver tus reservas";
             throw new Error(error);
@@ -112,7 +113,7 @@ export const detallesReserva = async (entrada, salida) => {
                 reservaUID: reservaUID,
                 // solo: solo
             };
-            const resuelveDetallesReserva = await detallesReserva(metadatos);
+            const resuelveDetallesReserva = await detallesReserva_(metadatos);
             delete resuelveDetallesReserva.reserva.origen;
             salida.json(resuelveDetallesReserva);
         }

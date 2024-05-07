@@ -1,6 +1,7 @@
 import Decimal from "decimal.js";
 import { precioBaseApartamento } from "../../../sistema/sistemaDePrecios/precioBaseApartamento.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const detallePrecioBaseApartamento = async (entrada, salida) => {
     try {
@@ -10,12 +11,14 @@ export const detallePrecioBaseApartamento = async (entrada, salida) => {
         if (IDX.control()) return
 
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (typeof apartamentoIDV !== "string" || !filtroCadena.test(apartamentoIDV)) {
-            const error = "El campo apartamentoIDV solo puede ser un una cadena de minúsculas y numeros, ni siquera espacios";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El campo apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         const transaccionInterna = await precioBaseApartamento(apartamentoIDV);
 
         //  transaccionInterna.precioNetoPorDia = new Decimal(transaccionInterna.precioNetoPorDia).toFixed(2)
@@ -27,7 +30,6 @@ export const detallePrecioBaseApartamento = async (entrada, salida) => {
             impuesto.tipoImpositivo = new Decimal(tipoImpositivo).toFixed(2);
             impuesto.totalImpuesto = new Decimal(totalImpuesto).toFixed(2);
         });
-
 
         const ok = {
             ok: transaccionInterna

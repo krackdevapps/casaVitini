@@ -12,19 +12,23 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const usuarioIDX = entrada.body.usuarioIDX;
         const claveNueva = entrada.body.claveNueva;
         const claveNuevaDos = entrada.body.claveNuevaDos;
-        const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-        if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
-            const error = "El campo usuarioIDX solo admite minúsculas y numeros";
-            throw new Error(error);
-        }
+
+        const usuarioIDX = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.usuarioIDX,
+            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        validadoresCompartidos.claves.minimoRequisitos(claveNueva);
+        validadoresCompartidos.claves.minimoRequisitos(claveNuevaDos);
+
         if (claveNueva !== claveNuevaDos) {
             const error = "No has escrito dos veces la misma nueva contrasena";
             throw new Error(error);
-        } else {
-            validadoresCompartidos.claves.minimoRequisitos(claveNueva);
         }
         const cryptoData = {
             sentido: "cifrar",

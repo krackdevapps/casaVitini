@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const eliminarEntidadAlojamiento = async (entrada, salida) => {
     try {
@@ -9,18 +10,24 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
         if (IDX.control()) return
 
 
-        const tipoEntidad = entrada.body.tipoEntidad;
-        const entidadIDV = entrada.body.entidadIDV;
-        const filtroCadenaSinEspacios = /^[a-z0-9]+$/;
-        const filtroCadenaConEspacios = /^[a-z0-9\s]+$/i;
-        if (!tipoEntidad || !filtroCadenaSinEspacios.test(tipoEntidad)) {
-            const error = "el campo 'tipoEntidad' solo puede ser letras minúsculas y numeros. sin pesacios";
-            throw new Error(error);
-        }
-        if (!entidadIDV || !filtroCadenaSinEspacios.test(entidadIDV)) {
-            const error = "el campo 'entidadIDV' solo puede ser letras minúsculas y numeros. sin pesacios";
-            throw new Error(error);
-        }
+        const tipoEntidad = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoEntidad,
+            nombreCampo: "El tipoEntidad",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+        const entidadIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.entidadIDV,
+            nombreCampo: "El entidadIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         if (tipoEntidad === "apartamento") {
             const validarIDV = `
                                     SELECT 

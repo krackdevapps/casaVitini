@@ -1,9 +1,26 @@
+import { precioReserva as precioReserva_ } from "../../sistema/sistemaDePrecios/precioReserva.mjs";
 import { validarObjetoReservaSoloFormato } from "../../sistema/sistemaDeReservas/validarObjetoReservaSoloFormato.mjs";
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const precioReserva = async (entrada, salida) => {
     try {
-        const tipoProcesadorPrecio = entrada.body.tipoProcesadorPrecio;
-        const reserva = entrada.body.reserva;
+        const tipoProcesadorPrecio = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoProcesadorPrecio,
+            nombreCampo: "El campo del tipo de procesador de precio",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reser (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         const rolActual = entrada.session.rol;
         if (tipoProcesadorPrecio !== "objeto" && tipoProcesadorPrecio !== "uid") {
             const error = "El campo 'tipoProcesadorPrecio' solo puede ser objeto o uid";
@@ -20,7 +37,7 @@ export const precioReserva = async (entrada, salida) => {
             tipoProcesadorPrecio: tipoProcesadorPrecio,
             reserva: reserva
         }
-        const transaccionInterna = await precioReserva(transaccion);
+        const transaccionInterna = await precioReserva_(transaccion);
         salida.json(transaccionInterna);
     } catch (errorCapturado) {
         const error = {

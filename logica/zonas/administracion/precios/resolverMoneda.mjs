@@ -1,5 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { resolverMoneda as resolverMoneda_ } from "../../../sistema/sistemaDeResolucion/resolverMoneda.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const resolverMoneda = async (entrada, salida) => {
     try {
@@ -9,12 +10,15 @@ export const resolverMoneda = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        let monedaIDV = entrada.body.monedaIDV;
-        const filtroCadena = /^[a-z]+$/;
-        if (!monedaIDV || !filtroCadena.test(monedaIDV)) {
-            const error = "El campo monedaIDV solo puede ser un una cadena de minúsculas";
-            throw new Error(error);
-        }
+        const monedaIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.monedaIDV,
+            nombreCampo: "El campo apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         const transaccionInterna = await resolverMoneda_(monedaIDV);
         salida.json(transaccionInterna);
     } catch (errorCapturado) {

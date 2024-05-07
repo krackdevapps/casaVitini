@@ -18,28 +18,49 @@ export const actualizarOferta = async (entrada, salida) => {
         mutex = new Mutex()
         await mutex.acquire()
 
-        let nombreOferta = entrada.body.nombreOferta;
+        const nombreOferta = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreOferta,
+            nombreCampo: "El campo del nombre de la oferta",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         const fechaInicio = entrada.body.fechaInicio;
         const fechaFin = entrada.body.fechaFin;
-        const tipoOferta = entrada.body.tipoOferta;
-        const ofertaUID = entrada.body.ofertaUID;
+        const tipoOferta = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoOferta,
+            nombreCampo: "El tipo de oferta",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const ofertaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.ofertaUID,
+            nombreCampo: "El identificador universal de la oferta (ofertaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+
         const tipoDescuento = entrada.body.tipoDescuento ? entrada.body.tipoDescuento : null;
-        let cantidad = entrada.body.cantidad;
+        const cantidad = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.cantidad,
+            nombreCampo: "El campo cantidad",
+            filtro: "cadenaConNumerosConDosDecimales",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
+        })
         const numero = entrada.body.numero;
         const simboloNumero = entrada.body.simboloNumero;
         const contextoAplicacion = entrada.body.contextoAplicacion;
         const apartamentosSeleccionados = entrada.body.apartamentosSeleccionados;
         const filtroCantidad = /^\d+\.\d{2}$/;
-        const filtroCadena = /['"\\;\r\n<>\t\b]/g;
-        if (!ofertaUID || !Number.isInteger(ofertaUID) || ofertaUID <= 0) {
-            const error = "El campo ofertaUID tiene que ser un numero, positivo y entero";
-            throw new Error(error);
-        }
-        if (!nombreOferta) {
-            const error = "El campo nombreOferta no admice comillas simples o dobles";
-            throw new Error(error);
-        }
-        nombreOferta = nombreOferta.replace(filtroCadena, '');
+
+
         const fechaInicio_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaInicio)).fecha_ISO;
         const fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin)).fecha_ISO;
         const fechaInicio_objeto = DateTime.fromISO(fechaInicio_ISO);
@@ -79,12 +100,6 @@ export const actualizarOferta = async (entrada, salida) => {
             contextoAplicacion: (contextoAplicacion) => {
                 if (!contextoAplicacion || (contextoAplicacion !== "totalNetoReserva" && contextoAplicacion !== "totalNetoApartamentoDedicado")) {
                     const error = `El campo contexto de aplicación solo puede ser, totalNetoReserva, totalNetoApartamentoDedicado`;
-                    throw new Error(error);
-                }
-            },
-            cantidad: (cantidad) => {
-                if (!cantidad || !filtroCantidad.test(cantidad)) {
-                    const error = "El campo cantidad debe ser un número con un máximo de dos decimales separados por punto. Recuerda que number es sin comillas.";
                     throw new Error(error);
                 }
             },
@@ -163,8 +178,6 @@ export const actualizarOferta = async (entrada, salida) => {
         if (tipoOferta === "porNumeroDeApartamentos" ||
             tipoOferta === "porDiasDeAntelacion" ||
             tipoOferta === "porDiasDeReserva") {
-            validadoresLocales.cantidad(cantidad);
-            cantidad = Number(cantidad);
             validadoresLocales.tipoDescuento(tipoDescuento);
             validadoresLocales.numero(numero);
             validadoresLocales.simboloNumero(simboloNumero);
@@ -191,8 +204,6 @@ export const actualizarOferta = async (entrada, salida) => {
             salida.json(ok);
         }
         if (tipoOferta === "porRangoDeFechas") {
-            validadoresLocales.cantidad(cantidad);
-            cantidad = Number(cantidad);
             validadoresLocales.tipoDescuento(tipoDescuento);
             validadoresLocales.controlLimitePorcentaje(tipoDescuento, cantidad);
             await eliminaPerfilApartamentoEspecificos(ofertaUID);
@@ -221,8 +232,6 @@ export const actualizarOferta = async (entrada, salida) => {
             const filtroCadena = /^[a-zA-Z0-9]+$/;
             const filtroCadenaUI = /^[a-zA-Z0-9\s]+$/;
             if (contextoAplicacion === "totalNetoReserva") {
-                validadoresLocales.cantidad(cantidad);
-                cantidad = Number(cantidad);
                 validadoresLocales.tipoDescuento(tipoDescuento);
                 validadoresLocales.controlLimitePorcentaje(tipoDescuento, cantidad);
             }

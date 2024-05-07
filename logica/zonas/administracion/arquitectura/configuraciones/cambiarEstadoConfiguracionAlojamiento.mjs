@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const cambiarEstadoConfiguracionAlojamiento = async (entrada, salida) => {
     try {
@@ -9,22 +10,27 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada, salida) => 
         if (IDX.control()) return
 
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const nuevoEstado = entrada.body.nuevoEstado;
-        const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-        if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-            const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios";
-            throw new Error(error);
-        }
-        if (!nuevoEstado || !filtroCadenaMinusculasSinEspacios.test(nuevoEstado)) {
-            const error = "el campo 'nuevoEstado' solo puede ser letras minúsculas, numeros y sin pesacios";
-            throw new Error(error);
-        }
-        const validarIDV = `
-                                    SELECT 
-                                    "estadoConfiguracion"
-                                    FROM "configuracionApartamento"
-                                    WHERE "apartamentoIDV" = $1
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        const nuevoEstado = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nuevoEstado,
+            nombreCampo: "El nuevoEstado",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+        const validarIDV = `  SELECT 
+                              "estadoConfiguracion"
+                               FROM "configuracionApartamento"
+                               WHERE "apartamentoIDV" = $1
                                     `;
         const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV]);
         if (resuelveValidarIDV.rowCount === 0) {

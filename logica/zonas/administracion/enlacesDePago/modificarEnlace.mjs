@@ -1,6 +1,7 @@
 
 import { conexion } from "../../../componentes/db.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/controlCaducidadEnlacesDePago.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const modificarEnlace = async (entrada, salida) => {
@@ -10,39 +11,43 @@ export const modificarEnlace = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const enlaceUID = entrada.body.enlaceUID;
-        const nombreEnlace = entrada.body.nombreEnlace;
-        const cantidad = entrada.body.cantidad;
-        let horasCaducidad = entrada.body.horasCaducidad;
-        const descripcion = entrada.body.descripcion;
-        const filtroCadena = /^[0-9]+$/;
-        if (!enlaceUID || !filtroCadena.test(enlaceUID)) {
-            const error = "el campo 'enlaceUID' solo puede ser una cadena de numeros.";
-            throw new Error(error);
-        }
-        const filtroTextoSimple = /^[a-zA-Z0-9\s]+$/;
-        if (!nombreEnlace || !filtroTextoSimple.test(nombreEnlace)) {
-            const error = "el campo 'nombreEnlace' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
-            throw new Error(error);
-        }
-        if (descripcion) {
-            if (!filtroTextoSimple.test(descripcion)) {
-                const error = "el campo 'descripcion' solo puede ser una cadena de letras, numeros y espacios.";
-                throw new Error(error);
-            }
-        }
-        if (horasCaducidad) {
-            if (!filtroCadena.test(horasCaducidad)) {
-                const error = "el campo cantidad solo puede ser una cadena de numeros con dos decimales separados por punto, ejemplo 10.00.";
-                throw new Error(error);
-            }
-        } else {
-            horasCaducidad = 72;
-        }
-        if (!cantidad || !filtroDecimales.test(cantidad)) {
-            const error = "el campo cantidad solo puede ser una cadena de numeros con dos decimales separados por punto, ejemplo 10.00.";
-            throw new Error(error);
-        }
+        const enlaceUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.enlaceUID,
+            nombreCampo: "El campo enlaceUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const horasCaducidad = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.horasCaducidad || 72,
+            nombreCampo: "El campo horasCaducidad",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const nombreEnlace = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreEnlace,
+            nombreCampo: "El campo del nombreEnlace",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const descripcion = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.descripcion,
+            nombreCampo: "El campo del descripcion",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const cantidad = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.cantidad,
+            nombreCampo: "El campo cantidad",
+            filtro: "cadenaConNumerosConDosDecimales",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         await controlCaducidadEnlacesDePago();
         const validarEnlaceUID = await conexion.query(`SELECT reserva FROM "enlacesDePago" WHERE "enlaceUID" = $1`, [enlaceUID]);
         if (validarEnlaceUID.rowCount === 0) {

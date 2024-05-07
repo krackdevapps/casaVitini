@@ -1,6 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarCuentasNoVerificadas } from "../../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../../sistema/vitiniCrypto.mjs";
 
 
@@ -12,26 +13,29 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return  
 
-        const usuarioIDX = entrada.body.usuarioIDX;
         const clave = entrada.body.clave;
-        const rol = entrada.body.rol;
-        const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-        if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
-            const error = "El campo usuarioIDX solo admite minúsculas y numeros y nada mas";
-            throw new Error(error);
-        }
+   
+        const usuarioIDX = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.usuarioIDX,
+            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
         if (usuarioIDX === "crear" || usuarioIDX === "buscador") {
             const error = "El nombre de usuario no esta disponbile, escoge otro";
             throw new Error(error);
         }
-        if (!rol) {
-            const error = "Selecciona un rol para la nueva cuenta de usuario";
-            throw new Error(error);
-        }
-        if (!filtro_minúsculas_numeros.test(rol)) {
-            const error = "El campo rol solo admite minúsculas y numeros y nada mas";
-            throw new Error(error);
-        }
+        const rol = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.rol,
+            nombreCampo: "El nombre del rol",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+ 
         // validar rol
         const validarRol = `
                             SELECT 

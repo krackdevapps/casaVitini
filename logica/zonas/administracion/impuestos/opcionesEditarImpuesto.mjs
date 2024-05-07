@@ -30,15 +30,6 @@ export const opcionesEditarImpuesto = async (entrada, salida) => {
         if (resuelveValidarAplicacionSobre.rowCount > 0) {
             opcionesAplicacionSobre.push(...resuelveValidarAplicacionSobre.rows);
         }
-        // const validarMoneda = `
-        // SELECT 
-        // "monedaIDV", "monedaUI", simbolo
-        // FROM monedas
-        // `
-        // const resuelveValidarMoneda = await conexion.query(validarMoneda)
-        // if (resuelveValidarMoneda.rowCount > 0) {
-        //     opcionesMonedas.push(...resuelveValidarMoneda.rows);
-        // }
         const detallesImpuesto = {
             tipoValor: opcionesTipoValor,
             aplicacionSobre: opcionesAplicacionSobre,

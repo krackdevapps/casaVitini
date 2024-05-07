@@ -2,6 +2,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const listaBloquoeosDelApartamento = async (entrada, salida) => {
     try {
@@ -11,14 +12,15 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
 
-
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (!filtroCadena.test(apartamentoIDV) || typeof apartamentoIDV !== "string") {
-            const error = "el campo 'apartmentoIDV' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
-            throw new Error(error);
-        }
         await eliminarBloqueoCaducado();
 
         const validarApartmento = `

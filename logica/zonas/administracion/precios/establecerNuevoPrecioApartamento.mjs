@@ -2,12 +2,11 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
     let mutex
     try {
-
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
@@ -17,22 +16,21 @@ export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
         mutex = new Mutex()
         await mutex.acquire();
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const nuevoPrecio = entrada.body.nuevoPrecio;
-        if (typeof apartamentoIDV !== "string") {
-            const error = "El campo apartamentoIDV debe de ser una cadena";
-            throw new Error(error);
-        }
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (!filtroCadena.test(apartamentoIDV)) {
-            const error = "El campo apartamentoIDV solo puede ser un una cadena de minúsculas y numeros, ni siquera espacios";
-            throw new Error(error);
-        }
-        const filtroPropuestaPrecio = /^\d+\.\d{2}$/;
-        if (!filtroPropuestaPrecio.test(nuevoPrecio)) {
-            const error = "El campo nuevoPrecio solo puede ser un numero con dos decimales y nada mas, los decimales deben de separarse con un punto y no una coma";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El campo apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const nuevoPrecio = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nuevoPrecio,
+            nombreCampo: "El campo nuevoPreci",
+            filtro: "cadenaConNumerosConDosDecimales",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         const validarApartamento = `
                             SELECT
                             "apartamentoIDV", "estadoConfiguracion"
@@ -122,7 +120,7 @@ export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
             detallesApartamento.totalBrutoPordia = totalDiaBruto;
         }
         const ok = {
-            "ok": detallesApartamento
+            ok: detallesApartamento
         };
         salida.json(ok);
     } catch (errorCapturado) {

@@ -1,6 +1,7 @@
 import { resolverApartamentoUI } from "../../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs"
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const addHabitacionToConfiguracionApartamento = async (entrada, salida) => {
     try {
@@ -10,17 +11,23 @@ export const addHabitacionToConfiguracionApartamento = async (entrada, salida) =
         if (IDX.control()) return
 
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const habitacionIDV = entrada.body.habitacionIDV;
-        const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-        if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-            const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin espacios";
-            throw new Error(error);
-        }
-        if (!habitacionIDV || !filtroCadenaMinusculasSinEspacios.test(habitacionIDV)) {
-            const error = "el campo 'habitacionIDV' solo puede ser letras minúsculas, numeros y sin espacios";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        const habitacionIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.habitacionIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         const consultaApartamento = `
                                 SELECT 
                                 "estadoConfiguracion"

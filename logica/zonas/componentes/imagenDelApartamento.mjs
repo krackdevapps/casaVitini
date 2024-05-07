@@ -1,11 +1,15 @@
+import { conexion } from "../../componentes/db.mjs";
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+
 export const imagenDelApartamento = async (entrada, salida) => {
     try {
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-        if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-            const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios. No puede tener mas de 50 caracteres";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El campo del identiifcador visual de apartamento (apartamentoIDV)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
         const consultaApartamento = `
             SELECT imagen
             FROM "configuracionApartamento" 

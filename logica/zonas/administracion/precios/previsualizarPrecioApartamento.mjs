@@ -1,6 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const previsualizarPrecioApartamento = async (entrada, salida) => {
@@ -11,23 +12,21 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const filtroCadena = /^[a-z0-9]+$/;
-        const propuestaPrecio = entrada.body.propuestaPrecio;
-        
-        if (typeof apartamentoIDV !== "string") {
-            const error = "El campo apartamentoIDV debe de ser una cadena";
-            throw new Error(error);
-        }
-        if (!filtroCadena.test(apartamentoIDV)) {
-            const error = "El campo apartamentoIDV solo puede ser un una cadena de minúsculas y numeros, ni siquera espacios";
-            throw new Error(error);
-        }
-        const filtroPropuestaPrecio = /^\d+\.\d{2}$/;
-        if (!filtroPropuestaPrecio.test(propuestaPrecio)) {
-            const error = "El campo propuestaPrecio solo puede ser un numero con dos decimales y nada mas, los decimales deben de separarse con un punto y no una coma, por ejemplo si quieres poner un precio de 10, tienes que escribir 10.00";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El campo apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const propuestaPrecio = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.propuestaPrecio,
+            nombreCampo: "El campo nuevoPreci",
+            filtro: "cadenaConNumerosConDosDecimales",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
         const validarApartamento = `
                             SELECT
                             "apartamentoIDV"

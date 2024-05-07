@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { generadorPDF3 } from '../generadorPDF.mjs';
+import { generadorPDF } from '../sistemaDePDF/';
 import fs from 'fs';
 import dotenv from "dotenv";
 dotenv.config();

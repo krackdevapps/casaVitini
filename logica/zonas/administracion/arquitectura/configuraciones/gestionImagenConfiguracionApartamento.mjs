@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const gestionImagenConfiguracionApartamento = async (entrada, salida) => {
     try {
@@ -8,18 +9,23 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
         IDX.administradores()
         if (IDX.control()) return
 
-        const apartamentoIDV = entrada.body.apartamentoIDV;
-        const contenidoArchivo = entrada.body.contenidoArchivo;
-        const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-        if (!apartamentoIDV || !filtroCadenaMinusculasSinEspacios.test(apartamentoIDV)) {
-            const error = "el campo 'apartamentoIDV' solo puede ser letras minúsculas, numeros y sin pesacios";
-            throw new Error(error);
-        }
-        const filtroBase64 = /^[A-Za-z0-9+/=]+$/;
-        if (typeof contenidoArchivo !== "string" || !filtroBase64.test(contenidoArchivo)) {
-            const error = "El campo contenido archivo solo acepta archivos codificados en base64";
-            throw new Error(error);
-        }
+        const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+        const contenidoArchivo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.contenidoArchivo,
+            nombreCampo: "El campo del contenidoArchivo",
+            filtro: "cadenaBase64",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         const esImagenPNG = (contenidoArchivo) => {
             const binarioMagicoPNG = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
             // Decodifica la cadena base64 a un buffer

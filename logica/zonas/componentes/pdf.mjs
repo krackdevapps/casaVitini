@@ -1,12 +1,19 @@
+import { conexion } from "../../componentes/db.mjs";
+import { generadorPDF } from "../../sistema/sistemaDePDF/generadorPDF.mjs";
+import { controlCaducidad } from "../../sistema/sistemaDePDF/controlCaducidad.mjs";
+import { detallesReserva } from "../../sistema/sistemaDeReservas/detallesReserva.mjs";
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+
 export const pdf = async (entrada, salida) => {
     try {
-        const nombreEnlace = entrada.body.enlace;
-        const filtroTextoSimple = /^[a-zA-Z0-9\s]+$/;
-        if (!filtroTextoSimple.test(nombreEnlace)) {
-            const error = "el campo 'nombreEnlace' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
-            throw new Error(error);
-        }
-        await componentes.gestionEnlacesPDF.controlCaducidad();
+        const nombreEnlace = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreEnlace,
+            nombreCampo: "El campo del nombre del enlace",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        await controlCaducidad();
         const consultaValidarEnlace = `
             SELECT
             "reservaUID"
@@ -25,7 +32,7 @@ export const pdf = async (entrada, salida) => {
             reservaUID: reservaUID
         };
         const reserva = await detallesReserva(datosDetallesReserva);
-        const pdf = await generadorPDF3(reserva);
+        const pdf = await generadorPDF(reserva);
         salida.setHeader('Content-Type', 'application/pdf');
         salida.setHeader('Content-Disposition', 'attachment; filename=documento.pdf');
         salida.send(pdf);

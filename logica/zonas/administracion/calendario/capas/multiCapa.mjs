@@ -7,6 +7,7 @@ import { eventosPorApartamentoAirbnb } from "../../../../sistema/calendarios/cap
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
 import { DateTime } from "luxon";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const multiCapa = async (entrada, salida) => {
@@ -18,32 +19,18 @@ export const multiCapa = async (entrada, salida) => {
         if (IDX.control()) return
 
         const fecha = entrada.body.fecha;
+        validadoresCompartidos.fechas.fecha(fecha)
+
         const contenedorCapas = entrada.body.contenedorCapas;
+        
         const capas = contenedorCapas?.capas;
-        const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
-        if (!filtroFecha.test(fecha)) {
-            const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante.";
-            throw new Error(error);
-        }
-        if (!capas) {
-            const error = "Falta determinar capas, debe de ser un array con las cadenas de las capasIDV";
-            throw new Error(error);
-        }
-        if (!Array.isArray(capas) || capas == null || capas === undefined) {
-            const error = "El campo capaIDV debe de ser un array con cadenas";
-            throw new Error(error);
-        }
+        validadoresCompartidos.tipos.array({
+            array: capas,
+            filtro: "soloCadenas",
+            nombreCompleto: "En el array del calendario multi capa"
+        })
         const filtroCapa = /^[a-zA-Z0-9]+$/;
-        const controlCapaIDV = capas.every(cadena => {
-            if (typeof cadena !== "string") {
-                return false;
-            }
-            return filtroCapa.test(cadena);
-        });
-        if (!controlCapaIDV) {
-            const error = "Los identificadores visuales de las capas solo pueden contener, minusculas, mayusculas y numeros";
-            throw new Error(error);
-        }
+
         const constructorObjetoPorDias = (fecha) => {
             const fechaArray = fecha.split("-");
             const mes = fechaArray[0];

@@ -1,6 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const buscarUsuarios = async (entrada, salida) => {
     try {
@@ -10,19 +10,41 @@ export const buscarUsuarios = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return  
 
-        const buscar = entrada.body.buscar;
-        const nombreColumna = entrada.body.nombreColumna;
-        let sentidoColumna = entrada.body.sentidoColumna;
-        if (!buscar) {
-            let error = "se tiene que espeficiar 'buscar' y lo que se desea buscar";
-            throw new Error(error);
-        }
-        let Pagina = entrada.body.pagina;
-        Pagina = Pagina ? Pagina : 1;
-        if (typeof Pagina !== "number" || !Number.isInteger(Pagina) || Pagina <= 0) {
-            const error = "En 'pagina' solo se aceptan numero enteros superiores a cero y positivos. Nada de decimales";
-            throw new Error(error);
-        }
+        const buscar = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.buscar,
+            nombreCampo: "El campo buscar esta vacío",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+
+        const nombreColumna = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreColumna,
+            nombreCampo: "El campo del nombre de la columna",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const sentidoColumna = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.sentidoColumna,
+            nombreCampo: "El campo del sentido de la columna",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+
+        const pagina = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pagina || 1,
+            nombreCampo: "El numero de página",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         let condicionComplejaSQLOrdenarResultadosComoSegundaCondicion = "";
         let nombreColumnaSentidoUI;
         let nombreColumnaUI;
@@ -65,7 +87,7 @@ export const buscarUsuarios = async (entrada, salida) => {
             terminosFormateados.push(terminoFinal);
         });
         const numeroPorPagina = 10;
-        const numeroPagina = Number((Pagina - 1) + "0");
+        const numeroPagina = Number((pagina - 1) + "0");
         const consultaConstructor = `    
                                 SELECT "usuarioIDX", email, nombre, "primerApellido", "segundoApellido", pasaporte, telefono,
                                 COUNT(*) OVER() as "totalUsuarios"

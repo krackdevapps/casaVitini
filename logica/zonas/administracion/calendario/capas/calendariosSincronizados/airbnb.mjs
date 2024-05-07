@@ -1,5 +1,6 @@
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
 import { eventosPorApartamentoAirbnb } from "../../../../../sistema/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs";
+import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const airbnb = async (entrada, salida) => {
@@ -11,17 +12,16 @@ export const airbnb = async (entrada, salida) => {
         if (IDX.control()) return
 
         const fecha = entrada.body.fecha;
-        const calendarioUID = entrada.body.calendarioUID;
-        const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
-        if (!filtroFecha.test(fecha)) {
-            const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante.";
-            throw new Error(error);
-        }
-        const filtroCadena = /^[0-9]+$/;
-        if (!filtroCadena.test(calendarioUID) || typeof calendarioUID !== "string") {
-            const error = "el campo 'calendarioUID' solo puede ser una cadena de letras minúsculas y numeros.";
-            throw new Error(error);
-        }
+        validadoresCompartidos.fechas.fecha(fecha)
+
+        const calendarioUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.calendarioUID,
+            nombreCampo: "El campo calendarioUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         const metadatosEventos = {
             fecha: fecha,
             calendarioUID: calendarioUID

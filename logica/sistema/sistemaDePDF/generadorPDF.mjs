@@ -3,11 +3,11 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { createRequire } from 'module';
-import { validadoresCompartidos } from './validadores/validadoresCompartidos.mjs';
+import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import Decimal from 'decimal.js';
 import { DateTime } from 'luxon';
 const require = createRequire(import.meta.url);
-const generadorPDF3 = async (reserva) => {
+export const generadorPDF = async (reserva) => {
     try {
         const reservaFake = {
             reserva: {
@@ -800,6 +800,4 @@ const generadorPDF3 = async (reserva) => {
         throw error
     }
 }
-export {
-    generadorPDF3
-}
+

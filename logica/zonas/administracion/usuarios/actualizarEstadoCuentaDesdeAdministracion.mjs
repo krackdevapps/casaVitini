@@ -1,7 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { vitiniCrypto } from "../../../sistema/vitiniCrypto.mjs";
-
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida) => {
     try {
@@ -9,15 +8,26 @@ export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida)
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return  
+        if (IDX.control()) return
 
-        const usuarioIDX = entrada.body.usuarioIDX;
-        const nuevoEstado = entrada.body.nuevoEstado;
-        const filtro_minúsculas_numeros = /^[a-z0-9]+$/;
-        if (!usuarioIDX || !filtro_minúsculas_numeros.test(usuarioIDX)) {
-            const error = "El campo usuarioIDX solo admite minúsculas y numeros";
-            throw new Error(error);
-        }
+        const usuarioIDX = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.usuarioIDX,
+            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        const nuevoEstado = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nuevoEstado,
+            nombreCampo: "El campo de nuevo estado",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+
         if (nuevoEstado !== "activado" && nuevoEstado !== "desactivado") {
             const error = "El campo nuevoEstado solo puede ser activado o desactivado";
             throw new Error(error);

@@ -13,23 +13,40 @@ export const modificarBloqueo = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const bloqueoUID = entrada.body.bloqueoUID;
-        const tipoBloqueo = entrada.body.tipoBloqueo;
-        const motivo = entrada.body.motivo;
-        const zona = entrada.body.zonaBloqueo;
-        if (typeof bloqueoUID !== "number" || !Number.isInteger(bloqueoUID) && bloqueoUID <= 0) {
-            const error = "la clave 'bloqueoUID' debe de tener un dato tipo 'number', positivo y entero";
-            throw new Error(error);
-        }
-        if (tipoBloqueo !== "permanente" && tipoBloqueo !== "rangoTemporal") {
-            const error = "tipoBloqueo solo puede ser permanente o rangoTemporal";
-            throw new Error(error);
-        }
-        if (zona !== "global" && zona !== "publico" && zona !== "privado") {
-            const error = "zona solo puede ser global, publico o privado";
-            throw new Error(error);
-        }
-        const filtroTextoSimple = /^[^'"]+$/;
+        const bloqueoUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.bloqueoUID,
+            nombreCampo: "El identificador universal de bloqueoUID",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no",
+            devuelveUnTipoNumber: "si"
+        })
+        const tipoBloqueo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoBloqueo,
+            nombreCampo: "El tipoBloqueo",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        const motivo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.motivo,
+            nombreCampo: "El campo del motivo",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const zona = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.zona,
+            nombreCampo: "El zona",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         const validarFechaInicioSuperiorFechaFinal = async (fechaInicio_ISO, fechaFin_ISO) => {
             const fechaInicio_Objeto = DateTime.fromISO(fechaInicio_ISO);
             const fechaFin_Objeto = DateTime.fromISO(fechaFin_ISO);
@@ -75,10 +92,6 @@ export const modificarBloqueo = async (entrada, salida) => {
                 fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin_Humano)).fecha_ISO;
                 await validarFechaInicioSuperiorFechaFinal(fechaInicioBloqueo_ISO, fechaFin_ISO);
             }
-        }
-        if (motivo && !filtroTextoSimple.test(motivo)) {
-            const error = "Por temas de seguridad ahora mismo en el campo motivo, solo pueden aceptarse minúsculas, mayúsculas, espacio y numeros. Mas adelante se aceptaran todos los caracteres";
-            throw new Error(error);
         }
 
         const modificarBloqueo = `
