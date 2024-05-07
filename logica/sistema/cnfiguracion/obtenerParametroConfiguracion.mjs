@@ -1,4 +1,4 @@
-import { conexion } from '../componentes/db.mjs';
+import { conexion } from '../../componentes/db.mjs';
 const obtenerParametroConfiguracion = async (configuracionUID) => {
     try {
         const filtroCadena = /^[a-zA-Z0-9]+$/;

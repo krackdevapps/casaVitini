@@ -11,36 +11,68 @@ export const realizarReembolso = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         if (IDX.control()) return
-        const reservaUID = entrada.body.reservaUID;
-        let cantidad = entrada.body.cantidad;
-        const pagoUID = entrada.body.pagoUID;
-        const palabra = entrada.body.palabra;
-        let tipoReembolso = entrada.body.tipoReembolso;
-        let plataformaDePagoEntrada = entrada.body.plataformaDePagoEntrada;
-        plataformaDePagoEntrada.toLowerCase();
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reser (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const cantidad = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.cantidad,
+            nombreCampo: "El campo cantidad",
+            filtro: "cadenaConNumerosConDosDecimales",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const pagoUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pagoUID,
+            nombreCampo: "El identificador universal del pago (pagoUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const palabra = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.palabra,
+            nombreCampo: "El campo de la palabra",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
         if (palabra !== "reembolso") {
             const error = "Escriba la palabra reembolso en le campo de confirmacion";
             throw new Error(error);
-        }
-        const filtroTotal = /^\d+\.\d{2}$/;
-        const filtroNumerosEnteros = /^[0-9]+$/;
-        const filtroDecimales = /^\d+\.\d{2}$/;
-        if (!reservaUID || !filtroNumerosEnteros.test(reservaUID)) {
-            const error = "el campo 'reservaUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
-            throw new Error(error);
-        }
-        if (!pagoUID || !filtroNumerosEnteros.test(pagoUID)) {
-            const error = "el campo 'pagoUID' solo puede ser una cadena de numeros.";
-            throw new Error(error);
-        }
+        } 
+
+        const tipoReembolso = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoReembolso,
+            nombreCampo: "El tipoReembolso",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
         if (tipoReembolso !== "porPorcentaje" && tipoReembolso !== "porCantidad") {
             const error = "el campo 'tipoReembolso' solo puede ser porPorcentaje o porCantidad.";
-            // throw new Error(error)
+             throw new Error(error)
         }
-        if (!cantidad || !filtroDecimales.test(cantidad)) {
-            const error = "LA cantida del reembolso solo puede ser una cadena con un numero don dos decimales separados por punto";
-            throw new Error(error);
-        }
+   
+        const plataformaDePagoEntrada = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.plataformaDePagoEntrada,
+            nombreCampo: "El nombre de plataformaDePagoEntrada",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+   
+     
+   
         const tipoDeReembolso = ["efectivo", "cheque", "pasarela", "tarjeta"];
         if (!tipoDeReembolso.some(palabra => plataformaDePagoEntrada.includes(palabra))) {
             const error = "Selecciona eltipo de plataforma en la que se va ha hacer el reembolso, por ejemplo, pasarela, tarjeta, efectivo o cheque";

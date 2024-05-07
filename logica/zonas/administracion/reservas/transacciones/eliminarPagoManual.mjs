@@ -3,7 +3,6 @@ import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { actualizarEstadoPago } from "../../../../sistema/sistemaDePrecios/actualizarEstadoPago.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
-
 export const eliminarPagoManual = async (entrada, salida) => {
     try {
 
@@ -13,18 +12,34 @@ export const eliminarPagoManual = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        const palabra = entrada.body.palabra;
-        const pagoUID = entrada.body.pagoUID;
-        const reservaUID = entrada.body.reservaUID;
+        const palabra = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.palabra,
+            nombreCampo: "El campo de la palabra",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
         if (palabra !== "eliminar") {
             const error = "Necesario escribir la la palabra eliminar para confirmar la eliminación y evitar falsos clicks";
             throw new Error(error);
         }
-        const filtroPagoUID = /^\d+$/;
-        if (!filtroPagoUID.test(pagoUID)) {
-            const error = "El pagoUID debe de ser una cadena con numeros";
-            throw new Error(error);
-        }
+        const pagoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.pagoUID,
+            nombreCampo: "El campo pagoUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         await conexion.query('BEGIN'); // Inicio de la transacción
         await validadoresCompartidos.reservas.validarReserva(reservaUID);
         const consultaEliminarPago = `

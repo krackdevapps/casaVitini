@@ -2,6 +2,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/controlCaducidadEnlacesDePago.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const detallesDelEnlace = async (entrada, salida) => {
     try {
@@ -11,13 +12,14 @@ export const detallesDelEnlace = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
+        const enlaceUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.enlaceUID,
+            nombreCampo: "El campo enlaceUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
 
-        const enlaceUID = entrada.body.enlaceUID;
-        const filtroCadena = /^[0-9]+$/;
-        if (!enlaceUID || !filtroCadena.test(enlaceUID)) {
-            const error = "el campo 'enlaceUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
-            throw new Error(error);
-        }
         await controlCaducidadEnlacesDePago();
         const consultaDetallesEnlace = `
                             SELECT

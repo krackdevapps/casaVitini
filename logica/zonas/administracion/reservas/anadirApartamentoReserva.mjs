@@ -5,6 +5,7 @@ import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/reso
 import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/insertarTotalesReserva.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const anadirApartamentoReserva = async (entrada, salida) => {
@@ -20,17 +21,25 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
         mutex = new Mutex();
         await mutex.acquire();
 
-        const reserva = entrada.body.reserva;
-        const apartamento = entrada.body.apartamento;
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (!filtroCadena.test(apartamento) || typeof apartamento !== "string") {
-            const error = "el campo 'apartamento' solo puede ser una cadena de letras minúsculas y numeros.";
-            throw new Error(error);
-        }
+
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva (reserva)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const apartamento = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamento,
+            nombreCampo: "El apartamento",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         await eliminarBloqueoCaducado();
         // Validar que le nombre del apartamento existe como tal
         const validacionNombreApartamento = `

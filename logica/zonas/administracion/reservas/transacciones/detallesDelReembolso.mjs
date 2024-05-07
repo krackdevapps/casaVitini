@@ -1,6 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const detallesDelReembolso = async (entrada, salida) => {
     try {
@@ -10,12 +10,15 @@ export const detallesDelReembolso = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        const reembolsoUID = entrada.body.reembolsoUID;
-        const filtroCadena = /^[0-9]+$/;
-        if (!reembolsoUID || !filtroCadena.test(reembolsoUID)) {
-            const error = "el campo 'reembolsoUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
-            throw new Error(error);
-        }
+        const reembolsoUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reembolsoUID,
+            nombreCampo: "El identificador universal de reembolsoUID",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no",
+            devuelveUnTipoNumber: "si"
+        })
         // const actualizarReembolso = await componentes.administracion.reservas.transacciones.actualizarSOLOreembolsoDesdeSquare(reembolsoUID)
         // if (actualizarReembolso.error) {
         //     throw new Error(actualizarReembolso.error)

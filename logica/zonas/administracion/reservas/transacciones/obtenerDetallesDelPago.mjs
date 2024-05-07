@@ -3,6 +3,7 @@ import { conexion } from "../../../../componentes/db.mjs";
 import { codigoZonaHoraria } from "../../../../sistema/codigoZonaHoraria.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import Decimal from "decimal.js";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const obtenerDetallesDelPago = async (entrada, salida) => {
     try {
@@ -11,13 +12,16 @@ export const obtenerDetallesDelPago = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         if (IDX.control()) return
-        const pagoUID = entrada.body.pagoUID;
-        const filtroCadena = /^[0-9]+$/;
-        if (!pagoUID || !filtroCadena.test(pagoUID)) {
-            const error = "el campo 'pagoUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
-            throw new Error(error);
-        }
+        const pagoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.pagoUID,
+            nombreCampo: "El campo pagoUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         const validarPago = `
+        
                             SELECT
                                 "plataformaDePago",
                                 "pagoUID",

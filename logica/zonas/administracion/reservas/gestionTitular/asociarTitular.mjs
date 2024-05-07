@@ -10,16 +10,24 @@ export const asociarTitular = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         if (IDX.control()) return
-        const clienteUID = entrada.body.clienteUID;
-        const reservaUID = entrada.body.reservaUID;
-        if (typeof clienteUID !== "number" || !Number.isInteger(clienteUID) || clienteUID <= 0) {
-            const error = "el campo 'clienteUID' solo puede un numero, entero y positivo";
-            throw new Error(error);
-        }
-        if (typeof reservaUID !== "number" || !Number.isInteger(reservaUID) || reservaUID <= 0) {
-            const error = "el campo 'reservaUID' solo puede un numero, entero y positivo";
-            throw new Error(error);
-        }
+
+        const clienteUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.clienteUID,
+            nombreCampo: "El identificador universal de la cliente (clienteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reser (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         const validarCliente = `
                             SELECT
                             uid,

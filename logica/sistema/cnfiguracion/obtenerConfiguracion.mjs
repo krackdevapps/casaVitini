@@ -1,6 +1,5 @@
-import { conexion } from "../../../../componentes/db.mjs";
+import { conexion } from "../../componentes/db.mjs";
 import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs";
-
 
 export const obtenerConfiguracion = async (parametrosConfiguracion) => {
     try {
@@ -27,12 +26,9 @@ export const obtenerConfiguracion = async (parametrosConfiguracion) => {
             throw new Error(error);
         }
         const configuraciones = resuelveConfiguracionGlobal.rows;
-        salida.json(configuraciones);
+        return configuraciones
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        throw errorCapturado
     }
 
 }

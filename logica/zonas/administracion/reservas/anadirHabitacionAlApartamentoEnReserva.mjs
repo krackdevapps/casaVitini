@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { estadoHabitacionesApartamento } from "../../../sistema/sistemaDeReservas/estadoHabitacionesApartamento.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) => {
     let mutex
@@ -15,22 +16,32 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
         mutex = new Mutex()
         await mutex.acquire();
 
-        let apartamento = entrada.body.apartamento;
-        const reserva = entrada.body.reserva;
-        const habitacion = entrada.body.habitacion;
-        if (typeof apartamento !== "number" || !Number.isInteger(apartamento) || apartamento <= 0) {
-            const error = "El campo 'apartamento' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (!filtroCadena.test(habitacion)) {
-            const error = "el campo 'habitacion' solo puede ser letras minúsculas y numeros.";
-            throw new Error(error);
-        }
+        const apartamento = validadoresCompartidos.tipos.numero({
+            string: entrada.body.apartamento,
+            nombreCampo: "El apartamento",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva (reserva)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const habitacion = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.habitacion,
+            nombreCampo: "La habitacion",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+
         const validacionReserva = `
                         SELECT 
                         reserva, "estadoReserva", "estadoPago"
@@ -87,8 +98,8 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
                     }
                 }
             }
-            let error = {
-                "error": `No se puede anadir esta habitacion, revisa que este bien escrito los datos y que el apartamento tenga habitaciones disponibles`
+            const error = {
+                error: `No se puede anadir esta habitacion, revisa que este bien escrito los datos y que el apartamento tenga habitaciones disponibles`
             };
             salida.json(error);
         }

@@ -3,6 +3,7 @@ import { obtenerTotalReembolsado } from "../../../../sistema/sistemaDePrecios/ob
 import { detallesReserva } from "../../../../sistema/sistemaDeReservas/detallesReserva.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { pagosDeLaReserva as pagosDeLaReserva_ } from "../../../../sistema/sistemaDeReservas/pagosDeLaReserva.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const obtenerPagosDeLaReserva = async (entrada, salida) => {
@@ -13,12 +14,15 @@ export const obtenerPagosDeLaReserva = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        const reservaUID = entrada.body.reservaUID;
-        const filtroCadena = /^[0-9]+$/;
-        if (!reservaUID || !filtroCadena.test(reservaUID)) {
-            const error = "el campo 'reservaUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
-            throw new Error(error);
-        }
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reser (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+  
         const detallesPagosReserva = await pagosDeLaReserva_(reservaUID);
         const metadatos = {
             reservaUID: Number(reservaUID),

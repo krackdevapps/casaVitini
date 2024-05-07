@@ -1,5 +1,5 @@
-import { conexion } from '../componentes/db.mjs';
-import { validadoresCompartidos } from './validadores/validadoresCompartidos.mjs';
+import { conexion } from '../../componentes/db.mjs';
+import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 const bloquearApartamentos = async (metadatos) => {
     try {
         const reserva = metadatos.reserva

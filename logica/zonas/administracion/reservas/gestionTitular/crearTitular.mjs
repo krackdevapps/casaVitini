@@ -11,16 +11,27 @@ export const crearTitular = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        const reservaUID = entrada.body.reservaUID;
-        let nombre = entrada.body.nombre;
-        let primerApellido = entrada.body.primerApellido;
-        let segundoApellido = entrada.body.segundoApellido;
-        let pasaporte = entrada.body.pasaporte;
-        let telefono = entrada.body.telefono;
-        let correoElectronico = entrada.body.correo;
-        let notas = entrada.body?.notas;
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reser (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        await validadoresCompartidos.reservas.validarReserva(reservaUID);
         await conexion.query('BEGIN'); // Inicio de la transacción
-        const reserva = await validadoresCompartidos.reservas.validarReserva(reservaUID);
+
+        const datosCliente = {
+            nombre: entrada.body.nombre,
+            primerApellido: entrada.body.primerApellido,
+            segundoApellido: entrada.body.segundoApellido,
+            pasaporte: entrada.body.pasaporte,
+            telefono: entrada.body.telefono,
+            correoElectronico: entrada.body.correoElectronico,
+            notas: entrada.body.notas,
+        };
+        const datosValidados = await validadoresCompartidos.clientes.validarCliente(datosCliente);
         const consultaElimintarTitularPool = `
                             DELETE FROM 
                             "poolTitularesReserva"
@@ -34,24 +45,8 @@ export const crearTitular = async (entrada, salida) => {
                             "reservaUID" = $1;
                             `;
         await conexion.query(eliminaTitular, [reservaUID]);
-        const nuevoClientePorValidar = {
-            nombre: nombre,
-            primerApellido: primerApellido,
-            segundoApellido: segundoApellido,
-            pasaporte: pasaporte,
-            telefono: telefono,
-            correoElectronico: correoElectronico,
-        };
-        const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoClientePorValidar);
-        const datosNuevoCliente = {
-            nombre: datosValidados.nombre,
-            primerApellido: datosValidados.primerApellido,
-            segundoApellido: datosValidados.segundoApellido,
-            pasaporte: datosValidados.pasaporte,
-            telefono: datosValidados.telefono,
-            correoElectronico: datosValidados.correoElectronico
-        };
-        const nuevoCliente = await insertarCliente(datosNuevoCliente);
+
+        const nuevoCliente = await insertarCliente(datosValidados);
         const clienteUID = nuevoCliente.uid;
         const nombre_ = datosValidados.nombre;
         const primerApellido_ = datosValidados.primerApellido ? datosValidados.primerApellido : "";

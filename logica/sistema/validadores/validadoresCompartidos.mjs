@@ -1,5 +1,5 @@
 import { DateTime } from "luxon"
-import { codigoZonaHoraria } from "../codigoZonaHoraria.mjs"
+import { codigoZonaHoraria } from "../sistemaDeConfiguracion/codigoZonaHoraria.mjs"
 import { conexion } from "../../componentes/db.mjs"
 const validadoresCompartidos = {
     clientes: {
@@ -303,7 +303,7 @@ const validadoresCompartidos = {
             }
         }
     },
-    tipos: { 
+    tipos: {
         cadena: (configuracion) => {
             let string = configuracion.string
             const nombreCampo = configuracion.nombreCampo
@@ -465,6 +465,17 @@ const validadoresCompartidos = {
                     if (!filtro.test(string)) {
                         const mensaje = `${nombreCampo} solo acepta una cadena con numeros con dos decimales separados por punto, por ejemplo 00.00`
                         throw new Error(mensaje)
+                    }
+                    const maximoDeLargo = configuracion.maximoDeLargo
+                    if (typeof maximoDeLargo !== "number") {
+                        const mensaje = `El validor de cadena esta mal configurado, maximoDeLargo solo acepta numeros.`
+                        throw new Error(mensaje)
+                    }
+                    if (maximoDeLargo) {
+                        if (string.length > maximoDeLargo) {
+                            const mensaje = `${nombreCampo} solo acepta un maximo de ${maximoDeLargo} numeros.`
+                            throw new Error(mensaje)
+                        }
                     }
                     const devuelveUnTipoNumber = configuracion.devuelveUnTipoNumber
                     if (typeof devuelveUnTipoNumber !== "string" &&

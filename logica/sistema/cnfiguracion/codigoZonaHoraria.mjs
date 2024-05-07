@@ -1,4 +1,4 @@
-import { conexion } from "../componentes/db.mjs"
+import { conexion } from "../../componentes/db.mjs"
 const codigoZonaHoraria = async () => {
     const zonaHorariaUID = "zonaHoraria"
     const consultaZonaHorariaConfigurada = `

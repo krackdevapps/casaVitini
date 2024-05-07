@@ -1,6 +1,6 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { zonasHorarias } from "../../../../componentes/zonasHorarias.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { obtenerCalendarios as oc } from "../calendariosSincronizados/obtenerCalendarios.mjs";
 
 export const obtenerConfiguracion = async (entrada, salida) => {
     try {
@@ -9,25 +9,12 @@ export const obtenerConfiguracion = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const consultaConfiguracionGlobal = `
-                            SELECT 
-                            *
-                            FROM 
-                            "configuracionGlobal"
-                            WHERE
-                            "configuracionUID" = $1
-                            `;
-        const configuracionUID = [
+            const configuraciones = await oc([
             "zonaHoraria"
-        ];
-        const resuelveConfiguracionGlobal = await conexion.query(consultaConfiguracionGlobal, configuracionUID);
-        if (resuelveConfiguracionGlobal.rowCount === 0) {
-            const error = "No hay configuraciones globales";
-            throw new Error(error);
-        }
+        ])
         const listaZonasHorarias = zonasHorarias();
         const ok = {
-            ok: resuelveConfiguracionGlobal.rows[0],
+            ok: configuraciones,
             listaZonasHorarias: listaZonasHorarias
         };
         salida.json(ok);

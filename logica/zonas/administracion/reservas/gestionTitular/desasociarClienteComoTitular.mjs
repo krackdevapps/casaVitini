@@ -10,8 +10,16 @@ export const desasociarClienteComoTitular = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        const reservaUID = entrada.body.reservaUID;
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reser (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
         await validadoresCompartidos.reservas.validarReserva(reservaUID);
+        
         const consultaElimintarTitularPool = `
                                 DELETE FROM 
                                     "poolTitularesReserva"

@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const eliminarReembolsoManual = async (entrada, salida) => {
     try {
@@ -9,17 +10,26 @@ export const eliminarReembolsoManual = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        const palabra = entrada.body.palabra;
-        const reembolsoUID = entrada.body.reembolsoUID;
+        const palabra = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.palabra,
+            nombreCampo: "El campo de la palabra",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
         if (palabra !== "eliminar") {
-            const error = "Necesario escribir la la palabra eliminar para confirmar el reembolso y evitar falsos clicks.";
+            const error = "Necesario escribir la la palabra eliminar para confirmar la eliminación y evitar falsos clicks";
             throw new Error(error);
         }
-        const filtroPagoUID = /^\d+$/;
-        if (!filtroPagoUID.test(reembolsoUID)) {
-            const error = "El reembolsoUID debe de ser una cadena con numeros";
-            throw new Error(error);
-        }
+        const reembolsoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.reembolsoUID,
+            nombreCampo: "El campo reembolsoUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         await conexion.query('BEGIN'); // Inicio de la transacción
         const consultaEliminarReembolso = `
                             DELETE FROM "reservaReembolsos"
