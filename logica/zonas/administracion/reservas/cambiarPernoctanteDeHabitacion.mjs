@@ -1,6 +1,8 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+
 
 
 export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
@@ -17,9 +19,32 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
         await mutex.acquire();
 
 
-        const reserva = entrada.body.reserva;
-        const habitacionDestino = entrada.body.habitacionDestino;
-        const pernoctanteUID = entrada.body.pernoctanteUID;
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva (reserva)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const habitacionDestino = validadoresCompartidos.tipos.numero({
+            string: entrada.body.habitacionDestino,
+            nombreCampo: "El identificador universal de la habitacionDestino (habitacionDestino)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const pernoctanteUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pernoctanteUID,
+            nombreCampo: "El identificador universal de la pernoctanteUID (pernoctanteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         const validacionReserva = `
                         SELECT 
                         reserva, "estadoReserva", "estadoPago"

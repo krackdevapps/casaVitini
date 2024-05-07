@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const cambiarCamaHabitacion = async (entrada, salida) => {
     let mutex
@@ -13,26 +13,35 @@ export const cambiarCamaHabitacion = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-
         mutex = new Mutex();
         await mutex.acquire();
 
-        const reserva = entrada.body.reserva;
-        const habitacion = entrada.body.habitacion;
-        const nuevaCama = entrada.body.nuevaCama;
-        if (typeof reserva !== 'number' || !Number.isInteger(reserva) || reserva <= 0) {
-            let error = "Se necesita un id de 'reserva' que sea un numero, positio y mayor a cero";
-            throw new Error(error);
-        }
-        if (typeof habitacion !== 'number' || !Number.isInteger(habitacion) || habitacion <= 0) {
-            let error = "Se necesita un id de 'habitacion' que sea un número entero, positivo y mayor a cero";
-            throw new Error(error);
-        }
-        const filtroCadena = /^[A-Za-z\s]+$/;
-        if (!nuevaCama || !filtroCadena.test(nuevaCama)) {
-            let error = "Se necesita un 'nuevaCama' que sea un string con letras y espacios, nada mas";
-            throw new Error(error);
-        }
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva (reserva)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const habitacion = validadoresCompartidos.tipos.numero({
+            string: entrada.body.habitacionUID,
+            nombreCampo: "El identificador universal de la habitacion (habitacion)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const nuevaCama = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nuevaCama,
+            nombreCampo: "El nuevaCama",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+
         // Valida reserva
         const validacionReserva = `
                         SELECT 

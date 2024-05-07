@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const anadirPernoctanteHabitacion = async (entrada, salida) => {
@@ -17,21 +18,30 @@ export const anadirPernoctanteHabitacion = async (entrada, salida) => {
         mutex = new Mutex();
         await mutex.acquire();
 
-        const reserva = entrada.body.reserva;
-        const habitacionUID = entrada.body.habitacionUID;
-        const clienteUID = entrada.body.clienteUID;
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        if (typeof habitacionUID !== "number" || !Number.isInteger(habitacionUID) || habitacionUID <= 0) {
-            const error = "el campo 'habitacionUID' solo puede un numero, entero y positivo";
-            throw new Error(error);
-        }
-        if (typeof clienteUID !== "number" || !Number.isInteger(clienteUID) || clienteUID <= 0) {
-            const error = "el campo 'clienteUID' solo puede un numero, entero y positivo";
-            throw new Error(error);
-        }
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva (reserva)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const habitacionUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.habitacionUID,
+            nombreCampo: "El identificador universal de la habitacionUID (habitacionUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const clienteUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.clienteUID,
+            nombreCampo: "El identificador universal de la clienteUID (clienteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
         await conexion.query('BEGIN'); // Inicio de la transacción
 
 
