@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const actualizarEstado = async (entrada, salida) => {
     try {
@@ -8,17 +9,23 @@ export const actualizarEstado = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const mensajeUID = entrada.body.mensajeUID;
-        const estado = entrada.body.estado;
-        const filtroIDV = /^[0-9]+$/;
-        if (!mensajeUID || !filtroIDV.test(mensajeUID)) {
-            const error = "El mensajeUID solo puede ser una cadena que acepta numeros";
-            throw new Error(error);
-        }
-        if (estado !== "activado" && estado !== "desactivado") {
-            const error = "El estado solo puede ser activado o desactivado";
-            throw new Error(error);
-        }
+        const mensajeUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.mensajeUID,
+            nombreCampo: "El campo mensajeUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const estado = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.estado,
+            nombreCampo: "El estado",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        await conexion.query('BEGIN'); // Inicio de la transacción
         const validarUID = `
                                 SELECT 
                                     "estado"
@@ -32,9 +39,6 @@ export const actualizarEstado = async (entrada, salida) => {
             const error = "No existe ningun mensaje con ese UID";
             throw new Error(error);
         }
-
-        await conexion.query('BEGIN'); // Inicio de la transacción
-
 
         const actualizarMensaje = `
                                 UPDATE 

@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const guardarConfiguracion = async (entrada, salida) => {  
     try {
@@ -8,22 +9,29 @@ export const guardarConfiguracion = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const diasAntelacionReserva = entrada.body.diasAntelacionReserva;
-        const limiteFuturoReserva = entrada.body.limiteFuturoReserva;
-        const diasMaximosReserva = entrada.body.diasMaximosReserva;
-        const filtroNumero = /^\d+$/;
-        if (!diasAntelacionReserva || !filtroNumero.test(diasAntelacionReserva)) {
-            const error = "El campo diasAntelacionReserva solo acepta numeros";
-            throw new Error(error);
-        }
-        if (!limiteFuturoReserva || !filtroNumero.test(limiteFuturoReserva)) {
-            const error = "El campo limiteFuturoReserva solo acepta numeros";
-            throw new Error(error);
-        }
-        if (!diasMaximosReserva || !filtroNumero.test(diasMaximosReserva)) {
-            const error = "El campo diasMaximosReserva solo acepta numeros";
-            throw new Error(error);
-        }
+        const diasAntelacionReserva = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.diasAntelacionReserva,
+            nombreCampo: "El campo diasAntelacionReserva",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const limiteFuturoReserva = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.limiteFuturoReserva,
+            nombreCampo: "El campo limiteFuturoReserva",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const diasMaximosReserva = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.diasMaximosReserva,
+            nombreCampo: "El campo diasMaximosReserva",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         if (Number(diasAntelacionReserva) >= Number(limiteFuturoReserva)) {
             const error = "Los dias de antelacion no pueden ser iguales o superiores a los dias del limiteFuturoReserva por que entonces no se permiten reservas de mas de 0 dias";
             throw new Error(error);

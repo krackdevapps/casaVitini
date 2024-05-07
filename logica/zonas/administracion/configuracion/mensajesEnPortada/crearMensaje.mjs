@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const crearMensaje = async (entrada, salida) => {
     try {
@@ -8,12 +9,13 @@ export const crearMensaje = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const mensaje = entrada.body.mensaje;
-        if (!mensaje || typeof mensaje !== "string" || mensaje.length === 0) {
-            const error = "Por favor escriba un mensaje para guardar, este debe de ser una cadena de texto.";
-            throw new Error(error);
-        }
-
+        const mensaje = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.mensaje,
+            nombreCampo: "El campo del mensaje",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
         const bufferObj = Buffer.from(mensaje, "utf8");
         const mensajeB64 = bufferObj.toString("base64");
 

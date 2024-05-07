@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const actualizarMensaje = async (entrada, salida) => {
     try {
@@ -8,13 +9,21 @@ export const actualizarMensaje = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const mensajeUID = entrada.body.mensajeUID;
-        const mensaje = entrada.body.mensaje;
-        const filtroIDV = /^[0-9]+$/;
-        if (!mensajeUID || !filtroIDV.test(mensajeUID)) {
-            const error = "El mensajeUID solo puede ser una cadena que acepta numeros";
-            throw new Error(error);
-        }
+        const mensajeUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.mensajeUID,
+            nombreCampo: "El campo mensajeUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const mensaje = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.mensaje,
+            nombreCampo: "El campo del mensaje",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         const bufferObj = Buffer.from(mensaje, "utf8");
         const mensajeB64 = bufferObj.toString("base64");
         const validarUID = `

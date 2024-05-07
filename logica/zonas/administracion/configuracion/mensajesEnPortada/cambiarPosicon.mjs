@@ -1,7 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-
-
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 export const cambiarPosicon = async (entrada, salida) => {
     try {
         const session = entrada.session
@@ -9,17 +8,20 @@ export const cambiarPosicon = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const mensajeUID = entrada.body.mensajeUID;
-        const posicion = entrada.body.posicion;
-        const filtroIDV = /^[0-9]+$/;
-        if (!mensajeUID || !filtroIDV.test(mensajeUID)) {
-            const error = "El mensajeUID solo puede ser una cadena que acepta numeros";
-            throw new Error(error);
-        }
-        if (!posicion || !filtroIDV.test(posicion) || posicion) {
-            const error = "La posicion solo puede ser una cadena que acepta numeros enteros y positivos";
-            throw new Error(error);
-        }
+        const mensajeUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.mensajeUID,
+            nombreCampo: "El campo mensajeUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const posicion = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.posicion,
+            nombreCampo: "El campo posicion",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
         const mensajeB64 = btoa(mensaje);
 
         const validarUID = `

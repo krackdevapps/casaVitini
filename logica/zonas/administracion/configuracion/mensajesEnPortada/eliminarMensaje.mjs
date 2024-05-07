@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const eliminarMensaje = async (entrada, salida) => {
     try {
@@ -8,12 +9,13 @@ export const eliminarMensaje = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const mensajeUID = entrada.body.mensajeUID;
-        const filtroNumeros = /^[0-9]+$/;
-        if (!mensajeUID || !filtroNumeros.test(mensajeUID)) {
-            const error = "El campo mensajeUID solo admite una cadena de numeros";
-            throw new Error(error);
-        }
+        const mensajeUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.mensajeUID,
+            nombreCampo: "El campo mensajeUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
         await conexion.query('BEGIN'); // Inicio de la transacción
 
 

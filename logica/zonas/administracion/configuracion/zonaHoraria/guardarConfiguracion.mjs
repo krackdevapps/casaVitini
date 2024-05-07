@@ -1,21 +1,24 @@
 import { conexion } from "../../../../componentes/db.mjs";
-
 import { zonasHorarias } from "../../../../componentes/zonasHorarias.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
+
 export const guardarConfiguracion = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         if (IDX.control()) return
-        
-        const zonaHoraria = entrada.body.zonaHoraria;
-        const filtroZonaHoraria = /^[a-zA-Z0-9\/_\-+]+$/;
-        const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;
-        if (!zonaHoraria || !filtroZonaHoraria.test(zonaHoraria)) {
-            const error = "el campo 'zonaHorarial' solo puede ser letras minúsculas, mayúsculas, guiones bajos y medios, signo mac y numeros";
-            throw new Error(error);
-        }
+
+        const zonaHoraria = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.zonaHoraria,
+            nombreCampo: "El campo del zonaHoraria",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+
         // Validar que la zona horarai exista
         const validarZonaHoraria = (zonaHorariaAValidar) => {
             let resultadoFinal = "no";

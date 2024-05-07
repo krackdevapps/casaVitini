@@ -303,7 +303,7 @@ const validadoresCompartidos = {
             }
         }
     },
-    tipos: {
+    tipos: { 
         cadena: (configuracion) => {
             let string = configuracion.string
             const nombreCampo = configuracion.nombreCampo
@@ -405,7 +405,7 @@ const validadoresCompartidos = {
                 }
             } else if (filtro === "strictoConEspacios") {
                 try {
-                    const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ]+$/;
+                    const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ+]+$/;
                     if (!filtro.test(string)) {
                         const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros, espacios y los siguientes caracteres: _, -, . y /`
                         throw new Error(mensaje)
@@ -716,7 +716,7 @@ const validadoresCompartidos = {
                 const error = "La url no cumple con el formato esperado, por favor revisa la url";
                 throw new Error(error);
             }
-            
+
             if (arrayDeDominiosPermitidos) {
                 const arrayFiltrado = validadoresCompartidos.tipos.array({
                     array: arrayDeDominiosPermitidos,
@@ -732,7 +732,25 @@ const validadoresCompartidos = {
                 }
             }
             return url
+        },
+        horas: (configuracion) => {
+
+            const hora = configuracion.hora
+            const nombreCampo = configuracion.nombreCampo
+            const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;
+
+            if (!hora) {
+                const error = `${nombreCampo} está vacío`;
+                throw new Error(error);
+            }
+            if (!filtroHora.test(hora)) {
+                const error = `${nombreCampo} debe de ser 00:00 y no puede ser superior a 23:59, si quieres poner la hora por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35`;
+                throw new Error(error);
+            }
+            return hora
         }
+
+
     }
 }
 export {

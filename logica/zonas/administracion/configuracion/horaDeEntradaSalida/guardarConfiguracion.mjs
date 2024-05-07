@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const guardarConfiguracion = async (entrada, salida) => {
     try {
@@ -9,17 +10,15 @@ export const guardarConfiguracion = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const horaEntradaTZ = entrada.body.horaEntradaTZ;
-        const horaSalidaTZ = entrada.body.horaSalidaTZ;
-        const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;
-        if (!horaEntradaTZ || !filtroHora.test(horaEntradaTZ)) {
-            const error = "La hora de entrada debe de ser 00:00 y no puede ser superior a 23:59, si quieres poner la hora por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35";
-            throw new Error(error);
-        }
-        if (!horaSalidaTZ || !filtroHora.test(horaSalidaTZ)) {
-            const error = "el campo 'horaEntradaTZ' debe de ser 00:00 y no puede ser superior a 23:59,si quieres poner la hora por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35";
-            throw new Error(error);
-        }
+        const horaEntradaTZ = validadoresCompartidos.tipos.horas({
+            hola: entrada.body.horaEntradaTZ,
+            nombreCampo: "El campo de la hora de entrada"
+        })
+        const horaSalidaTZ = validadoresCompartidos.tipos.horas({
+            hola: entrada.body.horaSalidaTZ,
+            nombreCampo: "El campo de la hora de entrada"
+        })
+        
         // Parsear las cadenas de hora a objetos DateTime de Luxon
         const horaEntradaControl = DateTime.fromFormat(horaEntradaTZ, 'HH:mm');
         const horaSalidaControl = DateTime.fromFormat(horaSalidaTZ, 'HH:mm');

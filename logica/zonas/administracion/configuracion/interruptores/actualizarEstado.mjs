@@ -1,5 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const actualizarEstado = async (entrada, salida) => {
     try {
@@ -8,16 +9,25 @@ export const actualizarEstado = async (entrada, salida) => {
         IDX.administradores()
         if (IDX.control()) return
 
-        const interruptorIDV = entrada.body.interruptorIDV;
-        const estado = entrada.body.estado;
-        const filtroIDV = /^[a-zA-Z0-9]+$/;
-        if (!interruptorIDV || !filtroIDV.test(interruptorIDV)) {
-            const error = "El interruptorIDV solo puede ser una cadena que acepta numeros, minusculas y mayusculas";
-            throw new Error(error);
-        }
-        if (!estado ||
-            !filtroIDV.test(estado) ||
-            (estado !== "activado" && estado !== "desactivado")) {
+        const interruptorIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.interruptorIDV,
+            nombreCampo: "El interruptorIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+        const estado = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.estado,
+            nombreCampo: "El estado",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
+        if (estado !== "activado" && estado !== "desactivado") {
             const error = "El estado solo puede ser activado o desactivado";
             throw new Error(error);
         }
