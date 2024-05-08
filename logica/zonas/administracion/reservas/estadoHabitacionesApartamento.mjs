@@ -1,6 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { estadoHabitacionesApartamento as estadoHabitacionesApartamento_ } from "../../../sistema/sistemaDeReservas/estadoHabitacionesApartamento.mjs";
+import { estadoHabitacionesApartamento as estadoHabitacionesApartamento_ } from "../../../sistema/reservas/estadoHabitacionesApartamento.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 

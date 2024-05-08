@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { obtenerDetallesOferta } from "../../../sistema/sistemaDeOfertas/obtenerDetallesOferta.mjs";
+import { obtenerDetallesOferta } from "../../../sistema/ofertas/obtenerDetallesOferta.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { Mutex } from "async-mutex";
 import Decimal from "decimal.js";

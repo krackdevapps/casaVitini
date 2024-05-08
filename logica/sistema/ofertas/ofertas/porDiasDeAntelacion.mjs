@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import Decimal from "decimal.js";
-import { codigoZonaHoraria } from "../../codigoZonaHoraria.mjs";
+import { codigoZonaHoraria } from "../../configuracion/codigoZonaHoraria.mjs"
 import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../validadores/validadoresCompartidos.mjs";
 const porDiasDeAntelacion = async (reserva) => {

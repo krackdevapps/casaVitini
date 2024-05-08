@@ -1,6 +1,6 @@
 import { Mutex } from "async-mutex";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { insertarCliente } from "../../../sistema/insertarCliente.mjs";
+import { insertarCliente } from "../../../sistema/clientes/insertarCliente.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const crearCliente = async (entrada, salida) => {

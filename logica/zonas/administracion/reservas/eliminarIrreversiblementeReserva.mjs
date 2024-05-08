@@ -1,6 +1,6 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
-import { vitiniCrypto } from "../../../sistema/vitiniCrypto.mjs";
+import { vitiniCrypto } from "../../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 

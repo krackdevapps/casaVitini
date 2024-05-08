@@ -1,5 +1,5 @@
-import { precioReserva as precioReserva_ } from "../../sistema/sistemaDePrecios/precioReserva.mjs";
-import { validarObjetoReservaSoloFormato } from "../../sistema/sistemaDeReservas/validarObjetoReservaSoloFormato.mjs";
+import { precioReserva as precioReserva_ } from "../../sistema/precios/precioReserva.mjs";
+import { validarObjetoReservaSoloFormato } from "../../sistema/reservas/validarObjetoReservaSoloFormato.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const precioReserva = async (entrada, salida) => {

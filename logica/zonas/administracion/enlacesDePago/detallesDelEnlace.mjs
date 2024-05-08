@@ -1,7 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { controlCaducidadEnlacesDePago } from "../../../sistema/controlCaducidadEnlacesDePago.mjs";
+import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const detallesDelEnlace = async (entrada, salida) => {

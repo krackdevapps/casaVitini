@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { conexion } from '../../componentes/db.mjs';
 import { sincronizarCalendariosAirbnbPorIDV } from '../calendariosSincronizados/airbnb/sincronizarCalendariosAirbnbPorIDV.mjs';
-import { codigoZonaHoraria } from '../codigoZonaHoraria.mjs';
+import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
 import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUniversal.mjs';
 import { bloqueosPorRango_apartamentoIDV } from '../selectoresCompartidos/bloqueosPorRango_apartamentoIDV.mjs';
 import { reservasPorRango_y_apartamentos } from '../selectoresCompartidos/reservasPorRango_y_apartamentos.mjs';

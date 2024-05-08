@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { validarModificacionRangoFechaResereva } from "../../../sistema/sistemaDeReservas/validarModificacionRangoFechaResereva.mjs";
+import { validarModificacionRangoFechaResereva } from "../../../sistema/reservas/validarModificacionRangoFechaResereva.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const obtenerElasticidadDelRango = async (entrada, salida) => {

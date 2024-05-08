@@ -8,11 +8,11 @@ const comprobarFechaEnRango = (fechaAComprobar_ISO, fechaInicio_ISO, fechaFin_IS
     return fechaObjetoAComprobar >= fechaObjetoInicio && fechaObjetoAComprobar <= fechaObjetoFin;
 }
 const porRangoDeFechas = async (reserva) => {
-    
+
     const fechaEntradaReserva_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(reserva.fechas.entrada)).fecha_ISO
     const fechaSalidaReserva_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(reserva.fechas.salida)).fecha_ISO
-    
-    const fechaActualTZ =  reserva.fechas.fechaActualProcesada_ISO
+
+    const fechaActualTZ = reserva.fechas.fechaActualProcesada_ISO
     const totalesPorNoche = reserva.desgloseFinanciero.totalesPorNoche
     const totalReservaNeto = new Decimal(reserva.desgloseFinanciero.totales.totalReservaNeto)
     const estadoOferta = "activada"
@@ -84,7 +84,7 @@ const porRangoDeFechas = async (reserva) => {
                     totalNetoNoche = totalNetoNoche.plus(precioNetoNoche)
                 }
                 if (tipoDescuento === "cantidadFija") {
-                    detalleDiaPorProcesar.descuento =cantidad
+                    detalleDiaPorProcesar.descuento = cantidad
                     descuento = descuento.plus(cantidad)
                     detalleDiaPorProcesar.totaDiaNetoConOferta = totalNetoNoche.minus(cantidad).toFixed(2)
 

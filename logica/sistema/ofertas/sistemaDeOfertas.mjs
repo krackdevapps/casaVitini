@@ -6,7 +6,7 @@ import { porDiasDeAntelacion } from './ofertas/porDiasDeAntelacion.mjs'
 import Decimal from "decimal.js"
 
 import { DateTime } from "luxon"
-import { codigoZonaHoraria } from "../codigoZonaHoraria.mjs"
+import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
 const sistemaDeOfertas = async (reserva) => {
 
     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria

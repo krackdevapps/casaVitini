@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { estadoHabitacionesApartamento } from "../../../sistema/sistemaDeReservas/estadoHabitacionesApartamento.mjs";
+import { estadoHabitacionesApartamento } from "../../../sistema/reservas/estadoHabitacionesApartamento.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) => {

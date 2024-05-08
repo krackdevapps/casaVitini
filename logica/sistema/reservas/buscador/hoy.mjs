@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
-import { codigoZonaHoraria } from "../../cnfiguracion/codigoZonaHoraria.mjs";
+import { codigoZonaHoraria } from "../../configuracion/codigoZonaHoraria.mjs";
 
 export const hoy = async (data) => {
     try {

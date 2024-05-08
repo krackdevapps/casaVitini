@@ -1,10 +1,10 @@
 
-import { validarObjetoReservaSoloFormato } from '../sistemaDeReservas/validarObjetoReservaSoloFormato.mjs';
+import { validarObjetoReservaSoloFormato } from '../reservas/validarObjetoReservaSoloFormato.mjs';
 import { precioRangoApartamento } from './precioRangoApartamento.mjs';
 import { aplicarImpuestos } from './aplicarImpuestos.mjs';
 import Decimal from 'decimal.js';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
-import { sistemaDeOfertas } from '../../sistema/sistemaDeOfertas/sistemaDeOfertas.mjs';
+import { sistemaDeOfertas } from '../../sistema/ofertas/sistemaDeOfertas.mjs';
 import { conexion } from '../../componentes/db.mjs';
 
 

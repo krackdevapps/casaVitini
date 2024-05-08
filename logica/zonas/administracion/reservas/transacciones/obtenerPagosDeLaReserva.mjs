@@ -1,8 +1,8 @@
 import Decimal from "decimal.js";
-import { obtenerTotalReembolsado } from "../../../../sistema/sistemaDePrecios/obtenerTotalReembolsado.mjs";
-import { detallesReserva } from "../../../../sistema/sistemaDeReservas/detallesReserva.mjs";
+import { obtenerTotalReembolsado } from "../../../../sistema/Precios/obtenerTotalReembolsado.mjs";
+import { detallesReserva } from "../../../../sistema/reservas/detallesReserva.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { pagosDeLaReserva as pagosDeLaReserva_ } from "../../../../sistema/sistemaDeReservas/pagosDeLaReserva.mjs";
+import { pagosDeLaReserva as pagosDeLaReserva_ } from "../../../../sistema/reservas/pagosDeLaReserva.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 

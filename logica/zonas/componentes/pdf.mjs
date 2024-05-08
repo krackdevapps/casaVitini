@@ -1,7 +1,7 @@
 import { conexion } from "../../componentes/db.mjs";
-import { generadorPDF } from "../../sistema/sistemaDePDF/generadorPDF.mjs";
-import { controlCaducidad } from "../../sistema/sistemaDePDF/controlCaducidad.mjs";
-import { detallesReserva } from "../../sistema/sistemaDeReservas/detallesReserva.mjs";
+import { generadorPDF } from "../../sistema/PDF/generadorPDF.mjs";
+import { controlCaducidad } from "../../sistema/PDF/controlCaducidad.mjs";
+import { detallesReserva } from "../../sistema/reservas/detallesReserva.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const pdf = async (entrada, salida) => {

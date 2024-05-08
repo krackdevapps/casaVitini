@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { generadorPDF } from "../../../sistema/sistemaDePDF/generadorPDF.mjs";
+import { generadorPDF } from "../../../sistema/PDF/generadorPDF.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { detallesReserva } from "../../../sistema/sistemaDeReservas/detallesReserva.mjs";
+import { detallesReserva } from "../../../sistema/reservas/detallesReserva.mjs";
 
 export const generarPdf = async (entrada, salida) => {
     try {

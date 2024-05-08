@@ -1,6 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { insertarCliente } from "../../../../sistema/insertarCliente.mjs";
+import { insertarCliente } from "../../../../sistema/clientes/insertarCliente.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const crearTitular = async (entrada, salida) => {

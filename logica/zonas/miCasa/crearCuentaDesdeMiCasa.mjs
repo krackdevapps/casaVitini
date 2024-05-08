@@ -2,9 +2,9 @@ import { DateTime } from "luxon";
 import { conexion } from "../../componentes/db.mjs";
 import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
 import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
-import { enviarEmailAlCrearCuentaNueva } from "../../sistema/sistemaDeMail/enviarEmailAlCrearCuentaNueva.mjs";
+import { enviarEmailAlCrearCuentaNueva } from "../../sistema/Mail/enviarEmailAlCrearCuentaNueva.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
-import { vitiniCrypto } from "../../sistema/vitiniCrypto.mjs";
+import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
 
 
 export const crearCuentaDesdeMiCasa = async (entrada, salida) => {

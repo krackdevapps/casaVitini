@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { bloquearApartamentos } from "../../../sistema/bloquearApartamentos.mjs";
+import { bloquearApartamentos } from "../../../sistema/bloqueos/bloquearApartamentos.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const cancelarReserva = async (entrada, salida) => {

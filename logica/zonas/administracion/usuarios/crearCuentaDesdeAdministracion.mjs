@@ -2,7 +2,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarCuentasNoVerificadas } from "../../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { vitiniCrypto } from "../../../sistema/vitiniCrypto.mjs";
+import { vitiniCrypto } from "../../../sistema/VitiniIDX/vitiniCrypto.mjs";
 
 
 export const crearCuentaDesdeAdministracion = async (entrada, salida) => {

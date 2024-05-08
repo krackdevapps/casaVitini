@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import { precioBaseApartamento } from "../../../sistema/sistemaDePrecios/precioBaseApartamento.mjs";
+import { precioBaseApartamento } from "../../../sistema/precios/precioBaseApartamento.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 

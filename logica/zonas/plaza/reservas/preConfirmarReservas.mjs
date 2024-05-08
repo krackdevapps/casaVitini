@@ -1,11 +1,11 @@
 import { Mutex } from "async-mutex";
 import { interruptor } from "../../../sistema/configuracionGlobal/interruptor.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
-import { validarObjetoReserva } from "../../../sistema/sistemaDeReservas/validarObjetoReserva.mjs";
-import { insertarReserva } from "../../../sistema/sistemaDeReservas/insertarReserva.mjs";
-import { detallesReserva } from "../../../sistema/sistemaDeReservas/detallesReserva.mjs";
-import { enviarEmailReservaConfirmada } from "../../../sistema/sistemaDeMail/enviarEmailReservaConfirmada.mjs";
-import { actualizarEstadoPago } from "../../../sistema/sistemaDePrecios/actualizarEstadoPago.mjs";
+import { validarObjetoReserva } from "../../../sistema/reservas/validarObjetoReserva.mjs";
+import { insertarReserva } from "../../../sistema/reservas/insertarReserva.mjs";
+import { detallesReserva } from "../../../sistema/reservas/detallesReserva.mjs";
+import { enviarEmailReservaConfirmada } from "../../../sistema/Mail/enviarEmailReservaConfirmada.mjs";
+import { actualizarEstadoPago } from "../../../sistema/precios/actualizarEstadoPago.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 import { crearEnlacePDF } from "../../../sistema/pdf/crearEnlacePDF.mjs";
 

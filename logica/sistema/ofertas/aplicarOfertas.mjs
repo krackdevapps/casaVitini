@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { codigoZonaHoraria } from '../codigoZonaHoraria.mjs';
+import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
 import { DateTime } from 'luxon';
 import { conexion } from '../../componentes/db.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';

@@ -1,4 +1,4 @@
-import { actualizarEstadoPago } from "../sistemaDePrecios/actualizarEstadoPago.mjs";
+import { actualizarEstadoPago } from "../precios/actualizarEstadoPago.mjs";
 import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs";
 
 export const estadoDelPago = async (reservaUID) => {

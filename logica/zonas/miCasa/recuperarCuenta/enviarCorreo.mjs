@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
-import { enviarMail } from "../../../sistema/sistemaDeMail/enviarMail.mjs";
+import { enviarMail } from "../../../sistema/Mail/enviarMail.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
