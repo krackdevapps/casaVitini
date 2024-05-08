@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../sistema/configuracion/codigoZonaHoraria.mjs";
-import { obtenerParametroConfiguracion } from "../../sistema/obtenerParametroConfiguracion.mjs";
+import { obtenerParametroConfiguracion } from "../../sistema/configuracion/obtenerParametroConfiguracion.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
 

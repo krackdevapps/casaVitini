@@ -1,12 +1,12 @@
-import { porApartamentosEspecificos } from "./ofertas/porApartamentosEspecificos.mjs"
-import { porNumeroDeApartamentos } from "./ofertas/porNumeroDeApartamentos.mjs"
-import { porDiasDeReserva } from "./ofertas/porDiasDeReserva.mjs"
-import { porRangoDeFechas } from './ofertas/porRangoDeFechas.mjs'
-import { porDiasDeAntelacion } from './ofertas/porDiasDeAntelacion.mjs'
-import Decimal from "decimal.js"
-
-import { DateTime } from "luxon"
+import { porApartamentosEspecificos } from "./perfiles/porApartamentosEspecificos.mjs"
+import { porNumeroDeApartamentos } from "./perfiles/porNumeroDeApartamentos.mjs"
+import { porDiasDeReserva } from "./perfiles/porDiasDeReserva.mjs"
+import { porRangoDeFechas } from './perfiles/porRangoDeFechas.mjs'
+import { porDiasDeAntelacion } from './perfiles/porDiasDeAntelacion.mjs'
 import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
+import Decimal from "decimal.js"
+import { DateTime } from "luxon"
+
 const sistemaDeOfertas = async (reserva) => {
 
     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria

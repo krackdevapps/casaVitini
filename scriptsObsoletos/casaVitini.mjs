@@ -44,7 +44,7 @@ import { eventosPorApartamneto } from '../logica/sistema/calendarios/capas/event
 import { eventosPorApartamentoAirbnb } from '../logica/sistema/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs';
 import { obtenerParametroConfiguracion } from '../logica/sistema/obtenerParametroConfiguracion.mjs';
 import { obtenerDetallesOferta } from '../logica/sistema/ofertas/obtenerDetallesOferta.mjs';
-import { interruptor } from '../logica/sistema/configuracionGlobal/interruptor.mjs';
+import { interruptor } from '../logica/sistema/configuracion/interruptor.mjs';
 import { apartamentosPorRango } from '../logica/sistema/selectoresCompartidos/apartamentosPorRango.mjs';
 import { evitarDuplicados } from '../logica/sistema/precios/comportamientoPrecios/evitarDuplicados.mjs';
 import { componentes } from './componentes.1.mjs';

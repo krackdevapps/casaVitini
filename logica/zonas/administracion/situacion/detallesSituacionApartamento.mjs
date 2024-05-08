@@ -4,7 +4,7 @@ import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHora
 import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { eventosDelApartamento } from "../../../sistema/calendariosSincronizados/airbnb/eventosDelApartamento.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracionGlobal/horasSalidaEntrada.mjs";
+import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracion/horasSalidaEntrada.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
 

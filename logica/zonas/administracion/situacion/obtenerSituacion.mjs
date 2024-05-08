@@ -4,7 +4,7 @@ import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHora
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { apartamentosOcupadosHoy_paraSitaucion } from "../../../sistema/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracionGlobal/horasSalidaEntrada.mjs";
+import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracion/horasSalidaEntrada.mjs";
 import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 
 

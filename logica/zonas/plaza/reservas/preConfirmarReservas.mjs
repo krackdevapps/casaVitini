@@ -1,5 +1,5 @@
 import { Mutex } from "async-mutex";
-import { interruptor } from "../../../sistema/configuracionGlobal/interruptor.mjs";
+import { interruptor } from "../../../sistema/configuracion/interruptor.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { validarObjetoReserva } from "../../../sistema/reservas/validarObjetoReserva.mjs";
 import { insertarReserva } from "../../../sistema/reservas/insertarReserva.mjs";

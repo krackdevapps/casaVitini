@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { codigoZonaHoraria } from '../codigoZonaHoraria.mjs';
+import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs'
 import { limitesReservaPublica } from './limitesReservaPublica.mjs';
 import { resolverApartamentoUI } from '../resolucion/resolverApartamentoUI.mjs'

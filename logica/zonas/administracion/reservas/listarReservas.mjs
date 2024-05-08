@@ -6,6 +6,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const listarReservas = async (entrada, salida) => {
     try {
+        console.log("test")
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
@@ -19,7 +20,8 @@ export const listarReservas = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
-        })
+        })       
+
         const nombreColumna = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombreColumna,
             nombreCampo: "El campo del nombre de la columna",
@@ -35,6 +37,7 @@ export const listarReservas = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
+
         validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
 
         const tipoConsulta = validadoresCompartidos.tipos.cadena({
@@ -56,7 +59,6 @@ export const listarReservas = async (entrada, salida) => {
                 tabla: "reservas"
             })
         }
-
 
         const numeroPagina = Number((pagina - 1) + "0");
         const numeroPorPagina = 10;

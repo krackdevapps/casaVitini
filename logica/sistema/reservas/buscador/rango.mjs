@@ -27,7 +27,6 @@ export const rango = async (data) => {
                 return nombreColumna
             }
         }
-
         if (tipoCoincidencia === "cualquieraQueCoincida") {
             const consultaConstructor = `
                 SELECT

@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { configuracionApartamento } from "../../../sistema/configuracionApartamento.mjs";
-import { interruptor } from "../../../sistema/configuracionGlobal/interruptor.mjs";
+import { interruptor } from "../../../sistema/configuracion/interruptor.mjs";
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";

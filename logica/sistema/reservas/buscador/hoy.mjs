@@ -72,6 +72,6 @@ export const hoy = async (data) => {
         };
         return respuesta
     } catch (error) {
-        throw
+        throw error
     }
 }
