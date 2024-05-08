@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
-import { resolverApartamentoUI } from "../../sistemaDeResolucion/resolverApartamentoUI.mjs";
+import { resolverApartamentoUI } from "../../resolucion/resolverApartamentoUI.mjs";
 const eventosTodosLosApartamentos = async (fecha) => {
     try {
         const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;

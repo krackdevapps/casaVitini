@@ -5,7 +5,7 @@ import { eventosTodosLosApartamentos } from "../../../../sistema/calendarios/cap
 import { eventosTodosLosBloqueos } from "../../../../sistema/calendarios/capas/eventosTodosLosBloqueos.mjs";
 import { eventosPorApartamentoAirbnb } from "../../../../sistema/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { eliminarBloqueoCaducado } from "../../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
+import { eliminarBloqueoCaducado } from "../../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 

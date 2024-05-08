@@ -1,5 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { crearEnlacePDF } from "../../../sistema/sistemaDePDF/crearEnlacePDF.mjs";
+import { crearEnlacePDF } from "../../../sistema/pdf/crearEnlacePDF.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const crearEnlacesPDF = async (entrada, salida) => {

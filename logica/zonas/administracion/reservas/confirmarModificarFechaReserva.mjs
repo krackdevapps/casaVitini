@@ -1,6 +1,6 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
-import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
+import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
 import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/insertarTotalesReserva.mjs";

@@ -1,5 +1,5 @@
 import { conexion } from "../../../../componentes/db.mjs";
-import { resolverApartamentoUI } from "../../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
+import { resolverApartamentoUI } from "../../../../sistema/resolucion/resolverApartamentoUI.mjs";
 export const airbnb = async (entrada, salida) => {
     try {
         const ok = {

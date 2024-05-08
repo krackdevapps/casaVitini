@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
-import { codigoZonaHoraria } from './codigoZonaHoraria.mjs';
-import { conexion } from '../componentes/db.mjs';
+import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
+import { conexion } from '../../componentes/db.mjs';
 const controlCaducidadEnlacesDePago = async () => {
     try {
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria

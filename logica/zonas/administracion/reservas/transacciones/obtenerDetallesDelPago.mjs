@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../../componentes/db.mjs";
-import { codigoZonaHoraria } from "../../../../sistema/codigoZonaHoraria.mjs";
+import { codigoZonaHoraria } from "../../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import Decimal from "decimal.js";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";

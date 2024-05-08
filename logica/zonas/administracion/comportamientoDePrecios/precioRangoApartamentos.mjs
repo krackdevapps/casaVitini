@@ -1,5 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { precioRangoApartamento } from "../../../sistema/sistemaDePrecios/precioRangoApartamento.mjs";
+import { precioRangoApartamento } from "../../../sistema/precios/precioRangoApartamento.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const precioRangoApartamentos = async (entrada, salida) => {

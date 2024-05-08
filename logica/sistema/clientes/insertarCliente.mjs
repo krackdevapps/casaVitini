@@ -1,5 +1,5 @@
-import { conexion } from "../componentes/db.mjs";
-import { validadoresCompartidos } from "./validadores/validadoresCompartidos.mjs";
+import { conexion } from "../../componentes/db.mjs";
+import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs";
 const insertarCliente = async (nuevoCliente) => {
     try {
         const nombre = nuevoCliente.nombre

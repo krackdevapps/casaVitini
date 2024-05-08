@@ -1,13 +1,13 @@
 import { Mutex } from "async-mutex";
 import { interruptor } from "../../../sistema/configuracionGlobal/interruptor.mjs";
-import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
+import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { validarObjetoReserva } from "../../../sistema/sistemaDeReservas/validarObjetoReserva.mjs";
 import { insertarReserva } from "../../../sistema/sistemaDeReservas/insertarReserva.mjs";
 import { detallesReserva } from "../../../sistema/sistemaDeReservas/detallesReserva.mjs";
 import { enviarEmailReservaConfirmada } from "../../../sistema/sistemaDeMail/enviarEmailReservaConfirmada.mjs";
 import { actualizarEstadoPago } from "../../../sistema/sistemaDePrecios/actualizarEstadoPago.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
-import { crearEnlacePDF } from "../../../sistema/sistemaDePDF/crearEnlacePDF.mjs";
+import { crearEnlacePDF } from "../../../sistema/pdf/crearEnlacePDF.mjs";
 
 export const preConfirmarReserva = async (entrada, salida) => {
     const mutex = new Mutex()

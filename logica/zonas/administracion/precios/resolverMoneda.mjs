@@ -1,5 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { resolverMoneda as resolverMoneda_ } from "../../../sistema/sistemaDeResolucion/resolverMoneda.mjs";
+import { resolverMoneda as resolverMoneda_ } from "../../../sistema/resolucion/resolverMoneda.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const resolverMoneda = async (entrada, salida) => {

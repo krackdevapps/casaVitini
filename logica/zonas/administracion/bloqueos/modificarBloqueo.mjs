@@ -1,9 +1,9 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
-import { codigoZonaHoraria } from "../../../sistema/sistemaDeConfiguracion/codigoZonaHoraria.mjs";
+import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
+import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 VitiniIDX
 
 export const modificarBloqueo = async (entrada, salida) => {

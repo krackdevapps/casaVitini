@@ -1,6 +1,6 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
-import { evitarDuplicados } from "../../../sistema/sistemaDePrecios/comportamientoPrecios/evitarDuplicados.mjs";
+import { evitarDuplicados } from "../../../sistema/precios/comportamientoPrecios/evitarDuplicados.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 

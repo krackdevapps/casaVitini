@@ -1,6 +1,6 @@
 import Decimal from "decimal.js";
 import { DateTime } from "luxon";
-import { codigoZonaHoraria } from "../sistema/codigoZonaHoraria.mjs";
+import { codigoZonaHoraria } from "../sistema/configuracion/codigoZonaHoraria.mjs";
 
 const utilidades = {
     deUTCaZonaHoraria: (fechaUTC, zonaHoraria) => {

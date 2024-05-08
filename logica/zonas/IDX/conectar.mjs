@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../componentes/db.mjs";
-import { vitiniCrypto } from "../../sistema/vitiniCrypto.mjs";
+import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
 

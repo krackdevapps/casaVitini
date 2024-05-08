@@ -10,12 +10,12 @@ import { insertarReserva } from '../logica/sistema/sistemaDeReservas/insertarRes
 import { estadoHabitacionesApartamento } from '../logica/sistema/sistemaDeReservas/estadoHabitacionesApartamento.mjs';
 import { validarModificacionRangoFechaResereva } from '../logica/sistema/validadores/validarModificacionRangoFechaResereva.mjs';
 import { bloquearApartamentos } from '../logica/sistema/bloquearApartamentos.mjs';
-import { resolverMoneda } from '../logica/sistema/sistemaDeResolucion/resolverMoneda.mjs';
+import { resolverMoneda } from '../logica/sistema/resolucion/resolverMoneda.mjs';
 import { precioBaseApartamento } from '../logica/sistema/sistemaDePrecios/precioBaseApartamento.mjs';
-import { precioRangoApartamento } from '../logica/sistema/sistemaDePrecios/precioRangoApartamento.mjs';
+import { precioRangoApartamento } from '../logica/sistema/precios/precioRangoApartamento.mjs';
 import { insertarTotalesReserva } from '../logica/sistema/sistemaDeReservas/insertarTotalesReserva.mjs';
 import { detallesReserva } from '../logica/sistema/sistemaDeReservas/detallesReserva.mjs';
-import { resolverApartamentoUI } from '../logica/sistema/sistemaDeResolucion/resolverApartamentoUI.mjs';
+import { resolverApartamentoUI } from '../logica/sistema/resolucion/resolverApartamentoUI.mjs';
 import { vitiniCrypto } from '../logica/sistema/vitiniCrypto.mjs';
 import { administracionUI } from '../logica/componentes/administracion.mjs';
 import { controlCaducidadEnlacesDePago } from '../logica/sistema/controlCaducidadEnlacesDePago.mjs';
@@ -23,7 +23,7 @@ import { zonasHorarias } from "../logica/componentes/zonasHorarias.mjs";
 import { utilidades } from '../logica/componentes/utilidades.mjs';
 import Decimal from 'decimal.js';
 import { insertarCliente } from '../logica/sistema/insertarCliente.mjs';
-import { codigoZonaHoraria } from '../logica/sistema/codigoZonaHoraria.mjs';
+import { codigoZonaHoraria } from '../logica/sistema/configuracion/codigoZonaHoraria.mjs';
 import { DateTime } from 'luxon';
 import { generadorPDF } from '../logica/sistema/sistemaDePDF/generadorPDF.mjs';
 import { validadoresCompartidos } from '../logica/sistema/validadores/validadoresCompartidos.mjs';
@@ -47,7 +47,7 @@ import { obtenerParametroConfiguracion } from '../logica/sistema/obtenerParametr
 import { obtenerDetallesOferta } from '../logica/sistema/sistemaDeOfertas/obtenerDetallesOferta.mjs';
 import { interruptor } from '../logica/sistema/configuracionGlobal/interruptor.mjs';
 import { apartamentosPorRango } from '../logica/sistema/selectoresCompartidos/apartamentosPorRango.mjs';
-import { evitarDuplicados } from '../logica/sistema/sistemaDePrecios/comportamientoPrecios/evitarDuplicados.mjs';
+import { evitarDuplicados } from '../logica/sistema/precios/comportamientoPrecios/evitarDuplicados.mjs';
 import { componentes } from './componentes.mjs';
 import { conexion } from '../logica/componentes/db.mjs';
 

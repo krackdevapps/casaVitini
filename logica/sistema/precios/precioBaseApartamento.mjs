@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js'; 
-import { resolverApartamentoUI } from '../sistemaDeResolucion/resolverApartamentoUI.mjs'
+import { resolverApartamentoUI } from '../resolucion/resolverApartamentoUI.mjs'
 import { conexion } from '../../componentes/db.mjs';
 // Los precios de los apartamentos, van asociados a fechas
 const precioBaseApartamento = async (apartamentoIDV) => {

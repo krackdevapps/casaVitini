@@ -1,11 +1,11 @@
 import { DateTime } from "luxon";
-import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
+import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { configuracionApartamento } from "../../../sistema/configuracionApartamento.mjs";
 import { interruptor } from "../../../sistema/configuracionGlobal/interruptor.mjs";
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
-import { precioRangoApartamento } from "../../../sistema/sistemaDePrecios/precioRangoApartamento.mjs";
+import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
+import { precioRangoApartamento } from "../../../sistema/precios/precioRangoApartamento.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 
 export const apartamentosDisponiblesPublico = async (entrada, salida) => {

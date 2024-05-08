@@ -1,5 +1,5 @@
 import { DateTime } from "luxon"
-import { codigoZonaHoraria } from "../sistemaDeConfiguracion/codigoZonaHoraria.mjs"
+import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
 import { conexion } from "../../componentes/db.mjs"
 const validadoresCompartidos = {
     clientes: {
@@ -212,6 +212,35 @@ const validadoresCompartidos = {
             } catch (error) {
                 throw error
             }
+        },
+        validacionVectorial: async (configuracion) => {
+            try {
+                const fechaEntrada_ISO = await validadoresCompartidos.fechas.validarFecha_ISO(configuracion.fechaEntrada_ISO)
+                const fechaSalida_ISO = await validadoresCompartidos.fechas.validarFecha_ISO(configuracion.fechaSalida_ISO)
+                const fechaEntrada_obejto = DateTime.fromISO(fechaEntrada_ISO)
+                const fechaSalida_obejto = DateTime.fromISO(fechaSalida_ISO)
+
+                const tipoVector = configuracion.tipoVector
+
+                if (tipoVector === "igual") {
+                    if (fechaEntrada_obejto < fechaSalida_obejto) {
+                        const error = "La fecha de entrada seleccionada es superior a la fecha de salida de la reserva";
+                        throw new Error(error);
+                    }
+                } else if (tipoVector === "diferente") {
+                    if (fechaEntrada_obejto <= fechaSalida_obejto) {
+                        const error = "La fecha de entrada seleccionada es igual o superior a la fecha de salida de la reserva";
+                        throw new Error(error);
+                    }
+                } else {
+                    const error = "El validador de fechas validacionVectorail esta mas configurado. Necesita la especificaicon de tipoVector.                    "
+                    throw new Error(error)
+                }
+
+            } catch (error) {
+                throw error
+            }
+
         }
     },
     reservas: {
@@ -767,6 +796,58 @@ const validadoresCompartidos = {
         }
 
 
+    },
+    baseDeDatos: {
+        validarNombreColumna: async (configuracion) => {
+
+            try {
+                const nombreColumna = validadoresCompartidos.tipos.cadena({
+                    string: configuracion.nombreColumna,
+                    nombreCampo: "El campo de nombreColumnade validador de columnas",
+                    filtro: "strictoIDV",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+
+                const tabla = validadoresCompartidos.tipos.cadena({
+                    string: configuracion.tabla,
+                    nombreCampo: "El campo tabla dentro de validador de columnas",
+                    filtro: "strictoIDV",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+
+                const consultaExistenciaNombreColumna = `
+                SELECT column_name
+                FROM information_schema.columns
+                WHERE table_name = $1 AND column_name = $2;
+                `;
+                const configuracionConsulta = [
+                    tabla,
+                    nombreColumna
+                ]
+                const resuelveNombreColumna = await conexion.query(consultaExistenciaNombreColumna, configuracionConsulta);
+                if (resuelveNombreColumna.rowCount === 0) {
+                    const error = `No existe el nombre de la columna ${nombreColumna} en la tabla ${tabla}`;
+                    throw new Error(error);
+                }
+            } catch (error) {
+                throw error
+            }
+
+        }
+    },
+    filtros: {
+        sentidoColumna: (sentidoColumna) => {
+            try {
+                if (sentidoColumna !== "ascendente" && sentidoColumna !== "descendente") {
+                    const error = "El campo sentido columna solo acepta un sentido ascendente o descendente"
+                    throw new Error(error)
+                }
+            } catch (error) {
+                throw error
+            }
+        }
     }
 }
 export {

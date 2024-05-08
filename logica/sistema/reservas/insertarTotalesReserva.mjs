@@ -2,7 +2,7 @@
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { actualizarEstadoPago } from '../sistemaDePrecios/actualizarEstadoPago.mjs';
 import { precioReserva } from '../sistemaDePrecios/precioReserva.mjs';
-import { resolverApartamentoUI } from '../sistemaDeResolucion/resolverApartamentoUI.mjs';
+import { resolverApartamentoUI } from '../resolucion/resolverApartamentoUI.mjs';
 import { conexion } from '../../componentes/db.mjs';
 const insertarTotalesReserva = async (metadatos) => {
     try {

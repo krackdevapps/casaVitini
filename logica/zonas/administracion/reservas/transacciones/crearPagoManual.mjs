@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { codigoZonaHoraria } from "../../../../sistema/codigoZonaHoraria.mjs";
+import { codigoZonaHoraria } from "../../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { utilidades } from "../../../../componentes/utilidades.mjs";
 import { actualizarEstadoPago } from "../../../../sistema/sistemaDePrecios/actualizarEstadoPago.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
