@@ -11,14 +11,18 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         if (IDX.control()) return
-  
 
-        const pernoctantaUID = entrada.body.pernoctanteUID;
+
+        const pernoctantaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pernoctantaUID,
+            nombreCampo: "El identificador universal de pernoctantaUID",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no",
+            devuelveUnTipoNumber: "si"
+        })
         const fechaCheckOut = entrada.body.fechaCheckOut;
-        if (typeof pernoctantaUID !== "number" || !Number.isInteger(pernoctantaUID) || pernoctantaUID <= 0) {
-            const error = "El campo 'pernoctantaUID' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
         const fechaCheckOut_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaCheckOut)).fecha_ISO;
         const fechaCheckOut_Objeto = DateTime.fromISO(fechaCheckOut_ISO);
         await conexion.query('BEGIN'); // Inicio de la transacción

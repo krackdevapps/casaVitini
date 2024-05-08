@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const eliminarPernoctanteReserva = async (entrada, salida) => {
@@ -16,17 +17,31 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
         mutex = new Mutex();
         await mutex.acquire();
 
-        const reserva = entrada.body.reserva;
-        const pernoctanteUID = entrada.body.pernoctanteUID;
-        const tipoElinacion = entrada.body.tipoEliminacion;
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        if (typeof pernoctanteUID !== "number" || !Number.isInteger(pernoctanteUID) || pernoctanteUID <= 0) {
-            const error = "El campo 'pernoctanteUID' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva (reserva)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const pernoctanteUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pernoctanteUID,
+            nombreCampo: "El identificador universal de la pernoctante (pernoctanteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const tipoElinacion = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoElinacion,
+            nombreCampo: "El tipoElinacion",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         if (typeof tipoElinacion !== "string" || (tipoElinacion !== "habitacion" && tipoElinacion !== "reserva")) {
             const error = "El campo 'tipoElinacion' solo puede ser 'habitacion' o 'reserva'";
             throw new Error(error);

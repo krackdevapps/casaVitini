@@ -1,12 +1,9 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-
-
-
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const eliminarCheckOutAdelantado = async (entrada, salida) => {
     try {
-
 
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -14,11 +11,16 @@ export const eliminarCheckOutAdelantado = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        
-
-        const pernoctantaUID = entrada.body.pernoctanteUID;
-        if (typeof pernoctantaUID !== "number" || !Number.isInteger(pernoctantaUID) || pernoctantaUID <= 0) {
-            const error = "El campo 'pernoctantaUID' debe ser un tipo numero, entero y positivo";
+        const pernoctanteUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pernoctanteUID,
+            nombreCampo: "El identificador universal de la pernoctante (pernoctanteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        if (typeof pernoctanteUID !== "number" || !Number.isInteger(pernoctanteUID) || pernoctanteUID <= 0) {
+            const error = "El campo 'pernoctanteUID' debe ser un tipo numero, entero y positivo";
             throw new Error(error);
         }
         await conexion.query('BEGIN'); // Inicio de la transacción
@@ -31,7 +33,7 @@ export const eliminarCheckOutAdelantado = async (entrada, salida) => {
                         FROM "reservaPernoctantes"
                         WHERE "pernoctanteUID" = $1
                         `;
-        const resuelvePernoctante = await conexion.query(validarPernoctante, [pernoctantaUID]);
+        const resuelvePernoctante = await conexion.query(validarPernoctante, [pernoctanteUID]);
         if (resuelvePernoctante.rowCount === 0) {
             const error = "No existe el pernoctanteUID";
             throw new Error(error);
@@ -64,7 +66,7 @@ export const eliminarCheckOutAdelantado = async (entrada, salida) => {
                         WHERE
                           "pernoctanteUID" = $1;
                         `;
-        const actualizarCheckOut = await conexion.query(actualizerFechaCheckOut, [pernoctantaUID]);
+        const actualizarCheckOut = await conexion.query(actualizerFechaCheckOut, [pernoctanteUID]);
         if (actualizarCheckOut.rowCount === 0) {
             const error = "No se ha podido eliminar la fecha de checkin";
             throw new Error(error);

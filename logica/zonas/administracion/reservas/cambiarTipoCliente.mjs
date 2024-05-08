@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const cambiarTipoCliente = async (entrada, salida) => {
     let mutex
@@ -15,18 +16,35 @@ export const cambiarTipoCliente = async (entrada, salida) => {
         mutex = new Mutex();
         await mutex.acquire();
 
-        const reservaUID = entrada.body.reservaUID;
-        const pernoctanteUID = entrada.body.pernoctanteUID;
-        const clienteUID = entrada.body.clienteUID;
+
+
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const pernoctanteUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pernoctanteUID,
+            nombreCampo: "El identificador universal de la pernoctante (pernoctanteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const clienteUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.clienteUID,
+            nombreCampo: "El identificador universal de la cliente (clienteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
         const reserva = await validadoresCompartidos.reservas.validarReserva(reservaUID);
-        if (typeof pernoctanteUID !== "number" || !Number.isInteger(pernoctanteUID) || pernoctanteUID <= 0) {
-            const error = "El campo 'pernoctanteUID' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        if (typeof clienteUID !== "number" || !Number.isInteger(clienteUID) || clienteUID <= 0) {
-            const error = "El campo 'clienteUID' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
+
         if (reserva.estadoReserva === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);

@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validarModificacionRangoFechaResereva } from "../../../sistema/sistemaDeReservas/validarModificacionRangoFechaResereva.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const obtenerElasticidadDelRango = async (entrada, salida) => {
     let mutex
@@ -15,14 +16,37 @@ export const obtenerElasticidadDelRango = async (entrada, salida) => {
         mutex = new Mutex()
         await mutex.acquire()
 
-        const reserva = entrada.body.reserva;
-        const sentidoRango = entrada.body.sentidoRango;
-        const mesCalendario = entrada.body.mesCalendario;
-        const anoCalendario = entrada.body.anoCalendario;
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva ",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const sentidoRango = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.sentidoRango,
+            nombreCampo: "El nombre de sentidoRango",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+        const mesCalendario = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.mesCalendario,
+            nombreCampo: "El campo mesCalendario",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const anoCalendario = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.anoCalendario,
+            nombreCampo: "El campo anoCalendario",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         if (sentidoRango !== "pasado" && sentidoRango !== "futuro") {
             const error = "El campo 'sentidoRango' solo puede ser pasado o futuro";
             throw new Error(error);

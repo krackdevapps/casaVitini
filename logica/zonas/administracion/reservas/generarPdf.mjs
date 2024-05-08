@@ -11,16 +11,20 @@ export const generarPdf = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
 
-        const reservaUID = entrada.body.reservaUID;
         await validadoresCompartidos.reservas.validarReserva(reservaUID);
         const metadatos = {
             reservaUID: reservaUID
         };
-        console.log("antes")
         const reserva = await detallesReserva(metadatos);
-        console.log("despues")
 
         const pdf = await generadorPDF(reserva);
         salida.setHeader('Content-Type', 'application/pdf');

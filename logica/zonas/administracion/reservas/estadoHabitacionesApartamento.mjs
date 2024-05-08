@@ -1,6 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { estadoHabitacionesApartamento as estadoHabitacionesApartamento_ } from "../../../sistema/sistemaDeReservas/estadoHabitacionesApartamento.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
 export const estadoHabitacionesApartamento = async (entrada, salida) => {
@@ -12,17 +13,24 @@ export const estadoHabitacionesApartamento = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
 
-        const apartamento = entrada.body.apartamento;
-        const reserva = entrada.body.reserva;
-        if (typeof apartamento !== "number" || !Number.isInteger(apartamento) || apartamento <= 0) {
-            const error = "El campo 'apartamento' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
+        const apartamento = validadoresCompartidos.tipos.numero({
+            string: entrada.body.apartamento,
+            nombreCampo: "El identificador universal dlapartamento",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         const transaccionInterna = {
             apartamento: apartamento,
             reserva: reserva

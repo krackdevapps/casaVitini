@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { bloquearApartamentos } from "../../../sistema/bloquearApartamentos.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const cancelarReserva = async (entrada, salida) => {
     let mutex
@@ -16,13 +17,22 @@ export const cancelarReserva = async (entrada, salida) => {
         mutex = new Mutex();
         await mutex.acquire();
 
-        const reserva = entrada.body.reserva;
-        const tipoBloqueo = entrada.body.tipoBloqueo;
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        if (tipoBloqueo !== "rangoTemporal" && tipoBloqueo !== "permanente" && tipoBloqueo !== "sinBloqueo") {
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva (reserva)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const tipoBloqueo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoBloqueo,
+            nombreCampo: "El nombre de tipoBloqueo",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+         if (tipoBloqueo !== "rangoTemporal" && tipoBloqueo !== "permanente" && tipoBloqueo !== "sinBloqueo") {
             const error = "El campo 'tipoBloqueo' solo puede ser rangoTemporal, permanente, sinBloqueo";
             throw new Error(error);
         }

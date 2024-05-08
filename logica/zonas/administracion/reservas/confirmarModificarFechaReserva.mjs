@@ -21,18 +21,32 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         mutex = new Mutex();
         await mutex.acquire();
 
-        const reserva = entrada.body.reserva;
-        const sentidoRango = entrada.body.sentidoRango;
-        const fechaSolicitada_ISO = entrada.body.fechaSolicitada_ISO;
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const sentidoRango = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.sentidoRango,
+            nombreCampo: "El nombre de sentidoRango",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
+
         if (sentidoRango !== "pasado" && sentidoRango !== "futuro") {
             const error = "El campo 'sentidoRango' solo puede ser pasado o futuro";
             throw new Error(error);
         }
+
+        const fechaSolicitada_ISO = entrada.body.fechaSolicitada_ISO;
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaSolicitada_ISO);
+
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const fechaSolicitada_objeto = DateTime.fromISO(fechaSolicitada_ISO, { zone: zonaHoraria });
         const fechaSolicitada_array = fechaSolicitada_ISO.split("-");
@@ -195,8 +209,8 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         }
         salida.json(error);
     } finally {
-       if (mutex) {
-        mutex.release()
-       }
+        if (mutex) {
+            mutex.release()
+        }
     }
 }

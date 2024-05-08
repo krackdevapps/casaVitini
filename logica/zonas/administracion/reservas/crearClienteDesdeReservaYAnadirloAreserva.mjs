@@ -17,37 +17,25 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
         mutex = new Mutex();
         await mutex.acquire();
 
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva ",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
 
-
-        const reserva = entrada.body.reserva;
-        const habitacionUID = entrada.body.habitacionUID;
-        const nombre = entrada.body.nombre;
-        const primerApellido = entrada.body.primerApellido;
-        const segundoApellido = entrada.body.segundoApellido;
-        const pasaporte = entrada.body.pasaporte;
-        const telefono = entrada.body.telefono;
-        const correoElectronico = entrada.body.correoElectronico;
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        if (typeof habitacionUID !== "number" || !Number.isInteger(habitacionUID) || habitacionUID <= 0) {
-            const error = "el campo 'habitacionUID' solo puede un numero, entero y positivo";
-            throw new Error(error);
-        }
-        // Comprobar que la reserva exisste
-        const validacionReserva = `
-                        SELECT 
-                        reserva, "estadoReserva", "estadoPago"
-                        FROM reservas
-                        WHERE reserva = $1
-                        `;
-        const resuelveValidacionReserva = await conexion.query(validacionReserva, [reserva]);
-        if (resuelveValidacionReserva.rowCount === 0) {
-            const error = "No existe la reserva";
-            throw new Error(error);
-        }
-        if (resuelveValidacionReserva.rows[0].estadoReserva === "cancelada") {
+        const habitacionUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.habitacionUID,
+            nombreCampo: "El identificador universal de la reservhabitacionUIDa ",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const resolverReserva = await validadoresCompartidos.reservas.validarReserva(reserva)
+        if (resolverReserva.estadoReserva === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);
         }
@@ -63,24 +51,19 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
             const error = "No existe la habitacion dentro de esta reserva";
             throw new Error(error);
         }
-        const nuevoClientePorValidar = {
-            nombre: nombre,
-            primerApellido: primerApellido,
-            segundoApellido: segundoApellido,
-            pasaporte: pasaporte,
-            telefono: telefono,
-            correoElectronico: correoElectronico,
+
+        const nuevoCliente = {
+            nombre: entrada.body.nombre,
+            primerApellido: entrada.body.primerApellido,
+            segundoApellido: entrada.body.segundoApellido,
+            pasaporte: entrada.body.pasaporte,
+            telefono: entrada.body.telefono,
+            correoElectronico: entrada.body.correoElectronico,
+            notas: entrada.body.notas,
         };
-        const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoClientePorValidar);
-        const datosNuevoCliente = {
-            nombre: datosValidados.nombre,
-            primerApellido: datosValidados.primerApellido,
-            segundoApellido: datosValidados.segundoApellido,
-            pasaporte: datosValidados.pasaporte,
-            telefono: datosValidados.telefono,
-            correoElectronico: datosValidados.correoElectronico
-        };
-        const nuevoClienteInsertado = await insertarCliente(datosNuevoCliente);
+        const datosValidados = await validadoresCompartidos.clientes.validarCliente(nuevoCliente);
+
+        const nuevoClienteInsertado = await insertarCliente(datosValidados);
         const nuevoUIDCliente = nuevoClienteInsertado.uid;
         const insertarPernoctante = `
                         INSERT INTO 

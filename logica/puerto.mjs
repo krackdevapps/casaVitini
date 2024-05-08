@@ -290,7 +290,6 @@ const puerto = async (entrada, salida) => {
         return X(entrada, salida)
     } catch (errorCapturado) {
         const error = {
-            //detail: errorCapturado,
             error: errorCapturado.message
         }
         salida.json(error);

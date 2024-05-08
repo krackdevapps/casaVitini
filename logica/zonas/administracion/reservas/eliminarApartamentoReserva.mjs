@@ -16,18 +16,31 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
         mutex = new Mutex();
         await mutex.acquire();
 
-        const reserva = entrada.body.reserva;
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
         // apartamentoUID
-        const apartamento = entrada.body.apartamento;
-        const tipoBloqueo = entrada.body.tipoBloqueo;
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        if (typeof apartamento !== "number" || !Number.isInteger(apartamento) || apartamento <= 0) {
-            const error = "el campo 'apartamento' solo puede un numero, entero y positivo";
-            throw new Error(error);
-        }
+        const apartamento = validadoresCompartidos.tipos.numero({
+            string: entrada.body.apartamento,
+            nombreCampo: "El identificador universal de la apartamento",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const tipoBloqueo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoBloqueo,
+            nombreCampo: "El nombre de tipoBloqueo",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         if (tipoBloqueo !== "permanente" && tipoBloqueo !== "rangoTemporal" && tipoBloqueo !== "sinBloqueo") {
             const error = "El campo 'tipoBloqueo' solo puede ser 'permanente', 'rangoTemporal', 'sinBloquo'";
             throw new Error(error);

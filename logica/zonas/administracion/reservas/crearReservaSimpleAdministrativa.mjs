@@ -1,15 +1,11 @@
-import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
-import { codigoZonaHoraria } from "../../../sistema/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
 import { resolverApartamentoUI } from "../../../sistema/sistemaDeResolucion/resolverApartamentoUI.mjs";
 import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/insertarTotalesReserva.mjs";
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/sistemaDeBloqueos/eliminarBloqueoCaducado.mjs";
-
 
 export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
     let mutex
@@ -27,25 +23,16 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
 
         const fechaEntrada = entrada.body.fechaEntrada;
         const fechaSalida = entrada.body.fechaSalida;
-        const apartamentos = entrada.body.apartamentos;
+        const apartamentos = validadoresCompartidos.tipos.array({
+            array: entrada.body.apartamentos,
+            nombreCampo: "El array de apartamentos",
+            filtro: "soloCadenasIDV",
+            noSePermitenDuplicados: "si"
+        })
         // Control validez fecha
         const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)).fecha_ISO;
         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida)).fecha_ISO;
-        const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-        if (!Array.isArray(apartamentos)) {
-            const error = "el campo 'apartamentos' debe de ser un array";
-            throw new Error(error);
-        }
-        const fechaControl_Entrada = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria }).isValid;
-        if (!fechaControl_Entrada) {
-            const error = "LA fecha de entrada no es valida";
-            throw new Error(error);
-        }
-        const fechaControl_Salida = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria }).isValid;
-        if (!fechaControl_Salida) {
-            const error = "LA fecha de salida no es valida";
-            throw new Error(error);
-        }
+
         await eliminarBloqueoCaducado();
         // validar que en el array hay un maximo de posiciones no superior al numero de filas que existen en los apartementos
         const estadoDisonibleApartamento = "disponible";

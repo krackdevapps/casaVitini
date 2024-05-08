@@ -18,51 +18,38 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
         mutex = new Mutex();
         await mutex.acquire();
 
-        const reserva = entrada.body.reserva;
-        const pernoctanteUID = entrada.body.pernoctanteUID;
-        let nombre = entrada.body.nombre;
-        let primerApellido = entrada.body.primerApellido;
-        let segundoApellido = entrada.body.segundoApellido;
-        let pasaporte = entrada.body.pasaporte;
-        let telefono = entrada.body.telefono;
-        let correoElectronico = entrada.body.correoElectronico;
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
-        if (typeof pernoctanteUID !== "number" || !Number.isInteger(pernoctanteUID) || pernoctanteUID <= 0) {
-            const error = "el campo 'pernoctanteUID' solo puede un numero, entero y positivo";
-            throw new Error(error);
-        }
-        const nuevoClienteParaValidar = {
-            nombre: nombre,
-            primerApellido: primerApellido,
-            segundoApellido: segundoApellido,
-            pasaporte: pasaporte,
-            telefono: telefono,
-            correoElectronico: correoElectronico,
-            //notas: notas,
+
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const pernoctanteUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pernoctanteUID,
+            nombreCampo: "El identificador universal de la pernoctante (pernoctanteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const nuevoCliente = {
+            nombre: entrada.body.nombre,
+            primerApellido: entrada.body.primerApellido,
+            segundoApellido: entrada.body.segundoApellido,
+            pasaporte: entrada.body.pasaporte,
+            telefono: entrada.body.telefono,
+            correoElectronico: entrada.body.correoElectronico
         };
-        const datosValidados = await validadoresCompartidos.clientes.nuevoCliente(nuevoClienteParaValidar);
-        nombre = datosValidados.nombre;
-        primerApellido = datosValidados.primerApellido;
-        segundoApellido = datosValidados.segundoApellido;
-        pasaporte = datosValidados.pasaporte;
-        telefono = datosValidados.telefono;
-        correoElectronico = datosValidados.correoElectronico;
+        const datosValidados = await validadoresCompartidos.clientes.validarCliente(nuevoCliente);
+
         // Comprobar que la reserva exisste
-        const validacionReserva = `
-                        SELECT 
-                        reserva, "estadoReserva", "estadoPago"
-                        FROM reservas
-                        WHERE reserva = $1
-                        `;
-        const resuelveValidacionReserva = await conexion.query(validacionReserva, [reserva]);
-        if (resuelveValidacionReserva.rowCount === 0) {
-            const error = "No existe la reserva";
-            throw new Error(error);
-        }
-        if (resuelveValidacionReserva.rows[0].estadoReserva === "cancelada") {
+        const resuelveReserva = await validadoresCompartidos.reservas.validarReserva(reserva)
+        if (resuelveReserva.estadoReserva === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);
         }
@@ -82,21 +69,12 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
         }
         const clienteUID = resuelveValidacionPernoctante.rows[0].clienteUID;
         if (clienteUID) {
-            const error = "El pernoctnte ya es un cliente y un clientePool";
+            const error = "El pernoctnte ya es un cliente y no un clientePool";
             throw new Error(error);
         }
         const ok = {};
-        const datosNuevoCliente = {
-            nombre: nombre,
-            primerApellido: primerApellido,
-            segundoApellido: segundoApellido,
-            pasaporte: pasaporte,
-            telefono: telefono,
-            correoElectronico: correoElectronico,
-            notas: null
-        };
-        const nuevoCliente = await insertarCliente(datosNuevoCliente);
-        const nuevoUIDCliente = nuevoCliente.uid;
+        const nuevoClienteAdd = await insertarCliente(datosValidados);
+        const nuevoUIDCliente = nuevoClienteAdd.uid;
         // Borrar clientePool
         const eliminarClientePool = `
                         DELETE FROM "poolClientes"
@@ -121,20 +99,22 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
             const habitacionUID = resuelveActualizaPernoctanteReserva.rows[0].habitacion;
             primerApellido = primerApellido ? primerApellido : "";
             segundoApellido = segundoApellido ? segundoApellido : "";
+
             ok.ok = "Se ha guardado al nuevo cliente y sustituido por el clientePool, tambien se ha eliminado al clientePool de la base de datos";
             ok.nuevoClienteUID = nuevoUIDCliente;
             ok.nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`;
             ok.pasaporte = pasaporte;
             ok.habitacionUID = habitacionUID;
-            salida.json(ok);
         }
+        salida.json(ok);
+
     } catch (errorCapturado) {
         const error = {
             error: errorCapturado.message
         };
         salida.json(error);
     } finally {
-        
+
         if (mutex) {
             mutex.release()
         }

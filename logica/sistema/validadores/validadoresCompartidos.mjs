@@ -215,13 +215,18 @@ const validadoresCompartidos = {
         }
     },
     reservas: {
-        validarReserva: async (reservaUID) => {
+        validarReserva: async (reservaUIDRaw) => {
             try {
-                const filtroCadena = /^[0-9]+$/;
-                if (!reservaUID || !filtroCadena.test(reservaUID)) {
-                    const error = "el campo 'reservaUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios."
-                    throw new Error(error)
-                }
+
+                const reservaUID = validadoresCompartidos.tipos.numero({
+                    string: reservaUIDRaw,
+                    nombreCampo: "El identificador universal de la reserva (reservaUID)",
+                    filtro: "numeroSimple",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                    sePermitenNegativos: "no"
+                })
+
                 const validarReserva = `
                 SELECT
                 *

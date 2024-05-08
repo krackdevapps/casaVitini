@@ -12,12 +12,17 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
         if (IDX.control()) return
   
 
-        const pernoctantaUID = entrada.body.pernoctanteUID;
+        const pernoctantaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pernoctantaUID,
+            nombreCampo: "El identificador universal de pernoctantaUID",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no",
+            devuelveUnTipoNumber: "si"
+        })
+        
         const fechaCheckIn = entrada.body.fechaCheckIn;
-        if (typeof pernoctantaUID !== "number" || !Number.isInteger(pernoctantaUID) || pernoctantaUID <= 0) {
-            const error = "El campo 'pernoctantaUID' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
         const fechaCheckIn_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaCheckIn)).fecha_ISO;
         const fechaCheckIn_Objeto = DateTime.fromISO(fechaCheckIn_ISO);
         await conexion.query('BEGIN'); // Inicio de la transacción

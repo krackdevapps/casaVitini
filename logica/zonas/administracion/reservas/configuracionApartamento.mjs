@@ -1,5 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { configuracionApartamento as configuracionApartamento_ } from "../../../sistema/configuracionApartamento.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const configuracionApartamento = async (entrada, salida) => {
     try {
@@ -10,7 +11,12 @@ export const configuracionApartamento = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        const apartamentos = entrada.body.apartamentos;
+        const apartamentos = validadoresCompartidos.tipos.array({
+            array: contenedorCapas?.apartamentos,
+            nombreCampo: "El array de apartamentos",
+            filtro: "soloCadenasIDV",
+            noSePermitenDuplicados: "si"
+        })
         const transactor = await configuracionApartamento_(apartamentos);
         salida.json(transactor);
     } catch (errorCapturado) {

@@ -1,5 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { insertarTotalesReserva } from "../../../sistema/sistemaDeReservas/insertarTotalesReserva.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { detallesReserva } from "./detallesReserva.mjs";
 
 export const insertarDatosFinancierosReservaExistente = async (entrada, salida) => {
@@ -10,11 +11,15 @@ export const insertarDatosFinancierosReservaExistente = async (entrada, salida) 
         IDX.empleados()
         if (IDX.control()) return
 
-        const reserva = entrada.body.reserva;
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo1";
-            throw new Error(error);
-        }
+        const reserva = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reserva,
+            nombreCampo: "El identificador universal de la reserva ",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         const transaccionPrecioReserva = {
             tipoProcesadorPrecio: "uid",
             reservaUID: reserva
@@ -25,8 +30,8 @@ export const insertarDatosFinancierosReservaExistente = async (entrada, salida) 
         };
         const reseuvleDetallesReserva = await detallesReserva(metadatosDetallesReserva);
         const respuesta = {
-            "ok": resuelvePrecioReserva,
-            "desgloseFinanciero": reseuvleDetallesReserva.desgloseFinanciero
+            ok: resuelvePrecioReserva,
+            desgloseFinanciero: reseuvleDetallesReserva.desgloseFinanciero
         };
         salida.json(respuesta);
     } catch (errorCapturado) {

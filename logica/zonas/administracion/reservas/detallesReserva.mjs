@@ -1,5 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { detallesReserva as detallesReserva_ } from "../../../sistema/sistemaDeReservas/detallesReserva.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+
 export const detallesReserva = async (entrada, salida) => {
     try {
 
@@ -10,16 +12,21 @@ export const detallesReserva = async (entrada, salida) => {
         if (IDX.control()) return
         console.log("test12")
 
-        const reservaUID = entrada.body.reserva;
-        const solo = entrada.body.solo;
-        if (!reservaUID) {
-            const error = "Se necesita un id de 'reserva'";
-            throw new Error(error);
-        }
-        if (typeof reservaUID !== "number" || !Number.isInteger(reservaUID) || reservaUID <= 0) {
-            const error = "Se ha definico correctamente  la clave 'reserva' pero el valor de esta debe de ser un numero positivo, si has escrito un numero positivo, revisa que en el objeto no este numero no este envuelvo entre comillas";
-            throw new Error(error);
-        }
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        const solo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.solo,
+            nombreCampo: "EL campo de solo",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
 
         if (solo) {
             if (solo !== "detallesAlojamiento" &&

@@ -2,10 +2,8 @@ import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
-
 export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
     try {
-
 
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -13,13 +11,25 @@ export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
 
-        const reservaUID = entrada.body.reservaUID;
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
         await validadoresCompartidos.reservas.validarReserva(reservaUID);
-        const pernoctanteUID = entrada.body.pernoctanteUID;
-        if (typeof pernoctanteUID !== "number" || !Number.isInteger(pernoctanteUID) || pernoctanteUID <= 0) {
-            const error = "El campo 'pernoctanteUID' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
+
+        const pernoctanteUID = validadoresCompartidos.tipos.numero({
+            string: entrada.body.pernoctanteUID,
+            nombreCampo: "El identificador universal de la pernoctante (pernoctanteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         const validarPernoctante = `
                         SELECT 
                         "clienteUID"
