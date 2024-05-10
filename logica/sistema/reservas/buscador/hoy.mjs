@@ -10,7 +10,7 @@ export const hoy = async (data) => {
 
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
-        const fechaActualTZ = tiempoZH.toISODate();
+        const fechaActual_ISO = tiempoZH.toISODate();
         const dia = String(tiempoZH.day).padStart("2", "0");
         const mes = String(tiempoZH.month).padStart("2", "0");
         const ano = tiempoZH.year;
@@ -51,7 +51,7 @@ export const hoy = async (data) => {
                         LIMIT $2
                         OFFSET $3;
                         `;
-        const consultaReservasHoy = await conexion.query(consultaHoy, [fechaActualTZ, numeroPorPagina, numeroPagina]);
+        const consultaReservasHoy = await conexion.query(consultaHoy, [fechaActual_ISO, numeroPorPagina, numeroPagina]);
         const consultaConteoTotalFilas = consultaReservasHoy?.rows[0]?.total_filas ? consultaReservasHoy.rows[0].total_filas : 0;
         const reservasEncontradas = consultaReservasHoy.rows;
         for (const detallesFila of reservasEncontradas) {
@@ -63,7 +63,7 @@ export const hoy = async (data) => {
             tipoConsulta: "rango",
             tipoCoincidencia: "porFechaDeEntrada",
             pagina: Number(1),
-            fechaEntrada: fechaFormato_Humano,
+            fechaEntrada: fechaActual_ISO,
             paginasTotales: totalPaginas,
             totalReservas: Number(consultaConteoTotalFilas),
             nombreColumna: "entrada",

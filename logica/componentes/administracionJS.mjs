@@ -1927,9 +1927,9 @@ const casaVitini = {
                             apartamento: metadatos.apartamentoIDV,
                             habitacion: metadatos.habitacionIDV
                         }
-                        console.log("transacion", transaccion)
+                        
                         const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                        console.log("respuestaServidor", respuestaServidor)
+                        
                         if (respuestaServidor?.error) {
                             return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                         }
@@ -7351,7 +7351,7 @@ const casaVitini = {
                                     document.body.removeAttribute("style")
                                     document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"]`)?.remove()
 
-                                    console.log("pagoUID", pagoUID)
+                                    
                                     const contenedorTransacciones = document.querySelector(`[contenedorID=transacciones][instanciaUID="${instanciaUID_contenedorDinamicoTransacciones}"]`)
                                     const listaDePagos = contenedorTransacciones.querySelector(`[contenedor=listaDePagos]`)
                                     listaDePagos.querySelector(`[pagoUID="${pagoUID}"]`)?.remove()

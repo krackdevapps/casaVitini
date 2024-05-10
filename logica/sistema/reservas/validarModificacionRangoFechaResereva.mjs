@@ -93,7 +93,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             apartamentosConConfiguracionDisponible.push(apartamentoConConfiguracionDisponible.apartamentoIDV)
         })
         const controlConfiguracionAlojamiento = apartamentosReservaActual.every(apto => apartamentosConConfiguracionDisponible.includes(apto));
-        console.log(apartamentosReservaActual, apartamentosConConfiguracionDisponible)
+        
         if (!controlConfiguracionAlojamiento) {
             // 3h665h5h56
 
@@ -107,7 +107,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 arrayStringsPrePresentacionDatos.push(nombreUI)
             }
 
-            console.log("apartamentos no existentes", elementosNoComunes)
+            
             const ultimoElemento = arrayStringsPrePresentacionDatos.pop();
             const constructorCadenaFinalUI = arrayStringsPrePresentacionDatos.join(", ") + (arrayStringsPrePresentacionDatos.length > 0 ? " y " : "") + ultimoElemento;
 

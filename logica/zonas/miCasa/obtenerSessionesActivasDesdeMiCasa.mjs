@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../componentes/db.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../sistema/error/filtroError.mjs";
 
 export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
     try {
@@ -62,9 +63,7 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
         await conexion.query('COMMIT');
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK');
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
 import { enviarMail } from "../../../sistema/Mail/enviarMail.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 
 export const enviarCorreo = async (entrada, salida) => {
@@ -163,9 +164,7 @@ export const enviarCorreo = async (entrada, salida) => {
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
         console.info(errorCapturado.message);
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

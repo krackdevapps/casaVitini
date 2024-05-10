@@ -8,6 +8,7 @@ import { enviarEmailReservaConfirmada } from "../../../sistema/Mail/enviarEmailR
 import { actualizarEstadoPago } from "../../../sistema/precios/actualizarEstadoPago.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 import { crearEnlacePDF } from "../../../sistema/pdf/crearEnlacePDF.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const preConfirmarReserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -18,11 +19,8 @@ export const preConfirmarReserva = async (entrada, salida) => {
         }
         const reserva = entrada.body.reserva;
         await conexion.query('BEGIN');
-        const resuelveValidacionObjetoReserva = await validarObjetoReserva(reserva);
-        if (!resuelveValidacionObjetoReserva.ok) {
-            const error = "Ha ocurrido un error desconocido en la validacion del objeto";
-            throw new Error(error);
-        }
+        await validarObjetoReserva(reserva);
+
         await eliminarBloqueoCaducado();
         const resolvertInsertarReserva = await insertarReserva(reserva);
         const reservaUID = resolvertInsertarReserva.reservaUID;
@@ -36,7 +34,7 @@ export const preConfirmarReserva = async (entrada, salida) => {
             const enlacePDF = await crearEnlacePDF(reservaUID);
             resolverDetallesReserva.enlacePDF = enlacePDF;
             const ok = {
-                ok: "Reserva confirmada y pagada",
+                ok: "Reserva confirmada",
                 detalles: resolverDetallesReserva
             };
             salida.json(ok);
@@ -45,10 +43,8 @@ export const preConfirmarReserva = async (entrada, salida) => {
         enviarEmailReservaConfirmada(reservaUID);
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK');
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         mutex.release();
     }

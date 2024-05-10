@@ -1,6 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
     try {
@@ -12,7 +13,7 @@ export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
         if (IDX.control()) return
 
         const reservaUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reservaUID,
+            number: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reserva (reservaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -22,7 +23,7 @@ export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
         await validadoresCompartidos.reservas.validarReserva(reservaUID);
 
         const pernoctanteUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.pernoctanteUID,
+            number: entrada.body.pernoctanteUID,
             nombreCampo: "El identificador universal de la pernoctante (pernoctanteUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -68,10 +69,8 @@ export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
             }
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
     }
 }

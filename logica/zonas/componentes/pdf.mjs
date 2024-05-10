@@ -3,6 +3,7 @@ import { generadorPDF } from "../../sistema/PDF/generadorPDF.mjs";
 import { controlCaducidad } from "../../sistema/PDF/controlCaducidad.mjs";
 import { detallesReserva } from "../../sistema/reservas/detallesReserva.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../sistema/error/filtroError.mjs";
 
 export const pdf = async (entrada, salida) => {
     try {
@@ -37,9 +38,7 @@ export const pdf = async (entrada, salida) => {
         salida.setHeader('Content-Disposition', 'attachment; filename=documento.pdf');
         salida.send(pdf);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

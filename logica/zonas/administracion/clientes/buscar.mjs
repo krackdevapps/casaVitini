@@ -1,7 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 
 export const buscar = async (entrada, salida) => {
     try {
@@ -24,7 +24,6 @@ export const buscar = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
         const nombreColumna = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombreColumna,
@@ -39,14 +38,13 @@ export const buscar = async (entrada, salida) => {
             filtro: "strictoConEspacios",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
         if (tipoBusqueda !== "rapido") {
             tipoBusqueda = null;
         }
 
         const pagina = validadoresCompartidos.tipos.numero({
-            string: entrada.body.pagina || 1,
+            number: entrada.body.pagina || 1,
             nombreCampo: "El numero de página",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -162,9 +160,7 @@ export const buscar = async (entrada, salida) => {
         respuesta.clientes = consultaReservas;
         salida.json(respuesta);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        return salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

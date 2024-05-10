@@ -2,6 +2,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { obtenerDetallesOferta } from "../../../sistema/ofertas/obtenerDetallesOferta.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const detallesOferta = async (entrada, salida) => {
                 try {
@@ -27,6 +28,6 @@ export const detallesOferta = async (entrada, salida) => {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             }

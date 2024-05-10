@@ -4,7 +4,7 @@ import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHora
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
-VitiniIDX
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const modificarBloqueo = async (entrada, salida) => {
     try {
@@ -14,7 +14,7 @@ export const modificarBloqueo = async (entrada, salida) => {
         if (IDX.control()) return
 
         const bloqueoUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.bloqueoUID,
+            number: entrada.body.bloqueoUID,
             nombreCampo: "El identificador universal de bloqueoUID",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -28,7 +28,6 @@ export const modificarBloqueo = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
         const motivo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.motivo,
@@ -124,10 +123,8 @@ export const modificarBloqueo = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 
 }

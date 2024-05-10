@@ -6,6 +6,7 @@ import { utilidades } from "../../../../componentes/utilidades.mjs";
 import { actualizarEstadoPago } from "../../../../sistema/precios/actualizarEstadoPago.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { detallesDelPago as detallesDelPago_square } from "../../../../componentes/pasarelas/square/detallesDelPago.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
 export const crearPagoManual = async (entrada, salida) => {
     try {
@@ -21,12 +22,11 @@ export const crearPagoManual = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
         const cantidad = entrada.body.cantidad
 
         const reservaUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reservaUID,
+            number: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reser (reservaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -250,9 +250,7 @@ export const crearPagoManual = async (entrada, salida) => {
         await actualizarEstadoPago(reservaUID);
         salida.json(estructuraFinal);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

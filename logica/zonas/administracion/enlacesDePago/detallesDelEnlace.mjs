@@ -3,6 +3,7 @@ import { utilidades } from "../../../componentes/utilidades.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const detallesDelEnlace = async (entrada, salida) => {
     try {
@@ -77,6 +78,6 @@ export const detallesDelEnlace = async (entrada, salida) => {
         } else {
             error.error = errorCapturado.message;
         }
-        salida.json(error);
+        salida.json(error)
     }
 }

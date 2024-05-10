@@ -2,6 +2,7 @@ import ICAL from 'ical.js';
 import { conexion } from '../../../../../componentes/db.mjs';
 import { VitiniIDX } from '../../../../../sistema/VitiniIDX/control.mjs';
 import { validadoresCompartidos } from '../../../../../sistema/validadores/validadoresCompartidos.mjs';
+import { filtroError } from '../../../../../sistema/error/filtroError.mjs';
 
 export const crearCalendario = async (entrada, salida) => {
     try {
@@ -23,7 +24,6 @@ export const crearCalendario = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
         const url = validadoresCompartidos.tipos.url({
             url: entrada.body.url,
@@ -127,10 +127,8 @@ export const crearCalendario = async (entrada, salida) => {
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 
 }

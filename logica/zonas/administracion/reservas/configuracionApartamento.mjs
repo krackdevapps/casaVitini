@@ -1,6 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { configuracionApartamento as configuracionApartamento_ } from "../../../sistema/configuracionApartamento.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const configuracionApartamento = async (entrada, salida) => {
     try {
@@ -20,9 +21,7 @@ export const configuracionApartamento = async (entrada, salida) => {
         const transactor = await configuracionApartamento_(apartamentos);
         salida.json(transactor);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

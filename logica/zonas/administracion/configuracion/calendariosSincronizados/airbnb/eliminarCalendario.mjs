@@ -1,6 +1,7 @@
 import { conexion } from "../../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from '../../../../../sistema/error/filtroError.mjs';
 
 export const eliminarCalendario = async (entrada, salida) => {
 
@@ -46,10 +47,8 @@ export const eliminarCalendario = async (entrada, salida) => {
             throw new Error(error);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 
 }

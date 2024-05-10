@@ -13,7 +13,7 @@ export const precioReserva = async (entrada, salida) => {
             soloMinusculas: "si"
         })
         const reserva = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reserva,
+            number: entrada.body.reserva,
             nombreCampo: "El identificador universal de la reser (reservaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -40,9 +40,7 @@ export const precioReserva = async (entrada, salida) => {
         const transaccionInterna = await precioReserva_(transaccion);
         salida.json(transaccionInterna);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        }
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

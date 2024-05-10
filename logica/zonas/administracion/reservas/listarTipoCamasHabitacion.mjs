@@ -1,6 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const listarTipoCamasHabitacion = async (entrada, salida) => {
     try {
@@ -47,10 +48,10 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
             const error = `Dentro de la configuración de este apartamento ya no esta disponible esta habitación para seleccionar. Para recuperar esta habitación en la configuración de alojamiento, crea una habitación como entidad con el identificador visual ${habitacion} y añádela a la configuración del apartamento con el identificar visual ${apartamento}`;
             throw new Error(error);
         }
-        console.log("antes 1", controlConfiguracionApartamento.rowCount)
+        
 
         if (controlConfiguracionApartamento.rowCount > 0) {
-            console.log("antes2")
+            
 
             const configuracionApartamento = controlConfiguracionApartamento.rows[0]["uid"];
 
@@ -63,7 +64,7 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
                 const error = "No existe ningun tipo de camas configuradas para esta habitacion";
                 throw new Error(error);
             }
-            console.log("despues3")
+            
 
             const camasResueltas = [];
             for (const camaPorResolver of configuracionCamasHabitacion.rows) {
@@ -88,9 +89,7 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
         }
 
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        }
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const eliminarPerfilImpuesto = async (entrada, salida) => {
     let mutex
@@ -15,7 +16,7 @@ export const eliminarPerfilImpuesto = async (entrada, salida) => {
         await mutex.acquire();
 
         const impuestoUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.impuestoUID,
+            number: entrada.body.impuestoUID,
             nombreCampo: "El identificador universal del impuesto (impuestoUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -36,10 +37,8 @@ export const eliminarPerfilImpuesto = async (entrada, salida) => {
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release();

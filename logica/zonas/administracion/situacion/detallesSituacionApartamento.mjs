@@ -7,6 +7,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracion/horasSalidaEntrada.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 
 export const detallesSituacionApartamento = async (entrada, salida) => {
@@ -24,7 +25,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        console.log("apartamentoIDV", apartamentoIDV)
+        
         // Validar que existe el apartamento
         const validarApartamento = `
                         SELECT 
@@ -249,10 +250,8 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
     }
 }

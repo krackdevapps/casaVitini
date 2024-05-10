@@ -6,6 +6,7 @@ import { eventosReservas } from "../../../../sistema/calendarios/capas/eventosRe
 import { eventosTodosLosApartamentos } from "../../../../sistema/calendarios/capas/eventosTodosLosApartamentos.mjs";
 import { eventosTodosLosBloqueos } from "../../../../sistema/calendarios/capas/eventosTodosLosBloqueos.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
 export const global = async (entrada, salida) => {
     try {
@@ -81,9 +82,7 @@ export const global = async (entrada, salida) => {
         }
         salida.json(estructuraGlobal);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        return salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

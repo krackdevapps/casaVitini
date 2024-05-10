@@ -2,6 +2,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../../sistema/VitiniIDX/vitiniCrypto.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 
 export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
@@ -61,10 +62,8 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
         await conexion.query('COMMIT'); // Confirmar la transacción
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
     }
 }

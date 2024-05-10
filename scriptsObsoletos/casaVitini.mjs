@@ -226,7 +226,7 @@ const casaVitini = {
             const error = {
                 error: errorCapturado.message
             };
-            salida.json(error);
+            salida.json(error)
         }
     },
     componentes: {
@@ -252,7 +252,7 @@ const casaVitini = {
                 } else {
                     error.error = "noExisteLaVista";
                 }
-                salida.json(error);
+                salida.json(error)
             }
         },
         calendario: async () => {
@@ -466,7 +466,7 @@ const casaVitini = {
                 const error = {
                     error: errorCapturado.message
                 };
-                salida.json(error);
+                salida.json(error)
             }
         },
         precioReserva: async () => {
@@ -495,7 +495,7 @@ const casaVitini = {
                 const error = {
                     error: errorCapturado.message
                 };
-                salida.json(error);
+                salida.json(error)
             } finally {
             }
         },
@@ -518,7 +518,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             bluesnap: {
@@ -557,7 +557,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 }
             }
@@ -597,7 +597,7 @@ const casaVitini = {
                 const error = {
                     error: errorCapturado.message
                 };
-                salida.json(error);
+                salida.json(error)
             }
         },
         diasOcupadosTotalmentePorMes: async () => {
@@ -876,7 +876,7 @@ const casaVitini = {
                 const error = {
                     error: errorCapturado.message
                 };
-                salida.json(error);
+                salida.json(error)
             } finally {
             }
         },
@@ -904,7 +904,7 @@ const casaVitini = {
                 const error = {
                     error: errorCapturado.message
                 };
-                salida.json(error);
+                salida.json(error)
             }
         },
         imagenDelApartamento: async () => {
@@ -933,7 +933,7 @@ const casaVitini = {
                 const error = {
                     error: errorCapturado.message
                 };
-                salida.json(error);
+                salida.json(error)
             }
         },
     },
@@ -1089,7 +1089,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     mutex.release();
                 }
@@ -1152,7 +1152,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
         },
@@ -1278,7 +1278,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             realizarPago: async () => {
@@ -1460,7 +1460,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
 
             },
@@ -1532,7 +1532,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             }
@@ -1601,7 +1601,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             }
@@ -1701,7 +1701,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             }
@@ -1785,7 +1785,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             }
@@ -1976,7 +1976,7 @@ const casaVitini = {
                 const error = {
                     error: errorCapturado.message
                 };
-                salida.json(error);
+                salida.json(error)
             } finally {
             }
         },
@@ -2048,7 +2048,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             }
@@ -2219,7 +2219,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             }
@@ -2282,7 +2282,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             }
@@ -2489,7 +2489,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             cancelarReserva: async () => {
@@ -2665,7 +2665,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             detallesReserva: async () => {
@@ -2783,7 +2783,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
         },
@@ -2957,7 +2957,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -3005,7 +3005,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -3089,7 +3089,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -3141,7 +3141,7 @@ const casaVitini = {
                 const error = {
                     error: errorCapturado.message
                 };
-                salida.json(error);
+                salida.json(error)
             } finally {
             }
         },
@@ -3773,7 +3773,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -3809,7 +3809,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             cambiarTipoCliente: async () => {
@@ -3936,7 +3936,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoCambiarTipoClienteEnReserva();
                 }
@@ -4019,7 +4019,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoCambiarPernoctanteHabitacion();
                 }
@@ -4140,7 +4140,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoCambiarCamaHabitacion();
                 }
@@ -4213,7 +4213,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -4259,7 +4259,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -4327,7 +4327,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -4340,7 +4340,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -4369,7 +4369,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -4426,7 +4426,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             anadirHabitacionAlApartamentoEnReserva: async () => {
@@ -4508,13 +4508,13 @@ const casaVitini = {
                         let error = {
                             "error": `No se puede anadir esta habitacion, revisa que este bien escrito los datos y que el apartamento tenga habitaciones disponibles`
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 } catch (errorCapturado) {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoaAnadirHabitacionAlApartamentoEnReserva();
                 }
@@ -4631,7 +4631,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoAnadirApartamentoReserva();
                 }
@@ -4756,7 +4756,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoEliminarApartamentoReserva();
                 }
@@ -4849,7 +4849,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoEliminarHabitacionReserva();
                 }
@@ -4959,7 +4959,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoAnadirPernoctanteHabitacion();
                 }
@@ -5068,7 +5068,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoCrearClienteDesdeReservaYAnadirloAreserva();
                 }
@@ -5191,7 +5191,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoGuardarNuevoClienteYSustituirloPorElClientePoolActual();
                 }
@@ -5292,7 +5292,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoEliminarPernoctanteReserva();
                 }
@@ -5363,7 +5363,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoModificarFechaReserva();
                 }
@@ -5398,7 +5398,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -5578,7 +5578,7 @@ const casaVitini = {
                     } else {
                         error.error = errorCapturado.message;
                     }
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoConfirmarModificarFechaReserva();
                 }
@@ -5682,7 +5682,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -5766,7 +5766,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     mutex.release();
                 }
@@ -5923,7 +5923,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     mutex.release();
                 }
@@ -5976,7 +5976,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 obtenerDetallesDelPago: async () => {
@@ -6101,7 +6101,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 detallesDelReembolso: async () => {
@@ -6159,7 +6159,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 realizarReembolso: async () => {
@@ -6348,7 +6348,7 @@ const casaVitini = {
                         const error = {
                             error: errorFinal
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 crearPagoManual: async () => {
@@ -6629,7 +6629,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 eliminarPagoManual: async () => {
@@ -6666,7 +6666,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 eliminarReembolsoManual: async () => {
@@ -6705,7 +6705,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 }
             },
@@ -6796,7 +6796,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 desasociarClienteComoTitular: async () => {
@@ -6828,7 +6828,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 crearTitular: async () => {
@@ -6915,7 +6915,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 }
             },
@@ -6935,7 +6935,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             detallesDelPernoctantePorComprobar: async () => {
@@ -6988,7 +6988,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -7090,7 +7090,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -7160,7 +7160,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -7266,7 +7266,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -7335,7 +7335,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -7556,7 +7556,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             detallesSituacionApartamento: async () => {
@@ -7803,7 +7803,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             }
@@ -7848,7 +7848,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -7909,7 +7909,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 }
@@ -7954,7 +7954,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -8020,7 +8020,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 }
@@ -8071,7 +8071,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -8123,7 +8123,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -8261,7 +8261,7 @@ const casaVitini = {
                                 const error = {
                                     error: errorCapturado.message
                                 };
-                                salida.json(error);
+                                salida.json(error)
                             }
                         }
                     },
@@ -8380,7 +8380,7 @@ const casaVitini = {
                                 const error = {
                                     error: errorCapturado.message
                                 };
-                                salida.json(error);
+                                salida.json(error)
                             }
                         }
                     },
@@ -8429,7 +8429,7 @@ const casaVitini = {
                                 const error = {
                                     error: errorCapturado.message
                                 };
-                                salida.json(error);
+                                salida.json(error)
                             }
                         }
                     },
@@ -8467,7 +8467,7 @@ const casaVitini = {
                                 const error = {
                                     error: errorCapturado.message
                                 };
-                                salida.json(error);
+                                salida.json(error)
                             }
                         }
                     }
@@ -8514,7 +8514,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -8598,7 +8598,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 }
@@ -8637,7 +8637,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -8706,7 +8706,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 }
@@ -8745,7 +8745,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -8789,7 +8789,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -8858,7 +8858,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -8922,7 +8922,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -9055,7 +9055,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -9124,7 +9124,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -9189,7 +9189,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -9250,7 +9250,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         } finally {
                         }
                     },
@@ -9394,7 +9394,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    return salida.json(error);
+                    return salida.json(error)
                 } finally {
                 }
             },
@@ -9434,7 +9434,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoCrearCliente();
                 }
@@ -9474,7 +9474,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -9557,7 +9557,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     bloqueoModificarClinete();
                 }
@@ -9780,7 +9780,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             eliminar: async () => {
@@ -9824,7 +9824,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             }
         },
@@ -9951,7 +9951,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -9989,7 +9989,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             guardarModificacionImpuesto: {
@@ -10119,7 +10119,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                         mutex.release();
                     }
@@ -10170,7 +10170,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -10205,7 +10205,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                         mutex.release();
                     }
@@ -10324,7 +10324,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                         mutex.release();
                     }
@@ -10381,7 +10381,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                     }
                 }
@@ -10476,7 +10476,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                     }
                 }
@@ -10517,7 +10517,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                     }
                 }
@@ -10614,7 +10614,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                     }
                 }
@@ -10738,7 +10738,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                         mutex.release();
                     }
@@ -10795,7 +10795,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                         mutex.release();
                     }
@@ -10819,7 +10819,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                     }
                 }
@@ -11207,7 +11207,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                         mutex.release();
                     }
@@ -11292,7 +11292,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             detallesOferta: async () => {
@@ -11311,7 +11311,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             opcionesCrearOferta: async () => {
@@ -11346,7 +11346,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -11658,7 +11658,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                         mutex.release();
                     }
@@ -11718,7 +11718,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                         mutex.release();
                     }
@@ -11765,7 +11765,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     } finally {
                         mutex.release();
                     }
@@ -11809,7 +11809,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             crearComportamiento: async () => {
@@ -12084,7 +12084,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     mutex.release();
                 }
@@ -12162,7 +12162,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             actualizarComportamiento: async () => {
@@ -12467,7 +12467,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     mutex.release();
                 }
@@ -12509,7 +12509,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     mutex.release();
                 }
@@ -12562,7 +12562,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                     mutex.release();
                 }
@@ -12610,7 +12610,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             }
         },
@@ -12673,7 +12673,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 }
             },
@@ -12753,7 +12753,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 }
             },
@@ -12821,7 +12821,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 }
             },
@@ -12872,7 +12872,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 }
             },
@@ -12999,7 +12999,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 }
             },
@@ -13107,7 +13107,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 }
             }
@@ -13176,7 +13176,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             detallesDelEnlace: async () => {
@@ -13244,7 +13244,7 @@ const casaVitini = {
                     } else {
                         error.error = errorCapturado.message;
                     }
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             eliminarEnlace: async () => {
@@ -13279,7 +13279,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             modificarEnlace: async () => {
@@ -13354,7 +13354,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             crearNuevoEnlace: async () => {
@@ -13492,7 +13492,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             }
         },
@@ -13545,7 +13545,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 listarApartamentosComoEntidades: async () => {
@@ -13609,7 +13609,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 detallesDeEntidadDeAlojamiento: async () => {
@@ -13697,7 +13697,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 crearEntidadAlojamiento: async () => {
@@ -13993,7 +13993,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 modificarEntidadAlojamiento: async () => {
@@ -14239,7 +14239,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 },
                 eliminarEntidadAlojamiento: async () => {
@@ -14344,7 +14344,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        salida.json(error);
+                        salida.json(error)
                     }
                 }
             },
@@ -14389,7 +14389,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -14489,7 +14489,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -14529,7 +14529,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -14597,7 +14597,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -14673,7 +14673,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -14743,7 +14743,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -14841,7 +14841,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -14898,7 +14898,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -14963,7 +14963,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -15009,7 +15009,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -15077,7 +15077,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -15193,7 +15193,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -15278,7 +15278,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 },
@@ -15329,7 +15329,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            salida.json(error);
+                            salida.json(error)
                         }
                     }
                 }
@@ -15473,7 +15473,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    return salida.json(error);
+                    return salida.json(error)
                 } finally {
                 }
             },
@@ -15508,7 +15508,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -15575,7 +15575,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -15662,7 +15662,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -15726,7 +15726,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -15780,7 +15780,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -15846,7 +15846,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -15910,7 +15910,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -16023,7 +16023,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -16049,7 +16049,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -16145,7 +16145,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             }
@@ -16177,7 +16177,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapurado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 } finally {
                 }
             },
@@ -16193,7 +16193,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             calculadora: () => {
@@ -16226,7 +16226,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             },
             crearEnlacesPDF: async () => {
@@ -16242,7 +16242,7 @@ const casaVitini = {
                     const error = {
                         error: errorCapturado.message
                     };
-                    salida.json(error);
+                    salida.json(error)
                 }
             }
         },
@@ -16266,7 +16266,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        return salida.json(error);
+                        return salida.json(error)
                     }
                 },
                 todosLosApartamentos: async () => {
@@ -16287,7 +16287,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        return salida.json(error);
+                        return salida.json(error)
                     }
                 },
                 todosLosBloqueos: async () => {
@@ -16309,7 +16309,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        return salida.json(error);
+                        return salida.json(error)
                     }
                 },
                 porApartamento: async () => {
@@ -16341,7 +16341,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        return salida.json(error);
+                        return salida.json(error)
                     }
                 },
                 global: async () => {
@@ -16418,7 +16418,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        return salida.json(error);
+                        return salida.json(error)
                     }
                 },
                 multiCapa: async () => {
@@ -16677,7 +16677,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        return salida.json(error);
+                        return salida.json(error)
                     }
                 },
                 calendariosSincronizados: {
@@ -16709,7 +16709,7 @@ const casaVitini = {
                             const error = {
                                 error: errorCapturado.message
                             };
-                            return salida.json(error);
+                            return salida.json(error)
                         }
                     }
                 }
@@ -16742,7 +16742,7 @@ const casaVitini = {
                         const error = {
                             error: errorCapturado.message
                         };
-                        return salida.json(error);
+                        return salida.json(error)
                     }
                 }
             }

@@ -1,6 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 
 export const apartamentosDisponiblesAdministracion = async (entrada, salida) => {
@@ -32,10 +33,8 @@ export const apartamentosDisponiblesAdministracion = async (entrada, salida) => 
         }
         salida.end();
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
     }
 }

@@ -1,6 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const eliminar = async (entrada, salida) => {   
     try {
@@ -11,7 +12,7 @@ export const eliminar = async (entrada, salida) => {
         if (IDX.control()) return
         
         const clienteUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.clienteUID,
+            number: entrada.body.clienteUID,
             nombreCampo: "El identificador universal del cliente (clienteUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -49,9 +50,7 @@ export const eliminar = async (entrada, salida) => {
             }
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

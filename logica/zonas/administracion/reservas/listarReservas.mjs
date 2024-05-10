@@ -1,44 +1,19 @@
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { hoy } from "../../../sistema/reservas/buscador/hoy.mjs";
 import { porTerminos } from "../../../sistema/reservas/buscador/porTerminos.mjs";
 import { rango } from "../../../sistema/reservas/buscador/rango.mjs";
+import { validadorBusqueda } from "../../../sistema/reservas/buscador/validarBusqueda.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 export const listarReservas = async (entrada, salida) => {
     try {
-        console.log("test")
+
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
-
-        const pagina = validadoresCompartidos.tipos.numero({
-            string: entrada.body.pagina || 1,
-            nombreCampo: "El numero de página",
-            filtro: "numeroSimple",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
-        })       
-
-        const nombreColumna = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.nombreColumna,
-            nombreCampo: "El campo del nombre de la columna",
-            filtro: "strictoConEspacios",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
-        const sentidoColumna = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.sentidoColumna,
-            nombreCampo: "El campo del sentido de la columna",
-            filtro: "strictoConEspacios",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
-        })
-
-        validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
+        IDX.control()
 
         const tipoConsulta = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoConsulta,
@@ -47,37 +22,39 @@ export const listarReservas = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        const columnasVirtuales = [
-            'nombreCompleto',
-            'pasaporteTitular',
-            'emailTitular'
-        ];
+        const pagina = entrada.body.pagina
+        const nombreColumna = entrada.body.nombreColumna
+        const sentidoColumna = entrada.body.sentidoColumna
 
-        if (!columnasVirtuales.includes(nombreColumna)) {
-            validadoresCompartidos.baseDeDatos.validarNombreColumna({
-                nombreColumna: nombreColumna,
-                tabla: "reservas"
-            })
+        const configuracionValidador = {
+            pagina: pagina,
+            nombreColumna: nombreColumna,
+            sentidoColumna: sentidoColumna
         }
-
-        const numeroPagina = Number((pagina - 1) + "0");
+        console.log("test")
         const numeroPorPagina = 10;
+        const numeroPagina = Number((pagina - 1) + "0");
+
         const ok = {}
         if (tipoConsulta === "hoy") {
             const data = {
                 numeroPorPagina: numeroPorPagina,
-                numeroPagina: numeroPagina
+                numeroPagina: 1
             }
             const resultados = await hoy(data)
             Object.assign(ok, resultados)
 
         }
         else if (tipoConsulta === "rango") {
-
-            const fechaEntrada = entrada.body.fechaEntrada;
-            const fechaSalida = entrada.body.fechaSalida;
-            const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)).fecha_ISO
-            const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida)).fecha_ISO
+            validadorBusqueda(configuracionValidador)
+            const fechaEntrada_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: entrada.body.fechaEntrada_ISO,
+                nombreCampo: "La fecha de entrada para listar reservas por rango"
+            })
+            const fechaSalida_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: entrada.body.fechaSalida_ISO,
+                nombreCampo: "La fecha de salida para listar reservas por rango"
+            })
 
             const tipoCoincidencia = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.tipoCoincidencia,
@@ -86,8 +63,6 @@ export const listarReservas = async (entrada, salida) => {
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
-
-
 
             await validadoresCompartidos.fechas.validacionVectorial({
                 fechaEntrada_ISO: fechaEntrada_ISO,
@@ -104,12 +79,13 @@ export const listarReservas = async (entrada, salida) => {
                 fechaSalida_ISO: fechaSalida_ISO,
                 tipoCoincidencia: tipoCoincidencia,
             }
-
-            const resultados = rango(data)
+            const resultados = await rango(data)
             Object.assign(ok, resultados)
 
         }
         else if (tipoConsulta === "porTerminos") {
+            validadorBusqueda(configuracionValidador)
+
             const termino = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.termino,
                 nombreCampo: "El campo del termino",
@@ -125,7 +101,7 @@ export const listarReservas = async (entrada, salida) => {
                 termino: termino,
             }
 
-            const resultados = porTerminos(data)
+            const resultados = await porTerminos(data)
             Object.assign(ok, resultados)
         }
         else {
@@ -134,9 +110,7 @@ export const listarReservas = async (entrada, salida) => {
         }
         salida.json(ok)
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        }
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

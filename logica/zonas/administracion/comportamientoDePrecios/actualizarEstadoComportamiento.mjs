@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 
 export const actualizarEstadoComportamiento = async (entrada, salida) => {
@@ -16,7 +17,7 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
         await mutex.acquire();
 
         const comportamientoUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.comportamientoUID,
+            number: entrada.body.comportamientoUID,
             nombreCampo: "El identificador universal de la comportamiento (comportamientoUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -64,10 +65,8 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
         await conexion.query('COMMIT'); // Confirmar la transacción
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         mutex.release();
     }

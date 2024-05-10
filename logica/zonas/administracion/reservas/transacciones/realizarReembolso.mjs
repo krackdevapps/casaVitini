@@ -3,6 +3,7 @@ import { conexion } from "../../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
 export const realizarReembolso = async (entrada, salida) => {
     try {
@@ -12,7 +13,7 @@ export const realizarReembolso = async (entrada, salida) => {
         IDX.empleados()
         if (IDX.control()) return
         const reservaUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reservaUID,
+            number: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reser (reservaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -28,7 +29,7 @@ export const realizarReembolso = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
         const pagoUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.pagoUID,
+            number: entrada.body.pagoUID,
             nombreCampo: "El identificador universal del pago (pagoUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -227,6 +228,6 @@ export const realizarReembolso = async (entrada, salida) => {
         const error = {
             error: errorFinal
         };
-        salida.json(error);
+        salida.json(error)
     }
 }

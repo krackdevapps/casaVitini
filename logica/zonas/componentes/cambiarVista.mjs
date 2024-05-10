@@ -1,5 +1,6 @@
 import { cambiarVista as cambiarVista_ } from "../../sistema/cambiarVista.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../sistema/error/filtroError.mjs";
 
 export const cambiarVista = async (entrada, salida) => {
     try {
@@ -12,7 +13,7 @@ export const cambiarVista = async (entrada, salida) => {
         })
         if (!vista) {
             const error = "Tienes que definir 'Vista' con el nombre de la vista";
-           throw new Error(error);
+            throw new Error(error);
         }
         const transaccion = {
             vista: vista,
@@ -22,16 +23,9 @@ export const cambiarVista = async (entrada, salida) => {
         const transaccionInterna = await cambiarVista_(transaccion);
         salida.json(transaccionInterna);
     } catch (errorCapturado) {
-
-        console.log(errorCapturado.message )
-
-        const error = {};
-        if (errorCapturado.message === "noExisteLaVista") {
-            error.error = "noExisteLaVista";
-        } else {
-            error.error = "noExisteLaVista";
-        }
-        salida.json(error);
+         const error = new Error("noExisteLaVista")
+        const errorFinal = filtroError(error)
+        salida.json(errorFinal)
     }
 }
 

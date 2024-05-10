@@ -3,19 +3,20 @@ import { codigoZonaHoraria } from "../../sistema/configuracion/codigoZonaHoraria
 import { conexion } from "../../componentes/db.mjs";
 import { obtenerTodosLosCalendarios } from "../../sistema/calendariosSincronizados/airbnb/obtenerTodosLosCalendarios.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../sistema/error/filtroError.mjs";
 
 
 export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
     try {
         const ano = validadoresCompartidos.tipos.numero({
-            string: entrada.body.ano,
+            number: entrada.body.ano,
             nombreCampo: "El campo del año",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
         const mes = validadoresCompartidos.tipos.numero({
-            string: entrada.body.mes,
+            number: entrada.body.mes,
             nombreCampo: "El campo del mes",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -291,10 +292,8 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         };
         salida.json(objetofinal);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
     }
 }

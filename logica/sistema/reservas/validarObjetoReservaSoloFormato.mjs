@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { conexion } from '../../componentes/db.mjs';
 import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
-const validarObjetoReservaSoloFormato = async (reserva) => {
+export const validarObjetoReservaSoloFormato = async (reserva) => {
     try {
         const fechaRegex = /^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4}$/;
         if (!fechaRegex.test(reserva.entrada)) {
@@ -16,10 +16,15 @@ const validarObjetoReservaSoloFormato = async (reserva) => {
         // Control validez fecha
         const fechaEntrada_Humano = reserva.entrada
         const fechaSalida_Humano = reserva.salida
-        const fechaEntrada_ISO =  (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_Humano)).fecha_ISO
+        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_Humano)).fecha_ISO
         const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_Humano)).fecha_ISO
-        const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO);
-        const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO);
+
+        const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
+        const tiempoZH = DateTime.now().setZone(zonaHoraria);
+        const fechaActualTZ = tiempoZH.toISODate()
+
+        const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
+        const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria });
         if (fechaEntrada_Objeto >= fechaSalida_Objeto) {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
             throw new Error(error)
@@ -65,6 +70,3 @@ const validarObjetoReservaSoloFormato = async (reserva) => {
         throw error;
     }
 }
-export {
-    validarObjetoReservaSoloFormato
-};

@@ -3,6 +3,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const modificarEnlace = async (entrada, salida) => {
     try {
@@ -30,7 +31,7 @@ export const modificarEnlace = async (entrada, salida) => {
             string: entrada.body.nombreEnlace,
             nombreCampo: "El campo del nombreEnlace",
             filtro: "strictoConEspacios",
-            sePermiteVacio: "si",
+            sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
         const descripcion = validadoresCompartidos.tipos.cadena({
@@ -82,9 +83,7 @@ export const modificarEnlace = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

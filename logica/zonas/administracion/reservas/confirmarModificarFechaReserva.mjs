@@ -7,6 +7,7 @@ import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotale
 import { vitiniSysError } from "../../../sistema/vitiniSysError.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validarModificacionRangoFechaResereva } from "../../../sistema/reservas/validarModificacionRangoFechaResereva.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
     let mutex
@@ -22,7 +23,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         await mutex.acquire();
 
         const reserva = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reserva,
+            number: entrada.body.reserva,
             nombreCampo: "El identificador universal de la reserva",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -207,7 +208,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         } else {
             error.error = errorCapturado.message;
         }
-        salida.json(error);
+        salida.json(error)
     } finally {
         if (mutex) {
             mutex.release()

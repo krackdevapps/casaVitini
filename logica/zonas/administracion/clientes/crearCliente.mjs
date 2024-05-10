@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { insertarCliente } from "../../../sistema/clientes/insertarCliente.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const crearCliente = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -37,10 +38,8 @@ export const crearCliente = async (entrada, salida) => {
             throw new Error(error);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         bloqueoCrearCliente();
     }

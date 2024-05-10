@@ -3,6 +3,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { evitarDuplicados } from "../../../sistema/precios/comportamientoPrecios/evitarDuplicados.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const crearComportamiento = async (entrada, salida) => {
     let mutex;
@@ -19,7 +20,7 @@ export const crearComportamiento = async (entrada, salida) => {
             string: entrada.body.nombreComportamiento,
             nombreCampo: "El campo del nombreComportamiento",
             filtro: "strictoConEspacios",
-            sePermiteVacio: "si",
+            sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
 
@@ -41,10 +42,8 @@ export const crearComportamiento = async (entrada, salida) => {
 
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK');
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release();

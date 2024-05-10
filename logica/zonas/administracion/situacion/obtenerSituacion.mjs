@@ -6,6 +6,7 @@ import { apartamentosOcupadosHoy_paraSitaucion } from "../../../sistema/calendar
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracion/horasSalidaEntrada.mjs";
 import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 
 export const obtenerSituacion = async (entrada, salida) => {
@@ -188,9 +189,7 @@ export const obtenerSituacion = async (entrada, salida) => {
         }
         salida.json(ok);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

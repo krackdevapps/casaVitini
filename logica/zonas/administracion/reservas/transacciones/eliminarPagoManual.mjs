@@ -2,6 +2,7 @@ import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { actualizarEstadoPago } from "../../../../sistema/precios/actualizarEstadoPago.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
 export const eliminarPagoManual = async (entrada, salida) => {
     try {
@@ -32,7 +33,7 @@ export const eliminarPagoManual = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
         const reservaUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reservaUID,
+            number: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reserva (reservaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -57,9 +58,7 @@ export const eliminarPagoManual = async (entrada, salida) => {
         salida.json(ok);
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

@@ -2,6 +2,9 @@ import { resolverApartamentoUI } from "../../../../sistema/resolucion/resolverAp
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
+
 export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
     try {
         const session = entrada.session
@@ -17,7 +20,6 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
 
         const consultaPerfilConfiguracion = `
@@ -101,10 +103,8 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 
 }

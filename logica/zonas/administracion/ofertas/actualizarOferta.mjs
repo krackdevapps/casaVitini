@@ -5,6 +5,7 @@ import { obtenerDetallesOferta } from "../../../sistema/ofertas/obtenerDetallesO
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { Mutex } from "async-mutex";
 import Decimal from "decimal.js";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const actualizarOferta = async (entrada, salida) => {
     let mutex
@@ -22,7 +23,7 @@ export const actualizarOferta = async (entrada, salida) => {
             string: entrada.body.nombreOferta,
             nombreCampo: "El campo del nombre de la oferta",
             filtro: "strictoConEspacios",
-            sePermiteVacio: "si",
+            sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
 
@@ -36,7 +37,7 @@ export const actualizarOferta = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
         const ofertaUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.ofertaUID,
+            number: entrada.body.ofertaUID,
             nombreCampo: "El identificador universal de la oferta (ofertaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -323,10 +324,8 @@ export const actualizarOferta = async (entrada, salida) => {
         }
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK');
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release();

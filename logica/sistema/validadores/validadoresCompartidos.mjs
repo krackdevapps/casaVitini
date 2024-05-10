@@ -1,7 +1,7 @@
 import { DateTime } from "luxon"
 import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
 import { conexion } from "../../componentes/db.mjs"
-const validadoresCompartidos = {
+export const validadoresCompartidos = {
     clientes: {
         validarCliente: async (cliente) => {
             try {
@@ -18,7 +18,7 @@ const validadoresCompartidos = {
                     string: cliente.primerApellido,
                     nombreCampo: "El campo del primer apellido",
                     filtro: "strictoConEspacios",
-                    sePermiteVacio: "si",
+                    sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
                     limpiezaEspaciosInternos: "si"
 
@@ -27,7 +27,7 @@ const validadoresCompartidos = {
                     string: cliente.segundoApellido,
                     nombreCampo: "El campo del segundo apellido",
                     filtro: "strictoConEspacios",
-                    sePermiteVacio: "si",
+                    sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
                     limpiezaEspaciosInternos: "si"
 
@@ -49,7 +49,7 @@ const validadoresCompartidos = {
                     string: cliente.notas,
                     nombreCampo: "El campo de notas",
                     filtro: "strictoConEspacios",
-                    sePermiteVacio: "si",
+                    sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
                 })
 
@@ -93,15 +93,36 @@ const validadoresCompartidos = {
                 const usuarioIDX = datosUsuario.usuarioIDX
                 const pasaporte = datosUsuario.pasaporte
                 const email = datosUsuario.email
+                const operacion = datosUsuario.operacion
 
+                if (!usuarioIDX && operacion !== "actualizar") {
+                    const error = "El validador de unicidadPasaporteYCorrreo esta mal configurado. Si la operacio es actualizar, falta el usuarioIDX."
+                    throw new Error(error)
+                }
+
+                const constructorSQL = (operacion, usuario) => {
+                    try {
+                        if (operacion === "actualizar") {
+                            return `AND "usuariosIDX" <> '${usuario}'`
+                        } else if (operacion === "crear") {
+                            return ""
+                        } else {
+                            const error = "El validador de unicidadPasaporteYCorrreo esta mal configurado. Debe de especificarse el tipo de operacion."
+                            throw new Error(error)
+                        }
+                    } catch (error) {
+                        throw error
+                    }
+                }
+                const inyectorSQL = constructorSQL(operacion, usuarioIDX)
                 // validar existencia de correo
                 const consultaControlCorreo = `
                 SELECT 
                 "usuarioIDX"
                 FROM "datosDeUsuario"
-                WHERE email = $1 AND "usuariosIDX" <> $2;
+                WHERE email = $1 ${inyectorSQL};
                 `
-                const resuelveUnicidadCorreo = await conexion.query(consultaControlCorreo, [email, usuarioIDX])
+                const resuelveUnicidadCorreo = await conexion.query(consultaControlCorreo, [email])
                 if (resuelveUnicidadCorreo.rowCount > 0) {
                     const usuariosExistentes = resuelveUnicidadCorreo.rows.map((usuario) => {
                         return usuario.usuarioIDX
@@ -116,9 +137,9 @@ const validadoresCompartidos = {
                     SELECT 
                     "usuarioIDX"
                     FROM "datosDeUsuario"
-                    WHERE pasaporte = $1 AND "usuariosIDX" <> $2;
+                    WHERE pasaporte = $1 ${inyectorSQL};
                     `
-                const resuelveUnicidadPasaporte = await conexion.query(consultaControlPasaporte, [pasaporte, usuarioIDX])
+                const resuelveUnicidadPasaporte = await conexion.query(consultaControlPasaporte, [pasaporte])
                 if (resuelveUnicidadPasaporte.rowCount > 0) {
                     const usuariosExistentes = resuelveUnicidadPasaporte.rows.map((usuario) => {
                         return usuario.usuarioIDX
@@ -132,27 +153,78 @@ const validadoresCompartidos = {
             } catch (error) {
                 throw error
             }
+        },
+        datosUsuario: (data) => {
+            try {
+                const nombre = validadoresCompartidos.tipos.cadena({
+                    string: data.nombre,
+                    nombreCampo: "El campo del nombre",
+                    filtro: "strictoConEspacios",
+                    sePermiteVacio: "si",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+                const primerApellido = validadoresCompartidos.tipos.cadena({
+                    string: data.primerApellido,
+                    nombreCampo: "El campo del primer apellido",
+                    filtro: "strictoConEspacios",
+                    sePermiteVacio: "si",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+
+                const segundoApellido = validadoresCompartidos.tipos.cadena({
+                    string: data.segundoApellido,
+                    nombreCampo: "El campo del segundo apellido",
+                    filtro: "strictoConEspacios",
+                    sePermiteVacio: "si",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+
+                const pasaporte = validadoresCompartidos.tipos.cadena({
+                    string: data.pasaporte,
+                    nombreCampo: "El campo del pasaporte",
+                    filtro: "strictoConEspacios",
+                    sePermiteVacio: "si",
+                    limpiezaEspaciosAlrededor: "si",
+                    limpiezaEspaciosInternos: "si"
+                })
+
+                const email = validadoresCompartidos.tipos
+                    .correoElectronico(data.email)
+                const telefono = validadoresCompartidos.tipos
+                    .telefono(data.telefono)
+
+            } catch (error) {
+                throw error
+            }
         }
     },
     fechas: {
-        validarFecha_ISO: async (fechaISO) => {
+        validarFecha_ISO: async (configuracion) => {
             try {
-                if (typeof fechaISO !== "string") {
-                    const error = "La fecha no cumple el formato cadena esperado"
+
+                if (!configuracion.hasOwnProperty("nombreCampo")) {
+                    throw new Error("El validador de fechas ISO mal configurado. no encuentra la llave nombreCampo en el objeto");
+                }
+
+                const fecha_ISO = configuracion.fecha_ISO
+                const nombreCampo = configuracion.nombreCampo
+
+                if (typeof fecha_ISO !== "string") {
+                    const error = `${nombreCampo} no cumple el formato de cadena`
                     throw new Error(error)
                 }
                 const filtroFecha_ISO = /^\d{4}-\d{2}-\d{2}$/;
-                if (!filtroFecha_ISO.test(fechaISO)) {
-                    const error = "La fecha no cumple el formato ISO esperado"
+                if (!filtroFecha_ISO.test(fecha_ISO)) {
+                    const error = `${nombreCampo} no cumple el formato ISO esperado`
                     throw new Error(error)
                 }
                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
-                const fechaControl = DateTime.fromISO(fechaISO, { zone: zonaHoraria }).isValid;
+                const fechaControl = DateTime.fromISO(fecha_ISO, { zone: zonaHoraria }).isValid;
                 if (!fechaControl) {
-                    const error = "LA fecha de entrada no es valida, representacion no terraquea"
+                    const error = `${nombreCampo} no es valida, representacion no terraquea`
                     throw new Error(error)
                 }
-                return true
+                return fecha_ISO
             } catch (error) {
                 throw error
             }
@@ -215,20 +287,28 @@ const validadoresCompartidos = {
         },
         validacionVectorial: async (configuracion) => {
             try {
-                const fechaEntrada_ISO = await validadoresCompartidos.fechas.validarFecha_ISO(configuracion.fechaEntrada_ISO)
-                const fechaSalida_ISO = await validadoresCompartidos.fechas.validarFecha_ISO(configuracion.fechaSalida_ISO)
+                const fechaEntrada_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+                    fecha_ISO: configuracion.fechaEntrada_ISO,
+                    nombreCampo: "La fecha de entrada en el validor vectorial"
+                })
+                const fechaSalida_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+                    fecha_ISO: configuracion.fechaSalida_ISO,
+                    nombreCampo: "La fecha de salida en el validador vectorial"
+                })
+
+
                 const fechaEntrada_obejto = DateTime.fromISO(fechaEntrada_ISO)
                 const fechaSalida_obejto = DateTime.fromISO(fechaSalida_ISO)
 
                 const tipoVector = configuracion.tipoVector
 
                 if (tipoVector === "igual") {
-                    if (fechaEntrada_obejto < fechaSalida_obejto) {
+                    if (fechaEntrada_obejto > fechaSalida_obejto) {
                         const error = "La fecha de entrada seleccionada es superior a la fecha de salida de la reserva";
                         throw new Error(error);
                     }
                 } else if (tipoVector === "diferente") {
-                    if (fechaEntrada_obejto <= fechaSalida_obejto) {
+                    if (fechaEntrada_obejto >= fechaSalida_obejto) {
                         const error = "La fecha de entrada seleccionada es igual o superior a la fecha de salida de la reserva";
                         throw new Error(error);
                     }
@@ -349,6 +429,14 @@ const validadoresCompartidos = {
             const soloMinusculas = configuracion.soloMinusculas || "no"
             const soloMayusculas = configuracion.soloMayusculas || "no"
 
+
+            if (!configuracion.hasOwnProperty("string")) {
+                throw new Error("El validador de numeros no encuentra la llave string en el objeto");
+            }
+
+
+
+
             if (!nombreCampo) {
                 const mensaje = `El validador de cadenas, necesito un nombre de campo.`
                 throw new Error(mensaje)
@@ -402,7 +490,7 @@ const validadoresCompartidos = {
             }
             if (string.length === 0 || string === "") {
                 const mensaje = `${nombreCampo} esta vacío.`
-                throw new Error(mensaje)
+                return mensaje
             }
             if (limpiezaEspaciosAlrededor === "si") {
                 string = string
@@ -559,6 +647,16 @@ const validadoresCompartidos = {
             const sePermiteVacio = configuracion.sePermiteVacio
             const limpiezaEspaciosAlrededor = configuracion.limpiezaEspaciosAlrededor
             const sePermitenNegativos = configuracion.sePermitenNegativos || "no"
+
+
+            if (!configuracion.hasOwnProperty("number")) {
+                throw new Error("El validador de numeros no encuentra la llave number en el objeto");
+            }
+
+            if (!configuracion.hasOwnProperty("nombreCampo")) {
+                throw new Error("El validador de numeros no encuentra la llave nombreCampo en el objeto");
+            }
+
 
             if (!nombreCampo) {
                 const mensaje = `El validador de cadenas, necesito un nombre de campo.`
@@ -731,7 +829,7 @@ const validadoresCompartidos = {
 
                 const control = objetoLiteral !== null && typeof objetoLiteral === 'object' && objetoLiteral.constructor === Object;
 
-                console.log("control", control)
+
                 if (!control) {
                     const error = `${nombreCampo} se esperara que fuera un objeto literal`;
                     throw new Error(error);
@@ -841,15 +939,13 @@ const validadoresCompartidos = {
         sentidoColumna: (sentidoColumna) => {
             try {
                 if (sentidoColumna !== "ascendente" && sentidoColumna !== "descendente") {
-                    const error = "El campo sentido columna solo acepta un sentido ascendente o descendente"
-                    throw new Error(error)
+                    return null
+                    // const error = "El campo sentido columna solo acepta un sentido ascendente o descendente"
+                    // throw new Error(error)
                 }
             } catch (error) {
                 throw error
             }
         }
     }
-}
-export {
-    validadoresCompartidos
 }

@@ -8,6 +8,88 @@ const arranque = async (entrada, salida) => {
     });
 }
 
+const puerto = async (entrada, salida) => {
+    try {
+        const zonaRaw = entrada.body.zona;
+        if (!zonaRaw) {
+            const error = "zonaIndefinida";
+            throw new Error(error);
+        }
+        const filtroZona = /^[a-zA-Z\/\-_]+$/;
+        if (!filtroZona.test(zonaRaw)) {
+            const error = "Las rutas de la zonas solo admiten minusculas y mayusculas junto con barras, nada mas ni siqueira espacios";
+            throw new Error(error);
+        }
+        const arbol = zonaRaw
+            .split("/")
+            .filter(rama => rama.trim() !== "")
+
+        if (!arbol) {
+            const error = "arbolNoDefinido";
+            throw new Error(error);
+        }
+
+        const ruta = arbol.join(".")
+        const contructorArbol = async (zonaBusqueda) => {
+            try {
+                const arbol = {}
+                const cargarModulosDesdeDirectorio = async (rutaActual, arbol) => {
+                    const arbolDeLaRuta = await fs.promises.readdir(rutaActual, { withFileTypes: true })
+                    for (const ramaDeLaRuta of arbolDeLaRuta) {
+                        const rutaEntrada = path.join(ramaDeLaRuta.path, ramaDeLaRuta.name)
+
+                        if (ramaDeLaRuta.isDirectory()) {
+
+                            arbol[ramaDeLaRuta.name] = {}
+                            await cargarModulosDesdeDirectorio(rutaEntrada, arbol[ramaDeLaRuta.name])
+                        } else if (ramaDeLaRuta.isFile() && ramaDeLaRuta.name.endsWith('.mjs')) {
+                            //console.log("rutaEntrada", rutaEntrada)
+
+                            const nombreModulo = ramaDeLaRuta.name.replace('.mjs', '')
+                            const rutaDeImportacion = path.relative('./zonas/', rutaEntrada)
+                            arbol[nombreModulo] = await import(rutaDeImportacion)
+                        }
+                    }
+                }
+                await cargarModulosDesdeDirectorio(zonaBusqueda, arbol)
+                return arbol
+            } catch (error) {
+
+            }
+        }
+
+        const directorioZonas = './logica/zonas'
+        const zonas = await contructorArbol(directorioZonas)
+
+        const exploradorArbol = (zonas, ruta) => {
+            const partes = ruta.split('.')
+            let rama = zonas;
+            for (const part of partes) {
+                if (rama && typeof rama === 'object' && rama.hasOwnProperty(part)) {
+                    rama = rama[part]
+                } else {
+                    const error = "zonaInexistente"
+                    throw new Error(error)
+                }
+            }
+            return rama
+        }
+
+        const estructura = exploradorArbol(zonas, ruta)
+        const X = estructura[arbol.pop()]
+        if (typeof X !== "function") {
+            const error = "zonaInexistente"
+            throw new Error(error)
+        }
+        return X(entrada, salida)
+    } catch (errorCapturado) {
+        const error = {
+            //details: errorCapturado,
+            error: errorCapturado.message
+        }
+        salida.json(error)
+    }
+}
 const calendarios_compartidos = async (entrada, salida) => {
     try {
         const url = entrada.url.toLowerCase()
@@ -214,98 +296,11 @@ const calendarios_compartidos = async (entrada, salida) => {
             salida.send(icalData);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        }
-        salida.json(error)
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }
 
-const puerto = async (entrada, salida) => {
-    try {
-        const zonaRaw = entrada.body.zona;
-        if (!zonaRaw) {
-            const error = "zonaIndefinida";
-            throw new Error(error);
-        }
-        const filtroZona = /^[a-zA-Z\/\-_]+$/;
-        if (!filtroZona.test(zonaRaw)) {
-            const error = "Las rutas de la zonas solo admiten minusculas y mayusculas junto con barras, nada mas ni siqueira espacios";
-            throw new Error(error);
-        }
-        const arbol = zonaRaw
-            .split("/")
-            .filter(rama => rama.trim() !== "")
-
-        if (!arbol) {
-            const error = "arbolNoDefinido";
-            throw new Error(error);
-        }
-
-
-        const ruta = arbol.join(".")
-
-        const contructorArbol = async (zonaBusqueda) => {
-            try {
-                const arbol = {}
-                const cargarModulosDesdeDirectorio = async (rutaActual, arbol) => {
-                    const arbolDeLaRuta = await fs.promises.readdir(rutaActual, { withFileTypes: true })
-                    for (const ramaDeLaRuta of arbolDeLaRuta) {
-                        const rutaEntrada = path.join(ramaDeLaRuta.path, ramaDeLaRuta.name)
-
-                        if (ramaDeLaRuta.isDirectory()) {
-
-                            arbol[ramaDeLaRuta.name] = {}
-                            await cargarModulosDesdeDirectorio(rutaEntrada, arbol[ramaDeLaRuta.name])
-                        } else if (ramaDeLaRuta.isFile() && ramaDeLaRuta.name.endsWith('.mjs')) {
-                            console.log("rtu", rutaEntrada)
-                            const nombreModulo = ramaDeLaRuta.name.replace('.mjs', '')
-                            const rutaDeImportacion = path.relative('./zonas/', rutaEntrada)
-                            arbol[nombreModulo] = await import(rutaDeImportacion)
-                        }
-                    }
-                }
-                await cargarModulosDesdeDirectorio(zonaBusqueda, arbol)
-                return arbol
-            } catch (error) {
-                console.log(error)
-            }
-        }
-
-        const directorioZonas = './logica/zonas'
-        console.log("test 0")
-
-        const zonas = await contructorArbol(directorioZonas)
-        console.log("test")
-        const exploradorArbol = (zonas, ruta) => {
-            const partes = ruta.split('.')
-            let rama = zonas;
-            for (const part of partes) {
-                if (rama && typeof rama === 'object' && rama.hasOwnProperty(part)) {
-                    rama = rama[part]
-                } else {
-                    const error = "zonaInexistente"
-                    throw new Error(error)
-                }
-            }
-            return rama
-        }
-        console.log("test1")
-        const estructura = exploradorArbol(zonas, ruta)
-        const X = estructura[arbol.pop()]
-        if (typeof X !== "function") {
-            const error = "zonaInexistente"
-            throw new Error(error)
-        }
-        return X(entrada, salida)
-    } catch (errorCapturado) {
-        const error = {
-            details: errorCapturado,
-            error: errorCapturado.message
-        }
-        salida.json(error);
-    }
-}
 
 export default {
     arranque,

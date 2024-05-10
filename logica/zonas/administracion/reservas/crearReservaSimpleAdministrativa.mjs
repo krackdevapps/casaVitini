@@ -6,6 +6,7 @@ import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotale
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
     let mutex
@@ -158,10 +159,8 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         }
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release();

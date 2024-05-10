@@ -3,6 +3,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotalesReserva.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { bloquearApartamentos } from "../../../sistema/bloqueos/bloquearApartamentos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const eliminarApartamentoReserva = async (entrada, salida) => {
     let mutex
@@ -17,7 +18,7 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
         await mutex.acquire();
 
         const reserva = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reserva,
+            number: entrada.body.reserva,
             nombreCampo: "El identificador universal de la reserva (reservaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -26,7 +27,7 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
         })
         // apartamentoUID
         const apartamento = validadoresCompartidos.tipos.numero({
-            string: entrada.body.apartamento,
+            number: entrada.body.apartamento,
             nombreCampo: "El identificador universal de la apartamento",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -150,10 +151,8 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
         }
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release()

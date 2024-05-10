@@ -1,6 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const reservasDelCliente = async (entrada, salida) => {
     try {
@@ -11,7 +12,7 @@ export const reservasDelCliente = async (entrada, salida) => {
         if (IDX.control()) return
 
         const cliente = validadoresCompartidos.tipos.numero({
-            string: entrada.body.cliente,
+            number: entrada.body.cliente,
             nombreCampo: "El identificador universal del cliente (clienteUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -37,7 +38,7 @@ export const reservasDelCliente = async (entrada, salida) => {
         })
 
         const pagina = validadoresCompartidos.tipos.numero({
-            string: entrada.body.pagina,
+            number: entrada.body.pagina,
             nombreCampo: "El numero de página",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -246,9 +247,7 @@ export const reservasDelCliente = async (entrada, salida) => {
         };
         salida.json(estructuraFinal);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

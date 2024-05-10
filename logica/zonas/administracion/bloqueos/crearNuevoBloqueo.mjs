@@ -4,6 +4,7 @@ import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHora
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const crearNuevoBloqueo = async (entrada, salida) => {
     try {
@@ -19,7 +20,6 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
         const tipoBloqueo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoBloqueo,
@@ -27,7 +27,6 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
         const motivo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.motivo,
@@ -130,10 +129,8 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 
 }

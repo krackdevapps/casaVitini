@@ -1,5 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const listaImpuestos = async (entrada, salida) => {
     try {
@@ -115,10 +116,8 @@ export const listaImpuestos = async (entrada, salida) => {
         ok.impuestos = impuestosEncontradoas;
         salida.json(ok);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
     }
 }

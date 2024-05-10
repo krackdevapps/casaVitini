@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const confirmarFechaCheckIn = async (entrada, salida) => {
     try {
@@ -13,7 +14,7 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
   
 
         const pernoctantaUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.pernoctantaUID,
+            number: entrada.body.pernoctantaUID,
             nombreCampo: "El identificador universal de pernoctantaUID",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -110,10 +111,8 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
         salida.json(ok);
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
     }
 }

@@ -3,7 +3,8 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarCuentasNoVerificadas } from "../../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../../sistema/VitiniIDX/vitiniCrypto.mjs";
-
+import { validarIDXUnico } from "../../../sistema/VitiniIDX/validarIDXUnico.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
     try {
@@ -11,10 +12,10 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return  
+        if (IDX.control()) return
 
         const clave = entrada.body.clave;
-   
+
         const usuarioIDX = validadoresCompartidos.tipos.cadena({
             string: entrada.body.usuarioIDX,
             nombreCampo: "El nombre de usuario (VitiniIDX)",
@@ -23,10 +24,7 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-        if (usuarioIDX === "crear" || usuarioIDX === "buscador") {
-            const error = "El nombre de usuario no esta disponbile, escoge otro";
-            throw new Error(error);
-        }
+
         const rol = validadoresCompartidos.tipos.cadena({
             string: entrada.body.rol,
             nombreCampo: "El nombre del rol",
@@ -35,7 +33,7 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
- 
+
         // validar rol
         const validarRol = `
                             SELECT 
@@ -49,17 +47,7 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
             throw new Error(error);
         }
         // comporbar que no exista la el usuario
-        const validarNuevoUsuario = `
-                            SELECT 
-                            usuario
-                            FROM usuarios
-                            WHERE usuario = $1
-                            `;
-        const resuelveValidarNuevoUsaurio = await conexion.query(validarNuevoUsuario, [usuarioIDX]);
-        if (resuelveValidarNuevoUsaurio.rowCount > 0) {
-            const error = "El nombre de usuario no esta disponbile, escoge otro";
-            throw new Error(error);
-        }
+        await validarIDXUnico(usuarioIDX)
         await eliminarCuentasNoVerificadas();
         const estadoCuenta = "desactivado";
         await conexion.query('BEGIN'); // Inicio de la transacción
@@ -120,10 +108,8 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
         await conexion.query('COMMIT');
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK');
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
     }
 }

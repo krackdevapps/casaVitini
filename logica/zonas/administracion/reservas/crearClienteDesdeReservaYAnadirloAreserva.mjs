@@ -3,6 +3,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { insertarCliente } from "../../../sistema/clientes/insertarCliente.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida) => {
     let mutex
@@ -18,7 +19,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
         await mutex.acquire();
 
         const reserva = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reserva,
+            number: entrada.body.reserva,
             nombreCampo: "El identificador universal de la reserva ",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -27,7 +28,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
         })
 
         const habitacionUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.habitacionUID,
+            number: entrada.body.habitacionUID,
             nombreCampo: "El identificador universal de la reservhabitacionUIDa ",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -99,10 +100,8 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release()

@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const cambiarTipoCliente = async (entrada, salida) => {
     let mutex
@@ -19,7 +20,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
 
 
         const reservaUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reservaUID,
+            number: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reserva (reservaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -28,7 +29,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
         })
 
         const pernoctanteUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.pernoctanteUID,
+            number: entrada.body.pernoctanteUID,
             nombreCampo: "El identificador universal de la pernoctante (pernoctanteUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -36,7 +37,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
         const clienteUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.clienteUID,
+            number: entrada.body.clienteUID,
             nombreCampo: "El identificador universal de la cliente (clienteUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -150,10 +151,8 @@ export const cambiarTipoCliente = async (entrada, salida) => {
         salida.json(ok);
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release()

@@ -3,6 +3,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { estadoHabitacionesApartamento } from "../../../sistema/reservas/estadoHabitacionesApartamento.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) => {
     let mutex
@@ -17,7 +18,7 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
         await mutex.acquire();
 
         const apartamento = validadoresCompartidos.tipos.numero({
-            string: entrada.body.apartamento,
+            number: entrada.body.apartamento,
             nombreCampo: "El apartamento",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -25,7 +26,7 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
             sePermitenNegativos: "no"
         })
         const reserva = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reserva,
+            number: entrada.body.reserva,
             nombreCampo: "El identificador universal de la reserva (reserva)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -38,7 +39,6 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
 
 
@@ -101,13 +101,11 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
             const error = {
                 error: `No se puede anadir esta habitacion, revisa que este bien escrito los datos y que el apartamento tenga habitaciones disponibles`
             };
-            salida.json(error);
+            salida.json(error)
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release()

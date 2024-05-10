@@ -3,6 +3,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validarModificacionRangoFechaResereva } from "../../../sistema/reservas/validarModificacionRangoFechaResereva.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const obtenerElasticidadDelRango = async (entrada, salida) => {
     let mutex
@@ -17,7 +18,7 @@ export const obtenerElasticidadDelRango = async (entrada, salida) => {
         await mutex.acquire()
 
         const reserva = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reserva,
+            number: entrada.body.reserva,
             nombreCampo: "El identificador universal de la reserva ",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -98,10 +99,8 @@ export const obtenerElasticidadDelRango = async (entrada, salida) => {
         };
         salida.json(transaccionInterna);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release()

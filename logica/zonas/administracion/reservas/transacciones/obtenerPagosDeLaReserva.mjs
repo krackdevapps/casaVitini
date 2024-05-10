@@ -4,6 +4,7 @@ import { detallesReserva } from "../../../../sistema/reservas/detallesReserva.mj
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { pagosDeLaReserva as pagosDeLaReserva_ } from "../../../../sistema/reservas/pagosDeLaReserva.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
 
 export const obtenerPagosDeLaReserva = async (entrada, salida) => {
@@ -15,7 +16,7 @@ export const obtenerPagosDeLaReserva = async (entrada, salida) => {
         if (IDX.control()) return
 
         const reservaUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reservaUID,
+            number: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reser (reservaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -56,9 +57,7 @@ export const obtenerPagosDeLaReserva = async (entrada, salida) => {
         const okFusionado = { ...ok, ...detallesPagosReserva };
         salida.json(okFusionado);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

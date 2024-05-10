@@ -3,19 +3,22 @@ import { conexion } from "../../componentes/db.mjs";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../sistema/error/filtroError.mjs";
 
 export const conectar = async (entrada, salida) => {
     try {
         await eliminarCuentasNoVerificadas();
         await borrarCuentasCaducadas();
 
-        const usuario = entrada.body.usuario;
-        const filtroIDX = /^[a-z0-9_\-\.]+$/;
-        const filtroCadena = /['"\\;\r\n<>\t\b]/g;
-        if (!usuario || !filtroIDX.test(usuario) || filtroCadena.test(usuario)) {
-            const error = "Datos de identificación incorrectos.";
-            throw new Error(error);
-        }
+        const usuario = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.usuario,
+            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            soloMinusculas: "si"
+        })
         const clave = entrada.body.clave;
         if (!clave) {
             const error = "Falta especificar la clave";
@@ -134,9 +137,7 @@ export const conectar = async (entrada, salida) => {
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

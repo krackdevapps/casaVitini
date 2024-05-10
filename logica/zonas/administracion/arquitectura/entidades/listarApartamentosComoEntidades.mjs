@@ -1,6 +1,7 @@
 
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
 export const listarApartamentosComoEntidades = async (entrada, salida) => {
     try {
@@ -9,8 +10,6 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         if (IDX.control()) return
-
-
 
         const estructuraApartamentosObjeto = {};
         const consultaApartamento = `
@@ -68,9 +67,7 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

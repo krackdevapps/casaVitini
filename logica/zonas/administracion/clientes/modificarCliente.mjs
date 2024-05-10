@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const modificarCliente = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -15,7 +16,7 @@ export const modificarCliente = async (entrada, salida) => {
 
         bloqueoModificarClinete = await mutex.acquire();
         const cliente = validadoresCompartidos.tipos.numero({
-            string: entrada.body.cliente,
+            number: entrada.body.cliente,
             nombreCampo: "El identificador universal del cliente (clienteUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -93,10 +94,8 @@ export const modificarCliente = async (entrada, salida) => {
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         bloqueoModificarClinete();
     }

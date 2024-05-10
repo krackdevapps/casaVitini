@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 
 export const anadirPernoctanteHabitacion = async (entrada, salida) => {
@@ -19,7 +20,7 @@ export const anadirPernoctanteHabitacion = async (entrada, salida) => {
         await mutex.acquire();
 
         const reserva = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reserva,
+            number: entrada.body.reserva,
             nombreCampo: "El identificador universal de la reserva (reserva)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -27,7 +28,7 @@ export const anadirPernoctanteHabitacion = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
         const habitacionUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.habitacionUID,
+            number: entrada.body.habitacionUID,
             nombreCampo: "El identificador universal de la habitacionUID (habitacionUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -35,7 +36,7 @@ export const anadirPernoctanteHabitacion = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
         const clienteUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.clienteUID,
+            number: entrada.body.clienteUID,
             nombreCampo: "El identificador universal de la clienteUID (clienteUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -125,10 +126,8 @@ export const anadirPernoctanteHabitacion = async (entrada, salida) => {
         await conexion.query('COMMIT'); // Confirmar la transacción
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
 
         if (mutex) {

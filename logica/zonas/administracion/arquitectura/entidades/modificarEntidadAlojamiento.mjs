@@ -2,6 +2,7 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
 export const modificarEntidadAlojamiento = async (entrada, salida) => {
     try {
@@ -16,7 +17,6 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
 
         const entidadIDV = validadoresCompartidos.tipos.cadena({
@@ -25,11 +25,7 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
-
-
-        const filtroCadenaMinusculasMayusculasSinEspacios = /^[a-zA-Z0-9]+$/;
 
         if (tipoEntidad === "apartamento") {
             const apartamentoIDV = validadoresCompartidos.tipos.cadena({
@@ -269,9 +265,7 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
             }
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

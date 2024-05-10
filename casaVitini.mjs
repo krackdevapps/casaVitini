@@ -109,7 +109,7 @@ app.use((err, entrada, salida, next) => {
     const error = {
       error: "Casa Vitini solo maneja peticiones GET y POST"
     };
-    salida.json(error);
+    salida.json(error)
   }
 });
 // Manejador de errores 404

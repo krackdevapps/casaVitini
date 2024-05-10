@@ -6,6 +6,7 @@ import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotale
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 
 export const anadirApartamentoReserva = async (entrada, salida) => {
@@ -23,7 +24,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
 
 
         const reserva = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reserva,
+            number: entrada.body.reserva,
             nombreCampo: "El identificador universal de la reserva (reserva)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -37,7 +38,6 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
 
         await eliminarBloqueoCaducado();
@@ -134,10 +134,8 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
         }
         // En el modo forzoso el apartamento entra igual
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release()

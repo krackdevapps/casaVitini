@@ -8,6 +8,7 @@ import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
 
 export const multiCapa = async (entrada, salida) => {
@@ -233,9 +234,7 @@ export const multiCapa = async (entrada, salida) => {
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        return salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

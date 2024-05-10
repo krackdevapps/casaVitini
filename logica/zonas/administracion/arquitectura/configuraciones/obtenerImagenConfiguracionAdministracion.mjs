@@ -1,5 +1,7 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 export const obtenerImagenConfiguracionAdministracion = async (entrada, salida) => {
     try {
         const session = entrada.session
@@ -13,8 +15,7 @@ export const obtenerImagenConfiguracionAdministracion = async (entrada, salida) 
             nombreCampo: "El apartamentoIDV",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
+            limpiezaEspaciosAlrededor: "si"
         })
         const consultaPerfilConfiguracion = `
                                 SELECT 
@@ -37,10 +38,8 @@ export const obtenerImagenConfiguracionAdministracion = async (entrada, salida) 
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 
 }

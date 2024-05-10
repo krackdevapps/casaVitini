@@ -5,7 +5,9 @@ import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCu
 import { enviarEmailAlCrearCuentaNueva } from "../../sistema/Mail/enviarEmailAlCrearCuentaNueva.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
-
+import { validarIDXUnico } from "../../sistema/VitiniIDX/validarIDXUnico.mjs";
+import { validarEMailUnico } from "../../sistema/VitiniIDX/validarEmailUnico.mjs";
+import { filtroError } from "../../sistema/error/filtroError.mjs";
 
 export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
     try {
@@ -45,32 +47,11 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
             throw new Error(error);
         }
 
-
         await eliminarCuentasNoVerificadas();
         await borrarCuentasCaducadas();
         await conexion.query('BEGIN'); // Inicio de la transacción
-        const validarNuevoUsuario = `
-                SELECT 
-                usuario
-                FROM usuarios
-                WHERE usuario = $1
-                `;
-        const resuelveValidarNuevoUsaurio = await conexion.query(validarNuevoUsuario, [usuarioIDX]);
-        if (resuelveValidarNuevoUsaurio.rowCount > 0) {
-            const error = "El nombre de usuario no esta disponible, escoge otro";
-            throw new Error(error);
-        }
-        const validarEmail = `
-            SELECT 
-            email
-            FROM "datosDeUsuario"
-            WHERE email = $1
-            `;
-        const resuelveValidarEmail = await conexion.query(validarEmail, [email]);
-        if (resuelveValidarEmail.rowCount > 0) {
-            const error = "El correo electronico ya existe, recupera tu cuenta de usuarios o escoge otro correo electronico";
-            throw new Error(error);
-        }
+        await validarIDXUnico(usuarioIDX)
+        await validarEMailUnico(email)
         const cryptoData = {
             sentido: "cifrar",
             clavePlana: claveNueva
@@ -174,9 +155,7 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
         enviarEmailAlCrearCuentaNueva(datosVerificacion);
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK');
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

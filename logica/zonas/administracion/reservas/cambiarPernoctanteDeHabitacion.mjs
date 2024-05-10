@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 
 
@@ -20,7 +21,7 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
 
 
         const reserva = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reserva,
+            number: entrada.body.reserva,
             nombreCampo: "El identificador universal de la reserva (reserva)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -28,7 +29,7 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
         const habitacionDestino = validadoresCompartidos.tipos.numero({
-            string: entrada.body.habitacionDestino,
+            number: entrada.body.habitacionDestino,
             nombreCampo: "El identificador universal de la habitacionDestino (habitacionDestino)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -37,7 +38,7 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
         })
 
         const pernoctanteUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.pernoctanteUID,
+            number: entrada.body.pernoctanteUID,
             nombreCampo: "El identificador universal de la pernoctanteUID (pernoctanteUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -113,10 +114,8 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release()

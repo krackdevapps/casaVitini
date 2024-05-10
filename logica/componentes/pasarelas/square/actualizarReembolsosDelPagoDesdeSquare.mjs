@@ -81,7 +81,7 @@ export const actualizarReembolsosDelPagoDesdeSquare = async (pagoUID, pagoUIDPas
     } catch (errorCapturado) {
         const error = {
             error: errorCapturado.message
-        };
+        }
         return error;
     }
 }

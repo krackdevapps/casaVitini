@@ -1,6 +1,7 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
 export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, salida) => {
     try {
@@ -12,7 +13,7 @@ export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, sa
 
 
         const habitacionUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.habitacionUID,
+            number: entrada.body.habitacionUID,
             nombreCampo: "El identificador universal de la habitación (habitacionUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -71,10 +72,8 @@ export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, sa
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 
 }

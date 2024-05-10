@@ -1,4 +1,5 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { constructorOrderBy } from "./contructorOrderBy.mjs";
 
 export const porTerminos = async (data) => {
     try {
@@ -15,74 +16,59 @@ export const porTerminos = async (data) => {
             terminosFormateados.push(terminoFinal);
         });
 
-        const sentidoColumnaSQL = (sentidoColumna) => {
-            if (sentidoColumna === "ascendente") {
-                return "ASC"
-            } else if (sentidoColumna === "descente") {
-                return "DESC"
-            } else {
-                return null
-            }
-        }
-
-        const nombreColumnaSQL = (nombreColumna) => {
-            if (!nombreColumna || nombreColumna === "") {
-                return null
-            } else {
-                return nombreColumna
-            }
-        }
+        const sqlORderBy = await constructorOrderBy(nombreColumna, sentidoColumna)
 
         const ordenamientoPorRelevancia = `
-                        (
-                            CASE
-                            WHEN
-                            (
-                                (LOWER(COALESCE(CAST(r.reserva AS TEXT), '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(to_char(r.entrada, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(to_char(r.salida, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(to_char(r.creacion, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(ptr."nombreTitular", '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(ptr."pasaporteTitular", '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(ptr."emailTitular", '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c.nombre, '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c."primerApellido", '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c."segundoApellido", '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c.telefono, '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c.email, '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c.pasaporte, '')) ILIKE ANY($1))::int
-                            ) = 1 THEN 1
-                            WHEN (
-                                (LOWER(COALESCE(CAST(r.reserva AS TEXT), '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(to_char(r.entrada, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(to_char(r.salida, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(to_char(r.creacion, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(ptr."nombreTitular", '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(ptr."pasaporteTitular", '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(ptr."emailTitular", '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c.nombre, '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c."primerApellido", '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c."segundoApellido", '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c.telefono, '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c.email, '')) ILIKE ANY($1))::int + 
-                                (LOWER(COALESCE(c.pasaporte, '')) ILIKE ANY($1))::int
-                            ) = 3 THEN 3              
-                                ELSE 2
-                            END                              
-                         )
-                        `;
-        let ordenamientoFinal;
-        const estructuraFinal = {
-            tipoConsulta: "porTerminos",
-            nombreColumna: nombreColumna,
-            sentidoColumna: sentidoColumna,
-        };
-        if (nombreColumna || sentidoColumna) {
-            estructuraFinal.nombreColumna = nombreColumna;
-            estructuraFinal.sentidoColumna = sentidoColumna;
-        } else {
-            ordenamientoFinal = ordenamientoPorRelevancia;
+            (
+                CASE
+                WHEN
+                (
+                    (LOWER(COALESCE(CAST(r.reserva AS TEXT), '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(to_char(r.entrada, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(to_char(r.salida, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(to_char(r.creacion, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(ptr."nombreTitular", '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(ptr."pasaporteTitular", '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(ptr."emailTitular", '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c.nombre, '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c."primerApellido", '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c."segundoApellido", '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c.telefono, '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c.email, '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c.pasaporte, '')) ILIKE ANY($1))::int
+                ) = 1 THEN 1
+                WHEN (
+                    (LOWER(COALESCE(CAST(r.reserva AS TEXT), '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(to_char(r.entrada, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(to_char(r.salida, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(to_char(r.creacion, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(ptr."nombreTitular", '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(ptr."pasaporteTitular", '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(ptr."emailTitular", '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c.nombre, '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c."primerApellido", '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c."segundoApellido", '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c.telefono, '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c.email, '')) ILIKE ANY($1))::int + 
+                    (LOWER(COALESCE(c.pasaporte, '')) ILIKE ANY($1))::int
+                ) = 3 THEN 3              
+                    ELSE 2
+                END                              
+             )
+            `;
+
+        const constructorOrderByPorTerminos = (sqlORderBy) => {
+            if (sqlORderBy) {
+                return sqlORderBy
+            } else {
+                const inyector = `
+            ORDER BY
+            ${ordenamientoPorRelevancia}`
+                return inyector
+            }
         }
+
+
         const consultaConstructorV2 = `                         
                         SELECT 
                             r.reserva,
@@ -135,17 +121,12 @@ export const porTerminos = async (data) => {
                             OR LOWER(COALESCE(ptr."pasaporteTitular", '')) ILIKE ANY($1)
                             OR LOWER(COALESCE(ptr."emailTitular", '')) ILIKE ANY($1)
                             )
-                        ORDER BY 
-                            
-                            CASE WHEN $2 IS NOT NULL THEN $2 END,
-                            CASE WHEN $2 IS NOT NULL THEN $3 END
-                        LIMIT $4
-                        OFFSET $5;                     
+                        ${constructorOrderByPorTerminos(sqlORderBy)}
+                        LIMIT $2
+                        OFFSET $3;                     
                         `;
         const parametrosConsulta = [
             terminosFormateados,
-            nombreColumnaSQL(nombreColumna),
-            sentidoColumnaSQL(sentidoColumna),
             numeroPorPagina,
             numeroPagina
         ]
@@ -158,13 +139,20 @@ export const porTerminos = async (data) => {
         }
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
         const corretorNumeroPagina = String(numeroPagina).replace("0", "");
-        estructuraFinal.pagina = 1;
-        estructuraFinal.totalReservas = Number(consultaConteoTotalFilas);
-        estructuraFinal.paginasTotales = totalPaginas;
-        estructuraFinal.pagina = Number(corretorNumeroPagina) + 1;
-        estructuraFinal.reservas = reservasEncontradas;
-        estructuraFinal.termino = termino;
-        salida.json(estructuraFinal);
+
+        const estructuraFinal = {
+            tipoConsulta: "porTerminos",
+            nombreColumna: nombreColumna,
+            sentidoColumna: sentidoColumna,
+            pagina: 1,
+            totalReservas: Number(consultaConteoTotalFilas),
+            paginasTotales: totalPaginas,
+            pagina: Number(corretorNumeroPagina) + 1,
+            termino: termino,
+            reservas: reservasEncontradas,
+        }
+
+        return estructuraFinal
 
 
     } catch (error) {

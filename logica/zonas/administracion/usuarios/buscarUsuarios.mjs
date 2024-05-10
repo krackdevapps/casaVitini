@@ -1,6 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const buscarUsuarios = async (entrada, salida) => {
     try {
@@ -37,7 +38,7 @@ export const buscarUsuarios = async (entrada, salida) => {
 
 
         const pagina = validadoresCompartidos.tipos.numero({
-            string: entrada.body.pagina || 1,
+            number: entrada.body.pagina || 1,
             nombreCampo: "El numero de página",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -161,10 +162,8 @@ export const buscarUsuarios = async (entrada, salida) => {
         Respuesta.usuarios = usuariosEncontrados;
         salida.json(Respuesta);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        return salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
     }
 }

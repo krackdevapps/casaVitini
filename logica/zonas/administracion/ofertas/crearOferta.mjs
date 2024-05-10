@@ -4,6 +4,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
 import Decimal from "decimal.js";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 
 
@@ -22,7 +23,7 @@ export const crearOferta = async (entrada, salida) => {
             string: entrada.body.nombreOferta,
             nombreCampo: "El campo del nombre de la oferta",
             filtro: "strictoConEspacios",
-            sePermiteVacio: "si",
+            sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
         const fechaInicio = entrada.body.fechaInicio;
@@ -382,10 +383,8 @@ export const crearOferta = async (entrada, salida) => {
         await conexion.query('COMMIT'); // Confirmar la transacción
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release();

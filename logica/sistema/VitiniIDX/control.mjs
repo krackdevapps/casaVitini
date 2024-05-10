@@ -18,30 +18,24 @@ export class VitiniIDX {
         try {
             const VitiniIDX = this.usuario;
             if (!VitiniIDX) {
-                const sysError = new Error("Mensaje de error")
-                const msgError = {
+                 const msgError = {
                     tipo: "IDX",
                     mensaje: "Tienes que identificarte para seguir"
                 };
-                const constructor = Object.assign(sysError, msgError)
-                throw constructor
+                throw msgError
             }
             if (this.contenedorGrupos.length > 0) {
                 const rol = this.rol;
                 if (!this.contenedorGrupos.includes(rol)) {
-                    const sysError = new Error("Mensaje de error")
                     const msgError = {
                         tipo: "ROL",
                         mensaje: "No estás autorizado, necesitas una cuenta de más autoridad para acceder aquí"
                     }
-                    const constructor = Object.assign(sysError, msgError)
-                    throw constructor
+                    throw msgError
                 }
             }
-            return false
         } catch (errorCapturado) {
-            this.salida.json(errorCapturado)
-            return true
+            throw errorCapturado
         }
     }
 }

@@ -1,6 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-VitiniIDX
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 export const apartamentosDisponiblesConfigurados = async (entrada, salida) => {
     try {
         const session = entrada.session
@@ -34,6 +35,6 @@ export const apartamentosDisponiblesConfigurados = async (entrada, salida) => {
         const error = {
             error: errorCatpurado.message
         };
-        salida.json(error);
+        salida.json(error)
     } 
 }

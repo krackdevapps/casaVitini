@@ -2,6 +2,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { generadorPDF } from "../../../sistema/PDF/generadorPDF.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { detallesReserva } from "../../../sistema/reservas/detallesReserva.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const generarPdf = async (entrada, salida) => {
     try {
@@ -12,7 +13,7 @@ export const generarPdf = async (entrada, salida) => {
         if (IDX.control()) return
 
         const reservaUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.reservaUID,
+            number: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reserva",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -31,9 +32,7 @@ export const generarPdf = async (entrada, salida) => {
         salida.setHeader('Content-Disposition', 'attachment; filename=documento.pdf');
         salida.send(pdf);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

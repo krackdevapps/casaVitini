@@ -4,6 +4,7 @@ import { evitarDuplicados } from "../../../sistema/precios/comportamientoPrecios
 import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const actualizarComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -22,7 +23,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
         const comportamientoUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.comportamientoUID,
+            number: entrada.body.comportamientoUID,
             nombreCampo: "El identificador universal del compotamiento (comportamientoUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -305,10 +306,8 @@ export const actualizarComportamiento = async (entrada, salida) => {
         }
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         mutex.release();
     }

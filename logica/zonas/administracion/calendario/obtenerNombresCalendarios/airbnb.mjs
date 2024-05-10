@@ -1,5 +1,8 @@
 import { conexion } from "../../../../componentes/db.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { resolverApartamentoUI } from "../../../../sistema/resolucion/resolverApartamentoUI.mjs";
+
+
 export const airbnb = async (entrada, salida) => {
     try {
         const ok = {
@@ -24,9 +27,7 @@ export const airbnb = async (entrada, salida) => {
         ok.calendariosSincronizados = [...resuelveCalendarios.rows];
         salida.json(ok);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        return salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

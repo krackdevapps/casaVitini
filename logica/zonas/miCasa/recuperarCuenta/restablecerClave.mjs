@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const restablecerClave = async (entrada, salida) => {
     try {
@@ -81,9 +82,7 @@ export const restablecerClave = async (entrada, salida) => {
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
         console.info(errorCapturado.message);
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

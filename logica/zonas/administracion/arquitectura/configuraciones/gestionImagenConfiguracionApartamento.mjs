@@ -1,6 +1,7 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
 export const gestionImagenConfiguracionApartamento = async (entrada, salida) => {
     try {
@@ -15,7 +16,6 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
 
         const contenidoArchivo = validadoresCompartidos.tipos.cadena({
@@ -86,10 +86,8 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
         await conexion.query('COMMIT'); // Confirmar la transacción
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 
 }

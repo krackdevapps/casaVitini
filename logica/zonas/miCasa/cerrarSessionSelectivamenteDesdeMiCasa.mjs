@@ -1,5 +1,6 @@
 import { conexion } from "../../componentes/db.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../sistema/error/filtroError.mjs";
 
 export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) => {
     try {
@@ -59,9 +60,7 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
         // await conexion.query('COMMIT');
     } catch (errorCapturado) {
         // await conexion.query('ROLLBACK');
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

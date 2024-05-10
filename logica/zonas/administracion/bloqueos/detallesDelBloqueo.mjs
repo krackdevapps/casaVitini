@@ -3,6 +3,7 @@ import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqu
 import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const detallesDelBloqueo = async (entrada, salida) => {
     try {
@@ -19,11 +20,10 @@ export const detallesDelBloqueo = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
 
         const bloqueoUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.bloqueoUID,
+            number: entrada.body.bloqueoUID,
             nombreCampo: "El identificador universal de bloqueoUID",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -73,10 +73,8 @@ export const detallesDelBloqueo = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 
 }

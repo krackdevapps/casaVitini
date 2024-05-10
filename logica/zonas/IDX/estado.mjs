@@ -1,6 +1,7 @@
 import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
 import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { conexion } from "../../componentes/db.mjs";
+import { filtroError } from "../../sistema/error/filtroError.mjs";
 
 export const estado = async (entrada, salida) => {
     try {
@@ -34,9 +35,7 @@ export const estado = async (entrada, salida) => {
         salida.json(respuesta);
 
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

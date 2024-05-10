@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const eliminarOferta = async (entrada, salida) => {
     let mutex
@@ -15,7 +16,7 @@ export const eliminarOferta = async (entrada, salida) => {
         await mutex.acquire();
 
         const ofertaUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.ofertaUID,
+            number: entrada.body.ofertaUID,
             nombreCampo: "El identificador universal de la oferta (ofertaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -47,10 +48,8 @@ export const eliminarOferta = async (entrada, salida) => {
         await conexion.query('COMMIT'); // Confirmar la transacción
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release();

@@ -1,3 +1,7 @@
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+
+
 export const obtenerPago = async (entrada, salida) => {
     try {
         const pagoUID = validadoresCompartidos.tipos.cadena({
@@ -124,9 +128,7 @@ export const obtenerPago = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

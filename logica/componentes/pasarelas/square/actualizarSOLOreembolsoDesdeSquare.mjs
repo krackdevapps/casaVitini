@@ -72,7 +72,7 @@ export const actualizarSOLOreembolsoDesdeSquare = async (reembolsoUID) => {
     } catch (errorCapturado) {
         const error = {
             error: errorCapturado.message
-        };
+        }
         return error;
     }
 }

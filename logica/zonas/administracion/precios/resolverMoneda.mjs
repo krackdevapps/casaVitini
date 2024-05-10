@@ -1,6 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { resolverMoneda as resolverMoneda_ } from "../../../sistema/resolucion/resolverMoneda.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const resolverMoneda = async (entrada, salida) => {
     try {
@@ -22,9 +23,7 @@ export const resolverMoneda = async (entrada, salida) => {
         const transaccionInterna = await resolverMoneda_(monedaIDV);
         salida.json(transaccionInterna);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

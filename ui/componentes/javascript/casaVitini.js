@@ -7469,7 +7469,7 @@ const casaVitini = {
                             (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal)
                         )
                         if (mesEntradaSalidaRenderizado) {
-                            console.log("mesEntradaSalidaRenderizado")
+                            
                             if (diaEntradaReserva_decimal > diaFinal_decimal) {
                                 bloqueDia.style.pointerEvents = "none"
                                 bloqueDia.setAttribute("estadoDia", "deshabilitado")
@@ -7497,7 +7497,7 @@ const casaVitini = {
                             }
                         }
                         else if (mesEntradaRenderizado) {
-                            console.log("mesEntradaRenderizado")
+                            
 
                             if (diaEntradaReserva_decimal > diaFinal_decimal) {
                                 bloqueDia.style.pointerEvents = "none"
@@ -7517,7 +7517,7 @@ const casaVitini = {
                             }
                         }
                         else if (mesSalidaRenderzado) {
-                            console.log("mesSalidaRenderzado")
+                            
 
                             if (diaSalidaReserva_decimal > diaFinal_decimal) {
                                 bloqueDia.classList.add("calendarioDiaReserva")
@@ -7538,7 +7538,7 @@ const casaVitini = {
                             }
                         }
                         else if (mesInternoRango) {
-                            console.log("mesInternoRango")
+                            
 
                             bloqueDia.classList.add("calendarioDiaReserva")
                             bloqueDia.style.pointerEvents = "all"

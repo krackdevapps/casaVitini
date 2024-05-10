@@ -3,6 +3,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const listaBloquoeosDelApartamento = async (entrada, salida) => {
     try {
@@ -18,7 +19,6 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
 
         await eliminarBloqueoCaducado();
@@ -79,10 +79,8 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
         }
         salida.json(ok);
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 
 }

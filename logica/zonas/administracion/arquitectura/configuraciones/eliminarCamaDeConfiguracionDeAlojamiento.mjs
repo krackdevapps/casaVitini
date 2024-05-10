@@ -1,6 +1,9 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
+
 
 export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) => {
     try {
@@ -10,7 +13,7 @@ export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) 
         if (IDX.control()) return
 
         const camaUID = validadoresCompartidos.tipos.numero({
-            string: entrada.body.camaUID,
+            number: entrada.body.camaUID,
             nombreCampo: "El identificador universal de la cama (camaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
@@ -64,10 +67,8 @@ export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) 
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        };
-        salida.json(error);
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 
 }
