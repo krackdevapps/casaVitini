@@ -1,5 +1,5 @@
 import { conexion } from "../../componentes/db.mjs"
-const resolverCamaUI = async (camaIDV) => {
+const obtenerNombreCamaUI = async (camaIDV) => {
     try {
         const resolucionNombre = await conexion.query(`SELECT "camaUI" FROM camas WHERE cama = $1`, [camaIDV])
         if (resolucionNombre.rowCount === 0) {
@@ -12,5 +12,5 @@ const resolverCamaUI = async (camaIDV) => {
     }
 }
 export {
-    resolverCamaUI
+    obtenerNombreCamaUI
 }

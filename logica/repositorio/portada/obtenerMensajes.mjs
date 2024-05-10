@@ -11,11 +11,10 @@ export const obtenerMensajes = async () => {
     WHERE
         estado = $1;
    `;
-        const resuelveMensajes = await conexion.query(consulta, ["activado"]);
-        return resuelveMensajes.rows;
-    } catch (errorCapturado) {
-        const error = "Error en el adaptador de obtener mensajes"
-        throw new Error(error)
+        const resuelve = await conexion.query(consulta, ["activado"]);
+        return resuelve.rows;
+    } catch (error) {     
+        throw error
     }
 
 

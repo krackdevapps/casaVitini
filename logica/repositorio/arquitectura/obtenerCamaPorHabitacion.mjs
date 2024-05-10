@@ -6,7 +6,7 @@ export const obtenerCamaPorHabitacion = async (data) => {
         const habitacionUID = data.habitacionUID
         const camaIDV = data.camaIDV
 
-        const consultaCamasDeHabitacion = `
+        const consulta = `
             SELECT
             cama
             FROM
@@ -14,9 +14,9 @@ export const obtenerCamaPorHabitacion = async (data) => {
             WHERE
             habitacion = $1 AND cama = $2;
             `
-        const resuelve = await conexion.query(consultaCamasDeHabitacion, [habitacionUID, camaIDV])
+        const resuelve = await conexion.query(consulta, [habitacionUID, camaIDV])
         return resuelve.rows
-    } catch (errorCapturado) {
+    } catch (errorAdaptador) {
         const error = "Error en el adaptador obtenerCamasPorHabitacion"
         throw new Error(error)
     }

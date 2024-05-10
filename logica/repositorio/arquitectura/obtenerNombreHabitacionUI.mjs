@@ -1,5 +1,5 @@
 import { conexion } from '../../componentes/db.mjs';
-const resolverHabitacionUI = async (habitacionIDV) => {
+const obtenerNombreHabitacionUI = async (habitacionIDV) => {
     try {
         const resolucionNombre = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV])
         if (resolucionNombre.rowCount === 0) {
@@ -12,5 +12,5 @@ const resolverHabitacionUI = async (habitacionIDV) => {
     }
 }
 export {
-    resolverHabitacionUI
+    obtenerNombreHabitacionUI
 }

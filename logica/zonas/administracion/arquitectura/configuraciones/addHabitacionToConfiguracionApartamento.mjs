@@ -1,4 +1,4 @@
-import { resolverApartamentoUI } from "../../../../sistema/resolucion/resolverApartamentoUI.mjs"
+import { resolverApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs"
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";

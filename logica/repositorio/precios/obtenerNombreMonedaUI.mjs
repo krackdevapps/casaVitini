@@ -1,6 +1,5 @@
 import { conexion } from "../../componentes/db.mjs";
-
-const resolverMoneda = async (moneda) => {
+export const obtenerNombreMonedaUI = async (moneda) => {
     try {
         const monedaIDV = moneda
         const filtroCadena = /^[a-z]+$/;
@@ -33,7 +32,4 @@ const resolverMoneda = async (moneda) => {
     } catch (error) {
         throw error;
     }
-}
-export {
-    resolverMoneda
 }
