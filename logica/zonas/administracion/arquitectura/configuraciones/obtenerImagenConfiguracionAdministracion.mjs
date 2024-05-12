@@ -1,4 +1,4 @@
-import { conexion } from "../../../../componentes/db.mjs";
+import { obtenerImagenApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerImagenApartamentoPorApartamentoIDV.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
@@ -8,7 +8,7 @@ export const obtenerImagenConfiguracionAdministracion = async (entrada, salida) 
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -17,20 +17,14 @@ export const obtenerImagenConfiguracionAdministracion = async (entrada, salida) 
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si"
         })
-        const consultaPerfilConfiguracion = `
-                                SELECT 
-                                imagen
-                                imagen
-                                FROM "configuracionApartamento"
-                                WHERE "apartamentoIDV" = $1;
-                                `;
-        const resuelveConsultaPerfilConfiguracion = await conexion.query(consultaPerfilConfiguracion, [apartamentoIDV]);
-        if (resuelveConsultaPerfilConfiguracion.rowCount === 0) {
+  
+        const configuracionDelApartamento = await obtenerImagenApartamentoPorApartamentoIDV(apartamentoIDV)
+        if (configuracionDelApartamento.length === 0) {
             const error = "No hay ninguna configuracion disponible para este apartamento";
             throw new Error(error);
         }
-        if (resuelveConsultaPerfilConfiguracion.rowCount === 1) {
-            const imagen = resuelveConsultaPerfilConfiguracion.rows[0].imagen;
+        if (configuracionDelApartamento.length === 1) {
+            const imagen = configuracionDelApartamento.imagen;
             const ok = {
                 ok: "Imagen de la configuracion adminsitrativa del apartamento, png codificado en base64",
                 imagen: imagen

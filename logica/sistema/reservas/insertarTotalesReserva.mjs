@@ -2,8 +2,8 @@
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { actualizarEstadoPago } from '../precios/actualizarEstadoPago.mjs';
 import { precioReserva } from '../precios/precioReserva.mjs';
-import { resolverApartamentoUI } from '../resolucion/resolverApartamentoUI.mjs';
 import { conexion } from '../../componentes/db.mjs';
+import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
 const insertarTotalesReserva = async (metadatos) => {
     try {
         const tipoProcesadorPrecio = metadatos.tipoProcesadorPrecio
@@ -87,7 +87,7 @@ const insertarTotalesReserva = async (metadatos) => {
             const apartamentoIDV = detallesDelApartamentomo.apartamentoIDV
             const totalNetoRango = detallesDelApartamentomo.totalNetoRango
             const precioMedioNocheRango = detallesDelApartamentomo.precioMedioNocheRango
-            const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
 
             const insertarDetallePorApartamento = `
             INSERT INTO

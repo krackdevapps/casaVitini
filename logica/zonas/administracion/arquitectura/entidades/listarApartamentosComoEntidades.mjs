@@ -1,5 +1,6 @@
 
-import { conexion } from "../../../../componentes/db.mjs";
+import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
+import { obtenerTodasLosApartamentos } from "../../../../repositorio/arquitectura/obtenerTodasLosApartamentos.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
@@ -9,24 +10,19 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const estructuraApartamentosObjeto = {};
-        const consultaApartamento = `
-                                SELECT
-                                apartamento,
-                                "apartamentoUI"
-                                FROM apartamentos;`;
-        const resuleveConsultaApartamento = await conexion.query(consultaApartamento);
-        if (resuleveConsultaApartamento.rowCount === 0) {
+        const todosLosApartamentosComoEntidad = await obtenerTodasLosApartamentos()
+
+        if (todosLosApartamentosComoEntidad.length === 0) {
             const ok = {
                 ok: "No existe ningun apartamento como entidad, por favor crea uno para poder construir una configuracion de alojamiento sobre el",
                 "apartamentosComoEntidadesDisponibles": []
             };
             salida.json(ok);
-        }
-        if (resuleveConsultaApartamento.rowCount > 0) {
-            const apartamentoEntidades = resuleveConsultaApartamento.rows;
+        } else {
+            const apartamentoEntidades = todosLosApartamentosComoEntidad;
             apartamentoEntidades.map((detallesApartamento) => {
                 const apartamentoIDV = detallesApartamento.apartamento;
                 const apartamentoUI = detallesApartamento.apartamentoUI;
@@ -37,15 +33,11 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
                 const apartamentoIDV = detallesDelApartamento.apartamento;
                 apartamentosComoEntidades_formatoArrayString.push(apartamentoIDV);
             });
-            const consultaConfiguraciones = `
-                                    SELECT
-                                    "apartamentoIDV"
-                                    FROM "configuracionApartamento"
-                                    ;`;
-            const resuelveConsultaApartamento = await conexion.query(consultaConfiguraciones);
-            const apartamentoConfiguraciones = resuelveConsultaApartamento.rows;
+
+            const configuracionesDeLosApartametnos = await obtenerTodasLasConfiguracionDeLosApartamento()
+
             const apartamentosIDVConfiguraciones_formatoArrayString = [];
-            apartamentoConfiguraciones.map((detallesapartamento) => {
+            configuracionesDeLosApartametnos.map((detallesapartamento) => {
                 const apartamentoIDV = detallesapartamento.apartamentoIDV;
                 apartamentosIDVConfiguraciones_formatoArrayString.push(apartamentoIDV);
             });

@@ -16,7 +16,7 @@ if (entorno === "nativo") {
         idleTimeoutMillis: 1000,
         connectionTimeoutMillis: 3000,
     }
-}
+} else
 if (entorno === "docker") {
     BaseDeDatos = {
         host: 'nodobasededatos',
@@ -28,6 +28,9 @@ if (entorno === "docker") {
         idleTimeoutMillis: 1000,
         connectionTimeoutMillis: 3000,
     }
+} else {
+    const errorMsg = "No se ha definido el tipo de entorno para la base de datos"
+    throw new Error(errorMsg)
 }
 const conexion = new Pool(BaseDeDatos);
 conexion.on('error', (error) => {

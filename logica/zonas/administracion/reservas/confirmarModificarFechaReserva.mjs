@@ -17,7 +17,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         mutex = new Mutex();
         await mutex.acquire();

@@ -26,7 +26,10 @@ export const validadorBusqueda = (configuracion) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-        validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
+        if (sentidoColumna) {
+            validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)    
+        }
+        
     } catch (error) {
         throw error
     }

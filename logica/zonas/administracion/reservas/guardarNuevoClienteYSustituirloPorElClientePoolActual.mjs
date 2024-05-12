@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { insertarCliente } from "../../../sistema/clientes/insertarCliente.mjs";
+import { insertarCliente } from "../../../repositorio/clientes/insertarCliente.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
@@ -14,7 +14,7 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         mutex = new Mutex();
         await mutex.acquire();

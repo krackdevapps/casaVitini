@@ -1,4 +1,4 @@
-import { clienteSquare } from "../../squareClient.mjs";
+import { clienteSquare } from "./squareClient.mjs";
 export const contruyeSession = async () => {
     try {
         const locationResponse = await clienteSquare.locationsApi.retrieveLocation(process.env.SQUARE_LOCATION_ID);

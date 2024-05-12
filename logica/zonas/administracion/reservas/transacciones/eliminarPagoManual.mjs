@@ -11,7 +11,7 @@ export const eliminarPagoManual = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const palabra = validadoresCompartidos.tipos.cadena({
             string: entrada.body.palabra,

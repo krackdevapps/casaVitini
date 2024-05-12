@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
-import { resolverApartamentoUI } from "../../resolucion/resolverApartamentoUI.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 const eventosPorApartamneto = async (metadatos) => {
     try {
         const fecha = metadatos.fecha
@@ -26,7 +26,7 @@ const eventosPorApartamneto = async (metadatos) => {
             const error = "No existe el nombre del apartamento, revisa el nombre escrito"
             throw new Error(error)
         }
-        const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
         const ano = fechaArray[1]
@@ -82,7 +82,7 @@ const eventosPorApartamneto = async (metadatos) => {
         const reservasSelecciondas = []
         for (const detalles of resuelveReservas.rows) {
             const apartamentoIDV = detalles.apartamentoIDV
-            detalles.apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+            detalles.apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
             reservasSelecciondas.push(detalles)
         }
         for (const detallesReserva of reservasSelecciondas) {
@@ -94,7 +94,7 @@ const eventosPorApartamneto = async (metadatos) => {
             detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
             detallesReserva.tipoEvento = "porApartamento"
             detallesReserva.eventoUID = "porApartamento_" + apartamentoUID
-            detallesReserva.apartamentoUI = await resolverApartamentoUI(apartamentoIDVReserva)
+            detallesReserva.apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDVReserva)
             const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO)
             for (const fechaInterna_ISO of arrayConFechasInternas) {
                 const fechaInternaObjeto = DateTime.fromISO(fechaInterna_ISO)

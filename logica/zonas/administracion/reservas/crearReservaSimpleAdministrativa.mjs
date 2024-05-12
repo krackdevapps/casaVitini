@@ -1,12 +1,12 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
-import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotalesReserva.mjs";
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 
 export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
     let mutex
@@ -16,7 +16,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         mutex = new Mutex();
         await mutex.acquire();
@@ -128,7 +128,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             const resuelveInsertarReserva = await conexion.query(insertarReserva, [fechaEntradaReservaISO8610, fechaSalidaReservaISO8610, estadoReserva, origen, creacionFechaReserva, estadoPago]);
             const reservaUIDNuevo = resuelveInsertarReserva.rows[0].reserva;
             for (const apartamento of apartamentos) {
-                const apartamentoUI = await resolverApartamentoUI(apartamento);
+                const apartamentoUI = await obtenerNombreApartamentoUI(apartamento);
                 const InsertarApartamento = `
                                 INSERT INTO
                                 "reservaApartamentos"

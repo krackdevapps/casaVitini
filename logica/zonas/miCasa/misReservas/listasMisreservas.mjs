@@ -8,7 +8,7 @@ export const listarMisReservas = async (entrada, salida) => {
 
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return
+        IDX.control()
 
         const usuario = entrada.session.usuario
         const paginaActual = validadoresCompartidos.tipos.numero({

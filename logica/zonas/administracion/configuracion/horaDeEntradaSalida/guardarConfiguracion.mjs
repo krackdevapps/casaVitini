@@ -9,7 +9,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         const horaEntradaTZ = validadoresCompartidos.tipos.horas({
             hola: entrada.body.horaEntradaTZ,

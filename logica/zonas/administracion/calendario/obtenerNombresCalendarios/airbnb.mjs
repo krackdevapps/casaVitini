@@ -1,30 +1,27 @@
-import { conexion } from "../../../../componentes/db.mjs";
+import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
+import { obtenerCalendariosPorPlataformaIDV } from "../../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
-import { resolverApartamentoUI } from "../../../../sistema/resolucion/resolverApartamentoUI.mjs";
-
 
 export const airbnb = async (entrada, salida) => {
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        IDX.control()
+
         const ok = {
             ok: "Lista con metadtos de los calendarios sincronizados de airbnb",
             calendariosSincronizados: []
         };
         const plataformaOrigen = "airbnb";
-        const consultaCalendarios = `
-                                SELECT
-                                    uid,
-                                    nombre,
-                                    "apartamentoIDV"
-                                FROM 
-                                    "calendariosSincronizados"
-                                WHERE 
-                                    "plataformaOrigen" = $1;`;
-        const resuelveCalendarios = await conexion.query(consultaCalendarios, [plataformaOrigen]);
-        for (const detallesDelCalendario of resuelveCalendarios.rows) {
+        const calenadriosPorPlataforam = await obtenerCalendariosPorPlataformaIDV(plataformaOrigen)
+        for (const detallesDelCalendario of calenadriosPorPlataforam) {
             const apartamentoIDV = detallesDelCalendario.apartamentoIDV;
-            detallesDelCalendario.apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
+            detallesDelCalendario.apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
         }
-        ok.calendariosSincronizados = [...resuelveCalendarios.rows];
+        ok.calendariosSincronizados = [...calenadriosPorPlataforam];
         salida.json(ok);
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)

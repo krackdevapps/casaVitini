@@ -1,7 +1,7 @@
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 
 export const detallesCliente = async (entrada, salida) => {
     try {
@@ -9,7 +9,7 @@ export const detallesCliente = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const cliente = validadoresCompartidos.tipos.numero({
             number: entrada.body.cliente,
@@ -19,26 +19,7 @@ export const detallesCliente = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        const consultaDetallesCliente = `
-                            SELECT 
-                            uid, 
-                            nombre,
-                            "primerApellido",
-                            "segundoApellido",
-                            pasaporte,
-                            telefono,
-                            email,
-                            notas 
-                            FROM 
-                            clientes 
-                            WHERE 
-                            uid = $1`;
-        const resolverConsultaDetallesCliente = await conexion.query(consultaDetallesCliente, [cliente]);
-        if (resolverConsultaDetallesCliente.rowCount === 0) {
-            const error = "No existe ningun clinete con ese UID";
-            throw new Error(error);
-        }
-        const detallesCliente = resolverConsultaDetallesCliente.rows[0];
+        const detallesCliente = await obtenerDetallesCliente(cliente)
         const ok = {
             ok: detallesCliente
         };
@@ -46,6 +27,5 @@ export const detallesCliente = async (entrada, salida) => {
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } finally {
     }
 }

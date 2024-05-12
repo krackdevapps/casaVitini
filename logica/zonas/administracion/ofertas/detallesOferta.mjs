@@ -9,7 +9,7 @@ export const detallesOferta = async (entrada, salida) => {
                     const session = entrada.session
                     const IDX = new VitiniIDX(session, salida)
                     IDX.administradores()
-                    if (IDX.control()) return
+                    IDX.control()
                     
                     const ofertaUID = validadoresCompartidos.tipos.numero({
                         string: entrada.body.ofertaUID,

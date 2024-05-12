@@ -12,7 +12,7 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         const clave = entrada.body.clave;
 

@@ -6,7 +6,7 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return
+        IDX.control()
 
         const usuarioIDX = entrada.session.usuario;
         const tipoOperacion = entrada.body.tipoOperacion;

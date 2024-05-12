@@ -1,8 +1,8 @@
 import { insertarCamaEnHabitacion } from "../../../../repositorio/arquitectura/insertarCamasEnHabitacion.mjs";
-import { obtenerCamaPorHabitacion } from "../../../../repositorio/arquitectura/obtenerCamaPorHabitacion.mjs";
-import { obtenerConfiguracionPorApartamento } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamento.mjs";
+import { obtenerCamaDeLaHabitacionPorHabitacionUID } from "../../../../repositorio/arquitectura/obtenerCamaDeLaHabitacionPorHabitacionUID.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerDetallesPorCama } from "../../../../repositorio/arquitectura/obtenerDetallesPorCama.mjs";
-import { obtenerHabitacionesPorApartamento } from "../../../../repositorio/arquitectura/obtenerHabitacfionesPorApartamento.mjs";
+import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
@@ -12,7 +12,7 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         const camaIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.camaIDV,
@@ -38,14 +38,14 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
         }
         const camaUI = obtenerDetallesPorCama_.camaUI;
         const capacidad = obtenerDetallesPorCama_.capacidad;
-        const obtenerHabitacionesPorApartamento_ = await obtenerHabitacionesPorApartamento(habitacionUID)
+        const obtenerHabitacionesPorApartamento_ = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
         if (obtenerHabitacionesPorApartamento_.length === 0) {
             const error = "No hay ninguna habitacíon con ese UID";
             throw new Error(error);
         }
         if (obtenerHabitacionesPorApartamento_.length === 1) {
             const apartamentoIDV = obtenerHabitacionesPorApartamento_.apartamento;
-            const obtenerConfiguracionPorApartamento_ = obtenerConfiguracionPorApartamento(apartamentoIDV)
+            const obtenerConfiguracionPorApartamento_ = obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
             if (obtenerConfiguracionPorApartamento_.estadoConfiguracion === "disponible") {
                 const error = "No se puede anadir una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama";
                 throw new Error(error);
@@ -54,7 +54,7 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
                 habitacionUID: habitacionUID,
                 camaIDV: camaIDV
             }
-            const obtenerCamaPorHabitacion_ = await obtenerCamaPorHabitacion(dataObtenerCamaPorHabitacion)
+            const obtenerCamaPorHabitacion_ = await obtenerCamaDeLaHabitacionPorHabitacionUID(dataObtenerCamaPorHabitacion)
             if (obtenerCamaPorHabitacion_.length > 0) {
                 const error = "Esta cama ya existe";
                 throw new Error(error);

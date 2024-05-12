@@ -1,7 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 
 
 export const listaPreciosApartamentos = async (entrada, salida) => {
@@ -9,7 +9,7 @@ export const listaPreciosApartamentos = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
         
         const apartamentos = `
                                 SELECT
@@ -36,7 +36,7 @@ export const listaPreciosApartamentos = async (entrada, salida) => {
         const objetoFInal = [];
         for (const apartamentoEncotrado of apartamentosEncontrados) {
             const apartamentoIDV = apartamentoEncotrado.apartamentoIDV;
-            const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
             const apartamento = {
                 apartamento: apartamentoIDV,
                 apartamentoUI: apartamentoUI

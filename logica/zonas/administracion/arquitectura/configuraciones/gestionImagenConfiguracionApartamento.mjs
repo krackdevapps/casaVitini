@@ -2,13 +2,15 @@ import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { actualizarImagenDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/actualizarImagenDelApartamentoPorApartamentoIDV.mjs";
 
 export const gestionImagenConfiguracionApartamento = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -51,38 +53,24 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
             throw new Error(error);
         }
         await conexion.query('BEGIN'); // Inicio de la transacción
-        const validarIDV = `
-                                    SELECT 
-                                    "estadoConfiguracion"
-                                    FROM "configuracionApartamento"
-                                    WHERE "apartamentoIDV" = $1
-                                    `;
-        const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV]);
-        if (resuelveValidarIDV.rowCount === 0) {
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+
+        if (configuracionApartamento.length === 0) {
             const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon";
             throw new Error(error);
         }
-        if (resuelveValidarIDV.rows[0].estadoConfiguracion === "disponible") {
+        if (configuracionApartamento.estadoConfiguracion === "disponible") {
             const error = "No se puede actualizar la imagen de una configuracion de apartamento cuando esta disponbile,cambie el estado primero";
             throw new Error(error);
         }
-        const actualizarImagenConfiguracion = `
-                                UPDATE "configuracionApartamento"
-                                SET imagen = $1
-                                WHERE "apartamentoIDV" = $2;
-                                `;
-        const resuelveActualizarImagenConfiguracion = await conexion.query(actualizarImagenConfiguracion, [contenidoArchivo, apartamentoIDV]);
-        if (resuelveActualizarImagenConfiguracion.rowCount === 0) {
-            const error = "No se ha podido actualizar la imagen del apartmento reintentalo";
-            throw new Error(error);
-        }
-        if (resuelveActualizarImagenConfiguracion.rowCount === 1) {
-            const ok = {
-                ok: "Se ha actualizado imagen correctamnte",
-                imagen: String(contenidoArchivo)
-            };
-            salida.json(ok);
-        }
+        await actualizarImagenDelApartamentoPorApartamentoIDV(apartamentoIDV)
+
+        const ok = {
+            ok: "Se ha actualizado imagen correctamnte",
+            imagen: String(contenidoArchivo)
+        };
+        salida.json(ok);
+
         await conexion.query('COMMIT'); // Confirmar la transacción
     } catch (errorCapturado) {
         await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error

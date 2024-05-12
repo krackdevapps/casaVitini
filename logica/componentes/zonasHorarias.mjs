@@ -1,4 +1,4 @@
-const listaZonasHorarias = [
+export const listaZonasHorarias = [
     "Africa/Abidjan",
     "Africa/Accra",
     "Africa/Addis_Ababa",
@@ -597,7 +597,3 @@ const listaZonasHorarias = [
     "WET",
     "Zulu"
 ]
-const zonasHorarias = () => {
-    return listaZonasHorarias
-}
-export { zonasHorarias }

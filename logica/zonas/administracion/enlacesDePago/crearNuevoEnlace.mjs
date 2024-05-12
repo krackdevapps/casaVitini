@@ -9,7 +9,7 @@ export const crearNuevoEnlace = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
         
         const error = "Hasta que no se pueda habilitar una pasarela de pago, esta opcion esta deshabilitada.";
         throw new Error(error);

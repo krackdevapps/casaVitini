@@ -1,8 +1,9 @@
-import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
+import { obtenerTodosLosBloqueos } from "../../../repositorio/bloqueos/obtenerTodosLosBloqueos.mjs";
+import { obtenerBloqueosDelApartamentoPorApartamentoIDV } from "../../../repositorio/bloqueos/obtenerBloqueosDelApartamentoPorApartamentoIDV.mjs";
 
 export const listarApartamentosConBloqueos = async (entrada, salida) => {
     try {
@@ -10,45 +11,31 @@ export const listarApartamentosConBloqueos = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
 
         await eliminarBloqueoCaducado();
-        const consultaApartamentosConBloqueo = `
-                            SELECT
-                            uid,
-                            to_char(entrada, 'DD/MM/YYYY') as entrada, 
-                            to_char(salida, 'DD/MM/YYYY') as salida, 
-                            apartamento,
-                            "tipoBloqueo"
-                            FROM "bloqueosApartamentos";`;
-        const resuelveApartamentosBloqueados = await conexion.query(consultaApartamentosConBloqueo);
+
+        const todosLosBloqueos = await obtenerTodosLosBloqueos()
         const ok = {};
-        if (resuelveApartamentosBloqueados.rowCount === 0) {
+        if (todosLosBloqueos.length === 0) {
             ok.ok = [];
         }
-        if (resuelveApartamentosBloqueados.rowCount > 0) {
-            const bloqueosEncontrados = resuelveApartamentosBloqueados.rows;
+        if (todosLosBloqueos.length > 0) {
             const apartamentosEncontradosConDuplicados = [];
-            bloqueosEncontrados.map((detalleBloqueo) => {
+            todosLosBloqueos.map((detalleBloqueo) => {
                 const apartamento = detalleBloqueo.apartamento;
                 apartamentosEncontradosConDuplicados.push(apartamento);
             });
             const apartamentosEncontrados = [...new Set(apartamentosEncontradosConDuplicados)];
             const estructuraSalidaFinal = [];
             for (const apartamento of apartamentosEncontrados) {
-                const apartamentoUI = await resolverApartamentoUI(apartamento);
-                const conteoDeBloqueosPorApartamento = `
-                                    SELECT
-                                    apartamento
-                                    FROM "bloqueosApartamentos"
-                                    WHERE apartamento = $1;`;
-                const resuelveConteoDeBloqueosPorApartamento = await conexion.query(conteoDeBloqueosPorApartamento, [apartamento]);
-                const numeroDeBloqueosPorApartamento = resuelveConteoDeBloqueosPorApartamento.rowCount;
+                const apartamentoUI = await obtenerNombreApartamentoUI(apartamento);
+                const bloqueosDelApartamento = await obtenerBloqueosDelApartamentoPorApartamentoIDV(apartamento)
                 const estructuraFinal = {
                     apartamentoIDV: apartamento,
                     apartamentoUI: apartamentoUI,
-                    numeroDeBloqueos: numeroDeBloqueosPorApartamento,
+                    numeroDeBloqueos: bloqueosDelApartamento.length,
                 };
                 estructuraSalidaFinal.push(estructuraFinal);
             }
@@ -59,5 +46,4 @@ export const listarApartamentosConBloqueos = async (entrada, salida) => {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }
-
 }

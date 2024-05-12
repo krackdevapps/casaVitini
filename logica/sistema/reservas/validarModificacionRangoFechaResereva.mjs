@@ -5,7 +5,7 @@ import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
 import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUniversal.mjs';
 import { bloqueosPorRango_apartamentoIDV } from '../selectoresCompartidos/bloqueosPorRango_apartamentoIDV.mjs';
 import { reservasPorRango_y_apartamentos } from '../selectoresCompartidos/reservasPorRango_y_apartamentos.mjs';
-import { resolverApartamentoUI } from '../resolucion/resolverApartamentoUI.mjs';
+import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
 const validarModificacionRangoFechaResereva = async (metadatos) => {
     try {
         const reserva = metadatos.reserva
@@ -102,7 +102,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             const arrayStringsPrePresentacionDatos = []
 
             for (const apartamentoIDV of elementosNoComunes) {
-                const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+                const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
                 const nombreUI = `${apartamentoUI} (IDV: ${apartamentoIDV})`
                 arrayStringsPrePresentacionDatos.push(nombreUI)
             }

@@ -10,7 +10,7 @@ export const asociarTitular = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const clienteUID = validadoresCompartidos.tipos.numero({
             number: entrada.body.clienteUID,

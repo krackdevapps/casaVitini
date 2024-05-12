@@ -59,7 +59,8 @@ export const conectar = async (entrada, salida) => {
                     throw error;
                 }
             }
-        };
+        }
+
         // Se valida si existe el usuario
         const consultaControlIDX = `
                 SELECT

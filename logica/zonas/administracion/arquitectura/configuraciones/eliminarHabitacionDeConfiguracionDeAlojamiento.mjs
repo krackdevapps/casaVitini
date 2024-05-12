@@ -1,16 +1,16 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
-
-
+import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { eliminarHabitacionDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/eliminarHabitacionDelApartamentoPorApartamentoIDV.mjs";
 
 export const eliminarHabitacionDeConfiguracionDeAlojamiento = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         const habitacionUID = validadoresCompartidos.tipos.numero({
             number: entrada.body.habitacionUID,
@@ -21,47 +21,26 @@ export const eliminarHabitacionDeConfiguracionDeAlojamiento = async (entrada, sa
             sePermitenNegativos: "no"
         })
 
-        const validarHabitacionUID = `
-                                    SELECT 
-                                    apartamento
-                                    FROM "configuracionHabitacionesDelApartamento"
-                                    WHERE uid = $1
-                                    `;
-        const resuelveValidarHabitacionUID = await conexion.query(validarHabitacionUID, [habitacionUID]);
-        if (resuelveValidarHabitacionUID.rowCount === 0) {
+        const detallesHabitacionDelApartamento = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
+        if (detallesHabitacionDelApartamento.length === 0) {
             const error = "No existe la habitacion, revisa el habitacionUID";
             throw new Error(error);
         }
-        const apartamentoIDV = resuelveValidarHabitacionUID.rows[0].apartamento;
-        const consultaApartamento = `
-                                SELECT 
-                                "estadoConfiguracion"
-                                FROM "configuracionApartamento"
-                                WHERE "apartamentoIDV" = $1;
-                                `;
-        const resuelveConsultaApartamento = await conexion.query(consultaApartamento, [apartamentoIDV]);
-        if (resuelveConsultaApartamento.rows[0].estadoConfiguracion === "disponible") {
+        const apartamentoIDV = detallesHabitacionDelApartamento.apartamento;
+
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        if (configuracionApartamento.estadoConfiguracion === "disponible") {
             const error = "No se puede eliminar una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama";
             throw new Error(error);
         }
-        const eliminarHabitacion = `
-                                    DELETE FROM "configuracionHabitacionesDelApartamento"
-                                    WHERE uid = $1;
-                                    `;
-        const resuelveEliminarHabitacion = await conexion.query(eliminarHabitacion, [habitacionUID]);
-        if (resuelveEliminarHabitacion.rowCount === 0) {
-            const error = "No se ha eliminado la habitacion por que no se ha entonctrado el registo en la base de datos";
-            throw new Error(error);
+
+        await eliminarHabitacionDelApartamentoPorApartamentoIDV(habitacionUID)
+        const ok = {
+            ok: "Se ha eliminado correctamente la habitacion como entidad",
         }
-        if (resuelveEliminarHabitacion.rowCount === 1) {
-            const ok = {
-                "ok": "Se ha eliminado correctamente la habitacion como entidad",
-            };
-            salida.json(ok);
-        }
+        salida.json(ok)
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }
-
 }

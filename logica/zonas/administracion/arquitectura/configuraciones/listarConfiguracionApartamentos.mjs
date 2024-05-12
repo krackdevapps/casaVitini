@@ -1,7 +1,7 @@
-import { resolverApartamentoUI } from "../../../../sistema/resolucion/resolverApartamentoUI.mjs";
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
+import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 
 export const listarConfiguracionApartamentos = async (entrada, salida) => {
     try {
@@ -9,32 +9,23 @@ export const listarConfiguracionApartamentos = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
+        const configuracionesDeLosApartamento = await obtenerTodasLasConfiguracionDeLosApartamento()
 
-        const seleccionaApartamentos = `
-                                    SELECT 
-                                    uid,
-                                    "apartamentoIDV",
-                                    "estadoConfiguracion"
-                                    FROM "configuracionApartamento"
-                                    `;
-        const resuelveSeleccionaApartamentos = await conexion.query(seleccionaApartamentos);
         const apartamentosConConfiguracion = [];
-        if (resuelveSeleccionaApartamentos.rowCount > 0) {
-            const apartamentoEntidad = resuelveSeleccionaApartamentos.rows;
-            for (const detallesDelApartamento of apartamentoEntidad) {
-                const apartamentoIDV = detallesDelApartamento.apartamentoIDV;
-                const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
-                const estadoConfiguracion = detallesDelApartamento.estadoConfiguracion;
-                const estructuraFinal = {
-                    apartamentoIDV: apartamentoIDV,
-                    apartamentoUI: apartamentoUI,
-                    estadoConfiguracion: estadoConfiguracion
-                };
-                apartamentosConConfiguracion.push(estructuraFinal);
-            }
+        for (const detallesDelApartamento of configuracionesDeLosApartamento) {
+            const apartamentoIDV = detallesDelApartamento.apartamentoIDV;
+            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+            const estadoConfiguracion = detallesDelApartamento.estadoConfiguracion;
+            const estructuraFinal = {
+                apartamentoIDV: apartamentoIDV,
+                apartamentoUI: apartamentoUI,
+                estadoConfiguracion: estadoConfiguracion
+            };
+            apartamentosConConfiguracion.push(estructuraFinal);
         }
+
         const ok = {
             ok: apartamentosConConfiguracion
         };
@@ -43,5 +34,4 @@ export const listarConfiguracionApartamentos = async (entrada, salida) => {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }
-
 }

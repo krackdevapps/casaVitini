@@ -1,4 +1,3 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { eventosPorApartamneto } from "../../../../sistema/calendarios/capas/eventosPorApartamento.mjs";
 import { eventosReservas } from "../../../../sistema/calendarios/capas/eventosReservas.mjs";
 import { eventosTodosLosApartamentos } from "../../../../sistema/calendarios/capas/eventosTodosLosApartamentos.mjs";
@@ -9,7 +8,8 @@ import { eliminarBloqueoCaducado } from "../../../../sistema/bloqueos/eliminarBl
 import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
-
+import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
+import { obtenerCalendariosPorPlataformaIDV } from "../../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs";
 
 export const multiCapa = async (entrada, salida) => {
     try {
@@ -17,7 +17,7 @@ export const multiCapa = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const fecha = entrada.body.fecha;
         validadoresCompartidos.fechas.fechaMesAno(fecha)
@@ -85,14 +85,9 @@ export const multiCapa = async (entrada, salida) => {
                     filtro: "soloCadenasIDV",
                     nombreCompleto: "En el array de capasCompuestas porApartamento"
                 })
-
-                const obtenerApartamentosIDV = `
-                                            SELECT "apartamentoIDV"
-                                            FROM "configuracionApartamento"
-                                            `;
-                const resuelveApartamentosIDV = await conexion.query(obtenerApartamentosIDV);
-                if (resuelveApartamentosIDV.rowCount > 0) {
-                    const apartamentosIDVValidos = resuelveApartamentosIDV.rows.map((apartamentoIDV) => {
+                const configuracionesApartamentos = await obtenerTodasLasConfiguracionDeLosApartamento()
+                if (configuracionesApartamentos.length > 0) {
+                    const apartamentosIDVValidos = configuracionesApartamentos.map((apartamentoIDV) => {
                         return apartamentoIDV.apartamentoIDV;
                     });
                     const controlApartamentosF2 = apartamentosIDV.every(apartamentosIDV => apartamentosIDVValidos.includes(apartamentosIDV));
@@ -128,14 +123,9 @@ export const multiCapa = async (entrada, salida) => {
             todoAirbnb: async () => {
                 // Obtengo todo los uids de los calendarios sincronizados en un objeto y lo itero
                 const plataformaAibnb = "airbnb";
-                const obtenerUIDCalendriosSincronizadosAirbnb = `
-                                           SELECT uid
-                                           FROM "calendariosSincronizados"
-                                           WHERE "plataformaOrigen" = $1
-                                           `;
-                const calendariosSincronizadosAirbnbUIDS = await conexion.query(obtenerUIDCalendriosSincronizadosAirbnb, [plataformaAibnb]);
-                if (calendariosSincronizadosAirbnbUIDS.rowCount > 0) {
-                    const calendariosUIDS = calendariosSincronizadosAirbnbUIDS.rows.map((calendario) => {
+                const calendariosPorPlataforma = await obtenerCalendariosPorPlataformaIDV(plataformaAibnb)
+                if (calendariosPorPlataforma.length > 0) {
+                    const calendariosUIDS = calendariosPorPlataforma.map((calendario) => {
                         return calendario.uid;
                     });
                     for (const calendarioUID of calendariosUIDS) {
@@ -161,14 +151,10 @@ export const multiCapa = async (entrada, salida) => {
                 })
                 // Validar que le nombre del apartamento existe como tal
                 const plataformaOrigen = "airbnb";
-                const obtenerCalendariosUID = `
-                                            SELECT uid
-                                            FROM "calendariosSincronizados"
-                                            WHERE "plataformaOrigen" = $1
-                                            `;
-                const resuelveCalendariosUID = await conexion.query(obtenerCalendariosUID, [plataformaOrigen]);
-                if (resuelveCalendariosUID.rowCount > 0) {
-                    const calendariosUIDValidos = resuelveCalendariosUID.rows.map((calendarioUID) => {
+                const calendariosPorPlataforma = await obtenerCalendariosPorPlataformaIDV(plataformaOrigen)
+
+                if (calendariosPorPlataforma.length > 0) {
+                    const calendariosUIDValidos = calendariosPorPlataforma.map((calendarioUID) => {
                         return String(calendarioUID.uid);
                     });
                     const controlCalendariosF2 = calendariosUID.every(calendariosUID => calendariosUIDValidos.includes(calendariosUID));

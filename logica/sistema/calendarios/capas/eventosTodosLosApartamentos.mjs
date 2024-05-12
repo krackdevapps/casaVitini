@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
-import { resolverApartamentoUI } from "../../resolucion/resolverApartamentoUI.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 const eventosTodosLosApartamentos = async (fecha) => {
     try {
         const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
@@ -61,7 +61,7 @@ const eventosTodosLosApartamentos = async (fecha) => {
             
         for (const detalles of resuelveReservas.rows) {
             const apartamentoIDV = detalles.apartamentoIDV
-            detalles.apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+            detalles.apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
             reservasSelecciondas.push(detalles)
         }
         for (const detallesReserva of reservasSelecciondas) {
@@ -87,7 +87,7 @@ const eventosTodosLosApartamentos = async (fecha) => {
                     fechaEntrada_ISO: fechaEntrada_ISO,
                     fechaSalida_ISO: fechaSalida_ISO,
                     apartamentoIDV: apartamentoIDVReserva,
-                    apartamentoUI: await resolverApartamentoUI(apartamentoIDVReserva)
+                    apartamentoUI: await obtenerNombreApartamentoUI(apartamentoIDVReserva)
                 }
                 if (calendarioObjeto[fechaInternaHumana]) {
                     calendarioObjeto[fechaInternaHumana].push(estructuraReservaEnDia)

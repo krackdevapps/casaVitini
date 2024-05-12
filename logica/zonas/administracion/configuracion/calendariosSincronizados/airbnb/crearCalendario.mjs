@@ -9,7 +9,7 @@ export const crearCalendario = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         const nombre = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombre,

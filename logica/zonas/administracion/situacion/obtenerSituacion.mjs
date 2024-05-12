@@ -5,8 +5,8 @@ import { utilidades } from "../../../componentes/utilidades.mjs";
 import { apartamentosOcupadosHoy_paraSitaucion } from "../../../sistema/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracion/horasSalidaEntrada.mjs";
-import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 
 
 export const obtenerSituacion = async (entrada, salida) => {
@@ -15,7 +15,7 @@ export const obtenerSituacion = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const apartamentosObjeto = {};
         const estadoDisonible = "disponible";
@@ -37,7 +37,7 @@ export const obtenerSituacion = async (entrada, salida) => {
         for (const apartamento of resuelveConsultaEstadoApartamentos) {
             const apartamentoIDV = apartamento.apartamentoIDV;
             const estadoApartamento = apartamento.estadoConfiguracion;
-            const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
             apartamentosObjeto[apartamentoIDV] = {
                 apartamentoUI: apartamentoUI,
                 estadoApartamento: estadoApartamento,

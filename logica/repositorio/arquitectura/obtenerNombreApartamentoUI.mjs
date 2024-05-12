@@ -1,5 +1,5 @@
 import { conexion } from "../../componentes/db.mjs";
-const obtenerNombreApartamentoUI = async (apartamentoIDV) => {
+export const obtenerNombreApartamentoUI = async (apartamentoIDV) => {
     try {
         const consulta = `
         SELECT "apartamentoUI" 
@@ -11,7 +11,4 @@ const obtenerNombreApartamentoUI = async (apartamentoIDV) => {
     } catch (error) {
         throw error;
     }
-}
-export {
-    obtenerNombreApartamentoUI
 }

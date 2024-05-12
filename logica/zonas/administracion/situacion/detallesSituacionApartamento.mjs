@@ -1,13 +1,13 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../componentes/db.mjs";
 import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
-import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { eventosDelApartamento } from "../../../sistema/calendariosSincronizados/airbnb/eventosDelApartamento.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracion/horasSalidaEntrada.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 
 
 export const detallesSituacionApartamento = async (entrada, salida) => {
@@ -16,7 +16,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -41,7 +41,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             const error = "No existe el apartamento";
             throw new Error(error);
         }
-        const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
+        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
         // Ver las reservas que existen hoy
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);

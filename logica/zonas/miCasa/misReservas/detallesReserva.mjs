@@ -8,7 +8,7 @@ export const detallesReserva = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return
+        IDX.control()
 
         const usuario = entrada.session.usuario;
         const reservaUID = validadoresCompartidos.tipos.numero({

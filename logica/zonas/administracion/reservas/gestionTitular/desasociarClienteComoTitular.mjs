@@ -9,7 +9,7 @@ export const desasociarClienteComoTitular = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const reservaUID = validadoresCompartidos.tipos.numero({
             number: entrada.body.reservaUID,

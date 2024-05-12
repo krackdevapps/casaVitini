@@ -9,7 +9,7 @@ export const detallesDelReembolso = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const reembolsoUID = validadoresCompartidos.tipos.numero({
             number: entrada.body.reembolsoUID,

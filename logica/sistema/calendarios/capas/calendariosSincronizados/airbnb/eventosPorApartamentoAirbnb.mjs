@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { conexion } from "../../../../../componentes/db.mjs";
-import { resolverApartamentoUI } from "../../../../resolucion/resolverApartamentoUI.mjs";
 import { eventosCalendarioPorUID } from "../../../../calendariosSincronizados/airbnb/eventosCalendarioPorUID.mjs";
+import { obtenerNombreApartamentoUI } from "../../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
     try {
         const fecha = contenedorDatos.fecha
@@ -28,7 +28,7 @@ const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             throw new Error(error)
         }
         const apartamentoIDV = resuelveCalendarioUID.rows[0].apartamentoIDV
-        const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
         const ano = fechaArray[1]

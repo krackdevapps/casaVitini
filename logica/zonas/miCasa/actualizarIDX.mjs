@@ -12,7 +12,7 @@ export const actualizarIDX = async (entrada, salida) => {
         mutex.acquire()
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return
+        IDX.control()
 
         const actualIDX = entrada.session.usuario;
         const nuevoIDX = validadoresCompartidos.tipos.cadena({

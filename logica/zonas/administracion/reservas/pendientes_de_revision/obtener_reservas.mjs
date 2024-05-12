@@ -8,7 +8,7 @@ export const obtener_reservas = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         // Obtener todas las reservas no pagadas de origen cliente
         const obtenerReservas = `

@@ -1,15 +1,22 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoUI } from "../../../../repositorio/arquitectura/obtenerApartamentoComoEntidadPorApartamentoUI.mjs";
+import { insertarApartamentoComoEntidad } from "../../../../repositorio/arquitectura/insertarApartamentoComoEntidad.mjs";
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
+import { obtenerHabitacionComoEntidadPorHabitacionUI } from "../../../../repositorio/arquitectura/obtenerHabitacionComoEntidadPorHabitacionUI.mjs";
+import { insertarHabitacionComoEntidad } from "../../../../repositorio/arquitectura/insertarHabitacionComoEntidad.mjs";
+import { obtenerCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/obtenerCamaComoEntidadPorCamaIDV.mjs";
+import { obtenerCamaComoEntidadPorCamaUI } from "../../../../repositorio/arquitectura/obtenerCamaComoEntidadPorCamaUI.mjs";
+import { insertarCamaComoEntidad } from "../../../../repositorio/arquitectura/insertarCamaComoEntidad.mjs";
 
 export const crearEntidadAlojamiento = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
-
+        IDX.control()
 
         const tipoEntidad = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoEntidad,
@@ -18,7 +25,6 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "no",
         })
-
 
         if (tipoEntidad === "apartamento") {
             const apartamentoUI = validadoresCompartidos.tipos.cadena({
@@ -37,15 +43,9 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 limpiezaEspaciosAlrededor: "si",
             })
 
-
             const validarCodigo = async (apartamentoIDV) => {
-                const validarCodigoAleatorio = `
-                                        SELECT
-                                        apartamento
-                                        FROM apartamentos
-                                        WHERE apartamento = $1;`;
-                const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [apartamentoIDV]);
-                if (resuelveValidarCodigoAleatorio.rowCount === 1) {
+                const detallesApartamentoComoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                if (detallesApartamentoComoEntidad.apartamento) {
                     return true;
                 }
             };
@@ -62,57 +62,29 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 return codigoGenerado;
             };
             const apartamentoIDV_unico = await controlApartamentoIDV(apartamentoIDV);
-            const validarIDV = `
-                                    SELECT 
-                                    *
-                                    FROM apartamentos
-                                    WHERE apartamento = $1
-                                    `;
-            const resuelveValidarIDV = await conexion.query(validarIDV, [apartamentoIDV_unico]);
-            if (resuelveValidarIDV.rowCount === 1) {
+            const detallesApartamentoComoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV_unico)
+
+            if (detallesApartamentoComoEntidad.rowCount === 1) {
                 const error = "Ya existe un identificador visual igual que el apartamento que propones, escoge otro";
                 throw new Error(error);
             }
-            const validarUI = `
-                                    SELECT 
-                                    *
-                                    FROM apartamentos
-                                    WHERE "apartamentoUI" = $1
-                                    `;
-            const resuelveValidarUI = await conexion.query(validarUI, [apartamentoUI]);
-            if (resuelveValidarUI.rowCount === 1) {
+            const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoUI(apartamentoUI)
+
+            if (apartamentoEntidad.apartamentoUI) {
                 const error = "Ya existe un apartamento con ese nombre, por tema de legibilidad escoge otro";
                 throw new Error(error);
             }
-            const crearEntidad = `
-                                    INSERT INTO apartamentos
-                                    (
-                                    apartamento,
-                                    "apartamentoUI"
-                                    )
-                                    VALUES 
-                                    (
-                                    $1,
-                                    $2
-                                    )
-                                    RETURNING apartamento
-                                    `;
-            const matriozDatosNuevaEntidad = [
-                apartamentoIDV_unico,
-                apartamentoUI
-            ];
-            const resuelveCrearEntidad = await conexion.query(crearEntidad, matriozDatosNuevaEntidad);
-            if (resuelveCrearEntidad.rowCount === 0) {
-                const error = "No se ha podido crear la nueva entidad";
-                throw new Error(error);
+            const dataInsertarApartamentoComoEntidad = {
+                apartamentoIDV: apartamentoIDV_unico,
+                apartamentoUI: apartamentoUI
             }
-            if (resuelveCrearEntidad.rowCount === 1) {
-                const ok = {
-                    ok: "Se ha creado correctament la nuevo entidad como apartamento",
-                    nuevoUID: resuelveCrearEntidad.rows[0].apartamento
-                };
-                salida.json(ok);
-            }
+            const nuevoApartamentoComEntidad = await insertarApartamentoComoEntidad(dataInsertarApartamentoComoEntidad)
+            const ok = {
+                ok: "Se ha creado correctament la nuevo entidad como apartamento",
+                nuevoUID: nuevoApartamentoComEntidad.apartamento
+            };
+            salida.json(ok);
+
         }
         if (tipoEntidad === "habitacion") {
 
@@ -133,13 +105,9 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 soloMinusculas: "si"
             })
             const validarCodigo = async (habitacionIDV) => {
-                const validarCodigoAleatorio = `
-                                        SELECT
-                                        *
-                                        FROM habitaciones
-                                        WHERE habitacion = $1;`;
-                const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [habitacionIDV]);
-                if (resuelveValidarCodigoAleatorio.rowCount === 1) {
+
+                const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
+                if (habitacion.habitacionUI) {
                     return true;
                 }
             };
@@ -156,60 +124,33 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 return codigoGenerado;
             };
             const habitacionIDV_unico = await controlHabitacionIDV(habitacionIDV);
-            const validarIDV = `
-                                    SELECT 
-                                    *
-                                    FROM habitaciones
-                                    WHERE habitacion = $1
-                                    `;
-            const resuelveValidarIDV = await conexion.query(validarIDV, [habitacionIDV_unico]);
-            if (resuelveValidarIDV.rowCount === 1) {
+
+            const habitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV_unico)
+
+            if (habitacionComoEntidad.habitacion) {
                 const error = "Ya existe un identificador visual igual que el que propones, escoge otro";
                 throw new Error(error);
             }
-            const validarUI = `
-                                    SELECT 
-                                    *
-                                    FROM habitaciones
-                                    WHERE "habitacionUI" = $1
-                                    `;
-            const resuelveValidarUI = await conexion.query(validarUI, [habitacionUI]);
-            if (resuelveValidarUI.rowCount === 1) {
+            const nombreHabitacionUI = await obtenerHabitacionComoEntidadPorHabitacionUI(habitacionUI).habitacionUI
+            if (nombreHabitacionUI.habitacion) {
                 const error = "Ya existe un nombre de la habitacion exactamente igual, por tema de legibilidad escoge otro";
                 throw new Error(error);
             }
-            const crearEntidad = `
-                                    INSERT INTO habitaciones
-                                    (
-                                    habitacion,
-                                    "habitacionUI"
-                                    )
-                                    VALUES 
-                                    (
-                                    $1,
-                                    $2
-                                    )
-                                    RETURNING habitacion
-                                    `;
-            const matriozDatosNuevaEntidad = [
-                habitacionIDV_unico,
-                habitacionUI,
-            ];
-            const resuelveCrearEntidad = await conexion.query(crearEntidad, matriozDatosNuevaEntidad);
-            if (resuelveCrearEntidad.rowCount === 0) {
-                const error = "No se ha podido crear la nueva entidad";
-                throw new Error(error);
+
+            const dataInsertarHabitacionComoEntidad = {
+                habitacionIDV: habitacionIDV_unico,
+                habitacionUI: habitacionUI
             }
-            if (resuelveCrearEntidad.rowCount === 1) {
-                const ok = {
-                    ok: "Se ha creado correctament la nuevo entidad como habitacion",
-                    nuevoUID: resuelveCrearEntidad.rows[0].habitacion
-                };
-                salida.json(ok);
-            }
+            const nuevaHabitacionComoEntidad = await insertarHabitacionComoEntidad(dataInsertarHabitacionComoEntidad)
+
+            const ok = {
+                ok: "Se ha creado correctament la nuevo entidad como habitacion",
+                nuevoUID: nuevaHabitacionComoEntidad.habitacion
+            };
+            salida.json(ok);
+
         }
         if (tipoEntidad === "cama") {
-
 
             const camaUI = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.camaUI,
@@ -228,23 +169,18 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 soloMinusculas: "si"
             })
 
-            const capacidad = validadoresCompartidos.tipos.cadena({
+            const capacidad = validadoresCompartidos.tipos.numero({
                 string: entrada.body.capacidad,
                 nombreCampo: "El campo capacidad",
-                filtro: "cadenaConNumerosEnteros",
+                filtro: "numeroSimple",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
+                sePermitenNegativos: "no"
             })
 
-
             const validarCodigo = async (camaIDV) => {
-                const validarCodigoAleatorio = `
-                                        SELECT
-                                        *
-                                        FROM camas
-                                        WHERE cama = $1;`;
-                const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [camaIDV]);
-                if (resuelveValidarCodigoAleatorio.rowCount === 1) {
+                const camaEntidad = await obtenerCamaComoEntidadPorCamaIDV(camaIDV)
+                if (camaEntidad.cama) {
                     return true;
                 }
             };
@@ -262,64 +198,33 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             };
             const camaIDV_unico = await controlCamaIDV(camaIDV);
 
-            if (!capacidad || !Number.isInteger(capacidad) || capacidad < 0) {
-                const error = "el campo 'capacidad' solo puede ser numeros, entero y positivo";
-                throw new Error(error);
-            }
-            const validarIDV = `
-                                    SELECT 
-                                    *
-                                    FROM camas
-                                    WHERE cama = $1
-                                    `;
-            const resuelveValidarIDV = await conexion.query(validarIDV, [camaIDV_unico]);
-            if (resuelveValidarIDV.rowCount === 1) {
+            const camaEntidad = await obtenerCamaComoEntidadPorCamaIDV(camaIDV_unico)
+
+            if (camaEntidad.cama) {
                 const error = "Ya existe un identificador visual igual que la cama que propones, escoge otro";
                 throw new Error(error);
             }
-            const validarUI = `
-                                    SELECT 
-                                    *
-                                    FROM camas
-                                    WHERE "camaUI" = $1
-                                    `;
-            const resuelveValidarUI = await conexion.query(validarUI, [camaUI]);
-            if (resuelveValidarUI.rowCount === 1) {
+            const camaUIExistene = await obtenerCamaComoEntidadPorCamaUI(camaUI)
+
+            if (camaUIExistene.cama) {
                 const error = "Ya existe una cama con ese nombre, por tema de legibilidad escoge otro";
                 throw new Error(error);
             }
-            const crearEntidad = `
-                                    INSERT INTO camas
-                                    (
-                                    cama,
-                                    "camaUI",
-                                    capacidad
-                                    )
-                                    VALUES 
-                                    (
-                                    $1,
-                                    $2,
-                                    $3
-                                    )
-                                    RETURNING cama
-                                    `;
-            const matriozDatosNuevaEntidad = [
-                camaIDV_unico,
-                camaUI,
-                capacidad
-            ];
-            const resuelveCrearEntidad = await conexion.query(crearEntidad, matriozDatosNuevaEntidad);
-            if (resuelveCrearEntidad.rowCount === 0) {
-                const error = "No se ha podido crear la nueva entidad";
-                throw new Error(error);
+            const dataInsertarCamaComoEntidad = {
+
+                camaIDV: camaIDV_unico,
+                camaUI: camaUI,
+                capacidad: capacidad
             }
-            if (resuelveCrearEntidad.rowCount === 1) {
-                const ok = {
-                    ok: "Se ha creado correctament la nuevo entidad como cama",
-                    nuevoUID: resuelveCrearEntidad.rows[0].cama
-                };
-                salida.json(ok);
-            }
+
+            const nuevaCama = await insertarCamaComoEntidad(dataInsertarCamaComoEntidad)
+
+            const ok = {
+                ok: "Se ha creado correctament la nuevo entidad como cama",
+                nuevoUID: nuevaCama.cama
+            };
+            salida.json(ok);
+
         }
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)

@@ -12,7 +12,7 @@ export const obtenerDetallesDelPago = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
         const pagoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pagoUID,
             nombreCampo: "El campo pagoUID",

@@ -1,8 +1,8 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
-import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 
 
 export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida) => {
@@ -11,7 +11,7 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
 
         const fechaEntrada = entrada.body.entrada;
@@ -33,7 +33,7 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             apartamentosNoDisponibles: []
         };
         for (const apartamentoIDV of apartamentosDisponbilesIDV) {
-            const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
             const detalleApartamento = {
                 apartamentoIDV: apartamentoIDV,
                 apartamentoUI: apartamentoUI
@@ -41,7 +41,7 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             estructuraFinal.apartamentosDisponibles.push(detalleApartamento);
         }
         for (const apartamentoIDV of apartamentosNoDisponiblesIDV) {
-            const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
             const detalleApartamento = {
                 apartamentoIDV: apartamentoIDV,
                 apartamentoUI: apartamentoUI

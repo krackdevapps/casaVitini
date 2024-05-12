@@ -1,12 +1,12 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
-import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotalesReserva.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 
 
 export const anadirApartamentoReserva = async (entrada, salida) => {
@@ -17,7 +17,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         mutex = new Mutex();
         await mutex.acquire();
@@ -106,7 +106,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
                     resultadoValidacion = apartamento;
                 }
             }
-            const apartamentoUI = await resolverApartamentoUI(apartamento);
+            const apartamentoUI = await obtenerNombreApartamentoUI(apartamento);
             const insertarApartamento = `
                                 INSERT INTO "reservaApartamentos"
                                 (

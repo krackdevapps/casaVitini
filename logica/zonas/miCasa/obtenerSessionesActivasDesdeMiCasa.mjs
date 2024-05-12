@@ -8,7 +8,7 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
 
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        if (IDX.control()) return  
+        IDX.control()  
 
         
         const usuarioIDX = entrada.session.usuario;

@@ -1,8 +1,8 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 
 
 export const previsualizarPrecioApartamento = async (entrada, salida) => {
@@ -11,7 +11,7 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -41,7 +41,7 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
             throw new Error(error);
         }
         const detallesApartamento = {};
-        const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
+        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
         detallesApartamento.apartamentoUI = apartamentoUI;
         detallesApartamento.apartamentoIDV = apartamentoIDV;
         const precioNetoApartamentoPorDia = propuestaPrecio;

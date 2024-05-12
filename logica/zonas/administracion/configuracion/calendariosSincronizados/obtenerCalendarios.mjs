@@ -1,15 +1,15 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { resolverApartamentoUI } from "../../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 
 export const obtenerCalendarios = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         const plataformaCalendarios = validadoresCompartidos.tipos.cadena({
             string: entrada.body.plataformaCalendarios,
@@ -39,7 +39,7 @@ export const obtenerCalendarios = async (entrada, salida) => {
         if (resuelveCalendariosSincronizados.rowCount > 0) {
             for (const detallesDelCalendario of resuelveCalendariosSincronizados.rows) {
                 const apartamentoIDV = detallesDelCalendario.apartamentoIDV;
-                const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
+                const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
                 detallesDelCalendario.apartamentoUI = apartamentoUI;
             }
             ok.ok = resuelveCalendariosSincronizados.rows;

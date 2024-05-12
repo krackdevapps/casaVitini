@@ -1,4 +1,4 @@
-import { zonasHorarias } from "../../../../componentes/zonasHorarias.mjs";
+import { listaZonasHorarias } from "../../../../componentes/zonasHorarias.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { obtenerCalendarios as oc } from "../calendariosSincronizados/obtenerCalendarios.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
@@ -8,12 +8,11 @@ export const obtenerConfiguracion = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
             const configuraciones = await oc([
             "zonaHoraria"
         ])
-        const listaZonasHorarias = zonasHorarias();
         const ok = {
             ok: configuraciones,
             listaZonasHorarias: listaZonasHorarias

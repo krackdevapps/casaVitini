@@ -1,4 +1,4 @@
-import { clienteSquare } from "../../squareClient.mjs";
+import { clienteSquare } from "./squareClient.mjs";
 
 export const crearReenbolso = async (reembolso) => {
     try {

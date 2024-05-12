@@ -1,9 +1,11 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
-import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { obtenerBloqueosDelApartamentoPorApartamentoIDV } from "../../../repositorio/bloqueos/obtenerBloqueosDelApartamentoPorApartamentoIDV.mjs";
 
 export const listaBloquoeosDelApartamento = async (entrada, salida) => {
     try {
@@ -11,7 +13,7 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -22,41 +24,19 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
         })
 
         await eliminarBloqueoCaducado();
+        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+        const bloqueosDelApartamento = await obtenerBloqueosDelApartamentoPorApartamentoIDV(apartamentoIDV)
 
-        const validarApartmento = `
-                                SELECT
-                                uid
-                                FROM "configuracionApartamento"
-                                WHERE "apartamentoIDV" = $1;`;
-        const resuelveValidarApartamentoIDV = await conexion.query(validarApartmento, [apartamentoIDV]);
-        if (resuelveValidarApartamentoIDV.rowCount === 0) {
-            const error = "No existe ningún apartamento con el identicados visual apartmentoIDV que has pasado.";
-            throw new Error(error);
-        }
-
-        const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
-        const consultaDetallesBloqueoApartamento = `
-                                    SELECT
-                                    uid,
-                                    to_char(entrada, 'DD/MM/YYYY') as entrada, 
-                                    to_char(salida, 'DD/MM/YYYY') as salida, 
-                                    apartamento,
-                                    "tipoBloqueo",
-                                    motivo,
-                                    zona
-                                    FROM "bloqueosApartamentos"
-                                    WHERE apartamento = $1;`;
-        const resuelveBloqueosPorApartmento = await conexion.query(consultaDetallesBloqueoApartamento, [apartamentoIDV]);
         const ok = {};
-        if (resuelveBloqueosPorApartmento.rowCount === 0) {
+        if (bloqueosDelApartamento.length === 0) {
             ok.apartamentoIDV = apartamentoIDV;
             ok.apartamentoUI = apartamentoUI;
             ok.ok = [];
         }
-        if (resuelveBloqueosPorApartmento.rowCount > 0) {
-            const bloqueosEncontradosDelApartamento = resuelveBloqueosPorApartmento.rows;
+        if (bloqueosDelApartamento.length > 0) {
             const bloqueosDelApartamentoEntonctrado = [];
-            bloqueosEncontradosDelApartamento.map((bloqueoDelApartamento) => {
+            bloqueosDelApartamento.map((bloqueoDelApartamento) => {
                 const uidBloqueo = bloqueoDelApartamento.uid;
                 const tipoBloqueo = bloqueoDelApartamento.tipoBloqueo;
                 const entrada = bloqueoDelApartamento.entrada;

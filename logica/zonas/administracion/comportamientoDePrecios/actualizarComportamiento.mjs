@@ -1,10 +1,10 @@
 import { Mutex } from "async-mutex";
 import { conexion } from "../../../componentes/db.mjs";
 import { evitarDuplicados } from "../../../sistema/precios/comportamientoPrecios/evitarDuplicados.mjs";
-import { resolverApartamentoUI } from "../../../sistema/resolucion/resolverApartamentoUI.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 
 export const actualizarComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -12,7 +12,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         await mutex.acquire();
         const nombreComportamiento = validadoresCompartidos.tipos.cadena({
@@ -171,7 +171,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
                 const error = "No existe ningún apartamento con ese identificador visual";
                 throw new Error(error);
             }
-            const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
             if (simbolo !== "aumentoPorcentaje" &&
                 simbolo !== "aumentoCantidad" &&
                 simbolo !== "reducirCantidad" &&

@@ -12,7 +12,7 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         await mutex.acquire();
 

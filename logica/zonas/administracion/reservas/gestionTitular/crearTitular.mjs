@@ -1,6 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { insertarCliente } from "../../../../sistema/clientes/insertarCliente.mjs";
+import { insertarCliente } from "../../../../repositorio/clientes/insertarCliente.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
@@ -10,7 +10,7 @@ export const crearTitular = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const reservaUID = validadoresCompartidos.tipos.numero({
             number: entrada.body.reservaUID,

@@ -11,7 +11,7 @@ export const apartamentosDisponiblesAdministracion = async (entrada, salida) => 
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const fechaEntrada = entrada.body.entrada;
         const fechaSalida = entrada.body.salida;

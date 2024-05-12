@@ -8,7 +8,7 @@ export const calculadora = (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const numero1 = entrada.body.numero1;
         const numero2 = entrada.body.numero2;

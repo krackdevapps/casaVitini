@@ -1,15 +1,16 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
+import { obtenerTodasLasHabitaciones } from "../../../../repositorio/arquitectura/obtenerTodasLasHabitaciones.mjs";
 
 export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
-
+        IDX.control()
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -20,33 +21,22 @@ export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entr
             soloMinusculas: "si"
         })
             
-        const consultaDetallesConfiguracion = `
-                                SELECT 
-                                *
-                                FROM "configuracionApartamento"
-                                WHERE "apartamentoIDV" = $1;
-                                `;
-        const metadatos = [
-            apartamentoIDV
-        ];
-        const resuelveConsultaDetallesConfiguracion = await conexion.query(consultaDetallesConfiguracion, metadatos);
-        if (resuelveConsultaDetallesConfiguracion.rowCount === 0) {
+        const configuracionDelApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        if (configuracionDelApartamento.length === 0) {
             const error = "No hay ninguna configuracion disponible para este apartamento";
             throw new Error(error);
         }
-        if (resuelveConsultaDetallesConfiguracion.rowCount > 0) {
-            const consultaHabitacionesEnConfiguracion = await conexion.query(`SELECT habitacion FROM "configuracionHabitacionesDelApartamento" WHERE apartamento = $1`, [apartamentoIDV]);
+        if (configuracionDelApartamento.length > 0) {
+            const habitacionesDelApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
             const habitacionesEnConfiguracionArrayLimpio = [];
-            const habitacionesEnConfiguracion = consultaHabitacionesEnConfiguracion.rows;
-            for (const detalleHabitacion of habitacionesEnConfiguracion) {
+            for (const detalleHabitacion of habitacionesDelApartamento) {
                 const habitacionIDV = detalleHabitacion.habitacion;
                 habitacionesEnConfiguracionArrayLimpio.push(habitacionIDV);
             }
-            const resuelveHabitacionesComoEntidad = await conexion.query(`SELECT habitacion, "habitacionUI" FROM habitaciones`);
-            const habitacionesComoEntidad = resuelveHabitacionesComoEntidad.rows;
+            const todasLasHabitacione = await obtenerTodasLasHabitaciones()
             const habitacionComoEntidadArrayLimpio = [];
             const habitacionesComoEntidadEstructuraFinal = {};
-            for (const detalleHabitacion of habitacionesComoEntidad) {
+            for (const detalleHabitacion of todasLasHabitacione) {
                 const habitacionUI = detalleHabitacion.habitacionUI;
                 const habitacionIDV = detalleHabitacion.habitacion;
                 habitacionComoEntidadArrayLimpio.push(habitacionIDV);

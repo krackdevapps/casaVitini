@@ -1,5 +1,5 @@
 import { conexion } from "../../../../componentes/db.mjs";
-import { zonasHorarias } from "../../../../componentes/zonasHorarias.mjs";
+import { listaZonasHorarias } from "../../../../componentes/zonasHorarias.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
@@ -9,7 +9,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         const zonaHoraria = validadoresCompartidos.tipos.cadena({
             string: entrada.body.zonaHoraria,
@@ -23,7 +23,6 @@ export const guardarConfiguracion = async (entrada, salida) => {
         // Validar que la zona horarai exista
         const validarZonaHoraria = (zonaHorariaAValidar) => {
             let resultadoFinal = "no";
-            const listaZonasHorarias = zonasHorarias();
             for (const zonaHoraria of listaZonasHorarias) {
                 if (zonaHoraria === zonaHorariaAValidar) {
                     resultadoFinal = "si";

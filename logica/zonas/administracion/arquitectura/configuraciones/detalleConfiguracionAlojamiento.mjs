@@ -1,9 +1,11 @@
-import { resolverApartamentoUI } from "../../../../sistema/resolucion/resolverApartamentoUI.mjs";
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
-
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
+import { obtenerNombreHabitacionUI } from "../../../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs";
+import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../../../../repositorio/arquitectura/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs";
 
 export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
     try {
@@ -11,7 +13,7 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
@@ -22,68 +24,41 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const consultaPerfilConfiguracion = `
-                                SELECT 
-                                uid,
-                                "apartamentoIDV",
-                                "estadoConfiguracion",
-                                imagen
-                                FROM "configuracionApartamento"
-                                WHERE "apartamentoIDV" = $1;
-                                `;
-        const resuelveConsultaPerfilConfiguracion = await conexion.query(consultaPerfilConfiguracion, [apartamentoIDV]);
-        if (resuelveConsultaPerfilConfiguracion.rowCount === 0) {
+
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+
+        if (configuracionApartamento.length === 0) {
             const error = "No hay ninguna configuracion disponible para este apartamento";
             throw new Error(error);
         }
-        if (resuelveConsultaPerfilConfiguracion.rowCount > 0) {
-            const estadoConfiguracion = resuelveConsultaPerfilConfiguracion.rows[0].estadoConfiguracion;
-            const apartamentoUI = await resolverApartamentoUI(apartamentoIDV);
-            const consultaHabitaciones = `
-                                    SELECT 
-                                    uid,
-                                    apartamento,
-                                    habitacion
-                                    FROM "configuracionHabitacionesDelApartamento"
-                                    WHERE apartamento = $1;
-                                    `;
-            const resuelveConsultaHabitaciones = await conexion.query(consultaHabitaciones, [apartamentoIDV]);
-            const habitacionesEncontradas = resuelveConsultaHabitaciones.rows;
-            for (const detalleHabitacion of habitacionesEncontradas) {
-                const uidHabitacion = detalleHabitacion.uid;
-                const apartamentoIDV = detalleHabitacion.apartamento;
+        if (configuracionApartamento.length > 0) {
+            const estadoConfiguracion = configuracionApartamento.estadoConfiguracion;
+            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+
+            const habitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
+            for (const detalleHabitacion of habitacionesPorApartamento) {
+                const habitacionUID = detalleHabitacion.uid;
                 const habitacionIDV = detalleHabitacion.habitacion;
-                const resolucionNombreHabitacion = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacionIDV]);
-                if (resolucionNombreHabitacion.rowCount === 0) {
+                const habitacionUI = await obtenerNombreHabitacionUI(habitacionIDV)
+                if (!habitacionUI) {
                     const error = "No existe el identificador de la habitacionIDV";
                     throw new Error(error);
                 }
-                const habitacionUI = resolucionNombreHabitacion.rows[0].habitacionUI;
                 detalleHabitacion.habitacionUI = habitacionUI;
-                const consultaCamas = `
-                                        SELECT
-                                        uid,
-                                        habitacion, 
-                                        cama
-                                        FROM
-                                        "configuracionCamasEnHabitacion"
-                                        WHERE
-                                        habitacion = $1
-                                        `;
-                const resolverConsultaCamas = await conexion.query(consultaCamas, [uidHabitacion]);
+
+                const camasDeLaHabitacion = await obtenerCamasDeLaHabitacionPorHabitacionUID(habitacionUID)
                 detalleHabitacion.camas = [];
-                if (resolverConsultaCamas.rowCount > 0) {
-                    const camasEntontradas = resolverConsultaCamas.rows;
-                    for (const detallesCama of camasEntontradas) {
-                        const uidCama = detallesCama.uid;
-                        const camaIDV = detallesCama.cama;
-                        const resolucionNombreCama = await conexion.query(`SELECT "camaUI", capacidad FROM camas WHERE cama = $1`, [camaIDV]);
-                        if (resolucionNombreCama.rowCount === 0) {
+                if (camasDeLaHabitacion.length > 0) {
+                    for (const detallesCamaEnLaHabitacion of camasDeLaHabitacion) {
+                        const uidCama = detallesCamaEnLaHabitacion.uid;
+                        const camaIDV = detallesCamaEnLaHabitacion.cama;
+                        const detallesCama = await obtenerDetallesCama(camaIDV)
+                        if (!detallesCama) {
                             const error = "No existe el identificador de la camaIDV";
                             throw new Error(error);
                         }
-                        const camaUI = resolucionNombreCama.rows[0].camaUI;
-                        const capacidad = resolucionNombreCama.rows[0].capacidad;
+                        const camaUI = detallesCama.camaUI
+                        const capacidad = detallesCama.capacidad;
                         const estructuraCama = {
                             uid: uidCama,
                             camaIDV: camaIDV,

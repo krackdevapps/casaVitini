@@ -939,13 +939,23 @@ export const validadoresCompartidos = {
         sentidoColumna: (sentidoColumna) => {
             try {
                 if (sentidoColumna !== "ascendente" && sentidoColumna !== "descendente") {
-                    return null
-                    // const error = "El campo sentido columna solo acepta un sentido ascendente o descendente"
-                    // throw new Error(error)
+                    const error = "El campo sentido columna solo acepta un sentido ascendente o descendente"
+                    throw new Error(error)
+                }
+            } catch (error) {
+                throw error
+            }
+        },
+        estados: (estado) => {
+            try {
+                if (estado !== "activado" && estado !== "desactivado") {
+                    const error = "El estado solo puede ser activado o desactivado"
+                    throw new Error(error)
                 }
             } catch (error) {
                 throw error
             }
         }
-    }
+    },
+
 }

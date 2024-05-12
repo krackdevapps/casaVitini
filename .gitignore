@@ -10,6 +10,9 @@ ui/componentes/videos/*
 certificados_ssl/*
 !certificados_ssl/
 
+scripts_obsoletos
+
+
 
 
 

@@ -10,7 +10,7 @@ export const obtenerDetallesPorCama = async (camaIDV) => {
         WHERE cama = $1;
         `;
         const resuelve = await conexion.query(consulta, [camaIDV])
-        return resuelve.rows
+        return resuelve.rows[0]
     } catch (errorAdaptador) { 
         throw errorAdaptador
     }

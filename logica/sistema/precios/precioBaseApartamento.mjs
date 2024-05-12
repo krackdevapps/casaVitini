@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'; 
-import { resolverApartamentoUI } from '../resolucion/resolverApartamentoUI.mjs'
 import { conexion } from '../../componentes/db.mjs';
+import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
 // Los precios de los apartamentos, van asociados a fechas
 const precioBaseApartamento = async (apartamentoIDV) => {
     try {
@@ -24,7 +24,7 @@ const precioBaseApartamento = async (apartamentoIDV) => {
         const detallesApartamento = {}
         detallesApartamento.impuestos = []
         detallesApartamento.totalImpuestos = "0.00"
-        const apartamentoUI = await resolverApartamentoUI(apartamentoIDV)
+        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
         detallesApartamento.apartamentoUI = apartamentoUI
         detallesApartamento.apartamentoIDV = apartamentoIDV
         const listarPrecioApartamento = `

@@ -10,7 +10,7 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const apartamento = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamento,

@@ -8,7 +8,7 @@ export const detalleImpuesto = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         const impuestoUID = validadoresCompartidos.tipos.numero({
             number: entrada.body.impuestoUID,

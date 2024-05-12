@@ -10,7 +10,7 @@ export const insertarDatosFinancierosReservaExistente = async (entrada, salida) 
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        if (IDX.control()) return
+        IDX.control()
 
         const reserva = validadoresCompartidos.tipos.numero({
             number: entrada.body.reserva,

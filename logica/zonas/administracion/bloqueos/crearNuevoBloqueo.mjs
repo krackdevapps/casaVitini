@@ -1,10 +1,11 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../../componentes/db.mjs";
 import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { insertarNuevoBloqueo } from "../../../repositorio/bloqueos/insertarNuevoBloqueo.mjs";
 
 export const crearNuevoBloqueo = async (entrada, salida) => {
     try {
@@ -12,7 +13,7 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        if (IDX.control()) return
+        IDX.control()
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -46,13 +47,8 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
         })
 
         await eliminarBloqueoCaducado()
-        const validarApartamenotIDV = `
-                            SELECT
-                            *
-                            FROM "configuracionApartamento"
-                            WHERE "apartamentoIDV" = $1;`;
-        const resuelveValidarApartmento = await conexion.query(validarApartamenotIDV, [apartamentoIDV]);
-        if (resuelveValidarApartmento.rowCount === 0) {
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        if (!configuracionApartamento.apartamento) {
             const error = "No existe el identificador del apartamento";
             throw new Error(error);
         }
@@ -94,18 +90,7 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
         } else {
             motivo = null;
         }
-        const insertarNuevoBloqueo = `
-                                INSERT INTO "bloqueosApartamentos"
-                                (
-                                apartamento,
-                                "tipoBloqueo",
-                                entrada,
-                                salida,
-                                motivo,
-                                zona
-                                )
-                                VALUES ($1, $2, $3, $4, $5, $6) RETURNING uid
-                                `;
+
         const datosNuevoBloqueo = [
             apartamentoIDV,
             tipoBloqueo,
@@ -114,13 +99,15 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             motivo,
             zonaUI
         ];
-        const resuelveInsertarNuevoBloqueo = await conexion.query(insertarNuevoBloqueo, datosNuevoBloqueo);
-        if (resuelveInsertarNuevoBloqueo.rowCount === 0) {
+  
+        const nuevoBloquoe = await insertarNuevoBloqueo(datosNuevoBloqueo)
+
+        if (nuevoBloquoe.rowCount === 0) {
             const error = "No se ha podido insertar el nuevo bloqueo";
             throw new Error(error);
         }
-        if (resuelveInsertarNuevoBloqueo.rowCount === 1) {
-            const nuevoUIDBloqueo = resuelveInsertarNuevoBloqueo.rows[0].uid;
+        if (nuevoBloquoe.rowCount === 1) {
+            const nuevoUIDBloqueo = nuevoBloquoe.rows[0].uid;
             const ok = {
                 ok: "Se ha creado el bloqueo correctamente",
                 nuevoBloqueoUID: nuevoUIDBloqueo,
