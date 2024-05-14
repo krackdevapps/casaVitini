@@ -1,9 +1,10 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { actualizarParConfiguracion } from "../../../../repositorio/configuracion/actualizarParConfiguracion.mjs";
+import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
 
-export const guardarConfiguracion = async (entrada, salida) => {  
+export const guardarConfiguracion = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -50,42 +51,21 @@ export const guardarConfiguracion = async (entrada, salida) => {
             const error = `En base la configuracíon que solicitas, es decir en base a los dias minimos de antelación establecidos y el limite futuro de dias, las reservas tendrian un maximo de ${maximoDiasDuracionReserva} días de duracíon, por lo tanto no puedes establecer mas días de duracíon que eso. Es decir o escoges poner menos dias de duración maximo para una reserva o ampliar los limites anteriores.`;
             throw new Error(error);
         }
-        await conexion.query('BEGIN'); // Inicio de la transacción
-        const configuracionUID_diasAntelacionReserva = "diasAntelacionReserva";
-        const configuracionUID_limiteFuturoReserva = "limiteFuturoReserva";
-        const configuracionUID_diasMaximosReserva = "diasMaximosReserva";
-        const actualizarConfiguracionGlobal = `
-                                UPDATE "configuracionGlobal"
-                                SET
-                                    valor = CASE
-                                        WHEN "configuracionUID" = $2 THEN $1
-                                        WHEN "configuracionUID" = $4 THEN $3
-                                        WHEN "configuracionUID" = $6 THEN $5
-                                        ELSE valor
-                                    END
-                                WHERE
-                                    "configuracionUID" IN ($2, $4, $6);
-                                `;
-        const nuevaConfiguracion = [
-            diasAntelacionReserva,
-            configuracionUID_diasAntelacionReserva,
-            limiteFuturoReserva,
-            configuracionUID_limiteFuturoReserva,
-            diasMaximosReserva,
-            configuracionUID_diasMaximosReserva
-        ];
-        const consultaValidarApartamento = await conexion.query(actualizarConfiguracionGlobal, nuevaConfiguracion);
-        if (consultaValidarApartamento.rowCount === 0) {
-            const error = "No se ha podido actualizar la configuracion, reintentalo";
-            throw new Error(error);
+        await campoDeTransaccion("iniciar")
+        const dataActualizarParConfiguracion = {
+            "diasAntelacionReserva": diasAntelacionReserva,
+            "limiteFuturoReserva": limiteFuturoReserva,
+            "diasMaximosReserva": diasMaximosReserva
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await actualizarParConfiguracion(dataActualizarParConfiguracion)
+
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado correctamente la configuracion"
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

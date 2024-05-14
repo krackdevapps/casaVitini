@@ -1,8 +1,10 @@
 import ICAL from 'ical.js';
-import { conexion } from "../../../../../componentes/db.mjs";
 import { VitiniIDX } from '../../../../../sistema/VitiniIDX/control.mjs';
 import { validadoresCompartidos } from '../../../../../sistema/validadores/validadoresCompartidos.mjs';
 import { filtroError } from '../../../../../sistema/error/filtroError.mjs';
+import { obtenerCalendarioPorCalendarioUID } from '../../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorCalendarioUID.mjs';
+import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs';
+import { actualizarCalendarioSincronizado } from '../../../../../repositorio/configuracion/calendarioSincronizados/actualizarCalendarioSincronizado.mjs';
 
 export const actualizarCalendario = async (entrada, salida) => {
     try {
@@ -41,42 +43,17 @@ export const actualizarCalendario = async (entrada, salida) => {
             ]
         })
 
-
-        const consultaSelecionaCalendario = `
-                                    SELECT 
-                                    uid
-                                    FROM 
-                                    "calendariosSincronizados" 
-                                    WHERE 
-                                    uid = $1`;
-        const resuelveSelecionarCalendario = await conexion.query(consultaSelecionaCalendario, [calendarioUID]);
-        if (resuelveSelecionarCalendario.rowCount === 0) {
-            const error = "No existe el calendario que quieres actualizar, por favor revisa el identificado calendarioUID que has introducido.";
-            throw new Error(error);
-        }
-
-        const validarApartamentoIDV = `
-                                            SELECT
-                                            "apartamentoIDV"
-                                            FROM 
-                                            "configuracionApartamento"
-                                            WHERE
-                                            "apartamentoIDV" = $1`;
-        const resuelveValidarCliente = await conexion.query(validarApartamentoIDV, [apartamentoIDV]);
-        if (resuelveValidarCliente.rowCount === 0) {
-            const error = "No existe el identificador de apartamento, verifica el apartamentoIDV";
-            throw new Error(error);
-        }
+        await obtenerCalendarioPorCalendarioUID(calendarioUID)
+        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
 
         let calendarioRaw = null;
-        if (url) {         
+        if (url) {
             const errorDeFormado = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb";
             try {
                 const calendarioData = await axios.get(url);
                 calendarioRaw = calendarioData.data;
                 const jcalData = ICAL.parse(calendarioRaw); // Intenta analizar el contenido como datos jCal
                 const jcal = new ICAL.Component(jcalData); // Crea un componente jCal
-
 
                 // Verifica si el componente es un calendario (VCALENDAR)
                 if (jcal?.name.toLowerCase() !== 'vcalendar') {
@@ -86,27 +63,16 @@ export const actualizarCalendario = async (entrada, salida) => {
                 throw new Error(errorDeFormado);
             }
         }
-        const actualizarCliente = `
-                                    UPDATE "calendariosSincronizados"
-                                    SET 
-                                    nombre = COALESCE($1, nombre),
-                                    url = COALESCE($2, url),
-                                    "apartamentoIDV" = COALESCE($3, "apartamentoIDV"),
-                                    "dataIcal" = COALESCE($4, "dataIcal")
-                                    WHERE uid = $5;
-                                    `;
-        const datosParaActualizar = [
-            nombre,
-            url,
-            apartamentoIDV,
-            calendarioRaw,
-            calendarioUID
-        ];
-        const resuelveActualizarCliente = await conexion.query(actualizarCliente, datosParaActualizar);
-        if (resuelveActualizarCliente.rowCount === 0) {
-            const error = "Los datos se han enviado a la base de datos pero el servido de base de datos infomra que no se ha actualizado el calendario vuelve a intentarlo mas tarde. Discule las molestias";
-            throw new Error(error);
+
+        const dataActualizarCalendarioSincronizado = {
+            nombre: nombre,
+            url: url,
+            apartamentoIDV: apartamentoIDV,
+            calendarioRaw: calendarioRaw,
+            calendarioUID: calendarioUID
         }
+
+        await actualizarCalendarioSincronizado(dataActualizarCalendarioSincronizado)
         const ok = {
             ok: "Se ha actualizado correctamente el calendario"
         };

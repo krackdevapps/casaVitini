@@ -20,10 +20,8 @@ export const obtenerDetallesCliente = async (clienteUID) => {
             const error = "No existe ningun cliente con ese UID";
             throw new Error(error)
         }
-        if (resuelve.rowCount === 1) {
-            const nuevoCliente = resuelve.rows[0]
-            return nuevoCliente
-        }
+        return resuelve.rows[0]
+
     } catch (error) {
         throw error
     }

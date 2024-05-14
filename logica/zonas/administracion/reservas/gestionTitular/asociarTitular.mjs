@@ -1,8 +1,11 @@
-import { conexion } from "../../../../componentes/db.mjs";
+import { eliminarTitularPoolPorReservaUID } from "../../../../repositorio/reservas/eliminarTitularPoolPorReservaUID.mjs";
+import { eliminarTitularPorReservaUID } from "../../../../repositorio/reservas/eliminarTitularPorReservaUID.mjs";
+import { obtenerDetallesCliente } from "../../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-
+import { insertarTitularEnReserva } from "../../../../repositorio/reservas/insertarTitularEnReserva.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
 
 export const asociarTitular = async (entrada, salida) => {
     try {
@@ -29,76 +32,36 @@ export const asociarTitular = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
 
-        const validarCliente = `
-                            SELECT
-                            uid,
-                            nombre,
-                            "primerApellido",
-                            "segundoApellido",
-                            pasaporte,
-                            telefono,
-                            email
-                            FROM 
-                            clientes
-                            WHERE
-                            uid = $1`;
-        const resuelveValidarCliente = await conexion.query(validarCliente, [clienteUID]);
-        if (resuelveValidarCliente.rowCount === 0) {
-            const error = "No existe el cliente";
-            throw new Error(error);
+        const detallesCliente = await obtenerDetallesCliente(clienteUID)
+        await eliminarTitularPoolPorReservaUID(reservaUID)
+        await eliminarTitularPorReservaUID(reservaUID)
+
+        const nombre = detallesCliente.nombre;
+        const primerApellido = detallesCliente.primerApellido ? detallesCliente.primerApellido : "";
+        const segundoApellido = detallesCliente.segundoApellido ? detallesCliente.segundoApellido : "";
+        const pasaporte = detallesCliente.pasaporte;
+        const email = detallesCliente.email ? detallesCliente.email : "";
+        const telefono = detallesCliente.telefono ? detallesCliente.telefono : "";
+        const nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`;
+        await obtenerReservaPorReservaUID(reservaUID)
+
+        const dataTitular = {
+            clienteUID: clienteUID,
+            reservaUID: reservaUID
         }
-        if (resuelveValidarCliente.rowCount === 1) {
-            const consultaElimintarTitularPool = `
-                                DELETE FROM 
-                                "poolTitularesReserva"
-                                WHERE
-                                reserva = $1;
-                                `;
-            await conexion.query(consultaElimintarTitularPool, [reservaUID]);
-            const eliminaTitular = `
-                                DELETE FROM 
-                                "reservaTitulares"
-                                WHERE
-                                "reservaUID" = $1;
-                                `;
-            await conexion.query(eliminaTitular, [reservaUID]);
-            const nombre = resuelveValidarCliente.rows[0].nombre;
-            const primerApellido = resuelveValidarCliente.rows[0].primerApellido ? resuelveValidarCliente.rows[0].primerApellido : "";
-            const segundoApellido = resuelveValidarCliente.rows[0].segundoApellido ? resuelveValidarCliente.rows[0].segundoApellido : "";
-            const pasaporte = resuelveValidarCliente.rows[0].pasaporte;
-            const email = resuelveValidarCliente.rows[0].email ? resuelveValidarCliente.rows[0].email : "";
-            const telefono = resuelveValidarCliente.rows[0].telefono ? resuelveValidarCliente.rows[0].telefono : "";
-            const nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`;
-            await validadoresCompartidos.reservas.validarReserva(reservaUID);
-            const consultaActualizarTitular = `
-                                INSERT INTO "reservaTitulares"
-                                (
-                                "titularUID",
-                                "reservaUID"
-                                )
-                                VALUES ($1, $2);`;
-            const datosParaActualizar = [
-                clienteUID,
-                reservaUID
-            ];
-            const resuelveActualizarTitular = await conexion.query(consultaActualizarTitular, datosParaActualizar);
-            if (resuelveActualizarTitular.rowCount === 0) {
-                const error = "No se ha podido actualizar el titular de la reserva";
-                throw new Error(error);
-            }
-            const ok = {
-                ok: "Se ha actualizado correctamente el titular en la reserva",
-                clienteUID: clienteUID,
-                nombreCompleto: nombreCompleto,
-                email: email,
-                nombre: nombre,
-                telefono: telefono,
-                primerApellido: primerApellido,
-                segundoApellido: segundoApellido,
-                pasaporte: pasaporte
-            };
-            salida.json(ok);
-        }
+        await insertarTitularEnReserva(dataTitular)
+        const ok = {
+            ok: "Se ha actualizado correctamente el titular en la reserva",
+            clienteUID: clienteUID,
+            nombreCompleto: nombreCompleto,
+            email: email,
+            nombre: nombre,
+            telefono: telefono,
+            primerApellido: primerApellido,
+            segundoApellido: segundoApellido,
+            pasaporte: pasaporte
+        };
+        salida.json(ok);
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)

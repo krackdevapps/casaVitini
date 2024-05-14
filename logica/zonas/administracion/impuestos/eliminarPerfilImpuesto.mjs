@@ -1,8 +1,9 @@
 import { Mutex } from "async-mutex";
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerImpuestosPorImppuestoUID } from "../../../repositorio/impuestos/obtenerImpuestosPorImpuestoUID.mjs";
+import { eliminarImpuesto } from "../../../repositorio/impuestos/eliminarImpuesto.mjs";
 
 export const eliminarPerfilImpuesto = async (entrada, salida) => {
     let mutex
@@ -23,15 +24,8 @@ export const eliminarPerfilImpuesto = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        const validarYEliminarImpuesto = `
-                                DELETE FROM impuestos
-                                WHERE "impuestoUID" = $1;
-                                `;
-        const resuelveValidarYEliminarImpuesto = await conexion.query(validarYEliminarImpuesto, [impuestoUID]);
-        if (resuelveValidarYEliminarImpuesto.rowCount === 0) {
-            const error = "No existe el perfil del impuesto que deseas eliminar";
-            throw new Error(error);
-        }
+        await obtenerImpuestosPorImppuestoUID(impuestoUID)
+        await eliminarImpuesto(impuestoUID)
         const ok = {
             ok: "Perfil del impuesto eliminado"
         };

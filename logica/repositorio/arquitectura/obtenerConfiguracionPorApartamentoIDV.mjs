@@ -12,7 +12,7 @@ export const obtenerConfiguracionPorApartamentoIDV = async (apartamentoIDV) => {
         `;
         const resuelve = await conexion.query(consulta, [apartamentoIDV]);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningún apartamento con el identicados visual apartmentoIDV que has pasado.";
+            const error = "No existe ningún apartamento con el identicador visual apartmentoIDV que has pasado.";
             throw new Error(error);
         }
         return resuelve.rows[0]

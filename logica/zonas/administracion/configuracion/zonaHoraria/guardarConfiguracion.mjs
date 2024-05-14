@@ -1,8 +1,9 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { listaZonasHorarias } from "../../../../componentes/zonasHorarias.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
+import { actualizarParConfiguracion } from "../../../../repositorio/configuracion/actualizarParConfiguracion.mjs";
 
 export const guardarConfiguracion = async (entrada, salida) => {
     try {
@@ -34,30 +35,19 @@ export const guardarConfiguracion = async (entrada, salida) => {
             const error = "el campo 'zonaHorariaGlobal' no existe";
             throw new Error(error);
         }
-        await conexion.query('BEGIN'); // Inicio de la transacción
-        const actualizarConfiguracionGlobal = `
-                                        UPDATE "configuracionGlobal"
-                                        SET
-                                          valor = $1
-                                        WHERE
-                                          "configuracionUID" = $2;
-                                        `;
-        const nuevaConfiguracion = [
-            zonaHoraria,
-            "zonaHoraria"
-        ];
-        const consultaValidarApartamento = await conexion.query(actualizarConfiguracionGlobal, nuevaConfiguracion);
-        if (consultaValidarApartamento.rowCount === 0) {
-            const error = "No se ha podido actualizar la configuracion, reintentalo";
-            throw new Error(error);
+        await campoDeTransaccion("iniciar")
+        const paresConf = {
+            "zonaHoraria": zonaHoraria
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await actualizarParConfiguracion(paresConf)
+
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado correctamente la configuracion"
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

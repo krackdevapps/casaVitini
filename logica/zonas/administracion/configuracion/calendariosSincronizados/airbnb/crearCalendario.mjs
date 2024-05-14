@@ -1,8 +1,11 @@
 import ICAL from 'ical.js';
-import { conexion } from '../../../../../componentes/db.mjs';
 import { VitiniIDX } from '../../../../../sistema/VitiniIDX/control.mjs';
 import { validadoresCompartidos } from '../../../../../sistema/validadores/validadoresCompartidos.mjs';
 import { filtroError } from '../../../../../sistema/error/filtroError.mjs';
+import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs';
+import { obtenerCalendarioPorCalendarioUIDPublico } from '../../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorCalendarioUIDPublico.mjs';
+import { insertarCalendarioSincronizado } from '../../../../../repositorio/configuracion/calendarioSincronizados/insertarCalendarioSincronizado.mjs';
+import { campoDeTransaccion } from '../../../../../componentes/campoDeTransaccion.mjs';
 
 export const crearCalendario = async (entrada, salida) => {
     try {
@@ -33,21 +36,10 @@ export const crearCalendario = async (entrada, salida) => {
                 "airbnb.com"
             ]
         })
+        await campoDeTransaccion("inicar")
+        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
 
-        const validarApartamentoIDV = `
-                                    SELECT
-                                    "apartamentoIDV"
-                                    FROM 
-                                    "configuracionApartamento"
-                                    WHERE
-                                    "apartamentoIDV" = $1`;
-        const resuelveValidarCliente = await conexion.query(validarApartamentoIDV, [apartamentoIDV]);
-        if (resuelveValidarCliente.rowCount === 0) {
-            const error = "No existe el identificador de apartamento, verifica el apartamentoIDV";
-            throw new Error(error);
-        }
-   
-        const errorDeFormado = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb";
+        const errorDeFormato = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb";
         let calendarioRaw;
         try {
             const maxContentLengthBytes = 10 * 1024 * 1024; // 10 MB
@@ -60,10 +52,10 @@ export const crearCalendario = async (entrada, salida) => {
 
             // Verifica si el componente es un calendario (VCALENDAR)
             if (jcal?.name.toLowerCase() !== 'vcalendar') {
-                throw new Error(errorDeFormado);
+                throw new Error(errorDeFormato);
             }
         } catch (errorCapturado) {
-            throw new Error(errorDeFormado);
+            throw new Error(errorDeFormato);
         }
         const generarCadenaAleatoria = (longitud) => {
             const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -75,13 +67,8 @@ export const crearCalendario = async (entrada, salida) => {
             return cadenaAleatoria + ".ics";
         };
         const validarCodigo = async (codigoAleatorio) => {
-            const validarCodigoAleatorio = `
-                                        SELECT
-                                        "uidPublico"
-                                        FROM "calendariosSincronizados"
-                                        WHERE "uidPublico" = $1;`;
-            const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [codigoAleatorio]);
-            if (resuelveValidarCodigoAleatorio.rowCount > 0) {
+            const calendario = await obtenerCalendarioPorCalendarioUIDPublico(codigoAleatorio)
+            if (calendario.length > 0) {
                 return true;
             }
         };
@@ -98,35 +85,24 @@ export const crearCalendario = async (entrada, salida) => {
         };
         const codigoAleatorioUnico = await controlCodigo();
         const plataformaOrigen = "airbnb";
-        const consultaConfiguracion = `
-                                    INSERT INTO "calendariosSincronizados"
-                                    (
-                                    nombre,
-                                    url,
-                                    "apartamentoIDV",
-                                    "plataformaOrigen",
-                                    "dataIcal", 
-                                    "uidPublico"
-                                    )
-                                    VALUES ($1, $2, $3, $4, $5, $6)
-                                    RETURNING uid
-                                        `;
-        const nuevoCalendario = [
-            nombre,
-            url,
-            apartamentoIDV,
-            plataformaOrigen,
-            calendarioRaw,
-            codigoAleatorioUnico
-        ];
-        const resuelveCalendariosSincronizados = await conexion.query(consultaConfiguracion, nuevoCalendario);
-        const nuevoUID = resuelveCalendariosSincronizados.rows[0].uid;
+        const dataInsertarCalendarioSincronizado = {
+            nombre: nombre,
+            url: url,
+            apartamentoIDV: apartamentoIDV,
+            plataformaOrigen: plataformaOrigen,
+            calendarioRaw: calendarioRaw,
+            codigoAleatorioUnico: codigoAleatorioUnico
+        }
+
+        const nuevoCalendario = await insertarCalendarioSincronizado(dataInsertarCalendarioSincronizado)
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha guardado el nuevo calendario y esta listo para ser sincronizado",
-            nuevoUID: nuevoUID
+            nuevoUID: nuevoCalendario.uid
         };
         salida.json(ok);
     } catch (errorCapturado) {
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

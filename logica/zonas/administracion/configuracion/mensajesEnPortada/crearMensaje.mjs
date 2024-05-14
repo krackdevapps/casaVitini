@@ -1,7 +1,9 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerTodosLosMensjaes } from "../../../../repositorio/configuracion/mensajesPortada/obtenerTodosLosMensajes.mjs";
+import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
+import { insertarMensajeEnPortada } from "../../../../repositorio/configuracion/mensajesPortada/insertarMensajeEnPortada.mjs";
 
 export const crearMensaje = async (entrada, salida) => {
     try {
@@ -20,46 +22,26 @@ export const crearMensaje = async (entrada, salida) => {
         const bufferObj = Buffer.from(mensaje, "utf8");
         const mensajeB64 = bufferObj.toString("base64");
 
-        await conexion.query('BEGIN'); // Inicio de la transacción
-        const consultaPosicionInicial = `
-                                SELECT 
-                                    *
-                                FROM 
-                                    "mensajesEnPortada";
-                               `;
-        const resuelvePosicionInicial = await conexion.query(consultaPosicionInicial);
-        const posicionInicial = resuelvePosicionInicial.rowCount + 1;
+        await campoDeTransaccion("iniciar")
 
-        const estadoInicial = "desactivado";
-        const crearMensaje = `
-                                INSERT INTO "mensajesEnPortada"
-                                (
-                                mensaje,
-                                estado,
-                                posicion
-                                )
-                                VALUES 
-                                ($1, $2, $3)
-                                RETURNING
-                                uid
-                                `;
+        const todosLosMensajes = await obtenerTodosLosMensjaes()
+        const posicionInicial = todosLosMensajes.length + 1;
 
-
-        const resuelveCreacion = await conexion.query(crearMensaje, [mensajeB64, estadoInicial, posicionInicial]);
-
-
-        if (resuelveCreacion.rowCount === 0) {
-            const error = "No se ha podido insertar el mensaje";
-            throw new Error(error);
+        const dataNuevoMensaje = {
+            mensajeB64: mensajeB64,
+            estadoInicial: "desactivado",
+            posicionInicial: posicionInicial
         }
+        await insertarMensajeEnPortada(dataNuevoMensaje)
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha creado el nuevo mensaje",
             mensajeUID: resuelveCreacion.rows[0].mensajeUID,
         };
         salida.json(ok);
-        await conexion.query('COMMIT');
+
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK');
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

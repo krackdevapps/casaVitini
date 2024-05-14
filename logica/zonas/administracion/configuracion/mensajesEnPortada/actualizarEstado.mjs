@@ -1,7 +1,9 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerMensajePorMensajeUID } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
+import { actualizarEstadoMensajeDePortada } from "../../../../repositorio/configuracion/mensajesPortada/actualizarEstadoMensajeDePortada.mjs";
+import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
 
 export const actualizarEstado = async (entrada, salida) => {
     try {
@@ -26,34 +28,15 @@ export const actualizarEstado = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-        await conexion.query('BEGIN'); // Inicio de la transacción
-        const validarUID = `
-                                SELECT 
-                                    "estado"
-                                FROM 
-                                    "mensajesEnPortada"
-                                WHERE 
-                                    uid = $1;
-                               `;
-        const resuelveValidacion = await conexion.query(validarUID, [mensajeUID]);
-        if (resuelveValidacion.rowCount === 0) {
-            const error = "No existe ningun mensaje con ese UID";
-            throw new Error(error);
-        }
+        await campoDeTransaccion("iniciar")
+        await obtenerMensajePorMensajeUID(mensajeUID)
 
-        const actualizarMensaje = `
-                                UPDATE 
-                                    "mensajesEnPortada"
-                                SET
-                                    estado = $1
-                                WHERE
-                                    uid = $2;`;
-        const resuelveActualizacion = await conexion.query(actualizarMensaje, [estado, mensajeUID]);
-        if (resuelveActualizacion.rowCount === 0) {
-            const error = "No se ha podido actualizar el mensaje por que no se ha encontrado";
-            throw new Error(error);
+        const dataActualizarEstadoMensaje = {
+            mensajeUID: mensajeUID,
+            estado: estado
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await actualizarEstadoMensajeDePortada(dataActualizarEstadoMensaje)
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el estado correctamente",
             mensajeUID: mensajeUID,
@@ -61,7 +44,7 @@ export const actualizarEstado = async (entrada, salida) => {
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

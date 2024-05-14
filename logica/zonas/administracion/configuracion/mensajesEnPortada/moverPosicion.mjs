@@ -1,7 +1,11 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerMensajePorMensajeUID } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
+import { obtenerMensajePorPosicion } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorPosicion.mjs";
+import { obtenerTodosLosMensjaes } from "../../../../repositorio/configuracion/mensajesPortada/obtenerTodosLosMensajes.mjs";
+import { actualizarPosicionDelMensajeDePortada } from "../../../../repositorio/configuracion/mensajesPortada/actualizarPosicionMensajeDePortada.mjs";
+import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
 
 export const moverPosicion = async (entrada, salida) => {
     try {
@@ -25,54 +29,39 @@ export const moverPosicion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const validarUID = `
-                                SELECT 
-                                    posicion,
-                                    mensaje,
-                                    estado
-                                FROM 
-                                    "mensajesEnPortada"
-                                WHERE 
-                                    uid = $1;
-                               `;
-        const resuelveValidacion = await conexion.query(validarUID, [mensajeUID]);
-        if (resuelveValidacion.rowCount === 0) {
-            const error = "No existe ningun mensaje con ese UID";
-            throw new Error(error);
-        }
+        const mensajeDePortadaa = await obtenerMensajePorMensajeUID(mensajeUID)
 
-
-        const posicionAntigua = resuelveValidacion.rows[0].posicion;
+        const posicionAntigua = mensajeDePortadaa.posicion;
         if (Number(posicionAntigua) === Number(nuevaPosicion)) {
             const error = "El mensaje ya esta en esa posicion";
             throw new Error(error);
         }
+
+        const todosLosMensaje = await obtenerTodosLosMensjaes()
+        const totalMensajes = todosLosMensaje.length
+
+        if (Number(totalMensajes) === 1) {
+            const error = "Solo hay un mensaje, por lo tanto mover la poscion es irrelevante.";
+            throw new Error(error);
+        }
+
+        if (Number(totalMensajes) < Number(nuevaPosicion)) {
+            const error = "La posicion no puede ser superior a: " + totalMensajes;
+            throw new Error(error);
+        }
+
         const mensajeSeleccionado = {};
-        const detallesMensajeSeleccionado = resuelveValidacion.rows[0];
-        const mensajeSeleccionado_texto = detallesMensajeSeleccionado.mensaje;
+        const mensajeSeleccionado_texto = mensajeDePortadaa.mensaje;
         const bufferObjPreDecode = Buffer.from(mensajeSeleccionado_texto, "base64");
 
         mensajeSeleccionado.uid = mensajeUID;
         mensajeSeleccionado.mensaje = bufferObjPreDecode.toString("utf8");
-        mensajeSeleccionado.estado = detallesMensajeSeleccionado.estado;
-        const validarMensajeAfectado = `
-                                SELECT 
-                                    uid,
-                                    mensaje,
-                                    estado, 
-                                    posicion
-                                FROM 
-                                    "mensajesEnPortada"
-                                WHERE 
-                                    posicion = $1;
-                               `;
-        const resuelveMensajeAfectado = await conexion.query(validarMensajeAfectado, [nuevaPosicion]);
-        const detallesMensajeAfectado = resuelveMensajeAfectado.rows[0];
+        mensajeSeleccionado.estado = mensajeDePortadaa.estado;
 
+        const detallesMensajeAfectado = await obtenerMensajePorPosicion(nuevaPosicion)
 
         const mensajeUIDAfectado = detallesMensajeAfectado.uid;
         const mensajeUIDAfectado_mensaje = detallesMensajeAfectado.mensaje;
-
         const buffer_mensajeAfectado = Buffer.from(mensajeUIDAfectado_mensaje, "base64");
 
         const mensajeAfectado = {
@@ -80,50 +69,28 @@ export const moverPosicion = async (entrada, salida) => {
             mensaje: buffer_mensajeAfectado.toString("utf8"),
             estado: detallesMensajeAfectado.estado
         };
-        await conexion.query('BEGIN'); // Inicio de la transacción
-        if (resuelveMensajeAfectado.rowCount === 1) {
-            // Posicion de transccion
-            const ajustarPosicionTransitivaElementoAfectado = `
-                                      UPDATE 
-                                          "mensajesEnPortada"
-                                      SET 
-                                          posicion = $2
-                                      WHERE 
-                                          uid = $1
-                                      RETURNING
-                                        mensaje,
-                                        estado
-                                         `;
-            const resuelveMensajeSeleccionado = await conexion.query(ajustarPosicionTransitivaElementoAfectado, [mensajeUIDAfectado, 0]);
+        await campoDeTransaccion("iniciar")
 
-
+        const dataActualizarPosicionDelMensaje_1 = {
+            mensajeUID: mensajeUIDAfectado,
+            posicion: "0"
         }
+        await actualizarPosicionDelMensajeDePortada(dataActualizarPosicionDelMensaje_1)
 
-        const actualizarMensajeActual = `
-                                UPDATE 
-                                    "mensajesEnPortada"
-                                SET
-                                    posicion = $1
-                                WHERE
-                                    uid = $2;`;
-
-        await conexion.query(actualizarMensajeActual, [nuevaPosicion, mensajeUID]);
-
-        if (resuelveMensajeAfectado.rowCount === 1) {
-            // Posicion de final a elementoAfectado
-            const ajustarPosicionFinalElementoAfectado = `
-                                     UPDATE 
-                                         "mensajesEnPortada"
-                                     SET 
-                                         posicion = $2
-                                     WHERE 
-                                         uid = $1;
-                                      `;
-            await conexion.query(ajustarPosicionFinalElementoAfectado, [mensajeUIDAfectado, posicionAntigua]);
+        const dataActualizarPosicionDelMensajeActual = {
+            mensajeUID: mensajeUID,
+            posicion: nuevaPosicion
         }
+        await actualizarPosicionDelMensajeDePortada(dataActualizarPosicionDelMensajeActual)
 
+        // Posicion de final a elementoAfectado
+        const dataActualizarPosicionDelMensajeFinal = {
+            mensajeUID: mensajeUIDAfectado,
+            posicion: posicionAntigua
+        }
+        await actualizarPosicionDelMensajeDePortada(dataActualizarPosicionDelMensajeFinal)
 
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado correctamente la posicion",
             mensajeSeleccionado: mensajeSeleccionado,
@@ -131,7 +98,7 @@ export const moverPosicion = async (entrada, salida) => {
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

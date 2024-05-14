@@ -2,6 +2,8 @@ import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerMensajePorMensajeUID } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
+import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
 
 export const cambiarPosicon = async (entrada, salida) => {
     try {
@@ -25,21 +27,9 @@ export const cambiarPosicon = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
         const mensajeB64 = btoa(mensaje);
-
-        const validarUID = `
-                                SELECT 
-                                    "estado"
-                                FROM 
-                                    "mensajeEnPortada"
-                                WHERE 
-                                    "mensajeUID" = $1;
-                               `;
-        const resuelveValidacion = await conexion.query(validarUID, [mensajeUID]);
-        if (resuelveValidacion.rowCount === 0) {
-            const error = "No existe ningun mensaje con ese UID";
-            throw new Error(error);
-        }
-        await conexion.query('BEGIN'); // Inicio de la transacción
+  
+        await obtenerMensajePorMensajeUID(mensajeUID)
+        await campoDeTransaccion("iniciar")
         const actualizarMensaje = `
                                 UPDATE 
                                     "mensajeEnPortada"
@@ -58,7 +48,7 @@ export const cambiarPosicon = async (entrada, salida) => {
             throw new Error(error);
         }
         const mensajeGuardado = resuelveEstado.rows[0].mensaje;
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado correctamente la posicion del mensaje",
             mensajeUID: mensajeUID,

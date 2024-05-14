@@ -1,6 +1,7 @@
 import { DateTime } from "luxon"
 import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
 import { conexion } from "../../componentes/db.mjs"
+import Decimal from "decimal.js"
 export const validadoresCompartidos = {
     clientes: {
         validarCliente: async (cliente) => {
@@ -429,13 +430,9 @@ export const validadoresCompartidos = {
             const soloMinusculas = configuracion.soloMinusculas || "no"
             const soloMayusculas = configuracion.soloMayusculas || "no"
 
-
             if (!configuracion.hasOwnProperty("string")) {
                 throw new Error("El validador de numeros no encuentra la llave string en el objeto");
             }
-
-
-
 
             if (!nombreCampo) {
                 const mensaje = `El validador de cadenas, necesito un nombre de campo.`
@@ -775,7 +772,7 @@ export const validadoresCompartidos = {
                     throw new Error(error);
                 }
                 if (array.length === 0) {
-                    const error = `${nombreCampo} está array vacío`;
+                    const error = `${nombreCampo} es un array vacío`;
                     throw new Error(error);
                 }
                 if (filtro === "soloCadenasIDV") {
@@ -891,8 +888,7 @@ export const validadoresCompartidos = {
                 throw new Error(error);
             }
             return hora
-        }
-
+        },
 
     },
     baseDeDatos: {
@@ -955,6 +951,17 @@ export const validadoresCompartidos = {
             } catch (error) {
                 throw error
             }
+        },
+        limiteCienNumero: (cantidad) => {
+            try {
+                if (new Decimal(cantidad).greaterThan(100)) {
+                    const error = "Cuidado! No se puede acepatar un porcentaje superior a 100% por que sino la oferta podria generar numeros negativos.";
+                    throw new Error(error);
+                }
+            } catch (error) {
+                throw error
+            }
+
         }
     },
 

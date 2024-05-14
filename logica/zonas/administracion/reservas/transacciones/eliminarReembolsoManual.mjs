@@ -1,7 +1,8 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { eliminarReembolsoPorReembosloUID } from "../../../../repositorio/reservas/transacciones/eliminarReembolsoPorReembosloUID.mjs";
+import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
 
 export const eliminarReembolsoManual = async (entrada, salida) => {
     try {
@@ -30,27 +31,16 @@ export const eliminarReembolsoManual = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-
-        await conexion.query('BEGIN'); // Inicio de la transacción
-        const consultaEliminarReembolso = `
-                            DELETE FROM "reservaReembolsos"
-                            WHERE "reembolsoUID" = $1;
-                            `;
-        const resuelveEliminarReembolso = await conexion.query(consultaEliminarReembolso, [reembolsoUID]);
-        if (resuelveEliminarReembolso.rowCount === 0) {
-            const error = "No se encuentra el reembolso con ese identificador, revisa el reembolsoUID";
-            throw new Error(error);
-        }
-        if (resuelveEliminarReembolso.rowCount === 1) {
-            const ok = {
-                ok: "Se ha eliminado irreversiblemente el el reembolso",
-                reembolsoUID: reembolsoUID
-            };
-            salida.json(ok);
-        }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("iniciar")
+        await eliminarReembolsoPorReembosloUID(reembolsoUID)
+        await campoDeTransaccion("confirmar")
+        const ok = {
+            ok: "Se ha eliminado irreversiblemente el el reembolso",
+            reembolsoUID: reembolsoUID
+        };
+        salida.json(ok);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

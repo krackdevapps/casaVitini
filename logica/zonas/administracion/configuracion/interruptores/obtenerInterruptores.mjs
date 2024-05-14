@@ -1,4 +1,4 @@
-import { conexion } from "../../../../componentes/db.mjs";
+import { obtenerTodosLosInterruptores } from "../../../../repositorio/configuracion/interruptores/obtenerTodosLosInterruptores.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
@@ -10,21 +10,9 @@ export const obtenerInterruptores = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-        const consultaConfiguracionGlobal = `
-                                SELECT 
-                                    estado,
-                                    "interruptorIDV"
-                                FROM 
-                                    "interruptoresGlobales";
-                               `;
-        const resuelveConfiguracionGlobal = await conexion.query(consultaConfiguracionGlobal);
-        if (resuelveConfiguracionGlobal.rowCount === 0) {
-            const error = "No hay configuraciones globales con estos parametros";
-            throw new Error(error);
-        }
-        const configuraciones = resuelveConfiguracionGlobal.rows;
+        const interruptores = await obtenerTodosLosInterruptores()
         const ok = { ok: {} };
-        for (const parConfiguracion of configuraciones) {
+        for (const parConfiguracion of interruptores) {
             const interruptorIDV = parConfiguracion.interruptorIDV;
             const estado = parConfiguracion.estado || "";
             ok.ok[interruptorIDV] = estado;

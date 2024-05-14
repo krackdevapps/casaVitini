@@ -8,7 +8,11 @@ export const obtenerPerfilPrecioPorApartamentoUID = async (apartamentoIDV) => {
         FROM "preciosApartamentos"
         WHERE apartamento = $1`
         const resuelve = await conexion.query(consulta, [apartamentoIDV]);
-        return resuelve.rows
+        if (resuelve.rowCount === 0) {
+            const error = "No hay ningun perfil de precio de este apartamento en el sistema";
+            throw new Error(error);
+        }
+        return resuelve.rows[0]
     } catch (errorAdaptador) {
         const error = "Error en el adaptador obtenerCamasPorHabitacion"
         throw new Error(error)

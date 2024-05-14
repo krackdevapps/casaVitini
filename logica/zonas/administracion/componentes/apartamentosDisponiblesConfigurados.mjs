@@ -1,4 +1,4 @@
-import { conexion } from "../../../componentes/db.mjs";
+import { obtenerApartamentosDisponiblesConfigurados } from "../../../repositorio/arquitectura/obtenerApartamentosDisponiblesConfigurados.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
@@ -10,31 +10,18 @@ export const apartamentosDisponiblesConfigurados = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
+        const apartamentosDisponiblesConfigurados_ = await obtenerApartamentosDisponiblesConfigurados()
 
-        const apartamentosDisponiblesParaCrearOfertas = `
-                            SELECT 
-                            ca."apartamentoIDV",
-                            ea."estadoUI",
-                            a."apartamentoUI"
-                            FROM "configuracionApartamento" ca
-                            JOIN "estadoApartamentos" ea ON ca."estadoConfiguracion" = ea.estado
-                            JOIN apartamentos a ON ca."apartamentoIDV" = a.apartamento;            
-    
-                            `;
-        const resulveApartamentosDisponiblesParaCrearOfertas = await conexion.query(apartamentosDisponiblesParaCrearOfertas);
-        if (resulveApartamentosDisponiblesParaCrearOfertas.rowCount === 0) {
+        if (apartamentosDisponiblesConfigurados_.length === 0) {
             const error = "No hay ningun apartamento disponible configurado";
             throw new Error(error);
         }
-        const apartamenosDisponiblesEcontrados = resulveApartamentosDisponiblesParaCrearOfertas.rows;
         const ok = {
-            ok: apartamenosDisponiblesEcontrados
-        };
+            ok: apartamentosDisponiblesConfigurados_
+        }
         salida.json(ok);
     } catch (errorCatpurado) {
-        const error = {
-            error: errorCatpurado.message
-        };
-        salida.json(error)
-    } 
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
+    }
 }

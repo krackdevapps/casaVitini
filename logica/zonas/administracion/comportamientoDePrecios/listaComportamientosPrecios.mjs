@@ -1,4 +1,4 @@
-import { conexion } from "../../../componentes/db.mjs";
+import { obtenerComportamientosOrdenadorPorFechaInicio } from "../../../repositorio/comportamientoDePrecios/obtenerTodosComportamientosOrdenadorPorFechaInicio.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
@@ -10,33 +10,17 @@ export const listaComportamientosPrecios = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-        const listaComportamientoPrecios = `
-                            SELECT
-                            "nombreComportamiento",
-                            uid,
-                            to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
-                            to_char("fechaFinal", 'DD/MM/YYYY') as "fechaFinal",
-                            explicacion,
-                            estado,
-                            tipo,
-                            "diasArray"
-                            FROM 
-                            "comportamientoPrecios"
-                            ORDER BY 
-                            "fechaInicio" ASC;
-                            `;
-        const resuelveListaComportamientoPrecios = await conexion.query(listaComportamientoPrecios);
+        const comportamientosDePrecio = await obtenerComportamientosOrdenadorPorFechaInicio()
         const ok = {};
-        if (resuelveListaComportamientoPrecios.rowCount === 0) {
+        if (comportamientosDePrecio.length === 0) {
             ok.ok = "No hay comportamiento de precios configurados";
             salida.json(ok);
         }
-        if (resuelveListaComportamientoPrecios.rowCount > 0) {
 
-            const listaComportamientos = resuelveListaComportamientoPrecios.rows;
-            ok.ok = listaComportamientos;
-            salida.json(ok);
-        }
+        const listaComportamientos = comportamientosDePrecio
+        ok.ok = listaComportamientos;
+        salida.json(ok);
+
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)

@@ -7,6 +7,7 @@ import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqu
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 
 
 export const anadirApartamentoReserva = async (entrada, salida) => {
@@ -42,16 +43,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
 
         await eliminarBloqueoCaducado();
         // Validar que le nombre del apartamento existe como tal
-        const validacionNombreApartamento = `
-                        SELECT *
-                        FROM "configuracionApartamento"
-                        WHERE "apartamentoIDV" = $1
-                        `;
-        const resuelveValidacionNombreApartamento = await conexion.query(validacionNombreApartamento, [apartamento]);
-        if (resuelveValidacionNombreApartamento.rowCount === 0) {
-            const error = "No existe el nombre del apartamento, revisa el nombre escrito";
-            throw new Error(error);
-        }
+        await obtenerConfiguracionPorApartamentoIDV(apartamento)
         // valida reserva y obten fechas
         const validacionReserva = `
                         SELECT 

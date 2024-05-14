@@ -1,18 +1,19 @@
 import { Mutex } from "async-mutex";
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerOferatPorOfertaUID } from "../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs";
+import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs";
+import { actualizarEstadoOferata } from "../../../repositorio/ofertas/actualizarEstadoOferta.mjs";
 
 export const actualizarEstadoOferta = async (entrada, salida) => {
-    let mutex
+    const mutex = new Mutex()
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
 
-        mutex = new Mutex()
         await mutex.acquire();
 
         const ofertaUID = validadoresCompartidos.tipos.numero({
@@ -33,36 +34,22 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
         })
 
         // Validar nombre unico oferta
-        const validarOferta = `
-                            SELECT uid
-                            FROM ofertas
-                            WHERE uid = $1;
-                            `;
-        const resuelveValidarOferta = await conexion.query(validarOferta, [ofertaUID]);
-        if (resuelveValidarOferta.rowCount === 0) {
-            const error = "No existe al oferta, revisa el UID introducie en el campo ofertaUID, recuerda que debe de ser un number";
-            throw new Error(error);
+        await obtenerOferatPorOfertaUID(ofertaUID)
+        await campoDeTransaccion("iniciar")
+
+        const data = {
+            ofertaUID:ofertaUID,
+            estadoOferta:estadoOferta,
         }
-        await conexion.query('BEGIN'); // Inicio de la transacción
-        const actualizarEstadoOferta = `
-                            UPDATE ofertas
-                            SET "estadoOferta" = $2
-                            WHERE uid = $1
-                            RETURNING "estadoOferta";
-                            `;
-        const datos = [
-            ofertaUID,
-            estadoOferta,
-        ];
-        const resuelveEstadoOferta = await conexion.query(actualizarEstadoOferta, datos);
+        const ofertaActualizada = await actualizarEstadoOferata(data)
         const ok = {
-            "ok": "El estado de la oferta se ha actualziado correctamente",
-            "estadoOferta": resuelveEstadoOferta.rows[0].estadoOferta
+            ok: "El estado de la oferta se ha actualziado correctamente",
+            estadoOferta: ofertaActualizada.estadoOferta
         };
         salida.json(ok);
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

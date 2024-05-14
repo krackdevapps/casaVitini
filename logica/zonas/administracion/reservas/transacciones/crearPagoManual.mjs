@@ -1,12 +1,12 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { codigoZonaHoraria } from "../../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { utilidades } from "../../../../componentes/utilidades.mjs";
 import { actualizarEstadoPago } from "../../../../sistema/precios/actualizarEstadoPago.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { detallesDelPago as detallesDelPago_square } from "../../../../componentes/pasarelas/square/detallesDelPago.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { insertarPago } from "../../../../repositorio/reservas/transacciones/insertarPago.mjs";
+import { obtenerPagoPorPagoUIDPasaresa } from "../../../../repositorio/reservas/transacciones/obtenerPagoPorPagoUIDPasaresa.mjs";
 
 export const crearPagoManual = async (entrada, salida) => {
     try {
@@ -48,61 +48,63 @@ export const crearPagoManual = async (entrada, salida) => {
         await validadoresCompartidos.reservas.validarReserva(reservaUID);
 
         const fechaActual = DateTime.utc().toISO();
-        const sql = {
-            insertarPago: async (datosDelNuevoPago) => {
-                try {
-                    const asociarPago = `
-                                        INSERT INTO
-                                        "reservaPagos"
-                                        (
-                                        "plataformaDePago",
-                                        tarjeta,
-                                        "tarjetaDigitos",
-                                        "pagoUIDPasarela",
-                                        reserva,
-                                        cantidad,
-                                        "fechaPago",
-                                        "chequeUID",
-                                        "transferenciaUID"
-                                        )
-                                        VALUES 
-                                        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-                                        RETURNING
-                                        "pagoUID",
-                                        "plataformaDePago",
-                                        "tarjetaDigitos",
-                                        "pagoUIDPasarela",
-                                        cantidad,
-                                        to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPagoUTC_ISO", 
-                                        "chequeUID",
-                                        "transferenciaUID"
-                                        `;
-                    const datosPago = [
-                        datosDelNuevoPago.plataformaDePago,
-                        datosDelNuevoPago.tarjeta,
-                        datosDelNuevoPago.tarjetaDigitos,
-                        datosDelNuevoPago.pagoUIDPasarela,
-                        datosDelNuevoPago.reservaUID,
-                        datosDelNuevoPago.cantidadConPunto,
-                        datosDelNuevoPago.fechaPago,
-                        datosDelNuevoPago.chequeUID,
-                        datosDelNuevoPago.transferenciaUID
-                    ];
-                    const consulta = await conexion.query(asociarPago, datosPago);
-                    const detallesDelPagoNuevo = consulta.rows[0];
-                    const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-                    const fechaPagoUTC_ISO = detallesDelPagoNuevo.fechaPagoUTC_ISO;
-                    const fechaPagoTZ_ISO = DateTime.fromISO(fechaPagoUTC_ISO, { zone: 'utc' })
-                        .setZone(zonaHoraria)
-                        .toISO();
-                    detallesDelPagoNuevo.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
+        // const sql = {
+        //     insertarPago: async (datosDelNuevoPago) => {
+        //         try {
+        //             const asociarPago = `
+        //                                 INSERT INTO
+        //                                 "reservaPagos"
+        //                                 (
+        //                                 "plataformaDePago",
+        //                                 tarjeta,
+        //                                 "tarjetaDigitos",
+        //                                 "pagoUIDPasarela",
+        //                                 reserva,
+        //                                 cantidad,
+        //                                 "fechaPago",
+        //                                 "chequeUID",
+        //                                 "transferenciaUID"
+        //                                 )
+        //                                 VALUES 
+        //                                 ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        //                                 RETURNING
+        //                                 "pagoUID",
+        //                                 "plataformaDePago",
+        //                                 "tarjetaDigitos",
+        //                                 "pagoUIDPasarela",
+        //                                 cantidad,
+        //                                 to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPagoUTC_ISO", 
+        //                                 "chequeUID",
+        //                                 "transferenciaUID"
+        //                                 `;
+        //             const datosPago = [
+        //                 datosDelNuevoPago.plataformaDePago,
+        //                 datosDelNuevoPago.tarjeta,
+        //                 datosDelNuevoPago.tarjetaDigitos,
+        //                 datosDelNuevoPago.pagoUIDPasarela,
+        //                 datosDelNuevoPago.reservaUID,
+        //                 datosDelNuevoPago.cantidadConPunto,
+        //                 datosDelNuevoPago.fechaPago,
+        //                 datosDelNuevoPago.chequeUID,
+        //                 datosDelNuevoPago.transferenciaUID
+        //             ];
+        //             const consulta = await conexion.query(asociarPago, datosPago);
+        //             const detallesDelPagoNuevo = consulta.rows[0];
+        //             const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
+        //             const fechaPagoUTC_ISO = detallesDelPagoNuevo.fechaPagoUTC_ISO;
+        //             const fechaPagoTZ_ISO = DateTime.fromISO(fechaPagoUTC_ISO, { zone: 'utc' })
+        //                 .setZone(zonaHoraria)
+        //                 .toISO();
+        //             detallesDelPagoNuevo.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
 
-                    return detallesDelPagoNuevo;
-                } catch (errorCapturado) {
-                    throw errorCapturado;
-                }
-            }
-        };
+        //             return detallesDelPagoNuevo;
+        //         } catch (errorCapturado) {
+        //             throw errorCapturado;
+        //         }
+        //     }
+        // };
+
+
         const estructuraFinal = {};
 
         if (plataformaDePago === "efectivo") {
@@ -114,7 +116,7 @@ export const crearPagoManual = async (entrada, salida) => {
                 fechaPago: fechaActual,
 
             };
-            const pagoUID = await sql.insertarPago(nuevoPago);
+            const pagoUID = await insertarPago(nuevoPago)
             estructuraFinal.ok = "Se ha insertado el nuevo pago en efectivo";
             estructuraFinal.detallesDelPago = pagoUID;
         } else if (plataformaDePago === "cheque") {
@@ -135,7 +137,7 @@ export const crearPagoManual = async (entrada, salida) => {
                 fechaPago: fechaActual,
                 chequeUID: chequeUID
             };
-            const pagoUID = await sql.insertarPago(nuevoPago);
+            const pagoUID = await insertarPago(nuevoPago)
             estructuraFinal.ok = "Se ha insertado el nuevo pago en cheque";
             estructuraFinal.detallesDelPago = pagoUID;
         } else if (plataformaDePago === "transferenciaBancaria") {
@@ -158,7 +160,7 @@ export const crearPagoManual = async (entrada, salida) => {
                 fechaPago: fechaActual,
                 transferenciaUID: transferenciaUID
             };
-            const pagoUID = await sql.insertarPago(nuevoPago);
+            const pagoUID = await insertarPago(nuevoPago)
             estructuraFinal.ok = "Se ha insertado el nuevo pago en cheque";
             estructuraFinal.detallesDelPago = pagoUID;
 
@@ -175,14 +177,12 @@ export const crearPagoManual = async (entrada, salida) => {
                 soloMinusculas: "si"
             })
 
-            const consultaUIDUnico = `
-                            SELECT 
-                            "pagoUIDPasarela"
-                            FROM 
-                            "reservaPagos"
-                            WHERE "pagoUIDPasarela" = $1 AND reserva = $2;`;
-            const resuelveConsultaUIDUnico = await conexion.query(consultaUIDUnico, [pagoUIDPasarela, reservaUID]);
-            if (resuelveConsultaUIDUnico.rowCount > 0) {
+            const dataPago = {
+                pagoUIDPasarela: pagoUIDPasarela,
+                reservaUID: reservaUID
+            }
+            const detallesDelPagoPasarela = await obtenerPagoPorPagoUIDPasaresa(dataPago)
+            if (detallesDelPagoPasarela.length > 0) {
                 const error = "Ya existe este id del pago asociado a esta reserva";
                 throw new Error(error);
             }
@@ -238,14 +238,13 @@ export const crearPagoManual = async (entrada, salida) => {
                 fechaPago: fechaActual,
                 tarjetaDigitos: tarjetaUltimos
             };
-            const pagoUID = await sql.insertarPago(nuevoPago);
+            const pagoUID = await insertarPago(nuevoPago)
             estructuraFinal.ok = "Se ha insertado el nuevo pago hecho con tarjeta de manera externa como en un TPV";
             estructuraFinal.detallesDelPago = pagoUID;
         } else {
             const error = "El campo plataformaDePago solo admite una cadena mayúsculas y minúsculas sin espacios. Las plataformas de pagos son tarjeta, efectivo, pasarela y tranferenciaBancaria";
             throw new Error(error);
         }
-
 
         await actualizarEstadoPago(reservaUID);
         salida.json(estructuraFinal);

@@ -1,7 +1,8 @@
-import { conexion } from "../../../componentes/db.mjs";
+import { obtenerTodosAplicacionSobreIDV } from "../../../repositorio/ofertas/obtenerTodosAplicacionSobreIDV.mjs";
+import { obtenerTodosLosTipoOfertaIDV } from "../../../repositorio/ofertas/obtenerTodosLosTipoOfertaIDV.mjs";
+import { obtenerTodosLosTiposDescuento } from "../../../repositorio/ofertas/obtenerTodosLosTiposDescuento.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-
 
 export const opcionesCrearOferta = async (entrada, salida) => {
     try {
@@ -10,28 +11,11 @@ export const opcionesCrearOferta = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-        const opcionesCrearOferta = {};
-        const listaAplicacionOferta = `
-                            SELECT
-                            "aplicacionIDV", "aplicacionUI"
-                            FROM 
-                            "ofertasAplicacion";`;
-        const resuelveListaAplicacionOferta = await conexion.query(listaAplicacionOferta);
-        opcionesCrearOferta.aplicacionSobre = resuelveListaAplicacionOferta.rows;
-        const listaTipoOfertas = `
-                            SELECT
-                            "tipoOfertaIDV", "tipoOfertaUI"
-                            FROM 
-                            "ofertasTipo";`;
-        const resuelveListaTipoOfertas = await conexion.query(listaTipoOfertas);
-        opcionesCrearOferta.tipoOfertas = resuelveListaTipoOfertas.rows;
-        const listaTipoDescuento = `
-                            SELECT
-                            "tipoDescuentoIDV", "tipoDescuentoUI"
-                            FROM 
-                            "ofertasTipoDescuento";`;
-        const resuelveListaTipoDescuento = await conexion.query(listaTipoDescuento);
-        opcionesCrearOferta.tipoDescuento = resuelveListaTipoDescuento.rows;
+        const opcionesCrearOferta = {
+            aplicacionSobre:await obtenerTodosAplicacionSobreIDV(),
+            tipoOfertas: await obtenerTodosLosTipoOfertaIDV(),
+            tipoDescuento: await obtenerTodosLosTiposDescuento()
+        };
         const ok = {
             ok: opcionesCrearOferta
         };

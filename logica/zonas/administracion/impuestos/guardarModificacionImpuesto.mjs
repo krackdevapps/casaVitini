@@ -1,11 +1,13 @@
 import { Mutex } from "async-mutex";
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerImpuestosPorNombreDelImpuesto } from "../../../repositorio/impuestos/obtenerImpuestosPorNombreDelImpuesto.mjs";
+import { actualizarImpuesto } from "../../../repositorio/impuestos/actualizarImpuesto.mjs";
+import { obtenerImpuestosPorImppuestoUID } from "../../../repositorio/impuestos/obtenerImpuestosPorImpuestoUID.mjs";
 
 export const guardarModificacionImpuesto = async (entrada, salida) => {
-    let mutex
+    const mutex = new Mutex()
     try {
 
         const session = entrada.session
@@ -13,7 +15,6 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-        mutex = new Mutex
         await mutex.acquire();
 
         const impuestoUID = validadoresCompartidos.tipos.numero({
@@ -61,92 +62,32 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
             soloMinusculas: "si"
         })
 
-
-        // Validar si el nombre del impuesto es unico
-        const consultaNombreImpuesto = `
-           SELECT 
-           nombre
-           FROM impuestos
-           WHERE LOWER(nombre) = LOWER($1)
-           AND
-           "impuestoUID" <> $2
-           `;
-        const resuelveValidarNombreImpuesto = await conexion.query(consultaNombreImpuesto, [nombreImpuesto, impuestoUID]);
-        if (resuelveValidarNombreImpuesto.rowCount > 0) {
-            const error = "Ya existe un impuesto con ese nombre exacto. Por favor selecciona otro nombre para este impuesto con el fin de tener nombres unicos en los impuestos y poder distingirlos correctamente.";
-            throw new Error(error);
-        }
-
-        if (estado?.length > 0 && estado !== "desactivado" && estado !== "activado") {
-            const error = "El estado de un impuesto solo puede ser activado o desactivado";
-            throw new Error(error);
-        }
-        if (tipoValor) {
-            const validarTipoValor = `
-                                SELECT 
-                                "tipoValorIDV"
-                                FROM "impuestoTipoValor"
-                                WHERE "tipoValorIDV" = $1
-                                `;
-            const resuelveValidarTipoValor = await conexion.query(validarTipoValor, [tipoValor]);
-            if (resuelveValidarTipoValor.rowCount === 0) {
-                const error = "No existe el tipo valor verifica el campor tipoValor";
+        // Validar si el nombre del impuesto es unico        
+        const impuestosPorNombre = await obtenerImpuestosPorNombreDelImpuesto(nombreImpuesto)
+        for (const detallesDelImpuesto of impuestosPorNombre) {
+            if (detallesDelImpuesto.impuestoUID !== impuestoUID) {
+                const error = "Ya existe un impuesto con ese nombre exacto. Por favor selecciona otro nombre para este impuesto con el fin de tener nombres unicos en los impuestos y poder distingirlos correctamente.";
                 throw new Error(error);
             }
         }
-        if (aplicacionSobre) {
-            const validarAplicacionSobre = `
-                                SELECT 
-                                "aplicacionIDV"
-                                FROM "impuestosAplicacion"
-                                WHERE "aplicacionIDV" = $1
-                                `;
-            const resuelveValidarAplicacionSobre = await conexion.query(validarAplicacionSobre, [aplicacionSobre]);
-            if (resuelveValidarAplicacionSobre.rowCount === 0) {
-                const error = "No existe el contexto de aplicación verifica el campor resuelveValidarAplicacionSobre";
-                throw new Error(error);
-            }
+
+        validadoresCompartidos.filtros.estados(estado)
+
+        await obtenerTipoValorPorTipoValorIDV(tipoValor)
+        await obtenerAplicacionIDVporAplicacionIDV(aplicacionSobre)
+
+        const dataActualizarImpuesto = {
+            impuestoUID: impuestoUID,
+            nombreImpuesto: nombreImpuesto,
+            tipoImpositivo: tipoImpositivo,
+            tipoValor: tipoValor,
+            aplicacionSobre: aplicacionSobre,
+            estado: estado,
         }
-        const validarImpuestoYActualizar = `
-                                UPDATE impuestos
-                                SET 
-                                nombre = COALESCE($1, nombre),
-                                "tipoImpositivo" = COALESCE($2, "tipoImpositivo"),
-                                "tipoValor" = COALESCE($3, "tipoValor"),
-                                "aplicacionSobre" = COALESCE($4, "aplicacionSobre"),
-                                estado = COALESCE($5, estado)
-                                WHERE "impuestoUID" = $6
-                                RETURNING
-                                "impuestoUID",
-                                "tipoImpositivo",
-                                "tipoValor",
-                                "aplicacionSobre",
-                                estado
-                                `;
-        const resuelveValidarImpuesto = await conexion.query(validarImpuestoYActualizar, [nombreImpuesto, tipoImpositivo, tipoValor, aplicacionSobre, estado, impuestoUID]);
-        if (resuelveValidarImpuesto.rowCount === 0) {
-            const error = "No existe el perfil del impuesto";
-            throw new Error(error);
-        }
-        const validarImpuesto = `
-                                SELECT
-                                nombre,
-                                "impuestoUID",
-                                "tipoImpositivo",
-                                "tipoValor",
-                                estado,
-                                "aplicacionSobre"
-                                FROM
-                                impuestos
-                                WHERE
-                                "impuestoUID" = $1;
-                                `;
-        const resuelveObtenerDetallesImpuesto = await conexion.query(validarImpuesto, [impuestoUID]);
-        if (resuelveObtenerDetallesImpuesto.rowCount === 0) {
-            const error = "No existe el perfil del impuesto";
-            throw new Error(error);
-        }
-        const perfilImpuesto = resuelveObtenerDetallesImpuesto.rows[0];
+
+        await actualizarImpuesto(dataActualizarImpuesto)
+
+        const perfilImpuesto = await obtenerImpuestosPorImppuestoUID(impuestoUID)
         const ok = {
             ok: "El impuesto se ha actualizado correctamente",
             detallesImpuesto: perfilImpuesto

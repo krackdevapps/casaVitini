@@ -1,7 +1,10 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerMensajePorMensajeUID } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
+import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
+import { eliminarMensajeEnPortada } from "../../../../repositorio/configuracion/mensajesPortada/elminarMensajeEnPortada.mjs";
+import { actualizaOrdenDePosiciones } from "../../../../repositorio/configuracion/mensajesPortada/actualizarOrdenDePosiciones.mjs";
 
 export const eliminarMensaje = async (entrada, salida) => {
     try {
@@ -17,46 +20,20 @@ export const eliminarMensaje = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
+        const mensajeEnPortada = await obtenerMensajePorMensajeUID(mensajeUID)
+        const posicion = mensajeEnPortada.posicion;
+        await eliminarMensajeEnPortada(mensajeUID)
+        await actualizaOrdenDePosiciones(posicion)
+        await campoDeTransaccion("confirmar")
+        const ok = {
+            ok: "Se ha eliminado correctamente el mensaje de portada",
+            mensajeUID: mensajeUID
+        };
+        salida.json(ok);
 
-
-        // Validar si es un usuario administrador
-        const validaMensaje = `
-                                SELECT 
-                                posicion
-                                FROM "mensajesEnPortada"
-                                WHERE uid = $1;
-                                `;
-        const resuelveValidacion = await conexion.query(validaMensaje, [mensajeUID]);
-
-        if (resuelveValidacion.rowCount === 0) {
-            const error = "No se encuentra ningun mensaje con ese UID";
-            throw new Error(error);
-        }
-        const posicion = resuelveValidacion.rows[0].posicion;
-        const consultaEliminacion = `
-                                DELETE FROM "mensajesEnPortada"
-                                WHERE uid = $1;
-                                `;
-        const resuelveEliminacion = await conexion.query(consultaEliminacion, [mensajeUID]);
-        // Ahora, puedes agregar la lógica para actualizar las filas restantes si es necesario
-        const consultaActualizacion = `
-                                    UPDATE "mensajesEnPortada"
-                                    SET posicion = posicion - 1
-                                    WHERE posicion > $1; 
-                                `;
-        await conexion.query(consultaActualizacion, [posicion]);
-
-        await conexion.query('COMMIT');
-        if (resuelveEliminacion.rowCount === 1) {
-            const ok = {
-                ok: "Se ha eliminado correctamente el mensaje de portada",
-                mensajeUID: mensajeUID
-            };
-            salida.json(ok);
-        }
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK');
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

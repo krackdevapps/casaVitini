@@ -1,10 +1,15 @@
 import { Mutex } from "async-mutex";
-import { conexion } from "../../../componentes/db.mjs";
 import { evitarDuplicados } from "../../../sistema/precios/comportamientoPrecios/evitarDuplicados.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoDePrecioPorComportamientoUID.mjs";
+import { actualizarComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/actualizarComportamientoDePrecio.mjs";
+import { eliminarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/eliminarApartamentosDelComportamientoDePrecio.mjs";
+import { insertarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/insertarApartamentosDelComportamiento.mjs";
+import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs";
 
 export const actualizarComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -54,35 +59,14 @@ export const actualizarComportamiento = async (entrada, salida) => {
         let fechaInicio_ISO;
         let fechaFinal_ISO;
         let diasArray;
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
 
         if (tipo === "porRango") {
-            const fechaInicio = entrada.body.fechaInicio;
-            const fechaFinal = entrada.body.fechaFinal;
+            const fechaInicio_ISO = entrada.body.fechaInicio_ISO;
+            const fechaFinal_ISO = entrada.body.fechaFinal_ISO;
 
-            const filtroFecha = /^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/)(?:0?[1,3-9]|1[0-2]))\2|(?:(?:0?[1-9])|(?:1[0-9])|(?:2[0-8]))(\/)(?:0?[1-9]|1[0-2]))\3(?:(?:19|20)[0-9]{2})$/;
-            if (!filtroFecha.test(fechaInicio)) {
-                const error = "el formato fecha de inicio no esta correctametne formateado debe ser una cadena asi 00/00/0000";
-                throw new Error(error);
-            }
-            if (!filtroFecha.test(fechaFinal)) {
-                const error = "el formato fecha de fin no esta correctametne formateado debe ser una cadena asi 00/00/0000";
-                throw new Error(error);
-            }
-
-
-            const fechaInicioArreglo = fechaInicio.split("/");
-            const diaEntrada = fechaInicioArreglo[0];
-            const mesEntrada = fechaInicioArreglo[1];
-            const anoEntrada = fechaInicioArreglo[2];
-            const fechaFinArreglo = fechaFinal.split("/");
-            const diaSalida = fechaFinArreglo[0];
-            const mesSalida = fechaFinArreglo[1];
-            const anoSalida = fechaFinArreglo[2];
-            fechaInicio_ISO = `${anoEntrada}-${mesEntrada}-${diaEntrada}`;
-            fechaFinal_ISO = `${anoSalida}-${mesSalida}-${diaSalida}`;
-            await validadoresCompartidos.fechas.validarFecha_ISO(fechaInicio_ISO);
-            await validadoresCompartidos.fechas.validarFecha_ISO(fechaFinal_ISO);
+            await validadoresCompartidos.fechas.validarFecha_ISO(fechaInicio_ISO)
+            await validadoresCompartidos.fechas.validarFecha_ISO(fechaFinal_ISO)
             const fechaInicio_Objeto = new Date(fechaInicio_ISO); // El formato es día/mes/ano
             const fechaFinal_Objeto = new Date(fechaFinal_ISO);
             if (fechaInicio_Objeto > fechaFinal_Objeto) {
@@ -110,7 +94,6 @@ export const actualizarComportamiento = async (entrada, salida) => {
                 throw new Error(error);
             }
         }
-
 
         const identificadoresVisualesEnArray = [];
         apartamentos.forEach((apart) => {
@@ -158,19 +141,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
-            //Validar existencia del apartamento
-            const validarApartamentoIDV = `
-                                      SELECT 
-                                      "apartamentoIDV"
-                                      FROM 
-                                      "configuracionApartamento"
-                                      WHERE "apartamentoIDV" = $1
-                                      `;
-            const resuelveApartamentoIDV = await conexion.query(validarApartamentoIDV, [apartamentoIDV]);
-            if (resuelveApartamentoIDV.rowCount === 0) {
-                const error = "No existe ningún apartamento con ese identificador visual";
-                throw new Error(error);
-            }
+            await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
             const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
             if (simbolo !== "aumentoPorcentaje" &&
                 simbolo !== "aumentoCantidad" &&
@@ -182,20 +153,9 @@ export const actualizarComportamiento = async (entrada, salida) => {
             }
             apartamentosArreglo.push(apartamentoIDV);
         }
-        // Validar nombre unico oferta
-        const validarComportamiento = `
-                            SELECT 
-                            estado
-                            FROM 
-                            "comportamientoPrecios"
-                            WHERE uid = $1
-                            `;
-        const resuelveValidarComportamiento = await conexion.query(validarComportamiento, [comportamientoUID]);
-        if (resuelveValidarComportamiento.rowCount === 0) {
-            const error = "No existe ningún comportamiento de precios con ese identificador";
-            throw new Error(error);
-        }
-        const estadoComportamiento = resuelveValidarComportamiento.rows[0].estado;
+
+        const comportamientoDePrecio = await obtenerComportamientoDePrecioPorComportamientoUID(comportamientoUID)
+        const estadoComportamiento = comportamientoDePrecio.estado;
         if (estadoComportamiento === "activado") {
             const error = "No se puede modificar un comportamiento de precio que esta activo. Primero desativalo con el boton de estado de color rojo en la parte superior izquierda, al lado del nombre.";
             throw new Error(error);
@@ -212,100 +172,68 @@ export const actualizarComportamiento = async (entrada, salida) => {
 
         await evitarDuplicados(dataEvitarDuplicados);
 
-        const actualizarComportamiento = `
-                            UPDATE "comportamientoPrecios"
-                            SET 
-                            "nombreComportamiento" = $1,
-                            "fechaInicio" = $2,
-                            "fechaFinal" = $3,
-                            tipo = $4,
-                            "diasArray" = $5
-                            WHERE uid = $6
-                            RETURNING *;
-                            `;
-        const datos = [
-            nombreComportamiento,
-            fechaInicio_ISO,
-            fechaFinal_ISO,
-            tipo,
-            diasArray,
-            comportamientoUID
-        ];
-        const resuelveActualizarComportamiento = await conexion.query(actualizarComportamiento, datos);
-        if (resuelveActualizarComportamiento.rowCount === 1) {
-            const eliminarComportamiento = `
-                                DELETE FROM "comportamientoPreciosApartamentos"
-                                WHERE "comportamientoUID" = $1 ;
-                                `;
-            await conexion.query(eliminarComportamiento, [comportamientoUID]);
-
-            for (const comportamiento of apartamentos) {
-                const apartamentoIDV = validadoresCompartidos.tipos.cadena({
-                    string: comportamiento.apartamentoIDV,
-                    nombreCampo: "El apartamentoIDV",
-                    filtro: "strictoIDV",
-                    sePermiteVacio: "no",
-                    limpiezaEspaciosAlrededor: "si",
-                })
-                const simbolo = validadoresCompartidos.tipos.cadena({
-                    string: comportamiento.simbolo,
-                    nombreCampo: "El simbolo",
-                    filtro: "strictoIDV",
-                    sePermiteVacio: "no",
-                    limpiezaEspaciosAlrededor: "si",
-                })
-                const cantidadPorApartamento = validadoresCompartidos.tipos.cadena({
-                    string: comportamiento.cantidad,
-                    nombreCampo: "El campo cantidad",
-                    filtro: "cadenaConNumerosConDosDecimales",
-                    sePermiteVacio: "no",
-                    limpiezaEspaciosAlrededor: "si",
-                    impedirCero: "si"
-
-                })
-
-                if (simbolo !== "aumentoPorcentaje" &&
-                    simbolo !== "aumentoCantidad" &&
-                    simbolo !== "reducirCantidad" &&
-                    simbolo !== "reducirPorcentaje" &&
-                    simbolo !== "precioEstablecido") {
-                    const error = "El campo simbolo solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido";
-                    throw new Error(error);
-                }
-                const actualizarComportamientoDedicado = `
-                                        INSERT INTO "comportamientoPreciosApartamentos"
-                                    (
-                                        "apartamentoIDV",
-                                        simbolo,
-                                        cantidad,
-                                        "comportamientoUID"
-                                    )
-                                        VALUES
-                                    (
-                                        NULLIF($1, NULL),
-                                        COALESCE($2, NULL),
-                                        COALESCE($3::numeric, NULL),
-                                        NULLIF($4::numeric, NULL)
-                                    )
-                                        RETURNING *;
-    
-                                        `;
-                const comportamientoDedicado = [
-                    apartamentoIDV,
-                    simbolo,
-                    cantidadPorApartamento,
-                    comportamientoUID
-                ];
-                await conexion.query(actualizarComportamientoDedicado, comportamientoDedicado);
-            }
-            await conexion.query('COMMIT'); // Confirmar la transacción
-            const ok = {
-                ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
-            };
-            salida.json(ok);
+        const dataActualizarComportamientoDePrecio = {
+            nombreComportamiento: nombreComportamiento,
+            fechaInicio_ISO: fechaInicio_ISO,
+            fechaFinal_ISO: fechaFinal_ISO,
+            tipo: tipo,
+            diasArray: diasArray,
+            comportamientoUID: comportamientoUID
         }
+        await actualizarComportamientoDePrecio(dataActualizarComportamientoDePrecio)
+        await eliminarApartamentosDelComportamientoDePrecio(comportamientoUID)
+
+        for (const comportamiento of apartamentos) {
+            const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+                string: comportamiento.apartamentoIDV,
+                nombreCampo: "El apartamentoIDV",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+            const simbolo = validadoresCompartidos.tipos.cadena({
+                string: comportamiento.simbolo,
+                nombreCampo: "El simbolo",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+            const cantidadPorApartamento = validadoresCompartidos.tipos.cadena({
+                string: comportamiento.cantidad,
+                nombreCampo: "El campo cantidad",
+                filtro: "cadenaConNumerosConDosDecimales",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                impedirCero: "si"
+
+            })
+
+            if (simbolo !== "aumentoPorcentaje" &&
+                simbolo !== "aumentoCantidad" &&
+                simbolo !== "reducirCantidad" &&
+                simbolo !== "reducirPorcentaje" &&
+                simbolo !== "precioEstablecido") {
+                const error = "El campo simbolo solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido";
+                throw new Error(error);
+            }
+            const dataInsertarApartamentosDelComportamientoDePrecio = {
+                apartamentoIDV: apartamentoIDV,
+                simbolo: simbolo,
+                cantidadPorApartamento: cantidadPorApartamento,
+                comportamientoUID: comportamientoUID
+            }
+            await insertarApartamentosDelComportamientoDePrecio(dataInsertarApartamentosDelComportamientoDePrecio)
+        }
+        await campoDeTransaccion("confirmar")
+
+        const ok = {
+            ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
+        };
+        salida.json(ok);
+
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
+
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

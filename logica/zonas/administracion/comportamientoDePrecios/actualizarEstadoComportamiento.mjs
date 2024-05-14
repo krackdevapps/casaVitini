@@ -1,9 +1,9 @@
 import { Mutex } from "async-mutex";
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-
+import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoDePrecioPorComportamientoUID copia.mjs";
+import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs";
 
 export const actualizarEstadoComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -33,38 +33,22 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-
-        // Validar nombre unico oferta
-        const validarOferta = `
-                            SELECT uid
-                            FROM "comportamientoPrecios"
-                            WHERE uid = $1;
-                            `;
-        const resuelveValidarOferta = await conexion.query(validarOferta, [comportamientoUID]);
-        if (resuelveValidarOferta.rowCount === 0) {
-            const error = "No existe al oferta, revisa el UID introducie en el campo comportamientoUID, recuerda que debe de ser un number";
-            throw new Error(error);
-        }
-        await conexion.query('BEGIN'); // Inicio de la transacción
-        const actualizarEstadoOferta = `
-                            UPDATE "comportamientoPrecios"
-                            SET estado = $1
-                            WHERE uid = $2
-                            RETURNING estado;
-                            `;
-        const datos = [
+        await campoDeTransaccion("iniciar")
+        await obtenerComportamientoDePrecioPorComportamientoUID(comportamientoUID)
+        
+        const dataActualizarComportamientoDePrecio = [
             estadoPropuesto,
             comportamientoUID
-        ];
-        const resuelveEstadoOferta = await conexion.query(actualizarEstadoOferta, datos);
+        ]
+        await actualizarEstadoComportamiento(dataActualizarComportamientoDePrecio)
         const ok = {
             ok: "El estado del comportamiento se ha actualziado correctamente",
             estadoComportamiento: resuelveEstadoOferta.rows[0].estado
         };
         salida.json(ok);
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

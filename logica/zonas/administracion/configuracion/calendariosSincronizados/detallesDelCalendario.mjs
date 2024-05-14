@@ -1,5 +1,5 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
+import { obtenerCalendarioPorCalendarioUID } from "../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorCalendarioUID.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
@@ -17,40 +17,20 @@ export const detallesDelCalendario = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-        })     
-   
+        })
+
+        const calendarioSincronziado = await obtenerCalendarioPorCalendarioUID(calendarioUID)
+        const apartamentoIDV = calendarioSincronziado.apartamentoIDV;
+        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+        calendarioSincronziado.apartamentoUI = apartamentoUI;
+
         const ok = {
-            ok: []
-        };
-        const consultaConfiguracion = `
-                                    SELECT 
-                                    uid,
-                                    nombre,
-                                    url,
-                                    "apartamentoIDV",
-                                    "plataformaOrigen",
-                                    "uidPublico"
-                                    FROM 
-                                    "calendariosSincronizados"
-                                    WHERE
-                                    uid = $1
-                                    `;
-        const resuelveCalendariosSincronizados = await conexion.query(consultaConfiguracion, [calendarioUID]);
-        if (resuelveCalendariosSincronizados.rowCount > 0) {
-            for (const detallesDelCalendario of resuelveCalendariosSincronizados.rows) {
-                const apartamentoIDV = detallesDelCalendario.apartamentoIDV;
-                const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
-                detallesDelCalendario.apartamentoUI = apartamentoUI;
-            }
-            ok.ok = resuelveCalendariosSincronizados.rows[0];
-        } else {
-            const error = "No existe ningun calendario con ese identificador, revisa el identificador.";
-            throw new Error(error);
+            ok: calendarioSincronziado
         }
         salida.json(ok);
+
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }
-
 }

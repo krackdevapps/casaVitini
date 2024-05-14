@@ -1,9 +1,9 @@
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
-
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { obtenerImpuestosPorAplicacionSobre } from "../../../repositorio/impuestos/obtenerImpuestosPorAplicacionSobre.mjs";
 
 export const previsualizarPrecioApartamento = async (entrada, salida) => {
     try {
@@ -28,18 +28,9 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        const validarApartamento = `
-                            SELECT
-                            "apartamentoIDV"
-                            FROM 
-                            "configuracionApartamento"
-                            WHERE "apartamentoIDV" = $1
-                            `;
-        const resuelveValidarApartamento = await conexion.query(validarApartamento, [apartamentoIDV]);
-        if (resuelveValidarApartamento.rowCount === 0) {
-            const error = "No existe el apartamenro";
-            throw new Error(error);
-        }
+
+        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+
         const detallesApartamento = {};
         const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
         detallesApartamento.apartamentoUI = apartamentoUI;
@@ -50,28 +41,23 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
         detallesApartamento.totalBrutoPordia = precioNetoApartamentoPorDia;
         detallesApartamento.impuestos = [];
 
-        const seleccionarImpuestos = `
-                            SELECT
-                            nombre, "tipoImpositivo", "tipoValor"
-                            FROM
-                            impuestos
-                            WHERE
-                            ("aplicacionSobre" = $1 OR "aplicacionSobre" = $2) AND estado = $3;
-    
-                            `;
-        const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto", "activado"]);
-        if (resuelveSeleccionarImpuestos.rowCount > 0) {
-            const impuestosEncontrados = resuelveSeleccionarImpuestos.rows;
+        const dataImpuestosPorAplicacion = {
+            aplicacionSobre: ["totalNeto", "totalReservaNeto"],
+            estado: "activado"
+        }
+        const listaImpuestos = await obtenerImpuestosPorAplicacionSobre(dataImpuestosPorAplicacion)
+
+        if (listaImpuestos.length > 0) {
             let impuestosFinal;
             let sumaTotalImpuestos = 0;
-            impuestosEncontrados.map((detalleImpuesto) => {
+            listaImpuestos.map((detalleImpuesto) => {
                 const tipoImpositivo = detalleImpuesto.tipoImpositivo;
                 const nombreImpuesto = detalleImpuesto.nombre;
                 const tipoValor = detalleImpuesto.tipoValor;
                 impuestosFinal = {
-                    "nombreImpuesto": nombreImpuesto,
-                    "tipoImpositivo": tipoImpositivo,
-                    "tipoValor": tipoValor,
+                    nombreImpuesto: nombreImpuesto,
+                    tipoImpositivo: tipoImpositivo,
+                    tipoValor: tipoValor,
                 };
                 if (tipoValor === "porcentaje") {
                     const resultadoApliacado = (precioNetoApartamentoPorDia * (tipoImpositivo / 100)).toFixed(2);
@@ -96,7 +82,5 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } finally {
     }
-
 }

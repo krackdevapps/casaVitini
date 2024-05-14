@@ -1,7 +1,8 @@
-import { conexion } from "../../../componentes/db.mjs";
+import { obtenerTodaMoneda } from "../../../repositorio/impuestos/obtenerTodaMoneda.mjs";
+import { obtenerTodoAplicacacionSobre } from "../../../repositorio/impuestos/obtenerTodoAplicacacionSobre.mjs";
+import { obtenerTodoTipoValor } from "../../../repositorio/impuestos/obtenerTodoTipoValor.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-
 
 export const opcionesEditarImpuesto = async (entrada, salida) => {
     try {
@@ -10,31 +11,14 @@ export const opcionesEditarImpuesto = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-        const opcionesTipoValor = [];
-        const opcionesAplicacionSobre = [];
-        const opcionesMonedas = [];
-        const validarTipoValor = `
-                            SELECT 
-                            "tipoValorIDV", "tipoValorUI", simbolo
-                            FROM "impuestoTipoValor"
-                            `;
-        const resuelveValidarTipoValor = await conexion.query(validarTipoValor);
-        if (resuelveValidarTipoValor.rowCount > 0) {
-            opcionesTipoValor.push(...resuelveValidarTipoValor.rows);
-        }
-        const validarAplicacionSobre = `
-                            SELECT 
-                            "aplicacionIDV", "aplicacionUI"
-                            FROM "impuestosAplicacion"
-                            `;
-        const resuelveValidarAplicacionSobre = await conexion.query(validarAplicacionSobre);
-        if (resuelveValidarAplicacionSobre.rowCount > 0) {
-            opcionesAplicacionSobre.push(...resuelveValidarAplicacionSobre.rows);
-        }
+        const opcionesTipoValor = await obtenerTodoTipoValor()
+        const opcionesAplicacionSobre = await obtenerTodoAplicacacionSobre()
+        const opcionesMonedas = await obtenerTodaMoneda()
+
         const detallesImpuesto = {
             tipoValor: opcionesTipoValor,
             aplicacionSobre: opcionesAplicacionSobre,
-            //moneda: opcionesMonedas
+            moneda: opcionesMonedas
         };
         const ok = {
             ok: detallesImpuesto

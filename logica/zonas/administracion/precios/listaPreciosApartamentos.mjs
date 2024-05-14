@@ -1,8 +1,9 @@
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
-
+import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
+import { obtenerImpuestosPorAplicacionSobre } from "../../../repositorio/impuestos/obtenerImpuestosPorAplicacionSobre.mjs";
+import { obtenerPerfilPrecioPorApartamentoUID } from "../../../repositorio/precios/obtenerPerfilPrecioPorApartamentoUID.mjs";
 
 export const listaPreciosApartamentos = async (entrada, salida) => {
     try {
@@ -10,47 +11,28 @@ export const listaPreciosApartamentos = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-        
-        const apartamentos = `
-                                SELECT
-                                "apartamentoIDV"
-                                FROM 
-                                "configuracionApartamento"
-                                `;
-        const resuelveApartamentos = await conexion.query(apartamentos);
-        if (resuelveApartamentos.rowCount === 0) {
-            const error = "No hay ningun apartamento en el sistema";
-            throw new Error(error);
+
+        const configuracionesDeAlojamiento = await obtenerTodasLasConfiguracionDeLosApartamento()
+
+        const dataImpuestosPorAplicacion = {
+            aplicacionSobre: ["totalNeto", "totalReservaNeto"],
+            estado: "activado"
         }
-        const apartamentosEncontrados = resuelveApartamentos.rows;
-        const seleccionarImpuestos = `
-                                SELECT
-                                nombre, "tipoImpositivo", "tipoValor"
-                                FROM
-                                impuestos
-                                WHERE
-                                ("aplicacionSobre" = $1 OR "aplicacionSobre" = $2) AND estado = $3;
-    
-                                `;
-        const resuelveSeleccionarImpuestos = await conexion.query(seleccionarImpuestos, ["totalNeto", "totalReservaNeto", "activado"]);
+        const listaImpuestos = await obtenerImpuestosPorAplicacionSobre(dataImpuestosPorAplicacion)
+
+ 
         const objetoFInal = [];
-        for (const apartamentoEncotrado of apartamentosEncontrados) {
+        for (const apartamentoEncotrado of configuracionesDeAlojamiento) {
             const apartamentoIDV = apartamentoEncotrado.apartamentoIDV;
             const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
             const apartamento = {
                 apartamento: apartamentoIDV,
                 apartamentoUI: apartamentoUI
             };
-            const listarPreciosApartamentos = `
-                                    SELECT
-                                    uid, apartamento, precio, moneda
-                                    FROM 
-                                    "preciosApartamentos"
-                                    WHERE apartamento = $1
-                                    `;
-            const resuelveListarPreciosApartamentos = await conexion.query(listarPreciosApartamentos, [apartamentoIDV]);
-            if (resuelveListarPreciosApartamentos.rowCount === 1) {
-                const precioEncontrados = resuelveListarPreciosApartamentos.rows[0];
+            const precioConfiguracionAlojamiento = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
+
+            if (precioConfiguracionAlojamiento.length === 1) {
+                const precioEncontrados = precioConfiguracionAlojamiento;
                 const precioApartamento = precioEncontrados.precio;
                 const moneda = precioEncontrados.moneda;
                 const uidPrecio = precioEncontrados.uid;
@@ -60,11 +42,10 @@ export const listaPreciosApartamentos = async (entrada, salida) => {
                 apartamento.totalImpuestos = "0.00";
                 apartamento.totalDiaBruto = precioApartamento;
 
-                if (resuelveSeleccionarImpuestos.rowCount > 0) {
-                    const impuestosEncontrados = resuelveSeleccionarImpuestos.rows;
+                if (listaImpuestos.length > 0) {
                     apartamento.totalImpuestos = 0;
                     let sumaTotalImpuestos = 0;
-                    impuestosEncontrados.map((detalleImpuesto) => {
+                    listaImpuestos.map((detalleImpuesto) => {
                         const tipoImpositivo = detalleImpuesto.tipoImpositivo;
                         const tipoValor = detalleImpuesto.tipoValor;
                         if (tipoValor === "porcentaje") {

@@ -1,7 +1,7 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerMensajePorMensajeUID } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
 
 export const detallesDelMensaje = async (entrada, salida) => {
     try {
@@ -17,25 +17,11 @@ export const detallesDelMensaje = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        const consulta = `
-                                SELECT 
-                                    uid,
-                                    mensaje,
-                                    estado,
-                                    posicion
-                                FROM 
-                                    "mensajesEnPortada"
-                                WHERE
-                                    uid = $1;
-                               `;
-        const resuelveMensajes = await conexion.query(consulta, [mensajeUID]);
-        const detallesDelMensaje = resuelveMensajes.rows[0];
-
-
-        const bufferObjPreDecode = Buffer.from(detallesDelMensaje.mensaje, "base64");
-        detallesDelMensaje.mensaje = bufferObjPreDecode.toString("utf8");
+        const mensajesEnPortada = await obtenerMensajePorMensajeUID(mensajeUID)
+        const bufferObjPreDecode = Buffer.from(mensajesEnPortada.mensaje, "base64");
+        mensajesEnPortada.mensaje = bufferObjPreDecode.toString("utf8");
         const ok = {
-            ok: detallesDelMensaje
+            ok: mensajesEnPortada
         };
         salida.json(ok);
     } catch (errorCapturado) {

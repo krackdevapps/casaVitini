@@ -1,8 +1,10 @@
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { actualizarEstadoPago } from "../../../../sistema/precios/actualizarEstadoPago.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
+import { eliminarPagoPorPagoUIDYReservaUID } from "../../../../repositorio/reservas/transacciones/eliminarPagoPorPagoUIDYReservaUID.mjs";
+import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
 
 export const eliminarPagoManual = async (entrada, salida) => {
     try {
@@ -41,23 +43,21 @@ export const eliminarPagoManual = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
 
-        await conexion.query('BEGIN'); // Inicio de la transacción
-        await validadoresCompartidos.reservas.validarReserva(reservaUID);
-        const consultaEliminarPago = `
-                            DELETE FROM "reservaPagos"
-                            WHERE "pagoUID" = $1 AND reserva = $2;
-                            `;
-        await conexion.query(consultaEliminarPago, [pagoUID, reservaUID]);
-        // Importante esto al afinal
+        await campoDeTransaccion("inicair")
+        await obtenerReservaPorReservaUID(reservaUID)
+        await eliminarPagoPorPagoUIDYReservaUID({
+            pagoUID: pagoUID,
+            reservaUID: reservaUID
+        })
         await actualizarEstadoPago(reservaUID);
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha eliminado irreversiblemente el pago",
             pagoUID: pagoUID
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

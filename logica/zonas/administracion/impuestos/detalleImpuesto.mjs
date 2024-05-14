@@ -1,7 +1,7 @@
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerImpuestosPorImppuestoUID } from "../../../repositorio/impuestos/obtenerImpuestosPorImpuestoUID.mjs";
 
 export const detalleImpuesto = async (entrada, salida) => {
     try {
@@ -18,25 +18,8 @@ export const detalleImpuesto = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        const validarImpuesto = `
-                            SELECT
-                            nombre,
-                            "impuestoUID",
-                            "tipoImpositivo",
-                            "tipoValor",
-                            "aplicacionSobre",
-                            "estado"
-                            FROM
-                            impuestos
-                            WHERE
-                            "impuestoUID" = $1;
-                            `;
-        const resuelveValidarImpuesto = await conexion.query(validarImpuesto, [impuestoUID]);
-        if (resuelveValidarImpuesto.rowCount === 0) {
-            const error = "No existe el perfil del impuesto";
-            throw new Error(error);
-        }
-        const perfilImpuesto = resuelveValidarImpuesto.rows[0];
+       
+        const perfilImpuesto = obtenerImpuestosPorImppuestoUID(impuestoUID)
         const ok = {
             ok: perfilImpuesto
         };

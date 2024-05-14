@@ -1,7 +1,7 @@
 import { listaZonasHorarias } from "../../../../componentes/zonasHorarias.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { obtenerCalendarios as oc } from "../calendariosSincronizados/obtenerCalendarios.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+import { obtenerParConfiguracion } from "../../../../repositorio/configuracion/obtenerParConfiguracion.mjs";
 
 export const obtenerConfiguracion = async (entrada, salida) => {
     try {
@@ -10,11 +10,10 @@ export const obtenerConfiguracion = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-            const configuraciones = await oc([
-            "zonaHoraria"
-        ])
+        const paresConf = ["zonaHoraria"]
+        const paresConfiguracion = await obtenerParConfiguracion(paresConf)
         const ok = {
-            ok: configuraciones,
+            ok: paresConfiguracion,
             listaZonasHorarias: listaZonasHorarias
         };
         salida.json(ok);

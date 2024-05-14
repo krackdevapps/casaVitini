@@ -1,7 +1,7 @@
-import { conexion } from "../../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from '../../../../../sistema/error/filtroError.mjs';
+import { obtenerCalendarioPorCalendarioUID } from "../../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorCalendarioUID.mjs";
 
 export const exportarCalendario = async (entrada, salida) => {   
     try {
@@ -17,19 +17,7 @@ export const exportarCalendario = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })    
-  
-        const consultaSelecionaCalendario = `
-                                    SELECT 
-                                    uid
-                                    FROM 
-                                    "calendariosSincronizados" 
-                                    WHERE 
-                                    uid = $1`;
-        const resuelveSelecionarCalendario = await conexion.query(consultaSelecionaCalendario, [calendarioUID]);
-        if (resuelveSelecionarCalendario.rowCount === 0) {
-            const error = "No existe el calendario que quieres borrar, por favor revisa el identificado calendarioUID que has introducido.";
-            throw new Error(error);
-        }
+        await obtenerCalendarioPorCalendarioUID(calendarioUID)
         // Obtener las las reservas
         // Verificar que el apartmento este en esa reserva
         // añadirlo a una array
