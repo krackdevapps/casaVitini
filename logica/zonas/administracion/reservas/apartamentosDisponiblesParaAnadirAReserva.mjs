@@ -14,10 +14,10 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
         IDX.control()
 
 
-        const fechaEntrada = entrada.body.entrada;
-        const fechaSalida = entrada.body.salida;
-        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)).fecha_ISO;
-        const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida)).fecha_ISO;
+        const fechaEntrada_ISO = entrada.body.fechaEntrada_ISO;
+        const fechaSalida_ISO = entrada.body.fechaSalida_ISO;
+        await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_ISO)
+        await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_ISO)
         const rol = entrada.session.rol;
         const configuracionApartamentosPorRango = {
             fechaEntrada_ISO: fechaEntrada_ISO,
@@ -58,5 +58,5 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } 
+    }
 }

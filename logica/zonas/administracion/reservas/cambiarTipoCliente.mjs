@@ -3,9 +3,10 @@ import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs";
 
 export const cambiarTipoCliente = async (entrada, salida) => {
-    let mutex
+    const mutex = new Mutex()
     try {
 
         const session = entrada.session
@@ -14,10 +15,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        mutex = new Mutex();
         await mutex.acquire();
-
-
 
         const reservaUID = validadoresCompartidos.tipos.numero({
             number: entrada.body.reservaUID,
@@ -50,7 +48,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);
         }
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
 
 
         // validar cliente
@@ -140,7 +138,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
                         DELETE FROM "poolClientes"
                         WHERE "pernoctanteUID" = $1;`;
         await conexion.query(eliminarClientePool, [pernoctanteUID]);
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha acualizado el pernoctante correctamente",
             pernoctanteUID: pernoctanteUID,
@@ -150,7 +148,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

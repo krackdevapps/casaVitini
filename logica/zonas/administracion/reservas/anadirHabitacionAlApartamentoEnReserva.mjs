@@ -1,12 +1,14 @@
 import { Mutex } from "async-mutex";
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { estadoHabitacionesApartamento } from "../../../sistema/reservas/estadoHabitacionesApartamento.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
+import { insertarHabitacionEnApartamento } from "../../../repositorio/reservas/apartamentos/insertarHabitacionEnApartamento.mjs";
+import { obtenerNombreHabitacionUI } from "../../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs";
 
 export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) => {
-    let mutex
+    const mutex = new Mutex()
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -14,10 +16,9 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
         IDX.empleados()
         IDX.control()
 
-        mutex = new Mutex()
         await mutex.acquire();
 
-        const apartamento = validadoresCompartidos.tipos.numero({
+        const apartamentoUID = validadoresCompartidos.tipos.numero({
             number: entrada.body.apartamento,
             nombreCampo: "El apartamento",
             filtro: "numeroSimple",
@@ -25,15 +26,15 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        const reserva = validadoresCompartidos.tipos.numero({
-            number: entrada.body.reserva,
-            nombreCampo: "El identificador universal de la reserva (reserva)",
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            number: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reservaUID (reservaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        const habitacion = validadoresCompartidos.tipos.cadena({
+        const habitacionIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.habitacion,
             nombreCampo: "La habitacion",
             filtro: "strictoIDV",
@@ -41,27 +42,15 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
             limpiezaEspaciosAlrededor: "si",
         })
 
-
-        const validacionReserva = `
-                        SELECT 
-                        reserva, "estadoReserva", "estadoPago"
-                        FROM reservas
-                        WHERE reserva = $1
-                        `;
-        const resuelveValidacionReserva = await conexion.query(validacionReserva, [reserva]);
-        if (resuelveValidacionReserva.rowCount === 0) {
-            const error = "No existe la reserva";
-            throw new Error(error);
-        }
-        if (resuelveValidacionReserva.rows[0].estadoReserva === "cancelada") {
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
+        if (reserva.estadoReservaIDV === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);
         }
-
         // Mira las habitaciones diponbiles para anadira este apartamento
         const transaccionInterna = {
-            "apartamento": apartamento,
-            "reserva": reserva
+            apartamento: apartamentoUID,
+            reservaUID: reservaUID
         };
         const resuelveHabitaciones = await estadoHabitacionesApartamento(transaccionInterna);
         const habitacionesResuelvas = resuelveHabitaciones.ok;
@@ -71,31 +60,19 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
         }
         if (habitacionesResuelvas.length > 0) {
             for (const habitacionResuelta of habitacionesResuelvas) {
-                if (habitacion === habitacionResuelta) {
-                    const resolucionNombreHabitacion = await conexion.query(`SELECT "habitacionUI" FROM habitaciones WHERE habitacion = $1`, [habitacion]);
-                    if (resolucionNombreHabitacion.rowCount === 0) {
-                        const error = "No existe el identificador de la habitacionIDV";
-                        throw new Error(error);
-                    }
-                    const habitacionUI = resolucionNombreHabitacion.rows[0].habitacionUI;
-                    const consultaInsertaHabitacion = `
-                                    INSERT INTO "reservaHabitaciones"
-                                    (
-                                    apartamento,
-                                    habitacion,
-                                    "habitacionUI",
-                                    reserva
-                                    )
-                                    VALUES ($1, $2, $3, $4) RETURNING uid
-                                    `;
-                    const resuelveInsercionHabitacion = await conexion.query(consultaInsertaHabitacion, [apartamento, habitacion, habitacionUI, reserva]);
-                    if (resuelveInsercionHabitacion.rowCount === 1) {
-                        const ok = {
-                            "ok": `Se ha anadido la ${habitacionUI} al apartamento`,
-                            "nuevoUID": resuelveInsercionHabitacion.rows[0].uid
-                        };
-                        return salida.json(ok);
-                    }
+                if (habitacionIDV === habitacionResuelta) {
+                    const habitacionUI = await obtenerNombreHabitacionUI(habitacionIDV)
+                    const nuevaHabitacionDelApartamento = await insertarHabitacionEnApartamento({
+                        reservaUID: reservaUID,
+                        apartamentoUID: apartamentoUID,
+                        habitacionIDV: habitacionIDV,
+                        habitacionUI: habitacionUI
+                    })
+                    const ok = {
+                        ok: `Se ha anadido la ${habitacionUI} al apartamento`,
+                        nuevoUID: nuevaHabitacionDelApartamento.componenteUID
+                    };
+                    return salida.json(ok);
                 }
             }
             const error = {

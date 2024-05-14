@@ -3,7 +3,6 @@ import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apa
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
-
 export const apartamentosDisponiblesAdministracion = async (entrada, salida) => {
     try {
 
@@ -13,10 +12,10 @@ export const apartamentosDisponiblesAdministracion = async (entrada, salida) => 
         IDX.empleados()
         IDX.control()
 
-        const fechaEntrada = entrada.body.entrada;
-        const fechaSalida = entrada.body.salida;
-        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)).fecha_ISO;
-        const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida)).fecha_ISO;
+        const fechaEntrada_ISO = entrada.body.fechaEntrada_ISO;
+        const fechaSalida_ISO = entrada.body.fechaEntrad_ISO;
+        await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
+        await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
         const rol = entrada.session.rol;
         const configuracionApartamentosPorRango = {
             fechaEntrada_ISO: fechaEntrada_ISO,
@@ -35,6 +34,5 @@ export const apartamentosDisponiblesAdministracion = async (entrada, salida) => 
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } finally {
     }
 }
