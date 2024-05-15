@@ -31,7 +31,7 @@ export const restablecerClave = async (entrada, salida) => {
             WHERE "fechaCaducidad" < $1;
             `;
         await conexion.query(eliminarEnlacesCaducados, [fechaActual_ISO]);
-        await conexion.query('BEGIN'); // Inicio de la transacción   
+        await campoDeTransaccion("iniciar")   
         const consultaValidarCodigo = `
                 SELECT 
                 usuario
@@ -72,7 +72,7 @@ export const restablecerClave = async (entrada, salida) => {
                 WHERE usuario = $1;
                 `;
             await conexion.query(eliminarEnlaceUsado, [usuario]);
-            await conexion.query('COMMIT'); // Confirmar la transacción
+            await campoDeTransaccion("confirmar")
             const ok = {
                 ok: "El enlace temporal sigue vigente",
                 usuario: usuario
@@ -80,7 +80,7 @@ export const restablecerClave = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         console.info(errorCapturado.message);
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)

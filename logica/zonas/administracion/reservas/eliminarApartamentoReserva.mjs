@@ -47,7 +47,7 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
             throw new Error(error);
         }
 
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
 
 
         // Comprobar que la reserva exisste
@@ -135,7 +135,7 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
                 };
                 await insertarTotalesReserva(transaccionPrecioReserva);
             }
-            await conexion.query('COMMIT'); // Confirmar la transacción
+            await campoDeTransaccion("confirmar")
             const ok = {};
             ok.estadoDesgloseFinanciero = estadoInfomracionFinanciera;
             if (tipoBloqueo === "rangoTemporal") {
@@ -150,7 +150,7 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

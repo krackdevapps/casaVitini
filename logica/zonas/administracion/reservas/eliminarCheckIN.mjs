@@ -25,7 +25,7 @@ export const eliminarCheckIN = async (entrada, salida) => {
             const error = "El campo 'pernoctanteUID' debe ser un tipo numero, entero y positivo";
             throw new Error(error);
         }
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
 
 
         // Validar pernoctanteUID
@@ -74,13 +74,13 @@ export const eliminarCheckIN = async (entrada, salida) => {
             const error = "No se ha podido eliminar la fecha de checkin";
             throw new Error(error);
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha eliminado la fecha de checkin correctamente"
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

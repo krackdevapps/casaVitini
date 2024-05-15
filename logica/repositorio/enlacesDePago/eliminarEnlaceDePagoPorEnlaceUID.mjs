@@ -1,6 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const eliminarEnlaceDePago = async (enlaceUID) => {
+export const eliminarEnlaceDePagoPorEnlaceUID = async (enlaceUID) => {
     try {
         const consulta = `
         DELETE FROM "enlacesDePago"

@@ -8,8 +8,8 @@ import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
-import { obtenerApartamentosDeLaReserva } from "../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReserva.mjs";
 import { insertarApartamentoEnReserva } from "../../../repositorio/reservas/apartamentos/insertarApartamentoEnReserva.mjs";
+import { obtenerApartamentosDeLaReservaPorApartamentoIDV } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDV.mjs";
 
 
 export const anadirApartamentoReserva = async (entrada, salida) => {
@@ -56,7 +56,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
         const fechaSalida_ISO = detallesReserva.fechaSalida;
         // ACABAR ESTA SENTENCIA DE ABAJO--
         // validar que el apartamento no este ya en la reserva
-        const apartamentoReserva = await obtenerApartamentosDeLaReserva({
+        const apartamentoReserva = await obtenerApartamentosDeLaReservaPorApartamentoIDV({
             reservaUID: reservaUID,
             apartamentoIDV: apartamentoIDV
         })

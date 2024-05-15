@@ -52,7 +52,7 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
             const error = "Solo se acetan imagenes PNG, TIFF, JPEG y JPG.";
             throw new Error(error);
         }
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
 
         if (configuracionApartamento.length === 0) {
@@ -71,9 +71,9 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
         };
         salida.json(ok);
 
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

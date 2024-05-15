@@ -57,9 +57,9 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
                 salida.json(ok);
             }
         }
-        // await conexion.query('COMMIT');
+        // await campoDeTransaccion("confirmar");
     } catch (errorCapturado) {
-        // await conexion.query('ROLLBACK');
+        // await campoDeTransaccion("cancelar");
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

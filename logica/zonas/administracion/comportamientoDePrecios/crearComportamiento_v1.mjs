@@ -24,7 +24,7 @@ export const crearComportamiento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
 
         const dataEvitarDuplicados = {
             nombreComportamiento: nombreComportamiento,
@@ -32,7 +32,7 @@ export const crearComportamiento = async (entrada, salida) => {
         };
 
         await evitarDuplicados(dataEvitarDuplicados);
-        await conexion.query('COMMIT');
+        await campoDeTransaccion("confirmar");
         const ok = {
             ok: "Se ha creado correctamente el comportamiento",
             nuevoUIDComportamiento: nuevoUIDComportamiento
@@ -41,7 +41,7 @@ export const crearComportamiento = async (entrada, salida) => {
 
 
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK');
+        await campoDeTransaccion("cancelar");
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

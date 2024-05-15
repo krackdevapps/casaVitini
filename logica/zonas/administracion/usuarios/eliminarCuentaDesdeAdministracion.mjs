@@ -19,7 +19,7 @@ export const eliminarCuentaDesdeAdministracion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
 
 
         // Validar si es un usuario administrador
@@ -65,9 +65,9 @@ export const eliminarCuentaDesdeAdministracion = async (entrada, salida) => {
             };
             salida.json(ok);
         }
-        await conexion.query('COMMIT');
+        await campoDeTransaccion("confirmar");
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK');
+        await campoDeTransaccion("cancelar");
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

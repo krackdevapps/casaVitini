@@ -30,7 +30,7 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
             soloMinusculas: "si"
         })
         await eliminarCuentasNoVerificadas();
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const actualizarIDX = `
                             UPDATE usuarios
                             SET 
@@ -65,9 +65,9 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
             };
             salida.json(ok);
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

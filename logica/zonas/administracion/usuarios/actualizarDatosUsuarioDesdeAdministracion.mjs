@@ -61,7 +61,7 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             email: email
         };
         await validadoresCompartidos.usuarios.unicidadPasaporteYCorrreo(validarDatosUsuario);
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
 
 
         // validar existencia de contrasena
@@ -112,9 +112,9 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             };
             salida.json(ok);
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

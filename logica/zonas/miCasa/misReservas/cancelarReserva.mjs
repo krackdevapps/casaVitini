@@ -22,7 +22,7 @@ export const cancelarReserva = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
 
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const obtenerDatosUsuario = `
             SELECT 
                 email
@@ -180,9 +180,9 @@ export const cancelarReserva = async (entrada, salida) => {
             }
             salida.json(ok);
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

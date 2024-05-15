@@ -19,7 +19,7 @@ const insertarReserva = async (reserva) => {
         const pasaporteTitularPool = reserva.datosTitular.pasaporteTitular
         const correoTitular = reserva.datosTitular.correoTitular
         const telefonoTitular = reserva.datosTitular.telefonoTitular
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const consultaReserva = `
         INSERT INTO
         reservas
@@ -221,14 +221,14 @@ const insertarReserva = async (reserva) => {
         await insertarTotalesReserva(transaccion)
 
         //resolverPrecio = resolverPrecio.ok
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "reserva insertada con exito",
             reservaUID: reservaUID
         }
         return ok
     } catch (error) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         throw error;
     }
 }

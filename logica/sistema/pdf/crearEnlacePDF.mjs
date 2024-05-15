@@ -4,7 +4,7 @@ import { controlCaducidad } from "./controlCaducidad.mjs";
 
 export const crearEnlacePDF = async (reservaUID) => {
     try {
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         await validadoresCompartidos.reservas.validarReserva(reservaUID);
         await controlCaducidad();
         const generarCadenaAleatoria = (longitud) => {
@@ -43,10 +43,10 @@ export const crearEnlacePDF = async (reservaUID) => {
         ];
         const reseulveEnlaces = await conexion.query(consultaCrearEnlace, datosEnlace);
         const enlacePDF = reseulveEnlaces.rows[0].enlace;
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
         return enlacePDF;
     } catch (error) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         throw error;
     }
 }

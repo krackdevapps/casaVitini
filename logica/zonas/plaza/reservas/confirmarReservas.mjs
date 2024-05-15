@@ -6,7 +6,7 @@ export const confirmarReserva = async (entrada, salida) => {
         const reserva = entrada.body.reserva;
 
 
-        await conexion.query('BEGIN');
+        await campoDeTransaccion("iniciar");
         const resuelveValidacionObjetoReserva = await validarObjetoReserva(reserva);
         if (!resuelveValidacionObjetoReserva.ok) {
             const error = "Ha ocurrido un error desconocido en la validacion del objeto";
@@ -95,11 +95,11 @@ export const confirmarReserva = async (entrada, salida) => {
             };
             salida.json(ok);
         }
-        await conexion.query('COMMIT');
+        await campoDeTransaccion("confirmar");
         // Si hay un error en el envio del email, este no escala, se queda local.
         enviarEmailReservaConfirmada(reservaUID);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK');
+        await campoDeTransaccion("cancelar");
         const errorFinal = {};
         if (errorCapturado.message && !errorCapturado.errors) {
             errorFinal.error = errorCapturado.message;

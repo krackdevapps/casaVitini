@@ -28,7 +28,7 @@ const insertarTotalesReserva = async (metadatos) => {
                 throw new Error(error)
             }
         }
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const resolverPrecio = await precioReserva(transaccion)
         const desgloseFinanciero = resolverPrecio.ok.desgloseFinanciero
         const totalesPorNoche = desgloseFinanciero.totalesPorNoche
@@ -373,13 +373,13 @@ const insertarTotalesReserva = async (metadatos) => {
             throw new Error(error)
         }
         await actualizarEstadoPago(reservaUID)
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "datos financieros generados correctamente en esta reserva"
         }
         return ok
     } catch (error) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         throw error;
     }
 }

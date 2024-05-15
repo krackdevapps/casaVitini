@@ -56,7 +56,7 @@ export const cambiarPosicon = async (entrada, salida) => {
         };
         salida.json(ok);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

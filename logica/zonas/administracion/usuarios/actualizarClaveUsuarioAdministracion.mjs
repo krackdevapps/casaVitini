@@ -38,7 +38,7 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
         const retorno = vitiniCrypto(cryptoData);
         const nuevaSal = retorno.nuevaSal;
         const hashCreado = retorno.hashCreado;
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const actualizarClave = `
                             UPDATE usuarios
                             SET 
@@ -59,9 +59,9 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
             };
             salida.json(ok);
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

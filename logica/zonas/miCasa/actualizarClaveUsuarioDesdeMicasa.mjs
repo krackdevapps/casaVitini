@@ -26,7 +26,7 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
             const error = "Has escrito una clave nueva que es la misma que la actual. Por favor revisa lo campos.";
             throw new Error(error);
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
         const obtenerClaveActualHASH = `
                 SELECT 
                 clave,
@@ -59,7 +59,7 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
         const retorno = vitiniCrypto(cryptoData);
         const nuevaSal = retorno.nuevaSal;
         const hashCreado = retorno.hashCreado;
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const actualizarClave = `
                 UPDATE usuarios
                 SET 
@@ -81,7 +81,7 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

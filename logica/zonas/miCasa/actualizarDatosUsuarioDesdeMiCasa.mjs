@@ -29,13 +29,13 @@ export const actualizarDatosUsuarioDesdeMiCas = async (entrada, salida) => {
             email: datosUsuario.email,
             operacion: "actualizar",
         }
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
 
         validadoresCompartidos.usuarios.unicidadPasaporteYCorrreo(datosUnicos)
         datosUsuario.usuarioIDX = usuarioIDX
         await actualizarDatos(datosUsuario)
 
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
         if (resuelveActualizarDatosUsuario.rowCount === 1) {
             const ok = {
                 ok: "Se ha actualiza correctamente los datos del usuario",
@@ -44,7 +44,7 @@ export const actualizarDatosUsuarioDesdeMiCas = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } 

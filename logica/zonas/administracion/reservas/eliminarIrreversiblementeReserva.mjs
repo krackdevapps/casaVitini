@@ -32,7 +32,7 @@ export const eliminarIrreversiblementeReserva = async (entrada, salida) => {
             throw new Error(error);
         }
         const usuarioIDX = entrada.session.usuario;
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const obtenerClaveActualHASH = `
                         SELECT 
                         clave,
@@ -92,9 +92,9 @@ export const eliminarIrreversiblementeReserva = async (entrada, salida) => {
             };
             salida.json(ok);
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

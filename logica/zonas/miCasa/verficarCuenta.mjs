@@ -16,7 +16,7 @@ export const verificarCuenta = async (entrada, salida) => {
 
 
         await eliminarCuentasNoVerificadas();
-        await conexion.query('BEGIN'); // Inicio de la transacción   
+        await campoDeTransaccion("iniciar")   
         const estadoVerificado = "si";
         const consultaValidarCodigo = `
             UPDATE 
@@ -43,9 +43,9 @@ export const verificarCuenta = async (entrada, salida) => {
             };
             salida.json(ok);
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         console.info(errorCapturado.message);
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)

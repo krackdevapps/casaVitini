@@ -9,7 +9,7 @@ export const realizarPago = async (entrada, salida) => {
             const error = "el codigo de un enlace de pago solo puede ser una cadena de minuscuals y numeros y ya esta";
             throw new Error(error);
         }
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const consultaDetallesEnlace = `
             SELECT
             reserva,
@@ -129,10 +129,10 @@ export const realizarPago = async (entrada, salida) => {
                 detalles: detalles
             };
             salida.json(ok);
-            await conexion.query('COMMIT'); // Confirmar la transacción
+            await campoDeTransaccion("confirmar")
         }
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         let errorFinal;
         if (errorCapturado.message) {
             const error = {

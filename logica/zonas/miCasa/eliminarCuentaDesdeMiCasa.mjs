@@ -16,7 +16,7 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
             const error = "No has escrito tu contrasena. Es necesaria para eliminar tu cuenta";
             throw new Error(error);
         }
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const obtenerClaveActualHASH = `
                 SELECT 
                 clave,
@@ -75,9 +75,9 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
             };
             salida.json(ok);
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

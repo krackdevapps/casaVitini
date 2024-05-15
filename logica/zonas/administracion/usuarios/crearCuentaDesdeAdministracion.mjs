@@ -50,7 +50,7 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
         await validarIDXUnico(usuarioIDX)
         await eliminarCuentasNoVerificadas();
         const estadoCuenta = "desactivado";
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const cryptoData = {
             sentido: "cifrar",
             clavePlana: clave
@@ -105,9 +105,9 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
             usuarioIDX: resuelveCrearNuevoUsuario.rows[0].usuario
         };
         salida.json(ok);
-        await conexion.query('COMMIT');
+        await campoDeTransaccion("confirmar");
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK');
+        await campoDeTransaccion("cancelar");
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

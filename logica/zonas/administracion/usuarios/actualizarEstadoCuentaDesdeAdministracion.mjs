@@ -45,7 +45,7 @@ export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida)
             const error = "No se puede activar una cuenta que carece de contrasena, por favor establece una contrasena primero";
             throw new Error(error);
         }
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const actualizarEstadoCuenta = `
                             UPDATE usuarios
                             SET 
@@ -76,9 +76,9 @@ export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida)
             };
             salida.json(ok);
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

@@ -29,7 +29,7 @@ export const actualizarRolCuenta = async (entrada, salida) => {
             soloMinusculas: "si"
         })
 
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
 
 
         // Validas usaurios
@@ -102,9 +102,9 @@ export const actualizarRolCuenta = async (entrada, salida) => {
             rolUI: rolUI
         };
         salida.json(ok);
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

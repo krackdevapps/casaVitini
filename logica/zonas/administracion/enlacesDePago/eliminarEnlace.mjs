@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { eliminarEnlaceDePago } from "../../../repositorio/enlacesDePago/eliminarEnlaceDePago.mjs";
+import { eliminarEnlaceDePagoPorEnlaceUID } from "../../../repositorio/enlacesDePago/eliminarEnlaceDePagoPorEnlaceUID.mjs";
 import { obtenerEnlaceDePagoPorEnlaceUID } from "../../../repositorio/enlacesDePago/obtenerEnlaceDePagoPorEnlaceUID.mjs";
 
 export const eliminarEnlace = async (entrada, salida) => {
@@ -20,7 +20,7 @@ export const eliminarEnlace = async (entrada, salida) => {
         })
         
         await obtenerEnlaceDePagoPorEnlaceUID(enlaceUID)
-        await eliminarEnlaceDePago(enlaceUID)
+        await eliminarEnlaceDePagoPorEnlaceUID(enlaceUID)
         const ok = {
             ok: "Se ha eliminado el enlace correctamente"
         };

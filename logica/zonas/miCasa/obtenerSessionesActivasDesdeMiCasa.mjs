@@ -12,7 +12,7 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
 
         
         const usuarioIDX = entrada.session.usuario;
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
 
         // validar rol
         const consultaSessionesActivas = `
@@ -60,9 +60,9 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
             sessionesActivas: sessionesActivas
         };
         salida.json(ok);
-        await conexion.query('COMMIT');
+        await campoDeTransaccion("confirmar");
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK');
+        await campoDeTransaccion("cancelar");
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

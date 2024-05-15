@@ -110,7 +110,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             const origen = "administracion";
             const creacionFechaReserva = new Date().toISOString();
             const estadoPago = "noPagado";
-            await conexion.query('BEGIN'); // Inicio de la transacción
+            await campoDeTransaccion("iniciar")
             const insertarReserva = `
                             INSERT INTO
                             reservas 
@@ -150,7 +150,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 reservaUID: Number(reservaUIDNuevo)
             };
             await insertarTotalesReserva(transaccionPrecioReserva);
-            await conexion.query('COMMIT'); // Confirmar la transacción
+            await campoDeTransaccion("confirmar")
             const ok = {
                 ok: "Se ha anadido al reserva vacia",
                 reservaUID: reservaUIDNuevo
@@ -158,7 +158,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             salida.json(ok);
         }
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

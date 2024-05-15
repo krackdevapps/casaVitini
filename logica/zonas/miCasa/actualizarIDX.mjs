@@ -31,7 +31,7 @@ export const actualizarIDX = async (entrada, salida) => {
         }
         await validarIDXUnico(nuevoIDX)
         await eliminarCuentasNoVerificadas();
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
 
         const data = {
             actualIDX: actualIDX,
@@ -39,7 +39,7 @@ export const actualizarIDX = async (entrada, salida) => {
         }
         await actualizarIDX(data)
 
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el IDX correctamente",
             usuarioIDX: nuevoIDX
@@ -47,7 +47,7 @@ export const actualizarIDX = async (entrada, salida) => {
         salida.json(ok);
 
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

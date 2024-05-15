@@ -18,7 +18,7 @@ export const preConfirmarReserva = async (entrada, salida) => {
             throw new Error(mensajesUI.aceptarReservasPublicas);
         }
         const reserva = entrada.body.reserva;
-        await conexion.query('BEGIN');
+        await campoDeTransaccion("iniciar");
         await validarObjetoReserva(reserva);
 
         await eliminarBloqueoCaducado();
@@ -39,10 +39,10 @@ export const preConfirmarReserva = async (entrada, salida) => {
             };
             salida.json(ok);
         }
-        await conexion.query('COMMIT');
+        await campoDeTransaccion("confirmar");
         enviarEmailReservaConfirmada(reservaUID);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK');
+        await campoDeTransaccion("cancelar");
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {

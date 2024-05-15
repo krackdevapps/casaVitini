@@ -49,7 +49,7 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
 
         await eliminarCuentasNoVerificadas();
         await borrarCuentasCaducadas();
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         await validarIDXUnico(usuarioIDX)
         await validarEMailUnico(email)
         const cryptoData = {
@@ -147,14 +147,14 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
             usuarioIDX: resuelveCrearNuevoUsuario.rows[0].usuario
         };
         salida.json(ok);
-        await conexion.query('COMMIT');
+        await campoDeTransaccion("confirmar");
         const datosVerificacion = {
             email: email,
             codigoVerificacion: codigoAleatorioUnico
         };
         enviarEmailAlCrearCuentaNueva(datosVerificacion);
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK');
+        await campoDeTransaccion("cancelar");
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

@@ -46,7 +46,7 @@ export const enviarCorreo = async (entrada, salida) => {
         const fechaActualUTC = DateTime.utc();
         const fechaCaducidadUTC = fechaActualUTC.plus({ hours: 1 });
         const hostActual = process.env.HOST_CASAVITINI;
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const consultaRecuperarCuenta = `
                 SELECT "usuarioIDX"
                 FROM "datosDeUsuario"
@@ -152,7 +152,7 @@ export const enviarCorreo = async (entrada, salida) => {
                 mensaje: mensaje,
             };
             // Enviamos el mensaje
-            await conexion.query('COMMIT'); // Confirmar la transacción
+            await campoDeTransaccion("confirmar")
             const resultadoEnvio = enviarMail(composicionDelMensaje);
             const ok = {
                 ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para verificar tu VitiniID",
@@ -162,7 +162,7 @@ export const enviarCorreo = async (entrada, salida) => {
 
 
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
+        await campoDeTransaccion("cancelar")
         console.info(errorCapturado.message);
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)

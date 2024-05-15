@@ -8,9 +8,11 @@ import { vitiniSysError } from "../../../sistema/vitiniSysError.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validarModificacionRangoFechaResereva } from "../../../sistema/reservas/validarModificacionRangoFechaResereva.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
+import { actualizarFechaEntradaReserva } from "../../../repositorio/reservas/rangoFlexible/actualizarFechaEntradaReserva.mjs";
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
-    let mutex
+    const mutex = new Mutex()
     try {
 
         const session = entrada.session
@@ -19,12 +21,11 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        mutex = new Mutex();
         await mutex.acquire();
 
-        const reserva = validadoresCompartidos.tipos.numero({
-            number: entrada.body.reserva,
-            nombreCampo: "El identificador universal de la reserva",
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            number: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reservaUID",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -51,34 +52,18 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const fechaSolicitada_objeto = DateTime.fromISO(fechaSolicitada_ISO, { zone: zonaHoraria });
         const fechaSolicitada_array = fechaSolicitada_ISO.split("-");
-        await conexion.query('BEGIN'); // Inicio de la transacción
+        await campoDeTransaccion("iniciar")
         const mesSeleccionado = fechaSolicitada_array[1];
         const anoSeleccionado = fechaSolicitada_array[0];
-        const validacionReserva = `
-                        SELECT 
-                        reserva,
-                        "estadoReserva", 
-                        "estadoPago",
-                        to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-                        to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"
-                        FROM
-                        reservas
-                        WHERE
-                        reserva = $1
-                        `;
-        const resuelveValidacionReserva = await conexion.query(validacionReserva, [reserva]);
-        if (resuelveValidacionReserva.rowCount === 0) {
-            const error = "No existe la reserva";
-            throw new Error(error);
-        }
-        if (resuelveValidacionReserva.rows[0].estadoReserva === "cancelada") {
+
+        const reserva = obtenerReservaPorReservaUID(reservaUID)
+        if (reserva.estadoReservaIDV === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada, una reserva cancelada no interfiere en los dias ocupados";
             throw new Error(error);
         }
-        const detallesReserva = resuelveValidacionReserva.rows[0];
-        const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO;
+        const fechaEntrada_ISO = reserva.fechaEntrada;
         const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
-        const fechaSalida_ISO = detallesReserva.fechaSalida_ISO;
+        const fechaSalida_ISO = reserva.fechaSalida;
         const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria });
         const metadatos = {
             reserva: reserva,
@@ -87,9 +72,6 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
             sentidoRango: sentidoRango
         };
         if (sentidoRango === "pasado") {
-
-
-
             if (fechaSalida_Objeto <= fechaSolicitada_objeto) {
                 const mensajeSinPasado = "La fecha nueva fecha de entrada solicitada no puede ser igual o superior a la fecha de salida de la reserva.";
                 throw new Error(mensajeSinPasado);
@@ -101,7 +83,6 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 reservaUID: reserva
             };
             const mensajeSinPasado = "No se puede aplicar esa fecha de entrada a la reserva por que en base a los apartamentos de esa reserva no hay dias libres. Puedes ver a continuacíon lo eventos que lo impiden.";
-
 
             if ((codigoFinal === "noHayRangoPasado")
                 &&
@@ -125,24 +106,19 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                     throw new vitiniSysError(estructura);
                 }
             }
-            const actualizarModificacionFechaEntradaReserva = `
-                            UPDATE reservas
-                            SET entrada = $1
-                            WHERE reserva = $2
-                            RETURNING
-                            to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO";
-                            `;
-            const resuelveActualizarModificacionFechaEntradaReserva = await conexion.query(actualizarModificacionFechaEntradaReserva, [fechaSolicitada_ISO, reserva]);
-            if (resuelveActualizarModificacionFechaEntradaReserva.rowCount === 1) {
-                const nuevaFechaEntrada = resuelveActualizarModificacionFechaEntradaReserva.rows[0].fechaEntrada_ISO;
-                await insertarTotalesReserva(transaccionPrecioReserva);
-                const ok = {
-                    ok: "Se ha actualizado correctamente la fecha de entrada en la reserva",
-                    sentidoRango: "pasado",
-                    fecha_ISO: nuevaFechaEntrada
-                };
-                salida.json(ok);
-            }
+            const reservaActualizada = await actualizarFechaEntradaReserva({
+                fechaSolicitada_ISO: fechaSolicitada_ISO,
+                reservaUID: reservaUID
+            })
+            const nuevaFechaEntrada = reservaActualizada.fechaEntrada;
+            await insertarTotalesReserva(transaccionPrecioReserva);
+            const ok = {
+                ok: "Se ha actualizado correctamente la fecha de entrada en la reserva",
+                sentidoRango: "pasado",
+                fecha_ISO: nuevaFechaEntrada
+            };
+            salida.json(ok);
+
         }
         if (sentidoRango === "futuro") {
             if (fechaSolicitada_objeto <= fechaEntrada_Objeto) {
@@ -177,38 +153,26 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                     };
                     throw new vitiniSysError(estructura);
                 }
-
-
             }
+            const reservaActualizada = await actualizarFechaEntradaReserva({
+                fechaSolicitada_ISO: fechaSolicitada_ISO,
+                reservaUID: reservaUID
+            })
+            const nuevaFechaSalida = reservaActualizada.fechaSalida;
+            await insertarTotalesReserva(transaccionPrecioReserva);
+            const ok = {
+                ok: "Se ha actualizado correctamente la fecha de entrada en la reserva",
+                sentidoRango: "futuro",
+                fecha_ISO: nuevaFechaSalida
+            };
+            salida.json(ok);
 
-            const actualizarModificacionFechaEntradaReserva = `
-                            UPDATE reservas
-                            SET salida = $1
-                            WHERE reserva = $2
-                            RETURNING
-                            to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO";`;
-            const resuelveConfirmarFecha = await conexion.query(actualizarModificacionFechaEntradaReserva, [fechaSolicitada_ISO, reserva]);
-            if (resuelveConfirmarFecha.rowCount === 1) {
-                const nuevaFechaSalida = resuelveConfirmarFecha.rows[0].fechaSalida_ISO;
-                await insertarTotalesReserva(transaccionPrecioReserva);
-                const ok = {
-                    ok: "Se ha actualizado correctamente la fecha de entrada en la reserva",
-                    sentidoRango: "futuro",
-                    fecha_ISO: nuevaFechaSalida
-                };
-                salida.json(ok);
-            }
         }
-        await conexion.query('COMMIT'); // Confirmar la transacción
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await conexion.query('ROLLBACK'); // Revertir la transacción en caso de error
-        const error = {};
-        if (errorCapturado instanceof vitiniSysError) {
-            error.error = errorCapturado.objeto;
-        } else {
-            error.error = errorCapturado.message;
-        }
-        salida.json(error)
+        await campoDeTransaccion("cancelar")
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     } finally {
         if (mutex) {
             mutex.release()
