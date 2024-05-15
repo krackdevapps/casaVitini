@@ -1,8 +1,9 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoDePrecioPorComportamientoUID.mjs";
+
 import { obtenerApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/obtenerApartamentosDelComportamientoDePrecio.mjs";
+import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
 
 export const detallesComportamiento = async (entrada, salida) => {
     try {

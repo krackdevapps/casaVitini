@@ -4,15 +4,15 @@ export const obtenerHabitacionesDelApartamentoPorApartamentoIDV = async (apartam
     try {
         const consulta = `
         SELECT 
-        habitacion,
-        uid
+        "habitacionIDV",
+        "componenteUID"
         FROM
         "configuracionHabitacionesDelApartamento"
         WHERE
-        apartamento = $1;
+        "apartamentoIDV" = $1;
         `
         const resuelve = await conexion.query(consulta, [apartamentoIDV])
-        return resuelve.rows[0]
+        return resuelve.rows
     } catch (errorAdaptador) {
         throw errorAdaptador
     }

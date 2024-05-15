@@ -1,7 +1,9 @@
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { actualizarFechaCheckOutPernoctante } from "../../../repositorio/reservas/pernoctantes/actualizarFechaCheckOutPernoctante.mjs";
 
 export const eliminarCheckOutAdelantado = async (entrada, salida) => {
     try {
@@ -20,58 +22,33 @@ export const eliminarCheckOutAdelantado = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        if (typeof pernoctanteUID !== "number" || !Number.isInteger(pernoctanteUID) || pernoctanteUID <= 0) {
-            const error = "El campo 'pernoctanteUID' debe ser un tipo numero, entero y positivo";
-            throw new Error(error);
-        }
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            number: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         await campoDeTransaccion("iniciar")
 
-
         // Validar pernoctanteUID
-        const validarPernoctante = `
-                        SELECT 
-                        reserva
-                        FROM "reservaPernoctantes"
-                        WHERE "pernoctanteUID" = $1
-                        `;
-        const resuelvePernoctante = await conexion.query(validarPernoctante, [pernoctanteUID]);
-        if (resuelvePernoctante.rowCount === 0) {
-            const error = "No existe el pernoctanteUID";
-            throw new Error(error);
-        }
+        const pernoctante = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
+            reservaUID: reservaUID,
+            pernoctanteUID: pernoctanteUID
+        })
         // Validar que el pernoctatne sea cliente y no cliente pool
-        const reservaUID = resuelvePernoctante.rows[0].reserva;
-        const fechasReserva = `
-                        SELECT 
-                        "estadoReserva"
-                        FROM 
-                        reservas
-                        WHERE 
-                        reserva = $1
-                        `;
-        const resuelveReserva = await conexion.query(fechasReserva, [reservaUID]);
-        if (resuelveReserva.rowCount === 0) {
-            const error = "No existe la reserva";
-            throw new Error(error);
-        }
+        const reserva = obtenerReservaPorReservaUID(reservaUID)
         // validar que la reserva no este cancelada
-        const estadoReserva = resuelveReserva.rows[0].estadoReserva;
-        if (estadoReserva === "cancelada") {
+        if (reserva.estadoReservaIDV === "cancelada") {
             const error = "No se puede alterar una fecha de checkin de una reserva cancelada";
             throw new Error(error);
         }
-        const actualizerFechaCheckOut = `
-                        UPDATE "reservaPernoctantes"
-                        SET
-                          "fechaCheckOutAdelantado" = NULL
-                        WHERE
-                          "pernoctanteUID" = $1;
-                        `;
-        const actualizarCheckOut = await conexion.query(actualizerFechaCheckOut, [pernoctanteUID]);
-        if (actualizarCheckOut.rowCount === 0) {
-            const error = "No se ha podido eliminar la fecha de checkin";
-            throw new Error(error);
-        }
+        await actualizarFechaCheckOutPernoctante({
+            pernoctanteUID: pernoctanteUID,
+            fechaCheckOut_ISO: null
+        })
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha eliminado la fecha de checkin correctamente"

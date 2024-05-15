@@ -6,7 +6,7 @@ import { obtenerImpuestosPorImppuestoUID } from "../../../repositorio/impuestos/
 import { eliminarImpuesto } from "../../../repositorio/impuestos/eliminarImpuesto.mjs";
 
 export const eliminarPerfilImpuesto = async (entrada, salida) => {
-    let mutex
+    const mutex = new Mutex()
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)

@@ -5,11 +5,11 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoDePrecioPorComportamientoUID.mjs";
 import { actualizarComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/actualizarComportamientoDePrecio.mjs";
 import { eliminarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/eliminarApartamentosDelComportamientoDePrecio.mjs";
 import { insertarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/insertarApartamentosDelComportamiento.mjs";
 import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs";
+import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
 
 export const actualizarComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();

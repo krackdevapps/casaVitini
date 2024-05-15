@@ -10,7 +10,7 @@ const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
         }
         const consultaSelecionaCalendario = `
         SELECT 
-        uid,
+        "calendarioUID",
         nombre,
         url,
         "dataIcal"

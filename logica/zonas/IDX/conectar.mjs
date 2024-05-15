@@ -65,11 +65,11 @@ export const conectar = async (entrada, salida) => {
         const consultaControlIDX = `
                 SELECT
                 usuario,
-                rol,
+                "rolIDV",
                 sal,
                 clave,
-                "estadoCuenta",
-                "cuentaVerificada",
+                "estadoCuentaIDV",
+                "cuentaVerificadaIDV",
                 intentos
                 FROM 
                 usuarios 
@@ -83,7 +83,7 @@ export const conectar = async (entrada, salida) => {
         }
         // Se recupera el hash y la sal
         const IDX_ = resuelveControlIDX.rows[0].usuario;
-        const rol = resuelveControlIDX.rows[0].rol;
+        const rol = resuelveControlIDX.rows[0].rolIDV;
         const sal = resuelveControlIDX.rows[0].sal;
         const claveHash = resuelveControlIDX.rows[0].clave;
         const estadoCuenta = resuelveControlIDX.rows[0].estadoCuenta;

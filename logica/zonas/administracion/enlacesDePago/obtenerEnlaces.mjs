@@ -1,5 +1,5 @@
 import { obtenerTodosEnlaceDePago } from "../../../repositorio/enlacesDePago/obtenerTodosLosEnlaceDePago.mjs";
-import { obtenerTotalesReservaPorReservaUID } from "../../../repositorio/reservas/obtenerTotalesReservaPorReservaUID.mjs";
+import { obtenerTotalesReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerTotalesReservaPorReservaUID.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";

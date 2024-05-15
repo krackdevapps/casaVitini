@@ -2,7 +2,7 @@ import { conexion } from "../../../componentes/db.mjs"
 
 export const actualizarFechaCheckOutPernoctante = async (data) => {
     try {
-        const fechaCheckOut_ISO = data.fechaCheckOut_ISO
+        const fechaCheckOut_ISO = data.fechaCheckOut_ISO !== undefined ? data.fechaCheckOut_ISO : null;
         const pernoctanteUID = data.pernoctanteUID
 
         const consulta = `

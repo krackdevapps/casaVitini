@@ -1,4 +1,4 @@
-import { obtenerReservaPendientesDeRevision } from "../../../../repositorio/reservas/obtenerReservaPendientesDeRevision.mjs";
+import { obtenerReservaPendientesDeRevision } from "../../../../repositorio/reservas/reserva/obtenerReservaPendientesDeRevision.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 

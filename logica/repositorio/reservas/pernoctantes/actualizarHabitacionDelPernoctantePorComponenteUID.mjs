@@ -1,6 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const actualizarHabitacionDelPernoctanteDeLaReserva = async (data) => {
+export const actualizarHabitacionDelPernoctantePorComponenteUID = async (data) => {
     try {
         const reservaUID = data.reservaUID
         const pernoctanteUID = data.pernoctanteUID

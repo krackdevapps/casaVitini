@@ -1,12 +1,13 @@
 import { Mutex } from "async-mutex";
-import { conexion } from "../../../componentes/db.mjs";
 import { insertarCliente } from "../../../repositorio/clientes/insertarCliente.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerHabitacionDelLaReserva } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionDelLaReserva.mjs";
+import { insertarPernoctanteEnLaHabitacion } from "../../../repositorio/reservas/pernoctantes/insertarPernoctanteEnLaHabitacion.mjs";
 
 export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida) => {
-    let mutex
+    const mutex = new Mutex()
     try {
 
         const session = entrada.session
@@ -15,12 +16,11 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
         IDX.empleados()
         IDX.control()
 
-        mutex = new Mutex();
         await mutex.acquire();
 
-        const reserva = validadoresCompartidos.tipos.numero({
-            number: entrada.body.reserva,
-            nombreCampo: "El identificador universal de la reserva ",
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            number: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reservaUID ",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -41,17 +41,10 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
             throw new Error(error);
         }
         // validar habitacion
-        const validacionHabitacion = `
-                        SELECT 
-                        uid
-                        FROM "reservaHabitaciones"
-                        WHERE reserva = $1 AND uid = $2
-                        `;
-        const resuelveValidacionHabitacion = await conexion.query(validacionHabitacion, [reserva, habitacionUID]);
-        if (resuelveValidacionHabitacion.rowCount === 0) {
-            const error = "No existe la habitacion dentro de esta reserva";
-            throw new Error(error);
-        }
+        await obtenerHabitacionDelLaReserva({
+            reservaUID: reservaUID,
+            habitacionUID: habitacionUID
+        })
 
         const nuevoCliente = {
             nombre: entrada.body.nombre,
@@ -66,39 +59,26 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
 
         const nuevoClienteInsertado = await insertarCliente(datosValidados);
         const nuevoUIDCliente = nuevoClienteInsertado.uid;
-        const insertarPernoctante = `
-                        INSERT INTO 
-                        "reservaPernoctantes"
-                        (
-                        reserva,
-                        habitacion,
-                        "clienteUID"
-                        )
-                        VALUES ($1,$2,$3)
-                        RETURNING
-                        "pernoctanteUID"
-                        `;
-        const resuelveInsertarPernoctante = await conexion.query(insertarPernoctante, [reserva, habitacionUID, nuevoUIDCliente]);
-        if (resuelveInsertarPernoctante.rowCount === 0) {
-            const error = "No se ha insertardo el pernoctante en al reserva";
-            throw new Error(error);
-        }
-        if (resuelveInsertarPernoctante.rowCount === 1) {
-            const ok = {
-                ok: "Se ha anadido correctamente el cliente en la habitacin de la reserva",
-                nuevoUIDPernoctante: resuelveInsertarPernoctante.rows[0].pernoctanteUID,
-                nuevoUIDCliente: nuevoUIDCliente,
-                nuevoCliente: {
-                    nombre: datosValidados.nombre,
-                    primerApellido: datosValidados.primerApellido,
-                    segundoApellido: datosValidados.segundoApellido,
-                    pasaporte: datosValidados.pasaporte,
-                    telefono: datosValidados.telefono,
-                    correoElectronico: datosValidados.correoElectronico
-                }
-            };
-            salida.json(ok);
-        }
+
+        const nuevoPernoctaneInsertado = await insertarPernoctanteEnLaHabitacion({
+            reservaUID: reservaUID,
+            habitacionUID: habitacionUID,
+            clienteUID: clienteUID
+        })
+        const ok = {
+            ok: "Se ha anadido correctamente el cliente en la habitacin de la reserva",
+            nuevoUIDPernoctante: nuevoPernoctaneInsertado.componenteUID,
+            nuevoUIDCliente: nuevoUIDCliente,
+            nuevoCliente: {
+                nombre: datosValidados.nombre,
+                primerApellido: datosValidados.primerApellido,
+                segundoApellido: datosValidados.segundoApellido,
+                pasaporte: datosValidados.pasaporte,
+                telefono: datosValidados.telefono,
+                correoElectronico: datosValidados.correoElectronico
+            }
+        };
+        salida.json(ok);
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)

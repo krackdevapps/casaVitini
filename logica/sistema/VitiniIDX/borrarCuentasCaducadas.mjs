@@ -5,7 +5,7 @@ export const borrarCuentasCaducadas = async () => {
         // El resto a los seis meses desde el ultimo login
         const consultaCuentaAntiguas = `
         DELETE FROM usuarios
-        WHERE "ultimoLogin" < NOW() - interval '6 months' AND rol <> $1;`;
+        WHERE "ultimoLogin" < NOW() - interval '6 months' AND "rolIDV" <> $1;`;
         await conexion.query(consultaCuentaAntiguas, ["administrador"]);
     } catch (error) {
         throw error;

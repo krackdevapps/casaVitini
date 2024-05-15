@@ -9,7 +9,7 @@ export const obtenerCamasDeLaHabitacionPorHabitacionUID = async (habitacionUID) 
             FROM
             "configuracionCamasEnHabitacion"
             WHERE
-            habitacion = $1;
+            "habitacionUID" = $1;
             `
         const resuelve = await conexion.query(consulta, [habitacionUID])
         return resuelve.rows

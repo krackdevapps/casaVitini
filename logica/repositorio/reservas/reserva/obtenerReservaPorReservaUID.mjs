@@ -4,16 +4,16 @@ export const obtenerReservaPorReservaUID = async (reservaUID) => {
     try {
         const consulta = `
         SELECT
-        "reservaUID"
+        "reservaUID",
         to_char("fechaEntrada", 'YYYY-MM-DD'), 
-        to_char("fechaSalida", 'YYYY-MM-DD')",
+        to_char("fechaSalida", 'YYYY-MM-DD'),
         "estadoReservaIDV", 
-        "estadoPagoIDV"
-        "origenIDV"
-        to_char("fechaCreacion", 'YYYY-MM-DD')",
-        to_char("fecahCancelacion", 'YYYY-MM-DD')"
+        "estadoPagoIDV",
+        "origenIDV",
+        to_char("fechaCreacion", 'YYYY-MM-DD'),
+        to_char("fechaCancelacion", 'YYYY-MM-DD')
         FROM reservas
-        WHERE reserva = $1;`;
+        WHERE "reservaUID" = $1;`;
         const resuelve = await conexion.query(consulta, [reservaUID]);
         if (resuelve.rowCount === 0) {
             const error = "No existe ninguna reserva con el reservaUID que solicitas.";

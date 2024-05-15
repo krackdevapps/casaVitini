@@ -1,11 +1,14 @@
 import { Mutex } from "async-mutex";
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
+import { actualizarHabitacionDelPernoctantePorComponenteUID } from "../../../repositorio/reservas/pernoctantes/actualizarHabitacionDelPernoctantePorComponenteUID.mjs";
+import { eliminarPernoctantePorPernoctanteUID } from "../../../repositorio/reservas/pernoctantes/eliminarPernoctantePorPernoctanteUID.mjs";
 
 export const eliminarPernoctanteReserva = async (entrada, salida) => {
-    let mutex
+    const mutex = new Mutex()
     try {
 
         const session = entrada.session
@@ -14,12 +17,11 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        mutex = new Mutex();
         await mutex.acquire();
 
-        const reserva = validadoresCompartidos.tipos.numero({
-            number: entrada.body.reserva,
-            nombreCampo: "El identificador universal de la reserva (reserva)",
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            number: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reservaUID (reservaUID)",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -42,82 +44,52 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
             soloMinusculas: "si"
         })
 
-        if (typeof tipoElinacion !== "string" || (tipoElinacion !== "habitacion" && tipoElinacion !== "reserva")) {
+        if (tipoElinacion !== "habitacion" && tipoElinacion !== "reserva") {
             const error = "El campo 'tipoElinacion' solo puede ser 'habitacion' o 'reserva'";
             throw new Error(error);
         }
         await campoDeTransaccion("iniciar")
 
-
         // Comprobar que la reserva exisste
-        const validacionReserva = `
-                        SELECT 
-                        reserva, "estadoReserva", "estadoPago"
-                        FROM reservas
-                        WHERE reserva = $1
-                        `;
-        const resuelveValidacionReserva = await conexion.query(validacionReserva, [reserva]);
-        if (resuelveValidacionReserva.rowCount === 0) {
-            const error = "No existe la reserva";
-            throw new Error(error);
-        }
-        if (resuelveValidacionReserva.rows[0].estadoReserva === "cancelada") {
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
+        if (reserva.estadoReservaIDV === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);
         }
         // validar habitacion
-        const validarCliente = `
-                            SELECT 
-                            "pernoctanteUID"
-                            FROM
-                            "reservaPernoctantes"
-                            WHERE
-                            reserva = $1 AND "pernoctanteUID" = $2
-                            `;
-        const resuelveValidarCliente = await conexion.query(validarCliente, [reserva, pernoctanteUID]);
-        if (resuelveValidarCliente.rowCount === 0) {
+
+        const pernoctante = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
+            reservaUID: reservaUID,
+            pernoctanteUID: pernoctanteUID
+        })
+        if (!pernoctante.componenteUID) {
             const error = "No existe el pernoctante en la reserva";
             throw new Error(error);
         }
-        const eliminaClientePool = `
-                            DELETE FROM "poolClientes"
-                            WHERE "pernoctanteUID" = $1;
-                            `;
-        await conexion.query(eliminaClientePool, [pernoctanteUID]);
-        let sentenciaDinamica;
+        await eliminaClientePool(pernoctanteUID)
         if (tipoElinacion === "habitacion") {
-            sentenciaDinamica = `
-                            UPDATE "reservaPernoctantes"
-                            SET habitacion = NULL
-                            WHERE reserva = $1 AND "pernoctanteUID" = $2 ;
-                            `;
+            await actualizarHabitacionDelPernoctantePorComponenteUID({
+                reservaUID: reservaUID,
+                habitacionUID: null,
+                pernoctanteUID: pernoctanteUID
+            })
         }
         if (tipoElinacion === "reserva") {
-            sentenciaDinamica = `
-                            DELETE FROM "reservaPernoctantes"
-                            WHERE reserva = $1 AND "pernoctanteUID" = $2;
-                            `;
-        }
-        const actualicarPernoctante = await conexion.query(sentenciaDinamica, [reserva, pernoctanteUID]);
-        if (actualicarPernoctante.rowCount === 0) {
-            const error = "No existe el pernoctante en la reserva, por lo tanto no se puede actualizar";
-            throw new Error(error);
-        }
-        if (actualicarPernoctante.rowCount === 1) {
-            let ok;
-            if (tipoElinacion === "habitacion") {
-                ok = {
-                    "ok": "Se ha eliminado al pernoctante de la habitacion"
-                };
-            }
-            if (tipoElinacion === "reserva") {
-                ok = {
-                    "ok": "Se ha eliminar al pernoctante de la reserva"
-                };
-            }
-            salida.json(ok);
+            await eliminarPernoctantePorPernoctanteUID({
+                reservaUID: reservaUID,
+                pernoctanteUID: pernoctanteUID
+            })
         }
         await campoDeTransaccion("confirmar")
+        const ok = {};
+        if (tipoElinacion === "habitacion") {
+            ok.ok = "Se ha eliminado al pernoctante de la habitacion"
+        }
+        if (tipoElinacion === "reserva") {
+            ok.ok = "Se ha eliminar al pernoctante de la reserva"
+        }
+        salida.json(ok);
+
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)

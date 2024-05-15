@@ -3,7 +3,7 @@ import { validadoresCompartidos } from "../../../../sistema/validadores/validado
 import { DateTime } from "luxon";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
-import { obtenerPagoPorPagoUIDYReservaUID } from "../../../../repositorio/reservas/transacciones/obtenerPagoPorPagoUID copia.mjs";
+import { eliminarPagoPorPagoUID } from "../../../../repositorio/reservas/transacciones/eliminarPagoPorPagoUID.mjs";
 import { insertarReembolso } from "../../../../repositorio/reservas/transacciones/insertarReembolso.mjs";
 import { obtenerReembolsosPorPagoUID } from "../../../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUID.mjs";
 
@@ -87,7 +87,7 @@ export const realizarReembolso = async (entrada, salida) => {
             // throw new Error(error)
         }
 
-        const detallesDelPago = await obtenerPagoPorPagoUIDYReservaUID({
+        const detallesDelPago = await eliminarPagoPorPagoUID({
             reservaUID: reservaUID,
             pagoUID: pagoUID
         })

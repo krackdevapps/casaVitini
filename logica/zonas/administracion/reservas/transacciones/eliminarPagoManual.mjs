@@ -2,8 +2,8 @@ import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { actualizarEstadoPago } from "../../../../sistema/precios/actualizarEstadoPago.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
-import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
-import { eliminarPagoPorPagoUIDYReservaUID } from "../../../../repositorio/reservas/transacciones/eliminarPagoPorPagoUIDYReservaUID.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { eliminarPagoPorPagoUID } from "../../../../repositorio/reservas/transacciones/eliminarPagoPorPagoUID.mjs";
 import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
 
 export const eliminarPagoManual = async (entrada, salida) => {
@@ -45,7 +45,7 @@ export const eliminarPagoManual = async (entrada, salida) => {
 
         await campoDeTransaccion("inicair")
         await obtenerReservaPorReservaUID(reservaUID)
-        await eliminarPagoPorPagoUIDYReservaUID({
+        await eliminarPagoPorPagoUID({
             pagoUID: pagoUID,
             reservaUID: reservaUID
         })

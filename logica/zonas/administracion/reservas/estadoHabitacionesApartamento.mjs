@@ -1,9 +1,8 @@
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { estadoHabitacionesApartamento as estadoHabitacionesApartamento_ } from "../../../sistema/reservas/estadoHabitacionesApartamento.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../repositorio/arquitectura/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 
 export const estadoHabitacionesApartamento = async (entrada, salida) => {
     try {
@@ -14,18 +13,18 @@ export const estadoHabitacionesApartamento = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        const reserva = validadoresCompartidos.tipos.numero({
-            number: entrada.body.reserva,
-            nombreCampo: "El identificador universal de la reserva",
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            number: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reservaUID",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
 
-        const apartamento = validadoresCompartidos.tipos.numero({
+        const apartamentoUID = validadoresCompartidos.tipos.numero({
             number: entrada.body.apartamento,
-            nombreCampo: "El identificador universal dlapartamento",
+            nombreCampo: "El identificador universal apartamentoUID",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -33,8 +32,8 @@ export const estadoHabitacionesApartamento = async (entrada, salida) => {
         })
 
         const transaccionInterna = {
-            apartamento: apartamento,
-            reserva: reserva
+            apartamento: apartamentoUID,
+            reserva: reservaUID
         };
         const resuelveHabitaciones = await estadoHabitacionesApartamento_(transaccionInterna);
         if (resuelveHabitaciones.info) {
@@ -49,15 +48,9 @@ export const estadoHabitacionesApartamento = async (entrada, salida) => {
         }
         if (habitacionesResuelvas.length > 0) {
             const habitacionesProcesdas = [];
-            for (const habitacionPreProcesada of habitacionesResuelvas) {
-                const consultaHabitacion = `
-                                SELECT habitacion, "habitacionUI"
-                                FROM habitaciones
-                                WHERE habitacion = $1
-                                `;
-                const resuelveHabitacion = await conexion.query(consultaHabitacion, [habitacionPreProcesada]);
-                const habitacionIDV = resuelveHabitacion.rows[0].habitacion;
-                const habitaconUI = resuelveHabitacion.rows[0].habitacionUI;
+            for (const habitacionIDV of habitacionesResuelvas) {
+                const habitacion = obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
+                const habitaconUI = habitacion.habitacionUI;
                 const habitacionResuelta = {
                     habitacionIDV: habitacionIDV,
                     habitacionUI: habitaconUI

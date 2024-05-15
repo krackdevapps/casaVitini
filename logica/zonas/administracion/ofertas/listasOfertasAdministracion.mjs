@@ -1,5 +1,5 @@
 import { obtenerApartamentosDeLaOfertaPorOfertaUID } from "../../../repositorio/ofertas/obtenerApartamentosDeLaOfertaPorOfertaUID.mjs";
-import { obtenerTodasLasOfertas } from "../../../repositorio/ofertas/obtenerTodasLasOfertas+.mjs";
+import { obtenerTodasLasOfertas } from "../../../repositorio/ofertas/obtenerTodasLasOfertas.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 

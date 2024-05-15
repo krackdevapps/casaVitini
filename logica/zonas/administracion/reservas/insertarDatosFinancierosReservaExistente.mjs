@@ -38,6 +38,5 @@ export const insertarDatosFinancierosReservaExistente = async (entrada, salida) 
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } finally {
     }
 }

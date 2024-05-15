@@ -4,7 +4,7 @@ import { actualizarEstadoPago } from '../precios/actualizarEstadoPago.mjs';
 import { precioReserva } from '../precios/precioReserva.mjs';
 import { conexion } from '../../componentes/db.mjs';
 import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
-const insertarTotalesReserva = async (metadatos) => {
+export const insertarTotalesReserva = async (metadatos) => {
     try {
         const tipoProcesadorPrecio = metadatos.tipoProcesadorPrecio
         const reserva = metadatos.reserva
@@ -382,7 +382,4 @@ const insertarTotalesReserva = async (metadatos) => {
         await campoDeTransaccion("cancelar")
         throw error;
     }
-}
-export {
-    insertarTotalesReserva
 }

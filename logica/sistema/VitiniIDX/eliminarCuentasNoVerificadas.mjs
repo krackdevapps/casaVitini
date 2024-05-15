@@ -7,8 +7,8 @@ export const eliminarCuentasNoVerificadas = async () => {
         const eliminarCuentasNoVefificadas = `
             DELETE FROM usuarios
             WHERE "fechaCaducidadCuentaNoVerificada" < $1 
-            AND rol <> $2
-            AND "cuentaVerificada" <> $3;
+            AND "rolIDV" <> $2
+            AND "cuentaVerificadaIDV" <> $3;
             `;
         await conexion.query(eliminarCuentasNoVefificadas, [fechaActual_ISO, "administrador", "si"]);
     } catch (error) {

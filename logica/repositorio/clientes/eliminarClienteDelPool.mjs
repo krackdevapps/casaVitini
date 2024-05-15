@@ -4,7 +4,7 @@ export const eliminarClienteDelPool = async (pernoctanteUID) => {
         const consulta = `
         DELETE FROM "poolClientes"
         WHERE "pernoctanteUID" = $1;`;
-        const resuelve = await conexion.query(consulta, pernoctanteUID)
+        await conexion.query(consulta, pernoctanteUID)
     } catch (error) {
         throw error
     }

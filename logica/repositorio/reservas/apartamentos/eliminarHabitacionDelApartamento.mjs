@@ -1,22 +1,25 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const eliminarPagoPorPagoUIDYReservaUID = async (data) => {
+export const eliminarHabitacionDelApartamento = async (data) => {
     try {
-
-        const pagoUID = data.pagoUID
         const reservaUID = data.reservaUID
-  
+        const habitacionUID = data.habitacionUID
+
         const consulta = `
-        DELETE FROM "reservaPagos"
-        WHERE "pagoUID" = $1 AND reserva = $2;
+        DELETE FROM 
+        "reservaHabitaciones"
+        WHERE 
+        "componenteUID" = $1 
+        AND 
+        "reservaUID" = $2;
         `;
         const parametros = [
-            pagoUID,
+            habitacionUID,
             reservaUID
-        ];
+        ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No existe el pago que quieres eliminar";
+            const error = "No se puede eliminar la habitacion por que no se encuentra dentro de la reserva."
             throw new Error(error)
         }
         return resuelve.rows[0]

@@ -1,13 +1,14 @@
 import { Mutex } from "async-mutex";
-import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { insertarCliente } from "../../../repositorio/clientes/insertarCliente.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
+import { actualizarClienteUIDDelPernoctantePorComponenteUID } from "../../../repositorio/reservas/pernoctantes/actualizarClienteUIDDelPernoctantePorComponenteUID.mjs";
 
 export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entrada, salida) => {
-    let mutex
+    const mutex = new Mutex()
     try {
 
         const session = entrada.session
@@ -16,13 +17,11 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
         IDX.empleados()
         IDX.control()
 
-        mutex = new Mutex();
         await mutex.acquire();
 
-
-        const reserva = validadoresCompartidos.tipos.numero({
-            number: entrada.body.reserva,
-            nombreCampo: "El identificador universal de la reserva",
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            number: entrada.body.reservaUID,
+            nombreCampo: "El identificador reservaUID de la reservaUID",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -49,71 +48,50 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
         const datosValidados = await validadoresCompartidos.clientes.validarCliente(nuevoCliente);
 
         // Comprobar que la reserva exisste
-        const resuelveReserva = await validadoresCompartidos.reservas.validarReserva(reserva)
-        if (resuelveReserva.estadoReserva === "cancelada") {
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
+        if (reserva.estadoReservaIDV === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);
         }
         // validar pernoctante y extraer el UID del clientePool
-        const validacionPernoctante = `
-                        SELECT 
-                        "clienteUID"
-                        FROM 
-                        "reservaPernoctantes"
-                        WHERE 
-                        reserva = $1 AND "pernoctanteUID" = $2
-                        `;
-        const resuelveValidacionPernoctante = await conexion.query(validacionPernoctante, [reserva, pernoctanteUID]);
-        if (resuelveValidacionPernoctante.rowCount === 0) {
+        const pernoctante = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
+            reservaUID: reservaUID,
+            pernoctanteUID: pernoctanteUID
+        })
+        if (!pernoctante.componenteUID) {
             const error = "No existe el pernoctanteUID dentro de esta reserva";
             throw new Error(error);
         }
-        const clienteUID = resuelveValidacionPernoctante.rows[0].clienteUID;
+        const clienteUID = pernoctante.clienteUID;
         if (clienteUID) {
             const error = "El pernoctnte ya es un cliente y no un clientePool";
             throw new Error(error);
         }
-        const ok = {};
         const nuevoClienteAdd = await insertarCliente(datosValidados);
         const nuevoUIDCliente = nuevoClienteAdd.uid;
-        // Borrar clientePool
-        const eliminarClientePool = `
-                        DELETE FROM "poolClientes"
-                        WHERE "pernoctanteUID" = $1;`;
-        const resuelveEliminarClientePool = await conexion.query(eliminarClientePool, [pernoctanteUID]);
-        if (resuelveEliminarClientePool.rowCount === 0) {
-            ok.informacion = "No se ha encontrado un clientePool asociado al pernoctante";
-        }
-        const actualizaPernoctanteReserva = `
-                            UPDATE "reservaPernoctantes"
-                            SET "clienteUID" = $3
-                            WHERE reserva = $1 AND "pernoctanteUID" = $2
-                            RETURNING
-                            habitacion;
-                            `;
-        const resuelveActualizaPernoctanteReserva = await conexion.query(actualizaPernoctanteReserva, [reserva, pernoctanteUID, nuevoUIDCliente]);
-        if (resuelveActualizaPernoctanteReserva.rowCount === 0) {
-            const error = "No se ha podido actualizar al pernoctante dentro de la reserva";
-            throw new Error(error);
-        }
-        if (resuelveActualizaPernoctanteReserva.rowCount === 1) {
-            const habitacionUID = resuelveActualizaPernoctanteReserva.rows[0].habitacion;
-            primerApellido = primerApellido ? primerApellido : "";
-            segundoApellido = segundoApellido ? segundoApellido : "";
+        // Borrar clientePool       
+        await eliminarClientePool(pernoctanteUID)
+        const pernoctanteActualizado = await actualizarClienteUIDDelPernoctantePorComponenteUID({
+            reservaUID: reservaUID,
+            pernoctanteUID: pernoctanteUID,
+            clienteUID: nuevoUIDCliente
+        })
 
-            ok.ok = "Se ha guardado al nuevo cliente y sustituido por el clientePool, tambien se ha eliminado al clientePool de la base de datos";
-            ok.nuevoClienteUID = nuevoUIDCliente;
-            ok.nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`;
-            ok.pasaporte = pasaporte;
-            ok.habitacionUID = habitacionUID;
+        const habitacionUID = pernoctanteActualizado.habitacion;
+        primerApellido = primerApellido ? primerApellido : "";
+        segundoApellido = segundoApellido ? segundoApellido : "";
+        const ok = {
+            ok: "Se ha guardado al nuevo cliente y sustituido por el clientePool, tambien se ha eliminado al clientePool de la base de datos",
+            nuevoClienteUID: nuevoUIDCliente,
+            nombreCompleto: `${nombre} ${primerApellido} ${segundoApellido}`,
+            pasaporte: pasaporte,
+            habitacionUID: habitacionUID,
         }
         salida.json(ok);
-
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {
-
         if (mutex) {
             mutex.release()
         }

@@ -1,6 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const obtenerHabitacionesDelLaReserva = async (data) => {
+export const obtenerHabitacionDelLaReserva = async (data) => {
     try {
         const reservaUID = data.reservaUID
         const habitacionUID = data.habitacionUID
@@ -9,7 +9,8 @@ export const obtenerHabitacionesDelLaReserva = async (data) => {
         SELECT 
         "componenteUID"
         FROM "reservaHabitaciones"
-        WHERE "reservaUID" = $1 
+        WHERE 
+        "reservaUID" = $1 
         AND 
         "componenteUID" = $2
         `;

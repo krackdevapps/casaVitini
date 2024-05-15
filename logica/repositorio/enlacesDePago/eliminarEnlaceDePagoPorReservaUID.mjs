@@ -1,5 +1,4 @@
-import { conexion } from "../../../componentes/db.mjs"
-
+import { conexion } from "../../componentes/db.mjs";
 export const eliminarEnlaceDePagoPorReservaUID = async (reservaUID) => {
     try {
         const consulta =  `

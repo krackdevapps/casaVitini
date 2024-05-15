@@ -3,11 +3,11 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { bloquearApartamentos } from "../../../sistema/bloqueos/bloquearApartamentos.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { eliminarEnlaceDePagoPorReservaUID } from "../../../repositorio/enlacesDePago/eliminarEnlaceDePagoPorReservaUID.mjs";
 import { DateTime } from "luxon";
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
-import { actualizarEstadoReservaPorReservaUID } from "../../../repositorio/reservas/actualizarEstadoReservaPorReservaUID.mjs";
+import { actualizarEstadoReservaPorReservaUID } from "../../../repositorio/reservas/reserva/actualizarEstadoReservaPorReservaUID.mjs";
 
 export const cancelarReserva = async (entrada, salida) => {
     const mutex = new Mutex()

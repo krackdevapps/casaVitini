@@ -1,5 +1,4 @@
 import { Mutex } from "async-mutex";
-import { conexion } from "../../../componentes/db.mjs";
 import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
@@ -8,7 +7,7 @@ import { vitiniSysError } from "../../../sistema/vitiniSysError.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validarModificacionRangoFechaResereva } from "../../../sistema/reservas/validarModificacionRangoFechaResereva.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { actualizarFechaEntradaReserva } from "../../../repositorio/reservas/rangoFlexible/actualizarFechaEntradaReserva.mjs";
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
@@ -166,7 +165,6 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 fecha_ISO: nuevaFechaSalida
             };
             salida.json(ok);
-
         }
         await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {

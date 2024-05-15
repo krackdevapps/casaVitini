@@ -1,11 +1,11 @@
-import { eliminarTitularPoolPorReservaUID } from "../../../../repositorio/reservas/eliminarTitularPoolPorReservaUID.mjs";
-import { eliminarTitularPorReservaUID } from "../../../../repositorio/reservas/eliminarTitularPorReservaUID.mjs";
+import { eliminarTitularPoolPorReservaUID } from "../../../../repositorio/reservas/titulares/eliminarTitularPoolPorReservaUID.mjs";
+import { eliminarTitularPorReservaUID } from "../../../../repositorio/reservas/titulares/eliminarTitularPorReservaUID.mjs";
 import { obtenerDetallesCliente } from "../../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { insertarTitularEnReserva } from "../../../../repositorio/reservas/insertarTitularEnReserva.mjs";
-import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
+import { insertarTitularEnReserva } from "../../../../repositorio/reservas/titulares/insertarTitularEnReserva.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const asociarTitular = async (entrada, salida) => {
     try {

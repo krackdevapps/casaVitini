@@ -2,12 +2,12 @@ import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoDePrecioPorComportamientoUID.mjs";
 import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs";
 import { eliminarComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/eliminarComportamientoDePrecio.mjs";
+import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
 
 export const eliminarComportamiento = async (entrada, salida) => {
-    let mutex
+    const mutex = new Mutex()
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)

@@ -3,7 +3,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
-import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { actualizarFechaCheckinPernoctante } from "../../../repositorio/reservas/pernoctantes/actualizarFechaCheckinPernoctante.mjs";
 
 export const confirmarFechaCheckIn = async (entrada, salida) => {

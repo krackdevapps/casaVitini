@@ -8,7 +8,7 @@ import { obtenerAplicacionIDVporAplicacionIDV } from "../../../repositorio/impue
 import { insertarImpuesto } from "../../../repositorio/impuestos/insertarImpuesto.mjs";
 
 export const crearNuevoImpuesto = async (entrada, salida) => {
-    let mutex
+    const mutex = new Mutex()
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)

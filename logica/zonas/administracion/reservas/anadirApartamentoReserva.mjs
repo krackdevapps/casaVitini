@@ -7,7 +7,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { insertarApartamentoEnReserva } from "../../../repositorio/reservas/apartamentos/insertarApartamentoEnReserva.mjs";
 import { obtenerApartamentosDeLaReservaPorApartamentoIDV } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDV.mjs";
 

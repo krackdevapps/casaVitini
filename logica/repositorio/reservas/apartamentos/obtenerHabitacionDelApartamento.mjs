@@ -1,22 +1,26 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const obtenerPernoctanteDeLaReservaPorClienteUID = async (data) => {
+export const obtenerHabitacionesDelApartamento = async (data) => {
     try {
         const reservaUID = data.reservaUID
-        const clienteUID = data.clienteUID
+        const apartamentoUID = data.apartamentoUID
 
         const consulta = `
         SELECT 
         *
-        FROM "reservaPernoctantes"
-        WHERE "clienteUID" = $1 AND "reservaUID" = $2
+        FROM
+        "reservaHabitaciones"
+        WHERE
+        "reservaUID" = $1
+        AND
+        "apartamentoUID" = $2 ; 
         `;
         const parametros = [
             reservaUID,
-            clienteUID
+            apartamentoUID
         ]
         const resuelve = await conexion.query(consulta, parametros);
-        return resuelve.rows[0]
+        return resuelve.rows
     } catch (error) {
         throw error
     }

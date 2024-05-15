@@ -3,7 +3,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { estadoHabitacionesApartamento } from "../../../sistema/reservas/estadoHabitacionesApartamento.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { insertarHabitacionEnApartamento } from "../../../repositorio/reservas/apartamentos/insertarHabitacionEnApartamento.mjs";
 import { obtenerNombreHabitacionUI } from "../../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs";
 

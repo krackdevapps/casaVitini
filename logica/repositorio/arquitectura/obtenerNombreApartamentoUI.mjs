@@ -4,7 +4,7 @@ export const obtenerNombreApartamentoUI = async (apartamentoIDV) => {
         const consulta = `
         SELECT "apartamentoUI" 
         FROM apartamentos 
-        WHERE apartamento = $1
+        WHERE "apartamentoIDV" = $1
         `
         const resolucionNombreApartamento = await conexion.query(consulta, [apartamentoIDV])
         return resolucionNombreApartamento.rows[0]?.apartamentoUI || "No encontrado"

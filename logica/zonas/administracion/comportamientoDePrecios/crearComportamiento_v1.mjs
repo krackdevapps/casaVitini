@@ -6,7 +6,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const crearComportamiento = async (entrada, salida) => {
-    let mutex;
+    const mutex = new Mutex();
     try {
         await mutex.acquire();
         const session = entrada.session

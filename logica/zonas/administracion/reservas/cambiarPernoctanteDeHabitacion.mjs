@@ -2,9 +2,9 @@ import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
-import { actualizarHabitacionDelPernoctanteDeLaReserva } from "../../../repositorio/reservas/pernoctantes/actualizarHabitacionDelPernoctanteDeLaReserva.mjs";
+import { actualizarHabitacionDelPernoctantePorComponenteUID } from "../../../repositorio/reservas/pernoctantes/actualizarHabitacionDelPernoctantePorComponenteUID.mjs";
 
 export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -65,7 +65,7 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
             const error = "No existe el pernoctante, por lo tanto no se puede mover de habitacion";
             throw new Error(error);
         }
-        await actualizarHabitacionDelPernoctanteDeLaReserva({
+        await actualizarHabitacionDelPernoctantePorComponenteUID({
             reservaUID: reservaUID,
             pernoctanteUID: pernoctanteUID,
             habitacionUID: habitacionDestinoUID

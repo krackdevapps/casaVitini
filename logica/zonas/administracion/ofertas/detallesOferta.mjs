@@ -1,5 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { obtenerDetallesOferta } from "../../../sistema/ofertas/obtenerOfertaConApartamentos.mjs";
+import { obtenerOfertaConApartamentos } from "../../../sistema/ofertas/obtenerOfertaConApartamentos.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
@@ -18,7 +18,7 @@ export const detallesOferta = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        const detallesOferta = await obtenerDetallesOferta(ofertaUID);
+        const detallesOferta = await obtenerOfertaConApartamentos(ofertaUID);
         const ok = {
             ok: detallesOferta
         };

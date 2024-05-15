@@ -11,7 +11,7 @@ import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs"
 import { insertarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/insertarApartamentosDelComportamiento.mjs";
 
 export const crearComportamiento = async (entrada, salida) => {
-    let mutex;
+    const mutex = new Mutex();
     try {
         await mutex.acquire();
         const session = entrada.session

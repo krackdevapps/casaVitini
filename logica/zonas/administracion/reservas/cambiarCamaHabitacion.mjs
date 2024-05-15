@@ -2,8 +2,8 @@ import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/obtenerReservaPorReservaUID.mjs";
-import { obtenerHabitacionesDelLaReserva } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionesDelLaReserva.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerHabitacionDelLaReserva } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionDelLaReserva.mjs";
 import { obtenerCamaComoEntidadPorCamaIDV } from "../../../repositorio/arquitectura/obtenerCamaComoEntidadPorCamaIDV.mjs";
 import { obtenerCamaDeLaHabitacion } from "../../../repositorio/reservas/apartamentos/obtenerCamaDeLaHabitacion.mjs";
 import { actualizaCamaDeLaHabitacion } from "../../../repositorio/reservas/apartamentos/actualizaCamaDeLaHabitacion.mjs";
@@ -62,7 +62,7 @@ export const cambiarCamaHabitacion = async (entrada, salida) => {
         }
 
         // valida que la habitacion exista dentro de la reserva
-        await obtenerHabitacionesDelLaReserva({
+        await obtenerHabitacionDelLaReserva({
             reservaUID: reservaUID,
             habitacionUID: habitacionUID
         })

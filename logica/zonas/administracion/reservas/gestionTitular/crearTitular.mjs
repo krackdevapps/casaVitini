@@ -2,8 +2,8 @@ import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { insertarCliente } from "../../../../repositorio/clientes/insertarCliente.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
-import { eliminarTitularPoolPorReservaUID } from "../../../../repositorio/reservas/eliminarTitularPoolPorReservaUID.mjs";
-import { eliminarTitularPorReservaUID } from "../../../../repositorio/reservas/eliminarTitularPorReservaUID.mjs";
+import { eliminarTitularPoolPorReservaUID } from "../../../../repositorio/reservas/titulares/eliminarTitularPoolPorReservaUID.mjs";
+import { eliminarTitularPorReservaUID } from "../../../../repositorio/reservas/titulares/eliminarTitularPorReservaUID.mjs";
 import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
 
 export const crearTitular = async (entrada, salida) => {

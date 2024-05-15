@@ -1,4 +1,4 @@
-import { conexion } from "../../componentes/db.mjs";
+import { conexion } from "../../../componentes/db.mjs";
 export const insertarTitularEnReserva = async (data) => {
     try {
         const clienteUID = data.clienteUID

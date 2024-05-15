@@ -322,6 +322,29 @@ export const validadoresCompartidos = {
                 throw error
             }
 
+        },
+        cadenaMes: (mes) => {
+            try {
+                const filtro = /(1[0-2]|[1-9])$/
+                if (!filtro.test(mes)) {
+                    const error = "El mes (mesCalendario) debe de ser una cadena que contenga un numero del 1 al 12";
+                    throw new Error(error);
+                }
+            } catch (error) {
+                throw error
+            }
+
+        },
+        cadenaAno: (ano) => {
+            try {
+                const filtro = /^(2000|[2-4][0-9]{3}|5000)$/
+                if (!filtro.test(ano)) {
+                    const error = "El año no puede ser inferior a 2000 ni superior a 5000";
+                    throw new Error(error);
+                }
+            } catch (error) {
+                throw error
+            }
         }
     },
     reservas: {
