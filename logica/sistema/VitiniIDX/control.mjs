@@ -1,7 +1,7 @@
 export class VitiniIDX {
     constructor(session, salida) {
         this.usuario = session.usuario;
-        this.rol = session.rol;
+        this.rolIDV = session.rol;
         this.salida = salida
         this.contenedorGrupos = [];
     }
@@ -14,6 +14,9 @@ export class VitiniIDX {
     clientes() {
         this.contenedorGrupos.push("cliente");
     }
+    rol() {
+        return this.rolIDV
+    }
     control() {
         try {
             const VitiniIDX = this.usuario;
@@ -25,7 +28,7 @@ export class VitiniIDX {
                 throw msgError
             }
             if (this.contenedorGrupos.length > 0) {
-                const rol = this.rol;
+                const rol = this.rolIDV;
                 if (!this.contenedorGrupos.includes(rol)) {
                     const msgError = {
                         tipo: "ROL",

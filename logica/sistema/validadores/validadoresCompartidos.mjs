@@ -2,7 +2,8 @@ import { DateTime } from "luxon"
 import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
 import { conexion } from "../../componentes/db.mjs"
 import Decimal from "decimal.js"
-export const validadoresCompartidos = {
+export const 
+validadoresCompartidos = {
     clientes: {
         validarCliente: async (cliente) => {
             try {
@@ -916,7 +917,6 @@ export const validadoresCompartidos = {
     },
     baseDeDatos: {
         validarNombreColumna: async (configuracion) => {
-
             try {
                 const nombreColumna = validadoresCompartidos.tipos.cadena({
                     string: configuracion.nombreColumna,
@@ -951,7 +951,6 @@ export const validadoresCompartidos = {
             } catch (error) {
                 throw error
             }
-
         }
     },
     filtros: {

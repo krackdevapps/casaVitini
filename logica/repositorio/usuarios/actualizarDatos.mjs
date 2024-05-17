@@ -3,13 +3,14 @@ import { conexion } from "../../componentes/db.mjs";
 
 export const actualizarDatos = async (data) => {
 
-    const usuarioIDX = data.usuarioIDX
+    const usuario = data.usuario
     const email = data.email
     const nombre = data.nombre
     const primerApellido = data.primerApellido
     const segundoApellido = data.segundoApellido
     const pasaporte = data.pasaporte
     const telefono = data.telefono
+    const cuentaVerificada = "no"
 
     try {
         const controlNuevoCorreoPorVerifical = `
@@ -18,13 +19,18 @@ export const actualizarDatos = async (data) => {
             FROM 
             "datosDeUsuario" 
             WHERE 
-            "usuarioIDX" = $1 
+            usuario <> $1 
             AND
             email = $2`;
         const resuelveNuevoCorreoPorVerifical = await conexion.query(
             controlNuevoCorreoPorVerifical,
-            [usuarioIDX, email]
+            [usuario, email]
         );
+        if (resuelveNuevoCorreoPorVerifical.rowCount > 0) {
+            //const cuentaConCorreoAsociado = resuelveNuevoCorreoPorVerifical.rows[0].usuario
+            const error = "El correo electronico ya tiene un VitiniIDX asociado. Utiliza esa cuenta, recuperala o inserta otro correo electronico para esta cuenta."
+            throw new Error(error)
+        }
         const actualizarDatosUsuario = `
             UPDATE "datosDeUsuario"
             SET
@@ -50,18 +56,21 @@ export const actualizarDatos = async (data) => {
             pasaporte,
             telefono,
             email,
-            usuarioIDX,
+            usuario,
         ];
-        await conexion.query(
+        const datosActualuizzados = await conexion.query(
             actualizarDatosUsuario,
             datos
         );
+        if (datosActualuizzados.rowCount === 0) {
+            const error = "No se han actualizado los datos de usuario"
+            throw new Error(error)
+        }
         if (resuelveNuevoCorreoPorVerifical.rowCount === 0 && email.length > 0) {
             const fechaActualUTC = DateTime.utc();
             const fechaCaducidadCuentaNoVerificada = fechaActualUTC.plus({
                 minutes: 30,
             });
-
             const volverAVerificarCuenta = `
             UPDATE 
             usuarios
@@ -71,10 +80,14 @@ export const actualizarDatos = async (data) => {
             WHERE 
             usuario = $3;`;
             await conexion.query(volverAVerificarCuenta, [
-                "no",
+                cuentaVerificada,
                 fechaCaducidadCuentaNoVerificada,
-                usuarioIDX,
+                usuario,
             ]);
+            if (resuelveNuevoCorreoPorVerifical.rowCount === 0) {
+                const error = "No se ha podido actualizar el estao de verificacion de la cuenta de usuario por que no se encuentra el usuario."
+                throw new Error(error)
+            }
         }
     } catch (error) {
         throw error;

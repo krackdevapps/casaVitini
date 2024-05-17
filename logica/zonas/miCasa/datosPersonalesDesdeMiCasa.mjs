@@ -1,70 +1,41 @@
-import { conexion } from "../../componentes/db.mjs";
+import { Mutex } from "async-mutex";
+import { obtenerDatosPersonales } from "../../repositorio/usuarios/obtenerDatosPersonales.mjs";
+import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
 
 export const datosPersonalesDesdeMiCasa = async (entrada, salida) => {
 
+    const mutex = new Mutex()
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.control()
 
+        mutex.acquire()
 
         const usuarioIDX = entrada.session.usuario;
         const ok = {
             ok: {}
         };
-        const consultaRol = `
-                SELECT 
-                rol,
-                "estadoCuenta"
-                FROM 
-                usuarios
-                WHERE 
-                usuario = $1;`;
-        const resolverUsuarioYRol = await conexion.query(consultaRol, [usuarioIDX]);
-        const rol = resolverUsuarioYRol.rows[0].rol;
-        const estadoCuenta = resolverUsuarioYRol.rows[0].estadoCuenta;
+        const cuentaDeUsuario = await obtenerUsuario(usuarioIDX)
+        const rol = cuentaDeUsuario.rolIDV;
+        const estadoCuenta = cuentaDeUsuario.estadoCuentaIDV;
         ok.ok.usuarioIDX = usuarioIDX;
         ok.ok.rol = rol;
         ok.ok.estadoCuenta = estadoCuenta;
 
-
-        const consultaDetallesUsuario = `
-                SELECT 
-                nombre,
-                "primerApellido",
-                "segundoApellido",
-                pasaporte,
-                telefono,
-                email
-                FROM 
-                "datosDeUsuario"
-                WHERE 
-                "usuarioIDX" = $1;`;
-        const resolverConsultaDetallesUsuario = await conexion.query(consultaDetallesUsuario, [usuarioIDX]);
-        let detallesCliente = resolverConsultaDetallesUsuario.rows[0];
-        if (resolverConsultaDetallesUsuario.rowCount === 0) {
-            const crearDatosUsuario = `
-                    INSERT INTO "datosDeUsuario"
-                    (
-                    "usuarioIDX"
-                    )
-                    VALUES ($1) 
-                    RETURNING
-                    *
-                    `;
-            const resuelveCrearFicha = await conexion.query(crearDatosUsuario, [usuarioIDX]);
-            detallesCliente = resuelveCrearFicha.rows[0];
-        }
-        for (const [dato, valor] of Object.entries(detallesCliente)) {
+        const datosDelUsuario = await obtenerDatosPersonales(usuarioIDX)
+        for (const [dato, valor] of Object.entries(datosDelUsuario)) {
             ok.ok[dato] = valor;
         }
-
         salida.json(ok);
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {
+        if (mutex) {
+            mutex.release()
+        }
     }
 }

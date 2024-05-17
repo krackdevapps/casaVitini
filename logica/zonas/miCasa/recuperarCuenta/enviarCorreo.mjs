@@ -1,13 +1,16 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../../componentes/db.mjs";
 import { enviarMail } from "../../../sistema/Mail/enviarMail.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-
+import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/IDX/obtenerEnlacesRecuperacionPorCodigoUPID.mjs";
+import { obtenerDatosPersonalesPorMail } from "../../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs";
+import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
+import { eliminarEnlacesDeRecuperacion } from "../../../repositorio/IDX/eliminarEnlacesDeRecuperacion.mjs";
+import { insertarEnlaceDeRecuperacion } from "../../../repositorio/IDX/enlacesDeRecuperacion/insertarEnlaceDeRecuperacion.mjs";
+import { actualizarEnlaceDeRecuperacionPorUsuario } from "../../../repositorio/IDX/enlacesDeRecuperacion/actualizarEnlaceDeRecuperacionPorUsuario.mjs";
 
 export const enviarCorreo = async (entrada, salida) => {
     try {
-
         const email = validadoresCompartidos.tipos
             .correoElectronico(entrada.body.email)
 
@@ -21,13 +24,8 @@ export const enviarCorreo = async (entrada, salida) => {
             return cadenaAleatoria;
         };
         const validarQueElCodigoEsUnico = async (codigoAleatorio) => {
-            const validarCodigoAleatorio = `
-                SELECT
-                codigo
-                FROM "enlaceDeRecuperacionCuenta"
-                WHERE codigo = $1;`;
-            const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [codigoAleatorio]);
-            if (resuelveValidarCodigoAleatorio.rowCount > 0) {
+            const enlacesDeRecuperacion = await obtenerEnlacesRecuperacionPorCodigoUPID(codigoAleatorio)
+            if (enlacesDeRecuperacion.length > 0) {
                 return true;
             }
         };
@@ -47,94 +45,56 @@ export const enviarCorreo = async (entrada, salida) => {
         const fechaCaducidadUTC = fechaActualUTC.plus({ hours: 1 });
         const hostActual = process.env.HOST_CASAVITINI;
         await campoDeTransaccion("iniciar")
-        const consultaRecuperarCuenta = `
-                SELECT "usuarioIDX"
-                FROM "datosDeUsuario"
-                WHERE "email" = $1;
-                `;
-        const resuelveActualizarIDX = await conexion.query(consultaRecuperarCuenta, [email]);
-        if (resuelveActualizarIDX.rowCount === 0) {
+        const datosDelUsuario = obtenerDatosPersonalesPorMail(email)
+        if (datosDelUsuario.email) {
             const error = "La dirección de correo electrònico no consta en nínguna cuenta de usuario. Registrate y crea tu VitiniID si lo neceistas.";
             throw new Error(error);
         }
-        const usuarioIDX = resuelveActualizarIDX.rows[0].usuarioIDX;
+        const usuarioIDX = datosDelUsuario.usuario;
         // Comporbar si es una recuperacion de contraseña o una verificacion de email
-        const consultaEstadoVerificacionCuenta = `
-            SELECT 
-            "cuentaVerificada",
-            usuario
-            FROM
-            usuarios
-            WHERE
-            usuario = $1;
-            `;
-        const resuelveEstadoVerificacion = await conexion.query(consultaEstadoVerificacionCuenta, [usuarioIDX]);
-        if (resuelveEstadoVerificacion.rowCount === 0) {
-            const error = "No existe esta cuenta de usuario";
-            throw new Error(error);
-        }
-        const estadoVerificacion = resuelveEstadoVerificacion.rows[0].cuentaVerificada;
-        const usuario = resuelveEstadoVerificacion.rows[0].usuario;
+        const cuentaDeUsuario = obtenerUsuario(usuarioIDX)
+
+        const estadoVerificacion = cuentaDeUsuario.cuentaVerificadaIDV;
+        const usuario = cuentaDeUsuario.usuario;
 
 
         if (estadoVerificacion === "si") {
             // Cuenta verificada, se busca recuperar, es decir restablecer la clave
-            if (resuelveActualizarIDX.rowCount === 1) {
-                const borrarEnlacesAntiguos = `
-                    DELETE FROM "enlaceDeRecuperacionCuenta"
-                    WHERE usuario = $1;`;
-                await conexion.query(borrarEnlacesAntiguos, [usuarioIDX]);
-                const consultaCrearEnlace = `
-                    INSERT INTO "enlaceDeRecuperacionCuenta"
-                    (
-                    usuario,
-                    codigo,
-                    "fechaCaducidad"
-                    )
-                    VALUES
-                    ($1, $2, $3)
-                    RETURNING
-                    codigo
-                    `;
-                await conexion.query(consultaCrearEnlace, [usuarioIDX, codigoGenerado, fechaCaducidadUTC]);
-                // Contruimos el mensaje
-                const origen = process.env.CORREO_DIRRECION_DE_ORIGEN;
-                const destino = email;
-                const asunto = "Recuperar tu VitiniID";
-                const mensaje = `<html>Aquí tíenes el enlace para recuperar tu cuenta. Este enlace tiene una duración de 30 minutos. <a href="https://${hostActual}/micasa/recuperar_cuenta/${codigoGenerado}">Recuperar mi cuenta</a>
+
+            await eliminarEnlacesDeRecuperacion()
+            await insertarEnlaceDeRecuperacion({
+                usuarioIDX: usuarioIDX,
+                codigoGenerado: codigoGenerado,
+                fechaCaducidadUTC: fechaCaducidadUTC
+            })
+            // Contruimos el mensaje
+            const origen = process.env.CORREO_DIRRECION_DE_ORIGEN;
+            const destino = email;
+            const asunto = "Recuperar tu VitiniID";
+            const mensaje = `<html>Aquí tíenes el enlace para recuperar tu cuenta. Este enlace tiene una duración de 30 minutos. <a href="https://${hostActual}/micasa/recuperar_cuenta/${codigoGenerado}">Recuperar mi cuenta</a>
                     <br>
                     Casa Vitini
                     </html>`;
-                const composicionDelMensaje = {
-                    origen: origen,
-                    destino: destino,
-                    asunto: asunto,
-                    mensaje: mensaje,
-                };
-                // Enviamos el mensaje
-                const resultadoEnvio = enviarMail(composicionDelMensaje);
-                const ok = {
-                    ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para recuperar tu cuenta",
-                };
-                salida.json(ok);
-            }
+            const composicionDelMensaje = {
+                origen: origen,
+                destino: destino,
+                asunto: asunto,
+                mensaje: mensaje,
+            };
+            // Enviamos el mensaje
+            enviarMail(composicionDelMensaje);
+            const ok = {
+                ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para recuperar tu cuenta",
+            };
+            salida.json(ok)
+
         } else {
             // Cuenta NO verificada, se busca verificar el correo
-            const actualizarCodigoVerificacion = `
-                UPDATE 
-                usuarios
-                SET
-                "codigoVerificacion" = $1,
-                "fechaCaducidadCuentaNoVerificada" = $2
-                WHERE
-                usuario = $3;
-                `;
-            const datosRestablecimiento = [
-                codigoGenerado,
-                fechaActualUTC,
-                usuario
-            ];
-            await conexion.query(actualizarCodigoVerificacion, datosRestablecimiento);
+            await actualizarEnlaceDeRecuperacionPorUsuario({
+                codigoGenerado: codigoGenerado,
+                fechaActualUTC: fechaActualUTC,
+                usuario: usuario
+            })
             // Contruimos el mensaje
             const origen = process.env.CORREO_DIRRECION_DE_ORIGEN;
             const destino = email;
@@ -153,7 +113,7 @@ export const enviarCorreo = async (entrada, salida) => {
             };
             // Enviamos el mensaje
             await campoDeTransaccion("confirmar")
-            const resultadoEnvio = enviarMail(composicionDelMensaje);
+            enviarMail(composicionDelMensaje);
             const ok = {
                 ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para verificar tu VitiniID",
             };

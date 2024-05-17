@@ -10,12 +10,11 @@ import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/ob
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { reservasPorRango } from "../../../sistema/selectoresCompartidos/reservasPorRango.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
-import { obtenerApartamentosDeLaReservaPorApartamentoIDV } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDV.mjs";
 import { obtenerHabitacionesDelApartamento } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionDelApartamento.mjs";
-import { obtenerNombreHabitacionUI } from "../../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs";
-import { obtenerPernoctantesDeLaHabitacion } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctantesDeLaHabitacion.mjs";
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 import { obtenerClientePoolPorPernoctanteUID } from "../../../repositorio/clientes/obtenerClientePoolPorPernoctanteUID.mjs";
+import { obtenerApartamentoDeLaReservaPorApartamentoIDV } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDV.mjs";
+import { obtenerTodosLosPernoctantesDeLaReserva } from "../../../repositorio/reservas/pernoctantes/obtenerTodosLosPernoctantesDeLaReserva.mjs";
 
 export const detallesSituacionApartamento = async (entrada, salida) => {
     try {
@@ -48,20 +47,17 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             apartamentoUI: apartamentoUI,
             apartamentoIDV: apartamentoIDV,
             zonaHoraria: zonaHoraria,
-            horaEntradaTZ: horaEntradaTZ,
             horaSalidaTZ: horaSalidaTZ,
+            horaEntradaTZ: horaEntradaTZ,
             estadoPernoctacion: "libre",
-            reservas: []
+            reservas: {}
         };
 
         const reservasUIDHoy = await reservasPorRango({
             fechaIncioRango_ISO: fechaActualTZ,
             fechaFinRango_ISO: fechaActualTZ
         })
-
-        const apartamentosDeLaReserva = {}    
-            console.log("1")
-
+        const identificadoresReservasValidas = []
         for (const reservaEncontrada of reservasUIDHoy) {
             const reservaUID = reservaEncontrada.reservaUID;
             // Fecha de la base de datos
@@ -70,25 +66,24 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             const fechaSalida_ISO = reserva.fechaSalida;
 
             // Formatos fecha
-            const fechaConHoraEntradaFormato_ISO_ZH = DateTime.fromISO(
+            const fechaConHoraEntrada_ISO_ZH = DateTime.fromISO(
                 `${fechaEntrada_ISO}T${horaEntradaTZ}`,
                 { zone: zonaHoraria })
                 .toISO();
-            const fechaConHoraSalidaFormato_ISO_ZH = DateTime.fromISO(
+            const fechaConHoraSalida_ISO_ZH = DateTime.fromISO(
                 `${fechaSalida_ISO}T${horaSalidaTZ}`,
                 { zone: zonaHoraria })
                 .toISO();
-                console.log("2")
 
-            const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorApartamentoIDV({
+            const apartamentoDeLaReserva = await obtenerApartamentoDeLaReservaPorApartamentoIDV({
                 reservaUID: reservaUID,
                 apartamentoIDV: apartamentoIDV
             })
-            console.log("3", apartamentosDeLaReserva.componteUID)
-            if (apartamentosDeLaReserva.componteUID) {
-                const tiempoRestante = utilidades.calcularTiempoRestanteEnFormatoISO(fechaConHoraSalidaFormato_ISO_ZH, fechaActualCompletaTZ);
+            if (apartamentoDeLaReserva.componenteUID) {
+                identificadoresReservasValidas.push(reservaUID)
+                const tiempoRestante = utilidades.calcularTiempoRestanteEnFormatoISO(fechaConHoraSalida_ISO_ZH, fechaActualCompletaTZ);
                 const cantidadDias = utilidades.calcularDiferenciaEnDias(fechaEntrada_ISO, fechaSalida_ISO);
-                const porcentajeTranscurrido = utilidades.calcularPorcentajeTranscurridoUTC(fechaConHoraEntradaFormato_ISO_ZH, fechaConHoraSalidaFormato_ISO_ZH, fechaActualCompletaTZ);
+                const porcentajeTranscurrido = utilidades.calcularPorcentajeTranscurridoUTC(fechaConHoraEntrada_ISO_ZH, fechaConHoraSalida_ISO_ZH, fechaActualCompletaTZ);
                 let porcentajeFinal = porcentajeTranscurrido;
                 if (porcentajeTranscurrido >= 100) {
                     porcentajeFinal = "100";
@@ -96,8 +91,8 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                 if (porcentajeTranscurrido <= 0) {
                     porcentajeFinal = "0";
                 }
-                const diaEntrada = utilidades.comparadorFechasStringDDMMAAAA(fechaEntrada_ISO, fechaActualTZ);
-                const diaSalida = utilidades.comparadorFechasStringDDMMAAAA(fechaSalida_ISO, fechaActualTZ);
+                const diaEntrada = utilidades.comparadorFechas_ISO(fechaEntrada_ISO, fechaActualTZ);
+                const diaSalida = utilidades.comparadorFechas_ISO(fechaSalida_ISO, fechaActualTZ);
                 let identificadoDiaLimite = "diaInterno";
                 if (diaEntrada) {
                     identificadoDiaLimite = "diaDeEntrada";
@@ -105,7 +100,6 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                 if (diaSalida) {
                     identificadoDiaLimite = "diaDeSalida";
                 }
-                console.log("4")
                 const estructuraReserva = {
                     reservaUID: reservaUID,
                     fechaEntrada: fechaEntrada_ISO,
@@ -114,91 +108,88 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                     tiempoRestante: tiempoRestante,
                     cantidadDias: cantidadDias,
                     porcentajeTranscurrido: porcentajeFinal + '%',
-                    habitaciones: []
+                    habitaciones: [],
+                    pernoctantes: []
                 };
                 objetoFinal.estadoPernoctacion = "ocupado";
-                const apartamentoUID = apartamentosDeLaReserva.componenteUID;
+                const apartamentoUID = apartamentoDeLaReserva.componenteUID;
                 // Extraer las habitaciones
                 const habitacionesDelApartamento = await obtenerHabitacionesDelApartamento({
                     reservaUID: reservaUID,
                     apartamentoUID: apartamentoUID
                 })
-                apartamentosDeLaReserva[apartamentoIDV] = habitacionesDelApartamento
-                objetoFinal.reservas.push(estructuraReserva);
+                estructuraReserva.habitaciones = habitacionesDelApartamento
+                //  habitacionesDelApartamento[apartamentoIDV] = habitacionesDelApartamento
+                objetoFinal.reservas[reservaUID] = estructuraReserva
+
+
             }
         }
-        console.log("aqui se lklega")
+        const pernoctantesContenedorTemporal = []
+        for (const reservaUIDValido of identificadoresReservasValidas) {
+            const pernoctantesDeLaReserva = await obtenerTodosLosPernoctantesDeLaReserva(reservaUIDValido)
+            pernoctantesContenedorTemporal.push(...pernoctantesDeLaReserva)
+        }
+        for (const pernoctante of pernoctantesContenedorTemporal) {
+            const clienteUID = pernoctante.clienteUID;
+            const fechaCheckIn_ISO = pernoctante.fechaCheckIn;
+            const fechaCheckOutAdelantado_ISO = pernoctante.fechaCheckOutAdelantado;
+            const reservaUIDDelPernoctante = pernoctante.reservaUID
+            const habitacionUID = pernoctante.habitacionUID
+            console.log("habitacionUID", habitacionUID)
 
-        for (const [apartamentoIDV, habitacionDelApartamento] of Object.entries(apartamentosDeLaReserva)) {
-            const habitacionUID = habitacion.componenteUID;
-            const habitacionIDV = habitacion.habitacionIDV;
-            const habitacionUI = await obtenerNombreHabitacionUI(habitacionIDV)
-            const detalleHabitacion = {
-                habitacionIDV: habitacionIDV,
-                habitacionUI: habitacionUI,
-                pernoctantes: []
-            };
-            const pernoctantesDeLaHabitacion = await obtenerPernoctantesDeLaHabitacion({
-                reservaUID: reservaUID,
-                habitacionUID: habitacionUID
-            })
-            const pernoctantesObjetoTemporal = [];
-            for (const pernoctante of pernoctantesDeLaHabitacion) {
-                const clienteUID = pernoctante.clienteUID;
-                const fechaCheckIn_ISO = pernoctante.fechaCheckIn;
-                const fechaCheckOutAdelantado_ISO = pernoctante.fechaCheckOutAdelantado;
-                if (clienteUID) {
-                    const cliente = obtenerDetallesCliente(clienteUID)
-                    const nombre = cliente.nombre;
-                    const primerApellido = cliente.primerApellido || "";
-                    const segundoApellido = cliente.segundoApellido || "";
-                    const pasaporte = cliente.pasaporte;
-                    const constructorNombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`;
-                    const clienteUID = cliente.clienteUID;
-                    const detallesPernoctante = {
-                        nombreCompleto: constructorNombreCompleto.trim(),
-                        tipoPernoctante: "cliente",
-                        pasaporte: pasaporte,
-                        clienteUID: clienteUID
-                    };
-                    if (fechaCheckIn_ISO) {
-                        const fechaCheckIn_array = fechaCheckIn_ISO.split("-");
-                        const fechaCheckIn_humano = `${fechaCheckIn_array[2]}/${fechaCheckIn_array[1]}/${fechaCheckIn_array[0]}`;
-                        detallesPernoctante.fechaCheckIn = fechaCheckIn_humano;
-                    }
-                    if (fechaCheckOutAdelantado_ISO) {
-                        const fechaCheckOutAdelantado_array = fechaCheckOutAdelantado_ISO.split("-");
-                        const fechaCheckOut_humano = `${fechaCheckOutAdelantado_array[2]}/${fechaCheckOutAdelantado_array[1]}/${fechaCheckOutAdelantado_array[0]}`;
-                        detallesPernoctante.fechaCheckOut = fechaCheckOut_humano;
-                    }
-                    pernoctantesObjetoTemporal.push(detallesPernoctante);
-                } else {
-                    const pernoctanteUID = pernoctante.pernoctanteUID;
-                    const clientePool = await obtenerClientePoolPorPernoctanteUID(pernoctanteUID)
-                    const nombreCompleto = clientePool.nombreCompleto;
-                    const clienteUID = clientePool.clienteUID;
-                    const pasaporte = clientePool.pasaporte;
-                    const detallesPernoctante = {
-                        nombreCompleto: nombreCompleto,
-                        tipoPernoctante: "clientePool",
-                        pasaporte: pasaporte,
-                        clienteUID: clienteUID
-                    };
-                    pernoctantesObjetoTemporal.push(detallesPernoctante);
+            if (clienteUID) {
+                const cliente = await obtenerDetallesCliente(clienteUID)
+                const nombre = cliente.nombre;
+                const primerApellido = cliente.primerApellido || "";
+                const segundoApellido = cliente.segundoApellido || "";
+                const pasaporte = cliente.pasaporte;
+                const constructorNombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`;
+                // const clienteUID = cliente.clienteUID;
+                const detallesPernoctante = {
+                    nombreCompleto: constructorNombreCompleto.trim(),
+                    tipoPernoctante: "cliente",
+                    pasaporte: pasaporte,
+                    clienteUID: clienteUID,
+                    habitacionUID: habitacionUID
+
+                };
+                if (fechaCheckIn_ISO) {
+                    const fechaCheckIn_array = fechaCheckIn_ISO.split("-");
+                    const fechaCheckIn_humano = `${fechaCheckIn_array[2]}/${fechaCheckIn_array[1]}/${fechaCheckIn_array[0]}`;
+                    detallesPernoctante.fechaCheckIn = fechaCheckIn_humano;
                 }
+                if (fechaCheckOutAdelantado_ISO) {
+                    const fechaCheckOutAdelantado_array = fechaCheckOutAdelantado_ISO.split("-");
+                    const fechaCheckOut_humano = `${fechaCheckOutAdelantado_array[2]}/${fechaCheckOutAdelantado_array[1]}/${fechaCheckOutAdelantado_array[0]}`;
+                    detallesPernoctante.fechaCheckOut = fechaCheckOut_humano;
+                }
+                // pernoctantesObjetoTemporal.push(detallesPernoctante);
+                objetoFinal.reservas[reservaUIDDelPernoctante].pernoctantes.push(detallesPernoctante)
+            } else {
+                const pernoctanteUID = pernoctante.pernoctanteUID;
+                const clientePool = await obtenerClientePoolPorPernoctanteUID(pernoctanteUID)
+                const nombreCompleto = clientePool.nombreCompleto;
+                //const clienteUID = clientePool.clienteUID;
+                const pasaporte = clientePool.pasaporte;
+                const detallesPernoctante = {
+                    nombreCompleto: nombreCompleto,
+                    tipoPernoctante: "clientePool",
+                    pasaporte: pasaporte,
+                    clienteUID: clienteUID,
+                    habitacionUID: habitacionUID
+                }
+                // pernoctantesObjetoTemporal.push(detallesPernoctante);
+                objetoFinal.reservas[reservaUIDDelPernoctante].pernoctantes.push(detallesPernoctante)
             }
-            detalleHabitacion.pernoctantes = pernoctantesObjetoTemporal;
-
-            estructuraReserva.habitaciones.push(detalleHabitacion);
         }
-
-
         // Calendarios sincronizados
         const datosAirbnb = {
             apartamentoIDV: apartamentoIDV,
             fechaHoy_ISO: fechaActualTZ
         };
         const eventosSincronizadosAirbnb = await eventosDelApartamento(datosAirbnb);
+
         objetoFinal.calendariosSincronizados = {};
         objetoFinal.calendariosSincronizados.airbnb = {
             eventos: eventosSincronizadosAirbnb.eventos

@@ -1,7 +1,8 @@
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerIDX } from "../../../repositorio/usuarios/obtenerIDX.mjs";
+import { actualizarDatos } from "../../../repositorio/usuarios/actualizarDatos.mjs";
 
 export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida) => {
     try {
@@ -63,60 +64,29 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
         await validadoresCompartidos.usuarios.unicidadPasaporteYCorrreo(validarDatosUsuario);
         await campoDeTransaccion("iniciar")
 
-
         // validar existencia de contrasena
-        const validarUsuario = `
-                             SELECT 
-                             usuario
-                             FROM usuarios
-                             WHERE usuario = $1;
-                             `;
-        const resuelveValidarUsuario = await conexion.query(validarUsuario, [usuarioIDX]);
-        if (!resuelveValidarUsuario.rowCount === 0) {
-            const error = "No existe el usuario";
-            throw new Error(error);
+        await obtenerIDX(usuarioIDX)
+
+        const datosUsuario = {
+            usuario: usuarioIDX,
+            email: email,
+            nombre: nombre,
+            primerApellido: primerApellido,
+            segundoApellido: segundoApellido,
+            pasaporte: pasaporte,
+            telefono: telefono,
         }
-        const actualizarDatosUsuario2 = `
-                            UPDATE "datosDeUsuario"
-                            SET 
-                              nombre = COALESCE(NULLIF($1, ''), nombre),
-                              "primerApellido" = COALESCE(NULLIF($2, ''), "primerApellido"),
-                              "segundoApellido" = COALESCE(NULLIF($3, ''), "segundoApellido"),
-                              pasaporte = COALESCE(NULLIF($4, ''), pasaporte),
-                              telefono = COALESCE(NULLIF($5, ''), telefono),
-                              email = COALESCE(NULLIF($6, ''), email)
-                            WHERE "usuarioIDX" = $7
-                            RETURNING 
-                              nombre,
-                              "primerApellido",
-                              "segundoApellido",
-                              pasaporte,
-                              telefono,
-                              email;                       
-                            `;
-        const datos = [
-            nombre,
-            primerApellido,
-            segundoApellido,
-            pasaporte,
-            telefono,
-            email,
-            usuarioIDX,
-        ];
-        const resuelveActualizarDatosUsuario2 = await conexion.query(actualizarDatosUsuario2, datos);
-        if (resuelveActualizarDatosUsuario2.rowCount === 1) {
-            const datosActualizados = resuelveActualizarDatosUsuario2.rows;
-            const ok = {
-                ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
-                datosActualizados: datosActualizados
-            };
-            salida.json(ok);
-        }
+        await actualizarDatos(datosUsuario)
+        const ok = {
+            ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
+            datosActualizados: datosUsuario
+        };
+        salida.json(ok);
+
         await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } finally {
     }
 }

@@ -1,9 +1,8 @@
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-
+import { actualizarClave } from "../../../repositorio/usuarios/actualizarClave.mjs";
 
 export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
     try {
@@ -39,31 +38,20 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
         const nuevaSal = retorno.nuevaSal;
         const hashCreado = retorno.hashCreado;
         await campoDeTransaccion("iniciar")
-        const actualizarClave = `
-                            UPDATE usuarios
-                            SET 
-                                clave = $1,
-                                sal = $2
-                            WHERE 
-                                usuario = $3
-                            `;
-        const datos = [
-            hashCreado,
-            nuevaSal,
-            usuarioIDX
-        ];
-        const resuelveActualizarClave = await conexion.query(actualizarClave, datos);
-        if (resuelveActualizarClave.rowCount === 1) {
-            const ok = {
-                "ok": "Se ha actualizado la nueva clave"
-            };
-            salida.json(ok);
-        }
+
+        await actualizarClave({
+            hashCreado: hashCreado,
+            nuevaSal: nuevaSal,
+            usuarioIDX: usuarioIDX
+        })
         await campoDeTransaccion("confirmar")
+        const ok = {
+            ok: "Se ha actualizado la nueva clave"
+        };
+        salida.json(ok);
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } finally {
     }
 }

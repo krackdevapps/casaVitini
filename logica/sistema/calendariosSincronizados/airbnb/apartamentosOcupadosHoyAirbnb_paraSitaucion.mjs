@@ -1,7 +1,7 @@
 import { conexion } from "../../../componentes/db.mjs"
 import { selectorRangoUniversal } from "../../selectoresCompartidos/selectorRangoUniversal.mjs"
 import { sincronizarCalendariosAirbnbPorIDV } from "./sincronizarCalendariosAirbnbPorIDV.mjs"
-const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
+export const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
     // Obtener todo los calendarios de airbnb que coinciden con hoy, o las fecha que se le pase. Este script es diferente a apartamentosOcupadosAirbnb y por tanto estos dos script deben exsite y no son reutilizables.
     const plataformaOrigen = "airbnb"
     const consultaCalendariosSincronizados = `
@@ -50,7 +50,4 @@ const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
     }
 
     return eventosPorApartamento
-}
-export {
-    apartamentosOcupadosHoy_paraSitaucion
 }

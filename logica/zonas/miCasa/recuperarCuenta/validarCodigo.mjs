@@ -1,7 +1,8 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { eliminarEnlacesDeRecuperacionPorFechaCaducidad } from "../../../repositorio/IDX/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorFechaCaducidad.mjs";
+import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorCodigoUPID.mjs";
 
 export const validarCodigo = async (entrada, salida) => {
     try {
@@ -15,25 +16,16 @@ export const validarCodigo = async (entrada, salida) => {
         })
 
         const fechaActual_ISO = DateTime.utc().toISO();
-        const eliminarEnlacesCaducados = `
-            DELETE FROM "enlaceDeRecuperacionCuenta"
-            WHERE "fechaCaducidad" < $1;
-            `;
-        await conexion.query(eliminarEnlacesCaducados, [fechaActual_ISO]);
-        await campoDeTransaccion("iniciar")   
-        const consultaValidarCodigo = `
-                SELECT 
-                usuario
-                FROM "enlaceDeRecuperacionCuenta"
-                WHERE codigo = $1;
-                `;
-        const resuelveValidarCodigo = await conexion.query(consultaValidarCodigo, [codigo]);
-        if (resuelveValidarCodigo.rowCount === 0) {
+
+        await eliminarEnlacesDeRecuperacionPorFechaCaducidad(fechaActual_ISO)
+        await campoDeTransaccion("iniciar")
+         const enlacesDeRecuperacion = await obtenerEnlacesRecuperacionPorCodigoUPID(codigo)
+        if (enlacesDeRecuperacion.length === 0) {
             const error = "El código que has introducido no existe. Si estás intentando recuperar tu cuenta, recuerda que los códigos son de un solo uso y duran una hora. Si has generado varios códigos, solo es válido el más nuevo.";
             throw new Error(error);
         }
-        if (resuelveValidarCodigo.rowCount === 1) {
-            const usuario = resuelveValidarCodigo.rows[0].usuario;
+        if (enlacesDeRecuperacion.length === 1) {
+            const usuario = enlacesDeRecuperacion.usuario;
             const ok = {
                 ok: "El enlace temporal sigue vigente",
                 usuario: usuario

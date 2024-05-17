@@ -4,9 +4,7 @@ export const obtenerUsuario = async (usuario) => {
     try {
         const consulta = `
         SELECT 
-        clave,
-        sal, 
-        rol
+        *
         FROM usuarios
         WHERE usuario = $1;
         `;

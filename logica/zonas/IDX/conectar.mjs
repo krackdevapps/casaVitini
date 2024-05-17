@@ -1,10 +1,11 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../componentes/db.mjs";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
+import { actualizarIntentoLogin } from "../../repositorio/usuarios/actualizarIntentoLogin.mjs";
+import { obtenerIDX } from "../../repositorio/usuarios/obtenerIDX.mjs";
 
 export const conectar = async (entrada, salida) => {
     try {
@@ -29,17 +30,12 @@ export const conectar = async (entrada, salida) => {
             suma: async (numeroIntentosActuales, IDX_) => {
                 try {
                     const intento = numeroIntentosActuales + 1;
-                    const actualizarIntentos = `
-                            UPDATE 
-                                usuarios
-                            SET     
-                                intentos = $1
-                            WHERE 
-                                usuario = $2
-                            RETURNING
-                                intentos;`;
-                    const resuelveIntento = await conexion.query(actualizarIntentos, [intento, IDX_]);
-                    return resuelveIntento.rows[0].intentos;
+                    const nuevoIntento = await actualizarIntentoLogin({
+                        usuarioIDX: IDX_,
+                        intento: intento
+                    })
+                    return nuevoIntento.intentos;
+
                 } catch (error) {
                     throw error;
                 }
@@ -47,14 +43,10 @@ export const conectar = async (entrada, salida) => {
             restablece: async (IDX_) => {
                 try {
                     const intento = 0;
-                    const actualizarIntentos = `
-                            UPDATE 
-                                usuarios
-                            SET     
-                                intentos = $1
-                            WHERE 
-                                usuario = $2;`;
-                    await conexion.query(actualizarIntentos, [intento, IDX_]);
+                    await actualizarIntentoLogin({
+                        usuarioIDX: IDX_,
+                        intento: intento
+                    })
                 } catch (error) {
                     throw error;
                 }
@@ -62,33 +54,13 @@ export const conectar = async (entrada, salida) => {
         }
 
         // Se valida si existe el usuario
-        const consultaControlIDX = `
-                SELECT
-                usuario,
-                "rolIDV",
-                sal,
-                clave,
-                "estadoCuentaIDV",
-                "cuentaVerificadaIDV",
-                intentos
-                FROM 
-                usuarios 
-                WHERE 
-                usuario = $1
-                `;
-        const resuelveControlIDX = await conexion.query(consultaControlIDX, [usuario]);
-        if (resuelveControlIDX.rowCount === 0) {
-            const error = "Datos de identificación incorrectos.";
-            throw new Error(error);
-        }
+        const cuentaUsuario = await obtenerIDX(usuario)
         // Se recupera el hash y la sal
-        const IDX_ = resuelveControlIDX.rows[0].usuario;
-        const rol = resuelveControlIDX.rows[0].rolIDV;
-        const sal = resuelveControlIDX.rows[0].sal;
-        const claveHash = resuelveControlIDX.rows[0].clave;
-        const estadoCuenta = resuelveControlIDX.rows[0].estadoCuenta;
-        const cuentaVerificada = resuelveControlIDX.rows[0].cuentaVerificada;
-        const intentos = resuelveControlIDX.rows[0].intentos || 0;
+        const rol = cuentaUsuario.rolIDV;
+        const sal = cuentaUsuario.sal;
+        const claveHash = cuentaUsuario.clave;
+        const estadoCuenta = cuentaUsuario.estadoCuenta;
+        const intentos = cuentaUsuario.intentos || 0;
         const ip = entrada.socket.remoteAddress;
         const userAgent = entrada.get('User-Agent');
         if (intentos >= intentosMaximos) {
@@ -103,7 +75,7 @@ export const conectar = async (entrada, salida) => {
         };
         const controlClave = vitiniCrypto(metadatos);
         if (!controlClave) {
-            const intentoActual = await controladorIntentos.suma(intentos, IDX_);
+            const intentoActual = await controladorIntentos.suma(intentos, usuario);
             if (intentoActual >= intentosMaximos) {
                 const error = "Cuenta bloqueada tras 10 intentos. Recupera tu cuenta con tu correo.";
                 throw new Error(error);
@@ -112,27 +84,23 @@ export const conectar = async (entrada, salida) => {
                 throw new Error(error);
             }
         }
-        await controladorIntentos.restablece(IDX_);
+        await controladorIntentos.restablece(usuario);
         if (estadoCuenta === "desactivado") {
             const error = "Esta cuenta esta desactivada";
             throw new Error(error);
         }
         const fechaActualISO = DateTime.utc().toISO();
-        const actualizarUltimoLogin = `
-                UPDATE usuarios
-                SET 
-                    "ultimoLogin" = $1
-                WHERE 
-                    usuario = $2;
-                `;
-        await conexion.query(actualizarUltimoLogin, [fechaActualISO, usuario]);
-        entrada.session.usuario = IDX_;
-        entrada.session.IDX = IDX_;
+        await actualizarUltimoLogin({
+            usuario: usuario,
+            fechaActualISO: fechaActualISO
+        })
+        entrada.session.usuario = usuario;
+        entrada.session.IDX = usuario;
         entrada.session.rol = rol;
         entrada.session.ip = ip;
         entrada.session.userAgent = userAgent;
         const ok = {
-            ok: IDX_,
+            ok: usuario,
             rol: rol,
             //controlEstado: "Objeto en IF IDX",
         };

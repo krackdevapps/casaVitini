@@ -1,7 +1,7 @@
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
 
 export const datosCuentaIDX = async (entrada, salida) => {
     try {
@@ -18,21 +18,12 @@ export const datosCuentaIDX = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-        const consultaDetallesUsuario = `
-                            SELECT 
-                            usuario, 
-                            rol,
-                            "estadoCuenta"
-                            FROM 
-                            usuarios
-                            WHERE 
-                            usuario = $1;`;
-        const resolverConsultaDetallesUsuario = await conexion.query(consultaDetallesUsuario, [usuarioIDX]);
-        if (resolverConsultaDetallesUsuario.rowCount === 0) {
-            const error = "No existe ningun usuario con ese IDX";
-            throw new Error(error);
+        const usuario = await obtenerUsuario(usuarioIDX)
+        const detallesCliente = {
+            usuario: usuario.usuario,
+            rol: usuario.rolIDV,
+            estadoCuenta: usuario.estadoCuentaIDV
         }
-        const detallesCliente = resolverConsultaDetallesUsuario.rows[0];
         const ok = {
             ok: detallesCliente
         };
@@ -40,6 +31,5 @@ export const datosCuentaIDX = async (entrada, salida) => {
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } finally {
     }
 }

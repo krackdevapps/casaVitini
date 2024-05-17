@@ -1,5 +1,4 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../../componentes/db.mjs";
 import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { apartamentosOcupadosHoy_paraSitaucion } from "../../../sistema/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs";
@@ -7,7 +6,10 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracion/horasSalidaEntrada.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
-
+import { obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc } from "../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc.mjs";
+import { reservasPorRango } from "../../../sistema/selectoresCompartidos/reservasPorRango.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
 
 export const obtenerSituacion = async (entrada, salida) => {
     try {
@@ -18,23 +20,12 @@ export const obtenerSituacion = async (entrada, salida) => {
         IDX.control()
 
         const apartamentosObjeto = {};
-        const estadoDisonible = "disponible";
-        const consultaEstadoApartamentos = `
-                        SELECT 
-                        "apartamentoIDV",
-                        "estadoConfiguracion"
-                        FROM 
-                        "configuracionApartamento"
-                        -- WHERE "estadoConfiguracion" = $1
-                        ORDER BY "apartamentoIDV" ASC
-                        `;
-        let resuelveConsultaEstadoApartamentos = await conexion.query(consultaEstadoApartamentos);
-        if (resuelveConsultaEstadoApartamentos.rowCount === 0) {
+        const configuracionesDeAlojamiento = await obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc()
+        if (configuracionesDeAlojamiento.length === 0) {
             const error = "No hay apartamentos configurados";
             throw new Error(error);
         }
-        resuelveConsultaEstadoApartamentos = resuelveConsultaEstadoApartamentos.rows;
-        for (const apartamento of resuelveConsultaEstadoApartamentos) {
+        for (const apartamento of configuracionesDeAlojamiento) {
             const apartamentoIDV = apartamento.apartamentoIDV;
             const estadoApartamento = apartamento.estadoConfiguracion;
             const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
@@ -55,23 +46,16 @@ export const obtenerSituacion = async (entrada, salida) => {
         const anoPresenteTZ = tiempoZH.year;
         const horaPresenteTZ = tiempoZH.hour;
         const minutoPresenteTZ = tiempoZH.minute;
-        const consultaReservasHoy = `
-                        SELECT 
-                        reserva, 
-                        to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-                        to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
-                        to_char(entrada, 'DD/MM/YYYY') as "entradaHumano", 
-                        to_char(salida, 'DD/MM/YYYY') as "salidaHumano"
-                        FROM reservas
-                        WHERE (entrada <= $1::DATE AND salida >= $1::DATE) AND "estadoReserva" <> $2; 
-                        `;
-        const resuelveConsultaReservasHoy = await conexion.query(consultaReservasHoy, [fechaActualTZ, "cancelada"]);
+
+        const reservasUIDHoy = await reservasPorRango({
+            fechaIncioRango_ISO: fechaActualTZ,
+            fechaFinRango_ISO: fechaActualTZ
+        })
         const ok = {};
-        if (resuelveConsultaReservasHoy.rowCount === 0) {
+        if (reservasUIDHoy.length === 0) {
             ok.ok = apartamentosObjeto;
         }
-        if (resuelveConsultaReservasHoy.rowCount > 0) {
-            const reservasHoy = resuelveConsultaReservasHoy.rows;
+        if (reservasUIDHoy.length > 0) {
             const horasSalidaEntrada = await horasSalidaEntrada_();
             const horaEntradaTZ = horasSalidaEntrada.horaEntradaTZ;
             const horaSalidaTZ = horasSalidaEntrada.horaSalidaTZ;
@@ -80,29 +64,21 @@ export const obtenerSituacion = async (entrada, salida) => {
             ok.horaTZ = `${horaPresenteTZ}:${minutoPresenteTZ}`;
             ok.horaEntrada = horaEntradaTZ;
             ok.horaSalida = horaSalidaTZ;
-            for (const reservaDetalles of reservasHoy) {
-                const reservaUID = reservaDetalles.reserva;
+            for (const reservaObjetoUID of reservasUIDHoy) {
+                const reservaUID = reservaObjetoUID.reservaUID
+                const reserva = await obtenerReservaPorReservaUID(reservaUID)
                 // Fecha de la base de datos
-                const fechaEntradaReservaISO = reservaDetalles.fechaEntrada_ISO;
-                const fechaSalidaReservaISO = reservaDetalles.fechaSalida_ISO;
-                const fechaEntradaReservaHumano = reservaDetalles.entradaHumano;
-                const fechaSalidaReservaHumano = reservaDetalles.salidaHumano;
+                const fechaEntradaReservaISO = reserva.fechaEntrada;
+                const fechaSalidaReservaISO = reserva.fechaSalida;
                 // Formatos fecha
                 const fechaConHoraEntradaFormato_ISO_ZH = DateTime.fromISO(`${fechaEntradaReservaISO}T${horaEntradaTZ}`, { zone: zonaHoraria }).toISO();
                 const fechaConHoraSalidaFormato_ISO_ZH = DateTime.fromISO(`${fechaSalidaReservaISO}T${horaSalidaTZ}`, { zone: zonaHoraria }).toISO();
-                const consultaApartamentos = `
-                                SELECT 
-                                apartamento
-                                FROM 
-                                "reservaApartamentos"
-                                WHERE 
-                                reserva = $1;`;
-                const resuelveConsultaApartamentos = await conexion.query(consultaApartamentos, [reservaUID]);
-                if (resuelveConsultaApartamentos.rowCount > 0) {
-                    const apartamentosResueltos = resuelveConsultaApartamentos.rows;
-                    apartamentosResueltos.map((apartamento) => {
-                        if (apartamentosObjeto[apartamento.apartamento]) {
-                            apartamentosObjeto[apartamento.apartamento].estadoPernoctacion = "ocupado";
+
+                const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
+                if (apartamentosDeLaReserva.length > 0) {
+                    apartamentosDeLaReserva.map((apartamento) => {
+                        if (apartamentosObjeto[apartamento.apartamentoIDV]) {
+                            apartamentosObjeto[apartamento.apartamentoIDV].estadoPernoctacion = "ocupado";
                         }
                         const tiempoRestante = utilidades.calcularTiempoRestanteEnFormatoISO(fechaConHoraSalidaFormato_ISO_ZH, fechaActualCompletaTZ);
                         const cantidadDias = utilidades.calcularDiferenciaEnDias(fechaConHoraEntradaFormato_ISO_ZH, fechaConHoraSalidaFormato_ISO_ZH);
@@ -114,8 +90,8 @@ export const obtenerSituacion = async (entrada, salida) => {
                         if (porcentajeTranscurrido <= 0) {
                             porcentajeFinal = "0";
                         }
-                        const diaEntrada = utilidades.comparadorFechasStringDDMMAAAA(fechaEntradaReservaISO, fechaActualTZ);
-                        const diaSalida = utilidades.comparadorFechasStringDDMMAAAA(fechaSalidaReservaISO, fechaActualTZ);
+                        const diaEntrada = utilidades.comparadorFechas_ISO(fechaEntradaReservaISO, fechaActualTZ);
+                        const diaSalida = utilidades.comparadorFechas_ISO(fechaSalidaReservaISO, fechaActualTZ);
                         let identificadoDiaLimite = "diaInterno";
                         if (diaEntrada) {
                             identificadoDiaLimite = "diaDeEntrada";
@@ -144,14 +120,14 @@ export const obtenerSituacion = async (entrada, salida) => {
                         const detalleReservaApartamento = {
                             reserva: reservaUID,
                             diaLimite: identificadoDiaLimite,
-                            fechaEntrada: fechaEntradaReservaHumano,
-                            fechaSalida: fechaSalidaReservaHumano,
+                            fechaEntrada: fechaEntradaReservaISO,
+                            fechaSalida: fechaSalidaReservaISO,
                             porcentajeTranscurrido: porcentajeFinal + '%',
                             tiempoRestante: tiempoRestante,
                             numeroDiasReserva: numeroDiaReservaUI
                         };
-                        if (apartamentosObjeto[apartamento.apartamento]) {
-                            apartamentosObjeto[apartamento.apartamento].reservas.push(detalleReservaApartamento);
+                        if (apartamentosObjeto[apartamento.apartamentoIDV]) {
+                            apartamentosObjeto[apartamento.apartamentoIDV].reservas.push(detalleReservaApartamento);
                         }
                     });
                 }
@@ -161,31 +137,14 @@ export const obtenerSituacion = async (entrada, salida) => {
         // buscar reservas en el dia actual
         const eventosCalendarios_airbnb = await apartamentosOcupadosHoy_paraSitaucion(fechaActualTZ);
 
-
         for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnb) {
-            /*
-            {
-                  apartamentoIDV: 'apartamento3',
-                  eventos: [
-                    {
-                      fechaFinal: '2024-03-31',
-                      fechaInicio: '2024-03-27',
-                      uid: '6fec1092d3fa-51854b16859896e37a57944c187c806c@airbnb.com',
-                      nombreEvento: 'Airbnb (Not available)'
-                    }
-                  ]
-                }
-            */
             const apartamentoIDV_destino = calendariosSincronizadosAirbnb.apartamentoIDV;
             const eventosDelApartamento = calendariosSincronizadosAirbnb.eventos;
-
-
 
             ok.ok[apartamentoIDV_destino].calendariosSincronizados = {};
             ok.ok[apartamentoIDV_destino].calendariosSincronizados.airbnb = {};
             ok.ok[apartamentoIDV_destino].calendariosSincronizados.airbnb.eventos = eventosDelApartamento;
             ok.ok[apartamentoIDV_destino].estadoPernoctacion = "ocupado";
-
         }
         salida.json(ok);
     } catch (errorCapturado) {

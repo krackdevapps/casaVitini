@@ -1,5 +1,4 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../componentes/db.mjs";
 import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
 import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { enviarEmailAlCrearCuentaNueva } from "../../sistema/Mail/enviarEmailAlCrearCuentaNueva.mjs";
@@ -8,6 +7,10 @@ import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { validarIDXUnico } from "../../sistema/VitiniIDX/validarIDXUnico.mjs";
 import { validarEMailUnico } from "../../sistema/VitiniIDX/validarEmailUnico.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
+import { obtenerUsuarioPorCodigoVerificacion } from "../../repositorio/usuarios/obtenerUsuarioPorCodigoVerificacion.mjs";
+import { insertarUsuario } from "../../repositorio/usuarios/insertarUsuario.mjs";
+import { insertarFilaDatosPersonales } from "../../repositorio/usuarios/insertarFilaDatosPersonales.mjs";
+import { actualizarDatos } from "../../repositorio/usuarios/actualizarDatos.mjs";
 
 export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
     try {
@@ -69,13 +72,8 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
             return cadenaAleatoria;
         };
         const validarCodigo = async (codigoAleatorio) => {
-            const validarCodigoAleatorio = `
-                SELECT
-                "codigoVerificacion"
-                FROM usuarios
-                WHERE "codigoVerificacion" = $1;`;
-            const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [codigoAleatorio]);
-            if (resuelveValidarCodigoAleatorio.rowCount === 1) {
+            const codigoVerificacion = await obtenerUsuarioPorCodigoVerificacion(codigoAleatorio)
+            if (codigoVerificacion.length > 0) {
                 return true;
             }
         };
@@ -95,56 +93,25 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
         const fechaCaducidadCuentaNoVerificada = fechaActualUTC.plus({ minutes: 30 });
         const estadoCuenta = "activado";
         const cuentaVerificada = "no";
-        const rol = "cliente";
-        const crearNuevoUsuario = `
-                INSERT INTO usuarios
-                (
-                usuario,
-                rol,
-                "estadoCuenta",
-                "cuentaVerificada",
-                "codigoVerificacion",
-                "fechaCaducidadCuentaNoVerificada",
-                sal,
-                clave
-                )
-                VALUES 
-                ($1, $2, $3, $4, $5, $6, $7, $8)
-                RETURNING
-                usuario
-                `;
-        const datosNuevoUsuario = [
-            usuarioIDX,
-            rol,
-            estadoCuenta,
-            cuentaVerificada,
-            codigoAleatorioUnico,
-            fechaCaducidadCuentaNoVerificada,
-            nuevaSal,
-            hashCreado
-        ];
-        const resuelveCrearNuevoUsuario = await conexion.query(crearNuevoUsuario, datosNuevoUsuario);
-        if (resuelveCrearNuevoUsuario.rowCount === 0) {
-            const error = "No se ha insertado el nuevo usuario en la base de datos";
-            throw new Error(error);
-        }
-        const crearNuevosDatosUsuario = `
-                INSERT INTO "datosDeUsuario"
-                (
-                "usuarioIDX",
-                email
-                )
-                VALUES 
-                ($1, $2)
-                `;
-        const resuelveCrearNuevosDatosUsuario = await conexion.query(crearNuevosDatosUsuario, [usuarioIDX, email]);
-        if (resuelveCrearNuevosDatosUsuario.rowCount === 0) {
-            const error = "No se ha insertado los datos del nuevo usuario";
-            throw new Error(error);
-        }
+        const rolIDV = "cliente";
+
+        const nuevoUsuario = await insertarUsuario({
+            usuarioIDX: usuarioIDX,
+            rolIDV: rolIDV,
+            estadoCuenta: estadoCuenta,
+            nuevaSal: nuevaSal,
+            hashCreado: hashCreado,
+            cuentaVerificada: cuentaVerificada,
+            fechaCaducidadCuentaNoVerificada: fechaCaducidadCuentaNoVerificada,
+        })
+        await insertarFilaDatosPersonales(usuarioIDX)
+        await actualizarDatos({
+            email: email,
+            usuario: usuarioIDX
+        })
         const ok = {
             ok: "Se ha creado el nuevo usuario",
-            usuarioIDX: resuelveCrearNuevoUsuario.rows[0].usuario
+            usuarioIDX: nuevoUsuario.usuario
         };
         salida.json(ok);
         await campoDeTransaccion("confirmar");

@@ -1,8 +1,8 @@
-import { conexion } from "../../componentes/db.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
+import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 
 export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
     try {
@@ -27,20 +27,10 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
             throw new Error(error);
         }
         await campoDeTransaccion("confirmar")
-        const obtenerClaveActualHASH = `
-                SELECT 
-                clave,
-                sal
-                FROM usuarios
-                WHERE usuario = $1;
-                `;
-        const resuelveObtenerClaveActualHASH = await conexion.query(obtenerClaveActualHASH, [usuarioIDX]);
-        if (resuelveObtenerClaveActualHASH.rowCount === 0) {
-            const error = "No existe el usuarios";
-            throw new Error(error);
-        }
-        const claveActualHASH = resuelveObtenerClaveActualHASH.rows[0].clave;
-        const sal = resuelveObtenerClaveActualHASH.rows[0].sal;
+
+        const cuentaDeUsuario = await obtenerUsuario(usuarioIDX)
+        const claveActualHASH = cuentaDeUsuario.clave;
+        const sal = cuentaDeUsuario.sal;
         const metadatos = {
             sentido: "comparar",
             clavePlana: claveActual,
@@ -60,26 +50,17 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
         const nuevaSal = retorno.nuevaSal;
         const hashCreado = retorno.hashCreado;
         await campoDeTransaccion("iniciar")
-        const actualizarClave = `
-                UPDATE usuarios
-                SET 
-                    clave = $1,
-                    sal = $2
-                WHERE 
-                    usuario = $3
-                `;
-        const datos = [
-            hashCreado,
-            nuevaSal,
-            usuarioIDX
-        ];
-        const resuelveActualizarClave = await conexion.query(actualizarClave, datos);
-        if (resuelveActualizarClave.rowCount === 1) {
-            const ok = {
-                "ok": "Se ha actualizado la nueva contrasena."
-            };
-            salida.json(ok);
-        }
+
+        await actualizarClave({
+            hashCreado: hashCreado,
+            nuevaSal: nuevaSal,
+            usuarioIDX: usuarioIDX
+        })
+        const ok = {
+            ok: "Se ha actualizado la nueva contrasena."
+        };
+        salida.json(ok);
+
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)

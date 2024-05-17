@@ -1,4 +1,3 @@
-import { conexion } from "../../componentes/db.mjs";
 import { actualizarDatos } from "../../repositorio/usuarios/actualizarDatos.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";

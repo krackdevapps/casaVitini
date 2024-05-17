@@ -1,9 +1,9 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const obtenerApartamentosDeLaReservaPorApartamentoIDV = async (data) => {
+export const obtenerApartamentoDeLaReservaPorApartamentoIDV = async (data) => {
     try {
         const reservaUID = data.reservaUID
-        const apartamentoIDV=data.apartamentoIDV
+        const apartamentoIDV = data.apartamentoIDV
 
         const consulta = `
         SELECT 

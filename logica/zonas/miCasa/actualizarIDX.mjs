@@ -1,5 +1,4 @@
 import { Mutex } from "async-mutex";
-import { conexion } from "../../componentes/db.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { validarIDXUnico } from "../../sistema/VitiniIDX/validarIDXUnico.mjs";

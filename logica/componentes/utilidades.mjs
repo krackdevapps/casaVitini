@@ -166,7 +166,7 @@ const utilidades = {
         }
         return estructua;
     },
-    comparadorFechasStringDDMMAAAA: (fecha1, fecha2) => {
+    comparadorFechas_ISO: (fecha1, fecha2) => {
         // Obtener componentes de la primera fecha
         const partesFecha1 = fecha1.split('-');
         const dia1 = parseInt(partesFecha1[2], 10);

@@ -1,4 +1,4 @@
-import { conexion } from "../../../componentes/db.mjs";
+import { obtenerTodosLosRoles } from "../../../repositorio/usuarios/obtenerTodosLosRoles.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
@@ -7,20 +7,9 @@ export const obtenerRoles = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
-        IDX.control()  
+        IDX.control()
 
-        const consultaRoles = `
-                            SELECT 
-                            rol, 
-                            "rolUI"
-                            FROM 
-                            "usuariosRoles";`;
-        const resolverConsultaRoles = await conexion.query(consultaRoles);
-        if (resolverConsultaRoles.rowCount === 0) {
-            const error = "No existe ningún rol";
-            throw new Error(error);
-        }
-        const roles = resolverConsultaRoles.rows;
+        const roles = await obtenerTodosLosRoles()
         const ok = {
             ok: roles
         };

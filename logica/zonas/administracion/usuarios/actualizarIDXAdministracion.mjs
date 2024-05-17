@@ -1,9 +1,8 @@
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarCuentasNoVerificadas } from "../../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-
+import { actualizarUsuarioSessionActiva } from "../../../repositorio/usuarios/actualizarSessionActiva.mjs";
 
 export const actualizarIDXAdministracion = async (entrada, salida) => {
     try {
@@ -31,45 +30,23 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
         })
         await eliminarCuentasNoVerificadas();
         await campoDeTransaccion("iniciar")
-        const actualizarIDX = `
-                            UPDATE usuarios
-                            SET 
-                                usuario = $2
-                            WHERE 
-                                usuario = $1
-                            RETURNING 
-                                usuario           
-                            `;
-        const datos = [
-            usuarioIDX,
-            nuevoIDX
-        ];
-        nuevoIDX = `"${nuevoIDX}"`;
-        const resuelveActualizarIDX = await conexion.query(actualizarIDX, datos);
-        if (resuelveActualizarIDX.rowCount === 0) {
-            const error = "No existe el nombre de usuario";
-            throw new Error(error);
-        }
-        if (resuelveActualizarIDX.rowCount === 1) {
-            const actualizarSessionesActivas = `
-                                UPDATE sessiones
-                                SET sess = jsonb_set(sess::jsonb, '{usuario}', $1::jsonb)::json
-                                WHERE sess->>'usuario' = $2;
-    
-                                `;
-            await conexion.query(actualizarSessionesActivas, [nuevoIDX, usuarioIDX]);
-            const IDXEstablecido = resuelveActualizarIDX.rows[0].usuario;
-            const ok = {
-                "ok": "Se ha actualizado el IDX correctamente",
-                usuarioIDX: IDXEstablecido
-            };
-            salida.json(ok);
-        }
+        await actualizarIDX({
+            usuarioIDX: usuarioIDX,
+            nuevoIDX: nuevoIDX
+        })
+        const sessionActivaActualizada = await actualizarUsuarioSessionActiva({
+            usuarioIDX: usuarioIDX,
+            nuevoIDX: nuevoIDX
+        })
         await campoDeTransaccion("confirmar")
+        const ok = {
+            ok: "Se ha actualizado el IDX correctamente",
+            usuarioIDX: sessionActivaActualizada.usuario
+        };
+        salida.json(ok);
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } finally {
     }
 }

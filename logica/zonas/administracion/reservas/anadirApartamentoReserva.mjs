@@ -9,7 +9,7 @@ import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/ob
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { insertarApartamentoEnReserva } from "../../../repositorio/reservas/apartamentos/insertarApartamentoEnReserva.mjs";
-import { obtenerApartamentosDeLaReservaPorApartamentoIDV } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDV.mjs";
+import { obtenerApartamentoDeLaReservaPorApartamentoIDV } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDV.mjs";
 
 
 export const anadirApartamentoReserva = async (entrada, salida) => {
@@ -56,7 +56,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
         const fechaSalida_ISO = detallesReserva.fechaSalida;
         // ACABAR ESTA SENTENCIA DE ABAJO--
         // validar que el apartamento no este ya en la reserva
-        const apartamentoReserva = await obtenerApartamentosDeLaReservaPorApartamentoIDV({
+        const apartamentoReserva = await obtenerApartamentoDeLaReservaPorApartamentoIDV({
             reservaUID: reservaUID,
             apartamentoIDV: apartamentoIDV
         })

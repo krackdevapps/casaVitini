@@ -1,7 +1,7 @@
-import { conexion } from "../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { buscarUsuariosPorTermino } from "../../../repositorio/usuarios/buscarUsuarios.mjs";
 
 export const buscarUsuarios = async (entrada, salida) => {
     try {
@@ -9,7 +9,7 @@ export const buscarUsuarios = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-        IDX.control()  
+        IDX.control()
 
         const buscar = validadoresCompartidos.tipos.cadena({
             string: entrada.body.buscar,
@@ -19,12 +19,11 @@ export const buscarUsuarios = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-
         const nombreColumna = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.nombreColumna,
+            string: entrada.body.nombreColumna || "",
             nombreCampo: "El campo del nombre de la columna",
             filtro: "strictoConEspacios",
-            sePermiteVacio: "no",
+            sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
         const sentidoColumna = validadoresCompartidos.tipos.cadena({
@@ -36,7 +35,6 @@ export const buscarUsuarios = async (entrada, salida) => {
             soloMinusculas: "si"
         })
 
-
         const pagina = validadoresCompartidos.tipos.numero({
             number: entrada.body.pagina || 1,
             nombreCampo: "El numero de página",
@@ -46,40 +44,13 @@ export const buscarUsuarios = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
 
-        let condicionComplejaSQLOrdenarResultadosComoSegundaCondicion = "";
-        let nombreColumnaSentidoUI;
-        let nombreColumnaUI;
         if (nombreColumna) {
-            const filtronombreColumna = /^[a-zA-Z]+$/;
-            if (!filtronombreColumna.test(nombreColumna)) {
-                const error = "el campo 'ordenClolumna' solo puede ser letras minúsculas y mayúsculas.";
-                throw new Error(error);
-            }
-            const consultaExistenciaNombreColumna = `
-                                    SELECT column_name
-                                    FROM information_schema.columns
-                                    WHERE table_name = 'datosDeUsuario' AND column_name = $1;
-                                    `;
-            const resuelveNombreColumna = await conexion.query(consultaExistenciaNombreColumna, [nombreColumna]);
-            if (resuelveNombreColumna.rowCount === 0) {
-                const error = "No existe el nombre de la columna que quieres ordenar";
-                throw new Error(error);
-            }
-            // OJO con la coma, OJO LA COMA ES IMPORTANTISMA!!!!!!!!
-            //!!!!!!!
-            if (sentidoColumna !== "descendente" && sentidoColumna !== "ascendente") {
-                sentidoColumna = "ascendente";
-            }
-            if (sentidoColumna == "ascendente") {
-                sentidoColumna = "ASC";
-                nombreColumnaSentidoUI = "ascendente";
-            }
-            if (sentidoColumna == "descendente") {
-                sentidoColumna = "DESC";
-                nombreColumnaSentidoUI = "descendente";
-            }
-            nombreColumnaUI = nombreColumna;
-            condicionComplejaSQLOrdenarResultadosComoSegundaCondicion = `,"${nombreColumna}" ${sentidoColumna}`;
+            await validadoresCompartidos.baseDeDatos.validarNombreColumna({
+                nombreColumna: nombreColumna,
+                tabla: "datosDeUsuario"
+            })
+            validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
+
         }
         const terminoBuscar = buscar.split(" ");
         const terminosFormateados = [];
@@ -88,60 +59,15 @@ export const buscarUsuarios = async (entrada, salida) => {
             terminosFormateados.push(terminoFinal);
         });
         const numeroPorPagina = 10;
-        const numeroPagina = Number((pagina - 1) + "0");
-        const consultaConstructor = `    
-                                SELECT "usuarioIDX", email, nombre, "primerApellido", "segundoApellido", pasaporte, telefono,
-                                COUNT(*) OVER() as "totalUsuarios"
-                                FROM "datosDeUsuario"
-                                WHERE  
-                                (
-    
-                                LOWER(COALESCE("usuarioIDX", '')) ILIKE ANY($1) OR
-                                LOWER(COALESCE(email, '')) ILIKE ANY($1) OR
-                                LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1) OR
-                                LOWER(COALESCE(telefono, '')) ILIKE ANY($1) OR
-    
-    
-                                LOWER(COALESCE(nombre, '')) ILIKE ANY($1) OR
-                                LOWER(COALESCE("primerApellido", '')) ILIKE ANY($1) OR
-                                LOWER(COALESCE("segundoApellido", '')) ILIKE ANY($1) OR
-                                LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1)
-                                )
-                                ORDER BY
-                                (
-                                  CASE
-                                    WHEN (
-    
-                                      (LOWER(COALESCE("usuarioIDX", '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE(email, '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE(telefono, '')) ILIKE ANY($1))::int +
-    
-                                      (LOWER(COALESCE(nombre, '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE("primerApellido", '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE("segundoApellido", '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1))::int
-                                    ) = 1 THEN 1
-                                    WHEN (
-    
-    
-                                      (LOWER(COALESCE("usuarioIDX", '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE(email, '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE(telefono, '')) ILIKE ANY($1))::int +
-    
-                                      (LOWER(COALESCE(nombre, '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE("primerApellido", '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE("segundoApellido", '')) ILIKE ANY($1))::int +
-                                      (LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1))::int
-                                    ) = 3 THEN 3
-                                    ELSE 2
-                                  END
-                                ) DESC
-                                ${condicionComplejaSQLOrdenarResultadosComoSegundaCondicion}
-                            LIMIT $2 OFFSET $3;`;
-        const consultaUsuarios = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina, numeroPagina]);
-        const usuariosEncontrados = consultaUsuarios.rows;
+        const numeroPagina = pagina
+
+        const usuariosEncontrados = await buscarUsuariosPorTermino({
+            terminosFormateados: terminosFormateados,
+            numeroPorPagina: numeroPorPagina,
+            numeroPagina: numeroPagina,
+            nombreColumna: nombreColumna,
+            sentidoColumna: sentidoColumna,
+        })
         const consultaConteoTotalFilas = usuariosEncontrados[0]?.totalUsuarios ? usuariosEncontrados[0].totalUsuarios : 0;
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
         const corretorNumeroPagina = String(numeroPagina).replace("0", "");
@@ -154,7 +80,7 @@ export const buscarUsuarios = async (entrada, salida) => {
         };
         if (nombreColumna) {
             Respuesta.nombreColumna;
-            Respuesta.sentidoColumna = nombreColumnaSentidoUI;
+            Respuesta.sentidoColumna = sentidoColumna;
         }
         usuariosEncontrados.map((detallesUsuario) => {
             delete detallesUsuario.totalUsuarios;
@@ -164,6 +90,5 @@ export const buscarUsuarios = async (entrada, salida) => {
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } finally {
     }
 }

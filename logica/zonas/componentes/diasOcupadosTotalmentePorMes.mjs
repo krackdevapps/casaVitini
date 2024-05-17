@@ -1,9 +1,12 @@
 import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../sistema/configuracion/codigoZonaHoraria.mjs";
-import { conexion } from "../../componentes/db.mjs";
 import { obtenerTodosLosCalendarios } from "../../sistema/calendariosSincronizados/airbnb/obtenerTodosLosCalendarios.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
+import { obtenerReservasPorMes } from "../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorMesPorAno.mjs";
+import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from "../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs";
+import { obtenerBloqueosPorMes } from "../../repositorio/bloqueos/obtenerBloqueosPorMes.mjs";
+import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
 
 
 export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
@@ -22,7 +25,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-
+        validadoresCompartidos.fechas.cadenaMes
         if (mes < 0 || mes > 12) {
             const error = "El campo 'mes' solo puede ser un numero entero y positivo entre el 1 y el 12";
             throw new Error(error);
@@ -54,85 +57,30 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
                 throw new Error(error);
             }
         }
-        const estadoReservaCancelada = "cancelada";
-        const reservarEnEseMes = `
-            SELECT 
-            reserva,
-            to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-            to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"
-            FROM 
-            reservas
-            WHERE
-            (
-                DATE_PART('YEAR', entrada) < $2
-                OR (
-                    DATE_PART('YEAR', entrada) = $2
-                    AND DATE_PART('MONTH', entrada) <= $1
-                )
-            )
-            AND (
-                DATE_PART('YEAR', salida) > $2
-                OR (
-                    DATE_PART('YEAR', salida) = $2
-                    AND DATE_PART('MONTH', salida) >= $1
-                )
-            )
-            AND "estadoReserva" <> $3
-           `;
-        const resuelveReservarEnEseMes = await conexion.query(reservarEnEseMes, [mes, ano, estadoReservaCancelada]);
-        const reservasCoincidentes = resuelveReservarEnEseMes.rows;
+        const reservasCoincidentes = await obtenerReservasPorMes({
+            mes: mes,
+            ano: ano,
+            estadoReservaCancelada: "cancelada",
+        })
         // Cuantos apartamentos disponibles existen
-        const consultaApartamentosDisponibles = `
-            SELECT 
-            "apartamentoIDV"
-            FROM 
-            "configuracionApartamento"
-            WHERE 
-            "estadoConfiguracion" = $1;          
-           `;
-        const estadoConfiguracionDisponible = "disponible";
-        const resuelveConsultaApartamentosDisponibles = await conexion.query(consultaApartamentosDisponibles, [estadoConfiguracionDisponible]);
-        if (resuelveConsultaApartamentosDisponibles.rowCount === 0) {
+        const configuracionesDisponibles = await obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles()
+        if (configuracionesDisponibles.length === 0) {
             const error = "No hay ningun apartamento disponible";
             throw new Error(error);
         }
-        const apartamentosDisponiblesPorFormatear = resuelveConsultaApartamentosDisponibles.rows;
         const apartamentosDisponbiles = [];
         const apartamentosConfiguradosDisponibles = [];
-        apartamentosDisponiblesPorFormatear.map((apartamento) => {
+        configuracionesDisponibles.map((apartamento) => {
             apartamentosConfiguradosDisponibles.push(apartamento.apartamentoIDV);
         });
-        const consultaApartamentosBloqueados = ` 
-            SELECT 
-            apartamento,
-            "tipoBloqueo",
-            to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-            to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"
-            FROM "bloqueosApartamentos"
-            WHERE
-            (
-                "tipoBloqueo" = $4 AND
-                (
-                DATE_PART('YEAR', entrada) < $2
-                OR (
-                    DATE_PART('YEAR', entrada) = $2
-                    AND DATE_PART('MONTH', entrada) <= $1
-                )
-            )
-            AND (
-                DATE_PART('YEAR', salida) > $2
-                OR (
-                    DATE_PART('YEAR', salida) = $2
-                    AND DATE_PART('MONTH', salida) >= $1
-                )
-            )) 
-            OR
-            "tipoBloqueo" = $3;
-            `;
         const bloqueoTemporal = "rangoTemporal";
         const bloqueoPermanente = "permanente";
-        const resuelveApartamentosBloqueados = await conexion.query(consultaApartamentosBloqueados, [mes, ano, bloqueoPermanente, bloqueoTemporal]);
-        const bloqueosCoincidentes = resuelveApartamentosBloqueados.rows;
+        const bloqueosCoincidentes = await obtenerBloqueosPorMes({
+            mes: mes,
+            ano: ano,
+            bloqueoPermanente: bloqueoPermanente,
+            bloqueoTemporal: bloqueoTemporal
+        })
         // Seleccionar apartamentos bloqueados
         const obtenerFechasInternas = (fechaEntrada_ISO, fechaSalida_ISO) => {
             const fechasInternas = [];
@@ -154,18 +102,11 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         const objetoFechasInternas = {};
         for (const reservaCoincidente of reservasCoincidentes) {
             const reservaUID = reservaCoincidente.reserva;
-            const consultaApartamentosPorReserva = `
-                SELECT 
-                apartamento
-                FROM "reservaApartamentos"
-                WHERE reserva = $1;          
-                `;
-            const resuelveConsultaApartamentosPorReserva = await conexion.query(consultaApartamentosPorReserva, [reservaUID]);
-            if (resuelveConsultaApartamentosPorReserva.rowCount > 0) {
-                const apartamentosPorReservaObjetoCompleto = resuelveConsultaApartamentosPorReserva.rows;
+            const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
+            if (apartamentosDeLaReserva.length > 0) {
                 const apartamentosPorReservaArray = [];
-                apartamentosPorReservaObjetoCompleto.map((apartamento) => {
-                    apartamentosPorReservaArray.push(apartamento.apartamento);
+                apartamentosDeLaReserva.map((apartamento) => {
+                    apartamentosPorReservaArray.push(apartamento.apartamentoIDV);
                 });
                 const fechaEntrada_ISO = reservaCoincidente.fechaEntrada_ISO;
                 const fechaSalida_ISO = reservaCoincidente.fechaSalida_ISO;
@@ -294,6 +235,5 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } finally {
-    }
+    } 
 }

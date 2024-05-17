@@ -1,9 +1,9 @@
-import { conexion } from "../../componentes/db.mjs";
 import { generadorPDF } from "../../sistema/PDF/generadorPDF.mjs";
 import { controlCaducidad } from "../../sistema/PDF/controlCaducidad.mjs";
 import { detallesReserva } from "../../sistema/reservas/detallesReserva.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
+import { obtenerPDFPorEnlaceUID } from "../../repositorio/pdf/obtenerPDFPorEnlaceUID.mjs";
 
 export const pdf = async (entrada, salida) => {
     try {
@@ -15,20 +15,8 @@ export const pdf = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
         await controlCaducidad();
-        const consultaValidarEnlace = `
-            SELECT
-            "reservaUID"
-            FROM 
-            "enlacesPdf" 
-            WHERE 
-            enlace = $1
-            `;
-        const resuelveValidarEnlace = await conexion.query(consultaValidarEnlace, [nombreEnlace]);
-        if (resuelveValidarEnlace.rowCount === 0) {
-            const error = "No existe el enlace para generar el PDF";
-            throw new Error(error);
-        }
-        const reservaUID = resuelveValidarEnlace.rows[0].reservaUID;
+        const enlace = await obtenerPDFPorEnlaceUID(nombreEnlace)
+        const reservaUID = enlace.reservaUID;
         const datosDetallesReserva = {
             reservaUID: reservaUID
         };

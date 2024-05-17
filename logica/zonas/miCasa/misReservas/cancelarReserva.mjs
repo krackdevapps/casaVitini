@@ -1,10 +1,10 @@
 import { conexion } from "../../../componentes/db.mjs";
 import { crearReenbolso } from "../../../componentes/pasarelas/square/crearReenbolso.mjs";
 import { detallesDelPago as detallesDelPago_ } from "../../../componentes/pasarelas/square/detallesDelPago.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 
 export const cancelarReserva = async (entrada, salida) => {
     try {
@@ -21,17 +21,16 @@ export const cancelarReserva = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
+        const mensaje = {
+            error: "Funcion temporalmente deshabilitdad"
+        }
+        salida.json(error)
+        return
 
+        // Abstraer y refactorizar
         await campoDeTransaccion("iniciar")
-        const obtenerDatosUsuario = `
-            SELECT 
-                email
-            FROM 
-                "datosDeUsuario" 
-            WHERE 
-                "usuarioIDX" = $1`;
-        const resolverObtenerDatosUsuario = await conexion.query(obtenerDatosUsuario, [usuario]);
-        const email = resolverObtenerDatosUsuario.rows[0].email;
+        const cuentaUsuario = await obtenerUsuario(usuario)
+        const email = cuentaUsuario.email;
         const validarExistenciaReserva = `
             SELECT
             reserva
@@ -41,6 +40,8 @@ export const cancelarReserva = async (entrada, salida) => {
             WHERE
             reserva = $1 AND email =$2`;
         const resuelveValidarExistenciaReserva = await conexion.query(validarExistenciaReserva, [reservaUID, email]);
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
+
         if (resuelveValidarExistenciaReserva.rowCount === 0) {
             const error = "No existe la reserva que quieres cancelar";
             throw new Error(error);
@@ -182,7 +183,7 @@ export const cancelarReserva = async (entrada, salida) => {
         }
         await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await campoDeTransaccion("cancelar")
+      //  await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

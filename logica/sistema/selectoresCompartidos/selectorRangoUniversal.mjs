@@ -6,21 +6,23 @@ const selectorRangoUniversal = async (metadatos) => {
         const fechaFin_rango_ISO = metadatos.fechaFin_rango_ISO
         const fechaInicio_elemento_ISO = metadatos.fechaInicio_elemento_ISO
         const fechaFin_elemento_ISO = metadatos.fechaFin_elemento_ISO
-        
-        
-        
-        
 
-
-        try {
-            await validadoresCompartidos.fechas.validarFecha_ISO(fechaInicio_rango_ISO)
-            await validadoresCompartidos.fechas.validarFecha_ISO(fechaFin_rango_ISO)
-            await validadoresCompartidos.fechas.validarFecha_ISO(fechaInicio_elemento_ISO)
-            await validadoresCompartidos.fechas.validarFecha_ISO(fechaFin_elemento_ISO)
-        } catch (errorCapturado) {
-            const mensaje = "En validadores del selectorRangoUniversal hay una fecha que no cumple el formato iso."
-            throw new Error(mensaje)
-        }
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            nombreCampo: "En el selectorRangoUniversal fechaInicio_rango_ISO",
+            fecha_ISO: fechaInicio_rango_ISO
+        })
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            nombreCampo: "En el selectorRangoUniversal fechaFin_rango_ISO",
+            fecha_ISO: fechaFin_rango_ISO
+        })
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            nombreCampo: "En el selectorRangoUniversal fechaInicio_elemento_ISO",
+            fecha_ISO: fechaInicio_elemento_ISO
+        })
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            nombreCampo: "En el selectorRangoUniversal fechaFin_elemento_ISO",
+            fecha_ISO: fechaFin_elemento_ISO
+        })
 
         const tipoLimite = metadatos.tipoLimite
         if (tipoLimite !== "incluido" && tipoLimite !== "noIncluido") {

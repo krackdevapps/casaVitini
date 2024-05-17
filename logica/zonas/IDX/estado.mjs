@@ -1,7 +1,7 @@
 import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
 import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
-import { conexion } from "../../componentes/db.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
+import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 
 export const estado = async (entrada, salida) => {
     try {
@@ -16,16 +16,8 @@ export const estado = async (entrada, salida) => {
             respuesta.usuario = usuario;
             respuesta.rol = rol;
             respuesta.cuentaVerificada = "no";
-            const consultaEstadoVerificado = `
-                    SELECT
-                    "cuentaVerificada"
-                    FROM 
-                    usuarios 
-                    WHERE 
-                    usuario = $1
-                    `;
-            const resuelveEstadoVerificado = await conexion.query(consultaEstadoVerificado, [usuario]);
-            const estadoCuenta = resuelveEstadoVerificado.rows[0].cuentaVerificada;
+            const cuentaUsuario = await obtenerUsuario(usuario)
+            const estadoCuenta = cuentaUsuario.cuentaVerificadaIDX;
             if (estadoCuenta === "si") {
                 respuesta.cuentaVerificada = "si";
             }
