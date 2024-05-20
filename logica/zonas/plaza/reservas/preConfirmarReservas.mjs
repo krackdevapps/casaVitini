@@ -18,28 +18,27 @@ export const preConfirmarReserva = async (entrada, salida) => {
             throw new Error(mensajesUI.aceptarReservasPublicas);
         }
         const reserva = entrada.body.reserva;
-        await campoDeTransaccion("iniciar");
         await validarObjetoReserva(reserva);
+        await campoDeTransaccion("iniciar");
 
         await eliminarBloqueoCaducado();
         const resolvertInsertarReserva = await insertarReserva(reserva);
         const reservaUID = resolvertInsertarReserva.reservaUID;
         await actualizarEstadoPago(reservaUID);
-        if (resolvertInsertarReserva.ok) {
-            const metadatos = {
-                reservaUID: reservaUID,
-                solo: "globalYFinanciera"
-            };
-            const resolverDetallesReserva = await detallesReserva(metadatos);
-            const enlacePDF = await crearEnlacePDF(reservaUID);
-            resolverDetallesReserva.enlacePDF = enlacePDF;
-            const ok = {
-                ok: "Reserva confirmada",
-                detalles: resolverDetallesReserva
-            };
-            salida.json(ok);
-        }
         await campoDeTransaccion("confirmar");
+        const metadatos = {
+            reservaUID: reservaUID,
+            solo: "globalYFinanciera"
+        };
+        const resolverDetallesReserva = await detallesReserva(metadatos);
+        const enlacePDF = await crearEnlacePDF(reservaUID);
+        resolverDetallesReserva.enlacePDF = enlacePDF;
+        const ok = {
+            ok: "Reserva confirmada",
+            detalles: resolverDetallesReserva
+        };
+        salida.json(ok);
+
         enviarEmailReservaConfirmada(reservaUID);
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");

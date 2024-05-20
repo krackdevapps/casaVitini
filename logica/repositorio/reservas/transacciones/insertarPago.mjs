@@ -38,6 +38,8 @@ export const insertarPago = async (data) => {
         to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPagoUTC_ISO", 
         "chequeUID",
         "transferenciaUID"
+        RETURNING
+        *
         `;
         const parametros = [
             plataformaDePago,

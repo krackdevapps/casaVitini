@@ -5,7 +5,7 @@ export const actualizarEnlaceDePagoPorEnlaceUID = async (data) => {
         const descripcion = data.descripcion
         const cantidad = data.cantidad
         const fechaDeCaducidad = data.fechaDeCaducidad
-        const enlaceUID = data.enlaceUID
+        const reservaUID = data.reservaUID
 
         const consulta = `
            UPDATE "enlacesDePago"
@@ -22,7 +22,7 @@ export const actualizarEnlaceDePagoPorEnlaceUID = async (data) => {
             descripcion,
             cantidad,
             fechaDeCaducidad,
-            enlaceUID
+            reservaUID
         ];
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

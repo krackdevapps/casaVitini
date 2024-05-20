@@ -53,13 +53,13 @@ export const modificarEnlace = async (entrada, salida) => {
         await controlCaducidadEnlacesDePago();       
         await obtenerEnlaceDePagoPorEnlaceUID(enlaceUID)
         const fechaDeCaducidad = new Date(fechaActual.getTime() + (horasCaducidad * 60 * 60 * 1000));
-        const dataActualizarEnlaceDePago = {
+        await actualizarEnlaceDePagoPorEnlaceUID({
             nombreEnlace: nombreEnlace,
             descripcion: descripcion,
             cantidad: cantidad,
             fechaDeCaducidad: fechaDeCaducidad,
-        }
-        await actualizarEnlaceDePagoPorEnlaceUID(dataActualizarEnlaceDePago)
+            enlaceUID: enlaceUID,
+        })
         const ok = {
             ok: "Se ha actualizado corratmente los datos del enlace"
         };

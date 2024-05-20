@@ -3,6 +3,7 @@ export const obtenerEnlaceDePagoPorCodigoUPID = async (codigoUPID) => {
     try {
         const consulta = `
             SELECT
+            "enlaceUID"
             "nombreEnlace", 
             codigo, 
             "reservaUID",

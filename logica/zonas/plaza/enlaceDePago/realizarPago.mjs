@@ -1,135 +1,96 @@
+import { Mutex } from "async-mutex";
+import { obtenerEnlaceDePagoPorCodigoUPID } from "../../../repositorio/enlacesDePago/obtenerEnlaceDePagoPorCodigoUPID.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerTotalesGlobal } from "../../../repositorio/reservas/transacciones/obtenerTotalesGlobal.mjs";
+import { insertarPago } from "../../../repositorio/reservas/transacciones/insertarPago.mjs";
+import { actualizarEstadoEnlaceDePagoPorEnlaceUID } from "../../../repositorio/enlacesDePago/actualizarEstadoEnlaceDePagoPorEnlaceUID.mjs";
+
 export const realizarPago = async (entrada, salida) => {
+    const mutex = new Mutex()
     try {
-        const error = "Esta opcion esta actuamente deshabilitada";
-        throw new Error(error);
-        const enlaceUID = entrada.body.enlaceUID;
-        const filtroCadena = /^[a-z0-9]+$/;
-        if (!enlaceUID || !filtroCadena.test(enlaceUID)) {
-            const error = "el codigo de un enlace de pago solo puede ser una cadena de minuscuals y numeros y ya esta";
-            throw new Error(error);
-        }
+
+        const enlaceUPID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.enlaceUID,
+            nombreCampo: "El apartamentoIDV",
+            filtro: "strictoIDV",
+            soloMinusculas: "si",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        mutex.acquire()
         await campoDeTransaccion("iniciar")
-        const consultaDetallesEnlace = `
-            SELECT
-            reserva,
-            cantidad,
-            "estadoPago"
-            FROM "enlacesDePago"
-            WHERE codigo = $1;`;
-        const resuelveConsultaDetallesEnlace = await conexion.query(consultaDetallesEnlace, [enlaceUID]);
-        if (resuelveConsultaDetallesEnlace.rowCount === 0) {
-            const error = "No existe ningún pago con este identificador de pago, por favro revisa que el identificador de pago sea correcto y no halla caducado";
+        const enlaceDePago = await obtenerEnlaceDePagoPorCodigoUPID(enlaceUPID)
+        const enlaceUID = enlaceDePago.enlaceUID
+        const reservaUID = enlaceDePago.reservaUID;
+        const totalPago = enlaceDePago.cantidad;
+        const estadoPagoObtenido = enlaceDePago.estadoPago;
+        if (estadoPagoObtenido === "pagado") {
+            const error = "Este enlace de pago ya esta pagado";
             throw new Error(error);
         }
-        if (resuelveConsultaDetallesEnlace.rowCount === 1) {
-            const detallesEnlace = resuelveConsultaDetallesEnlace.rows[0];
-            const reserva = detallesEnlace.reserva;
-            const totalPago = detallesEnlace.cantidad;
-            const estadoPagoObtenido = detallesEnlace.estadoPago;
-            if (estadoPagoObtenido === "pagado") {
-                const error = "Este enlace de pago ya esta pagado";
-                throw new Error(error);
-            }
-            const consultaEstadoPago = `
-                SELECT
-                "estadoPago",
-                "estadoReserva"
-                FROM reservas
-                WHERE reserva = $1;`;
-            const resuelveConsultaEstadoPago = await conexion.query(consultaEstadoPago, [reserva]);
-            const estadoReserva = resuelveConsultaEstadoPago.rows[0].estadoReserva;
-            if (estadoReserva === "cancelada") {
-                const error = "La reserva esta cancelada";
-                throw new Error(error);
-            }
-            const totalConImpuestosIDV = "totalConImpuestos";
-            const consultaTotalesReserva = `
-                SELECT
-                "totalConImpuestos"
-                FROM "reservaTotales"
-                WHERE reserva = $1;`;
-            const resuelveConsultaTotalesReserva = await conexion.query(consultaTotalesReserva, [reserva]);
-            if (resuelveConsultaTotalesReserva.rowCount === 0) {
-                const error = "Esta reserva no tiene totales";
-                throw new Error(error);
-            }
-            const totalConImpuestosFormatoFinal = Number(totalPago.replaceAll(".", ""));
-            const token = entrada.body.token;
-            const idempotencyKey = entrada.body.idempotencyKey;
-            const locationResponse = await clienteSquare.locationsApi.retrieveLocation(SQUARE_LOCATION_ID);
-            const currency = locationResponse.result.location.currency;
-            // Charge the customer's card
-            const pago = {
-                idempotencyKey,
-                sourceId: token,
-                //buyer_email_address: "test@test.com",
-                amountMoney: {
-                    amount: totalConImpuestosFormatoFinal, // $1.00 charge
-                    currency
-                }
-            };
-            const detallesDelPago = await componentes.pasarela.crearPago(pago);
-            const tarjeta = detallesDelPago.cardDetails.card.cardBrand;
-            const tarjetaDigitos = detallesDelPago.cardDetails.card.last4;
-            const pagoUIDPasarela = detallesDelPago.id;
-            const cantidadSinPunto = detallesDelPago.amountMoney.amount;
-            const cantidadConPunto = utilidades.deFormatoSquareAFormatoSQL(cantidadSinPunto);
-            const fechaDePago = detallesDelPago.createdAt;
-            const plataformaDePago = "pasarela";
-            const asociarPago = `
-                INSERT INTO
-                "reservaPagos"
-                (
-                    "plataformaDePago",
-                    tarjeta,
-                    "tarjetaDigitos",
-                    "pagoUIDPasarela",
-                    reserva,
-                    cantidad,
-                    "fechaPago"
-                )
-                VALUES 
-                ($1, $2, $3, $4, $5, $6, $7)
-                RETURNING
-                "pagoUID"
-                `;
-            const datosPago = [
-                plataformaDePago,
-                tarjeta,
-                tarjetaDigitos,
-                pagoUIDPasarela,
-                reserva,
-                cantidadConPunto,
-                fechaDePago
-            ];
-            const resolverPago = await conexion.query(asociarPago, datosPago);
-            const pagoUID = resolverPago.rows[0].pagoUID;
-            const actualizarEstadoPagoEnlaces = `
-                UPDATE "enlacesDePago"
-                SET 
-                    "estadoPago" = $1
-                WHERE 
-                    codigo = $2;
-                `;
-            const estadoPagado = "pagado";
-            const actualizarDatos = [
-                estadoPagado,
-                enlaceUID
-            ];
-            await conexion.query(actualizarEstadoPagoEnlaces, actualizarDatos);
-            await actualizarEstadoPago(reserva);
-            const detalles = {
+        const reserva = obtenerReservaPorReservaUID(reservaUID)
+        const estadoReserva = reserva.estadoReservaIDV;
+        if (estadoReserva === "cancelada") {
+            const error = "La reserva esta cancelada";
+            throw new Error(error);
+        }
+        const totalesReserva = await obtenerTotalesGlobal(reservaUID)
+        if (totalesReserva.length === 0) {
+            const error = "Esta reserva no tiene totales";
+            throw new Error(error);
+        }
+        // const totalConImpuestosFormatoFinal = Number(totalPago.replaceAll(".", ""));
+        // const token = entrada.body.token;
+        // const idempotencyKey = entrada.body.idempotencyKey;
+        // const locationResponse = await clienteSquare.locationsApi.retrieveLocation(SQUARE_LOCATION_ID);
+        // const currency = locationResponse.result.location.currency;
+        // // Charge the customer's card
+        // const pago = {
+        //     idempotencyKey,
+        //     sourceId: token,
+        //     //buyer_email_address: "test@test.com",
+        //     amountMoney: {
+        //         amount: totalConImpuestosFormatoFinal, // $1.00 charge
+        //         currency
+        //     }
+        // };
+        // const detallesDelPago = await componentes.pasarela.crearPago(pago);
+        // const tarjeta = detallesDelPago.cardDetails.card.cardBrand;
+        // const tarjetaDigitos = detallesDelPago.cardDetails.card.last4;
+        // const pagoUIDPasarela = detallesDelPago.id;
+        // const cantidadSinPunto = detallesDelPago.amountMoney.amount;
+        // const cantidadConPunto = utilidades.deFormatoSquareAFormatoSQL(cantidadSinPunto);
+        // const fechaDePago = detallesDelPago.createdAt;
+        // const plataformaDePago = "pasarela";
+
+        const nuevoPago = await insertarPago({
+            plataformaDePago: plataformaDePago,
+            tarjeta: tarjeta,
+            tarjetaDigitos: tarjetaDigitos,
+            pagoUIDPasarela: pagoUIDPasarela,
+            reservaUID: reservaUID,
+            cantidadConPunto: cantidadConPunto,
+            fechaPago: fechaDePago
+
+        })
+        const pagoUID = nuevoPago.pagoUID;
+        await actualizarEstadoEnlaceDePagoPorEnlaceUID({
+            estado: "pagado",
+            enlaceUID: enlaceUID
+        })
+
+        await actualizarEstadoPago(reserva);
+        await campoDeTransaccion("confirmar")
+        const ok = {
+            ok: "Pago realizado correctamente",
+            x: "casaVitini.ui.vistas.pagos.pagoConfirmado",
+            detalles: {
                 pagoUID: pagoUID,
                 mensaje: "Pago realizado correctamente"
-            };
-            const ok = {
-                ok: "Pago realizado correctamente",
-                x: "casaVitini.ui.vistas.pagos.pagoConfirmado",
-                detalles: detalles
-            };
-            salida.json(ok);
-            await campoDeTransaccion("confirmar")
+            }
         }
+        salida.json(ok);
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         let errorFinal;
@@ -144,6 +105,8 @@ export const realizarPago = async (entrada, salida) => {
         }
         salida.json(errorFinal);
     } finally {
-        mutex.release();
+        if (mutex) {
+            mutex.release();
+        }
     }
 }

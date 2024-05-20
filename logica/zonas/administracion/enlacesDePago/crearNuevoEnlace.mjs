@@ -14,6 +14,7 @@ export const crearNuevoEnlace = async (entrada, salida) => {
         
         const error = "Hasta que no se pueda habilitar una pasarela de pago, esta opcion esta deshabilitada.";
         throw new Error(error);
+        // Este script no esta refactorizado por que aun no hace falta, es un boceto sucio.
         let nombreEnlace = entrada.body.nombreEnlace;
         const reservaUID = entrada.body.reservaUID;
         const cantidad = entrada.body.cantidad;

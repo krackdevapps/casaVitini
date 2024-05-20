@@ -1,27 +1,18 @@
 import { conexion } from "../../componentes/db.mjs";
-export const actualizarEnlaceDePagoPorEnlaceUID = async (data) => {
+export const actualizarEstadoEnlaceDePagoPorEnlaceUID = async (data) => {
     try {
-        const nombreEnlace = data.nombreEnlace
-        const descripcion = data.descripcion
-        const cantidad = data.cantidad
-        const fechaDeCaducidad = data.fechaDeCaducidad
+        const estado = data.estado
         const enlaceUID = data.enlaceUID
 
         const consulta = `
            UPDATE "enlacesDePago"
            SET 
-           "nombreEnlace" = $1,
-           descripcion = $2,
-           cantidad = $3,
-           caducidad = $4
+           "estadoPago" = $1
            WHERE 
-           "reservaUID" = $5;
+           "enlaceUID" = $2;
            `;
         const parametros = [
-            nombreEnlace,
-            descripcion,
-            cantidad,
-            fechaDeCaducidad,
+            estado,
             enlaceUID
         ];
         const resuelve = await conexion.query(consulta, parametros);

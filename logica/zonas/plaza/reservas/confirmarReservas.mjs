@@ -1,6 +1,7 @@
 export const confirmarReserva = async (entrada, salida) => {
     salida.end();
     return;
+    // Boceto sucio de un script del proceso de confirmacion
     await mutex.acquire();
     try {
         const reserva = entrada.body.reserva;
