@@ -23,7 +23,7 @@ export const listarApartamentosConBloqueos = async (entrada, salida) => {
         }
         if (todosLosBloqueos.length > 0) {
             const apartamentosEncontradosConDuplicados = [];
-            todosLosBloqueos.map((detalleBloqueo) => {
+            todosLosBloqueos.forEach((detalleBloqueo) => {
                 const apartamento = detalleBloqueo.apartamento;
                 apartamentosEncontradosConDuplicados.push(apartamento);
             });

@@ -7,7 +7,7 @@ const comprobarFechaEnRango = (fechaAComprobar_ISO, fechaInicio_ISO, fechaFin_IS
     const fechaObjetoFin = new Date(fechaFin_ISO);
     return fechaObjetoAComprobar >= fechaObjetoInicio && fechaObjetoAComprobar <= fechaObjetoFin;
 }
-const porRangoDeFechas = async (reserva) => {
+export const porRangoDeFechas = async (reserva) => {
 
     const fechaEntradaReserva_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(reserva.fechas.entrada)).fecha_ISO
     const fechaSalidaReserva_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(reserva.fechas.salida)).fecha_ISO
@@ -91,7 +91,4 @@ const porRangoDeFechas = async (reserva) => {
         descuentoGlobal: descuentoGlobal
     }
     return estructuraSaliente
-}
-export {
-    porRangoDeFechas
 }

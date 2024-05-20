@@ -32,8 +32,14 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             noSePermitenDuplicados: "si"
         })
         // Control validez fecha
-        await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
-        await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: fechaEntrada_ISO,
+            nombreCampo: "La fecha de entrada de la reserva"
+        })
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: fechaSalida_ISO,
+            nombreCampo: "La fecha de salida de la reserva"
+        })
         const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada_ISO)
         const fechaSalida_objeto = DateTime.fromISO(fechaSalida_ISO)
 

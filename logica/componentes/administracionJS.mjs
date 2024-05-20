@@ -216,8 +216,8 @@ const casaVitini = {
                     mesSeleccionado = mesSeleccionado.padStart(2, "0")
                     mesSeleccionado = Number(mesSeleccionado)
                     const fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
-                    let selectorDias = [...document.querySelectorAll("[calendarioIO] [dia]")]
-                    selectorDias.map((dia) => {
+                    const selectorDias = document.querySelectorAll("[calendarioIO] [dia]")
+                    selectorDias.forEach((dia) => {
                         // dia.classList.remove("calendarioDiaDisponible")
                         dia.classList.remove("calendarioDiaReserva")
                         dia.classList.remove("calendarioDiaSeleccionado")
@@ -236,8 +236,8 @@ const casaVitini = {
                         diaSeleccionadoComoElemento.removeAttribute("estadoDia")
                         return
                     }
-                    let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
-                    diasDisponibles.map(diaDisponible => {
+                    const diasDisponibles = document.querySelectorAll("[estado=disponible]")
+                    diasDisponibles.forEach(diaDisponible => {
                         diaDisponible.removeAttribute("estadoDia")
                         diaDisponible.style.background = ""
                         diaDisponible.style.color = ""
@@ -279,14 +279,14 @@ const casaVitini = {
                         document.querySelector("#fechaEntrada").innerText = fechaSeleccionadaUI
                         if (fechaSalidaSelecionda) {
                             if (mesSeleccionadoSalida === mesSeleccionado && anoSeleccionado === anoSeleccionadoSalida) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) < diaSeleccionadoSalida) {
                                         //  dia.classList.remove("calendarioDiaDisponible")
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
@@ -299,13 +299,13 @@ const casaVitini = {
                         document.querySelector("#fechaSalida").innerText = fechaSeleccionadaUI
                         if (fechaEntradaSelecionda) {
                             if (mesSeleccionadoEntrada === mesSeleccionado && anoSeleccionado === anoSeleccionadoEntrada) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) > diaSeleccionadoEntrada) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
@@ -336,8 +336,8 @@ const casaVitini = {
                     constructorGrid.setAttribute("class", "administracionGridReservas")
                     constructorGrid.setAttribute("componenteID", "gridReservas")
                     constructorGrid.setAttribute("metadatosBusqueda", JSON.stringify(metadatosBusqueda))
-                    let selectorTitulosColumnas = [...document.querySelectorAll("[componenteGrid=celdaTituloColumna]")]
-                    selectorTitulosColumnas.map((celdaTituloColumna) => {
+                    let selectorTitulosColumnas = document.querySelectorAll("[componenteGrid=celdaTituloColumna]")
+                    selectorTitulosColumnas.forEach((celdaTituloColumna) => {
                         celdaTituloColumna.style.removeProperty("background")
                         celdaTituloColumna.querySelector("[sentidoIconos]")?.remove()
                     })
@@ -371,7 +371,7 @@ const casaVitini = {
                     let titulosColumnas = ["Reserva", "Fecha de entrada", "Fecha de salida", "Estado de la reserva", "Estado del pago"]
                     let nombreColumnas = ["reserva", "entrada", "salida", "estadoReserva", "estadoPago"]
                     let classesTitulos = ["idColumna", "entradaColumna", "salidaColuma", "estadoColumna", "pagoColumna"]
-                    titulosColumnas.map((tituloColumna, ciclo) => {
+                    titulosColumnas.forEach((tituloColumna, ciclo) => {
                         let columnaElemento = document.createElement("div")
                         columnaElemento.innerText = tituloColumna
                         columnaElemento.classList.add(classesTitulos[ciclo])
@@ -395,12 +395,12 @@ const casaVitini = {
                         }
                     })
                     if (metadatos.tipoConstruccionGrid === "soloLista") {
-                        let selectorFilasGrid = [...document.querySelectorAll("[componenteGrid=fila]")]
-                        selectorFilasGrid.map((filaGrid) => {
+                        let selectorFilasGrid = document.querySelectorAll("[componenteGrid=fila]")
+                        selectorFilasGrid.forEach((filaGrid) => {
                             filaGrid.remove()
                         })
                     }
-                    reservas.map((bloqueReserva) => {
+                    reservas.forEach((bloqueReserva) => {
                         let reserva = bloqueReserva.reserva
                         let fechaEntrada = bloqueReserva.fechaEntrada
                         let fechaSalida = bloqueReserva.fechaSalida
@@ -672,8 +672,8 @@ const casaVitini = {
                     }
                 },
                 seleccionarRango: (rangoIDV) => {
-                    let rangos = [...document.querySelectorAll("[selectorRango]")]
-                    rangos.map((rango) => {
+                    let rangos = document.querySelectorAll("[selectorRango]")
+                    rangos.forEach((rango) => {
                         let rangoPorCiclo = rango.getAttribute("selectorRango")
                         if (rangoPorCiclo === rangoIDV) {
                             rango.style.background = "#0800ff"
@@ -749,8 +749,8 @@ const casaVitini = {
                     if (transaccion.parametros?.porTerminos) {
                         const campoBuscador = document.querySelector("[componenteCampo=buscadorPorId]")
                         campoBuscador.value = transaccion.porTerminos
-                        const selectorRangos = [...document.querySelectorAll(`[selectorRango]`)]
-                        selectorRangos.map((selectorRango) => {
+                        const selectorRangos = document.querySelectorAll(`[selectorRango]`)
+                        selectorRangos.forEach((selectorRango) => {
                             selectorRango.removeAttribute("style")
                         })
                         selectorCuadradoFechaEntrada.removeAttribute("memoriaVolatil")
@@ -1084,8 +1084,8 @@ const casaVitini = {
                     selectorFechaEntradaUI.innerText = "(Seleccionar)"
                     selectorCuadradoFechaSalida.removeAttribute("memoriaVolatil")
                     selectorFechaSalidaUI.innerText = "(Seleccionar)"
-                    const selectorRangos = [...document.querySelectorAll(`[selectorRango]`)]
-                    selectorRangos.map((selectorRango) => {
+                    const selectorRangos = document.querySelectorAll(`[selectorRango]`)
+                    selectorRangos.forEach((selectorRango) => {
                         selectorRango.removeAttribute("style")
                     })
                 },
@@ -1104,8 +1104,8 @@ const casaVitini = {
                 arranque: () => {
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "administracion/reservas/nueva")
-                    const selectorBotonesCalendario = [...document.querySelectorAll("[calendario]")]
-                    selectorBotonesCalendario.map((boton) => {
+                    const selectorBotonesCalendario = document.querySelectorAll("[calendario]")
+                    selectorBotonesCalendario.forEach((boton) => {
                         boton.addEventListener("click", casaVitini.administracion.reservas.nuevaReserva.constructorCalendario)
                     })
                     document.querySelector("[componente=botonBuscarAlojamiento]").addEventListener("click", casaVitini.administracion.reservas.nuevaReserva.buscarAlojamiento)
@@ -1234,8 +1234,8 @@ const casaVitini = {
                     mesSeleccionado = mesSeleccionado.padStart(2, "0")
                     mesSeleccionado = Number(mesSeleccionado)
                     const fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
-                    let selectorDias = [...document.querySelectorAll("[calendarioIO] [dia]")]
-                    selectorDias.map((dia) => {
+                    let selectorDias = document.querySelectorAll("[calendarioIO] [dia]")
+                    selectorDias.forEach((dia) => {
                         // dia.classList.remove("calendarioDiaDisponible")
                         dia.classList.remove("calendarioDiaReserva")
                         dia.classList.remove("calendarioDiaSeleccionado")
@@ -1254,8 +1254,8 @@ const casaVitini = {
                         diaSeleccionadoComoElemento.removeAttribute("estadoDia")
                         return
                     }
-                    let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
-                    diasDisponibles.map(diaDisponible => {
+                    let diasDisponibles = document.querySelectorAll("[estado=disponible]")
+                    diasDisponibles.forEach(diaDisponible => {
                         diaDisponible.removeAttribute("estadoDia")
                         diaDisponible.style.background = ""
                         diaDisponible.style.color = ""
@@ -1295,14 +1295,14 @@ const casaVitini = {
                         document.querySelector("[dataReserva=fechaEntrada]").innerText = fechaSeleccionadaUI
                         if (fechaSalidaSelecionda) {
                             if (mesSeleccionadoSalida === mesSeleccionado && anoSeleccionado === anoSeleccionadoSalida) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) < diaSeleccionadoSalida) {
                                         //  dia.classList.remove("calendarioDiaDisponible")
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEachEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
@@ -1315,13 +1315,13 @@ const casaVitini = {
                         document.querySelector("[dataReserva=fechaSalida]").innerText = fechaSeleccionadaUI
                         if (fechaEntradaSelecionda) {
                             if (mesSeleccionadoEntrada === mesSeleccionado && anoSeleccionado === anoSeleccionadoEntrada) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) > diaSeleccionadoEntrada) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
@@ -1485,7 +1485,7 @@ const casaVitini = {
                     if (apartamento.target.getAttribute("estado")) {
                         apartamento.target.removeAttribute("style")
                         apartamento.target.removeAttribute("estado")
-                        let contadorApartamentosSeleccionados = [...document.querySelectorAll("[estado=seleccionado]")]
+                        let contadorApartamentosSeleccionados = document.querySelectorAll("[estado=seleccionado]")
                         if (contadorApartamentosSeleccionados.length > 0) {
                             selectorEspacioBotonConfimrar.classList.remove("elementoOcultoInicialmente")
                         } else {
@@ -1496,7 +1496,7 @@ const casaVitini = {
                     apartamento.target.style.background = "blue"
                     apartamento.target.style.color = "white"
                     apartamento.target.setAttribute("estado", "seleccionado")
-                    let contadorApartamentosSeleccionados = [...document.querySelectorAll("[estado=seleccionado]")]
+                    let contadorApartamentosSeleccionados = document.querySelectorAll("[estado=seleccionado]")
                     if (contadorApartamentosSeleccionados.length > 0) {
                         selectorEspacioBotonConfimrar.classList.remove("elementoOcultoInicialmente")
                     } else {
@@ -1760,7 +1760,7 @@ const casaVitini = {
                                 opcionesApartamento.appendChild(opcionApartamento)
                             }
                             if (habitacionesApartamento.length > 0) {
-                                habitacionesApartamento.map((habitacion) => {
+                                habitacionesApartamento.forEach((habitacion) => {
                                     const opcionApartamento = document.createElement("p")
                                     opcionApartamento.classList.add("opcionCambioCama")
                                     opcionApartamento.setAttribute("componente", "menuVolatil")
@@ -1927,9 +1927,9 @@ const casaVitini = {
                             apartamento: metadatos.apartamentoIDV,
                             habitacion: metadatos.habitacionIDV
                         }
-                        
+
                         const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                        
+
                         if (respuestaServidor?.error) {
                             return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                         }
@@ -1938,7 +1938,7 @@ const casaVitini = {
                             return
                         }
                         menuVolatilRenderizado.innerHTML = null
-                        respuestaServidor.camasDisponibles.map(cama => {
+                        respuestaServidor.camasDisponibles.forEach(cama => {
                             const camaIDV = cama.cama
                             const camaUI = cama.camaUI
                             const tipoCama = document.createElement("p")
@@ -2060,8 +2060,8 @@ const casaVitini = {
                         }
                         if (respuestaServidor?.ok) {
                             casaVitini.componentes.limpiarAdvertenciasInmersivas()
-                            const selectorPernoctantesHabitacion = [...document.querySelectorAll(`[apartamentoUID="${apartamentoUID}"] [pernoctanteUID]`)]
-                            selectorPernoctantesHabitacion.map((pernoctanteSeleccionado) => {
+                            const selectorPernoctantesHabitacion = document.querySelectorAll(`[apartamentoUID="${apartamentoUID}"] [pernoctanteUID]`)
+                            selectorPernoctantesHabitacion.forEach((pernoctanteSeleccionado) => {
                                 const nombreCompleto = pernoctanteSeleccionado.querySelector("[componente=nombreCompleto]").innerText
                                 const pasaporte = pernoctanteSeleccionado.querySelector("[componente=pasaporte]").innerText
                                 const tipoCliente = pernoctanteSeleccionado.getAttribute("tipoCliente")
@@ -2173,13 +2173,13 @@ const casaVitini = {
                     },
                     mostrasSelectorCambioPernoctanteHabitacion: (pernoctanteUID) => {
                         const habitacionActual = document.querySelector(`[pernoctanteUID="${pernoctanteUID}"]`)?.closest("[habitacionUID]")?.getAttribute("habitacionUID")
-                        const selectorHabitaciones = [...document.querySelectorAll("[habitacionIDV]")]
+                        const selectorHabitaciones = document.querySelectorAll("[habitacionIDV]")
                         document.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarSelectoresCambioHabitacion)
                         const selectorBotonAsignarAHabitacionRenderizado = document.querySelectorAll("[componente=botonMoverCliente]")
                         selectorBotonAsignarAHabitacionRenderizado.forEach(botonRenderizado => {
                             botonRenderizado.remove()
                         });
-                        selectorHabitaciones.map((habitacion) => {
+                        selectorHabitaciones.forEach((habitacion) => {
                             const habitacionUID = habitacion.getAttribute("habitacionUID")
                             if (habitacionUID !== habitacionActual) {
                                 const bloqueSelectorCambio = casaVitini.administracion.reservas.detallesReserva.UIComponentes.selectorCambioHabitacionUI(pernoctanteUID)
@@ -2220,8 +2220,8 @@ const casaVitini = {
                             tipoCliente = pernoctanteElemento.parentElement.getAttribute("tipoCliente")
                             bloqueCliente = pernoctanteElemento.parentElement
                         }
-                        const opcionesClientePool = [...document.querySelectorAll("[componente=opcionesCliente]")]
-                        opcionesClientePool.map((opcionClientePool) => {
+                        const opcionesClientePool = document.querySelectorAll("[componente=opcionesCliente]")
+                        opcionesClientePool.forEach((opcionClientePool) => {
                             opcionClientePool.parentElement.style.removeProperty("background")
                             opcionClientePool.remove()
                         })
@@ -2372,12 +2372,12 @@ const casaVitini = {
                         botonOpcionCliente.innerText = "Cerrar opciones del pernoctante"
                         botonOpcionCliente.addEventListener("click", (e) => {
                             e.stopPropagation()
-                            let selectorFilasCliente = [...document.querySelectorAll("[componente=contenedorPernocanteHabitacion]")]
-                            selectorFilasCliente.map((filaCliente) => {
+                            let selectorFilasCliente = document.querySelectorAll("[componente=contenedorPernocanteHabitacion]")
+                            selectorFilasCliente.forEach((filaCliente) => {
                                 filaCliente.style.removeProperty("background")
                             })
-                            const selectorContenedoresOpcionCliente = [...document.querySelectorAll("[contenedor=opcionesCliente]")]
-                            selectorContenedoresOpcionCliente.map((contenedor) => {
+                            const selectorContenedoresOpcionCliente = document.querySelectorAll("[contenedor=opcionesCliente]")
+                            selectorContenedoresOpcionCliente.forEach((contenedor) => {
                                 contenedor.remove()
                             })
                             document.querySelector("[componente=bloqueCalendario]")?.remove()
@@ -2461,12 +2461,12 @@ const casaVitini = {
                         const clientePoolID = busqueda.clientePoolID
                         const reservaID = document.querySelector("[reserva]").getAttribute("reserva")
                         const resultadosClientes = respuestaServidor?.clientes
-                        const selectorBuscadorRapido = [...document.querySelectorAll("[componente=buscadorRapidoCliente]")]
-                        selectorBuscadorRapido.map((buscadorRapidoRenderizado) => {
+                        const selectorBuscadorRapido = document.querySelectorAll("[componente=buscadorRapidoCliente]")
+                        selectorBuscadorRapido.forEach((buscadorRapidoRenderizado) => {
                             buscadorRapidoRenderizado.innerText = null
                         })
                         const buscadorRapidoRenderizado = document.querySelector("[componente=buscadorRapidoCliente]")
-                        resultadosClientes.map((clienteEncontrado) => {
+                        resultadosClientes.forEach((clienteEncontrado) => {
                             const clienteUID = clienteEncontrado.uid
                             const nombre = clienteEncontrado.nombre
                             const primerApellido = clienteEncontrado.primerApellido
@@ -2580,8 +2580,8 @@ const casaVitini = {
                         }
                         casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
                         const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                        const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUIDPantallaDeCarga}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                        selectorPantallaDeCarga.map((pantalla) => {
+                        const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUIDPantallaDeCarga}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                        selectorPantallaDeCarga.forEach((pantalla) => {
                             pantalla.remove()
                         })
                         if (respuestaServidor?.error) {
@@ -2636,8 +2636,8 @@ const casaVitini = {
                         selectorMenusVolatiles.forEach((menuVolatilRenderizado) => {
                             menuVolatilRenderizado.remove()
                         })
-                        const selectoresErrorUI = [...document.querySelectorAll("[componente=errorUI]")]
-                        selectoresErrorUI.map((errorUI) => {
+                        const selectoresErrorUI = document.querySelectorAll("[componente=errorUI]")
+                        selectoresErrorUI.forEach((errorUI) => {
                             errorUI.remove()
                             document.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarMenusVolatiles)
                         })
@@ -2647,15 +2647,15 @@ const casaVitini = {
                         if (componente === "botonOpcionClientePool") {
                             return
                         }
-                        const selectorBotonMoverCliente = [...document.querySelectorAll("[componente=botonMoverCliente]")]
-                        selectorBotonMoverCliente.map(selectorBotonMoverCliente => {
+                        const selectorBotonMoverCliente = document.querySelectorAll("[componente=botonMoverCliente]")
+                        selectorBotonMoverCliente.forEach(selectorBotonMoverCliente => {
                             selectorBotonMoverCliente.remove()
                         })
                         document.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.transactor.ocultarSelectoresCambioHabitacion)
                     },
                     controlEspacioAlojamiento: () => {
                         const selectorMarcoAlojameinto = document.querySelector("[componente=marcoAlojamiento]")
-                        const selectorApartamentos = [...document.querySelectorAll("[componente=marcoAlojamiento] [apartamento]")]
+                        const selectorApartamentos = document.querySelectorAll("[componente=marcoAlojamiento] [apartamento]")
                         if (selectorApartamentos.length > 0) {
                             document.querySelector("[componente=infoSinAlojamiento]")?.remove()
                         } else {
@@ -2668,7 +2668,7 @@ const casaVitini = {
                     },
                     controlEspacioPernoctantesSinAlojamiento: () => {
                         const selectorMarcoPernoctantesSinAlojamiento = document.querySelector("[componente=espacioPernoctantesSinAlojamiento]")
-                        const selectorPernoctantes = [...selectorMarcoPernoctantesSinAlojamiento.querySelectorAll("[contenedor=pernoctante]")]
+                        const selectorPernoctantes = selectorMarcoPernoctantesSinAlojamiento.querySelectorAll("[contenedor=pernoctante]")
                         if (selectorPernoctantes.length > 0) {
                             selectorMarcoPernoctantesSinAlojamiento.classList.remove("elementoOcultoInicialmente")
                         } else {
@@ -2677,13 +2677,13 @@ const casaVitini = {
                     },
                     guardarNuevoClienteYAnadirloComoPernoctnante: async (habitacionUID) => {
                         const reserva = document.querySelector("[reserva]").getAttribute("reserva")
-                        const campos = [...document.querySelectorAll(`[habitacionUID="${habitacionUID}"] [formulario=AnadirPernoctante]`)]
+                        const campos = document.querySelectorAll(`[habitacionUID="${habitacionUID}"] [formulario=AnadirPernoctante]`)
                         const transaccion = {
                             zona: "administracion/reservas/crearClienteDesdeReservaYAnadirloAreserva",
                             reserva: Number(reserva),
                             habitacionUID: Number(habitacionUID)
                         }
-                        campos.map((campo) => {
+                        campos.forEach((campo) => {
                             const nombreCampo = campo.getAttribute("campo")
                             const datoCampo = campo.value
                             transaccion[nombreCampo] = datoCampo
@@ -2881,8 +2881,8 @@ const casaVitini = {
                         const buscadorUI = termino.target.getAttribute("buscadorUID")
                         const habitacionUID = termino.target.closest("[habitacionUID]").getAttribute("habitacionUID")
                         const instanciaUID_anadirPernoctanteUI = termino.target.closest("[instanciaUID]").getAttribute("instanciaUID")
-                        const selectorBuscadorRapido = [...document.querySelectorAll("[componente=buscadorRapidoCliente]")]
-                        selectorBuscadorRapido.map((buscadorRapidoRenderizado) => {
+                        const selectorBuscadorRapido = document.querySelectorAll("[componente=buscadorRapidoCliente]")
+                        selectorBuscadorRapido.forEach((buscadorRapidoRenderizado) => {
                             buscadorRapidoRenderizado.remove()
                         })
                         const terminoBusqueda = termino.target.value
@@ -2962,8 +2962,8 @@ const casaVitini = {
                         campoBuscadorClienteRapido.addEventListener("input", casaVitini.administracion.reservas.detallesReserva.UIComponentes.buscadorRapidoUI)
                         campoBuscadorClienteRapido.addEventListener("blur", () => {
                             clearTimeout(casaVitini.componentes.temporizador);
-                            let selectorBuscadorRapido = [...document.querySelectorAll("[componente=buscadorRapidoCliente]")]
-                            selectorBuscadorRapido.map((buscadorRapidoRenderizado) => {
+                            let selectorBuscadorRapido = document.querySelectorAll("[componente=buscadorRapidoCliente]")
+                            selectorBuscadorRapido.forEach((buscadorRapidoRenderizado) => {
                                 buscadorRapidoRenderizado.remove()
                             })
                         })
@@ -3089,20 +3089,20 @@ const casaVitini = {
                         botonOpcionesCliente.setAttribute("componente", "botonCancelarPropuesta")
                         botonOpcionesCliente.innerText = "Cancelar"
                         botonOpcionesCliente.addEventListener("click", () => {
-                            let selectorContenedoresPropuesta = [...document.querySelectorAll("[componente=contenedorPropuestaCliente]")]
-                            selectorContenedoresPropuesta.map((contenedorPropueda) => {
+                            let selectorContenedoresPropuesta = document.querySelectorAll("[componente=contenedorPropuestaCliente]")
+                            selectorContenedoresPropuesta.forEach((contenedorPropueda) => {
                                 contenedorPropueda.remove()
                             })
                             document.querySelector("[componente=buscadorRapido]").style.removeProperty("display")
-                            let selectorComponentesOcultables = [...document.querySelectorAll("[componente=botonOpcionClientePool]")]
-                            selectorComponentesOcultables.map((elementoOcultable) => {
+                            let selectorComponentesOcultables = document.querySelectorAll("[componente=botonOpcionClientePool]")
+                            selectorComponentesOcultables.forEach((elementoOcultable) => {
                                 elementoOcultable.style.removeProperty("display")
                             })
                         })
                         bloquePropuestaCambio.appendChild(botonOpcionesCliente)
                         document.querySelector("[componente=buscadorRapido]").style.display = "none"
-                        let selectorComponentesOcultables = [...document.querySelectorAll("[componente=botonOpcionClientePool]")]
-                        selectorComponentesOcultables.map((elementoOcultable) => {
+                        let selectorComponentesOcultables = document.querySelectorAll("[componente=botonOpcionClientePool]")
+                        selectorComponentesOcultables.forEach((elementoOcultable) => {
                             elementoOcultable.style.display = "none"
                         })
                         let selectorPasaporte = document.querySelector("[componente=opcionesCliente]")
@@ -3157,15 +3157,15 @@ const casaVitini = {
                         botonCancelar.setAttribute("componente", "botonCancelarPropuesta")
                         botonCancelar.innerText = "Cancelar 2"
                         botonCancelar.addEventListener("click", () => {
-                            const selectorComponentesOcultables = [...document.querySelectorAll("[componente=anadirPernoctanteUI]")]
-                            selectorComponentesOcultables.map((elementoOcultable) => {
+                            const selectorComponentesOcultables = document.querySelectorAll("[componente=anadirPernoctanteUI]")
+                            selectorComponentesOcultables.forEach((elementoOcultable) => {
                                 elementoOcultable.remove()
                             })
                         })
                         bloquePropuestaCambio.appendChild(botonCancelar)
                         //document.querySelector("[componente=buscadorRapido]").style.display = "none"
-                        const selectorComponentesOcultables = [...document.querySelectorAll("[componente=botonOpcionClientePool]")]
-                        selectorComponentesOcultables.map((elementoOcultable) => {
+                        const selectorComponentesOcultables = document.querySelectorAll("[componente=botonOpcionClientePool]")
+                        selectorComponentesOcultables.forEach((elementoOcultable) => {
                             elementoOcultable.style.display = "none"
                         })
                         const selectorBuscadorCliente = document.querySelector(`[instanciaUID="${instanciaUID_anadirPernoctanteUI}"]`)
@@ -3227,8 +3227,8 @@ const casaVitini = {
                         // botonOpcionesCliente.addEventListener("click", casaVitini.componentes.limpiarAdvertenciasInmersivas)
                         // bloquePropuestaCambio.appendChild(botonOpcionesCliente)
                         // //document.querySelector("[componente=buscadorRapido]").style.display = "none"
-                        // const selectorComponentesOcultables = [...document.querySelectorAll("[componente=contenedorPropuestaCliente]")]
-                        // selectorComponentesOcultables.map((elementoOcultable) => {
+                        // const selectorComponentesOcultables = document.querySelectorAll("[componente=contenedorPropuestaCliente]")
+                        // selectorComponentesOcultables.forEach((elementoOcultable) => {
                         //     elementoOcultable.style.display = "none"
                         // })
                         // contenidoAdvertenciaInmersiva.appendChild(bloquePropuestaCambio)
@@ -3620,8 +3620,8 @@ const casaVitini = {
                                 fechaCheckIn: fechaCheckIn
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(estadoReserva)
-                            const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_localProceso}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                            selectorPantallaDeCarga.map((pantalla) => {
+                            const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID_localProceso}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                            selectorPantallaDeCarga.forEach((pantalla) => {
                                 pantalla.remove()
                             })
                             const selectorInstanciaRaiz = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -3653,8 +3653,8 @@ const casaVitini = {
                                 pernoctanteUID: Number(pernoctanteUID),
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(estadoReserva)
-                            const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_localProceso}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                            selectorPantallaDeCarga.map((pantalla) => {
+                            const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID_localProceso}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                            selectorPantallaDeCarga.forEach((pantalla) => {
                                 pantalla.remove()
                             })
                             const selectorInstanciaRaiz = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -3894,8 +3894,8 @@ const casaVitini = {
                                 fechaCheckOut: fechaCheckOut
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(estadoReserva)
-                            const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_localProceso}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                            selectorPantallaDeCarga.map((pantalla) => {
+                            const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID_localProceso}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                            selectorPantallaDeCarga.forEach((pantalla) => {
                                 pantalla.remove()
                             })
                             const selectorInstanciaRaiz = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -3928,8 +3928,8 @@ const casaVitini = {
                                 pernoctanteUID: Number(pernoctanteUID),
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(estadoReserva)
-                            const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_localProceso}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                            selectorPantallaDeCarga.map((pantalla) => {
+                            const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID_localProceso}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                            selectorPantallaDeCarga.forEach((pantalla) => {
                                 pantalla.remove()
                             })
                             const selectorInstanciaRaiz = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -4657,7 +4657,7 @@ const casaVitini = {
                             return casaVitini.administracion.reservas.detallesReserva.controladorCategorias(metadatos)
                         } else {
                             const directoriosFusionLimpios = []
-                            granuladoURL.directorios.map((directorio, indice) => {
+                            granuladoURL.directorios.forEach((directorio, indice) => {
                                 if (indice <= posicionReservaUID) {
                                     directoriosFusionLimpios.push(directorio)
                                 }
@@ -4690,7 +4690,7 @@ const casaVitini = {
                         const granuladoURL = casaVitini.componentes.granuladorURL()
                         const posicionReservaUID = granuladoURL.directorios.findIndex(directorio => directorio === "reservas") + 1;
                         const directoriosFusionLimpios = []
-                        granuladoURL.directorios.map((directorio, indice) => {
+                        granuladoURL.directorios.forEach((directorio, indice) => {
                             if (indice <= posicionReservaUID) {
                                 directoriosFusionLimpios.push(directorio)
                             }
@@ -4738,8 +4738,8 @@ const casaVitini = {
                 limpiarMenusCategorias: () => {
                     casaVitini.componentes.limpiarAdvertenciasInmersivas();
                     document.querySelector("[componente=iconoLineaMiscelanea]").removeAttribute("style")
-                    const botonesCategoria = [...document.querySelectorAll("[categoriaReserva]")]
-                    botonesCategoria.map((boton) => {
+                    const botonesCategoria = document.querySelectorAll("[categoriaReserva]")
+                    botonesCategoria.forEach((boton) => {
                         boton.removeAttribute("style")
                         boton.setAttribute("estadoCategoria", "otra")
                     })
@@ -5001,7 +5001,7 @@ const casaVitini = {
                                     }
                                     espacioAlojamiento.appendChild(apartamentoComponenteUI)
                                 }
-                                pernoctantesSinHabitacion.pernoctantes.map((pernoctante) => {
+                                pernoctantesSinHabitacion.pernoctantes.forEach((pernoctante) => {
                                     const pernoctanteUID = pernoctante.pernoctanteUID
                                     const clienteUID = pernoctante.clienteUID
                                     const nombreCompleto = pernoctante.nombrePernoctante
@@ -5030,7 +5030,7 @@ const casaVitini = {
                                     contenedorPernoctantesSinHabitacion.appendChild(bloquePernoctantes)
                                     divPernoctantesSinAlojamiento.classList.remove("elementoOcultoInicialmente")
                                 })
-                                pernoctantesSinHabitacion.pernoctantesPool.map((pernoctante) => {
+                                pernoctantesSinHabitacion.pernoctantesPool.forEach((pernoctante) => {
                                     const pernoctanteUID = pernoctante["pernoctanteUID"]
                                     const clienteUID = pernoctante["clientePoolUID"]
                                     const nombreCompleto = pernoctante["nombreCompleto"]
@@ -5260,8 +5260,8 @@ const casaVitini = {
                         },
                         arranque_obsoleto: async () => {
                             document.body.style.overflow = "hidden";
-                            const advertenciasInmersivasRenderizadas = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            advertenciasInmersivasRenderizadas.map((advertencia) =>
+                            const advertenciasInmersivasRenderizadas = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                            advertenciasInmersivasRenderizadas.forEach((advertencia) =>
                                 advertencia.remove()
                             )
                             const advertenciaInmersivaIU = document.createElement("div")
@@ -5540,8 +5540,8 @@ const casaVitini = {
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                             if (respuestaServidor?.error) {
-                                const advertenciasInmersivasRenderizadas = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                advertenciasInmersivasRenderizadas.map((advertencia) =>
+                                const advertenciasInmersivasRenderizadas = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                advertenciasInmersivasRenderizadas.forEach((advertencia) =>
                                     advertencia.remove()
                                 )
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -5800,8 +5800,8 @@ const casaVitini = {
                                 }
                                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                                 if (respuestaServidor?.error) {
-                                    const advertenciasInmersivasRenderizadas = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                    advertenciasInmersivasRenderizadas.map((advertencia) =>
+                                    const advertenciasInmersivasRenderizadas = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                    advertenciasInmersivasRenderizadas.forEach((advertencia) =>
                                         advertencia.remove()
                                     )
                                     casaVitini.administracion.comportamiento_de_precios.portadaUI()
@@ -5908,8 +5908,8 @@ const casaVitini = {
                                     botonCancelar.classList.add("detallesReservaCancelarBoton")
                                     botonCancelar.innerText = "Cerrar detalles del enlace de pago"
                                     botonCancelar.addEventListener("click", () => {
-                                        let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                        selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                        let selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                        selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                             advertenciaInmersiva.remove()
                                         })
                                     })
@@ -6104,8 +6104,8 @@ const casaVitini = {
                             botonTransacciones.style.color = "white"
                             const contenedorDinamico = document.querySelector("[componente=contenedorDinamico]")
                             contenedorDinamico.innerHTML = null
-                            const advertenciasInmersivasRenderizadas = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            advertenciasInmersivasRenderizadas.map((advertencia) =>
+                            const advertenciasInmersivasRenderizadas = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                            advertenciasInmersivasRenderizadas.forEach((advertencia) =>
                                 advertencia.remove()
                             )
                             const instanciaUID_contenedorDinamicoTransacciones = casaVitini.componentes.codigoFechaInstancia()
@@ -6449,7 +6449,7 @@ const casaVitini = {
                                         })
                                         selectorReembolso.appendChild(botonCerrarOpcionesDeReembolso)
                                     }
-                                    deglosePorReembolso.map((detallesDelReembolso) => {
+                                    deglosePorReembolso.forEach((detallesDelReembolso) => {
                                         const reembolsoUID = detallesDelReembolso.reembolsoUID
                                         const plataformaDePago = detallesDelReembolso.plataformaDePago
                                         const cantidad = detallesDelReembolso.cantidad
@@ -6639,15 +6639,15 @@ const casaVitini = {
                                 const selectorContenedorCrearReembolso = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"] [contenedor=nuevoReembolso]`)
                                 selectorContenedorCrearReembolso.style.display = "flex"
                                 const mostrarContenedorPorTipo = (tipoReembolso) => {
-                                    const selectorTipoContenedores = [...selectorContenedorCrearReembolso.querySelectorAll("[contenedorTipoReembolso]")]
-                                    selectorTipoContenedores.map((contenedor) => {
+                                    const selectorTipoContenedores = selectorContenedorCrearReembolso.querySelectorAll("[contenedorTipoReembolso]")
+                                    selectorTipoContenedores.forEach((contenedor) => {
                                         contenedor.style.display = "none"
                                     })
                                     selectorContenedorCrearReembolso.querySelector(`[contenedorTipoReembolso="${tipoReembolso}"]`).removeAttribute("style")
                                 }
                                 const reseteaBotonesTipoReembolso = () => {
-                                    const selectorBotonesTipoReembolso = [...selectorContenedorCrearReembolso.querySelectorAll("[botonTipoReembolso]")]
-                                    selectorBotonesTipoReembolso.map((botonTipoReembolso) => {
+                                    const selectorBotonesTipoReembolso = selectorContenedorCrearReembolso.querySelectorAll("[botonTipoReembolso]")
+                                    selectorBotonesTipoReembolso.forEach((botonTipoReembolso) => {
                                         botonTipoReembolso.removeAttribute("style")
                                         botonTipoReembolso.removeAttribute("tipoReembolsoSeleccionado")
                                     })
@@ -6922,8 +6922,8 @@ const casaVitini = {
                                     palabra: palabra
                                 }
                                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                                const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUIDDetalleDelPago}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                                selectorPantallaDeCarga.map((pantalla) => {
+                                const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUIDDetalleDelPago}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                                selectorPantallaDeCarga.forEach((pantalla) => {
                                     pantalla.remove()
                                 })
                                 if (respuestaServidor?.error) {
@@ -6982,8 +6982,8 @@ const casaVitini = {
                                 const palabra = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"] [campo=palabra]`)?.value
                                 transaccion.palabra = palabra
                                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                                const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaDeCarga}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                                selectorPantallaDeCarga.map((pantalla) => {
+                                const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaDeCarga}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                                selectorPantallaDeCarga.forEach((pantalla) => {
                                     pantalla.remove()
                                 })
                                 if (respuestaServidor?.error) {
@@ -7007,8 +7007,8 @@ const casaVitini = {
                                 const mostrarContenedorTipoPago = (opcion) => {
                                     const selectorInfo = document.querySelector("[componente=advertenciaInmersiva] [componente=infoDesplegable]")
                                     selectorInfo?.remove()
-                                    const selectorTodosLosContenedorTipoPago = [...document.querySelectorAll(`[componente=advertenciaInmersiva] [contenedorTipoPago]`)]
-                                    selectorTodosLosContenedorTipoPago.map((contenedorTipoPago) => {
+                                    const selectorTodosLosContenedorTipoPago = document.querySelectorAll(`[componente=advertenciaInmersiva] [contenedorTipoPago]`)
+                                    selectorTodosLosContenedorTipoPago.forEach((contenedorTipoPago) => {
                                         contenedorTipoPago.removeAttribute("style")
                                         contenedorTipoPago.removeAttribute("estado")
                                     })
@@ -7135,8 +7135,8 @@ const casaVitini = {
                                     })
                                 }
                                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                                const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaEspera}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                                selectorPantallaDeCarga.map((pantalla) => {
+                                const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaEspera}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                                selectorPantallaDeCarga.forEach((pantalla) => {
                                     pantalla.remove()
                                 })
                                 if (respuestaServidor?.error) {
@@ -7336,8 +7336,8 @@ const casaVitini = {
                                     reservaUID: Number(reservaUID)
                                 }
                                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                                const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaDeCarga}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                                selectorPantallaDeCarga.map((pantalla) => {
+                                const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaDeCarga}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                                selectorPantallaDeCarga.forEach((pantalla) => {
                                     pantalla.remove()
                                 })
                                 if (respuestaServidor?.error) {
@@ -7351,7 +7351,7 @@ const casaVitini = {
                                     document.body.removeAttribute("style")
                                     document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"]`)?.remove()
 
-                                    
+
                                     const contenedorTransacciones = document.querySelector(`[contenedorID=transacciones][instanciaUID="${instanciaUID_contenedorDinamicoTransacciones}"]`)
                                     const listaDePagos = contenedorTransacciones.querySelector(`[contenedor=listaDePagos]`)
                                     listaDePagos.querySelector(`[pagoUID="${pagoUID}"]`)?.remove()
@@ -7580,7 +7580,7 @@ const casaVitini = {
                             document.querySelector("main").appendChild(advertenciaInmersivaIU)
                         },
                         seleccionarOpcionBloqueoApartametos: (opcion) => {
-                            let selectorOpciones = [...document.querySelectorAll("[componente=cancelarReservaOpcionBloqueo]")]
+                            let selectorOpciones = document.querySelectorAll("[componente=cancelarReservaOpcionBloqueo]")
                             let opcionBloqueo = opcion.target
                             let botonCancelar = document.querySelector("[componente=botonConfirmarCancelarReserva]")
                             if (opcionBloqueo.getAttribute("estado") === "activo") {
@@ -7590,7 +7590,7 @@ const casaVitini = {
                                 opcionBloqueo.removeAttribute("style")
                                 return
                             }
-                            selectorOpciones.map((opcionBloqueo) => {
+                            selectorOpciones.forEach((opcionBloqueo) => {
                                 opcionBloqueo.removeAttribute("style")
                                 opcionBloqueo.removeAttribute("estado")
                             })
@@ -7617,7 +7617,7 @@ const casaVitini = {
                             }
 
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                            const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaEspera}"]`)]
+                            const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaEspera}"]`)
                             if (!selectorPantallaDeCarga) {
                                 return
                             }
@@ -7631,8 +7631,8 @@ const casaVitini = {
                             }
                             if (respuestaServidor?.ok) {
                                 document.querySelector("[dataReserva=estado]").innerText = "Cancelada"
-                                const selectorBotonesInvisibles = [...document.querySelectorAll("[estadoInvisible=Cancelada]")]
-                                selectorBotonesInvisibles.map((boton) => {
+                                const selectorBotonesInvisibles = document.querySelectorAll("[estadoInvisible=Cancelada]")
+                                selectorBotonesInvisibles.forEach((boton) => {
                                     boton.classList.add("estadoInicialInvisible")
                                 })
                                 const selectorAdvertenciaInmersiva = document.querySelector("[componente=advertenciaInmersiva]")
@@ -7645,8 +7645,8 @@ const casaVitini = {
                                 boton.classList.add("detallesReservaCancelarBoton")
                                 boton.innerText = "Aceptar y volver a la reserva ahora cancelada"
                                 boton.addEventListener("click", () => {
-                                    let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                    selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                    let selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                    selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                         advertenciaInmersiva.remove()
                                     })
                                 })
@@ -7719,8 +7719,8 @@ const casaVitini = {
                                     clave: clave?.value
                                 }
                                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                                const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                                selectorPantallaDeCarga.map((pantalla) => {
+                                const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                                selectorPantallaDeCarga.forEach((pantalla) => {
                                     pantalla.remove()
                                 })
                                 if (respuestaServidor?.error) {
@@ -7743,7 +7743,7 @@ const casaVitini = {
                             const posicionReservaUID = granuladoURL.directorios.findIndex(directorio => directorio === "reservas") + 1;
                             const reservaUID = granuladoURL.directorios[posicionReservaUID]
                             const directoriosFusionLimpios = []
-                            granuladoURL.directorios.map((directorio, indice) => {
+                            granuladoURL.directorios.forEach((directorio, indice) => {
                                 if (indice <= posicionReservaUID) {
                                     directoriosFusionLimpios.push(directorio)
                                 }
@@ -8255,15 +8255,15 @@ const casaVitini = {
                             const instanciaUID = metadatos.instanciaUID
                             const instanciaUIDDetalleDelPago = metadatos.instanciaUIDDetalleDelPago
                             const mostrarContenedorPorTipo = (tipoReembolso) => {
-                                const selectorTipoContenedores = [...document.querySelectorAll("[componenteUID=reembolsoUI] [contenedorTipoReembolso]")]
-                                selectorTipoContenedores.map((contenedor) => {
+                                const selectorTipoContenedores = document.querySelectorAll("[componenteUID=reembolsoUI] [contenedorTipoReembolso]")
+                                selectorTipoContenedores.forEach((contenedor) => {
                                     contenedor.style.display = "none"
                                 })
                                 document.querySelector(`[componenteUID=reembolsoUI] [contenedorTipoReembolso="${tipoReembolso}"]`).removeAttribute("style")
                             }
                             const reseteaBotonesTipoReembolso = () => {
-                                const selectorBotonesTipoReembolso = [...document.querySelectorAll("[componenteUID=reembolsoUI] [botonTipoReembolso]")]
-                                selectorBotonesTipoReembolso.map((botonTipoReembolso) => {
+                                const selectorBotonesTipoReembolso = document.querySelectorAll("[componenteUID=reembolsoUI] [botonTipoReembolso]")
+                                selectorBotonesTipoReembolso.forEach((botonTipoReembolso) => {
                                     botonTipoReembolso.removeAttribute("style")
                                     botonTipoReembolso.removeAttribute("tipoReembolsoSeleccionado")
                                 })
@@ -8440,15 +8440,15 @@ const casaVitini = {
                             contenedorDinamicoReembolso.appendChild(contenedorEmitirReembolso)
                         },
                         reseteaBotones: () => {
-                            const selectorBotones = [...document.querySelectorAll("[componenteUID=reembolsoUI] [boton]")]
-                            selectorBotones.map((boton) => {
+                            const selectorBotones = document.querySelectorAll("[componenteUID=reembolsoUI] [boton]")
+                            selectorBotones.forEach((boton) => {
                                 boton.removeAttribute("style")
                             })
                         }
                     },
                     desplegarUI: async () => {
-                        const advertenciasInmersivasRenderizadas = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                        advertenciasInmersivasRenderizadas.map((advertencia) =>
+                        const advertenciasInmersivasRenderizadas = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                        advertenciasInmersivasRenderizadas.forEach((advertencia) =>
                             advertencia.remove()
                         )
                         const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
@@ -8529,8 +8529,8 @@ const casaVitini = {
                             botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
                             botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion del enlace"
                             botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                                let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                let selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                     advertenciaInmersiva.remove()
                                 })
                             })
@@ -8548,8 +8548,8 @@ const casaVitini = {
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                             if (respuestaServidor?.error) {
-                                const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                     advertenciaInmersiva.remove()
                                 })
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -8599,8 +8599,8 @@ const casaVitini = {
                         const palabra = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"] [campo=palabra]`)?.value
                         transaccion.palabra = palabra
                         const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                        const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                        selectorPantallaDeCarga.map((pantalla) => {
+                        const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                        selectorPantallaDeCarga.forEach((pantalla) => {
                             pantalla.remove()
                         })
                         if (respuestaServidor?.error) {
@@ -8837,8 +8837,8 @@ const casaVitini = {
                                 const alturaDinamica = window.scrollY + entrada.target.getBoundingClientRect().bottom;
                                 const horizontalDinamico = entrada.target.offsetLeft;
                                 const anchoDinamico = entrada.target.getBoundingClientRect().width;
-                                const selectorListaResultadosBuscadorRapidoRenderiaza = [...document.querySelectorAll("[componente=buscadorRapidoCliente]")]
-                                selectorListaResultadosBuscadorRapidoRenderiaza.map((listaRenderizada) => {
+                                const selectorListaResultadosBuscadorRapidoRenderiaza = document.querySelectorAll("[componente=buscadorRapidoCliente]")
+                                selectorListaResultadosBuscadorRapidoRenderiaza.forEach((listaRenderizada) => {
                                     listaRenderizada.remove()
                                 })
                                 const campoVacio = entrada.target.value.length
@@ -8895,7 +8895,7 @@ const casaVitini = {
                                 }
                                 listaBuscadorRenderizada.innerHTML = null
                                 const resultadosClientes = respuestaServidor?.clientes
-                                resultadosClientes.map((clienteEncontrado) => {
+                                resultadosClientes.forEach((clienteEncontrado) => {
                                     const cliente = clienteEncontrado.uid
                                     const nombre = clienteEncontrado.nombre
                                     const primerApellido = clienteEncontrado.primerApellido
@@ -9049,12 +9049,12 @@ const casaVitini = {
                                 casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
                                 const pantallaDeCargaRenderizada = document.querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
                                 const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
-                                const campos = [...document.querySelector(`[instanciaUID="${instanciaUID}"] [formulario=nuevoCliente]`).querySelectorAll("[campo]")]
+                                const campos = document.querySelector(`[instanciaUID="${instanciaUID}"] [formulario=nuevoCliente]`).querySelectorAll("[campo]")
                                 const metadatos = {
                                     zona: "administracion/reservas/gestionTitular/crearTitular",
                                     reservaUID: Number(reservaUID)
                                 }
-                                campos.map((campo) => {
+                                campos.forEach((campo) => {
                                     const nombreCampo = campo.getAttribute("campo")
                                     const valorCampo = campo.value
                                     metadatos[nombreCampo] = valorCampo
@@ -9518,8 +9518,8 @@ const casaVitini = {
                                 const alturaDinamica = window.scrollY + e.target.getBoundingClientRect().bottom;
                                 const anchoDinamico = e.target.getBoundingClientRect().width;
                                 const horizontalDinamicoJerarquico = casaVitini.componentes.medirPorJerarquiaDom.horizontal(e.target);
-                                const selectorListaResultadosBuscadorRapidoRenderiaza = [...document.querySelectorAll("[componente=buscadorRapidoCliente]")]
-                                selectorListaResultadosBuscadorRapidoRenderiaza.map((listaRenderizada) => {
+                                const selectorListaResultadosBuscadorRapidoRenderiaza = document.querySelectorAll("[componente=buscadorRapidoCliente]")
+                                selectorListaResultadosBuscadorRapidoRenderiaza.forEach((listaRenderizada) => {
                                     listaRenderizada.remove()
                                 })
                                 const campoVacio = e.target.value.length
@@ -9572,7 +9572,7 @@ const casaVitini = {
                                 }
                                 listaBuscadorRenderizada.innerHTML = null
                                 const resultadosClientes = respuestaServidor?.clientes
-                                resultadosClientes.map((clienteEncontrado) => {
+                                resultadosClientes.forEach((clienteEncontrado) => {
                                     const cliente = clienteEncontrado.uid
                                     const nombre = clienteEncontrado.nombre
                                     const primerApellido = clienteEncontrado.primerApellido
@@ -9723,12 +9723,12 @@ const casaVitini = {
                                 casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
                                 const pantallaDeCargaRenderizada = document.querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
                                 const reservaUID = document.querySelector("[reserva]").getAttribute("reserva")
-                                const campos = [...document.querySelector(`[instanciaUID="${instanciaUID}"] [formulario=nuevoCliente]`).querySelectorAll("[campo]")]
+                                const campos = document.querySelector(`[instanciaUID="${instanciaUID}"] [formulario=nuevoCliente]`).querySelectorAll("[campo]")
                                 const metadatos = {
                                     zona: "administracion/reservas/gestionTitular/crearTitular",
                                     reservaUID: Number(reservaUID)
                                 }
-                                campos.map((campo) => {
+                                campos.forEach((campo) => {
                                     const nombreCampo = campo.getAttribute("campo")
                                     const valorCampo = campo.value
                                     metadatos[nombreCampo] = valorCampo
@@ -9966,7 +9966,7 @@ const casaVitini = {
                                 clienteUID: Number(clienteUID)
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                            const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaPropuestaConfirmada}"]`)]
+                            const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID_pantallaPropuestaConfirmada}"]`)
                             if (!selectorPantallaDeCarga) {
                                 return
                             }
@@ -10309,8 +10309,8 @@ const casaVitini = {
                             clave: clave?.value
                         }
                         const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
-                        const selectorPantallaDeCarga = [...document.querySelectorAll(`[instanciaUID="${instanciaUID}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)]
-                        selectorPantallaDeCarga.map((pantalla) => {
+                        const selectorPantallaDeCarga = document.querySelectorAll(`[instanciaUID="${instanciaUID}"][pantallaSuperpuesta=pantallaCargaSuperpuesta]`)
+                        selectorPantallaDeCarga.forEach((pantalla) => {
                             pantalla.remove()
                         })
                         if (respuestaServidor?.error) {
@@ -10344,8 +10344,8 @@ const casaVitini = {
             arranque: () => {
                 const main = document.querySelector("main")
                 main.setAttribute("zonaCSS", "administracion")
-                const botones = [...document.querySelectorAll("[componente=botonAdministracion]")]
-                botones.map((boton) => {
+                const botones = document.querySelectorAll("[componente=botonAdministracion]")
+                botones.forEach((boton) => {
                     boton.addEventListener("click", (boton) => {
                         boton.preventDefault()
                         const vista = boton.target.getAttribute("vista")
@@ -11072,8 +11072,8 @@ const casaVitini = {
             arranque: async () => {
                 const marcoElastico = document.querySelector("[componente=marcoElastico]")
                 marcoElastico.style.gap = "4px"
-                const botones = [...document.querySelectorAll("[componente=botonConfiguracion]")]
-                botones.map((boton) => {
+                const botones = document.querySelectorAll("[componente=botonConfiguracion]")
+                botones.forEach((boton) => {
                     boton.addEventListener("click", (boton) => {
                         boton.preventDefault()
                         const vista = boton.target.closest("[vista]").getAttribute("vista")
@@ -11157,17 +11157,17 @@ const casaVitini = {
                     }
                 },
                 cancelarCambios: () => {
-                    const campos = [...document.querySelectorAll("[campo]")]
-                    campos.map((campo) => {
+                    const campos = document.querySelectorAll("[campo]")
+                    campos.forEach((campo) => {
                         campo.value = campo.getAttribute("valorInicial")
                     })
                     const contenedorBotones = document.querySelector("[contenedor=botones]")
                     contenedorBotones.removeAttribute("style")
                 },
                 controlCampo: () => {
-                    const campos = [...document.querySelectorAll("[campo]")]
+                    const campos = document.querySelectorAll("[campo]")
                     let estadoFinal = null
-                    campos.map((campo) => {
+                    campos.forEach((campo) => {
                         if (campo.value !== campo.getAttribute("valorInicial")) {
                             estadoFinal = "visible"
                         }
@@ -11187,11 +11187,11 @@ const casaVitini = {
                         mensaje: mensaje
                     }
                     casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                    const campos = [...document.querySelectorAll("[campo]")]
+                    const campos = document.querySelectorAll("[campo]")
                     const transacccion = {
                         zona: "administracion/configuracion/zonaHoraria/guardarConfiguracion"
                     }
-                    campos.map((campo) => {
+                    campos.forEach((campo) => {
                         const nombreCampo = campo.getAttribute("campo")
                         const valorCampo = campo.value
                         transacccion[nombreCampo] = valorCampo
@@ -11207,7 +11207,7 @@ const casaVitini = {
                     if (respuestaServidor?.ok) {
                         const contenedorBotones = document.querySelector("[contenedor=botones]")
                         contenedorBotones.removeAttribute("style")
-                        campos.map((campo) => {
+                        campos.forEach((campo) => {
                             campo.setAttribute("valorInicial", campo.value)
                         })
                     }
@@ -11308,17 +11308,17 @@ const casaVitini = {
                     }
                 },
                 cancelarCambios: () => {
-                    const campos = [...document.querySelectorAll("[campo]")]
-                    campos.map((campo) => {
+                    const campos = document.querySelectorAll("[campo]")
+                    campos.forEach((campo) => {
                         campo.value = campo.getAttribute("valorInicial")
                     })
                     const contenedorBotones = document.querySelector("[contenedor=botones]")
                     contenedorBotones.removeAttribute("style")
                 },
                 controlCampo: () => {
-                    const campos = [...document.querySelectorAll("[campo]")]
+                    const campos = document.querySelectorAll("[campo]")
                     let estadoFinal = null
-                    campos.map((campo) => {
+                    campos.forEach((campo) => {
                         if (campo.value !== campo.getAttribute("valorInicial")) {
                             estadoFinal = "visible"
                         }
@@ -11338,11 +11338,11 @@ const casaVitini = {
                         mensaje: mensaje
                     }
                     casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                    const campos = [...document.querySelectorAll("[campo]")]
+                    const campos = document.querySelectorAll("[campo]")
                     const transacccion = {
                         zona: "administracion/configuracion/horaDeEntradaSalida/guardarConfiguracion"
                     }
-                    campos.map((campo) => {
+                    campos.forEach((campo) => {
                         const nombreCampo = campo.getAttribute("campo")
                         const valorCampo = campo.value
                         transacccion[nombreCampo] = valorCampo
@@ -11358,7 +11358,7 @@ const casaVitini = {
                     if (respuestaServidor?.ok) {
                         const contenedorBotones = document.querySelector("[contenedor=botones]")
                         contenedorBotones.removeAttribute("style")
-                        campos.map((campo) => {
+                        campos.forEach((campo) => {
                             campo.setAttribute("valorInicial", campo.value)
                         })
                     }
@@ -11475,17 +11475,17 @@ const casaVitini = {
                 }
             },
             cancelarCambios: () => {
-                const campos = [...document.querySelectorAll("[campo]")]
-                campos.map((campo) => {
+                const campos = document.querySelectorAll("[campo]")
+                campos.forEach((campo) => {
                     campo.value = campo.getAttribute("valorInicial")
                 })
                 const contenedorBotones = document.querySelector("[contenedor=botones]")
                 contenedorBotones.removeAttribute("style")
             },
             controlCampo: () => {
-                const campos = [...document.querySelectorAll("[campo]")]
+                const campos = document.querySelectorAll("[campo]")
                 let estadoFinal = null
-                campos.map((campo) => {
+                campos.forEach((campo) => {
                     if (campo.value !== campo.getAttribute("valorInicial")) {
                         estadoFinal = "visible"
                     }
@@ -11498,11 +11498,11 @@ const casaVitini = {
                 }
             },
             guardarCambios: async () => {
-                const campos = [...document.querySelectorAll("[campo]")]
+                const campos = document.querySelectorAll("[campo]")
                 const transacccion = {
                     zona: "administracion/configuracion/guardarConfiguracion"
                 }
-                campos.map((campo) => {
+                campos.forEach((campo) => {
                     const nombreCampo = campo.getAttribute("campo")
                     const valorCampo = campo.value
                     transacccion[nombreCampo] = valorCampo
@@ -11515,7 +11515,7 @@ const casaVitini = {
                 if (respuestaServidor?.ok) {
                     const contenedorBotones = document.querySelector("[contenedor=botones]")
                     contenedorBotones.removeAttribute("style")
-                    campos.map((campo) => {
+                    campos.forEach((campo) => {
                         campo.setAttribute("valorInicial", campo.value)
                     })
                 }
@@ -11831,7 +11831,7 @@ const casaVitini = {
                             tipoApartamentoUI.add(opcion);
                         }
                         if (apartamentosArray.length > 0) {
-                            apartamentosArray.map((detallesApartamento) => {
+                            apartamentosArray.forEach((detallesApartamento) => {
                                 const apartamentoIDV = detallesApartamento.apartamentoIDV
                                 const aparatmentoUI = detallesApartamento.apartamentoUI
                                 const opcion = document.createElement("option");
@@ -12039,17 +12039,17 @@ const casaVitini = {
                     }
                 },
                 cancelarCambios: () => {
-                    const campos = [...document.querySelectorAll("[campo]")]
-                    campos.map((campo) => {
+                    const campos = document.querySelectorAll("[campo]")
+                    campos.forEach((campo) => {
                         campo.value = campo.getAttribute("valorInicial")
                     })
                     const contenedorBotones = document.querySelector("[contenedor=botones]")
                     contenedorBotones.removeAttribute("style")
                 },
                 controlCampo: () => {
-                    const campos = [...document.querySelectorAll("[campo]")]
+                    const campos = document.querySelectorAll("[campo]")
                     let estadoFinal = null
-                    campos.map((campo) => {
+                    campos.forEach((campo) => {
                         if (campo.value !== campo.getAttribute("valorInicial")) {
                             estadoFinal = "visible"
                         }
@@ -12069,11 +12069,11 @@ const casaVitini = {
                         mensaje: mensaje
                     }
                     casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                    const campos = [...document.querySelectorAll("[campo]")]
+                    const campos = document.querySelectorAll("[campo]")
                     const transacccion = {
                         zona: "administracion/configuracion/limitesReservaPublica/guardarConfiguracion"
                     }
-                    campos.map((campo) => {
+                    campos.forEach((campo) => {
                         const nombreCampo = campo.getAttribute("campo")
                         const valorCampo = campo.value
                         transacccion[nombreCampo] = valorCampo
@@ -12089,7 +12089,7 @@ const casaVitini = {
                     if (respuestaServidor?.ok) {
                         const contenedorBotones = document.querySelector("[contenedor=botones]")
                         contenedorBotones.removeAttribute("style")
-                        campos.map((campo) => {
+                        campos.forEach((campo) => {
                             campo.setAttribute("valorInicial", campo.value)
                         })
                     }
@@ -12175,17 +12175,17 @@ const casaVitini = {
                     }
                 },
                 cancelarCambios: () => {
-                    const campos = [...document.querySelectorAll("[campo]")]
-                    campos.map((campo) => {
+                    const campos = document.querySelectorAll("[campo]")
+                    campos.forEach((campo) => {
                         campo.value = campo.getAttribute("valorInicial")
                     })
                     const contenedorBotones = document.querySelector("[contenedor=botones]")
                     contenedorBotones.removeAttribute("style")
                 },
                 controlCampo: () => {
-                    const campos = [...document.querySelectorAll("[campo]")]
+                    const campos = document.querySelectorAll("[campo]")
                     let estadoFinal = null
-                    campos.map((campo) => {
+                    campos.forEach((campo) => {
                         if (campo.value !== campo.getAttribute("valorInicial")) {
                             estadoFinal = "visible"
                         }
@@ -12467,17 +12467,17 @@ const casaVitini = {
 
                 },
                 cancelarCambios: () => {
-                    const campos = [...document.querySelectorAll("[campo]")]
-                    campos.map((campo) => {
+                    const campos = document.querySelectorAll("[campo]")
+                    campos.forEach((campo) => {
                         campo.value = campo.getAttribute("valorInicial")
                     })
                     const contenedorBotones = document.querySelector("[contenedor=botones]")
                     contenedorBotones.removeAttribute("style")
                 },
                 controlCampo: () => {
-                    const campos = [...document.querySelectorAll("[campo]")]
+                    const campos = document.querySelectorAll("[campo]")
                     let estadoFinal = null
-                    campos.map((campo) => {
+                    campos.forEach((campo) => {
                         if (campo.value !== campo.getAttribute("valorInicial")) {
                             estadoFinal = "visible"
                         }
@@ -12868,7 +12868,7 @@ const casaVitini = {
                     selectorBotonCrearCliente.addEventListener("click", casaVitini.administracion.clientes.nuevo.crearCliente)
                 },
                 crearCliente: async () => {
-                    const selectorCampos = [...document.querySelectorAll("[campo]")]
+                    const selectorCampos = document.querySelectorAll("[campo]")
                     const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
                     const mensaje = "Creando nuevo cliente..."
                     const datosPantallaSuperpuesta = {
@@ -12879,7 +12879,7 @@ const casaVitini = {
                     const transaccion = {
                         zona: "administracion/clientes/crearCliente"
                     }
-                    selectorCampos.map((campo) => {
+                    selectorCampos.forEach((campo) => {
                         const nombreCampo = campo.getAttribute("campo")
                         const datosCampo = campo.value
                         transaccion[nombreCampo] = datosCampo
@@ -13537,8 +13537,8 @@ const casaVitini = {
                     return casaVitini.administracion.clientes.detallesCliente.mostrarReservasDelClienteResueltas(transacccion)
                 },
                 editar: () => {
-                    let camposLectura = [...document.querySelectorAll("[componenteDetalle]")]
-                    camposLectura.map((campo) => {
+                    let camposLectura = document.querySelectorAll("[componenteDetalle]")
+                    camposLectura.forEach((campo) => {
                         let datoCampo = campo.innerText
                         let idCampo = campo.getAttribute("componenteDetalle")
                         campo.style.display = "none"
@@ -13561,12 +13561,12 @@ const casaVitini = {
                     document.querySelector("[boton=guardarCambios]").classList.remove("estadoInicialInvisible")
                 },
                 dejarDeEditar: () => {
-                    let camposEditables = [...document.querySelectorAll("[componenteEditable]")]
-                    camposEditables.map((campo) => {
+                    let camposEditables = document.querySelectorAll("[componenteEditable]")
+                    camposEditables.forEach((campo) => {
                         campo.remove()
                     })
-                    let camposLectura = [...document.querySelectorAll("[componenteDetalle]")]
-                    camposLectura.map((campo) => {
+                    let camposLectura = document.querySelectorAll("[componenteDetalle]")
+                    camposLectura.forEach((campo) => {
                         campo.removeAttribute("style")
                     })
                     document.querySelector("[boton=editar]").classList.remove("estadoInicialInvisible")
@@ -13575,13 +13575,13 @@ const casaVitini = {
                     document.querySelector("[boton=guardarCambios]").classList.add("estadoInicialInvisible")
                 },
                 guardarCambios: async () => {
-                    const campoEditable = [...document.querySelectorAll("[componenteEditable]")]
+                    const campoEditable = document.querySelectorAll("[componenteEditable]")
                     const clienteUID = document.querySelector("[clienteUID]").getAttribute("clienteUID")
                     const datosParaActualizar = {
                         zona: "administracion/clientes/modificarCliente",
                         cliente: Number(clienteUID)
                     }
-                    campoEditable.map((campo) => {
+                    campoEditable.forEach((campo) => {
                         const campoID = campo.getAttribute("componenteEditable")
                         const campoDato = campo.value
                         const campoEditable = document.querySelector(`[componenteEditable=${campoID}]`)
@@ -13601,8 +13601,8 @@ const casaVitini = {
                             selectorCampoLectura.innerText = dato
                             selectorCampoLectura.removeAttribute("style")
                         }
-                        const camposEditables = [...document.querySelectorAll("[componenteEditable]")]
-                        camposEditables.map((campo) => {
+                        const camposEditables = document.querySelectorAll("[componenteEditable]")
+                        camposEditables.forEach((campo) => {
                             campo.remove()
                         })
                         document.querySelector("[boton=editar]").classList.remove("estadoInicialInvisible")
@@ -13630,7 +13630,7 @@ const casaVitini = {
                         document.querySelector("main").appendChild(pantallaInmersiva)
                     },
                     confirmar: async () => {
-                        const campoEditable = [...document.querySelectorAll("[componenteEditable]")]
+                        const campoEditable = document.querySelectorAll("[componenteEditable]")
                         const clienteUID = document.querySelector("[clienteUID]").getAttribute("clienteUID")
                         const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
                         const metadatosPantallaCarga = {
@@ -13643,7 +13643,7 @@ const casaVitini = {
                             zona: "administracion/clientes/eliminar",
                             clienteUID: Number(clienteUID)
                         }
-                        campoEditable.map((campo) => {
+                        campoEditable.forEach((campo) => {
                             const campoID = campo.getAttribute("componenteEditable")
                             const campoDato = campo.value
                             const campoEditable = document.querySelector(`[componenteEditable=${campoID}]`)
@@ -13670,8 +13670,8 @@ const casaVitini = {
                                 selectorCampoLectura.innerText = dato
                                 selectorCampoLectura.removeAttribute("style")
                             }
-                            const camposEditables = [...document.querySelectorAll("[componenteEditable]")]
-                            camposEditables.map((campo) => {
+                            const camposEditables = document.querySelectorAll("[componenteEditable]")
+                            camposEditables.forEach((campo) => {
                                 campo.remove()
                             })
                             document.querySelector("[boton=editar]").classList.remove("estadoInicialInvisible")
@@ -13765,7 +13765,7 @@ const casaVitini = {
                     bloqueGlobalApartamentos.appendChild(contenedorTituloYOpciones)
                     let bloqueHorizontal = document.createElement("div")
                     bloqueHorizontal.classList.add("precioEImpuestosBloqueHorizotnal")
-                    preciosApartmentos.map((detalleApartamento) => {
+                    preciosApartmentos.forEach((detalleApartamento) => {
                         let uidPrecioApartamento = detalleApartamento.uid
                         let apartamentoIDV = detalleApartamento.apartamento
                         let precio = detalleApartamento.precio
@@ -13964,7 +13964,7 @@ const casaVitini = {
                     tituloImpuesto.classList.add("preciosEImpuestosDetalleApartamentoDetallesTituloImpuesto")
                     tituloImpuesto.innerText = "Impuestos Aplicados"
                     bloqueDetalles.appendChild(tituloImpuesto)
-                    impuestos.map((detalleImpuesto) => {
+                    impuestos.forEach((detalleImpuesto) => {
                         let nombreImpuesto = detalleImpuesto.nombreImpuesto
                         let tipoImpositivo = detalleImpuesto.tipoImpositivo
                         let tipoValor = detalleImpuesto.tipoValor
@@ -14072,7 +14072,7 @@ const casaVitini = {
                     selectorTotalBrutoPorDia.style.color = "green"
                     selectorTotalBrutoPorDia.innerText = totalBrutoPordia + " (Simulacíon)"
                     let impuestosPorPropuesta = propuestaDetalles.impuestos
-                    impuestosPorPropuesta.map((impuestoPropuesta) => {
+                    impuestosPorPropuesta.forEach((impuestoPropuesta) => {
                         let nombreImpuesto = impuestoPropuesta.nombreImpuesto
                         let totalImpuesto = impuestoPropuesta.totalImpuesto
                         let selectorTotalImpuesto = document.querySelector(`[componentePrecio="${nombreImpuesto}"]`)
@@ -14126,7 +14126,7 @@ const casaVitini = {
                     selectorTotalBrutoPorDia.removeAttribute("style")
                     selectorTotalBrutoPorDia.innerText = totalBrutoPordia
                     let impuestosPorPropuesta = propuestaDetalles.impuestos
-                    impuestosPorPropuesta.map((impuestoPropuesta) => {
+                    impuestosPorPropuesta.forEach((impuestoPropuesta) => {
                         let nombreImpuesto = impuestoPropuesta.nombreImpuesto
                         let totalImpuesto = impuestoPropuesta.totalImpuesto
                         let selectorTotalImpuesto = document.querySelector(`[componentePrecio="${nombreImpuesto}"]`)
@@ -14162,7 +14162,7 @@ const casaVitini = {
                     let totalBrutoPordiaUI = document.querySelector("[componentePrecio=totalBrutoPordia]")
                     totalBrutoPordiaUI.removeAttribute("style")
                     totalBrutoPordiaUI.innerText = totalBrutoPordia
-                    impuestos.map((detalleImpuesto) => {
+                    impuestos.forEach((detalleImpuesto) => {
                         let nombreImpuesto = detalleImpuesto.nombreImpuesto
                         let totalImpuesto = detalleImpuesto.totalImpuesto
                         let selectorTotalImpuesto = document.querySelector(`[componentePrecio="${nombreImpuesto}"]`)
@@ -14204,7 +14204,7 @@ const casaVitini = {
                     selectorTotalBrutoPorDia.removeAttribute("style")
                     selectorTotalBrutoPorDia.innerText = totalBrutoPordia
                     let impuestosPorPropuesta = propuestaDetalles.impuestos
-                    impuestosPorPropuesta.map((impuestoPropuesta) => {
+                    impuestosPorPropuesta.forEach((impuestoPropuesta) => {
                         let nombreImpuesto = impuestoPropuesta.nombreImpuesto
                         let totalImpuesto = impuestoPropuesta.totalImpuesto
                         let selectorTotalImpuesto = document.querySelector(`[componentePrecio="${nombreImpuesto}"]`)
@@ -14652,8 +14652,8 @@ const casaVitini = {
                         estadoUI: "Desactivado"
                     }
                 ]
-                const selectorDatoLectura = [...document.querySelectorAll("[detalleImpuesto]")]
-                selectorDatoLectura.map((detalleImpuesto) => {
+                const selectorDatoLectura = document.querySelectorAll("[detalleImpuesto]")
+                selectorDatoLectura.forEach((detalleImpuesto) => {
                     detalleImpuesto.style.display = "none"
                     const nombreDetalles = detalleImpuesto.getAttribute("detalleImpuesto")
                     const datoDetalle = detalleImpuesto.innerText
@@ -14677,7 +14677,7 @@ const casaVitini = {
                         contenedorOpciones.setAttribute("componente", "campoEditable")
                         contenedorOpciones.setAttribute("campoEditable", nombreDetalles)
                         contenedorOpciones.setAttribute("datoActual", tipoValorIDV_actual)
-                        opcionesTipoValor.map((opcionTipoValor) => {
+                        opcionesTipoValor.forEach((opcionTipoValor) => {
                             const tipoValorIDV = opcionTipoValor.tipoValorIDV
                             const tipoValorUI = opcionTipoValor.tipoValorUI
                             const opcion = document.createElement("option");
@@ -14701,7 +14701,7 @@ const casaVitini = {
                         contenedorOpciones.setAttribute("componente", "campoEditable")
                         contenedorOpciones.setAttribute("campoEditable", nombreDetalles)
                         contenedorOpciones.setAttribute("datoActual", aplicacionSobreIDV_actual)
-                        opcionesAplicacionSobre.map((opcionAplicacionSobre) => {
+                        opcionesAplicacionSobre.forEach((opcionAplicacionSobre) => {
                             const aplicacionIDV = opcionAplicacionSobre.aplicacionIDV
                             const aplicacionUI = opcionAplicacionSobre.aplicacionUI
                             const opcion = document.createElement("option");
@@ -14725,7 +14725,7 @@ const casaVitini = {
                         contenedorOpciones.setAttribute("componente", "campoEditable")
                         contenedorOpciones.setAttribute("campoEditable", nombreDetalles)
                         contenedorOpciones.setAttribute("datoActual", estadoIDV_Actual)
-                        listaEstados.map((estado) => {
+                        listaEstados.forEach((estado) => {
                             const estadoIDV = estado.estadoIDV
                             const estadoUI = estado.estadoUI
                             const opcion = document.createElement("option");
@@ -14755,12 +14755,12 @@ const casaVitini = {
                 document.querySelector("[boton=guardarCambios]").classList.add("elementoOcultoInicialmente")
                 document.querySelector("[boton=cancelarCambios]").classList.add("elementoOcultoInicialmente")
                 document.querySelector("[boton=eliminarImpuesto]").classList.add("elementoOcultoInicialmente")
-                let selectorCamposEditables = [...document.querySelectorAll("[componente=campoEditable]")]
-                selectorCamposEditables.map((campoEditable) => {
+                let selectorCamposEditables = document.querySelectorAll("[componente=campoEditable]")
+                selectorCamposEditables.forEach((campoEditable) => {
                     campoEditable.remove()
                 })
-                let selectorDatoLectura = [...document.querySelectorAll("[detalleImpuesto]")]
-                selectorDatoLectura.map((detalleImpuesto) => {
+                let selectorDatoLectura = document.querySelectorAll("[detalleImpuesto]")
+                selectorDatoLectura.forEachEach((detalleImpuesto) => {
                     detalleImpuesto.removeAttribute("style")
                 })
             },
@@ -14777,8 +14777,8 @@ const casaVitini = {
                     zona: "administracion/impuestos/guardarModificacionImpuesto",
                     impuestoUID: Number(impuestoUID)
                 }
-                const selectorCamposEditables = [...document.querySelectorAll("[componente=campoEditable]")]
-                selectorCamposEditables.map(campoEditable => {
+                const selectorCamposEditables = document.querySelectorAll("[componente=campoEditable]")
+                selectorCamposEditables.forEach(campoEditable => {
                     const nombreCampoEditable = campoEditable.getAttribute("campoEditable")
                     const datoCampoEditable = campoEditable.value
                     transaccion[nombreCampoEditable] = datoCampoEditable
@@ -14809,8 +14809,8 @@ const casaVitini = {
                     if (aplicacionSobre === "totalReservaNeto") {
                         aplicacionSobreUI = "Total reserva neto"
                     }
-                    const selectorCamposEditables = [...document.querySelectorAll("[componente=campoEditable]")]
-                    selectorCamposEditables.map(campoEditable => campoEditable.remove())
+                    const selectorCamposEditables = document.querySelectorAll("[componente=campoEditable]")
+                    selectorCamposEditables.forEach(campoEditable => campoEditable.remove())
                     const selectorNombreImpuesto = document.querySelector("[detalleImpuesto=nombreImpuesto]")
                     //selectorNombreImpuesto.setAttribute("detalleImpuesto", nombreImpuesto)
                     selectorNombreImpuesto.innerText = nombre
@@ -14826,8 +14826,8 @@ const casaVitini = {
                     const selectorMoneda = document.querySelector("[detalleImpuesto=estado]")
                     selectorMoneda.setAttribute("estado", estado)
                     selectorMoneda.innerText = primeraEnMayuscula(estado)
-                    const selectorDatoLectura = [...document.querySelectorAll("[detalleImpuesto]")]
-                    selectorDatoLectura.map((detalleImpuesto) => {
+                    const selectorDatoLectura = document.querySelectorAll("[detalleImpuesto]")
+                    selectorDatoLectura.forEach((detalleImpuesto) => {
                         detalleImpuesto.removeAttribute("style")
                     })
                     document.querySelector("[boton=editarImpuesto]").classList.remove("elementoOcultoInicialmente")
@@ -14875,8 +14875,8 @@ const casaVitini = {
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
-                        const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                        selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                        const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                        selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                             advertenciaInmersiva.remove()
                         })
                         const entrada = {
@@ -14928,7 +14928,7 @@ const casaVitini = {
                         let contenedorOpciones = document.createElement("select")
                         contenedorOpciones.classList.add("detalleImpuestoSelectorLista")
                         contenedorOpciones.setAttribute("comNuevoImpuesto", "tipoValor")
-                        opcionesTipoValor.map((opcionTipoValor) => {
+                        opcionesTipoValor.forEach((opcionTipoValor) => {
                             let tipoValorIDV = opcionTipoValor.tipoValorIDV
                             let tipoValorUI = opcionTipoValor.tipoValorUI
                             const opcion = document.createElement("option");
@@ -14941,7 +14941,7 @@ const casaVitini = {
                         contenedorOpciones = document.createElement("select")
                         contenedorOpciones.classList.add("detalleImpuestoSelectorLista")
                         contenedorOpciones.setAttribute("comNuevoImpuesto", "aplicacionSobre")
-                        opcionesAplicacionSobre.map((opcionAplicacionSobre) => {
+                        opcionesAplicacionSobre.forEach((opcionAplicacionSobre) => {
                             let aplicacionIDV = opcionAplicacionSobre.aplicacionIDV
                             let aplicacionUI = opcionAplicacionSobre.aplicacionUI
                             const opcion = document.createElement("option");
@@ -14954,7 +14954,7 @@ const casaVitini = {
                         contenedorOpciones = document.createElement("select")
                         contenedorOpciones.classList.add("detalleImpuestoSelectorLista")
                         contenedorOpciones.setAttribute("comNuevoImpuesto", "moneda")
-                        opcionesMoneda.map((opcionMoneda) => {
+                        opcionesMoneda.forEach((opcionMoneda) => {
                             let monedaIDV = opcionMoneda.monedaIDV
                             let monedaUI = opcionMoneda.monedaUI
                             let simbolo = opcionMoneda.simbolo
@@ -14978,8 +14978,8 @@ const casaVitini = {
                         botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
                         botonCancelarProcesoCancelacion.innerText = "Cancelar"
                         botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                            let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                            let selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                            selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                 advertenciaInmersiva.remove()
                             })
                         })
@@ -15001,8 +15001,8 @@ const casaVitini = {
                         zona: "administracion/impuestos/crearNuevoImpuesto"
                     }
 
-                    let selectorCampos = [...document.querySelectorAll("[comNuevoImpuesto]")]
-                    selectorCampos.map((campoNuevoImpuesto) => {
+                    let selectorCampos = document.querySelectorAll("[comNuevoImpuesto]")
+                    selectorCampos.forEach((campoNuevoImpuesto) => {
                         const nombreCampo = campoNuevoImpuesto.getAttribute("comNuevoImpuesto")
                         const datoCampo = campoNuevoImpuesto.value
                         transaccion[nombreCampo] = datoCampo
@@ -15170,7 +15170,7 @@ const casaVitini = {
                         espacioListaOfertas.appendChild(ofertaUI)
                     }
                     if (Array.isArray(ofertasEncontradas) && ofertasEncontradas.length > 0) {
-                        ofertasEncontradas.map((detalleOferta) => {
+                        ofertasEncontradas.forEach((detalleOferta) => {
                             const ofertaUID = detalleOferta.uid
                             const nombreOferta = detalleOferta.nombreOferta
                             const fechaInicio = detalleOferta.fechaInicio
@@ -15255,7 +15255,7 @@ const casaVitini = {
                             if (tipoOferta === "porApartamentosEspecificos") {
                                 let apartamentosDedicados = detalleOferta.apartamentosDedicados
                                 let apartamentosSeleccionados = []
-                                apartamentosDedicados.map((apartamento) => {
+                                apartamentosDedicados.forEach((apartamento) => {
                                     let apartamentoUI = apartamento.apartamentoUI
                                     apartamentosSeleccionados.push(apartamentoUI)
                                 })
@@ -15273,7 +15273,7 @@ const casaVitini = {
                                 if (descuentoAplicadoA === "totalNetoApartamentoDedicado") {
                                     let apartamentosDedicados = detalleOferta.apartamentosDedicados
                                     let mensajesDescuentoApartamentos = []
-                                    apartamentosDedicados.map((apartamento) => {
+                                    apartamentosDedicados.forEach((apartamento) => {
                                         let apartamentoUI = apartamento.apartamentoUI
                                         let tipoDescuento = apartamento.tipoDescuento
                                         let cantidadApartamento = apartamento.cantidadApartamento
@@ -15740,8 +15740,8 @@ const casaVitini = {
                     }
                     const fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
                     const diasDelCalendario = marcoMes.querySelectorAll("[dia]")
-                    let selectorDias = [...document.querySelectorAll("[calendarioIO] [dia]")]
-                    selectorDias.map((dia) => {
+                    let selectorDias = document.querySelectorAll("[calendarioIO] [dia]")
+                    selectorDias.forEach((dia) => {
                         // dia.classList.remove("calendarioDiaDisponible")
                         dia.classList.remove("calendarioDiaReserva")
                         dia.classList.remove("calendarioDiaSeleccionado")
@@ -15813,14 +15813,14 @@ const casaVitini = {
                         document.querySelector("[data=fechaInicioData]").innerText = fechaSeleccionadaUI
                         if (fechaSalidaSelecionda) {
                             if (mesSeleccionadoSalida === mesSeleccionado && anoSeleccionado === anoSeleccionadoSalida) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) <= diaSeleccionadoSalida) {
                                         dia.classList.remove("calendarioDiaDisponible")
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado) {
                                         dia.classList.remove("calendarioDiaDisponible")
                                         dia.classList.add("calendarioDiaReserva")
@@ -15835,14 +15835,14 @@ const casaVitini = {
                         document.querySelector("[data=fechaFinData]").innerText = fechaSeleccionadaUI
                         if (fechaEntradaSelecionda) {
                             if (mesSeleccionadoEntrada === mesSeleccionado && anoSeleccionado === anoSeleccionadoEntrada) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) >= diaSeleccionadoEntrada) {
                                         dia.classList.remove("calendarioDiaDisponible")
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado) {
                                         dia.classList.remove("calendarioDiaDisponible")
                                         dia.classList.add("calendarioDiaReserva")
@@ -15874,15 +15874,15 @@ const casaVitini = {
                         fechaFin: fechaFin_formateada,
                         tipoOferta: tipoOferta
                     }
-                    const selectoresCamposOferta = [...document.querySelectorAll(`[zonaOferta="${tipoOferta}"] [campoOferta]`)]
-                    selectoresCamposOferta.map((campoOferta) => {
+                    const selectoresCamposOferta = document.querySelectorAll(`[zonaOferta="${tipoOferta}"] [campoOferta]`)
+                    selectoresCamposOferta.forEach((campoOferta) => {
                         const nombreCampo = campoOferta.getAttribute("campoOferta")
                         const datoCampo = campoOferta.value
                         transaccion[nombreCampo] = datoCampo
                     })
                     const apartamentosSeleccionados = []
-                    const selectorApartamentosSeleccionados = [...document.querySelectorAll("[descuentoDedicadoUI]")]
-                    selectorApartamentosSeleccionados.map((apartamentoSeleccionado) => {
+                    const selectorApartamentosSeleccionados = document.querySelectorAll("[descuentoDedicadoUI]")
+                    selectorApartamentosSeleccionados.forEach((apartamentoSeleccionado) => {
                         const apartamentoUI = apartamentoSeleccionado.getAttribute("descuentoDedicadoUI")
                         const apartamentoIDV = apartamentoSeleccionado.getAttribute("descuentoDedicadoIDV")
                         const tipoDescuento = apartamentoSeleccionado.querySelector("[campoApartamentoSeleccionado=tipoDescuento]").value !== "no" ? apartamentoSeleccionado.querySelector("[campoApartamentoSeleccionado=tipoDescuento]").value : null
@@ -15943,7 +15943,7 @@ const casaVitini = {
                         selectorApartamentoUIRenderizado = document.querySelector("[comMenu=menuVolatilApartamentoDisponbiles]")
                         selectorApartamentoUIRenderizado.innerHTML = null
                         let apartamentosDisponibles = respuestaServidor?.ok
-                        apartamentosDisponibles.map((apartamentoDisponible) => {
+                        apartamentosDisponibles.forEach((apartamentoDisponible) => {
                             let apartamentoIDV = apartamentoDisponible.apartamentoIDV
                             let apartamentoUI = apartamentoDisponible.apartamentoUI
                             let estadoUI = apartamentoDisponible.estadoUI
@@ -15967,7 +15967,7 @@ const casaVitini = {
                                 selectorApartamentoUIRenderizado.appendChild(apartamentoDetallesUI)
                             }
                         })
-                        let selectorApartamentoYaRenderizado = [...document.querySelectorAll(`[apartamentoComoOpcion]`)]
+                        let selectorApartamentoYaRenderizado = document.querySelectorAll(`[apartamentoComoOpcion]`)
                         if (selectorApartamentoYaRenderizado.length === 0) {
                             let info = document.createElement("p")
                             info.classList.add("crearApartamentoInfoSinApartamento")
@@ -15983,9 +15983,9 @@ const casaVitini = {
                         return
                     }
                     if (componente !== "menuVolatil") {
-                        let selectorMenusVolatiles = [...document.querySelectorAll("[componente=menuVolatil]")]
+                        let selectorMenusVolatiles = document.querySelectorAll("[componente=menuVolatil]")
                         document.removeEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.ocultarMenusVolatiles)
-                        selectorMenusVolatiles.map(menuVolatil => {
+                        selectorMenusVolatiles.forEach(menuVolatil => {
                             menuVolatil.remove()
                         })
                     }
@@ -16067,7 +16067,7 @@ const casaVitini = {
                         opcionPredeterminada.value = ""
                         opcionPredeterminada.text = "Selecciona el tipo de descuento"
                         tipoDescuento.appendChild(opcionPredeterminada)
-                        tipoDescuentoOpciones.map((tipoDescuentoOpcion) => {
+                        tipoDescuentoOpciones.forEach((tipoDescuentoOpcion) => {
                             let tipoDescuentoIDV = tipoDescuentoOpcion.tipoDescuentoIDV
                             let tipoDescuentoUI = tipoDescuentoOpcion.tipoDescuentoUI
                             let opcion = document.createElement("option");
@@ -16086,12 +16086,12 @@ const casaVitini = {
                 eliminarApartamenro: (apartamento) => {
                     let apartamentoIDV = apartamento.target.parentNode.getAttribute("apartamentoSeleccionado")
                     apartamento.target.parentNode.remove()
-                    let conteoApartamentos = [...document.querySelectorAll("[apartamentoSeleccionado]")]
+                    let conteoApartamentos = document.querySelectorAll("[apartamentoSeleccionado]")
                     if (conteoApartamentos.length === 0) {
                         document.querySelector("[componente=infoSinApartamento]").removeAttribute("style")
                     }
                     document.querySelector(`[descuentoDedicadoIDV="${apartamentoIDV}"]`).remove()
-                    let conteoDescuentoDedicados = [...document.querySelector("[parteOferta=descuentosDedicados]").querySelectorAll("[descuentoDedicadoUI]")]
+                    let conteoDescuentoDedicados = document.querySelector("[parteOferta=descuentosDedicados]").querySelectorAll("[descuentoDedicadoUI]")
                     if (conteoDescuentoDedicados.length === 0) {
                         document.querySelector("[componente=infoDescuentoDedicados]").removeAttribute("style")
                     }
@@ -16099,8 +16099,8 @@ const casaVitini = {
                 opcionesOferta: (opcion) => {
                     let opciones = opcion.target.value
                     // Primer oculta todo
-                    let selectorOpciones = [...document.querySelectorAll("[controladorDesliegue]")]
-                    selectorOpciones.map((opcion) => {
+                    let selectorOpciones = document.querySelectorAll("[controladorDesliegue]")
+                    selectorOpciones.forEach((opcion) => {
                         opcion.classList.add("estadoInicialInvisible")
                     })
                     // Luego despliega
@@ -16298,15 +16298,15 @@ const casaVitini = {
                         fechaFin: fechaFin_formateada,
                         tipoOferta: tipoOferta
                     }
-                    const selectoresCamposOferta = [...document.querySelectorAll(`[zonaOferta="${tipoOferta}"] [campoOferta]`)]
-                    selectoresCamposOferta.map((campoOferta) => {
+                    const selectoresCamposOferta = document.querySelectorAll(`[zonaOferta="${tipoOferta}"] [campoOferta]`)
+                    selectoresCamposOferta.forEach((campoOferta) => {
                         const nombreCampo = campoOferta.getAttribute("campoOferta")
                         const datoCampo = campoOferta.value
                         transaccion[nombreCampo] = datoCampo
                     })
                     const apartamentosSeleccionados = []
-                    const selectorApartamentosSeleccionados = [...document.querySelectorAll("[descuentoDedicadoIDV]")]
-                    selectorApartamentosSeleccionados.map((apartamentoSeleccionado) => {
+                    const selectorApartamentosSeleccionados = document.querySelectorAll("[descuentoDedicadoIDV]")
+                    selectorApartamentosSeleccionados.forEach((apartamentoSeleccionado) => {
                         const apartamentoIDV = apartamentoSeleccionado.getAttribute("descuentoDedicadoIDV")
                         const apartamentoUI = apartamentoSeleccionado.getAttribute("descuentoDedicadoUI")
                         const tipoDescuento = apartamentoSeleccionado.querySelector("[campoApartamentoSeleccionado=tipoDescuento]").value
@@ -16352,40 +16352,40 @@ const casaVitini = {
                         botonModo = modo.modo
                     }
                     if (botonModo === "botonEditarOferta") {
-                        let selectorBotonesEditar = [...document.querySelectorAll("[componente=botonEditarOferta]")]
-                        selectorBotonesEditar.map((boton) => {
+                        let selectorBotonesEditar = document.querySelectorAll("[componente=botonEditarOferta]")
+                        selectorBotonesEditar.forEach((boton) => {
                             boton.classList.add("elementoOcultoInicialmente")
                         })
-                        let selectorBotonesGuardarCambios = [...document.querySelectorAll("[componente=botonGuardarCambios]")]
-                        selectorBotonesGuardarCambios.map((boton) => {
+                        let selectorBotonesGuardarCambios = document.querySelectorAll("[componente=botonGuardarCambios]")
+                        selectorBotonesGuardarCambios.forEach((boton) => {
                             boton.classList.remove("elementoOcultoInicialmente")
                         })
-                        let selectorBotonesCancelarCambios = [...document.querySelectorAll("[componente=botonCancelarCambios]")]
-                        selectorBotonesCancelarCambios.map((boton) => {
+                        let selectorBotonesCancelarCambios = document.querySelectorAll("[componente=botonCancelarCambios]")
+                        selectorBotonesCancelarCambios.forEach((boton) => {
                             boton.classList.remove("elementoOcultoInicialmente")
                         })
-                        let selectorBotonesEliminarOferta = [...document.querySelectorAll("[componente=botonElimnarOferta]")]
-                        selectorBotonesEliminarOferta.map((boton) => {
+                        let selectorBotonesEliminarOferta = document.querySelectorAll("[componente=botonElimnarOferta]")
+                        selectorBotonesEliminarOferta.forEach((boton) => {
                             boton.classList.remove("elementoOcultoInicialmente")
                         })
                         document.querySelector("[componente=espacioCrearOferta]").classList.remove("eventosDesactivadosInicialmente")
                         document.querySelector("[componente=soloLecturaInfo]").classList.add("elementoOcultoInicialmente")
                     }
                     if (botonModo === "botonCancelarCambios") {
-                        let selectorBotonesEditar = [...document.querySelectorAll("[componente=botonEditarOferta]")]
-                        selectorBotonesEditar.map((boton) => {
+                        let selectorBotonesEditar = document.querySelectorAll("[componente=botonEditarOferta]")
+                        selectorBotonesEditar.forEach((boton) => {
                             boton.classList.remove("elementoOcultoInicialmente")
                         })
-                        let selectorBotonesGuardarCambios = [...document.querySelectorAll("[componente=botonGuardarCambios]")]
-                        selectorBotonesGuardarCambios.map((boton) => {
+                        let selectorBotonesGuardarCambios = document.querySelectorAll("[componente=botonGuardarCambios]")
+                        selectorBotonesGuardarCambios.forEach((boton) => {
                             boton.classList.add("elementoOcultoInicialmente")
                         })
-                        let selectorBotonesCancelarCambios = [...document.querySelectorAll("[componente=botonCancelarCambios]")]
-                        selectorBotonesCancelarCambios.map((boton) => {
+                        let selectorBotonesCancelarCambios = document.querySelectorAll("[componente=botonCancelarCambios]")
+                        selectorBotonesCancelarCambios.forEach((boton) => {
                             boton.classList.add("elementoOcultoInicialmente")
                         })
-                        let selectorBotonesEliminarOferta = [...document.querySelectorAll("[componente=botonElimnarOferta]")]
-                        selectorBotonesEliminarOferta.map((boton) => {
+                        let selectorBotonesEliminarOferta = document.querySelectorAll("[componente=botonElimnarOferta]")
+                        selectorBotonesEliminarOferta.forEach((boton) => {
                             boton.classList.add("elementoOcultoInicialmente")
                         })
                         document.querySelector("[componente=espacioCrearOferta]").classList.add("eventosDesactivadosInicialmente")
@@ -17265,14 +17265,14 @@ const casaVitini = {
                 desplegarOpcionesOferta: (opcionOferta) => {
                     const tipoOferta = opcionOferta.target.closest("[tipoOferta]").getAttribute("tipoOferta")
                     const modoOferta = document.querySelector("[modo]").getAttribute("modo")
-                    const selectoresBotonDeplegarOpcionesOferta = [...document.querySelectorAll("[tipoOferta]")]
-                    selectoresBotonDeplegarOpcionesOferta.map((boton) => {
+                    const selectoresBotonDeplegarOpcionesOferta = document.querySelectorAll("[tipoOferta]")
+                    selectoresBotonDeplegarOpcionesOferta.forEach((boton) => {
                         boton.removeAttribute("style")
                     })
                     opcionOferta.target.closest("[tipoOferta]").style.background = "blue"
                     opcionOferta.target.closest("[tipoOferta]").style.color = "white"
-                    const selectorOpcionesOfertaRenderiadas = [...document.querySelectorAll(`[zonaOferta]`)]
-                    selectorOpcionesOfertaRenderiadas.map((opciones) => {
+                    const selectorOpcionesOfertaRenderiadas = document.querySelectorAll(`[zonaOferta]`)
+                    selectorOpcionesOfertaRenderiadas.forEach((opciones) => {
                         opciones.classList.add("elementoOcultoInicialmente")
                         opciones.removeAttribute("ofertaEnPrimerPlano")
                     })
@@ -17523,7 +17523,7 @@ const casaVitini = {
 
                         }
 
-                        comportamientosCondigurados.map((detallesComportamiento) => {
+                        comportamientosCondigurados.forEach((detallesComportamiento) => {
                             const comportamientoUI = comportamientosUI(detallesComportamiento)
                             espacioListaOfertas.appendChild(comportamientoUI)
                         })
@@ -17540,13 +17540,13 @@ const casaVitini = {
                 },
                 desplegarOpcionesOferta: (opcionOferta) => {
                     const tipoOferta = opcionOferta.target.closest("[tipoOferta]").getAttribute("tipoOferta")
-                    const selectorZonaOferta = [...document.querySelectorAll("[zonaOferta]")]
-                    selectorZonaOferta.map((zonaOferta) => {
+                    const selectorZonaOferta = document.querySelectorAll("[zonaOferta]")
+                    selectorZonaOferta.forEach((zonaOferta) => {
                         zonaOferta.classList.add("estadoInicialInvisible")
                     })
                     document.querySelector(`[zonaOferta=${tipoOferta}]`).classList.remove("estadoInicialInvisible")
-                    const selectoresBotonDeplegarOpcionesOferta = [...document.querySelectorAll("[tipoOferta]")]
-                    selectoresBotonDeplegarOpcionesOferta.map((boton) => {
+                    const selectoresBotonDeplegarOpcionesOferta = document.querySelectorAll("[tipoOferta]")
+                    selectoresBotonDeplegarOpcionesOferta.forEach((boton) => {
                         boton.removeAttribute("style")
                     })
                     opcionOferta.target.closest("[tipoOferta]").style.background = "blue"
@@ -17875,8 +17875,8 @@ const casaVitini = {
                     mesSeleccionado = mesSeleccionado.padStart(2, "0")
                     mesSeleccionado = Number(mesSeleccionado)
                     const fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
-                    let selectorDias = [...document.querySelectorAll("[calendarioIO] [dia]")]
-                    selectorDias.map((dia) => {
+                    let selectorDias = document.querySelectorAll("[calendarioIO] [dia]")
+                    selectorDias.forEach((dia) => {
                         // dia.classList.remove("calendarioDiaDisponible")
                         dia.classList.remove("calendarioDiaReserva")
                         dia.classList.remove("calendarioDiaSeleccionado")
@@ -17895,8 +17895,8 @@ const casaVitini = {
                         diaSeleccionadoComoElemento.removeAttribute("estadoDia")
                         return
                     }
-                    let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
-                    diasDisponibles.map(diaDisponible => {
+                    let diasDisponibles = document.querySelectorAll("[estado=disponible]")
+                    diasDisponibles.forEach(diaDisponible => {
                         diaDisponible.removeAttribute("estadoDia")
                         diaDisponible.style.background = ""
                         diaDisponible.style.color = ""
@@ -17939,14 +17939,14 @@ const casaVitini = {
                         document.querySelector("[data=fechaInicioData]").innerText = fechaSeleccionadaUI
                         if (fechaSalidaSelecionda) {
                             if (mesSeleccionadoSalida === mesSeleccionado && anoSeleccionado === anoSeleccionadoSalida) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) <= diaSeleccionadoSalida) {
                                         //  dia.classList.remove("calendarioDiaDisponible")
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
@@ -17960,13 +17960,13 @@ const casaVitini = {
                         document.querySelector("[data=fechaFinData]").innerText = fechaSeleccionadaUI
                         if (fechaEntradaSelecionda) {
                             if (mesSeleccionadoEntrada === mesSeleccionado && anoSeleccionado === anoSeleccionadoEntrada) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) >= diaSeleccionadoEntrada) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
@@ -18007,8 +18007,8 @@ const casaVitini = {
                         transaccion.diasArray = diasSeleccionados
                     }
 
-                    const selectoresApartamentos = [...document.querySelectorAll(`[descuentoDedicadoIDV]`)]
-                    selectoresApartamentos.map((apartamentos) => {
+                    const selectoresApartamentos = document.querySelectorAll(`[descuentoDedicadoIDV]`)
+                    selectoresApartamentos.forEach((apartamentos) => {
                         const apartamentoIDV = apartamentos.getAttribute("descuentoDedicadoIDV")
                         const cantidad = apartamentos.querySelector("[campoapartamentoseleccionado=cantidad]").value
                         const simbolo = apartamentos.querySelector("[campoapartamentoseleccionado=simbolo]").value
@@ -18073,7 +18073,7 @@ const casaVitini = {
                     if (respuestaServidor?.ok) {
                         instanciaRenderizada.innerHTML = null
                         const apartamentosDisponibles = respuestaServidor?.ok
-                        apartamentosDisponibles.map((apartamentoDisponible) => {
+                        apartamentosDisponibles.forEach((apartamentoDisponible) => {
                             const apartamentoIDV = apartamentoDisponible.apartamentoIDV
                             const apartamentoUI = apartamentoDisponible.apartamentoUI
                             const estadoUI = apartamentoDisponible.estadoUI
@@ -18094,7 +18094,7 @@ const casaVitini = {
                             apartamentoDetallesUI.appendChild(apartamentoEstadoUI)
                             instanciaRenderizada.appendChild(apartamentoDetallesUI)
                         })
-                        const selectorApartamentoYaRenderizado = [...document.querySelectorAll(`[apartamentoComoOpcion]`)]
+                        const selectorApartamentoYaRenderizado = document.querySelectorAll(`[apartamentoComoOpcion]`)
                         if (selectorApartamentoYaRenderizado.length === 0) {
                             const info = document.createElement("p")
                             info.classList.add("crearApartamentoInfoSinApartamento")
@@ -18110,9 +18110,9 @@ const casaVitini = {
                         return
                     }
                     if (componente !== "menuVolatil") {
-                        let selectorMenusVolatiles = [...document.querySelectorAll("[componente=menuVolatil]")]
+                        let selectorMenusVolatiles = document.querySelectorAll("[componente=menuVolatil]")
                         document.removeEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.ocultarMenusVolatiles)
-                        selectorMenusVolatiles.map(menuVolatil => {
+                        selectorMenusVolatiles.forEach(menuVolatil => {
                             menuVolatil.remove()
                         })
                     }
@@ -18211,7 +18211,7 @@ const casaVitini = {
                 eliminarApartamenro: (apartamento) => {
                     let apartamentoIDV = apartamento.target.parentNode.getAttribute("apartamentoSeleccionado")
                     apartamento.target.parentNode.remove()
-                    let conteoDescuentoDedicados = [...document.querySelector("[componente=comportamientoSuperBloque]").querySelectorAll("[descuentoDedicadoUI]")]
+                    let conteoDescuentoDedicados = document.querySelector("[componente=comportamientoSuperBloque]").querySelectorAll("[descuentoDedicadoUI]")
                     if (conteoDescuentoDedicados.length === 0) {
                         document.querySelector("[componente=infoDescuentoDedicados]").removeAttribute("style")
                         document.querySelector("[componente=comportamientoSuperBloque]").style.display = "flex"
@@ -18220,8 +18220,8 @@ const casaVitini = {
                 opcionesOferta: (opcion) => {
                     let opciones = opcion.target.value
                     // Primer oculta todo
-                    let selectorOpciones = [...document.querySelectorAll("[controladorDesliegue]")]
-                    selectorOpciones.map((opcion) => {
+                    let selectorOpciones = document.querySelectorAll("[controladorDesliegue]")
+                    selectorOpciones.forEach((opcion) => {
                         opcion.classList.add("estadoInicialInvisible")
                     })
                     // Luego despliega
@@ -18322,8 +18322,8 @@ const casaVitini = {
                     if (tipo === "porDias") {
                         transaccion.diasArray = diasArray
                     }
-                    const selectoresApartamentos = [...document.querySelectorAll(`[descuentoDedicadoIDV]`)]
-                    selectoresApartamentos.map((apartamento) => {
+                    const selectoresApartamentos = document.querySelectorAll(`[descuentoDedicadoIDV]`)
+                    selectoresApartamentos.forEach((apartamento) => {
                         const apartamentoIDV = apartamento.getAttribute("descuentoDedicadoIDV")
                         const apartamentoUI = apartamento.getAttribute("descuentoDedicadoUI")
 
@@ -18363,20 +18363,20 @@ const casaVitini = {
                         botonModo = modo.modo
                     }
                     if (botonModo === "botonEditarOferta") {
-                        let selectorBotonesEditar = [...document.querySelectorAll("[componente=botonEditarOferta]")]
-                        selectorBotonesEditar.map((boton) => {
+                        let selectorBotonesEditar = document.querySelectorAll("[componente=botonEditarOferta]")
+                        selectorBotonesEditar.forEach((boton) => {
                             boton.classList.add("elementoOcultoInicialmente")
                         })
-                        let selectorBotonesGuardarCambios = [...document.querySelectorAll("[componente=botonGuardarCambios]")]
-                        selectorBotonesGuardarCambios.map((boton) => {
+                        let selectorBotonesGuardarCambios = document.querySelectorAll("[componente=botonGuardarCambios]")
+                        selectorBotonesGuardarCambios.forEach((boton) => {
                             boton.classList.remove("elementoOcultoInicialmente")
                         })
-                        let selectorBotonesCancelarCambios = [...document.querySelectorAll("[componente=botonCancelarCambios]")]
-                        selectorBotonesCancelarCambios.map((boton) => {
+                        let selectorBotonesCancelarCambios = document.querySelectorAll("[componente=botonCancelarCambios]")
+                        selectorBotonesCancelarCambios.forEach((boton) => {
                             boton.classList.remove("elementoOcultoInicialmente")
                         })
-                        let selectorBotonesEliminarOferta = [...document.querySelectorAll("[componente=botonElimnarOferta]")]
-                        selectorBotonesEliminarOferta.map((boton) => {
+                        let selectorBotonesEliminarOferta = document.querySelectorAll("[componente=botonElimnarOferta]")
+                        selectorBotonesEliminarOferta.forEach((boton) => {
                             boton.classList.remove("elementoOcultoInicialmente")
                         })
                         document.querySelector("[componente=espacioCrearOferta]").classList.remove("eventosDesactivadosInicialmente")
@@ -18482,8 +18482,8 @@ const casaVitini = {
                         if (!instanciaRenderizada) { return }
                         instanciaRenderizada.remove()
                         if (respuestaServidor?.error) {
-                            let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                            let selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                            selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                 advertenciaInmersiva.remove()
                             })
                             return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -18926,7 +18926,7 @@ const casaVitini = {
                         espacioEnlacesRenderizados.appendChild(enlaceUI)
                     }
                     if (Array.isArray(enlacesCreados) && enlacesCreados.length > 0) {
-                        enlacesCreados.map((detalleOferta) => {
+                        enlacesCreados.forEach((detalleOferta) => {
                             const enlaceUID = detalleOferta.enlace
                             const nombreEnlace = detalleOferta.nombreEnlace
                             const reservaUID = detalleOferta.reservaUID
@@ -19087,8 +19087,8 @@ const casaVitini = {
                 }
             },
             cancelarCambios: () => {
-                const campos = [...document.querySelectorAll("[campo]")]
-                campos.map((campo) => {
+                const campos = document.querySelectorAll("[campo]")
+                campos.forEach((campo) => {
                     const valorInicial = campo.getAttribute("valorInicial")
                     campo.value = valorInicial
                 })
@@ -19128,8 +19128,8 @@ const casaVitini = {
                     botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
                     botonCancelarProcesoCancelacion.innerText = "Cancelar la eliminacion del enlace"
                     botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                        let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                        selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                        let selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                        selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                             advertenciaInmersiva.remove()
                         })
                     })
@@ -19146,8 +19146,8 @@ const casaVitini = {
                     }
                     let respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                     if (respuestaServidor?.error) {
-                        let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                        selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                        let selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                        selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                             advertenciaInmersiva.remove()
                         })
                         return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -19336,7 +19336,7 @@ const casaVitini = {
                 }
                 let interruptor = "ignorar"
                 const directoriosFiltrados = []
-                granuladoURL.directorios.map((directorio) => {
+                granuladoURL.directorios.forEach((directorio) => {
                     if (interruptor === "noIgnorar") {
                         directoriosFiltrados.push(directorio)
                     }
@@ -19395,7 +19395,7 @@ const casaVitini = {
                         informacionUI.innerText = "No hay ningun bloqueo configurado"
                         selectorEspacioBloqueos.appendChild(informacionUI)
                     }
-                    apartamentosConBloqueos.map((detalleDelApartamento) => {
+                    apartamentosConBloqueos.forEach((detalleDelApartamento) => {
                         const apartamentoIDV = detalleDelApartamento.apartamentoIDV
                         const apartamentoUI = detalleDelApartamento.apartamentoUI
                         const numeroDeBloqueos = detalleDelApartamento.numeroDeBloqueos
@@ -19470,7 +19470,7 @@ const casaVitini = {
                         }
 
 
-                        bloqueos.map((detalleBloqueo) => {
+                        bloqueos.forEach((detalleBloqueo) => {
                             const tipoBloqueo = detalleBloqueo.tipoBloqueo
                             const entrada = detalleBloqueo.entrada
                             const salida = detalleBloqueo.salida
@@ -20179,8 +20179,8 @@ const casaVitini = {
                         contenedorFechas.style.display = "none"
                     }
                     // Em en el caso de la fecha hay que eliminar las propuestas
-                    const selectorNuevasPropuestas = [...document.querySelectorAll("[componente=bloqueNuevaPropuesta]")]
-                    selectorNuevasPropuestas.map((nuevaPropuesta) => {
+                    const selectorNuevasPropuestas = document.querySelectorAll("[componente=bloqueNuevaPropuesta]")
+                    selectorNuevasPropuestas.forEach((nuevaPropuesta) => {
                         nuevaPropuesta.remove()
                     })
                 }
@@ -20199,7 +20199,7 @@ const casaVitini = {
                     const anoSeleccionado = Number(document.querySelector("[componente=mesReferencia]").getAttribute("ano"))
                     let fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
                     const fechaSeleccionadaTexto = `${diaSeleccionadoTexto}/${mesSeleccionadoTexto}/${anoSeleccionado}`
-                    let selectorDias = [...document.querySelectorAll("[calendarioIO] [dia]")]
+                    let selectorDias = document.querySelectorAll("[calendarioIO] [dia]")
                     const memoriaVolatilInicialEntrada = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatilInicial")
                     let diaInicialEntrada
                     let mesInicialEntrada
@@ -20243,7 +20243,7 @@ const casaVitini = {
                         anoSeleccionadoSalida = Number(fechaSaliraArray[2])
                         datosFechaSalidaSeleccionada = "existen"
                     }
-                    selectorDias.map((dia) => {
+                    selectorDias.forEach((dia) => {
                         // dia.classList.remove("calendarioDiaDisponible")
                         dia.classList.remove("calendarioDiaReserva")
                         dia.classList.remove("calendarioDiaSeleccionado")
@@ -20258,7 +20258,7 @@ const casaVitini = {
                             if (memoriaVolatilInicialEntrada) {
                                 document.querySelector("[calendario=entrada]").setAttribute("memoriaVolatil", memoriaVolatilInicialEntrada)
                                 if (mesInicialEntrada === mesSeleccionado && anoSeleccionado === anoInicialEntrada) {
-                                    selectorDias.map((dia) => {
+                                    selectorDias.forEach((dia) => {
                                         if (Number(dia.getAttribute("dia")) === Number(diaInicialEntrada)) {
                                             dia.classList.add("calendarioDiaSeleccionado")
                                         }
@@ -20277,7 +20277,7 @@ const casaVitini = {
                             if (memoriaVolatilInicialSalida) {
                                 document.querySelector("[calendario=salida]").setAttribute("memoriaVolatil", memoriaVolatilInicialSalida)
                                 if (mesSalidaEntrada === mesSeleccionado && anoSeleccionado === anoSalidaEntrada) {
-                                    selectorDias.map((dia) => {
+                                    selectorDias.forEach((dia) => {
                                         if (Number(dia.getAttribute("dia")) === Number(diaSalidaEntrada)) {
                                             dia.classList.add("calendarioDiaSeleccionado")
                                         }
@@ -20292,8 +20292,8 @@ const casaVitini = {
                         diaSeleccionadoComoElemento.removeAttribute("estadoDia")
                         return
                     }
-                    let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
-                    diasDisponibles.map(diaDisponible => {
+                    let diasDisponibles = document.querySelectorAll("[estado=disponible]")
+                    diasDisponibles.forEach(diaDisponible => {
                         diaDisponible.removeAttribute("estadoDia")
                         diaDisponible.style.background = ""
                         diaDisponible.style.color = ""
@@ -20304,14 +20304,14 @@ const casaVitini = {
                         document.querySelector("[calendario=entrada]").setAttribute("memoriaVolatil", fechaSeleccionadaTexto)
                         if (fechaSalidaVolatil_Humana) {
                             if (mesSeleccionadoSalida === mesSeleccionado && anoSeleccionado === anoSeleccionadoSalida) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) < diaSeleccionadoSalida) {
                                         dia.classList.remove("calendarioDiaDisponible")
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado) {
                                         dia.classList.remove("calendarioDiaDisponible")
                                         dia.classList.add("calendarioDiaReserva")
@@ -20334,13 +20334,13 @@ const casaVitini = {
                         //document.querySelector("[calendario=salida]").setAttribute("fechaFinFinal", fechaSeleccionadaUI)
                         if (fechaEntradaVolatil_Humana) {
                             if (mesSeleccionadoEntrada === mesSeleccionado && anoSeleccionado === anoSeleccionadoEntrada) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) > diaSeleccionadoEntrada) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
@@ -20372,8 +20372,8 @@ const casaVitini = {
                     }
                     const fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
                     const fechaSeleccionadaTexto = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
-                    let selectorDias = [...document.querySelectorAll("[calendarioIO] [dia]")]
-                    selectorDias.map((dia) => {
+                    let selectorDias = document.querySelectorAll("[calendarioIO] [dia]")
+                    selectorDias.forEach((dia) => {
                         // dia.classList.remove("calendarioDiaDisponible")
                         dia.classList.remove("calendarioDiaReserva")
                         dia.classList.remove("calendarioDiaSeleccionado")
@@ -20392,8 +20392,8 @@ const casaVitini = {
                         diaSeleccionadoComoElemento.removeAttribute("estadoDia")
                         return
                     }
-                    let diasDisponibles = [...document.querySelectorAll("[estado=disponible]")]
-                    diasDisponibles.map(diaDisponible => {
+                    let diasDisponibles = document.querySelectorAll("[estado=disponible]")
+                    diasDisponibles.forEach(diaDisponible => {
                         diaDisponible.removeAttribute("estadoDia")
                         diaDisponible.style.background = ""
                         diaDisponible.style.color = ""
@@ -20436,14 +20436,14 @@ const casaVitini = {
                         //document.querySelector("[data=fechaInicioData]").innerText = fechaSeleccionadaUI
                         if (fechaSalidaSelecionda) {
                             if (mesSeleccionadoSalida === mesSeleccionado && anoSeleccionado === anoSeleccionadoSalida) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEachEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) <= diaSeleccionadoSalida) {
                                         //  dia.classList.remove("calendarioDiaDisponible")
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) > diaSeleccionado) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
@@ -20466,13 +20466,13 @@ const casaVitini = {
                         // document.querySelector("[data=fechaFinData]").innerText = fechaSeleccionadaUI
                         if (fechaEntradaSelecionda) {
                             if (mesSeleccionadoEntrada === mesSeleccionado && anoSeleccionado === anoSeleccionadoEntrada) {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) >= diaSeleccionadoEntrada) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
                                 })
                             } else {
-                                selectorDias.map((dia) => {
+                                selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado) {
                                         dia.classList.add("calendarioDiaReserva")
                                     }
@@ -20535,7 +20535,7 @@ const casaVitini = {
                         tipoApartamentoUI.add(opcion);
                     }
                     if (apartamentosArray.length > 0) {
-                        apartamentosArray.map((detallesApartamento) => {
+                        apartamentosArray.forEach((detallesApartamento) => {
                             const apartamentoIDV = detallesApartamento.apartamentoIDV
                             const aparatmentoUI = detallesApartamento.apartamentoUI
                             const opcion = document.createElement("option");
@@ -20765,7 +20765,7 @@ const casaVitini = {
                             contenedorApartamentosExistentes.appendChild(infoNoApartamentoUI)
                         }
                         if (apartamentos.length > 0) {
-                            apartamentos.map((detalleApartamento) => {
+                            apartamentos.forEach((detalleApartamento) => {
                                 const apartamentoIDV = detalleApartamento.apartamento
                                 const apartamentoUI = detalleApartamento.apartamentoUI
                                 const estado = detalleApartamento.estado
@@ -20811,7 +20811,7 @@ const casaVitini = {
                             contenedorHabitacionesExistentes.appendChild(infoNoApartamentoUI)
                         }
                         if (habitaciones.length > 0) {
-                            habitaciones.map((detallesHabitacion) => {
+                            habitaciones.forEach((detallesHabitacion) => {
                                 const habitacionIDV = detallesHabitacion.habitacion
                                 const habitacionUI = detallesHabitacion.habitacionUI
                                 const contenedorDetalleHabitacion = document.createElement("a")
@@ -20856,7 +20856,7 @@ const casaVitini = {
                             contenedorCamasExistentes.appendChild(infoNoApartamentoUI)
                         }
                         if (camas.length > 0) {
-                            camas.map((detallesCama) => {
+                            camas.forEach((detallesCama) => {
                                 const camaIDV = detallesCama.cama
                                 const camaUI = detallesCama.camaUI
                                 const contenedorDetalleCama = document.createElement("a")
@@ -21063,8 +21063,8 @@ const casaVitini = {
                         }
                         const selectorTipoEntidad = document.querySelector("[tipoEntidad]").getAttribute("tipoEntidad")
                         transaccion.tipoEntidad = selectorTipoEntidad
-                        const selectorCampos = [...document.querySelectorAll("[campo]")]
-                        selectorCampos.map((campo) => {
+                        const selectorCampos = document.querySelectorAll("[campo]")
+                        selectorCampos.forEach((campo) => {
                             const nombreCampo = campo.getAttribute("campo")
                             const datoCampo = campo.value
                             transaccion[nombreCampo] = datoCampo
@@ -21555,8 +21555,8 @@ const casaVitini = {
                             selectorContenedorBotonEditar.style.display = "flex"
                             selectorContenedorOpcionesEdicion.style.display = "none"
                             selectorContenedorEntidadDatos.removeAttribute("style")
-                            const selectorCampos = [...document.querySelectorAll("[campo]")]
-                            selectorCampos.map((campo) => {
+                            const selectorCampos = document.querySelectorAll("[campo]")
+                            selectorCampos.forEach((campo) => {
                                 const valorInicial = campo.getAttribute("valorInicial")
                                 if (valorInicial) {
                                     campo.value = valorInicial
@@ -21592,8 +21592,8 @@ const casaVitini = {
                         const entidadIDV = document.querySelector("[entidadIDV]").getAttribute("entidadIDV")
                         metadatos["tipoEntidad"] = selectorTipoEntidada
                         metadatos["entidadIDV"] = entidadIDV
-                        const selectorCampos = [...document.querySelectorAll("[campo]")]
-                        selectorCampos.map((campo) => {
+                        const selectorCampos = document.querySelectorAll("[campo]")
+                        selectorCampos.forEach((campo) => {
                             const nombreCampo = campo.getAttribute("campo")
                             const datoCampo = campo.value
                             metadatos[nombreCampo] = datoCampo
@@ -21620,8 +21620,8 @@ const casaVitini = {
                         if (respuestaServidor?.ok) {
                             const selectorComponenteEntidadIDV = document.querySelector("[componente=entidadIDV]").value
                             document.querySelector("[entidadIDV]").setAttribute("entidadIDV", selectorComponenteEntidadIDV)
-                            const selectorCampos = [...document.querySelectorAll("[campo]")]
-                            selectorCampos.map((campo) => {
+                            const selectorCampos = document.querySelectorAll("[campo]")
+                            selectorCampos.forEach((campo) => {
                                 const datoCampo = campo.value
                                 campo.setAttribute("valorInicial", datoCampo)
                             })
@@ -21699,8 +21699,8 @@ const casaVitini = {
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                             if (respuestaServidor?.error) {
-                                let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                let selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                     advertenciaInmersiva.remove()
                                 })
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -22087,8 +22087,8 @@ const casaVitini = {
                                 document.removeEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
                                 return
                             }
-                            const selectorMenusRenderizados = [...document.querySelectorAll("[menuIDV=addCama]")]
-                            selectorMenusRenderizados.map((menu) => {
+                            const selectorMenusRenderizados = document.querySelectorAll("[menuIDV=addCama]")
+                            selectorMenusRenderizados.forEach((menu) => {
                                 menu.remove()
                             })
                             document.removeEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
@@ -22222,15 +22222,15 @@ const casaVitini = {
                             if (!instanciaRenderizada) { return }
                             instanciaRenderizada.remove()
                             if (respuestaServidor?.error) {
-                                const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                     advertenciaInmersiva.remove()
                                 })
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                             }
                             if (respuestaServidor?.ok) {
-                                const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                     advertenciaInmersiva.remove()
                                 })
                                 const navegacion = {
@@ -22301,16 +22301,16 @@ const casaVitini = {
                             if (!instanciaRenderizada) { return }
                             instanciaRenderizada.remove()
                             if (respuestaServidor?.error) {
-                                const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                     advertenciaInmersiva.remove()
                                 })
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                             }
                             if (respuestaServidor?.ok) {
                                 document.querySelector(`[habitacionUID="${habitacionUID}"]`)?.remove()
-                                const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                     advertenciaInmersiva.remove()
                                 })
                             }
@@ -22374,19 +22374,19 @@ const casaVitini = {
                             }
                             const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                             if (respuestaServidor?.error) {
-                                const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                     advertenciaInmersiva.remove()
                                 })
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                             }
                             if (respuestaServidor?.ok) {
                                 document.querySelector(`[camaUID="${camaUID}"]`)?.remove()
-                                const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                     advertenciaInmersiva.remove()
                                 })
-                                const selectorCamasEnHabitacion = [...document.querySelectorAll(`[habitacionUID="${habitacionUID}"] [camaUID]`)]
+                                const selectorCamasEnHabitacion = document.querySelectorAll(`[habitacionUID="${habitacionUID}"] [camaUID]`)
                                 if (selectorCamasEnHabitacion.length === 0) {
                                     const selectorContenedorHabitacion = document.querySelector(`[habitacionUID="${habitacionUID}"]`)
                                     const infoNoCamas = casaVitini.administracion.arquitectura_del_alojamiento.configuraciones.detallesConfiguracion.componentesUI.noCamaInfoUI()
@@ -22465,8 +22465,8 @@ const casaVitini = {
                             if (!instanciaRenderizada) { return }
                             instanciaRenderizada.remove()
                             if (respuestaServidor?.error) {
-                                const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                     advertenciaInmersiva.remove()
                                 })
                                 return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -22644,8 +22644,8 @@ const casaVitini = {
                                 const iconoProceso = casaVitini.componentes.iconoProceso()
                                 contenedorImagen.appendChild(iconoProceso)
                                 const iconoProcesoRenderizado = document.querySelector("[componente=iconoProceso]")
-                                const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                     advertenciaInmersiva.remove()
                                 })
                                 const transaccion = {
@@ -22655,8 +22655,8 @@ const casaVitini = {
                                 const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                                 if (respuestaServidor?.error) {
                                     iconoProcesoRenderizado.remove()
-                                    const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                                    selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                                    const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                                    selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                         advertenciaInmersiva.remove()
                                     })
                                     return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -22992,8 +22992,8 @@ const casaVitini = {
                     constructorGrid.setAttribute("class", "administracionGridUsuarios")
                     constructorGrid.setAttribute("componenteID", "gridUsuarios")
                     constructorGrid.setAttribute("metadatosBusqueda", JSON.stringify(metadatosBusqueda))
-                    const selectorTitulosColumnas = [...document.querySelectorAll("[componenteGrid=celdaTituloColumna]")]
-                    selectorTitulosColumnas.map((celdaTituloColumna) => {
+                    const selectorTitulosColumnas = document.querySelectorAll("[componenteGrid=celdaTituloColumna]")
+                    selectorTitulosColumnas.forEach((celdaTituloColumna) => {
                         celdaTituloColumna.style.removeProperty("background")
                         celdaTituloColumna.querySelector("[sentidoIconos]")?.remove()
                     })
@@ -23031,7 +23031,7 @@ const casaVitini = {
                     const titulosColumnas = ["Usuario", "Nombre", "Primer Apellido", "Segundo Apellido", "Pasaporte", "Correo electronico", "Telefono"]
                     const nombreColumnas = ["usuarioIDX", "nombre", "primerApellido", "segundoApellido", "pasaporte", "email", "telefono"]
                     const classesTitulos = ["idColumna", "entradaColumna", "salidaColuma", "estadoColumna", "pagoColumna"]
-                    titulosColumnas.map((tituloColumna, ciclo) => {
+                    titulosColumnas.forEach((tituloColumna, ciclo) => {
                         const columnaElemento = document.createElement("div")
                         columnaElemento.innerText = tituloColumna
                         // columnaElemento.classList.add(classesTitulos[ciclo])
@@ -23058,12 +23058,12 @@ const casaVitini = {
                         }
                     })
                     if (metadatos.tipoConstruccionGrid === "soloLista") {
-                        let selectorFilasGrid = [...document.querySelectorAll("[componenteGrid=fila]")]
-                        selectorFilasGrid.map((filaGrid) => {
+                        let selectorFilasGrid = document.querySelectorAll("[componenteGrid=fila]")
+                        selectorFilasGrid.forEach((filaGrid) => {
                             filaGrid.remove()
                         })
                     }
-                    usuarios.map((detallesDelUsuario) => {
+                    usuarios.forEach((detallesDelUsuario) => {
                         const usuarioIDX = detallesDelUsuario.usuarioIDX
                         const nombre = detallesDelUsuario.nombre
                         const primerApellido = detallesDelUsuario.primerApellido
@@ -23587,10 +23587,10 @@ const casaVitini = {
                             botonCancelarCambios.addEventListener("click", casaVitini.administracion.usuarios.detallesUsuario.datosUsuario.cancelarCambios)
                             contenedorBotones.appendChild(botonCancelarCambios)
                             espacioUsuario.appendChild(contenedorBotones)
-                            const campos = [...document.querySelectorAll("[campo]")]
+                            const campos = document.querySelectorAll("[campo]")
                             const controladorCampos = () => {
                                 let estadoGlobalCampos = "vacios"
-                                campos.map((campo) => {
+                                campos.forEach((campo) => {
                                     if (campo.value.length > 0) {
                                         estadoGlobalCampos = "noVacios"
                                     }
@@ -23603,14 +23603,14 @@ const casaVitini = {
                                     selectorContenedorBotones.style.display = "flex"
                                 }
                             }
-                            campos.map((campo) => {
+                            campos.forEach((campo) => {
                                 campo.addEventListener("input", controladorCampos)
                             })
                         }
                     },
                     editar: () => {
-                        let camposLectura = [...document.querySelectorAll("[componenteDetalle]")]
-                        camposLectura.map((campo) => {
+                        let camposLectura = document.querySelectorAll("[componenteDetalle]")
+                        camposLectura.forEach((campo) => {
                             let datoCampo = campo.innerText
                             let idCampo = campo.getAttribute("componenteDetalle")
                             campo.style.display = "none"
@@ -23632,8 +23632,8 @@ const casaVitini = {
                         document.querySelector("[boton=guardarCambios]").classList.remove("estadoInicialInvisible")
                     },
                     cancelarCambios: () => {
-                        const campos = [...document.querySelectorAll("[campo]")]
-                        campos.map((campo) => {
+                        const campos = document.querySelectorAll("[campo]")
+                        campos.forEach((campo) => {
                             campo.value = null
                         })
                         const selectorContenedorBotones = document.querySelector("[componente=contenedorBotones]")
@@ -23647,13 +23647,13 @@ const casaVitini = {
                             mensaje: mensaje
                         }
                         casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                        const campos = [...document.querySelectorAll("[campo]")]
+                        const campos = document.querySelectorAll("[campo]")
                         const usuarioIDX = document.querySelector("[usuarioIDX]").getAttribute("usuarioIDX")
                         const datosParaActualizar = {
                             zona: "administracion/usuarios/actualizarDatosUsuarioDesdeAdministracion",
                             usuarioIDX: usuarioIDX
                         }
-                        campos.map((campo) => {
+                        campos.forEach((campo) => {
                             const campoID = campo.getAttribute("campo")
                             const campoDato = campo.value
                             datosParaActualizar[campoID] = campoDato
@@ -23673,7 +23673,7 @@ const casaVitini = {
                             const pasaporte = detallesUsuario.pasaporte
                             const telefono = detallesUsuario.telefono
                             const email = detallesUsuario.email
-                            campos.map((campo) => {
+                            campos.forEach((campo) => {
                                 const campoID = campo.getAttribute("campo")
                                 campo.placeholder = detallesUsuario[campoID] || ""
                                 campo.value = ""
@@ -23782,8 +23782,8 @@ const casaVitini = {
                         }
                     },
                     cancelarCambios: () => {
-                        const campos = [...document.querySelectorAll("[campo]")]
-                        campos.map((campo) => {
+                        const campos = document.querySelectorAll("[campo]")
+                        campos.forEach((campo) => {
                             campo.value = null
                         })
                         const selectorContenedorBotones = document.querySelector("[componente=contenedorBotones]")
@@ -23838,8 +23838,8 @@ const casaVitini = {
                         botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
                         botonCancelarProcesoCancelacion.innerText = "Cancelar el cambio de estado"
                         botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                            let selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                            let selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                            selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                 advertenciaInmersiva.remove()
                             })
                         })
@@ -23858,8 +23858,8 @@ const casaVitini = {
                         }
                         const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                         if (respuestaServidor?.error) {
-                            const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                            const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                            selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                 advertenciaInmersiva.remove()
                             })
                             return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -23876,8 +23876,8 @@ const casaVitini = {
                             const selectorEstadoCuentaUI = document.querySelector("[estadoCuenta]")
                             selectorEstadoCuentaUI.innerText = estadoCuentaUI
                             selectorEstadoCuentaUI.setAttribute("estadoCuenta", estadoActual)
-                            const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                            const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                            selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                 advertenciaInmersiva.remove()
                             })
                         }
@@ -23950,7 +23950,7 @@ const casaVitini = {
                             espacioUsuario.appendChild(contenedorBotones)
                             const controladorCampos = () => {
                                 let estadoGlobalCampos = "vacios"
-                                campos.map((campo) => {
+                                campos.forEach((campo) => {
                                     if (campo.value.length > 0) {
                                         estadoGlobalCampos = "noVacios"
                                     }
@@ -23963,8 +23963,8 @@ const casaVitini = {
                                     selectorContenedorBotones.style.display = "flex"
                                 }
                             }
-                            const campos = [...document.querySelectorAll("[campo]")]
-                            campos.map((campo) => {
+                            const campos = document.querySelectorAll("[campo]")
+                            campos.forEach((campo) => {
                                 campo.addEventListener("input", controladorCampos)
                             })
                         }
@@ -24007,8 +24007,8 @@ const casaVitini = {
                         }
                     },
                     cancelarCambios: () => {
-                        const campos = [...document.querySelectorAll("[campo]")]
-                        campos.map((campo) => {
+                        const campos = document.querySelectorAll("[campo]")
+                        campos.forEach((campo) => {
                             campo.value = null
                         })
                         const selectorContenedorBotones = document.querySelector("[componente=contenedorBotones]")
@@ -24073,8 +24073,8 @@ const casaVitini = {
                         if (!instanciaRenderizada) { return }
                         instanciaRenderizada.remove()
                         if (respuestaServidor?.error) {
-                            const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                            const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                            selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                 advertenciaInmersiva.remove()
                             })
                             return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
@@ -24091,8 +24091,8 @@ const casaVitini = {
                             const selectorEstadoCuentaUI = document.querySelector("[estadoCuenta]")
                             selectorEstadoCuentaUI.innerText = estadoCuentaUI
                             selectorEstadoCuentaUI.setAttribute("estadoCuenta", estadoActual)
-                            const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                            const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                            selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                 advertenciaInmersiva.remove()
                             })
                         }
@@ -24136,15 +24136,15 @@ const casaVitini = {
                         if (!instanciaRenderizada) { return }
                         instanciaRenderizada.remove()
                         if (respuestaServidor?.error) {
-                            const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                            const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                            selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                 advertenciaInmersiva.remove()
                             })
                             return casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                         }
                         if (respuestaServidor?.ok) {
-                            const selectorAdvertenciaInmersiva = [...document.querySelectorAll("[componente=advertenciaInmersiva]")]
-                            selectorAdvertenciaInmersiva.map((advertenciaInmersiva) => {
+                            const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
+                            selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                 advertenciaInmersiva.remove()
                             })
                             const navegacion = {
@@ -24237,7 +24237,7 @@ const casaVitini = {
                             espacioUsuario.appendChild(contenedorBotones)
                             const controladorCampos = () => {
                                 let estadoGlobalCampos = "vacios"
-                                campos.map((campo) => {
+                                campos.forEach((campo) => {
                                     if (campo.value.length > 0) {
                                         estadoGlobalCampos = "noVacios"
                                     }
@@ -24250,8 +24250,8 @@ const casaVitini = {
                                     selectorContenedorBotones.style.display = "flex"
                                 }
                             }
-                            const campos = [...document.querySelectorAll("[campo]")]
-                            campos.map((campo) => {
+                            const campos = document.querySelectorAll("[campo]")
+                            campos.forEach((campo) => {
                                 campo.addEventListener("input", controladorCampos)
                             })
                         }
@@ -24297,8 +24297,8 @@ const casaVitini = {
                         }
                     },
                     cancelarCambios: () => {
-                        const campos = [...document.querySelectorAll("[campo]")]
-                        campos.map((campo) => {
+                        const campos = document.querySelectorAll("[campo]")
+                        campos.forEach((campo) => {
                             campo.value = null
                         })
                         const selectorContenedorBotones = document.querySelector("[componente=contenedorBotones]")
@@ -24617,7 +24617,7 @@ const casaVitini = {
                             capas: [],
                             capasCompuestas: {}
                         }
-                        const elementosSeleccionados = [...document.querySelectorAll("[componente=contenedorMenuCapas] [estado=seleccionado]")]
+                        const elementosSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [estado=seleccionado]")
                         for (const elementoSeleccionado of elementosSeleccionados) {
                             const capaUID = elementoSeleccionado.getAttribute("capaUID")
                             capasSelecionadas.push(capaUID)
@@ -24860,7 +24860,7 @@ const casaVitini = {
                         const iconoSelecionado = contenedorCapa.querySelector("[componente=icono]")
                         const estadoCapa = contenedorCapa.getAttribute("estado")
                         const controlBotonGlobal = () => {
-                            const capasGlobales = [...document.querySelectorAll("[componente=contenedorMenuCapas] [tipo=global], [componente=contenedorMenuCapas] [tipo=capaSimple]")]
+                            const capasGlobales = document.querySelectorAll("[componente=contenedorMenuCapas] [tipo=global], [componente=contenedorMenuCapas] [tipo=capaSimple]")
                             const capaGlobal = document.querySelector("[componente=contenedorMenuCapas] [capaUID=global]")
                             const iconoCapa = capaGlobal.querySelector("[componente=icono]")
                             let estadoFinal = "seleccionado"

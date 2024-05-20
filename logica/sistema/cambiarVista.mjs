@@ -49,7 +49,7 @@ const cambiarVista = async (transaccion) => {
         let parametros = []
         let urlResueltoParseador = urlResuelta.split("/")
         urlResueltoParseador = urlResueltoParseador.filter(rama => rama)
-        arbol.map((parametroPorResolver, posicion) => {
+        arbol.forEach((parametroPorResolver, posicion) => {
             parametroPorResolver = parametroPorResolver.toLowerCase()
             if (parametroPorResolver !== urlResueltoParseador[posicion]) {
                 parametros.push(parametroPorResolver)

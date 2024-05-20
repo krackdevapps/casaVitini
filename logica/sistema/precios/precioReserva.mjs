@@ -27,7 +27,7 @@ export const precioReserva = async (metadatos) => {
             // Extrae apartamentos
             const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
 
-            apartamentosDeLaReserva.map(apartamento => {
+            apartamentosDeLaReserva.forEach(apartamento => {
                 return apartamento.apartamento
             })
             const moldeReserva = {

@@ -66,7 +66,7 @@ export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
 
             let impuestosFinal;
             let sumaTotalImpuestos = 0;
-            listaImpuestos.map((detalleImpuesto) => {
+            listaImpuestos.forEach((detalleImpuesto) => {
                 const tipoImpositivo = detalleImpuesto.tipoImpositivo;
                 const nombreImpuesto = detalleImpuesto.nombre;
                 const tipoValor = detalleImpuesto.tipoValor;

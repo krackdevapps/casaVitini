@@ -55,7 +55,10 @@ export const insertarTotalesReserva = async (metadatos) => {
             const fechaMes = fechaDiaConNoche_array[1].padStart(2, "0")
             const fechaAno = fechaDiaConNoche_array[2]
             const fechaDiaConNoche_ISO = `${fechaAno}-${fechaMes}-${fechaDia}`
-            await validadoresCompartidos.fechas.validarFecha_ISO(fechaDiaConNoche_ISO)
+            await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: fechaDiaConNoche_ISO,
+                nombreCampo: "La fecha con noche"
+            })
 
             const precioNetoNoche = detallesDelDiaConNoche.precioNetoNoche
             const apartamentosJSON = detallesDelDiaConNoche.apartamentosJSON

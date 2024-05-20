@@ -61,14 +61,14 @@ export const reservasDelCliente = async (entrada, salida) => {
         const comoPernoctantePreProcesado = [];
         const reservasUIDComoTitular = await obtenerReservasDelClienteComoTitular(cliente)
         if (reservasUIDComoTitular.length > 0) {
-            reservasUIDComoTitular.map((detallesReserva) => {
+            reservasUIDComoTitular.forEach((detallesReserva) => {
                 const uid = detallesReserva.reservaUID;
                 comoTitularPreProcesado.push(uid);
             });
         }
         const reservasUIDComoPernoctante = await obtenerReservasDelClienteComoPernoctante(cliente)
         if (reservasUIDComoPernoctante.length > 0) {
-            reservasUIDComoPernoctante.map((detallesReserva) => {
+            reservasUIDComoPernoctante.forEach((detallesReserva) => {
                 const reserva = detallesReserva.reserva;
                 comoPernoctantePreProcesado.push(reserva);
             });

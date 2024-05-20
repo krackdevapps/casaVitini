@@ -29,8 +29,14 @@ export const bloquearApartamentos = async (metadatos) => {
         const zonaBloqueo = metadatos.zonaBloqueo
         const origen = metadatos.origen
 
-        await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
-        await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: fechaEntrada_ISO,
+            nombreCampo: "La fecha de entrada"
+        })
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: fechaSalida_ISO,
+            nombreCampo: "La fecha de salida"
+        })
 
         if (tipoBloqueo !== "rangoTemporal" && tipoBloqueo !== "permanente" && tipoBloqueo !== "sinBloqueo") {
             const error = "El campo 'tipoBloqueo' solo puede ser rangoTemporal, permanente, sinBloqueo"

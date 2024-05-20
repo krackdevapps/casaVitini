@@ -50,7 +50,7 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
         if (listaImpuestos.length > 0) {
             let impuestosFinal;
             let sumaTotalImpuestos = 0;
-            listaImpuestos.map((detalleImpuesto) => {
+            listaImpuestos.forEach((detalleImpuesto) => {
                 const tipoImpositivo = detalleImpuesto.tipoImpositivo;
                 const nombreImpuesto = detalleImpuesto.nombre;
                 const tipoValor = detalleImpuesto.tipoValor;

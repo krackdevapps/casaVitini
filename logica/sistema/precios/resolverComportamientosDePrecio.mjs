@@ -2,8 +2,14 @@ import { obtenerComportamientosPorRangoPorTipoIDV } from '../../repositorio/comp
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 
 export const resolverComportamientosDePrecio = async (fechaEntrada_ISO, fechaSalida_ISO) => {
-    await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO);
-    await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO);
+    await validadoresCompartidos.fechas.validarFecha_ISO({
+        fecha_ISO: fechaEntrada_ISO,
+        nombreCampo: "La fecha de entrado del comportamiento"
+    });
+    await validadoresCompartidos.fechas.validarFecha_ISO({
+        fecha_ISO: fechaSalida_ISO,
+        nombreCampo: "La fecah de salida del comportamiento"
+    });
 
     const estructuraComportamientos = [];
     const soloComportamientosActivados = "activado";

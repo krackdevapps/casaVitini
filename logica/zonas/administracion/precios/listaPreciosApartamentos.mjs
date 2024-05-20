@@ -45,7 +45,7 @@ export const listaPreciosApartamentos = async (entrada, salida) => {
                 if (listaImpuestos.length > 0) {
                     apartamento.totalImpuestos = 0;
                     let sumaTotalImpuestos = 0;
-                    listaImpuestos.map((detalleImpuesto) => {
+                    listaImpuestos.forEach((detalleImpuesto) => {
                         const tipoImpositivo = detalleImpuesto.tipoImpositivo;
                         const tipoValor = detalleImpuesto.tipoValor;
                         if (tipoValor === "porcentaje") {

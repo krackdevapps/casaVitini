@@ -95,7 +95,7 @@ export const validarObjetoReserva = async (reserva) => {
             const habitacionesSoloIDV = []
             const habitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV) || []
 
-            habitacionesPorApartamento.map((habitacionApartamento) => {
+            habitacionesPorApartamento.forEach((habitacionApartamento) => {
                 const habitacionIDV = habitacionApartamento.habitacion
                 const habitacionUID = habitacionApartamento.uid
                 habitacionesEstructura[habitacionIDV] = habitacionUID
@@ -125,7 +125,7 @@ export const validarObjetoReserva = async (reserva) => {
             const habitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV) || []
             const habitacionesEstructura = {}
             const habitacionesSoloIDV = []
-            habitacionesPorApartamento.map((habitacionApartamento) => {
+            habitacionesPorApartamento.forEach((habitacionApartamento) => {
                 const habitacionIDV = habitacionApartamento.habitacion
                 const habitacionUID = habitacionApartamento.uid
                 habitacionesEstructura[habitacionIDV] = habitacionUID

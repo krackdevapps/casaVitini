@@ -70,7 +70,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         }
         const apartamentosDisponbiles = [];
         const apartamentosConfiguradosDisponibles = [];
-        configuracionesDisponibles.map((apartamento) => {
+        configuracionesDisponibles.forEach((apartamento) => {
             apartamentosConfiguradosDisponibles.push(apartamento.apartamentoIDV);
         });
         const bloqueoTemporal = "rangoTemporal";
@@ -105,13 +105,13 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
             const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
             if (apartamentosDeLaReserva.length > 0) {
                 const apartamentosPorReservaArray = [];
-                apartamentosDeLaReserva.map((apartamento) => {
+                apartamentosDeLaReserva.forEach((apartamento) => {
                     apartamentosPorReservaArray.push(apartamento.apartamentoIDV);
                 });
                 const fechaEntrada_ISO = reservaCoincidente.fechaEntrada_ISO;
                 const fechaSalida_ISO = reservaCoincidente.fechaSalida_ISO;
                 const fechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO);
-                fechasInternas.map((fechaInterna) => {
+                fechasInternas.forEach((fechaInterna) => {
                     if (!objetoFechasInternas[fechaInterna]?.apartamentos) {
                         const detalleDia = {
                             fecha: `${fechaInterna}/${mes}/${ano}`,
@@ -135,7 +135,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
             const tipoBloqueo = bloqueoCoincidente.tipoBloqueo;
             if (tipoBloqueo === "rangoTemporal") {
                 const fechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO);
-                fechasInternas.map((fechaInterna) => {
+                fechasInternas.forEach((fechaInterna) => {
                     if (!objetoFechasInternas[fechaInterna]?.apartamentos) {
                         const detalleDia = {
                             fecha: `${fechaInterna}/${mes}/${ano}`,
@@ -157,7 +157,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
                 const fechaInicioDelMes_ISO = `${ano}-${String(mes).padStart(2, "0")}-01`;
                 const fechaFinDelMes_ISO = `${ano}-${String(mes).padStart(2, "0")}-${String(numeroUltimoDia).padStart(2, "0")}`;
                 const fechasInternas = obtenerFechasInternas(fechaInicioDelMes_ISO, fechaFinDelMes_ISO);
-                fechasInternas.map((fechaInterna) => {
+                fechasInternas.forEach((fechaInterna) => {
                     if (!objetoFechasInternas[fechaInterna]?.apartamentos) {
                         const detalleDia = {
                             fecha: `${fechaInterna}/${mes}/${ano}`,
@@ -186,7 +186,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
                 const fechaFinalEvento_ISO = detallesDelEvento.fechaFinal;
                 const apartamentosPorReservaArray = [apartamentoIDV];
                 const fechasInternas = obtenerFechasInternas(fechaInicioEvento_ISO, fechaFinalEvento_ISO);
-                fechasInternas.map((fechaInterna) => {
+                fechasInternas.forEach((fechaInterna) => {
                     if (!objetoFechasInternas[fechaInterna]?.apartamentos) {
                         const detalleDia = {
                             fecha: `${fechaInterna}/${mes}/${ano}`,

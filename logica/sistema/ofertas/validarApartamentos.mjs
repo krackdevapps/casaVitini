@@ -60,7 +60,7 @@ export const validarApartamentos = async (data) => {
             }
         }
         // No pueden existir dos apartamentos o mas iguales
-        const apartamentosSeleccionadosPreProcesados = apartamentos.map((detallesApartamento) => {
+        const apartamentosSeleccionadosPreProcesados = apartamentos.forEach((detallesApartamento) => {
             return detallesApartamento.apartamentoIDV
         });
         const apartamentosSeleccionadosUnicos = new Set(apartamentosSeleccionadosPreProcesados);
@@ -73,7 +73,7 @@ export const validarApartamentos = async (data) => {
         // que los identificadores no existan.
         const apartamentosPorIDV = await obtenerConfiguracionPorArrayDeApartamentoIDV(apartamentosSeleccionadosPreProcesados)
         // Extraer los valores encontrados en la base de datos  
-        const apartamentosIDVEncontrados = apartamentosPorIDV.map(apartamento => apartamento.apartamentoIDV);
+        const apartamentosIDVEncontrados = apartamentosPorIDV.forEach(apartamento => apartamento.apartamentoIDV);
         // Encontrar las cadenas que no coincidieron
         const cadenasNoCoincidentes = apartamentosSeleccionadosPreProcesados.filter((apartamentoIDV) => {
             !apartamentosIDVEncontrados.includes(apartamentoIDV)

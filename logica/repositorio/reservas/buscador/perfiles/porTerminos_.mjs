@@ -13,7 +13,7 @@ export const porTerminos_ = async (data) => {
         const arrayTerminmos = termino.toLowerCase().split(" ");
 
         const terminosFormateados = [];
-        arrayTerminmos.map((terminoDelArray) => {
+        arrayTerminmos.forEach((terminoDelArray) => {
             const terminoFinal = "%" + terminoDelArray + "%";
             terminosFormateados.push(terminoFinal);
         });

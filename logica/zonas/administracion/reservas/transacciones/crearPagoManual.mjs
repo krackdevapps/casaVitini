@@ -49,63 +49,7 @@ export const crearPagoManual = async (entrada, salida) => {
         await obtenerReservaPorReservaUID(reservaUID);
 
         const fechaActual = DateTime.utc().toISO();
-        // const sql = {
-        //     insertarPago: async (datosDelNuevoPago) => {
-        //         try {
-        //             const asociarPago = `
-        //                                 INSERT INTO
-        //                                 "reservaPagos"
-        //                                 (
-        //                                 "plataformaDePago",
-        //                                 tarjeta,
-        //                                 "tarjetaDigitos",
-        //                                 "pagoUIDPasarela",
-        //                                 reserva,
-        //                                 cantidad,
-        //                                 "fechaPago",
-        //                                 "chequeUID",
-        //                                 "transferenciaUID"
-        //                                 )
-        //                                 VALUES 
-        //                                 ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        //                                 RETURNING
-        //                                 "pagoUID",
-        //                                 "plataformaDePago",
-        //                                 "tarjetaDigitos",
-        //                                 "pagoUIDPasarela",
-        //                                 cantidad,
-        //                                 to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPagoUTC_ISO", 
-        //                                 "chequeUID",
-        //                                 "transferenciaUID"
-        //                                 `;
-        //             const datosPago = [
-        //                 datosDelNuevoPago.plataformaDePago,
-        //                 datosDelNuevoPago.tarjeta,
-        //                 datosDelNuevoPago.tarjetaDigitos,
-        //                 datosDelNuevoPago.pagoUIDPasarela,
-        //                 datosDelNuevoPago.reservaUID,
-        //                 datosDelNuevoPago.cantidadConPunto,
-        //                 datosDelNuevoPago.fechaPago,
-        //                 datosDelNuevoPago.chequeUID,
-        //                 datosDelNuevoPago.transferenciaUID
-        //             ];
-        //             const consulta = await conexion.query(asociarPago, datosPago);
-        //             const detallesDelPagoNuevo = consulta.rows[0];
-        //             const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-        //             const fechaPagoUTC_ISO = detallesDelPagoNuevo.fechaPagoUTC_ISO;
-        //             const fechaPagoTZ_ISO = DateTime.fromISO(fechaPagoUTC_ISO, { zone: 'utc' })
-        //                 .setZone(zonaHoraria)
-        //                 .toISO();
-        //             detallesDelPagoNuevo.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
-
-        //             return detallesDelPagoNuevo;
-        //         } catch (errorCapturado) {
-        //             throw errorCapturado;
-        //         }
-        //     }
-        // };
-
-
+       
         const estructuraFinal = {};
 
         if (plataformaDePago === "efectivo") {

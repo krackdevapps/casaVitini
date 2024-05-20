@@ -333,6 +333,35 @@ export const validadoresCompartidos = {
             } catch (error) {
                 throw error
             }
+        },
+        fechaEnRango: (data) => {
+            try {
+
+                const fechaAComprobrarDentroDelRango = data.fechaAComprobrarDentroDelRango
+                const fechaInicioRango_ISO = data.fechaInicioRango_ISO
+                const fechaFinRango_ISO = data.fechaFinRango_ISO
+
+                validadoresCompartidos.fechas.validarFecha_ISO({
+                    fechaISO: fechaAComprobrarDentroDelRango,
+                    nombreCampo: "La fecha a comprobar dentro del rango"
+                })
+
+                validadoresCompartidos.fechas.validarFecha_ISO({
+                    fechaISO: fechaInicioRango_ISO,
+                    nombreCampo: "La fecha fe inicio del rango"
+                })
+                validadoresCompartidos.fechas.validarFecha_ISO({
+                    fechaISO: fechaFinRango_ISO,
+                    nombreCampo: "La fecha a fin del rango"
+                })
+
+                const fechaObjetoAComprobar = DateTime.fromISO(fechaAComprobrarDentroDelRango);
+                const fechaObjetoInicio = DateTime.fromISO(fechaInicioRango_ISO);
+                const fechaObjetoFin = DateTime.fromISO(fechaFinRango_ISO);
+                return fechaObjetoAComprobar >= fechaObjetoInicio && fechaObjetoAComprobar <= fechaObjetoFin;
+            } catch (error) {
+                throw error
+            }
         }
     },
     claves: {

@@ -25,7 +25,7 @@ export const detallePrecioBaseApartamento = async (entrada, salida) => {
         //  transaccionInterna.precioNetoPorDia = new Decimal(transaccionInterna.precioNetoPorDia).toFixed(2)
         //  transaccionInterna.totalImpuestos = new Decimal(transaccionInterna.totalImpuestos).toFixed(2)
         //  transaccionInterna.totalBrutoPordia = new Decimal(transaccionInterna.totalBrutoPordia).toFixed(2)
-        transaccionInterna.impuestos.map((impuesto) => {
+        transaccionInterna.impuestos.forEach((impuesto) => {
             const tipoImpositivo = impuesto.tipoImpositivo;
             const totalImpuesto = impuesto.totalImpuesto;
             impuesto.tipoImpositivo = new Decimal(tipoImpositivo).toFixed(2);

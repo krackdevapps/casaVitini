@@ -9,7 +9,7 @@ export const obtenerUsuario = async (usuario) => {
         WHERE usuario = $1;
         `;
 
-        const resuelve = await conexion.query(consulta, usuario);
+        const resuelve = await conexion.query(consulta, [usuario]);
         if (resuelve.rowCount === 0) {
             const error = "No existe el usuario";
             throw new Error(error);

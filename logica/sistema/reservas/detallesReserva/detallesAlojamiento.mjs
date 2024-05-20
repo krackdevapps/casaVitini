@@ -12,13 +12,13 @@ export const detallesAlojamiento = async (reservaUID) => {
     }
     const habitacionObjeto = {}
     const apartamentosIndiceOrdenado = []
-    apartamentosDeLaReserva.map((apartamento) => {
+    apartamentosDeLaReserva.forEach((apartamento) => {
         apartamentosIndiceOrdenado.push(apartamento.apartamento)
     })
     apartamentosIndiceOrdenado.sort()
     const apartamenosOrdenados = []
-    apartamentosIndiceOrdenado.map((apartamentoIndice) => {
-        apartamentosDeLaReserva.map((apartamento) => {
+    apartamentosIndiceOrdenado.forEach((apartamentoIndice) => {
+        apartamentosDeLaReserva.forEach((apartamento) => {
             if (apartamento.apartamento === apartamentoIndice) {
                 apartamenosOrdenados.push(apartamento)
             }

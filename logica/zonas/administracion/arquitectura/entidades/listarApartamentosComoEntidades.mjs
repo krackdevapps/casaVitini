@@ -23,13 +23,13 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
             salida.json(ok);
         } else {
             const apartamentoEntidades = todosLosApartamentosComoEntidad;
-            apartamentoEntidades.map((detallesApartamento) => {
+            apartamentoEntidades.forEach((detallesApartamento) => {
                 const apartamentoIDV = detallesApartamento.apartamento;
                 const apartamentoUI = detallesApartamento.apartamentoUI;
                 estructuraApartamentosObjeto[apartamentoIDV] = apartamentoUI;
             });
             const apartamentosComoEntidades_formatoArrayString = [];
-            apartamentoEntidades.map((detallesDelApartamento) => {
+            apartamentoEntidades.forEach((detallesDelApartamento) => {
                 const apartamentoIDV = detallesDelApartamento.apartamento;
                 apartamentosComoEntidades_formatoArrayString.push(apartamentoIDV);
             });
@@ -37,7 +37,7 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
             const configuracionesDeLosApartametnos = await obtenerTodasLasConfiguracionDeLosApartamento()
 
             const apartamentosIDVConfiguraciones_formatoArrayString = [];
-            configuracionesDeLosApartametnos.map((detallesapartamento) => {
+            configuracionesDeLosApartametnos.forEach((detallesapartamento) => {
                 const apartamentoIDV = detallesapartamento.apartamentoIDV;
                 apartamentosIDVConfiguraciones_formatoArrayString.push(apartamentoIDV);
             });

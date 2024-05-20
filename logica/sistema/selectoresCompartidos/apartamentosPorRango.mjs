@@ -17,8 +17,14 @@ export const apartamentosPorRango = async (metadatos) => {
 
     try {
 
-        await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
-        await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: fechaEntrada_ISO,
+            nombreCampo: "La fecha de entrada de la reserva"
+        })
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: fechaSalida_ISO,
+            nombreCampo: "La fecha de salida de la reserva"
+        })
         const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO); // El formato es día/mes/ano
         const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO);
         if (fechaEntrada_Objeto >= fechaSalida_Objeto) {
@@ -49,7 +55,7 @@ export const apartamentosPorRango = async (metadatos) => {
 
         const bloqueos = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
 
-        bloqueos.map((apartamento) => {
+        bloqueos.forEach((apartamento) => {
             apartametnosIDVBloqueoados.push(apartamento.apartamento)
         })
         for (const reserva of reservas) {
@@ -66,12 +72,12 @@ export const apartamentosPorRango = async (metadatos) => {
             const error = "No hay ningun apartamento disponible"
             throw new Error(error)
         }
-        const configuracionesAlojaminetoNODisponbiles= await obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles()
-            configuracionesAlojaminetoNODisponbiles.map((apartamentoNoDisponible) => {
-                apartametnosIDVBloqueoados.push(apartamentoNoDisponible.apartamentoIDV)
-            })
-        
-        configuracionesAlojamientoSoloDisponible.map((apartamento) => {
+        const configuracionesAlojaminetoNODisponbiles = await obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles()
+        configuracionesAlojaminetoNODisponbiles.forEach((apartamentoNoDisponible) => {
+            apartametnosIDVBloqueoados.push(apartamentoNoDisponible.apartamentoIDV)
+        })
+
+        configuracionesAlojamientoSoloDisponible.forEach((apartamento) => {
             apartamentosDisponiblesArray.push(apartamento.apartamentoIDV)
         })
         const apartamentosNoDisponiblesArray = Array.from(new Set(apartametnosIDVBloqueoados));

@@ -35,7 +35,7 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
                 return `Quedan ${Math.floor(diferencia.as('minutes'))} minutos`;
             }
         };
-        sessionesActivasDelUsuario.map((detallesSession) => {
+        sessionesActivasDelUsuario.forEach((detallesSession) => {
             const fechaUTC_ISO = detallesSession.caducidadUTC;
             const fechaObjeto = DateTime.fromISO(detallesSession.caducidadUTC, { zone: 'utc' });
             const fechaFormateada = fechaObjeto.toFormat('dd/MM/yyyy HH:mm:ss');

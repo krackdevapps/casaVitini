@@ -36,7 +36,10 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
         })
 
         const fechaCheckIn_ISO = entrada.body.fechaCheckIn_ISO;
-        await validadoresCompartidos.fechas.validarFecha_ISO(fechaCheckIn_ISO)
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: fechaCheckIn_ISO,
+            nombreCampo: "La fecha de checkin"
+        })
         const fechaCheckIn_Objeto = DateTime.fromISO(fechaCheckIn_ISO);
         await campoDeTransaccion("iniciar")
 

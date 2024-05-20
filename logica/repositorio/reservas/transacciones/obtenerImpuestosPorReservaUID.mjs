@@ -1,15 +1,17 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const obtenerTotalesGlobal = async (reservaUID) => {
+export const obtenerImpuestosPorReservaUID = async (reservaUID) => {
     try {
-
         const consulta = `
         SELECT
-            *
+        "nombreImpuesto",
+        "tipoImpositivoIDV",
+        "tipoValorIDV",
+        "calculoImpuestoPorcentaje"
         FROM 
-            "reservaTotales"
-        WHERE 
-            reserva = $1;`;
+        "reservaImpuestos" 
+        WHERE
+        "reservaUID" = $1`
         const resuelve = await conexion.query(consulta, [reservaUID]);
         return resuelve.rows
     } catch (error) {

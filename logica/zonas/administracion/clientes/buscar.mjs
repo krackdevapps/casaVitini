@@ -71,13 +71,13 @@ export const buscar = async (entrada, salida) => {
 
         const consultaConteoTotalFilas = resultadosBusqueda[0]?.totalClientes ? resultadosBusqueda[0].totalClientes : 0;
         if (tipoBusqueda === "rapido") {
-            resultadosBusqueda.map((cliente) => {
+            resultadosBusqueda.forEach((cliente) => {
                 delete cliente.Telefono;
                 delete cliente.email;
                 delete cliente.notas;
             });
         }
-        resultadosBusqueda.map((cliente) => {
+        resultadosBusqueda.forEach((cliente) => {
             delete cliente.totalClientes;
         });
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);

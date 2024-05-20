@@ -69,10 +69,12 @@ export const modificarBloqueo = async (entrada, salida) => {
             const fechaInicioBloqueo_ISO = detallesDelBloquoe.fechaInicioBloqueo_ISO;
             const fechaFinBloqueo_ISO = detallesDelBloquoe.fechaFinBloqueo_ISO;
                 await validadoresCompartidos.fechas.validarFecha_ISO({
-                    fecha_ISO: fechaInicio_ISO
+                    fecha_ISO: fechaInicio_ISO,
+                    nombreCampo: "La fecha de inicio del bloqueo"
                 })
                 await validadoresCompartidos.fechas.validarFecha_ISO({
-                    fecha_ISO: fechaFin_ISO
+                    fecha_ISO: fechaFin_ISO,
+                    nombreCampo: "la fecha de final del bloqueo"
                 })
                 await validadoresCompartidos.fechas.validacionVectorial({
                     fechaEntrada_ISO: fechaInicio_ISO,

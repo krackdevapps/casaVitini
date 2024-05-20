@@ -76,7 +76,7 @@ export const obtenerSituacion = async (entrada, salida) => {
 
                 const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
                 if (apartamentosDeLaReserva.length > 0) {
-                    apartamentosDeLaReserva.map((apartamento) => {
+                    apartamentosDeLaReserva.forEach((apartamento) => {
                         if (apartamentosObjeto[apartamento.apartamentoIDV]) {
                             apartamentosObjeto[apartamento.apartamentoIDV].estadoPernoctacion = "ocupado";
                         }

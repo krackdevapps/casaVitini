@@ -49,13 +49,18 @@ export const crearOferta = async (entrada, salida) => {
         const simboloNumero = entrada.body.simboloNumero;
         const numero = entrada.body.numero;
 
-        await validadoresCompartidos.fechas.validarFecha_ISO(fechaInicio_ISO)
-        await validadoresCompartidos.fechas.validarFecha_ISO(fechaFin_ISO)
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: fechaInicio_ISO,
+            nombreCampo: "La fecha inicio de la oferta"
+        })
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: fechaFin_ISO,
+            nombreCampo: "La fecha fin de la oferta"
+        })
         validadoresCompartidos.fechas.validacionVectorial({
             fechaEntrada_ISO: fechaInicio_ISO,
             fechaSalida_ISO: fechaFin_ISO
         })
-
 
         // Validar nombre unico oferta
         const ofertasPorNombre = await obtenerOfertasPorNombreUI(nombreOferta)
@@ -75,8 +80,8 @@ export const crearOferta = async (entrada, salida) => {
         //                         `;
         //     await conexion.query(controlPrecioEstablecido, [fechaInicio_ISO, fechaFin_ISO, tipoDescuento]);
         // }
-    
-        
+
+
         const ok = {
             ok: "Se ha creado la oferta",
             ofertaUID: null

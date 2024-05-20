@@ -5,8 +5,14 @@ import { validadoresCompartidos } from "../../validadores/validadoresCompartidos
 export const porDiasDeAntelacion = async (reserva) => {
     try {
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
-        const fechaEntradaReserva_ISO = await validadoresCompartidos.fechas.validarFecha_ISO(reserva.fechas.fechaEntrada_ISO)
-        const fechaSalidaReserva_ISO = await validadoresCompartidos.fechas.validarFecha_ISO(reserva.fechas.fechaSalida_ISO)
+        const fechaEntradaReserva_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: reserva.fechas.fechaEntrada_ISO,
+            nombreCampo: "La fecha de entrada de la reserva"
+        })
+        const fechaSalidaReserva_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO:reserva.fechas.fechaSalida_ISO,
+            nombreCampo: "La fecha de salida de la reserva"
+        })
         const totalReservaNeto = new Decimal(reserva.desgloseFinanciero.totales.totalReservaNeto)
         const fechaActualTZ = reserva.fechas.fechaActualProcesada_ISO
         const fechaActual_objeto = DateTime.fromISO(fechaActualTZ).setZone(zonaHoraria);

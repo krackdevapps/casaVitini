@@ -61,8 +61,14 @@ export const crearComportamiento = async (entrada, salida) => {
             const fechaInicio_ISO = entrada.body.fechaInicio_ISO;
             const fechaFinal_ISO = entrada.body.fechaFinal_ISO;
 
-            await validadoresCompartidos.fechas.validarFecha_ISO(fechaInicio_ISO);
-            await validadoresCompartidos.fechas.validarFecha_ISO(fechaFinal_ISO);
+            await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: fechaInicio_ISO,
+                nombreComportameinto: "La fecha de inicio del comportamiento"
+            });
+            await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_UISO: fechaFinal_ISO,
+                nombreComportamiento: "La fecha final del comportameinto"
+            });
 
             const fechaInicio_Objeto = new Date(fechaInicio_ISO); // El formato es día/mes/ano
             const fechaFinal_Objeto = new Date(fechaFinal_ISO);

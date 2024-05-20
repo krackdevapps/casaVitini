@@ -54,7 +54,7 @@ export const buscarUsuarios = async (entrada, salida) => {
         }
         const terminoBuscar = buscar.split(" ");
         const terminosFormateados = [];
-        terminoBuscar.map((termino) => {
+        terminoBuscar.forEach((termino) => {
             const terminoFinal = "%" + termino + "%";
             terminosFormateados.push(terminoFinal);
         });
@@ -82,7 +82,7 @@ export const buscarUsuarios = async (entrada, salida) => {
             Respuesta.nombreColumna;
             Respuesta.sentidoColumna = sentidoColumna;
         }
-        usuariosEncontrados.map((detallesUsuario) => {
+        usuariosEncontrados.forEach((detallesUsuario) => {
             delete detallesUsuario.totalUsuarios;
         });
         Respuesta.usuarios = usuariosEncontrados;

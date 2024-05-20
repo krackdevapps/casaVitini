@@ -11,7 +11,7 @@ export const obtenerResultadosBusqueda = async (data) => {
 
         const terminoBuscar = terminoBusqueda.split(" ");
         const terminosFormateados = [];
-        terminoBuscar.map((termino) => {
+        terminoBuscar.forEach((termino) => {
             const terminoFinal = "%" + termino + "%";
             terminosFormateados.push(terminoFinal);
         });

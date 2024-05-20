@@ -108,7 +108,7 @@ export const realizarReembolso = async (entrada, salida) => {
         const reembolsoDelPago = await obtenerReembolsosPorPagoUID_ordenados(pagoUID)
         if (reembolsoDelPago.length > 0) {
             let totalReembolsado = 0;
-            reembolsoDelPago.map((detallesDelReembolso) => {
+            reembolsoDelPago.forEach((detallesDelReembolso) => {
                 const cantidadDelReembolso = detallesDelReembolso.cantidad;
                 totalReembolsado = new Decimal(totalReembolsado).plus(cantidadDelReembolso);
             });

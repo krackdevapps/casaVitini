@@ -25,7 +25,7 @@ export const detallesComportamiento = async (entrada, salida) => {
         detallesComportamiento["apartamentos"] = [];
 
         const apartamentosDelComportamiento = await obtenerApartamentosDelComportamientoPorComportamientoUID(comportamientoUID)
-        apartamentosDelComportamiento.map((apartamento) => {
+        apartamentosDelComportamiento.forEach((apartamento) => {
             const cantidad = apartamento.cantidad;
             const apartamentoIDV = apartamento.apartamentoIDV;
             const comportamientoUID = apartamento.comportamientoUID;

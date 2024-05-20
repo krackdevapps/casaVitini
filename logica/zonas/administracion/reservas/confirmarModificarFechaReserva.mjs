@@ -47,7 +47,10 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         }
 
         const fechaSolicitada_ISO = entrada.body.fechaSolicitada_ISO;
-        await validadoresCompartidos.fechas.validarFecha_ISO(fechaSolicitada_ISO);
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: fechaSolicitada_ISO,
+            nombreCampo: "La fecha solicitada"
+        });
 
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const fechaSolicitada_objeto = DateTime.fromISO(fechaSolicitada_ISO, { zone: zonaHoraria });

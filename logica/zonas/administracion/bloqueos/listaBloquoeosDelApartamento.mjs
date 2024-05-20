@@ -36,7 +36,7 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
         }
         if (bloqueosDelApartamento.length > 0) {
             const bloqueosDelApartamentoEntonctrado = [];
-            bloqueosDelApartamento.map((bloqueoDelApartamento) => {
+            bloqueosDelApartamento.forEach((bloqueoDelApartamento) => {
                 const uidBloqueo = bloqueoDelApartamento.uid;
                 const tipoBloqueo = bloqueoDelApartamento.tipoBloqueo;
                 const entrada = bloqueoDelApartamento.entrada;

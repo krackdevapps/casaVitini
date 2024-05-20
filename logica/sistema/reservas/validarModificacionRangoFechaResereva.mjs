@@ -56,7 +56,7 @@ export const validarModificacionRangoFechaResereva = async (metadatos) => {
         // consulta apartamentos NO diponibles en configuracion global
 
         const configuracionesApartamentosSoloDiponibles = await obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles()
-        configuracionesApartamentosSoloDiponibles.map((apartamentoConConfiguracionDisponible) => {
+        configuracionesApartamentosSoloDiponibles.forEach((apartamentoConConfiguracionDisponible) => {
             apartamentosConConfiguracionDisponible.push(apartamentoConConfiguracionDisponible.apartamentoIDV)
         })
         const controlConfiguracionAlojamiento = apartamentosReservaActual.every(apto => apartamentosConConfiguracionDisponible.includes(apto));

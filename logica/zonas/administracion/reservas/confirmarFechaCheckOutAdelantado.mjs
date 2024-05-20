@@ -35,7 +35,10 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
         const fechaCheckOut_ISO = entrada.body.fechaCheckOut_ISO;
-        await validadoresCompartidos.fechas.validarFecha_ISO(fechaCheckOut_ISO)
+        await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: fechaCheckOut_ISO,
+            nombreCampo: "La fecha de checkout"
+        })
         const fechaCheckOut_Objeto = DateTime.fromISO(fechaCheckOut_ISO);
         await campoDeTransaccion("iniciar")
 
