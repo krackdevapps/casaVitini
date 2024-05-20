@@ -1,4 +1,5 @@
 import { conexion } from "../../../componentes/db.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
@@ -48,7 +49,7 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             }
         }
         await controlCaducidadEnlacesDePago();
-        const resuelveValidarReserva = await validadoresCompartidos.reservas.validarReserva(reservaUID);
+        const resuelveValidarReserva = await obtenerReservaPorReservaUID(reservaUID);
         const estadoReserva = resuelveValidarReserva.estadoReserva;
         const estadoPago = resuelveValidarReserva.estadoPago;
         if (estadoReserva === "cancelada") {

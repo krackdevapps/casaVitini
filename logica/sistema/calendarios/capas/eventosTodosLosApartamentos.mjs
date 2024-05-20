@@ -1,13 +1,10 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../../componentes/db.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
-const eventosTodosLosApartamentos = async (fecha) => {
+import { obtenerReservasDeTodosLosApartamentosPorMesPorAno } from "../../../repositorio/calendario/obtenerReservasDeTodosLosApartamentosPorMesPorAno.mjs";
+import { validadoresCompartidos } from "../../validadores/validadoresCompartidos.mjs";
+export const eventosTodosLosApartamentos = async (fecha) => {
     try {
-        const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
-        if (!filtroFecha.test(fecha)) {
-            const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante."
-            throw new Error(error)
-        }
+        validadoresCompartidos.fechas.fechaMesAno(fecha)
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
         const ano = fechaArray[1]
@@ -28,38 +25,15 @@ const eventosTodosLosApartamentos = async (fecha) => {
             }
             return fechasInternas;
         }
-        const consultaReservas = `
-        SELECT 
-          r.reserva,
-          ra.uid,
-          to_char(r.entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-          to_char(r.salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
-          ra.apartamento as "apartamentoIDV",
-          (salida - entrada) as duracion_en_dias
-        FROM reservas r
-        JOIN "reservaApartamentos" ra ON r.reserva = ra.reserva 
-        WHERE 
-        (
-            DATE_PART('YEAR', entrada) < $2
-            OR (
-                DATE_PART('YEAR', entrada) = $2
-                AND DATE_PART('MONTH', entrada) <= $1
-            )
-        )
-        AND (
-            DATE_PART('YEAR', salida) > $2
-            OR (
-                DATE_PART('YEAR', salida) = $2
-                AND DATE_PART('MONTH', salida) >= $1
-            )
-        )
-          AND "estadoReserva" <> $3;
-        `
         const reservaCancelada = "cancelada"
-        const resuelveReservas = await conexion.query(consultaReservas, [mes, ano, reservaCancelada])
+        const reservas = await obtenerReservasDeTodosLosApartamentosPorMesPorAno({
+            mes: mes,
+            ano: ano,
+            reservaCancelada: reservaCancelada
+        })
         const reservasSelecciondas = []
-            
-        for (const detalles of resuelveReservas.rows) {
+
+        for (const detalles of reservas) {
             const apartamentoIDV = detalles.apartamentoIDV
             detalles.apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
             reservasSelecciondas.push(detalles)
@@ -102,7 +76,4 @@ const eventosTodosLosApartamentos = async (fecha) => {
     } catch (errorCapturado) {
         throw errorCapturado
     }
-}
-export {
-    eventosTodosLosApartamentos
 }

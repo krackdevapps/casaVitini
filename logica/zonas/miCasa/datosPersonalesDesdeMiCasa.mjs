@@ -3,6 +3,7 @@ import { obtenerDatosPersonales } from "../../repositorio/usuarios/obtenerDatosP
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
+import { campoDeTransaccion } from "../../componentes/campoDeTransaccion.mjs";
 
 export const datosPersonalesDesdeMiCasa = async (entrada, salida) => {
 
@@ -13,7 +14,7 @@ export const datosPersonalesDesdeMiCasa = async (entrada, salida) => {
         IDX.control()
 
         mutex.acquire()
-
+        await campoDeTransaccion("iniciar")
         const usuarioIDX = entrada.session.usuario;
         const ok = {
             ok: {}
@@ -26,6 +27,7 @@ export const datosPersonalesDesdeMiCasa = async (entrada, salida) => {
         ok.ok.estadoCuenta = estadoCuenta;
 
         const datosDelUsuario = await obtenerDatosPersonales(usuarioIDX)
+        await campoDeTransaccion("confirmar")
         for (const [dato, valor] of Object.entries(datosDelUsuario)) {
             ok.ok[dato] = valor;
         }
@@ -34,6 +36,7 @@ export const datosPersonalesDesdeMiCasa = async (entrada, salida) => {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     } finally {
+        await campoDeTransaccion("cancelar")
         if (mutex) {
             mutex.release()
         }

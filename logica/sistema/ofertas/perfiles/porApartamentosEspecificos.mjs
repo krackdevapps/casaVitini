@@ -1,15 +1,16 @@
 import Decimal from "decimal.js";
 import { validadoresCompartidos } from "../../validadores/validadoresCompartidos.mjs";
-import { conexion } from "../../../componentes/db.mjs";
+import { obtenerOfertasPorFechaPorEstadoPorTipo } from "../../../repositorio/ofertas/perfiles/obtenerOfertasPorFechaPorEstadoPorTipo.mjs";
+import { obtenerApartamentosDeLaOfertaPorOfertaUID } from "../../../repositorio/ofertas/obtenerApartamentosDeLaOfertaPorOfertaUID.mjs";
 const compararArraysStrings = (array1, array2) => {
     return array2.every(apartamento => array1.includes(apartamento));
 };
 const fusionaArrayConComaYUltimaConYGriega = (array) => {
     return array.length <= 1 ? array.join("") : `${array.slice(0, -1).join(", ")} y ${array.slice(-1)}`;
 }
-const porApartamentosEspecificos = async (reserva) => {
+export const porApartamentosEspecificos = async (reserva) => {
     try {
-        const fechaActualTZ =  reserva.fechas.fechaActualProcesada_ISO
+        const fechaActualTZ = reserva.fechas.fechaActualProcesada_ISO
         const estadoOfertaActivado = "activada"
         const apartamentosReserva = reserva.desgloseFinanciero.totalesPorApartamento
         const apartamentosIDV_reserva = []
@@ -24,29 +25,16 @@ const porApartamentosEspecificos = async (reserva) => {
         }
         const ofertasSeleccionadas = []
         let descuentoGlobal = new Decimal("0.00")
-        const consulta = `
-        SELECT 
-        uid,
-        to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
-        to_char("fechaFin", 'DD/MM/YYYY') as "fechaFin",
-        "simboloNumero",
-        "descuentoAplicadoA",
-        "estadoOferta",
-        "tipoOferta",
-        "cantidad",
-        numero,
-        "tipoDescuento",
-        "nombreOferta"
-        FROM ofertas
-        WHERE $1 BETWEEN "fechaInicio" AND "fechaFin"
-        AND "estadoOferta" = $2
-        AND "tipoOferta" = $3`;
-        // Mucho ojo en las ofertas de tipo1 por que se activan revisando la fecha actual, es decir la fecha de cuando se realiza la reserva y no las fechas de inicio y fin de la reserva, eso se revisa mas adelante
+           // Mucho ojo en las ofertas de tipo1 por que se activan revisando la fecha actual, es decir la fecha de cuando se realiza la reserva y no las fechas de inicio y fin de la reserva, eso se revisa mas adelante
         // Acuerdate por que esta parte es un poco contraintuitiva.
         const ofertaTipo = "porApartamentosEspecificos";
-        const ofertasEncontradas = await conexion.query(consulta, [fechaActualTZ, estadoOfertaActivado, ofertaTipo]);
+        const ofertas = await obtenerOfertasPorFechaPorEstadoPorTipo({
+            fechaActualTZ: fechaActualTZ,
+            estadoOfertaActivado: estadoOfertaActivado,
+            ofertaTipo:ofertaTipo
+        })
         // Filtro Ofertas
-        for (const detallesOferta of ofertasEncontradas.rows) {
+        for (const detallesOferta of ofertas) {
             const ofertaUID = detallesOferta.uid
             const tipoOferta = detallesOferta.tipoOferta
             const simboloNumero = detallesOferta.simboloNumero
@@ -75,16 +63,8 @@ const porApartamentosEspecificos = async (reserva) => {
         for (const detallesOferta of ofertasSeleccionadas) {
             const ofertaUID = detallesOferta.ofertaUID
             delete detallesOferta.ofertaUID
-            const consultaApartamentosEspecificos = `
-            SELECT  
-            apartamento AS "apartamentoIDV",
-            "tipoDescuento",
-            cantidad
-            FROM "ofertasApartamentos"
-            WHERE oferta = $1;
-            `
-            const apartamentosEspecificosDeLaOferta = await conexion.query(consultaApartamentosEspecificos, [ofertaUID]);
-            for (const detallesPorApartamento of apartamentosEspecificosDeLaOferta.rows) {
+            const apartamentosDeLaOferta = await obtenerApartamentosDeLaOfertaPorOfertaUID(ofertaUID)
+            for (const detallesPorApartamento of apartamentosDeLaOferta) {
                 const apartamentoIDV = detallesPorApartamento.apartamentoIDV
                 const apartamentoUI = await validadoresCompartidos.reservas.resolverNombreApartamento(apartamentoIDV)
                 const tipoDescuento = detallesPorApartamento.tipoDescuento
@@ -186,7 +166,4 @@ const porApartamentosEspecificos = async (reserva) => {
     } catch (error) {
         throw error
     }
-}
-export {
-    porApartamentosEspecificos
 }

@@ -1,83 +1,53 @@
-import { conexion } from '../../componentes/db.mjs';
-const estadoHabitacionesApartamento = async (transacion) => {
+import { obtenerConfiguracionPorApartamentoIDV } from '../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs';
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
+import { obtenerHabitacionesDelApartamento } from '../../repositorio/reservas/apartamentos/obtenerHabitacionDelApartamento.mjs';
+
+export const estadoHabitacionesApartamento = async (transacion) => {
     try {
-        const reserva = transacion.reserva
-        const apartamento = transacion.apartamento
+        const reservaUID = transacion.reservaUID
+        const apartamentoUID = transacion.apartamentoUID
         // compruebo que eso sea un apartamento dentro de la reserva
-        const controlApartamento = `
-        SELECT apartamento
-        FROM "reservaApartamentos"
-        WHERE uid = $1 AND reserva = $2;
-        `
-        const resuelveControlApartamento = await conexion.query(controlApartamento, [apartamento, reserva])
-        const apartamentoIDV = resuelveControlApartamento.rows[0]?.apartamento
-        if (!apartamentoIDV) {
+
+        const apartamentoDeLaReserva = await obtenerApartamentoDeLaReservaPorApartamentoUID({
+            reservaUID: reservaUID,
+            apartamentoUID: apartamentoUID
+        })
+        if (apartamentoDeLaReserva.length === 0) {
             const error = "No existe el apartamento dentro de esta reserva"
             throw new Error(error)
         }
-        const habitcionesApartamentoEnReserva = `
-        SELECT habitacion
-        FROM "reservaHabitaciones"
-        WHERE apartamento = $1 AND reserva = $2;
-        `
-        const resuelveHabitcionesApartamentoEnReserva = await conexion.query(habitcionesApartamentoEnReserva, [apartamento, reserva])
-        const habitacionesApartamentoReserva = resuelveHabitcionesApartamentoEnReserva.rows
+        const apartamentoIDV = apartamentoDeLaReserva?.apartamento
 
+        const habitacionesDelApartamento = await obtenerHabitacionesDelApartamento({
+            reservaUID: reservaUID,
+            apartamentoUID: apartamentoUID,
+        })
 
-        const controlConfiguracionApartametno = `
-            SELECT "apartamentoIDV"
-            FROM "configuracionApartamento"
-            WHERE "apartamentoIDV" = $1;
-            `
-        const resuelveCcontrolConfiguracionApartametno = await conexion.query(controlConfiguracionApartametno, [apartamentoIDV])
-        if (resuelveCcontrolConfiguracionApartametno.rows.length === 0) {
-            const info = `Este apartamento ya no existe como configuracion de alojamiento, para recuperar esta configuración de alojamiento, por favor cree una nueva configuración de alojmaiento con el identificador visual: ${apartamentoIDV}`
-            const respuesta = {
-                info: info
-            }
-            return respuesta
-        }
-        const configuracionGlobalHabitacionesApartamento = `
-            SELECT habitacion
-            FROM "configuracionHabitacionesDelApartamento"
-            WHERE apartamento = $1;
-            `
-        const resuelveconfiguracionGlobalHabitacionesApartamento = await conexion.query(configuracionGlobalHabitacionesApartamento, [apartamentoIDV])
-        const configuracionHabitacionesApartamento = resuelveconfiguracionGlobalHabitacionesApartamento.rows
-        if (configuracionHabitacionesApartamento.length === 0) {
-            const info = `Este apartamento no tiene habitaciones disponbiles para seleccionar. Si desea tener disponibles habitaciones a este apartamento, añada habitaciones seleccionables en la configuracion de alojamiento con identificador visual ${apartamentoIDV}`
-            const respuesta = {
-                info: info
-            }
-            return respuesta
+        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+
+        const configuracionDeHabitacionesDelApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
+        if (configuracionDeHabitacionesDelApartamento.length === 0) {
+            const error = `Este apartamento no tiene habitaciones disponbiles para seleccionar. Si desea tener disponibles habitaciones a este apartamento, añada habitaciones seleccionables en la configuracion de alojamiento con identificador visual ${apartamentoIDV}`
+            throw new Error(error)
         }
 
-        if (configuracionHabitacionesApartamento.length > 0) {
-            const habitacionesDelApartamentoPreProcesado = configuracionHabitacionesApartamento
-            const habitacionesDelApartamentoDeLaReservaPreProcesado = habitacionesApartamentoReserva
-            const habitacionesDelApartamentoPostProcesado = []
-            const habitacionesDelApartamentoDeLaReservaPostProcesado = []
-            habitacionesDelApartamentoPreProcesado.map((habitacionPreProcesda) => {
-                const habitacionPostProcesada = habitacionPreProcesda.habitacion
-                habitacionesDelApartamentoPostProcesado.push(habitacionPostProcesada)
-            })
-            habitacionesDelApartamentoDeLaReservaPreProcesado.map((habitacionPreProcesda) => {
-                const habitacionPostProcesada = habitacionPreProcesda.habitacion
-                habitacionesDelApartamentoDeLaReservaPostProcesado.push(habitacionPostProcesada)
-            })
-            const habitaconesDipsoniblesDelapartamentoPostProcesado = habitacionesDelApartamentoPostProcesado.filter(habitacion => !habitacionesDelApartamentoDeLaReservaPostProcesado.includes(habitacion));
+        const habitacionesDelApartamentoPostProcesado = []
+        const habitacionesDelApartamentoDeLaReservaPostProcesado = []
+        configuracionDeHabitacionesDelApartamento.forEach((habitacionPreProcesda) => {
+            const habitacionPostProcesada = habitacionPreProcesda.habitacion
+            habitacionesDelApartamentoPostProcesado.push(habitacionPostProcesada)
+        })
+        habitacionesDelApartamento.forEach((habitacionPreProcesda) => {
+            const habitacionPostProcesada = habitacionPreProcesda.habitacion
+            habitacionesDelApartamentoDeLaReservaPostProcesado.push(habitacionPostProcesada)
+        })
+        const habitaconesDipsoniblesDelapartamentoPostProcesado = habitacionesDelApartamentoPostProcesado.filter(habitacion => !habitacionesDelApartamentoDeLaReservaPostProcesado.includes(habitacion));
 
-            const ok = {
-                ok: habitaconesDipsoniblesDelapartamentoPostProcesado
-            }
-            return ok
+        const ok = {
+            ok: habitaconesDipsoniblesDelapartamentoPostProcesado
         }
-
-
+        return ok
     } catch (error) {
         throw error;
     }
 }
-export {
-    estadoHabitacionesApartamento
-};

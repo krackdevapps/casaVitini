@@ -1,24 +1,20 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const obtenerApartamentoDeLaReservaPorApartamentoIDV = async (data) => {
+export const obtenerApartamentoDeLaReservaPorApartamentoIDV = async (apartamentoIDV) => {
     try {
-        const reservaUID = data.reservaUID
-        const apartamentoIDV = data.apartamentoIDV
-
         const consulta = `
         SELECT 
         *
         FROM "reservaApartamentos"
         WHERE 
-        "reservaUID" = $1
-        AND 
-        "apartamentoIDV" = $2
+        "apartamentoIDV" = $1
         `;
-        const parametros = [
-            reservaUID,
-            apartamentoIDV
-        ]
-        const resuelve = await conexion.query(consulta, parametros);
+
+        const resuelve = await conexion.query(consulta, [apartamentoIDV]);
+        if (resuelve.rowCount === 0) {
+            const error = "No existe el apartamentoIDV en ninguna reserva."
+            throw new Error(error)
+        }
         return resuelve.rows[0]
     } catch (error) {
         throw error

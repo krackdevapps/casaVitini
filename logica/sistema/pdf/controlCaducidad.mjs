@@ -1,12 +1,9 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../componentes/db.mjs";
+import { eliminarEnlacesDePagoPorCaducidad } from "../../repositorio/enlacesDePago/eliminarEnlacesDePagoPorCaducidad.mjs";
 export const controlCaducidad = async () => {
     try {
         const fechaActual = DateTime.utc().toISO();
-        const consultaCaducidadEnlaces = `
-        DELETE FROM "enlacesPdf"
-        WHERE caducidad < $1;`;
-        await conexion.query(consultaCaducidadEnlaces, [fechaActual]);
+        await eliminarEnlacesDePagoPorCaducidad(fechaActual)
     } catch (error) {
         throw error;
     }

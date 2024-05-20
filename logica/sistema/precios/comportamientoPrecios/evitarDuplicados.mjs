@@ -1,227 +1,169 @@
-import { conexion } from "../../../componentes/db.mjs"
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs"
+import { obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array } from "../../../repositorio/comportamientoDePrecios/obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array.mjs"
+import { obtenerNombreComportamientoPorNombreUI } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorNombreUI.mjs"
+import { obtenerComportamientosDistintosPorNombreUI } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosDistintosPorNombreUI.mjs"
+import { obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoUID.mjs"
+import { obtenerComportamientosDistintosPorTipoIDVPorDiasArray } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoIDVPorDiasArray.mjs"
+import { obtenerComportamientosPorRangoPorTipoIDV } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs"
+import { obtenerComportamientosPorTipoIDVPorDiasArray } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorTipoIDVPorDiasArray.mjs"
 
-const evitarDuplicados = async (data) => {
+export const evitarDuplicados = async (data) => {
     try {
         const comportamientoUID = data.comportamientoUID
         const nombreComportamiento = date.nombreComportamiento
-        const tipo = data.tipo
+        const tipoIDV = data.tipoIDV
         const transaccion = data.transaccion
-        const apartamentos = data.apartamentos
+        const apartamentosIDV_array = data.apartamentosIDV_array
 
         if (transaccion !== "crear" && transaccion !== "actualizar") {
-            const error = `El sistema de evitar duplicados necesita un tipo de transaccion para ver si es un operacion de creacion o actualziacion`
+            const error = `El sistema de evitar duplicados necesita un tipo de transaccion para ver si es un operacion de creacion o actualizacion`
             throw new Error(error)
         }
-        let resuleveNombreUnico = 0
+        const mensajeNombreRepetido = "El nombre que tratas de poner a este comportamiento de precio ya existe. Por favor con el fin de evitar confusiones e ilegibilidad, escoge otro nombre para este comportamiento de precio";
         if (transaccion === "crear") {
-            const consultaNombreUnico = `
-            SELECT *
-            FROM "comportamientoPrecios"
-            WHERE 
-            lower("nombreComportamiento") = lower($1)
-            `
-            resuleveNombreUnico = await conexion.query(consultaNombreUnico, [nombreComportamiento])
-          
+            const comportamientosConNombreIgual = await obtenerNombreComportamientoPorNombreUI(nombreComportamiento)
+            if (comportamientosConNombreIgual.length > 0) {
+                throw new Error(mensajeNombreRepetido);
+            }
+
         }
         if (transaccion === "actualizar") {
-            const consultaNombreUnico = `
-            SELECT *
-            FROM "comportamientoPrecios"
-            WHERE 
-            lower("nombreComportamiento") = lower($1)
-            AND
-            uid <> $2
-            `
-            resuleveNombreUnico = await conexion.query(consultaNombreUnico, [consultaNombreUnico, comportamientoUID])
-        }
-        if (resuleveNombreUnico.rowCount > 0) {
-            const error = "El nombre que tratas de poner a este comportamiento de precio ya existe. Por favor con el fin de evitar confusiones e ilegibilidad, escoge otro nombre para este comportamiento de precio";
-            throw new Error(error);
+            const comportamientosDistintosConNombreIgual = await obtenerComportamientosDistintosPorNombreUI({
+                nombreComportamiento: nombreComportamiento,
+                comportamientoUID: comportamientoUID
+            })
+            if (comportamientosDistintosConNombreIgual.length > 0) {
+                throw new Error(mensajeNombreRepetido);
+            }
         }
 
-
-
-        if (tipo === "porRango") {
-
+        if (tipoIDV === "porRango") {
             const fechaInicio_ISO = data.fechaInicio_ISO
             const fechaFinal_ISO = data.fechaFinal_ISO
 
-            let resuelveVevalidarEspacioTemporalUnico
+            const comportamientosEnElRango = [] // Los comportamiento de precio que estan en el rango de nuevo comportamiento
             if (transaccion === "crear") {
-                const consulta = `
-                    SELECT uid 
-                    FROM "comportamientoPrecios" 
-                    WHERE tipo = $1 AND "fechaInicio" <= $2::DATE AND "fechaFinal" >= $3::DATE;`
-                resuelveVevalidarEspacioTemporalUnico = await conexion.query(consulta, [tipo, fechaFinal_ISO, fechaInicio_ISO])
+                const comportamientosPorRango = await obtenerComportamientosPorRangoPorTipoIDV({
+                    fechaInicio_ISO: fechaInicio_ISO,
+                    fechaFinal_ISO: fechaFinal_ISO,
+                    tipoIDV: tipoIDV
+                })
+                comportamientosEnElRango.push(...comportamientosPorRango)
             }
             if (transaccion === "actualizar") {
-                const consulta = `
-                   SELECT uid 
-                   FROM "comportamientoPrecios" 
-                   WHERE tipo = $1 AND "fechaInicio" <= $2::DATE AND "fechaFinal" >= $3::DATE AND uid <> $4;`
-                resuelveVevalidarEspacioTemporalUnico = await conexion.query(consulta, [tipo, fechaFinal_ISO, fechaInicio_ISO, comportamientoUID])
+                const comportamientosDistintosPorRango = await obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoUID({
+                    fechaInicio_ISO: fechaInicio_ISO,
+                    fechaFinal_ISO: fechaFinal_ISO,
+                    tipoIDV: tipoIDV,
+                    comportamientoUID: comportamientoUID
+                })
+                comportamientosEnElRango.push(...comportamientosDistintosPorRango)
             }
+            const soloUIDComportamientosCoincidentes = comportamientosEnElRango.map((detallesDelComportamiento, posicion) => {
+                return detallesDelComportamiento.comportamientoUID
+            })
 
-            if (resuelveVevalidarEspacioTemporalUnico.rowCount > 0) {
-                const detallesApartamentosEntontradosPorValidas = []
-                const comportamientoPreciosCocheTemporalPorAnalizar = resuelveVevalidarEspacioTemporalUnico.rows
-                for (const apartmentosEnComportamiento of comportamientoPreciosCocheTemporalPorAnalizar) {
-                    const UIDComportamientoChoque = apartmentosEnComportamiento.uid
-                    const seleccionarApartamentosPorComportamiento = `
-                         SELECT
-                         cpa."apartamentoIDV", 
-                         cpa.uid,
-                         a."apartamentoUI",
-                         cp."nombreComportamiento"
-                         FROM
-                         "comportamientoPreciosApartamentos" cpa
-                         JOIN 
-                         apartamentos a ON cpa."apartamentoIDV" = a.apartamento
-                         JOIN 
-                         "comportamientoPrecios" cp ON cpa."comportamientoUID" = cp.uid
-                         WHERE "comportamientoUID" = $1;`
-                    const resuelveSeleccionarApartamentosPorComportamiento = await conexion.query(seleccionarApartamentosPorComportamiento, [UIDComportamientoChoque])
-                    if (resuelveSeleccionarApartamentosPorComportamiento.rowCount > 0) {
-                        // Aqui falta un loop
-                        const apartamentoExistentes = resuelveSeleccionarApartamentosPorComportamiento.rows
-                        apartamentoExistentes.map((apartamentoExistente) => {
-                            const apartamentoIDVEntonctrado = apartamentoExistente.apartamentoIDV
-                            const apartamentoUIEncontrado = apartamentoExistente.apartamentoUI
-                            const nombreComportamiento = apartamentoExistente.nombreComportamiento
-                            const apartamentoCoincidenteDetalles = {
-                                apartamentoIDV: apartamentoIDVEntonctrado,
-                                apartamentoUI: apartamentoUIEncontrado,
-                                nombreComportamiento: nombreComportamiento,
-                            }
-                            detallesApartamentosEntontradosPorValidas.push(apartamentoCoincidenteDetalles)
-                        })
-                    }
-                }
-                const coincidenciasExistentes = []
-                for (const detalleApartemtno of apartamentos) {
-                    const apartamentoIDVSolicitante = detalleApartemtno.apartamentoIDV
-                    for (const detalleApartamentoYaExistente of detallesApartamentosEntontradosPorValidas) {
-                        const apartamentoIDVExistente = detalleApartamentoYaExistente.apartamentoIDV
-                        const nombreComportamiento = detalleApartamentoYaExistente.nombreComportamiento
-                        const apartamentoUIExistente = detalleApartamentoYaExistente.apartamentoUI
-                        if (apartamentoIDVSolicitante === apartamentoIDVExistente) {
-                            const apartamentoImposibleDeGuardar = {
-                                apartamentoIDV: apartamentoIDVExistente,
-                                apartamentoUI: apartamentoUIExistente,
-                                nombreComportamiento: nombreComportamiento,
-                            }
-                            coincidenciasExistentes.push(apartamentoImposibleDeGuardar)
-                        }
-                    }
-                }
-                const coincidenciaAgrupdasPorNombreComportamiento = {}
-                coincidenciasExistentes.map((coincidencia) => {
-                    const apartamentoUI = coincidencia.apartamentoUI
-                    const nombreComportamiento = coincidencia.nombreComportamiento
-                    if (coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento]) {
-                        coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento].push(apartamentoUI)
-                    } else {
-                        coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento] = []
-                        coincidenciaAgrupdasPorNombreComportamiento[nombreComportamiento].push(apartamentoUI)
+            if (soloUIDComportamientosCoincidentes.length > 0) {
+
+                const arbolComportamientoCoincidentes = {}
+                comportamientosEnElRango.forEach(detallesComportamiento => {
+                    const comportamientoUID = detallesComportamiento.comportamientoUID
+                    const nombreComportamiento = detallesComportamiento.nombreComportamiento
+
+                    arbolComportamientoCoincidentes[comportamientoUID] = {
+                        nombreComportamiento: nombreComportamiento,
+                        comportamientoUID: comportamientoUID,
+                        apartamentos: []
                     }
                 })
-                const infoFinal = []
-                for (const coincidenciaAgrupada of Object.entries(coincidenciaAgrupdasPorNombreComportamiento)) {
-                    const nombreComportamiento = coincidenciaAgrupada[0]
-                    const apartamentosCoincidentes = coincidenciaAgrupada[1].join(", ")
-                    infoFinal.push(`${nombreComportamiento} (${apartamentosCoincidentes})`)
-                }
-                infoFinal.join(", ")
-                if (coincidenciasExistentes.length > 0) {
-                    const error = `No se puede crear este comportamiento de precio por que hay apartamentos en este comportamiento que existen en otros comportamientos cuyos rangos de fechas se pisan. Concretamente en: ${infoFinal}`
-                    throw new Error(error)
+
+                const apartamentosDeLosComportamientos = await obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array({
+                    apartamentosIDV_array: apartamentosIDV_array,
+                    comportamientosUID_array: soloUIDComportamientosCoincidentes
+                })
+
+                for (const detallesDelApartamento of apartamentosDeLosComportamientos) {
+                    const comportamientoUID = detallesDelApartamento.comportamientoUID
+                    const apartamentoIDV = detallesDelApartamento.apartamentoIDV
+                    const componenteUID = detallesDelApartamento.componenteUID
+
+                    const estructuraApartamentoCoincidente = {
+                        comportamientoUID: comportamientoUID,
+                        apartamentoIDV: apartamentoIDV,
+                        componenteUID: componenteUID,
+                        apartametnoUI: await obtenerNombreApartamentoUI(apartamentoIDV)
+                    }
+                    arbolComportamientoCoincidentes[componenteUID].apartamento.push(estructuraApartamentoCoincidente)
+
+                    const errorCompuesto = {
+                        error: `No se puede crear este comportamiento de precio por que hay apartamentos en este comportamiento que existen en otros comportamientos cuyos rangos de fechas se pisan`,
+                        comportamientosCoincidentes: arbolComportamientoCoincidentes
+                    }
+                    throw errorCompuesto
                 }
             }
         }
-        if (tipo === "porDias") {
+        if (tipoIDV === "porDias") {
             const diasArray = data.diasArray
-            let resuelveConsultaPorDias
+            const comportamientosPorTipoPorDiasEnElRango = []
             if (transaccion === "crear") {
-                const consulta = `
-                    SELECT *
-                    FROM "comportamientoPrecios"
-                    WHERE 
-                    tipo = $1
-                    AND
-                    $2::text[] && "diasArray";
-                    `
-                resuelveConsultaPorDias = await conexion.query(consulta, [tipo, diasArray])
+                const comportamientosPorDiasArray = await obtenerComportamientosPorTipoIDVPorDiasArray({
+                    tipoIDV: tipoIDV,
+                    diasArray: diasArray
+                })
+                comportamientosPorTipoPorDiasEnElRango.push(...comportamientosPorDiasArray)
             }
             if (transaccion === "actualizar") {
-                const consulta = `
-                   SELECT *
-                   FROM "comportamientoPrecios"
-                   WHERE 
-                   tipo = $1
-                   AND
-                   $2::text[] && "diasArray"
-                   AND uid <> $3;
-                   `
-                resuelveConsultaPorDias = await conexion.query(consulta, [tipo, diasArray, comportamientoUID])
+                const comportamientosDistintosPorDiasArray = await obtenerComportamientosDistintosPorTipoIDVPorDiasArray({
+                    tipoIDV: tipoIDV,
+                    diasArray: diasArray,
+                    comportamientoUID: comportamientoUID,
+                })
+                comportamientosPorTipoPorDiasEnElRango.push(...comportamientosDistintosPorDiasArray)
+            }
+            const soloUIDComportamientosCoincidentes = comportamientosPorTipoPorDiasEnElRango.map((detallesDelComportamiento) => {
+                return detallesDelComportamiento.comportamientoUID
+            })
+
+            if (soloUIDComportamientosCoincidentes.length > 0) {
+                const arbolComportamientoCoincidentes = {}
+                comportamientosEnElRango.forEach(detallesComportamiento => {
+                    const comportamientoUID = detallesComportamiento.comportamientoUID
+                    const nombreComportamiento = detallesComportamiento.nombreComportamiento
+
+                    arbolComportamientoCoincidentes[comportamientoUID] = {
+                        nombreComportamiento: nombreComportamiento,
+                        comportamientoUID: comportamientoUID,
+                        apartamentos: []
+                    }
+                })
+                const apartamentosDeLosComportamientos = await obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array({
+                    apartamentosIDV_array: apartamentosIDV_array,
+                    comportamientosUID_array: soloUIDComportamientosCoincidentes
+                })
+                for (const detallesDelApartamento of apartamentosDeLosComportamientos) {
+                    const comportamientoUID = detallesDelApartamento.comportamientoUID
+                    const apartamentoIDV = detallesDelApartamento.apartamentoIDV
+                    const componenteUID = detallesDelApartamento.componenteUID
+
+                    const estructuraApartamentoCoincidente = {
+                        comportamientoUID: comportamientoUID,
+                        apartamentoIDV: apartamentoIDV,
+                        componenteUID: componenteUID,
+                        apartametnoUI: await obtenerNombreApartamentoUI(apartamentoIDV)
+                    }
+                    arbolComportamientoCoincidentes[componenteUID].apartamento.push(estructuraApartamentoCoincidente)
+
+                    const errorCompuesto = {
+                        error: `No se puede crear este comportamiento de por dias por que hay apartamentos en este comportamiento que existen en otros comportamientos por dias que coinciden en el dias y el apartamento. Es decir hay comportamientos que tiene el mismo dia y el mismo apartamento coincidiendo.`,
+                        comportamientosCoincidentes: arbolComportamientoCoincidentes
+                    }
+                    throw errorCompuesto
+                }
             }
 
-
-            if (resuelveConsultaPorDias.rowCount > 0) {
-                const comportamientosEncontrados_fase1 = resuelveConsultaPorDias.rows
-                const comportamientosUIDParaComprobarApartamentos = []
-
-                for (const detallescomportamientos of comportamientosEncontrados_fase1) {
-                    const uid = detallescomportamientos.uid
-                    comportamientosUIDParaComprobarApartamentos.push(uid)
-                }
-
-                const apartamentosIDV = []
-                for (const detallesApartamento of apartamentos) {
-                    apartamentosIDV.push(detallesApartamento.apartamentoIDV)
-                }
-
-                const consultaComportameintoConMismoApartamentos = `
-                      SELECT *
-                      FROM "comportamientoPreciosApartamentos"
-                      WHERE 
-                      "comportamientoUID" = ANY($1)
-                      AND
-                      "apartamentoIDV" = ANY($2)
-                      ;`
-                const confConsulta = [
-                    comportamientosUIDParaComprobarApartamentos,
-                    apartamentosIDV
-                ]
-                const resuelveConsultaPorApartamentos = await conexion.query(consultaComportameintoConMismoApartamentos, confConsulta)
-                if (resuelveConsultaPorApartamentos.rowCount > 0) {
-                    const comportamientosUID_conDuplicados = []
-
-                    const comportamientosCoincidentes = resuelveConsultaPorApartamentos.rows
-                    for (const detallesComportamiento of comportamientosCoincidentes) {
-                        const uid_para_anadir = detallesComportamiento.comportamientoUID
-                        comportamientosUID_conDuplicados.push(uid_para_anadir)
-                    }
-
-                    const comportamientosQueEntranEnConflicto = comportamientosEncontrados_fase1.filter(objeto => comportamientosUID_conDuplicados.includes(objeto.uid));
-                    const arrayStringsPrePresentacionDatos = []
-                    for (const detalles of comportamientosQueEntranEnConflicto) {
-                        const uidComportamiento = detalles.uid
-                        const nombreComportamiento = detalles.nombreComportamiento
-                        const nombreUI = `${nombreComportamiento} (UID: ${uidComportamiento})`
-                        arrayStringsPrePresentacionDatos.push(nombreUI)
-                    }
-                    const ultimoElemento = arrayStringsPrePresentacionDatos.pop();
-                    const constructorCadenaFinalUI = arrayStringsPrePresentacionDatos.join(", ") + (arrayStringsPrePresentacionDatos.length > 0 ? " y " : "") + ultimoElemento;
-
-                    const error = "El comportamiento de precio que intentas crear, coincide con otros comportamientos de precio, concretamente con: " + constructorCadenaFinalUI
-                    throw new Error(error)
-                }
-            }
         }
     } catch (error) {
         throw error
     }
 }
-export {
-    evitarDuplicados
-};

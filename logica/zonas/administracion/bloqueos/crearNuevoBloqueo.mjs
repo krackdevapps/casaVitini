@@ -99,22 +99,17 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             motivo,
             zonaUI
         ];
-  
+
         const nuevoBloquoe = await insertarNuevoBloqueo(datosNuevoBloqueo)
 
-        if (nuevoBloquoe.rowCount === 0) {
-            const error = "No se ha podido insertar el nuevo bloqueo";
-            throw new Error(error);
-        }
-        if (nuevoBloquoe.rowCount === 1) {
-            const nuevoUIDBloqueo = nuevoBloquoe.rows[0].uid;
-            const ok = {
-                ok: "Se ha creado el bloqueo correctamente",
-                nuevoBloqueoUID: nuevoUIDBloqueo,
-                apartamentoIDV: apartamentoIDV
-            };
-            salida.json(ok);
-        }
+        const nuevoUIDBloqueo = nuevoBloquoe.resuelve;
+        const ok = {
+            ok: "Se ha creado el bloqueo correctamente",
+            nuevoBloqueoUID: nuevoUIDBloqueo,
+            apartamentoIDV: apartamentoIDV
+        };
+        salida.json(ok);
+
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)

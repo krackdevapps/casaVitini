@@ -31,7 +31,7 @@ export const eliminarCheckIN = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        await validadoresCompartidos.reservas.validarReserva(reservaUID);
+        await obtenerReservaPorReservaUID(reservaUID);
 
         // Validar pernoctanteUID
         const pernoctante = obtenerPernoctanteDeLaReservaPorPernoctaneUID({

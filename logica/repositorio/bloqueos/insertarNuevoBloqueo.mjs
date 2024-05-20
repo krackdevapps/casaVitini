@@ -5,22 +5,24 @@ export const insertarNuevoBloqueo = async (data) => {
 
         const apartamentoIDV = data.apartamentoIDV
         const tipoBloqueo = data.tipoBloqueo
-        const fechaInicio_ISO = data.fechaInicio_ISO
-        const fechaFin_ISO = data.fechaFin_ISO
+        const fechaInicio_ISO = data.fechaInicio_ISO || null
+        const fechaFin_ISO = data.fechaFin_ISO || null
         const motivo = data.motivo
-        const zonaUI = data.zonaUI
+        const zonaIDV = data.zonaIDV
 
-        const consulta = `
+        const consulta = `insertarNuevoBloqueo
         INSERT INTO "bloqueosApartamentos"
         (
-        apartamento,
-        "tipoBloqueo",
+        "apartamentoIDV",
+        "tipoBloqueoIDV",
         entrada,
         salida,
         motivo,
-        zona
+        "zonaIDV"
         )
-        VALUES ($1, $2, $3, $4, $5, $6) RETURNING uid
+        VALUES ($1, $2, $3, $4, $5, $6) 
+        RETURNING 
+        "bloqueoUID"
         `;
         const parametros = [
             apartamentoIDV,
@@ -28,10 +30,14 @@ export const insertarNuevoBloqueo = async (data) => {
             fechaInicio_ISO,
             fechaFin_ISO,
             motivo,
-            zonaUI
+            zonaIDV
         ];
         const resuelve = await conexion.query(consulta, parametros)
-        return resuelve
+        if (resuelve.rowCount === 0) {
+            const error = "No se ha podido insertar el nuevo bloqueo";
+            throw new Error(error);
+        }
+        return resuelve.rows[0]
     } catch (errorAdaptador) {
         throw errorAdaptador
     }

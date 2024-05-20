@@ -1,36 +1,19 @@
-import { conexion } from "../../db.mjs";
+import { actualizarReembolsoPorReembolsoUID } from "../../../repositorio/reservas/transacciones/actualizarReembolsoPorReembolsoUID.mjs";
+import { obtenerReembolsoPorReembolsoUID } from "../../../repositorio/reservas/transacciones/obtenerReembolsoPorReembolsoUID.mjs";
 import { utilidades } from "../../utilidades.mjs";
 import { detallesDelReembolso } from "./detallesDelReembolso.mjs";
 
-
 export const actualizarSOLOreembolsoDesdeSquare = async (reembolsoUID) => {
     try {
-        const validarReembolso = `
-        SELECT
-            "pagoUID",
-            cantidad,
-            "plataformaDePago",
-            "reembolsoUIDPasarela",
-            "estado",
-            "fechaCreacion"::text AS "fechaCreacion",
-            "fechaActualizacion"::text AS "fechaActualizacion"
-        FROM 
-            "reservaReembolsos"
-        WHERE 
-            "reembolsoUID" = $1;`;
-        const resuelveValidarReembolso = await conexion.query(validarReembolso, [reembolsoUID]);
-        if (resuelveValidarReembolso.rowCount === 0) {
-            const error = "No existe ningún reembolso con ese reembolsoUID";
-            throw new Error(error);
-        }
-        const detallesDelReembolso = resuelveValidarReembolso.rows[0];
-        const pagoUID = detallesDelReembolso.pagoUID;
-        const plataformaDePago = detallesDelReembolso.plataformaDePago;
+
+        const reembolso = await obtenerReembolsoPorReembolsoUID(reembolsoUID)
+        const pagoUID = reembolso.pagoUID;
+        const plataformaDePago = reembolso.plataformaDePago;
         if (plataformaDePago !== "pasarela") {
             const error = "El reembolso no es de pasarela";
             throw new Error(error);
         }
-        const reembolsoUIDPasarela = detallesDelReembolso.reembolsoUIDPasarela;
+        const reembolsoUIDPasarela = reembolso.reembolsoUIDPasarela;
         if (!reembolsoUIDPasarela) {
             const error = "El reembolso de pasarela no tiene un idenfiticador de Square";
             throw new Error(error);
@@ -44,35 +27,20 @@ export const actualizarSOLOreembolsoDesdeSquare = async (reembolsoUID) => {
         const cantidad = utilidades.deFormatoSquareAFormatoSQL(detallesDelReembolsoOL.amountMoney.amount);
         const creacionUTC = detallesDelReembolsoOL.createdAt;
         const actualizacionUTC = detallesDelReembolsoOL.updatedAt;
-        const actualizarReembolsoPasarela = `
-                    UPDATE
-                        "reservaReembolsos"
-                    SET 
-                        cantidad = $1,
-                        "plataformaDePago" = $2,
-                        estado = $3,
-                        "fechaCreacion" = $4,
-                        "fechaActualizacion" = $5
-                    WHERE 
-                    "reembolsoUID" = $6;
-                    `;
-        const datosActualizarReembolso = [
-            cantidad,
-            plataformaDePago,
-            estadoReembolso,
-            creacionUTC,
-            actualizacionUTC,
-            reembolsoUID,
-        ];
-        await conexion.query(actualizarReembolsoPasarela, datosActualizarReembolso);
+
+        await actualizarReembolsoPorReembolsoUID({
+            reembolsoUID: reembolsoUID,
+            cantidad: cantidad,
+            plataformaDePago: plataformaDePago,
+            estadoReembolso: estadoReembolso,
+            fechaCreacion: creacionUTC,
+            fechaActualizacion: actualizacionUTC,
+        })
         const ok = {
             ok: "Se ha actualziad correctamente los datos del reembolso en la pasarela"
         };
         return ok;
-    } catch (errorCapturado) {
-        const error = {
-            error: errorCapturado.message
-        }
-        return error;
+    } catch (error) {
+        throw error;
     }
 }

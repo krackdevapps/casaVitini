@@ -1,3 +1,4 @@
+import { obtenerNombreApartamentoUI } from "../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs"
 import { obtenerApartamentosDeLaOfertaPorOfertaUID } from "../../repositorio/ofertas/obtenerApartamentosDeLaOfertaPorOfertaUID.mjs"
 import { obtenerOferatPorOfertaUID } from "../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs"
 export const obtenerOfertaConApartamentos = async (ofertaUID) => {
@@ -8,9 +9,9 @@ export const obtenerOfertaConApartamentos = async (ofertaUID) => {
             oferta["apartamentosDedicados"] = []
             const apartamentosDeLaOferta = await obtenerApartamentosDeLaOfertaPorOfertaUID(ofertaUID)
             oferta["apartamentosDedicados"] = []
-            apartamentosDeLaOferta.map((apartamento) => {
+            for (const apartamento of apartamentosDeLaOferta) {
                 const apartamentoIDV = apartamento.apartamentoIDV
-                const apartamentoUI = apartamento.apartamentoUI
+                const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
                 const tipoDescuentoApartamento = apartamento.tipoDescuento
                 const cantidadApartamento = apartamento.cantidad
                 const detallesApartamentoDedicado = {
@@ -20,7 +21,9 @@ export const obtenerOfertaConApartamentos = async (ofertaUID) => {
                     cantidadApartamento: cantidadApartamento
                 }
                 oferta["apartamentosDedicados"].push(detallesApartamentoDedicado)
-            })
+            }
+
+
         }
         return oferta
     } catch (error) {

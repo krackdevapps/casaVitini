@@ -1,5 +1,6 @@
 import crypto from 'crypto';
-const vitiniCrypto = (metadatos) => {
+
+export const vitiniCrypto = (metadatos) => {
   try {
     const sentido = metadatos.sentido
     const clavePlana = metadatos.clavePlana
@@ -47,7 +48,4 @@ const vitiniCrypto = (metadatos) => {
   } catch (error) {
     throw error;
   }
-}
-export {
-  vitiniCrypto
 }

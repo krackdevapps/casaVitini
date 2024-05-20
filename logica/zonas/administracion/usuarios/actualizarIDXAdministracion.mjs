@@ -1,8 +1,8 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { eliminarCuentasNoVerificadas } from "../../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { actualizarUsuarioSessionActiva } from "../../../repositorio/usuarios/actualizarSessionActiva.mjs";
+import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 
 export const actualizarIDXAdministracion = async (entrada, salida) => {
     try {
@@ -28,7 +28,7 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-        await eliminarCuentasNoVerificadas();
+        await eliminarUsuarioPorRolPorEstadoVerificacion();
         await campoDeTransaccion("iniciar")
         await actualizarIDX({
             usuarioIDX: usuarioIDX,

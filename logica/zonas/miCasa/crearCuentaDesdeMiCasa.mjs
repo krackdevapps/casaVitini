@@ -1,16 +1,16 @@
 import { DateTime } from "luxon";
-import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
-import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { enviarEmailAlCrearCuentaNueva } from "../../sistema/Mail/enviarEmailAlCrearCuentaNueva.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
-import { validarIDXUnico } from "../../sistema/VitiniIDX/validarIDXUnico.mjs";
-import { validarEMailUnico } from "../../sistema/VitiniIDX/validarEmailUnico.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
 import { obtenerUsuarioPorCodigoVerificacion } from "../../repositorio/usuarios/obtenerUsuarioPorCodigoVerificacion.mjs";
 import { insertarUsuario } from "../../repositorio/usuarios/insertarUsuario.mjs";
 import { insertarFilaDatosPersonales } from "../../repositorio/usuarios/insertarFilaDatosPersonales.mjs";
 import { actualizarDatos } from "../../repositorio/usuarios/actualizarDatos.mjs";
+import { eliminarSessionPorRolPorCaducidad } from "../../repositorio/sessiones/eliminarSessionPorRolPorCaducidad.mjs";
+import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
+import { obtenerDatosPersonalesPorMail } from "../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs";
+import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 
 export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
     try {
@@ -50,11 +50,11 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
             throw new Error(error);
         }
 
-        await eliminarCuentasNoVerificadas();
-        await borrarCuentasCaducadas();
+        await eliminarUsuarioPorRolPorEstadoVerificacion();
+        await eliminarSessionPorRolPorCaducidad();
         await campoDeTransaccion("iniciar")
-        await validarIDXUnico(usuarioIDX)
-        await validarEMailUnico(email)
+        await obtenerUsuario(usuarioIDX)
+        await obtenerDatosPersonalesPorMail(email)
         const cryptoData = {
             sentido: "cifrar",
             clavePlana: claveNueva

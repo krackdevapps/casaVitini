@@ -5,6 +5,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerHabitacionDelLaReserva } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionDelLaReserva.mjs";
 import { insertarPernoctanteEnLaHabitacion } from "../../../repositorio/reservas/pernoctantes/insertarPernoctanteEnLaHabitacion.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -35,7 +36,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        const resolverReserva = await validadoresCompartidos.reservas.validarReserva(reserva)
+        const resolverReserva = await obtenerReservaPorReservaUID(reserva)
         if (resolverReserva.estadoReserva === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);

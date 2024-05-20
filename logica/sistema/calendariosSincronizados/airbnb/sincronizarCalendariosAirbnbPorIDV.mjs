@@ -1,34 +1,25 @@
 import axios from 'axios';
 import ICAL from 'ical.js';
-import { conexion } from '../../../componentes/db.mjs';
-const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
+export const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
     try {
         const filtroCadena = /^[a-z0-9]+$/;
         if (!apartamentoIDV || !filtroCadena.test(apartamentoIDV)) {
             const error = "Hay que definir la apartamentoIDV, solo se admiten numeros sin espacios.";
             throw new Error(error);
         }
-        const consultaSelecionaCalendario = `
-        SELECT 
-        "calendarioUID",
-        nombre,
-        url,
-        "dataIcal"
-        FROM 
-        "calendariosSincronizados" 
-        WHERE 
-        "apartamentoIDV" = $1 AND "plataformaOrigen" = $2`
         const plataformaDeOrigen = "airbnb"
-        const resuelveSelecionarCalendario = await conexion.query(consultaSelecionaCalendario, [apartamentoIDV, plataformaDeOrigen])
+        const calendarios = await obtenerCalendariosPorPlataformaIDVPorPlataformaOrigenIDV({
+            apartamentoIDV: apartamentoIDV,
+            plataformaDeOrigen: plataformaDeOrigen
+        })
         const ok = {
             apartamentoIDV: apartamentoIDV,
             calendariosPorApartamento: []
         }
-        if (resuelveSelecionarCalendario.rowCount > 0) {
+        if (calendarios.rowCount > 0) {
             const errorDeFormato = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb"
-            let calendariosDelApartamento = resuelveSelecionarCalendario.rows
             const calendariosPorApartamento = []
-            for (const detallesDelCalendario of calendariosDelApartamento) {
+            for (const detallesDelCalendario of calendarios) {
                 const calendarioUID = detallesDelCalendario.uid
                 const url = detallesDelCalendario.url
                 let estadoSincronizacion = null
@@ -45,21 +36,10 @@ const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
                     if (jcal?.name.toLowerCase() !== 'vcalendar') {
                         throw new Error(errorDeFormato)
                     }
-                    const actualizarCalendario = `
-                    UPDATE "calendariosSincronizados"
-                    SET 
-                    "dataIcal" = COALESCE($1, "dataIcal")
-                    WHERE uid = $2;
-                    `;
-                    const datosParaActualizar = [
-                        calendarioRaw,
-                        calendarioUID
-                    ];
-                    const resuelveActualizarCalendario = await conexion.query(actualizarCalendario, datosParaActualizar);
-                    if (resuelveActualizarCalendario.rowCount === 0) {
-                        const error = "Los datos actualizados tras la sincronizacion se han enviado a la base de datos pero el servidor de base de datos informa que no se ha actualizado el calendario. Vuelve a intentarlo mas tarde.";
-                        throw new Error(error);
-                    }
+                    await actualizarEventosCalendarioPorCalendarioUID({
+                        calendarioRaw: calendarioRaw,
+                        calendarioUID: calendarioUID
+                    })
                     calendarioDatos = calendarioRaw
                     estructura.estadoSincronizacion = "sincronizado"
                 } catch (errorCapturado) {
@@ -113,7 +93,4 @@ const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
     } catch (error) {
         throw error
     }
-}
-export {
-    sincronizarCalendariosAirbnbPorIDV
 }

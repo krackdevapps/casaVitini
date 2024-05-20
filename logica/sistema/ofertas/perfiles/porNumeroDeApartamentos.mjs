@@ -1,6 +1,5 @@
 import Decimal from "decimal.js";
-import { conexion } from "../../../componentes/db.mjs";
-const porNumeroDeApartamentos = async (reserva) => {
+export const porNumeroDeApartamentos = async (reserva) => {
     try {
         const fechaActualTZ = reserva.fechas.fechaActualProcesada_ISO
         const estadoOfertaActivado = "activada"
@@ -8,28 +7,15 @@ const porNumeroDeApartamentos = async (reserva) => {
         const numeroApartamentos = Number(reserva.desgloseFinanciero.totalesPorApartamento.length)
         const ofertasSeleccionadas = []
         let descuentoGlobal = 0
-        const consultaOfertas = `
-        SELECT 
-        uid,
-        to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
-        to_char("fechaFin", 'DD/MM/YYYY') as "fechaFin",
-        "simboloNumero",
-        "descuentoAplicadoA",
-        "estadoOferta",
-        "tipoOferta",
-        cantidad,
-        numero,
-        "tipoDescuento",
-        "nombreOferta"
-        FROM ofertas
-        WHERE $1 BETWEEN "fechaInicio" AND "fechaFin"
-        AND "estadoOferta" = $2
-        AND "tipoOferta" = $3`;
-        const ofertaTipo = "porNumeroDeApartamentos";
-        const ofertasEncontradas = await conexion.query(consultaOfertas, [fechaActualTZ, estadoOfertaActivado, ofertaTipo]);
 
+        const ofertaTipo = "porNumeroDeApartamentos";
+        const ofertasEncontradas = await obtenerOfertasPorFechaPorEstadoPorTipo({
+            fechaActualTZ: fechaActualTZ,
+            estadoOfertaActivado: estadoOfertaActivado,
+            ofertaTipo: ofertaTipo
+        })
         // Filtro Ofertas
-        for (const detallesOferta of ofertasEncontradas.rows) {
+        for (const detallesOferta of ofertasEncontradas) {
             const tipoOferta = detallesOferta.tipoOferta
             const simboloNumero = detallesOferta.simboloNumero
             const numero = Number(detallesOferta.numero)
@@ -72,7 +58,4 @@ const porNumeroDeApartamentos = async (reserva) => {
     } catch (error) {
         throw error
     }
-}
-export {
-    porNumeroDeApartamentos
 }

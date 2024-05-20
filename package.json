@@ -4,13 +4,11 @@
   "description": "Aplicacion paga gestionar reservas",
   "main": "casaVitini.mjs",
   "scripts": {
-    "arranqueLocal": "node casaVitini.mjs",
-    "arranqueServidor": "node casaVitini.mjs",
     "start": "node casaVitini.mjs",
     "dev": "node --watch casaVitini.mjs"
   },
   "type": "module",
-  "author": "Lucas, Voldimor, Krackton",
+  "author": "Lucas, Leo, Krackton",
   "license": "ISC",
   "dependencies": {
     "async-mutex": "^0.4.0",

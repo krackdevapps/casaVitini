@@ -1,4 +1,5 @@
-import { conexion } from "../../componentes/db.mjs";
+import { actualizarIDX as aIDX } from "../../repositorio/usuarios/actualizarIDX.mjs";
+import { actualizarUsuarioSessionActiva } from "../../repositorio/usuarios/actualizarSessionActiva.mjs";
 
 export const actualizarIDX = async (data) => {
 
@@ -6,33 +7,16 @@ export const actualizarIDX = async (data) => {
         const actualIDX = data.actualIDX
         const nuevoIDX = data.nuevoIDX
 
-        const actualizarIDX = `
-        UPDATE usuarios
-        SET 
-            usuario = $2
-        WHERE 
-            usuario = $1
-        RETURNING 
-            usuario           
-        `;
-        const datos = [
-            actualIDX,
-            nuevoIDX
-        ];
+        await aIDX({
+            usuarioIDX: actualIDX,
+            nuevoIDX: nuevoIDX
+        })
 
-        const resuelveActualizarIDX = await conexion.query(actualizarIDX, datos);
-        if (resuelveActualizarIDX.rowCount === 0) {
-            const error = "No existe el nombre de usuario";
-            throw new Error(error);
-        }
-        if (resuelveActualizarIDX.rowCount === 1) {
-            const actualizarSessionesActivas = `
-            UPDATE sessiones
-            SET sess = jsonb_set(sess::jsonb, '{usuario}', $1::jsonb)::json
-            WHERE sess->>'usuario' = $2;            
-            `;
-            await conexion.query(actualizarSessionesActivas, [nuevoIDX, actualIDX]);
-        }
+        await actualizarUsuarioSessionActiva({
+            usuarioIDX: actualIDX,
+            nuevoIDX: nuevoIDX
+        })
+
     }
     catch (error) {
         throw error

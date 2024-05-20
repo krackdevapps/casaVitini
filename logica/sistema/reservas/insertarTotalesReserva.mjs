@@ -1,9 +1,19 @@
-    
+
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { actualizarEstadoPago } from '../precios/actualizarEstadoPago.mjs';
 import { precioReserva } from '../precios/precioReserva.mjs';
-import { conexion } from '../../componentes/db.mjs';
 import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
+import { eliminarTotalesPorNochePorReservaUID } from '../../repositorio/reservas/transacciones/eliminarTotalesPorNochePorReservaUID.mjs';
+import { insertarTotalPorNohce } from '../../repositorio/reservas/transacciones/insertarTotalPorNohce.mjs';
+import { eliminarTotalesPorApartamentoPorReservaUID } from '../../repositorio/reservas/transacciones/eliminarTotalesPorApartamentoPorReservaUID.mjs';
+import { insertarTotalPorApartamento } from '../../repositorio/reservas/transacciones/insertarTotalPorApartamento.mjs';
+import { eliminarImpuestosReservaUID } from '../../repositorio/reservas/transacciones/eliminarImpuestosReservaUID.mjs';
+import { insertarImpuestoEnReserva } from '../../repositorio/reservas/transacciones/insertarImpuestoEnReserva.mjs';
+import { eliminarOfertasPorReservaUID } from '../../repositorio/reservas/transacciones/eliminarOfertasPorReservaUID.mjs';
+import { insertarOfertaEnReserva } from '../../repositorio/reservas/transacciones/insertarOfertaEnReserva.mjs';
+import { eliminarTotalesPorReservaUID } from '../../repositorio/reservas/transacciones/eliminarTotalesPorReservaUID.mjs';
+import { insertarTotalEnReserva } from '../../repositorio/reservas/transacciones/insertarTotalEnReserva.mjs';
+import { obtenerReservaPorReservaUID } from '../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs';
 export const insertarTotalesReserva = async (metadatos) => {
     try {
         const tipoProcesadorPrecio = metadatos.tipoProcesadorPrecio
@@ -21,7 +31,7 @@ export const insertarTotalesReserva = async (metadatos) => {
         }
         if (tipoProcesadorPrecio === "uid") {
             transaccion.reserva = reservaUID
-            const detallesReserva = await validadoresCompartidos.reservas.validarReserva(reservaUID)
+            const detallesReserva = await obtenerReservaPorReservaUID(reservaUID)
             const estadoReserva = detallesReserva.estadoReserva
             if (estadoReserva === "cancelada") {
                 const error = "No se puede generar o volver a generar datos financieros de de una reserva cancelada"
@@ -36,11 +46,7 @@ export const insertarTotalesReserva = async (metadatos) => {
         const impuestos = desgloseFinanciero.impuestos
         const ofertas = desgloseFinanciero.ofertas
         const totales = desgloseFinanciero.totales
-        const eliminaDetallePorDiaConNoche = `
-        DELETE FROM "reservaTotalesPorNoche"
-        WHERE reserva = $1;
-        `
-        await conexion.query(eliminaDetallePorDiaConNoche, [reservaUID])
+        await eliminarTotalesPorNochePorReservaUID(reservaUID)
         let reservaTotalesPorNocheUID
         for (const detallesDelDiaConNoche of totalesPorNoche) {
             const fechaDiaConNoche_Humana = detallesDelDiaConNoche.fechaDiaConNoche
@@ -52,107 +58,47 @@ export const insertarTotalesReserva = async (metadatos) => {
             await validadoresCompartidos.fechas.validarFecha_ISO(fechaDiaConNoche_ISO)
 
             const precioNetoNoche = detallesDelDiaConNoche.precioNetoNoche
-            const apartamentos = detallesDelDiaConNoche.apartamentos
-            const insertarDetallePorDia = `
-            INSERT INTO
-            "reservaTotalesPorNoche"
-            (
-            reserva,
-            "apartamentos",
-            "precioNetoNoche",
-            "fechaDiaConNoche"
-            )
-            VALUES ($1,$2::jsonb,$3,$4)
-            RETURNING
-            uid
-            `
-            const metadatosDetallePorDia = [
-                reservaUID,
-                JSON.stringify(apartamentos),
-                precioNetoNoche,
-                fechaDiaConNoche_ISO
-            ]
-            const resuelveInsertarDetallePorDia = await conexion.query(insertarDetallePorDia, metadatosDetallePorDia)
-            if (resuelveInsertarDetallePorDia.rowCount === 0) {
-                const error = "Ha ocurrido un error y no se ha podido anadir el desglose por dia en los datos de pago de la reserva"
-                throw new Error(error)
-            }
+            const apartamentosJSON = detallesDelDiaConNoche.apartamentosJSON
+
+            await insertarTotalPorNohce({
+                reservaUID: reservaUID,
+                apartamentosJSON: apartamentosJSON,
+                precioNetoNoche: precioNetoNoche,
+                fechaDiaConNoche_ISO: fechaDiaConNoche_ISO
+            })
+
         }
-        const eliminaDetallePorApartamento = `
-        DELETE FROM "reservaTotalesPorApartamento"
-        WHERE reserva = $1;
-        `
-        await conexion.query(eliminaDetallePorApartamento, [reservaUID])
+        await eliminarTotalesPorApartamentoPorReservaUID(reservaUID)
         for (const detallesDelApartamentomo of detallePorApartamento) {
             const apartamentoIDV = detallesDelApartamentomo.apartamentoIDV
             const totalNetoRango = detallesDelApartamentomo.totalNetoRango
             const precioMedioNocheRango = detallesDelApartamentomo.precioMedioNocheRango
             const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
 
-            const insertarDetallePorApartamento = `
-            INSERT INTO
-            "reservaTotalesPorApartamento"
-            (
-            reserva,
-            "apartamentoIDV",
-            "apartamentoUI",
-            "totalNetoRango",
-            "precioMedioNocheRango"
-            )
-            VALUES ($1,$2,$3,$4,$5)
-            `
-            const metadatosDetallePorApartamento = [
-                reservaUID,
-                apartamentoIDV,
-                apartamentoUI,
-                totalNetoRango,
-                precioMedioNocheRango,
-            ]
-            const resuelveInsertarDetallePorApartamento = await conexion.query(insertarDetallePorApartamento, metadatosDetallePorApartamento)
-            if (resuelveInsertarDetallePorApartamento.rowCount === 0) {
-                const error = "Ha ocurrido un error y no se ha podido anadir el deslose por apartamento en los datos de pago de la reserva"
-                throw new Error(error)
-            }
+            await insertarTotalPorApartamento({
+                reservaUID: reservaUID,
+                apartamentoIDV: apartamentoIDV,
+                apartamentoUI: apartamentoUI,
+                totalNetoRango: totalNetoRango,
+                precioMedioNocheRango: precioMedioNocheRango
+            })
         }
-        const eliminaImpuestos = `
-        DELETE FROM "reservaImpuestos"
-        WHERE reserva = $1;
-        `
-        await conexion.query(eliminaImpuestos, [reservaUID])
+        await eliminarImpuestosReservaUID(reservaUID)
         for (const impuesto of impuestos) {
             const impuestoNombre = impuesto.nombreImpuesto
             const tipoImpositivo = impuesto.tipoImpositivo
             const tipoValor = impuesto.tipoValor
             const calculoImpuestoPorcentaje = impuesto.calculoImpuestoPorcentaje ? impuesto.calculoImpuestoPorcentaje : null
-            const insertarImpuesto = `INSERT INTO
-                "reservaImpuestos"
-                (
-                reserva,
-                "nombreImpuesto",
-                "tipoImpositivo",
-                "tipoValor",
-                "calculoImpuestoPorcentaje"
-                )
-                VALUES ($1,$2,$3,$4,$5)
-                `
-            const metadatosImpuestos = [
-                reservaUID,
-                impuestoNombre,
-                tipoImpositivo,
-                tipoValor,
-                calculoImpuestoPorcentaje
-            ]
-            const resuelveInsertarImpuesto = await conexion.query(insertarImpuesto, metadatosImpuestos)
-            if (resuelveInsertarImpuesto.rowCount === 0) {
-                const error = "ha ocurrido un error y no se ha podido anadir los impuestos a la reserva"
-                throw new Error(error)
-            }
+
+            await insertarImpuestoEnReserva({
+                reservaUID: reservaUID,
+                impuestoNombre: impuestoNombre,
+                tipoImpositivo: tipoImpositivo,
+                tipoValor: tipoValor,
+                calculoImpuestoPorcentaje: calculoImpuestoPorcentaje
+            })
         }
-        const eliminaOfertasAplicadas = `
-        DELETE FROM "reservaOfertas"
-        WHERE reserva = $1;
-        `
-        await conexion.query(eliminaOfertasAplicadas, [reservaUID])
+        await eliminarOfertasPorReservaUID(reservaUID)
         const insertarOferta = async (oferta) => {
             try {
 
@@ -166,47 +112,18 @@ export const insertarTotalesReserva = async (metadatos) => {
                 const definicion = oferta.definicion
                 const descuento = oferta.descuento || null
 
-                // Revisar esto con el tema de los detallesOferta
-                const insertarOferta = `
-                INSERT INTO "reservaOfertas"
-                (
-                  reserva,
-                  "nombreOferta",
-                  "tipoOferta",
-                  "definicion",
-                  descuento,
-                  "detallesOferta",
-                  "tipoDescuento",
-                  cantidad,
-                  "descuentoAplicadoA"
-                )
-                VALUES (
-                  $1,
-                  NULLIF($2, ''),
-                  NULLIF($3, ''),
-                  NULLIF($4, ''),
-                 $5,
-                  NULLIF(CAST($6 AS jsonb), '{}'::jsonb),
-                  NULLIF($7, ''),
-                 $8,
-                  NULLIF($9, '')
-                );`
-                const metadatosOferta = [
-                    reservaUID,
-                    nombreOferta,
-                    tipoOferta,
-                    definicion,
-                    descuento !== '' ? Number(descuento) : null,
-                    JSON.stringify(detallesOferta),
-                    tipoDescuento,
-                    cantidad !== '' ? Number(cantidad) : null,
-                    descuentoAplicadoA
-                ]
-                const resuelveInsertarOferta = await conexion.query(insertarOferta, metadatosOferta)
-                if (resuelveInsertarOferta.rowCount === 0) {
-                    const error = "Ha ocurrido un error y no se ha podido anadir la informacion de las ofertas a la reserva"
-                    throw new Error(error)
-                }
+                await insertarOfertaEnReserva({
+                    reservaUID: reservaUID,
+                    nombreOferta: nombreOferta,
+                    tipoOferta: tipoOferta,
+                    definicion: definicion,
+                    detallesOferta: JSON.stringify(detallesOferta),
+                    detallesOferta: descuento || null,
+                    tipoDescuento: tipoDescuento,
+                    cantidad: Number(cantidad) || null,
+                    descuentoAplicadoA: descuentoAplicadoA
+                })
+
             } catch (error) {
                 throw error
             }
@@ -324,11 +241,7 @@ export const insertarTotalesReserva = async (metadatos) => {
                 }
             }
         }
-        const eliminaTotales = `
-        DELETE FROM "reservaTotales"
-        WHERE reserva = $1;
-        `
-        await conexion.query(eliminaTotales, [reservaUID])
+        await eliminarTotalesPorReservaUID(reservaUID)
         const promedioNetoPorNoche = totales.promedioNetoPorNoche
         const totalReservaNetoSinOfertas = totales.totalReservaNetoSinOfertas
         const totalReservaNeto = totales.totalReservaNeto
@@ -344,34 +257,15 @@ export const insertarTotalesReserva = async (metadatos) => {
             typeof totalConImpuestos
         //El error esta en que los totales mira como biene
         //10 object string string string string
-        const consultaInsertarTotales = `
-            INSERT INTO
-            "reservaTotales"
-            (
-            "promedioNetoPorNoche",
-            "totalReservaNetoSinOfertas",
-            "totalReservaNeto",
-            "totalDescuentos",
-            "totalImpuestos",
-            "totalConImpuestos",
-            reserva
-            )
-            VALUES ($1,$2,$3,$4,$5,$6,$7)
-            `
-        const datosInsertarTotales = [
-            promedioNetoPorNoche,
-            totalReservaNetoSinOfertas,
-            totalReservaNeto,
-            totalDescuentos,
-            totalImpuestos,
-            totalConImpuestos,
-            reservaUID
-        ]
-        const resuelveInsertartotalNetoPorDia = await conexion.query(consultaInsertarTotales, datosInsertarTotales)
-        if (resuelveInsertartotalNetoPorDia.rowCount === 0) {
-            const error = `Ha ocurrido un error y no se ha podido añadir los totales en la reserva`
-            throw new Error(error)
-        }
+        await insertarTotalEnReserva({
+            promedioNetoPorNoche: promedioNetoPorNoche,
+            totalReservaNetoSinOfertas: totalReservaNetoSinOfertas,
+            totalReservaNeto: totalReservaNeto,
+            totalDescuentos: totalDescuentos,
+            totalImpuestos: totalImpuestos,
+            totalConImpuestos: totalConImpuestos,
+            reservaUID: reservaUID
+        })
         await actualizarEstadoPago(reservaUID)
         await campoDeTransaccion("confirmar")
         const ok = {

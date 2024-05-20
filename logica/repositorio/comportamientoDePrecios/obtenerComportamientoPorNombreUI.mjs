@@ -4,7 +4,7 @@ export const obtenerNombreComportamientoPorNombreUI = async (nombreDelComportami
 
     try {
         const consulta =  `
-        SELECT "nombreComportamiento"
+        SELECT *
         FROM "comportamientoPrecios"
         WHERE "nombreComportamiento" = $1
         `;

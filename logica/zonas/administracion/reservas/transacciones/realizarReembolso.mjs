@@ -5,7 +5,8 @@ import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { eliminarPagoPorPagoUID } from "../../../../repositorio/reservas/transacciones/eliminarPagoPorPagoUID.mjs";
 import { insertarReembolso } from "../../../../repositorio/reservas/transacciones/insertarReembolso.mjs";
-import { obtenerReembolsosPorPagoUID } from "../../../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUID.mjs";
+import { obtenerReembolsosPorPagoUID_ordenados } from "../../../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUID_ordenados.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const realizarReembolso = async (entrada, salida) => {
     try {
@@ -79,7 +80,7 @@ export const realizarReembolso = async (entrada, salida) => {
             const error = "Selecciona eltipo de plataforma en la que se va ha hacer el reembolso, por ejemplo, pasarela, tarjeta, efectivo o cheque";
             throw new Error(error);
         }
-        const detallesReserva = await validadoresCompartidos.reservas.validarReserva(reservaUID);
+        const detallesReserva = await obtenerReservaPorReservaUID(reservaUID);
         const estadoReserva = detallesReserva.estadoReserva;
         const estadoPago = detallesReserva.estadoPago;
         if (estadoPago === "noPagado") {
@@ -104,7 +105,7 @@ export const realizarReembolso = async (entrada, salida) => {
             throw new Error(error);
         }
         // controlar que el reembolso no sea superior al maximo  reembolsable teniendo en cuenta todos los reembolsos ya realizados de cualquuier tipo
-        const reembolsoDelPago = await obtenerReembolsosPorPagoUID(pagoUID)
+        const reembolsoDelPago = await obtenerReembolsosPorPagoUID_ordenados(pagoUID)
         if (reembolsoDelPago.length > 0) {
             let totalReembolsado = 0;
             reembolsoDelPago.map((detallesDelReembolso) => {

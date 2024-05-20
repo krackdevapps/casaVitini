@@ -1,11 +1,14 @@
-import { conexion } from "../../componentes/db.mjs";
+import { eliminarEnlacesPDFPorReservaUID } from "../../repositorio/pdf/eliminarEnlacesPDFPorReservaUID.mjs";
+import { insertarEnlacePDF } from "../../repositorio/pdf/insertarEnlacePDF.mjs";
+import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs";
 import { controlCaducidad } from "./controlCaducidad.mjs";
 
 export const crearEnlacePDF = async (reservaUID) => {
     try {
         await campoDeTransaccion("iniciar")
-        await validadoresCompartidos.reservas.validarReserva(reservaUID);
+        
+        await obtenerReservaPorReservaUID(reservaUID)
         await controlCaducidad();
         const generarCadenaAleatoria = (longitud) => {
             const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -20,29 +23,14 @@ export const crearEnlacePDF = async (reservaUID) => {
         const fechaFutura = fechaActual.plus({ days: 2 });
         const fechaCaducidad = fechaFutura.toISO();
         // Ver si existe el enlace se borra
-        const consultaCaducidadEnlaces = `
-        DELETE FROM "enlacesPdf"
-        WHERE "reservaUID" = $1;`;
-        await conexion.query(consultaCaducidadEnlaces, [reservaUID]);
-        const consultaCrearEnlace = `
-        INSERT INTO
-        "enlacesPdf"
-        (
-        "reservaUID",
-        enlace,
-        caducidad
-        )
-        VALUES 
-        ($1, $2, $3)
-        RETURNING
-        enlace;`;
-        const datosEnlace = [
-            reservaUID,
-            generarCadenaAleatoria(100),
-            fechaCaducidad
-        ];
-        const reseulveEnlaces = await conexion.query(consultaCrearEnlace, datosEnlace);
-        const enlacePDF = reseulveEnlaces.rows[0].enlace;
+        await eliminarEnlacesPDFPorReservaUID(reservaUID)
+
+        const nuevoEnlace = await insertarEnlacePDF({
+            reservaUID: reservaUID,
+            enlaceUPID: generarCadenaAleatoria(100),
+            fechaCaducidad: fechaCaducidad,
+        })
+        const enlacePDF = nuevoEnlace.enlace;
         await campoDeTransaccion("confirmar")
         return enlacePDF;
     } catch (error) {

@@ -1,8 +1,10 @@
 import Decimal from "decimal.js";
 import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs";
-import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
-import { conexion } from "../../componentes/db.mjs";
+import { obtenerTotalesGlobal } from "../../repositorio/reservas/transacciones/obtenerTotalesGlobal.mjs";
+import { obtenerPagosPorReservaUIDConOrdenamiento } from "../../repositorio/reservas/transacciones/obtenerPagosPorReservaUIDConOrdenamiento.mjs";
+import { obtenerReembolsosPorPagoUID } from "../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUID.mjs";
+import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const pagosDeLaReserva = async (reservaUID) => {
     try {
@@ -11,7 +13,7 @@ export const pagosDeLaReserva = async (reservaUID) => {
             const error = "el campo 'reservaUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
             throw new Error(error);
         }
-        await validadoresCompartidos.reservas.validarReserva(reservaUID);
+        await obtenerReservaPorReservaUID(reservaUID);
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
 
         /*
@@ -22,20 +24,9 @@ export const pagosDeLaReserva = async (reservaUID) => {
         totalImpuestos
         totalConImpuestos
         */
-        const consultaTotales = `
-            SELECT
-                "totalConImpuestos"
-            FROM 
-                "reservaTotales"
-            WHERE 
-                reserva = $1;`;
-        const resuelveConsultaTotales = await conexion.query(consultaTotales, [reservaUID]);
-        if (resuelveConsultaTotales.rowCount === 0) {
-            const error = `Esta reserva no tiene totales calculados`;
-            // throw new Error(error)
-        }
-        const totalConImpuestos = resuelveConsultaTotales.rows[0]?.totalConImpuestos ?
-            resuelveConsultaTotales.rows[0].totalConImpuestos : "0.00";
+
+        const totalesReserva = await obtenerTotalesGlobal(reservaUID)
+        const totalConImpuestos = totalesReserva?.totalConImpuestos ? totalesReserva.totalConImpuestos : "0.00";
         const totalConImpuestosDecimal = new Decimal(totalConImpuestos);
         const ok = {
             totalReserva: totalConImpuestos,
@@ -43,28 +34,10 @@ export const pagosDeLaReserva = async (reservaUID) => {
             faltantePorPagar: totalConImpuestos,
             pagos: []
         };
-        const consultaListaPagos = `
-                        SELECT
-                            "pagoUID",
-                            "plataformaDePago",
-                            "tarjetaDigitos",
-                            "pagoUIDPasarela",
-                            "tarjetaDigitos",
-                            to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPagoUTC_ISO", 
-                            tarjeta,
-                            "chequeUID",
-                            cantidad
-                        FROM 
-                            "reservaPagos"
-                        WHERE 
-                            reserva = $1
-                        ORDER BY
-                            "pagoUID" DESC;`;
-        const resuelveConsultaListaDePagos = await conexion.query(consultaListaPagos, [reservaUID]);
-        if (resuelveConsultaListaDePagos.rowCount === 0) {
-        }
-        if (resuelveConsultaListaDePagos.rowCount > 0) {
-            const pagosDeLaReserva = resuelveConsultaListaDePagos.rows;
+
+        const pagosDeLaReserva = await obtenerPagosPorReservaUIDConOrdenamiento(reservaUID)
+        if (pagosDeLaReserva.length > 0) {
+
             let pagoResultadoFinal = 0;
             for (const detallesDelPago of pagosDeLaReserva) {
                 const pagoUID = detallesDelPago.pagoUID;
@@ -77,26 +50,19 @@ export const pagosDeLaReserva = async (reservaUID) => {
                 detallesDelPago.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
 
                 const cantidadDelPago = new Decimal(detallesDelPago.cantidad);
-                const consultaReembolsos = `
-                    SELECT
-                        cantidad
-                    FROM 
-                        "reservaReembolsos"
-                    WHERE 
-                        "pagoUID" = $1;`;
-                const resuelveConsultaReembolsos = await conexion.query(consultaReembolsos, [pagoUID]);
-                if (resuelveConsultaReembolsos.rowCount === 0) {
+
+                const reembolsosDelPago = await obtenerReembolsosPorPagoUID(pagoUID)
+                if (reembolsosDelPago.length === 0) {
                     ok.pagos.push(detallesDelPago);
                     pagoResultadoFinal = cantidadDelPago.plus(pagoResultadoFinal);
                 }
-                if (resuelveConsultaReembolsos.rowCount > 0) {
+                if (reembolsosDelPago.length > 0) {
                     // if (plataformaDePago === "pasarela") {
                     //     const actualizarReembolsos = await componentes.administracion.reservas.transacciones.actualizarReembolsosDelPagoDesdeSquare(pagoUID, pagoUIDPasarela)
                     //     if (actualizarReembolsos?.error) {
                     //         ok.estadoPasarela = actualizarReembolsos.error
                     //     }
                     // }
-                    const reembolsosDelPago = resuelveConsultaReembolsos.rows;
                     let sumaDeLoReembolsado = 0;
                     for (const detallesDelReembolso of reembolsosDelPago) {
                         const cantidadDelReembolso = new Decimal(detallesDelReembolso.cantidad);

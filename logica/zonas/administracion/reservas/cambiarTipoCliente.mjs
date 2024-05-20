@@ -6,9 +6,9 @@ import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs"
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 import { obtenerPernoctanteDeLaReservaPorClienteUID } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorClienteUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
-import { reservasPorRango } from "../../../sistema/selectoresCompartidos/reservasPorRango.mjs";
 import { actualizarPernoctantePoolPorClienteUID } from "../../../repositorio/reservas/pernoctantes/actualizarPernoctantePoolPorClienteUID.mjs";
 import { eliminarClienteDelPool } from "../../../repositorio/clientes/eliminarClienteDelPool.mjs";
+import { reservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/reservasPorRango.mjs";
 
 export const cambiarTipoCliente = async (entrada, salida) => {
     const mutex = new Mutex()

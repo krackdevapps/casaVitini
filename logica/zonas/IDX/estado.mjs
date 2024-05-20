@@ -1,12 +1,12 @@
-import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
-import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
+import { eliminarSessionPorRolPorCaducidad } from "../../repositorio/sessiones/eliminarSessionPorRolPorCaducidad.mjs";
+import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 
 export const estado = async (entrada, salida) => {
     try {
-        await eliminarCuentasNoVerificadas();
-        await borrarCuentasCaducadas();
+        await eliminarUsuarioPorRolPorEstadoVerificacion();
+        await eliminarSessionPorRolPorCaducidad();
 
         const usuario = entrada.session?.usuario;
         const rol = entrada.session?.rol;

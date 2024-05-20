@@ -44,13 +44,28 @@ export const actualizarComportamiento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
+
+        const zonaIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.zonaIDV,
+            nombreCampo: "La zonaIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
         if (tipo !== "porDias" && tipo !== "porRango") {
             const error = "Por favor determine si el tipo de bloqueo es porRango o porDias.";
             throw new Error(error);
         }
 
-        const apartamentos = validadoresCompartidos.tipos.array({
-            array: entrada.body.apartamentos,
+        if (zonaIDV !== "publico" && zonaIDV !== "privado" && zonaIDV !== "global") {
+            const error = "La zonaIDV de un bloqueo, solo puede ser publico, privado o global.";
+            throw new Error(error);
+        }
+
+
+        const apartamentosIDV_array = validadoresCompartidos.tipos.array({
+            array: entrada.body.apartamentosIDV_array,
             nombreCampo: "El array de apartamentos",
             filtro: "soloCadenasIDV",
             noSePermitenDuplicados: "si"
@@ -60,6 +75,17 @@ export const actualizarComportamiento = async (entrada, salida) => {
         let fechaFinal_ISO;
         let diasArray;
         await campoDeTransaccion("iniciar")
+
+        await evitarDuplicados({
+            comportamientoUID: comportamientoUID,
+            tipo: tipo,
+            transaccion: "actualizar",
+            apartamentosIDV_array: apartamentosIDV_array,
+            fechaInicio_ISO: fechaInicio_ISO,
+            fechaFinal_ISO: fechaFinal_ISO,
+            zonaIDV: zonaIDV,
+            diasArray: diasArray
+        })
 
         if (tipo === "porRango") {
             const fechaInicio_ISO = entrada.body.fechaInicio_ISO;
@@ -160,17 +186,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
             const error = "No se puede modificar un comportamiento de precio que esta activo. Primero desativalo con el boton de estado de color rojo en la parte superior izquierda, al lado del nombre.";
             throw new Error(error);
         }
-        const dataEvitarDuplicados = {
-            comportamientoUID: comportamientoUID,
-            tipo: tipo,
-            transaccion: "actualizar",
-            apartamentos: apartamentos,
-            fechaInicio_ISO: fechaInicio_ISO,
-            fechaFinal_ISO: fechaFinal_ISO,
-            diasArray: diasArray
-        };
 
-        await evitarDuplicados(dataEvitarDuplicados);
 
         const dataActualizarComportamientoDePrecio = {
             nombreComportamiento: nombreComportamiento,

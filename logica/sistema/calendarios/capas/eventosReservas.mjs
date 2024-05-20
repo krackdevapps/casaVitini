@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../../componentes/db.mjs";
+import { obtenerReservasPorMesPorAno } from "../../../repositorio/calendario/obtenerReservasPorMesPorAno.mjs";
 
-const eventosReservas = async (fecha) => {
+export const eventosReservas = async (fecha) => {
     try {
         const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
         if (!filtroFecha.test(fecha)) {
@@ -29,33 +29,12 @@ const eventosReservas = async (fecha) => {
             }
             return fechasInternas;
         }
-        const consultaReservas = `
-        SELECT 
-        reserva,
-        to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-        to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
-        (salida - entrada) as duracion_en_dias
-        FROM reservas
-        WHERE
-        (
-            DATE_PART('YEAR', entrada) < $2
-            OR (
-                DATE_PART('YEAR', entrada) = $2
-                AND DATE_PART('MONTH', entrada) <= $1
-            )
-        )
-        AND (
-            DATE_PART('YEAR', salida) > $2
-            OR (
-                DATE_PART('YEAR', salida) = $2
-                AND DATE_PART('MONTH', salida) >= $1
-            )
-        )
-            AND "estadoReserva" <> $3
-        ORDER BY duracion_en_dias DESC;
-        `
-        const resuelveReservas = await conexion.query(consultaReservas, [mes, ano, reservaCancelada])
-        const reservasSelecciondas = resuelveReservas.rows.map((detallesReserva) => {
+        const reservas = await obtenerReservasPorMesPorAno({
+            mes: mes,
+            ano: ano,
+            reservaCancelada: reservaCancelada
+        })
+        const reservasSelecciondas = reservas.map((detallesReserva) => {
             detallesReserva.eventoUID = "reservaUID_" + detallesReserva.reserva
             return detallesReserva
         })
@@ -90,7 +69,4 @@ const eventosReservas = async (fecha) => {
     } catch (errorCapturado) {
         throw errorCapturado
     }
-}
-export {
-    eventosReservas
 }

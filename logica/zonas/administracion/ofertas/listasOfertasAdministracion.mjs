@@ -1,3 +1,4 @@
+import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerApartamentosDeLaOfertaPorOfertaUID } from "../../../repositorio/ofertas/obtenerApartamentosDeLaOfertaPorOfertaUID.mjs";
 import { obtenerTodasLasOfertas } from "../../../repositorio/ofertas/obtenerTodasLasOfertas.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
@@ -19,9 +20,10 @@ export const listasOfertasAdministracion = async (entrada, salida) => {
 
             if (tipoOferta === "porApartamentosEspecificos") {
                 const apartamentosDeLaOferta = await obtenerApartamentosDeLaOfertaPorOfertaUID(uid)
-                apartamentosDeLaOferta.map((apartamento) => {
+
+                for (const apartamento of apartamentosDeLaOferta) {
                     const apartamentoIDV = apartamento.apartamentoIDV;
-                    const apartamentoUI = apartamento.apartamentoUI;
+                    const apartamentoUI = obtenerNombreApartamentoUI(apartamentoIDV);
                     const tipoDescuentoApartamento = apartamento.tipoDescuento;
                     const cantidadApartamento = apartamento.cantidad;
                     const detallesApartamentoDedicado = {
@@ -31,12 +33,9 @@ export const listasOfertasAdministracion = async (entrada, salida) => {
                         cantidadApartamento: cantidadApartamento
                     };
                     ofertaDetalles.apartamentosDedicados.push(detallesApartamentoDedicado);
-                });
-
+                }
             }
         }
-
-
         const ok = {
             ok: ofertas
         };

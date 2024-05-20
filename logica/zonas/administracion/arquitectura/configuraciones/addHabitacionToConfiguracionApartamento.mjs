@@ -1,11 +1,11 @@
 import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs"
-import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarHabitacionEnApartamento } from "../../../../repositorio/arquitectura/insertarHabitacionEnApartamento.mjs";
 import { obtenerNombreHabitacionUI } from "../../../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs";
+import { obtenerHabitacionesDelApartamentoPorHabitacionIDV } from "../../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorHabitacionIDV.mjs";
 
 export const addHabitacionToConfiguracionApartamento = async (entrada, salida) => {
     try {
@@ -46,9 +46,12 @@ export const addHabitacionToConfiguracionApartamento = async (entrada, salida) =
                 const error = "No existe el identificador visual de la habitacion";
                 throw new Error(error);
             }
-            const validarInexistenciaHabitacionEnConfiguracionDeApartamento = await conexion.query(`SELECT * FROM "configuracionHabitacionesDelApartamento" WHERE apartamento = $1 AND habitacion = $2 `, [apartamentoIDV, habitacionIDV]);
+            const habitacionDelApartamento = await obtenerHabitacionesDelApartamentoPorHabitacionIDV({
+                apartamentoIDV:apartamentoIDV,
+                habitacionIDV:habitacionIDV
+            })
 
-            if (validarInexistenciaHabitacionEnConfiguracionDeApartamento.rowCount === 1) {
+            if (habitacionDelApartamento.length > 0) {
                 const error = `Ya existe la ${habitacionUI} en esta configuracion del ${apartamentoUI}`;
                 throw new Error(error);
             }

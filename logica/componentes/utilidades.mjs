@@ -110,36 +110,6 @@ const utilidades = {
         const valorString = numeroInstanciado.toString();
         return valorString;
     },
-    procesadorFecha: async (fechaUTC) => {
-        // Apartarentemente no hace falta por que se dan las fechas en utc y con js en el cliente se traducen
-        const regexUTC = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)$/;
-        if (!regexUTC.test(fechaUTC)) {
-            return "Fecha no válida. Debe estar en formato UTC y seguir el estándar ISO 8601.";
-        }
-        componentes.control.relojlUTC()
-        const estructuraFinal = {
-            fecha: null,
-            formato: null,
-            zonaHoraria: null
-        }
-        const IDX = entrada.session.IDX
-        const ROL = entrada.session.rol
-        if (IDX && (ROL === "administrador" || ROL === "empleado")) {
-            // Recuperar confioguracion usuarios
-            const consultaConfiguracionZonaHoraria = `
-            SELECT
-                "zonaHoraria",
-                configuracion
-            FROM 
-                "usuarioZonaHoraria"
-            WHERE 
-                "pagoUID" = $1 AND "reembolsoUIDPasarela" = $2;`
-            const resuelveValidarExistenciaReembolsoPasarela = await conexion.query(consultaConfiguracionZonaHoraria, [IDX])
-        } else {
-        }
-        // Si el usuario no esta identificado se da la fecha UTC y en el cliente se procesa
-        // Si el usuario esta identificado en la configuracion eliga si quiere la fecha utc y que el cliente la procese o que el servidor la procese
-    },
     calcularTiempoRestanteEnFormatoISO: (fechaSalida_ISO, fechaActual_ISO) => {
         const fechaHoy = DateTime.fromISO(fechaActual_ISO);
         const fechaSalidaObj = DateTime.fromISO(fechaSalida_ISO);

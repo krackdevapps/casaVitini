@@ -1,37 +1,24 @@
 import axios from 'axios';
 import ICAL from 'ical.js';
-import { conexion } from '../../../componentes/db.mjs';
-const eventosCalendarioPorUID = async (calendarioUID) => {
+import { obtenerCalendariosPorPlataformaIDVPorCalendarioUID } from '../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDVPorCalendarioUID.mjs';
+import { actualizarEventosCalendarioPorCalendarioUID } from '../../../repositorio/calendario/actualizarEventosCalendarioPorCalendarioUID.mjs';
+export const eventosCalendarioPorUID = async (calendarioUID) => {
     try {
-        const filtroCadena = /^[0-9]+$/;
-        if (!calendarioUID || !filtroCadena.test(calendarioUID)) {
-            const error = "Hay que definir la calendarioUID, solo se admiten numeros sin espacios.";
-            throw new Error(error);
-        }
-        const consultaSelecionaCalendario = `
-        SELECT 
-        uid,
-        nombre,
-        url,
-        "dataIcal",
-        "apartamentoIDV"
-        FROM 
-        "calendariosSincronizados" 
-        WHERE 
-        uid = $1 AND "plataformaOrigen" = $2`
         const plataformaDeOrigen = "airbnb"
-        const resuelveSelecionarCalendario = await conexion.query(consultaSelecionaCalendario, [calendarioUID, plataformaDeOrigen])
+        const calendario = await obtenerCalendariosPorPlataformaIDVPorCalendarioUID({
+            calendarioUID: calendarioUID,
+            plataformaDeOrigen: plataformaDeOrigen,
+        })
         const ok = {
             calendariosPorApartamento: []
         }
-        if (resuelveSelecionarCalendario.rowCount > 0) {
+        if (calendario.calendarioUID) {
             const errorDeFormato = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb"
-            const calendariosDelApartamento = resuelveSelecionarCalendario.rows[0]
-            const calendarioUID = calendariosDelApartamento.uid
-            const url = calendariosDelApartamento.url
-            const nombre = calendariosDelApartamento.nombre
-            let calendarioDatos = calendariosDelApartamento.dataIcal
-            ok.apartamentoIDV = calendariosDelApartamento.apartamentoIDV
+            const calendarioUID = calendario.uid
+            const url = calendario.url
+            const nombre = calendario.nombre
+            let calendarioDatos = calendario.dataIcal
+            ok.apartamentoIDV = calendario.apartamentoIDV
             const estructura = {
                 calendarioRaw: calendarioDatos
             }
@@ -43,25 +30,16 @@ const eventosCalendarioPorUID = async (calendarioUID) => {
                 if (jcal?.name.toLowerCase() !== 'vcalendar') {
                     throw new Error(errorDeFormato)
                 }
-                const actualizarCalendario = `
-                    UPDATE "calendariosSincronizados"
-                    SET 
-                    "dataIcal" = COALESCE($1, "dataIcal")
-                    WHERE uid = $2;
-                    `;
-                const datosParaActualizar = [
-                    calendarioRaw,
-                    calendarioUID
-                ];
-                const resuelveActualizarCalendario = await conexion.query(actualizarCalendario, datosParaActualizar);
-                if (resuelveActualizarCalendario.rowCount === 0) {
-                    const error = "Los datos actualizados tras la sincronizacion se han enviado a la base de datos pero el servidor de base de datos informa que no se ha actualizado el calendario. Vuelve a intentarlo mas tarde.";
-                    throw new Error(error);
-                }
+
+                await actualizarEventosCalendarioPorCalendarioUID({
+                    calendarioRaw: calendarioRaw,
+                    calendarioUID: calendarioUID
+                })
+
                 calendarioDatos = calendarioRaw
                 estructura.estadoSincronizacion = "sincronizado"
             } catch (errorCapturado) {
-                
+
                 estructura.estadoSincronizacion = "noSincronizado"
             }
             const jcalData = ICAL.parse(calendarioDatos);
@@ -111,7 +89,4 @@ const eventosCalendarioPorUID = async (calendarioUID) => {
     } catch (error) {
         throw error
     }
-}
-export {
-    eventosCalendarioPorUID
 }

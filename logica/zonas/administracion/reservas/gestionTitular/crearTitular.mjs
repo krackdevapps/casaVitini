@@ -5,6 +5,7 @@ import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { eliminarTitularPoolPorReservaUID } from "../../../../repositorio/reservas/titulares/eliminarTitularPoolPorReservaUID.mjs";
 import { eliminarTitularPorReservaUID } from "../../../../repositorio/reservas/titulares/eliminarTitularPorReservaUID.mjs";
 import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const crearTitular = async (entrada, salida) => {
     try {
@@ -22,7 +23,7 @@ export const crearTitular = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        await validadoresCompartidos.reservas.validarReserva(reservaUID);
+        await obtenerReservaPorReservaUID(reservaUID);
 
         await campoDeTransaccion("iniciar")
 

@@ -1,9 +1,11 @@
 import { DateTime } from "luxon"
 import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
-import { conexion } from "../../componentes/db.mjs"
 import Decimal from "decimal.js"
-export const 
-validadoresCompartidos = {
+import { obtenerClientesPorPasaporte } from "../../repositorio/clientes/obtenerClientesPorPasaporte.mjs"
+import { obtenerDatosPersonalesPorMail } from "../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs"
+import { obtenerDatosPersonalesPorPasaporteDual } from "../../repositorio/usuarios/obtenerDatosPersonalesPorPasaporte.mjs"
+import { obtenerNombreColumnaPorTabla } from "../../repositorio/globales/obtenerNombreColumnaPorTabla.mjs"
+export const validadoresCompartidos = {
     clientes: {
         validarCliente: async (cliente) => {
             try {
@@ -55,19 +57,12 @@ validadoresCompartidos = {
                     limpiezaEspaciosAlrededor: "si",
                 })
 
-                const consultaPasaporte = `
-                SELECT 
-                nombre,
-                "primerApellido",
-                "segundoApellido"
-                FROM clientes
-                WHERE pasaporte = $1;
-                `
-                const resuelveUnicidadPasaporte = await conexion.query(consultaPasaporte, [pasaporte])
-                if (resuelveUnicidadPasaporte.rowCount > 0) {
-                    const nombreClienteExistente = resuelveUnicidadPasaporte.rows[0].nombre
-                    const primerApellidoClienteExistente = resuelveUnicidadPasaporte.rows[0].primerApellido
-                    const segundoApellidoClienteExistente = resuelveUnicidadPasaporte.rows[0].segundoApellido
+
+                const clienteConMismoPasaporte = await obtenerClientesPorPasaporte(pasaporte)
+                if (clienteConMismoPasaporte.length > 0) {
+                    const nombreClienteExistente = clienteConMismoPasaporte.nombre
+                    const primerApellidoClienteExistente = clienteConMismoPasaporte.primerApellido
+                    const segundoApellidoClienteExistente = clienteConMismoPasaporte.segundoApellido
                     const error = `Ya existe un cliente con ese pasaporte: ${nombreClienteExistente} ${primerApellidoClienteExistente} ${segundoApellidoClienteExistente}`
                     throw new Error(error)
                 }
@@ -118,16 +113,10 @@ validadoresCompartidos = {
                 }
                 const inyectorSQL = constructorSQL(operacion, usuarioIDX)
                 // validar existencia de correo
-                const consultaControlCorreo = `
-                SELECT 
-                "usuarioIDX"
-                FROM "datosDeUsuario"
-                WHERE email = $1 ${inyectorSQL};
-                `
-                const resuelveUnicidadCorreo = await conexion.query(consultaControlCorreo, [email])
-                if (resuelveUnicidadCorreo.rowCount > 0) {
-                    const usuariosExistentes = resuelveUnicidadCorreo.rows.map((usuario) => {
-                        return usuario.usuarioIDX
+                const usuarioConMismoMail = await obtenerDatosPersonalesPorMail(email)
+                if (usuarioConMismoMail.length > 0) {
+                    const usuariosExistentes = usuarioConMismoMail.map((usuario) => {
+                        return usuario.usuario
                     })
                     const ultimoElemento = usuariosExistentes.pop();
                     const constructorCadenaFinalUI = usuariosExistentes.join(", ") + (usuariosExistentes.length > 0 ? " y " : "") + ultimoElemento;
@@ -135,16 +124,14 @@ validadoresCompartidos = {
                     throw new Error(error)
                 }
                 // validar existencia de pasaporte
-                const consultaControlPasaporte = `
-                    SELECT 
-                    "usuarioIDX"
-                    FROM "datosDeUsuario"
-                    WHERE pasaporte = $1 ${inyectorSQL};
-                    `
-                const resuelveUnicidadPasaporte = await conexion.query(consultaControlPasaporte, [pasaporte])
-                if (resuelveUnicidadPasaporte.rowCount > 0) {
-                    const usuariosExistentes = resuelveUnicidadPasaporte.rows.map((usuario) => {
-                        return usuario.usuarioIDX
+                const usaurioConMismoPasaporte = await obtenerDatosPersonalesPorPasaporteDual({
+                    pasaporte: pasaporte,
+                    opoeracion: operacion,
+                    usuario: usuario
+                })
+                if (usaurioConMismoPasaporte.length > 0) {
+                    const usuariosExistentes = usaurioConMismoPasaporte.map((usuario) => {
+                        return usuario.usuario
                     })
                     const ultimoElemento = usuariosExistentes.pop();
                     const constructorCadenaFinalUI = usuariosExistentes.join(", ") + (usuariosExistentes.length > 0 ? " y " : "") + ultimoElemento;
@@ -343,55 +330,6 @@ validadoresCompartidos = {
                     const error = "El año no puede ser inferior a 2000 ni superior a 5000";
                     throw new Error(error);
                 }
-            } catch (error) {
-                throw error
-            }
-        }
-    },
-    reservas: {
-        validarReserva: async (reservaUIDRaw) => {
-            try {
-
-                const reservaUID = validadoresCompartidos.tipos.numero({
-                    string: reservaUIDRaw,
-                    nombreCampo: "El identificador universal de la reserva (reservaUID)",
-                    filtro: "numeroSimple",
-                    sePermiteVacio: "no",
-                    limpiezaEspaciosAlrededor: "si",
-                    sePermitenNegativos: "no"
-                })
-
-                const validarReserva = `
-                SELECT
-                *
-                FROM 
-                reservas
-                WHERE
-                reserva = $1
-                ;`
-                const resuelveValidarReserva = await conexion.query(validarReserva, [reservaUID])
-                if (resuelveValidarReserva.rowCount === 0) {
-                    const error = "No existe la reserva comprueba es reservaUID"
-                    throw new Error(error)
-                }
-                return resuelveValidarReserva.rows[0]
-            } catch (errorCapturado) {
-                throw errorCapturado
-            }
-        },
-        resolverNombreApartamento: async (apartamentoIDV) => {
-            try {
-                const consultaNombreApartamento = `
-                SELECT "apartamentoUI"
-                FROM apartamentos 
-                WHERE apartamento = $1;`
-                const resolverNombreApartamento = await conexion.query(consultaNombreApartamento, [apartamentoIDV])
-                if (resolverNombreApartamento.rowCount === 0) {
-                    const error = "No existe el apartamentoIDV para resolver"
-                    throw new new Error(error)
-                }
-                const apartamentoUI = resolverNombreApartamento.rows[0].apartamentoUI
-                return apartamentoUI
             } catch (error) {
                 throw error
             }
@@ -934,17 +872,11 @@ validadoresCompartidos = {
                     limpiezaEspaciosAlrededor: "si",
                 })
 
-                const consultaExistenciaNombreColumna = `
-                SELECT column_name
-                FROM information_schema.columns
-                WHERE table_name = $1 AND column_name = $2;
-                `;
-                const configuracionConsulta = [
-                    tabla,
-                    nombreColumna
-                ]
-                const resuelveNombreColumna = await conexion.query(consultaExistenciaNombreColumna, configuracionConsulta);
-                if (resuelveNombreColumna.rowCount === 0) {
+                const columna = await obtenerNombreColumnaPorTabla({
+                    tabla: tabla,
+                    nombreColumna: nombreColumna
+                })
+                if (columna.length === 0) {
                     const error = `No existe el nombre de la columna ${nombreColumna} en la tabla ${tabla}`;
                     throw new Error(error);
                 }

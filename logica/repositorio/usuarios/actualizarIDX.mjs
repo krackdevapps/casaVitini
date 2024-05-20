@@ -5,7 +5,8 @@ export const actualizarIDX = async (data) => {
     const nuevoIDX = data.nuevoIDX
     try {
         const consulta = `
-        UPDATE usuarios
+        UPDATE 
+        usuarios
         SET 
             usuario = $2
         WHERE 

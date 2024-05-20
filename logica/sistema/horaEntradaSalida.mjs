@@ -1,25 +1,15 @@
-import { conexion } from "../componentes/db.mjs";
+import { obtenerParConfiguracion } from "../repositorio/configuracion/obtenerParConfiguracion.mjs";
 
-const horaEntradaSalida = async () => {
+export const horaEntradaSalida = async () => {
     try {
-        const consultasHorasSalidaYEntrada = `
-        SELECT 
-            valor,
-            "configuracionUID"
-        FROM 
-            "configuracionGlobal"
-        WHERE 
-            "configuracionUID" IN ($1, $2, $3);
-       `;
-        const configuracionUID = [
+        const configuracionesSolicitadas = [
             "horaEntradaTZ",
             "horaSalidaTZ",
             "zonaHoraria"
         ];
-        const resuelveConfiguracionGlobal = await conexion.query(consultasHorasSalidaYEntrada, configuracionUID)
-        const detallesConfiguracion = resuelveConfiguracionGlobal.rows
+        const paresConfiguracion = await obtenerParConfiguracion(configuracionesSolicitadas)
         const estructuraFinal = {}
-        for (const parConfirmacion of detallesConfiguracion) {
+        for (const parConfirmacion of paresConfiguracion) {
             const configuracionUID = parConfirmacion.configuracionUID
             const valor = parConfirmacion.valor
             estructuraFinal[configuracionUID] = valor
@@ -42,7 +32,4 @@ const horaEntradaSalida = async () => {
     } catch (errorCapturado) {
         throw errorCapturado
     }
-}
-export {
-    horaEntradaSalida
 }

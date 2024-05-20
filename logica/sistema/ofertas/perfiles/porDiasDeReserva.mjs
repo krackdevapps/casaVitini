@@ -1,37 +1,24 @@
 import { DateTime } from "luxon";
 import Decimal from "decimal.js";
-import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../validadores/validadoresCompartidos.mjs";
-const porDiasDeReserva = async (reserva) => {
+export const porDiasDeReserva = async (reserva) => {
     try {
         const fechaEntradaReserva_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(reserva.fechas.entrada)).fecha_ISO
         const fechaSalidaReserva_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(reserva.fechas.salida)).fecha_ISO
         const totalReservaNeto = new Decimal(reserva.desgloseFinanciero.totales.totalReservaNeto)
-        const fechaActualTZ =  reserva.fechas.fechaActualProcesada_ISO
+        const fechaActualTZ = reserva.fechas.fechaActualProcesada_ISO
         const estadoOfertaActivado = "activada"
-        const consulta = `
-        SELECT 
-        uid,
-        to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
-        to_char("fechaFin", 'DD/MM/YYYY') as "fechaFin",
-        "simboloNumero",
-        "descuentoAplicadoA",
-        "estadoOferta",
-        "tipoOferta",
-        "cantidad",
-        numero,
-        "tipoDescuento",
-        "nombreOferta"
-        FROM ofertas
-        WHERE $1 BETWEEN "fechaInicio" AND "fechaFin"
-        AND "estadoOferta" = $2
-        AND "tipoOferta" = $3;`;
+
         // Mucho ojo en las ofertas de tipo1 por que se activan revisando la fecha actual, es decir la fecha de cuando se realiza la reserva y no las fechas de inicio y fin de la reserva, eso se revisa mas adelante
         // Acuerdate por que esta parte es un poco contraintuitiva.
         const ofertasTipo = "porDiasDeReserva";
-        const ofertasEncontradas = await conexion.query(consulta, [fechaActualTZ, estadoOfertaActivado, ofertasTipo]);
+        const ofertasEncontradas = await obtenerOfertasPorFechaPorEstadoPorTipo({
+            fechaActualTZ: fechaActualTZ,
+            estadoOfertaActivado: estadoOfertaActivado,
+            ofertaTipo: ofertasTipo
+        })
         const ofertasSeleccionadas = []
-        for (const detallesOferta of ofertasEncontradas.rows) {
+        for (const detallesOferta of ofertasEncontradas) {
             const simboloNumero = detallesOferta.simboloNumero
             const numero = Number(detallesOferta.numero)
             const nombreOferta = detallesOferta.nombreOferta
@@ -42,9 +29,9 @@ const porDiasDeReserva = async (reserva) => {
                 nombreOferta: nombreOferta,
                 tipoDescuento: tipoDescuento,
                 cantidad: cantidad,
-                numero: numero, 
+                numero: numero,
                 simboloNumero: simboloNumero,
-                tipoOferta:tipoOferta
+                tipoOferta: tipoOferta
             }
             const fechaEntradaReservaObjeto = DateTime.fromISO(fechaEntradaReserva_ISO);
             const fechaSalidaReservaObjeto = DateTime.fromISO(fechaSalidaReserva_ISO);
@@ -86,7 +73,4 @@ const porDiasDeReserva = async (reserva) => {
     } catch (error) {
         throw error
     }
-}
-export {
-    porDiasDeReserva
 }

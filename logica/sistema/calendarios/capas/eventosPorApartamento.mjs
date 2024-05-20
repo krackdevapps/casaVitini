@@ -1,7 +1,8 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../../componentes/db.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
-const eventosPorApartamneto = async (metadatos) => {
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { obtenerReservasPorApartamentoIDVPorMesPorAno } from "../../../repositorio/calendario/obtenerReservasPorPlataformaIDV.mjs";
+export const eventosPorApartamneto = async (metadatos) => {
     try {
         const fecha = metadatos.fecha
         const apartamentoIDV = metadatos.apartamentoIDV
@@ -16,16 +17,9 @@ const eventosPorApartamneto = async (metadatos) => {
             throw new Error(error)
         }
         // Validar que le nombre del apartamento existe como tal
-        const validacionNombreApartamento = `
-               SELECT *
-               FROM "configuracionApartamento"
-               WHERE "apartamentoIDV" = $1
-               `
-        const resuelveValidacionNombreApartamento = await conexion.query(validacionNombreApartamento, [apartamentoIDV])
-        if (resuelveValidacionNombreApartamento.rowCount === 0) {
-            const error = "No existe el nombre del apartamento, revisa el nombre escrito"
-            throw new Error(error)
-        }
+
+
+        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
         const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
@@ -48,48 +42,23 @@ const eventosPorApartamneto = async (metadatos) => {
             return fechasInternas;
         }
         const reservaCancelada = "cancelada"
-        const consultaReservas = `
-        SELECT 
-          r.reserva,
-          ra.uid,
-          to_char(r.entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-          to_char(r.salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
-          ra.apartamento as "apartamentoIDV",
-          (salida - entrada) as duracion_en_dias
-        FROM reservas r
-        JOIN "reservaApartamentos" ra ON r.reserva = ra.reserva
-        WHERE 
-       ( 
-        (
-            DATE_PART('YEAR', entrada) < $2
-            OR (
-                DATE_PART('YEAR', entrada) = $2
-                AND DATE_PART('MONTH', entrada) <= $1
-            )
-        )
-        AND (
-            DATE_PART('YEAR', salida) > $2
-            OR (
-                DATE_PART('YEAR', salida) = $2
-                AND DATE_PART('MONTH', salida) >= $1
-            )
-        )
-        )
-          AND ra.apartamento = $3
-          AND "estadoReserva" <> $4;
-        `
-        const resuelveReservas = await conexion.query(consultaReservas, [mes, ano, apartamentoIDV, reservaCancelada])
+        const reservasPorApartentoIDV = await obtenerReservasPorApartamentoIDVPorMesPorAno({
+            mes: mes,
+            ano: ano,
+            apartamentoIDV: apartamentoIDV,
+            reservaCancelada: reservaCancelada
+        })
         const reservasSelecciondas = []
-        for (const detalles of resuelveReservas.rows) {
+        for (const detalles of reservasPorApartentoIDV) {
             const apartamentoIDV = detalles.apartamentoIDV
             detalles.apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
             reservasSelecciondas.push(detalles)
         }
         for (const detallesReserva of reservasSelecciondas) {
-            const reservaUID = detallesReserva.reserva
-            const apartamentoUID = detallesReserva.uid
-            const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
-            const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
+            const reservaUID = detallesReserva.reservaUID
+            const apartamentoUID = detallesReserva.apartamentoUID
+            const fechaEntrada_ISO = detallesReserva.fechaEntrada
+            const fechaSalida_ISO = detallesReserva.fechaSalida
             const apartamentoIDVReserva = detallesReserva.apartamentoIDV
             detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
             detallesReserva.tipoEvento = "porApartamento"
@@ -120,7 +89,4 @@ const eventosPorApartamneto = async (metadatos) => {
     } catch (errorCapturado) {
         throw errorCapturado
     }
-}
-export {
-    eventosPorApartamneto
 }

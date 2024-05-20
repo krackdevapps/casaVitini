@@ -12,14 +12,14 @@ export const validadorBusqueda = (configuracion) => {
         })
 
         const nombreColumna = validadoresCompartidos.tipos.cadena({
-            string: configuracion.nombreColumna,
+            string: configuracion.nombreColumna || "",
             nombreCampo: "El campo del nombre de la columna",
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
         const sentidoColumna = validadoresCompartidos.tipos.cadena({
-            string: configuracion.sentidoColumna,
+            string: configuracion.sentidoColumna || "",
             nombreCampo: "El campo del sentido de la columna",
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",

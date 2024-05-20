@@ -4,7 +4,7 @@ export const obtenerInterruptorPorInterruptorIDV = async (interruptorIDV) => {
     try {
         const consulta = `
             SELECT 
-                "interruptorIDV"
+                *
             FROM 
                 "interruptoresGlobales"
             WHERE 

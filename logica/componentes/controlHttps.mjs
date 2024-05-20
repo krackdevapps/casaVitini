@@ -1,4 +1,4 @@
-export default (entrada, salida, siguinte) => {
+export const controlHTTPS = (entrada, salida, siguinte) => {
     const dominioDePeticion = entrada.headers.host
     if (dominioDePeticion === 'lripoll.ddns.net') {
         return salida.redirect(301, 'https://casavitini.com' + entrada.originalUrl);

@@ -7,7 +7,7 @@ import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
 import Decimal from "decimal.js"
 import { DateTime } from "luxon"
 
-const sistemaDeOfertas = async (reserva) => {
+export const sistemaDeOfertas = async (reserva) => {
 
     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
     let fechaActualTZ
@@ -44,6 +44,3 @@ const sistemaDeOfertas = async (reserva) => {
     return estructura
 
 };
-export {
-    sistemaDeOfertas
-}

@@ -1,98 +1,62 @@
-import { conexion } from "../componentes/db.mjs"
+import { obtenerCamaComoEntidadPorCamaIDV } from "../repositorio/arquitectura/obtenerCamaComoEntidadPorCamaIDV.mjs"
+import { obtenerConfiguracionPorApartamentoIDV } from "../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs"
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs"
+import { obtenerNombreApartamentoUI } from "../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs"
+import { obtenerNombreHabitacionUI } from "../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs"
+import { obtenerTodasLasCaracteristicasDelApartamento } from "../repositorio/arquitectura/obtenerTodasLasCaracteristicasDelApartamento.mjs"
+import { validadoresCompartidos } from "./validadores/validadoresCompartidos.mjs"
 
-const configuracionApartamento = async (apartamentos) => {
-    if (!apartamentos || !Array.isArray(apartamentos)) {
-        const error = {
-            error: "el identificador del 'apartamentos' debe de ser un array"
-        }
-        return error
-    }
-    const filtroApartamento = /^[a-z0-9]+$/
-    for (const apartamento of apartamentos) {
-        if (!apartamento || !filtroApartamento.test(apartamento)) {
-            const error = {
-                error: "el identificador del 'apartamento' solo puede contener minúsculas, ni siquera espacios"
-            }
-            return error
-        }
-    }
-    let apartamentosValidados = []
-    const configuracion = {}
+export const configuracionApartamento = async (apartamentosIDVArray) => {
+
     try {
-        for (const apartamentoID of apartamentos) {
-            const consultaApartamento = `
-            SELECT "apartamentoIDV"
-            FROM "configuracionApartamento" 
-            WHERE "apartamentoIDV" = $1;`
-            const resuelveConsultaApartamento = await conexion.query(consultaApartamento, [apartamentoID])
-            if (resuelveConsultaApartamento.rowCount === 1) {
-                const apartamentosEncontrados = resuelveConsultaApartamento.rows[0]
-                const estructuraApartamentoInicial = {
-                    apartamentoIDV: apartamentosEncontrados.apartamentoIDV,
-                    //imagen: apartamentosEncontrados.imagen
-                }
-                apartamentosValidados.push(estructuraApartamentoInicial)
+        validadoresCompartidos.tipos.array({
+            array: apartamentosIDVArray,
+            nombreCampo: "El sistema de configuracion",
+            filtro: "soloCadenasIDV",
+            noSePermitenDuplicados: "si"
+        })
+
+        const apartamentosValidados = []
+        const configuracion = {}
+
+        for (const apartamentoIDV of apartamentosIDVArray) {
+            const configuracionApartamento = obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+            const estructuraApartamentoInicial = {
+                apartamentoIDV: configuracionApartamento.apartamentoIDV,
             }
+            apartamentosValidados.push(estructuraApartamentoInicial)
+
         }
-        apartamentosValidados = Array.from(new Set(apartamentosValidados));
+
         for (const detallesApartamento of apartamentosValidados) {
-            const apartamento = detallesApartamento.apartamentoIDV
-            const imagenApartamento = detallesApartamento.imagen
-            configuracion[apartamento] = {}
-            // Ojo con esto que es la cadena binaria del apartamento y la lia muy fuerte por que se renderiz secuencialmente
-            //configuracion[apartamento]["imagenApartamento"] = imagenApartamento
-            const consultaNombreApartamento = `
-            SELECT "apartamentoUI"
-            FROM apartamentos 
-            WHERE apartamento = $1;`
-            const resolverNombreApartamento = await conexion.query(consultaNombreApartamento, [apartamento])
-            const apartamentoIDV = resolverNombreApartamento.rows[0].apartamentoUI
-            configuracion[apartamento]["apartamentoUI"] = apartamentoIDV
-            const consultaCaracteristicas = `
-            SELECT caracteristica
-            FROM "apartamentosCaracteristicas" 
-            WHERE "apartamentoIDV" = $1;`
-            const resolverCaracteristicas = await conexion.query(consultaCaracteristicas, [apartamento])
-            const caracteristicas = resolverCaracteristicas.rows
-            configuracion[apartamento]["caracteristicas"] = caracteristicas
-            const consultaHabitaciones = `
-            SELECT uid, habitacion 
-            FROM "configuracionHabitacionesDelApartamento"
-            WHERE apartamento = $1;`
-            const resuelveConsultaHabitaciones = await conexion.query(consultaHabitaciones, [apartamento])
-            const hagitaciones = resuelveConsultaHabitaciones.rows
-            configuracion[apartamento]["habitaciones"] = {}
-            for (const habitacion of hagitaciones) {
-                const habiacionIDV = habitacion["habitacion"]
-                const habitacionUID = habitacion["uid"]
-                configuracion[apartamento]["habitaciones"][habiacionIDV] = {}
-                const consultaNombreHabitacion = `
-                SELECT "habitacionUI"
-                FROM habitaciones 
-                WHERE habitacion = $1;`
-                let resolverNombreHabitacion = await conexion.query(consultaNombreHabitacion, [habiacionIDV])
-                resolverNombreHabitacion = resolverNombreHabitacion.rows[0].habitacionUI
-                configuracion[apartamento]["habitaciones"][habiacionIDV]["habitacionUI"] = resolverNombreHabitacion
-                const consultaCamas = `
-                SELECT cama
-                FROM "configuracionCamasEnHabitacion" 
-                WHERE habitacion = $1;`
-                const consultaHabitaciones = await conexion.query(consultaCamas, [habitacionUID])
-                const camaEncontradas = consultaHabitaciones.rows
+            const apartamentoIDV = detallesApartamento.apartamentoIDV
+            configuracion[apartamentoIDV] = {}
+
+            const apartamentoUI = obtenerNombreApartamentoUI(apartamentoIDV)
+            configuracion[apartamentoIDV].apartamentoUI = apartamentoUI
+            const caracteristicasDeLApartamento = await obtenerTodasLasCaracteristicasDelApartamento(apartamentoIDV)
+            configuracion[apartamentoIDV].caracteristicas = caracteristicasDeLApartamento
+            const configuracionHabitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
+            configuracion[apartamentoIDV].habitaciones = {}
+
+            for (const habitacion of configuracionHabitacionesPorApartamento) {
+                const habiacionIDV = habitacion.habitacionIDV
+                const habitacionUID = habitacion.habitacionUID
+                configuracion[apartamentoIDV].habitaciones[habiacionIDV] = {}
+                configuracion[apartamentoIDV].habitaciones[habiacionIDV].habitacionUI = obtenerNombreHabitacionUI(habiacionIDV)
+
+                const camasDeLaHabitacion = await obtenerCamasDeLaHabitacionPorHabitacionUID(habitacionUID)
                 let configuracionNumero = 0
-                configuracion[apartamento]["habitaciones"][habiacionIDV]["configuraciones"] = {}
-                for (const configuracionHabitacion of camaEncontradas) {
+                configuracion[apartamentoIDV].habitaciones[habiacionIDV].configuraciones = {}
+
+                for (const configuracionHabitacion of camasDeLaHabitacion) {
                     configuracionNumero += 1
-                    const camaIDV = configuracionHabitacion["cama"]
-                    const consultaNombreCamaUI = `
-                    SELECT "camaUI", capacidad
-                    FROM camas 
-                    WHERE cama = $1;`
-                    const resolverNombreCama = await conexion.query(consultaNombreCamaUI, [camaIDV])
-                    const camaUI = resolverNombreCama.rows[0].camaUI
-                    const capacidad = resolverNombreCama.rows[0].capacidad
-                    configuracion[apartamento]["habitaciones"][habiacionIDV]["configuraciones"]["configuracion" + configuracionNumero] = {}
-                    configuracion[apartamento]["habitaciones"][habiacionIDV]["configuraciones"]["configuracion" + configuracionNumero] = {
+                    const camaIDV = configuracionHabitacion.camaIDV
+                    const cama = await obtenerCamaComoEntidadPorCamaIDV(camaIDV)
+                    const camaUI = cama.camaUI
+                    const capacidad = cama.capacidad
+                    configuracion[apartamentoIDV].habitaciones[habiacionIDV].configuraciones["configuracion" + configuracionNumero] = {}
+                    configuracion[apartamentoIDV].habitaciones[habiacionIDV].configuraciones["configuracion" + configuracionNumero] = {
                         camaIDV: camaIDV,
                         camaUI: camaUI,
                         capacidad: capacidad
@@ -108,6 +72,3 @@ const configuracionApartamento = async (apartamentos) => {
     }
     return ok
 }
-export {
-    configuracionApartamento
-};

@@ -1,9 +1,9 @@
 import nodemailer from 'nodemailer'
-import fs from 'fs';
+//import fs from 'fs';
 import dotenv from "dotenv";
 dotenv.config();
 
-const enviarMail = async (entrada) => {
+export const enviarMail = async (entrada) => {
     try {
         const filtroCorreo = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
         const filtroComillas = /['"]/;
@@ -52,13 +52,8 @@ const enviarMail = async (entrada) => {
                },
            ]*/
         const mensajeCompositor = await transporte.sendMail(composicionDelMensaje)
-        
         return mensajeCompositor
     } catch (error) {
-        
         throw error
     }
-}
-export {
-    enviarMail
 }

@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../../componentes/db.mjs";
+import { obtenerTodosLosbloqueosPorMesPorAnoPorTipo } from "../../../repositorio/calendario/obtenerTodosLosbloqueosPorMesPorAnoPorTipo.mjs";
 const eventosTodosLosBloqueos = async (fecha) => {
     try {
         const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
@@ -29,38 +29,13 @@ const eventosTodosLosBloqueos = async (fecha) => {
             }
             return fechasInternas;
         }
-        const consultaBloqueos = `
-        SELECT 
-            bA.uid,
-            bA."tipoBloqueo",
-            bA.apartamento AS "apartamentoIDV",
-            to_char(bA.entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-            to_char(bA.salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
-            (bA.salida - bA.entrada) as duracion_en_dias,
-            a."apartamentoUI"
-        FROM "bloqueosApartamentos" bA
-        JOIN apartamentos a ON bA.apartamento = a.apartamento
-        WHERE 
-        (
-            DATE_PART('YEAR', entrada) < $2
-            OR (
-                DATE_PART('YEAR', entrada) = $2
-                AND DATE_PART('MONTH', entrada) <= $1
-            )
-        )
-        AND (
-            DATE_PART('YEAR', salida) > $2
-            OR (
-                DATE_PART('YEAR', salida) = $2
-                AND DATE_PART('MONTH', salida) >= $1
-            )
-        )
-          OR
-          bA."tipoBloqueo" = $3;
-        `
         const bloqueoPermanente = "permanente"
-        const resuelveBloqueos = await conexion.query(consultaBloqueos, [mes, ano, bloqueoPermanente])
-        const bloqueosSeleccionados = resuelveBloqueos.rows.map((detallesBloqueo) => {
+        const bloqueos = await obtenerTodosLosbloqueosPorMesPorAnoPorTipo({
+            mes: mes,
+            ano: ano,
+            bloqueoPermanente: bloqueoPermanente
+        })
+        const bloqueosSeleccionados = bloqueos.map((detallesBloqueo) => {
             return detallesBloqueo
         })
         for (const detallesReserva of bloqueosSeleccionados) {

@@ -1,7 +1,7 @@
-import { conexion } from "../../componentes/db.mjs";
-import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
+import { actualizarEstadoVerificacion } from "../../repositorio/usuarios/actualizarEstadoVerificacion.mjs";
+import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 
 export const verificarCuenta = async (entrada, salida) => {
     try {
@@ -14,36 +14,21 @@ export const verificarCuenta = async (entrada, salida) => {
             soloMinusculas: "si"
         })
 
-
-        await eliminarCuentasNoVerificadas();
-        await campoDeTransaccion("iniciar")   
+        await eliminarUsuarioPorRolPorEstadoVerificacion();
+        await campoDeTransaccion("iniciar")
         const estadoVerificado = "si";
-        const consultaValidarCodigo = `
-            UPDATE 
-            usuarios
-            SET
-            "cuentaVerificada" = $1,
-            "codigoVerificacion" = NULL,
-            "fechaCaducidadCuentaNoVerificada" = NULL
-            WHERE
-            "codigoVerificacion" = $2
-            RETURNING
-            usuario
-            `;
-        const resuelveValidarCodigo = await conexion.query(consultaValidarCodigo, [estadoVerificado, codigo]);
-        if (resuelveValidarCodigo.rowCount === 0) {
-            const error = "El codigo que has introducino no existe";
-            throw new Error(error);
-        }
-        if (resuelveValidarCodigo.rowCount === 1) {
-            const usuario = resuelveValidarCodigo.rows[0].usuario;
-            const ok = {
-                ok: "Cuenta verificada",
-                usuario: usuario
-            };
-            salida.json(ok);
-        }
+        const usuarioVerificado = await actualizarEstadoVerificacion({
+            estadoVerificado: estadoVerificado,
+            codigo: codigo
+        })
         await campoDeTransaccion("confirmar")
+
+        const usuario = usuarioVerificado.usuario;
+        const ok = {
+            ok: "Cuenta verificada",
+            usuario: usuario
+        };
+        salida.json(ok);
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         console.info(errorCapturado.message);

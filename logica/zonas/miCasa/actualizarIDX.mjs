@@ -1,9 +1,9 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
-import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
-import { validarIDXUnico } from "../../sistema/VitiniIDX/validarIDXUnico.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
+import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
+import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 
 export const actualizarIDX = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -28,8 +28,8 @@ export const actualizarIDX = async (entrada, salida) => {
             throw new Error(error)
 
         }
-        await validarIDXUnico(nuevoIDX)
-        await eliminarCuentasNoVerificadas();
+        await obtenerUsuario(nuevoIDX)
+        await eliminarUsuarioPorRolPorEstadoVerificacion();
         await campoDeTransaccion("iniciar")
 
         const data = {

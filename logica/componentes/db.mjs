@@ -2,38 +2,33 @@ import pkg from 'pg';
 import dotenv from "dotenv";
 dotenv.config();
 const { Pool } = pkg;
-let BaseDeDatos
+const configuracion = {}
 const entorno = process.env.ENTORNO_DB
+
 if (entorno === "nativo") {
-    BaseDeDatos = {
-        host: 'localhost',
-        user: process.env.BASEDEDATOS_USER,
-        password: "hola",
-        database: "casaVitiniDev",
-        //revisar esto
-        max: 100,
-        port: 5432,
-        idleTimeoutMillis: 1000,
-        connectionTimeoutMillis: 3000,
-    }
-} else
-if (entorno === "docker") {
-    BaseDeDatos = {
-        host: 'nodobasededatos',
-        user: process.env.BASEDEDATOS_USER,
-        password: process.env.BASEDEDATOS_PASS,
-        database: process.env.BASEDEDATOS_DBNAME,
-        max: 100,
-        port: 5432,
-        idleTimeoutMillis: 1000,
-        connectionTimeoutMillis: 3000,
-    }
+    configuracion.host = 'localhost'
+    configuracion.user = process.env.BASEDEDATOS_USER
+    configuracion.password = "hola"
+    configuracion.database = "casaVitiniDev"
+    configuracion.max = 100
+    configuracion.port = 5432
+    configuracion.idleTimeoutMillis = 1000
+    configuracion.connectionTimeoutMillis = 3000
+} else if (entorno === "docker") {
+    configuracion.host = 'nodobasededatos'
+    configuracion.user = process.env.BASEDEDATOS_USER
+    configuracion.password = process.env.BASEDEDATOS_PASS
+    configuracion.database = process.env.BASEDEDATOS_DBNAME
+    configuracion.max = 100
+    configuracion.port = 5432
+    configuracion.idleTimeoutMillis = 1000
+    configuracion.connectionTimeoutMillis = 3000
+
 } else {
     const errorMsg = "No se ha definido el tipo de entorno para la base de datos"
     throw new Error(errorMsg)
 }
-const conexion = new Pool(BaseDeDatos);
+export const conexion = new Pool(configuracion);
 conexion.on('error', (error) => {
     console.error('Error en la conexión a la base de datos:', error.message);
-  });
-export { conexion };
+})

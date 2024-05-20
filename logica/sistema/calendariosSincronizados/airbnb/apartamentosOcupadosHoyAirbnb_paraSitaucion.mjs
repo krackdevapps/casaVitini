@@ -1,23 +1,15 @@
-import { conexion } from "../../../componentes/db.mjs"
+import { obtenerCalendariosPorPlataformaIDV } from "../../../repositorio/calendario/obtenerReservasPorApartamentoIDVPorMesPorAno.mjs"
 import { selectorRangoUniversal } from "../../selectoresCompartidos/selectorRangoUniversal.mjs"
 import { sincronizarCalendariosAirbnbPorIDV } from "./sincronizarCalendariosAirbnbPorIDV.mjs"
 export const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
     // Obtener todo los calendarios de airbnb que coinciden con hoy, o las fecha que se le pase. Este script es diferente a apartamentosOcupadosAirbnb y por tanto estos dos script deben exsite y no son reutilizables.
     const plataformaOrigen = "airbnb"
-    const consultaCalendariosSincronizados = `
-    SELECT 
-    "apartamentoIDV"
-    FROM 
-    "calendariosSincronizados"
-    WHERE
-    "plataformaOrigen" = $1;
-    `
-    const resuelveCalendariosSincronizados = await conexion.query(consultaCalendariosSincronizados, [plataformaOrigen])
-    const apartamentosIDVArray = resuelveCalendariosSincronizados.rows
+
+    const calendariosSincronizados = await obtenerCalendariosPorPlataformaIDV(plataformaOrigen)
     // const fechaHoy_ISO = "2024-05-05"
     // Sincronizar y obtener los dtos
     const eventosPorApartamento = []
-    for (const apartamentoIDV_porCalendario of apartamentosIDVArray) {
+    for (const apartamentoIDV_porCalendario of calendariosSincronizados) {
         const apartamentoIDV_porComprovar = apartamentoIDV_porCalendario.apartamentoIDV
         const calendarioExterno = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV_porComprovar)
         const calendariosPorApartamento = calendarioExterno.calendariosPorApartamento
@@ -48,6 +40,5 @@ export const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
         }
         eventosPorApartamento.push(detallesDelApartamento)
     }
-
     return eventosPorApartamento
 }

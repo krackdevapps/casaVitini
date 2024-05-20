@@ -3,6 +3,7 @@ import { generadorPDF } from "../../../sistema/PDF/generadorPDF.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { detallesReserva } from "../../../sistema/reservas/detallesReserva.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const generarPdf = async (entrada, salida) => {
     try {
@@ -21,7 +22,7 @@ export const generarPdf = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
 
-        await validadoresCompartidos.reservas.validarReserva(reservaUID);
+        await obtenerReservaPorReservaUID(reservaUID);
         const metadatos = {
             reservaUID: reservaUID
         };

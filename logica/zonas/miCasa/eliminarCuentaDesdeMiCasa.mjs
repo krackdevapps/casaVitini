@@ -1,13 +1,18 @@
-import { conexion } from "../../componentes/db.mjs";
+import { Mutex } from "async-mutex";
+import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
+import { obtenerAdministradores } from "../../repositorio/usuarios/obtenerAdministradores.mjs";
+import { eliminarUsuario } from "../../repositorio/usuarios/eliminarUsuario.mjs";
+import { eliminarSessionPorUsuario } from "../../repositorio/sessiones/eliminarSessionPorUsuario.mjs";
 
 export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
+    const mutex = new Mutex()
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        IDX.control()  
+        IDX.control()
 
         const usuarioIDX = entrada.session.usuario;
         const clave = entrada.body.clave;
@@ -16,22 +21,12 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
             const error = "No has escrito tu contrasena. Es necesaria para eliminar tu cuenta";
             throw new Error(error);
         }
+        mutex.acquire()
         await campoDeTransaccion("iniciar")
-        const obtenerClaveActualHASH = `
-                SELECT 
-                clave,
-                sal, 
-                rol
-                FROM usuarios
-                WHERE usuario = $1;
-                `;
-        const resuelveObtenerClaveActualHASH = await conexion.query(obtenerClaveActualHASH, [usuarioIDX]);
-        if (resuelveObtenerClaveActualHASH.rowCount === 0) {
-            const error = "No existe el usuario";
-            throw new Error(error);
-        }
-        const claveActualHASH = resuelveObtenerClaveActualHASH.rows[0].clave;
-        const sal = resuelveObtenerClaveActualHASH.rows[0].sal;
+
+        const cuentaDeUsuario = await obtenerUsuario(usuarioIDX)
+        const claveActualHASH = cuentaDeUsuario.clave;
+        const sal = cuentaDeUsuario.sal;
         const metadatos = {
             sentido: "comparar",
             clavePlana: clave,
@@ -44,42 +39,32 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
             throw new Error(error);
         }
         // Validar si es un usuario administrador
-        const rol = resuelveObtenerClaveActualHASH.rows[0].rol;
+        const rol = cuentaDeUsuario.rolIDV;
         const rolAdministrador = "administrador";
         if (rol === rolAdministrador) {
-            const validarUltimoAdministrador = `
-                    SELECT 
-                    rol
-                    FROM usuarios
-                    WHERE rol = $1;
-                    `;
-            const resuelValidarUltimoAdministrador = await conexion.query(validarUltimoAdministrador, [rolAdministrador]);
-            if (resuelValidarUltimoAdministrador.rowCount === 1) {
+            const adminsitradores = await obtenerAdministradores(rolAdministrador)
+            if (adminsitradores.length === 1) {
                 const error = "No se puede eliminar esta cuenta por que es la unica cuenta adminsitradora existente. Si quieres eliminar esta cuenta tienes que crear otra cuenta administradora. Por que en el sistema debe de existir al menos una cuenta adminitrador";
                 throw new Error(error);
             }
         }
-        const eliminarCuenta = `
-                DELETE FROM usuarios
-                WHERE usuario = $1;
-                `;
-        const resuelveEliminarCuenta = await conexion.query(eliminarCuenta, [usuarioIDX]);
-        if (resuelveEliminarCuenta.rowCount === 1) {
-            const cerrarSessiones = `
-                    DELETE FROM sessiones
-                    WHERE sess->> 'usuario' = $1;
-                    `;
-            await conexion.query(cerrarSessiones, [usuarioIDX]);
-            const ok = {
-                ok: "Se ha eliminado correctamente la cuenta"
-            };
-            salida.json(ok);
-        }
+        await eliminarUsuario(usuarioIDX)
+        await eliminarSessionPorUsuario(usuarioIDX)
         await campoDeTransaccion("confirmar")
+
+        const ok = {
+            ok: "Se ha eliminado correctamente la cuenta"
+        };
+        salida.json(ok);
+
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
+    } finally {
+        if (mutex) {
+            mutex.release()
+        }
     }
 
 }

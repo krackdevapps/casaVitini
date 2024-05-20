@@ -1,8 +1,8 @@
 import Decimal from 'decimal.js';
 import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
 import { DateTime } from 'luxon';
-import { conexion } from '../../componentes/db.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
+import { obtenerApartamentosDeLaOfertaPorOfertaUID } from '../../repositorio/ofertas/obtenerApartamentosDeLaOfertaPorOfertaUID.mjs';
 Decimal.set({ precision: 50 });
 const aplicarOfertas = async (reservaPrecio) => {
     try {
@@ -27,24 +27,8 @@ const aplicarOfertas = async (reservaPrecio) => {
         const totalReservaNetoDecimal = new Decimal(totalReservaNeto)
         // Numero de noches de la reserva
         // Numero de dias de antelacion
-        const ofertasEncontrada = []
-        const consultaOfertasTipo1 = `
-        SELECT 
-        uid,
-        to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
-        to_char("fechaFin", 'DD/MM/YYYY') as "fechaFin",
-        "simboloNumero",
-        "descuentoAplicadoA",
-        "estadoOferta",
-        "tipoOferta",
-        "cantidad",
-        numero,
-        "tipoDescuento",
-        "nombreOferta"
-        FROM ofertas
-        WHERE $1 BETWEEN "fechaInicio" AND "fechaFin"
-        AND "estadoOferta" = $3
-        AND "tipoOferta" = ANY($2::text[]);`;
+        const ofertasEncontradas = []
+
         // Mucho ojo en las ofertas de tipo1 por que se activan revisando la fecha actual, es decir la fecha de cuando se realiza la reserva y no las fechas de inicio y fin de la reserva, eso se revisa mas adelante
         // Acuerdate por que esta parte es un poco contraintuitiva.
         const ofertasTipo1 = [
@@ -53,39 +37,30 @@ const aplicarOfertas = async (reservaPrecio) => {
             "porDiasDeAntelacion",
             "porDiasDeReserva"
         ];
-        const resuelveConsultaOfertasTipo1 = await conexion.query(consultaOfertasTipo1, [fechaActualTZ, ofertasTipo1, estadoOfertaActivado]);
-        if (resuelveConsultaOfertasTipo1.rowCount > 0) {
-            resuelveConsultaOfertasTipo1.rows.map((oferta) => {
-                ofertasEncontrada.push(oferta)
-            })
-        }
+
+        const listaOferatasTipo1 = await obtenerOfertasPorFechaPorEstadoPorTipo({
+            fechaActualTZ: fechaActualTZ,
+            arrayDeTiposDeOferta: ofertasTipo1,
+            estadoOfertaActivado: estadoOfertaActivado
+        })
+        listaOferatasTipo1.map((oferta) => {
+            ofertasEncontradas.push(oferta)
+        })
+
         const ofertasTipo2 = "porRangoDeFechas"
-        const consultaOfertasTipo2 = `
-        SELECT 
-        uid,
-        to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
-        to_char("fechaFin", 'DD/MM/YYYY') as "fechaFin",
-        "simboloNumero",
-        "estadoOferta",
-        "tipoOferta",
-        "cantidad",
-        numero,
-        "tipoDescuento",
-        "nombreOferta"
-        FROM ofertas
-        WHERE ("fechaInicio" <= $1 AND "fechaFin" >= $2)
-        AND "estadoOferta" = $4 
-        AND "tipoOferta" = $3;
-        `
-        const resuelveConsultaOfertasTipo2 = await conexion.query(consultaOfertasTipo2, [fechaSalidaReserva_ISO, fechaEntradaReserva_ISO, ofertasTipo2, estadoOfertaActivado]);
-        if (resuelveConsultaOfertasTipo2.rowCount > 0) {
-            const ofertasTipo2Encontradas = resuelveConsultaOfertasTipo2.rows
-            ofertasTipo2Encontradas.map((oferta) => {
-                ofertasEncontrada.push(oferta)
-            })
-        }
+
+        const listaOferatasTipo2 = await obtenerOfertasPorFechaPorEstadoPorTipo({
+            fechaSalidaReserva_ISO: fechaSalidaReserva_ISO,
+            fechaEntradaReserva_ISO: fechaEntradaReserva_ISO,
+            ofertasTipo: ofertasTipo2,
+            estadoOfertaActivado: estadoOfertaActivado
+        })
+        listaOferatasTipo2.map((oferta) => {
+            ofertasEncontradas.push(oferta)
+        })
+
         const ofertasQueSeDebeAplicar = []
-        for (const detalleOferta of ofertasEncontrada) {
+        for (const detalleOferta of ofertasEncontradas) {
             const tipoOferta = detalleOferta.tipoOferta
             if (tipoOferta === "porNumeroDeApartamentos") {
                 const simboloNumero = detalleOferta.simboloNumero
@@ -166,19 +141,11 @@ const aplicarOfertas = async (reservaPrecio) => {
                 const ofertaUID = detalleOferta.uid
                 const descuentoAplicadoA = detalleOferta.descuentoAplicadoA
                 const apartamentosDedicadosOferta = []
-                const consultaApartamentosEspecificos = `
-                SELECT  
-                apartamento AS "apartamentoIDV",
-                "tipoDescuento",
-                cantidad
-                FROM "ofertasApartamentos"
-                WHERE oferta = $1;
-                `
-                const resuelveConsultaApartamentosEspecificos = await conexion.query(consultaApartamentosEspecificos, [ofertaUID]);
-                const apartamentosDedicados = resuelveConsultaApartamentosEspecificos.rows
+
+                const apartamentosDeLaOferta = await obtenerApartamentosDeLaOfertaPorOfertaUID(ofertaUID)
                 const apartamentosIDVOferta = []
                 const apartamentosUIOferta = []
-                for (const detallesApartamentoDedicado of apartamentosDedicados) {
+                for (const detallesApartamentoDedicado of apartamentosDeLaOferta) {
                     const apartamentoIDV = detallesApartamentoDedicado.apartamentoIDV
                     const apartamentoUI = await validadoresCompartidos.reservas.resolverNombreApartamento(apartamentoIDV)
                     const tipoDescuento = detallesApartamentoDedicado.tipoDescuento
@@ -291,7 +258,7 @@ const aplicarOfertas = async (reservaPrecio) => {
         const apartmamentoaFormatoObtenerTotal = {}
         detallePorDiaPreProcesdo.map((detalleApartamento) => {
         })
-        
+
         const comprobarFechaEnRango = (fechaAComprobar_ISO, fechaInicio_ISO, fechaFin_ISO) => {
             const fechaObjetoAComprobar = new Date(fechaAComprobar_ISO);
             const fechaObjetoInicio = new Date(fechaInicio_ISO);
@@ -309,26 +276,18 @@ const aplicarOfertas = async (reservaPrecio) => {
             return totalNetoDia
         }
         const tipoOfertaPorRangoDeFechas = "porRangoDeFechas"
-        const seleccionarOfertaPorRAngoDeFecha = `
-        SELECT 
-        uid,
-        to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio_Humano", 
-        to_char("fechaFin", 'DD/MM/YYYY') as "fechaFin_Humano", 
-        to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio_ISO", 
-        to_char("fechaFin", 'YYYY-MM-DD') as "fechaFin_ISO", 
-        "tipoOferta",
-        "cantidad",
-        "tipoDescuento",
-        "descuentoAplicadoA",
-        "nombreOferta"
-        FROM ofertas 
-        WHERE "fechaInicio" <= $1::DATE AND "fechaFin" >= $2::DATE AND "estadoOferta" = $3 AND "tipoOferta" = $4;`
-        const resuelveOfertasPorRangoDeFecha = await conexion.query(seleccionarOfertaPorRAngoDeFecha, [fechaSalidaReserva_ISO, fechaEntradaReserva_ISO, estadoOfertaActivado, tipoOfertaPorRangoDeFechas])
+
+        const ofertas = await obtenerOfertasPorRangoFechaPorEstadoPorTipo({
+            fechaSalidaReserva_ISO: fechaSalidaReserva_ISO,
+            fechaEntradaReserva_ISO: fechaEntradaReserva_ISO,
+            estadoOfertaActivado: estadoOfertaActivado,
+            tipoOfertaPorRangoDeFechas: tipoOfertaPorRangoDeFechas
+        })
         const diasPorProcesarPorOfertasPorRangoDeFechas = {}
         // Inicio oferta por rango fecha
-        if (resuelveOfertasPorRangoDeFecha.rowCount > 0) {
-            const ofertasPorRangoDeFecha = resuelveOfertasPorRangoDeFecha.rows
-            
+        if (ofertas.length > 0) {
+            const ofertasPorRangoDeFecha = ofertas
+
             // Revisar esto
             for (const detalleDia of detallePorDiaPreProcesdo) {
                 const fechaDiaArreglo = detalleDia.fechaDiaConNoche.split("/")
@@ -395,7 +354,7 @@ const aplicarOfertas = async (reservaPrecio) => {
                 const tipoDescuento = detalleOfertaPorRango[1].tipoDescuento
                 const cantidad = new Decimal(detalleOfertaPorRango[1].cantidad)
                 let descuentoFinalPorDia
-                
+
                 for (const diaAfectado of diasAfectados) {
                     const totalNetoDiaSinOferta = diaAfectado.totalNetoDiaSinOferta
                     totalRangoNetoSinOferta = totalRangoNetoSinOferta + Number(totalNetoDiaSinOferta)
@@ -429,7 +388,7 @@ const aplicarOfertas = async (reservaPrecio) => {
                     const conntrolCeroTtoal = totalNetoDiaConOferta.isPositive() ? totalNetoDiaConOferta.toFixed(2) : "0.00"
                     diaAfectado.totalNetoDiaConOferta = conntrolCeroTtoal
                 }
-                
+
             }
         }
         let sumaDescuentos = 0
@@ -484,7 +443,7 @@ const aplicarOfertas = async (reservaPrecio) => {
                 detalleOferta.descuentoRenderizado = descuentoAplicado.toFixed(2)
             }
             if (tipoOferta === "porApartamentosEspecificos") {
-                
+
                 const apartamentosEspecificos = detalleOferta.apartamentos ? detalleOferta.apartamentos : []
                 let descuentoRenderizado = 0
                 const descuentoAplicadoA = detalleOferta.descuentoAplicadoA
@@ -510,7 +469,7 @@ const aplicarOfertas = async (reservaPrecio) => {
                             desglosePorApartamento_Objeto[detallesDelApartamento.apartamentoIDV] = detallesDelApartamento
                             //return desglosePorApartamento_Objeto
                         })
-                        
+
                         const totalNetoApartamento = new Decimal(desglosePorApartamento_Objeto[apartamentoIDV].totalNetoRango)
                         let descuentoRenderizadoPorApartamento = 0
                         if (tipoDescuento === "cantidadFija") {

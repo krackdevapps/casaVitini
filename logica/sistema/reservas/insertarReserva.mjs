@@ -1,10 +1,20 @@
 import { DateTime } from 'luxon';
-import { conexion } from '../../componentes/db.mjs';
 import { insertarTotalesReserva } from './insertarTotalesReserva.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
-const insertarReserva = async (reserva) => {
+import { insertarReservaAdministrativa } from '../../repositorio/reservas/reserva/insertarReservaAdministrativa.mjs';
+import { Mutex } from 'async-mutex';
+import { insertarClientePool } from '../../repositorio/clientes/insertarClientePool.mjs';
+import { insertarApartamentoEnReserva } from '../../repositorio/reservas/apartamentos/insertarApartamentoEnReserva.mjs';
+import { obtenerNombreHabitacionUI } from '../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs';
+import { insertarHabitacionEnApartamento } from '../../repositorio/arquitectura/insertarHabitacionEnApartamento.mjs';
+import { insertarCamaEnLaHabitacion } from '../../repositorio/reservas/apartamentos/insertarCamaEnLaHabitacion.mjs';
+
+export const insertarReserva = async (reserva) => {
+    const mutex = new Mutex()
     try {
+
+        mutex.acquire()
         const fechaEntrada_Humano = reserva.entrada
         const fechaSalida_Humano = reserva.salida
 
@@ -20,196 +30,60 @@ const insertarReserva = async (reserva) => {
         const correoTitular = reserva.datosTitular.correoTitular
         const telefonoTitular = reserva.datosTitular.telefonoTitular
         await campoDeTransaccion("iniciar")
-        const consultaReserva = `
-        INSERT INTO
-        reservas
-        (
-        entrada,
-        salida,
-        "estadoReserva",
-        origen,
-        creacion,
-        "estadoPago"
-        )
-        VALUES
-        ($1,$2,$3,$4,$5,$6)
-        RETURNING
-        reserva;`
-        const datosReservas = [
-            fechaEntrada_ISO,
-            fechaSalida_ISO,
-            estadoReserva,
-            origen,
-            fechaReserva,
-            estadoPago
-        ]
-        const insertarReserva = await conexion.query(consultaReserva, datosReservas)
-        const reservaUID = insertarReserva.rows[0].reserva;
-        const cosultaInsertarTitularPool = `
-            INSERT INTO
-            "poolTitularesReserva"
-            (
-            "nombreTitular",
-            "pasaporteTitular",
-            "emailTitular",
-            "telefonoTitular",
-            reserva
-            )
-            VALUES 
-            ($1, $2, $3, $4, $5);`
-        const datosInsertarTitularPool = [
-            titularReservaPool,
-            pasaporteTitularPool,
-            correoTitular,
-            telefonoTitular,
-            reservaUID
-        ]
-        const insertarTitularPool = await conexion.query(cosultaInsertarTitularPool, datosInsertarTitularPool)
-        if (insertarTitularPool.rowCount === 0) {
-            const error = "No se ha podido insertar los datos del titular en la base de datos"
-            throw new Error(error)
-        }
 
+        const nuevaReserva = await insertarReservaAdministrativa({
+            fechaEntrada_ISO: fechaEntrada_ISO,
+            fechaSalida_ISO: fechaSalida_ISO,
+            estadoReserva: estadoReserva,
+            origen: origen,
+            fechaReserva: fechaReserva,
+            estadoPago: estadoPago
+        })
+        const reservaUID = nuevaReserva.reservaUID;
+
+        const nuevoClientePool = await insertarClientePool({
+            titularReservaPool: titularReservaPool,
+            pasaporteTitularPool: pasaporteTitularPool,
+            correoTitular: correoTitular,
+            telefonoTitular: telefonoTitular,
+            reservaUID: reservaUID
+        })
         for (const apartamentoConfiguracion in alojamiento) {
-            const apartamento = apartamentoConfiguracion
+            const apartamentoIDV = apartamentoConfiguracion
             const habitaciones = alojamiento[apartamentoConfiguracion].habitaciones
-            
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamento)
-            const consultaInsertarApartamento = `
-            INSERT INTO
-            "reservaApartamentos"
-            (
-            reserva,
-            apartamento,
-            "apartamentoUI"
-            )
-            VALUES
-            ($1,$2,$3) 
-            RETURNING
-            uid;`
-            const datosInsertarApartamento = [
-                reservaUID,
-                apartamento,
-                apartamentoUI
-            ]
-            const insertaApartamento = await conexion.query(consultaInsertarApartamento, datosInsertarApartamento)
-            const apartamentoUID = insertaApartamento.rows[0].uid
+
+            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+
+            const nuevoApartamentoEnReserva = await insertarApartamentoEnReserva({
+                reservaUID: reservaUID,
+                apartamentoIDV: apartamentoIDV,
+                apartamentoUI: apartamentoUI
+            })
+            const apartamentoUID = nuevoApartamentoEnReserva.uid
 
             for (const habitacionConfiguracion in habitaciones) {
-                const habitacion = habitacionConfiguracion
-                const camaIDV = habitaciones[habitacion].camaSeleccionada.camaIDV
-                const pernoctantesPool = habitaciones[habitacion]["pernoctantes"]
-                const consultaNombreHabitacion = `
-                SELECT
-                "habitacionUI"
-                FROM
-                habitaciones
-                WHERE
-                habitacion = $1;`
-                const resolucionNombreHabitacion = await conexion.query(consultaNombreHabitacion, [habitacion])
-                if (resolucionNombreHabitacion.rowCount === 0) {
-                    const error = "No existe el identificador de la habitacionIDV"
-                    throw new Error(error)
-                }
-                const habitacionUI = resolucionNombreHabitacion.rows[0].habitacionUI
-                const consultaInsertarHabitacion = `
-                INSERT INTO
-                "reservaHabitaciones"
-                ( 
-                apartamento,
-                habitacion,
-                reserva,
-                "habitacionUI"
-                )
-                VALUES
-                ($1,$2,$3,$4)  
-                RETURNING
-                uid;`
-                const datosInsertarHabitacion = [
-                    apartamentoUID,
-                    habitacion,
-                    reservaUID,
-                    habitacionUI
-                ]
-                const insertaHabitacion = await conexion.query(consultaInsertarHabitacion, datosInsertarHabitacion)
-                const habitacionUID = insertaHabitacion.rows[0].uid
-                const consultaNombreCama = `
-                SELECT 
-                "camaUI" 
-                FROM 
-                camas 
-                WHERE 
-                cama = $1`
-                const resolucionNombreCama = await conexion.query(consultaNombreCama, [camaIDV])
-                if (resolucionNombreCama.rowCount === 0) {
-                    const error = "No existe el identificador de la camaIDV"
-                    throw new Error(error)
-                }
-                const camaUI = resolucionNombreCama.rows[0].camaUI
-                const consultaInsertarCama = `
-                INSERT INTO 
-                "reservaCamas" 
-                (
-                habitacion,
-                cama,
-                reserva,
-                "camaUI"
-                )
-                VALUES
-                ($1,$2,$3,$4) 
-                RETURNING 
-                uid `
-                const datosInsertarCama = [
-                    habitacionUID,
-                    camaIDV,
-                    reservaUID,
-                    camaUI
-                ]
-                const insertaCama = await conexion.query(consultaInsertarCama, datosInsertarCama)
-                const camaUID = insertaCama.rows[0].uid
-                /*
-                for (const pernoctantePool of pernoctantesPool) {
-                    let pernoctanteNombre = pernoctantePool.nombre
-                    let pernoctantePasaporte = pernoctantePool.pasaporte
-                    if (pernoctanteNombre || pernoctantePasaporte) {
-                        pernoctanteNombre = pernoctanteNombre ? pernoctanteNombre : "(Sin nombre)"
-                        pernoctantePasaporte = pernoctantePasaporte ? pernoctantePasaporte : "(Sin pasaporte)"
-                        const consultaReservasPernoctante = `
-                        INSERT INTO 
-                        "reservaPernoctantes" 
-                        (
-                        reserva,
-                        habitacion
-                        )
-                        VALUES
-                        ($1,$2) 
-                        RETURNING "pernoctanteUID";`
-                        const datosReservarPernoctantes = [
-                            reservaUID,
-                            habitacionUID
-                        ]
-                        const reservasPernoctante = await conexion.query(consultaReservasPernoctante, datosReservarPernoctantes)
-                        const pernoctanteUID = reservasPernoctante.rows[0].pernoctanteUID
-                        const consultaPernoctantePool = `
-                        INSERT INTO
-                        "poolClientes"
-                        (
-                        "nombreCompleto",
-                        pasaporte,
-                        "pernoctanteUID"
-                        )
-                        VALUES
-                        ($1,$2,$3) 
-                        RETURNING 
-                        uid;`
-                        const datosPernoctantePool = [
-                            pernoctanteNombre,
-                            pernoctantePasaporte,
-                            pernoctanteUID
-                        ]
-                        await conexion.query(consultaPernoctantePool, datosPernoctantePool)
-                    }
-                }*/
+                const habitacionIDV = habitacionConfiguracion
+                const camaIDV = habitaciones[habitacionIDV].camaSeleccionada.camaIDV
+                const pernoctantesPool = habitaciones[habitacionIDV].pernoctantes
+                const habitacionUI = await obtenerNombreHabitacionUI(habitacionIDV)
+
+                const nuevoHabitacionEnElApartamento = await insertarHabitacionEnApartamento({
+                    apartamentoUID: apartamentoUID,
+                    habitacionIDV: habitacionIDV,
+                    reservaUID: reservaUID,
+                    habitacionUI: habitacionUI
+                })
+                const habitacionUID = nuevoHabitacionEnElApartamento.componenteUID
+                const cama = await obtenerCamaComoEntidadPorCamaIDV(camaIDV)
+                const camaUI = cama.camaUI
+
+                const nuevaCamaEnLaHabitacion = await insertarCamaEnLaHabitacion({
+                    habitacionUID: habitacionUID,
+                    nuevaCamaIDV: camaIDV,
+                    reservaUID: reservaUID,
+                    camaUI: camaUI
+                })
+                const camaUID = nuevaCamaEnLaHabitacion.componenteUID
             }
         }
 
@@ -219,7 +93,6 @@ const insertarReserva = async (reserva) => {
             reservaUID: reservaUID
         }
         await insertarTotalesReserva(transaccion)
-
         //resolverPrecio = resolverPrecio.ok
         await campoDeTransaccion("confirmar")
         const ok = {
@@ -230,8 +103,9 @@ const insertarReserva = async (reserva) => {
     } catch (error) {
         await campoDeTransaccion("cancelar")
         throw error;
+    } finally {
+        if (mutex) {
+            mutex.release()
+        }
     }
-}
-export {
-    insertarReserva
 }

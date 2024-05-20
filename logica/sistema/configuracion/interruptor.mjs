@@ -1,20 +1,8 @@
-import { conexion } from '../../componentes/db.mjs';
-const interruptor = async (interruptorIDV) => {
+import { obtenerInterruptorPorInterruptorIDV } from '../../repositorio/configuracion/interruptores/obtenerInterruptorPorInterruptorIDV.mjs';
+export const interruptor = async (interruptorIDV) => {
     try {
-        const consultaConfiguracionGlobal = `
-            SELECT 
-                estado,
-                "interruptorIDV"
-            FROM 
-                "interruptoresGlobales"
-            WHERE
-                "interruptorIDV" = $1;`;
-        const resuelveEstado = await conexion.query(consultaConfiguracionGlobal, [interruptorIDV])
-        if (resuelveEstado.rowCount === 0) {
-            const error = "El controlador del interruptor no ha encontrado el interruptor, verifica el interruptorIDV"
-            throw new Error(error)
-        }
-        const estadoInterruptor = resuelveEstado.rows[0].estado
+        const interruptor = await obtenerInterruptorPorInterruptorIDV(interruptorIDV)
+        const estadoInterruptor = interruptor.estadoIDV
         if (estadoInterruptor === "activado") {
             return true
         } else {
@@ -23,7 +11,4 @@ const interruptor = async (interruptorIDV) => {
     } catch (errorCapturado) {
         throw errorCapturado
     }
-}
-export {
-    interruptor
 }

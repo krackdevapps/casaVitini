@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
-import { conexion } from '../../componentes/db.mjs';
 import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
+import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from '../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs';
 export const validarObjetoReservaSoloFormato = async (reserva) => {
     try {
         const fechaRegex = /^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4}$/;
@@ -45,19 +45,16 @@ export const validarObjetoReservaSoloFormato = async (reserva) => {
             const error = "Existen apartamentosIDV repetidos en el objeto de la reserva"
             throw new Error(error)
         }
-        const estadoDisponible = "disponible"
-        const consultaApartamentosDisponibles = `
-        SELECT "apartamentoIDV" 
-        FROM "configuracionApartamento"
-        WHERE "estadoConfiguracion" = $1;`
-        const resuelveConsultaApartamentosDisponibles = await conexion.query(consultaApartamentosDisponibles, [estadoDisponible])
-        if (resuelveConsultaApartamentosDisponibles.rowCount === 0) {
+        const configuracionesApartamentosSoloDisponibles = await obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles()
+        if (configuracionesApartamentosSoloDisponibles.length === 0) {
             const error = "No hay ningun apartamento disponible por confirguracion global"
             throw new Error(error)
         }
-        const apartamentosDisponibles = resuelveConsultaApartamentosDisponibles.rows
+        configuracionesApartamentosSoloDisponibles.forEach((configuracionApartamento, i) => {
+            configuracionesApartamentosSoloDisponibles[i] = configuracionApartamento.apartamenntoIDV
+        })
         for (const [apartamentoIDV, detalleApartamento] of Object.entries(alojamiento)) {
-            if (apartamentosDisponibles.includes(apartamentoIDV)) {
+            if (configuracionesApartamentosSoloDisponibles.includes(apartamentoIDV)) {
                 const error = `Atencion, el apartamento con identificador visual '${apartamentoIDV}' no esta disponible para reservar`
                 throw new Error(error)
             }

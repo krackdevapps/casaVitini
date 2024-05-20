@@ -7,6 +7,7 @@ import { detallesDelPago as detallesDelPago_square } from "../../../../component
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { insertarPago } from "../../../../repositorio/reservas/transacciones/insertarPago.mjs";
 import { obtenerPagoPorPagoUIDPasaresa } from "../../../../repositorio/reservas/transacciones/obtenerPagoPorPagoUIDPasaresa.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const crearPagoManual = async (entrada, salida) => {
     try {
@@ -45,7 +46,7 @@ export const crearPagoManual = async (entrada, salida) => {
             return cv
         }
 
-        await validadoresCompartidos.reservas.validarReserva(reservaUID);
+        await obtenerReservaPorReservaUID(reservaUID);
 
         const fechaActual = DateTime.utc().toISO();
         // const sql = {

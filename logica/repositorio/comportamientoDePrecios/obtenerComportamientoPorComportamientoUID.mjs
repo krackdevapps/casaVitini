@@ -4,17 +4,17 @@ export const obtenerComportamientoDePrecioPorComportamientoUID = async (comporta
 
         const consulta =  `
         SELECT
-        uid,
+        "comportamientoUID",
         to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
         to_char("fechaFinal", 'DD/MM/YYYY') as "fechaFinal", 
         "nombreComportamiento",
-        estado,
-        tipo,
+        "estadoIDV",
+        "tipoIDV",
         "diasArray"
         FROM
         "comportamientoPrecios" 
         WHERE
-        uid = $1;
+        "comportamientoUID" = $1;
         `;
 
         const resuelve = await conexion.query(consulta, [comportamientoUID]);

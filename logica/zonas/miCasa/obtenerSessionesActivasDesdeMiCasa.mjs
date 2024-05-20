@@ -1,31 +1,21 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../componentes/db.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
+import { obtenerSessionesActivasPorUsuario } from "../../repositorio/sessiones/obtenerSessionesActivasPorUsuario.mjs";
 
 export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
     try {
 
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
-        IDX.control()  
+        IDX.control()
 
-        
+
         const usuarioIDX = entrada.session.usuario;
         await campoDeTransaccion("iniciar")
 
-        // validar rol
-        const consultaSessionesActivas = `
-                SELECT 
-                sid AS "sessionIDX",
-                to_char(expire, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS "caducidadUTC",
-                sess->> 'ip' AS ip,
-                sess->> 'userAgent' AS "userAgent"
-                FROM sessiones
-                WHERE sess->> 'usuario' = $1;
-                `;
-        const resuelveConsultaSessionesActivas = await conexion.query(consultaSessionesActivas, [usuarioIDX]);
-        if (resuelveConsultaSessionesActivas.rowCount === 0) {
+        const sessionesActivasDelUsuario = await obtenerSessionesActivasPorUsuario(usuarioIDX)
+        if (sessionesActivasDelUsuario.length === 0) {
             const error = "No existe ninguna session activa para este usuario";
             throw new Error(error);
         }
@@ -44,8 +34,7 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
                 return `Quedan ${Math.floor(diferencia.as('minutes'))} minutos`;
             }
         };
-        const sessionesActivas = resuelveConsultaSessionesActivas.rows;
-        sessionesActivas.map((detallesSession) => {
+        sessionesActivasDelUsuario.map((detallesSession) => {
             const fechaUTC_ISO = detallesSession.caducidadUTC;
             const fechaObjeto = DateTime.fromISO(detallesSession.caducidadUTC, { zone: 'utc' });
             const fechaFormateada = fechaObjeto.toFormat('dd/MM/yyyy HH:mm:ss');
@@ -57,7 +46,7 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
         const ok = {
             ok: "Sessiones activas",
             sessionIDX: entrada.sessionID,
-            sessionesActivas: sessionesActivas
+            sessionesActivas: sessionesActivasDelUsuario
         };
         salida.json(ok);
         await campoDeTransaccion("confirmar");

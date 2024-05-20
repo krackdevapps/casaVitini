@@ -1,4 +1,4 @@
-import { conexion } from '../../componentes/db.mjs';
+import { obtenerComportamientosPorRangoPorTipoIDV } from '../../repositorio/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 
 export const resolverComportamientosDePrecio = async (fechaEntrada_ISO, fechaSalida_ISO) => {
@@ -7,33 +7,20 @@ export const resolverComportamientosDePrecio = async (fechaEntrada_ISO, fechaSal
 
     const estructuraComportamientos = [];
     const soloComportamientosActivados = "activado";
-    const buscarComportamientoPrecio = `
-    SELECT
-    uid,
-    "nombreComportamiento",
-    to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
-    to_char("fechaFinal", 'DD/MM/YYYY') as "fechaFinal"
-    FROM "comportamientoPrecios" 
-    WHERE "fechaInicio" <= $1::DATE AND "fechaFinal" >= $2::DATE AND estado = $3;`;
-    const resuelveBuscarComportamientoPrecio = await conexion.query(buscarComportamientoPrecio, [fechaSalida_ISO, fechaEntrada_ISO, soloComportamientosActivados]);
-    if (resuelveBuscarComportamientoPrecio.rowCount > 0) {
-        const comportamientoEntonctrados = resuelveBuscarComportamientoPrecio.rows;
-        for (const detallesComportamiento of comportamientoEntonctrados) {
+    const comportamientoDePrecios = await obtenerComportamientosPorRangoPorTipoIDV({
+        fechaInicio_ISO: fechaEntrada_ISO,
+        fechaFinal_ISO: fechaSalida_ISO,
+        tipoIDV: soloComportamientosActivados,
+    })
+    if (comportamientoDePrecios.length > 0) {
+        for (const detallesComportamiento of comportamientoDePrecios) {
             const uidComportamiento = detallesComportamiento.uid;
             const nombreComportamiento = detallesComportamiento.nombreComportamiento;
             const fechaInicioComportamiento = detallesComportamiento.fechaInicio;
             const fechaFinalComportamiento = detallesComportamiento.fechaFinal;
-            const buscarApartamentosEnComportamiento = `
-            SELECT 
-            "apartamentoIDV",
-            simbolo,
-            cantidad
-            FROM "comportamientoPreciosApartamentos" 
-            WHERE "comportamientoUID" = $1;`;
-            const resuelveBuscarApartamentosEnComortamiento = await conexion.query(buscarApartamentosEnComportamiento, [uidComportamiento]);
-            if (resuelveBuscarApartamentosEnComortamiento.rowCount > 0) {
-                const apartamentoEntonctradoEnComportamiento = resuelveBuscarApartamentosEnComortamiento.rows;
-                for (const perfilComportamiento of apartamentoEntonctradoEnComportamiento) {
+            const apartamentosDelComportamiento = await obtenerApartamentosDelComportamientoPorComportamientoUID(uidComportamiento)
+            if (apartamentosDelComportamiento.length > 0) {
+                for (const perfilComportamiento of apartamentosDelComportamiento) {
                     const simbolo = perfilComportamiento.simbolo;
                     const cantidad = perfilComportamiento.cantidad;
                     const apartamentoIDVComportamiento = perfilComportamiento.apartamentoIDV;

@@ -1,16 +1,22 @@
 import { DateTime } from 'luxon';
-import { conexion } from '../../componentes/db.mjs';
 import { apartamentosOcupadosAirbnb } from '../calendariosSincronizados/airbnb/apartamentosOcudaosAirbnb.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
-import { reservasPorRango } from './reservasPorRango.mjs';
-import { bloqueosPorRango_apartamentoIDV } from './bloqueosPorRango_apartamentoIDV.mjs';
-const apartamentosPorRango = async (metadatos) => {
+import { obtenerApartamentosDeLaReservaPorReservaUID } from '../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs';
+import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from '../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs';
+import { obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles } from '../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles.mjs';
+import { obtenerBloqueosPorRangoPorApartamentoIDV } from '../../repositorio/bloqueos/obtenerBloqueosPorRangoPorApartamentoIDV.mjs';
+import { reservasPorRango } from '../../repositorio/reservas/selectoresDeReservas/reservasPorRango.mjs';
+
+export const apartamentosPorRango = async (metadatos) => {
+
     const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
     const fechaSalida_ISO = metadatos.fechaSalida_ISO
     const apartamentosIDV = metadatos.apartamentosIDV
     const origen = metadatos.origen || "plaza"
     const rol = metadatos.rol || ""
+
     try {
+
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
         const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO); // El formato es día/mes/ano
@@ -39,51 +45,33 @@ const apartamentosPorRango = async (metadatos) => {
         ) {
             configuracionBloqueos.zonaBloqueo_array = ["privado", "global"]
         }
-        
 
-        const bloqueos = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
-        
+
+        const bloqueos = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
+
         bloqueos.map((apartamento) => {
             apartametnosIDVBloqueoados.push(apartamento.apartamento)
         })
         for (const reserva of reservas) {
             const reservaUID = reserva["reserva"]
-            const consultaApartamentosNoDisponibles = `
-                SELECT apartamento 
-                FROM "reservaApartamentos" 
-                WHERE reserva = $1`
-            const ApartamentosNoDisponibles = await conexion.query(consultaApartamentosNoDisponibles, [reservaUID])
-            if (ApartamentosNoDisponibles.rows.length > 0) {
-                ApartamentosNoDisponibles.rows.map((apartamento) => {
-                    const apartamentoIDV = apartamento.apartamento
-                    apartametnosIDVBloqueoados.push(apartamentoIDV)
-                })
-            }
+            const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
+            apartamentosDeLaReserva.forEach((apartamentoDeLaReserva) => {
+                const apartamentoIDV = apartamentoDeLaReserva.apartamentoIDV
+                apartametnosIDVBloqueoados.push(apartamentoIDV)
+            })
+
         }
-        const estadoDisponibleApartamento = "disponible"
-        const consultaFinalDinamica = `
-        SELECT "apartamentoIDV" 
-        FROM "configuracionApartamento" 
-        WHERE "estadoConfiguracion" = $1
-        `
-        const apartamentosDisponibles = await conexion.query(consultaFinalDinamica, [estadoDisponibleApartamento])
-        if (apartamentosDisponibles.rowCount === 0) {
+        const configuracionesAlojamientoSoloDisponible = await obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles()
+        if (configuracionesAlojamientoSoloDisponible.length === 0) {
             const error = "No hay ningun apartamento disponible"
             throw new Error(error)
         }
-        const estadoNoDisponibleApartamento = "noDisponible"
-        const consultaApartamentosNoDispopnbiles = `
-        SELECT "apartamentoIDV" 
-        FROM "configuracionApartamento" 
-        WHERE "estadoConfiguracion" = $1
-        `
-        const resuelveConsultaApartamentosNoDisponibles = await conexion.query(consultaApartamentosNoDispopnbiles, [estadoNoDisponibleApartamento])
-        if (resuelveConsultaApartamentosNoDisponibles.rowCount > 0) {
-            resuelveConsultaApartamentosNoDisponibles.rows.map((apartamentoNoDisponible) => {
+        const configuracionesAlojaminetoNODisponbiles= await obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles()
+            configuracionesAlojaminetoNODisponbiles.map((apartamentoNoDisponible) => {
                 apartametnosIDVBloqueoados.push(apartamentoNoDisponible.apartamentoIDV)
             })
-        }
-        apartamentosDisponibles.rows.map((apartamento) => {
+        
+        configuracionesAlojamientoSoloDisponible.map((apartamento) => {
             apartamentosDisponiblesArray.push(apartamento.apartamentoIDV)
         })
         const apartamentosNoDisponiblesArray = Array.from(new Set(apartametnosIDVBloqueoados));
@@ -94,7 +82,7 @@ const apartamentosPorRango = async (metadatos) => {
             apartamentosDisponibles: apartamentosDisponiblesFinal,
         }
         const apartamentosOcupadosPorEliminar_Airbnb = await apartamentosOcupadosAirbnb(datosAirbnb)
-        
+
 
         for (const apartamentoIDV of apartamentosOcupadosPorEliminar_Airbnb) {
             const elementoParaBorrar = apartamentosDisponiblesFinal.indexOf(apartamentoIDV);
@@ -113,6 +101,3 @@ const apartamentosPorRango = async (metadatos) => {
         throw error;
     }
 }
-export {
-    apartamentosPorRango
-};

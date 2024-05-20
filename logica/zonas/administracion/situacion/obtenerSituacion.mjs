@@ -7,9 +7,9 @@ import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/conf
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc } from "../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc.mjs";
-import { reservasPorRango } from "../../../sistema/selectoresCompartidos/reservasPorRango.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
+import { reservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/reservasPorRango.mjs";
 
 export const obtenerSituacion = async (entrada, salida) => {
     try {

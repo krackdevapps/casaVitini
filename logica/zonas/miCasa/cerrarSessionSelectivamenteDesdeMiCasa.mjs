@@ -1,4 +1,4 @@
-import { eliminarSessionPorUsuario } from "../../repositorio/sessiones/eliminarSessionPorUsuario.mjs";
+import { eliminarSessionPorUsuarioPorSessionIDX } from "../../repositorio/sessiones/eliminarSessionPorUsuarioPorSessionIDX.mjs";
 import { eliminarTodasLasSessionesMenosPorUsuario } from "../../repositorio/sessiones/eliminarTodasLasSessionesMenosPorUsuario.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
@@ -23,7 +23,7 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
                 throw new Error(error);
             }
 
-            await eliminarSessionPorUsuario({
+            await eliminarSessionPorUsuarioPorSessionIDX({
                 sessionIDX: sessionIDX,
                 usuarioIDX: usuarioIDX
             })

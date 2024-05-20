@@ -5,7 +5,7 @@ import Decimal from "decimal.js";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { obtenerPagoPorPagoUID } from "../../../../repositorio/reservas/transacciones/obtenerPagoPorPagoUID.mjs";
-import { obtenerReembolsosPorPagoUID } from "../../../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUID.mjs";
+import { obtenerReembolsosPorPagoUID_ordenados } from "../../../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUID_ordenados.mjs";
 
 export const obtenerDetallesDelPago = async (entrada, salida) => {
     try {
@@ -39,7 +39,7 @@ export const obtenerDetallesDelPago = async (entrada, salida) => {
             detallesDelPago: detallesDelPago,
             deglosePorReembolso: []
         };
-        const reembolsosDelPago = await obtenerReembolsosPorPagoUID(pagoUID)
+        const reembolsosDelPago = await obtenerReembolsosPorPagoUID_ordenados(pagoUID)
         if (reembolsosDelPago.length > 0) {
             let sumaDeLoReembolsado = 0;
             for (const detallesDelReembolso of reembolsosDelPago) {

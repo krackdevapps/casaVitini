@@ -8,13 +8,13 @@ import { utilidades } from "../../../componentes/utilidades.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { reservasPorRango } from "../../../sistema/selectoresCompartidos/reservasPorRango.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerHabitacionesDelApartamento } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionDelApartamento.mjs";
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 import { obtenerClientePoolPorPernoctanteUID } from "../../../repositorio/clientes/obtenerClientePoolPorPernoctanteUID.mjs";
-import { obtenerApartamentoDeLaReservaPorApartamentoIDV } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDV.mjs";
+import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs";
 import { obtenerTodosLosPernoctantesDeLaReserva } from "../../../repositorio/reservas/pernoctantes/obtenerTodosLosPernoctantesDeLaReserva.mjs";
+import { reservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/reservasPorRango.mjs";
 
 export const detallesSituacionApartamento = async (entrada, salida) => {
     try {
@@ -75,7 +75,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                 { zone: zonaHoraria })
                 .toISO();
 
-            const apartamentoDeLaReserva = await obtenerApartamentoDeLaReservaPorApartamentoIDV({
+            const apartamentoDeLaReserva = await obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID({
                 reservaUID: reservaUID,
                 apartamentoIDV: apartamentoIDV
             })

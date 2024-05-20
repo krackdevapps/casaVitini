@@ -1,103 +1,67 @@
 import { DateTime } from 'luxon';
-import { conexion } from '../../componentes/db.mjs';
 import { sincronizarCalendariosAirbnbPorIDV } from '../calendariosSincronizados/airbnb/sincronizarCalendariosAirbnbPorIDV.mjs';
 import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
 import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUniversal.mjs';
-import { bloqueosPorRango_apartamentoIDV } from '../selectoresCompartidos/bloqueosPorRango_apartamentoIDV.mjs';
-import { reservasPorRango_y_apartamentos } from '../selectoresCompartidos/reservasPorRango_y_apartamentos.mjs';
+import { reservasPorRangoPorApartamentosArray } from '../selectoresCompartidos/reservasPorRangoPorApartamentosArray.mjs';
 import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
-const validarModificacionRangoFechaResereva = async (metadatos) => {
+import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
+import { obtenerReservaPorReservaUID } from '../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs';
+import { obtenerApartamentosDeLaReservaPorReservaUID } from '../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs';
+import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from '../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs';
+import { obtenerBloqueosPorRangoPorApartamentoIDV } from '../../repositorio/bloqueos/obtenerBloqueosPorRangoPorApartamentoIDV.mjs';
+export const validarModificacionRangoFechaResereva = async (metadatos) => {
     try {
-        const reserva = metadatos.reserva
         const mesCalendario = metadatos.mesCalendario.padStart(2, '0');
         const anoCalendario = metadatos.anoCalendario.padStart(2, '0');
         const sentidoRango = metadatos.sentidoRango
-        const regexMes = /^\d{2}$/;
-        const regexAno = /^\d{4,}$/;
-        if (!regexAno.test(anoCalendario)) {
-            const error = "El año (anoCalenadrio) debe de ser una cadena de cuatro digitos. Por ejemplo el año uno se escribiria 0001"
-            throw new Error(error)
-        }
-        if (!regexMes.test(mesCalendario)) {
-            const error = "El mes (mesCalendario) debe de ser una cadena de dos digitos, por ejemplo el mes de enero se escribe 01"
-            throw new Error(error)
-        }
-        const mesNumeroControl = parseInt(mesCalendario, 10);
-        const anoNumeroControl = parseInt(anoCalendario, 10);
-        if (mesNumeroControl < 1 && mesNumeroControl > 12 && anoNumeroControl < 1000) {
-            const error = "Revisa los datos de mes por que debe de ser un numero del 1 al 12"
-            throw new Error(error)
-        }
-        if (anoNumeroControl < 1000 || anoNumeroControl > 5000) {
-            const error = "El año no puede ser inferior a 2000 ni superior a 5000"
-            throw new Error(error)
-        }
-        if (typeof reserva !== "number" || !Number.isInteger(reserva) || reserva <= 0) {
-            const error = "El campo 'reserva' debe ser un tipo numero, entero y positivo"
-            throw new Error(error)
-        }
+
+        validadoresCompartidos.fechas.cadenaAno(anoCalendario)
+        validadoresCompartidos.fechas.cadenaMes(mesCalendario)
+
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            number: metadatos.reservaUID,
+            nombreCampo: "El identificador universal de la reservaUID (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
         if (sentidoRango !== "pasado" && sentidoRango !== "futuro") {
             const error = "El campo 'sentidoRango' solo puede ser pasado o futuro"
             throw new Error(error)
         }
         // La fecha de entrada seleccionada no puede seer superior a la de la fecha de entrada de la reserva
         // extraer el rango y los apartamentos de la reserva actual
-        const consultaDatosReservaActual = `
-        SELECT 
-        reserva,
-        to_char(entrada, 'DD/MM/YYYY') as entrada, 
-        to_char(salida, 'DD/MM/YYYY') as salida,
-        to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-        to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO",  
-        "estadoPago" 
-        FROM reservas 
-        WHERE reserva = $1;`
-        const resuelveConsultaDatosReservaActual = await conexion.query(consultaDatosReservaActual, [reserva])
-        if (resuelveConsultaDatosReservaActual.rowCount === 0) {
-            const error = "No existe la reserva"
-            throw new Error(error)
-        }
-        const estadoPago = resuelveConsultaDatosReservaActual.rows[0].estadoPago
+
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
+        const estadoPago = reserva.estadoPagoIDV
+
         if (estadoPago === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada"
             throw new Error(error)
         }
-        const fechaEntradaReserva_ISO = resuelveConsultaDatosReservaActual.rows[0].fechaEntrada_ISO
-        const fechaSalidaReserva_ISO = resuelveConsultaDatosReservaActual.rows[0].fechaSalida_ISO
-        const fechaEntradaReserva_Objeto = DateTime.fromISO(fechaEntradaReserva_ISO)
-        const fechaSalidaReserva_Objeto = DateTime.fromISO(fechaSalidaReserva_ISO)
+        const fechaEntradaReserva_ISO = reserva.fechaEntrada
+        const fechaSalidaReserva_ISO = reserva.fechaSalida
         const mesReservaEntrada = fechaEntradaReserva_ISO.split("-")[1]
         const anoReservaEntrada = fechaEntradaReserva_ISO.split("-")[0]
         const mesReservaSalida = fechaSalidaReserva_ISO.split("-")[1]
         const anoReservaSalida = fechaSalidaReserva_ISO.split("-")[0]
-        const consultaAlojamientoReservaActual = `
-        SELECT 
-        apartamento
-        FROM "reservaApartamentos" 
-        WHERE reserva = $1;`
-        const resuelveConsultaAlojamientoReservaActual = await conexion.query(consultaAlojamientoReservaActual, [reserva])
-
-        const apartamentosReservaActual = resuelveConsultaAlojamientoReservaActual.rows.map((apartamento) => {
+      
+        const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
+        const apartamentosReservaActual = apartamentosDeLaReserva.map((apartamento) => {
             return apartamento.apartamento
         })
         const apartamentosConConfiguracionDisponible = []
         // consulta apartamentos NO diponibles en configuracion global
-        const estadoDisponibleApartamento = "disponible"
-        const consultaApartamentosNoDispopnbiles = `
-            SELECT "apartamentoIDV" 
-            FROM "configuracionApartamento" 
-            WHERE "estadoConfiguracion" = $1
-            `
-        const resuelveConsultaApartamentosNoDisponibles = await conexion.query(consultaApartamentosNoDispopnbiles, [estadoDisponibleApartamento])
-        resuelveConsultaApartamentosNoDisponibles.rows.map((apartamentoConConfiguracionDisponible) => {
+
+        const configuracionesApartamentosSoloDiponibles = await obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles()
+        configuracionesApartamentosSoloDiponibles.map((apartamentoConConfiguracionDisponible) => {
             apartamentosConConfiguracionDisponible.push(apartamentoConConfiguracionDisponible.apartamentoIDV)
         })
         const controlConfiguracionAlojamiento = apartamentosReservaActual.every(apto => apartamentosConConfiguracionDisponible.includes(apto));
-        
+
         if (!controlConfiguracionAlojamiento) {
-            // 3h665h5h56
-
-
             const elementosNoComunes = apartamentosReservaActual.filter(elemento => !apartamentosConConfiguracionDisponible.includes(elemento));
             const arrayStringsPrePresentacionDatos = []
 
@@ -107,7 +71,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 arrayStringsPrePresentacionDatos.push(nombreUI)
             }
 
-            
+
             const ultimoElemento = arrayStringsPrePresentacionDatos.pop();
             const constructorCadenaFinalUI = arrayStringsPrePresentacionDatos.join(", ") + (arrayStringsPrePresentacionDatos.length > 0 ? " y " : "") + ultimoElemento;
 
@@ -144,7 +108,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     "privado"
                 ],
             }
-            const bloqueosSeleccionados = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
+            const bloqueosSeleccionados = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
             const contenedorBloqueosEncontrados = []
             for (const detallesDelBloqueo of bloqueosSeleccionados) {
                 const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada_ISO
@@ -168,20 +132,20 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
             const configuracionReservas = {
                 fechaInicioRango_ISO: fechaSeleccionadaParaPasado_ISO,
                 fechaFinRango_ISO: fechaEntradaReserva_ISO,
-                reservaUID: reserva,
+                reservaUID: reservaUID,
                 apartamentosIDV_array: apartamentosReservaActual,
             }
-            const reservasSeleccionadas = await reservasPorRango_y_apartamentos(configuracionReservas)
+            const reservasSeleccionadas = await reservasPorRangoPorApartamentosArray(configuracionReservas)
 
             for (const detallesReserva of reservasSeleccionadas) {
-                const reserva = detallesReserva.reserva
+                const reservaUID = detallesReserva.reservaUID
                 const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
                 const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
                 const apartamentos = detallesReserva.apartamentos
                 const estructura = {
                     fechaEntrada_ISO: fechaEntrada_ISO,
                     fechaSalida_ISO: fechaSalida_ISO,
-                    uid: reserva,
+                    uid: reservaUID,
                     tipoElemento: "reserva",
                     apartamentos: apartamentos
                 }
@@ -374,7 +338,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                     "privado"
                 ],
             }
-            const bloqueosSeleccionados = await bloqueosPorRango_apartamentoIDV(configuracionBloqueos)
+            const bloqueosSeleccionados = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
 
             const contenedorBloqueosEncontrados = []
             for (const detallesDelBloqueo of bloqueosSeleccionados) {
@@ -403,7 +367,7 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
                 apartamentosIDV_array: apartamentosReservaActual,
             }
 
-            const reservasSeleccionadas = await reservasPorRango_y_apartamentos(configuracionReservas)
+            const reservasSeleccionadas = await reservasPorRangoPorApartamentosArray(configuracionReservas)
             for (const detallesReserva of reservasSeleccionadas) {
                 const reserva = detallesReserva.reserva
                 const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
@@ -580,6 +544,3 @@ const validarModificacionRangoFechaResereva = async (metadatos) => {
         throw error;
     }
 }
-export {
-    validarModificacionRangoFechaResereva
-};

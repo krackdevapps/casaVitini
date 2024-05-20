@@ -1,8 +1,8 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../../../../componentes/db.mjs";
 import { eventosCalendarioPorUID } from "../../../../calendariosSincronizados/airbnb/eventosCalendarioPorUID.mjs";
 import { obtenerNombreApartamentoUI } from "../../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
-const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
+import { obtenerCalendariosPorCalendarioUID } from "../../../../../repositorio/calendario/obtenerCalendariosPorCalendarioUID.mjs";
+export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
     try {
         const fecha = contenedorDatos.fecha
         const calendarioUID = contenedorDatos.calendarioUID
@@ -17,17 +17,9 @@ const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             throw new Error(error)
         }
         // Validar que le nombre del calendarioUID existe como tal
-        const validacionCalendarioUID = `
-               SELECT *
-               FROM "calendariosSincronizados"
-               WHERE uid = $1
-               `
-        const resuelveCalendarioUID = await conexion.query(validacionCalendarioUID, [calendarioUID])
-        if (resuelveCalendarioUID.rowCount === 0) {
-            const error = "No existe el calendarioUID, revisa el nombre identificador"
-            throw new Error(error)
-        }
-        const apartamentoIDV = resuelveCalendarioUID.rows[0].apartamentoIDV
+
+        const calendario = await obtenerCalendariosPorCalendarioUID(calendarioUID)
+        const apartamentoIDV = calendario.apartamentoIDV
         const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
@@ -119,7 +111,4 @@ const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
     } catch (errorCapturado) {
         throw errorCapturado
     }
-}
-export {
-    eventosPorApartamentoAirbnb
 }

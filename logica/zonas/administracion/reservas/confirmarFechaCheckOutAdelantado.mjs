@@ -1,5 +1,4 @@
 import { DateTime } from "luxon";
-import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
@@ -15,7 +14,6 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
 
         const pernoctantaUID = validadoresCompartidos.tipos.numero({
             number: entrada.body.pernoctantaUID,
@@ -62,7 +60,7 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
         }
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
-         // validar que la reserva no este cancelada
+        // validar que la reserva no este cancelada
         const estadoReserva = reserva.estadoReservaIDV;
         if (estadoReserva === "cancelada") {
             const error = "No se puede alterar una fecha de checkin de una reserva cancelada";
@@ -87,21 +85,13 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
             const error = "La fecha de Checkout no puede ser inferior o igual a la fecha de entrada de la reserva";
             throw new Error(error);
         }
-        const actualizerFechaCheckOut = `
-                        UPDATE "reservaPernoctantes"
-                        SET
-                          "fechaCheckOutAdelantado" = $1
-                        WHERE
-                          "pernoctanteUID" = $2;
-                        `;
-        const actualizarCheckOut = await conexion.query(actualizerFechaCheckOut, [fechaCheckOut_ISO, pernoctantaUID]);
-        if (actualizarCheckOut.rowCount === 0) {
-            const error = "No se ha podido actualziar la fecha de checkout";
-            throw new Error(error);
-        }
         await actualizarFechaCheckOutPernoctante({
-            fechaCheckOut_ISO:fechaCheckOut_ISO,
-            pernoctantaUID:pernoctantaUID
+            fechaCheckOut_ISO: fechaCheckOut_ISO,
+            pernoctantaUID: pernoctantaUID
+        })
+        await actualizarFechaCheckOutPernoctante({
+            fechaCheckOut_ISO: fechaCheckOut_ISO,
+            pernoctantaUID: pernoctantaUID
         })
         await campoDeTransaccion("confirmar")
         const ok = {
@@ -113,5 +103,5 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
         await campoDeTransaccion("cancelar")
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
-    } 
+    }
 }

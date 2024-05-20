@@ -1,25 +1,14 @@
 import axios from 'axios';
 import ICAL from 'ical.js';
-import { conexion } from '../../../componentes/db.mjs';
-const obtenerTodosLosCalendarios = async () => {
+import { obtenerCalendariosPorPlataformaIDV } from '../../../repositorio/calendario/obtenerReservasPorApartamentoIDVPorMesPorAno.mjs';
+export const obtenerTodosLosCalendarios = async () => {
     try {
-        const consultaSelecionaCalendario = `
-        SELECT 
-        uid,
-        nombre,
-        url,
-        "dataIcal",
-        "apartamentoIDV"
-        FROM 
-        "calendariosSincronizados" 
-        WHERE 
-        "plataformaOrigen" = $1`
         const plataformaDeOrigen = "airbnb"
-        const resuelveSelecionarCalendario = await conexion.query(consultaSelecionaCalendario, [plataformaDeOrigen])
+        const calendarios = await obtenerCalendariosPorPlataformaIDV(plataformaDeOrigen)
         const ok = {
             calendariosSincronizados: []
         }
-        for (const detallesDelCalendario of resuelveSelecionarCalendario.rows) {
+        for (const detallesDelCalendario of calendarios) {
             const calendarioUID = detallesDelCalendario.uid
             const nombre = detallesDelCalendario.nombre
             const url = detallesDelCalendario.url
@@ -38,25 +27,14 @@ const obtenerTodosLosCalendarios = async () => {
                 if (jcal?.name.toLowerCase() !== 'vcalendar') {
                     throw new Error(errorDeFormato)
                 }
-                const actualizarCalendario = `
-                    UPDATE "calendariosSincronizados"
-                    SET 
-                    "dataIcal" = COALESCE($1, "dataIcal")
-                    WHERE uid = $2;
-                    `;
-                const datosParaActualizar = [
-                    calendarioRaw,
-                    calendarioUID
-                ];
-                const resuelveActualizarCalendario = await conexion.query(actualizarCalendario, datosParaActualizar);
-                if (resuelveActualizarCalendario.rowCount === 0) {
-                    const error = "Los datos actualizados tras la sincronizacion se han enviado a la base de datos pero el servidor de base de datos informa que no se ha actualizado el calendario. Vuelve a intentarlo mas tarde.";
-                    throw new Error(error);
-                }
+                await actualizarEventosCalendarioPorCalendarioUID({
+                    calendarioRaw: calendarioRaw,
+                    calendarioUID: calendarioUID
+                })
                 calendarioDatos = calendarioRaw
                 estructura.estadoSincronizacion = "sincronizado"
             } catch (errorCapturado) {
-                
+
                 estructura.estadoSincronizacion = "noSincronizado"
             }
             const jcalData = ICAL.parse(calendarioDatos);
@@ -102,12 +80,8 @@ const obtenerTodosLosCalendarios = async () => {
             estructura.calendarioObjeto = calendarioObjeto
             ok.calendariosSincronizados.push(estructura)
         }
-        
         return ok
     } catch (error) {
         throw error
     }
-}
-export {
-    obtenerTodosLosCalendarios
 }

@@ -1,16 +1,16 @@
 import { DateTime } from "luxon";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
-import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
-import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
 import { actualizarIntentoLogin } from "../../repositorio/usuarios/actualizarIntentoLogin.mjs";
 import { obtenerIDX } from "../../repositorio/usuarios/obtenerIDX.mjs";
+import { eliminarSessionPorRolPorCaducidad } from "../../repositorio/sessiones/eliminarSessionPorRolPorCaducidad.mjs";
+import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 
 export const conectar = async (entrada, salida) => {
     try {
-        await eliminarCuentasNoVerificadas();
-        await borrarCuentasCaducadas();
+        await eliminarUsuarioPorRolPorEstadoVerificacion();
+        await eliminarSessionPorRolPorCaducidad();
 
         const usuario = validadoresCompartidos.tipos.cadena({
             string: entrada.body.usuario,

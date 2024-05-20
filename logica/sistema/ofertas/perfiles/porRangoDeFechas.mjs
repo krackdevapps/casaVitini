@@ -1,6 +1,6 @@
 import Decimal from "decimal.js";
-import { conexion } from "../../../componentes/db.mjs";
 import { validadoresCompartidos } from "../../validadores/validadoresCompartidos.mjs";
+import { obtenerOfertasPorRangoFechaPorEstadoPorTipo } from "../../../repositorio/ofertas/perfiles/obtenerOfertasPorRangoDeFechaPorEstadoPorTipo.mjs";
 const comprobarFechaEnRango = (fechaAComprobar_ISO, fechaInicio_ISO, fechaFin_ISO) => {
     const fechaObjetoAComprobar = new Date(fechaAComprobar_ISO);
     const fechaObjetoInicio = new Date(fechaInicio_ISO);
@@ -17,29 +17,14 @@ const porRangoDeFechas = async (reserva) => {
     const totalReservaNeto = new Decimal(reserva.desgloseFinanciero.totales.totalReservaNeto)
     const estadoOferta = "activada"
     const tipoOferta = "porRangoDeFechas"
-    const consulta = `
-    SELECT 
-    uid,
-    to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio_Humano", 
-    to_char("fechaFin", 'DD/MM/YYYY') as "fechaFin_Humano", 
-    to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio_ISO", 
-    to_char("fechaFin", 'YYYY-MM-DD') as "fechaFin_ISO", 
-    "tipoOferta",
-    cantidad,
-    "tipoDescuento",
-    "nombreOferta"
-    FROM ofertas 
-    WHERE "fechaInicio" <= $1::DATE 
-    AND "fechaFin" >= $2::DATE
-    AND "estadoOferta" = $3 
-    AND "tipoOferta" = $4;`
-    const parametrosConsulta = [
-        fechaSalidaReserva_ISO,
-        fechaEntradaReserva_ISO,
-        estadoOferta,
-        tipoOferta
-    ]
-    const ofertasEncontradas = await conexion.query(consulta, parametrosConsulta)
+  
+    const ofertasEncontradas = await obtenerOfertasPorRangoFechaPorEstadoPorTipo({
+        fechaSalidaReserva_ISO: fechaSalidaReserva_ISO,
+        fechaEntradaReserva_ISO: fechaEntradaReserva_ISO,
+        estadoOferta: estadoOferta,
+        arrayDeTiposDeOferta: [tipoOferta],
+    })
+
     // Creamos un array con los dias de la reserva y los apartamentos
     const ofertasSeleccionadas = ofertasEncontradas.rows
     let descuentoGlobal = new Decimal("0.00")

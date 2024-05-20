@@ -1,18 +1,19 @@
 import Decimal from 'decimal.js';
-import { conexion } from '../../componentes/db.mjs';
+import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../repositorio/impuestos/obtenerImpuestosPorAplicacionIDVPorEstado.mjs';
 Decimal.set({ precision: 50 });
-const aplicarImpuestos = async (totalNetoEntrada) => {
+export const aplicarImpuestos = async (totalNetoEntrada) => {
     try {
         const totalNeto = new Decimal(totalNetoEntrada)
-        const cosultaImpuestosReserva = `
-        SELECT nombre, "tipoImpositivo", "tipoValor"
-        FROM impuestos 
-        WHERE ("aplicacionSobre" = $1 OR "aplicacionSobre" = $2) AND estado = $3;`
-        const resuelveCosultaImpuestosReserva = await conexion.query(cosultaImpuestosReserva, ["totalReservaNeto", "totalNeto", "activado"])
-        const impuestosReserva = resuelveCosultaImpuestosReserva.rows
+        const impuestos = await obtenerImpuestosPorAplicacionIDVPorEstado({
+            estadoIDV: "activado",
+            aplicacionSobre_array: [
+                "totalReservaNeto",
+                "totalNeto",
+            ]
+        })
         const objetoImpuestos = []
         let sumaImpuestos = 0
-        for (const impuesto of impuestosReserva) {
+        for (const impuesto of impuestos) {
             const impuestoNombre = impuesto.nombre
             const tipoImpositivo = impuesto.tipoImpositivo
             const tipoValor = impuesto.tipoValor
@@ -32,7 +33,7 @@ const aplicarImpuestos = async (totalNetoEntrada) => {
                 const tipoImpositivoConst = new Decimal(tipoImpositivo)
                 sumaImpuestos = tipoImpositivoConst.plus(sumaImpuestos)
             }
-            
+
             // let objetoImpuesto = {}
             // objetoImpuesto[impuestoNombre] = presentacionImpuesto
             objetoImpuestos.push(presentacionImpuesto)
@@ -45,7 +46,4 @@ const aplicarImpuestos = async (totalNetoEntrada) => {
     } catch (error) {
         throw error
     }
-}
-export {
-    aplicarImpuestos
 }

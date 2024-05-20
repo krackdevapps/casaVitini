@@ -1,5 +1,4 @@
 export const realizarPago = async (entrada, salida) => {
-    await mutex.acquire();
     try {
         const error = "Esta opcion esta actuamente deshabilitada";
         throw new Error(error);

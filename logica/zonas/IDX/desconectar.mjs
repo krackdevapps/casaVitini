@@ -1,11 +1,11 @@
-import { borrarCuentasCaducadas } from "../../sistema/VitiniIDX/borrarCuentasCaducadas.mjs";
-import { eliminarCuentasNoVerificadas } from "../../sistema/VitiniIDX/eliminarCuentasNoVerificadas.mjs";
+import { eliminarSessionPorRolPorCaducidad } from "../../repositorio/sessiones/eliminarSessionPorRolPorCaducidad.mjs";
+import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
 
 export const desconectar = async (entrada, salida) => {
     try {
-        await eliminarCuentasNoVerificadas();
-        await borrarCuentasCaducadas();
+        await eliminarUsuarioPorRolPorEstadoVerificacion();
+        await eliminarSessionPorRolPorCaducidad();
         entrada.session.destroy();
         salida.clearCookie("VitiniID");
         const respuesta = {

@@ -3,7 +3,7 @@ import Decimal from 'decimal.js';
 import { aplicarImpuestos } from './aplicarImpuestos.mjs';
 import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUniversal.mjs';
 import { resolverComportamientosDePrecio } from './resolverComportamientosDePrecio.mjs';
-import { conexion } from '../../componentes/db.mjs';
+import { obtenerPerfilPrecioPorApartamentoUID } from '../../repositorio/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
 
 // Pasas una fecha de a un fecha de salida y un apartmaento y te da todos el tema
 const constructorObjetoEstructuraPrecioDia = (fechaEntrada_ISO, fechaSalida_ISO) => {
@@ -16,14 +16,13 @@ const constructorObjetoEstructuraPrecioDia = (fechaEntrada_ISO, fechaSalida_ISO)
     }
     return arregloFechas;
 }
-const precioRangoApartamento = async (metadatos) => {
+export const precioRangoApartamento = async (metadatos) => {
     try {
         const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
         const fechaSalida_ISO = metadatos.fechaSalida_ISO
         const apartamentosIDVArreglo = metadatos.apartamentosIDVArreglo
         const estructuraArregloDiasEnEspera = constructorObjetoEstructuraPrecioDia(fechaEntrada_ISO, fechaSalida_ISO);
 
-        const comportamientoEntonctradosPorProcesar = []
         const desglosePreciosBaseApartamentos = []
         const estructuraFinal = {}
         estructuraFinal.totalesPorNoche_Objeto = {}
@@ -31,27 +30,13 @@ const precioRangoApartamento = async (metadatos) => {
         estructuraFinal.metadatos = {}
         let totalPrecioNeto = 0
         for (const apartamentoIDVGlobal of apartamentosIDVArreglo) {
-            const consultaPrecios = `
-            SELECT
-            pc.precio,
-            pc.moneda, 
-            pc.apartamento AS "apartamentoIDV",
-            a."apartamentoUI"
-            FROM
-            "preciosApartamentos" pc
-            JOIN
-            apartamentos a ON pc.apartamento = a.apartamento
-            WHERE
-            a.apartamento = $1;`
-            const resuelveConsutaPrecios = await conexion.query(consultaPrecios, [apartamentoIDVGlobal])
-            if (resuelveConsutaPrecios.rowCount == 0) {
-                const error = "No existe el apartamento, revisa el apartamentoID"
-                throw new Error(error)
-            }
-            const precioBase = resuelveConsutaPrecios.rows[0].precio
-            const apartamentoUI = resuelveConsutaPrecios.rows[0].apartamentoUI
-            const apartamentoIDV = resuelveConsutaPrecios.rows[0].apartamentoIDV
-            const moneda = resuelveConsutaPrecios.rows[0].moneda
+
+            const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDVGlobal)
+            const precioBase = perfilPrecio.precio
+            const apartamentoUI = perfilPrecio.apartamentoUI
+            const apartamentoIDV = perfilPrecio.apartamentoIDV
+
+
             // Inyectar variacion de precio
             const detalleApartamento = {
                 apartamentoUI: apartamentoUI,
@@ -198,7 +183,4 @@ const precioRangoApartamento = async (metadatos) => {
     } catch (error) {
         throw error
     }
-}
-export {
-    precioRangoApartamento
 }

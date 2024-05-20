@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { crearEnlacePDF } from "../../../sistema/pdf/crearEnlacePDF.mjs";
-import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const crearEnlacesPDF = async (entrada, salida) => {
     try {
@@ -12,7 +12,7 @@ export const crearEnlacesPDF = async (entrada, salida) => {
         IDX.control()
 
         const reserva = entrada.body.reserva;
-        await validadoresCompartidos.reservas.validarReserva(reserva);
+        await obtenerReservaPorReservaUID(reserva);
         
         const enlaces = await crearEnlacePDF(reserva);
         const ok = {

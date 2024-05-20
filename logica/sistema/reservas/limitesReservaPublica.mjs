@@ -2,17 +2,17 @@ import { DateTime } from 'luxon';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
 import { obtenerParametroConfiguracion } from '../configuracion/obtenerParametroConfiguracion.mjs';
-const limitesReservaPublica = async (fechas) => {
+export const limitesReservaPublica = async (fechas) => {
     try {
         const fechaEntrada_ISO = fechas.fechaEntrada_ISO
         const fechaSalida_ISO = fechas.fechaSalida_ISO
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaEntrada_ISO)
         await validadoresCompartidos.fechas.validarFecha_ISO(fechaSalida_ISO)
-        
+
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaActualTZ = tiempoZH.toISODate()
-        
+
         const fechaEntradaReserva_ISO = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
         const fechaSalidaReserva_ISO = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria });
         if (fechaEntradaReserva_ISO < fechaActualTZ) {
@@ -28,13 +28,14 @@ const limitesReservaPublica = async (fechas) => {
         const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva")
         const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva")
         const fechaLimite_Objeto = tiempoZH.plus({ days: limiteFuturoReserva })
-        let diasDeAntelacion = fechaEntradaReserva_ISO.diff(tiempoZH, 'days').toObject().days
-        diasDeAntelacion = diasDeAntelacion < 0 ? 0 : Math.ceil(diasDeAntelacion)
+        const diasDeAntelacion = fechaEntradaReserva_ISO.diff(tiempoZH, 'days').toObject().days < 0
+            ? 0 :
+            Math.ceil(diasDeAntelacion)
         if (diasDeAntelacion < diasAntelacionReserva) {
             const error = `Casa Vitini solo acepta reservas con un minimo de ${diasAntelacionReserva} dias de antelacion. Gracias.`
             throw new Error(error)
         }
-        let diferenciaEnDiasLimiteFuturo = fechaLimite_Objeto.diff(fechaSalidaReserva_ISO, 'days').toObject().days;
+        const diferenciaEnDiasLimiteFuturo = fechaLimite_Objeto.diff(fechaSalidaReserva_ISO, 'days').toObject().days;
         if (diferenciaEnDiasLimiteFuturo <= 0) {
             const error = `Como maximo las reservas no pueden superar ${limiteFuturoReserva} dias a partir de hoy. Gracias.`
             throw new Error(error)
@@ -48,7 +49,4 @@ const limitesReservaPublica = async (fechas) => {
     } catch (error) {
         throw error;
     }
-}
-export {
-    limitesReservaPublica
 }

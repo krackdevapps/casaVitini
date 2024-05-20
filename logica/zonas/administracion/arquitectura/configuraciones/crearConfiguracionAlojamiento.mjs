@@ -4,14 +4,20 @@ import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarConfiguracionApartamento } from "../../../../repositorio/arquitectura/insertarConfiguracionApartamento.mjs";
+import { insertarPerfilPrecio } from "../../../../repositorio/precios/insertarPerfilPrecio.mjs";
+import { Mutex } from "async-mutex";
+
 
 export const crearConfiguracionAlojamiento = async (entrada, salida) => {
+    const mutex = new Mutex()
     try {
 
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
+
+        mutex.acquire()
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -32,12 +38,16 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
             throw new Error(error);
         }
         const estadoInicial = "nodisponible";
-      
+
         const dataInsertarConfiguracionApartamento = {
             apartamentoIDV: apartamentoIDV,
             estadoInicial: estadoInicial
         }
         await insertarConfiguracionApartamento(dataInsertarConfiguracionApartamento).apartamentoIDV
+        await insertarPerfilPrecio({
+            apartamentoIDV: apartamentoIDV,
+            precioInicial: "0.00"
+        })
         const ok = {
             ok: "Se ha creado correctament la nuevo configuracion del apartamento",
             apartamentoIDV: apartamentoIDV
@@ -47,6 +57,9 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
     } catch (errorCapturado) {
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
+    } finally {
+        if (mutex) {
+            mutex.acquire()
+        }
     }
-
 }
