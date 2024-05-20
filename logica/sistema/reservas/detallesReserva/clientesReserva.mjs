@@ -1,7 +1,7 @@
 import { eliminarClienteDelPool } from "../../../repositorio/clientes/eliminarClienteDelPool.mjs"
 import { obtenerClientePoolPorPernoctanteUID } from "../../../repositorio/clientes/obtenerClientePoolPorPernoctanteUID.mjs"
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs"
-import { obtenerPernoctantesDeLaHabitacion } from "../../repositorio/reservas/pernoctantes/obtenerPernoctantesDeLaHabitacion.mjs"
+import { obtenerPernoctantesDeLaHabitacion } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctantesDeLaHabitacion.mjs"
 
 export const clientesReserva = async (data) => {
 

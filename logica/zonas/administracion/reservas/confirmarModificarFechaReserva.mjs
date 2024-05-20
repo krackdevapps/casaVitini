@@ -9,6 +9,7 @@ import { validarModificacionRangoFechaResereva } from "../../../sistema/reservas
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { actualizarFechaEntradaReserva } from "../../../repositorio/reservas/rangoFlexible/actualizarFechaEntradaReserva.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
     const mutex = new Mutex()

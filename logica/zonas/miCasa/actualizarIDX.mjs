@@ -4,6 +4,7 @@ import { validadoresCompartidos } from "../../sistema/validadores/validadoresCom
 import { filtroError } from "../../sistema/error/filtroError.mjs";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
+import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const actualizarIDX = async (entrada, salida) => {
     const mutex = new Mutex()

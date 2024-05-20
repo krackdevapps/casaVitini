@@ -5,6 +5,7 @@ import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../reposito
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { actualizarFechaCheckinPernoctante } from "../../../repositorio/reservas/pernoctantes/actualizarFechaCheckinPernoctante.mjs";
 import { actualizarFechaCheckOutPernoctante } from "../../../repositorio/reservas/pernoctantes/actualizarFechaCheckOutPernoctante.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const eliminarCheckIN = async (entrada, salida) => {
     try {

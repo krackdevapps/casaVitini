@@ -1,5 +1,5 @@
 import { conexion } from "../../componentes/db.mjs"
-export const obtenerObtenerBloqueosPorRangoPorApartamentoIDV = async (metadatos) => {
+export const obtenerBloqueosPorRangoPorApartamentoIDV = async (metadatos) => {
   try {
     const fechaInicio_ISO = metadatos.fechaInicio_ISO
     const fechaFinal_ISO = metadatos.fechaFinal_ISO

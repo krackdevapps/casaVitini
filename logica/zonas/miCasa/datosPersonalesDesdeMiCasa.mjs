@@ -3,7 +3,7 @@ import { obtenerDatosPersonales } from "../../repositorio/usuarios/obtenerDatosP
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
-import { campoDeTransaccion } from "../../componentes/campoDeTransaccion.mjs";
+import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const datosPersonalesDesdeMiCasa = async (entrada, salida) => {
 

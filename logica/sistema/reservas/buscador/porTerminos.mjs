@@ -1,4 +1,4 @@
-import { porTerminos_ } from "../../../repositorio/reservas/buscador/perfiles/porTerminos.mjs";
+import { porTerminos_ } from "../../../repositorio/reservas/buscador/perfiles/porTerminos_.mjs";
 
 export const porTerminos = async (data) => {
     try {

@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
 import { obtenerSessionesActivasPorUsuario } from "../../repositorio/sessiones/obtenerSessionesActivasPorUsuario.mjs";
+import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
     try {

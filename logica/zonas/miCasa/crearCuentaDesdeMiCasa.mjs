@@ -11,6 +11,7 @@ import { eliminarSessionPorRolPorCaducidad } from "../../repositorio/sessiones/e
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { obtenerDatosPersonalesPorMail } from "../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs";
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
+import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
     try {

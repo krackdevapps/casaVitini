@@ -2,12 +2,13 @@ import { DateTime } from "luxon";
 import { enviarMail } from "../../../sistema/Mail/enviarMail.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/IDX/obtenerEnlacesRecuperacionPorCodigoUPID.mjs";
+import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorCodigoUPID.mjs";
 import { obtenerDatosPersonalesPorMail } from "../../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs";
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
-import { eliminarEnlacesDeRecuperacion } from "../../../repositorio/IDX/eliminarEnlacesDeRecuperacion.mjs";
-import { insertarEnlaceDeRecuperacion } from "../../../repositorio/IDX/enlacesDeRecuperacion/insertarEnlaceDeRecuperacion.mjs";
-import { actualizarEnlaceDeRecuperacionPorUsuario } from "../../../repositorio/IDX/enlacesDeRecuperacion/actualizarEnlaceDeRecuperacionPorUsuario.mjs";
+import { eliminarEnlacesDeRecuperacion } from "../../../repositorio/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacion.mjs";
+import { insertarEnlaceDeRecuperacion } from "../../../repositorio/enlacesDeRecuperacion/insertarEnlaceDeRecuperacion.mjs";
+import { actualizarEnlaceDeRecuperacionPorUsuario } from "../../../repositorio/enlacesDeRecuperacion/actualizarEnlaceDeRecuperacionPorUsuario.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const enviarCorreo = async (entrada, salida) => {
     try {

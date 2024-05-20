@@ -1,7 +1,7 @@
 import { conexion } from "../../componentes/db.mjs";
 
 export const actualizarUltimoLogin = async (data) => {
-    const usuarioIDX = data.usuarioIDX
+    const usuario = data.usuario
     const fechaActualISO = data.fechaActualISO
     try {
         const consulta = `
@@ -12,8 +12,9 @@ export const actualizarUltimoLogin = async (data) => {
             usuario = $2;
         `;
         const parametros = [
-            usuarioIDX,
-            fechaActualISO
+            fechaActualISO,
+            usuario,
+
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {

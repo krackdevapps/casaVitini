@@ -2,7 +2,7 @@ import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { actualizarParConfiguracion } from "../../../../repositorio/configuracion/actualizarParConfiguracion.mjs";
-import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
+import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const guardarConfiguracion = async (entrada, salida) => {
     try {

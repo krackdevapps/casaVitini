@@ -1,5 +1,5 @@
 import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
-import { desgloseTotal, desgloseTotal } from "./detallesReserva/desgloseTotal.mjs"
+import { desgloseTotal } from "./detallesReserva/desgloseTotal.mjs"
 import { detallesAlojamiento } from "./detallesReserva/detallesAlojamiento.mjs"
 import { detallesTitular } from "./detallesReserva/detallesTitular.mjs"
 import { clientesReserva } from "./detallesReserva/clientesReserva.mjs"

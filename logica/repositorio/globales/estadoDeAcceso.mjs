@@ -2,7 +2,8 @@ import { conexion } from "../../componentes/db.mjs";
 
 export const estadoDeAcceso = async () => {
     try {
-        await conexion.query("SELECT 1");
+       const hola  = await conexion.query("SELECT 1");
+       return hola
     } catch (error) {
         throw error
     }

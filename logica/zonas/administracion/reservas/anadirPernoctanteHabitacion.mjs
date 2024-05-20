@@ -3,11 +3,11 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
-import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs";
 import { obtenerHabitacionDelLaReserva } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionDelLaReserva.mjs";
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 import { obtenerPernoctanteDeLaReservaPorClienteUID } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorClienteUID.mjs";
 import { insertarPernoctanteEnLaHabitacion } from "../../../repositorio/reservas/pernoctantes/insertarPernoctanteEnLaHabitacion.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const anadirPernoctanteHabitacion = async (entrada, salida) => {
     const mutex = new Mutex()

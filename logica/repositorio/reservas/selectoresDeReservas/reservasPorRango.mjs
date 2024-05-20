@@ -1,4 +1,5 @@
-import { conexion } from "../../componentes/db.mjs"
+import { conexion } from "../../../componentes/db.mjs"
+
 export const reservasPorRango = async (metadatos) => {
     try {
         // En el caso y caso 3, los operadores son mayos que e igual que. Si se quiera que se seleccionaran reservas del mismo dia incluido acuerdate del igual. Pero como las reservas pueden compartir dias de salida y de entrada, por el tema de las horas de salida y de entrada, este script funciona asi.

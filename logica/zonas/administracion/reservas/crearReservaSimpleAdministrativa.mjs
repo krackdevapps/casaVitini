@@ -10,6 +10,7 @@ import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from "..
 import { DateTime } from "luxon";
 import { insertarReservaAdministrativa } from "../../../repositorio/reservas/reserva/insertarReservaAdministrativa.mjs";
 import { insertarApartamentoEnReservaAdministrativa } from "../../../repositorio/reservas/reserva/insertarApartamentoEnReservaAdministrativa.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
     const mutex = new Mutex()

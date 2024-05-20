@@ -1,14 +1,14 @@
 import session from 'express-session';
 import pgSession from 'connect-pg-simple';
 import { conexion } from '../logica/componentes/db.mjs';
-import dotenv from 'dotenv';
-dotenv.config();
 
+const duracionSessionServidor = parseInt(process.env.DURACION_SERVIDOR, 10)
+const duracionSessionCliente = parseInt(process.env.DURACION_CLIENTE, 10)
 
 const almacenSessiones = new (pgSession(session))({
   pool: conexion,
   tableName: 'sessiones',
-  pruneSessionInterval: process.env.DURACION_SERVIDOR,
+  pruneSessionInterval: duracionSessionServidor,
   logErrors: true,
   createTableIfMissing: true,
   max: 100,
@@ -18,7 +18,7 @@ const almacenSessiones = new (pgSession(session))({
 });
 
 
-export const sessionConfig = session({
+export const configuracionSession = session({
   store: almacenSessiones,
   secret: process.env.SECRET,
   name: 'VitiniID',
@@ -27,10 +27,10 @@ export const sessionConfig = session({
   rolling: false,
   cookie: {
     secure: true,
-    maxAge: process.env.DURACION_CLIENTE,
+    maxAge: duracionSessionCliente,
     sameSite: true,
-    expires: process.env.DURACION_CLIENTE,
+    expires: duracionSessionCliente,
     httpOnly: true,
     rolling: false,
-  },
+  }
 })

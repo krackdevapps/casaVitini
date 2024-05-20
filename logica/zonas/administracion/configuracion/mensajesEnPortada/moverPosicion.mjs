@@ -5,7 +5,8 @@ import { obtenerMensajePorMensajeUID } from "../../../../repositorio/configuraci
 import { obtenerMensajePorPosicion } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorPosicion.mjs";
 import { obtenerTodosLosMensjaes } from "../../../../repositorio/configuracion/mensajesPortada/obtenerTodosLosMensajes.mjs";
 import { actualizarPosicionDelMensajeDePortada } from "../../../../repositorio/configuracion/mensajesPortada/actualizarPosicionMensajeDePortada.mjs";
-import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
+import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
+
 
 export const moverPosicion = async (entrada, salida) => {
     try {

@@ -1,10 +1,11 @@
 import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { eliminarEnlacesDeRecuperacionPorFechaCaducidad } from "../../../repositorio/IDX/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorFechaCaducidad.mjs";
-import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/IDX/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorCodigoUPID.mjs";
+import { eliminarEnlacesDeRecuperacionPorFechaCaducidad } from "../../../repositorio/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorFechaCaducidad.mjs";
+import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorCodigoUPID.mjs";
 import { actualizarClave } from "../../../repositorio/usuarios/actualizarClave.mjs";
-import { eliminarEnlacesDeRecuperacionPorUsuario } from "../../../repositorio/IDX/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorUsuario.mjs";
+import { eliminarEnlacesDeRecuperacionPorUsuario } from "../../../repositorio/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorUsuario.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const restablecerClave = async (entrada, salida) => {
     try {

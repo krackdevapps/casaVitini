@@ -1,3 +1,4 @@
+import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 import { eliminarEnlacesPDFPorReservaUID } from "../../repositorio/pdf/eliminarEnlacesPDFPorReservaUID.mjs";
 import { insertarEnlacePDF } from "../../repositorio/pdf/insertarEnlacePDF.mjs";
 import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";

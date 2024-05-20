@@ -1,4 +1,3 @@
-
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { actualizarEstadoPago } from '../precios/actualizarEstadoPago.mjs';
 import { precioReserva } from '../precios/precioReserva.mjs';
@@ -14,6 +13,7 @@ import { insertarOfertaEnReserva } from '../../repositorio/reservas/transaccione
 import { eliminarTotalesPorReservaUID } from '../../repositorio/reservas/transacciones/eliminarTotalesPorReservaUID.mjs';
 import { insertarTotalEnReserva } from '../../repositorio/reservas/transacciones/insertarTotalEnReserva.mjs';
 import { obtenerReservaPorReservaUID } from '../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs';
+import { campoDeTransaccion } from '../../repositorio/globales/campoDeTransaccion.mjs';
 export const insertarTotalesReserva = async (metadatos) => {
     try {
         const tipoProcesadorPrecio = metadatos.tipoProcesadorPrecio

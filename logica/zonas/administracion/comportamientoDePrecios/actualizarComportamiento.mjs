@@ -8,8 +8,8 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arqu
 import { actualizarComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/actualizarComportamientoDePrecio.mjs";
 import { eliminarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/eliminarApartamentosDelComportamientoDePrecio.mjs";
 import { insertarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/insertarApartamentosDelComportamiento.mjs";
-import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const actualizarComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();

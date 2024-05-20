@@ -6,6 +6,7 @@ import { actualizarIntentoLogin } from "../../repositorio/usuarios/actualizarInt
 import { obtenerIDX } from "../../repositorio/usuarios/obtenerIDX.mjs";
 import { eliminarSessionPorRolPorCaducidad } from "../../repositorio/sessiones/eliminarSessionPorRolPorCaducidad.mjs";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
+import { actualizarUltimoLogin } from "../../repositorio/usuarios/actualizarUltimoLogin.mjs";
 
 export const conectar = async (entrada, salida) => {
     try {
@@ -59,7 +60,7 @@ export const conectar = async (entrada, salida) => {
         const rol = cuentaUsuario.rolIDV;
         const sal = cuentaUsuario.sal;
         const claveHash = cuentaUsuario.clave;
-        const estadoCuenta = cuentaUsuario.estadoCuenta;
+        const estadoCuenta = cuentaUsuario.estadoCuentaIDV;
         const intentos = cuentaUsuario.intentos || 0;
         const ip = entrada.socket.remoteAddress;
         const userAgent = entrada.get('User-Agent');

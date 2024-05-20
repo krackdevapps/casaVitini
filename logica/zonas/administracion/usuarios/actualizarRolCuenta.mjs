@@ -5,6 +5,7 @@ import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs
 import { obtenerRol } from "../../../repositorio/usuarios/obtenerRol.mjs";
 import { actualizarRol } from "../../../repositorio/usuarios/actualizarRol.mjs";
 import { actualizarRolSessionActiva } from "../../../repositorio/usuarios/actualizarRolSessionActiva.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const actualizarRolCuenta = async (entrada, salida) => {
     try {

@@ -1,7 +1,6 @@
 import { conexion } from "../../componentes/db.mjs";
 
 export const eliminarSessionPorUsuario = async (usuarioIDX) => {
-    const usuarioIDX = data.usuarioIDX
     try {
         const consulta = `
         DELETE FROM sessiones

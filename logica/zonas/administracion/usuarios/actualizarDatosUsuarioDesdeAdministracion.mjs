@@ -3,6 +3,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerIDX } from "../../../repositorio/usuarios/obtenerIDX.mjs";
 import { actualizarDatos } from "../../../repositorio/usuarios/actualizarDatos.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida) => {
     try {

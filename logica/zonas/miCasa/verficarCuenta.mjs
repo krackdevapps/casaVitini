@@ -2,6 +2,7 @@ import { validadoresCompartidos } from "../../sistema/validadores/validadoresCom
 import { filtroError } from "../../sistema/error/filtroError.mjs";
 import { actualizarEstadoVerificacion } from "../../repositorio/usuarios/actualizarEstadoVerificacion.mjs";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
+import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const verificarCuenta = async (entrada, salida) => {
     try {

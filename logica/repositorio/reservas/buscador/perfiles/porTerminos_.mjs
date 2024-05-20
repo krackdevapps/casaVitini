@@ -2,7 +2,7 @@ import { conexion } from "../../../../componentes/db.mjs"
 import { constructorOrderBy } from "../../../../sistema/reservas/buscador/contructorOrderBy.mjs"
 
 
-export const porTerminos = async (data) => {
+export const porTerminos_ = async (data) => {
     try {
         const numeroPorPagina = data.numeroPorPagina
         const numeroPagina = data.numeroPagina

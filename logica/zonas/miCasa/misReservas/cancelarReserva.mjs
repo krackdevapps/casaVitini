@@ -5,6 +5,7 @@ import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reser
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const cancelarReserva = async (entrada, salida) => {
     try {

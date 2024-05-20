@@ -14,8 +14,9 @@ export const actualizarIntentoLogin = async (data) => {
         RETURNING
             intentos;`;
         const parametros = [
-            usuarioIDX,
-            intento
+            intento,
+            usuarioIDX
+
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {

@@ -5,7 +5,7 @@ import { filtroError } from '../../../../../sistema/error/filtroError.mjs';
 import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs';
 import { obtenerCalendarioPorCalendarioUIDPublico } from '../../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorCalendarioUIDPublico.mjs';
 import { insertarCalendarioSincronizado } from '../../../../../repositorio/configuracion/calendarioSincronizados/insertarCalendarioSincronizado.mjs';
-import { campoDeTransaccion } from '../../../../../componentes/campoDeTransaccion.mjs';
+import { campoDeTransaccion } from '../../../../../repositorio/globales/campoDeTransaccion.mjs';
 
 export const crearCalendario = async (entrada, salida) => {
     try {

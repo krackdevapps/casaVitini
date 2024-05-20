@@ -1,9 +1,8 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
-
-import { obtenerApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/obtenerApartamentosDelComportamientoDePrecio.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
+import { obtenerApartamentosDelComportamientoPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerApartamentosDelComportamientoPorComportamientoUID.mjs";
 
 export const detallesComportamiento = async (entrada, salida) => {
     try {
@@ -25,7 +24,7 @@ export const detallesComportamiento = async (entrada, salida) => {
         const detallesComportamiento = await obtenerComportamientoDePrecioPorComportamientoUID(comportamientoUID)
         detallesComportamiento["apartamentos"] = [];
 
-        const apartamentosDelComportamiento = await obtenerApartamentosDelComportamientoDePrecio(comportamientoUID)
+        const apartamentosDelComportamiento = await obtenerApartamentosDelComportamientoPorComportamientoUID(comportamientoUID)
         apartamentosDelComportamiento.map((apartamento) => {
             const cantidad = apartamento.cantidad;
             const apartamentoIDV = apartamento.apartamentoIDV;

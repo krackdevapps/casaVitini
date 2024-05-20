@@ -4,6 +4,7 @@ import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerAdministradores } from "../../../repositorio/usuarios/obtenerAdministradores.mjs";
 import { eliminarSessionUsuario } from "../../../repositorio/usuarios/eliminarSessionUsuario.mjs";
 import { eliminarUsuario } from "../../../repositorio/usuarios/eliminarUsuario.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const eliminarCuentaDesdeAdministracion = async (entrada, salida) => {
     try {

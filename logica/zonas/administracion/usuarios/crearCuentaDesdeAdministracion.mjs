@@ -8,6 +8,7 @@ import { insertarFilaDatosPersonales } from "../../../repositorio/usuarios/inser
 import { Mutex } from "async-mutex";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
     const mutex = new Mutex()

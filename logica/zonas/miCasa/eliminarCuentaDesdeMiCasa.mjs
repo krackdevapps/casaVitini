@@ -6,6 +6,7 @@ import { filtroError } from "../../sistema/error/filtroError.mjs";
 import { obtenerAdministradores } from "../../repositorio/usuarios/obtenerAdministradores.mjs";
 import { eliminarUsuario } from "../../repositorio/usuarios/eliminarUsuario.mjs";
 import { eliminarSessionPorUsuario } from "../../repositorio/sessiones/eliminarSessionPorUsuario.mjs";
+import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
     const mutex = new Mutex()

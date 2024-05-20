@@ -4,7 +4,7 @@ import { validadoresCompartidos } from "../../../../sistema/validadores/validado
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { eliminarPagoPorPagoUID } from "../../../../repositorio/reservas/transacciones/eliminarPagoPorPagoUID.mjs";
-import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
+import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const eliminarPagoManual = async (entrada, salida) => {
     try {

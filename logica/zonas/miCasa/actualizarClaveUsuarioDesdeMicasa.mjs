@@ -3,6 +3,7 @@ import { validadoresCompartidos } from "../../sistema/validadores/validadoresCom
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { filtroError } from "../../sistema/error/filtroError.mjs";
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
+import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
     try {

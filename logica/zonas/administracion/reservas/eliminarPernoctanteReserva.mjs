@@ -6,6 +6,7 @@ import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reser
 import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
 import { actualizarHabitacionDelPernoctantePorComponenteUID } from "../../../repositorio/reservas/pernoctantes/actualizarHabitacionDelPernoctantePorComponenteUID.mjs";
 import { eliminarPernoctantePorPernoctanteUID } from "../../../repositorio/reservas/pernoctantes/eliminarPernoctantePorPernoctanteUID.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const eliminarPernoctanteReserva = async (entrada, salida) => {
     const mutex = new Mutex()

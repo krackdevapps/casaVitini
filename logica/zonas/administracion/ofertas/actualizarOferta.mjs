@@ -6,9 +6,9 @@ import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerOferatPorOfertaUID } from "../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs";
 import { actualizarOferta as actualizarOferta_ } from "../../../repositorio/ofertas/actualizarOferta.mjs";
 import { eliminarApartamentosDeLaOferta } from "../../../repositorio/ofertas/eliminarApartamentosDeLaOferta.mjs";
-import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs";
 import { insertarApartamentosEnOferta } from "../../../repositorio/ofertas/insertarApartamentosEnOferta.mjs";
 import { validadoresLocales } from "../../../sistema/ofertas/validadoresLocales.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const actualizarOferta = async (entrada, salida) => {
     const mutex = new Mutex()

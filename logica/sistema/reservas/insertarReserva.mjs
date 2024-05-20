@@ -9,6 +9,7 @@ import { insertarApartamentoEnReserva } from '../../repositorio/reservas/apartam
 import { obtenerNombreHabitacionUI } from '../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs';
 import { insertarHabitacionEnApartamento } from '../../repositorio/arquitectura/insertarHabitacionEnApartamento.mjs';
 import { insertarCamaEnLaHabitacion } from '../../repositorio/reservas/apartamentos/insertarCamaEnLaHabitacion.mjs';
+import { campoDeTransaccion } from '../../repositorio/globales/campoDeTransaccion.mjs';
 
 export const insertarReserva = async (reserva) => {
     const mutex = new Mutex()

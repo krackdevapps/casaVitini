@@ -4,10 +4,10 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerOfertasPorNombreUI } from "../../../repositorio/ofertas/obtenerOfertasPorNombreUI.mjs";
 import { insertarOferta } from "../../../repositorio/ofertas/insertarOferta.mjs";
-import { campoDeTransaccion } from "../../../componentes/campoDeTransaccion.mjs";
 import { validarApartamentos } from "../../../sistema/ofertas/validarApartamentos.mjs";
 import { insertarApartamentosEnOferta } from "../../../repositorio/ofertas/insertarApartamentosEnOferta.mjs";
 import { validadoresLocales } from "../../../sistema/ofertas/validadoresLocales.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const crearOferta = async (entrada, salida) => {
     const mutex = new Mutex()

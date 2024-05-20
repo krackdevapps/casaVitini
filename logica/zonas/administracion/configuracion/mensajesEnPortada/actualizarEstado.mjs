@@ -3,7 +3,7 @@ import { validadoresCompartidos } from "../../../../sistema/validadores/validado
 import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { obtenerMensajePorMensajeUID } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
 import { actualizarEstadoMensajeDePortada } from "../../../../repositorio/configuracion/mensajesPortada/actualizarEstadoMensajeDePortada.mjs";
-import { campoDeTransaccion } from "../../../../componentes/campoDeTransaccion.mjs";
+import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const actualizarEstado = async (entrada, salida) => {
     try {

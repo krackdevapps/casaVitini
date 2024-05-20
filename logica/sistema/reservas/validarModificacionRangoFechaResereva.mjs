@@ -2,13 +2,13 @@ import { DateTime } from 'luxon';
 import { sincronizarCalendariosAirbnbPorIDV } from '../calendariosSincronizados/airbnb/sincronizarCalendariosAirbnbPorIDV.mjs';
 import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
 import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUniversal.mjs';
-import { reservasPorRangoPorApartamentosArray } from '../selectoresCompartidos/reservasPorRangoPorApartamentosArray.mjs';
 import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { obtenerReservaPorReservaUID } from '../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs';
 import { obtenerApartamentosDeLaReservaPorReservaUID } from '../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs';
 import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from '../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs';
 import { obtenerBloqueosPorRangoPorApartamentoIDV } from '../../repositorio/bloqueos/obtenerBloqueosPorRangoPorApartamentoIDV.mjs';
+import { reservasPorRangoPorApartamentosArray } from '../../repositorio/reservas/selectoresDeReservas/reservasPorRangoPorApartamentosArray.mjs';
 export const validarModificacionRangoFechaResereva = async (metadatos) => {
     try {
         const mesCalendario = metadatos.mesCalendario.padStart(2, '0');
