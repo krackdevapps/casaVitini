@@ -4,18 +4,8 @@ import { aplicarImpuestos } from './aplicarImpuestos.mjs';
 import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUniversal.mjs';
 import { resolverComportamientosDePrecio } from './resolverComportamientosDePrecio.mjs';
 import { obtenerPerfilPrecioPorApartamentoUID } from '../../repositorio/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
+import { constructorObjetoEstructuraPrecioDia } from './constructorObjetoEstructuraPrecioDia.mjs';
 
-// Pasas una fecha de a un fecha de salida y un apartmaento y te da todos el tema
-const constructorObjetoEstructuraPrecioDia = (fechaEntrada_ISO, fechaSalida_ISO) => {
-    const arregloFechas = [];
-    let fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO); // Convertir la fecha de entrada a un objeto DateTime
-    const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO)
-    while (fechaEntrada_Objeto <= fechaSalida_Objeto) {
-        arregloFechas.push(fechaEntrada_Objeto.toISODate());
-        fechaEntrada_Objeto = fechaEntrada_Objeto.plus({ days: 1 }); // Avanzar al siguiente día
-    }
-    return arregloFechas;
-}
 export const precioRangoApartamento = async (metadatos) => {
     try {
         const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
@@ -35,8 +25,6 @@ export const precioRangoApartamento = async (metadatos) => {
             const precioBase = perfilPrecio.precio
             const apartamentoUI = perfilPrecio.apartamentoUI
             const apartamentoIDV = perfilPrecio.apartamentoIDV
-
-
             // Inyectar variacion de precio
             const detalleApartamento = {
                 apartamentoUI: apartamentoUI,

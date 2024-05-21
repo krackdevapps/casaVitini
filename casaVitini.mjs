@@ -44,12 +44,11 @@ const options = {
   key: fs.readFileSync(llave),
   cert: fs.readFileSync(cert),
 }
-console.info("Entorno DB:", entorno)
-console.info("Casa Vitini dice Hola!")
-
+console.info("db:", entorno)
 app.listen(puerto, (entrada, Salida) => {
-  console.info(">> http:", puerto)
+  console.info("http:", puerto)
 })
 https.createServer(options, app).listen(puertoSec, (entrada, salida) => {
-  console.info(">> https", puertoSec)
+  console.info("https", puertoSec)
+  console.info("Casa Vitini dice Hola!")
 })

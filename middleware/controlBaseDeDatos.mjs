@@ -2,8 +2,8 @@ import { estadoDeAcceso } from '../logica/repositorio/globales/estadoDeAcceso.mj
 
 export const controlBaseDeDatos = async (entrada, salida, next) => {
   try {
-await estadoDeAcceso();
-     next()
+    await estadoDeAcceso();
+    next()
   } catch (error) {
     if (entrada.method === 'GET') {
       salida.render('constructorV1', { 'vistaGlobal': '../global/navegacion.ejs' });

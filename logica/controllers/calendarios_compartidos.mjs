@@ -138,8 +138,7 @@ export const calendarios_compartidos = async (entrada, salida) => {
                     apartamentoIDV: apartamentoIDV
                 })
 
-
-                // Aqui esta el error
+               // Ojo con esto
                 for (const apartamentos of apartamentoPorApartamentoIDVPorReservaUID) {
                     if (apartamentos.apartamento === apartamentoIDV) {
                         const estructuraEVENTO = {
