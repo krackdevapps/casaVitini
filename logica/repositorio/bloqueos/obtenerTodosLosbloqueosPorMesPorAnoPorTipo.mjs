@@ -5,36 +5,34 @@ export const obtenerTodosLosbloqueosPorMesPorAnoPorTipo = async (data) => {
 
         const mes = data.mes
         const ano = data.ano
-        const bloqueoPermanente = data.bloqueoPermanente
+        const bloqueoPermanente = "permanente"
 
         const consulta =  `
         SELECT 
-            bA.uid,
-            bA."tipoBloqueo",
-            bA.apartamento AS "apartamentoIDV",
-            to_char(bA.entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-            to_char(bA.salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
-            (bA.salida - bA.entrada) as duracion_en_dias,
-            a."apartamentoUI"
-        FROM "bloqueosApartamentos" bA
-        JOIN apartamentos a ON bA.apartamento = a.apartamento
+            "bloqueoUID",
+            "tipoBloqueoIDV",
+            "apartamentoIDV",
+            to_char("fechaInicio", 'YYYY-MM-DD') as "fechaEntradaa", 
+            to_char("fechaFin", 'YYYY-MM-DD') as "fechaFin",
+            ("fechaFin" - "fechaInicio") as duracion_en_dias
+        FROM "bloqueosApartamentos"
         WHERE 
         (
-            DATE_PART('YEAR', entrada) < $2
+            DATE_PART('YEAR', "fechaInicio") < $2
             OR (
-                DATE_PART('YEAR', entrada) = $2
-                AND DATE_PART('MONTH', entrada) <= $1
+                DATE_PART('YEAR', "fechaInicio") = $2
+                AND DATE_PART('MONTH', "fechaInicio") <= $1
             )
         )
         AND (
-            DATE_PART('YEAR', salida) > $2
+            DATE_PART('YEAR',  "fechaFin") > $2
             OR (
-                DATE_PART('YEAR', salida) = $2
-                AND DATE_PART('MONTH', salida) >= $1
+                DATE_PART('YEAR',  "fechaFin") = $2
+                AND DATE_PART('MONTH',  "fechaFin") >= $1
             )
         )
-          OR
-          bA."tipoBloqueo" = $3;
+        OR
+        "tipoBloqueoIDV" = $3;
         `
         const parametros = [
             mes,

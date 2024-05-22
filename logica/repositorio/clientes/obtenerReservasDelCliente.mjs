@@ -34,43 +34,43 @@ export const obtenerReservasDelCliente = async (data) => {
         WITH resultados AS (
             SELECT 
                 'Titular' AS como,
-                reserva::text,
-                to_char(entrada, 'DD/MM/YYYY') as entrada, 
-                to_char(salida, 'DD/MM/YYYY') as salida
+                "reservaUID"::text,
+                to_char("fechaEntrada", 'DD/MM/YYYY') as "fechaEntrada", 
+                to_char("fechaSalida", 'DD/MM/YYYY') as "fechaSalida"
             FROM 
                 reservas 
             WHERE 
-                reserva = ANY($1)
+                "reservaUID" = ANY($1)
 
             UNION ALL
 
             SELECT 
                 'Pernoctante' AS como,
-                reserva::text,
-                to_char(entrada, 'DD/MM/YYYY') as entrada, 
-                to_char(salida, 'DD/MM/YYYY') as salida
+                "reservaUID"::text,
+                to_char("fechaEntrada", 'DD/MM/YYYY') as "fechaEntrada", 
+                to_char("fechaSalida", 'DD/MM/YYYY') as "fechaSalida"
             FROM 
                 reservas 
             WHERE 
-                reserva = ANY($2)
+            "reservaUID" = ANY($2)
 
             UNION ALL
 
             SELECT 
                 'Ambos' AS como,
-                reserva::text,
-                to_char(entrada, 'DD/MM/YYYY') as entrada, 
-                to_char(salida, 'DD/MM/YYYY') as salida
+                "reservaUID"::text,
+                to_char("fechaEntrada", 'DD/MM/YYYY') as "fechaEntrada", 
+                to_char("fechaSalida", 'DD/MM/YYYY') as "fechaSalida"
             FROM 
                 reservas 
             WHERE 
-                reserva = ANY($3)                   
+            "reservaUID" = ANY($3)                   
         )
         SELECT 
             como,
-            reserva,
-            entrada,
-            salida,
+            "reservaUID",
+            "fechaEntrada",
+            "fechaSalida",
             COUNT(*) OVER ()::text as total_filas
             -- ROW_NUMBER() OVER (PARTITION BY reserva ORDER BY reserva) as fila_duplicada
         FROM resultados

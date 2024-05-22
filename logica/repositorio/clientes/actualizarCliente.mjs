@@ -8,7 +8,7 @@ export const actualizarCliente = async (data) => {
         const telefono = data.telefono
         const correoElectronico = data.correoElectronico
         const notas = data.notas
-        const cliente = data.cliente
+        const clienteUID = data.clienteUID
 
         const consulta = `
             UPDATE clientes
@@ -18,37 +18,29 @@ export const actualizarCliente = async (data) => {
             "segundoApellido" = COALESCE($3, "segundoApellido"),
             pasaporte = COALESCE($4, pasaporte),
             telefono = COALESCE($5, telefono),
-            email = COALESCE($6, email),
+            mail = COALESCE($6, mail),
             notas = COALESCE($7, notas)
-            WHERE uid = $8
+            WHERE 
+            "clienteUID" = $8
             RETURNING
-            nombre,
-            "primerApellido",
-            "segundoApellido",
-            pasaporte,
-            telefono,
-            email,
-            notas;
+            *
             `;
         const datosCliente = [
             nombre,
-            primerApellido,
+            primerApellido, 
             segundoApellido,
             pasaporte,
             telefono,
             correoElectronico,
             notas,
-            cliente
+            clienteUID
         ]
         const resuelve = await conexion.query(consulta, datosCliente);
         if (resuelve.rowCount === 0) {
             const error = "No existe el cliente, revisa su identificador";
             throw new Error(error)
         }
-        if (resuelve.rowCount === 1) {
-            const clienteActualizado = resuelve.rows[0]
-            return clienteActualizado
-        }
+        return resuelve.rows[0]
     } catch (errorCapturado) {
         throw errorCapturado
     }

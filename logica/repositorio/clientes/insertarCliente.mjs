@@ -1,6 +1,5 @@
 import { conexion } from "../../componentes/db.mjs";
-import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
-const insertarCliente = async (nuevoCliente) => {
+export const insertarCliente = async (nuevoCliente) => {
     try {
         const nombre = nuevoCliente.nombre
         const primerApellido = nuevoCliente.primerApellido
@@ -19,19 +18,12 @@ const insertarCliente = async (nuevoCliente) => {
         "segundoApellido",
         pasaporte,
         telefono,
-        email,
+        mail,
         notas
         )
         VALUES ($1,$2,$3,$4,$5,$6,$7) 
         RETURNING
-        uid,
-        nombre,
-        "primerApellido",
-        "segundoApellido",
-        pasaporte,
-        telefono,
-        email,
-        notas
+        *
         `
         const datosClientes = [
             nombre,
@@ -42,19 +34,10 @@ const insertarCliente = async (nuevoCliente) => {
             correoElectronico,
             notas
         ]
-        const resuelveInsertarCliente = await conexion.query(insertarCliente, datosClientes)
-        if (resuelveInsertarCliente.rowCount === 0) {
-            const error = "No se ha insertardo el cliente en la base de datos"
-            throw new Error(error)
-        }
-        if (resuelveInsertarCliente.rowCount === 1) {
-            const nuevoCliente = resuelveInsertarCliente.rows[0]
-            return nuevoCliente
-        }
+        const resuelve = await conexion.query(insertarCliente, datosClientes)
+        return resuelve.rows[0]
+
     } catch (errorCapturado) {
         throw errorCapturado
     }
-}
-export {
-    insertarCliente
 }

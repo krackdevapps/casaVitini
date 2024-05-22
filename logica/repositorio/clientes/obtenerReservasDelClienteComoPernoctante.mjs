@@ -4,7 +4,7 @@ export const obtenerReservasDelClienteComoPernoctante = async (clienteUID) => {
     
         const consulta =  `
         SELECT 
-        reserva
+        *
         FROM 
         "reservaPernoctantes" 
         WHERE 

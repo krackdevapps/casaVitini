@@ -43,7 +43,7 @@ export const obtenerResultadosBusqueda = async (data) => {
             LOWER(COALESCE(nombre, '')) ILIKE ANY($1) OR
             LOWER(COALESCE("primerApellido", '')) ILIKE ANY($1) OR
             LOWER(COALESCE("segundoApellido", '')) ILIKE ANY($1) OR
-            LOWER(COALESCE("email", '')) ILIKE ANY($1) OR
+            LOWER(COALESCE("mail", '')) ILIKE ANY($1) OR
             LOWER(COALESCE("telefono", '')) ILIKE ANY($1) OR
             LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1)
             )
@@ -54,7 +54,7 @@ export const obtenerResultadosBusqueda = async (data) => {
                   (LOWER(COALESCE(nombre, '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE("primerApellido", '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE("segundoApellido", '')) ILIKE ANY($1))::int +
-                  (LOWER(COALESCE("email", '')) ILIKE ANY($1))::int +
+                  (LOWER(COALESCE("mail", '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE("telefono", '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1))::int
                 ) = 1 THEN 1
@@ -62,7 +62,7 @@ export const obtenerResultadosBusqueda = async (data) => {
                   (LOWER(COALESCE(nombre, '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE("primerApellido", '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE("segundoApellido", '')) ILIKE ANY($1))::int +
-                  (LOWER(COALESCE("email", '')) ILIKE ANY($1))::int +
+                  (LOWER(COALESCE("mail", '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE("telefono", '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1))::int
                 ) = 3 THEN 3

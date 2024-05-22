@@ -17,6 +17,7 @@ import { eliminarConfiguracionPorApartamentoIDV } from '../../../logica/reposito
 import { eliminarApartamentoComoEntidad } from '../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
 import { insertarApartamentoComoEntidad } from '../../../logica/repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
 import { obtenerBloqueosPorMes } from '../../../logica/repositorio/bloqueos/obtenerBloqueosPorMes.mjs';
+import { obtenerTodosLosbloqueosPorMesPorAnoPorTipo } from '../../../logica/repositorio/bloqueos/obtenerTodosLosbloqueosPorMesPorAnoPorTipo.mjs';
 describe('crud locks for apartments', () => {
     const apartamentoIDVInicial = "apartamento1TESTInicial"
     const tipoPermanente = "permanente"
@@ -109,6 +110,17 @@ describe('crud locks for apartments', () => {
         const response = await obtenerBloqueosPorMes({
             mes: mes,
             ano: ano
+        });
+        expect(response).not.toBeUndefined();
+        expect(Array.isArray(response)).toBe(true);
+    })
+
+
+    test('selec all locks by month and tipo', async () => {
+        const response = await obtenerTodosLosbloqueosPorMesPorAnoPorTipo({
+            mes: mes,
+            ano: ano,
+            
         });
         expect(response).not.toBeUndefined();
         expect(Array.isArray(response)).toBe(true);
