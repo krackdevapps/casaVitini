@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../../sistema/VitiniIDX/vitiniCrypto.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { actualizarClave } from "../../../repositorio/usuarios/actualizarClave.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
@@ -49,10 +49,9 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
         const ok = {
             ok: "Se ha actualizado la nueva clave"
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

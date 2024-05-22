@@ -73,7 +73,7 @@ export const obtenerResultadosBusqueda = async (data) => {
         LIMIT $2 OFFSET $3;`;
         const resuelve = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina, numeroPagina]);
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

@@ -110,7 +110,7 @@ window.createPayment = async function (token, verificationToken) {
         window.showError('Ha ocurrido un error inesperado!');
       }
     }
-  } catch (error) {
+  } catch (errorCapturado) {
     console.error('Error capturado:', error.message);
     console.error('Error capturado:', error.result);
     console.error('Error capturado:', error);

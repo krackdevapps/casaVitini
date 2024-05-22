@@ -1,8 +1,7 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerCalendarioPorPlataformaIDV } from "../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorPlataformaIDV.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const obtenerCalendarios = async (entrada, salida) => {
     try {
@@ -25,14 +24,13 @@ export const obtenerCalendarios = async (entrada, salida) => {
         const calendarioSincronizado = await obtenerCalendarioPorPlataformaIDV(plataformaCalendarios)
         for (const detallesDelCalendario of calendarioSincronizado) {
             const apartamentoIDV = detallesDelCalendario.apartamentoIDV;
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
             detallesDelCalendario.apartamentoUI = apartamentoUI;
             ok.ok.push(detallesDelCalendario)
         }
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

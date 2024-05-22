@@ -18,7 +18,7 @@ export const obtenerEstadoVerificado = async (usuario) => {
         } 
         return resuelve.rows[0]
 
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 };

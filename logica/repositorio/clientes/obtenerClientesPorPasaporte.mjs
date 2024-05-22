@@ -10,7 +10,7 @@ export const obtenerClientesPorPasaporte = async (pasaporte) => {
         pasaporte = $1;`
         const resuelve = await conexion.query(consulta, [pasaporte])
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

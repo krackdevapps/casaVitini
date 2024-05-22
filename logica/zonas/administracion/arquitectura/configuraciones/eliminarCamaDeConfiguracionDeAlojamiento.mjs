@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { eliminarCamaDeLaHabitacionPorCamaUID } from "../../../../repositorio/arquitectura/eliminarCamaDeLaHabitacionPorCamaUID.mjs";
@@ -39,11 +39,10 @@ export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) 
         const ok = {
             ok: "Se ha eliminado correctamente la cama de la habitacion"
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

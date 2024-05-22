@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerTodosLosMensjaes } from "../../../../repositorio/configuracion/mensajesPortada/obtenerTodosLosMensajes.mjs";
 import { insertarMensajeEnPortada } from "../../../../repositorio/configuracion/mensajesPortada/insertarMensajeEnPortada.mjs";
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -38,12 +38,11 @@ export const crearMensaje = async (entrada, salida) => {
             ok: "Se ha creado el nuevo mensaje",
             mensajeUID: resuelveCreacion.rows[0].mensajeUID,
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 
 }

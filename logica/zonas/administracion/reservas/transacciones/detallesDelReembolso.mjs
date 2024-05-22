@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerReembolsoPorReembolsoUID } from "../../../../repositorio/reservas/transacciones/obtenerReembolsoPorReembolsoUID.mjs";
 
 export const detallesDelReembolso = async (entrada, salida) => {
@@ -39,10 +39,9 @@ export const detallesDelReembolso = async (entrada, salida) => {
             fechaCreacion: fechaCreacion,
             fechaActualizacion: fechaActualizacion,
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

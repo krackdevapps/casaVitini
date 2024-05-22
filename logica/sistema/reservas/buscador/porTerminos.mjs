@@ -42,7 +42,7 @@ export const porTerminos = async (data) => {
         }
 
         return estructuraFinal
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

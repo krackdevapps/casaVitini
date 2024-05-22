@@ -1,6 +1,6 @@
 import { obtenerTodosLosRoles } from "../../../repositorio/usuarios/obtenerTodosLosRoles.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const obtenerRoles = async (entrada, salida) => {
     try {
@@ -13,9 +13,8 @@ export const obtenerRoles = async (entrada, salida) => {
         const ok = {
             ok: roles
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

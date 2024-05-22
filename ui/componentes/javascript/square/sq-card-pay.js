@@ -45,7 +45,7 @@ async function CardPay(fieldEl, buttonEl) {
     if (destinoDinamico === "confirmarReserva") {
       try {
         casaVitini.ui.vistas.reservasNuevo.controlPrevioEnvioDatos()
-      } catch (error) {
+      } catch (errorCapturado) {
         return casaVitini.ui.vistas.advertenciaInmersiva(error.message)
       }
     }

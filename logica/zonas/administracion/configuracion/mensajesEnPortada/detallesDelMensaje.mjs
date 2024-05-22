@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerMensajePorMensajeUID } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
 
 export const detallesDelMensaje = async (entrada, salida) => {
@@ -23,10 +23,9 @@ export const detallesDelMensaje = async (entrada, salida) => {
         const ok = {
             ok: mensajesEnPortada
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

@@ -1,6 +1,5 @@
 import { cambiarVista as cambiarVista_ } from "../../sistema/cambiarVista.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../sistema/error/filtroError.mjs";
 
 export const cambiarVista = async (entrada, salida) => {
     try {
@@ -21,11 +20,11 @@ export const cambiarVista = async (entrada, salida) => {
             rol: entrada.session?.rol
         };
         const transaccionInterna = await cambiarVista_(transaccion);
-        salida.json(transaccionInterna);
+        return transaccionInterna
     } catch (errorCapturado) {
-         const error = new Error("noExisteLaVista")
-        const errorFinal = filtroError(error)
-        salida.json(errorFinal)
+        //  const error = new Error("noExisteLaVista")
+        // const errorFinal = filtroError(error)
+        throw errorFinal
     }
 }
 

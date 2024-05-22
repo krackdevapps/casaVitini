@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
 import { actualizarHabitacionDelPernoctantePorComponenteUID } from "../../../repositorio/reservas/pernoctantes/actualizarHabitacionDelPernoctantePorComponenteUID.mjs";
@@ -89,12 +89,11 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
         if (tipoElinacion === "reserva") {
             ok.ok = "Se ha eliminar al pernoctante de la reserva"
         }
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         if (mutex) {
             mutex.release()

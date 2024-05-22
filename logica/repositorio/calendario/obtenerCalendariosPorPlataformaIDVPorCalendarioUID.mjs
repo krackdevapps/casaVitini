@@ -13,7 +13,7 @@ export const obtenerCalendariosPorPlataformaIDVPorCalendarioUID = async (data) =
         WHERE 
         "calendarioUID" = $1
         AND
-        "plataformaOrigen" = $2`
+        "plataformaOrigenIDV" = $2`
         const parametros = [
             calendarioUID,
             plataformaDeOrigen

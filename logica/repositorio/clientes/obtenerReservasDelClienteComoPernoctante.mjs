@@ -11,7 +11,7 @@ export const obtenerReservasDelClienteComoPernoctante = async (clienteUID) => {
         "clienteUID" = $1`;
         const resuelve = await conexion.query(consulta, [clienteUID]);
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

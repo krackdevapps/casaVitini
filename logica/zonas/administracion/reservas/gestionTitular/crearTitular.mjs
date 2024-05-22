@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { insertarCliente } from "../../../../repositorio/clientes/insertarCliente.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { eliminarTitularPoolPorReservaUID } from "../../../../repositorio/reservas/titulares/eliminarTitularPoolPorReservaUID.mjs";
 import { eliminarTitularPorReservaUID } from "../../../../repositorio/reservas/titulares/eliminarTitularPorReservaUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -68,11 +68,10 @@ export const crearTitular = async (entrada, salida) => {
             telefono: telefono_,
             pasaporte: pasaporte_
         };
-        salida.json(ok);
+        return ok
     }
     catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerMensajePorMensajeUID } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
 import { eliminarMensajeEnPortada } from "../../../../repositorio/configuracion/mensajesPortada/elminarMensajeEnPortada.mjs";
 import { actualizaOrdenDePosiciones } from "../../../../repositorio/configuracion/mensajesPortada/actualizarOrdenDePosiciones.mjs";
@@ -30,12 +30,11 @@ export const eliminarMensaje = async (entrada, salida) => {
             ok: "Se ha eliminado correctamente el mensaje de portada",
             mensajeUID: mensajeUID
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
     }
 }

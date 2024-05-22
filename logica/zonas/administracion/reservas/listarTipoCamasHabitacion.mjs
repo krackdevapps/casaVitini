@@ -1,11 +1,10 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerHabitacionesDelApartamentoPorHabitacionIDV } from "../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorHabitacionIDV.mjs";
 import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../../../repositorio/arquitectura/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs";
 import { obtenerCamaComoEntidadPorCamaIDV } from "../../../repositorio/arquitectura/obtenerCamaComoEntidadPorCamaIDV.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const listarTipoCamasHabitacion = async (entrada, salida) => {
     try {
@@ -39,7 +38,7 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
             apartamentoIDV: apartamentoIDV,
             habitacionIDV: habitacionIDV
         })
-        const nombreUIApartamento = obtenerNombreApartamentoUI(apartamentoIDV)
+        const nombreUIApartamento = obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
         if (!habitacion.componenteUID) {
             const error = `Dentro de la configuración de este apartamento ya no esta disponible esta habitación para seleccionar. Para recuperar esta habitación en la configuración de alojamiento, crea una habitación como entidad con el identificador visual ${habitacionIDV} y añádela a la configuración del apartamento con nombre ${nombreUIApartamento} e identificador visual ${apartamentoIDV}`;
             throw new Error(error);
@@ -64,10 +63,9 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
         const ok = {
             camasDisponibles: listaCamasDisponiblesPorHabitacion
         }
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

@@ -71,7 +71,7 @@ export const porDiasDeAntelacion = async (reserva) => {
             descuentoGlobal: descuentoGlobal
         }
         return estructuraSaliente
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

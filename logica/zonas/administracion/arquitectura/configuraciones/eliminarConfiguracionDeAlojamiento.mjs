@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { eliminarConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/eliminarConfiguracionPorApartamentoIDV.mjs";
 
@@ -28,11 +28,10 @@ export const eliminarConfiguracionDeAlojamiento = async (entrada, salida) => {
         const ok = {
             ok: "Se ha eliminado correctamente la configuracion de apartamento",
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

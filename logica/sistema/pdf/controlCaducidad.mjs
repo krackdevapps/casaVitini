@@ -4,7 +4,7 @@ export const controlCaducidad = async () => {
     try {
         const fechaActual = DateTime.utc().toISO();
         await eliminarEnlacesDePagoPorCaducidad(fechaActual)
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 }

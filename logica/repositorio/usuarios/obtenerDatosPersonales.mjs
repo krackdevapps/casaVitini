@@ -16,7 +16,7 @@ export const obtenerDatosPersonales = async (usuario) => {
         usuario = $1;`;
         const resuelve = await conexion.query(consulta, [usuario]);
         return resuelve.rows[0]
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

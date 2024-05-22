@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerMensajePorMensajeUID } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
 import { actualizarEstadoMensajeDePortada } from "../../../../repositorio/configuracion/mensajesPortada/actualizarEstadoMensajeDePortada.mjs";
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -42,11 +42,10 @@ export const actualizarEstado = async (entrada, salida) => {
             mensajeUID: mensajeUID,
             estado: estado
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 
 }

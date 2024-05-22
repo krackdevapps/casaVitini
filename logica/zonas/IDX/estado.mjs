@@ -1,4 +1,4 @@
-import { filtroError } from "../../sistema/error/filtroError.mjs";
+
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { eliminarSessionPorRolPorCaducidad } from "../../repositorio/sessiones/eliminarSessionPorRolPorCaducidad.mjs";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
@@ -27,7 +27,6 @@ export const estado = async (entrada, salida) => {
         salida.json(respuesta);
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { actualizarParConfiguracion } from "../../../../repositorio/configuracion/actualizarParConfiguracion.mjs";
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
 
@@ -40,11 +40,10 @@ export const guardarConfiguracion = async (entrada, salida) => {
         const ok = {
             ok: "Se ha actualizado correctamente la configuracion"
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 
 }

@@ -8,8 +8,8 @@ export const eliminarEnlacesDePagoPorCaducidad = async (fechaActual) => {
         caducidad < $1`
         const resuelve = await conexion.query(consulta, [fechaActual]);
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

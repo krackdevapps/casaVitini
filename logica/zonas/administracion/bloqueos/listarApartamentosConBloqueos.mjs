@@ -1,9 +1,8 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerTodosLosBloqueos } from "../../../repositorio/bloqueos/obtenerTodosLosBloqueos.mjs";
 import { obtenerBloqueosDelApartamentoPorApartamentoIDV } from "../../../repositorio/bloqueos/obtenerBloqueosDelApartamentoPorApartamentoIDV.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const listarApartamentosConBloqueos = async (entrada, salida) => {
     try {
@@ -30,7 +29,7 @@ export const listarApartamentosConBloqueos = async (entrada, salida) => {
             const apartamentosEncontrados = [...new Set(apartamentosEncontradosConDuplicados)];
             const estructuraSalidaFinal = [];
             for (const apartamento of apartamentosEncontrados) {
-                const apartamentoUI = await obtenerNombreApartamentoUI(apartamento);
+                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamento);
                 const bloqueosDelApartamento = await obtenerBloqueosDelApartamentoPorApartamentoIDV(apartamento)
                 const estructuraFinal = {
                     apartamentoIDV: apartamento,
@@ -41,9 +40,8 @@ export const listarApartamentosConBloqueos = async (entrada, salida) => {
             }
             ok.ok = estructuraSalidaFinal;
         }
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

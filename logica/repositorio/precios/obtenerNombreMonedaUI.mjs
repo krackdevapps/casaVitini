@@ -29,7 +29,7 @@ export const obtenerNombreMonedaUI = async (moneda) => {
             "simbolo": simbolo
         }
         return ok
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 }

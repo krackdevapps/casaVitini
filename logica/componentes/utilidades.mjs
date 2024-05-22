@@ -1,8 +1,7 @@
 import Decimal from "decimal.js";
 import { DateTime } from "luxon";
-import { codigoZonaHoraria } from "../sistema/configuracion/codigoZonaHoraria.mjs";
 
-const utilidades = {
+export const utilidades = {
     deUTCaZonaHoraria: (fechaUTC, zonaHoraria) => {
         const regexUTC = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)$/;
         if (!regexUTC.test(fechaUTC)) {
@@ -11,24 +10,6 @@ const utilidades = {
         const fecha = new Date(fechaUTC);
         const opciones = { timeZone: zonaHoraria };
         return fecha.toLocaleString("sv-SE", opciones).replace(/\s+/g, 'T');
-    },
-    convertirFechaUTCaTZ: (fechaUTC, zonaHoraria) => {
-        // Esta funcion solo devuelve la fecha no confundir con deUTCaZonaHoraria que devuelve la fecha y la hora
-        // Agregar la hora 00:00:00 al objeto Date
-        const fechaConHoraCero = new Date(fechaUTC);
-        fechaConHoraCero.setUTCHours(0, 0, 0, 0);
-        // Configurar las opciones de formato
-        const opciones = { timeZone: zonaHoraria, year: 'numeric', month: '2-digit', day: '2-digit' };
-        // Formatear la fecha con la zona horaria especificada
-        const formatoFecha = new Intl.DateTimeFormat('en-US', opciones);
-        const fechaEnRegion = new Date(formatoFecha.format(fechaConHoraCero));
-        return fechaEnRegion.toISOString().slice(0, 10);
-    },
-    convertirFechaTZaUTC: (fechaTZ, zonaHoraria) => {
-        const fechaLocal = new Date(fechaTZ.toLocaleString('en-US', { timeZone: zonaHoraria }));
-        const offsetUTC = fechaLocal.getTimezoneOffset();
-        const fechaEnUTC = new Date(fechaLocal.getTime() + offsetUTC * 60000);
-        return fechaEnUTC;
     },
     calcularPorcentajeTranscurridoUTC: (fechaHoraEntradaUTC, fechaHoraSalidaUTC, fechaActualUTC) => {
         const ahora = new Date(fechaActualUTC); // Fecha y hora actuales
@@ -41,36 +22,6 @@ const utilidades = {
         // Calcular el porcentaje transcurrido
         const porcentajeTranscurrido = (diferenciaActual / diferenciaTotal) * 100;
         return porcentajeTranscurrido.toFixed(2);
-    },
-    convertirFechaUTCaHumano: (fechaUTC) => {
-        // Expresión regular para verificar si la fecha es UTC y cumple con ISO 8601
-        const regexUTC = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)$/;
-        // Verificar si la fecha cumple con el formato UTC y ISO 8601
-        if (!regexUTC.test(fechaUTC)) {
-            return "Fecha no válida. Debe estar en formato UTC y seguir el estándar ISO 8601.";
-        }
-        // Obtener la fecha y la hora en formato UTC
-        const fecha = new Date(fechaUTC);
-        // Formatear la fecha y hora como "dd/mm/yyyy, hh:mm:ss"
-        const dia = String(fecha.getUTCDate()).padStart(2, "0");
-        const mes = String(fecha.getUTCMonth() + 1).padStart(2, "0");
-        const año = fecha.getUTCFullYear();
-        const horas = String(fecha.getUTCHours()).padStart(2, "0");
-        const minutos = String(fecha.getUTCMinutes()).padStart(2, "0");
-        const segundos = String(fecha.getUTCSeconds()).padStart(2, "0");
-        return `${dia}/${mes}/${año}, ${horas}:${minutos}:${segundos}`;
-    },
-    convertirFechaHaciaISO8601: (fechaEnCadena) => {
-        const partes = fechaEnCadena.split(' ');
-        if (partes.length !== 2) {
-            throw new Error('Formato de fecha y hora no válido.');
-        }
-        const [fecha, tiempoConMilesimas] = partes;
-        const [dia, mes, ano] = fecha.split('/');
-        const [tiempo, milisegundos] = tiempoConMilesimas.split('.');
-        const [hora, minutos, segundos] = tiempo.split(':');
-        const fechaISO = `${ano}-${mes}-${dia}T${hora}:${minutos}:${segundos}.${milisegundos}Z`;
-        return fechaISO;
     },
     calculadora: (numero1, numero2, operador) => {
         const validarNumero = (numero) => {
@@ -153,53 +104,4 @@ const utilidades = {
         // Comparar las fechas
         return date1.getTime() === date2.getTime();
     },
-    convertirFechaSQLAFormatoISO: (fechaString) => {
-        // Dividir la cadena en partes: día, mes, año y tiempo
-        const partes = fechaString.split(' ');
-        // Obtener las partes de la fecha
-        const fechaPartes = partes[0].split('/');
-        const dia = fechaPartes[0];
-        const mes = fechaPartes[1];
-        const anio = fechaPartes[2];
-        // Obtener las partes del tiempo
-        const tiempoPartes = partes[1].split(':');
-        const horas = tiempoPartes[0];
-        const minutos = tiempoPartes[1];
-        const segundos = tiempoPartes[2];
-        // Construir la fecha en formato ISO con indicación de UTC
-        const fechaISO = `${anio}-${mes}-${dia}T${horas}:${minutos}:${segundos}Z`;
-        return fechaISO;
-    },
-    calculoImpuestosEnPagoParcial: (cantidadPagoParcial, totalNeto, sumaImpuestos) => {
-        const filtroNumero = /^\d+\.\d{2}$/;
-        if (!filtroNumero.test(cantidadPagoParcial)) {
-            console.error(
-                "Formato incorrecto para 'cantidadPagoParcial'. Introduce una cadena con un número con dos decimales."
-            );
-            return null;
-        }
-        if (!filtroNumero.test(totalNeto)) {
-            console.error(
-                "Formato incorrecto para 'totalNeto'. Introduce una cadena con un número con dos decimales."
-            );
-            return null;
-        }
-        if (!filtroNumero.test(sumaImpuestos)) {
-            console.error(
-                "Formato incorrecto para 'sumaImpuestos'. Introduce una cadena con un número con dos decimales."
-            );
-            return null;
-        }
-        // Convertir las cadenas a números antes de realizar el cálculo
-        const cantidadPagoParcialNum = parseFloat(cantidadPagoParcial);
-        const totalNetoNum = parseFloat(totalNeto);
-        const sumaImpuestosNum = parseFloat(sumaImpuestos);
-        // Realizar el cálculo
-        const resultado = ((cantidadPagoParcialNum * 100) / totalNetoNum) * (sumaImpuestosNum / 100);
-        // Redondear el resultado a dos decimales y devolver como cadena
-        return resultado.toFixed(2);
-    },
-}
-export {
-    utilidades
 }

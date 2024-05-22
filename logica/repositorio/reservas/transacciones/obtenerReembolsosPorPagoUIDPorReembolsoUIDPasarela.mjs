@@ -32,8 +32,8 @@ export const obtenerReembolsosPorPagoUIDPorReembolsoUIDPasarela = async (data) =
             throw new Error(error);
         }
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

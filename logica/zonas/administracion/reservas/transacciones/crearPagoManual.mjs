@@ -4,7 +4,7 @@ import { utilidades } from "../../../../componentes/utilidades.mjs";
 import { actualizarEstadoPago } from "../../../../sistema/precios/actualizarEstadoPago.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { detallesDelPago as detallesDelPago_square } from "../../../../componentes/pasarelas/square/detallesDelPago.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { insertarPago } from "../../../../repositorio/reservas/transacciones/insertarPago.mjs";
 import { obtenerPagoPorPagoUIDPasaresa } from "../../../../repositorio/reservas/transacciones/obtenerPagoPorPagoUIDPasaresa.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -194,7 +194,6 @@ export const crearPagoManual = async (entrada, salida) => {
         await actualizarEstadoPago(reservaUID);
         salida.json(estructuraFinal);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

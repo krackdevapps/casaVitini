@@ -45,7 +45,7 @@ export const detallesReserva = async (metadatos) => {
                 break;
         }
         return reserva
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

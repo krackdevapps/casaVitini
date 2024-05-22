@@ -1,17 +1,18 @@
 import { conexion } from "../../componentes/db.mjs";
 
-export const obtenerTodosLosBloqueos = async (apartmamentoIDV) => {
+export const obtenerTodosLosBloqueos = async () => {
     try {
 
         const consulta = `
         SELECT
-        uid,
-        to_char(entrada, 'DD/MM/YYYY') as entrada, 
-        to_char(salida, 'DD/MM/YYYY') as salida, 
-        apartamento,
-        "tipoBloqueo"
-        FROM "bloqueosApartamentos";`;
-        const resuelve = await conexion.query(consulta, [apartmamentoIDV])
+        "bloqueoUID",
+        to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
+        to_char("fechaFin", 'DD/MM/YYYY') as "fechaFin", 
+        "apartamentoIDV",
+        "tipoBloqueoIDV"
+        FROM 
+        "bloqueosApartamentos";`;
+        const resuelve = await conexion.query(consulta)
         return resuelve.rows
     } catch (errorAdaptador) {
         throw errorAdaptador

@@ -15,7 +15,6 @@ export const squareConstruyeCliente = async (entrada, salida) => {
         };
         salida.json(clienteMetadatos);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

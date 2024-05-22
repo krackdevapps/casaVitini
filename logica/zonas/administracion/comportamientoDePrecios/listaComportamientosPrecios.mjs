@@ -1,6 +1,6 @@
 import { obtenerComportamientosOrdenadorPorFechaInicio } from "../../../repositorio/comportamientoDePrecios/obtenerTodosComportamientosOrdenadorPorFechaInicio.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const listaComportamientosPrecios = async (entrada, salida) => {
 
@@ -14,15 +14,14 @@ export const listaComportamientosPrecios = async (entrada, salida) => {
         const ok = {};
         if (comportamientosDePrecio.length === 0) {
             ok.ok = "No hay comportamiento de precios configurados";
-            salida.json(ok);
+            return ok
         }
 
         const listaComportamientos = comportamientosDePrecio
         ok.ok = listaComportamientos;
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

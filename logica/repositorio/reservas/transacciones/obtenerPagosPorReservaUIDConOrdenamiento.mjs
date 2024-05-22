@@ -13,8 +13,8 @@ export const obtenerPagosPorReservaUIDConOrdenamiento = async (reservaUID) => {
         "pagoUID" DESC;`;
         const resuelve = await conexion.query(consulta, [reservaUID]);
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

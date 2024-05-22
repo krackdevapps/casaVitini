@@ -2,7 +2,7 @@ import { Mutex } from "async-mutex";
 import { insertarCliente } from "../../../repositorio/clientes/insertarCliente.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerHabitacionDelLaReserva } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionDelLaReserva.mjs";
 import { insertarPernoctanteEnLaHabitacion } from "../../../repositorio/reservas/pernoctantes/insertarPernoctanteEnLaHabitacion.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -79,10 +79,9 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
                 correoElectronico: datosValidados.correoElectronico
             }
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release()

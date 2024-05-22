@@ -6,7 +6,7 @@ import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotale
 import { vitiniSysError } from "../../../sistema/vitiniSysError.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validarModificacionRangoFechaResereva } from "../../../sistema/reservas/validarModificacionRangoFechaResereva.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { actualizarFechaEntradaReserva } from "../../../repositorio/reservas/rangoFlexible/actualizarFechaEntradaReserva.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -120,7 +120,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 sentidoRango: "pasado",
                 fecha_ISO: nuevaFechaEntrada
             };
-            salida.json(ok);
+            return ok
 
         }
         if (sentidoRango === "futuro") {
@@ -168,13 +168,12 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 sentidoRango: "futuro",
                 fecha_ISO: nuevaFechaSalida
             };
-            salida.json(ok);
+            return ok
         }
         await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         if (mutex) {
             mutex.release()

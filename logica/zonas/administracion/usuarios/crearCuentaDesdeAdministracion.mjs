@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../../sistema/VitiniIDX/vitiniCrypto.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerRol } from "../../../repositorio/usuarios/obtenerRol.mjs";
 import { insertarUsuario } from "../../../repositorio/usuarios/insertarUsuario.mjs";
 import { insertarFilaDatosPersonales } from "../../../repositorio/usuarios/insertarFilaDatosPersonales.mjs";
@@ -69,11 +69,10 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
             ok: "Se ha creado el nuevo usuario",
             usuarioIDX: nuevoUsuario.usuario
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         if (mutex) {
             mutex.release()

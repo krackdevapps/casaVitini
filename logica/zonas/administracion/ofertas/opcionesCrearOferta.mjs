@@ -2,7 +2,7 @@ import { obtenerTodosAplicacionSobreIDV } from "../../../repositorio/ofertas/obt
 import { obtenerTodosLosTipoOfertaIDV } from "../../../repositorio/ofertas/obtenerTodosLosTipoOfertaIDV.mjs";
 import { obtenerTodosLosTiposDescuento } from "../../../repositorio/ofertas/obtenerTodosLosTiposDescuento.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const opcionesCrearOferta = async (entrada, salida) => {
     try {
@@ -19,9 +19,8 @@ export const opcionesCrearOferta = async (entrada, salida) => {
         const ok = {
             ok: opcionesCrearOferta
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } 
 }

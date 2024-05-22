@@ -31,8 +31,8 @@ export const insertarPerfilPrecio = async (data) => {
             throw new Error(error);
         }
         return resuelve.rows[0]
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 
 }

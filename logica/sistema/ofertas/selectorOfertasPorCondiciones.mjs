@@ -153,7 +153,7 @@ export const selectorOfertasPorCondiciones = async (ofertasEncontradasPorFecha) 
             }
         }
         return ofertasSeleccionadasPorCondiciones
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

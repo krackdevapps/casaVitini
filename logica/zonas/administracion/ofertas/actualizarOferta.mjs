@@ -2,7 +2,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { obtenerOfertaConApartamentos } from "../../../sistema/ofertas/obtenerOfertaConApartamentos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { Mutex } from "async-mutex";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerOferatPorOfertaUID } from "../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs";
 import { actualizarOferta as actualizarOferta_ } from "../../../repositorio/ofertas/actualizarOferta.mjs";
 import { eliminarApartamentosDeLaOferta } from "../../../repositorio/ofertas/eliminarApartamentosDeLaOferta.mjs";
@@ -112,7 +112,7 @@ export const actualizarOferta = async (entrada, salida) => {
                 ok: "Se ha acualizado correctamente la oferta",
                 detallesOferta: await obtenerOfertaConApartamentos(ofertaUID)
             };
-            salida.json(ok);
+            return ok
         }
         if (tipoOferta === "porRangoDeFechas") {
             validadoresLocales.tipoDescuento(tipoDescuento);
@@ -135,7 +135,7 @@ export const actualizarOferta = async (entrada, salida) => {
                 ok: "Se ha acualizado correctamente la oferta",
                 detallesOferta: await obtenerDetallesOferta(ofertaUID)
             };
-            salida.json(ok);
+            return ok
         }
         if (tipoOferta === "porApartamentosEspecificos") {
             validadoresLocales.contextoAplicacion(contextoAplicacion);
@@ -174,12 +174,11 @@ export const actualizarOferta = async (entrada, salida) => {
                 ok: "La oferta  se ha actualizado bien junto con los apartamentos dedicados",
                 detallesOferta: await obtenerDetallesOferta(ofertaUID)
             };
-            salida.json(ok);
+            return ok
         }
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         if (mutex) {
             mutex.release();

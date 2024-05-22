@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../sistema/error/filtroError.mjs";
+
 import { obtenerSessionesActivasPorUsuario } from "../../repositorio/sessiones/obtenerSessionesActivasPorUsuario.mjs";
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
@@ -49,11 +49,10 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
             sessionIDX: entrada.sessionID,
             sessionesActivas: sessionesActivasDelUsuario
         };
-        salida.json(ok);
+        return ok
         await campoDeTransaccion("confirmar");
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

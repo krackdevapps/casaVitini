@@ -1,8 +1,7 @@
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerApartamentosDeLaOfertaPorOfertaUID } from "../../../repositorio/ofertas/obtenerApartamentosDeLaOfertaPorOfertaUID.mjs";
 import { obtenerTodasLasOfertas } from "../../../repositorio/ofertas/obtenerTodasLasOfertas.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const listasOfertasAdministracion = async (entrada, salida) => {
     try {
@@ -23,7 +22,7 @@ export const listasOfertasAdministracion = async (entrada, salida) => {
 
                 for (const apartamento of apartamentosDeLaOferta) {
                     const apartamentoIDV = apartamento.apartamentoIDV;
-                    const apartamentoUI = obtenerNombreApartamentoUI(apartamentoIDV);
+                    const apartamentoUI = obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
                     const tipoDescuentoApartamento = apartamento.tipoDescuento;
                     const cantidadApartamento = apartamento.cantidad;
                     const detallesApartamentoDedicado = {
@@ -39,9 +38,8 @@ export const listasOfertasAdministracion = async (entrada, salida) => {
         const ok = {
             ok: ofertas
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

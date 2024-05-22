@@ -1,10 +1,9 @@
 import { administracionJS } from "../../../componentes/administracionJS.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
 
 export const administracionUI = async (entrada, salida) => {
     try {
-        
+
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
@@ -12,12 +11,12 @@ export const administracionUI = async (entrada, salida) => {
         IDX.control()
 
         const codigoJS = administracionJS();
+        console.log(codigoJS)
         const ok = {
             ok: codigoJS
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

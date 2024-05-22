@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path';
+import { filtroError } from '../sistema/error/filtroError.mjs';
 
 export const puerto = async (entrada, salida) => {
     try {
@@ -37,16 +38,14 @@ export const puerto = async (entrada, salida) => {
                             const nombreModulo = ramaDeLaRuta.name.replace('.mjs', '')
                             //console.log("rutaEntrada", rutaEntrada)
                             const rutaDeImportacion = path.relative('./zonas/logica', rutaEntrada)
-                            //console.log("rutaDeImportacion", rutaDeImportacion)
-                            //console.log("El directorio actual es: " + process.cwd())
                             arbol[nombreModulo] = await import(rutaDeImportacion)
                         }
                     }
                 }
                 await cargarModulosDesdeDirectorio(zonaBusqueda, arbol)
                 return arbol
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         }
 
@@ -56,9 +55,7 @@ export const puerto = async (entrada, salida) => {
         const exploradorArbol = (zonas, ruta) => {
             const partes = ruta.split('.')
             let rama = zonas;
-            //console.log(partes)
             for (const part of partes) {
-                //console.log("part", part)
                 if (rama && typeof rama === 'object' && rama.hasOwnProperty(part)) {
                     rama = rama[part]
                 } else {
@@ -68,20 +65,16 @@ export const puerto = async (entrada, salida) => {
             }
             return rama
         }
-
         const estructura = exploradorArbol(zonas, ruta)
         const X = estructura[arbol.pop()]
         if (typeof X !== "function") {
             const error = "zonaInexistente2"
             throw new Error(error)
         }
-        return X(entrada, salida)
+        const respuesta = await X(entrada, salida)
+        salida.json(respuesta)
     } catch (errorCapturado) {
-        //console.log(errorCapturado)
-        const error = {
-            //details: errorCapturado.code,
-            error: errorCapturado.message
-        }
-        salida.json(error)
+        const errorFinal = filtroError(errorCapturado)
+        salida.json(errorFinal)
     }
 }

@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { router } from './middleware/rutas.mjs'
+import { router } from './routes/rutas.mjs'
 import fs from 'fs';
 import https from 'https';
 import { controlHTTPS } from './logica/componentes/controlHttps.mjs'
@@ -17,6 +17,7 @@ process.on('uncaughtException', (error) => {
   console.error('Alerta! ->>:', error.message);
 });
 const app = express()
+export default app
 app.use(controlHTTPS)
 app.set('views', './ui/constructor')
 app.set('view engine', 'ejs')

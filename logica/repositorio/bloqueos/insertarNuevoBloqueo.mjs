@@ -9,20 +9,23 @@ export const insertarNuevoBloqueo = async (data) => {
         const fechaFin_ISO = data.fechaFin_ISO || null
         const motivo = data.motivo
         const zonaIDV = data.zonaIDV
+        // bloqueoIDV para tests
+        const bloqueoIDV = data.bloqueIDV || null
 
-        const consulta = `insertarNuevoBloqueo
+        const consulta = `
         INSERT INTO "bloqueosApartamentos"
         (
         "apartamentoIDV",
         "tipoBloqueoIDV",
-        entrada,
-        salida,
+        "fechaInicio",
+        "fechaFin",
         motivo,
-        "zonaIDV"
+        "zonaIDV",
+        "bloqueoIDV"
         )
-        VALUES ($1, $2, $3, $4, $5, $6) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7) 
         RETURNING 
-        "bloqueoUID"
+        *
         `;
         const parametros = [
             apartamentoIDV,
@@ -30,7 +33,8 @@ export const insertarNuevoBloqueo = async (data) => {
             fechaInicio_ISO,
             fechaFin_ISO,
             motivo,
-            zonaIDV
+            zonaIDV,
+            bloqueoIDV
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {

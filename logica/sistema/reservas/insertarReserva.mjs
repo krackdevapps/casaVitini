@@ -1,15 +1,15 @@
 import { DateTime } from 'luxon';
 import { insertarTotalesReserva } from './insertarTotalesReserva.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
-import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
 import { insertarReservaAdministrativa } from '../../repositorio/reservas/reserva/insertarReservaAdministrativa.mjs';
 import { Mutex } from 'async-mutex';
 import { insertarClientePool } from '../../repositorio/clientes/insertarClientePool.mjs';
 import { insertarApartamentoEnReserva } from '../../repositorio/reservas/apartamentos/insertarApartamentoEnReserva.mjs';
-import { obtenerNombreHabitacionUI } from '../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs';
 import { insertarHabitacionEnApartamento } from '../../repositorio/arquitectura/insertarHabitacionEnApartamento.mjs';
 import { insertarCamaEnLaHabitacion } from '../../repositorio/reservas/apartamentos/insertarCamaEnLaHabitacion.mjs';
 import { campoDeTransaccion } from '../../repositorio/globales/campoDeTransaccion.mjs';
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from '../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs';
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 
 export const insertarReserva = async (reserva) => {
     const mutex = new Mutex()
@@ -53,7 +53,7 @@ export const insertarReserva = async (reserva) => {
             const apartamentoIDV = apartamentoConfiguracion
             const habitaciones = alojamiento[apartamentoConfiguracion].habitaciones
 
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
 
             const nuevoApartamentoEnReserva = await insertarApartamentoEnReserva({
                 reservaUID: reservaUID,
@@ -66,7 +66,7 @@ export const insertarReserva = async (reserva) => {
                 const habitacionIDV = habitacionConfiguracion
                 const camaIDV = habitaciones[habitacionIDV].camaSeleccionada.camaIDV
                 const pernoctantesPool = habitaciones[habitacionIDV].pernoctantes
-                const habitacionUI = await obtenerNombreHabitacionUI(habitacionIDV)
+                const habitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
 
                 const nuevoHabitacionEnElApartamento = await insertarHabitacionEnApartamento({
                     apartamentoUID: apartamentoUID,
@@ -101,7 +101,7 @@ export const insertarReserva = async (reserva) => {
             reservaUID: reservaUID
         }
         return ok
-    } catch (error) {
+    } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         throw error;
     } finally {

@@ -40,7 +40,6 @@ export const precioReserva = async (entrada, salida) => {
         const transaccionInterna = await precioReserva_(transaccion);
         salida.json(transaccionInterna);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

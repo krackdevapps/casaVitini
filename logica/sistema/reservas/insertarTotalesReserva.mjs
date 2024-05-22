@@ -1,7 +1,6 @@
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { actualizarEstadoPago } from '../precios/actualizarEstadoPago.mjs';
 import { precioReserva } from '../precios/precioReserva.mjs';
-import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
 import { eliminarTotalesPorNochePorReservaUID } from '../../repositorio/reservas/transacciones/eliminarTotalesPorNochePorReservaUID.mjs';
 import { insertarTotalPorNohce } from '../../repositorio/reservas/transacciones/insertarTotalPorNohce.mjs';
 import { eliminarTotalesPorApartamentoPorReservaUID } from '../../repositorio/reservas/transacciones/eliminarTotalesPorApartamentoPorReservaUID.mjs';
@@ -14,6 +13,7 @@ import { eliminarTotalesPorReservaUID } from '../../repositorio/reservas/transac
 import { insertarTotalEnReserva } from '../../repositorio/reservas/transacciones/insertarTotalEnReserva.mjs';
 import { obtenerReservaPorReservaUID } from '../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs';
 import { campoDeTransaccion } from '../../repositorio/globales/campoDeTransaccion.mjs';
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 export const insertarTotalesReserva = async (metadatos) => {
     try {
         const tipoProcesadorPrecio = metadatos.tipoProcesadorPrecio
@@ -76,7 +76,7 @@ export const insertarTotalesReserva = async (metadatos) => {
             const apartamentoIDV = detallesDelApartamentomo.apartamentoIDV
             const totalNetoRango = detallesDelApartamentomo.totalNetoRango
             const precioMedioNocheRango = detallesDelApartamentomo.precioMedioNocheRango
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
 
             await insertarTotalPorApartamento({
                 reservaUID: reservaUID,
@@ -127,8 +127,8 @@ export const insertarTotalesReserva = async (metadatos) => {
                     descuentoAplicadoA: descuentoAplicadoA
                 })
 
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         }
 
@@ -275,7 +275,7 @@ export const insertarTotalesReserva = async (metadatos) => {
             ok: "datos financieros generados correctamente en esta reserva"
         }
         return ok
-    } catch (error) {
+    } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         throw error;
     }

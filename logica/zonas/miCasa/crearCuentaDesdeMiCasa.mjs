@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { enviarEmailAlCrearCuentaNueva } from "../../sistema/Mail/enviarEmailAlCrearCuentaNueva.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
-import { filtroError } from "../../sistema/error/filtroError.mjs";
+
 import { obtenerUsuarioPorCodigoVerificacion } from "../../repositorio/usuarios/obtenerUsuarioPorCodigoVerificacion.mjs";
 import { insertarUsuario } from "../../repositorio/usuarios/insertarUsuario.mjs";
 import { insertarFilaDatosPersonales } from "../../repositorio/usuarios/insertarFilaDatosPersonales.mjs";
@@ -114,7 +114,7 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
             ok: "Se ha creado el nuevo usuario",
             usuarioIDX: nuevoUsuario.usuario
         };
-        salida.json(ok);
+        return ok
         await campoDeTransaccion("confirmar");
         const datosVerificacion = {
             email: email,
@@ -123,7 +123,6 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
         enviarEmailAlCrearCuentaNueva(datosVerificacion);
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

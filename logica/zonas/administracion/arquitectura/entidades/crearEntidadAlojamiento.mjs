@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoUI } from "../../../../repositorio/arquitectura/obtenerApartamentoComoEntidadPorApartamentoUI.mjs";
 import { insertarApartamentoComoEntidad } from "../../../../repositorio/arquitectura/insertarApartamentoComoEntidad.mjs";
@@ -83,7 +83,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 ok: "Se ha creado correctament la nuevo entidad como apartamento",
                 nuevoUID: nuevoApartamentoComEntidad.apartamento
             };
-            salida.json(ok);
+            return ok
 
         }
         if (tipoEntidad === "habitacion") {
@@ -147,7 +147,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 ok: "Se ha creado correctament la nuevo entidad como habitacion",
                 nuevoUID: nuevaHabitacionComoEntidad.habitacion
             };
-            salida.json(ok);
+            return ok
 
         }
         if (tipoEntidad === "cama") {
@@ -223,11 +223,10 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 ok: "Se ha creado correctament la nuevo entidad como cama",
                 nuevoUID: nuevaCama.cama
             };
-            salida.json(ok);
+            return ok
 
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

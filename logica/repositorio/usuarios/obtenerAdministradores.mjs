@@ -10,7 +10,7 @@ export const obtenerAdministradores = async (rolAdministrador) => {
         `;
         const resuelve = await conexion.query(consulta, [rolAdministrador]);
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

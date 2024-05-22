@@ -1,7 +1,7 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerMensajePorMensajeUID } from "../../../../repositorio/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
 
@@ -54,11 +54,10 @@ export const cambiarPosicon = async (entrada, salida) => {
             mensajeUID: mensajeUID,
             mensaje: atob(mensajeGuardado)
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 
 }

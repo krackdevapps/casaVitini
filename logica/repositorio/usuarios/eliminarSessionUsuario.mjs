@@ -9,7 +9,7 @@ export const eliminarSessionUsuario = async (usuarioIDX) => {
         sess->> 'usuario' = $1;
         `;
         await conexion.query(consulta, [usuarioIDX])
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 };

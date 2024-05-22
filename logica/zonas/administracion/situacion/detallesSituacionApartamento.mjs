@@ -5,8 +5,6 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracion/horasSalidaEntrada.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerHabitacionesDelApartamento } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionDelApartamento.mjs";
@@ -15,6 +13,7 @@ import { obtenerClientePoolPorPernoctanteUID } from "../../../repositorio/client
 import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs";
 import { obtenerTodosLosPernoctantesDeLaReserva } from "../../../repositorio/reservas/pernoctantes/obtenerTodosLosPernoctantesDeLaReserva.mjs";
 import { reservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/reservasPorRango.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const detallesSituacionApartamento = async (entrada, salida) => {
     try {
@@ -34,7 +33,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
 
         // Validar que existe el apartamento
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
         // Ver las reservas que existen hoy
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
@@ -200,9 +199,8 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         const ok = {
             ok: objetoFinal
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

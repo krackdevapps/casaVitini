@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
 import { obtenerTodasLasHabitaciones } from "../../../../repositorio/arquitectura/obtenerTodasLasHabitaciones.mjs";
@@ -56,11 +56,10 @@ export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entr
             const ok = {
                 ok: estructuraFinal
             };
-            salida.json(ok);
+            return ok
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

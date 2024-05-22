@@ -1,6 +1,6 @@
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const calculadora = (entrada, salida) => {
     try {
@@ -33,9 +33,8 @@ export const calculadora = (entrada, salida) => {
         const ok = {
             ok: resultado
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

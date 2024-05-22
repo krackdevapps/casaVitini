@@ -2,7 +2,7 @@ import { conexion } from "../../../componentes/db.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 
 export const crearNuevoEnlace = async (entrada, salida) => {
@@ -140,10 +140,9 @@ export const crearNuevoEnlace = async (entrada, salida) => {
                 cantidad: cantidad,
                 enlace: enlace
             };
-            salida.json(ok);
+            return ok
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

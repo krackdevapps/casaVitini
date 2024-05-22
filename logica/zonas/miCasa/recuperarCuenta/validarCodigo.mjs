@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { eliminarEnlacesDeRecuperacionPorFechaCaducidad } from "../../../repositorio/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorFechaCaducidad.mjs";
 import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorCodigoUPID.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -31,13 +31,12 @@ export const validarCodigo = async (entrada, salida) => {
                 ok: "El enlace temporal sigue vigente",
                 usuario: usuario
             };
-            salida.json(ok);
+            return ok
         }
         await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         console.info(errorCapturado.message);
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

@@ -13,8 +13,8 @@ export const obtenerTotalesPorNochePorReservaUID = async (reservaUID) => {
         "reservaUID" = $1`
         const resuelve = await conexion.query(consulta, [reservaUID]);
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

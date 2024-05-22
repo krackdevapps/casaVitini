@@ -78,8 +78,8 @@ export const validadoresCompartidos = {
                     datosValidados.notas = notas
                 }
                 return datosValidados
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         },
 
@@ -107,7 +107,7 @@ export const validadoresCompartidos = {
                             const error = "El validador de unicidadPasaporteYCorrreo esta mal configurado. Debe de especificarse el tipo de operacion."
                             throw new Error(error)
                         }
-                    } catch (error) {
+                    } catch (errorCapturado) {
                         throw error
                     }
                 }
@@ -139,8 +139,8 @@ export const validadoresCompartidos = {
                     throw new Error(error)
                 }
 
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         },
         datosUsuario: (data) => {
@@ -182,8 +182,8 @@ export const validadoresCompartidos = {
                 const telefono = validadoresCompartidos.tipos
                     .telefono(data.telefono)
 
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         }
     },
@@ -214,8 +214,8 @@ export const validadoresCompartidos = {
                     throw new Error(error)
                 }
                 return fecha_ISO
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         },
         validarFecha_Humana: async (fecha_Humana) => {
@@ -254,8 +254,8 @@ export const validadoresCompartidos = {
                     fecha_ISO: fecha_ISO
                 }
                 return estructura
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         },
         fechaMesAno: async (fechaMesAno) => {
@@ -270,8 +270,8 @@ export const validadoresCompartidos = {
                     const error = "La fecha no cumple el formato especifico. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante. Por ejemplo 5-2024 o 10-2024";
                     throw new Error(error);
                 }
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         },
         validacionVectorial: async (configuracion) => {
@@ -306,8 +306,8 @@ export const validadoresCompartidos = {
                     throw new Error(error)
                 }
 
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
 
         },
@@ -318,8 +318,8 @@ export const validadoresCompartidos = {
                     const error = "El mes (mesCalendario) debe de ser una cadena que contenga un numero del 1 al 12";
                     throw new Error(error);
                 }
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
 
         },
@@ -330,8 +330,8 @@ export const validadoresCompartidos = {
                     const error = "El año no puede ser inferior a 2000 ni superior a 5000";
                     throw new Error(error);
                 }
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         },
         fechaEnRango: (data) => {
@@ -359,8 +359,8 @@ export const validadoresCompartidos = {
                 const fechaObjetoInicio = DateTime.fromISO(fechaInicioRango_ISO);
                 const fechaObjetoFin = DateTime.fromISO(fechaFinRango_ISO);
                 return fechaObjetoAComprobar >= fechaObjetoInicio && fechaObjetoAComprobar <= fechaObjetoFin;
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         }
     },
@@ -719,8 +719,8 @@ export const validadoresCompartidos = {
                     throw new Error(error)
                 }
                 return cadenaCorreoLimpia
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
 
         },
@@ -745,8 +745,8 @@ export const validadoresCompartidos = {
                     throw new Error(error)
                 }
                 return telefonoLimpio
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         },
         array: (configuracion) => {
@@ -800,8 +800,8 @@ export const validadoresCompartidos = {
                 }
 
                 return array
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         },
         objetoLiteral: (configuracion) => {
@@ -823,7 +823,7 @@ export const validadoresCompartidos = {
                     throw new Error(error);
                 }
                 return objetoLiteral
-            } catch (error) {
+            } catch (errorCapturado) {
                 throw error
 
             }
@@ -880,6 +880,22 @@ export const validadoresCompartidos = {
             }
             return hora
         },
+        urlPath: (configuracion) => {
+
+            const urlPath = configuracion.urlPath
+            const nombreCampo = configuracion.nombreCampo
+
+            if (!urlPath) {
+                const error = `${nombreCampo} está vacío`;
+                throw new Error(error);
+            }
+            const filtroURL = /^[a-zA-Z0-9/_./]+$/;
+            if (!filtroURL.test(urlPath)) {
+                const error = `${nombreCampo} no cumple con el formato esperado de una url.`;
+                throw new Error(error);
+            }
+            return urlPath
+        },
 
     },
     baseDeDatos: {
@@ -909,8 +925,8 @@ export const validadoresCompartidos = {
                     const error = `No existe el nombre de la columna ${nombreColumna} en la tabla ${tabla}`;
                     throw new Error(error);
                 }
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         }
     },
@@ -921,8 +937,8 @@ export const validadoresCompartidos = {
                     const error = "El campo sentido columna solo acepta un sentido ascendente o descendente"
                     throw new Error(error)
                 }
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         },
         estados: (estado) => {
@@ -931,8 +947,8 @@ export const validadoresCompartidos = {
                     const error = "El estado solo puede ser activado o desactivado"
                     throw new Error(error)
                 }
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         },
         limiteCienNumero: (cantidad) => {
@@ -941,8 +957,8 @@ export const validadoresCompartidos = {
                     const error = "Cuidado! No se puede acepatar un porcentaje superior a 100% por que sino la oferta podria generar numeros negativos.";
                     throw new Error(error);
                 }
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
 
         }

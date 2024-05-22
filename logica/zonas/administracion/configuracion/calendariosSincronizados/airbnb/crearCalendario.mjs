@@ -1,7 +1,7 @@
 import ICAL from 'ical.js';
 import { VitiniIDX } from '../../../../../sistema/VitiniIDX/control.mjs';
 import { validadoresCompartidos } from '../../../../../sistema/validadores/validadoresCompartidos.mjs';
-import { filtroError } from '../../../../../sistema/error/filtroError.mjs';
+
 import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs';
 import { obtenerCalendarioPorCalendarioUIDPublico } from '../../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorCalendarioUIDPublico.mjs';
 import { insertarCalendarioSincronizado } from '../../../../../repositorio/configuracion/calendarioSincronizados/insertarCalendarioSincronizado.mjs';
@@ -100,11 +100,10 @@ export const crearCalendario = async (entrada, salida) => {
             ok: "Se ha guardado el nuevo calendario y esta listo para ser sincronizado",
             nuevoUID: nuevoCalendario.uid
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 
 }

@@ -7,7 +7,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { precioRangoApartamento } from "../../../sistema/precios/precioRangoApartamento.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 export const apartamentosDisponiblesPublico = async (entrada, salida) => {
     try {
         if (!await interruptor("aceptarReservasPublicas")) {
@@ -61,9 +61,8 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
         const ok = {
             ok: estructuraFinal
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

@@ -4,7 +4,7 @@ import { detallesReserva } from "../../../../sistema/reservas/detallesReserva.mj
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { pagosDeLaReserva as pagosDeLaReserva_ } from "../../../../sistema/reservas/pagosDeLaReserva.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 
 
 export const obtenerPagosDeLaReserva = async (entrada, salida) => {
@@ -57,7 +57,6 @@ export const obtenerPagosDeLaReserva = async (entrada, salida) => {
         const okFusionado = { ...ok, ...detallesPagosReserva };
         salida.json(okFusionado);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

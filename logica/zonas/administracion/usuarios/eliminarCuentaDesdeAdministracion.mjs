@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerAdministradores } from "../../../repositorio/usuarios/obtenerAdministradores.mjs";
 import { eliminarSessionUsuario } from "../../../repositorio/usuarios/eliminarSessionUsuario.mjs";
 import { eliminarUsuario } from "../../../repositorio/usuarios/eliminarUsuario.mjs";
@@ -38,10 +38,9 @@ export const eliminarCuentaDesdeAdministracion = async (entrada, salida) => {
         const ok = {
             ok: "Se ha eliminado correctamente la cuenta de usuario",
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

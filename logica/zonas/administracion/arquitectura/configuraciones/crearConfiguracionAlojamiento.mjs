@@ -1,11 +1,10 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarConfiguracionApartamento } from "../../../../repositorio/arquitectura/insertarConfiguracionApartamento.mjs";
 import { insertarPerfilPrecio } from "../../../../repositorio/precios/insertarPerfilPrecio.mjs";
 import { Mutex } from "async-mutex";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 
 export const crearConfiguracionAlojamiento = async (entrada, salida) => {
@@ -27,7 +26,7 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
         if (!apartamentoUI) {
             const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon";
             throw new Error(error);
@@ -52,11 +51,10 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
             ok: "Se ha creado correctament la nuevo configuracion del apartamento",
             apartamentoIDV: apartamentoIDV
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.acquire()

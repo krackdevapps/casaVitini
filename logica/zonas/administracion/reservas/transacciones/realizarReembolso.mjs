@@ -2,7 +2,7 @@ import Decimal from "decimal.js";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { eliminarPagoPorPagoUID } from "../../../../repositorio/reservas/transacciones/eliminarPagoPorPagoUID.mjs";
 import { insertarReembolso } from "../../../../repositorio/reservas/transacciones/insertarReembolso.mjs";
 import { obtenerReembolsosPorPagoUID_ordenados } from "../../../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUID_ordenados.mjs";
@@ -181,10 +181,9 @@ export const realizarReembolso = async (entrada, salida) => {
         } else {
             ok.ok = "Se ha guardado el reembolso en la base de datos verifique que el reembolso sea entrago al cliente";
         }
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

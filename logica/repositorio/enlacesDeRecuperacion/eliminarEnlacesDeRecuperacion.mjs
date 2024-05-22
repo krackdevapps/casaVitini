@@ -6,8 +6,8 @@ export const eliminarEnlacesDeRecuperacion = async () => {
         DELETE FROM "enlaceDeRecuperacionCuenta"
         WHERE usuario = $1;`;
         await conexion.query(consulta, []);
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

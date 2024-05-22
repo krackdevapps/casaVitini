@@ -103,7 +103,7 @@ export const apartamentosPorRango = async (metadatos) => {
             detalles: "Se esta teniendo en cuenta, los apartamentos en reservas y los apartamentos no disponbiles definidos por la configuración global de alojamiento"
         }
         return ok
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 }

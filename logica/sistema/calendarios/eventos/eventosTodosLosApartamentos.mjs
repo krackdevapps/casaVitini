@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerReservasDeTodosLosApartamentosPorMesPorAno } from "../../../repositorio/calendario/obtenerReservasDeTodosLosApartamentosPorMesPorAno.mjs";
 import { validadoresCompartidos } from "../../validadores/validadoresCompartidos.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 export const eventosTodosLosApartamentos = async (fecha) => {
     try {
         validadoresCompartidos.fechas.fechaMesAno(fecha)
@@ -35,7 +35,7 @@ export const eventosTodosLosApartamentos = async (fecha) => {
 
         for (const detalles of reservas) {
             const apartamentoIDV = detalles.apartamentoIDV
-            detalles.apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+            detalles.apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
             reservasSelecciondas.push(detalles)
         }
         for (const detallesReserva of reservasSelecciondas) {
@@ -61,7 +61,7 @@ export const eventosTodosLosApartamentos = async (fecha) => {
                     fechaEntrada_ISO: fechaEntrada_ISO,
                     fechaSalida_ISO: fechaSalida_ISO,
                     apartamentoIDV: apartamentoIDVReserva,
-                    apartamentoUI: await obtenerNombreApartamentoUI(apartamentoIDVReserva)
+                    apartamentoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDVReserva)
                 }
                 if (calendarioObjeto[fechaInternaHumana]) {
                     calendarioObjeto[fechaInternaHumana].push(estructuraReservaEnDia)

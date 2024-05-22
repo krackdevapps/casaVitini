@@ -18,7 +18,7 @@ export const eliminarSessionPorUsuarioPorSessionIDX = async (data) => {
             throw new Error(error);
         }
         return resuelve.rows[0]
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 };

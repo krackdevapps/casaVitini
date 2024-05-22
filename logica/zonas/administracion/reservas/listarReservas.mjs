@@ -1,4 +1,4 @@
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { hoy } from "../../../sistema/reservas/buscador/hoy.mjs";
 import { porTerminos } from "../../../sistema/reservas/buscador/porTerminos.mjs";
 import { rango } from "../../../sistema/reservas/buscador/rango.mjs";
@@ -110,7 +110,6 @@ export const listarReservas = async (entrada, salida) => {
         }
         salida.json(ok)
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

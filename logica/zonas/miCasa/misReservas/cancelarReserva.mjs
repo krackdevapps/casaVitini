@@ -3,7 +3,7 @@ import { crearReenbolso } from "../../../componentes/pasarelas/square/crearReenb
 import { detallesDelPago as detallesDelPago_ } from "../../../componentes/pasarelas/square/detallesDelPago.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
@@ -181,12 +181,11 @@ export const cancelarReserva = async (entrada, salida) => {
         //             ok.reembolsoPasarela = "Se ha reembolsado todos los pagos asociados a esta reserva hechos desde la pasarela";
         //         }
         //     }
-        //     salida.json(ok);
+        //     return ok
         // }
         // await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
       //  await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

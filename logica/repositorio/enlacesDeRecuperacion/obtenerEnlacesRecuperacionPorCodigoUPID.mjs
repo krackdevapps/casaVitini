@@ -10,8 +10,8 @@ export const obtenerEnlacesRecuperacionPorCodigoUPID = async (codigo) => {
         WHERE "codigoUPID" = $1;`;
         const resuelve = await conexion.query(consulta, [codigo]);
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

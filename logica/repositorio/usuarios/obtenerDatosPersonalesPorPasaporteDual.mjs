@@ -11,7 +11,7 @@ export const obtenerDatosPersonalesPorPasaporte = async (pasaporte) => {
         pasaporte = $1;`;
         const resuelve = await conexion.query(consulta, [pasaporte]);
         return resuelve.rows[0]
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

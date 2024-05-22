@@ -1,6 +1,6 @@
 import { conexion } from "../../componentes/db.mjs";
 
-export const obtenerBloqueoPorBloqueoUID = async (data) => {
+export const obtenerBloqueoPorBloqueoUIDPorApartamentoIDV = async (data) => {
     try {
 
         const apartamentoIDV = data.apartamentoIDV
@@ -8,13 +8,12 @@ export const obtenerBloqueoPorBloqueoUID = async (data) => {
       
         const consulta = `
         SELECT
-        uid,
-        to_char(entrada, 'DD/MM/YYYY') as entrada, 
-        to_char(salida, 'DD/MM/YYYY') as salida, 
+        to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
+        to_char("fechaFin", 'DD/MM/YYYY') as "fechaFin", 
         "apartamentoIDV",
-        "tipoBloqueo",
+        "tipoBloqueoIDV",
         motivo,
-        zona
+        "zonaIDV"
         FROM 
         "bloqueosApartamentos"
         WHERE 

@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { actualizarUsuarioSessionActiva } from "../../../repositorio/usuarios/actualizarSessionActiva.mjs";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -44,10 +44,9 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
             ok: "Se ha actualizado el IDX correctamente",
             usuarioIDX: sessionActivaActualizada.usuario
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

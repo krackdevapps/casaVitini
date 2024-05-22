@@ -36,7 +36,7 @@ export const actualizarComportamientoDePrecio = async (data) => {
         const comportamientoActualizado = resuelve.rows[0]
         return comportamientoActualizado
 
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

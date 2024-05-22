@@ -4,12 +4,11 @@ import { utilidades } from "../../../componentes/utilidades.mjs";
 import { apartamentosOcupadosHoy_paraSitaucion } from "../../../sistema/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracion/horasSalidaEntrada.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc } from "../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
 import { reservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/reservasPorRango.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const obtenerSituacion = async (entrada, salida) => {
     try {
@@ -28,7 +27,7 @@ export const obtenerSituacion = async (entrada, salida) => {
         for (const apartamento of configuracionesDeAlojamiento) {
             const apartamentoIDV = apartamento.apartamentoIDV;
             const estadoApartamento = apartamento.estadoConfiguracion;
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
             apartamentosObjeto[apartamentoIDV] = {
                 apartamentoUI: apartamentoUI,
                 estadoApartamento: estadoApartamento,
@@ -146,9 +145,8 @@ export const obtenerSituacion = async (entrada, salida) => {
             ok.ok[apartamentoIDV_destino].calendariosSincronizados.airbnb.eventos = eventosDelApartamento;
             ok.ok[apartamentoIDV_destino].estadoPernoctacion = "ocupado";
         }
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

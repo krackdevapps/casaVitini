@@ -1,5 +1,8 @@
 import axios from 'axios';
 import ICAL from 'ical.js';
+import { obtenerCalendariosPorPlataformaIDVPorPlataformaOrigenIDV } from '../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDVPorPlataformaOrigenIDV.mjs';
+import { actualizarEventosCalendarioPorCalendarioUID } from '../../../repositorio/calendario/actualizarEventosCalendarioPorCalendarioUID.mjs';
+
 export const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
     try {
         const filtroCadena = /^[a-z0-9]+$/;
@@ -90,7 +93,7 @@ export const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
             }
         }
         return ok
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

@@ -8,7 +8,7 @@ import { enviarEmailReservaConfirmada } from "../../../sistema/Mail/enviarEmailR
 import { actualizarEstadoPago } from "../../../sistema/precios/actualizarEstadoPago.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 import { crearEnlacePDF } from "../../../sistema/pdf/crearEnlacePDF.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const preConfirmarReserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -37,13 +37,12 @@ export const preConfirmarReserva = async (entrada, salida) => {
             ok: "Reserva confirmada",
             detalles: resolverDetallesReserva
         };
-        salida.json(ok);
+        return ok
 
         enviarEmailReservaConfirmada(reservaUID);
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         mutex.release();
     }

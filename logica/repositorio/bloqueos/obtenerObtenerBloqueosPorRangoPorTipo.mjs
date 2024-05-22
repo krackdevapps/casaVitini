@@ -13,7 +13,7 @@ export const obtenerObtenerBloqueosPorRangoPorTipo = async (metadatos) => {
 
     const consultaBloqueos = `
       SELECT 
-      uid,
+      "bloqueoUID",
       "apartamentoIDV",
       "tipoBloqueoIDV",
       "zonaIDV",

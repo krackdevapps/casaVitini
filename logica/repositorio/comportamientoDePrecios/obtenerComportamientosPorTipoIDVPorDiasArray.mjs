@@ -23,7 +23,7 @@ export const obtenerComportamientosPorTipoIDVPorDiasArray = async (data) => {
         }
         return resuelve.rows
 
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

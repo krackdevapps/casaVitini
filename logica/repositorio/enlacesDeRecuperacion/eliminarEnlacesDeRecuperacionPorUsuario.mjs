@@ -7,8 +7,8 @@ export const eliminarEnlacesDeRecuperacionPorUsuario = async (usuario) => {
         WHERE usuario = $1;
         `;
         await conexion.query(consulta, [usuario]);
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

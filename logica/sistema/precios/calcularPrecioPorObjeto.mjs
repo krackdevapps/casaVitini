@@ -39,8 +39,8 @@ export const calcularPrecioPorObjeto = async (reserva) => {
         precioFinal.desgloseFinanciero.totales.totalReservaNeto = new Decimal(totalNeto).toString();
 
         return precioFinal;
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 
 };

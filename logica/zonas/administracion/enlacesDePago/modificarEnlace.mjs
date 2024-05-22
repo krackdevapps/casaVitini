@@ -2,7 +2,7 @@
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { actualizarEnlaceDePagoPorEnlaceUID } from "../../../repositorio/enlacesDePago/actualizarEnlaceDePagoPorEnlaceUID.mjs";
 import { obtenerEnlaceDePagoPorEnlaceUID } from "../../../repositorio/enlacesDePago/obtenerEnlaceDePagoPorEnlaceUID.mjs";
 
@@ -63,10 +63,9 @@ export const modificarEnlace = async (entrada, salida) => {
         const ok = {
             ok: "Se ha actualizado corratmente los datos del enlace"
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

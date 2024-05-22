@@ -1,4 +1,4 @@
-import { obtenerNombreApartamentoUI } from "../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs"
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 import { obtenerApartamentosDeLaOfertaPorOfertaUID } from "../../repositorio/ofertas/obtenerApartamentosDeLaOfertaPorOfertaUID.mjs"
 import { obtenerOferatPorOfertaUID } from "../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs"
 export const obtenerOfertaConApartamentos = async (ofertaUID) => {
@@ -11,7 +11,7 @@ export const obtenerOfertaConApartamentos = async (ofertaUID) => {
             oferta["apartamentosDedicados"] = []
             for (const apartamento of apartamentosDeLaOferta) {
                 const apartamentoIDV = apartamento.apartamentoIDV
-                const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
                 const tipoDescuentoApartamento = apartamento.tipoDescuento
                 const cantidadApartamento = apartamento.cantidad
                 const detallesApartamentoDedicado = {
@@ -26,7 +26,7 @@ export const obtenerOfertaConApartamentos = async (ofertaUID) => {
 
         }
         return oferta
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

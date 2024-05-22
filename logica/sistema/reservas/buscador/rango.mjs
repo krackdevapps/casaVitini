@@ -146,7 +146,7 @@ export const rango = async (data) => {
             const error = "Falta especificar el tipo de coincidencia, por favor selecciona el tipo de coincidencia para poder realizar la busqueda";
             throw new Error(error);
         }
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 };

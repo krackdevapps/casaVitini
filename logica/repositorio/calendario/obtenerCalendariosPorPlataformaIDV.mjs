@@ -5,7 +5,7 @@ export const obtenerCalendariosPorPlataformaIDV = async (plataformaIDV) => {
         const consulta =  `
         SELECT *
         FROM "calendariosSincronizados"
-        WHERE "plataformaOrigen" = $1
+        WHERE "plataformaOrigenIDV" = $1
         `;
         const resuelve = await conexion.query(consulta, [plataformaIDV])
         return resuelve.rows

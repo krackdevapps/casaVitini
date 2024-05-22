@@ -1,13 +1,12 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
-import { obtenerNombreHabitacionUI } from "../../../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs";
 import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../../../../repositorio/arquitectura/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs";
 import { obtenerPerfilPrecioPorApartamentoUID } from "../../../../repositorio/precios/obtenerPerfilPrecioPorApartamentoUID.mjs";
 import { actualizarEstadoPorApartamentoIDV } from "../../../../repositorio/arquitectura/actualizarEstadoPorApartamentoIDV.mjs";
 import { Mutex } from "async-mutex";
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 
 export const cambiarEstadoConfiguracionAlojamiento = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -55,7 +54,7 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada, salida) => 
                 for (const detalleHabitacion of habitacionesEnConfiguracion) {
                     const habitacionUID = detalleHabitacion.uid;
                     const habitacionIDV = detalleHabitacion.habitacion;
-                    const nombreHabitacionUI = await obtenerNombreHabitacionUI(habitacionIDV)
+                    const nombreHabitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
                     if (!nombreHabitacionUI) {
                         const error = "No existe el identificador de la habitacionIDV";
                         throw new Error(error);
@@ -96,8 +95,7 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada, salida) => 
         salida.json(ok)
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         mutex.release()
     }

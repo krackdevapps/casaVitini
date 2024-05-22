@@ -235,7 +235,7 @@ export const validadorFuturo = async (data) => {
         }
         return ok
 
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

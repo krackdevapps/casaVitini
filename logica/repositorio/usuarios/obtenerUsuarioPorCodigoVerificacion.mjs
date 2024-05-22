@@ -10,7 +10,7 @@ export const obtenerUsuarioPorCodigoVerificacion = async (codigo) => {
 
         const resuelve = await conexion.query(consulta, [codigo]);
  resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

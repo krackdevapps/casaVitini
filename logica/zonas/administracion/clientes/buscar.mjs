@@ -1,6 +1,6 @@
 import { obtenerResultadosBusqueda } from "../../../repositorio/clientes/obtenerResultadosBusqueda.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const buscar = async (entrada, salida) => {
@@ -95,7 +95,6 @@ export const buscar = async (entrada, salida) => {
         respuesta.clientes = resultadosBusqueda;
         salida.json(respuesta);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

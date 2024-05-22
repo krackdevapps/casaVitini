@@ -52,7 +52,7 @@ export const limitesReservaPublica = async (fechas) => {
             throw new Error(error)
         }
         return true
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 }

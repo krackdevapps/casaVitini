@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerReservasPorApartamentoIDVPorMesPorAno } from "../../../repositorio/calendario/obtenerReservasPorPlataformaIDV.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 export const eventosPorApartamneto = async (metadatos) => {
     try {
         const fecha = metadatos.fecha
@@ -20,7 +20,7 @@ export const eventosPorApartamneto = async (metadatos) => {
 
 
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
         const ano = fechaArray[1]
@@ -51,7 +51,7 @@ export const eventosPorApartamneto = async (metadatos) => {
         const reservasSelecciondas = []
         for (const detalles of reservasPorApartentoIDV) {
             const apartamentoIDV = detalles.apartamentoIDV
-            detalles.apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+            detalles.apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
             reservasSelecciondas.push(detalles)
         }
         for (const detallesReserva of reservasSelecciondas) {
@@ -63,7 +63,7 @@ export const eventosPorApartamneto = async (metadatos) => {
             detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
             detallesReserva.tipoEvento = "porApartamento"
             detallesReserva.eventoUID = "porApartamento_" + apartamentoUID
-            detallesReserva.apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDVReserva)
+            detallesReserva.apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDVReserva)
             const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO)
             for (const fechaInterna_ISO of arrayConFechasInternas) {
                 const fechaInternaObjeto = DateTime.fromISO(fechaInterna_ISO)

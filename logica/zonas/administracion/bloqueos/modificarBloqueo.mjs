@@ -1,7 +1,7 @@
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerBloqueoPorBloqueoUID } from "../../../repositorio/bloqueos/obtenerBloqueoPorBloqueoUID.mjs";
 import { actualizarBloqueoPorBloqueoUID } from "../../../repositorio/bloqueos/actualizarBloqueoPorBloqueoUID.mjs";
 
@@ -93,10 +93,9 @@ export const modificarBloqueo = async (entrada, salida) => {
         const ok = {
             ok: "Se ha actualizado el bloqueo correctamente"
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

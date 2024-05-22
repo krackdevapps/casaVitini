@@ -9,8 +9,10 @@ export const obtenerCalendariosPorCalendarioUID = async (calendarioUID) => {
         `;
         const resuelve = await conexion.query(consulta, [calendarioUID])
         if (resuelve.rowCount === 0) {
-            const error = "No existe el calendarioUID, revisa el nombre identificador"
-            throw new Error(error)
+            const error = {
+                error: "11 No existe el calendarioUID, revisa el nombre identificador"
+            }
+            throw error
         }
         return resuelve.rows[0]
     } catch (errorAdaptador) {

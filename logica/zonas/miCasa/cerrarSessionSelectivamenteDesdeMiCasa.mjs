@@ -1,7 +1,7 @@
 import { eliminarSessionPorUsuarioPorSessionIDX } from "../../repositorio/sessiones/eliminarSessionPorUsuarioPorSessionIDX.mjs";
 import { eliminarTodasLasSessionesMenosPorUsuario } from "../../repositorio/sessiones/eliminarTodasLasSessionesMenosPorUsuario.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../sistema/error/filtroError.mjs";
+
 
 export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) => {
     try {
@@ -32,7 +32,7 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
                 ok: "Se ha cerrado correctamente la session",
                 sessionAtual: entrada.sessionID
             };
-            salida.json(ok);
+            return ok
 
         }
         if (tipoOperacion === "todasMenosActual") {
@@ -45,10 +45,9 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
                 ok: "Se ha cerrado correctament el resto de sessiones",
                 sessionAtual: entrada.sessionID
             };
-            salida.json(ok);
+            return ok
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

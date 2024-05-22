@@ -17,7 +17,7 @@ export const eliminarTodasLasSessionesMenosPorUsuario = async (data) => {
             const error = "No existe la session";
             throw new Error(error);
         }
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 };

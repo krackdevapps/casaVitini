@@ -3,7 +3,7 @@ import { obtenerTodasLasCamas } from "../../../../repositorio/arquitectura/obten
 import { obtenerTodasLasHabitaciones } from "../../../../repositorio/arquitectura/obtenerTodasLasHabitaciones.mjs";
 import { obtenerTodasLosApartamentos } from "../../../../repositorio/arquitectura/obtenerTodasLosApartamentos.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 
 export const listarEntidadesAlojamiento = async (entrada, salida) => {
     try {
@@ -31,7 +31,6 @@ export const listarEntidadesAlojamiento = async (entrada, salida) => {
         }
         salida.json(ok)
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

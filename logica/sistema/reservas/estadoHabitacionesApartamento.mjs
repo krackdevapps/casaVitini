@@ -47,7 +47,7 @@ export const estadoHabitacionesApartamento = async (transacion) => {
             ok: habitaconesDipsoniblesDelapartamentoPostProcesado
         }
         return ok
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 }

@@ -14,7 +14,7 @@ export const eliminarCliente = async (clienteUID) => {
             const clienteEliminado = resuelve.rows[0]
             return clienteEliminado
         }
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

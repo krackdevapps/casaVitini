@@ -5,11 +5,13 @@ export const eliminarBloqueoPorBloqueoUID = async (bloqueoUID) => {
 
         const consulta = `
         DELETE FROM "bloqueosApartamentos"
-        WHERE uid = $1;
+        WHERE "bloqueoUID" = $1
+        RETURNING
+        *;
         `;
  
         const resuelve = await conexion.query(consulta, [bloqueoUID])
-        return resuelve
+        return resuelve.rows
     } catch (errorAdaptador) {
         throw errorAdaptador
     }

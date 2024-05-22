@@ -16,7 +16,7 @@ export const obtenerIDX = async (usuarioIDX) => {
         } 
         return resuelve.rows[0]
 
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 };

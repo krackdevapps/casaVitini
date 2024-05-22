@@ -37,7 +37,7 @@ export const insertarClientePool = async (data) => {
         const nuevoCliente = resuelveInsertarCliente.rows[0]
         return nuevoCliente
 
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

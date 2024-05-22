@@ -10,7 +10,7 @@ export const obtenerClientesPorMail = async (mail) => {
         mail = $1;`;
         const resuelve = await conexion.query(consulta, [mail])
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

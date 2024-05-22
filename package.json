@@ -5,7 +5,8 @@
   "main": "casaVitini.mjs",
   "scripts": {
     "start": "node casaVitini.mjs",
-    "dev": "node --watch casaVitini.mjs"
+    "dev": "node --watch casaVitini.mjs",
+    "test":"export NODE_OPTIONS=--experimental-vm-modules && npx jest"
   },
   "type": "module",
   "author": "Lucas, Leo, Krackton",
@@ -34,5 +35,9 @@
     "square": "^33.1.0",
     "uuid": "^9.0.1",
     "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }

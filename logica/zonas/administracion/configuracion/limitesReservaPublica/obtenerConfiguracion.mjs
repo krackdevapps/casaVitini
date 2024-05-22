@@ -1,5 +1,5 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerParConfiguracion } from "../../../../repositorio/configuracion/obtenerParConfiguracion.mjs";
 
 export const obtenerConfiguracion = async (entrada, salida) => {
@@ -18,10 +18,9 @@ export const obtenerConfiguracion = async (entrada, salida) => {
         const ok = {
             ok: paresConfiguracion
         }
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

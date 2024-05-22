@@ -11,7 +11,7 @@ export const obtenerTitularReservaPoolPorMail = async (mail) => {
 
         const resuelve = await conexion.query(consulta, [mail])
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

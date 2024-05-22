@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerOferatPorOfertaUID } from "../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs";
 import { eliminarOferta as eliminarOferta_ } from "../../../repositorio/ofertas/eliminarOferta.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -31,12 +31,11 @@ export const eliminarOferta = async (entrada, salida) => {
         const ok = {
             ok: "Se ha eliminado la oferta correctamente",
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         if (mutex) {
             mutex.release();

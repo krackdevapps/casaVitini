@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerInterruptorPorInterruptorIDV } from "../../../../repositorio/configuracion/interruptores/obtenerInterruptorPorInterruptorIDV.mjs";
 import { actualizarEstadoDelInterruptor } from "../../../../repositorio/configuracion/interruptores/actualizarEstadoDelInterruptor.mjs";
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -45,11 +45,10 @@ export const actualizarEstado = async (entrada, salida) => {
             interrutorIDV: interruptorIDV,
             estado: nuevoEstado.estado
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 
 }

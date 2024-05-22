@@ -61,7 +61,7 @@ export const insertarOferta = async (data) => {
             throw new Error(error);
         }
         return resuelve.rows[0].uid
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

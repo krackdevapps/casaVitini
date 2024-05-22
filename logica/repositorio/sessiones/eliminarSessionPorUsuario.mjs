@@ -7,7 +7,7 @@ export const eliminarSessionPorUsuario = async (usuarioIDX) => {
         WHERE sess->> 'usuario' = $1;
         `;
         await conexion.query(consulta, [usuarioIDX])
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 };

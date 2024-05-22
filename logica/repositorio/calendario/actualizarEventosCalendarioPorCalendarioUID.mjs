@@ -10,7 +10,10 @@ export const actualizarEventosCalendarioPorCalendarioUID = async (data) => {
         UPDATE "calendariosSincronizados"
         SET 
         "dataIcal" = COALESCE($1, "dataIcal")
-        WHERE "calendarioUID" = $2;
+        WHERE 
+        "calendarioUID" = $2
+        RETURNING
+        *;
         `;
         const parametros = [
             calendarioRaw,

@@ -1,11 +1,10 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
-import { obtenerNombreHabitacionUI } from "../../../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs";
 import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../../../../repositorio/arquitectura/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs";
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
     try {
@@ -33,13 +32,13 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
         }
         if (configuracionApartamento.length > 0) {
             const estadoConfiguracion = configuracionApartamento.estadoConfiguracion;
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
 
             const habitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
             for (const detalleHabitacion of habitacionesPorApartamento) {
                 const habitacionUID = detalleHabitacion.uid;
                 const habitacionIDV = detalleHabitacion.habitacion;
-                const habitacionUI = await obtenerNombreHabitacionUI(habitacionIDV)
+                const habitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
                 if (!habitacionUI) {
                     const error = "No existe el identificador de la habitacionIDV";
                     throw new Error(error);
@@ -75,11 +74,10 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
                 apartamentoUI: apartamentoUI,
                 estadoConfiguracion: estadoConfiguracion,
             };
-            salida.json(ok);
+            return ok
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

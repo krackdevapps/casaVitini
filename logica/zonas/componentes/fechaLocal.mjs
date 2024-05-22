@@ -21,7 +21,6 @@ export const fechaLocal = async (entrada, salida) => {
         };
         salida.json(estructura);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

@@ -251,7 +251,7 @@ export const validadorPasado = async (data) => {
         }
         return ok
 
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

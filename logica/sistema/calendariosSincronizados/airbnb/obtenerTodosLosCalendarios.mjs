@@ -81,7 +81,7 @@ export const obtenerTodosLosCalendarios = async () => {
             ok.calendariosSincronizados.push(estructura)
         }
         return ok
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

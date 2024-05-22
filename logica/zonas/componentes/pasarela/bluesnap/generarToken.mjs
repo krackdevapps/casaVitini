@@ -28,9 +28,8 @@ export const generarToken = async (entrada, salida) => {
         const ok = {
             token: token
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

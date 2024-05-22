@@ -25,7 +25,7 @@ export const obtenerBloqueosPorRangoPorApartamentoIDV = async (metadatos) => {
 
     const consultaBloqueos = `
       SELECT 
-      uid,
+      "bloqueoUID",
       "apartamentoIDV",
       "tipoBloqueoIDV",
       "zonaIDV",

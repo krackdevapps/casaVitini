@@ -1,15 +1,15 @@
-import { eventosPorApartamneto } from "../../../../sistema/calendarios/capas/eventosPorApartamento.mjs";
-import { eventosReservas } from "../../../../sistema/calendarios/capas/eventosReservas.mjs";
-import { eventosTodosLosApartamentos } from "../../../../sistema/calendarios/capas/eventosTodosLosApartamentos.mjs";
-import { eventosTodosLosBloqueos } from "../../../../sistema/calendarios/capas/eventosTodosLosBloqueos.mjs";
-import { eventosPorApartamentoAirbnb } from "../../../../sistema/calendarios/capas/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs";
+import { eventosReservas } from "../../../../sistema/calendarios/eventos/eventosReservas.mjs";
+import { eventosTodosLosApartamentos } from "../../../../sistema/calendarios/eventos/eventosTodosLosApartamentos.mjs";
+import { eventosTodosLosBloqueos } from "../../../../sistema/calendarios/eventos/eventosTodosLosBloqueos.mjs";
+import { eventosPorApartamentoAirbnb } from "../../../../sistema/calendarios/eventos/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
 import { obtenerCalendariosPorPlataformaIDV } from "../../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs";
+import { eventosPorApartamneto } from "../../../../sistema/calendarios/eventos/eventosPorApartamento.mjs";
 
 export const multiCapa = async (entrada, salida) => {
     try {
@@ -218,9 +218,8 @@ export const multiCapa = async (entrada, salida) => {
             ok: "Eventos del calendario",
             ...estructuraGlobal
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

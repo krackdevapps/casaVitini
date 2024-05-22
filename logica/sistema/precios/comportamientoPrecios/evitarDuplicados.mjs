@@ -1,4 +1,4 @@
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs"
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 import { obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array } from "../../../repositorio/comportamientoDePrecios/obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array.mjs"
 import { obtenerNombreComportamientoPorNombreUI } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorNombreUI.mjs"
 import { obtenerComportamientosDistintosPorNombreUI } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosDistintosPorNombreUI.mjs"
@@ -91,7 +91,7 @@ export const evitarDuplicados = async (data) => {
                         comportamientoUID: comportamientoUID,
                         apartamentoIDV: apartamentoIDV,
                         componenteUID: componenteUID,
-                        apartametnoUI: await obtenerNombreApartamentoUI(apartamentoIDV)
+                        apartametnoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
                     }
                     arbolComportamientoCoincidentes[componenteUID].apartamento.push(estructuraApartamentoCoincidente)
 
@@ -150,7 +150,7 @@ export const evitarDuplicados = async (data) => {
                         comportamientoUID: comportamientoUID,
                         apartamentoIDV: apartamentoIDV,
                         componenteUID: componenteUID,
-                        apartametnoUI: await obtenerNombreApartamentoUI(apartamentoIDV)
+                        apartametnoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
                     }
                     arbolComportamientoCoincidentes[componenteUID].apartamento.push(estructuraApartamentoCoincidente)
 
@@ -163,7 +163,7 @@ export const evitarDuplicados = async (data) => {
             }
 
         }
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

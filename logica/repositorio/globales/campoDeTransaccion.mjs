@@ -12,7 +12,7 @@ export const campoDeTransaccion = async (operacion) => {
             const msg = "El campo de transaccion necesita un identificador de operacion valida"
             throw new error(msg)
         }
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

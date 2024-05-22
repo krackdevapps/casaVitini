@@ -71,7 +71,7 @@ const casaVitini = {
                         let reservaConfirmadaLocal
                         try {
                             reservaConfirmadaLocal = JSON.parse(localStorage.getItem("reservaConfirmada"))
-                        } catch (error) {
+                        } catch (errorCapturado) {
                             reservaConfirmadaLocal = null
                         }
                         if (reservaConfirmadaLocal) {
@@ -90,7 +90,7 @@ const casaVitini = {
                     let reservaConfirmadaLocal
                     try {
                         reservaConfirmadaLocal = JSON.parse(localStorage.getItem("reservaConfirmada"))
-                    } catch (error) {
+                    } catch (errorCapturado) {
                         reservaConfirmadaLocal = null
                     }
                     const main = document.querySelector("main")
@@ -939,7 +939,7 @@ const casaVitini = {
                         await casaVitini.componentes.square.inyectorSquareJS(instanciaUID);
                         await casaVitini.componentes.square.inyectorMetodosPago(instanciaUID);
                         await casaVitini.componentes.square.inyectorFlujoPago(instanciaUID);
-                    } catch (error) {
+                    } catch (errorCapturado) {
                         return casaVitini.ui.vistas.advertenciaInmersiva(error.message)
                     }
                     */
@@ -1412,7 +1412,7 @@ const casaVitini = {
                             const error = "El campo de correo electrónico no cumple con el formato esperado, se espera un formato tal que asi: ejemplo@servidor.com"
                             throw new Error(error)
                         }
-                    } catch (error) {
+                    } catch (errorCapturado) {
                         throw error
                     }
                 },
@@ -1806,7 +1806,7 @@ const casaVitini = {
                                 seccion.innerHTML = null
                                 seccion.appendChild(marcoElasticoRelatico)
                             }
-                        } catch (error) {
+                        } catch (errorCapturado) {
                         }
                     },
                     borrarReservaLocal: () => {
@@ -4696,7 +4696,7 @@ const casaVitini = {
                     }
                     advertenciaInmersivaUI.appendChild(marcoElastico)
                     document.querySelector("main").appendChild(advertenciaInmersivaUI)
-                } catch (error) {
+                } catch (errorCapturado) {
                     casaVitini.ui.vistas.advertenciaInmersiva(error.message)
                 }
             },
@@ -4848,7 +4848,7 @@ const casaVitini = {
                                 await casaVitini.componentes.square.inyectorSquareJS(instanciaUID);
                                 await casaVitini.componentes.square.inyectorMetodosPago(instanciaUID);
                                 await casaVitini.componentes.square.inyectorFlujoPago(instanciaUID);
-                            } catch (error) {
+                            } catch (errorCapturado) {
                                 return casaVitini.ui.vistas.advertenciaInmersiva(error.message)
                             }
                         }
@@ -5009,7 +5009,7 @@ const casaVitini = {
                                 scale: 1.5,
                                 overflow: false,
                             });
-                        } catch (error) {
+                        } catch (errorCapturado) {
                             console.error(error);
                         }
                     };
@@ -5570,7 +5570,7 @@ const casaVitini = {
                     document.querySelector(`[componente=contenedorError]`)?.remove()
                 }
                 return respuestaServidor
-            } catch (error) {
+            } catch (errorCapturado) {
                 if (error.name === 'AbortError') {
                 }
 
@@ -5895,7 +5895,7 @@ const casaVitini = {
                         try {
                             const functionConstructor = new Function(`return ${objeto[clave]}`);
                             objeto[clave] = functionConstructor();
-                        } catch (error) {
+                        } catch (errorCapturado) {
                             // Si no se puede analizar como una función, deja la cadena tal como está
                         }
                     } else if (typeof objeto[clave] === "object") {
@@ -10032,7 +10032,7 @@ const casaVitini = {
                     await casaVitini.componentes.controlCodigoAdministracion()
                     return respuestaServidor
                 }
-            } catch (error) {
+            } catch (errorCapturado) {
                 return casaVitini.ui.vistas.advertenciaInmersiva(error)
             }
         },

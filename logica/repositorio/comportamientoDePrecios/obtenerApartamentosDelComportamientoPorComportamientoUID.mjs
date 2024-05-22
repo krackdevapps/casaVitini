@@ -16,7 +16,7 @@ export const obtenerApartamentosDelComportamientoPorComportamientoUID = async (c
             throw new Error(error)
         }
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { eliminarApartamentoComoEntidad } from "../../../../repositorio/arquitectura/eliminarApartamentoComoEntidad.mjs";
 import { eliminarHabitacionComoEntidad } from "../../../../repositorio/arquitectura/eliminarHabitacionComoEntidad.mjs";
 import { obtenerCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/obtenerCamaComoEntidadPorCamaIDV.mjs";
@@ -48,7 +48,7 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
                 const ok = {
                     ok: "Se ha eliminado correctamente el apartamento como entidad",
                 };
-                salida.json(ok);
+                return ok
             }
         }
         if (tipoEntidad === "habitacion") {
@@ -66,7 +66,7 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
                 const ok = {
                     ok: "Se ha eliminado correctamente la habitacion como entidad",
                 };
-                salida.json(ok);
+                return ok
             }
         }
         if (tipoEntidad === "cama") {
@@ -85,11 +85,10 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
                 const ok = {
                     ok: "Se ha eliminado correctamente la cama como entidad",
                 };
-                salida.json(ok);
+                return ok
             }
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

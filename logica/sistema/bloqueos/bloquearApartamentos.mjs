@@ -99,7 +99,7 @@ export const bloquearApartamentos = async (metadatos) => {
             ok.ok = "Se ha eliminado el apartamento de la reserva y se ha liberado"
         }
         return ok
-    } catch (error) {
-        throw error;
+    } catch (errorCapturado) {
+        throw errorCapturado;
     }
 }

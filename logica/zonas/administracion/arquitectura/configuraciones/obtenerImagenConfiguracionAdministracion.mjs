@@ -1,6 +1,6 @@
 import { obtenerImagenApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerImagenApartamentoPorApartamentoIDV.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 
 export const obtenerImagenConfiguracionAdministracion = async (entrada, salida) => {
     try {
@@ -29,11 +29,10 @@ export const obtenerImagenConfiguracionAdministracion = async (entrada, salida) 
                 ok: "Imagen de la configuracion adminsitrativa del apartamento, png codificado en base64",
                 imagen: imagen
             };
-            salida.json(ok);
+            return ok
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

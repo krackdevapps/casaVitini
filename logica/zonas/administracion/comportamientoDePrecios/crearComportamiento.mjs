@@ -2,13 +2,12 @@ import { Mutex } from "async-mutex";
 import { evitarDuplicados } from "../../../sistema/precios/comportamientoPrecios/evitarDuplicados.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerNombreComportamientoPorNombreUI } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorNombreUI.mjs";
 import { insertarComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/insertarComportamientoDePrecio.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { insertarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/insertarApartamentosDelComportamiento.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const crearComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -122,7 +121,7 @@ export const crearComportamiento = async (entrada, salida) => {
 
             await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
 
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
             if (!simbolo || typeof simbolo !== "string" ||
                 (
                     simbolo !== "aumentoPorcentaje" &&
@@ -192,12 +191,11 @@ export const crearComportamiento = async (entrada, salida) => {
             ok: "Se ha creado correctamente el comportamiento",
             nuevoUIDComportamiento: nuevoUIDComportamiento
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         if (mutex) {
             mutex.release();

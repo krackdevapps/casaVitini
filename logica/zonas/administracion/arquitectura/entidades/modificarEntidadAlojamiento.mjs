@@ -1,7 +1,7 @@
 
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { actualizarApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/actualizarApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { eliminarCaracteristicasDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/eliminarCaracteristicasDelApartamentoPorApartamentoIDV.mjs";
@@ -61,7 +61,7 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                     string: caractaristica,
                     nombreCampo: "El campo caracteristicas",
                     filtro: "strictoConEspacios",
-                    sePermiteVacio: "si",
+                    sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
                 })
             }
@@ -104,7 +104,7 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                 const ok = {
                     ok: "Se ha actualizado correctamente el apartamento"
                 };
-                salida.json(ok);
+                return ok
             }
         }
         if (tipoEntidad === "habitacion") {
@@ -154,7 +154,7 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                 const ok = {
                     ok: "Se ha actualizado correctamente la habitacion"
                 };
-                salida.json(ok);
+                return ok
             }
         }
         if (tipoEntidad === "cama") {
@@ -213,11 +213,10 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                 const ok = {
                     ok: "Se ha actualizado correctamente la cama"
                 };
-                salida.json(ok);
+                return ok
             }
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

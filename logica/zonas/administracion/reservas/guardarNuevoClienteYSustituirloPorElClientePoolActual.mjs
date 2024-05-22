@@ -2,7 +2,7 @@ import { Mutex } from "async-mutex";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { insertarCliente } from "../../../repositorio/clientes/insertarCliente.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
 import { actualizarClienteUIDDelPernoctantePorComponenteUID } from "../../../repositorio/reservas/pernoctantes/actualizarClienteUIDDelPernoctantePorComponenteUID.mjs";
@@ -87,10 +87,9 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
             pasaporte: pasaporte,
             habitacionUID: habitacionUID,
         }
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release()

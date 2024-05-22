@@ -19,7 +19,7 @@ export const eliminarUsuarioPorRolPorEstadoVerificacion = async () => {
             estadoVerificado
         ]
         await conexion.query(eliminarCuentasNoVefificadas, parametros);
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 }

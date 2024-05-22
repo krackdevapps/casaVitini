@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { obtenerParametroConfiguracion } from "../../sistema/configuracion/obtenerParametroConfiguracion.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../sistema/error/filtroError.mjs";
+
 
 
 export const calendario = async (entrada, salida) => {
@@ -174,7 +174,6 @@ export const calendario = async (entrada, salida) => {
             salida.json(calendario);
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

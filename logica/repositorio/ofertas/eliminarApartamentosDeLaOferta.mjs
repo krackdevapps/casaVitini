@@ -6,7 +6,7 @@ export const eliminarApartamentosDeLaOferta = async (ofertaUID) => {
         WHERE oferta = $1;`;
         const resuelve = await conexion.query(consulta, [ofertaUID])
         return resuelve.rows[0]
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

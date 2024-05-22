@@ -36,7 +36,7 @@ export const actualizarEstadoPago = async (reservaUID) => {
             throw new Error(error)
         }
         await actualizarEstadoPago(reservaUID)
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

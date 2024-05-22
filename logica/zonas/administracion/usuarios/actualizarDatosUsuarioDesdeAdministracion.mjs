@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerIDX } from "../../../repositorio/usuarios/obtenerIDX.mjs";
 import { actualizarDatos } from "../../../repositorio/usuarios/actualizarDatos.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -82,12 +82,11 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
             datosActualizados: datosUsuario
         };
-        salida.json(ok);
+        return ok
 
         await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerImpuestosPorNombreDelImpuesto } from "../../../repositorio/impuestos/obtenerImpuestosPorNombreDelImpuesto.mjs";
 import { obtenerTipoValorPorTipoValorIDV } from "../../../repositorio/impuestos/obtenerTipoValorPorTipoValorIDV.mjs";
 import { obtenerAplicacionIDVporAplicacionIDV } from "../../../repositorio/impuestos/obtenerAplicacionIDVporAplicaionIDV.mjs";
@@ -72,10 +72,9 @@ export const crearNuevoImpuesto = async (entrada, salida) => {
             ok: "Se ha creado el nuevo impuesto",
             nuevoImpuestoUID: nuevoImpuesto.impuestoUID
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release();

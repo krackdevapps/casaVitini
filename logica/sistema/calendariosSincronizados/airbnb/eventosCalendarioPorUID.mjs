@@ -86,7 +86,7 @@ export const eventosCalendarioPorUID = async (calendarioUID) => {
             ok.calendariosPorApartamento.push(estructura)
         }
         return ok
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

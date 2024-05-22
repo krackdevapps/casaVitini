@@ -1,5 +1,5 @@
 import fs from 'fs';
-const cambiarVista = async (transaccion) => {
+export const cambiarVista = async (transaccion) => {
     try {
         const vista = transaccion.vista
         const arbol = vista.split("/").filter(n => n)
@@ -87,10 +87,7 @@ const cambiarVista = async (transaccion) => {
             const error = "noExisteLaVista"
             throw new Error(error)
         }
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 }
-export {
-    cambiarVista
-};

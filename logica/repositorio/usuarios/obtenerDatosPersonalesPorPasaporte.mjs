@@ -17,8 +17,8 @@ export const obtenerDatosPersonalesPorPasaporteDual = async (data) => {
                     const error = "El validador de unicidadPasaporteYCorrreo esta mal configurado. Debe de especificarse el tipo de operacion."
                     throw new Error(error)
                 }
-            } catch (error) {
-                throw error
+            } catch (errorCapturado) {
+                throw errorCapturado
             }
         }
         const inyectorSQL = constructorSQL(operacion, usuario)
@@ -32,7 +32,7 @@ export const obtenerDatosPersonalesPorPasaporteDual = async (data) => {
         ${inyectorSQL};`;
         const resuelve = await conexion.query(consulta, [pasaporte]);
         return resuelve.rows[0]
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

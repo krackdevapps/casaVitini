@@ -1,5 +1,5 @@
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../sistema/error/filtroError.mjs";
+
 import { actualizarEstadoVerificacion } from "../../repositorio/usuarios/actualizarEstadoVerificacion.mjs";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
@@ -29,11 +29,10 @@ export const verificarCuenta = async (entrada, salida) => {
             ok: "Cuenta verificada",
             usuario: usuario
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         console.info(errorCapturado.message);
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

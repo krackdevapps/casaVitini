@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { actualizarImagenDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/actualizarImagenDelApartamentoPorApartamentoIDV.mjs";
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -69,13 +69,12 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
             ok: "Se ha actualizado imagen correctamnte",
             imagen: String(contenidoArchivo)
         };
-        salida.json(ok);
+        return ok
 
         await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 
 }

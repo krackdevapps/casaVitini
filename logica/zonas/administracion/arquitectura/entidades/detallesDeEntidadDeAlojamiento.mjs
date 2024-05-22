@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerTodasLasCaracteristicasDelApartamento } from "../../../../repositorio/arquitectura/obtenerTodasLasCaracteristicasDelApartamento.mjs";
 
@@ -39,7 +39,7 @@ export const detallesDeEntidadDeAlojamiento = async (entrada, salida) => {
                     ok: apartamentoEntidad,
                     caracteristicas: caracteristicasDelApartamento
                 };
-                salida.json(ok);
+                return ok
             }
         }
         if (tipoEntidad === "habitacion") {
@@ -51,7 +51,7 @@ export const detallesDeEntidadDeAlojamiento = async (entrada, salida) => {
             const ok = {
                 ok: habitacionesComoEntidad
             };
-            salida.json(ok);
+            return ok
 
         }
         if (tipoEntidad === "cama") {
@@ -63,11 +63,10 @@ export const detallesDeEntidadDeAlojamiento = async (entrada, salida) => {
             const ok = {
                 ok: camaComoEntidad
             };
-            salida.json(ok);
+            return ok
 
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

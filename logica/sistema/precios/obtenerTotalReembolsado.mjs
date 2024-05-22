@@ -25,7 +25,7 @@ export const obtenerTotalReembolsado = async (reservaUID) => {
         }
 
         return totalReembolsado
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

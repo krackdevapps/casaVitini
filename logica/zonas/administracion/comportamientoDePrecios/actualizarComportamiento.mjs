@@ -2,14 +2,13 @@ import { Mutex } from "async-mutex";
 import { evitarDuplicados } from "../../../sistema/precios/comportamientoPrecios/evitarDuplicados.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { actualizarComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/actualizarComportamientoDePrecio.mjs";
 import { eliminarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/eliminarApartamentosDelComportamientoDePrecio.mjs";
 import { insertarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/insertarApartamentosDelComportamiento.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const actualizarComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -174,7 +173,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
                 limpiezaEspaciosAlrededor: "si",
             })
             await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
             if (simbolo !== "aumentoPorcentaje" &&
                 simbolo !== "aumentoCantidad" &&
                 simbolo !== "reducirCantidad" &&
@@ -251,13 +250,12 @@ export const actualizarComportamiento = async (entrada, salida) => {
         const ok = {
             ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
 
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         mutex.release();
     }

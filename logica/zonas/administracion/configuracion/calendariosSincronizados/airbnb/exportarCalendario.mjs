@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from '../../../../../sistema/error/filtroError.mjs';
+
 import { obtenerCalendarioPorCalendarioUID } from "../../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorCalendarioUID.mjs";
 
 export const exportarCalendario = async (entrada, salida) => {   
@@ -23,8 +23,7 @@ export const exportarCalendario = async (entrada, salida) => {
         // añadirlo a una array
         // parsearlo en formato ical
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

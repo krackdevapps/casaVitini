@@ -163,7 +163,7 @@ export const porApartamentosEspecificos = async (reserva) => {
             descuentoGlobal: descuentoGlobal
         }
         return estructuraSaliente
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

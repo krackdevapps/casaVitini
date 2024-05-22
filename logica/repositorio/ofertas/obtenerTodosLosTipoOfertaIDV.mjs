@@ -8,7 +8,7 @@ export const obtenerTodosLosTipoOfertaIDV = async () => {
         "ofertasTipo";`;
         const resuelve = await conexion.query(consulta)
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

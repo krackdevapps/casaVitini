@@ -1,11 +1,10 @@
-import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs"
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarHabitacionEnApartamento } from "../../../../repositorio/arquitectura/insertarHabitacionEnApartamento.mjs";
-import { obtenerNombreHabitacionUI } from "../../../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs";
 import { obtenerHabitacionesDelApartamentoPorHabitacionIDV } from "../../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorHabitacionIDV.mjs";
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const addHabitacionToConfiguracionApartamento = async (entrada, salida) => {
     try {
@@ -40,8 +39,8 @@ export const addHabitacionToConfiguracionApartamento = async (entrada, salida) =
             throw new Error(error);
         }
         if (obtenerConfiguracionPorApartamento_.length === 1) {
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
-            const habitacionUI = await obtenerNombreHabitacionUI(habitacionIDV)
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+            const habitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
             if (!habitacionUI) {
                 const error = "No existe el identificador visual de la habitacion";
                 throw new Error(error);
@@ -73,12 +72,11 @@ export const addHabitacionToConfiguracionApartamento = async (entrada, salida) =
                     habitacionIDV: habitacionIDV,
                     habitacionUI: habitacionUI
                 };
-                salida.json(ok);
+                return ok
             }
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

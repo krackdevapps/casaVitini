@@ -30,7 +30,7 @@ export const validadorBusqueda = (configuracion) => {
             validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)    
         }
         
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

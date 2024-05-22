@@ -6,6 +6,8 @@ export const obtenerParConfiguracion = async (arrayDeConfiguracionesUID) => {
                 SELECT 
                 "configuracionUID",
                 valor
+                FROM 
+                "configuracionGlobal"
                 WHERE
                 "configuracionUID" = ANY($1)
             `;
@@ -16,8 +18,8 @@ export const obtenerParConfiguracion = async (arrayDeConfiguracionesUID) => {
             throw new Error(error)
         }
 
-        return resuelve
-    } catch (error) {
-        throw error
+        return resuelve.rows
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

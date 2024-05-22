@@ -13,7 +13,7 @@ export const obtenerApartamentosDeLaOfertaPorOfertaUID = async (ofertaUID) => {
         `
         const resuelve = await conexion.query(consulta, [ofertaUID])
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

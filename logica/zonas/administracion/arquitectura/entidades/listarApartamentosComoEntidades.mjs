@@ -2,7 +2,7 @@
 import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
 import { obtenerTodasLosApartamentos } from "../../../../repositorio/arquitectura/obtenerTodasLosApartamentos.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 
 export const listarApartamentosComoEntidades = async (entrada, salida) => {
     try {
@@ -20,7 +20,7 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
                 ok: "No existe ningun apartamento como entidad, por favor crea uno para poder construir una configuracion de alojamiento sobre el",
                 "apartamentosComoEntidadesDisponibles": []
             };
-            salida.json(ok);
+            return ok
         } else {
             const apartamentoEntidades = todosLosApartamentosComoEntidad;
             apartamentoEntidades.forEach((detallesApartamento) => {
@@ -56,10 +56,9 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
                 ok: "Apartamento especificos disponibles",
                 apartamentosComoEntidadesDisponibles: estructuraFinal
             };
-            salida.json(ok);
+            return ok
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

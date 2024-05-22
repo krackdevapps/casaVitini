@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
 import { obtenerRol } from "../../../repositorio/usuarios/obtenerRol.mjs";
 import { actualizarRol } from "../../../repositorio/usuarios/actualizarRol.mjs";
@@ -56,10 +56,9 @@ export const actualizarRolCuenta = async (entrada, salida) => {
             rolIDV: rolIDV,
             rolUI: rolUI
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

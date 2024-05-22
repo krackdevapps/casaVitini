@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
 
@@ -45,12 +45,11 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
             ok: "El estado del comportamiento se ha actualziado correctamente",
             estadoComportamiento: resuelveEstadoOferta.rows[0].estado
         };
-        salida.json(ok);
+        return ok
         await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         mutex.release();
     }

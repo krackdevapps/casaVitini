@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerReservasDelClienteComoTitular } from "../../../repositorio/clientes/obtenerReservasDelClienteComoTitular.mjs";
 import { obtenerReservasDelClienteComoPernoctante } from "../../../repositorio/clientes/obtenerReservasDelClienteComoPernoctante.mjs";
 import { obtenerReservasDelCliente } from "../../../repositorio/clientes/obtenerReservasDelCliente.mjs";
@@ -123,7 +123,6 @@ export const reservasDelCliente = async (entrada, salida) => {
         };
         salida.json(estructuraFinal);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

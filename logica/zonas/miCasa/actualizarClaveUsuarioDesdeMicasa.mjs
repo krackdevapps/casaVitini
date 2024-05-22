@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
-import { filtroError } from "../../sistema/error/filtroError.mjs";
+
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
@@ -60,11 +60,10 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
         const ok = {
             ok: "Se ha actualizado la nueva contrasena."
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

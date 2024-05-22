@@ -1,6 +1,6 @@
 import { obtenerTodosImpuestosConOrdenamiento } from "../../../repositorio/impuestos/obtenerTodosImpuestosConOrdenamiento.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const listaImpuestos = async (entrada, salida) => {
@@ -61,9 +61,8 @@ export const listaImpuestos = async (entrada, salida) => {
         ok.paginasTotales = totalPaginas;
         ok.pagina = pagina;
         ok.impuestos = impuestosEncontradoas;
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

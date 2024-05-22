@@ -1,12 +1,11 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { actualizarPerfilPrecioPorApartamentoUID } from "../../../repositorio/precios/actualizarPerfilPrecioPorApartamentoUID.mjs";
 import { obtenerPerfilPrecioPorApartamentoUID } from "../../../repositorio/precios/obtenerPerfilPrecioPorApartamentoUID.mjs";
 import { obtenerImpuestosPorAplicacionSobre } from "../../../repositorio/impuestos/obtenerImpuestosPorAplicacionSobre.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
     const mutex = new Mutex
@@ -39,7 +38,7 @@ export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
             throw new Error(error);
         }
         const detallesApartamento = {};
-        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
         detallesApartamento.apartamentoUI = apartamentoUI;
         detallesApartamento.apartamentoIDV = apartamentoIDV;       
   
@@ -94,10 +93,9 @@ export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
         const ok = {
             ok: detallesApartamento
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release();

@@ -43,7 +43,7 @@ export const aplicarImpuestos = async (totalNetoEntrada) => {
             sumaImpuestos: sumaImpuestos
         }
         return estructoraFinal
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

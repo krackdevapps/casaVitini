@@ -2,9 +2,10 @@ import { utilidades } from "../../../componentes/utilidades.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerEnlaceDePagoPorEnlaceUID } from "../../../repositorio/enlacesDePago/obtenerEnlaceDePagoPorEnlaceUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
 
 export const detallesDelEnlace = async (entrada, salida) => {
     try {
@@ -31,8 +32,9 @@ export const detallesDelEnlace = async (entrada, salida) => {
         const fechaCaducidad_ISO = enlaceDePago.fechaCaducidad_ISO;
         const caducidad = enlaceDePago.caducidad;
         const caducidadUTC = utilidades.convertirFechaUTCaHumano(caducidad);
+        const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const caducidadMadrid = utilidades.deUTCaZonaHoraria(caducidad, "Europe/Madrid");
-        const caducidadNicaragua = utilidades.deUTCaZonaHoraria(caducidad, "America/Managua");
+        const caducidadNicaragua = utilidades.deUTCaZonaHoraria(caducidad, zonaHoraria);
 
         const detallesReserva = await obtenerReservaPorReservaUID(reserva)
         const estadoPago = detallesReserva.estadoPago;
@@ -51,7 +53,6 @@ export const detallesDelEnlace = async (entrada, salida) => {
         }
         salida.json(ok)
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

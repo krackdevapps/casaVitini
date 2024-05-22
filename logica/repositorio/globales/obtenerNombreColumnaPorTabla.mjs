@@ -22,8 +22,8 @@ export const obtenerNombreColumnaPorTabla = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

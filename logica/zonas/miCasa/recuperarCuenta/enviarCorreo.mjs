@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { enviarMail } from "../../../sistema/Mail/enviarMail.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorCodigoUPID.mjs";
 import { obtenerDatosPersonalesPorMail } from "../../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs";
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
@@ -118,14 +118,13 @@ export const enviarCorreo = async (entrada, salida) => {
             const ok = {
                 ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para verificar tu VitiniID",
             };
-            salida.json(ok);
+            return ok
         }
 
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         console.info(errorCapturado.message);
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

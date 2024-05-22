@@ -19,9 +19,8 @@ export const imagenDelApartamento = async (entrada, salida) => {
             ok: "Imagen de apartamento PNG en base64",
             imagen: configuracionDelApartamento.imagen
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

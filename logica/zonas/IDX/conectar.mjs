@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../sistema/error/filtroError.mjs";
+
 import { actualizarIntentoLogin } from "../../repositorio/usuarios/actualizarIntentoLogin.mjs";
 import { obtenerIDX } from "../../repositorio/usuarios/obtenerIDX.mjs";
 import { eliminarSessionPorRolPorCaducidad } from "../../repositorio/sessiones/eliminarSessionPorRolPorCaducidad.mjs";
@@ -37,7 +37,7 @@ export const conectar = async (entrada, salida) => {
                     })
                     return nuevoIntento.intentos;
 
-                } catch (error) {
+                } catch (errorCapturado) {
                     throw error;
                 }
             },
@@ -48,7 +48,7 @@ export const conectar = async (entrada, salida) => {
                         usuarioIDX: IDX_,
                         intento: intento
                     })
-                } catch (error) {
+                } catch (errorCapturado) {
                     throw error;
                 }
             }
@@ -105,9 +105,8 @@ export const conectar = async (entrada, salida) => {
             rol: rol,
             //controlEstado: "Objeto en IF IDX",
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

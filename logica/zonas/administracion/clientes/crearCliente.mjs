@@ -2,7 +2,7 @@ import { Mutex } from "async-mutex";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { insertarCliente } from "../../../repositorio/clientes/insertarCliente.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const crearCliente = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -32,14 +32,13 @@ export const crearCliente = async (entrada, salida) => {
                 ok: "Se ha anadido correctamente el cliente",
                 nuevoUIDCliente: nuevoUIDCliente.uid
             };
-            salida.json(ok);
+            return ok
         } else {
             const error = "Ha ocurrido un error interno y no se ha podido obtener el nuevo UID de cliente";
             throw new Error(error);
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         bloqueoCrearCliente();
     }

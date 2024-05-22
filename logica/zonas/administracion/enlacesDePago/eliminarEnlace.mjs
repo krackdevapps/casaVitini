@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { eliminarEnlaceDePagoPorEnlaceUID } from "../../../repositorio/enlacesDePago/eliminarEnlaceDePagoPorEnlaceUID.mjs";
 import { obtenerEnlaceDePagoPorEnlaceUID } from "../../../repositorio/enlacesDePago/obtenerEnlaceDePagoPorEnlaceUID.mjs";
 
@@ -24,10 +24,9 @@ export const eliminarEnlace = async (entrada, salida) => {
         const ok = {
             ok: "Se ha eliminado el enlace correctamente"
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

@@ -1,6 +1,6 @@
 import { obtenerApartamentosDisponiblesConfigurados } from "../../../repositorio/arquitectura/obtenerApartamentosDisponiblesConfigurados.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const apartamentosDisponiblesConfigurados = async (entrada, salida) => {
     try {
@@ -19,9 +19,8 @@ export const apartamentosDisponiblesConfigurados = async (entrada, salida) => {
         const ok = {
             ok: apartamentosDisponiblesConfigurados_
         }
-        salida.json(ok);
+        return ok
     } catch (errorCatpurado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     }
 }

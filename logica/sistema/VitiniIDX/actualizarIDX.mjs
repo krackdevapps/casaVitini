@@ -18,8 +18,8 @@ export const actualizarIDX = async (data) => {
         })
 
     }
-    catch (error) {
-        throw error
+    catch (errorCapturado) {
+        throw errorCapturado
     }
 
 }

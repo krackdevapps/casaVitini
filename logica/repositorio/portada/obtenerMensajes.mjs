@@ -9,12 +9,12 @@ export const obtenerMensajes = async () => {
     FROM 
         "mensajesEnPortada"
     WHERE
-        estado = $1;
+        "estadoIDV" = $1;
    `;
         const resuelve = await conexion.query(consulta, ["activado"]);
         return resuelve.rows;
-    } catch (error) {     
-        throw error
+    } catch (errorCapturado) {     
+        throw errorCapturado
     }
 
 

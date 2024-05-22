@@ -1,7 +1,7 @@
 import { conexion } from "../../../../componentes/db.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const desasociarClienteComoTitular = async (entrada, salida) => {
@@ -26,9 +26,8 @@ export const desasociarClienteComoTitular = async (entrada, salida) => {
         const ok = {
             ok: "Se ha eliminado el titular de la reserva, la reserva ahora no tiene titular"
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

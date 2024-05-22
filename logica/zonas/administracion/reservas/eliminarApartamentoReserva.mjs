@@ -2,7 +2,7 @@ import { Mutex } from "async-mutex";
 import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotalesReserva.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { bloquearApartamentos } from "../../../sistema/bloqueos/bloquearApartamentos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
@@ -94,12 +94,11 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
         if (tipoBloqueo === "sinBloqueo") {
             ok.ok = "Se ha eliminado el apartamento de la reserva y se ha liberado";
         }
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         if (mutex) {
             mutex.release()

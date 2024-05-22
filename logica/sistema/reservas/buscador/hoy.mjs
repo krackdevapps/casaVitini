@@ -37,7 +37,7 @@ export const hoy = async (data) => {
             reservas: reservas
         };
         return respuesta
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

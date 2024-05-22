@@ -1,6 +1,6 @@
 import { obtenerReservaPendientesDeRevision } from "../../../../repositorio/reservas/reserva/obtenerReservaPendientesDeRevision.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 
 export const obtener_reservas = async (entrada, salida) => {
     try {
@@ -23,10 +23,9 @@ export const obtener_reservas = async (entrada, salida) => {
             reservas: reseervasPendientesDeRevision
         };
 
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

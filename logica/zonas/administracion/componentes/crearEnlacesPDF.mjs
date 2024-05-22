@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { crearEnlacePDF } from "../../../sistema/pdf/crearEnlacePDF.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const crearEnlacesPDF = async (entrada, salida) => {
@@ -19,9 +19,8 @@ export const crearEnlacesPDF = async (entrada, salida) => {
             ok: "ok",
             enlaces: enlaces
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

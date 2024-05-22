@@ -11,7 +11,7 @@ export const obtenerTitularReservaPorClienteUID_array = async (clienteUID_array)
 
         const resuelve = await conexion.query(consulta, [clienteUID_array])
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

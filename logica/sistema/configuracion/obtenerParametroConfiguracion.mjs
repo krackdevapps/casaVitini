@@ -9,7 +9,7 @@ export const obtenerParametroConfiguracion = async (configuracionUID) => {
 
         const parConfiguracion = await obtenerParConfiguracion([configuracionUID])
         return parConfiguracion[configuracionUID]
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 }

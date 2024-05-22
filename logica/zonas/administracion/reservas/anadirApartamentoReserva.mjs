@@ -4,12 +4,11 @@ import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotale
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { insertarApartamentoEnReserva } from "../../../repositorio/reservas/apartamentos/insertarApartamentoEnReserva.mjs";
 import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 
 export const anadirApartamentoReserva = async (entrada, salida) => {
@@ -84,7 +83,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
                     resultadoValidacion = apartamentoIDV;
                 }
             }
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
             const nuevoApartamentoEnReserva = await insertarApartamentoEnReserva({
                 reservaUID: reservaUID,
                 apartamentoIDV: apartamentoIDV,
@@ -101,11 +100,10 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
                 apartamentoUI: apartamentoUI,
                 nuevoUID: nuevoApartamentoEnReserva.componenteUID,
             };
-            salida.json(ok);
+            return ok
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release()

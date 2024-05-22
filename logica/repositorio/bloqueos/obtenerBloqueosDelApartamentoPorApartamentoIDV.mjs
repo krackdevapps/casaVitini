@@ -5,7 +5,7 @@ export const obtenerBloqueosDelApartamentoPorApartamentoIDV = async (apartmament
         const consulta = `
         SELECT * 
         FROM "bloqueosApartamentos" 
-        WHERE apartamento = $1`;
+        WHERE "apartamentoIDV" = $1`;
         const resuelve = await conexion.query(consulta, [apartmamentoIDV])
         return resuelve.rows
     } catch (errorAdaptador) {

@@ -90,7 +90,7 @@ export const realizarPago = async (entrada, salida) => {
                 mensaje: "Pago realizado correctamente"
             }
         }
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         let errorFinal;
@@ -103,7 +103,7 @@ export const realizarPago = async (entrada, salida) => {
         if (errorCapturado.errors) {
             errorFinal.error = errorCapturado.errors[0].detail;
         }
-        salida.json(errorFinal);
+        throw errorFinal;
     } finally {
         if (mutex) {
             mutex.release();

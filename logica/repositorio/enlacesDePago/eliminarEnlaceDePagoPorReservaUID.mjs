@@ -7,8 +7,8 @@ export const eliminarEnlaceDePagoPorReservaUID = async (reservaUID) => {
         `;
         const resuelve = await conexion.query(consulta, [reservaUID]);
         return resuelve.rows[0]
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

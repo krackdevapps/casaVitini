@@ -1,8 +1,9 @@
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerMensajes as om } from "../../../repositorio/portada/obtenerMensajes.mjs";
 export const obtenerMensajes = async (entrada, salida) => {
     try {
-        const mensajes = om()
+        const mensajes = await om()
+
         for (const detallesDelMensaje of mensajes) {
             const bufferObjPreDecode = Buffer.from(detallesDelMensaje.mensaje, "base64");
             detallesDelMensaje.mensaje = bufferObjPreDecode.toString("utf8");
@@ -11,10 +12,9 @@ export const obtenerMensajes = async (entrada, salida) => {
         const ok = {
             ok: mensajes,
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

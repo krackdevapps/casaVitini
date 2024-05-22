@@ -15,7 +15,7 @@ export const controlCaducidadEnlacesDePago = async () => {
         if (enlacesDePagoCaducados.length > 0) {
             return enlacesDePagoCaducados
         }
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

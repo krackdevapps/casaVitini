@@ -21,7 +21,7 @@ export const actualizarPerfilPrecioPorApartamentoUID = async (data) => {
         }
         return resuelve.rows[0]
     } catch (errorAdaptador) {
-        throw error
+        throw errorCapturado
     }
 
 }

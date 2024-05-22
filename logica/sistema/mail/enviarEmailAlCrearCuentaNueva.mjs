@@ -37,7 +37,7 @@ const enviarEmailAlCrearCuentaNueva = async (datosConfirmacion) => {
         // Enviamos el mensaje
         const resultado = await enviarMail(composicionDelMensaje)
         
-    } catch (error) {
+    } catch (errorCapturado) {
         
         // manejar error de manera local
     }

@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { detallesReserva as detallesReserva_ } from "../../../sistema/reservas/detallesReserva.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const detallesReserva = async (entrada, salida) => {
     try {
@@ -46,7 +46,6 @@ export const detallesReserva = async (entrada, salida) => {
         const resuelveDetallesReserva = await detallesReserva_(metadatos);
         salida.json(resuelveDetallesReserva);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

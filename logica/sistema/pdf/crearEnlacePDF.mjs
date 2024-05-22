@@ -34,7 +34,7 @@ export const crearEnlacePDF = async (reservaUID) => {
         const enlacePDF = nuevoEnlace.enlace;
         await campoDeTransaccion("confirmar")
         return enlacePDF;
-    } catch (error) {
+    } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         throw error;
     }

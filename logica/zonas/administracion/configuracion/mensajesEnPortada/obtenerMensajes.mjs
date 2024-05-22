@@ -1,6 +1,6 @@
 import { obtenerTodosLosMensjaes } from "../../../../repositorio/configuracion/mensajesPortada/obtenerTodosLosMensajes.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 
 export const obtenerMensajes = async (entrada, salida) => {
     try {
@@ -18,10 +18,9 @@ export const obtenerMensajes = async (entrada, salida) => {
             ok: mensajesDePortada,
             numeroMensajes: mensajesDePortada.length
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

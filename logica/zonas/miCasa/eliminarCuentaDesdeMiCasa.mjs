@@ -2,7 +2,7 @@ import { Mutex } from "async-mutex";
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
-import { filtroError } from "../../sistema/error/filtroError.mjs";
+
 import { obtenerAdministradores } from "../../repositorio/usuarios/obtenerAdministradores.mjs";
 import { eliminarUsuario } from "../../repositorio/usuarios/eliminarUsuario.mjs";
 import { eliminarSessionPorUsuario } from "../../repositorio/sessiones/eliminarSessionPorUsuario.mjs";
@@ -56,12 +56,11 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
         const ok = {
             ok: "Se ha eliminado correctamente la cuenta"
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         if (mutex) {
             mutex.release()

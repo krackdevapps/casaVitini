@@ -7,8 +7,8 @@ export const eliminarEnlacesDeRecuperacionPorFechaCaducidad = async (fechaActual
         WHERE "fechaCaducidad" < $1;
         `;
         await conexion.query(consulta, [fechaActual_ISO]);
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

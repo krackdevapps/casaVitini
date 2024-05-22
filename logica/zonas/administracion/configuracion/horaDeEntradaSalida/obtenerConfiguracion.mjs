@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { obtenerCalendarios as oc } from "../calendariosSincronizados/obtenerCalendarios.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 
 export const obtenerConfiguracion = async (entrada, salida) => {
     try {
@@ -14,9 +14,8 @@ export const obtenerConfiguracion = async (entrada, salida) => {
             "horaSalidaTZ",
         ])
         const ok = { ok: configuraciones };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

@@ -5,15 +5,14 @@ export const obtenerBloqueoPorBloqueoUID = async (bloqueoUID) => {
 
         const consulta = `
         SELECT
-        uid,
-        to_char(entrada, 'YYYY-MM-DD') as "fechaInicioBloqueo_ISO", 
-        to_char(salida, 'YYYY-MM-DD') as "fechaFinBloqueo_ISO"
-        apartamento,
-        "tipoBloqueo",
+        to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
+        to_char("fechaFin", 'YYYY-MM-DD') as "fechaFin",
+        "apartamentoIDV",
+        "tipoBloqueoIDV",
         motivo,
-        zona
+        "zonaIDV"
         FROM "bloqueosApartamentos"
-        WHERE uid = $1;`;
+        WHERE "bloqueoUID" = $1;`;
         const resuelve = await conexion.query(consulta, [bloqueoUID])
         if (resuelve.rowCount === 0) {
             const error = "No existe el bloqueo, revisa el bloqueoUID";

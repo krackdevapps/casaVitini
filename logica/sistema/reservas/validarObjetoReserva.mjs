@@ -3,10 +3,10 @@ import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs'
 import { limitesReservaPublica } from './limitesReservaPublica.mjs';
 import { apartamentosPorRango } from '../selectoresCompartidos/apartamentosPorRango.mjs';
-import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
-import { obtenerNombreHabitacionUI } from '../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs';
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
 import { obtenerCamaDeLaHabitacionPorHabitacionUID } from '../../repositorio/arquitectura/obtenerCamaDeLaHabitacionPorHabitacionUID.mjs';
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from '../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs';
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 
 export const validarObjetoReserva = async (reserva) => {
     try {
@@ -118,7 +118,7 @@ export const validarObjetoReserva = async (reserva) => {
             const habitacionesDelApartamentoPorValidar = apartamento[1].habitaciones
             const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
             if (!apartamentosDisponibles.includes(apartamentoIDV)) {
-                const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
                 const error = `Sentimos informar que el '${apartamentoUI}' no esta disponible para reservar para las fechas seleccionadas`
                 throw new Error(error)
             }
@@ -139,7 +139,7 @@ export const validarObjetoReserva = async (reserva) => {
                     throw new Error(error)
                 }
                 if (!habitacionesSoloIDV.includes(habitacionIDVPorValidar)) {
-                    const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+                    const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
                     const error = `El ${apartamentoUI} contiene una habitacion que no existe, concretamente la habitacion ${habitacionIDVPorValidar}`
                     throw new Error(error)
                 }
@@ -149,9 +149,9 @@ export const validarObjetoReserva = async (reserva) => {
                 const habitacionUID = habitacionesEstructura[habitacionIDV]
                 const camaIDV = habitacion[1]?.camaSeleccionada?.camaIDV
                 if (!camaIDV || !filtroCadenaMinusculasSinEspacios.test(camaIDV)) {
-                    const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+                    const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
 
-                    const habitacionUI = await obtenerNombreHabitacionUI(habitacionIDV)
+                    const habitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
                     const error = `Por favor selecciona el tipo de cama de la ${habitacionUI} del apartamento ${apartamentoUI}`
                     throw new Error(error)
                 }
@@ -166,7 +166,7 @@ export const validarObjetoReserva = async (reserva) => {
                 }
             }
         }
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 }

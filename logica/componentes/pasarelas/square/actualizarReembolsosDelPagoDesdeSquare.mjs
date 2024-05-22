@@ -1,17 +1,21 @@
 import { actualizarReembolsoPorPagoUIDPorReembolsoUIDPasarela } from "../../../repositorio/reservas/transacciones/actualizarReembolsoPorPagoUIDPorReembolsoUIDPasarela.mjs";
 import { insertarReembolso } from "../../../repositorio/reservas/transacciones/insertarReembolso.mjs";
 import { obtenerReembolsosPorPagoUIDPorReembolsoUIDPasarela } from "../../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUIDPorReembolsoUIDPasarela.mjs";
+import { utilidades } from "../../utilidades.mjs";
+import { detallesDelPago } from "./detallesDelPago.mjs";
+import { detallesDelReembolso } from "./detallesDelReembolso.mjs";
+
 export const actualizarReembolsosDelPagoDesdeSquare = async (pagoUID, pagoUIDPasarela) => {
     try {
         const plataformaDePago = "pasarela";
-        const detallesDelPagoSquare = await componentes.pasarela.detallesDelPago(pagoUIDPasarela);
+        const detallesDelPagoSquare = await detallesDelPago(pagoUIDPasarela);
         if (detallesDelPagoSquare.error) {
             const error = `La pasarela no ha respondido con los detalles del pago actualizados al requerir ${pagoUIDPasarela} a la pasarela, esto son datos de la copia no actualizada en casa vitini`;
             throw new Error(error);
         }
         const identificadoresRembolsosDeEstaTransacion = detallesDelPagoSquare?.refundIds;
         for (const reembolsoUIDPasarela of identificadoresRembolsosDeEstaTransacion) {
-            const detallesDelReembolsoOL = await componentes.pasarela.detallesDelReembolso(reembolsoUIDPasarela);
+            const detallesDelReembolsoOL = await detallesDelReembolso(reembolsoUIDPasarela);
             if (detallesDelReembolsoOL.error) {
                 const error = `La pasarela no ha respondido con los detalles del reembolso ${reembolsoUIDPasarela} actualizados, esto son datos de la copia no actualizada en casa vitini`;
                 throw new Error(error);
@@ -25,8 +29,7 @@ export const actualizarReembolsosDelPagoDesdeSquare = async (pagoUID, pagoUIDPas
                 pagoUID: pagoUID,
                 reembolsoUIDPasarela: reembolsoUIDPasarela
             })
-            if (reembolsoPorPagoUIDPorReembolsoUIDPasarela.length === 0) {
-
+            if (reembolsoPorPagoUIDPorReembolsoUIDPasarela.length === 0) {               
                 await insertarReembolso({
                     pagoUID: pagoUID,
                     cantidad: cantidad,
@@ -49,7 +52,7 @@ export const actualizarReembolsosDelPagoDesdeSquare = async (pagoUID, pagoUIDPas
                 })
             }
         }
-    } catch (error) {
+    } catch (errorCapturado) {
         return error;
     }
 }

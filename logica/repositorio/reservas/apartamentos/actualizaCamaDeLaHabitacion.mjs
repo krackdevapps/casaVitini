@@ -27,8 +27,8 @@ export const actualizaCamaDeLaHabitacion = async (data) => {
             throw new Erro(msg)
         }
         return resuelve.rows[0]
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

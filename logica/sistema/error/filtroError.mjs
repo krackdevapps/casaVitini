@@ -1,5 +1,6 @@
 export const filtroError = (error) => {
     try {
+        console.log("error", error)
         const objetoError = {}
         if (error.hasOwnProperty('message')) {
             objetoError.error = error.message
@@ -7,7 +8,7 @@ export const filtroError = (error) => {
             Object.assign(objetoError, error)
         }
         return objetoError
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

@@ -2,7 +2,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { generadorPDF } from "../../../sistema/PDF/generadorPDF.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { detallesReserva } from "../../../sistema/reservas/detallesReserva.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const generarPdf = async (entrada, salida) => {
@@ -33,7 +33,6 @@ export const generarPdf = async (entrada, salida) => {
         salida.setHeader('Content-Disposition', 'attachment; filename=documento.pdf');
         salida.send(pdf);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

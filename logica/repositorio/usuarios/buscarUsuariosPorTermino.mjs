@@ -84,7 +84,7 @@ export const buscarUsuarios = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros)
         return resuelve.rows
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 };

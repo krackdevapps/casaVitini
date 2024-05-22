@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerHabitacionDelLaReserva } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionDelLaReserva.mjs";
 import { obtenerCamaComoEntidadPorCamaIDV } from "../../../repositorio/arquitectura/obtenerCamaComoEntidadPorCamaIDV.mjs";
@@ -96,10 +96,9 @@ export const cambiarCamaHabitacion = async (entrada, salida) => {
             ok.ok = "Se ha anadido correctamente la nueva a la habitacion"
             ok.nuevoUID = nuevaCamaEnHabitacion.componenteUID
         }
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release()

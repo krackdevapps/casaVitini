@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
 import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../../../../repositorio/arquitectura/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs";
 import { obtenerTodasLasCamas } from "../../../../repositorio/arquitectura/obtenerTodasLasCama.mjs";
@@ -26,7 +26,7 @@ export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, sa
             const ok = {
                 ok: "No hay ninguna habitacion con ese identificador disponible para este apartamento"
             };
-            salida.json(ok);
+            return ok
         }
         if (detallesHabitacionDelApartamento.length > 0) {
             const camasDeLaHabitacion = await obtenerCamasDeLaHabitacionPorHabitacionUID(habitacionUID)
@@ -58,11 +58,10 @@ export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, sa
             const ok = {
                 ok: estructuraFinal
             };
-            salida.json(ok);
+            return ok
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

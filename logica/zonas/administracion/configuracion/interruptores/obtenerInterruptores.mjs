@@ -1,6 +1,6 @@
 import { obtenerTodosLosInterruptores } from "../../../../repositorio/configuracion/interruptores/obtenerTodosLosInterruptores.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 
 export const obtenerInterruptores = async (entrada, salida) => {
     try {
@@ -17,10 +17,9 @@ export const obtenerInterruptores = async (entrada, salida) => {
             const estado = parConfiguracion.estado || "";
             ok.ok[interruptorIDV] = estado;
         }
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

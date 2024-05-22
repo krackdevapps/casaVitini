@@ -89,7 +89,7 @@ export const actualizarDatos = async (data) => {
                 throw new Error(error)
             }
         }
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 };

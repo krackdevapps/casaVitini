@@ -3,7 +3,7 @@ import { codigoZonaHoraria } from "../../../../sistema/configuracion/codigoZonaH
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import Decimal from "decimal.js";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { obtenerPagoPorPagoUID } from "../../../../repositorio/reservas/transacciones/obtenerPagoPorPagoUID.mjs";
 import { obtenerReembolsosPorPagoUID_ordenados } from "../../../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUID_ordenados.mjs";
 
@@ -87,10 +87,9 @@ export const obtenerDetallesDelPago = async (entrada, salida) => {
             ok.detallesDelPago.reembolsado = reembolsado;
         }
         //ok.deglosePorReembolso.push(detallesDelPago)
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

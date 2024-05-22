@@ -21,7 +21,7 @@ export const actualizarParConfiguracion = async (data) => {
                 throw new Error(error)
             }
         }
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

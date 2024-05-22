@@ -1,7 +1,5 @@
-import { obtenerNombreApartamentoUI } from "../../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerCalendariosPorPlataformaIDV } from "../../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
 
 export const airbnb = async (entrada, salida) => {
     try {
@@ -19,12 +17,11 @@ export const airbnb = async (entrada, salida) => {
         const calenadriosPorPlataforam = await obtenerCalendariosPorPlataformaIDV(plataformaOrigen)
         for (const detallesDelCalendario of calenadriosPorPlataforam) {
             const apartamentoIDV = detallesDelCalendario.apartamentoIDV;
-            detallesDelCalendario.apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+            detallesDelCalendario.apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
         }
         ok.calendariosSincronizados = [...calenadriosPorPlataforam];
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

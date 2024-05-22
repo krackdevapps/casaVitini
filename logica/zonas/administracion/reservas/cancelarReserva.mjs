@@ -2,7 +2,7 @@ import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { bloquearApartamentos } from "../../../sistema/bloqueos/bloquearApartamentos.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { eliminarEnlaceDePagoPorReservaUID } from "../../../repositorio/enlacesDePago/eliminarEnlaceDePagoPorReservaUID.mjs";
 import { DateTime } from "luxon";
@@ -74,9 +74,8 @@ export const cancelarReserva = async (entrada, salida) => {
         const ok = {
             ok: "La reserva se ha cancelado correctamente"
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

@@ -49,7 +49,7 @@ export const actualizarCliente = async (data) => {
             const clienteActualizado = resuelve.rows[0]
             return clienteActualizado
         }
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

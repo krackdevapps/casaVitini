@@ -3,7 +3,7 @@ import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHora
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarNuevoBloqueo } from "../../../repositorio/bloqueos/insertarNuevoBloqueo.mjs";
 
@@ -108,11 +108,10 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             nuevoBloqueoUID: nuevoUIDBloqueo,
             apartamentoIDV: apartamentoIDV
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

@@ -26,7 +26,7 @@ export const actualizarEstadoCuenta = async (data) => {
             const error = "No se encuentra el usuario";
             throw new Error(error);
         }
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 };

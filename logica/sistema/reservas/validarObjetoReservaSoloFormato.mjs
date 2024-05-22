@@ -63,7 +63,7 @@ export const validarObjetoReservaSoloFormato = async (reserva) => {
             ok: "No hay errores en la validacion"
         }
         return ok
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 }

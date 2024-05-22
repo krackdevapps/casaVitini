@@ -1,14 +1,14 @@
 import Decimal from 'decimal.js';
-import { obtenerNombreApartamentoUI } from '../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs';
 import { obtenerConfiguracionPorApartamentoIDV } from '../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs';
 import { obtenerPerfilPrecioPorApartamentoUID } from '../../repositorio/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
 import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../repositorio/impuestos/obtenerImpuestosPorAplicacionIDVPorEstado.mjs';
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 // Los precios de los apartamentos, van asociados a fechas
 
 export const precioBaseApartamento = async (apartamentoIDV) => {
     try {
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV)
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
         const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
         const precioNetoNoche = perfilPrecio.precio
 
@@ -52,7 +52,7 @@ export const precioBaseApartamento = async (apartamentoIDV) => {
             detallesApartamento.totalBrutoPordia = totalDiaBruto;
         }
         return detallesApartamento
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

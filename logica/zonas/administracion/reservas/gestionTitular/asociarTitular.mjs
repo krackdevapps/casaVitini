@@ -2,7 +2,7 @@ import { eliminarTitularPoolPorReservaUID } from "../../../../repositorio/reserv
 import { eliminarTitularPorReservaUID } from "../../../../repositorio/reservas/titulares/eliminarTitularPorReservaUID.mjs";
 import { obtenerDetallesCliente } from "../../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { insertarTitularEnReserva } from "../../../../repositorio/reservas/titulares/insertarTitularEnReserva.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -61,9 +61,8 @@ export const asociarTitular = async (entrada, salida) => {
             segundoApellido: segundoApellido,
             pasaporte: pasaporte
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

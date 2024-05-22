@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 import { actualizarCliente } from "../../../repositorio/clientes/actualizarCliente.mjs";
 
@@ -41,10 +41,9 @@ export const modificarCliente = async (entrada, salida) => {
             ok: "Se ha anadido correctamente el cliente",
             detallesCliente: clienteActualziado
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         bloqueoModificarClinete();
     }

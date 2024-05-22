@@ -53,7 +53,7 @@ export const enviarMail = async (entrada) => {
            ]*/
         const mensajeCompositor = await transporte.sendMail(composicionDelMensaje)
         return mensajeCompositor
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

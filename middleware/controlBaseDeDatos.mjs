@@ -4,7 +4,7 @@ export const controlBaseDeDatos = async (entrada, salida, next) => {
   try {
     await estadoDeAcceso();
     next()
-  } catch (error) {
+  } catch (errorCapturado) {
     if (entrada.method === 'GET') {
       salida.render('constructorV1', { 'vistaGlobal': '../global/navegacion.ejs' });
     } else if (entrada.method === 'POST') {

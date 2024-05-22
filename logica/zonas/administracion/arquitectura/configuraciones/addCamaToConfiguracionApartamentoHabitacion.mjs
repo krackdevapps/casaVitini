@@ -4,7 +4,7 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/a
 import { obtenerDetallesPorCama } from "../../../../repositorio/arquitectura/obtenerDetallesPorCama.mjs";
 import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../../sistema/error/filtroError.mjs";
+
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salida) => {
@@ -74,13 +74,12 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
                     camaIDV: camaIDV,
                     capaciad: capacidad
                 };
-                salida.json(ok);
+                return ok
 
             }
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

@@ -20,7 +20,7 @@ export const obtenerMensajePorPosicion = async (posicion) => {
             throw new Error(error)
         }
         return resuelve.rows[0]
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

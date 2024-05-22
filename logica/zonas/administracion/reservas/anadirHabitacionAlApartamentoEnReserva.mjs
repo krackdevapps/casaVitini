@@ -2,10 +2,9 @@ import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { estadoHabitacionesApartamento } from "../../../sistema/reservas/estadoHabitacionesApartamento.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { insertarHabitacionEnApartamento } from "../../../repositorio/reservas/apartamentos/insertarHabitacionEnApartamento.mjs";
-import { obtenerNombreHabitacionUI } from "../../../repositorio/arquitectura/obtenerNombreHabitacionUI.mjs";
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 
 export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -61,7 +60,7 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
         if (habitacionesResuelvas.length > 0) {
             for (const habitacionResuelta of habitacionesResuelvas) {
                 if (habitacionIDV === habitacionResuelta) {
-                    const habitacionUI = await obtenerNombreHabitacionUI(habitacionIDV)
+                    const habitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
                     const nuevaHabitacionDelApartamento = await insertarHabitacionEnApartamento({
                         reservaUID: reservaUID,
                         apartamentoUID: apartamentoUID,
@@ -72,7 +71,7 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
                         ok: `Se ha anadido la ${habitacionUI} al apartamento`,
                         nuevoUID: nuevaHabitacionDelApartamento.componenteUID
                     };
-                    return salida.json(ok);
+                    return ok
                 }
             }
             const error = {
@@ -81,8 +80,7 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) =>
             salida.json(error)
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release()

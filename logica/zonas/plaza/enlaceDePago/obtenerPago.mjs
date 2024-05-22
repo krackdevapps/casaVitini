@@ -1,7 +1,7 @@
 import { obtenerEnlaceDePagoPorCodigoUPID } from "../../../repositorio/enlacesDePago/obtenerEnlaceDePagoPorCodigoUPID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerTotalesReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerTotalesReservaPorReservaUID.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const obtenerPago = async (entrada, salida) => {
@@ -90,10 +90,9 @@ export const obtenerPago = async (entrada, salida) => {
         const ok = {
             ok: estructuraEnlace
         };
-        salida.json(ok);
+        return ok
 
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

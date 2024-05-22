@@ -2,7 +2,7 @@ import { obtenerTodaMoneda } from "../../../repositorio/impuestos/obtenerTodaMon
 import { obtenerTodoAplicacacionSobre } from "../../../repositorio/impuestos/obtenerTodoAplicacacionSobre.mjs";
 import { obtenerTodoTipoValor } from "../../../repositorio/impuestos/obtenerTodoTipoValor.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const opcionesEditarImpuesto = async (entrada, salida) => {
     try {
@@ -23,10 +23,9 @@ export const opcionesEditarImpuesto = async (entrada, salida) => {
         const ok = {
             ok: detallesImpuesto
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
     }
 }

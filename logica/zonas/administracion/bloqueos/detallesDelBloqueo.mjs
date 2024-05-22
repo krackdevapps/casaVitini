@@ -1,9 +1,8 @@
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
 import { obtenerBloqueoPorBloqueoUID } from "../../../repositorio/bloqueos/obtenerBloqueoPorBloqueoUID.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const detallesDelBloqueo = async (entrada, salida) => {
     try {
@@ -32,7 +31,7 @@ export const detallesDelBloqueo = async (entrada, salida) => {
         })
         console.log("test")
         await eliminarBloqueoCaducado();
-        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
         const detallesDelBloqueo = await obtenerBloqueoPorBloqueoUID(bloqueoUID)
         console.log("test")
         if (detallesDelBloqueo.rowCount === 0) {
@@ -59,11 +58,10 @@ export const detallesDelBloqueo = async (entrada, salida) => {
             ok.apartamentoIDV = apartamentoIDV;
             ok.apartamentoUI = apartamentoUI;
             ok.ok = estructuraBloqueo;
-            salida.json(ok);
+            return ok
         }
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

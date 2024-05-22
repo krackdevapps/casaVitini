@@ -1,7 +1,7 @@
 import ICAL from 'ical.js';
 import { VitiniIDX } from '../../../../../sistema/VitiniIDX/control.mjs';
 import { validadoresCompartidos } from '../../../../../sistema/validadores/validadoresCompartidos.mjs';
-import { filtroError } from '../../../../../sistema/error/filtroError.mjs';
+
 import { obtenerCalendarioPorCalendarioUID } from '../../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorCalendarioUID.mjs';
 import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs';
 import { actualizarCalendarioSincronizado } from '../../../../../repositorio/configuracion/calendarioSincronizados/actualizarCalendarioSincronizado.mjs';
@@ -76,10 +76,9 @@ export const actualizarCalendario = async (entrada, salida) => {
         const ok = {
             ok: "Se ha actualizado correctamente el calendario"
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 
 }

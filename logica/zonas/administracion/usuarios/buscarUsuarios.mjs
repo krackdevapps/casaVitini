@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 import { buscarUsuariosPorTermino } from "../../../repositorio/usuarios/buscarUsuarios.mjs";
 
 export const buscarUsuarios = async (entrada, salida) => {
@@ -88,7 +88,6 @@ export const buscarUsuarios = async (entrada, salida) => {
         Respuesta.usuarios = usuariosEncontrados;
         salida.json(Respuesta);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

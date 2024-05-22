@@ -11,7 +11,7 @@ export const validadoresLocales = {
                 limpiezaEspaciosAlrededor: "si",
                 sePermitenNegativos: "no"
             })
-        } catch (error) {
+        } catch (errorCapturado) {
             throw error
         }
     },
@@ -21,7 +21,7 @@ export const validadoresLocales = {
                 const error = "El campo simboloNumero debe de ser un numer entero y positivo";
                 throw new Error(error);
             }
-        } catch (error) {
+        } catch (errorCapturado) {
             throw error
         }
     },
@@ -31,7 +31,7 @@ export const validadoresLocales = {
                 const error = `El tipo de descuento solo puede ser cantidadFija, porcentable o precioEstablecido`;
                 throw new Error(error);
             }
-        } catch (error) {
+        } catch (errorCapturado) {
             throw error
         }
     },
@@ -41,7 +41,7 @@ export const validadoresLocales = {
                 const error = `El campo contexto de aplicación solo puede ser, totalNetoReserva, totalNetoApartamentoDedicado`;
                 throw new Error(error);
             }
-        } catch (error) {
+        } catch (errorCapturado) {
             throw error
         }
 
@@ -52,7 +52,7 @@ export const validadoresLocales = {
                 const error = "Cuidado! No se puede acepatar un porcentaje superior a 100% por que sino la oferta podria generar numeros negativos.";
                 throw new Error(error);
             }
-        } catch (error) {
+        } catch (errorCapturado) {
             throw error
         }
     }

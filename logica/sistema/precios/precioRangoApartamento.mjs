@@ -168,7 +168,7 @@ export const precioRangoApartamento = async (metadatos) => {
         delete estructuraFinal.totalesPorNoche_Objeto
         delete estructuraFinal.totalesPorApartamento_Objeto
         return estructuraFinal
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

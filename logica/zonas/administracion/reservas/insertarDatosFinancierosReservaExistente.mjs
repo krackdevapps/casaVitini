@@ -2,7 +2,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotalesReserva.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { detallesReserva } from "./detallesReserva.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const insertarDatosFinancierosReservaExistente = async (entrada, salida) => {
     try {
@@ -36,7 +36,6 @@ export const insertarDatosFinancierosReservaExistente = async (entrada, salida) 
         };
         salida.json(respuesta);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

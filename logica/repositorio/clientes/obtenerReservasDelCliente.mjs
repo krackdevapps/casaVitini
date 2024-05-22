@@ -86,7 +86,7 @@ export const obtenerReservasDelCliente = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametrosConsulta);
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

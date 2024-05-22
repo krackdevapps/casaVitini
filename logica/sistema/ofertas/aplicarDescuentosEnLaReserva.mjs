@@ -97,7 +97,7 @@ export const aplicarDescuentosEnLaReserva = (ofertasSeleccionadasPorCondiciones)
                 detalleOferta.descuentoRenderizado = descuentoRenderizado.toFixed(2)
             }
         })
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

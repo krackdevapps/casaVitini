@@ -796,8 +796,8 @@ export const generadorPDF = async (reserva) => {
         };
         const archivo = await generarPDF(docDefinition);
         return archivo
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

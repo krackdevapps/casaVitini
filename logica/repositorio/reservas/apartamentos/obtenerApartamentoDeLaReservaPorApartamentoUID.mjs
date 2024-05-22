@@ -20,8 +20,8 @@ export const obtenerApartamentoDeLaReservaPorApartamentoUID = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows[0]
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
 

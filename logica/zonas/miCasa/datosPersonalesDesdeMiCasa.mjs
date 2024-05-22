@@ -2,7 +2,7 @@ import { Mutex } from "async-mutex";
 import { obtenerDatosPersonales } from "../../repositorio/usuarios/obtenerDatosPersonales.mjs";
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../sistema/error/filtroError.mjs";
+
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const datosPersonalesDesdeMiCasa = async (entrada, salida) => {
@@ -31,10 +31,9 @@ export const datosPersonalesDesdeMiCasa = async (entrada, salida) => {
         for (const [dato, valor] of Object.entries(datosDelUsuario)) {
             ok.ok[dato] = valor;
         }
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
         await campoDeTransaccion("cancelar")
         if (mutex) {

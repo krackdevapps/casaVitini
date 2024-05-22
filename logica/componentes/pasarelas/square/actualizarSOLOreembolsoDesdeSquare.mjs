@@ -40,7 +40,7 @@ export const actualizarSOLOreembolsoDesdeSquare = async (reembolsoUID) => {
             ok: "Se ha actualziad correctamente los datos del reembolso en la pasarela"
         };
         return ok;
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 }

@@ -1,7 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerImpuestosPorAplicacionSobre } from "../../../repositorio/impuestos/obtenerImpuestosPorAplicacionSobre.mjs";
 
@@ -32,7 +30,7 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
 
         const detallesApartamento = {};
-        const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
         detallesApartamento.apartamentoUI = apartamentoUI;
         detallesApartamento.apartamentoIDV = apartamentoIDV;
         const precioNetoApartamentoPorDia = propuestaPrecio;
@@ -78,9 +76,8 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
         const ok = {
             ok: detallesApartamento
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

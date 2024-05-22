@@ -2,7 +2,7 @@ import Decimal from "decimal.js";
 import { precioBaseApartamento } from "../../../sistema/precios/precioBaseApartamento.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const detallePrecioBaseApartamento = async (entrada, salida) => {
     try {
@@ -35,10 +35,9 @@ export const detallePrecioBaseApartamento = async (entrada, salida) => {
         const ok = {
             ok: transaccionInterna
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
     }
 

@@ -4,13 +4,12 @@ import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotale
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
 import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from "../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs";
 import { DateTime } from "luxon";
 import { insertarReservaAdministrativa } from "../../../repositorio/reservas/reserva/insertarReservaAdministrativa.mjs";
 import { insertarApartamentoEnReservaAdministrativa } from "../../../repositorio/reservas/reserva/insertarApartamentoEnReservaAdministrativa.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -98,7 +97,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             })
             const reservaUIDNuevo = reservaInsertada.reservaUID;
             for (const apartamentoIDV of apartamentos) {
-                const apartamentoUI = await obtenerNombreApartamentoUI(apartamento);
+                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
                 await insertarApartamentoEnReservaAdministrativa({
                     reservaUIDNuevo: reservaUIDNuevo,
                     apartamentoIDV: apartamentoIDV,
@@ -115,12 +114,11 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 ok: "Se ha anadido al reserva vacia",
                 reservaUID: reservaUIDNuevo
             };
-            salida.json(ok);
+            return ok
         }
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorFinal
     } finally {
         if (mutex) {
             mutex.release();

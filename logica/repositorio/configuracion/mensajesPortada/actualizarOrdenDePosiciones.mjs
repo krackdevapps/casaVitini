@@ -10,7 +10,7 @@ export const actualizaOrdenDePosiciones = async (posicion) => {
 
         const resuelve = await conexion.query(consulta, [posicion]);
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }

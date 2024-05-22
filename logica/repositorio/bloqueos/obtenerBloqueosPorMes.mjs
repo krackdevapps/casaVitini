@@ -10,30 +10,30 @@ export const obtenerBloqueosPorMes = async (data) => {
 
         const consulta = ` 
         SELECT 
-        apartamento,
-        "tipoBloqueo",
-        to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-        to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"
+        "apartamentoIDV",
+        "tipoBloqueoIDV",
+        to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
+        to_char("fechaFin", 'YYYY-MM-DD') as "fechaFin"
         FROM "bloqueosApartamentos"
         WHERE
         (
-            "tipoBloqueo" = $4 AND
+            "tipoBloqueoIDV" = $4 AND
             (
-            DATE_PART('YEAR', entrada) < $2
+            DATE_PART('YEAR', "fechaInicio") < $2
             OR (
-                DATE_PART('YEAR', entrada) = $2
-                AND DATE_PART('MONTH', entrada) <= $1
+                DATE_PART('YEAR', "fechaInicio") = $2
+                AND DATE_PART('MONTH', "fechaInicio") <= $1
             )
         )
         AND (
-            DATE_PART('YEAR', salida) > $2
+            DATE_PART('YEAR', "fechaFin") > $2
             OR (
-                DATE_PART('YEAR', salida) = $2
-                AND DATE_PART('MONTH', salida) >= $1
+                DATE_PART('YEAR', "fechaFin") = $2
+                AND DATE_PART('MONTH', "fechaFin") >= $1
             )
         )) 
         OR
-        "tipoBloqueo" = $3;
+        "tipoBloqueoIDV" = $3;
         `;
         const parametros = [
             mes,

@@ -19,7 +19,7 @@ export const actualizarUsuarioSessionActiva = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros)
         return resuelve.rows[0]
-    } catch (error) {
+    } catch (errorCapturado) {
         throw error;
     }
 };

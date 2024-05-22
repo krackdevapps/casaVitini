@@ -4,10 +4,11 @@ export const eliminarBloqueoPorFechaSalida = async (fechaActual_ISO) => {
     try {
         const consulta = `
         DELETE FROM "bloqueosApartamentos"
-        WHERE salida < $1;
+        WHERE "fechaFin" < $1;
         `;
 
-        await conexion.query(consulta, [fechaActual_ISO])
+        const resuelve = await conexion.query(consulta, [fechaActual_ISO])
+        return resuelve.rows
     } catch (errorAdaptador) {
         throw errorAdaptador
     }

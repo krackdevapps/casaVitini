@@ -1,9 +1,9 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
+
 import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
 import { obtenerImpuestosPorAplicacionSobre } from "../../../repositorio/impuestos/obtenerImpuestosPorAplicacionSobre.mjs";
 import { obtenerPerfilPrecioPorApartamentoUID } from "../../../repositorio/precios/obtenerPerfilPrecioPorApartamentoUID.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const listaPreciosApartamentos = async (entrada, salida) => {
     try {
@@ -24,7 +24,7 @@ export const listaPreciosApartamentos = async (entrada, salida) => {
         const objetoFInal = [];
         for (const apartamentoEncotrado of configuracionesDeAlojamiento) {
             const apartamentoIDV = apartamentoEncotrado.apartamentoIDV;
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
             const apartamento = {
                 apartamento: apartamentoIDV,
                 apartamentoUI: apartamentoUI
@@ -66,10 +66,9 @@ export const listaPreciosApartamentos = async (entrada, salida) => {
         const ok = {
             ok: objetoFInal
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } finally {
     }
 

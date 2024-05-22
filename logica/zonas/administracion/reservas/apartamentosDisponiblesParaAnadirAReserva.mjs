@@ -1,9 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
-import { obtenerNombreApartamentoUI } from "../../../repositorio/arquitectura/obtenerNombreApartamentoUI.mjs";
-
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida) => {
     try {
@@ -33,7 +31,7 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             apartamentosNoDisponibles: []
         };
         for (const apartamentoIDV of apartamentosDisponbilesIDV) {
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
             const detalleApartamento = {
                 apartamentoIDV: apartamentoIDV,
                 apartamentoUI: apartamentoUI
@@ -41,7 +39,7 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             estructuraFinal.apartamentosDisponibles.push(detalleApartamento);
         }
         for (const apartamentoIDV of apartamentosNoDisponiblesIDV) {
-            const apartamentoUI = await obtenerNombreApartamentoUI(apartamentoIDV);
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
             const detalleApartamento = {
                 apartamentoIDV: apartamentoIDV,
                 apartamentoUI: apartamentoUI
@@ -52,11 +50,10 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             const ok = {
                 ok: estructuraFinal
             };
-            salida.json(ok);
+            return ok
         }
         salida.end();
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

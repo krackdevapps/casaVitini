@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { obtenerTodosLosCalendarios } from "../../sistema/calendariosSincronizados/airbnb/obtenerTodosLosCalendarios.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../sistema/error/filtroError.mjs";
+
 import { obtenerReservasPorMes } from "../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorMesPorAno.mjs";
 import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from "../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs";
 import { obtenerBloqueosPorMes } from "../../repositorio/bloqueos/obtenerBloqueosPorMes.mjs";
@@ -233,7 +233,6 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         };
         salida.json(objetofinal);
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     } 
 }

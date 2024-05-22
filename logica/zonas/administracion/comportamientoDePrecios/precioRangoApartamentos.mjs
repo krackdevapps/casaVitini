@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { precioRangoApartamento } from "../../../sistema/precios/precioRangoApartamento.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { filtroError } from "../../../sistema/error/filtroError.mjs";
+
 
 export const precioRangoApartamentos = async (entrada, salida) => {
     try {
@@ -31,9 +31,8 @@ export const precioRangoApartamentos = async (entrada, salida) => {
         const ok = {
             ok: preciosApartamentosResuelos
         };
-        salida.json(ok);
+        return ok
     } catch (errorCapturado) {
-        const errorFinal = filtroError(errorCapturado)
-        salida.json(errorFinal)
+        throw errorCapturado
     }
 }

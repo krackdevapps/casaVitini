@@ -8,7 +8,7 @@ export const obtenerOfertasPorNombreUI = async (nombreUI) => {
         `
         const resuelve = await conexion.query(consulta, [nombreUI])
         return resuelve.rows
-    } catch (error) {
-        throw error
+    } catch (errorCapturado) {
+        throw errorCapturado
     }
 }
