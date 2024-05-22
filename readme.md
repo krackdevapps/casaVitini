@@ -37,11 +37,11 @@ Aplicación de gestión de reservas
 
 #### Implementación rápida en local para desarrollo
 
-Si quieres probar la aplicación, aquí tienes dos enfoques. También tienes que rellenar el archivo de variables de entorno. Tiene un archivo SQL con la estructura de la base de datos vacía con un usuario administrador llamado `admin` y clave es `a`, para poder acceder al panel de administración.
+Si quieres probar la aplicación rellena el archivo de variables de entorno. Tiene un archivo SQL con la estructura de la base de datos vacía con un usuario administrador llamado `admin` y clave es `a`, para poder acceder al panel de administración.
 
 1. Instala node y postgres en tu sistema.
 2. Importa la base de datos vacía de ejemplo en tu servidor postgres, el archivo está en ejemplos/basededatosvacia.sql
-3. Configura la conexión con la base de datos en: componentes/db.mjs
-4. Escribe los datos de conexión en el archivo de variables de entorno de ejemplo, define también el entorno en el archivo de variables de entorno. En el archivo db.mjs tengo dos configuraciones para producción y dev. El Docker lo uso en producción y el dev en local.
-5. `node casavitini.mjs` o abre el archivo .workspace con Visual Studio Code y desde scripts de NPM`
+3. Configura la conexión con la base de datos en: logica/componentes/db.mjs
+4. Escribe los datos de conexión en el archivo de variables de entorno de ejemplo, define también el entorno en el archivo de variables de entorno, el entorno puede ser `nativo` o `docker`. En el archivo db.mjs tengo dos configuraciones para producción y dev. El Docker lo uso en producción y el dev en local.
+5. `node casavitini.mjs` o abre el archivo .workspace con Visual Studio Code y desde ejecutalo desde los scripts de NPM
 

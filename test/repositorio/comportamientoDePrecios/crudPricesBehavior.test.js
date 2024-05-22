@@ -16,13 +16,15 @@ describe('crud prices behavior by range', () => {
     const nombreComportamiento = "comportamientoTest"
     const fechaInicio = "2020-01-01"
     const fechaFinal = "2022-01-01"
+    const porRangoTVI = "porRangoTVI"
+    const porDiasTVI = "porDiasTVI"
     const tipoComportamineto = "porRango"
     let nuevoComportamientoUID = 0
 
     beforeAll(async () => {
         await eliminarClientePorClienteIDV(clineteTVI)
     })
-    test('insert new price', async () => {
+    test('insert new price by range', async () => {
         const response = await insertarComportamientoDePrecio({
             nombreComportamiento: nombreComportamiento,
             fechaInicio_ISO: fechaInicio,
