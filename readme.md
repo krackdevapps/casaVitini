@@ -35,7 +35,7 @@ Aplicación de gestión de reservas
 - Gestión de mensajes simple en portada;
 - Gestión centralizada de interruptores para funciones de acceso rápido;
 
-#### Implementación rápida en local para desarrollo
+### Implementación en local para desarrollo
 
 Si quieres probar la aplicación rellena el archivo de variables de entorno. Tiene un archivo SQL con la estructura de la base de datos vacía con un usuario administrador llamado `admin` y clave es `a`, para poder acceder al panel de administración.
 
