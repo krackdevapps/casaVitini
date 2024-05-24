@@ -5959,6 +5959,11 @@ const casaVitini = {
                     const error = "El contructor del calendario necesita una instanciaUID para el contenedor del calendario"
                     throw new Error(error)
                 }
+                const instanciaUID_contenedorFechas = metadatos.instanciaUID_contenedorFechas
+                if (!instanciaUID_contenedorFechas) {
+                    const error = "El contructor del calendario necesita una instanciaUID_destinoSeleccionDia para calendario"
+                    throw new Error(error)
+                }
                 const metodoSelectorDia = metadatos.metodoSelectorDia
                 if (!metodoSelectorDia) {
                     const error = "El contructor del calendario necesita un metodoSelectorDia para el contenedor del calendario"
@@ -6041,6 +6046,7 @@ const casaVitini = {
                 const bloqueCalendario = document.createElement("div")
                 bloqueCalendario.setAttribute("class", "bloqueCalendarioNuevo")
                 bloqueCalendario.setAttribute("instanciaUID", instanciaUID)
+                bloqueCalendario.setAttribute("instanciaUID_contenedorFechas", instanciaUID_contenedorFechas)
                 bloqueCalendario.setAttribute("componente", "bloqueCalendario")
                 bloqueCalendario.style.top = alturaDinamica + "px"
                 const contenedoCalendarioIntermedio = document.createElement("div")
@@ -6202,6 +6208,9 @@ const casaVitini = {
         constructorMesNuevo: async (calendario) => {
             try {
                 const instanciaUID = calendario.instanciaUID
+                const instanciaUID_contenedorFechas = calendario.instanciaUID_contenedorFechas
+
+
                 const selectorCalendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                 const instanciaUID_procesoCambioMes = calendario.instanciaUID_procesoCambioMes
                 const metodoSelectorDia = selectorCalendarioRenderizado.querySelector("[metodoSelectorDia]").getAttribute("metodoSelectorDia")
@@ -7469,7 +7478,7 @@ const casaVitini = {
                             (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal)
                         )
                         if (mesEntradaSalidaRenderizado) {
-                            
+
                             if (diaEntradaReserva_decimal > diaFinal_decimal) {
                                 bloqueDia.style.pointerEvents = "none"
                                 bloqueDia.setAttribute("estadoDia", "deshabilitado")
@@ -7497,7 +7506,7 @@ const casaVitini = {
                             }
                         }
                         else if (mesEntradaRenderizado) {
-                            
+
 
                             if (diaEntradaReserva_decimal > diaFinal_decimal) {
                                 bloqueDia.style.pointerEvents = "none"
@@ -7517,7 +7526,7 @@ const casaVitini = {
                             }
                         }
                         else if (mesSalidaRenderzado) {
-                            
+
 
                             if (diaSalidaReserva_decimal > diaFinal_decimal) {
                                 bloqueDia.classList.add("calendarioDiaReserva")
@@ -7538,7 +7547,7 @@ const casaVitini = {
                             }
                         }
                         else if (mesInternoRango) {
-                            
+
 
                             bloqueDia.classList.add("calendarioDiaReserva")
                             bloqueDia.style.pointerEvents = "all"
@@ -7594,6 +7603,14 @@ const casaVitini = {
                     }
                 }
                 if (perfilMes === "calendario_entrada_perfilSimple") {
+                    console.log("instanciaUID_contenedorFechas", instanciaUID_contenedorFechas)
+                    const contenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
+                    if (!contenedorFechas) {
+                        const error = "El perfil de calendario_entrada_perfilSimple no encuentra el contenedor de fechas de destino"
+                        casaVitini.componentes.limpiarAdvertenciasInmersivas()
+                        casaVitini.ui.vistas.advertenciaInmersiva(error)
+
+                    }
                     const seleccionableDiaLimite = marcoCalendario?.getAttribute("seleccionableDiaLimite")
                     // Si hay fecha de entrada, posicionar el calendario en la fecha de entrada
                     // Si hay fecha de salida, limitar el calendario de entrada por la fecha de salida
@@ -7601,14 +7618,14 @@ const casaVitini = {
                     const anoActual_string = String(calendario.ano).padStart(4, '0')
                     const mesActual_decimal = parseInt(calendario.mes, 10)
                     const anoActual_decimal = parseInt(calendario.ano, 10)
-                    const fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
+                    const fechaEntradaSelecionda = contenedorFechas.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
                     const fechaEntradaSeleccionada = {}
                     if (fechaEntradaSelecionda) {
                         fechaEntradaSeleccionada.dia = parseInt(fechaEntradaSelecionda.split("/")[0], 10)
                         fechaEntradaSeleccionada.mes = parseInt(fechaEntradaSelecionda.split("/")[1], 10)
                         fechaEntradaSeleccionada.ano = parseInt(fechaEntradaSelecionda.split("/")[2], 10)
                     }
-                    const fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
+                    const fechaSalidaSelecionda = contenedorFechas.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
                     const fechaSalidaSeleccionada = {}
                     if (fechaSalidaSelecionda) {
                         fechaSalidaSeleccionada.dia = parseInt(fechaSalidaSelecionda.split("/")[0], 10)
@@ -7803,20 +7820,29 @@ const casaVitini = {
                     }
                 }
                 if (perfilMes === "calendario_salida_perfilSimple") {
+
+                    const contenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
+                    if (!contenedorFechas) {
+                        const error = "El perfil de calendario_salida_perfilSimple no encuentra el contenedor de fechas de destino"
+                        casaVitini.componentes.limpiarAdvertenciasInmersivas()
+                        casaVitini.ui.vistas.advertenciaInmersiva(error)
+
+                    }
+
                     const seleccionableDiaLimite = marcoCalendario?.getAttribute("seleccionableDiaLimite")
                     // Si hay fecha de salida, limitar el calendario de entrada por la fecha de salida
                     const mesActual_string = String(calendario.mes).padStart(2, '0')
                     const anoActual_string = String(calendario.ano).padStart(4, '0')
                     const mesActual_decimal = parseInt(calendario.mes, 10)
                     const anoActual_decimal = parseInt(calendario.ano, 10)
-                    const fechaEntradaSelecionda = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
+                    const fechaEntradaSelecionda = contenedorFechas.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
                     const fechaEntradaSeleccionada = {}
                     if (fechaEntradaSelecionda) {
                         fechaEntradaSeleccionada.dia = parseInt(fechaEntradaSelecionda.split("/")[0], 10)
                         fechaEntradaSeleccionada.mes = parseInt(fechaEntradaSelecionda.split("/")[1], 10)
                         fechaEntradaSeleccionada.ano = parseInt(fechaEntradaSelecionda.split("/")[2], 10)
                     }
-                    const fechaSalidaSelecionda = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
+                    const fechaSalidaSelecionda = contenedorFechas.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil")
                     const fechaSalidaSeleccionada = {}
                     if (fechaSalidaSelecionda) {
                         fechaSalidaSeleccionada.dia = parseInt(fechaSalidaSelecionda.split("/")[0], 10)
@@ -8044,6 +8070,7 @@ const casaVitini = {
         },
         resolverCalendarioNuevo: async (calendario) => {
             calendario.zona = "componentes/calendario"
+            console.log("")
             const respuestaServidor = await casaVitini.componentes.servidor(calendario)
             if (respuestaServidor?.error) {
                 const selectorContenedorCalendario = document.querySelectorAll("[componente=bloqueCalendario]")
@@ -8063,6 +8090,8 @@ const casaVitini = {
                 botonRenderizado.style.pointerEvents = "none"
             })
             const instanciaUID = calendario.target.closest("[instanciaUID]").getAttribute("instanciaUID")
+            const instanciaUID_contenedorFechas = calendario.target.closest("[instanciaUID]").getAttribute("instanciaUID_contenedorFechas")
+
             let mesActual = Number(document.querySelector("[componente=mesReferencia]").getAttribute("mes"))
             let anoActual = Number(document.querySelector("[componente=mesReferencia]").getAttribute("ano"))
             const instanciaUID_procesoCambioMes = casaVitini.componentes.codigoFechaInstancia()
@@ -8090,6 +8119,7 @@ const casaVitini = {
             }
             const calendarioResuelto = await casaVitini.componentes.resolverCalendarioNuevo(calendarioContruir)
             calendarioResuelto.instanciaUID = instanciaUID
+            calendarioResuelto.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
             calendarioResuelto.instanciaUID_procesoCambioMes = instanciaUID_procesoCambioMes
             const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
             const selectorDiasRenderizados = calendarioRenderizado.querySelectorAll("[dia]")
@@ -9578,6 +9608,34 @@ const casaVitini = {
                         return '_' + match.toLowerCase();
                     });
                 }
+            },
+            conversor: {
+                fecha_humana_hacia_ISO: (fecha) => {
+                    const filtroFechaHumana = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
+                    if (!filtroFechaHumana.test(fecha)) {
+                        const error = "el conversor de fecha, fecha_Humana_hacia_ISO no reconoce la fecha en formato humano 00/00/0000"
+                        return casaVitini.ui.vistas.advertenciaInmersiva(error)
+                    }
+                    const fechaArray = fecha.split("/")
+                    const dia = fechaArray[0]
+                    const mes = fechaArray[1]
+                    const ano = fechaArray[2]
+                    const fechaISO = `${ano}-${mes}-${dia}`
+                    return fechaISO
+                },
+                fecha_ISO_hacia_humana: (fecha) => {
+                    const filtroFechaHumana = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+                    if (!filtroFechaHumana.test(fecha)) {
+                        const error = "el conversor de fecha, fecha_ISO_hacia_humana no reconoce la fecha en formato humano 0000-00-00"
+                        return casaVitini.ui.vistas.advertenciaInmersiva(error)
+                    }
+                    const fechaArray = fecha.split("-")
+                    const dia = fechaArray[2]
+                    const mes = fechaArray[1]
+                    const ano = fechaArray[0]
+                    const fechaISO = `${ano}/${mes}/${dia}`
+                    return fechaHumana
+                },
             }
         },
         diasOcupadosTotalmentePorMes: async (metadatos) => {
@@ -9619,24 +9677,29 @@ const casaVitini = {
         calendarioCompartido: {
             seleccionarDia: (dia) => {
                 const diaSeleccionadoComoElemento = dia.target;
-                const calendario = document.querySelector("[componente=bloqueCalendario] [componente=marcoCalendario]")
+                const contenedorCalendario = diaSeleccionadoComoElemento.closest("[componente=bloqueCalendario]")
+                const instanciaUID_contenedorFechas = contenedorCalendario.getAttribute("instanciaUID_contenedorFechas")
+                const calendario = contenedorCalendario.querySelector("[componente=marcoCalendario]")
+
+                const contendorDestino = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
+
+
                 const calendarioIO = calendario.getAttribute("calendarioIO")
-                const contenedorCalendario = dia.target.closest("[contenedor=calendario]")
                 const marcoMes = dia.target.closest("[componente=marcoMes]")
                 const diaSeleccionado = dia.target.getAttribute("dia").padStart(2, "0")
-                const anoSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("ano").padStart(2, "0")
-                const mesSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("mes").padStart(2, "0")
+                const anoSeleccionado = contenedorCalendario.querySelector("[componente=mesReferencia]").getAttribute("ano").padStart(2, "0")
+                const mesSeleccionado = contenedorCalendario.querySelector("[componente=mesReferencia]").getAttribute("mes").padStart(2, "0")
                 const fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
                 const diasDelCalendario = marcoMes.querySelectorAll("[dia]")
                 if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
                     diaSeleccionadoComoElemento.setAttribute("estadoDia", "disponible")
                     if (calendarioIO === "entrada") {
-                        document.querySelector("[calendario=entrada]").removeAttribute("memoriaVolatil")
-                        document.querySelector("[fechaUI=fechaInicio]").innerText = "(Seleccionar)"
+                        contendorDestino.querySelector("[calendario=entrada]").removeAttribute("memoriaVolatil")
+                        contendorDestino.querySelector("[fechaUI=fechaInicio]").innerText = "(Seleccionar)"
                     }
                     if (calendarioIO === "salida") {
-                        document.querySelector("[calendario=salida]").removeAttribute("memoriaVolatil")
-                        document.querySelector("[fechaUI=fechaFin]").innerText = "(Seleccionar)"
+                        contendorDestino.querySelector("[calendario=salida]").removeAttribute("memoriaVolatil")
+                        contendorDestino.querySelector("[fechaUI=fechaFin]").innerText = "(Seleccionar)"
                     }
                     diasDelCalendario.forEach(dia => {
                         if (dia.getAttribute("estadoDia") === "disponible" ||
@@ -9661,7 +9724,7 @@ const casaVitini = {
                 });
                 diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
                 diaSeleccionadoComoElemento.classList.add("calendarioDiaSeleccionado")
-                const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                const fechaEntradaVolatil_Humana = contendorDestino.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                 const fechaEntradaSeleccionada = {}
                 if (fechaEntradaVolatil_Humana) {
                     const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
@@ -9669,7 +9732,7 @@ const casaVitini = {
                     fechaEntradaSeleccionada.mes = parseInt(fechaEntradaAarray[1], 10)
                     fechaEntradaSeleccionada.ano = parseInt(fechaEntradaAarray[2], 10)
                 }
-                const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                const fechaSalidaVolatil_Humana = contendorDestino.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
                 const fechaSalidaSeleccionada = {}
                 if (fechaSalidaVolatil_Humana) {
                     const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
@@ -9678,8 +9741,8 @@ const casaVitini = {
                     fechaSalidaSeleccionada.ano = parseInt(fechaSaliraArray[2], 10)
                 }
                 if (calendarioIO === "entrada") {
-                    document.querySelector("[calendario=entrada]").setAttribute("memoriaVolatil", fechaSeleccionadaUI)
-                    document.querySelector("[fechaUI=fechaInicio]").innerText = fechaSeleccionadaUI
+                    contendorDestino.querySelector("[calendario=entrada]").setAttribute("memoriaVolatil", fechaSeleccionadaUI)
+                    contendorDestino.querySelector("[fechaUI=fechaInicio]").innerText = fechaSeleccionadaUI
                     if (Object.keys(fechaSalidaSeleccionada).length) {
                         diasDelCalendario.forEach((dia) => {
                             if (dia.getAttribute("estadoDia") === "disponible") {
@@ -9700,8 +9763,8 @@ const casaVitini = {
                     }
                 }
                 if (calendarioIO === "salida") {
-                    document.querySelector("[calendario=salida]").setAttribute("memoriaVolatil", fechaSeleccionadaUI)
-                    document.querySelector("[fechaUI=fechaFin]").innerText = fechaSeleccionadaUI
+                    contendorDestino.querySelector("[calendario=salida]").setAttribute("memoriaVolatil", fechaSeleccionadaUI)
+                    contendorDestino.querySelector("[fechaUI=fechaFin]").innerText = fechaSeleccionadaUI
                     if (Object.keys(fechaEntradaSeleccionada).length) {
                         diasDelCalendario.forEach((dia) => {
                             if (dia.getAttribute("estadoDia") === "disponible") {

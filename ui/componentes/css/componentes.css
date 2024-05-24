@@ -4913,6 +4913,15 @@
     padding: 6px;
     border-radius: 16px;
 }
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorCondiciones {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-radius: 16px;
+}
+
+
+
 [zonaCSS="administracion/ofertas/ofertaUI"] .contenedorBotonesGlobal {
     display: flex;
     flex-direction: row;
@@ -4922,6 +4931,14 @@
 [zonaCSS="administracion/ofertas/ofertaUI"] .espaciadoInterno {
     display: flex;
     flex-direction: column;
+}
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorDescuento {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #ffffff54;
+    padding: 6px;
+    border-radius: 16px;
 }
 
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .espaciadoInterno {
@@ -6519,6 +6536,19 @@
     align-items: stretch;
 }
 
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalModoCrear {
+    display: flex;
+    grid-template-columns: 0.25fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    flex-direction: column;
+}
+
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontal {
     /*width: 100%; */
@@ -6767,13 +6797,11 @@
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaEpacioBotones {
-    /* background: yellow; */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     align-content: center;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    flex-direction: column;
     gap: 6px;
 }
 
@@ -7277,6 +7305,7 @@ grid-template-columns: 0.5fr 1.5fr;
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearApartamentoInfoSinApartamento {
     padding: 6px;
     margin: 0px;
+    text-align: center;
 }
 
 .crearOfertaBoton {
@@ -13597,4 +13626,10 @@ grid-template-columns: 0.5fr 1.5fr;
     user-select: none;
     -webkit-user-select: none;
     text-align: center;
+    transition: all 250ms linear;
+}
+
+.botonV1:hover {
+    background: rgba(255, 255, 255, 0.7);
+
 }

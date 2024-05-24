@@ -77,14 +77,14 @@ export const calendario = async (entrada, salida) => {
         }
         if (tipo === "personalizado") {
             const ano = validadoresCompartidos.tipos.numero({
-                string: entrada.body.ano,
+                number: entrada.body.ano,
                 nombreCampo: "El campo del año",
                 filtro: "numeroSimple",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
             const mes = validadoresCompartidos.tipos.numero({
-                string: entrada.body.mes,
+                number: entrada.body.mes,
                 nombreCampo: "El campo del mes",
                 filtro: "numeroSimple",
                 sePermiteVacio: "no",

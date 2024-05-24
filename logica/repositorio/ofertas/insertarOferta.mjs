@@ -1,65 +1,47 @@
 import { conexion } from "../../componentes/db.mjs";
 export const insertarOferta = async (data) => {
     try {
-        const nombreOferta = data.nombreOferta;
-        const fechaInicio_ISO = data.fechaInicio_ISO;
-        const fechaFin_ISO = data.fechaFin_ISO;
-        const simboloNumero = data.simboloNumero;
-        const numero = data.numero;
-        const descuentoAplicadoA = data.descuentoAplicadoA;
-        const estadoInicalDesactivado = "desactivada";
-        const tipoOferta = data.tipoOferta;
-        const cantidad = data.cantidad;
-        const tipoDescuento = data.tipoDescuento;
+
+        const nombreOferta = data.nombreOferta
+        const fechaInicio = data.fechaInicio
+        const fechaFinal = data.fechaFinal
+        const condiciones = data.condiciones
+        const descuentos = data.descuentos
 
         const consulta = `
-            INSERT INTO ofertas
+            INSERT INTO "ofertasV2"
             (
                 "nombreOferta",
                 "fechaInicio",
-                "fechaFin",
-                "simboloNumeroIDV",
-                "numero",
-                "descuentoAplicadoAIDV",
-                "estadoOfertaIDV",
-                "tipoOfertaIDV",
-                cantidad,
-                "tipoDescuentoIDV"
+                "fechaFinal",
+                "condicionesArray",
+                "descuentosArray"
             )
             VALUES
             (
-                COALESCE($1, NULL),
+                COALESCE($1::test, NULL),
                 COALESCE($2::date, NULL),
                 COALESCE($3::date, NULL),
-                NULLIF($4, NULL),
-                NULLIF($5::numeric, NULL),
-                COALESCE($6, NULL),
-                COALESCE($7, NULL),
-                COALESCE($8, NULL),
-                NULLIF($9::numeric, NULL),
-                NULLIF($10, NULL)
+                NULLIF($4:jsonb, NULL),
+                NULLIF($5::jsonb, NULL),
+    
             )
             RETURNING *;
             `;
 
             const parametros = [
                 nombreOferta,
-                fechaInicio_ISO,
-                fechaFin_ISO,
-                simboloNumero,
-                numero,
-                descuentoAplicadoA,
-                estadoInicalDesactivado,
-                tipoOferta,
-                cantidad,
-                tipoDescuento
+                fechaInicio,
+                fechaFinal,
+                condiciones,
+                descuentos
             ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
             const error = "Ha ocurrido un error y no se ha insertado la nueva oferta";
             throw new Error(error);
         }
-        return resuelve.rows[0].uid
+        return resuelve.rows[0]
     } catch (errorCapturado) {
         throw errorCapturado
     }
