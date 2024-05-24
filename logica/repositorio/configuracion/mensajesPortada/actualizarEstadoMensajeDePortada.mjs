@@ -10,9 +10,11 @@ export const actualizarEstadoMensajeDePortada = async (data) => {
         UPDATE 
             "mensajesEnPortada"
         SET
-            estado = $1
+            "estadoIDV" = $1
         WHERE
-            uid = $2;`;
+            "mensajeUID" = $2
+        RETURNING
+        *;`;
 
         const parametros = [
             estado,

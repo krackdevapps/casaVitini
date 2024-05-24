@@ -12,7 +12,6 @@ export const reservasDelCliente = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-        console.log("test")
 
         const cliente = validadoresCompartidos.tipos.numero({
             number: entrada.body.cliente,

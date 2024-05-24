@@ -15406,6 +15406,7 @@ const casaVitini = {
                     main.setAttribute("zonaCSS", "administracion/ofertas/ofertaUI")
                     const selector = document.querySelector("[componente=espacioOfertas]")
                     const ofertaUI = casaVitini.administracion.gestion_de_ofertas.detalleUI()
+
                     selector.appendChild(ofertaUI)
                     selector.setAttribute("modo", "crearOferta")
                 },
@@ -15540,11 +15541,13 @@ const casaVitini = {
                         casaVitini.componentes.constructorMesNuevo(calendarioResuelvo)
                     }
                 },
-                constructorCalendario: async (boton) => {
-                    const botonID = boton.target.closest("[componente]").getAttribute("componente")
-                    const alturaDinamicaArriba = casaVitini.componentes.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(boton.target.closest("[calendario]")) + 20
+                constructorCalendario: async (data) => {
+                    const e = data.e
+
+                    const botonID = e.target.closest("[componente]").getAttribute("componente")
+                    const alturaDinamicaArriba = casaVitini.componentes.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(e.target.closest("[calendario]")) + 20
                     const bloqueCalendario = document.querySelector("[componente=bloqueCalendario]")
-                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+                    const instanciaUID = data.instanciaUID
                     const selectorCalendario = document.querySelector("[contenedor=calendario]")
                     const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                     let diaSeleccionadoEntrada
@@ -15876,6 +15879,16 @@ const casaVitini = {
                         fechaFin: fechaFin_formateada,
                         tipoOferta: tipoOferta
                     }
+                    const areaOferta = document.querySelector(`[zonaOferta="${tipoOferta}"]`)
+                    if (tipoOferta === "porRangoDeFechas") {
+
+
+                    }
+
+
+
+
+
                     const selectoresCamposOferta = document.querySelectorAll(`[zonaOferta="${tipoOferta}"] [campoOferta]`)
                     selectoresCamposOferta.forEach((campoOferta) => {
                         const nombreCampo = campoOferta.getAttribute("campoOferta")
@@ -15912,19 +15925,20 @@ const casaVitini = {
                         casaVitini.componentes.controladorVista(navegacion)
                     }
                 },
-                apartamentosDisponibles: async (apartamento) => {
-                    apartamento.preventDefault()
-                    apartamento.stopPropagation()
-                    let selectorApartamentoUIRenderizado = document.querySelector("[comMenu=menuVolatilApartamentoDisponbiles]")
+                apartamentosDisponibles: async (data) => {
+                    const e = data.e
+                    const instanciaUID = data.instanciaUID
+                    e.preventDefault()
+                    e.stopPropagation()
+                    const selectorApartamentoUIRenderizado = document.querySelector("[comMenu=menuVolatilApartamentoDisponbiles]")
                     if (selectorApartamentoUIRenderizado) {
                         selectorApartamentoUIRenderizado.remove()
-
                     }
-                    let alturaDinamica = apartamento.target.getBoundingClientRect().bottom;
-                    let horizontalDinamico = apartamento.target.getBoundingClientRect().left;
-                    let anchoDinamico = apartamento.target.getBoundingClientRect().width;
+                    const alturaDinamica = casaVitini.componentes.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(e.target)
+                    const horizontalDinamico = e.target.getBoundingClientRect().left;
+                    const anchoDinamico = e.target.getBoundingClientRect().width;
                     document.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.ocultarMenusVolatiles)
-                    let apartamentosUI = document.createElement("div")
+                    const apartamentosUI = document.createElement("div")
                     apartamentosUI.classList.add("crearOfertaMenuVolatilAnadirApartamento")
                     apartamentosUI.setAttribute("comMenu", "menuVolatilApartamentoDisponbiles")
                     apartamentosUI.setAttribute("componente", "menuVolatil")
@@ -15932,7 +15946,7 @@ const casaVitini = {
                     apartamentosUI.style.left = (horizontalDinamico) + "px"
                     apartamentosUI.style.width = (anchoDinamico - 10) + "px"
                     apartamentosUI.innerText = "Obteniendo apartamentos..."
-                    let seccion = document.querySelector("main:not([estado=obsoleto])")
+
                     document.querySelector("main").appendChild(apartamentosUI)
                     const transaccion = {
                         zona: "administracion/componentes/apartamentosDisponiblesConfigurados"
@@ -15942,36 +15956,50 @@ const casaVitini = {
                         casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
-                        selectorApartamentoUIRenderizado = document.querySelector("[comMenu=menuVolatilApartamentoDisponbiles]")
+                        const selectorApartamentoUIRenderizado = document.querySelector("[comMenu=menuVolatilApartamentoDisponbiles]")
                         selectorApartamentoUIRenderizado.innerHTML = null
-                        let apartamentosDisponibles = respuestaServidor?.ok
+                        const apartamentosDisponibles = respuestaServidor?.ok
                         apartamentosDisponibles.forEach((apartamentoDisponible) => {
-                            let apartamentoIDV = apartamentoDisponible.apartamentoIDV
-                            let apartamentoUI = apartamentoDisponible.apartamentoUI
-                            let estadoUI = apartamentoDisponible.estadoUI
-                            let apartamentoDetallesUI = document.createElement("div")
+                            const apartamentoIDV = apartamentoDisponible.apartamentoIDV
+                            const apartamentoUI = apartamentoDisponible.apartamentoUI
+                            const estadoConfiguracionIDV = apartamentoDisponible.estadoConfiguracionIDV
+
+                            let estadoUI
+                            if (estadoConfiguracionIDV === "disponible") {
+                                estadoUI = "Disponible"
+                            }
+                            if (estadoConfiguracionIDV === "nodisponible") {
+                                estadoUI = "No disponible"
+                            }
+                            const apartamentoDetallesUI = document.createElement("div")
                             apartamentoDetallesUI.classList.add("crearOfertaApartamentoUI")
-                            apartamentoDetallesUI.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.insertarApartamento)
+                            apartamentoDetallesUI.addEventListener("click", () => {
+                                casaVitini.administracion.gestion_de_ofertas.crearOferta.insertarApartamento({
+                                    instanciaUID,
+                                    apartamentoIDV,
+                                    apartamentoUI
+                                })
+                            })
                             apartamentoDetallesUI.setAttribute("apartamentoIDV", apartamentoIDV)
                             apartamentoDetallesUI.setAttribute("apartamentoUI", apartamentoUI)
                             apartamentoDetallesUI.setAttribute("apartamentoComoOpcion", apartamentoIDV)
-                            let apartamentoTitulo = document.createElement("p")
+                            const apartamentoTitulo = document.createElement("p")
                             apartamentoTitulo.classList.add("crearOfertaApartamentoTItulo")
                             apartamentoTitulo.innerText = apartamentoUI
                             apartamentoDetallesUI.appendChild(apartamentoTitulo)
-                            let apartamentoEstadoUI = document.createElement("p")
+                            const apartamentoEstadoUI = document.createElement("p")
                             apartamentoEstadoUI.classList.add("crearOfertaApartamentoEstado")
                             apartamentoEstadoUI.setAttribute("estadouI", estadoUI)
                             apartamentoEstadoUI.innerText = estadoUI
                             apartamentoDetallesUI.appendChild(apartamentoEstadoUI)
-                            let selectorApartamentoYaRenderizado = document.querySelector(`[apartamentoSeleccionado=${apartamentoIDV}]`)
+                            const selectorApartamentoYaRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"] [apartamentoSeleccionado=${apartamentoIDV}]`)
                             if (!selectorApartamentoYaRenderizado) {
                                 selectorApartamentoUIRenderizado.appendChild(apartamentoDetallesUI)
                             }
                         })
-                        let selectorApartamentoYaRenderizado = document.querySelectorAll(`[apartamentoComoOpcion]`)
-                        if (selectorApartamentoYaRenderizado.length === 0) {
-                            let info = document.createElement("p")
+                        const selectorApartamentoYaRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"] [apartamentoComoOpcion]`)
+                        if (selectorApartamentoYaRenderizado?.length === 0) {
+                            const info = document.createElement("p")
                             info.classList.add("crearApartamentoInfoSinApartamento")
                             info.setAttribute("componente", "infoSinApartamento")
                             info.innerText = "Todos los apartamentos disponibles estan insertados en la oferta"
@@ -15992,49 +16020,104 @@ const casaVitini = {
                         })
                     }
                 },
-                insertarApartamento: async (apartamento) => {
-                    let apartamentoIDV = apartamento.target.closest("[apartamentoIDV]").getAttribute("apartamentoIDV")
-                    let apartamentoUI = apartamento.target.closest("[apartamentoIDV]").getAttribute("apartamentoUI")
+                insertarApartamento: async (data) => {
+                    const apartamentoIDV = data.apartamentoIDV
+                    const apartamentoUI = data.apartamentoUI
+                    const instanciaUID = data.instanciaUID
+
                     document.querySelector("[componente=infoSinApartamento]").style.display = "none"
-                    let detallesApartamento = {
-                        "apartamentoIDV": apartamentoIDV,
-                        "apartamentoUI": apartamentoUI
+                    const detallesApartamento = {
+                        apartamentoIDV: apartamentoIDV,
+                        apartamentoUI: apartamentoUI,
+                        instanciaUID: instanciaUID
                     }
-                    let apartamentoSeleccionadoUI = await casaVitini.administracion.gestion_de_ofertas.crearOferta.insertarApartamentoUI(detallesApartamento)
-                    let zonaApartamentos = document.querySelector("[componente=zonaAnadirApartamento]")
+                    const apartamentoSeleccionadoUI = await casaVitini.administracion.gestion_de_ofertas.crearOferta.insertarApartamentoUI(detallesApartamento)
+                    const zonaApartamentos = document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=zonaAnadirApartamento]`)
+                    console.log("zonas", zonaApartamentos)
                     zonaApartamentos.appendChild(apartamentoSeleccionadoUI)
                     // Descuento dedicado
-                    let opciones = {
-                        "apartamentoIDV": apartamentoIDV,
-                        "apartamentoUI": apartamentoUI
-                    }
-                    let descuentoDedicadoUI = await casaVitini.administracion.gestion_de_ofertas.crearOferta.insertarOpcionesApartamento(opciones)
-                    let zonaDescuentoDedicados = document.querySelector("[parteOferta=descuentosDedicados]")
-                    document.querySelector("[componente=infoDescuentoDedicados]").style.display = "none"
-                    zonaDescuentoDedicados.appendChild(descuentoDedicadoUI)
+                    // const opciones = {
+                    //     apartamentoIDV: apartamentoIDV,
+                    //     apartamentoUI: apartamentoUI
+                    // }
+                    // const descuentoDedicadoUI = await casaVitini.administracion.gestion_de_ofertas.crearOferta.insertarOpcionesApartamento(opciones)
+                    // const zonaDescuentoDedicados = document.querySelector(`[instanciaUID="${instanciaUID}"] [parteOferta=descuentosDedicados]`)
+                    // document.querySelector("[componente=infoDescuentoDedicados]").style.display = "none"
+                    // zonaDescuentoDedicados.appendChild(descuentoDedicadoUI)
                 },
-                insertarApartamentoUI: async (detallesApartmento) => {
-                    let apartamentoIDV = detallesApartmento.apartamentoIDV
-                    let apartamentoUI = detallesApartmento.apartamentoUI
-                    let apartamentoSeleccionadoUI = document.createElement("div")
+                insertarApartamentoUI: async (data) => {
+                    const apartamentoIDV = data.apartamentoIDV
+                    const apartamentoUI = data.apartamentoUI
+                    const instanciaUID = data.instanciaUID
+
+                    const apartamentoSeleccionadoUI = document.createElement("div")
                     apartamentoSeleccionadoUI.classList.add("crearOfertaApartamentoSeleccionadoUI")
                     apartamentoSeleccionadoUI.setAttribute("apartamentoSeleccionado", apartamentoIDV)
-                    let tituloApartamento = document.createElement("div")
+                    const tituloApartamento = document.createElement("div")
                     tituloApartamento.classList.add("crearOfertaApartamentoSeleccionadoUITitulo")
                     tituloApartamento.innerText = apartamentoUI
                     apartamentoSeleccionadoUI.appendChild(tituloApartamento)
-                    let botonEliminarApartamento = document.createElement("div")
+                    const botonEliminarApartamento = document.createElement("div")
                     botonEliminarApartamento.classList.add("crearOfertaBoton")
                     botonEliminarApartamento.innerText = "Eliminar apartamento de esta oferta"
-                    botonEliminarApartamento.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.eliminarApartamenro)
+                    botonEliminarApartamento.addEventListener("click", () => {
+                        casaVitini.administracion.gestion_de_ofertas.crearOferta.eliminarApartamenro({
+                            apartamentoIDV,
+                            apartamentoUI,
+                            instanciaUID,
+                        })
+                    })
                     apartamentoSeleccionadoUI.appendChild(botonEliminarApartamento)
-                    apartamentoSeleccionadoUI
+
+                    const cantidadUI = document.createElement("input")
+                    cantidadUI.classList.add("crearOferDescuentoDedicadoCantidad")
+                    cantidadUI.setAttribute("campoApartamentoSeleccionado", "cantidad")
+                    cantidadUI.placeholder = "Inserta la cantidad"
+                    cantidadUI.value = "0.00"
+                    apartamentoSeleccionadoUI.appendChild(cantidadUI)
+                    const tipoDescuento = document.createElement("select")
+                    tipoDescuento.classList.add("crearOfertaDescuentoDedicadoListaTipoDescuento")
+                    tipoDescuento.setAttribute("campoApartamentoSeleccionado", "tipoDescuento")
+                    const opcionPredeterminada = document.createElement("option")
+
+                    opcionPredeterminada.disabled = true;
+                    opcionPredeterminada.value = ""
+                    opcionPredeterminada.text = "Selecciona el tipo de descuento"
+                    tipoDescuento.appendChild(opcionPredeterminada)
+                    const tipoDescuentoOpciones = [
+                        {
+                            tipoDescuentoIDV: "pocentaje",
+                            tipoDescuentoUI: "Porcentaje",
+                        },
+                        {
+                            tipoDescuentoIDV: "cantidadFija",
+                            tipoDescuentoUI: "Cantidad fija",
+                        }
+                    ]
+                    const seleccionadoInicial = ""
+                    tipoDescuentoOpciones.forEach((tipoDescuentoOpcion) => {
+                        const tipoDescuentoIDV = tipoDescuentoOpcion.tipoDescuentoIDV
+                        const tipoDescuentoUI = tipoDescuentoOpcion.tipoDescuentoUI
+
+                        const opcion = document.createElement("option");
+                        if (seleccionadoInicial === tipoDescuentoIDV) {
+                            opcion.selected = true;
+                        }
+                        opcion.value = tipoDescuentoIDV;
+                        opcion.text = tipoDescuentoUI;
+                        opcion.setAttribute("tipoDescuentoIDV", tipoDescuentoIDV)
+                        tipoDescuento.appendChild(opcion);
+                    })
+                    apartamentoSeleccionadoUI.appendChild(tipoDescuento)
+
+
+                    return apartamentoSeleccionadoUI
                 },
                 insertarOpcionesApartamento: async (opcionesApartamento) => {
                     const transaccion = {
                         zona: "administracion/ofertas/opcionesCrearOferta"
                     }
-                    let respuestaServidor = await casaVitini.componentes.servidor(transaccion)
+                    const respuestaServidor = await casaVitini.componentes.servidor(transaccion)
                     if (respuestaServidor?.error) {
                         casaVitini.ui.vistas.advertenciaInmersiva(respuestaServidor?.error)
                     }
@@ -16082,26 +16165,28 @@ const casaVitini = {
                             tipoDescuento.appendChild(opcion);
                         })
                         descuentoDedicadoUI.appendChild(tipoDescuento)
-                        descuentoDedicadoUI
+                        return descuentoDedicadoUI
                     }
                 },
-                eliminarApartamenro: (apartamento) => {
-                    let apartamentoIDV = apartamento.target.parentNode.getAttribute("apartamentoSeleccionado")
-                    apartamento.target.parentNode.remove()
-                    let conteoApartamentos = document.querySelectorAll("[apartamentoSeleccionado]")
+                eliminarApartamenro: (data) => {
+                    const instanciaUID = data.instanciaUID
+                    const apartamentoIDV = data.apartamentoIDV
+                    const area = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    area.querySelector(`[apartamentoSeleccionado="${apartamentoIDV}"]`).remove()
+                    const conteoApartamentos = area.querySelectorAll(`[apartamentoSeleccionado]`)
                     if (conteoApartamentos.length === 0) {
-                        document.querySelector("[componente=infoSinApartamento]").removeAttribute("style")
+                        area.querySelector("[componente=infoSinApartamento]").removeAttribute("style")
                     }
-                    document.querySelector(`[descuentoDedicadoIDV="${apartamentoIDV}"]`).remove()
-                    let conteoDescuentoDedicados = document.querySelector("[parteOferta=descuentosDedicados]").querySelectorAll("[descuentoDedicadoUI]")
+                    const conteoDescuentoDedicados = area.querySelector("[parteOferta=descuentosDedicados]").querySelectorAll("[descuentoDedicadoUI]")
                     if (conteoDescuentoDedicados.length === 0) {
-                        document.querySelector("[componente=infoDescuentoDedicados]").removeAttribute("style")
+                        area.querySelector("[componente=infoDescuentoDedicados]").removeAttribute("style")
                     }
                 },
                 opcionesOferta: (opcion) => {
-                    let opciones = opcion.target.value
+                    const origen = opcion.target
+                    const opciones = opcion.target.value
                     // Primer oculta todo
-                    let selectorOpciones = document.querySelectorAll("[controladorDesliegue]")
+                    const selectorOpciones = origen.closest("[contenedorSelector=apartamentosEnConcreto]").querySelectorAll("[controladorDesliegue]")
                     selectorOpciones.forEach((opcion) => {
                         opcion.classList.add("estadoInicialInvisible")
                     })
@@ -16116,7 +16201,7 @@ const casaVitini = {
                     if (opciones === "totalNetoReserva") {
                         zonaDespliegue = "descuentoGlobal"
                     }
-                    document.querySelector(`[controladorDesliegue="${zonaDespliegue}"]`)?.classList.remove("estadoInicialInvisible")
+                    origen.closest("[contenedorSelector=apartamentosEnConcreto]").querySelector(`[controladorDesliegue="${zonaDespliegue}"]`)?.classList.remove("estadoInicialInvisible")
                 }
             },
             detallesOferta: {
@@ -16596,9 +16681,13 @@ const casaVitini = {
             },
             detalleUI: () => {
                 // Crear el elemento div principal
+                const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+
+
                 const divPrincipal = document.createElement('div');
                 divPrincipal.setAttribute('componente', 'espacioCrearOferta');
                 divPrincipal.classList.add('espacioClientes');
+
                 const divContenedorNombreYEstado = document.createElement('div');
                 divContenedorNombreYEstado.classList.add('crearOfertaContenedorHorizontalV2');
                 const botonEstadoOferta = document.createElement("div")
@@ -16617,6 +16706,15 @@ const casaVitini = {
                 divContenedorNombreYEstado.appendChild(input)
                 divPrincipal.appendChild(divContenedorNombreYEstado)
                 // Crear el div contenedor
+
+
+                const titulo = document.createElement('p');
+                titulo.classList.add('crearOfertaTituloOpcion');
+                titulo.textContent = 'Selecciona el rango de fechas de vigencia de la oferta. Este rango determina el inicio y el final de la vigencia de la oferta. Cuando se realiza una reserva, se determina si en el momento de hacer una reserva, con la fecha de creacion, esta, la reserva, puede acceder a la oferta.';
+                divPrincipal.appendChild(titulo);
+
+
+
                 const divContenedor = document.createElement('div');
                 divContenedor.classList.add('administracion_ofertas_crearOfertas_contenedorFecha');
                 // Crear el primer div contenedor horizontal
@@ -16628,7 +16726,12 @@ const casaVitini = {
                 divContenedorFechaInicio.setAttribute('calendario', 'entrada');
                 divContenedorFechaInicio.setAttribute('componente', 'inicioOferta');
                 divContenedorFechaInicio.setAttribute('paralizadorEvento', 'ocultadorCalendarios');
-                divContenedorFechaInicio.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorCalendario)
+                divContenedorFechaInicio.addEventListener("click", (e) => {
+                    casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorCalendario({
+                        e,
+                        instanciaUID: instanciaUID
+                    })
+                })
                 // Crear el párrafo de la fecha de inicio
                 const pFechaInicio = document.createElement('p');
                 pFechaInicio.classList.add('tituloFecha');
@@ -16647,7 +16750,12 @@ const casaVitini = {
                 divContenedorFechaFin.setAttribute('calendario', 'salida');
                 divContenedorFechaFin.setAttribute('paralizadorEvento', 'ocultadorCalendarios');
                 divContenedorFechaFin.setAttribute('componente', 'finOferta');
-                divContenedorFechaFin.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorCalendario)
+                divContenedorFechaFin.addEventListener("click", (e) => {
+                    casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorCalendario({
+                        e,
+                        instanciaUID: instanciaUID
+                    })
+                })
                 // Crear el párrafo de la fecha de fin
                 const pFechaFin = document.createElement('p');
                 pFechaFin.classList.add('tituloFecha');
@@ -16668,204 +16776,197 @@ const casaVitini = {
                 // Agregar el div contenedor al div principal
                 divPrincipal.appendChild(divContenedor);
                 // Crear el segundo div contenedor
-                const divContenedorTipoOfertas = document.createElement('div');
-                divContenedorTipoOfertas.classList.add('crearOfertaConentenedor');
-                // Crear el párrafo del título de tipo de oferta
-                const pTituloTipoOferta = document.createElement('p');
-                pTituloTipoOferta.classList.add('crearOfertaTitulo');
-                pTituloTipoOferta.textContent = 'Escoge tipo de oferta';
-                // Crear el div contenedor horizontal de tipo de ofertas
-                const divContenedorHorizontalTipoOfertas = document.createElement('div');
-                divContenedorHorizontalTipoOfertas.classList.add('crearOfertaContenedorHorizontalTipoOfertas');
-                // Crear las opciones de tipo de oferta
-                const opcionesTipoOferta = [
-                    {
-                        tipo: 'porNumeroDeApartamentos',
-                        titulo: 'Por número de apartamentos ',
-                        descripcion: 'Aplicar oferta cuando una reserva que se realiza dentro del periodo de la oferta cumple con el número de apartamentos requeridos por este tipo de oferta.'
-                    },
-                    {
-                        tipo: 'porApartamentosEspecificos',
-                        titulo: 'Por apartamentos específicos ',
-                        descripcion: 'Aplicar oferta cuando una reserva que se realiza dentro del período de la oferta contiene los apartamentos en específico que requiere esta oferta.'
-                    },
-                    {
-                        tipo: 'porDiasDeAntelacion',
-                        titulo: 'Por días de antelación ',
-                        descripcion: 'Aplicar oferta cuando una reserva que se realiza dentro del periodo de la oferta cumple con el requisito de los días de antelación que requiere la oferta.'
-                    },
-                    {
-                        tipo: 'porDiasDeReserva',
-                        titulo: 'Por dias de la reserva',
-                        descripcion: 'Aplicar oferta cuando una reserva que se realiza dentro del periodo de la oferta cumple con los requisitos de días de duración que requiere la oferta '
-                    },
-                    {
-                        tipo: 'porRangoDeFechas',
-                        titulo: 'Por rango de fechas de la reserva',
-                        descripcion: 'Aplicar esta oferta cuando se realiza una reserva cuyo rango determinado por la fecha de entrada y la fecha de salida se cruza con el rango de duración de la oferta determinado.'
-                    }
-                ];
-                // Crear las opciones de tipo de oferta y agregarlos al div contenedor horizontal de tipo de ofertas
-                for (const opcion of opcionesTipoOferta) {
-                    const divOpcionTipoOferta = document.createElement('div');
-                    divOpcionTipoOferta.classList.add('opcionTipoOFerta');
-                    divOpcionTipoOferta.setAttribute('tipoOferta', opcion.tipo);
-                    divOpcionTipoOferta.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.componenteUI.desplegarOpcionesOferta)
-                    const pTituloTipoOferta = document.createElement('p');
-                    pTituloTipoOferta.classList.add('crearOfertaTituloTipoOferta');
-                    pTituloTipoOferta.textContent = opcion.titulo;
-                    const pDescripcionTipoOferta = document.createElement('p');
-                    pDescripcionTipoOferta.classList.add('crearOfertaDescripcionTipoOferta');
-                    pDescripcionTipoOferta.textContent = opcion.descripcion;
-                    divOpcionTipoOferta.appendChild(pTituloTipoOferta);
-                    divOpcionTipoOferta.appendChild(pDescripcionTipoOferta);
-                    divContenedorHorizontalTipoOfertas.appendChild(divOpcionTipoOferta);
-                }
-                // Agregar el div contenedor horizontal de tipo de ofertas al segundo div contenedor
-                divContenedorTipoOfertas.appendChild(pTituloTipoOferta);
-                divContenedorTipoOfertas.appendChild(divContenedorHorizontalTipoOfertas);
-                // Agregar el segundo div contenedor al div principal
-                divPrincipal.appendChild(divContenedorTipoOfertas);
-                // Agregar el div principal al documento body
-                divPrincipal;
+
+                const botonAnadirCondicion = document.createElement("div")
+                botonAnadirCondicion.classList.add("botonV1")
+                botonAnadirCondicion.innerText = "Añadir condicion"
+                botonAnadirCondicion.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.componenteUI.selectorTipoOferta)
+                divPrincipal.appendChild(botonAnadirCondicion)
+
+                const contenedorCondiciones = document.createElement("div")
+                contenedorCondiciones.setAttribute("contenedor", "condiciones")
+                divPrincipal.appendChild(contenedorCondiciones)
+
+                const contenedorDescuentos = document.createElement("div")
+                contenedorDescuentos.setAttribute("contenedor", "descuentos")
+                divPrincipal.appendChild(contenedorDescuentos)
+
+                const contenedorBotones = document.createElement("div")
+                contenedorBotones.setAttribute("contenedor", "botones")
+                divPrincipal.appendChild(contenedorBotones)
+
+                return divPrincipal
             },
             componenteUI: {
-                porNumeroDeApartamentos: () => {
-                    const divOfertaConXApartamentos_O1 = document.createElement('div');
-                    divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porNumeroDeApartamentos');
-                    divOfertaConXApartamentos_O1.classList.add('espaciadoInterno');
-                    // Crear el elemento div para el espacio de opciones
-                    const divEspacioOpciones_O1 = document.createElement('div');
-                    divEspacioOpciones_O1.classList.add('crearOfeartaEspacioOpciones');
-                    // Crear el primer contenedor de opciones
-                    const divContenedor1_O1 = document.createElement('div');
-                    divContenedor1_O1.classList.add('crearOfertaConentenedor');
-                    // Crear el elemento p para el título de la primera opción
-                    const pTituloOpcion1_O1 = document.createElement('p');
-                    pTituloOpcion1_O1.classList.add('crearOfertaTituloOpcion');
-                    pTituloOpcion1_O1.textContent = 'Determina cuántos apartamentos en concreto debe seleccionar el cliente o a partir de cuantos apartamentos necesita escoger el cliente para acceder esta oferta';
-                    // Crear el select para el tipo de descuento
-                    const seleccionaTipoNumero = document.createElement('select');
-                    seleccionaTipoNumero.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    seleccionaTipoNumero.setAttribute('campoOferta', 'simboloNumero');
-                    // Crear las opciones del select
-                    const optionO1 = document.createElement('option');
-                    optionO1.selected = true;
-                    optionO1.disabled = true;
-                    optionO1.setAttribute('value', '');
-                    optionO1.textContent = 'Selecciona si apartir de o un numero exacto de apartamentos';
-                    const optionO2 = document.createElement('option');
-                    optionO2.value = 'numeroExacto';
-                    optionO2.textContent = 'Con un numero exacto de apartamentos';
-                    const opcion03 = document.createElement('option');
-                    opcion03.value = 'aPartirDe';
-                    opcion03.textContent = 'A partir de un numero exacto de apartamentos';
-                    seleccionaTipoNumero.appendChild(optionO1);
-                    seleccionaTipoNumero.appendChild(optionO2);
-                    seleccionaTipoNumero.appendChild(opcion03);
-                    // Crear el input para el número de apartamentos
-                    const inputNumeroApartamentos_O1 = document.createElement('input');
-                    inputNumeroApartamentos_O1.setAttribute('type', 'text');
-                    inputNumeroApartamentos_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    inputNumeroApartamentos_O1.placeholder = '0';
-                    inputNumeroApartamentos_O1.setAttribute('campoOferta', 'numero');
-                    // Agregar el título y el input al primer contenedor
-                    divContenedor1_O1.appendChild(pTituloOpcion1_O1);
-                    divContenedor1_O1.appendChild(seleccionaTipoNumero);
-                    divContenedor1_O1.appendChild(inputNumeroApartamentos_O1);
-                    // Crear el segundo contenedor de opciones
-                    const divContenedor2_O1 = document.createElement('div');
-                    divContenedor2_O1.classList.add('crearOfertaConentenedor');
-                    // Crear el elemento p para el título de la segunda opción
-                    const pTituloOpcion2_O1 = document.createElement('p');
-                    pTituloOpcion2_O1.classList.add('crearOfertaTituloOpcion');
-                    pTituloOpcion2_O1.textContent = 'Determina si esta oferta será un descuento por porcentaje o una rebaja fija del precio y luego determina esa cantidad';
-                    // Crear el select para el tipo de descuento
-                    const selectTipoDescuento_O1 = document.createElement('select');
-                    selectTipoDescuento_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    selectTipoDescuento_O1.setAttribute('campoOferta', 'tipoDescuento');
-                    // Crear las opciones del select
-                    const optionPredeterminada_O1 = document.createElement('option');
-                    optionPredeterminada_O1.selected = true;
-                    optionPredeterminada_O1.setAttribute('value', '');
-                    optionPredeterminada_O1.disabled = true;
-                    optionPredeterminada_O1.textContent = 'Selecciona el tipo de descuento';
-                    const optionPorcentaje_O1 = document.createElement('option');
-                    optionPorcentaje_O1.value = 'porcentaje';
-                    optionPorcentaje_O1.textContent = 'Descuento por porcentaje';
-                    const optionCantidadFija_O1 = document.createElement('option');
-                    optionCantidadFija_O1.value = 'cantidadFija';
-                    optionCantidadFija_O1.textContent = 'Descuento por cantidad fija';
-                    // Agregar las opciones al select
-                    selectTipoDescuento_O1.appendChild(optionPredeterminada_O1);
-                    selectTipoDescuento_O1.appendChild(optionPorcentaje_O1);
-                    selectTipoDescuento_O1.appendChild(optionCantidadFija_O1);
-                    // Crear el input para la cantidad de descuento
-                    const inputCantidadDescuento_O1 = document.createElement('input');
-                    inputCantidadDescuento_O1.setAttribute('type', 'text');
-                    inputCantidadDescuento_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    inputCantidadDescuento_O1.placeholder = '00.00';
-                    inputCantidadDescuento_O1.setAttribute('campoOferta', 'cantidad');
-                    // Agregar el título, el select y el input al segundo contenedor
-                    divContenedor2_O1.appendChild(pTituloOpcion2_O1);
-                    divContenedor2_O1.appendChild(selectTipoDescuento_O1);
-                    divContenedor2_O1.appendChild(inputCantidadDescuento_O1);
-                    // Agregar los contenedores de opciones al espacio de opciones
-                    divEspacioOpciones_O1.appendChild(divContenedor1_O1);
-                    divEspacioOpciones_O1.appendChild(divContenedor2_O1);
-                    divOfertaConXApartamentos_O1.appendChild(divEspacioOpciones_O1);
-                    divOfertaConXApartamentos_O1
+
+                botonesCrearOferta: () => {
+                    const divBotones_O1 = document.createElement('div');
+                    divBotones_O1.classList.add('crearOfertaEpacioBotones');
+                    divBotones_O1.setAttribute("componente", "espacioBotones")
+                    // Crear el botón para crear la oferta
+                    const pBotonCrearOferta_O1 = document.createElement('p');
+                    pBotonCrearOferta_O1.classList.add('crearOfervaBotonV1');
+                    pBotonCrearOferta_O1.textContent = 'Crear oferta';
+                    pBotonCrearOferta_O1.setAttribute('componente', 'botonCrearOferta');
+                    pBotonCrearOferta_O1.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.crearOfertaConfirmar)
+                    divBotones_O1.appendChild(pBotonCrearOferta_O1)
+                    return divBotones_O1
                 },
-                porApartamentosEspecificos: () => {
+                botonesModificarOferta: () => {
+                    const divBotones_O1 = document.createElement('div');
+                    divBotones_O1.classList.add('crearOfertaEpacioBotones');
+                    divBotones_O1.setAttribute("componente", "espacioBotones")
+                    const botonModificarOferta = document.createElement("div")
+                    botonModificarOferta.classList.add('crearOfervaBotonV1');
+                    botonModificarOferta.setAttribute('componente', 'botonEditarOferta');
+                    botonModificarOferta.setAttribute('tipoOferta', 'conXApartamentosEnConcreto');
+                    botonModificarOferta.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.detallesOferta.ofertaModos)
+                    botonModificarOferta.textContent = 'Modificar oferta';
+                    const pBotonGuardarOferta_O1 = document.createElement("div")
+                    pBotonGuardarOferta_O1.classList.add('crearOfervaBotonV1');
+                    pBotonGuardarOferta_O1.setAttribute('componente', 'botonGuardarCambios');
+                    pBotonGuardarOferta_O1.classList.add('elementoOcultoInicialmente');
+                    pBotonGuardarOferta_O1.setAttribute('tipoOferta', 'conXApartamentosEnConcreto');
+                    pBotonGuardarOferta_O1.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.detallesOferta.guardarCambiosOferta)
+                    pBotonGuardarOferta_O1.textContent = 'Guardar cambios';
+                    const pBotonCancelarCambiosOferta_O1 = document.createElement('p');
+                    pBotonCancelarCambiosOferta_O1.classList.add('crearOfervaBotonV1');
+                    pBotonCancelarCambiosOferta_O1.classList.add('elementoOcultoInicialmente');
+                    pBotonCancelarCambiosOferta_O1.setAttribute('componente', 'botonCancelarCambios');
+                    pBotonCancelarCambiosOferta_O1.setAttribute('tipoOferta', 'conXApartamentosEnConcreto');
+                    pBotonCancelarCambiosOferta_O1.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.detallesOferta.ofertaModos)
+                    pBotonCancelarCambiosOferta_O1.textContent = 'Cancelar cambios y dejar de editar';
+                    const pBotonEliminarOferta_O1 = document.createElement('p');
+                    pBotonEliminarOferta_O1.classList.add('crearOfervaBotonV1');
+                    pBotonEliminarOferta_O1.classList.add('elementoOcultoInicialmente');
+                    pBotonEliminarOferta_O1.setAttribute('componente', 'botonElimnarOferta');
+                    pBotonEliminarOferta_O1.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.detallesOferta.eliminarOferta.UI)
+                    pBotonEliminarOferta_O1.textContent = 'Eliminar oferta';
+                    divBotones_O1.appendChild(botonModificarOferta);
+                    divBotones_O1.appendChild(pBotonGuardarOferta_O1);
+                    divBotones_O1.appendChild(pBotonCancelarCambiosOferta_O1);
+                    divBotones_O1.appendChild(pBotonEliminarOferta_O1);
+                    return divBotones_O1
+                },
+                desplegarOpcionesOferta: (data) => {
+                    const tipoOferta = data.tipoOferta
+                    const modoOferta = data.modoOferta
+
+                    const espacioCrearOferta = document.querySelector("[componente=espacioCrearOferta] [contenedor=condiciones]")
+
+                    const ofertaUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.tiposOfertasUI[tipoOferta]
+                    if (typeof ofertaUI === "function") {
+                        const contructorOfertaUI = ofertaUI()
+                        const botonBorrarCondicion = document.createElement("p")
+                        botonBorrarCondicion.classList.add("botonV1")
+                        botonBorrarCondicion.setAttribute("componente", "titulo")
+                        botonBorrarCondicion.innerText = "Eliminar condicion"
+                        botonBorrarCondicion.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.componenteUI.eliminarContenedorCondicion)
+                        contructorOfertaUI.querySelector("[contenedor=botones]").appendChild(botonBorrarCondicion)
+                        espacioCrearOferta.appendChild(contructorOfertaUI)
+
+                        return casaVitini.administracion.gestion_de_ofertas.componenteUI.controlDespliegeContenedorDescuento()
+                    }
+   
+                },
+                contenedorFechasUI: () => {
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+
+                    const divContenedor = document.createElement('div');
+                    divContenedor.classList.add('administracion_ofertas_crearOfertas_contenedorFecha');
+                    // Crear el primer div contenedor horizontal
+                    const divContenedorHorizontal = document.createElement('div');
+                    divContenedorHorizontal.classList.add('crearOfertaContenedorHorizontal');
+                    // Crear el div contenedor de fecha de inicio
+                    const divContenedorFechaInicio = document.createElement('div');
+                    divContenedorFechaInicio.classList.add('contenedorFecha');
+                    divContenedorFechaInicio.setAttribute('calendario', 'entrada');
+                    divContenedorFechaInicio.setAttribute('componente', 'inicioOferta');
+                    divContenedorFechaInicio.setAttribute('paralizadorEvento', 'ocultadorCalendarios');
+                    divContenedorFechaInicio.addEventListener("click", (e) => {
+                        casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorCalendario({
+                            e,
+                            instanciaUID: instanciaUID
+                        })
+                    })
+                    // Crear el párrafo de la fecha de inicio
+                    const pFechaInicio = document.createElement('p');
+                    pFechaInicio.classList.add('tituloFecha');
+                    pFechaInicio.textContent = 'Fecha de inicio';
+                    // Crear el párrafo de la fecha de inicio seleccionada
+                    const pFechaInicioSeleccionada = document.createElement('p');
+                    pFechaInicioSeleccionada.classList.add('fechaInicio');
+                    pFechaInicioSeleccionada.setAttribute('fechaUI', 'fechaInicio');
+                    pFechaInicioSeleccionada.textContent = '(Seleccionar)';
+                    // Agregar los elementos al div contenedor de fecha de inicio
+                    divContenedorFechaInicio.appendChild(pFechaInicio);
+                    divContenedorFechaInicio.appendChild(pFechaInicioSeleccionada);
+                    // Crear el div contenedor de fecha de fin
+                    const divContenedorFechaFin = document.createElement('div');
+                    divContenedorFechaFin.classList.add('contenedorFecha');
+                    divContenedorFechaFin.setAttribute('calendario', 'salida');
+                    divContenedorFechaFin.setAttribute('paralizadorEvento', 'ocultadorCalendarios');
+                    divContenedorFechaFin.setAttribute('componente', 'finOferta');
+                    divContenedorFechaFin.addEventListener("click", (e) => {
+                        casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorCalendario({
+                            e,
+                            instanciaUID: instanciaUID
+                        })
+                    })
+                    // Crear el párrafo de la fecha de fin
+                    const pFechaFin = document.createElement('p');
+                    pFechaFin.classList.add('tituloFecha');
+                    pFechaFin.textContent = 'Fecha fin';
+                    // Crear el párrafo de la fecha de fin seleccionada
+                    const pFechaFinSeleccionada = document.createElement('p');
+                    pFechaFinSeleccionada.classList.add('fechaFin');
+                    pFechaFinSeleccionada.setAttribute('fechaUI', 'fechaFin');
+                    pFechaFinSeleccionada.textContent = '(Seleccionar)';
+                    // Agregar los elementos al div contenedor de fecha de fin
+                    divContenedorFechaFin.appendChild(pFechaFin);
+                    divContenedorFechaFin.appendChild(pFechaFinSeleccionada);
+                    // Agregar los elementos al primer div contenedor horizontal
+                    divContenedorHorizontal.appendChild(divContenedorFechaInicio);
+                    divContenedorHorizontal.appendChild(divContenedorFechaFin);
+                    // Agregar el primer div contenedor horizontal al div contenedor
+                    divContenedor.appendChild(divContenedorHorizontal);
+                    // Agregar el div contenedor al div principal
+                    return divContenedor
+                },
+                contenedorDescuento: () => {
                     // Crear el elemento div principal
                     const porApartamentoDedicado = document.createElement('div');
+                    const instanciaUID = casaVitini.componentes.codigoFechaInstancia()
+
                     porApartamentoDedicado.classList.add('espaciadoInterno');
-                    porApartamentoDedicado.setAttribute('zonaOferta', 'porApartamentosEspecificos');
+                    porApartamentoDedicado.setAttribute("contenedorSelector", "apartamentosEnConcreto")
+                    porApartamentoDedicado.setAttribute("instanciaUID", instanciaUID)
+
                     // Crear el primer div interno
                     const divCrearOfertaEspacioOpciones_3 = document.createElement('div');
                     divCrearOfertaEspacioOpciones_3.classList.add('crearOfeartaEspacioOpciones');
-                    porApartamentoDedicado.appendChild(divCrearOfertaEspacioOpciones_3);
+
                     // Crear el segundo div interno dentro del primer div interno
-                    const divCrearOfertaConentenedor1_3 = document.createElement('div');
-                    divCrearOfertaConentenedor1_3.classList.add('crearOfertaConentenedor');
-                    divCrearOfertaConentenedor1_3.setAttribute('parteOferta', 'apartamentosDedicados');
-                    divCrearOfertaEspacioOpciones_3.appendChild(divCrearOfertaConentenedor1_3);
-                    // Crear el párrafo dentro del segundo div interno
-                    const pCrearOfertaTituloOpcion1_3 = document.createElement('p');
-                    pCrearOfertaTituloOpcion1_3.classList.add('crearOfertaTituloOpcion');
-                    pCrearOfertaTituloOpcion1_3.textContent =
-                        'Añade que apartamentos en concreto debe de seleccionar el cliente para que se aplique esta oferta';
-                    divCrearOfertaConentenedor1_3.appendChild(pCrearOfertaTituloOpcion1_3);
-                    // Crear el párrafo 'Anadir apartamento' dentro del segundo div interno
-                    const pCrearOFertaBotonAnadirApartamento_3 = document.createElement('p');
-                    pCrearOFertaBotonAnadirApartamento_3.classList.add('crearOFertaBotonAnadirApartamento');
-                    pCrearOFertaBotonAnadirApartamento_3.setAttribute('componente', 'botonAnadirApartamentoOferta');
-                    pCrearOFertaBotonAnadirApartamento_3.textContent = 'Anadir apartamento';
-                    pCrearOFertaBotonAnadirApartamento_3.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.apartamentosDisponibles)
-                    divCrearOfertaConentenedor1_3.appendChild(pCrearOFertaBotonAnadirApartamento_3);
-                    // Crear el div 'crearOfertaZonaAnadirApartamento' dentro del segundo div interno
-                    const divCrearOfertaZonaAnadirApartamento_3 = document.createElement('div');
-                    divCrearOfertaZonaAnadirApartamento_3.classList.add('crearOfertaZonaAnadirApartamento');
-                    divCrearOfertaZonaAnadirApartamento_3.setAttribute('componente', 'zonaAnadirApartamento');
-                    // Crear el párrafo 'No hay ningun apartamento...' dentro del div 'crearOfertaZonaAnadirApartamento'
-                    const pCrearApartamentoInfoSinApartamento_3 = document.createElement('p');
-                    pCrearApartamentoInfoSinApartamento_3.classList.add('crearApartamentoInfoSinApartamento');
-                    pCrearApartamentoInfoSinApartamento_3.setAttribute('componente', 'infoSinApartamento');
-                    pCrearApartamentoInfoSinApartamento_3.textContent =
-                        'No hay ningun apartamento dentro de esta reserva, pulse el boton anadir apartamento para anadir apartamentos en especiico';
-                    divCrearOfertaZonaAnadirApartamento_3.appendChild(pCrearApartamentoInfoSinApartamento_3);
-                    divCrearOfertaConentenedor1_3.appendChild(divCrearOfertaZonaAnadirApartamento_3);
+
+
                     // Crear el tercer div interno dentro del primer div interno
                     const divCrearOfertaConentenedor2_3 = document.createElement('div');
                     divCrearOfertaConentenedor2_3.classList.add('crearOfertaConentenedor');
                     divCrearOfertaConentenedor2_3.setAttribute('parteOferta', 'aplicacionDescuento');
                     divCrearOfertaEspacioOpciones_3.appendChild(divCrearOfertaConentenedor2_3);
+
                     // Crear el párrafo dentro del tercer div interno
                     const pCrearOfertaTituloOpcion2_3 = document.createElement('p');
                     pCrearOfertaTituloOpcion2_3.classList.add('crearOfertaTituloOpcion');
                     pCrearOfertaTituloOpcion2_3.textContent =
                         'Determina donde se aplica el descuento de esta oferta, este tipo de oferta que has seleccionado se basa en los apartamentos concretos que tiene que escoger el cliente. Es por eso que aparte de la opción de descuento al neto de la reserva, puedes establecer descuentos individuales por apartamento dedicado';
                     divCrearOfertaConentenedor2_3.appendChild(pCrearOfertaTituloOpcion2_3);
+
+
+
+
+
+
                     // Crear el select dentro del tercer div interno
                     const selectPreciosEImpuestosbotonOpcionCrearNuevoImpuesto_3 = document.createElement('select');
                     selectPreciosEImpuestosbotonOpcionCrearNuevoImpuesto_3.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
@@ -16899,6 +17000,8 @@ const casaVitini = {
                     //selectPreciosEImpuestosbotonOpcionCrearNuevoImpuesto_3.appendChild(optiontotalNetoApartmento_O2);
                     selectPreciosEImpuestosbotonOpcionCrearNuevoImpuesto_3.appendChild(optiontotalNetoReserva_O3);
                     divCrearOfertaConentenedor2_3.appendChild(selectPreciosEImpuestosbotonOpcionCrearNuevoImpuesto_3);
+
+
                     // Crear el cuarto div interno con la clase estadoInicialInvisible
                     const divCrearOfertaConentenedor3_3 = document.createElement('div');
                     divCrearOfertaConentenedor3_3.classList.add('crearOfertaConentenedor', 'estadoInicialInvisible');
@@ -16944,7 +17047,49 @@ const casaVitini = {
                     divCrearOfertaConentenedor4_3.classList.add('crearOfertaConentenedor', 'estadoInicialInvisible');
                     divCrearOfertaConentenedor4_3.setAttribute('controladorDesliegue', 'descuentosDedicados');
                     divCrearOfertaConentenedor4_3.setAttribute('parteOferta', 'descuentosDedicados');
-                    divCrearOfertaEspacioOpciones_3.appendChild(divCrearOfertaConentenedor4_3);
+
+
+                    const contenedorSelectorApartamentos = document.createElement('div');
+                    contenedorSelectorApartamentos.classList.add('crearOfertaConentenedor');
+                    contenedorSelectorApartamentos.setAttribute('parteOferta', 'apartamentosDedicados');
+                    // Crear el párrafo dentro del segundo div interno
+                    const pCrearOfertaTituloOpcion1_3 = document.createElement('p');
+                    pCrearOfertaTituloOpcion1_3.classList.add('crearOfertaTituloOpcion');
+                    pCrearOfertaTituloOpcion1_3.textContent =
+                        'Añade que apartamentos en concreto debe de seleccionar el cliente para que se aplique esta oferta';
+                    contenedorSelectorApartamentos.appendChild(pCrearOfertaTituloOpcion1_3);
+                    // Crear el párrafo 'Anadir apartamento' dentro del segundo div interno
+
+                    const pCrearOFertaBotonAnadirApartamento_3 = document.createElement('p');
+                    pCrearOFertaBotonAnadirApartamento_3.classList.add('crearOFertaBotonAnadirApartamento');
+                    pCrearOFertaBotonAnadirApartamento_3.setAttribute('componente', 'botonAnadirApartamentoOferta');
+                    pCrearOFertaBotonAnadirApartamento_3.textContent = 'Anadir apartamento';
+                    pCrearOFertaBotonAnadirApartamento_3.addEventListener("click", (e) => {
+                        const data = {
+                            e: e,
+                            instanciaUID: instanciaUID
+                        }
+                        casaVitini.administracion.gestion_de_ofertas.crearOferta.apartamentosDisponibles(data)
+                    })
+                    contenedorSelectorApartamentos.appendChild(pCrearOFertaBotonAnadirApartamento_3);
+
+
+                    // Crear el div 'crearOfertaZonaAnadirApartamento' dentro del segundo div interno
+                    const divCrearOfertaZonaAnadirApartamento_3 = document.createElement('div');
+                    divCrearOfertaZonaAnadirApartamento_3.classList.add('crearOfertaZonaAnadirApartamento');
+                    divCrearOfertaZonaAnadirApartamento_3.setAttribute('componente', 'zonaAnadirApartamento');
+                    // Crear el párrafo 'No hay ningun apartamento...' dentro del div 'crearOfertaZonaAnadirApartamento'
+                    const pCrearApartamentoInfoSinApartamento_3 = document.createElement('p');
+                    pCrearApartamentoInfoSinApartamento_3.classList.add('crearApartamentoInfoSinApartamento');
+                    pCrearApartamentoInfoSinApartamento_3.setAttribute('componente', 'infoSinApartamento');
+                    pCrearApartamentoInfoSinApartamento_3.textContent =
+                        'No hay ningun apartamento dentro de esta reserva, pulse el boton anadir apartamento para anadir apartamentos en especiico';
+                    divCrearOfertaZonaAnadirApartamento_3.appendChild(pCrearApartamentoInfoSinApartamento_3);
+                    contenedorSelectorApartamentos.appendChild(divCrearOfertaZonaAnadirApartamento_3);
+                    divCrearOfertaConentenedor4_3.appendChild(contenedorSelectorApartamentos);
+
+
+
                     // Crear el párrafo dentro del quinto div interno
                     const pCrearOfertaTituloOpcion4_3 = document.createElement('p');
                     pCrearOfertaTituloOpcion4_3.classList.add('crearOfertaTituloOpcion');
@@ -16958,391 +17103,416 @@ const casaVitini = {
                     pCrearOfertaTituloOpcion5_3.textContent =
                         'Ahora mismo no tienes ningun apartamento selecioando poder aplicarle un descuento individual. Pulsa en el boton Anadir apartamentos para comenzar a personalizar los descuentos por apartamento.';
                     divCrearOfertaConentenedor4_3.appendChild(pCrearOfertaTituloOpcion5_3);
-                    porApartamentoDedicado
+                    divCrearOfertaEspacioOpciones_3.appendChild(divCrearOfertaConentenedor4_3);
+                    porApartamentoDedicado.appendChild(divCrearOfertaEspacioOpciones_3);
+
+
+                    return porApartamentoDedicado
+
                 },
-                porDiasDeAntelacion: () => {
-                    const divOfertaConXApartamentos_O1 = document.createElement('div');
-                    divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porDiasDeAntelacion');
-                    divOfertaConXApartamentos_O1.classList.add('espaciadoInterno');
-                    // Crear el elemento div para el espacio de opciones
-                    const divEspacioOpciones_O1 = document.createElement('div');
-                    divEspacioOpciones_O1.classList.add('crearOfeartaEspacioOpciones');
-                    // Crear el primer contenedor de opciones
-                    const divContenedor1_O1 = document.createElement('div');
-                    divContenedor1_O1.classList.add('crearOfertaConentenedor');
-                    // Crear el elemento p para el título de la primera opción
-                    const pTituloOpcion1_O1 = document.createElement('p');
-                    pTituloOpcion1_O1.classList.add('crearOfertaTituloOpcion');
-                    pTituloOpcion1_O1.textContent = 'Determina cuántos dias de antelacion en concreto debe de tener la reserva o a partir de cuantos dias de antelacion se aplica esta oferta';
-                    // Crear el select para el tipo de descuento
-                    const seleccionaTipoNumero = document.createElement('select');
-                    seleccionaTipoNumero.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    seleccionaTipoNumero.setAttribute('campoOferta', 'simboloNumero');
-                    // Crear las opciones del select
-                    const optionO1 = document.createElement('option');
-                    optionO1.selected = true;
-                    optionO1.disabled = true;
-                    optionO1.setAttribute('value', '');
-                    optionO1.textContent = 'Selecciona si apartir de o un numero exacto de dias';
-                    const optionO2 = document.createElement('option');
-                    optionO2.value = 'numeroExacto';
-                    optionO2.textContent = 'Con un numero exacto de dias de antelacion';
-                    const opcion03 = document.createElement('option');
-                    opcion03.value = 'aPartirDe';
-                    opcion03.textContent = 'A partir de un numero exacto de de dias de antelacion';
-                    seleccionaTipoNumero.appendChild(optionO1);
-                    seleccionaTipoNumero.appendChild(optionO2);
-                    seleccionaTipoNumero.appendChild(opcion03);
-                    // Crear el input para el número de apartamentos
-                    const inputNumeroApartamentos_O1 = document.createElement('input');
-                    inputNumeroApartamentos_O1.setAttribute('type', 'text');
-                    inputNumeroApartamentos_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    inputNumeroApartamentos_O1.placeholder = "Determina el numero de dias de antelacion";
-                    inputNumeroApartamentos_O1.setAttribute('campoOferta', 'numero');
-                    // Agregar el título y el input al primer contenedor
-                    divContenedor1_O1.appendChild(pTituloOpcion1_O1);
-                    divContenedor1_O1.appendChild(seleccionaTipoNumero);
-                    divContenedor1_O1.appendChild(inputNumeroApartamentos_O1);
-                    // Crear el segundo contenedor de opciones
-                    const divContenedor2_O1 = document.createElement('div');
-                    divContenedor2_O1.classList.add('crearOfertaConentenedor');
-                    // Crear el elemento p para el título de la segunda opción
-                    const pTituloOpcion2_O1 = document.createElement('p');
-                    pTituloOpcion2_O1.classList.add('crearOfertaTituloOpcion');
-                    pTituloOpcion2_O1.textContent = 'Determina si esta oferta será un descuento por porcentaje o una rebaja fija del precio y luego determina esa cantidad';
-                    // Crear el select para el tipo de descuento
-                    const selectTipoDescuento_O1 = document.createElement('select');
-                    selectTipoDescuento_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    selectTipoDescuento_O1.setAttribute('campoOferta', 'tipoDescuento');
-                    // Crear las opciones del select
-                    const optionPredeterminada_O1 = document.createElement('option');
-                    optionPredeterminada_O1.selected = true;
-                    optionPredeterminada_O1.setAttribute('value', '');
-                    optionPredeterminada_O1.disabled = true;
-                    optionPredeterminada_O1.textContent = 'Selecciona el tipo de descuento';
-                    const optionPorcentaje_O1 = document.createElement('option');
-                    optionPorcentaje_O1.value = 'porcentaje';
-                    optionPorcentaje_O1.textContent = 'Descuento por porcentaje';
-                    const optionCantidadFija_O1 = document.createElement('option');
-                    optionCantidadFija_O1.value = 'cantidadFija';
-                    optionCantidadFija_O1.textContent = 'Descuento por cantidad fija';
-                    // Agregar las opciones al select
-                    selectTipoDescuento_O1.appendChild(optionPredeterminada_O1);
-                    selectTipoDescuento_O1.appendChild(optionPorcentaje_O1);
-                    selectTipoDescuento_O1.appendChild(optionCantidadFija_O1);
-                    // Crear el input para la cantidad de descuento
-                    const inputCantidadDescuento_O1 = document.createElement('input');
-                    inputCantidadDescuento_O1.setAttribute('type', 'text');
-                    inputCantidadDescuento_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    inputCantidadDescuento_O1.placeholder = '00.00';
-                    inputCantidadDescuento_O1.setAttribute('campoOferta', 'cantidad');
-                    // Agregar el título, el select y el input al segundo contenedor
-                    divContenedor2_O1.appendChild(pTituloOpcion2_O1);
-                    divContenedor2_O1.appendChild(selectTipoDescuento_O1);
-                    divContenedor2_O1.appendChild(inputCantidadDescuento_O1);
-                    // Agregar los contenedores de opciones al espacio de opciones
-                    divEspacioOpciones_O1.appendChild(divContenedor1_O1);
-                    divEspacioOpciones_O1.appendChild(divContenedor2_O1);
-                    divOfertaConXApartamentos_O1.appendChild(divEspacioOpciones_O1);
-                    divOfertaConXApartamentos_O1
-                },
-                porDiasDeReserva: () => {
-                    const divOfertaConXApartamentos_O1 = document.createElement('div');
-                    divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porDiasDeReserva');
-                    divOfertaConXApartamentos_O1.classList.add('espaciadoInterno');
-                    // Crear el elemento div para el espacio de opciones
-                    const divEspacioOpciones_O1 = document.createElement('div');
-                    divEspacioOpciones_O1.classList.add('crearOfeartaEspacioOpciones');
-                    // Crear el primer contenedor de opciones
-                    const divContenedor1_O1 = document.createElement('div');
-                    divContenedor1_O1.classList.add('crearOfertaConentenedor');
-                    // Crear el elemento p para el título de la primera opción
-                    const pTituloOpcion1_O1 = document.createElement('p');
-                    pTituloOpcion1_O1.classList.add('crearOfertaTituloOpcion');
-                    pTituloOpcion1_O1.textContent = 'Determina cuántos dias con noche debe tener la reserva en concreto o a partir de cuantos dias con noche debe de tener la reserva';
-                    // Crear el select para el tipo de descuento
-                    const seleccionaTipoNumero = document.createElement('select');
-                    seleccionaTipoNumero.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    seleccionaTipoNumero.setAttribute('campoOferta', 'simboloNumero');
-                    // Crear las opciones del select
-                    const optionO1 = document.createElement('option');
-                    optionO1.selected = true;
-                    optionO1.disabled = true;
-                    optionO1.setAttribute('value', '');
-                    optionO1.textContent = 'Selecciona si apartir de o un numero exacto de días con noche';
-                    const optionO2 = document.createElement('option');
-                    optionO2.value = 'numeroExacto';
-                    optionO2.textContent = 'Con un numero exacto de días con noche de la reserva';
-                    const opcion03 = document.createElement('option');
-                    opcion03.value = 'aPartirDe';
-                    opcion03.textContent = 'A partir de un numero exacto de de días noche de la reserva';
-                    seleccionaTipoNumero.appendChild(optionO1);
-                    seleccionaTipoNumero.appendChild(optionO2);
-                    seleccionaTipoNumero.appendChild(opcion03);
-                    // Crear el input para el número de apartamentos
-                    const inputNumeroApartamentos_O1 = document.createElement('input');
-                    inputNumeroApartamentos_O1.setAttribute('type', 'text');
-                    inputNumeroApartamentos_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    inputNumeroApartamentos_O1.placeholder = "Determina el numero de dias de la reserva";
-                    inputNumeroApartamentos_O1.setAttribute('campoOferta', 'numero');
-                    // Agregar el título y el input al primer contenedor
-                    divContenedor1_O1.appendChild(pTituloOpcion1_O1);
-                    divContenedor1_O1.appendChild(seleccionaTipoNumero);
-                    divContenedor1_O1.appendChild(inputNumeroApartamentos_O1);
-                    // Crear el segundo contenedor de opciones
-                    const divContenedor2_O1 = document.createElement('div');
-                    divContenedor2_O1.classList.add('crearOfertaConentenedor');
-                    // Crear el elemento p para el título de la segunda opción
-                    const pTituloOpcion2_O1 = document.createElement('p');
-                    pTituloOpcion2_O1.classList.add('crearOfertaTituloOpcion');
-                    pTituloOpcion2_O1.textContent = 'Determina si esta oferta será un descuento por porcentaje o una rebaja fija del precio y luego determina esa cantidad';
-                    // Crear el select para el tipo de descuento
-                    const selectTipoDescuento_O1 = document.createElement('select');
-                    selectTipoDescuento_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    selectTipoDescuento_O1.setAttribute('campoOferta', 'tipoDescuento');
-                    // Crear las opciones del select
-                    const optionPredeterminada_O1 = document.createElement('option');
-                    optionPredeterminada_O1.selected = true;
-                    optionPredeterminada_O1.disabled = true;
-                    optionPredeterminada_O1.setAttribute('value', '');
-                    optionPredeterminada_O1.textContent = 'Selecciona el tipo de descuento';
-                    const optionPorcentaje_O1 = document.createElement('option');
-                    optionPorcentaje_O1.value = 'porcentaje';
-                    optionPorcentaje_O1.textContent = 'Descuento por porcentaje';
-                    const optionCantidadFija_O1 = document.createElement('option');
-                    optionCantidadFija_O1.value = 'cantidadFija';
-                    optionCantidadFija_O1.textContent = 'Descuento por cantidad fija';
-                    // Agregar las opciones al select
-                    selectTipoDescuento_O1.appendChild(optionPredeterminada_O1);
-                    selectTipoDescuento_O1.appendChild(optionPorcentaje_O1);
-                    selectTipoDescuento_O1.appendChild(optionCantidadFija_O1);
-                    // Crear el input para la cantidad de descuento
-                    const inputCantidadDescuento_O1 = document.createElement('input');
-                    inputCantidadDescuento_O1.setAttribute('type', 'text');
-                    inputCantidadDescuento_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    inputCantidadDescuento_O1.placeholder = '00.00';
-                    inputCantidadDescuento_O1.setAttribute('campoOferta', 'cantidad');
-                    // Agregar el título, el select y el input al segundo contenedor
-                    divContenedor2_O1.appendChild(pTituloOpcion2_O1);
-                    divContenedor2_O1.appendChild(selectTipoDescuento_O1);
-                    divContenedor2_O1.appendChild(inputCantidadDescuento_O1);
-                    // Agregar los contenedores de opciones al espacio de opciones
-                    divEspacioOpciones_O1.appendChild(divContenedor1_O1);
-                    divEspacioOpciones_O1.appendChild(divContenedor2_O1);
-                    divOfertaConXApartamentos_O1.appendChild(divEspacioOpciones_O1);
-                    divOfertaConXApartamentos_O1
-                },
-                porRangoDeFechas: () => {
-                    const divOfertaConXApartamentos_O1 = document.createElement('div');
-                    divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porRangoDeFechas');
-                    divOfertaConXApartamentos_O1.classList.add('espaciadoInterno');
-                    // Crear el elemento div para el espacio de opciones
-                    const divEspacioOpciones_O1 = document.createElement('div');
-                    divEspacioOpciones_O1.classList.add('crearOfeartaEspacioOpciones');
-                    // Crear el primer contenedor de opciones
-                    const divContenedor1_O1 = document.createElement('div');
-                    divContenedor1_O1.classList.add('crearOfertaConentenedor');
-                    // Crear el elemento p para el título de la primera opción
-                    const pTituloOpcion1_O1 = document.createElement('p');
-                    pTituloOpcion1_O1.classList.add('crearOfertaTituloOpcion');
-                    pTituloOpcion1_O1.textContent = 'Determina cuántos dias debe tener la reserva en concreto o a partir de cuantos dias debe de tener la reserva';
-                    // Crear el select para el tipo de descuento
-                    const seleccionaTipoNumero = document.createElement('select');
-                    seleccionaTipoNumero.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    seleccionaTipoNumero.setAttribute('campoOferta', 'simboloNumero');
-                    // Crear las opciones del select
-                    const optionO1 = document.createElement('option');
-                    optionO1.selected = true;
-                    optionO1.disabled = true;
-                    optionO1.setAttribute('value', '');
-                    optionO1.textContent = 'Selecciona si apartir de o un numero exacto de dias';
-                    const optionO2 = document.createElement('option');
-                    optionO2.value = 'numeroExacto';
-                    optionO2.textContent = 'Con un numero exacto de dias de de duracion de la reserva';
-                    const opcion03 = document.createElement('option');
-                    opcion03.value = 'aPartirDe';
-                    opcion03.textContent = 'A partir de un numero exacto de de dias de duracion de la reserva';
-                    seleccionaTipoNumero.appendChild(optionO1);
-                    seleccionaTipoNumero.appendChild(optionO2);
-                    seleccionaTipoNumero.appendChild(opcion03);
-                    // Crear el input para el número de apartamentos
-                    const inputNumeroApartamentos_O1 = document.createElement('input');
-                    inputNumeroApartamentos_O1.setAttribute('type', 'text');
-                    inputNumeroApartamentos_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    inputNumeroApartamentos_O1.placeholder = "Determina el numero de dias de la reserva";
-                    inputNumeroApartamentos_O1.setAttribute('campoOferta', 'numero');
-                    // Agregar el título y el input al primer contenedor
-                    divContenedor1_O1.appendChild(pTituloOpcion1_O1);
-                    divContenedor1_O1.appendChild(seleccionaTipoNumero);
-                    divContenedor1_O1.appendChild(inputNumeroApartamentos_O1);
-                    // Crear el segundo contenedor de opciones
-                    const divContenedor2_O1 = document.createElement('div');
-                    divContenedor2_O1.classList.add('crearOfertaConentenedor');
-                    // Crear el elemento p para el título de la segunda opción
-                    const pTituloOpcion2_O1 = document.createElement('p');
-                    pTituloOpcion2_O1.classList.add('crearOfertaTituloOpcion');
-                    pTituloOpcion2_O1.textContent = 'Determina si esta oferta será un descuento por porcentaje o una rebaja fija del precio y luego determina esa cantidad';
-                    // Crear el select para el tipo de descuento
-                    const selectTipoDescuento_O1 = document.createElement('select');
-                    selectTipoDescuento_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    selectTipoDescuento_O1.setAttribute('campoOferta', 'tipoDescuento');
-                    // Crear las opciones del select
-                    const optionPredeterminada_O1 = document.createElement('option');
-                    optionPredeterminada_O1.selected = true;
-                    optionPredeterminada_O1.disabled = true;
-                    optionPredeterminada_O1.setAttribute('value', '');
-                    optionPredeterminada_O1.textContent = 'Selecciona el tipo de descuento';
-                    const optionPorcentaje_O1 = document.createElement('option');
-                    optionPorcentaje_O1.value = 'porcentaje';
-                    optionPorcentaje_O1.textContent = 'Descuento por porcentaje';
-                    const optionCantidadFija_O1 = document.createElement('option');
-                    optionCantidadFija_O1.value = 'cantidadFija';
-                    optionCantidadFija_O1.textContent = 'Descuento por cantidad fija';
-                    // Agregar las opciones al select
-                    selectTipoDescuento_O1.appendChild(optionPredeterminada_O1);
-                    selectTipoDescuento_O1.appendChild(optionPorcentaje_O1);
-                    selectTipoDescuento_O1.appendChild(optionCantidadFija_O1);
-                    // Crear el input para la cantidad de descuento
-                    const inputCantidadDescuento_O1 = document.createElement('input');
-                    inputCantidadDescuento_O1.setAttribute('type', 'text');
-                    inputCantidadDescuento_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
-                    inputCantidadDescuento_O1.placeholder = '00.00';
-                    inputCantidadDescuento_O1.setAttribute('campoOferta', 'cantidad');
-                    // Agregar el título, el select y el input al segundo contenedor
-                    divContenedor2_O1.appendChild(pTituloOpcion2_O1);
-                    divContenedor2_O1.appendChild(selectTipoDescuento_O1);
-                    divContenedor2_O1.appendChild(inputCantidadDescuento_O1);
-                    // Agregar los contenedores de opciones al espacio de opciones
-                    //  divEspacioOpciones_O1.appendChild(divContenedor1_O1);
-                    divEspacioOpciones_O1.appendChild(divContenedor2_O1);
-                    divOfertaConXApartamentos_O1.appendChild(divEspacioOpciones_O1);
-                    divOfertaConXApartamentos_O1
-                },
-                botonesCrearOferta: () => {
-                    const divBotones_O1 = document.createElement('div');
-                    divBotones_O1.classList.add('crearOfertaEpacioBotones');
-                    divBotones_O1.setAttribute("componente", "espacioBotones")
-                    // Crear el botón para crear la oferta
-                    const pBotonCrearOferta_O1 = document.createElement('p');
-                    pBotonCrearOferta_O1.classList.add('crearOfervaBotonV1');
-                    pBotonCrearOferta_O1.textContent = 'Crear oferta';
-                    pBotonCrearOferta_O1.setAttribute('componente', 'botonCrearOferta');
-                    pBotonCrearOferta_O1.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.crearOferta.crearOfertaConfirmar)
-                    divBotones_O1.appendChild(pBotonCrearOferta_O1)
-                    divBotones_O1
-                },
-                botonesModificarOferta: () => {
-                    const divBotones_O1 = document.createElement('div');
-                    divBotones_O1.classList.add('crearOfertaEpacioBotones');
-                    divBotones_O1.setAttribute("componente", "espacioBotones")
-                    const botonModificarOferta = document.createElement("div")
-                    botonModificarOferta.classList.add('crearOfervaBotonV1');
-                    botonModificarOferta.setAttribute('componente', 'botonEditarOferta');
-                    botonModificarOferta.setAttribute('tipoOferta', 'conXApartamentosEnConcreto');
-                    botonModificarOferta.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.detallesOferta.ofertaModos)
-                    botonModificarOferta.textContent = 'Modificar oferta';
-                    const pBotonGuardarOferta_O1 = document.createElement("div")
-                    pBotonGuardarOferta_O1.classList.add('crearOfervaBotonV1');
-                    pBotonGuardarOferta_O1.setAttribute('componente', 'botonGuardarCambios');
-                    pBotonGuardarOferta_O1.classList.add('elementoOcultoInicialmente');
-                    pBotonGuardarOferta_O1.setAttribute('tipoOferta', 'conXApartamentosEnConcreto');
-                    pBotonGuardarOferta_O1.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.detallesOferta.guardarCambiosOferta)
-                    pBotonGuardarOferta_O1.textContent = 'Guardar cambios';
-                    const pBotonCancelarCambiosOferta_O1 = document.createElement('p');
-                    pBotonCancelarCambiosOferta_O1.classList.add('crearOfervaBotonV1');
-                    pBotonCancelarCambiosOferta_O1.classList.add('elementoOcultoInicialmente');
-                    pBotonCancelarCambiosOferta_O1.setAttribute('componente', 'botonCancelarCambios');
-                    pBotonCancelarCambiosOferta_O1.setAttribute('tipoOferta', 'conXApartamentosEnConcreto');
-                    pBotonCancelarCambiosOferta_O1.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.detallesOferta.ofertaModos)
-                    pBotonCancelarCambiosOferta_O1.textContent = 'Cancelar cambios y dejar de editar';
-                    const pBotonEliminarOferta_O1 = document.createElement('p');
-                    pBotonEliminarOferta_O1.classList.add('crearOfervaBotonV1');
-                    pBotonEliminarOferta_O1.classList.add('elementoOcultoInicialmente');
-                    pBotonEliminarOferta_O1.setAttribute('componente', 'botonElimnarOferta');
-                    pBotonEliminarOferta_O1.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.detallesOferta.eliminarOferta.UI)
-                    pBotonEliminarOferta_O1.textContent = 'Eliminar oferta';
-                    divBotones_O1.appendChild(botonModificarOferta);
-                    divBotones_O1.appendChild(pBotonGuardarOferta_O1);
-                    divBotones_O1.appendChild(pBotonCancelarCambiosOferta_O1);
-                    divBotones_O1.appendChild(pBotonEliminarOferta_O1);
-                    divBotones_O1
-                },
-                desplegarOpcionesOferta: (opcionOferta) => {
-                    const tipoOferta = opcionOferta.target.closest("[tipoOferta]").getAttribute("tipoOferta")
-                    const modoOferta = document.querySelector("[modo]").getAttribute("modo")
-                    const selectoresBotonDeplegarOpcionesOferta = document.querySelectorAll("[tipoOferta]")
-                    selectoresBotonDeplegarOpcionesOferta.forEach((boton) => {
-                        boton.removeAttribute("style")
+                selectorTipoOferta: () => {
+
+
+
+                    const pantallaInmersiva = casaVitini.componentes.ui.pantallaInmersivaPersonalizada()
+                    const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+                    const destino = pantallaInmersiva.querySelector("[destino=inyector]")
+
+                    const tituloUI = document.createElement("p")
+                    tituloUI.classList.add("titulo")
+                    tituloUI.setAttribute("componente", "titulo")
+                    tituloUI.innerText = "Añadir condición de oferta"
+                    constructor.appendChild(tituloUI)
+
+                    const divContenedorHorizontalTipoOfertas = document.createElement('div');
+                    divContenedorHorizontalTipoOfertas.classList.add('crearOfertaContenedorHorizontalTipoOfertas');
+                    // Crear las opciones de tipo de oferta
+                    const divContenedorTipoOfertas = document.createElement('div');
+                    divContenedorTipoOfertas.classList.add('crearOfertaConentenedor');
+                    // Crear el párrafo del título de tipo de oferta
+                    const opcionesTipoOferta = [
+                        {
+                            tipo: 'conFechaEntradaEntreRango',
+                            titulo: 'Con fecha de entrada entre rango',
+                            descripcion: 'Aplicar esta oferta cuando la fecha de entrada de una reserva está dentro de un rango de fechas.'
+                        },
+                        {
+                            tipo: 'conFechaCreacionEntreRango',
+                            titulo: 'Con fecha de creacion entre rango',
+                            descripcion: 'Aplicar esta oferta cuando la fecha de creación de una reserva está dentro de un rango de fechas.'
+                        },
+                        {
+                            tipo: 'porNumeroDeApartamentos',
+                            titulo: 'Por número de apartamentos ',
+                            descripcion: 'Aplicar oferta cuando una reserva que se realiza dentro del periodo de la oferta cumple con el número de apartamentos requeridos por este tipo de oferta.'
+                        },
+                        {
+                            tipo: 'porApartamentosEspecificos',
+                            titulo: 'Por apartamentos específicos ',
+                            descripcion: 'Aplicar oferta cuando una reserva que se realiza dentro del período de la oferta contiene los apartamentos en específico que requiere esta oferta.'
+                        },
+                        {
+                            tipo: 'porDiasDeAntelacion',
+                            titulo: 'Por días de antelación ',
+                            descripcion: 'Aplicar oferta cuando una reserva que se realiza dentro del periodo de la oferta cumple con el requisito de los días de antelación que requiere la oferta.'
+                        },
+                        {
+                            tipo: 'porDiasDeReserva',
+                            titulo: 'Por dias de la reserva',
+                            descripcion: 'Aplicar oferta cuando una reserva que se realiza dentro del periodo de la oferta cumple con los requisitos de días de duración que requiere la oferta '
+                        },
+                        {
+                            tipo: 'porRangoDeFechas',
+                            titulo: 'Por rango de fechas de la reserva',
+                            descripcion: 'Aplicar esta oferta cuando se realiza una reserva cuyo rango determinado por la fecha de entrada y la fecha de salida se cruza con el rango de duración de la oferta determinado. Esta oferta solo aplica el descuento a los dias de la reserva que estan dentro de este rango.'
+                        }
+                    ];
+                    // Crear las opciones de tipo de oferta y agregarlos al div contenedor horizontal de tipo de ofertas
+                    for (const opcion of opcionesTipoOferta) {
+                        const tipoOferta = opcion.tipo
+                        const divOpcionTipoOferta = document.createElement('div');
+                        divOpcionTipoOferta.classList.add('opcionTipoOFerta');
+                        divOpcionTipoOferta.setAttribute('tipoOferta', tipoOferta);
+                        divOpcionTipoOferta.addEventListener("click", () => {
+                            casaVitini.administracion.gestion_de_ofertas.componenteUI.desplegarOpcionesOferta({
+                                tipoOferta: tipoOferta,
+                                modoOferta: "crearOferta"
+                            })
+                            return casaVitini.componentes.limpiarAdvertenciasInmersivas()
+                        })
+                        const pTituloTipoOferta = document.createElement('p');
+                        pTituloTipoOferta.classList.add('crearOfertaTituloTipoOferta');
+                        pTituloTipoOferta.textContent = opcion.titulo;
+                        divContenedorTipoOfertas.appendChild(pTituloTipoOferta);
+
+                        const pDescripcionTipoOferta = document.createElement('p');
+                        pDescripcionTipoOferta.classList.add('crearOfertaDescripcionTipoOferta');
+                        pDescripcionTipoOferta.textContent = opcion.descripcion;
+                        divOpcionTipoOferta.appendChild(pTituloTipoOferta);
+                        divOpcionTipoOferta.appendChild(pDescripcionTipoOferta);
+                        divContenedorHorizontalTipoOfertas.appendChild(divOpcionTipoOferta);
+                    }
+                    divContenedorTipoOfertas.appendChild(divContenedorHorizontalTipoOfertas);
+                    destino.appendChild(divContenedorTipoOfertas);
+
+
+
+
+                    const botonCancelar = document.createElement("div")
+                    botonCancelar.classList.add("boton")
+                    botonCancelar.innerText = "Cerrar y volver al a edición de la oferta"
+                    botonCancelar.setAttribute("boton", "cancelar")
+                    botonCancelar.addEventListener("click", () => {
+                        return casaVitini.componentes.limpiarAdvertenciasInmersivas()
                     })
-                    opcionOferta.target.closest("[tipoOferta]").style.background = "blue"
-                    opcionOferta.target.closest("[tipoOferta]").style.color = "white"
-                    const selectorOpcionesOfertaRenderiadas = document.querySelectorAll(`[zonaOferta]`)
-                    selectorOpcionesOfertaRenderiadas.forEach((opciones) => {
-                        opciones.classList.add("elementoOcultoInicialmente")
-                        opciones.removeAttribute("ofertaEnPrimerPlano")
-                    })
-                    const espacioCrearOferta = document.querySelector("[componente=espacioCrearOferta]")
-                    if (tipoOferta === "porNumeroDeApartamentos") {
-                        let selectorZonaOfertaRenderizada = document.querySelector(`[zonaOferta=porNumeroDeApartamentos]`)
-                        if (!selectorZonaOfertaRenderizada) {
-                            const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porNumeroDeApartamentos()
-                            espacioCrearOferta.appendChild(opcionesUI)
-                        } else {
-                            selectorZonaOfertaRenderizada.classList.remove("elementoOcultoInicialmente")
-                        }
-                        document.querySelector(`[zonaOferta=porNumeroDeApartamentos]`).setAttribute("ofertaEnPrimerPlano", "Activado")
-                    }
-                    if (tipoOferta === "porApartamentosEspecificos") {
-                        let selectorZonaOfertaRenderizada = document.querySelector(`[zonaOferta=porApartamentosEspecificos]`)
-                        if (!selectorZonaOfertaRenderizada) {
-                            const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porApartamentosEspecificos()
-                            espacioCrearOferta.appendChild(opcionesUI)
-                        } else {
-                            selectorZonaOfertaRenderizada.classList.remove("elementoOcultoInicialmente")
-                        }
-                        document.querySelector(`[zonaOferta=porApartamentosEspecificos]`).setAttribute("ofertaEnPrimerPlano", "Activado")
-                    }
-                    if (tipoOferta === "porDiasDeAntelacion") {
-                        let selectorZonaOfertaRenderizada = document.querySelector(`[zonaOferta=porDiasDeAntelacion]`)
-                        if (!selectorZonaOfertaRenderizada) {
-                            const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porDiasDeAntelacion()
-                            espacioCrearOferta.appendChild(opcionesUI)
-                        } else {
-                            selectorZonaOfertaRenderizada.classList.remove("elementoOcultoInicialmente")
-                        }
-                        document.querySelector(`[zonaOferta=porDiasDeAntelacion]`).setAttribute("ofertaEnPrimerPlano", "Activado")
-                    }
-                    if (tipoOferta === "porDiasDeReserva") {
-                        let selectorZonaOfertaRenderizada = document.querySelector(`[zonaOferta=porDiasDeReserva]`)
-                        if (!selectorZonaOfertaRenderizada) {
-                            const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porDiasDeReserva()
-                            espacioCrearOferta.appendChild(opcionesUI)
-                        } else {
-                            selectorZonaOfertaRenderizada.classList.remove("elementoOcultoInicialmente")
-                        }
-                        document.querySelector(`[zonaOferta=porDiasDeReserva]`).setAttribute("ofertaEnPrimerPlano", "Activado")
-                    }
-                    if (tipoOferta === "porRangoDeFechas") {
-                        let selectorZonaOfertaRenderizada = document.querySelector(`[zonaOferta=porRangoDeFechas]`)
-                        if (!selectorZonaOfertaRenderizada) {
-                            const opcionesUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.porRangoDeFechas()
-                            espacioCrearOferta.appendChild(opcionesUI)
-                        } else {
-                            selectorZonaOfertaRenderizada.classList.remove("elementoOcultoInicialmente")
-                        }
-                        document.querySelector(`[zonaOferta=porRangoDeFechas]`).setAttribute("ofertaEnPrimerPlano", "Activado")
-                    }
-                    const espacioOfertas = document.querySelector("[componente=espacioOfertas]")
-                    const espacioBotonesRenderizado = document.querySelector("[componente=espacioBotones]")
-                    if (modoOferta === "crearOferta" && !espacioBotonesRenderizado) {
-                        const botonesCrearOferta = casaVitini.administracion.gestion_de_ofertas.componenteUI.botonesCrearOferta()
-                        espacioOfertas.appendChild(botonesCrearOferta)
-                    }
-                    if (modoOferta === "editarOferta" && !espacioBotonesRenderizado) {
-                        const botonesCrearOferta = casaVitini.administracion.gestion_de_ofertas.componenteUI.botonesModificarOferta()
-                        espacioOfertas.appendChild(botonesCrearOferta)
-                    }
+                    constructor.appendChild(botonCancelar)
+
+                    document.querySelector("main").appendChild(pantallaInmersiva)
                 },
+                tiposOfertasUI: {
+                    porNumeroDeApartamentos: () => {
+                        const divOfertaConXApartamentos_O1 = document.createElement('div');
+                        divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porNumeroDeApartamentos');
+                        divOfertaConXApartamentos_O1.classList.add('contenedorCondicion');
+
+
+                        const contenedorBotonesGlobales = document.createElement("div")
+                        contenedorBotonesGlobales.classList.add("contenedorBotonesGlobal")             
+                        contenedorBotonesGlobales.setAttribute("contenedor", "botones")             
+                        divOfertaConXApartamentos_O1.appendChild(contenedorBotonesGlobales)
+
+                        // Crear el elemento p para el título de la primera opción
+                        const pTituloOpcion1_O1 = document.createElement('p');
+                        pTituloOpcion1_O1.classList.add('crearOfertaTituloOpcion');
+                        pTituloOpcion1_O1.textContent = 'Determina cuántos apartamentos en concreto debe seleccionar el cliente o a partir de cuantos apartamentos necesita escoger el cliente para acceder esta oferta';
+                        divOfertaConXApartamentos_O1.appendChild(pTituloOpcion1_O1);
+                        // Crear el select para el tipo de descuento
+                        const seleccionaTipoNumero = document.createElement('select');
+                        seleccionaTipoNumero.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
+                        seleccionaTipoNumero.setAttribute('campoOferta', 'simboloNumero');
+                        // Crear las opciones del select
+                        const optionO1 = document.createElement('option');
+                        optionO1.selected = true;
+                        optionO1.disabled = true;
+                        optionO1.setAttribute('value', '');
+                        optionO1.textContent = 'Selecciona si apartir de o un numero exacto de apartamentos';
+                        const optionO2 = document.createElement('option');
+                        optionO2.value = 'numeroExacto';
+                        optionO2.textContent = 'Con un numero exacto de apartamentos';
+                        const opcion03 = document.createElement('option');
+                        opcion03.value = 'aPartirDe';
+                        opcion03.textContent = 'A partir de un numero exacto de apartamentos';
+                        seleccionaTipoNumero.appendChild(optionO1);
+                        seleccionaTipoNumero.appendChild(optionO2);
+                        seleccionaTipoNumero.appendChild(opcion03); +
+                            divOfertaConXApartamentos_O1.appendChild(seleccionaTipoNumero);
+
+                        // Crear el input para el número de apartamentos
+                        const inputNumeroApartamentos_O1 = document.createElement('input');
+                        inputNumeroApartamentos_O1.setAttribute('type', 'text');
+                        inputNumeroApartamentos_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
+                        inputNumeroApartamentos_O1.placeholder = '0';
+                        inputNumeroApartamentos_O1.setAttribute('campoOferta', 'numero');
+                        divOfertaConXApartamentos_O1.appendChild(inputNumeroApartamentos_O1);
+                        // Agregar el título y el input al primer contenedor
+
+                        const contenedorDescuento = casaVitini.administracion.gestion_de_ofertas.componenteUI.contenedorDescuento()
+                        divOfertaConXApartamentos_O1.appendChild(contenedorDescuento)
+                        return divOfertaConXApartamentos_O1
+                    },
+                    porApartamentosEspecificos: () => {
+                        // Crear el elemento div principal
+                        const porApartamentoDedicado = document.createElement('div');
+                        porApartamentoDedicado.classList.add('contenedorCondicion');
+                        porApartamentoDedicado.setAttribute('zonaOferta', 'porApartamentosEspecificos');
+
+
+                        const contenedorBotonesGlobales = document.createElement("div")
+                        contenedorBotonesGlobales.classList.add("contenedorBotonesGlobal")             
+                        contenedorBotonesGlobales.setAttribute("contenedor", "botones")             
+                        divOfertaConXApartamentos_O1.appendChild(contenedorBotonesGlobales)
+
+
+                        const pCrearOfertaTituloOpcion1_3 = document.createElement('p');
+                        pCrearOfertaTituloOpcion1_3.classList.add('crearOfertaTituloOpcion');
+                        pCrearOfertaTituloOpcion1_3.textContent =
+                            'Añade que apartamentos en concreto debe de seleccionar el cliente para que se aplique esta oferta';
+                        porApartamentoDedicado.appendChild(pCrearOfertaTituloOpcion1_3);
+
+                        const contenedorDescuento = casaVitini.administracion.gestion_de_ofertas.componenteUI.contenedorDescuento()
+                        porApartamentoDedicado.appendChild(contenedorDescuento)
+                        return porApartamentoDedicado
+                    },
+                    porDiasDeAntelacion: () => {
+                        const divOfertaConXApartamentos_O1 = document.createElement('div');
+                        divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porDiasDeAntelacion');
+                        divOfertaConXApartamentos_O1.classList.add('contenedorCondicion');
+
+
+
+                        const contenedorBotonesGlobales = document.createElement("div")
+                        contenedorBotonesGlobales.classList.add("contenedorBotonesGlobal")             
+                        contenedorBotonesGlobales.setAttribute("contenedor", "botones")             
+                        divOfertaConXApartamentos_O1.appendChild(contenedorBotonesGlobales)
+                        // Crear el elemento div para el espacio de opciones
+                        const divEspacioOpciones_O1 = document.createElement('div');
+                        divEspacioOpciones_O1.classList.add('crearOfeartaEspacioOpciones');
+                        // Crear el primer contenedor de opciones
+                        const divContenedor1_O1 = document.createElement('div');
+                        divContenedor1_O1.classList.add('crearOfertaConentenedor');
+                        // Crear el elemento p para el título de la primera opción
+                        const pTituloOpcion1_O1 = document.createElement('p');
+                        pTituloOpcion1_O1.classList.add('crearOfertaTituloOpcion');
+                        pTituloOpcion1_O1.textContent = 'Determina cuántos dias de antelacion en concreto debe de tener la reserva o a partir de cuantos dias de antelacion se aplica esta oferta';
+                        divContenedor1_O1.appendChild(pTituloOpcion1_O1);
+
+                        // Crear el select para el tipo de descuento
+                        const seleccionaTipoNumero = document.createElement('select');
+                        seleccionaTipoNumero.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
+                        seleccionaTipoNumero.setAttribute('campoOferta', 'simboloNumero');
+                        // Crear las opciones del select
+                        const optionO1 = document.createElement('option');
+                        optionO1.selected = true;
+                        optionO1.disabled = true;
+                        optionO1.setAttribute('value', '');
+                        optionO1.textContent = 'Selecciona si apartir de o un numero exacto de dias';
+                        const optionO2 = document.createElement('option');
+                        optionO2.value = 'numeroExacto';
+                        optionO2.textContent = 'Con un numero exacto de dias de antelacion';
+                        const opcion03 = document.createElement('option');
+                        opcion03.value = 'aPartirDe';
+                        opcion03.textContent = 'A partir de un numero exacto de de dias de antelacion';
+                        seleccionaTipoNumero.appendChild(optionO1);
+                        seleccionaTipoNumero.appendChild(optionO2);
+                        seleccionaTipoNumero.appendChild(opcion03);
+                        divContenedor1_O1.appendChild(seleccionaTipoNumero);
+
+                        // Crear el input para el número de apartamentos
+                        const inputNumeroApartamentos_O1 = document.createElement('input');
+                        inputNumeroApartamentos_O1.setAttribute('type', 'text');
+                        inputNumeroApartamentos_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
+                        inputNumeroApartamentos_O1.placeholder = "Determina el numero de dias de antelacion";
+                        inputNumeroApartamentos_O1.setAttribute('campoOferta', 'numero');
+                        // Agregar el título y el input al primer contenedor
+                        divContenedor1_O1.appendChild(inputNumeroApartamentos_O1);
+
+
+
+                        // Agregar los contenedores de opciones al espacio de opciones
+                        divEspacioOpciones_O1.appendChild(divContenedor1_O1);
+                        divOfertaConXApartamentos_O1.appendChild(divEspacioOpciones_O1);
+
+
+                        const contenedorDescuento = casaVitini.administracion.gestion_de_ofertas.componenteUI.contenedorDescuento()
+                        divOfertaConXApartamentos_O1.appendChild(contenedorDescuento)
+                        return divOfertaConXApartamentos_O1
+                    },
+                    porDiasDeReserva: () => {
+                        const divOfertaConXApartamentos_O1 = document.createElement('div');
+                        divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porDiasDeReserva');
+                        divOfertaConXApartamentos_O1.classList.add('contenedorCondicion');
+
+
+
+                        const contenedorBotonesGlobales = document.createElement("div")
+                        contenedorBotonesGlobales.classList.add("contenedorBotonesGlobal")             
+                        contenedorBotonesGlobales.setAttribute("contenedor", "botones")             
+                        divOfertaConXApartamentos_O1.appendChild(contenedorBotonesGlobales)
+
+                        // Crear el elemento div para el espacio de opciones
+                        const divEspacioOpciones_O1 = document.createElement('div');
+                        divEspacioOpciones_O1.classList.add('crearOfeartaEspacioOpciones');
+                        // Crear el primer contenedor de opciones
+                        const divContenedor1_O1 = document.createElement('div');
+                        divContenedor1_O1.classList.add('crearOfertaConentenedor');
+                        // Crear el elemento p para el título de la primera opción
+                        const pTituloOpcion1_O1 = document.createElement('p');
+                        pTituloOpcion1_O1.classList.add('crearOfertaTituloOpcion');
+                        pTituloOpcion1_O1.textContent = 'Determina cuántos dias con noche debe tener la reserva en concreto o a partir de cuantos dias con noche debe de tener la reserva';
+                        // Crear el select para el tipo de descuento
+                        const seleccionaTipoNumero = document.createElement('select');
+                        seleccionaTipoNumero.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
+                        seleccionaTipoNumero.setAttribute('campoOferta', 'simboloNumero');
+                        // Crear las opciones del select
+                        const optionO1 = document.createElement('option');
+                        optionO1.selected = true;
+                        optionO1.disabled = true;
+                        optionO1.setAttribute('value', '');
+                        optionO1.textContent = 'Selecciona si apartir de o un numero exacto de días con noche';
+                        const optionO2 = document.createElement('option');
+                        optionO2.value = 'numeroExacto';
+                        optionO2.textContent = 'Con un numero exacto de días con noche de la reserva';
+                        const opcion03 = document.createElement('option');
+                        opcion03.value = 'aPartirDe';
+                        opcion03.textContent = 'A partir de un numero exacto de de días noche de la reserva';
+                        seleccionaTipoNumero.appendChild(optionO1);
+                        seleccionaTipoNumero.appendChild(optionO2);
+                        seleccionaTipoNumero.appendChild(opcion03);
+                        divEspacioOpciones_O1.appendChild(divContenedor1_O1);
+
+                        // Crear el input para el número de apartamentos
+                        const inputNumeroApartamentos_O1 = document.createElement('input');
+                        inputNumeroApartamentos_O1.setAttribute('type', 'text');
+                        inputNumeroApartamentos_O1.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
+                        inputNumeroApartamentos_O1.placeholder = "Determina el numero de dias de la reserva";
+                        inputNumeroApartamentos_O1.setAttribute('campoOferta', 'numero');
+                        // Agregar el título y el input al primer contenedor
+                        divContenedor1_O1.appendChild(pTituloOpcion1_O1);
+                        divContenedor1_O1.appendChild(seleccionaTipoNumero);
+                        divContenedor1_O1.appendChild(inputNumeroApartamentos_O1);
+
+
+                        divOfertaConXApartamentos_O1.appendChild(divEspacioOpciones_O1);
+                        const contenedorDescuento = casaVitini.administracion.gestion_de_ofertas.componenteUI.contenedorDescuento()
+                        divOfertaConXApartamentos_O1.appendChild(contenedorDescuento)
+                        return divOfertaConXApartamentos_O1
+                    },
+                    conFechaCreacionEntreRango: () => {
+
+                        const divOfertaConXApartamentos_O1 = document.createElement('div');
+                        divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'conFechaCreacionEntreRango');
+                        divOfertaConXApartamentos_O1.classList.add('contenedorCondicion');
+
+                        
+                        const contenedorBotonesGlobales = document.createElement("div")
+                        contenedorBotonesGlobales.classList.add("contenedorBotonesGlobal")             
+                        contenedorBotonesGlobales.setAttribute("contenedor", "botones")             
+                        divOfertaConXApartamentos_O1.appendChild(contenedorBotonesGlobales)
+
+
+                        const titulo = document.createElement('p');
+                        titulo.classList.add('crearOfertaTituloOpcion');
+                        titulo.textContent = 'Esta oferta es el perfil mas simple, simplemente se aplica si se realiza una reserva en el momento de vigencia de la oferta. Es decir se aplica a la reserva cuya fecha de creacion esta dentro del rango de vigencia de la reserva..';
+                        divOfertaConXApartamentos_O1.appendChild(titulo);
+
+                        const contenedorDescuento = casaVitini.administracion.gestion_de_ofertas.componenteUI.contenedorDescuento()
+                        divOfertaConXApartamentos_O1.appendChild(contenedorDescuento)
+                        return divOfertaConXApartamentos_O1
+                    },
+                    conFechaEntradaEntreRango: () => {
+
+                        const divOfertaConXApartamentos_O1 = document.createElement('div');
+                        divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'conFechaEntradaEntreRango');
+                        divOfertaConXApartamentos_O1.classList.add('contenedorCondicion');
+
+                        const contenedorBotonesGlobales = document.createElement("div")
+                        contenedorBotonesGlobales.classList.add("contenedorBotonesGlobal")             
+                        contenedorBotonesGlobales.setAttribute("contenedor", "botones")             
+                        divOfertaConXApartamentos_O1.appendChild(contenedorBotonesGlobales)
+
+                        const titulo = document.createElement('p');
+                        titulo.classList.add('crearOfertaTituloOpcion');
+                        titulo.textContent = 'Selecciona el rango de fechas que se tendra en cuenta para determinar que dias de la reserva, es decir lo dias dentro del rango de la reserva, seran a los que se les aplicara un descuento.';
+                        divOfertaConXApartamentos_O1.appendChild(titulo);
+
+                        const contenedorFechasUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.contenedorFechasUI()
+                        divOfertaConXApartamentos_O1.appendChild(contenedorFechasUI)
+                        const contenedorDescuento = casaVitini.administracion.gestion_de_ofertas.componenteUI.contenedorDescuento()
+                        divOfertaConXApartamentos_O1.appendChild(contenedorDescuento)
+                        return divOfertaConXApartamentos_O1
+                    },
+                    porRangoDeFechas: () => {
+
+                        const divOfertaConXApartamentos_O1 = document.createElement('div');
+                        divOfertaConXApartamentos_O1.setAttribute('zonaOferta', 'porRangoDeFechas');
+                        divOfertaConXApartamentos_O1.classList.add('contenedorCondicion');
+
+                        const contenedorBotonesGlobales = document.createElement("div")
+                        contenedorBotonesGlobales.classList.add("contenedorBotonesGlobal")             
+                        contenedorBotonesGlobales.setAttribute("contenedor", "botones")             
+
+                        divOfertaConXApartamentos_O1.appendChild(contenedorBotonesGlobales)
+
+                  
+
+                        const titulo = document.createElement('p');
+                        titulo.classList.add('crearOfertaTituloOpcion');
+                        titulo.textContent = 'Selecciona el rango de fechas que se tendra en cuenta para determinar que dias de la reserva, es decir lo dias dentro del rango de la reserva, seran a los que se les aplicara un descuento.';
+                        divOfertaConXApartamentos_O1.appendChild(titulo);
+
+                        const contenedorFechasUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.contenedorFechasUI()
+                        divOfertaConXApartamentos_O1.appendChild(contenedorFechasUI)
+                        const contenedorDescuento = casaVitini.administracion.gestion_de_ofertas.componenteUI.contenedorDescuento()
+                        divOfertaConXApartamentos_O1.appendChild(contenedorDescuento)
+                        return divOfertaConXApartamentos_O1
+                    },
+                },
+                eliminarContenedorCondicion: (tipoCondicion) => {
+                   tipoCondicion.target.closest("[zonaOferta]").remove()
+                   return casaVitini.administracion.gestion_de_ofertas.componenteUI.controlDespliegeContenedorDescuento()
+                },
+                controlDespliegeContenedorDescuento: () => {
+
+                    const contenedorCondiciones = document.querySelector("[componente=espacioCrearOferta] [contenedor=condiciones]")
+                    const contenedorDescuentos = document.querySelector("[componente=espacioCrearOferta] [contenedor=descuentos]")
+                    const contenedorBotones = document.querySelector("[componente=espacioCrearOferta] [contenedor=botones]")
+                    const ofertasRenderizadas = contenedorCondiciones.querySelectorAll("[zonaOferta]")
+                    
+                    const modoActual = document.querySelector("[componente=espacioOfertas]").getAttribute("modo")
+                    if (ofertasRenderizadas.length > 0) {
+                        const descuentosUI = casaVitini.administracion.gestion_de_ofertas.componenteUI.contenedorDescuento()
+                        contenedorDescuentos.appendChild(descuentosUI)
+
+                        if (modoActual === "crearOferta") {
+                            const botonesCrearOferta = casaVitini.administracion.gestion_de_ofertas.componenteUI.botonesCrearOferta()
+                            contenedorBotones.appendChild(botonesCrearOferta)
+                        }
+                        if (modoActual === "editarOferta") {
+                            const botonesCrearOferta = casaVitini.administracion.gestion_de_ofertas.componenteUI.botonesModificarOferta()
+                            contenedorBotones.appendChild(botonesCrearOferta)
+                        }
+                        
+                    }else {
+
+                        contenedorDescuentos.innerHTML = null
+                        contenedorBotones.innerHTML = null
+                    }
+
+
+
+
+
+                }
             }
         },
         comportamiento_de_precios: {
@@ -26069,6 +26239,5 @@ const convertirFuncionesEnCadenas = (objeto) => {
 export const administracionJS = () => {
     convertirFuncionesEnCadenas(casaVitini.administracion);
     const objetoComoJSON = JSON.stringify(casaVitini.administracion);
-    console.log(objetoComoJSON)
     return objetoComoJSON
 }

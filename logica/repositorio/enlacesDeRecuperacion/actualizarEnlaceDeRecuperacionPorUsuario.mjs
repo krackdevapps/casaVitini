@@ -13,7 +13,9 @@ export const actualizarEnlaceDeRecuperacionPorUsuario = async (data) => {
         "codigoVerificacion" = $1,
         "fechaCaducidadCuentaNoVerificada" = $2
         WHERE
-        usuario = $3;
+        usuario = $3
+        RETURNING
+        *;
         `;
         const parametros = [
             codigoGenerado,

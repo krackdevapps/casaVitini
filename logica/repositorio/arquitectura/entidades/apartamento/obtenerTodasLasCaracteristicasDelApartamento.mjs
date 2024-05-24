@@ -6,8 +6,8 @@ export const obtenerTodasLasCaracteristicasDelApartamento = async (apartamentoID
         *
         FROM "apartamentosCaracteristicas" 
         WHERE "apartamentoIDV" = $1;`;
-        const resolucionNombre = await conexion.query(consulta, [apartamentoIDV])
-        return resolucionNombre.rows
+        const resuelve = await conexion.query(consulta, [apartamentoIDV])
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

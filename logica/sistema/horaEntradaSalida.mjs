@@ -1,4 +1,4 @@
-import { obtenerParConfiguracion } from "../repositorio/configuracion/obtenerParConfiguracion.mjs";
+import { obtenerParConfiguracion } from "../repositorio/configuracion/parConfiguracion/obtenerParConfiguracion.mjs";
 
 export const horaEntradaSalida = async () => {
     try {

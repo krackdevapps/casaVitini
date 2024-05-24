@@ -4,10 +4,10 @@ import { utilidades } from "../../../componentes/utilidades.mjs";
 import { apartamentosOcupadosHoy_paraSitaucion } from "../../../sistema/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracion/horasSalidaEntrada.mjs";
-import { obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc } from "../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc.mjs";
+import { obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc } from "../../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
-import { reservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/reservasPorRango.mjs";
+import { obtenerReservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorRango.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const obtenerSituacion = async (entrada, salida) => {
@@ -46,7 +46,7 @@ export const obtenerSituacion = async (entrada, salida) => {
         const horaPresenteTZ = tiempoZH.hour;
         const minutoPresenteTZ = tiempoZH.minute;
 
-        const reservasUIDHoy = await reservasPorRango({
+        const reservasUIDHoy = await obtenerReservasPorRango({
             fechaIncioRango_ISO: fechaActualTZ,
             fechaFinRango_ISO: fechaActualTZ
         })

@@ -13,9 +13,10 @@ export const actualizarEnlaceDePagoPorEnlaceUID = async (data) => {
            "nombreEnlace" = $1,
            descripcion = $2,
            cantidad = $3,
-           caducidad = $4
+           "fechaCaducidad" = $4
            WHERE 
-           "reservaUID" = $5;
+           "enlaceUID" = $5
+           RETURNING *;
            `;
         const parametros = [
             nombreEnlace,

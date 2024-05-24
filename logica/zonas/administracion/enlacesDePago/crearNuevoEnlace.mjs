@@ -1,9 +1,9 @@
-import { conexion } from "../../../componentes/db.mjs";
+import { insertarEnlaceDePago } from "../../../repositorio/enlacesDePago/insertarEnlaceDePago.mjs";
+import { obtenerEnlaceDePagoPorCodigoUPID } from "../../../repositorio/enlacesDePago/obtenerEnlaceDePagoPorCodigoUPID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
-
-
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const crearNuevoEnlace = async (entrada, salida) => {
     try {
@@ -11,48 +11,51 @@ export const crearNuevoEnlace = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-        
-        const error = "Hasta que no se pueda habilitar una pasarela de pago, esta opcion esta deshabilitada.";
-        throw new Error(error);
-        // Este script no esta refactorizado por que aun no hace falta, es un boceto sucio.
-        let nombreEnlace = entrada.body.nombreEnlace;
-        const reservaUID = entrada.body.reservaUID;
-        const cantidad = entrada.body.cantidad;
-        let horasCaducidad = entrada.body.horasCaducidad;
-        const filtroCadena = /^[0-9]+$/;
-        const filtroDecimales = /^\d+\.\d{2}$/;
-        const filtroTextoSimple = /^[a-zA-Z0-9\s]+$/;
-        if (horasCaducidad) {
-            if (!filtroCadena.test(horasCaducidad)) {
-                const error = "el campo cantidad solo puede ser una cadena de numeros con dos decimales separados por punto, ejemplo 10.00.";
-                throw new Error(error);
-            }
-        } else {
-            horasCaducidad = 72;
-        }
-        if (!cantidad || !filtroDecimales.test(cantidad)) {
-            const error = "el campo cantidad solo puede ser una cadena de numeros con dos decimales separados por punto, ejemplo 10.00.";
-            throw new Error(error);
-        }
-        if (nombreEnlace) {
-            if (!filtroTextoSimple.test(nombreEnlace)) {
-                const error = "el campo 'nombreEnlace' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
-                throw new Error(error);
-            }
-        } else {
-            nombreEnlace = `Enlace de pago de la reserva ${reservaUID}`;
-        }
-        const descripcion = entrada.body.descripcion;
-        if (descripcion) {
-            if (!filtroTextoSimple.test(descripcion)) {
-                const error = "el campo 'descripcion' solo puede ser una cadena de letras, numeros y espacios.";
-                throw new Error(error);
-            }
-        }
+
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            number: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reser (reservaUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+
+        const nombreEnlace = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreEnlace || `Enlace de pago de la reserva ${reservaUID}`,
+            nombreCampo: "El campo del nombreEnlace",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const cantidad = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.cantidad,
+            nombreCampo: "El campo cantidad",
+            filtro: "cadenaConNumerosConDosDecimales",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const horasCaducidad = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.horasCaducidad || 72,
+            nombreCampo: "El campo horasCaducidad",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const descripcion = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.descripcion,
+            nombreCampo: "El campo del descripcion",
+            filtro: "strictoConEspacios",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
         await controlCaducidadEnlacesDePago();
         const resuelveValidarReserva = await obtenerReservaPorReservaUID(reservaUID);
-        const estadoReserva = resuelveValidarReserva.estadoReserva;
-        const estadoPago = resuelveValidarReserva.estadoPago;
+        const estadoReserva = resuelveValidarReserva.estadoReservaIDV;
+
         if (estadoReserva === "cancelada") {
             const error = "No se puede generar un enlace de pago una reserva cancelada";
             throw new Error(error);
@@ -71,14 +74,11 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             return cadenaAleatoria;
         };
         const validarCodigo = async (codigoAleatorio) => {
-            const validarCodigoAleatorio = `
-                                SELECT
-                                codigo
-                                FROM "enlacesDePago"
-                                WHERE codigo = $1;`;
-            const resuelveValidarCodigoAleatorio = await conexion.query(validarCodigoAleatorio, [codigoAleatorio]);
-            if (resuelveValidarCodigoAleatorio.rowCount === 1) {
-                return true;
+            // Se esta validando que no existe ningun enlace de pago con el mismo codiog UPID. Si no existe, el adaptaador manera el error de enlace inexistente y el trycatch de aqui devuelve true
+            try {   
+                await obtenerEnlaceDePagoPorCodigoUPID(codigoAleatorio)
+            } catch (error) {
+                return true
             }
         };
         const controlCodigo = async () => {
@@ -96,52 +96,26 @@ export const crearNuevoEnlace = async (entrada, salida) => {
         const fechaActual = new Date();
         const fechaDeCaducidad = new Date(fechaActual.getTime() + (horasCaducidad * 60 * 60 * 1000));
         const estadoPagoInicial = "noPagado";
-        const insertarEnlace = `
-                                INSERT INTO "enlacesDePago"
-                                (
-                                "nombreEnlace",
-                                reserva,
-                                descripcion,
-                                caducidad,
-                                cantidad,
-                                codigo,
-                                "estadoPago"
-                                )
-                                VALUES ($1, $2, $3, $4, $5, $6, $7) 
-                                RETURNING
-                                "enlaceUID",
-                                "nombreEnlace",
-                                cantidad,
-                                codigo
-                                `;
-        const datosEnlace = [
-            nombreEnlace,
-            reservaUID,
-            descripcion,
-            fechaDeCaducidad,
-            cantidad,
-            codigoAleatorioUnico,
-            estadoPagoInicial
-        ];
-        const resuelveInsertarEnlace = await conexion.query(insertarEnlace, datosEnlace);
-        if (resuelveInsertarEnlace.rowCount === 0) {
-            const error = "No se ha podido insertar el nuevo enlace, reintentalo";
-            throw new Error(error);
-        }
-        if (resuelveInsertarEnlace.rowCount === 1) {
-            const enlaceUID = resuelveInsertarEnlace.rows[0].enlaceUID;
-            const nombreEnlace = resuelveInsertarEnlace.rows[0].nombreEnlace;
-            const cantidad = resuelveInsertarEnlace.rows[0].cantidad;
-            const enlace = resuelveInsertarEnlace.rows[0].codigo;
-            const ok = {
-                ok: "Se ha creado el enlace correctamente",
-                enlaceUID: enlaceUID,
-                nombreEnlace: nombreEnlace,
-                cantidad: cantidad,
-                enlace: enlace
-            };
-            return ok
-        }
+        const nuevoEnlaceDePago = await insertarEnlaceDePago({
+            nombreEnlace: nombreEnlace,
+            reservaUID: reservaUID,
+            descripcion: descripcion,
+            fechaDeCaducidad: fechaDeCaducidad,
+            cantidad: cantidad,
+            codigoAleatorioUnico: codigoAleatorioUnico,
+            estadoPagoInicial: estadoPagoInicial,
+        })
+
+        const enlaceUID = nuevoEnlaceDePago.enlaceUID;
+        const enlace = nuevoEnlaceDePago.codigo;
+        const ok = {
+            ok: "Se ha creado el enlace correctamente",
+            enlaceUID: enlaceUID,
+            nombreEnlace: nombreEnlace,
+            cantidad: cantidad,
+            enlace: enlace
+        };
+        return ok
     } catch (errorCapturado) {
         throw errorCapturado
     }

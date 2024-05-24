@@ -5,8 +5,12 @@ export const obtenerCamaComoEntidadPorCamaIDV = async (camaIDV) => {
         SELECT *
         FROM camas 
         WHERE "camaIDV" = $1`
-        const resolucionNombre = await conexion.query(consulta, [camaIDV])
-        return resolucionNombre.rows[0]
+        const resuelve = await conexion.query(consulta, [camaIDV])
+        if (resuelve.rowCount === 0) {
+            const error = "No se encuntra ninguna cama con ese camaIDV"
+            throw error
+        }
+        return resuelve.rows[0]
     } catch (errorCapturado) {
         throw error;
     }

@@ -1,5 +1,5 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
+import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const listarConfiguracionApartamentos = async (entrada, salida) => {

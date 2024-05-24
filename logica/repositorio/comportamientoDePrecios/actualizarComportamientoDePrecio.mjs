@@ -15,9 +15,10 @@ export const actualizarComportamientoDePrecio = async (data) => {
         "nombreComportamiento" = $1,
         "fechaInicio" = $2,
         "fechaFinal" = $3,
-        tipo = $4,
+        "tipoIDV" = $4,
         "diasArray" = $5
-        WHERE uid = $6
+        WHERE 
+        "comportamientoUID" = $6
         RETURNING *;
         `;
         const parametros = [
@@ -33,8 +34,7 @@ export const actualizarComportamientoDePrecio = async (data) => {
             const error = "No existe ningun comportamiento de precio con ese comportamientoUID, revisa el identificador";
             throw new Error(error)
         }
-        const comportamientoActualizado = resuelve.rows[0]
-        return comportamientoActualizado
+        return resuelve.rows[0]
 
     } catch (errorCapturado) {
         throw errorCapturado

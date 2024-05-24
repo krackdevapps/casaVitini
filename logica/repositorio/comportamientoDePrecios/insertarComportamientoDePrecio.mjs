@@ -15,8 +15,8 @@ export const insertarComportamientoDePrecio = async (data) => {
                 "nombreComportamiento",
                 "fechaInicio",
                 "fechaFinal",
-                 estado,
-                 tipo,
+                 "estadoIDV",
+                 "tipoIDV",
                  "diasArray",
                  "comportamientoTVI"
             )
@@ -27,7 +27,9 @@ export const insertarComportamientoDePrecio = async (data) => {
                 COALESCE($3::date, NULL),
                 COALESCE($4, NULL),
                 COALESCE($5, NULL),
-                COALESCE($6::text[], NULL)
+                COALESCE($6::text[], NULL),
+                COALESCE($7, NULL)
+
             )
             RETURNING 
             *;

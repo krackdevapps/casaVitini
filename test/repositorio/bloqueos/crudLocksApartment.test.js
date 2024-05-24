@@ -3,7 +3,7 @@ import { describe, expect, test } from '@jest/globals';
 import { insertarNuevoBloqueo } from '../../../logica/repositorio/bloqueos/insertarNuevoBloqueo.mjs';
 import { eliminarBloqueoPorBloqueoIDV } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorBloqueoIDV.mjs';
 import { actualizarBloqueoPorBloqueoUID } from '../../../logica/repositorio/bloqueos/actualizarBloqueoPorBloqueoUID.mjs';
-import { obtenerBloqueoPorTipoIDVPorApartamentoIDV } from '../../../logica/repositorio/bloqueos/obtenerBloqueoPorTipoIDVPorApartamentoIDV.mjs';
+import { obtenerBloqueosPorTipoIDVPorApartamentoIDV } from '../../../logica/repositorio/bloqueos/obtenerBloqueosPorTipoIDVPorApartamentoIDV.mjs';
 import { obtenerBloqueoPorBloqueoUIDPorApartamentoIDV } from '../../../logica/repositorio/bloqueos/obtenerBloqueoPorBloqueoUIDPorApartamentoIDV.mjs';
 import { obtenerBloqueoPorBloqueoUID } from '../../../logica/repositorio/bloqueos/obtenerBloqueoPorBloqueoUID.mjs';
 import { obtenerBloqueosDelApartamentoPorApartamentoIDV } from '../../../logica/repositorio/bloqueos/obtenerBloqueosDelApartamentoPorApartamentoIDV.mjs';
@@ -87,11 +87,11 @@ describe('crud locks for apartments', () => {
             bloqueoUID: nuevoBloqueoUID
         });
         expect(response).not.toBeUndefined();
-        expect(Array.isArray(response)).toBe(true);
+        expect(typeof response).toBe('object');
     })
 
     test('selec lock by bloqueoUID and tipoBloqueoIDV', async () => {
-        const response = await obtenerBloqueoPorTipoIDVPorApartamentoIDV({
+        const response = await obtenerBloqueosPorTipoIDVPorApartamentoIDV({
             apartamentoIDV: apartamentoIDVInicial,
             tipoBloqueoIDV: tipoRangoTemporal
         });
@@ -120,7 +120,7 @@ describe('crud locks for apartments', () => {
         const response = await obtenerTodosLosbloqueosPorMesPorAnoPorTipo({
             mes: mes,
             ano: ano,
-            
+
         });
         expect(response).not.toBeUndefined();
         expect(Array.isArray(response)).toBe(true);

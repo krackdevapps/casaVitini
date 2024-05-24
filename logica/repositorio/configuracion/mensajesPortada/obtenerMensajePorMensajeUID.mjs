@@ -8,7 +8,7 @@ export const obtenerMensajePorMensajeUID = async (mensajeUID) => {
                FROM 
                    "mensajesEnPortada"
                WHERE 
-                   uid = $1;
+                   "mensajeUID" = $1;
             `;
 
         const resuelve = await conexion.query(consulta, [mensajeUID]);

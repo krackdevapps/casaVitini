@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { obtenerBloqueoPorTipoIDVPorApartamentoIDV } from '../../repositorio/bloqueos/obtenerBloqueoPorTipoIDVPorApartamentoIDV.mjs';
+import { obtenerBloqueosPorTipoIDVPorApartamentoIDV } from '../../repositorio/bloqueos/obtenerBloqueosPorTipoIDVPorApartamentoIDV.mjs';
 import { obtenerCalendarioPorCalendarioUIDPublico } from '../../repositorio/calendario/obtenerCalendarioPorCalendarioUIDPublico.mjs';
 import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from '../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs';
 import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
@@ -30,7 +30,6 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
             }
             return fechasEnRango;
         };
-        console.log("d")
         const arrayFechas = generarFechasEnRango(fechaInicio, fechaFin);
         const objetoFechas = {};
         for (const fecha of arrayFechas) {
@@ -39,7 +38,7 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
         // Primero buscamso si hay bloqueos permanentes
         // si no hay procedemos a buscar bloquoeos temporales y reservas
         const bloqueoPermanente = "permanente";
-        const bloqueosPorTipoPorApartamentoIDV = await obtenerBloqueoPorTipoIDVPorApartamentoIDV({
+        const bloqueosPorTipoPorApartamentoIDV = await obtenerBloqueosPorTipoIDVPorApartamentoIDV({
             tipoBloqueoIDV: bloqueoPermanente,
             apartamentoIDV: apartamentoIDV
         })

@@ -4,14 +4,12 @@ export const eliminarEnlaceDePagoPorEnlaceUID = async (enlaceUID) => {
     try {
         const consulta = `
         DELETE FROM "enlacesDePago"
-        WHERE "enlaceUID" = $1;
+        WHERE "enlaceUID" = $1
+        RETURNING
+        *;
         `;
         const resuelve = await conexion.query(consulta, [enlaceUID]);
-        if (resuelve.rowCount === 0) {
-            const error = "No se ha podido eliminar el enlace de pago por que no existe";
-            throw new Error(error)
-        }
-        return resuelve.rows[0]
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

@@ -2,10 +2,10 @@ import ICAL from 'ical.js';
 import { VitiniIDX } from '../../../../../sistema/VitiniIDX/control.mjs';
 import { validadoresCompartidos } from '../../../../../sistema/validadores/validadoresCompartidos.mjs';
 
-import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs';
-import { obtenerCalendarioPorCalendarioUIDPublico } from '../../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorCalendarioUIDPublico.mjs';
-import { insertarCalendarioSincronizado } from '../../../../../repositorio/configuracion/calendarioSincronizados/insertarCalendarioSincronizado.mjs';
+import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs';
 import { campoDeTransaccion } from '../../../../../repositorio/globales/campoDeTransaccion.mjs';
+import { obtenerCalendarioPorCalendarioUIDPublico } from '../../../../../repositorio/calendario/obtenerCalendarioPorCalendarioUIDPublico.mjs';
+import { insertarCalendarioSincronizado } from '../../../../../repositorio/calendario/insertarCalendarioSincronizado.mjs';
 
 export const crearCalendario = async (entrada, salida) => {
     try {

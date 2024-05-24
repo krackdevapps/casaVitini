@@ -23,6 +23,10 @@ export const actualizarHabitacionComoEntidadPorHabitacionIDV = async (data) => {
             habitacionIDVSelector
         ];
         const resuelve = await conexion.query(consulta, parametros)
+        if (resuelve.rowCount === 0) {
+            const error = "No existe ninguna habitacion con ese habitacionIDV para actualizar."
+            throw error
+        }
         return resuelve.rows[0]
     } catch (errorAdaptador) {
         throw errorAdaptador

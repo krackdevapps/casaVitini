@@ -10,13 +10,13 @@ export const insertarEnlaceDeRecuperacion = async (data) => {
         INSERT INTO "enlaceDeRecuperacionCuenta"
         (
         usuario,
-        codigo,
+        "codigoUPID",
         "fechaCaducidad"
         )
         VALUES
         ($1, $2, $3)
         RETURNING
-        codigo
+        *
         `;
         const parametros = [
             usuarioIDX,

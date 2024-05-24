@@ -1,8 +1,7 @@
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
-
-import { obtenerCalendarioPorCalendarioUID } from "../../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorCalendarioUID.mjs";
-import { eliminarCalendarioSincronizadoPorCalendarioUID } from "../../../../../repositorio/configuracion/calendarioSincronizados/eliminarCalendarioSincronizadoPorCalendarioUID.mjs";
+import { obtenerCalendarioPorCalendarioUID } from "../../../../../repositorio/calendario/obtenerCalendarioPorCalendarioUID.mjs";
+import { eliminarCalendarioSincronizadoPorCalendarioUID } from "../../../../../repositorio/calendario/eliminarCalendarioSincronizadoPorCalendarioUID.mjs";
 
 export const eliminarCalendario = async (entrada, salida) => {
 

@@ -1,8 +1,8 @@
-import { obtenerImpuestosPorReservaUID } from "../../../repositorio/reservas/transacciones/obtenerImpuestosPorReservaUID.mjs";
-import { obtenerOfertasPorReservaUID } from "../../../repositorio/reservas/transacciones/obtenerOfertasPorReservaUID.mjs";
-import { obtenerTotalesGlobal } from "../../../repositorio/reservas/transacciones/obtenerTotalesGlobal.mjs";
-import { obtenerTotalesPorApartamentoPorReservaUID } from "../../../repositorio/reservas/transacciones/obtenerTotalesPorApartamentoPorReservaUID.mjs";
-import { obtenerTotalesPorNochePorReservaUID } from "../../../repositorio/reservas/transacciones/obtenerTotalesPorNochePorReservaUID.mjs";
+import { obtenerImpuestosPorReservaUID } from "../../../repositorio/reservas/transacciones/impuestos/obtenerImpuestosPorReservaUID.mjs";
+import { obtenerOfertasPorReservaUID } from "../../../repositorio/reservas/transacciones/ofertas/obtenerOfertasPorReservaUID.mjs";
+import { obtenerTotalesGlobal } from "../../../repositorio/reservas/transacciones/totales/obtenerTotalesGlobal.mjs";
+import { obtenerTotalesPorApartamentoPorReservaUID } from "../../../repositorio/reservas/transacciones/totales/obtenerTotalesPorApartamentoPorReservaUID.mjs";
+import { obtenerTotalesPorNochePorReservaUID } from "../../../repositorio/reservas/transacciones/totales/obtenerTotalesPorNochePorReservaUID.mjs";
 
 export const desgloseTotal = async (reservaUID) => {
     const desgloseFinanciero = {

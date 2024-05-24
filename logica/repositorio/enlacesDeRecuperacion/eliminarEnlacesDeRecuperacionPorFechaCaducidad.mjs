@@ -4,9 +4,11 @@ export const eliminarEnlacesDeRecuperacionPorFechaCaducidad = async (fechaActual
     try {
         const consulta = `
         DELETE FROM "enlaceDeRecuperacionCuenta"
-        WHERE "fechaCaducidad" < $1;
+        WHERE "fechaCaducidad" < $1
+        RETURNING *;
         `;
-        await conexion.query(consulta, [fechaActual_ISO]);
+        const resuelve = await conexion.query(consulta, [fechaActual_ISO]);
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

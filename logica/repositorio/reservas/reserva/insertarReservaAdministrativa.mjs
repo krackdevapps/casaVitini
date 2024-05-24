@@ -6,30 +6,33 @@ export const insertarReservaAdministrativa = async (data) => {
         const fechaSalida_ISO = data.fechaSalida_ISO
         const estadoReserva = data.estadoReserva
         const origen = data.origen
-        const creacionFechaReserva = data.creacionFechaReserva
+        const fechaCreacion_ISO = data.fechaCreacion_ISO
         const estadoPago = data.estadoPago
+        const reservaTVI = data.reservaTVI
 
         const consulta = `
         INSERT INTO
         reservas 
         (
         "fechaEntrada",
-        "fechaSalida,
+        "fechaSalida",
         "estadoReservaIDV",
         "origenIDV",
         "fechaCreacion",
-        "estadoPagoIDV")
+        "estadoPagoIDV",
+        "reservaTVI")
         VALUES
-        ($1,$2,$3,$4,$5,$6)
+        ($1,$2,$3,$4,$5,$6,$7)
         RETURNING 
-        "reservaUID" `;
+        * `;
         const parametros = [
             fechaEntrada_ISO,
             fechaSalida_ISO,
             estadoReserva,
             origen,
-            creacionFechaReserva,
-            estadoPago
+            fechaCreacion_ISO,
+            estadoPago,
+            reservaTVI
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

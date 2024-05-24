@@ -1,10 +1,9 @@
+import { eliminarCamaDeLaHabitacionPorCamaUID } from "../../../../repositorio/arquitectura/configuraciones/eliminarCamaDeLaHabitacionPorCamaUID.mjs";
+import { obtenerCamasDeLaHabitacionPorCamaUID } from "../../../../repositorio/arquitectura/configuraciones/obtenerCamasDeLaHabitacionPorCamaUID.mjs";
+import { obtenerConfiguracionPorArrayDeApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorArrayDeApartamentoIDV.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-
-import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { eliminarCamaDeLaHabitacionPorCamaUID } from "../../../../repositorio/arquitectura/eliminarCamaDeLaHabitacionPorCamaUID.mjs";
-import { obtenerCamasDeLaHabitacionPorCamaUID } from "../../../../repositorio/arquitectura/obtenerCamasDeLaHabitacionPorCamaUID.mjs";
+import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
 
 export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) => {
     try {
@@ -30,7 +29,7 @@ export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) 
         const detallesHabitacion = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
         const apartamentoIDV = detallesHabitacion.apartamento;
 
-        const detallesApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        const detallesApartamento = await obtenerConfiguracionPorArrayDeApartamentoIDV(apartamentoIDV)
         if (detallesApartamento.estadoConfiguracion === "disponible") {
             const error = "No se puede eliminar una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama";
             throw new Error(error);

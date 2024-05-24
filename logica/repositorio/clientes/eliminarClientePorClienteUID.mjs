@@ -1,5 +1,5 @@
 import { conexion } from "../../componentes/db.mjs";
-export const eliminarCliente = async (clienteUID) => {
+export const eliminarClientePorClienteUID = async (clienteUID) => {
     try {
         const consulta = `
         DELETE FROM clientes

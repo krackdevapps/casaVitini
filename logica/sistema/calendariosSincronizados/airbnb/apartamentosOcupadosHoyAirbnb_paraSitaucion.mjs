@@ -1,4 +1,4 @@
-import { obtenerCalendariosPorPlataformaIDV } from "../../../repositorio/calendario/obtenerReservasPorApartamentoIDVPorMesPorAno.mjs"
+import { obtenerCalendariosPorPlataformaIDV } from "../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs"
 import { selectorRangoUniversal } from "../../selectoresCompartidos/selectorRangoUniversal.mjs"
 import { sincronizarCalendariosAirbnbPorIDV } from "./sincronizarCalendariosAirbnbPorIDV.mjs"
 export const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {

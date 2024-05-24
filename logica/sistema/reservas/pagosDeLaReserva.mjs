@@ -1,9 +1,9 @@
 import Decimal from "decimal.js";
 import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs";
 import { DateTime } from "luxon";
-import { obtenerTotalesGlobal } from "../../repositorio/reservas/transacciones/obtenerTotalesGlobal.mjs";
-import { obtenerPagosPorReservaUIDConOrdenamiento } from "../../repositorio/reservas/transacciones/obtenerPagosPorReservaUIDConOrdenamiento.mjs";
-import { obtenerReembolsosPorPagoUID } from "../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUID.mjs";
+import { obtenerTotalesGlobal } from "../../repositorio/reservas/transacciones/totales/obtenerTotalesGlobal.mjs";
+import { obtenerPagosPorReservaUIDConOrdenamiento } from "../../repositorio/reservas/transacciones/pagos/obtenerPagosPorReservaUIDConOrdenamiento.mjs";
+import { obtenerReembolsosPorPagoUID } from "../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const pagosDeLaReserva = async (reservaUID) => {

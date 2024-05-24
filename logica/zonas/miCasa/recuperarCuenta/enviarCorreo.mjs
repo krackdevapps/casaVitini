@@ -1,14 +1,13 @@
 import { DateTime } from "luxon";
 import { enviarMail } from "../../../sistema/Mail/enviarMail.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorCodigoUPID.mjs";
 import { obtenerDatosPersonalesPorMail } from "../../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs";
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
-import { eliminarEnlacesDeRecuperacion } from "../../../repositorio/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacion.mjs";
 import { insertarEnlaceDeRecuperacion } from "../../../repositorio/enlacesDeRecuperacion/insertarEnlaceDeRecuperacion.mjs";
 import { actualizarEnlaceDeRecuperacionPorUsuario } from "../../../repositorio/enlacesDeRecuperacion/actualizarEnlaceDeRecuperacionPorUsuario.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
+import { eliminarEnlacesDeRecuperacionPorUsuario } from "../../../repositorio/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorUsuario.mjs";
 
 export const enviarCorreo = async (entrada, salida) => {
     try {
@@ -62,7 +61,7 @@ export const enviarCorreo = async (entrada, salida) => {
         if (estadoVerificacion === "si") {
             // Cuenta verificada, se busca recuperar, es decir restablecer la clave
 
-            await eliminarEnlacesDeRecuperacion()
+            await eliminarEnlacesDeRecuperacionPorUsuario(usuarioIDX)
             await insertarEnlaceDeRecuperacion({
                 usuarioIDX: usuarioIDX,
                 codigoGenerado: codigoGenerado,

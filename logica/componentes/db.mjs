@@ -4,7 +4,7 @@ dotenv.config();
 
 const { Pool } = pkg;
 const configuracion = {}
-const entorno = process.env.ENTORNO_DB
+const entorno = process.env.ENTORNO_DB || "nativo"
 
 if (entorno === "nativo") {
     configuracion.host = 'localhost'

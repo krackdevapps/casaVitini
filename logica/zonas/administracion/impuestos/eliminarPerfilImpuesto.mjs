@@ -1,9 +1,8 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerImpuestosPorImppuestoUID } from "../../../repositorio/impuestos/obtenerImpuestosPorImpuestoUID.mjs";
-import { eliminarImpuesto } from "../../../repositorio/impuestos/eliminarImpuesto.mjs";
+import { eliminarImpuestoPorImpuestoUID } from "../../../repositorio/impuestos/eliminarImpuestoPorImpuestoUID.mjs";
 
 export const eliminarPerfilImpuesto = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -25,7 +24,7 @@ export const eliminarPerfilImpuesto = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
         await obtenerImpuestosPorImppuestoUID(impuestoUID)
-        await eliminarImpuesto(impuestoUID)
+        await eliminarImpuestoPorImpuestoUID(impuestoUID)
         const ok = {
             ok: "Perfil del impuesto eliminado"
         };

@@ -1,13 +1,12 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 import { obtenerPernoctanteDeLaReservaPorClienteUID } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorClienteUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { actualizarPernoctantePoolPorClienteUID } from "../../../repositorio/reservas/pernoctantes/actualizarPernoctantePoolPorClienteUID.mjs";
-import { eliminarClienteDelPool } from "../../../repositorio/clientes/eliminarClienteDelPool.mjs";
-import { reservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/reservasPorRango.mjs";
+import { eliminarClienteDelPool } from "../../../repositorio/pool/eliminarClienteDelPool.mjs";
+import { obtenerReservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorRango.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const cambiarTipoCliente = async (entrada, salida) => {
@@ -75,7 +74,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
             throw new Error(error);
         }
         // Buscar reservas que interfieren para verificar que el pernoctante no esta en otra reserva del mismo rango
-        const selectorReservaInterfirientes = await reservasPorRango({
+        const selectorReservaInterfirientes = await obtenerReservasPorRango({
             fechaInicioRango_ISO: fechaEntrada_ISO,
             fechaSalidaRango_ISO: fechaSalida_ISO
         })

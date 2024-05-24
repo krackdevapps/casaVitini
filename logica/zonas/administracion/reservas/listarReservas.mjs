@@ -31,7 +31,6 @@ export const listarReservas = async (entrada, salida) => {
             nombreColumna: nombreColumna,
             sentidoColumna: sentidoColumna
         }
-        console.log("test")
         const numeroPorPagina = 10;
         const numeroPagina = Number((pagina - 1) + "0");
 

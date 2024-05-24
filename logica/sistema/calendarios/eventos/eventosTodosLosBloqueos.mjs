@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
-import { obtenerTodosLosbloqueosPorMesPorAnoPorTipo } from "../../../repositorio/calendario/obtenerTodosLosbloqueosPorMesPorAnoPorTipo.mjs";
-const eventosTodosLosBloqueos = async (fecha) => {
+import { obtenerTodosLosbloqueosPorMesPorAnoPorTipo } from "../../../repositorio/bloqueos/obtenerTodosLosbloqueosPorMesPorAnoPorTipo.mjs";
+export const eventosTodosLosBloqueos = async (fecha) => {
     try {
         const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
         if (!filtroFecha.test(fecha)) {
@@ -88,7 +88,4 @@ const eventosTodosLosBloqueos = async (fecha) => {
     } catch (errorCapturado) {
         throw errorCapturado
     }
-}
-export {
-    eventosTodosLosBloqueos
 }

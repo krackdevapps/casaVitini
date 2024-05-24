@@ -1,7 +1,9 @@
 import { DateTime } from "luxon";
-import { eventosCalendarioPorUID } from "../../../../calendariosSincronizados/airbnb/eventosCalendarioPorUID.mjs";
-import { obtenerCalendariosPorCalendarioUID } from "../../../../../repositorio/calendario/obtenerCalendariosPorCalendarioUID.mjs";
+
+
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { eventosCalendarioPorUID } from "../../../../calendariosSincronizados/airbnb/eventosCalendarioPorUID.mjs";
+import { obtenerCalendarioPorCalendarioUID } from "../../../../../repositorio/calendario/obtenerCalendarioPorCalendarioUID.mjs";
 export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
     try {
         const fecha = contenedorDatos.fecha
@@ -18,7 +20,7 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
         }
         // Validar que le nombre del calendarioUID existe como tal
 
-        const calendario = await obtenerCalendariosPorCalendarioUID(calendarioUID)
+        const calendario = await obtenerCalendarioPorCalendarioUID(calendarioUID)
         const apartamentoIDV = calendario.apartamentoIDV
         const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
         const fechaArray = fecha.split("-")

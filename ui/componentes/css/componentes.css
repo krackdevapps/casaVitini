@@ -4905,11 +4905,23 @@
     color: white;
     background: #0040ff;
 }
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorCondicion {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #ffffff54;
+    padding: 6px;
+    border-radius: 16px;
+}
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorBotonesGlobal {
+    display: flex;
+    flex-direction: row;
+
+}
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .espaciadoInterno {
     display: flex;
     flex-direction: column;
-    gap: 6px;
 }
 
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .espaciadoInterno {
@@ -6263,7 +6275,7 @@
 }
 
 .contenidoAdvertenciaInmersiva {
-    max-width: 720px;
+    max-width: 1280px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -6397,7 +6409,6 @@
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     border-radius: 13px;
-    padding: 6px;
     display: flex;
     flex-direction: column;
     align-content: flex-start;
@@ -6508,6 +6519,20 @@
     align-items: stretch;
 }
 
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontal {
+    /*width: 100%; */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaContenedorHorizontalV2 {
     /*width: 100%; */
     display: grid;
@@ -6591,7 +6616,8 @@
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalTipoOfertas {
     /* width: 100%; */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 4fr));
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     grid-gap: 6px;
     padding: 0px;
     justify-items: stretch;
@@ -6641,6 +6667,7 @@
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaTituloOpcion {
     margin: 0px;
     padding: 6px;
+    text-align: center;
 }
 
 .crearComportamientoConentenedor {
@@ -6688,15 +6715,16 @@
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfeartaEspacioOpciones {
-    display: grid;
+    display: flex;
     grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
     grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
     justify-items: stretch;
     justify-content: center;
     align-content: center;
-    align-items: start;
+    align-items: stretch;
     border-radius: 16px;
+    flex-direction: column;
 }
 
 .crearOfeartaEspacioOpcionesV3 {
@@ -13554,4 +13582,19 @@ grid-template-columns: 0.5fr 1.5fr;
     width: 100%;
     margin-bottom: 20px;
 
+}
+
+
+.botonV1 {
+    margin: 0px;
+    font-weight: bold;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
 }

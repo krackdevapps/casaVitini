@@ -9,22 +9,21 @@ export const insertarApartamentosDelComportamientoDePrecio = async (data) => {
 
         const consulta = `
         INSERT INTO "comportamientoPreciosApartamentos"
-    (
-        "apartamentoIDV",
-        simbolo,
-        cantidad,
-        "comportamientoUID"
-    )
-        VALUES
-    (
-        NULLIF($1, NULL),
-        COALESCE($2, NULL),
-        COALESCE($3::numeric, NULL),
-        NULLIF($4::numeric, NULL)
-    )
-        RETURNING *;
-
-        `;
+        (
+            "apartamentoIDV",
+            "simboloIDV",
+            cantidad,
+            "comportamientoUID"
+        )
+            VALUES
+        (
+            NULLIF($1, NULL),
+            COALESCE($2, NULL),
+            COALESCE($3::numeric, NULL),
+            $4
+        )
+            RETURNING
+             *;`;
         const parametros = [
             apartamentoIDV,
             simbolo,

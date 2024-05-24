@@ -14,10 +14,10 @@ export const obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_arra
         AND
         "apartamentoIDV" = ANY($2)
         ;`;
-        const parametros = {
+        const parametros = [
             comportamientoUID_array,
             apartamentoIDV_array
-        }
+        ]
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows
     } catch (errorCapturado) {

@@ -2,10 +2,10 @@ import { DateTime } from 'luxon';
 import { apartamentosOcupadosAirbnb } from '../calendariosSincronizados/airbnb/apartamentosOcudaosAirbnb.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { obtenerApartamentosDeLaReservaPorReservaUID } from '../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs';
-import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from '../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs';
-import { obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles } from '../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles.mjs';
+import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from '../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs';
+import { obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles } from '../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles.mjs';
 import { obtenerBloqueosPorRangoPorApartamentoIDV } from '../../repositorio/bloqueos/obtenerBloqueosPorRangoPorApartamentoIDV.mjs';
-import { reservasPorRango } from '../../repositorio/reservas/selectoresDeReservas/reservasPorRango.mjs';
+import { obtenerReservasPorRango } from '../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorRango.mjs';
 
 export const apartamentosPorRango = async (metadatos) => {
 
@@ -36,7 +36,7 @@ export const apartamentosPorRango = async (metadatos) => {
             fechaIncioRango_ISO: fechaEntrada_ISO,
             fechaFinRango_ISO: fechaSalida_ISO,
         }
-        const reservas = await reservasPorRango(configuracionReservas)
+        const reservas = await obtenerReservasPorRango(configuracionReservas)
         const apartametnosIDVBloqueoados = []
         const configuracionBloqueos = {
             fechaInicioRango_ISO: fechaEntrada_ISO,

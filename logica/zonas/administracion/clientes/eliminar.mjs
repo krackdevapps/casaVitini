@@ -2,7 +2,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
-import { eliminarCliente } from "../../../repositorio/clientes/eliminarCliente.mjs";
+import { eliminarClientePorClienteUID } from "../../../repositorio/clientes/eliminarClientePorClienteUID.mjs";
 
 export const eliminar = async (entrada, salida) => {
     try {
@@ -21,7 +21,7 @@ export const eliminar = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
         await obtenerDetallesCliente(clienteUID)
-        await eliminarCliente(clienteUID)
+        await eliminarClientePorClienteUID(clienteUID)
         const ok = {
             ok: "Se ha eliminado correctamente el cliente",
             clienteUID: clienteUID

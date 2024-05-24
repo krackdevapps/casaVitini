@@ -13,12 +13,12 @@ export const obtenerComportamientosDistintosPorNombreUI = async (data) => {
         WHERE 
         lower("nombreComportamiento") = lower($1)
         AND
-        uid <> $2
+        "comportamientoUID" <> $2
         `
-        const parametros = {
-            nombreComportamiento: nombreComportamiento,
-            comportamientoUID: comportamientoUID
-        }
+        const parametros = [
+            nombreComportamiento,
+            comportamientoUID
+        ]
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows
     } catch (errorAdaptador) {

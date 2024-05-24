@@ -3,8 +3,8 @@ import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs'
 import { limitesReservaPublica } from './limitesReservaPublica.mjs';
 import { apartamentosPorRango } from '../selectoresCompartidos/apartamentosPorRango.mjs';
-import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
-import { obtenerCamaDeLaHabitacionPorHabitacionUID } from '../../repositorio/arquitectura/obtenerCamaDeLaHabitacionPorHabitacionUID.mjs';
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../repositorio/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
+import { obtenerCamaDeLaHabitacionPorHabitacionUID } from '../../repositorio/arquitectura/configuraciones/obtenerCamaDeLaHabitacionPorHabitacionUID.mjs';
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from '../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 

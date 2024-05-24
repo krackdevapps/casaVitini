@@ -8,11 +8,11 @@ export const actualizarPosicionDelMensajeDePortada = async (data) => {
 
         const consulta =`
         UPDATE 
-            "mensajeEnPortada"
+            "mensajesEnPortada"
         SET
             posicion = $1
         WHERE
-            uid = $2
+            "mensajeUID" = $2
         RETURNING *;`;
 
         const parametros = [

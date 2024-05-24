@@ -1,5 +1,5 @@
 import { conexion } from "../../componentes/db.mjs";
-export const actualizarEnlaceDePagoPorEnlaceUID = async (data) => {
+export const actualizarEnlaceDePagoPorReservaUID = async (data) => {
     try {
         const nombreEnlace = data.nombreEnlace
         const descripcion = data.descripcion
@@ -13,9 +13,11 @@ export const actualizarEnlaceDePagoPorEnlaceUID = async (data) => {
            "nombreEnlace" = $1,
            descripcion = $2,
            cantidad = $3,
-           caducidad = $4
+           "fechaCaducidad" = $4
            WHERE 
-           "reservaUID" = $5;
+           "reservaUID" = $5
+           RETURNING
+           *;
            `;
         const parametros = [
             nombreEnlace,

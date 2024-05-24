@@ -5,12 +5,12 @@ export const obtenerComportamientosOrdenadorPorFechaInicio = async () => {
         const consulta =  `
         SELECT
         "nombreComportamiento",
-        uid,
+        "comportamientoUID",
         to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
         to_char("fechaFinal", 'DD/MM/YYYY') as "fechaFinal",
         explicacion,
-        estado,
-        tipo,
+        "estadoIDV",
+        "tipoIDV",
         "diasArray"
         FROM 
         "comportamientoPrecios"

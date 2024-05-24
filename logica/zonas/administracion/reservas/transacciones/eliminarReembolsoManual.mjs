@@ -1,7 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-
-import { eliminarReembolsoPorReembosloUID } from "../../../../repositorio/reservas/transacciones/eliminarReembolsoPorReembosloUID.mjs";
+import { eliminarReembolsoPorReembosloUID } from "../../../../repositorio/reservas/transacciones/reembolsos/eliminarReembolsoPorReembosloUID.mjs";
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const eliminarReembolsoManual = async (entrada, salida) => {

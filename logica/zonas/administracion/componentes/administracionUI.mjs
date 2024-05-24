@@ -11,7 +11,6 @@ export const administracionUI = async (entrada, salida) => {
         IDX.control()
 
         const codigoJS = administracionJS();
-        console.log(codigoJS)
         const ok = {
             ok: codigoJS
         };

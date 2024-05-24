@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { obtenerReservasPorApartamentoIDVPorMesPorAno } from "../../../repositorio/calendario/obtenerReservasPorPlataformaIDV.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { obtenerReservasPorApartamentoIDVPorMesPorAno } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorPlataformaIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 export const eventosPorApartamneto = async (metadatos) => {
     try {

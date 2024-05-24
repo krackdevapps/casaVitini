@@ -1,10 +1,8 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerImpuestosPorNombreDelImpuesto } from "../../../repositorio/impuestos/obtenerImpuestosPorNombreDelImpuesto.mjs";
 import { obtenerTipoValorPorTipoValorIDV } from "../../../repositorio/impuestos/obtenerTipoValorPorTipoValorIDV.mjs";
-import { obtenerAplicacionIDVporAplicacionIDV } from "../../../repositorio/impuestos/obtenerAplicacionIDVporAplicaionIDV.mjs";
 import { insertarImpuesto } from "../../../repositorio/impuestos/insertarImpuesto.mjs";
 
 export const crearNuevoImpuesto = async (entrada, salida) => {
@@ -58,8 +56,8 @@ export const crearNuevoImpuesto = async (entrada, salida) => {
         }
 
         await obtenerTipoValorPorTipoValorIDV(tipoValor)
-        await obtenerAplicacionIDVporAplicacionIDV(aplicacionSobre)
-
+        // IMPORTANTE Hay que validar APLICAICON SOBRE1
+        
         const dataNuevoImpuesto = {
             nombreImpuesto: nombreImpuesto,
             tipoImpositivo: tipoImpositivo,

@@ -5,14 +5,14 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/configuracion/horasSalidaEntrada.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerHabitacionesDelApartamento } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionDelApartamento.mjs";
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
-import { obtenerClientePoolPorPernoctanteUID } from "../../../repositorio/clientes/obtenerClientePoolPorPernoctanteUID.mjs";
+import { obtenerClientePoolPorPernoctanteUID } from "../../../repositorio/pool/obtenerClientePoolPorPernoctanteUID.mjs";
 import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs";
 import { obtenerTodosLosPernoctantesDeLaReserva } from "../../../repositorio/reservas/pernoctantes/obtenerTodosLosPernoctantesDeLaReserva.mjs";
-import { reservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/reservasPorRango.mjs";
+import { obtenerReservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorRango.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const detallesSituacionApartamento = async (entrada, salida) => {
@@ -52,7 +52,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             reservas: {}
         };
 
-        const reservasUIDHoy = await reservasPorRango({
+        const reservasUIDHoy = await obtenerReservasPorRango({
             fechaIncioRango_ISO: fechaActualTZ,
             fechaFinRango_ISO: fechaActualTZ
         })
@@ -135,7 +135,6 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             const fechaCheckOutAdelantado_ISO = pernoctante.fechaCheckOutAdelantado;
             const reservaUIDDelPernoctante = pernoctante.reservaUID
             const habitacionUID = pernoctante.habitacionUID
-            console.log("habitacionUID", habitacionUID)
 
             if (clienteUID) {
                 const cliente = await obtenerDetallesCliente(clienteUID)

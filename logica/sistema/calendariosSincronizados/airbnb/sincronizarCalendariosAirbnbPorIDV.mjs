@@ -1,6 +1,6 @@
 import axios from 'axios';
 import ICAL from 'ical.js';
-import { obtenerCalendariosPorPlataformaIDVPorPlataformaOrigenIDV } from '../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDVPorPlataformaOrigenIDV.mjs';
+import { obtenerCalendariosPorPlataformaIDV } from '../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs';
 import { actualizarEventosCalendarioPorCalendarioUID } from '../../../repositorio/calendario/actualizarEventosCalendarioPorCalendarioUID.mjs';
 
 export const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
@@ -11,7 +11,7 @@ export const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
             throw new Error(error);
         }
         const plataformaDeOrigen = "airbnb"
-        const calendarios = await obtenerCalendariosPorPlataformaIDVPorPlataformaOrigenIDV({
+        const calendarios = await obtenerCalendariosPorPlataformaIDV({
             apartamentoIDV: apartamentoIDV,
             plataformaDeOrigen: plataformaDeOrigen
         })

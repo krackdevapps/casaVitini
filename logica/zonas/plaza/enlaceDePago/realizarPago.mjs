@@ -2,9 +2,9 @@ import { Mutex } from "async-mutex";
 import { obtenerEnlaceDePagoPorCodigoUPID } from "../../../repositorio/enlacesDePago/obtenerEnlaceDePagoPorCodigoUPID.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
-import { obtenerTotalesGlobal } from "../../../repositorio/reservas/transacciones/obtenerTotalesGlobal.mjs";
-import { insertarPago } from "../../../repositorio/reservas/transacciones/insertarPago.mjs";
+import { obtenerTotalesGlobal } from "../../../repositorio/reservas/transacciones/totales/obtenerTotalesGlobal.mjs";
 import { actualizarEstadoEnlaceDePagoPorEnlaceUID } from "../../../repositorio/enlacesDePago/actualizarEstadoEnlaceDePagoPorEnlaceUID.mjs";
+import { insertarPago } from "../../../repositorio/reservas/transacciones/pagos/insertarPago.mjs";
 
 export const realizarPago = async (entrada, salida) => {
     const mutex = new Mutex()

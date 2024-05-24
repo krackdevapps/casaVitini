@@ -12,7 +12,7 @@ export const obtenerComportamientosDistintosPorTipoIDVPorDiasArray = async (data
         WHERE 
         "tipoIDV" = $1
         AND
-        $2::text[] && "diasArray";
+        $2::text[] && "diasArray"
         AND 
         "comportamientoUID" <> $3;
         `
@@ -22,10 +22,6 @@ export const obtenerComportamientosDistintosPorTipoIDVPorDiasArray = async (data
             comportamientoUID
         ]
         const resuelve = await conexion.query(consulta, parametros);
-        if (resuelve.rowCount === 0) {
-            const error = "No existe ningun comportamiento de precio con ese comportamientoUID, revisa el identificador";
-            throw new Error(error)
-        }
         return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado

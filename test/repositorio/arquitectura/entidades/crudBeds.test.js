@@ -1,11 +1,12 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { obtenerTodasLasHabitaciones } from '../../../../../logica/repositorio/arquitectura/entidades/habitacion/obtenerTodasLasHabitaciones.mjs';
-import { eliminarCamaComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs';
-import { insertarCamaComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/cama/insertarCamaComoEntidad.mjs';
-import { obtenerCamaComoEntidadPorCamaIDV } from '../../../../../logica/repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs';
-import { actualizarCamaComoEntidadPorCamaIDV } from '../../../../../logica/repositorio/arquitectura/entidades/cama/actualizarCamaComoEntidadPorCamaIDV.mjs';
-import { obtenerCamaComoEntidadPorCamaUI } from '../../../../../logica/repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaUI.mjs';
+import { eliminarCamaComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs';
+import { insertarCamaComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/cama/insertarCamaComoEntidad.mjs';
+import { obtenerCamaComoEntidadPorCamaIDV } from '../../../../logica/repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs';
+import { obtenerCamaComoEntidadPorCamaUI } from '../../../../logica/repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaUI.mjs';
+import { obtenerTodasLasHabitaciones } from '../../../../logica/repositorio/arquitectura/entidades/habitacion/obtenerTodasLasHabitaciones.mjs';
+import { actualizarCamaComoEntidadPorCamaIDV } from '../../../../logica/repositorio/arquitectura/entidades/cama/actualizarCamaComoEntidadPorCamaIDV.mjs';
+
 describe('crud bed as entity', () => {
     const IDVStart = "camaTestInicial"
     const IDVFinal = "camaTestFinal"

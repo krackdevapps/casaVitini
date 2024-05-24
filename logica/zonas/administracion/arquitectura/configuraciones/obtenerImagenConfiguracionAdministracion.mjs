@@ -1,4 +1,4 @@
-import { obtenerImagenApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerImagenApartamentoPorApartamentoIDV.mjs";
+import { obtenerImagenApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerImagenApartamentoPorApartamentoIDV.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 

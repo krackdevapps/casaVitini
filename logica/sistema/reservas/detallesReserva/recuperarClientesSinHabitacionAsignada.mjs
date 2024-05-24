@@ -1,4 +1,4 @@
-import { obtenerClientePoolPorPernoctanteUID } from "../../../repositorio/clientes/obtenerClientePoolPorPernoctanteUID.mjs"
+import { obtenerClientePoolPorPernoctanteUID } from "../../../repositorio/pool/obtenerClientePoolPorPernoctanteUID.mjs"
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs"
 import { obtenerPernoctantesSinHabitacion } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctantesSinHabitacion.mjs"
 

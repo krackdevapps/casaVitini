@@ -14,16 +14,12 @@ export const actualizarImpuesto = async (data) => {
         SET 
         nombre = COALESCE($1, nombre),
         "tipoImpositivo" = COALESCE($2, "tipoImpositivo"),
-        "tipoValor" = COALESCE($3, "tipoValor"),
-        "aplicacionSobre" = COALESCE($4, "aplicacionSobre"),
-        estado = COALESCE($5, estado)
+        "tipoValorIDV" = COALESCE($3, "tipoValorIDV"),
+        "aplicacionSobreIDV" = COALESCE($4, "aplicacionSobreIDV"),
+        "estadoIDV" = COALESCE($5, "estadoIDV")
         WHERE "impuestoUID" = $6
         RETURNING
-        "impuestoUID",
-        "tipoImpositivo",
-        "tipoValor",
-        "aplicacionSobre",
-        estado
+        *
         `;
         const parametros = [
             nombreImpuesto,

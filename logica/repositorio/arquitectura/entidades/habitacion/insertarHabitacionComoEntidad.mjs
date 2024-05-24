@@ -21,6 +21,10 @@ export const insertarHabitacionComoEntidad = async (data) => {
         *
         `;
         const resuelve = await conexion.query(consulta, [habitacionIDV, habitacionUI]);
+        if (resuelve.rowCount === 0) {
+            const error = "No se ha insertado a nueva habitacion como entidad"
+            throw error
+        }
         return resuelve.rows[0]
     } catch (errorAdaptador) {
         throw errorAdaptador

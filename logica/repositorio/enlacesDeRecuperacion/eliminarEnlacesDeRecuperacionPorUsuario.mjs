@@ -4,9 +4,11 @@ export const eliminarEnlacesDeRecuperacionPorUsuario = async (usuario) => {
     try {
         const consulta =`
         DELETE FROM "enlaceDeRecuperacionCuenta"
-        WHERE usuario = $1;
+        WHERE usuario = $1
+        RETURNING *;
         `;
-        await conexion.query(consulta, [usuario]);
+        const resuelve = await conexion.query(consulta, [usuario]);
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

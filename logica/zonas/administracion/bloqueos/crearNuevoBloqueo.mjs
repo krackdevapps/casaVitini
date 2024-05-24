@@ -4,7 +4,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarNuevoBloqueo } from "../../../repositorio/bloqueos/insertarNuevoBloqueo.mjs";
 
 export const crearNuevoBloqueo = async (entrada, salida) => {

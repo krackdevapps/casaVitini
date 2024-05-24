@@ -1,9 +1,8 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
-import { eliminarComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/eliminarComportamientoDePrecio.mjs";
+import { eliminarComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/eliminarComportamientoDePrecioPorComportamientoUID.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
 
 export const eliminarComportamiento = async (entrada, salida) => {
@@ -28,7 +27,7 @@ export const eliminarComportamiento = async (entrada, salida) => {
 
         await obtenerComportamientoDePrecioPorComportamientoUID(comportamientoUID)
         await campoDeTransaccion("iniciar")
-        await eliminarComportamientoDePrecio(comportamientoUID)
+        await eliminarComportamientoDePrecioPorComportamientoUID(comportamientoUID)
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha eliminado el comportamiento correctamente",

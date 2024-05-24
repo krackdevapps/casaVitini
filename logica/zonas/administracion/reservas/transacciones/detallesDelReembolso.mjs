@@ -1,7 +1,6 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-
-import { obtenerReembolsoPorReembolsoUID } from "../../../../repositorio/reservas/transacciones/obtenerReembolsoPorReembolsoUID.mjs";
+import { obtenerReembolsoPorReembolsoUID } from "../../../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsoPorReembolsoUID.mjs";
 
 export const detallesDelReembolso = async (entrada, salida) => {
     try {

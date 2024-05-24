@@ -1,6 +1,6 @@
 import Decimal from "decimal.js"
 import { obtenerTotalesReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerTotalesReservaPorReservaUID.mjs"
-import { obtenerPagosPorReservaUID } from "../../repositorio/reservas/transacciones/obtenerPagosPorReservaUID.mjs"
+import { obtenerPagosPorReservaUID } from "../../repositorio/reservas/transacciones/pagos/obtenerPagosPorReservaUID.mjs"
 
 export const actualizarEstadoPago = async (reservaUID) => {
 

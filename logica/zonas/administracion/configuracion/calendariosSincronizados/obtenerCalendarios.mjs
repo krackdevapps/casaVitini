@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { obtenerCalendarioPorPlataformaIDV } from "../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorPlataformaIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { obtenerCalendariosPorPlataformaIDV } from "../../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs";
 
 export const obtenerCalendarios = async (entrada, salida) => {
     try {
@@ -21,7 +21,7 @@ export const obtenerCalendarios = async (entrada, salida) => {
         const ok = {
             ok: []
         };
-        const calendarioSincronizado = await obtenerCalendarioPorPlataformaIDV(plataformaCalendarios)
+        const calendarioSincronizado = await obtenerCalendariosPorPlataformaIDV(plataformaCalendarios)
         for (const detallesDelCalendario of calendarioSincronizado) {
             const apartamentoIDV = detallesDelCalendario.apartamentoIDV;
             const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);

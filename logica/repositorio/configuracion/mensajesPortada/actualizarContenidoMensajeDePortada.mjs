@@ -12,7 +12,9 @@ export const actualizarContenidoMensajeDePortada = async (data) => {
         SET
             mensaje = $1
         WHERE
-            uid = $2;`;
+            "mensajeUID" = $2
+        RETURNING
+        *;`;
 
         const parametros = [
             mensajeB64,

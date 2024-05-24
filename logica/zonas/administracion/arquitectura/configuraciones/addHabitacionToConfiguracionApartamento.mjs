@@ -1,10 +1,10 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { insertarHabitacionEnApartamento } from "../../../../repositorio/arquitectura/insertarHabitacionEnApartamento.mjs";
-import { obtenerHabitacionesDelApartamentoPorHabitacionIDV } from "../../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorHabitacionIDV.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { insertarHabitacionEnApartamento } from "../../../../repositorio/arquitectura/configuraciones/insertarHabitacionEnApartamento.mjs";
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { obtenerHabitacionDelApartamentoPorHabitacionIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionIDV.mjs";
 
 export const addHabitacionToConfiguracionApartamento = async (entrada, salida) => {
     try {
@@ -45,7 +45,7 @@ export const addHabitacionToConfiguracionApartamento = async (entrada, salida) =
                 const error = "No existe el identificador visual de la habitacion";
                 throw new Error(error);
             }
-            const habitacionDelApartamento = await obtenerHabitacionesDelApartamentoPorHabitacionIDV({
+            const habitacionDelApartamento = await obtenerHabitacionDelApartamentoPorHabitacionIDV({
                 apartamentoIDV:apartamentoIDV,
                 habitacionIDV:habitacionIDV
             })

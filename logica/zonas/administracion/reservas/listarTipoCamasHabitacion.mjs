@@ -1,9 +1,9 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
-import { obtenerHabitacionesDelApartamentoPorHabitacionIDV } from "../../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorHabitacionIDV.mjs";
-import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../../../repositorio/arquitectura/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs";
-import { obtenerCamaComoEntidadPorCamaIDV } from "../../../repositorio/arquitectura/obtenerCamaComoEntidadPorCamaIDV.mjs";
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
+import { obtenerHabitacionDelApartamentoPorHabitacionIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionIDV.mjs";
+import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../../../repositorio/arquitectura/configuraciones/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs";
+import { obtenerCamaComoEntidadPorCamaIDV } from "../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const listarTipoCamasHabitacion = async (entrada, salida) => {
@@ -34,7 +34,7 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
             const error = `Ya no existe el apartamento como una configuración del apartamento. Si deseas volver a usar este apartamento, vuelve a crear la configuración del apartamento con el identificador visual: ${apartamentoIDV} y dentro de este apartamento crea una habitacion con el habitacionIDV: ${habitacionIDV}`;
             throw new Error(error);
         }
-        const habitacion = await obtenerHabitacionesDelApartamentoPorHabitacionIDV({
+        const habitacion = await obtenerHabitacionDelApartamentoPorHabitacionIDV({
             apartamentoIDV: apartamentoIDV,
             habitacionIDV: habitacionIDV
         })

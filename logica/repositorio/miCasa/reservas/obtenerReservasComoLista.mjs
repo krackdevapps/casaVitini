@@ -4,7 +4,7 @@ export const obtenerReservasComoLista = async (data) => {
     try {
         const reservasUID = data.reservasUID
         const numeroPorPagina = data.numeroPorPagina
-        const paginaActualSQL = data.paginaActualSQL
+        const paginaActualSQL = Number(numeroPorPagina - 1)
         const sentidoColumna = data.sentidoColumna
         const nombreColumna = data.nombreColumna
 
@@ -16,7 +16,6 @@ export const obtenerReservasComoLista = async (data) => {
                 return "DESC"
             }
         }
-
 
         const constructorSQL = (nombreColumna, sentidoColumna) => {
             const sentidoColumnaSQL = sentidoColumnaSQLFiltro(sentidoColumna)
@@ -30,17 +29,17 @@ export const obtenerReservasComoLista = async (data) => {
         }
         const consulta = `
         SELECT 
-                reserva,
-                to_char(entrada, 'DD/MM/YYYY') as entrada,
-                to_char(salida, 'DD/MM/YYYY') as salida,
-                "estadoReserva", 
-                "estadoPago", 
-                to_char(creacion, 'DD/MM/YYYY') as creacion,
+                "reservaUID",
+                to_char("fechaEntrada", 'DD/MM/YYYY') as "fechaEntrada",
+                to_char("fechaSalida", 'DD/MM/YYYY') as "fechaSalida",
+                "estadoReservaIDV", 
+                "estadoPagoIDV", 
+                to_char("fechaCreacion", 'DD/MM/YYYY') as "fechaCreacion",
                 COUNT(*) OVER() as total_filas
         FROM
                 reservas
         WHERE
-            ($1::int[] IS NOT NULL AND reserva = ANY($1::int[])) 
+            ($1::int[] IS NOT NULL AND "reservaUID" = ANY($1::int[])) 
         ${constructorSQL(nombreColumna, sentidoColumna)}
         LIMIT
             $2

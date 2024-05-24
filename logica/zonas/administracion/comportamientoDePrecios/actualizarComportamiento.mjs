@@ -2,9 +2,9 @@ import { Mutex } from "async-mutex";
 import { evitarDuplicados } from "../../../sistema/precios/comportamientoPrecios/evitarDuplicados.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { actualizarComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/actualizarComportamientoDePrecio.mjs";
-import { eliminarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/eliminarApartamentosDelComportamientoDePrecio.mjs";
+import { eliminarApartamentosDelComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/eliminarApartamentosDelComportamientoDePrecioPorComportamientoUID.mjs";
 import { insertarApartamentosDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/insertarApartamentosDelComportamiento.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -202,7 +202,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
             comportamientoUID: comportamientoUID
         }
         await actualizarComportamientoDePrecio(dataActualizarComportamientoDePrecio)
-        await eliminarApartamentosDelComportamientoDePrecio(comportamientoUID)
+        await eliminarApartamentosDelComportamientoDePrecioPorComportamientoUID(comportamientoUID)
 
         for (const comportamiento of apartamentos) {
             const apartamentoIDV = validadoresCompartidos.tipos.cadena({

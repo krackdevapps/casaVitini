@@ -1,10 +1,10 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
-import { eliminarApartamentoComoEntidad } from "../../../../repositorio/arquitectura/eliminarApartamentoComoEntidad.mjs";
-import { eliminarHabitacionComoEntidad } from "../../../../repositorio/arquitectura/eliminarHabitacionComoEntidad.mjs";
-import { obtenerCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/obtenerCamaComoEntidadPorCamaIDV.mjs";
-import { eliminarCamasComoEntidad } from "../../../../repositorio/arquitectura/eliminarCamasComoEntidad.mjs";
+import { eliminarApartamentoComoEntidad } from "../../../../repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs";
+import { eliminarHabitacionComoEntidad } from "../../../../repositorio/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs";
+import { obtenerCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs";
+import { eliminarCamaComoEntidad } from "../../../../repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs";
 
 export const eliminarEntidadAlojamiento = async (entrada, salida) => {
     try {
@@ -75,7 +75,7 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
                 const error = "No existe la cama, revisa el camaIDV";
                 throw new Error(error);
             }
-            const eliminarCama = await eliminarCamasComoEntidad(entidadIDV)
+            const eliminarCama = await eliminarCamaComoEntidad(entidadIDV)
 
             if (eliminarCama.rowCount === 0) {
                 const error = "No se ha eliminado la cama por que no se ha entonctrado el registo en la base de datos";

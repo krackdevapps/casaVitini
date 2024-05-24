@@ -1,6 +1,6 @@
 
-import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
-import { obtenerTodasLosApartamentos } from "../../../../repositorio/arquitectura/obtenerTodasLosApartamentos.mjs";
+import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
+import { obtenerTodasLosApartamentos } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerTodasLosApartamentos.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 

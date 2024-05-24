@@ -5,10 +5,9 @@ export const obtenerEnlaceDePagoPorEnlaceUID = async (enlaceUID) => {
             SELECT
             "nombreEnlace", 
             codigo, 
-            reserva,
-            cantidad,
-            "estadoPago",
-            TO_CHAR(caducidad AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS fechaCaducidad_ISO
+            "reservaUID",
+            "estadoPagoIDV",
+            TO_CHAR("fechaCaducidad" AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS "fechaCaducidad"
             FROM "enlacesDePago"
             WHERE "enlaceUID" = $1;`;
         const resuelve = await conexion.query(consulta, [enlaceUID]);

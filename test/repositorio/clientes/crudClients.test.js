@@ -60,12 +60,12 @@ describe('crud clients', () => {
     test('selec client by mail', async () => {
         const response = await obtenerClientesPorMail(correoElectronico);
         expect(response).not.toBeUndefined();
-        expect(Array.isArray(response)).toBe(true);
+        expect(typeof response).toBe('object');
     })
     test('selec client by pasaporte', async () => {
         const response = await obtenerClientesPorPasaporte(pasaporte);
         expect(response).not.toBeUndefined();
-        expect(Array.isArray(response)).toBe(true);
+        expect(typeof response).toBe('object');
     })
 
     test('selec reseervas by clienteUID for search', async () => {
@@ -93,7 +93,6 @@ describe('crud clients', () => {
         expect(response).not.toBeUndefined();
         expect(Array.isArray(response)).toBe(true);
     })
-
 
     test('selec cliente by search', async () => {
         const response = await obtenerResultadosBusqueda({

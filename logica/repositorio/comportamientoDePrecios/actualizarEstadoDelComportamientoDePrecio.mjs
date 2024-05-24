@@ -7,9 +7,9 @@ export const actualizarEstadoDelComportamientoDePrecio = async (data) => {
 
         const consulta = `
         UPDATE "comportamientoPrecios"
-        SET estado = $1
-        WHERE uid = $2
-        RETURNING estado;
+        SET "estadoIDV" = $1
+        WHERE "comportamientoUID" = $2
+        RETURNING "estadoIDV";
         `;
         const parametros = [
             estadoPropuesto,
@@ -20,8 +20,7 @@ export const actualizarEstadoDelComportamientoDePrecio = async (data) => {
             const error = "No se ha actualizar el estado del comportamiento de precio";
             throw new Error(error)
         }
-        const comportamientoActualizado = resuelve.rows[0]
-        return comportamientoActualizado
+        return resuelve.rows[0]
 
     } catch (errorCapturado) {
         throw errorCapturado

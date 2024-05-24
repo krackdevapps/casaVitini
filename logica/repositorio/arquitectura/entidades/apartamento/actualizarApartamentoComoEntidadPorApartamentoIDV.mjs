@@ -23,8 +23,12 @@ export const actualizarApartamentoComoEntidadPorApartamentoIDV = async (data) =>
             apartamentoUI,
             apartamentoIDVSelector
         ];
-        const resolucionNombre = await conexion.query(consulta, parametros)
-        return resolucionNombre.rows[0]
+        const resuelve = await conexion.query(consulta, parametros)
+        if (resuelve.rowCount === 0) {
+            const error = "No se encuentra el apartamento que quieres actualizar"
+            throw error
+        }
+        return resuelve.rows[0]
     } catch (errorCapturado) {
         throw errorCapturado;
     }

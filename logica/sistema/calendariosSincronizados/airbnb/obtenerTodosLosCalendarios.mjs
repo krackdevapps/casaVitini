@@ -1,6 +1,7 @@
 import axios from 'axios';
 import ICAL from 'ical.js';
-import { obtenerCalendariosPorPlataformaIDV } from '../../../repositorio/calendario/obtenerReservasPorApartamentoIDVPorMesPorAno.mjs';
+import { obtenerCalendariosPorPlataformaIDV } from '../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs';
+
 export const obtenerTodosLosCalendarios = async () => {
     try {
         const plataformaDeOrigen = "airbnb"

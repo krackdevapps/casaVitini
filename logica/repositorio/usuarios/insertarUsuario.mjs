@@ -22,9 +22,9 @@ export const insertarUsuario = async (data) => {
         "fechaCaducidadCuentaNoVerificada"
         )
         VALUES 
-        ($1, $2, $3, $4, $5, $6)
+        ($1, $2, $3, $4, $5, $6, $7)
         RETURNING
-        usuario
+        *
         `;
         const parametros = [
             usuarioIDX,
@@ -42,6 +42,6 @@ export const insertarUsuario = async (data) => {
         }
         return resuelve.rows[0]
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 };

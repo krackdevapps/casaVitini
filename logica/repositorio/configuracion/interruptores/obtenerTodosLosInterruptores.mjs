@@ -4,16 +4,12 @@ export const obtenerTodosLosInterruptores = async () => {
     try {
         const consulta = `
         SELECT 
-            estado,
+            "estadoIDV",
             "interruptorIDV"
         FROM 
             "interruptoresGlobales";
        `;
-        const resuelve = await conexion.query(consulta, []);
-        if (resuelve.rowCount === 0) {
-            const error = "No hay interruptores definidos";
-            throw new Error(error);
-        }
+        const resuelve = await conexion.query(consulta);
         return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado

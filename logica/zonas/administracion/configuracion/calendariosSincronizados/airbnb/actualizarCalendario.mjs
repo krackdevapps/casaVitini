@@ -1,10 +1,10 @@
 import ICAL from 'ical.js';
 import { VitiniIDX } from '../../../../../sistema/VitiniIDX/control.mjs';
 import { validadoresCompartidos } from '../../../../../sistema/validadores/validadoresCompartidos.mjs';
+import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs';
+import { actualizarCalendarioSincronizado } from '../../../../../repositorio/calendario/actualizarCalendarioSincronizado.mjs';
+import { obtenerCalendarioPorCalendarioUID } from '../../../../../repositorio/calendario/obtenerCalendarioPorCalendarioUID.mjs';
 
-import { obtenerCalendarioPorCalendarioUID } from '../../../../../repositorio/configuracion/calendarioSincronizados/obtenerCalendarioPorCalendarioUID.mjs';
-import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs';
-import { actualizarCalendarioSincronizado } from '../../../../../repositorio/configuracion/calendarioSincronizados/actualizarCalendarioSincronizado.mjs';
 
 export const actualizarCalendario = async (entrada, salida) => {
     try {

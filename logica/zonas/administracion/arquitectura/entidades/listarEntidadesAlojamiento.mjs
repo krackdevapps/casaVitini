@@ -1,7 +1,7 @@
 
-import { obtenerTodasLasCamas } from "../../../../repositorio/arquitectura/obtenerTodasLasCama.mjs";
-import { obtenerTodasLasHabitaciones } from "../../../../repositorio/arquitectura/obtenerTodasLasHabitaciones.mjs";
-import { obtenerTodasLosApartamentos } from "../../../../repositorio/arquitectura/obtenerTodasLosApartamentos.mjs";
+import { obtenerTodasLasCamas } from "../../../../repositorio/arquitectura/entidades/cama/obtenerTodasLasCama.mjs";
+import { obtenerTodasLasHabitaciones } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerTodasLasHabitaciones.mjs";
+import { obtenerTodasLosApartamentos } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerTodasLosApartamentos.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 

@@ -18,8 +18,12 @@ export const actualizarImagenDelApartamentoPorApartamentoIDV = async (data) => {
             imagen,
             apartamentoIDV
         ]
-        const resolucionNombre = await conexion.query(consulta, parametros)
-        return resolucionNombre.rows[0]
+        const resuelve = await conexion.query(consulta, parametros)
+        if (resuelve.rowCount === 0) {
+            const error = "No se ha posido actualizar la imagen por que no existe ningun apartmento con ese apartamentoIDV";
+            throw error;
+        }
+        return resuelve.rows[0]
     } catch (errorCapturado) {
         throw errorCapturado;
     }

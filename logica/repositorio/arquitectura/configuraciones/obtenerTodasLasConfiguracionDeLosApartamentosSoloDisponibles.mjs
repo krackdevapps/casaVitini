@@ -6,7 +6,7 @@ export const obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles = asyn
         const consulta = `
         SELECT 
         "apartamentoIDV",
-        "estadoConfiguracionIDV",
+        "estadoConfiguracionIDV"
         FROM
          "configuracionApartamento"
          WHERE

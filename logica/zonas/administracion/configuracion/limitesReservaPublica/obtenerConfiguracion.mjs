@@ -1,7 +1,5 @@
+import { obtenerParConfiguracion } from "../../../../repositorio/configuracion/parConfiguracion/obtenerParConfiguracion.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-
-import { obtenerParConfiguracion } from "../../../../repositorio/configuracion/obtenerParConfiguracion.mjs";
-
 export const obtenerConfiguracion = async (entrada, salida) => {
     try {
         const session = entrada.session

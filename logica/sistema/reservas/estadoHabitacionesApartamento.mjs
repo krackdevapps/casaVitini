@@ -1,5 +1,5 @@
-import { obtenerConfiguracionPorApartamentoIDV } from '../../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs';
-import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
+import { obtenerConfiguracionPorApartamentoIDV } from '../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs';
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../repositorio/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
 import { obtenerHabitacionesDelApartamento } from '../../repositorio/reservas/apartamentos/obtenerHabitacionDelApartamento.mjs';
 
 export const estadoHabitacionesApartamento = async (transacion) => {

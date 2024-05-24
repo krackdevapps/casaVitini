@@ -22,6 +22,10 @@ export const insertarCaracteristicaDelApartamento = async (data) => {
         *
         `;
         const resuelve = await conexion.query(consulta, [caracteristica, apartamentoIDV]);
+        if (resuelve.rowCount === 0) {
+            const error = "No se ha insertado la caracteristica como entidad"
+            throw error
+        }
         return resuelve.rows[0]
     } catch (errorAdaptador) {
         throw errorAdaptador

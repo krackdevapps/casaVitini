@@ -1,14 +1,12 @@
 import Decimal from "decimal.js"
-import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
-import { obtenerPagosPorReservaUID } from "../../repositorio/reservas/transacciones/obtenerPagosPorReservaUID.mjs"
-import { obtenerReembolsosPorPagoUID } from "../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUID.mjs"
+import { obtenerPagosPorReservaUID } from "../../repositorio/reservas/transacciones/pagos/obtenerPagosPorReservaUID.mjs"
+import { obtenerReembolsosPorPagoUID } from "../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 
 export const obtenerTotalReembolsado = async (reservaUID) => {
     try {
         await obtenerReservaPorReservaUID(reservaUID)
         // Obtener todos los pagoUID de la reserva
-
         const pagosDeLaReserva = await obtenerPagosPorReservaUID(reservaUID)
         const contenedorPagosUID = pagosDeLaReserva.map((detallesPagoUID) => {
             return detallesPagoUID.pagoUID
@@ -23,7 +21,6 @@ export const obtenerTotalReembolsado = async (reservaUID) => {
                 totalReembolsado = new Decimal(totalReembolsado).plus(cantidadDelreembolso)
             })
         }
-
         return totalReembolsado
     } catch (errorCapturado) {
         throw errorCapturado

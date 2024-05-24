@@ -21,6 +21,10 @@ export const insertarConfiguracionApartamento = async (data) => {
         *
         `;
         const resuelve = await conexion.query(consulta, [apartamentoIDV, estadoInicial]);
+        if (resuelve.rowCount === 0) {
+            const error = "No se ha insertado la nueva configuracion de alojamiento"
+            throw error
+        }
         return resuelve.rows[0]
     } catch (errorAdaptador) {
         throw errorAdaptador

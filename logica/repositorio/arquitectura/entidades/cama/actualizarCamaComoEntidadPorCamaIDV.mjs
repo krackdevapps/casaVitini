@@ -26,6 +26,10 @@ export const actualizarCamaComoEntidadPorCamaIDV = async (data) => {
             camaIDVSelector,
         ];
         const resuelve = await conexion.query(consulta, parametros)
+        if (resuelve.rowCount === 0) {
+            const error = "No se encuntra ninguna cama con ese camaIDV para actualizar"
+            throw error
+        }
         return resuelve.rows[0]
     } catch (errorAdaptador) {
         const error = "Error en el adaptador actualizarCamaComoEntidadPorCamaIDV"

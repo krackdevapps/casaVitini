@@ -1,9 +1,9 @@
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs"
-import { obtenerCamaComoEntidadPorCamaIDV } from "../repositorio/arquitectura/obtenerCamaComoEntidadPorCamaIDV.mjs"
-import { obtenerConfiguracionPorApartamentoIDV } from "../repositorio/arquitectura/obtenerConfiguracionPorApartamentoIDV.mjs"
-import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../repositorio/arquitectura/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs"
-import { obtenerTodasLasCaracteristicasDelApartamento } from "../repositorio/arquitectura/obtenerTodasLasCaracteristicasDelApartamento.mjs"
+import { obtenerCamaComoEntidadPorCamaIDV } from "../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs"
+import { obtenerConfiguracionPorApartamentoIDV } from "../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../repositorio/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs"
+import { obtenerTodasLasCaracteristicasDelApartamento } from "../repositorio/arquitectura/entidades/apartamento/obtenerTodasLasCaracteristicasDelApartamento.mjs"
 import { validadoresCompartidos } from "./validadores/validadoresCompartidos.mjs"
 
 export const configuracionApartamento = async (apartamentosIDVArray) => {

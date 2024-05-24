@@ -3,10 +3,11 @@ export const eliminarEnlaceDePagoPorReservaUID = async (reservaUID) => {
     try {
         const consulta =  `
         DELETE FROM "enlacesDePago"
-        WHERE reserva = $1;
+        WHERE "reservaUID" = $1
+        RETURNING *;
         `;
         const resuelve = await conexion.query(consulta, [reservaUID]);
-        return resuelve.rows[0]
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

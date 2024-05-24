@@ -1,14 +1,15 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarApartamentoComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
-import { insertarApartamentoComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
-import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
-import { obtenerApartamentoComoEntidadPorApartamentoUI } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoUI.mjs';
-import { obtenerTodasLasCaracteristicasDelApartamento } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerTodasLasCaracteristicasDelApartamento.mjs';
-import { actualizarApartamentoComoEntidadPorApartamentoIDV } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/actualizarApartamentoComoEntidadPorApartamentoIDV.mjs';
-import { insertarCaracteristicaDelApartamento } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/insertarCaracteristicaDelApartamento.mjs';
-import { eliminarCaracteristicasDelApartamentoPorApartamentoIDV } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarCaracteristicasDelApartamentoPorApartamentoIDV.mjs';
-import { obtenerTodasLosApartamentos } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerTodasLosApartamentos.mjs';
+import { eliminarApartamentoComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
+import { insertarApartamentoComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
+import { insertarCaracteristicaDelApartamento } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/insertarCaracteristicaDelApartamento.mjs';
+import { eliminarCaracteristicasDelApartamentoPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarCaracteristicasDelApartamentoPorApartamentoIDV.mjs';
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
+import { obtenerApartamentoComoEntidadPorApartamentoUI } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoUI.mjs';
+import { obtenerTodasLasCaracteristicasDelApartamento } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerTodasLasCaracteristicasDelApartamento.mjs';
+import { obtenerTodasLosApartamentos } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerTodasLosApartamentos.mjs';
+import { actualizarApartamentoComoEntidadPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/actualizarApartamentoComoEntidadPorApartamentoIDV.mjs';
+
 describe('crud apartament as entity', () => {
     const IDVStart = "apartamentoTestInicial"
     const IDVFinal = "apartamentoTestFinal"
@@ -35,8 +36,8 @@ describe('crud apartament as entity', () => {
         expect(respons).not.toBeUndefined();
         expect(typeof respons).toBe('object');
     })
-    test('delete all features of apartament', async () => {
-        const respons = await eliminarCaracteristicasDelApartamentoPorApartamentoIDV(IDVStart)
+    test('select features of apartment by IDV', async () => {
+        const respons = await obtenerTodasLasCaracteristicasDelApartamento(IDVStart)
         expect(respons).not.toBeUndefined();
         expect(Array.isArray(respons)).toBe(true);
     })
@@ -50,11 +51,7 @@ describe('crud apartament as entity', () => {
         expect(respons).not.toBeUndefined();
         expect(typeof respons).toBe('object');
     })
-    test('select features of apartment by IDV', async () => {
-        const respons = await obtenerTodasLasCaracteristicasDelApartamento(IDVStart)
-        expect(respons).not.toBeUndefined();
-        expect(Array.isArray(respons)).toBe(true);
-    })
+
     test('select all featuress of apartment', async () => {
         const respons = await obtenerTodasLasCaracteristicasDelApartamento(IDVStart)
         expect(respons).not.toBeUndefined();
@@ -74,6 +71,13 @@ describe('crud apartament as entity', () => {
         const respons = await actualizarApartamentoComoEntidadPorApartamentoIDV(updateEntity);
         expect(respons).not.toBeUndefined();
         expect(typeof respons).toBe('object');
+
+        
+    })
+    test('delete all features of apartament', async () => {
+        const respons = await eliminarCaracteristicasDelApartamentoPorApartamentoIDV(IDVStart)
+        expect(respons).not.toBeUndefined();
+        expect(Array.isArray(respons)).toBe(true);
     })
     afterAll(async () => {
         await eliminarApartamentoComoEntidad(IDVStart)

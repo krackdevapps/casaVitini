@@ -7,10 +7,12 @@ export const actualizarEstadoEnlaceDePagoPorEnlaceUID = async (data) => {
         const consulta = `
            UPDATE "enlacesDePago"
            SET 
-           "estadoPago" = $1
+           "estadoPagoIDV" = $1
            WHERE 
-           "enlaceUID" = $2;
-           `;
+           "enlaceUID" = $2
+           RETURNING
+           *
+           ;`;
         const parametros = [
             estado,
             enlaceUID

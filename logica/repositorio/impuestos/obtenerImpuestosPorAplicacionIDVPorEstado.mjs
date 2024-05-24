@@ -9,7 +9,7 @@ export const obtenerImpuestosPorAplicacionIDVPorEstado = async (data) => {
         *
         FROM impuestos 
         WHERE 
-        "aplicacionSobre" = ANY($1)
+        "aplicacionSobreIDV" = ANY($1)
         AND 
         "estadoIDV" = $2;`
         const parametros = [

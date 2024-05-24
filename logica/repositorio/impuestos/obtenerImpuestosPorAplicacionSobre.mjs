@@ -1,25 +1,18 @@
 import { conexion } from "../../componentes/db.mjs";
 
-export const obtenerImpuestosPorAplicacionSobre = async (data) => {
+export const obtenerImpuestosPorAplicacionSobre = async (aplicacionSobre_array) => {
     try {
 
-        const aplicacionSobre = data.aplicacionSobre
-        const estado = data.estado
-            
-        const consulta =`
+        const consulta = `
         SELECT
-        nombre, "tipoImpositivo", "tipoValor"
+        nombre, "tipoImpositivo", "tipoValorIDV"
         FROM
         impuestos
         WHERE
-        "aplicacionSobre" = ANY($1)
-        AND estado = $3;
+        "aplicacionSobreIDV" = ANY($1);
         `;
-        const parametros = [
-            aplicacionSobre,
-            estado
-        ]
-        const resuelve = await conexion.query(consulta, parametros); 
+
+        const resuelve = await conexion.query(consulta, [aplicacionSobre_array]);
         return resuelve.rows
     } catch (errorAdaptador) {
         throw errorAdaptador

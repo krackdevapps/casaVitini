@@ -1,17 +1,16 @@
 import { conexion } from "../../componentes/db.mjs";
 export const insertarOferta = async (data) => {
     try {
-
-        const nombreOferta = metadatos.nombreOferta;
-        const fechaInicio_ISO = metadatos.fechaInicio_ISO;
-        const fechaFin_ISO = metadatos.fechaFin_ISO;
-        const simboloNumero = metadatos.simboloNumero;
-        const numero = metadatos.numero;
-        const contextoAplicacion = metadatos.contextoAplicacion;
+        const nombreOferta = data.nombreOferta;
+        const fechaInicio_ISO = data.fechaInicio_ISO;
+        const fechaFin_ISO = data.fechaFin_ISO;
+        const simboloNumero = data.simboloNumero;
+        const numero = data.numero;
+        const descuentoAplicadoA = data.descuentoAplicadoA;
         const estadoInicalDesactivado = "desactivada";
-        const tipoOferta = metadatos.tipoOferta;
-        const cantidad = metadatos.cantidad;
-        const tipoDescuento = metadatos.tipoDescuento;
+        const tipoOferta = data.tipoOferta;
+        const cantidad = data.cantidad;
+        const tipoDescuento = data.tipoDescuento;
 
         const consulta = `
             INSERT INTO ofertas
@@ -19,13 +18,13 @@ export const insertarOferta = async (data) => {
                 "nombreOferta",
                 "fechaInicio",
                 "fechaFin",
-                "simboloNumero",
+                "simboloNumeroIDV",
                 "numero",
-                "descuentoAplicadoA",
-                "estadoOferta",
-                "tipoOferta",
+                "descuentoAplicadoAIDV",
+                "estadoOfertaIDV",
+                "tipoOfertaIDV",
                 cantidad,
-                "tipoDescuento"
+                "tipoDescuentoIDV"
             )
             VALUES
             (
@@ -40,7 +39,7 @@ export const insertarOferta = async (data) => {
                 NULLIF($9::numeric, NULL),
                 NULLIF($10, NULL)
             )
-            RETURNING uid;
+            RETURNING *;
             `;
 
             const parametros = [
@@ -49,7 +48,7 @@ export const insertarOferta = async (data) => {
                 fechaFin_ISO,
                 simboloNumero,
                 numero,
-                contextoAplicacion,
+                descuentoAplicadoA,
                 estadoInicalDesactivado,
                 tipoOferta,
                 cantidad,

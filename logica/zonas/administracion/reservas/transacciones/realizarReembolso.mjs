@@ -2,10 +2,9 @@ import Decimal from "decimal.js";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-
-import { eliminarPagoPorPagoUID } from "../../../../repositorio/reservas/transacciones/eliminarPagoPorPagoUID.mjs";
-import { insertarReembolso } from "../../../../repositorio/reservas/transacciones/insertarReembolso.mjs";
-import { obtenerReembolsosPorPagoUID_ordenados } from "../../../../repositorio/reservas/transacciones/obtenerReembolsosPorPagoUID_ordenados.mjs";
+import { eliminarPagoPorPagoUID } from "../../../../repositorio/reservas/transacciones/pagos/eliminarPagoPorPagoUID.mjs";
+import { insertarReembolso } from "../../../../repositorio/reservas/transacciones/reembolsos/insertarReembolso.mjs";
+import { obtenerReembolsosPorPagoUID_ordenados } from "../../../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID_ordenados.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const realizarReembolso = async (entrada, salida) => {

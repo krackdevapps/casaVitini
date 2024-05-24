@@ -1,4 +1,4 @@
-import { obtenerParConfiguracion } from '../../repositorio/configuracion/obtenerParConfiguracion.mjs';
+import { obtenerParConfiguracion } from '../../repositorio/configuracion/parConfiguracion/obtenerParConfiguracion.mjs';
 export const obtenerParametroConfiguracion = async (configuracionUID) => {
     try {
         const filtroCadena = /^[a-zA-Z0-9]+$/;

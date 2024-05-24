@@ -2,14 +2,14 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
-import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
-import { actualizarApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/actualizarApartamentoComoEntidadPorApartamentoIDV.mjs";
-import { eliminarCaracteristicasDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/eliminarCaracteristicasDelApartamentoPorApartamentoIDV.mjs";
-import { insertarCaracteristicaDelApartamento } from "../../../../repositorio/arquitectura/insertarCaracteristicaDelApartamento.mjs";
-import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
-import { actualizarHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/actualizarHabitacionComoEntidadPorHabitacionIDV.mjs";
-import { obtenerCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/obtenerCamaComoEntidadPorCamaIDV.mjs";
-import { actualizarCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/actualizarCamaComoEntidadPorCamaIDV.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { actualizarApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/actualizarApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { eliminarCaracteristicasDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/eliminarCaracteristicasDelApartamentoPorApartamentoIDV.mjs";
+import { insertarCaracteristicaDelApartamento } from "../../../../repositorio/arquitectura/entidades/apartamento/insertarCaracteristicaDelApartamento.mjs";
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
+import { actualizarHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/actualizarHabitacionComoEntidadPorHabitacionIDV.mjs";
+import { obtenerCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs";
+import { actualizarCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/entidades/cama/actualizarCamaComoEntidadPorCamaIDV.mjs";
 
 export const modificarEntidadAlojamiento = async (entrada, salida) => {
     try {

@@ -1,7 +1,8 @@
 import { DateTime } from "luxon";
-import { obtenerReservasDeTodosLosApartamentosPorMesPorAno } from "../../../repositorio/calendario/obtenerReservasDeTodosLosApartamentosPorMesPorAno.mjs";
 import { validadoresCompartidos } from "../../validadores/validadoresCompartidos.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { obtenerReservasDeTodosLosApartamentosPorMesPorAno } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasDeTodosLosApartamentosPorMesPorAno.mjs";
+
 export const eventosTodosLosApartamentos = async (fecha) => {
     try {
         validadoresCompartidos.fechas.fechaMesAno(fecha)

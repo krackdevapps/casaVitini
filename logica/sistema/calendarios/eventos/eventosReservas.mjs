@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { obtenerReservasPorMesPorAno } from "../../../repositorio/calendario/obtenerReservasPorMesPorAno.mjs";
+import { obtenerReservasPorMesPorAno } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorMes.mjs";
 
 export const eventosReservas = async (fecha) => {
     try {

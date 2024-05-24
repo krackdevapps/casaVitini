@@ -4,7 +4,7 @@ import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotale
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
-import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from "../../../repositorio/arquitectura/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs";
+import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from "../../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs";
 import { DateTime } from "luxon";
 import { insertarReservaAdministrativa } from "../../../repositorio/reservas/reserva/insertarReservaAdministrativa.mjs";
 import { insertarApartamentoEnReservaAdministrativa } from "../../../repositorio/reservas/reserva/insertarApartamentoEnReservaAdministrativa.mjs";

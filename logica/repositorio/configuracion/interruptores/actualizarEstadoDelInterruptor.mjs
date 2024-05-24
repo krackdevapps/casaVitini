@@ -10,7 +10,7 @@ export const actualizarEstadoDelInterruptor = async (data) => {
         UPDATE 
             "interruptoresGlobales"
         SET
-            estado = $1
+            "estadoIDV" = $1
         WHERE
             "interruptorIDV" = $2
             RETURNING *;`;

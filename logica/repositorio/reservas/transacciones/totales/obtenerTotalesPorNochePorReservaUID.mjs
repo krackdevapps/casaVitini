@@ -1,4 +1,5 @@
-import { conexion } from "../../../componentes/db.mjs"
+import { conexion } from "../../../../componentes/db.mjs";
+
 
 export const obtenerTotalesPorNochePorReservaUID = async (reservaUID) => {
     try {
@@ -17,4 +18,5 @@ export const obtenerTotalesPorNochePorReservaUID = async (reservaUID) => {
         throw errorCapturado
     }
 }
+
 

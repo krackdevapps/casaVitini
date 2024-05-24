@@ -20,6 +20,10 @@ export const obtenerHabitacionDelApartamentoPorHabitacionIDV = async (data) => {
         ]
 
         const resuelve = await conexion.query(consulta, parametros)
+        if (resuelve.rowCount === 0) {
+            const error = "No existe ningua habitacion dentro del apartmento con ese habitacionIDV";
+            throw error;
+        }
         return resuelve.rows[0]
     } catch (errorAdaptador) {
         throw errorAdaptador

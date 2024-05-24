@@ -4,10 +4,7 @@ export const obtenerMensajePorPosicion = async (posicion) => {
     try {
         const consulta =  `
              SELECT 
-                 uid,
-                 mensaje,
-                 estado, 
-                 posicion
+                 *
              FROM 
                  "mensajesEnPortada"
              WHERE 

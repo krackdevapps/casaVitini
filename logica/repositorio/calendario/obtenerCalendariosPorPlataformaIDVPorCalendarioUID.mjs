@@ -19,6 +19,10 @@ export const obtenerCalendariosPorPlataformaIDVPorCalendarioUID = async (data) =
             plataformaDeOrigen
         ]
         const resuelve = await conexion.query(consulta, parametros)
+        if (resuelve.rowCount === 0) {
+            const error = "No existe el calendarioUID con ese plataformaOrigen, revisa el nombre identificador"
+            throw error
+        }
         return resuelve.rows[0]
     } catch (errorAdaptador) {
         throw errorAdaptador

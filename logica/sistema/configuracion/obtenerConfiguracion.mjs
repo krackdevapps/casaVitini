@@ -1,4 +1,4 @@
-import { obtenerParConfiguracion } from "../../repositorio/configuracion/obtenerParConfiguracion.mjs";
+import { obtenerParConfiguracion } from "../../repositorio/configuracion/parConfiguracion/obtenerParConfiguracion.mjs";
 import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs";
 
 export const obtenerConfiguracion = async (arrayConfiguracionesUID) => {

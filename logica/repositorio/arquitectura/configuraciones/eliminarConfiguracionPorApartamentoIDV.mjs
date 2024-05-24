@@ -2,9 +2,13 @@ import { conexion } from "../../../componentes/db.mjs";
 
 export const eliminarConfiguracionPorApartamentoIDV = async (apartamentoIDV) => {
     try {
-        const consulta =  `
-        DELETE FROM "configuracionApartamento"
-        WHERE "apartamentoIDV" = $1
+        const consulta = `
+        DELETE FROM 
+        "configuracionApartamento"
+        WHERE
+         "apartamentoIDV" = $1
+         RETURNING 
+         *
         `;
         const resuelve = await conexion.query(consulta, [apartamentoIDV]);
         return resuelve.rows
