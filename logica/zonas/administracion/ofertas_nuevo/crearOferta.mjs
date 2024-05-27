@@ -19,14 +19,14 @@ export const crearOferta = async (entrada, salida) => {
         const fechaInicio = entrada.body.fechaInicio
         const fechaFinal = entrada.body.fechaFinal
         const condiciones = entrada.body.condiciones
-        const descuento = entrada.body.descuentos
+        const descuentos = entrada.body.descuentos
 
         const oferta = {
             nombreOferta,
             fechaInicio,
             fechaFinal,
             condiciones,
-            descuento,
+            descuentos,
         }
         await validarObjetoOferta(oferta)
         await campoDeTransaccion("iniciar")
@@ -37,7 +37,6 @@ export const crearOferta = async (entrada, salida) => {
         }
 
         const nuevaOferta = await insertarOferta(oferta)
-
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha creado la oferta",
@@ -47,7 +46,7 @@ export const crearOferta = async (entrada, salida) => {
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release();

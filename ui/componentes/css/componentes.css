@@ -6576,6 +6576,20 @@
     align-items: stretch;
 }
 
+
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaContenedorHorizontal_modoCrear {
+    display: flex;
+    grid-template-columns: 0.25fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    flex-direction: column;
+}
+
 [zonaCSS="administracion/ofertas/ofertaUI"] .creatOfertaBotonEstado {
     background: rgba(255, 255, 255, 0.3);
     display: flex;

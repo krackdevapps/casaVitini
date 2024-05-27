@@ -11,6 +11,7 @@ export const sistemaDeOfertas = async (reserva) => {
 
     const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
     let fechaActualTZ
+
     if (reserva.fechas.creacion_ISO_UTC) {
         fechaActualTZ = DateTime.fromISO(reserva.fechas.creacion_ISO_UTC).setZone(zonaHoraria).toISODate();
     } else {
@@ -30,6 +31,8 @@ export const sistemaDeOfertas = async (reserva) => {
     contenedorOferta.push(ofertasPorRangoDeFecha)
     const ofertasPorDiasDeAntelacion = await porDiasDeAntelacion(reserva)
     contenedorOferta.push(ofertasPorDiasDeAntelacion)
+
+    
     //Sumar el total
     for (const detallesOferta of contenedorOferta) {
         const totalOferta = detallesOferta.descuentoGlobal

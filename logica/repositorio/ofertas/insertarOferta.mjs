@@ -5,11 +5,11 @@ export const insertarOferta = async (data) => {
         const nombreOferta = data.nombreOferta
         const fechaInicio = data.fechaInicio
         const fechaFinal = data.fechaFinal
-        const condiciones = data.condiciones
-        const descuentos = data.descuentos
+        const condiciones = JSON.stringify(data.condiciones)
+        const descuentos = JSON.stringify(data.descuentos)
 
         const consulta = `
-            INSERT INTO "ofertasV2"
+            INSERT INTO "ofertas"
             (
                 "nombreOferta",
                 "fechaInicio",
@@ -19,11 +19,11 @@ export const insertarOferta = async (data) => {
             )
             VALUES
             (
-                COALESCE($1::test, NULL),
+                COALESCE($1::text, NULL),
                 COALESCE($2::date, NULL),
                 COALESCE($3::date, NULL),
-                NULLIF($4:jsonb, NULL),
-                NULLIF($5::jsonb, NULL),
+                NULLIF($4::jsonb, NULL),
+                NULLIF($5::jsonb, NULL)
     
             )
             RETURNING *;

@@ -195,6 +195,11 @@ export const validadoresCompartidos = {
                     throw new Error("El validador de fechas ISO mal configurado. no encuentra la llave nombreCampo en el objeto");
                 }
 
+
+                if (!configuracion.hasOwnProperty("fecha_ISO")) {
+                    throw new Error("El validador de fechas ISO mal configurado. no encuentra la llave fecha_ISO en el objeto");
+                }
+
                 const fecha_ISO = configuracion.fecha_ISO
                 const nombreCampo = configuracion.nombreCampo
 
@@ -285,10 +290,8 @@ export const validadoresCompartidos = {
                     nombreCampo: "La fecha de salida en el validador vectorial"
                 })
 
-
                 const fechaEntrada_obejto = DateTime.fromISO(fechaEntrada_ISO)
                 const fechaSalida_obejto = DateTime.fromISO(fechaSalida_ISO)
-
                 const tipoVector = configuracion.tipoVector
 
                 if (tipoVector === "igual") {
@@ -478,7 +481,7 @@ export const validadoresCompartidos = {
             }
             if (string.length === 0 || string === "") {
                 const mensaje = `${nombreCampo} esta vacío.`
-                return mensaje
+                throw new Error(mensaje)
             }
             if (limpiezaEspaciosAlrededor === "si") {
                 string = string
@@ -577,13 +580,27 @@ export const validadoresCompartidos = {
                         throw new Error(mensaje)
                     }
                     const maximoDeLargo = configuracion.maximoDeLargo
-                    if (typeof maximoDeLargo !== "number") {
+                    if (maximoDeLargo && typeof maximoDeLargo !== "number") {
                         const mensaje = `El validor de cadena esta mal configurado, maximoDeLargo solo acepta numeros.`
                         throw new Error(mensaje)
                     }
                     if (maximoDeLargo) {
                         if (string.length > maximoDeLargo) {
                             const mensaje = `${nombreCampo} solo acepta un maximo de ${maximoDeLargo} numeros.`
+                            throw new Error(mensaje)
+                        }
+                    }
+                    const impedirCero = configuracion.impedirCero
+                    if (typeof impedirCero !== "string" &&
+                        (impedirCero !== "si" && impedirCero !== "no")) {
+                        const mensaje = `El validor de cadena esta mal configurado, impedirCero solo acepta si o no.`
+                        throw new Error(mensaje)
+                    }
+
+                    if (impedirCero === "si") {
+                        const numero = parseFloat(string)
+                        if (numero === 0) {
+                            const mensaje = `${nombreCampo} no permite valores de cero.`
                             throw new Error(mensaje)
                         }
                     }
@@ -779,26 +796,26 @@ export const validadoresCompartidos = {
                 }
 
                 const noSePermitenDuplicados = configuracion.noSePermitenDuplicados
-                if (typeof noSePermitenDuplicados !== "string" &&
-                    (noSePermitenDuplicados !== "si" && noSePermitenDuplicados !== "no")) {
-                    const mensaje = `El validor de cadena esta mal configurado, noSePermitenDuplicados solo acepta si o no.`
-                    throw new Error(mensaje)
-                }
-                if (noSePermitenDuplicados === "si") {
-                    const arrayFiltrado = array.map((array) => {
-                        if (typeof elemento === "string") {
-                            return elemento.toLowerCase();
-                        } else {
-                            return elemento;
+                if (noSePermitenDuplicados) {
+                    if (noSePermitenDuplicados !== "si" && noSePermitenDuplicados !== "no") {
+                        const mensaje = `El validor de cadena esta mal configurado, noSePermitenDuplicados solo acepta si o no.`
+                        throw new Error(mensaje)
+                    }
+                    if (noSePermitenDuplicados === "si") {
+                        const arrayFiltrado = array.map((cadenaEnElArray) => {
+                            if (typeof cadenaEnElArray === "string") {
+                                return cadenaEnElArray.toLowerCase();
+                            } else {
+                                return cadenaEnElArray;
+                            }
+                        });
+                        const controlDuplicados = new Set(arrayFiltrado).size !== arrayFiltrado.length;
+                        if (controlDuplicados) {
+                            const error = `${nombreCampo} que es un arrayFiltrado, tiene duplicados y no deberia tener.`;
+                            throw new Error(error);
                         }
-                    });
-                    const controlDuplicados = new Set(arrayFiltrado).size !== arrayFiltrado.length;
-                    if (controlDuplicados) {
-                        const error = `${nombreCampo} que es un arrayFiltrado, tiene duplicados y no deberia tener.`;
-                        throw new Error(error);
                     }
                 }
-
                 return array
             } catch (errorCapturado) {
                 throw errorCapturado
@@ -808,7 +825,6 @@ export const validadoresCompartidos = {
             try {
                 const objetoLiteral = configuracion.objetoLiteral
                 const nombreCampo = configuracion.nombreCampo
-                const filtro = configuracion.filtro
 
                 if (!nombreCampo) {
                     const mensaje = `El validador de objetos, necesito un nombre de campo.`
@@ -824,7 +840,7 @@ export const validadoresCompartidos = {
                 }
                 return objetoLiteral
             } catch (errorCapturado) {
-                throw error
+                throw errorCapturado
 
             }
         },
@@ -961,6 +977,23 @@ export const validadoresCompartidos = {
                 throw errorCapturado
             }
 
+        },
+        comparadorArraysExactos: (data) => {
+            const arrayPrimero = data.arrayPrimero
+            const arraySegundo = data.arraySegundo
+
+            const setPrimero = new Set(arrayPrimero);
+            const setSegundo = new Set(arraySegundo);
+
+            if (setPrimero.size !== setSegundo.size) {
+                return false;
+            }
+            for (let elemento of setPrimero) {
+                if (!setSegundo.has(elemento)) {
+                    return false;
+                }
+            }
+            return true;
         }
     },
 

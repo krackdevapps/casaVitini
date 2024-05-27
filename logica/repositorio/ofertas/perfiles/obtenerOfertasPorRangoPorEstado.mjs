@@ -1,26 +1,21 @@
 import { conexion } from "../../../componentes/db.mjs";
 
-export const obtenerOfertasPorRangoFechaPorEstadoPorTipo = async (data) => {
+export const obtenerOfertasPorRangoPorEstado = async (data) => {
     try {
 
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
         const fechaEntradaReserva_ISO = data.fechaEntradaReserva_ISO
-        const estadoOferta = data.estadoOferta
-        const tipoOferta = data.tipoOferta
+        const estadoOferta = "activado"
 
-        const consulta =`
+        const consulta = `
         SELECT 
-        uid,
-        to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio_Humano", 
-        to_char("fechaFin", 'DD/MM/YYYY') as "fechaFin_Humano", 
+        "ofertaUID",
+        "nombreOferta"
         to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio_ISO", 
         to_char("fechaFin", 'YYYY-MM-DD') as "fechaFin_ISO", 
         "tipoOferta",
-        cantidad,
-        "tipoDescuento",
-        "nombreOferta"
+        contenedor
         FROM ofertas 
-        WHERE
         WHERE                     
         (
             (
@@ -44,8 +39,7 @@ export const obtenerOfertasPorRangoFechaPorEstadoPorTipo = async (data) => {
         const parametros = [
             fechaSalidaReserva_ISO,
             fechaEntradaReserva_ISO,
-            estadoOferta,
-            tipoOferta
+            estadoOferta
         ]
         const resuelve = await conexion.query(consulta, parametros)
         return resuelve.rows

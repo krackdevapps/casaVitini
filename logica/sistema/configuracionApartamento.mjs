@@ -5,6 +5,7 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../repositorio/arquitectu
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../repositorio/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs"
 import { obtenerTodasLasCaracteristicasDelApartamento } from "../repositorio/arquitectura/entidades/apartamento/obtenerTodasLasCaracteristicasDelApartamento.mjs"
 import { validadoresCompartidos } from "./validadores/validadoresCompartidos.mjs"
+import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../repositorio/arquitectura/configuraciones/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs"
 
 export const configuracionApartamento = async (apartamentosIDVArray) => {
 
@@ -20,20 +21,19 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
         const configuracion = {}
 
         for (const apartamentoIDV of apartamentosIDVArray) {
-            const configuracionApartamento = obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+            const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
             const estructuraApartamentoInicial = {
                 apartamentoIDV: configuracionApartamento.apartamentoIDV,
             }
             apartamentosValidados.push(estructuraApartamentoInicial)
-
         }
 
         for (const detallesApartamento of apartamentosValidados) {
             const apartamentoIDV = detallesApartamento.apartamentoIDV
             configuracion[apartamentoIDV] = {}
 
-            const apartamentoUI = obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
-            configuracion[apartamentoIDV].apartamentoUI = apartamentoUI
+            const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+            configuracion[apartamentoIDV].apartamentoUI = apartamentoEntidad.apartamentoUI
             const caracteristicasDeLApartamento = await obtenerTodasLasCaracteristicasDelApartamento(apartamentoIDV)
             configuracion[apartamentoIDV].caracteristicas = caracteristicasDeLApartamento
             const configuracionHabitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
@@ -41,11 +41,13 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
 
             for (const habitacion of configuracionHabitacionesPorApartamento) {
                 const habiacionIDV = habitacion.habitacionIDV
-                const habitacionUID = habitacion.habitacionUID
+                const habitacionUID = habitacion.componenteUID
+                const habitacionEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(habiacionIDV)
                 configuracion[apartamentoIDV].habitaciones[habiacionIDV] = {}
-                configuracion[apartamentoIDV].habitaciones[habiacionIDV].habitacionUI = obtenerHabitacionComoEntidadPorHabitacionIDV(habiacionIDV)
+                configuracion[apartamentoIDV].habitaciones[habiacionIDV].habitacionUI = habitacionEntidad.habitacionUI
 
                 const camasDeLaHabitacion = await obtenerCamasDeLaHabitacionPorHabitacionUID(habitacionUID)
+
                 let configuracionNumero = 0
                 configuracion[apartamentoIDV].habitaciones[habiacionIDV].configuraciones = {}
 
@@ -64,11 +66,12 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
                 }
             }
         }
+        const ok = {
+            configuracionApartamento: configuracion
+        }
+        return ok
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
-    const ok = {
-        configuracionApartamento: configuracion
-    }
-    return ok
+
 }

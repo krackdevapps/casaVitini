@@ -7,14 +7,14 @@ import { obtenerComportamientosDistintosPorTipoIDVPorDiasArray } from "../../../
 import { obtenerComportamientosPorRangoPorTipoIDV } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs"
 import { obtenerComportamientosPorTipoIDVPorDiasArray } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorTipoIDVPorDiasArray.mjs"
 
-export const evitarDuplicados = async (data) => {
+export const evitarDuplicados = async (comportamiento) => {
     try {
-        const comportamientoUID = data.comportamientoUID
+        const comportamientoUID = comportamiento.comportamientoUID
         const nombreComportamiento = date.nombreComportamiento
-        const tipoIDV = data.tipoIDV
-        const transaccion = data.transaccion
-        const apartamentosIDV_array = data.apartamentosIDV_array
-
+        const contenedor = comportamiento.contenedor
+        const tipoIDV = contenedor.tipoIDV
+        const transaccion = comportamiento.transaccion
+        console.log("ee")
         if (transaccion !== "crear" && transaccion !== "actualizar") {
             const error = `El sistema de evitar duplicados necesita un tipo de transaccion para ver si es un operacion de creacion o actualizacion`
             throw new Error(error)
@@ -36,10 +36,10 @@ export const evitarDuplicados = async (data) => {
                 throw new Error(mensajeNombreRepetido);
             }
         }
-
-        if (tipoIDV === "porRango") {
-            const fechaInicio_ISO = data.fechaInicio_ISO
-            const fechaFinal_ISO = data.fechaFinal_ISO
+        console.log("1")
+            if (tipoIDV === "porRango") {
+            const fechaInicio_ISO = contenedor.fechaInicio
+            const fechaFinal_ISO = contenedor.fechaFinal
 
             const comportamientosEnElRango = [] // Los comportamiento de precio que estan en el rango de nuevo comportamiento
             if (transaccion === "crear") {
@@ -104,7 +104,7 @@ export const evitarDuplicados = async (data) => {
             }
         }
         if (tipoIDV === "porDias") {
-            const diasArray = data.diasArray
+            const diasArray = comportamiento.diasArray
             const comportamientosPorTipoPorDiasEnElRango = []
             if (transaccion === "crear") {
                 const comportamientosPorDiasArray = await obtenerComportamientosPorTipoIDVPorDiasArray({
@@ -158,11 +158,10 @@ export const evitarDuplicados = async (data) => {
                         error: `No se puede crear este comportamiento de por dias por que hay apartamentos en este comportamiento que existen en otros comportamientos por dias que coinciden en el dias y el apartamento. Es decir hay comportamientos que tiene el mismo dia y el mismo apartamento coincidiendo.`,
                         comportamientosCoincidentes: arbolComportamientoCoincidentes
                     }
-                    throw errorCompuesto
+                    throw new Error(errorCompuesto)
                 }
             }
-
-        }
+        }console.log("3")
     } catch (errorCapturado) {
         throw errorCapturado
     }

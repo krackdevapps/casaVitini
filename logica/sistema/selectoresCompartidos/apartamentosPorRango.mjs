@@ -44,15 +44,11 @@ export const apartamentosPorRango = async (metadatos) => {
             apartamentoIDV: apartamentosIDV,
             zonaBloqueo_array: ["publico", "global"],
         }
-        if (
-            origen === "administracion"
+        if (origen === "administracion"
             &&
-            (rol === "administrador" || rol === "empleado")
-        ) {
+            (rol === "administrador" || rol === "empleado")) {
             configuracionBloqueos.zonaBloqueo_array = ["privado", "global"]
         }
-
-
         const bloqueos = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
 
         bloqueos.forEach((apartamento) => {

@@ -2,45 +2,33 @@ import { conexion } from "../../componentes/db.mjs";
 export const insertarComportamientoDePrecio = async (data) => {
     try {
         const nombreComportamiento = data.nombreComportamiento
-        const fechaInicio_ISO = data.fechaInicio_ISO
-        const fechaFinal_ISO = data.fechaFinal_ISO
-        const tipo = data.tipo
-        const diasArray = data.diasArray
+        const contenedor = data.contenedor
         const comportamientoTVI = data.comportamientoTVI
         const estadoInicalDesactivado = "desactivado";
+
 
         const consulta = `
             INSERT INTO "comportamientoPrecios"
             (
                 "nombreComportamiento",
-                "fechaInicio",
-                "fechaFinal",
-                 "estadoIDV",
-                 "tipoIDV",
-                 "diasArray",
-                 "comportamientoTVI"
+                "estadoIDV",
+                 contenedor,
+                "comportamientoTVI"
             )
             VALUES
             (
-                COALESCE($1, NULL),
-                COALESCE($2::date, NULL),
-                COALESCE($3::date, NULL),
-                COALESCE($4, NULL),
-                COALESCE($5, NULL),
-                COALESCE($6::text[], NULL),
-                COALESCE($7, NULL)
-
+                COALESCE($1::text, NULL),
+                COALESCE($2::text, NULL),
+                COALESCE($3::jsonb, NULL),
+                COALESCE($4::text, NULL)
             )
             RETURNING 
             *;
             `;
         const parametros = [
             nombreComportamiento,
-            fechaInicio_ISO,
-            fechaFinal_ISO,
             estadoInicalDesactivado,
-            tipo,
-            diasArray,
+            contenedor,
             comportamientoTVI
         ]
         const resuelve = await conexion.query(consulta, parametros);

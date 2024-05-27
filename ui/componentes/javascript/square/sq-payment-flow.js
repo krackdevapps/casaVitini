@@ -91,7 +91,7 @@ window.createPayment = async function (token, verificationToken) {
       }
     } else {
       // Pago exitoso
-      casaVitini.componentes.limpiarAdvertenciasInmersivas()
+      casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
       if (data.ok) {
         console.info("Pago Existoso !!!!")
         const detalles = data.detalles

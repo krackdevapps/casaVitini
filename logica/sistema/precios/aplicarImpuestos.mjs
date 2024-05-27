@@ -12,30 +12,24 @@ export const aplicarImpuestos = async (totalNetoEntrada) => {
             ]
         })
         const objetoImpuestos = []
-        let sumaImpuestos = 0
+        let sumaImpuestos = new Decimal("0")
         for (const impuesto of impuestos) {
             const impuestoNombre = impuesto.nombre
             const tipoImpositivo = impuesto.tipoImpositivo
-            const tipoValor = impuesto.tipoValor
-            let calculoImpuestoPorcentaje
+            const tipoValorIDV = impuesto.tipoValorIDV
             const presentacionImpuesto = {
                 nombreImpuesto: impuestoNombre,
                 tipoImpositivo: tipoImpositivo,
-                tipoValor: tipoValor,
+                tipoValor: tipoValorIDV,
             }
-            if (tipoValor === "porcentaje") {
-                calculoImpuestoPorcentaje = totalNeto.times(tipoImpositivo).dividedBy(100);
-                presentacionImpuesto.calculoImpuestoPorcentaje = calculoImpuestoPorcentaje.toFixed(2).toString()
-                calculoImpuestoPorcentaje = new Decimal(calculoImpuestoPorcentaje)
-                sumaImpuestos = calculoImpuestoPorcentaje.plus(sumaImpuestos)
+            if (tipoValorIDV === "porcentaje") {
+                const calculoImpuestoPorcentaje = totalNeto.times(tipoImpositivo).dividedBy(100);
+                sumaImpuestos = sumaImpuestos.plus(calculoImpuestoPorcentaje)
             }
-            if (tipoValor === "tasa") {
+            if (tipoValorIDV === "tasa") {
                 const tipoImpositivoConst = new Decimal(tipoImpositivo)
-                sumaImpuestos = tipoImpositivoConst.plus(sumaImpuestos)
+                sumaImpuestos = sumaImpuestos.plus(tipoImpositivoConst)
             }
-
-            // let objetoImpuesto = {}
-            // objetoImpuesto[impuestoNombre] = presentacionImpuesto
             objetoImpuestos.push(presentacionImpuesto)
         }
         const estructoraFinal = {

@@ -1,53 +1,54 @@
 import { conexion } from "../../componentes/db.mjs"
 
 export const obtenerComportamientosPorRangoPorTipoIDV = async (metadatos) => {
-    try {
-        const fechaInicio_ISO = metadatos.fechaInicio_ISO
-        const fechaFinal_ISO = metadatos.fechaFinal_ISO
-        const tipoIDV = metadatos.tipoIDV
+  try {
+    const fechaInicio_ISO = metadatos.fechaEntrada_ISO
+    const fechaFinal_ISO = metadatos.fechaSalida_ISO
+    const arrayApartamentos = metadatos.arrayApartamentos
+    const tipoIDV = metadatos.tipoIDV
+    const estado = metadatos.estado
 
-        const parametrosBusqueda = [
-            fechaInicio_ISO,
-            fechaFinal_ISO,
-            tipoIDV
-        ]
+    const consulta = `
+         SELECT "comportamientoUID",
+          "nombreComportamiento",
+          "estadoIDV",
+          "contenedor",
+          to_char(("contenedor"->>'fechaInicio')::DATE, 'YYYY-MM-DD') as "fechaInicio",
+          to_char(("contenedor"->>'fechaFinal')::DATE, 'YYYY-MM-DD') as "fechaFinal"
+          
+         FROM "comportamientoPrecios"
+         WHERE ( -- Caso 1: Evento totalmente dentro del rango
+           (("contenedor"->>'fechaInicio')::DATE >=$1::DATE
+            AND ("contenedor"->>'fechaFinal')::DATE <= $2::DATE)
+                 OR -- Caso 2: Evento parcialmente dentro del rango
+           (("contenedor"->>'fechaInicio')::DATE <=$1::DATE
+            AND ("contenedor"->>'fechaFinal')::DATE >=$1::DATE)
+                 OR (("contenedor"->>'fechaInicio')::DATE <= $2::DATE
+                     AND ("contenedor"->>'fechaFinal')::DATE >= $2::DATE)
+                 OR -- Caso 3: Evento que atraviesa el rango
+           (("contenedor"->>'fechaInicio')::DATE <$1::DATE
+            AND ("contenedor"->>'fechaFinal')::DATE > $2::DATE) )
+            AND "contenedor"->>'tipo'= $3
+            AND EXISTS
+              ( SELECT 1
+               FROM jsonb_array_elements("contenedor"->'apartamentos') AS apt
+               WHERE apt->>'apartamentoIDV' = ANY($4)
+               )
+            AND 
+            "estadoIDV" = $5
+              ;`
+    const parametros = [
+      fechaInicio_ISO,
+      fechaFinal_ISO,
+      tipoIDV,
+      arrayApartamentos,
+      estado
+    ]
 
-        const consultaBloqueos = `
-      SELECT 
-      "comportamientoUID",
-      "tipoIDV",
-      to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
-      to_char("fechaFinal", 'YYYY-MM-DD') as "fechaFinal"  
-      FROM "comportamientoPrecios" 
-      WHERE                     
-      (
-        (
-           (   
-               (
-                 -- Caso 1: Evento totalmente dentro del rango
-                 "fechaInicio" >= $1::DATE AND "fechaFinal" <= $2::DATE
-               )
-               OR
-               (
-                 -- Caso 2: Evento parcialmente dentro del rango
-                 ("fechaInicio" <= $1::DATE AND "fechaFinal" >= $1::DATE)
-                 OR ("fechaInicio" <= $2::DATE AND "fechaFinal" >= $2::DATE)
-               )
-               OR
-               (
-                 -- Caso 3: Evento que atraviesa el rango
-                 ("fechaInicio" < $1::DATE AND "fechaFinal" > $2::DATE)
-               )
-            )
-        )
-             OR 
-             "tipoIDV" = $3
-      )
-        ;`
+    const resuelve = await conexion.query(consulta, parametros)
 
-        const resuelveBloqueos = await conexion.query(consultaBloqueos, parametrosBusqueda)
-        return resuelveBloqueos.rows
-    } catch (errorCapturado) {
-        throw errorCapturado
-    }
+    return resuelve.rows
+  } catch (errorCapturado) {
+    throw errorCapturado
+  }
 }

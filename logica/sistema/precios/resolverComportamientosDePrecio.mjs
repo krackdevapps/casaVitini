@@ -1,3 +1,4 @@
+import { obtenerApartamentosDelComportamientoPorComportamientoUID } from '../../repositorio/comportamientoDePrecios/obtenerApartamentosDelComportamientoPorComportamientoUID.mjs';
 import { obtenerComportamientosPorRangoPorTipoIDV } from '../../repositorio/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 
@@ -18,30 +19,34 @@ export const resolverComportamientosDePrecio = async (fechaEntrada_ISO, fechaSal
         fechaFinal_ISO: fechaSalida_ISO,
         tipoIDV: soloComportamientosActivados,
     })
-    if (comportamientoDePrecios.length > 0) {
-        for (const detallesComportamiento of comportamientoDePrecios) {
-            const uidComportamiento = detallesComportamiento.uid;
-            const nombreComportamiento = detallesComportamiento.nombreComportamiento;
-            const fechaInicioComportamiento = detallesComportamiento.fechaInicio;
-            const fechaFinalComportamiento = detallesComportamiento.fechaFinal;
-            const apartamentosDelComportamiento = await obtenerApartamentosDelComportamientoPorComportamientoUID(uidComportamiento)
-            if (apartamentosDelComportamiento.length > 0) {
-                for (const perfilComportamiento of apartamentosDelComportamiento) {
-                    const simbolo = perfilComportamiento.simbolo;
-                    const cantidad = perfilComportamiento.cantidad;
-                    const apartamentoIDVComportamiento = perfilComportamiento.apartamentoIDV;
-                    const constructorFaseUno = {
-                        apartamentoIDV: apartamentoIDVComportamiento,
-                        simbolo: simbolo,
-                        nombreComportamiento: nombreComportamiento,
-                        cantidad: cantidad,
-                        fechaInicio: fechaInicioComportamiento,
-                        fechaFinal: fechaFinalComportamiento,
-                    };
-                    estructuraComportamientos.push(constructorFaseUno);
-                }
+    for (const detallesComportamiento of comportamientoDePrecios) {
+        const comportamientoUID = detallesComportamiento.comportamientoUID;
+        const nombreComportamiento = detallesComportamiento.nombreComportamiento;
+        const fechaInicio = detallesComportamiento.fechaInicio;
+        const fechaFinal = detallesComportamiento.fechaFinal;
+        const apartamentosDelComportamiento = await obtenerApartamentosDelComportamientoPorComportamientoUID(comportamientoUID)
+        if (apartamentosDelComportamiento.length > 0) {
+            for (const perfilComportamiento of apartamentosDelComportamiento) {
+                const simboloIDV = perfilComportamiento.simboloIDV;
+                const cantidad = perfilComportamiento.cantidad;
+                const apartamentoIDV = perfilComportamiento.apartamentoIDV;
+                const diasArray = perfilComportamiento.diasArray
+                const tipoIDV = perfilComportamiento.tipoIDV
+
+                const constructorFaseUno = {
+                    apartamentoIDV,
+                    simboloIDV,
+                    nombreComportamiento,
+                    cantidad,
+                    fechaInicio,
+                    fechaFinal,
+                    diasArray,
+                    tipoIDV
+                };
+                estructuraComportamientos.push(constructorFaseUno);
             }
         }
     }
+
     return estructuraComportamientos;
 };

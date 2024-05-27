@@ -4,12 +4,25 @@ import { aplicarImpuestos } from './aplicarImpuestos.mjs';
 import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUniversal.mjs';
 import { resolverComportamientosDePrecio } from './resolverComportamientosDePrecio.mjs';
 import { obtenerPerfilPrecioPorApartamentoUID } from '../../repositorio/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
-import { constructorObjetoEstructuraPrecioDia } from './constructorObjetoEstructuraPrecioDia.mjs';
 
+// Pasas una fecha de a un fecha de salida y un apartmaento y te da todos el tema
+const constructorObjetoEstructuraPrecioDia = (fechaEntrada_ISO, fechaSalida_ISO) => {
+    const arregloFechas = [];
+    let fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO); // Convertir la fecha de entrada a un objeto DateTime
+    const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO)
+    while (fechaEntrada_Objeto <= fechaSalida_Objeto) {
+        arregloFechas.push(fechaEntrada_Objeto.toISODate());
+        fechaEntrada_Objeto = fechaEntrada_Objeto.plus({ days: 1 }); // Avanzar al siguiente día
+    }
+    return arregloFechas;
+}
 export const precioRangoApartamento = async (metadatos) => {
+
     try {
+        
         const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
         const fechaSalida_ISO = metadatos.fechaSalida_ISO
+
         const apartamentosIDVArreglo = metadatos.apartamentosIDVArreglo
         const estructuraArregloDiasEnEspera = constructorObjetoEstructuraPrecioDia(fechaEntrada_ISO, fechaSalida_ISO);
 
@@ -19,12 +32,15 @@ export const precioRangoApartamento = async (metadatos) => {
         estructuraFinal.totalesPorApartamento_Objeto = {}
         estructuraFinal.metadatos = {}
         let totalPrecioNeto = 0
+
         for (const apartamentoIDVGlobal of apartamentosIDVArreglo) {
 
             const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDVGlobal)
             const precioBase = perfilPrecio.precio
             const apartamentoUI = perfilPrecio.apartamentoUI
             const apartamentoIDV = perfilPrecio.apartamentoIDV
+
+
             // Inyectar variacion de precio
             const detalleApartamento = {
                 apartamentoUI: apartamentoUI,
@@ -42,7 +58,7 @@ export const precioRangoApartamento = async (metadatos) => {
         }
 
         const comportamientosPorProcesarComoPerfiles = await resolverComportamientosDePrecio(fechaEntrada_ISO, fechaSalida_ISO)
-
+        console.log("comportamientosPorProcesarComoPerfiles",comportamientosPorProcesarComoPerfiles)
         // Borrar la ultima fecha por que se esta calculano noches no dias
         estructuraArregloDiasEnEspera.pop()
         const numeroNoches = estructuraArregloDiasEnEspera.length
@@ -63,7 +79,7 @@ export const precioRangoApartamento = async (metadatos) => {
                 apartamentos: []
             }
             let apartamentoIDVDia
-            let precioNetoNoche = new Decimal("0")
+            let precioNetoNocheAcumulador = new Decimal("0")
             for (const detalleDesglose of desglosePreciosBaseApartamentos) {
                 const apartamentoIDV = detalleDesglose.apartamentoIDV
                 apartamentoIDVDia = apartamentoIDV
@@ -73,15 +89,11 @@ export const precioRangoApartamento = async (metadatos) => {
                     let comportamientoEncontrado
                     for (const detalleComportamiento of comportamientosPorProcesarComoPerfiles) {
                         const apartamentoIDVComportamiento = detalleComportamiento.apartamentoIDV
-                        const simbolo = detalleComportamiento.simbolo
+                        const simbolo = detalleComportamiento.simboloIDV
                         const cantidad = new Decimal(detalleComportamiento.cantidad)
-                        const fechaIncioComportamiento_Humano = detalleComportamiento.fechaInicio
-                        const fechaFinalComportamiento_Humano = detalleComportamiento.fechaFinal
-                        const fechaInicioComortamiento_Array = fechaIncioComportamiento_Humano.split("/")
-                        const fehcaInicioComportamiento_ISO = `${fechaInicioComortamiento_Array[2]}-${fechaInicioComortamiento_Array[1]}-${fechaInicioComortamiento_Array[0]}`
-                        const fechaFinalComportamiento_Array = fechaFinalComportamiento_Humano.split("/")
+                        const fehcaInicioComportamiento_ISO = detalleComportamiento.fechaInicio
+                        const fechaFinalComportamiento_ISO = detalleComportamiento.fechaFinal
 
-                        const fechaFinalComportamiento_ISO = `${fechaFinalComportamiento_Array[2]}-${fechaFinalComportamiento_Array[1]}-${fechaFinalComportamiento_Array[0]}`
 
                         const controlRangoInterno = await selectorRangoUniversal({
                             fechaInicio_rango_ISO: fehcaInicioComportamiento_ISO,
@@ -168,7 +180,7 @@ export const precioRangoApartamento = async (metadatos) => {
         delete estructuraFinal.totalesPorNoche_Objeto
         delete estructuraFinal.totalesPorApartamento_Objeto
         return estructuraFinal
-    } catch (errorCapturado) {
-        throw errorCapturado
+    } catch (error) {
+        throw error
     }
 }

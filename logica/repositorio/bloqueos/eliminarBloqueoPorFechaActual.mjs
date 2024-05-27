@@ -1,6 +1,6 @@
 import { conexion } from "../../componentes/db.mjs";
 
-export const eliminarBloqueoPorFechaSalida = async (fechaActual_ISO) => {
+export const eliminarBloqueoPorFechaActual = async (fechaActual_ISO) => {
     try {
         const consulta = `
         DELETE FROM "bloqueosApartamentos"

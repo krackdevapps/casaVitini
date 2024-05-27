@@ -1,5 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { precioRangoApartamento } from "../../../sistema/precios/precioRangoApartamento.mjs";
+import { totalesBasePorRango } from "../../../sistema/precios/totalesBasePorRango.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
@@ -27,7 +27,7 @@ export const precioRangoApartamentos = async (entrada, salida) => {
             fechaSalida: fechaSalida,
             apartamentosIDVArreglo: apartamentosIDVArreglo
         };
-        const preciosApartamentosResuelos = await precioRangoApartamento(metadatos);
+        const preciosApartamentosResuelos = await totalesBasePorRango(metadatos);
         const ok = {
             ok: preciosApartamentosResuelos
         };

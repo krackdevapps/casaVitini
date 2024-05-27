@@ -4,8 +4,7 @@ export const obtenerHabitacionesDelApartamentoPorApartamentoIDV = async (apartam
     try {
         const consulta = `
         SELECT 
-        "habitacionIDV",
-        "componenteUID"
+        *
         FROM
         "configuracionHabitacionesDelApartamento"
         WHERE

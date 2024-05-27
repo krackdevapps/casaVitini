@@ -50,7 +50,7 @@ async function CardPay(fieldEl, buttonEl) {
       }
     }
     try {
-      casaVitini.componentes.flujoPagoUI.desplegarUI()
+      casaVitini.componentes.pasarela.square.flujoPagoUI.desplegarUI()
       const result = await card.tokenize();
       const verificationToken = await verifyBuyer(window.payments, result.token);
       if (result.status === 'OK') {
@@ -63,7 +63,7 @@ async function CardPay(fieldEl, buttonEl) {
     } catch (e) {
       if (e.message) {
         casaVitini.componentes.flujoPagoUI.errorInfo(e.message)
-        casaVitini.componentes.limpiarAdvertenciasInmersivas()
+        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
         
         //window.showError(`Error: ${e.message}`);
       } else {
