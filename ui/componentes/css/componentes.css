@@ -6437,6 +6437,38 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorInternoPorRango {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorDia {
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    background: rgb(37, 149, 246);
+    padding: 6px;
+
+}
+
+
+
 [zonaCSS="administracion/ofertas/ofertaUI"] .administracion_ofertas_crearOfertas_contenedorFecha {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -6712,6 +6744,27 @@
     margin: 0px;
     padding: 6px;
     text-align: center;
+}
+
+ .textoCentrado {
+    text-align: center;
+}
+
+
+.contenedorVertical {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: stretch;
+}
+
+.padding6 {
+    padding: 6px;
+}
+
+.gap6 {
+    gap: 6px;
 }
 
 .crearComportamientoConentenedor {

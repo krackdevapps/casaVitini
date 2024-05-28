@@ -26,8 +26,6 @@ export const validarObjetoOferta = async (oferta) => {
             tipoVector: "igual"
         })
 
-
-
         const condiciones = validadoresCompartidos.tipos.array({
             array: oferta.condiciones,
             nombreCampo: "El array de condiciones"
@@ -39,9 +37,7 @@ export const validarObjetoOferta = async (oferta) => {
         if (condiciones.length === 0) {
             const error = "Añade al menos una condiciona la oferta"
             throw new Error(error)
-
         }
-
 
         for (const condicion of condiciones) {
             const tipoCondicionIDV = condicion?.tipoCondicion
@@ -180,8 +176,8 @@ export const validarObjetoOferta = async (oferta) => {
             }
         }
 
-
         const tipoDescuento = descuentos.tipoDescuento
+        console.log("d", tipoDescuento)
         if (tipoDescuento === "totalNetoApartamentoDedicado") {
             const apartamentos = validadoresCompartidos.tipos.array({
                 array: descuentos.apartamentos,
@@ -239,12 +235,161 @@ export const validarObjetoOferta = async (oferta) => {
                 limpiezaEspaciosAlrededor: "si",
             })
 
+        } else if (tipoDescuento === "totalNetoPorRango") {
+
+
+            const tipoAplicacion = descuentos.tipoAplicacion
+            const descuentoTotal = descuentos.descuentoTotal
+
+            if (tipoAplicacion !== "porcentaje" && tipoAplicacion !== "cantidadFija") {
+                const error = `En la descuentos, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
+                throw new Error(error)
+            }
+            validadoresCompartidos.tipos.cadena({
+                string: descuentoTotal,
+                nombreCampo: `El campo descuentoTotal en ${tipoDescuento} solo puede ser una cadena con un numero don dos decimales separados por punto, tal que asi 0.00`,
+                filtro: "cadenaConNumerosConDosDecimales",
+                sePermiteVacio: "no",
+                impedirCero: "si",
+                devuelveUnTipoNumber: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
+        } else if (tipoDescuento === "porRango") {
+
+
+            const fechaInicioRango_ISO = descuentos.fechaInicioRango_ISO
+            const fechaFinalRango_ISO = descuentos.fechaFinalRango_ISO
+
+            await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: fechaInicioRango_ISO,
+                nombreCampo: `La fecha de incio de la condicion ${fechaInicioRango_ISO}`
+            })
+            await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: fechaFinalRango_ISO,
+                nombreCampo: `La fecha de final de la condicion ${fechaFinalRango_ISO}`
+            })
+            validadoresCompartidos.fechas.validacionVectorial({
+                fechaEntrada_ISO: fechaInicioRango_ISO,
+                fechaSalida_ISO: fechaFinalRango_ISO,
+                tipoVector: "diferente"
+
+            })
+
+            const detallesDelDescuento = validadoresCompartidos.tipos.objetoLiteral({
+                objetoLiteral: descuentos.detallesDelDescuento,
+                nombreCampo: "El objeto de descuentos"
+            })
+
+            const tipoDelDescuentoPorRango = detallesDelDescuento.tipoDescuento
+            if (tipoDelDescuentoPorRango === "totalNetoPorRango") {
+                const tipoAplicacion = descuentos.tipoAplicacion
+                const descuentoTotal = descuentos.descuentoTotal
+
+                if (tipoAplicacion !== "porcentaje" && tipoAplicacion !== "cantidadFija") {
+                    const error = `En ${tipoDelDescuentoPorRango} el tipo aplicacion del descuento solo puede ser porcentaje o cantidadFija`
+                    throw new Error(error)
+                }
+                validadoresCompartidos.tipos.cadena({
+                    string: descuentoTotal,
+                    nombreCampo: `El campo descuentoTotal en ${tipoDelDescuentoPorRango} del dia ${fechaDelDia} solo puede ser una cadena con un numero don dos decimales separados por punto, tal que asi 0.00`,
+                    filtro: "cadenaConNumerosConDosDecimales",
+                    sePermiteVacio: "no",
+                    impedirCero: "si",
+                    devuelveUnTipoNumber: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+            }
+
+            if (tipoDelDescuentoPorRango === "porDiasDelRango") {
+
+                const descuentoPorDias = validadoresCompartidos.tipos.array({
+                    array: detallesDelDescuento.descuentoPorDias,
+                    nombreCampo: "El array de descuentoPorDias"
+                })
+
+
+                for (const dia of descuentoPorDias) {
+                    const tipoDescuentoDelDia = dia.tipoDescuento
+                    const fechaDelDia = await validadoresCompartidos.fechas.validarFecha_ISO({
+                        fecha_ISO: dia.fecha,
+                        nombreCampo: `La fecha de final de la condicion ${tipoCondicionIDV}`
+                    })
+                    const fechaEnRango = validadoresCompartidos.fechas.fechaEnRango({
+                        fechaAComprobrarDentroDelRango: fechaDelDia,
+                        fechaInicioRango_ISO: fechaInicioRango_ISO,
+                        fechaFinRango_ISO: fechaFinalRango_ISO,
+                    })
+                    if (!fechaEnRango) {
+                        const error = `Dentro el dia con fecha ${fechaDelDia} esta fuera del rango entre ${fechaInicioRango_ISO} y ${fechaFinalRango_ISO}`
+                        throw new Error(error)
+                    }
+
+                    if (tipoDescuentoDelDia !== "netoPorDia" && tipoDescuentoDelDia !== "netoPorApartamentoDelDia") {
+                        const error = `Dentro el dia con fecha ${fechaDelDia} el tipo de descuento del dia solo puede ser netoPorDia o netoPorApartamentoDelDia`
+                        throw new Error(error)
+                    }
+
+
+                    if (tipoDescuentoDelDia === "netoPorApartamentoDelDia") {
+
+                        const fechaDelDia = await validadoresCompartidos.fechas.validarFecha_ISO({
+                            fecha_ISO: dia.fecha,
+                            nombreCampo: `La fecha de final de la condicion ${tipoCondicionIDV}`
+                        })
+                        const fechaEnRango = validadoresCompartidos.fechas.fechaEnRango({
+                            fechaAComprobrarDentroDelRango: fechaDelDia,
+                            fechaInicioRango_ISO: fechaInicioRango_ISO,
+                            fechaFinRango_ISO: fechaFinalRango_ISO,
+                        })
+                        if (!fechaEnRango) {
+                            const error = `Dentro el dia con fecha ${fechaDelDia} esta fuera del rango entre ${fechaInicioRango_ISO} y ${fechaFinalRango_ISO}`
+                            throw new Error(error)
+                        }
+
+                        const apartamentos = validadoresCompartidos.tipos.array({
+                            array: dia.apartamentos,
+                            nombreCampo: `El array de apatamento en el dia ${fechaDelDia}`
+                        })
+
+                        for (const apartmentoDelDia of apartamentos) {
+
+                            const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+                                string: apartmentoDelDia.apartamentoIDV,
+                                nombreCampo: `el identificador visual del apartamento dentro del dia ${fechaDelDia}.`,
+                                filtro: "strictoIDV",
+                                sePermiteVacio: "no",
+                                limpiezaEspaciosAlrededor: "si",
+                            })
+                            const tipoAplicacionDentroDelDia = apartmentoDelDia.tipoAplicacion
+                            if (tipoAplicacionDentroDelDia !== "netoPorDia" && tipoAplicacionDentroDelDia !== "netoPorApartamentoDelDia") {
+                                const error = `Dentro el dia con fecha ${fechaDelDia} el tipo de descuento del ${apartamentoIDV} dia solo puede ser netoPorDia o netoPorApartamentoDelDia`
+                                throw new Error(error)
+                            }
+
+                            validadoresCompartidos.tipos.cadena({
+                                string: apartmentoDelDia.descuentoTotla,
+                                nombreCampo: `El campo descuentoTotal del dia ${fechaDelDia} en el apartamento ${apartamentoIDV} solo puede ser una cadena con un numero con dos decimales separados por punto, tal que asi 0.00`,
+                                filtro: "cadenaConNumerosConDosDecimales",
+                                sePermiteVacio: "no",
+                                impedirCero: "si",
+                                devuelveUnTipoNumber: "no",
+                                limpiezaEspaciosAlrededor: "si",
+                            })
+
+                        }
+
+
+                    }
+
+                }
+
+            }
+
         } else {
-            const error = "No se reconoce el tipo de descuneto, el tipo de descuento solo puede ser totalNetoApartamentoDedicado o totalNetoReserva"
+            const error = "No se reconoce el tipo de descuneto, el tipo de descuento solo puede ser totalNetoApartamentoDedicado, totalNetoReserva o porRango"
             throw new Error(error)
-
         }
-
 
     } catch (error) {
         throw error
