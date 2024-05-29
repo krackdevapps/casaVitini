@@ -16056,22 +16056,22 @@ const casaVitini = {
                             tipoDescuento: tipoDescuento,
                             fechaInicioRango_ISO: fechaInicioRango_ISO,
                             fechaFinalRango_ISO: fechaFinalRango_ISO,
-                            detallesDelDeceunto: {}
+                            detallesDelDescuento: {}
                         }
                         oferta.descuentos = estructuraDescuento
 
                         if (tipoDescuentoPorRango === "totalNetoPorRango") {
                             const descuentoTotal = area.querySelector("[campoOferta=descuentoGlobal]").value
                             const tipoAplicacion = area.querySelector("[campoOferta=tipoDescuento]").value
-                            estructuraDescuento.detallesDelDeceunto.tipoAplicacion = tipoAplicacion
-                            estructuraDescuento.detallesDelDeceunto.descuentoTotal = descuentoTotal
-                            estructuraDescuento.detallesDelDeceunto.tipoDescuento = tipoDescuentoPorRango 
+                            estructuraDescuento.detallesDelDescuento.tipoAplicacion = tipoAplicacion
+                            estructuraDescuento.detallesDelDescuento.descuentoTotal = descuentoTotal
+                            estructuraDescuento.detallesDelDescuento.tipoDescuento = tipoDescuentoPorRango 
                         }
 
                         if (tipoDescuentoPorRango === "porDiasDelRango") {
-                            estructuraDescuento.detallesDelDeceunto.tipoDescuento = tipoDescuentoPorRango 
+                            estructuraDescuento.detallesDelDescuento.tipoDescuento = tipoDescuentoPorRango 
 
-                            estructuraDescuento.detallesDelDeceunto.descuentoPorDias = []
+                            estructuraDescuento.detallesDelDescuento.descuentoPorDias = []
 
                             const contenedorPorDiasPorRango = area.querySelectorAll("[contenedor=dia]")
                             contenedorPorDiasPorRango.forEach((dia) => {
@@ -16113,7 +16113,7 @@ const casaVitini = {
                                     })
 
                                 }
-                                estructuraDescuento.detallesDelDeceunto.descuentoPorDias.push(estructuraDescuentoPorDia)
+                                estructuraDescuento.detallesDelDescuento.descuentoPorDias.push(estructuraDescuentoPorDia)
                             })
                         }
                     }
@@ -16283,7 +16283,7 @@ const casaVitini = {
                         tipoDescuento.appendChild(opcionPredeterminada)
                         const tipoDescuentoOpciones = [
                             {
-                                tipoDescuentoIDV: "pocentaje",
+                                tipoDescuentoIDV: "porcentaje",
                                 tipoDescuentoUI: "Porcentaje",
                             },
                             {

@@ -39,13 +39,12 @@ export const procesadorPrecio = async (data) => {
         for (const apartamentoIDV of apartamentosArray) {
             await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
         }
-        console.log("antes")
         const totalesBase = await totalesBasePorRango({
             fechaEntrada_ISO: fechaEntrada,
             fechaSalida_ISO: fechaSalida,
             apartamentosArray
         })
-        console.log("despues")
+        
 
         const ofertasAplicadas = await aplicarOfertas({
             totalesBase,

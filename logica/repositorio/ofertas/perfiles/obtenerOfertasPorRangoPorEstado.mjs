@@ -10,31 +10,33 @@ export const obtenerOfertasPorRangoPorEstado = async (data) => {
         const consulta = `
         SELECT 
         "ofertaUID",
-        "nombreOferta"
-        to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio_ISO", 
-        to_char("fechaFin", 'YYYY-MM-DD') as "fechaFin_ISO", 
-        "tipoOferta",
-        contenedor
-        FROM ofertas 
+        "nombreOferta",
+        to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
+        to_char("fechaFinal", 'YYYY-MM-DD') as "fechaFinal", 
+        "condicionesArray",
+        "descuentosArray"
+        FROM
+        ofertas 
         WHERE                     
         (
             (
                 -- Caso 1: Evento totalmente dentro del rango
-                "fechaEntrada" >= $1::DATE AND "fechaSalida" <= $2::DATE
+                "fechaInicio" >= $1::DATE AND "fechaFinal" <= $2::DATE
             )
             OR
             (
                 -- Caso 2: Evento parcialmente dentro del rango
-                ("fechaEntrada" < $1::DATE AND "fechaSalida" > $1::DATE)
-                OR ("fechaEntrada" < $2::DATE AND "fechaSalida" > $2::DATE)
+                ("fechaInicio" < $1::DATE AND "fechaFinal" > $1::DATE)
+                OR 
+                ("fechaInicio" < $2::DATE AND "fechaFinal" > $2::DATE)
             )
             OR
             (
                 -- Caso 3: Evento atraviesa el rango
-                "fechaEntrada" < $1::DATE AND "fechaSalida" > $2::DATE
+                "fechaInicio" < $1::DATE AND "fechaFinal" > $2::DATE
             )
         )
-                AND "estadoOferta" = $3 
+                AND estado = $3::text
         ;`
         const parametros = [
             fechaSalidaReserva_ISO,

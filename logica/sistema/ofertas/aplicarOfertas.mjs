@@ -1,11 +1,3 @@
-import { porApartamentosEspecificos } from "./perfiles/porApartamentosEspecificos.mjs"
-import { porNumeroDeApartamentos } from "./perfiles/porNumeroDeApartamentos.mjs"
-import { porDiasDeReserva } from "./perfiles/porDiasDeReserva.mjs"
-import { porRangoDeFechas } from './perfiles/porRangoDeFechas.mjs'
-import { porDiasDeAntelacion } from './perfiles/porDiasDeAntelacion.mjs'
-import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
-import Decimal from "decimal.js"
-import { DateTime } from "luxon"
 import { obtenerOfertasPorRangoPorEstado } from "../../repositorio/ofertas/perfiles/obtenerOfertasPorRangoPorEstado.mjs"
 import { selectorPorCondicion } from "./selectorPorCondicion.mjs"
 
@@ -22,6 +14,7 @@ export const aplicarOfertas = async (data) => {
             fechaSalidaReserva_ISO: fechaEntrada,
             fechaEntradaReserva_ISO: fechaSalida,
         })
+
         const ofertasSeleccionadasPorCondiciones = []
         for (const oferta of ofertasSeleccionadasPorRango) {
             const resultadosSelector = await selectorPorCondicion({
@@ -32,36 +25,13 @@ export const aplicarOfertas = async (data) => {
                 fechaEntrada_reserva: fechaEntrada,
                 fechaSalida_reserva: fechaSalida,
             })
+            console.log("resultadosSelector", resultadosSelector)
+
             if (resultadosSelector.condicionesQueNoSeCumple.length > 0) {
                 break
             }
             ofertasSeleccionadasPorCondiciones.push(oferta)
         }
-
-        for (const oferta of ofertasSeleccionadasPorCondiciones) {
-
-
-
-            
-            const resultadosSelector = await selectorPorCondicion({
-                oferta,
-                apartamentosArray,
-                totalesBase,
-                fechaActual_reserva: fechaActual,
-                fechaEntrada_reserva: fechaEntrada,
-                fechaSalida_reserva: fechaSalida,
-            })
-            if (resultadosSelector.condicionesQueNoSeCumple.length > 0) {
-                break
-            }
-            ofertasSeleccionadasPorCondiciones.push(oferta)
-        }
-
-
-
-
-
-
 
         // // Coincidencia por condciones de oferta
         // // aplicar descuentos
@@ -95,6 +65,4 @@ export const aplicarOfertas = async (data) => {
     } catch (error) {
         throw error
     }
-
-
-};
+}

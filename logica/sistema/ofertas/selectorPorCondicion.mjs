@@ -5,9 +5,9 @@ import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mj
 export const selectorPorCondicion = async (data) => {
     try {
         const oferta = data.oferta
-        const condiciones = oferta.condiciones
+        const condiciones = oferta.condicionesArray
         const apartamentosArray = data.apartamentosArray
-        const fechaActual_reserva = data.fechaActual
+        const fechaActual_reserva = data.fechaActual_reserva
         const fechaEntrada_reserva = data.fechaEntrada
         const fechaSalida_reserva = data.fechaSalida
 
@@ -15,7 +15,7 @@ export const selectorPorCondicion = async (data) => {
             condicionesQueSeCumplen: [],
             condicionesQueNoSeCumple: []
         }
-
+console.log("condiciones", condiciones)
         for (const condicion of condiciones) {
             const tipoCondicion = condicion.tipoCondicion
             const nombreOferta = oferta.nombreOferta
@@ -27,6 +27,8 @@ export const selectorPorCondicion = async (data) => {
                 const fechaFinalRango_objeto = DateTime.fromISO(fechaFinalRango_ISO)
                 const fechaActual_objeto = DateTime.fromISO(fechaActual_reserva)
 
+
+
                 const fechaDentroDelRango = fechaActual_objeto >= fechaInicioRango_objeto && fechaActual_objeto <= fechaFinalRango_objeto;
                 if (!fechaDentroDelRango) {
                     resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
@@ -34,13 +36,18 @@ export const selectorPorCondicion = async (data) => {
                     resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
                 }
             } else if (tipoCondicion === "conFechaCreacionEntreRango") {
-                const fechaInicioOferta = condicion.fechaInicioOferta
-                const fechaFinalOferata = condicion.fechaFinalOferta
+                const fechaInicioOferta = oferta.fechaInicio
+                const fechaFinalOferata = oferta.fechaFinal
 
                 const fechaInicioOferta_objeto = DateTime.fromISO(fechaInicioOferta)
                 const fechaFinalOferta_objeto = DateTime.fromISO(fechaFinalOferata)
                 const fechaActual_objeto = DateTime.fromISO(fechaActual_reserva)
 
+                console.log(
+                    "fechaInicioOferta", fechaInicioOferta, "\n",
+                    "fechaFinalOferata", fechaFinalOferata, "\n",
+                    "fechaActual_reserva", fechaActual_reserva, "\n"
+                )
                 const fechaDentroDelRango = fechaActual_objeto >= fechaInicioOferta_objeto && fechaActual_objeto <= fechaFinalOferta_objeto;
                 if (!fechaDentroDelRango) {
                     resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)

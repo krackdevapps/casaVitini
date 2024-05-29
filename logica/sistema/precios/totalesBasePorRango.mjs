@@ -6,7 +6,7 @@ import { constructorIndiceDias } from './constructorIndiceDias.mjs';
 import { comportamientosPorDias } from './comportamientoPrecios/comportamientosPorDias.mjs';
 import { aplicarCalculoDelComportamientoPorRango } from './comportamientoPrecios/aplicarCalculoDelComportamientoPorRango.mjs';
 import { aplicarCalculoDelComportamientoPorDias } from './comportamientoPrecios/aplicarCalculoDelComportamientoPorDias.mjs';
-import { constructorTotalesPorApartamento } from './contructorTotalesPorApartamento.mjs';
+import { constructorDesglosePorApartamento } from './constructorDesglosePorApartamento.mjs';
 Decimal.set({ precision: 1000 });
 export const totalesBasePorRango = async (metadatos) => {
     try {
@@ -31,8 +31,9 @@ export const totalesBasePorRango = async (metadatos) => {
             arrayApartamentos: apartamentosArray
         })
 
-        const desglosePorNoches = []
-        const totalesPorApartamento = {}
+        const estructuraDesglosePorNoches = []
+        const estructuraDesglosePorApartamento = {}
+
 
         for (const fecha_ISO of diasArray) {
             const totalesPorNoche = {
@@ -69,23 +70,44 @@ export const totalesBasePorRango = async (metadatos) => {
                 totalesPorNoche.precioNetoNoche = totalesPorNoche.precioNetoNoche.plus(precioNetoApartamento)
                 totalesPorNoche.apartamentosPorNoche.push(apartamentosPorNoch_estructura)
 
-                if (!totalesPorApartamento.hasOwnProperty(apartamentoIDV)) {
-                    totalesPorApartamento[apartamentoIDV] = new Decimal(0)
+                if (!estructuraDesglosePorApartamento.hasOwnProperty(apartamentoIDV)) {
+                    estructuraDesglosePorApartamento[apartamentoIDV] = new Decimal(0)
                 }
-                const totalPorApartamento = totalesPorApartamento[apartamentoIDV]
-                totalesPorApartamento[apartamentoIDV] = totalPorApartamento.plus(precioNetoApartamento)
+                const totalPorApartamento = estructuraDesglosePorApartamento[apartamentoIDV]
+                estructuraDesglosePorApartamento[apartamentoIDV] = totalPorApartamento.plus(precioNetoApartamento)
             }
 
-            desglosePorNoches.push(totalesPorNoche)
+            estructuraDesglosePorNoches.push(totalesPorNoche)
         }
         const estructuraTotales = {
-            nochesReserva: diasArray.length,
-            desglosePorNoche: desglosePorNoches,
-            desglosePorApartamento: await constructorTotalesPorApartamento({
-                totalesPorApartamento,
+            global: {
+                fechaEntrada: fechaEntrada_ISO,
+                fechaSalida: fechaSalida_ISO,
+                nochesReserva: diasArray.length
+            },
+            totales: {
+                totalNeto: new Decimal("0.00"),
+                totalFinal: "0.00"
+            },
+            desglosePorNoche: estructuraDesglosePorNoches,
+            desglosePorApartamento: await constructorDesglosePorApartamento({
+                estructuraDesglosePorApartamento,
                 diasArray
             })
         }
+
+        const desglosePorApartamento = estructuraTotales.desglosePorApartamento
+
+        desglosePorApartamento.forEach((totalPorApartamento) => {
+            const totalNetoPorApartmento = totalPorApartamento.totalNeto
+            const totalNeto = estructuraTotales.totales.totalNeto
+            estructuraTotales.totales.totalNeto = totalNeto.plus(totalNetoPorApartmento)
+        })
+
+        const totalNeto = estructuraTotales.totales.totalNeto
+        estructuraTotales.totales.totalNeto = totalNeto.toFixed(2)
+        estructuraTotales.totales.totalFinal = totalNeto.toFixed(2)
+
         return estructuraTotales
     } catch (errorCapturado) {
         throw errorCapturado

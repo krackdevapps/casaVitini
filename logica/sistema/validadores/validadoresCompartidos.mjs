@@ -345,16 +345,16 @@ export const validadoresCompartidos = {
                 const fechaFinRango_ISO = data.fechaFinRango_ISO
 
                 validadoresCompartidos.fechas.validarFecha_ISO({
-                    fechaISO: fechaAComprobrarDentroDelRango,
+                    fecha_ISO: fechaAComprobrarDentroDelRango,
                     nombreCampo: "La fecha a comprobar dentro del rango"
                 })
 
                 validadoresCompartidos.fechas.validarFecha_ISO({
-                    fechaISO: fechaInicioRango_ISO,
+                    fecha_ISO: fechaInicioRango_ISO,
                     nombreCampo: "La fecha fe inicio del rango"
                 })
                 validadoresCompartidos.fechas.validarFecha_ISO({
-                    fechaISO: fechaFinRango_ISO,
+                    fecha_ISO: fechaFinRango_ISO,
                     nombreCampo: "La fecha a fin del rango"
                 })
 
@@ -537,6 +537,13 @@ export const validadoresCompartidos = {
                 stringLimpio = string.replace(filtro, '');
             } else if (filtro === "cadenaConNumerosConDosDecimales") {
                 try {
+                    const filtroComa = /^\d+\,\d{2}$/
+                    if (filtroComa.test(string)) {
+                        const mensaje = `${nombreCampo} cambia la coma por un punto, gracias.`
+                        throw new Error(mensaje)
+                    }
+
+
                     const filtro = /^\d+\.\d{2}$/
                     if (!filtro.test(string)) {
                         const mensaje = `${nombreCampo} solo acepta una cadena con numeros con dos decimales separados por punto, por ejemplo 00.00`
@@ -771,6 +778,8 @@ export const validadoresCompartidos = {
                 const array = configuracion.array
                 const nombreCampo = configuracion.nombreCampo
                 const filtro = configuracion.filtro
+                const sePermiteArrayVacio = configuracion?.sePermiteArrayVacio || "no"
+
                 if (!nombreCampo) {
                     const mensaje = `El validador de arrays, necesito un nombre de campo.`
                     throw new Error(mensaje)
@@ -779,7 +788,15 @@ export const validadoresCompartidos = {
                     const error = `${nombreCampo} se esperaba un array`;
                     throw new Error(error);
                 }
-                if (array.length === 0) {
+
+
+
+                if (sePermiteArrayVacio !== "no" && sePermiteArrayVacio !== "si") {
+                    const error = `${nombreCampo} el valdidador array mal configurado, si se define sePermiteArrayVacio tiene que esta en si o no. Predeterminadamente es no.`;
+                    throw new Error(error);
+                }
+
+                if (array.length === 0 && sePermiteArrayVacio === "no") {
                     const error = `${nombreCampo} es un array vacío`;
                     throw new Error(error);
                 }
@@ -816,6 +833,9 @@ export const validadoresCompartidos = {
                         }
                     }
                 }
+
+
+
                 return array
             } catch (errorCapturado) {
                 throw errorCapturado
