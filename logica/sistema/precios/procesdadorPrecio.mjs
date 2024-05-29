@@ -26,7 +26,7 @@ export const procesadorPrecio = async (data) => {
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const fechaActual = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaActual || DateTime.now().setZone(zonaHoraria).toISODate(),
-            nombreCampo: "LA fecha de salida del procesador de precios"
+            nombreCampo: "La fecha de salida del procesador de precios"
         })
 
         const apartamentosArray = validadoresCompartidos.tipos.array({

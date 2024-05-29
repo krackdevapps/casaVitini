@@ -13,11 +13,13 @@ export const aplicarOfertas = async (data) => {
         const ofertasSeleccionadasPorRango = await obtenerOfertasPorRangoPorEstado({
             fechaSalidaReserva_ISO: fechaEntrada,
             fechaEntradaReserva_ISO: fechaSalida,
+            estado: "activado"
         })
+        console.log("ofertas seleccion inicial por fecha", ofertasSeleccionadasPorRango)
 
-        const ofertasSeleccionadasPorCondiciones = []
+        const ofertaAnalizadasPorCondiciones = []
         for (const oferta of ofertasSeleccionadasPorRango) {
-            const resultadosSelector = await selectorPorCondicion({
+            const resultadoSelector = await selectorPorCondicion({
                 oferta,
                 apartamentosArray,
                 totalesBase,
@@ -25,13 +27,11 @@ export const aplicarOfertas = async (data) => {
                 fechaEntrada_reserva: fechaEntrada,
                 fechaSalida_reserva: fechaSalida,
             })
-            console.log("resultadosSelector", resultadosSelector)
-
-            if (resultadosSelector.condicionesQueNoSeCumple.length > 0) {
-                break
-            }
-            ofertasSeleccionadasPorCondiciones.push(oferta)
+            ofertaAnalizadasPorCondiciones.push(resultadoSelector)
         }
+
+        console.log("ofertaAnalizadasPorCondiciones", ofertaAnalizadasPorCondiciones)
+
 
         // // Coincidencia por condciones de oferta
         // // aplicar descuentos
@@ -57,10 +57,14 @@ export const aplicarOfertas = async (data) => {
         //     delete detallesOferta.descuentoGlobal
         // }
         // const descuentoFinal = descuentoTotal.isPositive() ? descuentoTotal : "0.00"
+        const contenedorOferta = " de momento vacio"
+        const descuentoFinal = " de momento vacio"
+
         const estructura = {
-            ofertas: contenedorOferta,
+            ofertasAplicadas: contenedorOferta,
             descuentoFinal: descuentoFinal
         }
+
         return estructura
     } catch (error) {
         throw error

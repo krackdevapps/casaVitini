@@ -5,7 +5,7 @@ export const obtenerOfertasPorRangoPorEstado = async (data) => {
 
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
         const fechaEntradaReserva_ISO = data.fechaEntradaReserva_ISO
-        const estadoOferta = "activado"
+        const estado = data.estado
 
         const consulta = `
         SELECT 
@@ -41,7 +41,7 @@ export const obtenerOfertasPorRangoPorEstado = async (data) => {
         const parametros = [
             fechaSalidaReserva_ISO,
             fechaEntradaReserva_ISO,
-            estadoOferta
+            estado
         ]
         const resuelve = await conexion.query(consulta, parametros)
         return resuelve.rows

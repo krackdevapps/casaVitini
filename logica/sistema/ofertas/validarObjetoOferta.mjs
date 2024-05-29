@@ -217,7 +217,7 @@ export const validarObjetoOferta = async (oferta) => {
             }
 
 
-        } else if (tipoDescuento === "totalNetoReserva") {
+        } else if (tipoDescuento === "totalNeto") {
 
             const tipoAplicacion = descuentos.tipoAplicacion
             const descuentoTotal = descuentos.descuentoTotal
@@ -236,7 +236,7 @@ export const validarObjetoOferta = async (oferta) => {
                 limpiezaEspaciosAlrededor: "si",
             })
 
-        } else if (tipoDescuento === "totalNetoPorRango") {
+        } else if (tipoDescuento === "individualPorApartamento") {
 
 
             const tipoAplicacion = descuentos.tipoAplicacion

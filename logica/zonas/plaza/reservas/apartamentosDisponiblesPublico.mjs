@@ -37,7 +37,7 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
         const fechaEntrad_objeto = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
         if (fechaEntrad_objeto < tiempoZH.startOf('day')) {
             const error = "La fecha de entrada no puede ser inferior a la fecha actual. Solo se pueden hacer reservas a partir de hoy";
-            throw new Error(error);
+            //    throw new Error(error);
         }
 
         await eliminarBloqueoCaducado();
@@ -52,12 +52,7 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
         const resuelveApartametnoDisponiblesPublico = await apartamentosPorRango(configuracionApartamentosPorRango);
         const apartamentosDisponiblesEncontrados = resuelveApartametnoDisponiblesPublico.apartamentosDisponibles;
         const configuracionesApartamentosVerificadas = await configuracionApartamento(apartamentosDisponiblesEncontrados);
-
-        console.log({
-            fechaEntrada: fechaEntrada,
-            fechaSalida: fechaSalida,
-            apartamentosArray: apartamentosDisponiblesEncontrados
-        })
+ 
         const estructuraFinal = {};
         const desgloseFinanciero = await procesadorPrecio({
             fechaEntrada: fechaEntrada,

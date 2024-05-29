@@ -16009,7 +16009,7 @@ const casaVitini = {
                     const contenedorDescuentos = document.querySelector("[contenedor=descuentos]")
                     const tipoDescuento = contenedorDescuentos.querySelector("[componente=tipoDescuento]").value
 
-                    if (tipoDescuento === "totalNetoReserva") {
+                    if (tipoDescuento === "totalNeto") {
                         const descuentoTotal = contenedorDescuentos.querySelector("[campoOferta=descuentoGlobal]").value
                         const tipoAplicacion = contenedorDescuentos.querySelector("[campoOferta=tipoDescuento]").value
 
@@ -16021,7 +16021,7 @@ const casaVitini = {
                         oferta.descuentos = estructuraDescuento
 
                     }
-                    if (tipoDescuento === "totalNetoApartamentoDedicado") {
+                    if (tipoDescuento === "individualPorApartamento") {
                         const apartamentos = []
 
                         const apartamentosSeleccionados = contenedorDescuentos.querySelectorAll("[apartamentoSeleccionado]")

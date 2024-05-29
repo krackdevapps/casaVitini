@@ -8,14 +8,14 @@ export const selectorPorCondicion = async (data) => {
         const condiciones = oferta.condicionesArray
         const apartamentosArray = data.apartamentosArray
         const fechaActual_reserva = data.fechaActual_reserva
-        const fechaEntrada_reserva = data.fechaEntrada
-        const fechaSalida_reserva = data.fechaSalida
+        const fechaEntrada_reserva = data.fechaEntrada_reserva
+        const fechaSalida_reserva = data.fechaSalida_reserva
 
         const resultadoSelector = {
+            oferta,
             condicionesQueSeCumplen: [],
             condicionesQueNoSeCumple: []
         }
-console.log("condiciones", condiciones)
         for (const condicion of condiciones) {
             const tipoCondicion = condicion.tipoCondicion
             const nombreOferta = oferta.nombreOferta
@@ -26,8 +26,6 @@ console.log("condiciones", condiciones)
                 const fechaInicioRango_objeto = DateTime.fromISO(fechaInicioRango_ISO)
                 const fechaFinalRango_objeto = DateTime.fromISO(fechaFinalRango_ISO)
                 const fechaActual_objeto = DateTime.fromISO(fechaActual_reserva)
-
-
 
                 const fechaDentroDelRango = fechaActual_objeto >= fechaInicioRango_objeto && fechaActual_objeto <= fechaFinalRango_objeto;
                 if (!fechaDentroDelRango) {
@@ -43,11 +41,6 @@ console.log("condiciones", condiciones)
                 const fechaFinalOferta_objeto = DateTime.fromISO(fechaFinalOferata)
                 const fechaActual_objeto = DateTime.fromISO(fechaActual_reserva)
 
-                console.log(
-                    "fechaInicioOferta", fechaInicioOferta, "\n",
-                    "fechaFinalOferata", fechaFinalOferata, "\n",
-                    "fechaActual_reserva", fechaActual_reserva, "\n"
-                )
                 const fechaDentroDelRango = fechaActual_objeto >= fechaInicioOferta_objeto && fechaActual_objeto <= fechaFinalOferta_objeto;
                 if (!fechaDentroDelRango) {
                     resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
@@ -95,12 +88,13 @@ console.log("condiciones", condiciones)
             } else if (tipoCondicion === "porRangoDeFechas") {
                 const fechaInicio_oferta = oferta.fechaInicio
                 const fechaFinal_oferta = oferta.fechaFinal
-                const rangoFechasReservaEnRangoFechaOferta = selectorRangoUniversal({
+
+                const rangoFechasReservaEnRangoFechaOferta = await selectorRangoUniversal({
                     fechaInicio_rango_ISO: fechaInicio_oferta,
                     fechaFin_rango_ISO: fechaFinal_oferta,
                     fechaInicio_elemento_ISO: fechaEntrada_reserva,
                     fechaFin_elemento_ISO: fechaSalida_reserva,
-                    tipoLimtie: "incluido"
+                    tipoLimite: "incluido"
                 })
                 if (rangoFechasReservaEnRangoFechaOferta) {
                     resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
@@ -122,7 +116,6 @@ console.log("condiciones", condiciones)
                 }
                 if (tipoConteo === "numeroExacto" && numeroDias === diasAntelacion) {
                     resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
-
                 } else {
                     resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
                 }

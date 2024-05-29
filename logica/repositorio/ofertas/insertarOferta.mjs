@@ -7,6 +7,7 @@ export const insertarOferta = async (data) => {
         const fechaFinal = data.fechaFinal
         const condiciones = JSON.stringify(data.condiciones)
         const descuentos = JSON.stringify(data.descuentos)
+        const estado = data.estado
 
         const consulta = `
             INSERT INTO "ofertas"
@@ -15,7 +16,8 @@ export const insertarOferta = async (data) => {
                 "fechaInicio",
                 "fechaFinal",
                 "condicionesArray",
-                "descuentosArray"
+                "descuentosArray",
+                estado
             )
             VALUES
             (
@@ -23,19 +25,22 @@ export const insertarOferta = async (data) => {
                 COALESCE($2::date, NULL),
                 COALESCE($3::date, NULL),
                 NULLIF($4::jsonb, NULL),
-                NULLIF($5::jsonb, NULL)
+                NULLIF($5::jsonb, NULL),
+                COALESCE($6::text, NULL)
+
     
             )
             RETURNING *;
             `;
 
-            const parametros = [
-                nombreOferta,
-                fechaInicio,
-                fechaFinal,
-                condiciones,
-                descuentos
-            ];
+        const parametros = [
+            nombreOferta,
+            fechaInicio,
+            fechaFinal,
+            condiciones,
+            descuentos,
+            estado
+        ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
             const error = "Ha ocurrido un error y no se ha insertado la nueva oferta";

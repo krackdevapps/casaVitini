@@ -20,6 +20,7 @@ export const crearOferta = async (entrada, salida) => {
         const fechaFinal = entrada.body.fechaFinal
         const condiciones = entrada.body.condiciones
         const descuentos = entrada.body.descuentos
+        const estadoInicial = "desactivado"
 
         const oferta = {
             nombreOferta,
@@ -27,6 +28,7 @@ export const crearOferta = async (entrada, salida) => {
             fechaFinal,
             condiciones,
             descuentos,
+            estado: estadoInicial
         }
         await validarObjetoOferta(oferta)
         await campoDeTransaccion("iniciar")
