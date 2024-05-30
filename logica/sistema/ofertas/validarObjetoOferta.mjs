@@ -238,9 +238,10 @@ export const validarObjetoOferta = async (oferta) => {
 
         } else if (tipoDescuento === "individualPorApartamento") {
 
-
+            console.log("descuentos", descuentos)
             const tipoAplicacion = descuentos.tipoAplicacion
-            const descuentoTotal = descuentos.descuentoTotal
+            const descuentoTotal = descuentos.descuentoTotals
+            //falta un loop
 
             if (tipoAplicacion !== "porcentaje" && tipoAplicacion !== "cantidadFija") {
                 const error = `En la descuentos, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
@@ -377,7 +378,7 @@ export const validarObjetoOferta = async (oferta) => {
                             }
 
                             validadoresCompartidos.tipos.cadena({
-                                string: apartmentoDelDia.descuentoTotla,
+                                string: apartmentoDelDia.descuentoTotal,
                                 nombreCampo: `El campo descuentoTotal del dia ${fechaDelDia} en el ${apartamentoUI} (${apartamentoIDV}) solo puede ser una cadena con un numero con dos decimales separados por punto, tal que asi 0.00`,
                                 filtro: "cadenaConNumerosConDosDecimales",
                                 sePermiteVacio: "no",

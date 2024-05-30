@@ -16,7 +16,7 @@ export const insertarOferta = async (data) => {
                 "fechaInicio",
                 "fechaFinal",
                 "condicionesArray",
-                "descuentosArray",
+                "descuentosJSON",
                 estado
             )
             VALUES

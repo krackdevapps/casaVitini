@@ -14,7 +14,7 @@ export const obtenerOfertasPorRangoPorEstado = async (data) => {
         to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
         to_char("fechaFinal", 'YYYY-MM-DD') as "fechaFinal", 
         "condicionesArray",
-        "descuentosArray"
+        "descuentosJSON"
         FROM
         ofertas 
         WHERE                     

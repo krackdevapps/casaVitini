@@ -16033,7 +16033,7 @@ const casaVitini = {
                             const estructuraApartamento = {
                                 apartamentoIDV,
                                 cantidad,
-                                tipoDescuento
+                                tipoAplicacion: tipoDescuento
                             }
                             apartamentos.push(estructuraApartamento)
 
