@@ -337,25 +337,25 @@ export const validadoresCompartidos = {
                 throw errorCapturado
             }
         },
-        fechaEnRango: (data) => {
+        fechaEnRango: async (data) => {
             try {
 
                 const fechaAComprobrarDentroDelRango = data.fechaAComprobrarDentroDelRango
                 const fechaInicioRango_ISO = data.fechaInicioRango_ISO
                 const fechaFinRango_ISO = data.fechaFinRango_ISO
 
-                validadoresCompartidos.fechas.validarFecha_ISO({
+                await validadoresCompartidos.fechas.validarFecha_ISO({
                     fecha_ISO: fechaAComprobrarDentroDelRango,
                     nombreCampo: "La fecha a comprobar dentro del rango"
                 })
 
-                validadoresCompartidos.fechas.validarFecha_ISO({
+                await validadoresCompartidos.fechas.validarFecha_ISO({
                     fecha_ISO: fechaInicioRango_ISO,
                     nombreCampo: "La fecha fe inicio del rango"
                 })
-                validadoresCompartidos.fechas.validarFecha_ISO({
+                await validadoresCompartidos.fechas.validarFecha_ISO({
                     fecha_ISO: fechaFinRango_ISO,
-                    nombreCampo: "La fecha a fin del rango"
+                    nombreCampo: "La fecha del fin del rango"
                 })
 
                 const fechaObjetoAComprobar = DateTime.fromISO(fechaAComprobrarDentroDelRango);

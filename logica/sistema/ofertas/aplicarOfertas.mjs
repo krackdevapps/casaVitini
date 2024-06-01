@@ -3,7 +3,6 @@ import { aplicarDescuento } from "./aplicarDescuento.mjs"
 import { selectorPorCondicion } from "./selectorPorCondicion.mjs"
 
 export const aplicarOfertas = async (data) => {
-
     try {
         const totalesBase = data.totalesBase
         const fechaActual = data.fechaActual
@@ -29,23 +28,12 @@ export const aplicarOfertas = async (data) => {
             ofertaAnalizadasPorCondiciones.push(resultadoSelector)
         }
 
-        // console.log("ofertaAnalizadasPorCondiciones", ofertaAnalizadasPorCondiciones)
-        // console.log("_________________________________________")
-
-        const descuentosAplicado = aplicarDescuento({
+        await aplicarDescuento({
             ofertarParaAplicarDescuentos: ofertaAnalizadasPorCondiciones,
             totalesBase: totalesBase,
         })
 
-   
-        const contenedorOferta = " de momento vacio"
-        const descuentoFinal = " de momento vacio"
 
-        const estructura = {
-            ofertasAplicadas: contenedorOferta,
-            descuentoFinal: descuentoFinal
-        }
-        return estructura
     } catch (error) {
         throw error
     }

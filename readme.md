@@ -1,9 +1,6 @@
 Atención 
 
-Casa Vitini está en un proceso de refactoring donde ciertas estructuras se han rediseñado y se están reimplementado los test. La rama main ahora mismo contiene ciertos errores en ciertos componentes que tienen previstos solucionarse entre esta semana y la que viene que es donde está previsto que este todo solucionado. Todo se desarrolla según lo previsto. Se recomienda no implementar este código hasta pasado una semana por que está en una fase crítica de refactoring.  
- 
-
- 
+Casa Vitini está en un proceso de refactoring donde ciertas estructuras se han rediseñado y se están reimplementado los test. La rama main ahora mismo contiene ciertos errores en ciertos componentes que tienen previstos solucionarse entre esta semana y la que viene que es donde está previsto que este todo solucionado. Todo se desarrolla según lo previsto. Se recomienda no implementar este código hasta pasado una semana por que está en una fase crítica de refactoring. 
 
 # Casa Vitini App
 

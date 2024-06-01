@@ -89,11 +89,12 @@ export const totalesBasePorRango = async (metadatos) => {
                 totalNeto: new Decimal("0.00"),
                 totalFinal: "0.00"
             },
-            desglosePorNoche: estructuraDesglosePorNoches,
             desglosePorApartamento: await constructorDesglosePorApartamento({
                 estructuraDesglosePorApartamento,
                 diasArray
-            })
+            }),
+            desglosePorNoche: estructuraDesglosePorNoches
+
         }
 
         const desglosePorApartamento = estructuraTotales.desglosePorApartamento

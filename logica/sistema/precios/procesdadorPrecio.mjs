@@ -44,9 +44,8 @@ export const procesadorPrecio = async (data) => {
             fechaSalida_ISO: fechaSalida,
             apartamentosArray
         })
-        
 
-        const ofertasAplicadas = await aplicarOfertas({
+        await aplicarOfertas({
             totalesBase,
             fechaActual,
             fechaEntrada,
@@ -54,10 +53,8 @@ export const procesadorPrecio = async (data) => {
             apartamentosArray
         })
 
-        // Aplicar ofertas
         // Aplicar impuestos
         // Generar totales
-
 
         return totalesBase
 

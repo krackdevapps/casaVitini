@@ -16027,12 +16027,12 @@ const casaVitini = {
                         const apartamentosSeleccionados = contenedorDescuentos.querySelectorAll("[apartamentoSeleccionado]")
                         apartamentosSeleccionados.forEach((apartamento) => {
                             const apartamentoIDV = apartamento.getAttribute("apartamentoSeleccionado")
-                            const cantidad = apartamento.querySelector("[campoapartamentoseleccionado=cantidad]").value
+                            const descuentoTotal = apartamento.querySelector("[campoapartamentoseleccionado=descuentoTotal]").value
                             const tipoDescuento = apartamento.querySelector("[campoapartamentoseleccionado=tipoDescuento]").value
 
                             const estructuraApartamento = {
                                 apartamentoIDV,
-                                cantidad,
+                                descuentoTotal,
                                 tipoAplicacion: tipoDescuento
                             }
                             apartamentos.push(estructuraApartamento)
@@ -16049,29 +16049,26 @@ const casaVitini = {
                         const area = contenedorDescuentos.querySelector("[area=descuentosPorRango]")
                         const fechaInicioRango_humana = area.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                         const fechaFinalRango_humana = area.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                        const tipoDescuentoPorRango = area.querySelector("[componente=tipoDescuento]").value
+                        const subTipoDescuento = area.querySelector("[componente=subTipoDescuento]").value
                         const fechaInicioRango_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaInicioRango_humana)
                         const fechaFinalRango_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaFinalRango_humana)
                         const estructuraDescuento = {
                             tipoDescuento: tipoDescuento,
                             fechaInicioRango_ISO: fechaInicioRango_ISO,
                             fechaFinalRango_ISO: fechaFinalRango_ISO,
-                            detallesDelDescuento: {}
+                            subTipoDescuento: subTipoDescuento,
                         }
                         oferta.descuentos = estructuraDescuento
 
-                        if (tipoDescuentoPorRango === "totalNetoPorRango") {
+                        if (subTipoDescuento === "totalNetoPorRango") {
                             const descuentoTotal = area.querySelector("[campoOferta=descuentoGlobal]").value
                             const tipoAplicacion = area.querySelector("[campoOferta=tipoDescuento]").value
-                            estructuraDescuento.detallesDelDescuento.tipoAplicacion = tipoAplicacion
-                            estructuraDescuento.detallesDelDescuento.descuentoTotal = descuentoTotal
-                            estructuraDescuento.detallesDelDescuento.tipoDescuento = tipoDescuentoPorRango 
+                            estructuraDescuento.tipoAplicacion = tipoAplicacion
+                            estructuraDescuento.descuentoTotal = descuentoTotal
                         }
 
-                        if (tipoDescuentoPorRango === "porDiasDelRango") {
-                            estructuraDescuento.detallesDelDescuento.tipoDescuento = tipoDescuentoPorRango 
-
-                            estructuraDescuento.detallesDelDescuento.descuentoPorDias = []
+                        if (subTipoDescuento === "porDiasDelRango") {
+                            estructuraDescuento.descuentoPorDias = []
 
                             const contenedorPorDiasPorRango = area.querySelectorAll("[contenedor=dia]")
                             contenedorPorDiasPorRango.forEach((dia) => {
@@ -16100,20 +16097,20 @@ const casaVitini = {
                                     contenedorApartamentos.forEach((apartamento) => {
                                         const aparatmentoIDV = apartamento.getAttribute("apartamentoSeleccionado")
                                         const tipoAplicacion = apartamento.querySelector("[campoApartamentoSeleccionado=tipoDescuento]").value
-                                        const cantidad = apartamento.querySelector("[campoApartamentoSeleccionado=cantidad]").value
+                                        const descuentoTotal = apartamento.querySelector("[campoApartamentoSeleccionado=descuentoTotal]").value
 
                                         const descuentoPorApartamento = {
                                             apartamentoIDV: aparatmentoIDV,
                                             tipoAplicacion: tipoAplicacion,
-                                            descuentoTotal: cantidad,
+                                            descuentoTotal: descuentoTotal,
                                         }
-                                        
+
                                         estructuraDescuentoPorDia.apartamentos.push(descuentoPorApartamento)
 
                                     })
 
                                 }
-                                estructuraDescuento.detallesDelDescuento.descuentoPorDias.push(estructuraDescuentoPorDia)
+                                estructuraDescuento.descuentoPorDias.push(estructuraDescuentoPorDia)
                             })
                         }
                     }
@@ -16242,6 +16239,8 @@ const casaVitini = {
                     const apartamentoUI = data.apartamentoUI
                     const instanciaUID = data.instanciaUID
                     const tipoDespliegue = data.tipoDespliegue
+                    const seleccionadoInicial = data.seleccionadoInicial
+
 
                     const apartamentoSeleccionadoUI = document.createElement("div")
                     apartamentoSeleccionadoUI.classList.add("crearOfertaApartamentoSeleccionadoUI")
@@ -16262,12 +16261,10 @@ const casaVitini = {
                     })
                     apartamentoSeleccionadoUI.appendChild(botonEliminarApartamento)
 
-
-
                     if (tipoDespliegue === "completo") {
                         const cantidadUI = document.createElement("input")
                         cantidadUI.classList.add("crearOferDescuentoDedicadoCantidad")
-                        cantidadUI.setAttribute("campoApartamentoSeleccionado", "cantidad")
+                        cantidadUI.setAttribute("campoApartamentoSeleccionado", "descuentoTotal")
                         cantidadUI.placeholder = "Inserta la cantidad"
                         cantidadUI.value = "0.00"
                         apartamentoSeleccionadoUI.appendChild(cantidadUI)
@@ -16278,31 +16275,35 @@ const casaVitini = {
                         const opcionPredeterminada = document.createElement("option")
 
                         opcionPredeterminada.disabled = true;
-                        opcionPredeterminada.value = ""
+                        opcionPredeterminada.selected = true;
                         opcionPredeterminada.text = "Selecciona el tipo de descuento"
                         tipoDescuento.appendChild(opcionPredeterminada)
                         const tipoDescuentoOpciones = [
                             {
-                                tipoDescuentoIDV: "porcentaje",
-                                tipoDescuentoUI: "Porcentaje",
+                                nombreUI: "Selecciona el tipo de descuento",
                             },
                             {
-                                tipoDescuentoIDV: "cantidadFija",
-                                tipoDescuentoUI: "Cantidad fija",
+                                nombreUI: "Porcentaje",
+                                valorIDV: "porcentaje",
+                            },
+                            {
+                                nombreUI: "Cantidad fija",
+                                valorIDV: "cantidadFija",
                             }
                         ]
-                        const seleccionadoInicial = ""
                         tipoDescuentoOpciones.forEach((tipoDescuentoOpcion) => {
-                            const tipoDescuentoIDV = tipoDescuentoOpcion.tipoDescuentoIDV
-                            const tipoDescuentoUI = tipoDescuentoOpcion.tipoDescuentoUI
+                            const valorIDV = tipoDescuentoOpcion?.valorIDV || null
+                            const nombreUI = tipoDescuentoOpcion.nombreUI
 
                             const opcion = document.createElement("option");
-                            if (seleccionadoInicial === tipoDescuentoIDV) {
+                            if (seleccionadoInicial === valorIDV) {
                                 opcion.selected = true;
+                            } else {
+
                             }
-                            opcion.value = tipoDescuentoIDV;
-                            opcion.text = tipoDescuentoUI;
-                            opcion.setAttribute("tipoDescuentoIDV", tipoDescuentoIDV)
+                            opcion.value = valorIDV;
+                            opcion.text = nombreUI;
+                            opcion.setAttribute("tipoDescuentoIDV", valorIDV)
                             tipoDescuento.appendChild(opcion);
                         })
                         apartamentoSeleccionadoUI.appendChild(tipoDescuento)
@@ -17216,6 +17217,10 @@ const casaVitini = {
                             tipo: 'porRangoDeFechas',
                             titulo: 'Por rango de fechas de la reserva',
                             descripcion: 'Aplicar esta oferta cuando se realiza una reserva cuyo rango determinado por la fecha de entrada y la fecha de salida se cruza con el rango de duración de la oferta determinado. Esta oferta solo aplica el descuento a los dias de la reserva que estan dentro de este rango.'
+                        },{
+                            tipo: 'porCodigoDescuento',
+                            titulo: 'Por codigo de descuento',
+                            descripcion: 'Aplicar esta oferta a la reservas que inserte un codigo de descuento. Esta condicion solo se puede insertar una vez por oferta.'
                         }
                     ];
                     // Crear las opciones de tipo de oferta y agregarlos al div contenedor horizontal de tipo de ofertas
@@ -17655,7 +17660,7 @@ const casaVitini = {
                             const selectorTipoDescuento = document.createElement('select');
                             selectorTipoDescuento.classList.add('preciosEImpuestosbotonOpcionCrearNuevoImpuesto');
                             selectorTipoDescuento.setAttribute('campoOferta', 'contextoAplicacion');
-                            selectorTipoDescuento.setAttribute('componente', 'tipoDescuento');
+                            selectorTipoDescuento.setAttribute('componente', 'subTipoDescuento');
                             selectorTipoDescuento.addEventListener("change", casaVitini.administracion.gestion_de_ofertas.componenteUI.tipoDescuentosUI.porRango.componentes.controladorUI)
                             const opcionesSelector = [{
                                 nombre: "Determina dentro del rango seleccionado, como se aplica el descuento",
