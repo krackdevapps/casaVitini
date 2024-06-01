@@ -1,9 +1,10 @@
 import Decimal from 'decimal.js';
 import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../repositorio/impuestos/obtenerImpuestosPorAplicacionIDVPorEstado.mjs';
+import { totalesBasePorRango } from './totalesBasePorRango.mjs';
 Decimal.set({ precision: 50 });
-export const aplicarImpuestos = async (totalNetoEntrada) => {
+export const aplicarImpuestos = async (totalesBase) => {
     try {
-        const totalNeto = new Decimal(totalNetoEntrada)
+        const totalFinal = new Decimal(totalesBase.totales.totalFinal)
         const impuestos = await obtenerImpuestosPorAplicacionIDVPorEstado({
             estadoIDV: "activado",
             aplicacionSobre_array: [
@@ -19,24 +20,30 @@ export const aplicarImpuestos = async (totalNetoEntrada) => {
             const tipoValorIDV = impuesto.tipoValorIDV
             const presentacionImpuesto = {
                 nombreImpuesto: impuestoNombre,
-                tipoImpositivo: tipoImpositivo,
                 tipoValor: tipoValorIDV,
             }
             if (tipoValorIDV === "porcentaje") {
-                const calculoImpuestoPorcentaje = totalNeto.times(tipoImpositivo).dividedBy(100);
+                const calculoImpuestoPorcentaje = totalFinal.times(tipoImpositivo).dividedBy(100);
+                presentacionImpuesto.porcentaje = tipoImpositivo
+                presentacionImpuesto.tipoImpositivo = calculoImpuestoPorcentaje,
                 sumaImpuestos = sumaImpuestos.plus(calculoImpuestoPorcentaje)
             }
             if (tipoValorIDV === "tasa") {
                 const tipoImpositivoConst = new Decimal(tipoImpositivo)
+                presentacionImpuesto.tipoImpositivo = tipoImpositivo,
                 sumaImpuestos = sumaImpuestos.plus(tipoImpositivoConst)
             }
             objetoImpuestos.push(presentacionImpuesto)
         }
-        const estructoraFinal = {
-            impuestos: objetoImpuestos,
-            sumaImpuestos: sumaImpuestos
-        }
-        return estructoraFinal
+
+        totalesBase.impuestos = objetoImpuestos
+        totalesBase.totales.impuestosAplicados = sumaImpuestos.toFixed(2)
+        totalesBase.totales.totalFinal = totalFinal.plus(sumaImpuestos).toFixed(2)
+        // const estructoraFinal = {
+        //     impuestos: objetoImpuestos,
+        //     sumaImpuestos: sumaImpuestos
+        // }
+        // return estructoraFinal
     } catch (errorCapturado) {
         throw errorCapturado
     }

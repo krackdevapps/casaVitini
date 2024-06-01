@@ -16,11 +16,14 @@ export const aplicarDescuento = async (data) => {
             porApartamento: {},
             porDia: {},
         }
-        const totalNeto = new Decimal(totalesBase.totales.totalNeto)
+        const contenedorTotalesBase = totalesBase.totales
+        const totalNeto = new Decimal(contenedorTotalesBase.totalNeto)
         const contenedorOfertas = totalesBase.global.ofertasAplicadas.ofertas
         const contenedorPorTotal = totalesBase.global.ofertasAplicadas.porTotal
         const contenedorPorApartamento = totalesBase.global.ofertasAplicadas.porApartamento
         const contenedorPorDia = totalesBase.global.ofertasAplicadas.porDia
+
+        let totalGlobalDescuento = new Decimal("0.00")
 
         for (const oferta of ofertarParaAplicarDescuentos) {
             const descuentos = oferta.oferta.descuentosJSON
@@ -37,6 +40,7 @@ export const aplicarDescuento = async (data) => {
                     descuentoTotal,
                     total: totalNeto
                 })
+                totalGlobalDescuento = totalGlobalDescuento.plus(totalCalculado.descuentoAplicado)
 
                 const descuentoAplicado = {
                     tipoAplicacion,
@@ -54,7 +58,6 @@ export const aplicarDescuento = async (data) => {
                     const apartamentoIDV = descuentoDelApartamento.apartamentoIDV
                     const descuentoTotal = descuentoDelApartamento.descuentoTotal
                     const tipoAplicacion = descuentoDelApartamento.tipoAplicacion
-
                     const indiceTotalApartamento = indiceTotales.indicePorApartamentos[apartamentoIDV].posicion
                     const totalPorApartametno = totalesBase.desglosePorApartamento[indiceTotalApartamento].totalNeto
 
@@ -66,6 +69,7 @@ export const aplicarDescuento = async (data) => {
                         descuentoTotal,
                         total: totalPorApartametno
                     })
+                    totalGlobalDescuento = totalGlobalDescuento.plus(totalCalculado.descuentoAplicado)
 
                     const porApartamento = {
                         apartamentoIDV,
@@ -105,9 +109,7 @@ export const aplicarDescuento = async (data) => {
                                     const apartamentoIDV = apartamento.apartamentoIDV
                                     const descuentoTotal = new Decimal(apartamento.descuentoTotal)
                                     const tipoAplicacion = apartamento.tipoAplicacion
-
                                     const indicePosicionApartamento = indiceTotales.indicePorNoche[fechaDelDia].posicion
-
                                     const indiceTotalPorApartamento = indiceTotales.indicePorNoche
                                     [fechaDelDia]
                                         .apartamentosPorNoche
@@ -127,6 +129,7 @@ export const aplicarDescuento = async (data) => {
                                         descuentoTotal,
                                         total: totalPorApartamento
                                     })
+                                    totalGlobalDescuento = totalGlobalDescuento.plus(totalCalculado.descuentoAplicado)
 
                                     const porDia = {
                                         apartamentoIDV,
@@ -163,6 +166,7 @@ export const aplicarDescuento = async (data) => {
                                     descuentoTotal,
                                     total: totalNetoPorDia
                                 })
+                                totalGlobalDescuento = totalGlobalDescuento.plus(totalCalculado.descuentoAplicado)
 
                                 const porDia = {
                                     ofertaUID,
@@ -195,11 +199,9 @@ export const aplicarDescuento = async (data) => {
                             const descuentoTotal = descuentos.descuentoTotal
                             const tipoAplicacion = descuentos.tipoAplicacion
 
-
                             const indicePosicionNetoPorDiaApartamento = indiceTotales.indicePorNoche[fechaDelDia].posicion
-
-                            const totalNetoPorDia = totalesBase.
-                                desglosePorNoche
+                            const totalNetoPorDia = totalesBase
+                                .desglosePorNoche
                             [indicePosicionNetoPorDiaApartamento]
                                 .precioNetoNoche
 
@@ -209,6 +211,7 @@ export const aplicarDescuento = async (data) => {
                                 descuentoTotal,
                                 total: totalNetoPorDia
                             })
+                            totalGlobalDescuento = totalGlobalDescuento.plus(totalCalculado.descuentoAplicado)
 
                             const porDia = {
                                 ofertaUID,
@@ -226,6 +229,8 @@ export const aplicarDescuento = async (data) => {
                 }
             }
         }
+        contenedorTotalesBase.totalDescuento = totalGlobalDescuento.toFixed(2)
+        contenedorTotalesBase.totalFinal = totalNeto.minus(totalGlobalDescuento).toFixed(2)
     } catch (error) {
         throw error
     }

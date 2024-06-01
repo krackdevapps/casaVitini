@@ -4,9 +4,11 @@ import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mj
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 import { aplicarOfertas } from "../ofertas/aplicarOfertas.mjs"
+import { aplicarImpuestos } from "./aplicarImpuestos.mjs"
 
 export const procesadorPrecio = async (data) => {
     try {
+
         const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaEntrada,
             nombreCampo: "LA fecha de entrada del procesador de precios"
@@ -26,7 +28,7 @@ export const procesadorPrecio = async (data) => {
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const fechaActual = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaActual || DateTime.now().setZone(zonaHoraria).toISODate(),
-            nombreCampo: "La fecha de salida del procesador de precios"
+            nombreCampo: "La fecha de actual del procesador de precios"
         })
 
         const apartamentosArray = validadoresCompartidos.tipos.array({
@@ -39,23 +41,37 @@ export const procesadorPrecio = async (data) => {
         for (const apartamentoIDV of apartamentosArray) {
             await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
         }
+        const capaImpuestos = data?.capaImpuestos
+        const capaOfertas = data?.capaOfertas
+
+        console.log("capaImpuerstos0", capaImpuestos, "capaOfertas", capaOfertas)
+
+        if (capaImpuestos !== "si" && capaImpuestos !== "no") {
+            const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos"
+            throw new Error(error)
+        }
+        if (capaOfertas !== "si" && capaOfertas !== "no") {
+            const error = "El procesador de precios esta mal configurado, necesita parametro capaOfertas"
+            throw new Error(error)
+        }
+
         const totalesBase = await totalesBasePorRango({
             fechaEntrada_ISO: fechaEntrada,
             fechaSalida_ISO: fechaSalida,
             apartamentosArray
         })
-
-        await aplicarOfertas({
-            totalesBase,
-            fechaActual,
-            fechaEntrada,
-            fechaSalida,
-            apartamentosArray
-        })
-
-        // Aplicar impuestos
-        // Generar totales
-
+        if (capaOfertas === "si") {
+            await aplicarOfertas({
+                totalesBase,
+                fechaActual,
+                fechaEntrada,
+                fechaSalida,
+                apartamentosArray
+            })
+        }
+        if (capaImpuestos === "si") {
+            await aplicarImpuestos(totalesBase)
+        }
         return totalesBase
 
     } catch (error) {

@@ -57,7 +57,9 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
         const desgloseFinanciero = await procesadorPrecio({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
-            apartamentosArray: apartamentosDisponiblesEncontrados
+            apartamentosArray: apartamentosDisponiblesEncontrados,
+            capaOfertas: "si",
+            capaImpuestos: "si"
         })
         estructuraFinal.nuevoDesglose = desgloseFinanciero
 

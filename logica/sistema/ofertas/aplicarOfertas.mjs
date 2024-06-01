@@ -32,8 +32,9 @@ export const aplicarOfertas = async (data) => {
             ofertarParaAplicarDescuentos: ofertaAnalizadasPorCondiciones,
             totalesBase: totalesBase,
         })
-
-
+        
+        
+        
     } catch (error) {
         throw error
     }
