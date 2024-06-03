@@ -4,7 +4,9 @@ export const obtenerConfiguracionPorApartamentoIDV = async (apartamentoIDV) => {
     try {
         const consulta = `
         SELECT 
-        *
+        "configuracionUID",
+        "apartamentoIDV",
+        "estadoConfiguracionIDV"
         FROM "configuracionApartamento"
         WHERE "apartamentoIDV" = $1;
         `;

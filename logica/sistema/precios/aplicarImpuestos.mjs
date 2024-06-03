@@ -1,6 +1,5 @@
 import Decimal from 'decimal.js';
 import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../repositorio/impuestos/obtenerImpuestosPorAplicacionIDVPorEstado.mjs';
-import { totalesBasePorRango } from './totalesBasePorRango.mjs';
 Decimal.set({ precision: 50 });
 export const aplicarImpuestos = async (totalesBase) => {
     try {

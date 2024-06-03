@@ -15999,6 +15999,12 @@ const casaVitini = {
 
                             oferta.condiciones.push(estructuraConficion)
 
+                        } else if (tipoCondicion === "porCodigoDescuento") {
+                            estructuraConficion.tipoCondicion = tipoCondicion
+                            const codigoDescuento = espacioCondicion.querySelector("[campo=codigoDescuento]").value
+                            estructuraConficion.codigoDescuento = codigoDescuento
+                            oferta.condiciones.push(estructuraConficion)
+
                         } else {
                             const error = "No se reconoce el tipo de oferta"
                             return casaVitini.ui.vistas.adver(error)
@@ -17217,7 +17223,7 @@ const casaVitini = {
                             tipo: 'porRangoDeFechas',
                             titulo: 'Por rango de fechas de la reserva',
                             descripcion: 'Aplicar esta oferta cuando se realiza una reserva cuyo rango determinado por la fecha de entrada y la fecha de salida se cruza con el rango de duración de la oferta determinado. Esta oferta solo aplica el descuento a los dias de la reserva que estan dentro de este rango.'
-                        },{
+                        }, {
                             tipo: 'porCodigoDescuento',
                             titulo: 'Por codigo de descuento',
                             descripcion: 'Aplicar esta oferta a la reservas que inserte un codigo de descuento. Esta condicion solo se puede insertar una vez por oferta.'
@@ -17348,27 +17354,32 @@ const casaVitini = {
 
                         return divOfertaConXApartamentos_O1
                     },
-                    porApartamentosEspecificos: () => {
+                    porCodigoDescuento: () => {
                         // Crear el elemento div principal
-                        const porApartamentoDedicado = document.createElement('div');
-                        porApartamentoDedicado.classList.add('contenedorCondicion');
-                        porApartamentoDedicado.setAttribute('zonaOferta', 'porApartamentosEspecificos');
+                        const porCodigoDescuento = document.createElement('div');
+                        porCodigoDescuento.classList.add('contenedorCondicion');
+                        porCodigoDescuento.setAttribute('zonaOferta', 'porCodigoDescuento');
 
 
                         const contenedorBotonesGlobales = document.createElement("div")
                         contenedorBotonesGlobales.classList.add("contenedorBotonesGlobal")
                         contenedorBotonesGlobales.setAttribute("contenedorEnCondicion", "botones")
-                        porApartamentoDedicado.appendChild(contenedorBotonesGlobales)
+                        porCodigoDescuento.appendChild(contenedorBotonesGlobales)
 
 
                         const pCrearOfertaTituloOpcion1_3 = document.createElement('p');
                         pCrearOfertaTituloOpcion1_3.classList.add('crearOfertaTituloOpcion');
                         pCrearOfertaTituloOpcion1_3.textContent =
-                            'Esta condicion determina que apartametnos deben de estar dentro de la reserva para acceder a esta oferta.';
-                        porApartamentoDedicado.appendChild(pCrearOfertaTituloOpcion1_3);
-                        const selectorApartamentosEspecificos = casaVitini.administracion.gestion_de_ofertas.componenteUI.contenedorSelectorApartamentosEspecificos()
-                        porApartamentoDedicado.appendChild(selectorApartamentosEspecificos)
-                        return porApartamentoDedicado
+                            'Esta condicion permite usar un código de descuento para poder acceder a esta oferta.';
+                        porCodigoDescuento.appendChild(pCrearOfertaTituloOpcion1_3);
+
+                        const campoCodigo = document.createElement("input")
+                        campoCodigo.setAttribute("campo", "codigoDescuento")
+                        campoCodigo.classList.add("campoTextoSimple")
+                        campoCodigo.placeholder = "Escribe el codigo"
+                        porCodigoDescuento.appendChild(campoCodigo)
+
+                        return porCodigoDescuento
                     },
                     porDiasDeAntelacion: () => {
                         const divOfertaConXApartamentos_O1 = document.createElement('div');

@@ -2,11 +2,10 @@ import { conexion } from "../../../componentes/db.mjs";
 
 export const obtenerOfertasPorRangoPorEstado = async (data) => {
     try {
-
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
         const fechaEntradaReserva_ISO = data.fechaEntradaReserva_ISO
         const estado = data.estado
-
+        const zonaDeLaOferta = data.zonaDeLaOferta
         const consulta = `
         SELECT 
         "ofertaUID",
@@ -36,12 +35,16 @@ export const obtenerOfertasPorRangoPorEstado = async (data) => {
                 "fechaInicio" < $1::DATE AND "fechaFinal" > $2::DATE
             )
         )
-                AND estado = $3::text
+        AND
+        estado = $3::text
+        AND
+        "zonaIDV" = $4::text
         ;`
         const parametros = [
             fechaSalidaReserva_ISO,
             fechaEntradaReserva_ISO,
-            estado
+            estado,
+            zonaDeLaOferta
         ]
         const resuelve = await conexion.query(consulta, parametros)
         return resuelve.rows

@@ -169,6 +169,15 @@ export const validarObjetoOferta = async (oferta) => {
                     tipoVector: "diferente"
 
                 })
+            } else if (tipoCondicionIDV === "porCodigoDescuento") {
+                const codigoDescuento = condicion?.codigoDescuento
+                if (!codigoDescuento) {
+                    const error = "Te falta el codigo de descuento en la condicion de codigo de descuento."
+                    throw new Error(error)
+                }
+                const codigoDescuentoComoBuffer = Buffer.from(codigoDescuento, "utf8")
+                const codigoDescuentoB64 = codigoDescuentoComoBuffer.toString("base64")
+                condicion.codigoDescuento = codigoDescuentoB64
             } else {
                 const error = "No se reconoce el tipo de la condiciones"
                 throw new Error(error)
@@ -274,7 +283,7 @@ export const validarObjetoOferta = async (oferta) => {
                 tipoVector: "diferente"
             })
 
-     
+
             const subTipoDescuento = descuentos.subTipoDescuento
 
             if (subTipoDescuento === "totalNetoPorRango") {

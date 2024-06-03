@@ -139,7 +139,9 @@ export const selectorPorCondicion = async (data) => {
                 } else {
                     resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
                 }
-            } else {
+            } else if (tipoCondicion === "porCodigoDescuento") {
+              // implementar
+            } else{
                 const error = `En la oferta ${nombreOferta} no se reconoce el identificador de condicion ${tipoCondicion}`
                 throw new Error(error)
             }

@@ -809,7 +809,18 @@ export const validadoresCompartidos = {
                             sePermiteVacio: "no",
                             limpiezaEspaciosAlrededor: "si"
                         })
-                    });
+                    })
+                }
+                if (filtro === "soloNumerosEnteros") {
+                    array.every((cadena, index) => {
+                        validadoresCompartidos.tipos.cadena({
+                            string: cadena,
+                            nombreCampo: `En la posicion ${index} del array debe haber una cadena con numeros`,
+                            filtro: "cadenaConNumerosEnteros",
+                            sePermiteVacio: "no",
+                            limpiezaEspaciosAlrededor: "si"
+                        })
+                    })
                 }
 
                 const noSePermitenDuplicados = configuracion.noSePermitenDuplicados

@@ -13700,3 +13700,12 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.7);
 
 }
+
+.campoTextoSimple  {
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.3);
+    appearance: none;
+}

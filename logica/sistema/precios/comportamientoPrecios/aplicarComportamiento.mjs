@@ -22,9 +22,11 @@ export const aplicarComportamiento = (data) => {
             const error = "No se reconcoe el simboloIDV del comportamiento"
             throw new Error(error)
         }
-        return precioFinalPorNoche;
+        if (precioFinalPorNoche.isPositive()) {
+            return precioFinalPorNoche
+        }
+        return "0.00";
     } catch (error) {
         throw error
     }
-
 }

@@ -5,10 +5,10 @@ import { totalesBasePorRango } from "./totalesBasePorRango.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 import { aplicarOfertas } from "../ofertas/aplicarOfertas.mjs"
 import { aplicarImpuestos } from "./aplicarImpuestos.mjs"
+import { aplicarDescuentosPersonalizados } from "../ofertas/aplicarDescuentosPersonalizados.mjs"
 
 export const procesadorPrecio = async (data) => {
     try {
-
         const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaEntrada,
             nombreCampo: "LA fecha de entrada del procesador de precios"
@@ -43,8 +43,7 @@ export const procesadorPrecio = async (data) => {
         }
         const capaImpuestos = data?.capaImpuestos
         const capaOfertas = data?.capaOfertas
-
-        console.log("capaImpuerstos0", capaImpuestos, "capaOfertas", capaOfertas)
+        const capaDescuentosPersonalizados = data?.capaDescuentosPersonalizados
 
         if (capaImpuestos !== "si" && capaImpuestos !== "no") {
             const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos"
@@ -54,29 +53,59 @@ export const procesadorPrecio = async (data) => {
             const error = "El procesador de precios esta mal configurado, necesita parametro capaOfertas"
             throw new Error(error)
         }
+        if (capaDescuentosPersonalizados !== "si" && capaDescuentosPersonalizados !== "no") {
+            const error = "El procesador de precios esta mal configurado, necesita parametro capaDescuentosPersonalizados"
+            throw new Error(error)
+        }
 
         const totalesBase = await totalesBasePorRango({
             fechaEntrada_ISO: fechaEntrada,
             fechaSalida_ISO: fechaSalida,
             apartamentosArray
         })
+
         if (capaOfertas === "si") {
+            const zonasDeLaOferta = validadoresCompartidos.tipos.array({
+                array: data?.zonasDeLaOferta,
+                nombreCampo: "El array de zonasDeLaoferta en el procesador de precios",
+                filtro: "soloCadenasIDV",
+                noSePermitenDuplicados: "si"
+            })
+            
+            const zonasIDVControl = ["publica", "privada", "global"]
+            const contieneSoloValoresPermitidos = zonasDeLaOferta.every(zonaIDV => zonasIDVControl.includes(zonaIDV));
+            if (!contieneSoloValoresPermitidos) {
+                const error = "En el array de zonasDeLaOferta hay identificadores visuales de zona no reconocidos. Los identificadores visuales reconocidos son publica, privada y global"
+                throw new Error(error)
+            }
+
             await aplicarOfertas({
                 totalesBase,
                 fechaActual,
                 fechaEntrada,
                 fechaSalida,
-                apartamentosArray
+                apartamentosArray,
+                zonasDeLaOferta
+            })
+        }
+
+        if (capaDescuentosPersonalizados === "si") {
+            const descuentosArray = validadoresCompartidos.tipos.array({
+                array: data.descuentosArray,
+                nombreCampo: "El array de descuentosArray en el procesador de precios",
+                filtro: "cadenaConNumerosEnteros",
+                noSePermitenDuplicados: "si"
+            })
+            await aplicarDescuentosPersonalizados({
+                totalesBase,
+                descuentosArray,
             })
         }
         if (capaImpuestos === "si") {
             await aplicarImpuestos(totalesBase)
         }
         return totalesBase
-
     } catch (error) {
         throw error
     }
-
-
 }

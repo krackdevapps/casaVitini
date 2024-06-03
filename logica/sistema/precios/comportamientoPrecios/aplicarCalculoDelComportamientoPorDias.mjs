@@ -26,7 +26,7 @@ export const aplicarCalculoDelComportamientoPorDias = async (data) => {
                         simboloIDV: simboloIDV,
                         cantidad: cantidad
                     })
-                    comportamientoAplicado = precioNetoFinal.toFixed(2)
+                    comportamientoAplicado = precioNetoFinal
                 }
             }
         }

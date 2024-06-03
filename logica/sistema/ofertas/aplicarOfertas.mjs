@@ -9,11 +9,13 @@ export const aplicarOfertas = async (data) => {
         const fechaEntrada = data.fechaEntrada
         const fechaSalida = data.fechaSalida
         const apartamentosArray = data.apartamentosArray
+        const zonaDeLaOferta = data.zonaDeLaOferta
 
         const ofertasSeleccionadasPorRango = await obtenerOfertasPorRangoPorEstado({
             fechaSalidaReserva_ISO: fechaEntrada,
             fechaEntradaReserva_ISO: fechaSalida,
-            estado: "activado"
+            estado: "activado",
+            zonaDeLaOferta
         })
 
         const ofertaAnalizadasPorCondiciones = []
