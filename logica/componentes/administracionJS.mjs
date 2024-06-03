@@ -15542,7 +15542,7 @@ const casaVitini = {
                     const e = data.e
                     const instanciaUID_contenedorFechas = data.instanciaUID_contenedorFechas
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                    const metodoSelectorDia = data.metodoSelectorDia || "casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia"
+                    const metodoSelectorDia = "casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia"
                     const areaContenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
 
                     const botonID = e.target.closest("[componente]").getAttribute("componente")
@@ -15571,9 +15571,6 @@ const casaVitini = {
                         mesSeleccionadoSalida = fechaSaliraArray[1]
                         anoSeleccionadoSalida = fechaSaliraArray[2]
                     }
-
-
-
 
                     if (botonID === "inicioOferta") {
                         if (selectorCalendario?.getAttribute("calendarioIO") === "salida") {

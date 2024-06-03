@@ -7,9 +7,13 @@ import { controlInstanciaDecimal } from "./controlInstanciaDecimal.mjs"
 
 export const aplicarDescuento = async (data) => {
     try {
+        const fechaEntradaReserva_ISO = data.fechaEntradaReserva_ISO
+        const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
         const ofertarParaAplicarDescuentos = data.ofertarParaAplicarDescuentos
         const totalesBase = data.totalesBase
         const indiceTotales = constructorIndiceTotales(totalesBase)
+
+
 
         if (!totalesBase.hasOwnProperty("ofertasAplicadas")) {
             totalesBase.ofertasAplicadas = {
@@ -61,7 +65,9 @@ export const aplicarDescuento = async (data) => {
                     const apartamentoIDV = descuentoDelApartamento.apartamentoIDV
                     const descuentoTotal = descuentoDelApartamento.descuentoTotal
                     const tipoAplicacion = descuentoDelApartamento.tipoAplicacion
+
                     const indiceTotalApartamento = indiceTotales.indicePorApartamentos[apartamentoIDV].posicion
+
                     const totalPorApartametno = totalesBase.desglosePorApartamento[indiceTotalApartamento].totalNeto
 
                     if (!contenedorPorApartamento.hasOwnProperty(apartamentoIDV)) {
@@ -104,8 +110,8 @@ export const aplicarDescuento = async (data) => {
 
                         const fechaDentroDelRango = await validadoresCompartidos.fechas.fechaEnRango({
                             fechaAComprobrarDentroDelRango: fechaDelDia,
-                            fechaInicioRango_ISO: fechaInicioRango_ISO,
-                            fechaFinRango_ISO: fechaFinalRango_ISO
+                            fechaInicioRango_ISO: fechaEntradaReserva_ISO,
+                            fechaFinRango_ISO: fechaSalidaReserva_ISO
                         })
                         if (!fechaDentroDelRango) {
                             continue
@@ -131,7 +137,6 @@ export const aplicarDescuento = async (data) => {
                                     .apartamentosPorNoche
                                 [apartamentoIDV]
                                     .posicion
-
                                 const totalPorApartamento = totalesBase.
                                     desglosePorNoche
                                 [indicePosicionApartamento]
@@ -179,9 +184,7 @@ export const aplicarDescuento = async (data) => {
                         if (tipoDescuento === "netoPorDia") {
                             const descuentoTotal = descuentoPorDia.descuentoTotal
                             const tipoAplicacion = descuentoPorDia.tipoAplicacion
-
                             const indicePosicionNetoPorDiaApartamento = indiceTotales.indicePorNoche[fechaDelDia].posicion
-
                             const totalNetoPorDia = totalesBase.
                                 desglosePorNoche
                             [indicePosicionNetoPorDiaApartamento]
@@ -212,15 +215,20 @@ export const aplicarDescuento = async (data) => {
                     }
                 }
                 if (subTipoDescuento === "totalNetoPorRango") {
-                    const diasArray = constructorObjetoEstructuraPrecioDia(fechaInicioRango_ISO, fechaFinalRango_ISO)
 
-                    for (const fechaDelDia of diasArray) {
+                    const diasArrayReserva = constructorObjetoEstructuraPrecioDia(fechaEntradaReserva_ISO, fechaSalidaReserva_ISO)
+                    console.log("diasArrayReserva", diasArrayReserva)
+                    for (const fechaDelDia of diasArrayReserva) {
                         const fechaDentroDelRango = await validadoresCompartidos.fechas.fechaEnRango({
                             fechaAComprobrarDentroDelRango: fechaDelDia,
                             fechaInicioRango_ISO: fechaInicioRango_ISO,
                             fechaFinRango_ISO: fechaFinalRango_ISO
                         })
-
+                        console.log("fechaDentroDelRango", fechaDentroDelRango, {
+                            fechaAComprobrarDentroDelRango: fechaDelDia,
+                            fechaInicioRango_ISO: fechaInicioRango_ISO,
+                            fechaFinRango_ISO: fechaFinalRango_ISO
+                        })
                         if (!fechaDentroDelRango) {
                             continue
                         }
@@ -234,8 +242,8 @@ export const aplicarDescuento = async (data) => {
                         }
                         const descuentoTotal = descuentos.descuentoTotal
                         const tipoAplicacion = descuentos.tipoAplicacion
-
                         const indicePosicionNetoPorDiaApartamento = indiceTotales.indicePorNoche[fechaDelDia].posicion
+
                         const totalNetoPorDia = totalesBase
                             .desglosePorNoche
                         [indicePosicionNetoPorDiaApartamento]

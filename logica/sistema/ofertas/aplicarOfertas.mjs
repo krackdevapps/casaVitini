@@ -33,6 +33,8 @@ export const aplicarOfertas = async (data) => {
         await aplicarDescuento({
             ofertarParaAplicarDescuentos: ofertaAnalizadasPorCondiciones,
             totalesBase: totalesBase,
+            fechaEntradaReserva_ISO: fechaEntrada,
+            fechaSalidaReserva_ISO: fechaSalida
         })
         
         

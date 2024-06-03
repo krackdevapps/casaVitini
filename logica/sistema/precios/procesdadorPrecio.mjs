@@ -11,12 +11,12 @@ export const procesadorPrecio = async (data) => {
     try {
         const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaEntrada,
-            nombreCampo: "LA fecha de entrada del procesador de precios"
+            nombreCampo: "La fecha de entrada del procesador de precios"
         })
 
         const fechaSalida = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaSalida,
-            nombreCampo: "LA fecha de salida del procesador de precios"
+            nombreCampo: "La fecha de salida del procesador de precios"
         })
 
         await validadoresCompartidos.fechas.validacionVectorial({
@@ -78,7 +78,6 @@ export const procesadorPrecio = async (data) => {
                 const error = "En el array de zonasDeLaOferta hay identificadores visuales de zona no reconocidos. Los identificadores visuales reconocidos son publica, privada y global"
                 throw new Error(error)
             }
-
             await aplicarOfertas({
                 totalesBase,
                 fechaActual,
@@ -96,10 +95,14 @@ export const procesadorPrecio = async (data) => {
                 filtro: "cadenaConNumerosEnteros",
                 noSePermitenDuplicados: "si"
             })
+
             await aplicarDescuentosPersonalizados({
                 totalesBase,
                 descuentosArray,
+                fechaEntradaReserva_ISO: fechaEntrada,
+                fechaSalidaReserva_ISO: fechaSalida
             })
+
         }
         if (capaImpuestos === "si") {
             await aplicarImpuestos(totalesBase)

@@ -653,6 +653,10 @@ const casaVitini = {
             },
             ocultarElementos: (e) => {
                 if (e?.target) {
+                    const botonDesplegarCalendario = e.target.closest("[boton=desplegarCalendario]")
+                    if (botonDesplegarCalendario) {
+                        return
+                    }
                     const selectorFlotante = e.target.closest("[elemento]")?.getAttribute("elemento")
                     if (selectorFlotante === "flotante") {
                         return
@@ -734,7 +738,6 @@ const casaVitini = {
             },
         },
         servidor: async (transaccion) => {
-
             const puerto = '/puerto';
             const peticion = {
                 method: 'POST',
@@ -778,10 +781,7 @@ const casaVitini = {
                 console.log("errorCapturado", errorCapturado)
                 if (errorCapturado.name === 'AbortError') {
                 }
-
                 if (errorCapturado instanceof TypeError) {
-
-
                     return casaVitini.componentes.errorUI()
                 }
             }
@@ -842,15 +842,11 @@ const casaVitini = {
             },
             reservasNuevo: {
                 arranque: async () => {
-                    //document.body.style.backgroundImage = "url(/componentes/imagenes/fotos/image00018.jpeg)"
                     document.body.style.backgroundImage = 'url("/componentes/imagenes/test/image00061.jpeg")';
-                    //document.body.style.background = "rgb(214 192 157)"
-                    //document.querySelector("#uiLogo").style.filter = "invert(1)"
                     document.body.style.height = "auto"
                     const granuladoURL = casaVitini.utilidades.granuladorURL()
                     const directorios = granuladoURL.directorios[granuladoURL.directorios.length - 1]
                     const main = document.querySelector("main")
-                    //main.style.height = "100%"
                     main.setAttribute("zonaCSS", "alojamiento")
                     if (directorios === "alojamiento") {
                         return casaVitini.ui.vistas.reservasNuevo.buscarAlojamientoUI()
@@ -874,23 +870,20 @@ const casaVitini = {
                     }
                 },
                 buscarAlojamientoUI: async () => {
+                    const instanciaUID_contenedorFechas = casaVitini.utilidades.codigoFechaInstancia()
                     const reservaLocal = JSON.parse(sessionStorage.getItem("reserva"))
-                    let reservaConfirmadaLocal
-                    try {
-                        reservaConfirmadaLocal = JSON.parse(localStorage.getItem("reservaConfirmada"))
-                    } catch (errorCapturado) {
-                        reservaConfirmadaLocal = null
-                    }
+                    const reservaEnCache = localStorage.getItem("reservaConfirmada");
+                    const reservaConfirmadaLocal = reservaEnCache ? JSON.parse(reservaEnCache) : null;
+
                     const main = document.querySelector("main")
                     const tituloUI = document.createElement("p")
                     tituloUI.classList.add("titulo")
                     tituloUI.innerText = "Alojamiento"
-                    // main.appendChild(tituloUI);
-                    // Contenedor principal
+
                     const marcoElasticoRelativo = document.createElement('div');
-                    marcoElasticoRelativo.setAttribute('class', 'marcoElasticoRelativo');
-                    marcoElasticoRelativo.setAttribute('style', 'height: 100%;');
-                    // Contenedor de bloques de reserva
+                    marcoElasticoRelativo.classList.add('marcoElasticoRelativo');
+                    marcoElasticoRelativo.style.height = "100%"
+
                     const bloquePasosReservaNuevo = document.createElement('div');
                     bloquePasosReservaNuevo.setAttribute('class', 'bloquePasosReservaNuevo');
                     bloquePasosReservaNuevo.setAttribute('contenedor', 'busquedaAlojamiento');
@@ -911,6 +904,7 @@ const casaVitini = {
                     const plazaAlojamientoContenedor = document.createElement('div');
                     plazaAlojamientoContenedor.setAttribute('class', 'plaza_alojamiento_contenedor');
                     plazaAlojamientoContenedor.setAttribute('contenedor', 'alojamiento');
+                    plazaAlojamientoContenedor.setAttribute("instanciaUID_contenedorFechas", instanciaUID_contenedorFechas)
                     // Bloque de día de entrada
                     const diaEntradaNuevo = document.createElement('div');
                     diaEntradaNuevo.setAttribute('class', 'diaEntradaNuevo plaza_alojamiento_marcoFechaCompartido');
@@ -921,8 +915,12 @@ const casaVitini = {
                     } else {
                         diaEntradaNuevo.classList.add("parpadeaFondo")
                     }
-                    diaEntradaNuevo.addEventListener("click", () => {
-                        casaVitini.ui.vistas.reservasNuevo.reservasNuevoEntrada("entrada")
+                    diaEntradaNuevo.addEventListener("click", async (e) => {
+                        await casaVitini.ui.componentes.calendario.configurarCalendario({
+                            e,
+                            instanciaUID_contenedorFechas,
+                            rangoIDV: "inicioRango"
+                        })
                     })
                     const textoDiaEntrada = document.createElement('div');
                     textoDiaEntrada.setAttribute('class', 'textoDiaNuevo');
@@ -930,7 +928,7 @@ const casaVitini = {
                     diaEntradaNuevo.appendChild(textoDiaEntrada);
                     const plazaAlojamientoMarcoFechaEntrada = document.createElement('div');
                     plazaAlojamientoMarcoFechaEntrada.setAttribute('class', 'plaza_alojamiento_marcoFechaCompartido_contenedorFecha');
-                    plazaAlojamientoMarcoFechaEntrada.setAttribute('id', 'fechaEntrada');
+                    plazaAlojamientoMarcoFechaEntrada.setAttribute('fechaUI', 'fechaInicio');
                     if (reservaLocal?.entrada) {
                         plazaAlojamientoMarcoFechaEntrada.textContent = reservaLocal.entrada
                     } else {
@@ -947,8 +945,12 @@ const casaVitini = {
                     } else {
                         // diaSalidaNuevo.classList.add("parpadeaFondo")
                     }
-                    diaSalidaNuevo.addEventListener("click", () => {
-                        casaVitini.ui.vistas.reservasNuevo.reservasNuevoEntrada("salida")
+                    diaSalidaNuevo.addEventListener("click", async (e) => {
+                        await casaVitini.ui.componentes.calendario.configurarCalendario({
+                            e,
+                            instanciaUID_contenedorFechas,
+                            rangoIDV: "finalRango"
+                        })
                     })
                     const textoDiaSalida = document.createElement('div');
                     textoDiaSalida.setAttribute('class', 'textoDiaNuevo');
@@ -956,7 +958,7 @@ const casaVitini = {
                     diaSalidaNuevo.appendChild(textoDiaSalida);
                     const plazaAlojamientoMarcoFechaSalida = document.createElement('div');
                     plazaAlojamientoMarcoFechaSalida.setAttribute('class', 'plaza_alojamiento_marcoFechaCompartido_contenedorFecha');
-                    plazaAlojamientoMarcoFechaSalida.setAttribute('id', 'fechaSalida');
+                    plazaAlojamientoMarcoFechaSalida.setAttribute('fechaUI', 'fechaFin');
                     if (reservaLocal?.salida) {
                         plazaAlojamientoMarcoFechaSalida.innerText = reservaLocal.salida
                     } else {
@@ -969,9 +971,7 @@ const casaVitini = {
                     botonMostrarDisponibilidad.setAttribute('componente', 'botonDisponibilidad');
                     botonMostrarDisponibilidad.setAttribute('boton', 'mostrarDisponibilidad');
                     botonMostrarDisponibilidad.textContent = 'Mostrar disponibilidad';
-                    botonMostrarDisponibilidad.addEventListener("click", () => {
-                        casaVitini.ui.vistas.reservasNuevo.reservasNuevoEntrada("botonDisponibilidad")
-                    })
+                    botonMostrarDisponibilidad.addEventListener("click", casaVitini.ui.vistas.reservasNuevo.buscarApartamentosDisponibles)
                     // Agregar elementos al DOM
                     plazaAlojamientoContenedor.appendChild(diaEntradaNuevo);
                     plazaAlojamientoContenedor.appendChild(diaSalidaNuevo);
@@ -1016,544 +1016,307 @@ const casaVitini = {
                                 const camaIDV = habitacionesPorApartamento[habitacion]["camaIDV"]
                                 const constructorSelector = `[apartamentoIDV='${apartamento}'][habitacionIDV='${habitacion}'][camaIDV='${camaIDV}']`
                                 document.querySelector(constructorSelector)?.click()
-                                const pernoctantes = habitacionesPorApartamento[habitacion]["pernoctantes"]
-                                /*
-                                  pernoctantes.forEach((pernoctante, ciclo) => {
-                                      const selectorCampoNombre = document.querySelectorAll(`[zona=apartamentoPernoctacion][apartamentoIDV='${apartamento}'] [habitacionidv='${habitacion}'] > [bloquepernoctante=bloquePernoctante] [pernoctante=nombre]`)
-                                      const selectorCampoPasaporte = document.querySelectorAll(`[zona=apartamentoPernoctacion][apartamentoIDV='${apartamento}'] [habitacionidv='${habitacion}'] > [bloquepernoctante=bloquePernoctante] [pernoctante=pasaporte]`)
-  
-                                      if (selectorCampoNombre[ciclo]) {
-                                          selectorCampoNombre[ciclo].value = pernoctante?.nombre
-  
-                                      }
-                                      if (selectorCampoPasaporte[ciclo]) {
-                                          selectorCampoPasaporte[ciclo].value = pernoctante?.pasaporte
-  
-                                      }
-                                  })
-                                  */
+                                // const pernoctantes = habitacionesPorApartamento[habitacion]["pernoctantes"]
+                                // pernoctantes.forEach((pernoctante, ciclo) => {
+                                //     const selectorCampoNombre = document.querySelectorAll(`[zona=apartamentoPernoctacion][apartamentoIDV='${apartamento}'] [habitacionidv='${habitacion}'] > [bloquepernoctante=bloquePernoctante] [pernoctante=nombre]`)
+                                //     const selectorCampoPasaporte = document.querySelectorAll(`[zona=apartamentoPernoctacion][apartamentoIDV='${apartamento}'] [habitacionidv='${habitacion}'] > [bloquepernoctante=bloquePernoctante] [pernoctante=pasaporte]`)
+                                //     if (selectorCampoNombre[ciclo]) {
+                                //         selectorCampoNombre[ciclo].value = pernoctante?.nombre
+                                //     }
+                                //     if (selectorCampoPasaporte[ciclo]) {
+                                //         selectorCampoPasaporte[ciclo].value = pernoctante?.pasaporte
+                                //     }
+                                // })
+
                             }
                         }
                     }
                 },
                 reservaConfirmadaUI: async () => {
                 },
-                reservasNuevoEntrada: async (componente) => {
+                buscarApartamentosDisponibles: async (componente) => {
                     try {
-                        const bloqueCalendario = document.querySelectorAll("[componente=bloqueCalendario]")
-                        const calendario = document.querySelector("[contenedor=calendario]")
-                        const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                         document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
                         const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                        let diaSeleccionadoEntrada
-                        let mesSeleccionadoEntrada
-                        let anoSeleccionadoEntrada
-                        let datosFechaEntradaSeleccionada
-                        if (fechaEntradaVolatil_Humana) {
-                            const fechaEntradaAarray = fechaEntradaVolatil_Humana.split("/")
-                            diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
-                            mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
-                            anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
-                        }
                         const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                        let diaSeleccionadoSalida
-                        let mesSeleccionadoSalida
-                        let anoSeleccionadoSalida
-                        let datosFechaSalidaSeleccionada
-                        if (fechaSalidaVolatil_Humana) {
-                            const fechaSaliraArray = fechaSalidaVolatil_Humana.split("/")
-                            diaSeleccionadoSalida = Number(fechaSaliraArray[0])
-                            mesSeleccionadoSalida = Number(fechaSaliraArray[1])
-                            anoSeleccionadoSalida = Number(fechaSaliraArray[2])
-                        }
-                        if (componente === "entrada") {
-                            if (calendario?.getAttribute("calendarioIO") === "entrada") {
-                                bloqueCalendario.forEach((calendarioRenderizado) => {
-                                    calendarioRenderizado.remove()
-                                })
-                                document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                                return
-                            }
-                            if (calendario?.getAttribute("calendarioIO") === "salida") {
-                                bloqueCalendario.forEach((calendarioRenderizado) => {
-                                    calendarioRenderizado.remove()
-                                })
-                                document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                                // return
-                            }
-                            let reservaLocal = JSON.parse(localStorage.getItem("reserva"))
-                            const selectorBloqueFechaEntrada = document.querySelector("[calendario=entrada")
-                            const alturaDinamicaArriba = casaVitini.utilidades.observador.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(selectorBloqueFechaEntrada) + 20
-                            if (fechaEntradaVolatil_Humana && !fechaSalidaVolatil_Humana) {
-                                const metadatos = {
-                                    tipoFecha: "entrada",
-                                    almacenamientoCalendarioID: "reserva",
-                                    perfilMes: "calendario_entrada_publico_sinPasado",
-                                    calendarioIO: "entrada",
-                                    mensajeInfo: "Selecciona el día de entrada",
-                                    alturaDinamica: alturaDinamicaArriba,
-                                    instanciaUID: instanciaUID,
-                                    metodoSelectorDia: "casaVitini.ui.vistas.reservasNuevo.seleccionarDia"
-                                }
-                                casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(metadatos)
-                                const calendario = {
-                                    tipo: "personalizado",
-                                    comando: "construyeObjeto",
-                                    tipoFecha: "entrada",
-                                    //  "diaSeleccionado": diaEntradaMemoriaVolatil.Dia,
-                                    mes: mesSeleccionadoEntrada,
-                                    ano: anoSeleccionadoEntrada
-                                }
-                                const calendarioPresente = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
-                                calendarioPresente.instanciaUID = instanciaUID
-                                casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioPresente)
-                            }
-                            if (!fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
-                                const tipoFecha = {
-                                    tipoFecha: "entrada",
-                                    almacenamientoCalendarioID: "reserva",
-                                    perfilMes: "calendario_entrada_publico_sinPasado",
-                                    calendarioIO: "entrada",
-                                    mensajeInfo: "Selecciona el día de entrada",
-                                    alturaDinamica: alturaDinamicaArriba,
-                                    instanciaUID: instanciaUID,
-                                    metodoSelectorDia: "casaVitini.ui.vistas.reservasNuevo.seleccionarDia"
-                                }
-                                casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(tipoFecha)
-                                const calendario = {
-                                    tipo: "actual",
-                                    comando: "construyeObjeto"
-                                }
-                                const calendarioPresente = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
-                                const primeraFechaDisponible = calendarioPresente.limites.primeraFechaDisponible
-                                if (calendarioPresente.mes !== primeraFechaDisponible.mes ||
-                                    calendarioPresente.ano !== primeraFechaDisponible.ano) {
-                                    calendarioPresente.tiempo = "futuro"
-                                }
-                                // calendarioPresente.dia = calendarioPresente.dia
-                                //  calendarioPresente.dia = primeraFechaDisponible.dia
-                                calendarioPresente.mes = primeraFechaDisponible.mes
-                                calendarioPresente.ano = primeraFechaDisponible.ano
-                                if (calendarioPresente.dia === calendarioPresente.numeroDiasPorMes) {
-                                    calendarioPresente.ano = Number(calendarioPresente.mes) === 12 ? Number(calendarioPresente.ano) + 1 : Number(calendarioPresente.ano)
-                                    calendarioPresente.mes = Number(calendarioPresente.mes) === 12 ? 1 : Number(calendarioPresente.mes) + 1
-                                    // calendarioPresente.Dia = 1
-                                }
-                                calendarioPresente.instanciaUID = instanciaUID
-                                casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioPresente)
-                            }
-                            if (fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
-                                const metadatos = {
-                                    tipoFecha: "entrada",
-                                    almacenamientoCalendarioID: "reserva",
-                                    perfilMes: "calendario_entrada_publico_sinPasado",
-                                    calendarioIO: "entrada",
-                                    mensajeInfo: "Selecciona el día de entrada",
-                                    alturaDinamica: alturaDinamicaArriba,
-                                    instanciaUID: instanciaUID,
-                                    metodoSelectorDia: "casaVitini.ui.vistas.reservasNuevo.seleccionarDia"
-                                }
-                                casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(metadatos)
-                                const calendario = {
-                                    tipo: "personalizado",
-                                    comando: "construyeObjeto",
-                                    tipoFecha: "entrada",
-                                    mes: mesSeleccionadoSalida,
-                                    ano: anoSeleccionadoSalida
-                                }
-                                calendarioPersonalizado = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
-                                calendarioPersonalizado.instanciaUID = instanciaUID
-                                casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioPersonalizado)
-                            }
-                            if (fechaSalidaVolatil_Humana && fechaEntradaVolatil_Humana) {
-                                const metadatos = {
-                                    tipoFecha: "entrada",
-                                    almacenamientoCalendarioID: "reserva",
-                                    perfilMes: "calendario_entrada_publico_sinPasado",
-                                    calendarioIO: "entrada",
-                                    mensajeInfo: "Selecciona el día de entrada",
-                                    alturaDinamica: alturaDinamicaArriba,
-                                    instanciaUID: instanciaUID,
-                                    metodoSelectorDia: "casaVitini.ui.vistas.reservasNuevo.seleccionarDia"
-                                }
-                                casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(metadatos)
-                                const calendario = {
-                                    tipo: "personalizado",
-                                    comando: "construyeObjeto",
-                                    mes: mesSeleccionadoEntrada,
-                                    ano: anoSeleccionadoEntrada
-                                }
-                                calendarioPersonalizado = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
-                                calendarioPersonalizado.instanciaUID = instanciaUID
-                                await casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioPersonalizado)
-                            }
-                            document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                        }
-                        if (componente === "salida") {
-                            if (calendario?.getAttribute("calendarioIO") === "salida") {
-                                bloqueCalendario.forEach((calendarioRenderizado) => {
-                                    calendarioRenderizado.remove()
-                                })
-                                document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                                return
-                            }
-                            if (calendario?.getAttribute("calendarioIO") === "entrada") {
-                                bloqueCalendario.forEach((calendarioRenderizado) => {
-                                    calendarioRenderizado.remove()
-                                })
-                                document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                                //return
-                            }
-                            const selectorBloqueFechaEntrada = document.querySelector("[calendario=entrada")
-                            const alturaDinamicaArriba = casaVitini.utilidades.observador.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(selectorBloqueFechaEntrada) + 20
-                            const tipoFecha = {
-                                tipoFecha: "salida",
-                                almacenamientoCalendarioID: "reserva",
-                                perfilMes: "calendario_salida_publico_sinPasado",
-                                calendarioIO: "salida",
-                                mensajeInfo: "Selecciona el día de salida",
-                                alturaDinamica: alturaDinamicaArriba,
-                                instanciaUID: instanciaUID,
-                                metodoSelectorDia: "casaVitini.ui.vistas.reservasNuevo.seleccionarDia"
-                            }
-                            casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(tipoFecha)
-                            let diaEntradaSelecioando
-                            let calendarioPersonalizado
-                            if (fechaEntradaVolatil_Humana && !fechaSalidaVolatil_Humana) {
-                                const calendario = {
-                                    tipo: "personalizado",
-                                    comando: "construyeObjeto",
-                                    tipoFecha: "entrada",
-                                    mes: mesSeleccionadoEntrada,
-                                    ano: anoSeleccionadoEntrada
-                                }
-                                diaEntradaSelecioando = diaSeleccionadoEntrada
-                                calendarioPersonalizado = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
-                                calendarioPersonalizado.instanciaUID = instanciaUID
-                                casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioPersonalizado)
-                            }
-                            if (fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
-                                const calendario = {
-                                    tipo: "personalizado",
-                                    comando: "construyeObjeto",
-                                    tipoFecha: "salida",
-                                    mes: mesSeleccionadoSalida,
-                                    ano: anoSeleccionadoSalida
-                                }
-                                calendarioPersonalizado = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
-                                calendarioPersonalizado.instanciaUID = instanciaUID
-                                casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioPersonalizado)
-                            }
-                            if (!fechaSalidaVolatil_Humana && !fechaEntradaVolatil_Humana) {
-                                const calendario = {
-                                    tipo: "actual",
-                                    comando: "construyeObjeto",
-                                }
-                                const calendarioPresente = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
-                                const primeraFechaDisponible = calendarioPresente.limites.primeraFechaDisponible
-                                if (calendarioPresente.mes !== primeraFechaDisponible.mes ||
-                                    calendarioPresente.ano !== primeraFechaDisponible.ano) {
-                                    calendarioPresente.tiempo = "futuro"
-                                }
-                                // calendarioPresente.dia = primeraFechaDisponible.dia
-                                calendarioPresente.mes = primeraFechaDisponible.mes
-                                calendarioPresente.ano = primeraFechaDisponible.ano
-                                if (calendarioPresente.dia === calendarioPresente.numeroDiasPorMes) {
-                                    calendarioPresente.ano = Number(calendarioPresente.mes) === 12 ? Number(calendarioPresente.ano) + 1 : Number(calendarioPresente.ano)
-                                    calendarioPresente.mes = Number(calendarioPresente.mes) === 12 ? 1 : Number(calendarioPresente.mes) + 1
-                                    // calendarioPresente.Dia = 1
-                                }
-                                calendarioPresente.instanciaUID = instanciaUID
-                                casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioPresente)
-                            }
-                            if (fechaSalidaVolatil_Humana && fechaEntradaVolatil_Humana) {
-                                let calendario = {
-                                    tipo: "personalizado",
-                                    comando: "construyeObjeto",
-                                    tipoFecha: "salida",
-                                    mes: mesSeleccionadoSalida,
-                                    ano: anoSeleccionadoSalida
-                                }
-                                calendarioPersonalizado = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
-                                calendarioPersonalizado.instanciaUID = instanciaUID
-                                await casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioPersonalizado)
-                            }
-                            document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                        }
-                        if (componente === "botonDisponibilidad") {
-                            document.body.removeAttribute("style")
+                        casaVitini.shell.controladoresUI.ocultarElementos()
 
-                            casaVitini.shell.controladoresUI.ocultarElementos()
-                            let reservaLocal = JSON.parse(localStorage.getItem("reserva"))
-                            let seccion = document.querySelector("section:not([estado=obsoleto])")
-                            const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                            const bloqueCalendario = document.createElement("div")
-                            bloqueCalendario.setAttribute("class", "bloqueCalendarioNuevo")
-                            // bloqueCalendario.style.top = PosicionAlto + "px"
-                            const cartelInfoCalendarioEstado = document.createElement("div")
-                            cartelInfoCalendarioEstado.setAttribute("class", "cartelInfoCalendarioEstado")
-                            cartelInfoCalendarioEstado.setAttribute("componente", "infoCalendario")
-                            if (!fechaEntradaVolatil_Humana) {
-                                const error = "Por favor, selecciona la fecha de entrada haciendo clic en el recuadro correspondiente y elige la fecha deseada en el calendario desplegable."
-                                return casaVitini.ui.componentes.advertenciaInmersiva(error)
-                            }
-                            if (!fechaSalidaVolatil_Humana) {
-                                const error = "Selecciona una fecha de salida pulsando en el cuadro de fecha de salida y seleccionando la fecha en el calendario flotante"
-                                return casaVitini.ui.componentes.advertenciaInmersiva(error)
-                            }
-                            //document.body.classList.add("fondoConDesenfoque")
-                            document.querySelector(".bloquePernoctacion")?.remove()
-                            document.querySelector(".bloqueBotonResumenReserva")?.remove()
-                            document.querySelectorAll("[componente=superBloque]").forEach((contenedorAlojamientoRenderizado) => {
-                                contenedorAlojamientoRenderizado.remove()
-                            })
-                            const contenedorBusquedaAlojamiento = document.querySelector("[contenedor=busquedaAlojamiento]")
-                            const superBloqueReserva = document.createElement("div")
-                            superBloqueReserva.classList.add("plaza_alojamiento_superBloque")
-                            superBloqueReserva.setAttribute("componente", "superBloque")
-                            superBloqueReserva.setAttribute("instanciaUID", instanciaUID)
-                            const contenedorEstadoBusqueda = document.createElement("div")
-                            contenedorEstadoBusqueda.classList.add("plaza_alojamiento_contenedorEsperaAlojamiento")
-                            const spinnerContainer = document.createElement('div');
-                            spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
-                            spinnerContainer.classList.add("lds-spinner");
-                            for (let i = 0; i < 12; i++) {
-                                const div = document.createElement('div');
-                                spinnerContainer.appendChild(div);
-                            }
-                            contenedorEstadoBusqueda.appendChild(spinnerContainer)
-                            const info = document.createElement("div")
-                            info.setAttribute("class", "advertenciaInfoFlujoPago")
-                            info.setAttribute("componente", "mensajeFlujoPasarela")
-                            info.innerText = "Buscando alojamiento..."
-                            contenedorEstadoBusqueda.appendChild(info)
-                            const boton = document.createElement("div")
-                            boton.setAttribute("class", "errorBoton")
-                            boton.classList.add("blur")
-                            boton.innerText = "Cancelar"
-                            boton.addEventListener("click", () => {
-                                document.querySelector(`[instanciaUID="${instanciaUID}"]`).remove()
-                                document.body.removeAttribute("class")
-                            })
-                            contenedorEstadoBusqueda.appendChild(boton)
-                            superBloqueReserva.appendChild(contenedorEstadoBusqueda)
-                            contenedorBusquedaAlojamiento.appendChild(superBloqueReserva)
-                            const botonBorrarBusquedaAlojamiento = document.querySelector("[componente=botonBorrarBusquedaAlojamiento]")
-                            botonBorrarBusquedaAlojamiento.style.display = "flex"
-                            const fechaEntradaArray = fechaEntradaVolatil_Humana.split("/")
-                            const fechaSalidaArray = fechaSalidaVolatil_Humana.split("/")
-                            const diaEntrada = fechaEntradaArray[0].padStart("2", 0)
-                            const mesEntrada = fechaEntradaArray[1].padStart("2", 0)
-                            const anoEntrada = fechaEntradaArray[2].padStart("4", 0)
-                            const diaSalida = fechaSalidaArray[0].padStart("2", 0)
-                            const mesSalida = fechaSalidaArray[1].padStart("2", 0)
-                            const anoSalida = fechaSalidaArray[2].padStart("4", 0)
-                            const fechaEntrada = `${diaEntrada}/${mesEntrada}/${anoEntrada}`
-                            const fechaSalida = `${diaSalida}/${mesSalida}/${anoSalida}`
-                            document.querySelector("[componente=botonDisponibilidad]").classList.remove("parpadeaFondo")
-                            const transaccion = {
-                                zona: "plaza/reservas/apartamentosDisponiblesPublico",
-                                entrada: fechaEntrada,
-                                salida: fechaSalida
-                            }
-                            const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                            if (!document.querySelector(`[instanciaUID="${instanciaUID}"]`)) {
-                                return
-                            }
-                            let apartamentosDisponibles
-                            if (respuestaServidor?.error) {
-                                document.querySelector(`[instanciaUID="${instanciaUID}"]`).remove()
-                                return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-                            }
-                            if (respuestaServidor.ok) {
-                                apartamentosDisponibles = respuestaServidor?.ok.apartamentosDisponibles
-                            }
-                            const superBloqueReservaRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                            superBloqueReservaRenderizado.innerHTML = null
-                            if (!superBloqueReservaRenderizado) {
-                                return
-                            }
-                            if (Object.keys(apartamentosDisponibles).length === 0) {
-                                const infoSinAlojamiento = document.createElement("p")
-                                infoSinAlojamiento.setAttribute("class", "plaza_alojamiento_infoSinAlojamientoDisponible")
-                                infoSinAlojamiento.innerText = "No hay níngun alojamiento dispopnible para las fechas seleccionadas."
-                                superBloqueReservaRenderizado.appendChild(infoSinAlojamiento);
-                                return
-                            }
-                            //document.body.classList.add("fondoConDesenfoque")
-                            const tituloBloqueAlojamiento = document.createElement("p")
-                            tituloBloqueAlojamiento.setAttribute("class", "tituloBloqueAlojamiento parpadeaFondoTransparente")
-                            tituloBloqueAlojamiento.setAttribute("componente", "tituloInfoSeleccionar")
-                            tituloBloqueAlojamiento.innerText = "Aquí tienes el alojamiento disponible para seleccionar."
-                            superBloqueReservaRenderizado.appendChild(tituloBloqueAlojamiento);
-                            const bloqueAlojamientoUI = document.createElement("div")
-                            bloqueAlojamientoUI.classList.add("bloqueAlojamiento")
-                            bloqueAlojamientoUI.setAttribute("contenedor", "alojamiento")
-                            superBloqueReservaRenderizado.appendChild(bloqueAlojamientoUI)
-                            const desgloseTotalesPorApartmentos = respuestaServidor?.ok.desgloseFinanciero.totalesPorApartamento
-                            const desgloseTotalesFormateado = {}
-                            desgloseTotalesPorApartmentos.forEach((detallesApartamento) => {
-                                const apartamentoIDV = detallesApartamento.apartamentoIDV
-                                desgloseTotalesFormateado[apartamentoIDV] = detallesApartamento
-                            })
-                            for (const apartamento of Object.entries(apartamentosDisponibles)) {
-                                const apartamentoIDV = apartamento[0]
-                                const apartamentoUI = apartamento[1].apartamentoUI
-                                const habitaciones = apartamento[1].habitaciones
-                                const caracteristicas = apartamento[1].caracteristicas
-                                // let precioBrutoPorDia = apartamento[1].preciosTotales.totalBrutoPordia
-                                const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                                const bloqueApartamento = document.createElement("div")
-                                bloqueApartamento.setAttribute("class", "plaza_alojamiento_contenedorApartamento")
-                                bloqueApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-                                bloqueApartamento.setAttribute("apartamentoUI", apartamentoUI)
-                                bloqueApartamento.setAttribute("instanciaUID", instanciaUID)
-                                bloqueApartamento.setAttribute("habitaciones", JSON.stringify(habitaciones))
-                                bloqueApartamento.addEventListener("click", (e) => {
-                                    const selectorApartamento = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
-                                    const selectorSelectorApartamento = selectorApartamento.querySelector("[componente=selectorApartamento]")
-                                    if (selectorApartamento.getAttribute("estadoApartamento") !== "seleccionado") {
-                                        selectorApartamento.setAttribute("estadoApartamento", "seleccionado")
-                                        selectorSelectorApartamento.style.opacity = "1"
-                                    } else {
-                                        selectorApartamento.removeAttribute("estadoApartamento")
-                                        selectorSelectorApartamento.removeAttribute("style")
-                                    }
-                                    const selectorApartamentosSeleccionados = document.querySelectorAll("[estadoApartamento=seleccionado]")
-                                    const marcoFlotante = document.querySelector("[componente=marcoFlotanteIrAResumen]")
-                                    const selectorInfoTextoParpadeo = document.querySelector("[componente=tituloInfoSeleccionar]")
-                                    if (selectorApartamentosSeleccionados.length > 0) {
-                                        selectorInfoTextoParpadeo.classList.remove("parpadeaFondoTransparente")
-                                        marcoFlotante.style.opacity = "1"
-                                        marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
-                                            .style.pointerEvents = "all"
-                                    } else {
-                                        selectorInfoTextoParpadeo.classList.add("parpadeaFondoTransparente")
-                                        marcoFlotante.removeAttribute("style")
-                                        marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
-                                            .removeAttribute("style")
-                                    }
-                                })
-                                const bloqueImagen = document.createElement("div")
-                                bloqueImagen.setAttribute("class", "bloqueImagen")
-                                // bloqueTituloImagen.appendChild(bloqueImagen)
-                                const contenedorTitulo = document.createElement("div")
-                                contenedorTitulo.classList.add("plaza_alojamiento_contenedorApartamento_contenedorTitulo")
-                                const bloqueVerticalTitulo = document.createElement("div")
-                                bloqueVerticalTitulo.setAttribute("class", "bloqueVerticalTitulo")
-                                const elementoTituloNombre = document.createElement("div")
-                                elementoTituloNombre.setAttribute("class", "elementoTituloPrincipal")
-                                elementoTituloNombre.innerText = apartamentoUI
-                                bloqueVerticalTitulo.appendChild(elementoTituloNombre)
-                                const bloqueTituloApartamentoComponenteUI = document.createElement("div")
-                                bloqueTituloApartamentoComponenteUI.setAttribute("class", "tituloApartamentoComponenteUI")
-                                bloqueVerticalTitulo.appendChild(bloqueTituloApartamentoComponenteUI)
-                                contenedorTitulo.appendChild(bloqueVerticalTitulo)
-                                const bloqueCaracteristicas = document.createElement("div")
-                                bloqueCaracteristicas.classList.add("plaza_alojamiento_contenedorApartmento_contenedorCaracteristicas")
-                                for (const caracteristica of caracteristicas) {
-                                    const caracteristicaUI = document.createElement("div")
-                                    caracteristicaUI.classList.add("plaza_alojamiento_contenedorCaracteristicas_caracteristicas")
-                                    caracteristicaUI.innerText = caracteristica.caracteristica
-                                    bloqueCaracteristicas.appendChild(caracteristicaUI)
-                                }
-                                contenedorTitulo.appendChild(bloqueCaracteristicas)
-                                bloqueApartamento.appendChild(contenedorTitulo)
-                                const elementoTituloCocina = document.createElement("div")
-                                elementoTituloCocina.setAttribute("class", "elementoTitulo")
-                                elementoTituloCocina.innerText = `${desgloseTotalesFormateado[apartamentoIDV].totalBrutoRango}$ Total con impuestos incluidos`
-                                bloqueTituloApartamentoComponenteUI.appendChild(elementoTituloCocina)
-                                const bloqueHabitaciones = document.createElement("div")
-                                bloqueHabitaciones.classList.add("plaza_alojamiento_contenedorApartmento_contenedorHabitaciones")
-                                bloqueHabitaciones.setAttribute("componente", "bloqueHabitaciones")
-                                const checkUI = document.createElement("div")
-                                checkUI.classList.add("plaza_alojamiento_contenedorApartmento_check")
-                                checkUI.setAttribute("componente", "selectorApartamento")
-                                checkUI.innerText = "Seleccionado"
-                                bloqueApartamento.appendChild(checkUI)
-                                for (const habitacion of Object.entries(habitaciones)) {
-                                    const habitacionIDV = habitacion[0]
-                                    const habitacionUI = habitacion[1].habitacionUI
-                                    const configuracionesHabitacion = habitacion[1].configuraciones
-                                    const numeroDeCamasPorHabitacion = Object.keys(configuracionesHabitacion).length
-                                    const habitacionBloque = document.createElement("div")
-                                    habitacionBloque.setAttribute("class", "habitacion")
-                                    habitacionBloque.setAttribute("componente", "habitacacionContenedor")
-                                    habitacionBloque.setAttribute("habitacionIDV", habitacionIDV)
-                                    habitacionBloque.addEventListener("click", (e) => {
-                                        // e.stopPropagation()
-                                    })
-                                    const habitacionNombre = document.createElement("div")
-                                    habitacionNombre.setAttribute("class", "habitacionNombre")
-                                    habitacionNombre.innerText = habitacionUI
-                                    habitacionBloque.appendChild(habitacionNombre)
-                                    if (numeroDeCamasPorHabitacion > 1) {
-                                        const infoHabitacion = document.createElement("div")
-                                        infoHabitacion.classList.add("plaza_alojamiento_contenedorHabitacion_infoSeleccionTipoCama")
-                                        infoHabitacion.setAttribute("componente", "infoSeleccionCama")
-                                        infoHabitacion.innerText = "Selecciona el tipo de cama para la habitación."
-                                        habitacionBloque.appendChild(infoHabitacion)
-                                    }
-                                    if (numeroDeCamasPorHabitacion === 1) {
-                                        const infoHabitacion = document.createElement("div")
-                                        infoHabitacion.classList.add("plaza_alojamiento_contenedorHabitacion_infoSeleccionTipoCama")
-                                        infoHabitacion.innerText = "Esta habitación solo dispone de este tipo de cama. Al seleccionar este apartamento, se selecciona esta cama para esta habitación"
-                                        habitacionBloque.appendChild(infoHabitacion)
-                                    }
-                                    const bloqueHabitacionCamas = document.createElement("div")
-                                    bloqueHabitacionCamas.setAttribute("class", "bloqueHabitacion")
-                                    // 
-                                    for (const configuracionHabitacion of Object.entries(configuracionesHabitacion)) {
-                                        const camaIDV = configuracionHabitacion[1].camaIDV
-                                        const camaUI = configuracionHabitacion[1].camaUI
-                                        const capacidad = configuracionHabitacion[1].capacidad
-                                        const bloqueCama = document.createElement("div")
-                                        bloqueCama.setAttribute("class", "habitacionCamas")
-                                        bloqueCama.setAttribute("camaIDV", camaIDV)
-                                        bloqueCama.setAttribute("capacidadPernoctativa", capacidad)
-                                        bloqueCama.setAttribute("componente", "botonSelectorCama")
-                                        bloqueCama.innerText = camaUI
-                                        if (numeroDeCamasPorHabitacion > 1) {
-                                            bloqueCama.addEventListener("click", (e) => {
-                                                e.stopPropagation()
-                                                const datosCama = {
-                                                    apartamentoIDV: apartamentoIDV,
-                                                    habitacionIDV: habitacionIDV,
-                                                    camaIDV: camaIDV
-                                                }
-                                                casaVitini.ui.vistas.reservasNuevo.seleccionarCama(datosCama)
-                                            })
-                                        }
-                                        bloqueHabitacionCamas.appendChild(bloqueCama)
-                                        habitacionBloque.appendChild(bloqueCama)
-                                    }
-                                    //   bloqueHabitacionCamas.appendChild(habitacionNombre)
-                                    bloqueHabitaciones.appendChild(habitacionBloque)
-                                }
-                                // bloqueTituloImagen.appendChild(bloqueHabitaciones)
-                                bloqueAlojamientoUI.appendChild(bloqueApartamento)
-                                const metadatos = {
-                                    apartamentoIDV: apartamentoIDV,
-                                    instanciaUID: instanciaUID,
-                                }
-                                casaVitini.ui.vistas.reservasNuevo.obtenerImagenApartamento(metadatos)
-                                // Imagen apartamento aqui
-                            }
-                            const marcoBotonFlotanteIrAResumenReserva = document.createElement("div")
-                            marcoBotonFlotanteIrAResumenReserva.classList.add("plaza_alojamiento_marcoBotonIreAResumenReserva")
-                            marcoBotonFlotanteIrAResumenReserva.setAttribute("componente", "marcoFlotanteIrAResumen")
-                            const marcoIntermedio = document.createElement("div")
-                            marcoIntermedio.classList.add("plaza_alojamiento_marcoIntermedioBotonIrResumenReserva")
-                            const botonResumenReserva = document.createElement("div")
-                            botonResumenReserva.classList.add("plaza_alojamiento_boronResumenReservaEnMarcoFlotante")
-                            botonResumenReserva.classList.add("parpadeaFondoSemiBlanco")
-                            botonResumenReserva.setAttribute("componente", "botonIrAResumenReserva")
-                            botonResumenReserva.innerText = "Ir al resumen de mi reserva"
-                            botonResumenReserva.addEventListener("click", casaVitini.ui.vistas.reservasNuevo.iraResumenReserva)
-                            marcoIntermedio.append(botonResumenReserva)
-                            marcoBotonFlotanteIrAResumenReserva.append(marcoIntermedio)
-                            superBloqueReservaRenderizado.appendChild(marcoBotonFlotanteIrAResumenReserva)
+                        let reservaLocal = JSON.parse(localStorage.getItem("reserva"))
+                        let seccion = document.querySelector("section:not([estado=obsoleto])")
+                        const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                        const bloqueCalendario = document.createElement("div")
+                        bloqueCalendario.setAttribute("class", "bloqueCalendarioNuevo")
+                        // bloqueCalendario.style.top = PosicionAlto + "px"
+                        const cartelInfoCalendarioEstado = document.createElement("div")
+                        cartelInfoCalendarioEstado.setAttribute("class", "cartelInfoCalendarioEstado")
+                        cartelInfoCalendarioEstado.setAttribute("componente", "infoCalendario")
+                        if (!fechaEntradaVolatil_Humana) {
+                            const error = "Por favor, selecciona la fecha de entrada haciendo clic en el recuadro correspondiente y elige la fecha deseada en el calendario desplegable."
+                            return casaVitini.ui.componentes.advertenciaInmersiva(error)
                         }
+                        if (!fechaSalidaVolatil_Humana) {
+                            const error = "Selecciona una fecha de salida pulsando en el cuadro de fecha de salida y seleccionando la fecha en el calendario flotante"
+                            return casaVitini.ui.componentes.advertenciaInmersiva(error)
+                        }
+
+                        //document.body.classList.add("fondoConDesenfoque")
+                        document.querySelector(".bloquePernoctacion")?.remove()
+                        document.querySelector(".bloqueBotonResumenReserva")?.remove()
+                        document.querySelectorAll("[componente=superBloque]").forEach((contenedorAlojamientoRenderizado) => {
+                            contenedorAlojamientoRenderizado.remove()
+                        })
+                        const contenedorBusquedaAlojamiento = document.querySelector("[contenedor=busquedaAlojamiento]")
+                        const superBloqueReserva = document.createElement("div")
+                        superBloqueReserva.classList.add("plaza_alojamiento_superBloque")
+                        superBloqueReserva.setAttribute("componente", "superBloque")
+                        superBloqueReserva.setAttribute("instanciaUID", instanciaUID)
+                        const contenedorEstadoBusqueda = document.createElement("div")
+                        contenedorEstadoBusqueda.classList.add("plaza_alojamiento_contenedorEsperaAlojamiento")
+                        const spinnerContainer = document.createElement('div');
+                        spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
+                        spinnerContainer.classList.add("lds-spinner");
+                        for (let i = 0; i < 12; i++) {
+                            const div = document.createElement('div');
+                            spinnerContainer.appendChild(div);
+                        }
+                        contenedorEstadoBusqueda.appendChild(spinnerContainer)
+                        const info = document.createElement("div")
+                        info.setAttribute("class", "advertenciaInfoFlujoPago")
+                        info.setAttribute("componente", "mensajeFlujoPasarela")
+                        info.innerText = "Buscando alojamiento..."
+                        contenedorEstadoBusqueda.appendChild(info)
+                        const boton = document.createElement("div")
+                        boton.setAttribute("class", "errorBoton")
+                        boton.classList.add("blur")
+                        boton.innerText = "Cancelar"
+                        boton.addEventListener("click", () => {
+                            document.querySelector(`[instanciaUID="${instanciaUID}"]`).remove()
+                            document.body.removeAttribute("class")
+                        })
+                        contenedorEstadoBusqueda.appendChild(boton)
+                        superBloqueReserva.appendChild(contenedorEstadoBusqueda)
+                        contenedorBusquedaAlojamiento.appendChild(superBloqueReserva)
+                        const botonBorrarBusquedaAlojamiento = document.querySelector("[componente=botonBorrarBusquedaAlojamiento]")
+                        botonBorrarBusquedaAlojamiento.style.display = "flex"
+
+                        const fechaEntrada_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaEntradaVolatil_Humana)
+                        const fechaSalida_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaSalidaVolatil_Humana)
+
+                        const fechaEntradaArray = fechaEntradaVolatil_Humana.split("/")
+                        const fechaSalidaArray = fechaSalidaVolatil_Humana.split("/")
+                        const diaEntrada = fechaEntradaArray[0].padStart("2", 0)
+                        const mesEntrada = fechaEntradaArray[1].padStart("2", 0)
+                        const anoEntrada = fechaEntradaArray[2].padStart("4", 0)
+                        const diaSalida = fechaSalidaArray[0].padStart("2", 0)
+                        const mesSalida = fechaSalidaArray[1].padStart("2", 0)
+                        const anoSalida = fechaSalidaArray[2].padStart("4", 0)
+                        const fechaEntrada = `${diaEntrada}/${mesEntrada}/${anoEntrada}`
+                        const fechaSalida = `${diaSalida}/${mesSalida}/${anoSalida}`
+                        document.querySelector("[componente=botonDisponibilidad]").classList.remove("parpadeaFondo")
+                        const transaccion = {
+                            zona: "plaza/reservas/apartamentosDisponiblesPublico",
+                            fechaEntrada: fechaEntrada_ISO,
+                            fechaSalida: fechaSalida_ISO
+                        }
+                        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                        console.log("respuesataServ", respuestaServidor)
+                        if (!document.querySelector(`[instanciaUID="${instanciaUID}"]`)) {
+                            return
+                        }
+                        let apartamentosDisponibles
+                        if (respuestaServidor?.error) {
+                            document.querySelector(`[instanciaUID="${instanciaUID}"]`).remove()
+                            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                        }
+                        if (respuestaServidor.ok) {
+                            apartamentosDisponibles = respuestaServidor?.ok.apartamentosDisponibles
+                        }
+                        const superBloqueReservaRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                        superBloqueReservaRenderizado.innerHTML = null
+                        if (!superBloqueReservaRenderizado) {
+                            return
+                        }
+                        if (Object.keys(apartamentosDisponibles).length === 0) {
+                            const infoSinAlojamiento = document.createElement("p")
+                            infoSinAlojamiento.setAttribute("class", "plaza_alojamiento_infoSinAlojamientoDisponible")
+                            infoSinAlojamiento.innerText = "No hay níngun alojamiento dispopnible para las fechas seleccionadas."
+                            superBloqueReservaRenderizado.appendChild(infoSinAlojamiento);
+                            return
+                        }
+                        //document.body.classList.add("fondoConDesenfoque")
+                        const tituloBloqueAlojamiento = document.createElement("p")
+                        tituloBloqueAlojamiento.setAttribute("class", "tituloBloqueAlojamiento parpadeaFondoTransparente")
+                        tituloBloqueAlojamiento.setAttribute("componente", "tituloInfoSeleccionar")
+                        tituloBloqueAlojamiento.innerText = "Aquí tienes el alojamiento disponible para seleccionar."
+                        superBloqueReservaRenderizado.appendChild(tituloBloqueAlojamiento);
+                        const bloqueAlojamientoUI = document.createElement("div")
+                        bloqueAlojamientoUI.classList.add("bloqueAlojamiento")
+                        bloqueAlojamientoUI.setAttribute("contenedor", "alojamiento")
+                        superBloqueReservaRenderizado.appendChild(bloqueAlojamientoUI)
+                        const desgloseTotalesPorApartmentos = respuestaServidor?.ok.desgloseFinanciero.totalesPorApartamento
+                        const desgloseTotalesFormateado = {}
+                        desgloseTotalesPorApartmentos.forEach((detallesApartamento) => {
+                            const apartamentoIDV = detallesApartamento.apartamentoIDV
+                            desgloseTotalesFormateado[apartamentoIDV] = detallesApartamento
+                        })
+                        for (const apartamento of Object.entries(apartamentosDisponibles)) {
+                            const apartamentoIDV = apartamento[0]
+                            const apartamentoUI = apartamento[1].apartamentoUI
+                            const habitaciones = apartamento[1].habitaciones
+                            const caracteristicas = apartamento[1].caracteristicas
+                            // let precioBrutoPorDia = apartamento[1].preciosTotales.totalBrutoPordia
+                            const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                            const bloqueApartamento = document.createElement("div")
+                            bloqueApartamento.setAttribute("class", "plaza_alojamiento_contenedorApartamento")
+                            bloqueApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
+                            bloqueApartamento.setAttribute("apartamentoUI", apartamentoUI)
+                            bloqueApartamento.setAttribute("instanciaUID", instanciaUID)
+                            bloqueApartamento.setAttribute("habitaciones", JSON.stringify(habitaciones))
+                            bloqueApartamento.addEventListener("click", (e) => {
+                                const selectorApartamento = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
+                                const selectorSelectorApartamento = selectorApartamento.querySelector("[componente=selectorApartamento]")
+                                if (selectorApartamento.getAttribute("estadoApartamento") !== "seleccionado") {
+                                    selectorApartamento.setAttribute("estadoApartamento", "seleccionado")
+                                    selectorSelectorApartamento.style.opacity = "1"
+                                } else {
+                                    selectorApartamento.removeAttribute("estadoApartamento")
+                                    selectorSelectorApartamento.removeAttribute("style")
+                                }
+                                const selectorApartamentosSeleccionados = document.querySelectorAll("[estadoApartamento=seleccionado]")
+                                const marcoFlotante = document.querySelector("[componente=marcoFlotanteIrAResumen]")
+                                const selectorInfoTextoParpadeo = document.querySelector("[componente=tituloInfoSeleccionar]")
+                                if (selectorApartamentosSeleccionados.length > 0) {
+                                    selectorInfoTextoParpadeo.classList.remove("parpadeaFondoTransparente")
+                                    marcoFlotante.style.opacity = "1"
+                                    marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
+                                        .style.pointerEvents = "all"
+                                } else {
+                                    selectorInfoTextoParpadeo.classList.add("parpadeaFondoTransparente")
+                                    marcoFlotante.removeAttribute("style")
+                                    marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
+                                        .removeAttribute("style")
+                                }
+                            })
+                            const bloqueImagen = document.createElement("div")
+                            bloqueImagen.setAttribute("class", "bloqueImagen")
+                            // bloqueTituloImagen.appendChild(bloqueImagen)
+                            const contenedorTitulo = document.createElement("div")
+                            contenedorTitulo.classList.add("plaza_alojamiento_contenedorApartamento_contenedorTitulo")
+                            const bloqueVerticalTitulo = document.createElement("div")
+                            bloqueVerticalTitulo.setAttribute("class", "bloqueVerticalTitulo")
+                            const elementoTituloNombre = document.createElement("div")
+                            elementoTituloNombre.setAttribute("class", "elementoTituloPrincipal")
+                            elementoTituloNombre.innerText = apartamentoUI
+                            bloqueVerticalTitulo.appendChild(elementoTituloNombre)
+                            const bloqueTituloApartamentoComponenteUI = document.createElement("div")
+                            bloqueTituloApartamentoComponenteUI.setAttribute("class", "tituloApartamentoComponenteUI")
+                            bloqueVerticalTitulo.appendChild(bloqueTituloApartamentoComponenteUI)
+                            contenedorTitulo.appendChild(bloqueVerticalTitulo)
+                            const bloqueCaracteristicas = document.createElement("div")
+                            bloqueCaracteristicas.classList.add("plaza_alojamiento_contenedorApartmento_contenedorCaracteristicas")
+                            for (const caracteristica of caracteristicas) {
+                                const caracteristicaUI = document.createElement("div")
+                                caracteristicaUI.classList.add("plaza_alojamiento_contenedorCaracteristicas_caracteristicas")
+                                caracteristicaUI.innerText = caracteristica.caracteristica
+                                bloqueCaracteristicas.appendChild(caracteristicaUI)
+                            }
+                            contenedorTitulo.appendChild(bloqueCaracteristicas)
+                            bloqueApartamento.appendChild(contenedorTitulo)
+                            const elementoTituloCocina = document.createElement("div")
+                            elementoTituloCocina.setAttribute("class", "elementoTitulo")
+                            elementoTituloCocina.innerText = `${desgloseTotalesFormateado[apartamentoIDV].totalBrutoRango}$ Total con impuestos incluidos`
+                            bloqueTituloApartamentoComponenteUI.appendChild(elementoTituloCocina)
+                            const bloqueHabitaciones = document.createElement("div")
+                            bloqueHabitaciones.classList.add("plaza_alojamiento_contenedorApartmento_contenedorHabitaciones")
+                            bloqueHabitaciones.setAttribute("componente", "bloqueHabitaciones")
+                            const checkUI = document.createElement("div")
+                            checkUI.classList.add("plaza_alojamiento_contenedorApartmento_check")
+                            checkUI.setAttribute("componente", "selectorApartamento")
+                            checkUI.innerText = "Seleccionado"
+                            bloqueApartamento.appendChild(checkUI)
+                            for (const habitacion of Object.entries(habitaciones)) {
+                                const habitacionIDV = habitacion[0]
+                                const habitacionUI = habitacion[1].habitacionUI
+                                const configuracionesHabitacion = habitacion[1].configuraciones
+                                const numeroDeCamasPorHabitacion = Object.keys(configuracionesHabitacion).length
+                                const habitacionBloque = document.createElement("div")
+                                habitacionBloque.setAttribute("class", "habitacion")
+                                habitacionBloque.setAttribute("componente", "habitacacionContenedor")
+                                habitacionBloque.setAttribute("habitacionIDV", habitacionIDV)
+                                habitacionBloque.addEventListener("click", (e) => {
+                                    // e.stopPropagation()
+                                })
+                                const habitacionNombre = document.createElement("div")
+                                habitacionNombre.setAttribute("class", "habitacionNombre")
+                                habitacionNombre.innerText = habitacionUI
+                                habitacionBloque.appendChild(habitacionNombre)
+                                if (numeroDeCamasPorHabitacion > 1) {
+                                    const infoHabitacion = document.createElement("div")
+                                    infoHabitacion.classList.add("plaza_alojamiento_contenedorHabitacion_infoSeleccionTipoCama")
+                                    infoHabitacion.setAttribute("componente", "infoSeleccionCama")
+                                    infoHabitacion.innerText = "Selecciona el tipo de cama para la habitación."
+                                    habitacionBloque.appendChild(infoHabitacion)
+                                }
+                                if (numeroDeCamasPorHabitacion === 1) {
+                                    const infoHabitacion = document.createElement("div")
+                                    infoHabitacion.classList.add("plaza_alojamiento_contenedorHabitacion_infoSeleccionTipoCama")
+                                    infoHabitacion.innerText = "Esta habitación solo dispone de este tipo de cama. Al seleccionar este apartamento, se selecciona esta cama para esta habitación"
+                                    habitacionBloque.appendChild(infoHabitacion)
+                                }
+                                const bloqueHabitacionCamas = document.createElement("div")
+                                bloqueHabitacionCamas.setAttribute("class", "bloqueHabitacion")
+                                // 
+                                for (const configuracionHabitacion of Object.entries(configuracionesHabitacion)) {
+                                    const camaIDV = configuracionHabitacion[1].camaIDV
+                                    const camaUI = configuracionHabitacion[1].camaUI
+                                    const capacidad = configuracionHabitacion[1].capacidad
+                                    const bloqueCama = document.createElement("div")
+                                    bloqueCama.setAttribute("class", "habitacionCamas")
+                                    bloqueCama.setAttribute("camaIDV", camaIDV)
+                                    bloqueCama.setAttribute("capacidadPernoctativa", capacidad)
+                                    bloqueCama.setAttribute("componente", "botonSelectorCama")
+                                    bloqueCama.innerText = camaUI
+                                    if (numeroDeCamasPorHabitacion > 1) {
+                                        bloqueCama.addEventListener("click", (e) => {
+                                            e.stopPropagation()
+                                            const datosCama = {
+                                                apartamentoIDV: apartamentoIDV,
+                                                habitacionIDV: habitacionIDV,
+                                                camaIDV: camaIDV
+                                            }
+                                            casaVitini.ui.vistas.reservasNuevo.seleccionarCama(datosCama)
+                                        })
+                                    }
+                                    bloqueHabitacionCamas.appendChild(bloqueCama)
+                                    habitacionBloque.appendChild(bloqueCama)
+                                }
+                                //   bloqueHabitacionCamas.appendChild(habitacionNombre)
+                                bloqueHabitaciones.appendChild(habitacionBloque)
+                            }
+                            // bloqueTituloImagen.appendChild(bloqueHabitaciones)
+                            bloqueAlojamientoUI.appendChild(bloqueApartamento)
+                            const metadatos = {
+                                apartamentoIDV: apartamentoIDV,
+                                instanciaUID: instanciaUID,
+                            }
+                            casaVitini.ui.vistas.reservasNuevo.obtenerImagenApartamento(metadatos)
+                            // Imagen apartamento aqui
+                        }
+                        const marcoBotonFlotanteIrAResumenReserva = document.createElement("div")
+                        marcoBotonFlotanteIrAResumenReserva.classList.add("plaza_alojamiento_marcoBotonIreAResumenReserva")
+                        marcoBotonFlotanteIrAResumenReserva.setAttribute("componente", "marcoFlotanteIrAResumen")
+                        const marcoIntermedio = document.createElement("div")
+                        marcoIntermedio.classList.add("plaza_alojamiento_marcoIntermedioBotonIrResumenReserva")
+                        const botonResumenReserva = document.createElement("div")
+                        botonResumenReserva.classList.add("plaza_alojamiento_boronResumenReservaEnMarcoFlotante")
+                        botonResumenReserva.classList.add("parpadeaFondoSemiBlanco")
+                        botonResumenReserva.setAttribute("componente", "botonIrAResumenReserva")
+                        botonResumenReserva.innerText = "Ir al resumen de mi reserva"
+                        botonResumenReserva.addEventListener("click", casaVitini.ui.vistas.reservasNuevo.iraResumenReserva)
+                        marcoIntermedio.append(botonResumenReserva)
+                        marcoBotonFlotanteIrAResumenReserva.append(marcoIntermedio)
+                        superBloqueReservaRenderizado.appendChild(marcoBotonFlotanteIrAResumenReserva)
+
                     } catch (errorCapturado) {
                         const mensajeError = errorCapturado.message
                         casaVitini.ui.componentes.advertenciaInmersiva(mensajeError)
@@ -7091,7 +6854,7 @@ const casaVitini = {
                         }
                         const instanciaUID_contenedorFechas = metadatos.instanciaUID_contenedorFechas
                         if (!instanciaUID_contenedorFechas) {
-                            const error = "El contructor del calendario necesita una instanciaUID_destinoSeleccionDia para calendario"
+                            const error = "El contructor del calendario necesita una instanciaUID_contenedorFechas para calendario"
                             throw new Error(error)
                         }
                         const metodoSelectorDia = metadatos.metodoSelectorDia
@@ -7137,7 +6900,7 @@ const casaVitini = {
                         botonNavegacionMesAtras.setAttribute("id", "botonAtras")
                         botonNavegacionMesAtras.setAttribute("sentido", "atras")
                         botonNavegacionMesAtras.innerText = "Atras"
-                        botonNavegacionMesAtras.addEventListener("click", casaVitini.componentes.navegacionCalendarioNuevo)
+                        botonNavegacionMesAtras.addEventListener("click", casaVitini.ui.componentes.calendario.navegacionCalendarioNuevo)
                         navegacionMes.appendChild(botonNavegacionMesAtras)
                         const navegacionMesReferencia = document.createElement("div")
                         navegacionMesReferencia.setAttribute("id", "navegacionMesReferencia")
@@ -7149,7 +6912,7 @@ const casaVitini = {
                         botonNavegacionMesAdelante.setAttribute("id", "botonAdelante")
                         botonNavegacionMesAdelante.innerText = "Adelante"
                         botonNavegacionMesAdelante.setAttribute("sentido", "adelante")
-                        botonNavegacionMesAdelante.addEventListener("click", casaVitini.componentes.navegacionCalendarioNuevo)
+                        botonNavegacionMesAdelante.addEventListener("click", casaVitini.ui.componentes.calendario.navegacionCalendarioNuevo)
                         navegacionMes.appendChild(botonNavegacionMesAdelante)
                         const marcoMes = document.createElement("ol")
                         marcoMes.setAttribute("id", "marcoMes")
@@ -7203,29 +6966,28 @@ const casaVitini = {
                     const metodoAlternativo = data.metodoAlternativo
                     const instanciaUID_contenedorFechas = data.instanciaUID_contenedorFechas
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-
+                    const metodoSelectorDia = data?.metodoSelectorDia || "casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia"
                     const areaContenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
 
-                    const botonID = e.target.closest("[componente]").getAttribute("componente")
+                    const rangoIDV = data.rangoIDV
                     const alturaDinamicaArriba = casaVitini.utilidades.observador.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(e.target.closest("[calendario]")) + 20
                     const bloqueCalendario = document.querySelector("[componente=bloqueCalendario]")
                     const selectorCalendario = document.querySelector("[contenedor=calendario]")
                     const fechaEntradaVolatil_Humana = areaContenedorFechas.querySelector("[calendario=entrada]").
                         getAttribute("memoriaVolatil")
-
-                    const fechaEntradaAarray = fechaEntradaVolatil_Humana?.split("/")
+                    const fechaEntradaAarray = fechaEntradaVolatil_Humana?.split("/") ? fechaEntradaVolatil_Humana?.split("/") : []
                     const diaSeleccionadoEntrada = Number(fechaEntradaAarray[0])
                     const mesSeleccionadoEntrada = Number(fechaEntradaAarray[1])
                     const anoSeleccionadoEntrada = Number(fechaEntradaAarray[2])
 
                     const fechaSalidaVolatil_Humana = areaContenedorFechas.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
 
-                    const fechaSaliraArray = fechaSalidaVolatil_Humana?.split("/")
+                    const fechaSaliraArray = fechaSalidaVolatil_Humana?.split("/") ? fechaEntradaVolatil_Humana?.split("/") : []
                     const diaSeleccionadoSalida = Number(fechaSaliraArray[0])
                     const mesSeleccionadoSalida = Number(fechaSaliraArray[1])
                     const anoSeleccionadoSalida = Number(fechaSaliraArray[2])
 
-                    if (botonID === "inicioOferta") {
+                    if (rangoIDV === "inicioRango") {
                         if (selectorCalendario?.getAttribute("calendarioIO") === "salida") {
                             bloqueCalendario.remove()
                             document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
@@ -7233,7 +6995,7 @@ const casaVitini = {
                         if (selectorCalendario?.getAttribute("calendarioIO") === "entrada") {
                             bloqueCalendario.remove()
                             document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-
+                            return
                         }
                         if (fechaEntradaVolatil_Humana) {
                             const calendario = {
@@ -7254,7 +7016,7 @@ const casaVitini = {
                                 instanciaUID: instanciaUID,
                                 instanciaUID_contenedorFechas,
                                 metodoAlternativo,
-                                metodoSelectorDia: "casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia",
+                                metodoSelectorDia,
                                 seleccionableDiaLimite: "si"
                             }
                             casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(tipoFecha)
@@ -7262,7 +7024,7 @@ const casaVitini = {
                             const calendarioResuelvo = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
                             calendarioResuelvo.instanciaUID = instanciaUID
                             calendarioResuelvo.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
-                            casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelvo)
+                            await casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelvo)
                         } else {
                             const calendario = {
                                 tipo: "actual",
@@ -7278,7 +7040,7 @@ const casaVitini = {
                                 alturaDinamica: alturaDinamicaArriba,
                                 instanciaUID: instanciaUID,
                                 instanciaUID_contenedorFechas,
-                                metodoSelectorDia: "casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia",
+                                metodoSelectorDia,
                                 seleccionableDiaLimite: "si"
                             }
                             casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(tipoFecha)
@@ -7286,11 +7048,9 @@ const casaVitini = {
                             const calendarioResuelvo = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
                             calendarioResuelvo.instanciaUID = instanciaUID
                             calendarioResuelvo.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
-
-                            casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelvo)
+                            await casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelvo)
                         }
-                    }
-                    if (botonID === "finOferta") {
+                    } else if (rangoIDV === "finalRango") {
                         if (selectorCalendario?.getAttribute("calendarioIO") === "salida") {
                             bloqueCalendario.remove()
                             document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
@@ -7317,7 +7077,7 @@ const casaVitini = {
                                 instanciaUID_contenedorFechas,
                                 metodoAlternativo,
                                 instanciaUID: instanciaUID,
-                                metodoSelectorDia: "casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia",
+                                metodoSelectorDia,
                                 seleccionableDiaLimite: "si"
                             }
                             casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(tipoFecha)
@@ -7326,7 +7086,7 @@ const casaVitini = {
                             calendarioResuelvo.instanciaUID = instanciaUID
                             calendarioResuelvo.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
 
-                            casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelvo)
+                            await casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelvo)
                         }
                         if (fechaEntradaVolatil_Humana && !fechaSalidaVolatil_Humana) {
                             const calendario = {
@@ -7348,7 +7108,7 @@ const casaVitini = {
                                 instanciaUID: instanciaUID,
                                 instanciaUID_contenedorFechas,
                                 metodoAlternativo,
-                                metodoSelectorDia: "casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia",
+                                metodoSelectorDia,
                                 seleccionableDiaLimite: "si"
                             }
                             casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(tipoFecha)
@@ -7357,7 +7117,7 @@ const casaVitini = {
                             calendarioResuelto.tiempo = "presente"
                             calendarioResuelto.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
                             calendarioResuelto.instanciaUID = instanciaUID
-                            casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
+                            await casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
                         }
                         if (fechaSalidaVolatil_Humana) {
                             const calendario = {
@@ -7379,7 +7139,7 @@ const casaVitini = {
                                 instanciaUID: instanciaUID,
                                 instanciaUID_contenedorFechas,
                                 metodoAlternativo,
-                                metodoSelectorDia: "casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia",
+                                metodoSelectorDia,
                                 seleccionableDiaLimite: "si"
                             }
                             casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(tipoFecha)
@@ -7387,7 +7147,7 @@ const casaVitini = {
                             const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
                             calendarioResuelto.instanciaUID = instanciaUID
                             calendarioResuelto.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
-                            casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
+                            await casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
                         }
                     }
                 },
@@ -7533,9 +7293,10 @@ const casaVitini = {
                         const instanciaUID = calendario.instanciaUID
                         const instanciaUID_contenedorFechas = calendario.instanciaUID_contenedorFechas
 
-
                         const selectorCalendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                         const instanciaUID_procesoCambioMes = calendario.instanciaUID_procesoCambioMes
+                        console.log("selectorCalendarioRenderizado", selectorCalendarioRenderizado)
+
                         const metodoSelectorDia = selectorCalendarioRenderizado.querySelector("[metodoSelectorDia]").getAttribute("metodoSelectorDia")
                         if (!selectorCalendarioRenderizado) {
                             return
@@ -10295,7 +10056,7 @@ const casaVitini = {
             }
             return estructuraFinal
         },
-        codigoFechaInstancia:  () => {
+        codigoFechaInstancia: () => {
             const fecha = new Date();
             const año = fecha.getFullYear();
             const mes = String(fecha.getMonth() + 1).padStart(2, "0"); // El mes es de 0 a 11, así que sumamos 1.
@@ -10304,7 +10065,7 @@ const casaVitini = {
             const minutos = String(fecha.getMinutes()).padStart(2, "0");
             const segundos = String(fecha.getSeconds()).padStart(2, "0");
             const milisegundos = String(fecha.getMilliseconds()).padStart(3, "0");
-            const fechaNumerica =  `${año}${mes}${dia}${horas}${minutos}${segundos}${milisegundos}`;
+            const fechaNumerica = `${año}${mes}${dia}${horas}${minutos}${segundos}${milisegundos}`;
 
             // Control para cuando halla una instancia con el mismo instanciaUID
             const instanciaRenderizada = document.querySelector(`[instanciaUI="${fechaNumerica}"]`)
