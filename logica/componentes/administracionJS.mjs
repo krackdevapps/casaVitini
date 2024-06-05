@@ -15880,10 +15880,8 @@ const casaVitini = {
                     const transaccion = casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorObjeto()
                     transaccion.zona = "administracion/ofertas_nuevo/crearOferta"
 
-                    console.log("transaccion", transaccion)
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                    console.log("respuestaServidor", respuestaServidor)
                     if (!pantallaDeCargaRenderizada) {
                         return
                     }
@@ -15892,7 +15890,7 @@ const casaVitini = {
                     }
                     if (respuestaServidor?.ok) {
 
-                        console.log(respuestaServidor)
+                        
                         return
                         const nuevaOferta = respuestaServidor?.oferta.ofertaUID
                         const vista = `/administracion/gestion_de_ofertas/oferta:${nuevaOferta}`
@@ -16077,13 +16075,11 @@ const casaVitini = {
                             contenedorPorDiasPorRango.forEach((dia) => {
 
                                 const fechaDelDia = dia.getAttribute("fechaDelDia")
-                                console.log("dia", dia)
 
                                 const estructuraDescuentoPorDia = {
                                     fecha: fechaDelDia
                                 }
                                 const tipoDescuentoEnElDia = dia.querySelector("[componente=tipoDescuento]").value
-                                console.log("tipoDescuentoEnElDia", tipoDescuentoEnElDia)
                                 estructuraDescuentoPorDia.tipoDescuento = tipoDescuentoEnElDia
 
                                 if (tipoDescuentoEnElDia === "netoPorDia") {
@@ -16224,7 +16220,6 @@ const casaVitini = {
                     const instanciaUID = data.instanciaUID
                     const tipoDespliegue = data.tipoDespliegue
 
-                    console.log("instanciaUID,", instanciaUID)
 
                     document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=infoSinApartamento]`).style.display = "none"
                     const detallesApartamento = {
@@ -16386,17 +16381,14 @@ const casaVitini = {
                 opcionesOferta: (opcion) => {
                     const origen = opcion.target
                     const descuentoIDV = origen.value
-                    console.log("dexc", descuentoIDV)
                     // Primer oculta todo
                     const areaDescuentosUI = origen.closest("[contenedor=descuentos]")
-                    console.log("area", areaDescuentosUI)
                     const selectorDescuentosUI = areaDescuentosUI.querySelectorAll("[descuentoIDV]")
-                    console.log("selectorDescuentosUI", selectorDescuentosUI)
                     selectorDescuentosUI.forEach((descuentoUI) => {
                         descuentoUI.classList.add("estadoInicialInvisible")
                     })
                     areaDescuentosUI.querySelector(`[descuentoIDV="${descuentoIDV}"]`)?.classList.remove("estadoInicialInvisible")
-                    console.log(areaDescuentosUI.querySelector(`[descuentoIDV="${descuentoIDV}"]`)?.classList.remove("estadoInicialInvisible"))
+                    
                 }
             },
             detallesOferta: {
@@ -18172,7 +18164,6 @@ const casaVitini = {
                     main.setAttribute("zonaCSS", "administracion/comportamiento_de_precios/comportamientoUI")
                     const selector = document.querySelector("[componente=espacioBuscadorReservas]")
                     const comportamientoUI = casaVitini.administracion.comportamiento_de_precios.detalleUI("crearOferta")
-                    console.log("selector", selector)
                     selector.appendChild(comportamientoUI)
                 },
                 desplegarOpcionesOferta: (opcionOferta) => {
@@ -18666,7 +18657,6 @@ const casaVitini = {
                         }
                         transaccion.contenedor.apartamentos.push(apartamentoFinal)
                     })
-                    console.log("trasnaccion", transaccion)
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                     if (!instanciaRenderizada) { }
@@ -25412,7 +25402,7 @@ const casaVitini = {
                     grupoGlobalCapas.appendChild(contenedorTodosLosBloqueos)
                     contenedorMenuCapas.appendChild(grupoGlobalCapas)
                     const apartamentosLista = await casaVitini.administracion.calendario.obtenerConfiguracionesApartamento()
-                    console.log(apartamentosLista)
+                    
                     if (apartamentosLista.length > 0) {
                         const contenedorTodosLosApartamentos = document.createElement("div")
                         contenedorTodosLosApartamentos.classList.add("contenedorGrupoFondo")

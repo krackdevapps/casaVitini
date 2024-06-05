@@ -63,7 +63,6 @@ export const procesadorPrecio = async (data) => {
             fechaSalida_ISO: fechaSalida,
             apartamentosArray
         })
-
         if (capaOfertas === "si") {
             const zonasDeLaOferta = validadoresCompartidos.tipos.array({
                 array: data?.zonasDeLaOferta,
@@ -71,13 +70,13 @@ export const procesadorPrecio = async (data) => {
                 filtro: "soloCadenasIDV",
                 noSePermitenDuplicados: "si"
             })
-            
             const zonasIDVControl = ["publica", "privada", "global"]
             const contieneSoloValoresPermitidos = zonasDeLaOferta.every(zonaIDV => zonasIDVControl.includes(zonaIDV));
             if (!contieneSoloValoresPermitidos) {
                 const error = "En el array de zonasDeLaOferta hay identificadores visuales de zona no reconocidos. Los identificadores visuales reconocidos son publica, privada y global"
                 throw new Error(error)
             }
+
             await aplicarOfertas({
                 totalesBase,
                 fechaActual,
@@ -93,7 +92,7 @@ export const procesadorPrecio = async (data) => {
                 array: data.descuentosArray,
                 nombreCampo: "El array de descuentosArray en el procesador de precios",
                 filtro: "cadenaConNumerosEnteros",
-                noSePermitenDuplicados: "si"
+                noSePermitenDuplicados: "no"
             })
 
             await aplicarDescuentosPersonalizados({
@@ -102,7 +101,6 @@ export const procesadorPrecio = async (data) => {
                 fechaEntradaReserva_ISO: fechaEntrada,
                 fechaSalidaReserva_ISO: fechaSalida
             })
-
         }
         if (capaImpuestos === "si") {
             await aplicarImpuestos(totalesBase)

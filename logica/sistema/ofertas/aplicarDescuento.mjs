@@ -13,14 +13,17 @@ export const aplicarDescuento = async (data) => {
         const totalesBase = data.totalesBase
         const indiceTotales = constructorIndiceTotales(totalesBase)
 
-
-
         if (!totalesBase.hasOwnProperty("ofertasAplicadas")) {
             totalesBase.ofertasAplicadas = {
                 ofertas: {},
                 porTotal: [],
-                porApartamento: {},
-                porDia: {},
+                entidades: {
+                    reservas: {
+                        porApartamento: {},
+                        porDia: {},
+                    }
+                }
+
             }
         }
 
@@ -28,11 +31,28 @@ export const aplicarDescuento = async (data) => {
         const totalNeto = new Decimal(contenedorTotalesBase.totalNeto)
         const contenedorOfertas = totalesBase.ofertasAplicadas.ofertas
         const contenedorPorTotal = totalesBase.ofertasAplicadas.porTotal
-        const contenedorPorApartamento = totalesBase.ofertasAplicadas.porApartamento
-        const contenedorPorDia = totalesBase.ofertasAplicadas.porDia
+        const contenedorPorApartamento = totalesBase.ofertasAplicadas.entidades.reservas.porApartamento
+        const contenedorPorDia = totalesBase.ofertasAplicadas.entidades.reservas.porDia
 
         let totalGlobalDescuento = new Decimal("0.00")
 
+        const controlCantidadOfertas = (data) => {
+            const contenedorOfertas = data.contenedorOfertas
+            const ofertaUID = data.ofertaUID
+            const oferta = data.oferta
+
+            if (!contenedorOfertas.hasOwnProperty(ofertaUID)) {
+                contenedorOfertas[ofertaUID] = {
+                    cantidad: new Decimal("1"),
+                    oferta
+                }
+            } else {
+                const cantidad = contenedorOfertas[ofertaUID].cantidad
+                contenedorOfertas[ofertaUID].cantidad = cantidad.plus("1")
+            }
+
+        }
+        
         for (const oferta of ofertarParaAplicarDescuentos) {
             const descuentos = oferta.oferta.descuentosJSON
             const ofertaUID = oferta.oferta.ofertaUID
@@ -41,8 +61,11 @@ export const aplicarDescuento = async (data) => {
             if (tipoDescuento === "totalNeto") {
                 const tipoAplicacion = descuentos.tipoAplicacion
                 const descuentoTotal = descuentos.descuentoTotal
-                contenedorOfertas[ofertaUID] = oferta
-
+                controlCantidadOfertas({
+                    ofertaUID,
+                    oferta,
+                    contenedorOfertas
+                })
                 const totalCalculado = calcularTotal({
                     tipoAplicacion,
                     descuentoTotal,
@@ -59,16 +82,19 @@ export const aplicarDescuento = async (data) => {
 
             } else if (tipoDescuento === "individualPorApartamento") {
                 const apartamentos = descuentos.apartamentos
-                contenedorOfertas[ofertaUID] = oferta
-
+                controlCantidadOfertas({
+                    ofertaUID,
+                    oferta,
+                    contenedorOfertas
+                })
                 for (const descuentoDelApartamento of apartamentos) {
                     const apartamentoIDV = descuentoDelApartamento.apartamentoIDV
                     const descuentoTotal = descuentoDelApartamento.descuentoTotal
                     const tipoAplicacion = descuentoDelApartamento.tipoAplicacion
 
                     const indiceTotalApartamento = indiceTotales.indicePorApartamentos[apartamentoIDV].posicion
-
-                    const totalPorApartametno = totalesBase.desglosePorApartamento[indiceTotalApartamento].totalNeto
+                    
+                    const totalPorApartametno = totalesBase.entidades.reservas.desglosePorApartamento[indiceTotalApartamento].totalNeto
 
                     if (!contenedorPorApartamento.hasOwnProperty(apartamentoIDV)) {
                         contenedorPorApartamento[apartamentoIDV] = {
@@ -126,6 +152,11 @@ export const aplicarDescuento = async (data) => {
                         }
 
                         if (tipoDescuento === "netoPorApartamentoDelDia") {
+                            controlCantidadOfertas({
+                                ofertaUID,
+                                oferta,
+                                contenedorOfertas
+                            })
 
                             for (const apartamento of apartamentos) {
                                 const apartamentoIDV = apartamento.apartamentoIDV
@@ -137,7 +168,7 @@ export const aplicarDescuento = async (data) => {
                                     .apartamentosPorNoche
                                 [apartamentoIDV]
                                     .posicion
-                                const totalPorApartamento = totalesBase.
+                                const totalPorApartamento = totalesBase.entidades.reservas.
                                     desglosePorNoche
                                 [indicePosicionApartamento]
                                     .apartamentosPorNoche
@@ -182,10 +213,16 @@ export const aplicarDescuento = async (data) => {
                         }
 
                         if (tipoDescuento === "netoPorDia") {
+                            controlCantidadOfertas({
+                                ofertaUID,
+                                oferta,
+                                contenedorOfertas
+                            })
+
                             const descuentoTotal = descuentoPorDia.descuentoTotal
                             const tipoAplicacion = descuentoPorDia.tipoAplicacion
                             const indicePosicionNetoPorDiaApartamento = indiceTotales.indicePorNoche[fechaDelDia].posicion
-                            const totalNetoPorDia = totalesBase.
+                            const totalNetoPorDia = totalesBase.entidades.reservas.
                                 desglosePorNoche
                             [indicePosicionNetoPorDiaApartamento]
                                 .precioNetoNoche
@@ -214,21 +251,21 @@ export const aplicarDescuento = async (data) => {
                         }
                     }
                 }
-                if (subTipoDescuento === "totalNetoPorRango") {
 
+                if (subTipoDescuento === "totalNetoPorRango") {
+                    controlCantidadOfertas({
+                        ofertaUID,
+                        oferta,
+                        contenedorOfertas
+                    })
                     const diasArrayReserva = constructorObjetoEstructuraPrecioDia(fechaEntradaReserva_ISO, fechaSalidaReserva_ISO)
-                    console.log("diasArrayReserva", diasArrayReserva)
                     for (const fechaDelDia of diasArrayReserva) {
                         const fechaDentroDelRango = await validadoresCompartidos.fechas.fechaEnRango({
                             fechaAComprobrarDentroDelRango: fechaDelDia,
                             fechaInicioRango_ISO: fechaInicioRango_ISO,
                             fechaFinRango_ISO: fechaFinalRango_ISO
                         })
-                        console.log("fechaDentroDelRango", fechaDentroDelRango, {
-                            fechaAComprobrarDentroDelRango: fechaDelDia,
-                            fechaInicioRango_ISO: fechaInicioRango_ISO,
-                            fechaFinRango_ISO: fechaFinalRango_ISO
-                        })
+
                         if (!fechaDentroDelRango) {
                             continue
                         }
@@ -244,7 +281,7 @@ export const aplicarDescuento = async (data) => {
                         const tipoAplicacion = descuentos.tipoAplicacion
                         const indicePosicionNetoPorDiaApartamento = indiceTotales.indicePorNoche[fechaDelDia].posicion
 
-                        const totalNetoPorDia = totalesBase
+                        const totalNetoPorDia = totalesBase.entidades.reservas
                             .desglosePorNoche
                         [indicePosicionNetoPorDiaApartamento]
                             .precioNetoNoche

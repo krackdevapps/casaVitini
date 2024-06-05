@@ -14,7 +14,7 @@ export const evitarDuplicados = async (comportamiento) => {
         const contenedor = comportamiento.contenedor
         const tipoIDV = contenedor.tipoIDV
         const transaccion = comportamiento.transaccion
-        console.log("ee")
+   
         if (transaccion !== "crear" && transaccion !== "actualizar") {
             const error = `El sistema de evitar duplicados necesita un tipo de transaccion para ver si es un operacion de creacion o actualizacion`
             throw new Error(error)
@@ -36,7 +36,7 @@ export const evitarDuplicados = async (comportamiento) => {
                 throw new Error(mensajeNombreRepetido);
             }
         }
-        console.log("1")
+       
             if (tipoIDV === "porRango") {
             const fechaInicio_ISO = contenedor.fechaInicio
             const fechaFinal_ISO = contenedor.fechaFinal
@@ -161,7 +161,7 @@ export const evitarDuplicados = async (comportamiento) => {
                     throw new Error(errorCompuesto)
                 }
             }
-        }console.log("3")
+        }
     } catch (errorCapturado) {
         throw errorCapturado
     }

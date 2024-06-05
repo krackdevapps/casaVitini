@@ -1,15 +1,17 @@
 import { obtenerParConfiguracion } from '../../repositorio/configuracion/parConfiguracion/obtenerParConfiguracion.mjs';
+import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 export const obtenerParametroConfiguracion = async (configuracionUID) => {
     try {
-        const filtroCadena = /^[a-zA-Z0-9]+$/;
-        if (!configuracionUID || !filtroCadena.test(configuracionUID)) {
-            const error = "El campo configuracionUID solo puede ser un una cadena de minúsculas, mayusculas y numeros y nada mas"
-            throw new Error(error)
-        }
+       const confArrayUIDS = validadoresCompartidos.tipos.array({
+            array: configuracionUID,
+            nombreCampo: "El array depbtemerParametroConfiguracion ",
+            filtro: "soloCadenasIDV",
+            noSePermitenDuplicados: "si"
+        })
 
-        const parConfiguracion = await obtenerParConfiguracion([configuracionUID])
-        return parConfiguracion[configuracionUID]
+        const parConfiguracion = await obtenerParConfiguracion([confArrayUIDS])
+        return parConfiguracion
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 }

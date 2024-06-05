@@ -20,21 +20,29 @@ export const calendario = async (entrada, salida) => {
             throw new Error(error)
         }
 
-
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const diaHoyTZ = tiempoZH.day;
         const mesPresenteTZ = tiempoZH.month;
         const anoPresenteTZ = tiempoZH.year;
+
+        const paresConfiguracion = await obtenerParametroConfiguracion([
+            "limiteFuturoReserva",
+            "diasAntelacionReserva", 
+            "diasMaximosReserva"
+        ])
+        const limiteFuturoReserva = paresConfiguracion.limiteFuturoReserva
+        const diasAntelacionReserva = paresConfiguracion.diasAntelacionReserva
+        const diasMaximosReserva = paresConfiguracion.diasMaximosReserva
+
+
         if (tipo === "actual") {
             const anoActual = anoPresenteTZ;
             const mesActual = mesPresenteTZ;
             const diaActual = diaHoyTZ;
             const posicionDia1 = tiempoZH.set({ day: 1 }).weekday;
             const numeroDeDiasPorMes = tiempoZH.daysInMonth;
-            const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva");
-            const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva");
-            const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva");
+
             const estructuraGlobal_DiasAntelacion = {};
             const primeraFechaDisponible = tiempoZH.plus({ day: diasAntelacionReserva }).toObject();
             for (let index = 0; index < diasAntelacionReserva; index++) {
@@ -139,9 +147,6 @@ export const calendario = async (entrada, salida) => {
             // Calendario["Tiempo"] = Tiempo
             calendario.numeroDiasPorMes = numeroDeDiasPorMes;
             calendario.posicionDia1 = posicionDiaComienzoMes;
-            const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva");
-            const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva");
-            const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva");
             const estructuraGlobal_DiasAntelacion = {};
             const primeraFechaDisponible = tiempoZH.plus({ day: diasAntelacionReserva }).toObject();
             for (let index = 0; index < diasAntelacionReserva; index++) {

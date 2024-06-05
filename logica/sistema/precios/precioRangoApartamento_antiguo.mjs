@@ -58,7 +58,7 @@ export const precioRangoApartamento = async (metadatos) => {
         }
 
         const comportamientosPorProcesarComoPerfiles = await resolverComportamientosDePrecio(fechaEntrada_ISO, fechaSalida_ISO)
-        console.log("comportamientosPorProcesarComoPerfiles",comportamientosPorProcesarComoPerfiles)
+        
         // Borrar la ultima fecha por que se esta calculano noches no dias
         estructuraArregloDiasEnEspera.pop()
         const numeroNoches = estructuraArregloDiasEnEspera.length

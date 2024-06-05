@@ -9,15 +9,15 @@ export const aplicarOfertas = async (data) => {
         const fechaEntrada = data.fechaEntrada
         const fechaSalida = data.fechaSalida
         const apartamentosArray = data.apartamentosArray
-        const zonaDeLaOferta = data.zonaDeLaOferta
+        const zonasDeLaOferta = data.zonasDeLaOferta
 
         const ofertasSeleccionadasPorRango = await obtenerOfertasPorRangoPorEstado({
-            fechaSalidaReserva_ISO: fechaEntrada,
-            fechaEntradaReserva_ISO: fechaSalida,
+            fechaEntradaReserva_ISO: fechaEntrada,
+            fechaSalidaReserva_ISO: fechaSalida,
             estado: "activado",
-            zonaDeLaOferta
+            zonasDeLaOferta
         })
-
+ 
         const ofertaAnalizadasPorCondiciones = []
         for (const oferta of ofertasSeleccionadasPorRango) {
             const resultadoSelector = await selectorPorCondicion({
@@ -29,7 +29,7 @@ export const aplicarOfertas = async (data) => {
             })
             ofertaAnalizadasPorCondiciones.push(resultadoSelector)
         }
-
+        
         await aplicarDescuento({
             ofertarParaAplicarDescuentos: ofertaAnalizadasPorCondiciones,
             totalesBase: totalesBase,

@@ -36,7 +36,7 @@ export const puerto = async (entrada, salida) => {
                             await cargarModulosDesdeDirectorio(rutaEntrada, arbol[ramaDeLaRuta.name])
                         } else if (ramaDeLaRuta.isFile() && ramaDeLaRuta.name.endsWith('.mjs')) {
                             const nombreModulo = ramaDeLaRuta.name.replace('.mjs', '')
-                            //console.log("rutaEntrada", rutaEntrada)
+                            // 
                             const rutaDeImportacion = path.relative('./zonas/logica', rutaEntrada)
                             arbol[nombreModulo] = await import(rutaDeImportacion)
                         }
@@ -65,6 +65,8 @@ export const puerto = async (entrada, salida) => {
             }
             return rama
         }
+        
+
         const estructura = exploradorArbol(zonas, ruta)
         const X = estructura[arbol.pop()]
         if (typeof X !== "function") {

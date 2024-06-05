@@ -49,11 +49,11 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
             fechaEntrada: fechaEntrada_ISO,
             fechaSalida: fechaSalida_ISO,
             apartamentosArray: apartamentosDisponiblesEncontrados,
-            capaOfertas: "no",
+            capaOfertas: "si",
             zonasDeLaOferta: ["global", "publica"],
             capaImpuestos: "si",
             capaDescuentosPersonalizados: "si",
-            descuentosArray: ["52", "50", "51"]
+            descuentosArray: ["52", "50", "51","50","50"]
         })
         estructuraFinal.desgloseFinanciero = desgloseFinanciero
         estructuraFinal.apartamentosDisponibles = configuracionesApartamentosVerificadas.configuracionApartamento;
