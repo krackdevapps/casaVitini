@@ -14,7 +14,6 @@ export const obtenerCamaDeLaHabitacionPorHabitacionUID = async (data) => {
         const resuelve = await conexion.query(consulta, [habitacionUID, camaIDV])
         return resuelve.rows[0]
     } catch (errorAdaptador) {
-        const error = "Error en el adaptador obtenerCamasPorHabitacion"
-        throw new Error(error)
+        throw errorAdaptador
     }
 }

@@ -10,7 +10,7 @@ export const obtenerHabitacionComoEntidadPorHabitacionIDV = async (habitacionIDV
         const resuelve = await conexion.query(consulta, [habitacionIDV]);
         if (resuelve.rowCount === 0) {
             const error = "No existe ninguna habitacion como entidad con ese habitacionIDV"
-            throw error
+            throw new Error(error)
         }
         return resuelve.rows[0]
     } catch (errorAdaptador) {

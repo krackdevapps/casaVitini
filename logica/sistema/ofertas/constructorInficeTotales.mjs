@@ -1,7 +1,7 @@
 export const constructorIndiceTotales = (data) => {
     try {
-        const desglosePorApartamento = data.entidades.reservas.desglosePorApartamento
-        const desglosePorNoche = data.entidades.reservas.desglosePorNoche
+        const desglosePorApartamento = data.entidades.reserva.desglosePorApartamento
+        const desglosePorNoche = data.entidades.reserva.desglosePorNoche
         const indicePorApartamentos = {}
         const indicePorNoche = {}
 

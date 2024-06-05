@@ -1,9 +1,9 @@
 import Decimal from 'decimal.js';
 import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../repositorio/impuestos/obtenerImpuestosPorAplicacionIDVPorEstado.mjs';
 Decimal.set({ precision: 50 });
-export const aplicarImpuestos = async (totalesBase) => {
+export const aplicarImpuestos = async (estructura) => {
     try {
-        const totalFinal = new Decimal(totalesBase.totales.totalFinal)
+        const totalFinal = new Decimal(estructura.global.totales.totalFinal)
         const impuestos = await obtenerImpuestosPorAplicacionIDVPorEstado({
             estadoIDV: "activado",
             aplicacionSobre_array: [
@@ -35,9 +35,9 @@ export const aplicarImpuestos = async (totalesBase) => {
             objetoImpuestos.push(presentacionImpuesto)
         }
 
-        totalesBase.impuestos = objetoImpuestos
-        totalesBase.totales.impuestosAplicados = sumaImpuestos.toFixed(2)
-        totalesBase.totales.totalFinal = totalFinal.plus(sumaImpuestos).toFixed(2)
+        estructura.impuestos = objetoImpuestos
+        estructura.global.totales.impuestosAplicados = sumaImpuestos.toFixed(2)
+        estructura.global.totales.totalFinal = totalFinal.plus(sumaImpuestos).toFixed(2)
         // const estructoraFinal = {
         //     impuestos: objetoImpuestos,
         //     sumaImpuestos: sumaImpuestos

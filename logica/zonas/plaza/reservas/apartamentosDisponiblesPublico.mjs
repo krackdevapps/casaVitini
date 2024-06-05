@@ -44,7 +44,6 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
         const configuracionesApartamentosVerificadas = await configuracionApartamento(apartamentosDisponiblesEncontrados);
 
 
-        const estructuraFinal = {};
         const desgloseFinanciero = await procesadorPrecio({
             fechaEntrada: fechaEntrada_ISO,
             fechaSalida: fechaSalida_ISO,
@@ -53,10 +52,13 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
             zonasDeLaOferta: ["global", "publica"],
             descuentosParaRechazar: ["51"],
             capaImpuestos: "si",
-            capaDescuentosPersonalizados: "no",
+            capaDescuentosPersonalizados: "si",
             descuentosArray: ["52", "50", "51","50","50"]
         })
-        estructuraFinal.desgloseFinanciero = desgloseFinanciero
+        const estructuraFinal = {
+            ...desgloseFinanciero
+        };
+
         estructuraFinal.apartamentosDisponibles = configuracionesApartamentosVerificadas.configuracionApartamento;
         const ok = {
             ok: estructuraFinal

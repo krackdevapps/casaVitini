@@ -10,6 +10,7 @@ import { constructorDesglosePorApartamento } from './constructorDesglosePorApart
 Decimal.set({ precision: 1000 });
 export const totalesBasePorRango = async (metadatos) => {
     try {
+        const estructura = metadatos.estructura
         const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
         const fechaSalida_ISO = metadatos.fechaSalida_ISO
         const apartamentosArray = metadatos.apartamentosArray
@@ -79,40 +80,34 @@ export const totalesBasePorRango = async (metadatos) => {
 
             estructuraDesglosePorNoches.push(totalesPorNoche)
         }
-        const estructuraTotales = {
-            global: {
-                fechaEntrada: fechaEntrada_ISO,
-                fechaSalida: fechaSalida_ISO,
-                nochesReserva: diasArray.length
-            },
-            totales: {
-                totalNeto: new Decimal("0.00"),
-                totalFinal: "0.00"
-            },
-            entidades: {
-                reservas: {
-                    desglosePorApartamento: await constructorDesglosePorApartamento({
-                        estructuraDesglosePorApartamento,
-                        diasArray
-                    }),
-                    desglosePorNoche: estructuraDesglosePorNoches
-                }
-            }
-        }
+        estructura.entidades.reserva = {}
+        const reservaEntidad = estructura.entidades.reserva
+        reservaEntidad.fechaEntrada = fechaEntrada_ISO
+        reservaEntidad.fechaSalida = fechaEntrada_ISO
+        reservaEntidad.nochesReserva = fechaEntrada_ISO
 
-        const desglosePorApartamento = estructuraTotales.entidades.reservas.desglosePorApartamento
+        const totales = estructura.global.totales
+        totales.totalNeto = new Decimal("0.00")
+        totales.totalFinal = "0.00"
+
+        reservaEntidad.desglosePorApartamento = await constructorDesglosePorApartamento({
+            estructuraDesglosePorApartamento,
+            diasArray
+        })
+        reservaEntidad.desglosePorNoche = estructuraDesglosePorNoches
+
+        const desglosePorApartamento = reservaEntidad.desglosePorApartamento
 
         desglosePorApartamento.forEach((totalPorApartamento) => {
             const totalNetoPorApartmento = totalPorApartamento.totalNeto
-            const totalNeto = estructuraTotales.totales.totalNeto
-            estructuraTotales.totales.totalNeto = totalNeto.plus(totalNetoPorApartmento)
+            const totalNeto = totales.totalNeto
+            estructura.global.totales.totalNeto = totalNeto.plus(totalNetoPorApartmento)
         })
 
-        const totalNeto = estructuraTotales.totales.totalNeto
-        estructuraTotales.totales.totalNeto = totalNeto.toFixed(2)
-        estructuraTotales.totales.totalFinal = totalNeto.toFixed(2)
+        const totalNeto = totales.totalNeto
+        totales.totalNeto = totalNeto.toFixed(2)
+        totales.totalFinal = totalNeto.toFixed(2)
 
-        return estructuraTotales
     } catch (errorCapturado) {
         throw errorCapturado
     }

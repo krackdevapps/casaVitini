@@ -1,34 +1,36 @@
-import { precioReserva } from "../../sistema/precios/precioReserva.mjs";
 import { procesadorPrecio } from "../../sistema/precios/procesdadorPrecio.mjs";
-import { validarObjetoReservaSoloFormato } from "../../sistema/reservas/validarObjetoReservaSoloFormato.mjs";
+import { validarObjetoReserva } from "../../sistema/reservas/validarObjetoReserva.mjs";
 
 export const precioReservaPublica = async (entrada, salida) => {
     try {
 
-        const reservaObjeto = entrada.body.reservaObjeto
-        await validarObjetoReservaSoloFormato({
-            reservaObjeto,
+        const reservaObjeto = entrada.body?.reservaObjeto
+
+        await validarObjetoReserva({
+            reservaObjeto: reservaObjeto,
             filtroTitular: "no",
             filtroHabitacionesCamas: "no"
         });
-        const transaccion = {
-            tipoProcesadorPrecio: tipoProcesadorPrecio,
-            reserva: reserva
-        }
 
+        const fechaEntradaReserva = reservaObjeto.fechaEntrada
+        const fechaSalidaReserva = reservaObjeto.fechaSalida
+        const alojamiento = reservaObjeto.alojamiento
+        const apartamentosIDV = Object.keys(alojamiento)
 
         const desgloseFinanciero = await procesadorPrecio({
-            fechaEntrad: null,
-            fechaSalida: null,
-            apartamentosArray: null,
-            capaImpuesto: "si",
+            fechaEntrada: fechaEntradaReserva,
+            fechaSalida: fechaSalidaReserva,
+            apartamentosArray: apartamentosIDV,
+            capaImpuestos: "si",
             capaOfertas: "si",
-            capaDescuntosPersonlizados: "no",
-            
-        })
+            zonasDeLaOferta: ["publica", "global"],
+            capaDescuentosPersonalizados: "no",
 
-        const transaccionInterna = await precioReserva(transaccion);
-        salida.json(desgloseFinanciero);
+        })
+        const ok = {
+            desgloseFinanciero
+        }
+        salida.json(ok)
     } catch (errorCapturado) {
         throw errorCapturado
     }

@@ -41,6 +41,6 @@ export const actualizarSOLOreembolsoDesdeSquare = async (reembolsoUID) => {
         };
         return ok;
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 }

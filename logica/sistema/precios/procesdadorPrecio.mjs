@@ -6,6 +6,7 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../repositorio/arquite
 import { aplicarOfertas } from "../ofertas/aplicarOfertas.mjs"
 import { aplicarImpuestos } from "./aplicarImpuestos.mjs"
 import { aplicarDescuentosPersonalizados } from "../ofertas/aplicarDescuentosPersonalizados.mjs"
+import { estructuraDesgloseFinanciero } from "./estructuraDesgloseFinanciero.mjs"
 
 export const procesadorPrecio = async (data) => {
     try {
@@ -57,7 +58,10 @@ export const procesadorPrecio = async (data) => {
             throw new Error(error)
         }
 
-        const totalesBase = await totalesBasePorRango({
+        const estructura = estructuraDesgloseFinanciero()
+
+        await totalesBasePorRango({
+            estructura,
             fechaEntrada_ISO: fechaEntrada,
             fechaSalida_ISO: fechaSalida,
             apartamentosArray
@@ -86,7 +90,7 @@ export const procesadorPrecio = async (data) => {
             })
 
             await aplicarOfertas({
-                totalesBase,
+                estructura,
                 fechaActual,
                 fechaEntrada,
                 fechaSalida,
@@ -105,16 +109,19 @@ export const procesadorPrecio = async (data) => {
             })
 
             await aplicarDescuentosPersonalizados({
-                totalesBase,
+                estructura,
                 descuentosArray,
                 fechaEntradaReserva_ISO: fechaEntrada,
                 fechaSalidaReserva_ISO: fechaSalida
             })
         }
         if (capaImpuestos === "si") {
-            await aplicarImpuestos(totalesBase)
+            await aplicarImpuestos(estructura)
         }
-        return totalesBase
+        const ok = {
+            desgloseFinanciero: estructura
+        }
+        return ok
     } catch (error) {
         throw error
     }

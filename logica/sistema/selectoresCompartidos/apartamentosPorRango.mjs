@@ -100,6 +100,6 @@ export const apartamentosPorRango = async (metadatos) => {
         }
         return ok
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 }

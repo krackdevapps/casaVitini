@@ -10,15 +10,15 @@ export const aplicarDescuento = async (data) => {
         const fechaEntradaReserva_ISO = data.fechaEntradaReserva_ISO
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
         const ofertarParaAplicarDescuentos = data.ofertarParaAplicarDescuentos
-        const totalesBase = data.totalesBase
-        const indiceTotales = constructorIndiceTotales(totalesBase)
+        const estructura = data.estructura
+        const indiceTotales = constructorIndiceTotales(estructura)
 
-        if (!totalesBase.hasOwnProperty("ofertasAplicadas")) {
-            totalesBase.ofertasAplicadas = {
+        if (!estructura.hasOwnProperty("ofertasAplicadas")) {
+            estructura.ofertasAplicadas = {
                 ofertas: {},
                 porTotal: [],
                 entidades: {
-                    reservas: {
+                    reserva: {
                         porApartamento: {},
                         porDia: {},
                     }
@@ -27,12 +27,12 @@ export const aplicarDescuento = async (data) => {
             }
         }
 
-        const contenedorTotalesBase = totalesBase.totales
+        const contenedorTotalesBase = estructura.global.totales
         const totalNeto = new Decimal(contenedorTotalesBase.totalNeto)
-        const contenedorOfertas = totalesBase.ofertasAplicadas.ofertas
-        const contenedorPorTotal = totalesBase.ofertasAplicadas.porTotal
-        const contenedorPorApartamento = totalesBase.ofertasAplicadas.entidades.reservas.porApartamento
-        const contenedorPorDia = totalesBase.ofertasAplicadas.entidades.reservas.porDia
+        const contenedorOfertas = estructura.ofertasAplicadas.ofertas
+        const contenedorPorTotal = estructura.ofertasAplicadas.porTotal
+        const contenedorPorApartamento = estructura.ofertasAplicadas.entidades.reserva.porApartamento
+        const contenedorPorDia = estructura.ofertasAplicadas.entidades.reserva.porDia
 
         let totalGlobalDescuento = new Decimal("0.00")
 
@@ -94,7 +94,7 @@ export const aplicarDescuento = async (data) => {
 
                     const indiceTotalApartamento = indiceTotales.indicePorApartamentos[apartamentoIDV].posicion
                     
-                    const totalPorApartametno = totalesBase.entidades.reservas.desglosePorApartamento[indiceTotalApartamento].totalNeto
+                    const totalPorApartametno = estructura.entidades.reserva.desglosePorApartamento[indiceTotalApartamento].totalNeto
 
                     if (!contenedorPorApartamento.hasOwnProperty(apartamentoIDV)) {
                         contenedorPorApartamento[apartamentoIDV] = {
@@ -168,7 +168,7 @@ export const aplicarDescuento = async (data) => {
                                     .apartamentosPorNoche
                                 [apartamentoIDV]
                                     .posicion
-                                const totalPorApartamento = totalesBase.entidades.reservas.
+                                const totalPorApartamento = estructura.entidades.reserva.
                                     desglosePorNoche
                                 [indicePosicionApartamento]
                                     .apartamentosPorNoche
@@ -222,7 +222,7 @@ export const aplicarDescuento = async (data) => {
                             const descuentoTotal = descuentoPorDia.descuentoTotal
                             const tipoAplicacion = descuentoPorDia.tipoAplicacion
                             const indicePosicionNetoPorDiaApartamento = indiceTotales.indicePorNoche[fechaDelDia].posicion
-                            const totalNetoPorDia = totalesBase.entidades.reservas.
+                            const totalNetoPorDia = estructura.entidades.reserva.
                                 desglosePorNoche
                             [indicePosicionNetoPorDiaApartamento]
                                 .precioNetoNoche
@@ -281,7 +281,7 @@ export const aplicarDescuento = async (data) => {
                         const tipoAplicacion = descuentos.tipoAplicacion
                         const indicePosicionNetoPorDiaApartamento = indiceTotales.indicePorNoche[fechaDelDia].posicion
 
-                        const totalNetoPorDia = totalesBase.entidades.reservas
+                        const totalNetoPorDia = estructura.entidades.reserva
                             .desglosePorNoche
                         [indicePosicionNetoPorDiaApartamento]
                             .precioNetoNoche

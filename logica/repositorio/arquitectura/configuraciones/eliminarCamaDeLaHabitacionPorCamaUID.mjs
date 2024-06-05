@@ -10,7 +10,7 @@ export const eliminarCamaDeLaHabitacionPorCamaUID = async (camaUID) => {
         const resuelve = await conexion.query(consulta, [camaUID])
         if (resuelve.rowCount === 0) {
             const error = "No existe la cama que quieres eliminar.";
-            throw error;
+            throw new Error(error);
         }
         return resuelve.rows[0] 
     } catch (errorAdaptador) {

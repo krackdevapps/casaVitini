@@ -28,11 +28,14 @@ export const validarObjetoReserva = async (data) => {
             objetoLiteral: reservaObjeto,
             nombreCampo: "el campo reservaObjeto"
         })
-
-        const fechaEntrada_Humano = reservaObjeto.fechaEntrada
-        const fechaSalida_Humano = reservaObjeto.fecahSalida
-        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_Humano)).fecha_ISO
-        const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_Humano)).fecha_ISO
+        const fechaEntrada_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: reservaObjeto?.fechaEntrada,
+            nombreCampo: "El campo fechaEntrada del objetoReserva"
+        })
+        const fechaSalida_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: reservaObjeto?.fechaSalida,
+            nombreCampo: "El campo fechaSalida del objetoReserva"
+        })
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaActualTZ = tiempoZH.toISODate()
@@ -53,20 +56,24 @@ export const validarObjetoReserva = async (data) => {
         const fechasParaValidarLimites = {
             fechaEntrada_ISO: fechaEntrada_ISO,
             fechaSalida_ISO: fechaSalida_ISO
-        }
+        } 
+        console.log("reservaObjeto", reservaObjeto)
+
         await limitesReservaPublica(fechasParaValidarLimites)
-        const alojamiento = reservaObjeto?.alojamiento
-        if (reservaObjeto.hasOwnProterpy("alojamiento")) {
+
+        if (!reservaObjeto.hasOwnProperty("alojamiento")) {
             const error = "No exite la llave de 'alojamiento' esperada dentro del objeto, por lo tante hasta aquí hemos llegado"
             throw new Error(error)
         }
+        const alojamiento = reservaObjeto?.alojamiento
 
         const apartemtosIDVarray = Object.keys(alojamiento)
         const controlApartamentosIDVUnicos = new Set(apartemtosIDVarray);
         if (controlApartamentosIDVUnicos.size !== apartemtosIDVarray.length) {
             const error = "Existen apartamentosIDV repetidos en el objeto de la reserva"
             throw new Error(error)
-        }
+        }          
+
         for (const apartamento of Object.entries(alojamiento)) {
             const apartamentoIDV = apartamento[0]
             const habitacionesDelApartamentoPorValidar = apartamento[1].habitaciones
@@ -78,6 +85,7 @@ export const validarObjetoReserva = async (data) => {
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
+
             validadoresCompartidos.tipos.objetoLiteral({
                 objetoLiteral: habitacionesDelApartamentoPorValidar,
                 nombreCampo: "el campo habitacionesDelApartamentoPorValidar"
@@ -85,6 +93,7 @@ export const validarObjetoReserva = async (data) => {
 
             const habitacionesEstructura = {}
             const habitacionesSoloIDV = []
+
             const habitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV) || []
 
             habitacionesPorApartamento.forEach((habitacionApartamento) => {
@@ -93,7 +102,9 @@ export const validarObjetoReserva = async (data) => {
                 habitacionesEstructura[habitacionIDV] = habitacionUID
                 habitacionesSoloIDV.push(habitacionIDV)
             })
+
         }
+
         const fecha = {
             fechaEntrada_ISO: fechaEntrada_ISO,
             fechaSalida_ISO: fechaSalida_ISO,

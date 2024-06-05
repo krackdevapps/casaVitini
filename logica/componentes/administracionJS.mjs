@@ -695,7 +695,7 @@ const casaVitini = {
                         }
                         respuestaServidor
                     } catch (errorCapturado) {
-                        throw error
+                        throw errorCapturado
                     }
                 },
                 mostrarReservasResueltas: async (transaccion) => {

@@ -8,7 +8,6 @@ export const obtenerParametroConfiguracion = async (configuracionUID) => {
             filtro: "soloCadenasIDV",
             sePermitenDuplicados: "no"
         })
-
         const parConfiguracion = await obtenerParConfiguracion([confArrayUIDS])
         return parConfiguracion
     } catch (errorCapturado) {

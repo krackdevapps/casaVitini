@@ -30,17 +30,27 @@ export const limitesReservaPublica = async (fechas) => {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
             throw new Error(error)
         }
-        const limiteFuturoReserva = await obtenerParametroConfiguracion("limiteFuturoReserva")
-        const diasAntelacionReserva = await obtenerParametroConfiguracion("diasAntelacionReserva")
-        const diasMaximosReserva = await obtenerParametroConfiguracion("diasMaximosReserva")
+        const paresConfiguracion = await obtenerParametroConfiguracion([
+            "limiteFuturoReserva",
+            "diasAntelacionReserva",
+            "diasMaximosReserva"
+        ])
+
+        const limiteFuturoReserva = paresConfiguracion.limiteFuturoReserva
+        const diasAntelacionReserva = paresConfiguracion.diasAntelacionReserva
+        const diasMaximosReserva = paresConfiguracion.diasMaximosReserva
+
         const fechaLimite_Objeto = tiempoZH.plus({ days: limiteFuturoReserva })
+        console.log("antes")
+
         const diasDeAntelacion = fechaEntradaReserva_ISO.diff(tiempoZH, 'days').toObject().days < 0
             ? 0 :
-            Math.ceil(diasDeAntelacion)
+            Math.ceil(diasAntelacionReserva)
         if (diasDeAntelacion < diasAntelacionReserva) {
             const error = `Casa Vitini solo acepta reservas con un minimo de ${diasAntelacionReserva} dias de antelacion. Gracias.`
             throw new Error(error)
         }
+        console.log("aquiaquaiqui")
         const diferenciaEnDiasLimiteFuturo = fechaLimite_Objeto.diff(fechaSalidaReserva_ISO, 'days').toObject().days;
         if (diferenciaEnDiasLimiteFuturo <= 0) {
             const error = `Como maximo las reservas no pueden superar ${limiteFuturoReserva} dias a partir de hoy. Gracias.`
@@ -53,6 +63,6 @@ export const limitesReservaPublica = async (fechas) => {
         }
         return true
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 }
