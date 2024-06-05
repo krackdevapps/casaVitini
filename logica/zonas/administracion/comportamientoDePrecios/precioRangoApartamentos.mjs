@@ -19,7 +19,7 @@ export const precioRangoApartamentos = async (entrada, salida) => {
             array: entrada.body.apartamentosIDVArreglo,
             nombreCampo: "El apartamentosIDVArreglo",
             filtro: "soloCadenasIDV",
-            noSePermitenDuplicados: "si"
+            sePermitenDuplicados: "no"
         })
 
         const metadatos = {

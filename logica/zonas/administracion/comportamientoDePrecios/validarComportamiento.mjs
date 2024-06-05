@@ -96,7 +96,7 @@ export const validarComportamiento = async (comportamiento) => {
                 nombreCampo: "El diasArray",
                 filtro: "soloCadenasIDV",
                 nombreCompleto: "En diasArray",
-                noSePermitenDuplicados: "si"
+                sePermitenDuplicados: "no"
             })
 
             const diasIDV = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];

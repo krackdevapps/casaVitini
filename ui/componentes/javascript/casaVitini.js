@@ -25,7 +25,7 @@ const casaVitini = {
                         funcionPersonalizada: funcionPersonalizada,
                         datosPaginacion: datosPaginacion
                     }
-                    return casaVitini.componentes.controladorCambioPersonalizado(entrada)
+                    return casaVitini.shell.navegacion.controladorCambioPersonalizado(entrada)
                 }
             },
             cambiarVista: (vistaMenu) => {
@@ -108,9 +108,9 @@ const casaVitini = {
                 }
                 const controladorResposnivo = window.matchMedia("(max-width: 720px)").matches
                 if (controladorResposnivo) {
-                    window.removeEventListener("touchstart", casaVitini.componentes.restaurarMenu)
-                    window.removeEventListener("click", casaVitini.componentes.restaurarMenu)
-                    window.removeEventListener("scroll", casaVitini.componentes.restaurarMenu)
+                    window.removeEventListener("touchstart", casaVitini.shell.controladoresUI.restaurarMenu)
+                    window.removeEventListener("click", casaVitini.shell.controladoresUI.restaurarMenu)
+                    window.removeEventListener("scroll", casaVitini.shell.controladoresUI.restaurarMenu)
                     document.getElementById("navegadorResponsivo").style.display = ""
                 }
                 const transaccion = {
@@ -392,7 +392,7 @@ const casaVitini = {
             },
         },
         arranque: async () => {
-            window.addEventListener("popstate", casaVitini.componentes.navegacion)
+            window.addEventListener("popstate", casaVitini.shell.navegacion.navegacionInversa)
             await casaVitini.shell.controladoresUI.controladorEstadoIDX()
 
             document.getElementById("botonMenuResponsivo").addEventListener("click", casaVitini.componentes.menuResponsivo)
@@ -1184,7 +1184,7 @@ const casaVitini = {
                             bloqueAlojamientoUI.classList.add("bloqueAlojamiento")
                             bloqueAlojamientoUI.setAttribute("contenedor", "alojamiento")
                             superBloqueReservaRenderizado.appendChild(bloqueAlojamientoUI)
-                            const desgloseTotalesPorApartmentos = respuestaServidor?.ok.desgloseFinanciero.desglosePorApartamento
+                            const desgloseTotalesPorApartmentos = respuestaServidor?.ok.desgloseFinanciero.entidades.reservas.desglosePorApartamento
                             const desgloseTotalesFormateado = {}
                             desgloseTotalesPorApartmentos.forEach((detallesApartamento) => {
                                 const apartamentoIDV = detallesApartamento.apartamentoIDV
@@ -1203,7 +1203,7 @@ const casaVitini = {
                                 bloqueApartamento.setAttribute("apartamentoUI", apartamentoUI)
                                 bloqueApartamento.setAttribute("instanciaUID", instanciaUID)
                                 bloqueApartamento.setAttribute("habitaciones", JSON.stringify(habitaciones))
-                                bloqueApartamento.addEventListener("click", (e) => {
+                                bloqueApartamento.addEventListener("click", () => {
                                     const selectorApartamento = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
                                     const selectorSelectorApartamento = selectorApartamento.querySelector("[componente=selectorApartamento]")
                                     if (selectorApartamento.getAttribute("estadoApartamento") !== "seleccionado") {
@@ -1230,7 +1230,7 @@ const casaVitini = {
                                 })
                                 const bloqueImagen = document.createElement("div")
                                 bloqueImagen.setAttribute("class", "bloqueImagen")
-                                // bloqueTituloImagen.appendChild(bloqueImagen)
+
                                 const contenedorTitulo = document.createElement("div")
                                 contenedorTitulo.classList.add("plaza_alojamiento_contenedorApartamento_contenedorTitulo")
                                 const bloqueVerticalTitulo = document.createElement("div")
@@ -1248,14 +1248,14 @@ const casaVitini = {
                                 for (const caracteristica of caracteristicas) {
                                     const caracteristicaUI = document.createElement("div")
                                     caracteristicaUI.classList.add("plaza_alojamiento_contenedorCaracteristicas_caracteristicas")
-                                    caracteristicaUI.innerText = caracteristica.caracteristica
+                                    caracteristicaUI.innerText = caracteristica.caracteristicaUI
                                     bloqueCaracteristicas.appendChild(caracteristicaUI)
                                 }
                                 contenedorTitulo.appendChild(bloqueCaracteristicas)
                                 bloqueApartamento.appendChild(contenedorTitulo)
                                 const elementoTituloCocina = document.createElement("div")
                                 elementoTituloCocina.setAttribute("class", "elementoTitulo")
-                                elementoTituloCocina.innerText = `${desgloseTotalesFormateado[apartamentoIDV].totalBrutoRango}$ Total con impuestos incluidos`
+                                elementoTituloCocina.innerText = `${desgloseTotalesFormateado[apartamentoIDV].totalNeto}$ Total neto sin ofertas aplicadas`
                                 bloqueTituloApartamentoComponenteUI.appendChild(elementoTituloCocina)
                                 const bloqueHabitaciones = document.createElement("div")
                                 bloqueHabitaciones.classList.add("plaza_alojamiento_contenedorApartmento_contenedorHabitaciones")
@@ -9798,9 +9798,8 @@ const casaVitini = {
                 if (!reservaObjetoLocal) {
                 } else {
                     const transaccion = {
-                        zona: "componentes/precioReserva",
-                        tipoProcesadorPrecio: "objeto",
-                        reserva: reservaObjetoLocal
+                        zona: "componentes/precioReservaPublica",
+                        reservaObjeto: reservaObjetoLocal
                     }
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     if (respuestaServidor?.error) {

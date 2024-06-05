@@ -785,7 +785,7 @@ export const validadoresCompartidos = {
                     throw new Error(mensaje)
                 }
                 if (!Array.isArray(array) || array == null || array === undefined) {
-                    const error = `${nombreCampo} se esperaba un array`;
+                    const error = `${nombreCampo} se esperaba que fuera un array`;
                     throw new Error(error);
                 }
 
@@ -823,13 +823,13 @@ export const validadoresCompartidos = {
                     })
                 }
 
-                const noSePermitenDuplicados = configuracion.noSePermitenDuplicados
-                if (noSePermitenDuplicados) {
-                    if (noSePermitenDuplicados !== "si" && noSePermitenDuplicados !== "no") {
-                        const mensaje = `El validor de cadena esta mal configurado, noSePermitenDuplicados solo acepta si o no.`
+                const sePermitenDuplicados = configuracion.sePermitenDuplicados
+                if (sePermitenDuplicados) {
+                    if (sePermitenDuplicados !== "si" && sePermitenDuplicados !== "no") {
+                        const mensaje = `El validor de cadena esta mal configurado, sePermitenDuplicados solo acepta si o no.`
                         throw new Error(mensaje)
                     }
-                    if (noSePermitenDuplicados === "si") {
+                    if (sePermitenDuplicados === "no") {
                         const arrayFiltrado = array.map((cadenaEnElArray) => {
                             if (typeof cadenaEnElArray === "string") {
                                 return cadenaEnElArray.toLowerCase();
@@ -861,10 +861,7 @@ export const validadoresCompartidos = {
                     const mensaje = `El validador de objetos, necesito un nombre de campo.`
                     throw new Error(mensaje)
                 }
-
                 const control = objetoLiteral !== null && typeof objetoLiteral === 'object' && objetoLiteral.constructor === Object;
-
-
                 if (!control) {
                     const error = `${nombreCampo} se esperara que fuera un objeto literal`;
                     throw new Error(error);
@@ -900,7 +897,7 @@ export const validadoresCompartidos = {
                     array: arrayDeDominiosPermitidos,
                     nombreCampo: "El array de dominios permitidos dentro del tipo url",
                     filtro: "soloCadenasIDV",
-                    noSePermitenDuplicados: "si"
+                    sePermitenDuplicados: "no"
                 })
                 const controlDominio = new URL(url);
                 const dominiofinal = controlDominio.hostname;

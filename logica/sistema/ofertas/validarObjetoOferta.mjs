@@ -94,7 +94,7 @@ export const validarObjetoOferta = async (oferta) => {
                     array: apartamentos,
                     nombreCampo: "Array de apartamento en la condicion de porApartamentosEspecificos",
                     filtro: "soloCadenasIDV",
-                    noSePermitenDuplicados: "si"
+                    sePermitenDuplicados: "no"
                 })
                 for (const apartamento of apartamentos) {
                     const apartamentoIDV = validadoresCompartidos.tipos.cadena({

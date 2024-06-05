@@ -67,7 +67,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
             array: entrada.body.apartamentosIDV_array,
             nombreCampo: "El array de apartamentos",
             filtro: "soloCadenasIDV",
-            noSePermitenDuplicados: "si"
+            sePermitenDuplicados: "no"
         })
 
         let fechaInicio_ISO;
@@ -111,7 +111,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
                 nombreCampo: "El diasArray",
                 filtro: "soloCadenasIDV",
                 nombreCompleto: "En diasArray",
-                noSePermitenDuplicados: "si"
+                sePermitenDuplicados: "no"
             })
 
             const diasIDV = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
@@ -133,7 +133,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
                 array: apart,
                 nombreCampo: "Dentro de array de apartamentos",
                 filtro: "soloCadenasIDV",
-                noSePermitenDuplicados: "si"
+                sePermitenDuplicados: "no"
             })
             const apartamentoIDV_preProcesado = apart.apartamentoIDV;
             identificadoresVisualesEnArray.push(apartamentoIDV_preProcesado);
@@ -143,7 +143,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
             array: identificadoresVisualesEnArray,
             nombreCampo: "El array de identificadoresVisualesEnArray",
             filtro: "soloCadenasIDV",
-            noSePermitenDuplicados: "si"
+            sePermitenDuplicados: "no"
         })
 
         const apartamentosArreglo = [];

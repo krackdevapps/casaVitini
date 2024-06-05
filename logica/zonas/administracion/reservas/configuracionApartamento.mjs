@@ -16,7 +16,7 @@ export const configuracionApartamento = async (entrada, salida) => {
             array: contenedorCapas?.apartamentos,
             nombreCampo: "El array de apartamentos",
             filtro: "soloCadenasIDV",
-            noSePermitenDuplicados: "si"
+            sePermitenDuplicados: "no"
         })
         const transactor = await configuracionApartamento_(apartamentos);
         salida.json(transactor);

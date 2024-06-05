@@ -28,7 +28,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             array: entrada.body.apartamentos,
             nombreCampo: "El array de apartamentoIDV",
             filtro: "soloCadenasIDV",
-            noSePermitenDuplicados: "si"
+            sePermitenDuplicados: "no"
         })
         // Control validez fecha
         await validadoresCompartidos.fechas.validarFecha_ISO({

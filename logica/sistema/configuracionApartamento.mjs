@@ -14,7 +14,7 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
             array: apartamentosIDVArray,
             nombreCampo: "El sistema de configuracion",
             filtro: "soloCadenasIDV",
-            noSePermitenDuplicados: "si"
+            sePermitenDuplicados: "no"
         })
 
         const apartamentosValidados = []

@@ -35,7 +35,7 @@ export const procesadorPrecio = async (data) => {
             array: data.apartamentosArray,
             nombreCampo: "El array de apartamentos en el procesador de precios",
             filtro: "soloCadenasIDV",
-            noSePermitenDuplicados: "si"
+            sePermitenDuplicados: "no"
         })
 
         for (const apartamentoIDV of apartamentosArray) {
@@ -44,7 +44,6 @@ export const procesadorPrecio = async (data) => {
         const capaImpuestos = data?.capaImpuestos
         const capaOfertas = data?.capaOfertas
         const capaDescuentosPersonalizados = data?.capaDescuentosPersonalizados
-
         if (capaImpuestos !== "si" && capaImpuestos !== "no") {
             const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos"
             throw new Error(error)
@@ -64,18 +63,27 @@ export const procesadorPrecio = async (data) => {
             apartamentosArray
         })
         if (capaOfertas === "si") {
+
             const zonasDeLaOferta = validadoresCompartidos.tipos.array({
                 array: data?.zonasDeLaOferta,
                 nombreCampo: "El array de zonasDeLaoferta en el procesador de precios",
                 filtro: "soloCadenasIDV",
-                noSePermitenDuplicados: "si"
+                sePermitenDuplicados: "no"
             })
             const zonasIDVControl = ["publica", "privada", "global"]
+
             const contieneSoloValoresPermitidos = zonasDeLaOferta.every(zonaIDV => zonasIDVControl.includes(zonaIDV));
             if (!contieneSoloValoresPermitidos) {
                 const error = "En el array de zonasDeLaOferta hay identificadores visuales de zona no reconocidos. Los identificadores visuales reconocidos son publica, privada y global"
                 throw new Error(error)
             }
+            const descuentosParaRechazar = validadoresCompartidos.tipos.array({
+                array: data?.descuentosParaRechazar || [],
+                nombreCampo: "descuentosParaRechazar en el procesador de precios",
+                filtro: "soloCadenasIDV",
+                sePermitenDuplicados: "si",
+                sePermiteArrayVacio: "si"
+            })
 
             await aplicarOfertas({
                 totalesBase,
@@ -83,7 +91,8 @@ export const procesadorPrecio = async (data) => {
                 fechaEntrada,
                 fechaSalida,
                 apartamentosArray,
-                zonasDeLaOferta
+                zonasDeLaOferta,
+                descuentosParaRechazar
             })
         }
 
@@ -92,7 +101,7 @@ export const procesadorPrecio = async (data) => {
                 array: data.descuentosArray,
                 nombreCampo: "El array de descuentosArray en el procesador de precios",
                 filtro: "cadenaConNumerosEnteros",
-                noSePermitenDuplicados: "no"
+                sePermitenDuplicados: "si"
             })
 
             await aplicarDescuentosPersonalizados({

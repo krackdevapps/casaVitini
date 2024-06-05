@@ -7,7 +7,7 @@ export const obtenerConfiguracion = async (arrayConfiguracionesUID) => {
             array: arrayConfiguracionesUID,
             nombreCampo: "El sistema de configuracion",
             filtro: "soloCadenasIDV",
-            noSePermitenDuplicados: "si"
+            sePermitenDuplicados: "no"
         })
 
         const parConfiguracion = await obtenerParConfiguracion(arrayConfiguracionesUID)
