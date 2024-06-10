@@ -2937,8 +2937,6 @@
 
 .administracion_reservas_detallesReserva_tituloPendienteComprobacion {
     pointer-events: none;
-    padding-right: 4px;
-    padding-left: 4px;
     color: rgb(0 11 168);
 }
 
@@ -10374,7 +10372,8 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-animation-iteration-count: infinite;
 }
 
-@-moz-keyframes parpadeo {
+
+/* @-webkit-keyframes parpadeo {
     0% {
         opacity: 1.0;
     }
@@ -10386,34 +10385,17 @@ grid-template-columns: 0.5fr 1.5fr;
     100% {
         opacity: 1.0;
     }
-}
-
-@-webkit-keyframes parpadeo {
-    0% {
-        opacity: 1.0;
-    }
-
-    50% {
-        opacity: 0.0;
-    }
-
-    100% {
-        opacity: 1.0;
-    }
-}
+} */
 
 @keyframes parpadeo {
     0% {
-        opacity: 1.0;
     }
 
     50% {
-        opacity: 0.0;
-        background: green;
+        color: red;
     }
 
     100% {
-        opacity: 1.0;
     }
 }
 

@@ -66,7 +66,7 @@ export const utilidades = {
         const fechaSalidaObj = DateTime.fromISO(fechaSalida_ISO);
         const diferencia = fechaSalidaObj.diff(fechaHoy, ['days', 'hours']);
         const dias = diferencia.days;
-        const horas =  Math.floor(diferencia.hours);
+        const horas = Math.floor(diferencia.hours);
         if (dias > 0) {
             return `${dias} ${dias === 1 ? 'día' : 'días'} y ${horas} ${horas === 1 ? 'hora' : 'horas'}`;
         } else if (horas > 0) {
@@ -104,4 +104,13 @@ export const utilidades = {
         // Comparar las fechas
         return date1.getTime() === date2.getTime();
     },
+    contructorComasEY: (array) => {
+        if (array.length === 1) {
+            return array[0];
+        } else {
+            const formattedString = array.slice(0, -1).join(', ') + ' y ' + array.slice(-1);
+            return formattedString;
+        }
+
+    }
 }

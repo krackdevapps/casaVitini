@@ -6,14 +6,19 @@ export const obtenerCamaDeLaHabitacion = async (data) => {
         const habitacionUID = data.habitacionUID
 
         const consulta = `
-        SELECT "componenteUID" 
-        FROM "reservaCamas" 
-        WHERE "reservaUID" = $1 AND "habitacionUID" = $2;`;
+        SELECT 
+        *
+        FROM 
+        "reservaCamas" 
+        WHERE 
+        "reservaUID" = $1 
+        AND
+        "habitacionUID" = $2;`;
         const parametros = [
             reservaUID,
             habitacionUID
         ]
-        const resuelve = await conexion.query(consulta, [parametros]);
+        const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows[0]
     } catch (errorCapturado) {
         throw errorCapturado

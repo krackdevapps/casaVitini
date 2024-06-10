@@ -5,7 +5,7 @@ export const eliminarEnlacesDePagoPorCaducidad = async (fechaActual) => {
         DELETE FROM
         "enlacesDePago"
         WHERE
-        caducidad < $1`
+        "fechaCaducidad" < $1`
         const resuelve = await conexion.query(consulta, [fechaActual]);
         return resuelve.rows
     } catch (errorCapturado) {

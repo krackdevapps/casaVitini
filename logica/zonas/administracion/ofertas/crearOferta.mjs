@@ -4,9 +4,9 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 
 import { obtenerOfertasPorNombreUI } from "../../../repositorio/ofertas/obtenerOfertasPorNombreUI.mjs";
 import { insertarOferta } from "../../../repositorio/ofertas/insertarOferta.mjs";
-import { validarApartamentos } from "../../../sistema/ofertas/validarApartamentos.mjs";
+import { validarApartamentos } from "../../../sistema/ofertas/entidades/reserva/validarApartamentos.mjs";
 import { insertarApartamentosEnOferta } from "../../../repositorio/ofertas/insertarApartamentosEnOferta.mjs";
-import { validadoresLocales } from "../../../sistema/ofertas/validadoresLocales.mjs";
+import { validadoresLocales } from "../../../sistema/ofertas/entidades/reserva/validadoresLocales.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const crearOferta = async (entrada, salida) => {
@@ -57,7 +57,7 @@ export const crearOferta = async (entrada, salida) => {
             fecha_ISO: fechaFin_ISO,
             nombreCampo: "La fecha fin de la oferta"
         })
-        validadoresCompartidos.fechas.validacionVectorial({
+        await validadoresCompartidos.fechas.validacionVectorial({
             fechaEntrada_ISO: fechaInicio_ISO,
             fechaSalida_ISO: fechaFin_ISO
         })

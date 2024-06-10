@@ -36,7 +36,7 @@ export const obtenerComportamientosPorRangoPorTipoIDV = async (metadatos) => {
                )
             AND 
             "estadoIDV" = $5
-              ;`
+              `
     const parametros = [
       fechaInicio_ISO,
       fechaFinal_ISO,

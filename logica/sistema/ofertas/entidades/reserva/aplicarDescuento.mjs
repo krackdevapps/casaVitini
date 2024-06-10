@@ -1,7 +1,7 @@
 import Decimal from "decimal.js"
-import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
-import { constructorIndiceTotales } from "./constructorInficeTotales.mjs"
-import { constructorObjetoEstructuraPrecioDia } from "../precios/constructorObjetoEstructuraPrecioDia.mjs"
+import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs"
+//import { constructorIndiceTotales } from "./constructorInficeTotales.mjs"
+import { constructorObjetoEstructuraPrecioDia } from "../../../precios/entidades/reserva/constructorObjetoEstructuraPrecioDia.mjs"
 import { calcularTotal } from "./calcularTotal.mjs"
 import { controlInstanciaDecimal } from "./controlInstanciaDecimal.mjs"
 
@@ -10,12 +10,19 @@ export const aplicarDescuento = async (data) => {
         const fechaEntradaReserva_ISO = data.fechaEntradaReserva_ISO
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
         const ofertarParaAplicarDescuentos = data.ofertarParaAplicarDescuentos
+        const origen = data.origen
         const estructura = data.estructura
-        const indiceTotales = constructorIndiceTotales(estructura)
+        if (origen !== "porCondicion" && origen !== "porAdministrador") {
+            const error = "aplicarDescuento necesita llave origen, esta puede ser porCondicion o porAdminstrador"
+            throw new Error(error)
+        }
 
         if (!estructura.hasOwnProperty("ofertasAplicadas")) {
             estructura.ofertasAplicadas = {
-                ofertas: {},
+                ofertas: {
+                    porCondicion: {},
+                    porAdministrador: {}
+                },
                 porTotal: [],
                 entidades: {
                     reserva: {
@@ -23,16 +30,16 @@ export const aplicarDescuento = async (data) => {
                         porDia: {},
                     }
                 }
-
             }
         }
 
         const contenedorTotalesBase = estructura.global.totales
         const totalNeto = new Decimal(contenedorTotalesBase.totalNeto)
-        const contenedorOfertas = estructura.ofertasAplicadas.ofertas
+        const contenedorOfertas = estructura.ofertasAplicadas.ofertas[origen]
         const contenedorPorTotal = estructura.ofertasAplicadas.porTotal
         const contenedorPorApartamento = estructura.ofertasAplicadas.entidades.reserva.porApartamento
         const contenedorPorDia = estructura.ofertasAplicadas.entidades.reserva.porDia
+
 
         let totalGlobalDescuento = new Decimal("0.00")
 
@@ -52,12 +59,16 @@ export const aplicarDescuento = async (data) => {
             }
 
         }
-        
+
         for (const oferta of ofertarParaAplicarDescuentos) {
             const descuentos = oferta.oferta.descuentosJSON
             const ofertaUID = oferta.oferta.ofertaUID
             const tipoDescuento = descuentos.tipoDescuento
+            const autorizacion = oferta.autorizacion
 
+            if (origen === "porCondicion" && autorizacion !== "aceptada") {
+                continue
+            }
             if (tipoDescuento === "totalNeto") {
                 const tipoAplicacion = descuentos.tipoAplicacion
                 const descuentoTotal = descuentos.descuentoTotal
@@ -92,9 +103,10 @@ export const aplicarDescuento = async (data) => {
                     const descuentoTotal = descuentoDelApartamento.descuentoTotal
                     const tipoAplicacion = descuentoDelApartamento.tipoAplicacion
 
-                    const indiceTotalApartamento = indiceTotales.indicePorApartamentos[apartamentoIDV].posicion
-                    
-                    const totalPorApartametno = estructura.entidades.reserva.desglosePorApartamento[indiceTotalApartamento].totalNeto
+                    const totalPorApartametno = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]?.totalNeto
+                    if (!totalPorApartametno) {
+                        continue
+                    }
 
                     if (!contenedorPorApartamento.hasOwnProperty(apartamentoIDV)) {
                         contenedorPorApartamento[apartamentoIDV] = {
@@ -162,18 +174,21 @@ export const aplicarDescuento = async (data) => {
                                 const apartamentoIDV = apartamento.apartamentoIDV
                                 const descuentoTotal = new Decimal(apartamento.descuentoTotal)
                                 const tipoAplicacion = apartamento.tipoAplicacion
-                                const indicePosicionApartamento = indiceTotales.indicePorNoche[fechaDelDia].posicion
-                                const indiceTotalPorApartamento = indiceTotales.indicePorNoche
+
+                                //     desglosePorNoche
+                                // [fechaDelDia]
+                                //     .apartamentosPorNoche
+                                // [apartamentoIDV]
+
+                                const totalPorApartamento = estructura.entidades.reserva
+                                    ?.desglosePorNoche
                                 [fechaDelDia]
-                                    .apartamentosPorNoche
+                                    ?.apartamentosPorNoche
                                 [apartamentoIDV]
-                                    .posicion
-                                const totalPorApartamento = estructura.entidades.reserva.
-                                    desglosePorNoche
-                                [indicePosicionApartamento]
-                                    .apartamentosPorNoche
-                                [indiceTotalPorApartamento]
-                                    .precioNetoApartamento
+                                    ?.precioNetoApartamento
+                                if (!totalPorApartamento) {
+                                    continue
+                                }
 
                                 if (!contenedorPorDia[fechaDelDia].hasOwnProperty("porApartamento")) {
                                     contenedorPorDia[fechaDelDia].porApartamento = {}
@@ -221,10 +236,9 @@ export const aplicarDescuento = async (data) => {
 
                             const descuentoTotal = descuentoPorDia.descuentoTotal
                             const tipoAplicacion = descuentoPorDia.tipoAplicacion
-                            const indicePosicionNetoPorDiaApartamento = indiceTotales.indicePorNoche[fechaDelDia].posicion
                             const totalNetoPorDia = estructura.entidades.reserva.
                                 desglosePorNoche
-                            [indicePosicionNetoPorDiaApartamento]
+                            [fechaDelDia]
                                 .precioNetoNoche
 
                             const totalCalculado = calcularTotal({
@@ -279,11 +293,9 @@ export const aplicarDescuento = async (data) => {
                         }
                         const descuentoTotal = descuentos.descuentoTotal
                         const tipoAplicacion = descuentos.tipoAplicacion
-                        const indicePosicionNetoPorDiaApartamento = indiceTotales.indicePorNoche[fechaDelDia].posicion
-
                         const totalNetoPorDia = estructura.entidades.reserva
                             .desglosePorNoche
-                        [indicePosicionNetoPorDiaApartamento]
+                        [fechaDelDia]
                             .precioNetoNoche
 
                         const totalCalculado = calcularTotal({

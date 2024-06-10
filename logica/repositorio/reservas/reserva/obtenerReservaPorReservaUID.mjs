@@ -4,13 +4,14 @@ export const obtenerReservaPorReservaUID = async (reservaUID) => {
     try {
         const consulta = `
         SELECT
+        "reservaUID",
         to_char("fechaEntrada", 'YYYY-MM-DD') AS "fechaEntrada",
         to_char("fechaSalida", 'YYYY-MM-DD') AS "fechaSalida",
         "estadoReservaIDV",
         "estadoPagoIDV",
         "origenIDV",
-        to_char("fechaCreacion", 'YYYY-MM-DD') AS "fechaCreacion",
-        to_char("fechaCancelacion", 'YYYY-MM-DD') AS "fechaCancelacion"
+        to_char("fechaCreacion",  'YYYY-MM-DD HH24:MI:SS.MS') AS "fechaCreacion",
+        to_char("fechaCancelacion",  'YYYY-MM-DD HH24:MI:SS.MS') AS "fechaCancelacion"
         FROM reservas
         WHERE "reservaUID" = $1;`;
         const resuelve = await conexion.query(consulta, [reservaUID]);

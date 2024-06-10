@@ -6,7 +6,7 @@ export const obtenerApartamentoComoEntidadPorApartamentoIDV = async (apartamento
         SELECT
         *
         FROM apartamentos
-        WHERE "apartamentoIDV" = $1;`;
+        WHERE "apartamentoIDV" = $1`;
         const resuelve = await conexion.query(consulta, [apartamentoIDV]);
         if (resuelve.rowCount === 0) {
             const error = "No se encuentra ningun apartamento como entidad con ese apartamentoIDV"

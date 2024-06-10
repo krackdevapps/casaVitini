@@ -10,11 +10,9 @@ export const obtenerInterruptorPorInterruptorIDV = async (interruptorIDV) => {
             WHERE 
                 "interruptorIDV" = $1;
            `;
-
-
         const resuelve = await conexion.query(consulta, [interruptorIDV]);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningun interruptor con ese interruptorIDV : " + interruptorIDV;
+            const error = "CUIDADO! -> No existe ningun interruptor con ese interruptorIDV : " + interruptorIDV;
             throw new Error(error)
         }
         return resuelve.rows[0]

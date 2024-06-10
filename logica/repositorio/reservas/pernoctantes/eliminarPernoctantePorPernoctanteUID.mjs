@@ -6,8 +6,12 @@ export const eliminarPernoctantePorPernoctanteUID = async (data) => {
         const pernoctanteUID = data.pernoctanteUID
 
         const consulta = `
-        DELETE FROM "reservaPernoctantes"
-        WHERE reserva = $1 AND "pernoctanteUID" = $2;
+        DELETE FROM 
+        "reservaPernoctantes"
+        WHERE 
+        "reservaUID" = $1 
+        AND
+        "componenteUID" = $2;
         `;
         const parametros = [
             reservaUID,

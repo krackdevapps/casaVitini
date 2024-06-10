@@ -9,7 +9,7 @@ export const obtenerDetallesCliente = async (clienteUID) => {
         "segundoApellido",
         pasaporte,
         telefono,
-        email,
+        mail,
         notas 
         FROM 
         clientes 

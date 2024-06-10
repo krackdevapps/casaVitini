@@ -3,13 +3,13 @@ import { conexion } from "../../../componentes/db.mjs"
 export const insertarHabitacionEnApartamento = async (data) => {
     try {
         const reservaUID = data.reservaUID
-        const apartamentoIDV = data.apartamentoIDV
+        const apartamentoUID = data.apartamentoUID
         const habitacionUI = data.habitacionUI
         const habitacionIDV = data.habitacionIDV
         const consulta = `
         INSERT INTO "reservaHabitaciones"
         (
-        "apartamentoUID"
+        "apartamentoUID",
         "habitacionIDV",
         "habitacionUI",
         "reservaUID"
@@ -18,7 +18,7 @@ export const insertarHabitacionEnApartamento = async (data) => {
         RETURNING "componenteUID"
         `;
         const parametros = [
-            apartamentoIDV,
+            apartamentoUID,
             habitacionIDV,
             habitacionUI,
             reservaUID

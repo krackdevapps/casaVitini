@@ -52,7 +52,6 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
             const error = "Solo se acetan imagenes PNG, TIFF, JPEG y JPG.";
             throw new Error(error);
         }
-        await campoDeTransaccion("iniciar")
         const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
 
         if (configuracionApartamento.length === 0) {
@@ -70,10 +69,7 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
             imagen: String(contenidoArchivo)
         };
         return ok
-
-        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
-        await campoDeTransaccion("cancelar")
         throw errorFinal
     }
 

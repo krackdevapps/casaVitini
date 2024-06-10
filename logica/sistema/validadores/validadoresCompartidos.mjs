@@ -764,7 +764,7 @@ export const validadoresCompartidos = {
                     .replace("+", '00')
                     .trim()
 
-                if (!filtroTelefono.test(telefonoLimpio)) {
+                if (filtroTelefono.test(telefonoLimpio)) {
                     const error = "el campo Telefono no cumple con el formato esperado, el formado esperado es una cadena con numeros"
                     throw new Error(error)
                 }
@@ -801,15 +801,15 @@ export const validadoresCompartidos = {
                     throw new Error(error);
                 }
                 if (filtro === "soloCadenasIDV") {
-                    array.every((cadena, index) => {
+                    array.forEach((item, posicion) => {
                         validadoresCompartidos.tipos.cadena({
-                            string: cadena,
-                            nombreCampo: `En la posicion ${index} del array debe haber una cadena`,
+                            string: item,
+                            nombreCampo: `${nombreCampo} es un array que en la posicion ${(posicion+1)} tiene un tipo que no es cadena, este array solo acepta cadenas.`,
                             filtro: "strictoIDV",
                             sePermiteVacio: "no",
                             limpiezaEspaciosAlrededor: "si"
-                        })
-                    })
+                        }) 
+                    })           
                 }
                 if (filtro === "soloNumerosEnteros") {
                     array.every((cadena, index) => {
@@ -839,7 +839,7 @@ export const validadoresCompartidos = {
                         });
                         const controlDuplicados = new Set(arrayFiltrado).size !== arrayFiltrado.length;
                         if (controlDuplicados) {
-                            const error = `${nombreCampo} que es un arrayFiltrado, tiene duplicados y no deberia tener.`;
+                            const error = `${nombreCampo} que es un array filtrado, tiene duplicados y no deberia tener.`;
                             throw new Error(error);
                         }
                     }

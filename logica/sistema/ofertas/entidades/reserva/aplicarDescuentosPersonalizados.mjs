@@ -1,4 +1,4 @@
-import { obtenerOfertasPorArrayUID } from "../../repositorio/ofertas/perfiles/obtenerOfertasPorArrayUID.mjs"
+import { obtenerOfertasPorArrayUID } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorArrayUID.mjs"
 import { aplicarDescuento } from "./aplicarDescuento.mjs"
 
 export const aplicarDescuentosPersonalizados = async (data) => {
@@ -17,6 +17,7 @@ export const aplicarDescuentosPersonalizados = async (data) => {
         ofertaAnalizadasPorCondiciones.push(ofertaEstructura)
     }
     await aplicarDescuento({
+        origen: "porAdministrador",
         ofertarParaAplicarDescuentos: ofertaAnalizadasPorCondiciones,
         estructura: estructura,
         fechaEntradaReserva_ISO,

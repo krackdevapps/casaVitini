@@ -5,11 +5,11 @@ export const obtenerCamaDeLaHabitacionPorHabitacionUID = async (data) => {
         const camaIDV = data.camaIDV
         const consulta = `
             SELECT
-            cama
+            *
             FROM
             "configuracionCamasEnHabitacion"
             WHERE
-            habitacion = $1 AND cama = $2;
+            "habitacionUID" = $1 AND "camaIDV" = $2;
             `
         const resuelve = await conexion.query(consulta, [habitacionUID, camaIDV])
         return resuelve.rows[0]

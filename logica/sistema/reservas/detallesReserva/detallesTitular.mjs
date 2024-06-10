@@ -4,33 +4,40 @@ import { obtenerTitularReservaPorReservaUID } from "../../../repositorio/reserva
 import { eliminarTitularPoolPorReservaUID } from "../../../repositorio/reservas/titulares/eliminarTitularPoolPorReservaUID.mjs"
 
 export const detallesTitular = async (reservaUID) => {
-    const titular = await obtenerTitularReservaPorReservaUID(reservaUID)
-    const titularUID = titular.titularUID
-    const t = {}
-    if (titularUID) {
-        await eliminarTitularPoolPorReservaUID(reservaUID)
-        const cliente = await obtenerDetallesCliente(titularUID)
 
-        const nombre = cliente.nombre
-        const primerApellido = cliente.primerApellido
-        const segundoApellido = cliente.segundoApellido
-        const nombreTitular = `${nombre} ${primerApellido} ${segundoApellido}`
-
-        t.clienteUID = titularUID
-        t.nombreTitular = nombreTitular
-        t.pasaporteTitular = cliente.pasaporte
-        t.emailTitular = cliente.mail
-        t.telefonoTitular = cliente.telefono
-        t.tipoTitular = "titularCliente"
-    } else {
-        const titularPool = await obtenerTitularPoolReservaPorReservaUID(reserva)
-        t.nombreTitular = titularPool.nombreTitular
-        t.pasaporteTitular = titularPool.pasaporteTitular
-        t.emailTitular = titularPool.emailTitular
-        t.telefonoTitular = titularPool.telefonoTitular
-        t.tipoTitular = "titularPool"
+    try {
+        const titular = await obtenerTitularReservaPorReservaUID(reservaUID)
+    
+        const titularUID = titular?.titularUID
+        const t = {}
+        if (titularUID) {
+            await eliminarTitularPoolPorReservaUID(reservaUID)
+            const cliente = await obtenerDetallesCliente(titularUID)
+    
+            const nombre = cliente.nombre
+            const primerApellido = cliente.primerApellido
+            const segundoApellido = cliente.segundoApellido
+            const nombreTitular = `${nombre} ${primerApellido} ${segundoApellido}`
+    
+            t.clienteUID = titularUID
+            t.nombreTitular = nombreTitular
+            t.pasaporteTitular = cliente.pasaporte
+            t.emailTitular = cliente.mail
+            t.telefonoTitular = cliente.telefono
+            t.tipoTitularIDV = "titularCliente"
+        } else {
+            const titularPool = await obtenerTitularPoolReservaPorReservaUID(reservaUID)
+            t.nombreTitular = titularPool.nombreTitular
+            t.pasaporteTitular = titularPool.pasaporteTitular
+            t.emailTitular = titularPool.emailTitular
+            t.telefonoTitular = titularPool.telefonoTitular
+            t.tipoTitularIDV = "titularPool"
+        }
+        //delete reserva.titularPool
+        return t
+    } catch (error) {
+        throw error
     }
-    delete reserva.titularPool
-    return t
+  
 
 }

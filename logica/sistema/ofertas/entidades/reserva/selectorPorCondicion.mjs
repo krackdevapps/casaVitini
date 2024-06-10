@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
-import { selectorRangoUniversal } from "../selectoresCompartidos/selectorRangoUniversal.mjs";
-import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs";
+import { selectorRangoUniversal } from "../../../selectoresCompartidos/selectorRangoUniversal.mjs";
+import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs";
 
 export const selectorPorCondicion = async (data) => {
     try {

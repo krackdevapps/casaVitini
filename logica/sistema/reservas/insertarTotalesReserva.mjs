@@ -1,6 +1,6 @@
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
-import { actualizarEstadoPago } from '../precios/actualizarEstadoPago.mjs';
-import { precioReserva } from '../precios/precioReserva.mjs';
+//import { actualizarEstadoPago } from '../precios/entidades/reseerva/entidades/reserva/actualizarEstadoPago.mjs';
+import { precioReserva } from '../precios/obsoleto/precioReserva.mjs';
 import { eliminarTotalesPorNochePorReservaUID } from '../../repositorio/reservas/transacciones/totales/eliminarTotalesPorNochePorReservaUID.mjs';
 import { insertarTotalPorNohce } from '../../repositorio/reservas/transacciones/totales/insertarTotalPorNohce.mjs';
 import { eliminarTotalesPorApartamentoPorReservaUID } from '../../repositorio/reservas/transacciones/totales/eliminarTotalesPorApartamentoPorReservaUID.mjs';
@@ -12,7 +12,6 @@ import { insertarOfertaEnReserva } from '../../repositorio/reservas/transaccione
 import { eliminarTotalesPorReservaUID } from '../../repositorio/reservas/transacciones/totales/eliminarTotalesPorReservaUID.mjs';
 import { insertarTotalEnReserva } from '../../repositorio/reservas/transacciones/totales/insertarTotalEnReserva.mjs';
 import { obtenerReservaPorReservaUID } from '../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs';
-import { campoDeTransaccion } from '../../repositorio/globales/campoDeTransaccion.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 export const insertarTotalesReserva = async (metadatos) => {
     try {
@@ -38,7 +37,6 @@ export const insertarTotalesReserva = async (metadatos) => {
                 throw new Error(error)
             }
         }
-        await campoDeTransaccion("iniciar")
         const resolverPrecio = await precioReserva(transaccion)
         const desgloseFinanciero = resolverPrecio.ok.desgloseFinanciero
         const totalesPorNoche = desgloseFinanciero.totalesPorNoche
@@ -269,14 +267,12 @@ export const insertarTotalesReserva = async (metadatos) => {
             totalConImpuestos: totalConImpuestos,
             reservaUID: reservaUID
         })
-        await actualizarEstadoPago(reservaUID)
-        await campoDeTransaccion("confirmar")
+       // await actualizarEstadoPago(reservaUID)
         const ok = {
             ok: "datos financieros generados correctamente en esta reserva"
         }
         return ok
     } catch (errorCapturado) {
-        await campoDeTransaccion("cancelar")
-        throw error;
+        throw errorCapturado;
     }
 }

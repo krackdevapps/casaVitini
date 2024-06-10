@@ -11,19 +11,19 @@ if (entorno === "nativo") {
     configuracion.user = process.env.BASEDEDATOS_USER
     configuracion.password = "hola"
     configuracion.database = "casaVitiniDev"
-    configuracion.max = 100
+    configuracion.max = 1000
     configuracion.port = 5432
-    configuracion.idleTimeoutMillis = 1000
-    configuracion.connectionTimeoutMillis = 3000
+    configuracion.idleTimeoutMillis = 5000
+    configuracion.connectionTimeoutMillis = 5000
 } else if (entorno === "docker") {
     configuracion.host = 'base_de_datos'
     configuracion.user = process.env.BASEDEDATOS_USER
     configuracion.password = process.env.BASEDEDATOS_PASS
     configuracion.database = process.env.BASEDEDATOS_DBNAME
-    configuracion.max = 100
+    configuracion.max = 1000
     configuracion.port = 5432
-    configuracion.idleTimeoutMillis = 1000
-    configuracion.connectionTimeoutMillis = 3000
+    configuracion.idleTimeoutMillis = 5000
+    configuracion.connectionTimeoutMillis = 5000
 } else {
     const errorMsg = "No se ha definido el tipo de entorno para la base de datos"
     throw new Error(errorMsg)

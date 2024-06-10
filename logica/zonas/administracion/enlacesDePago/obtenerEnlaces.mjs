@@ -1,5 +1,5 @@
 import { obtenerTodosEnlaceDePago } from "../../../repositorio/enlacesDePago/obtenerTodosLosEnlaceDePago.mjs";
-import { obtenerTotalesReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerTotalesReservaPorReservaUID.mjs";
+import { obtenerDesgloseFinancieroPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerDesgloseFinancieroPorReservaUID.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 
@@ -27,7 +27,7 @@ export const obtenerEnlaces = async (entrada, salida) => {
             const cantidad = detallesEnlace.cantidad;
             const descripcion = detallesEnlace.descripcion;
             const totalIDV = "totalConImpuestos";
-            const totalesReserva = await obtenerTotalesReservaPorReservaUID(reservaUID)
+            const totalesReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
             const totalDeLaReservaConImpuestos = totalesReserva.totalConImpuestos
             const precio = totalDeLaReservaConImpuestos ? totalDeLaReservaConImpuestos : "Reserva sin total"
 

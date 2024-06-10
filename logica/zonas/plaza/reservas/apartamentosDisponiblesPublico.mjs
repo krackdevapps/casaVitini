@@ -6,7 +6,7 @@ import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apa
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
-import { procesadorPrecio } from "../../../sistema/precios/procesdadorPrecio.mjs";
+import { procesador } from "../../../sistema/precios/procesador.mjs";
 
 export const apartamentosDisponiblesPublico = async (entrada, salida) => {
     try {
@@ -27,9 +27,8 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
         const fechaEntrad_objeto = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
         if (fechaEntrad_objeto < tiempoZH.startOf('day')) {
             const error = "La fecha de entrada no puede ser inferior a la fecha actual. Solo se pueden hacer reservas a partir de hoy";
-          // throw new Error(error);
+            // throw new Error(error);
         }
-
         await eliminarBloqueoCaducado();
         const rol = entrada.session.rol;
         const configuracionApartamentosPorRango = {
@@ -42,24 +41,26 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
         const resuelveApartametnoDisponiblesPublico = await apartamentosPorRango(configuracionApartamentosPorRango);
         const apartamentosDisponiblesEncontrados = resuelveApartametnoDisponiblesPublico.apartamentosDisponibles;
         const configuracionesApartamentosVerificadas = await configuracionApartamento(apartamentosDisponiblesEncontrados);
-
-
-        const desgloseFinanciero = await procesadorPrecio({
-            fechaEntrada: fechaEntrada_ISO,
-            fechaSalida: fechaSalida_ISO,
-            apartamentosArray: apartamentosDisponiblesEncontrados,
-            capaOfertas: "si",
-            zonasDeLaOferta: ["global", "publica"],
-            descuentosParaRechazar: ["51"],
+        const desgloseFinanciero = await procesador({
+            entidades: {
+                reserva: {
+                    tipoOperacion: "crearDesglose",
+                    fechaEntrada: fechaEntrada_ISO,
+                    fechaSalida: fechaSalida_ISO,
+                    apartamentosArray: apartamentosDisponiblesEncontrados,
+                    capaOfertas: "si",
+                    zonasArray: ["global", "publica"],
+                    descuentosParaRechazar: ["51"],
+                    capaDescuentosPersonalizados: "si",
+                    descuentosArray: ["52", "50", "51", "50", "50"]
+                }
+            },
             capaImpuestos: "si",
-            capaDescuentosPersonalizados: "si",
-            descuentosArray: ["52", "50", "51","50","50"]
         })
         const estructuraFinal = {
-            ...desgloseFinanciero
-        };
-
-        estructuraFinal.apartamentosDisponibles = configuracionesApartamentosVerificadas.configuracionApartamento;
+            desgloseFinanciero,
+            apartamentosDisponibles: configuracionesApartamentosVerificadas.configuracionApartamento
+        }
         const ok = {
             ok: estructuraFinal
         };

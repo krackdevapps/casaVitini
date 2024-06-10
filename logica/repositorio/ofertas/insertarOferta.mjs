@@ -3,43 +3,50 @@ export const insertarOferta = async (data) => {
     try {
 
         const nombreOferta = data.nombreOferta
+        const entidad = data.entidad
         const fechaInicio = data.fechaInicio
         const fechaFinal = data.fechaFinal
         const condiciones = JSON.stringify(data.condiciones)
         const descuentos = JSON.stringify(data.descuentos)
         const estado = data.estado
+        const zonaIDV = data.zonaIDV
 
         const consulta = `
             INSERT INTO "ofertas"
             (
                 "nombreOferta",
+                "entidadIDV",
                 "fechaInicio",
                 "fechaFinal",
                 "condicionesArray",
                 "descuentosJSON",
-                estado
+                "estadoIDV",
+                "zonaIDV",
             )
             VALUES
             (
                 COALESCE($1::text, NULL),
-                COALESCE($2::date, NULL),
+                COALESCE($2::text, NULL),
                 COALESCE($3::date, NULL),
-                NULLIF($4::jsonb, NULL),
+                COALESCE($4::date, NULL),
                 NULLIF($5::jsonb, NULL),
-                COALESCE($6::text, NULL)
+                NULLIF($6::jsonb, NULL),
+                COALESCE($7::text, NULL)
+                COALESCE($8::text, NULL)
 
-    
             )
             RETURNING *;
             `;
 
         const parametros = [
             nombreOferta,
+            entidad,
             fechaInicio,
             fechaFinal,
             condiciones,
             descuentos,
-            estado
+            estado,
+            zonaIDV
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {

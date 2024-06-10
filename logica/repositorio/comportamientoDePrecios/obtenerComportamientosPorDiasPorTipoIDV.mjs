@@ -29,7 +29,7 @@ export const obtenerComportamientosPorDiasTipoIDV = async (metadatos) => {
             )
           AND 
           "estadoIDV" = $4
-          ;`
+          `
     const parametros = [
       nombreDiasAgrupados,
       tipoIDV,

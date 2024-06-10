@@ -1,6 +1,6 @@
 import { conexion } from "../../componentes/db.mjs";
 
-export const insertarClientePool = async (data) => {
+export const insertarTitularPool = async (data) => {
     try {
         const titularReservaPool = data.titularReservaPool
         const pasaporteTitularPool = data.pasaporteTitularPool
@@ -14,12 +14,12 @@ export const insertarClientePool = async (data) => {
         (
         "nombreTitular",
         "pasaporteTitular",
-        "emailTitular",
+        "mailTitular",
         "telefonoTitular",
         "reservaUID"
         )
         VALUES 
-        ($1, $2, $3, $4, $5);
+        ($1, $2, $3, $4, $5)
         RETURNING
         *;`
         const datosClientes = [

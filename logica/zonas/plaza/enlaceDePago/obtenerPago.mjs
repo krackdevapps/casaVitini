@@ -1,7 +1,6 @@
 import { obtenerEnlaceDePagoPorCodigoUPID } from "../../../repositorio/enlacesDePago/obtenerEnlaceDePagoPorCodigoUPID.mjs";
+import { obtenerDesgloseFinancieroPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerDesgloseFinancieroPorReservaUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
-import { obtenerTotalesReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerTotalesReservaPorReservaUID.mjs";
-
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const obtenerPago = async (entrada, salida) => {
@@ -44,8 +43,8 @@ export const obtenerPago = async (entrada, salida) => {
         totalImpuestos
         totalConImpuestos
         */
-       
-        const totalesDeLaReserva = await obtenerTotalesReservaPorReservaUID(reservaUID)
+
+        const totalesDeLaReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
         const sumaImpuestos = new Decimal(totalesDeLaReserva.totalImpuestos);
         const totalNeto = new Decimal(totalesDeLaReserva.totalReservaNeto);
         const proporcion = new Decimal(cantidadPagoParcial).times(100).dividedBy(totalNeto).times(sumaImpuestos.dividedBy(100));
@@ -89,7 +88,7 @@ export const obtenerPago = async (entrada, salida) => {
         };
         const ok = {
             ok: estructuraEnlace
-        };
+        }
         return ok
 
     } catch (errorCapturado) {

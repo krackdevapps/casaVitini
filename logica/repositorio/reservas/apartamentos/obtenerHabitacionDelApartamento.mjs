@@ -5,6 +5,8 @@ export const obtenerHabitacionesDelApartamento = async (data) => {
         const reservaUID = data.reservaUID
         const apartamentoUID = data.apartamentoUID
 
+
+
         const consulta = `
         SELECT 
         *
@@ -19,6 +21,7 @@ export const obtenerHabitacionesDelApartamento = async (data) => {
             reservaUID,
             apartamentoUID
         ]
+
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows
     } catch (errorCapturado) {

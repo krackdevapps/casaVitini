@@ -7,6 +7,7 @@ import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../reposi
 import { obtenerCamaDeLaHabitacionPorHabitacionUID } from '../../repositorio/arquitectura/configuraciones/obtenerCamaDeLaHabitacionPorHabitacionUID.mjs';
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from '../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
+import { utilidades } from '../../componentes/utilidades.mjs';
 
 export const validarObjetoReserva = async (data) => {
     try {
@@ -56,8 +57,8 @@ export const validarObjetoReserva = async (data) => {
         const fechasParaValidarLimites = {
             fechaEntrada_ISO: fechaEntrada_ISO,
             fechaSalida_ISO: fechaSalida_ISO
-        } 
-        console.log("reservaObjeto", reservaObjeto)
+        }
+
 
         await limitesReservaPublica(fechasParaValidarLimites)
 
@@ -72,7 +73,7 @@ export const validarObjetoReserva = async (data) => {
         if (controlApartamentosIDVUnicos.size !== apartemtosIDVarray.length) {
             const error = "Existen apartamentosIDV repetidos en el objeto de la reserva"
             throw new Error(error)
-        }          
+        }
 
         for (const apartamento of Object.entries(alojamiento)) {
             const apartamentoIDV = apartamento[0]
@@ -113,24 +114,39 @@ export const validarObjetoReserva = async (data) => {
         const resueleApartamentosDisponibles = await apartamentosPorRango(fecha)
         const apartamentosDisponibles = resueleApartamentosDisponibles?.apartamentosDisponibles
         if (apartamentosDisponibles.length === 0) {
-            const error = "No hay ningun apartamento disponible"
+            const error = "Sentimos informar que no ya no hay ningún apartamento disponible de su reserva para reservas por que estan ocupados."
             throw new Error(error)
         }
+
+        const apartamentosOcupados = []
+        for (const apartamento of Object.entries(alojamiento)) {
+            const apartamentoIDV = apartamento[0]
+            if (!apartamentosDisponibles.includes(apartamentoIDV)) {
+                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                apartamentosOcupados.push(apartamentoUI)
+            }
+        }
+
+        if (apartamentosOcupados.length > 0) {
+            const constructo = utilidades.contructorComasEY(apartamentosOcupados)
+            let error
+            if (apartamentosOcupados.length === 1) {
+                error = `Sentimos informar que el ${constructo} no esta disponible para las fechas seleccionadas.`
+            } else {
+                error = `Sentimos informar que ${constructo} ya no estan dipsonibles para las fechas seleccionadas.`
+            }
+            throw new Error(error)
+        }
+
         for (const apartamento of Object.entries(alojamiento)) {
             const apartamentoIDV = apartamento[0]
             const habitacionesDelApartamentoPorValidar = apartamento[1].habitaciones
-            const filtroCadenaMinusculasSinEspacios = /^[a-z0-9]+$/;
-            if (!apartamentosDisponibles.includes(apartamentoIDV)) {
-                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
-                const error = `Sentimos informar que el '${apartamentoUI}' ya no esta disponible para reservar para las fechas seleccionadas`
-                throw new Error(error)
-            }
-            const habitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV) || []
+            const habitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
             const habitacionesEstructura = {}
             const habitacionesSoloIDV = []
             habitacionesPorApartamento.forEach((habitacionApartamento) => {
-                const habitacionIDV = habitacionApartamento.habitacion
-                const habitacionUID = habitacionApartamento.uid
+                const habitacionIDV = habitacionApartamento.habitacionIDV
+                const habitacionUID = habitacionApartamento.componenteUID
                 habitacionesEstructura[habitacionIDV] = habitacionUID
                 habitacionesSoloIDV.push(habitacionIDV)
             })
@@ -147,29 +163,35 @@ export const validarObjetoReserva = async (data) => {
                         limpiezaEspaciosAlrededor: "si",
                     })
                     if (!habitacionesSoloIDV.includes(habitacionIDVPorValidar)) {
-                        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
-                        const error = `El ${apartamentoUI} contiene una habitacion que no existe, concretamente la habitacion ${habitacionIDVPorValidar}`
+                        const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                        const apartamentoUI = apartamento.apartamentoUI
+                        const error = `El ${apartamentoUI} contiene una habitacion que no existe, concretamente se hace referencia a un habitacionIDV: ${habitacionIDVPorValidar}`
                         throw new Error(error)
                     }
                 }
                 for (const habitacion of Object.entries(habitacionesDelApartamentoPorValidar)) {
                     const habitacionIDV = habitacion[0]
+                    const habitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
                     const habitacionUID = habitacionesEstructura[habitacionIDV]
-                    const camaIDV = habitacion[1]?.camaSeleccionada?.camaIDV
-                    if (!camaIDV || !filtroCadenaMinusculasSinEspacios.test(camaIDV)) {
-                        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                    const habitacionUI = habitacionComoEntidad.habitacionUI
+                    const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                    const apartamentoUI = apartamento.apartamentoUI
 
-                        const habitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
-                        const error = `Por favor selecciona el tipo de cama de la ${habitacionUI} del apartamento ${apartamentoUI}`
-                        throw new Error(error)
-                    }
+                    const camaIDV = validadoresCompartidos.tipos.cadena({
+                        string: habitacion[1]?.camaSeleccionada?.camaIDV,
+                        nombreCampo: `El identificador visual camaIDV, en la habitacion ${habitacionUI}`,
+                        filtro: "strictoIDV",
+                        sePermiteVacio: "no",
+                        limpiezaEspaciosAlrededor: "si",
+                    })
+
                     const dataCamaPorHabitacion = {
                         habitacionUID: habitacionUID,
                         camaIDV: camaIDV,
                     }
                     const camaPorHabitacion = await obtenerCamaDeLaHabitacionPorHabitacionUID(dataCamaPorHabitacion)
-                    if (camaPorHabitacion.length === 0) {
-                        const error = `Dentro de la habitacion ${habitacionIDV} del apartamento ${apartamentoIDV} no exista la cama ${camaIDV}`
+                    if (!camaPorHabitacion) {
+                        const error = `Dentro de la habitacion ${habitacionUI} del apartamento ${apartamentoUI} no existe ninguna cama con identificador identificador visual: ${camaIDV}`
                         throw new Error(error)
                     }
                 }
@@ -177,8 +199,9 @@ export const validarObjetoReserva = async (data) => {
 
         }
         if (filtroTitular === "si") {
+            const datosTitular = reservaObjeto.datosTitular
             const nombreTitular = validadoresCompartidos.tipos.cadena({
-                string: reservaObjeto.datosTitular?.nombreTitular || "",
+                string: datosTitular.nombreTitular || "",
                 nombreCampo: "El campo del nombre del titular",
                 filtro: "strictoConEspacios",
                 sePermiteVacio: "no",
@@ -188,18 +211,19 @@ export const validarObjetoReserva = async (data) => {
             })
 
             const pasaporteTitular = validadoresCompartidos.tipos.cadena({
-                string: reservaObjeto.datosTitular?.pasaporteTitular || "",
+                string: datosTitular.pasaporteTitular || "",
                 nombreCampo: "El campo del pasaporte del titular",
                 filtro: "strictoConEspacios",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
                 limpiezaEspaciosInternos: "si"
             })
+
             const telefonoTitular = validadoresCompartidos.tipos
-                .telefono(reservaObjeto.datosTitular?.telefonoTitular || "")
+                .telefono(datosTitular.telefonoTitular)
 
             const correoTitular = validadoresCompartidos.tipos
-                .correoElectronico(reservaObjeto.datosTitular?.correoTitular || "")
+                .correoElectronico(datosTitular.correoTitular)
 
             reservaObjeto.datosTitular.nombreTitular = nombreTitular
             reservaObjeto.datosTitular.pasaporteTitular = pasaporteTitular

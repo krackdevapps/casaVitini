@@ -1,6 +1,6 @@
-import { obtenerConfiguracionPorApartamentoIDV } from "../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
-import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
-import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
+import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs"
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 export const validarObjetoOferta = async (oferta) => {
 
     try {
@@ -21,6 +21,20 @@ export const validarObjetoOferta = async (oferta) => {
             nombreCampo: "La fecha fin de la vigencia de la oferta"
         })
 
+        const entidad = validadoresCompartidos.tipos.cadena({
+            string: oferta.entidad,
+            nombreCampo: "El campo de entidad",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        const entidadesIDV = ["reserva"]
+        if (!entidadesIDV.includes(entidad)) {
+            const error = "No se reconoce el campo entidad"
+            throw new Error(error)
+        }
+
         await validadoresCompartidos.fechas.validacionVectorial({
             fechaEntrada_ISO: fechaEntrada,
             fechaSalida_ISO: fechaSalida,
@@ -37,6 +51,11 @@ export const validarObjetoOferta = async (oferta) => {
         })
         if (condiciones.length === 0) {
             const error = "Añade al menos una condiciona la oferta"
+            throw new Error(error)
+        }
+        const zonaIDV = oferta.zonaIDV
+        if (zonaIDV !== "global" && zonaIDV !== "publica" && zonaIDV !== "privada") {
+            const error = "el campo zonaIDV solo admite global, publica o privada"
             throw new Error(error)
         }
 

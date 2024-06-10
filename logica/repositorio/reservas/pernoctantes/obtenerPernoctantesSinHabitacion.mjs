@@ -17,10 +17,7 @@ export const obtenerPernoctantesSinHabitacion = async (reservaUID) => {
         "reservaUID" = $1 
         AND
         "habitacionUID" = NULL;`;
-        const parametros = [
-            reservaUID
-        ]
-        const resuelve = await conexion.query(consulta, parametros);
+        const resuelve = await conexion.query(consulta, [reservaUID]);
         return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado

@@ -41,7 +41,7 @@ export const limitesReservaPublica = async (fechas) => {
         const diasMaximosReserva = paresConfiguracion.diasMaximosReserva
 
         const fechaLimite_Objeto = tiempoZH.plus({ days: limiteFuturoReserva })
-        console.log("antes")
+        
 
         const diasDeAntelacion = fechaEntradaReserva_ISO.diff(tiempoZH, 'days').toObject().days < 0
             ? 0 :
@@ -50,7 +50,7 @@ export const limitesReservaPublica = async (fechas) => {
             const error = `Casa Vitini solo acepta reservas con un minimo de ${diasAntelacionReserva} dias de antelacion. Gracias.`
             throw new Error(error)
         }
-        console.log("aquiaquaiqui")
+        
         const diferenciaEnDiasLimiteFuturo = fechaLimite_Objeto.diff(fechaSalidaReserva_ISO, 'days').toObject().days;
         if (diferenciaEnDiasLimiteFuturo <= 0) {
             const error = `Como maximo las reservas no pueden superar ${limiteFuturoReserva} dias a partir de hoy. Gracias.`

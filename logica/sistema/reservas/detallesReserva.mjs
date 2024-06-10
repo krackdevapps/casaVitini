@@ -1,48 +1,62 @@
 import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
-import { desgloseTotal } from "./detallesReserva/desgloseTotal.mjs"
 import { detallesAlojamiento } from "./detallesReserva/detallesAlojamiento.mjs"
 import { detallesTitular } from "./detallesReserva/detallesTitular.mjs"
 import { clientesReserva } from "./detallesReserva/clientesReserva.mjs"
 import { recuperarClientesSinHabitacionAsignada } from "./detallesReserva/recuperarClientesSinHabitacionAsignada.mjs"
 import { pernoctantesDeLaReserva } from "./detallesReserva/pernoctantesDeLaReserva.mjs"
-export const detallesReserva = async (metadatos) => {
+import { obtenerDesgloseFinancieroPorReservaUID } from "../../repositorio/reservas/reserva/obtenerDesgloseFinancieroPorReservaUID.mjs"
+import { utilidades } from "../../componentes/utilidades.mjs"
+export const detallesReserva = async (data) => {
     try {
-        const solo = metadatos.solo
-        const reservaUID = metadatos.reservaUID
-        
-        const reserva = await obtenerReservaPorReservaUID(reservaUID)
+        const capas = data.capas
+        const reservaUID = data.reservaUID
 
-        reserva.titular = await detallesTitular(reservaUID)
-        reserva.clientes = await clientesReserva({
-            reservaUID: reservaUID,
-            habitacionUID: habitacionUID
-        })
-        reserva.clientesSinHabitacion = await recuperarClientesSinHabitacionAsignada(reservaUID)
-        reserva.alojamiento = await detallesAlojamiento(reservaUID)
-        reserva.pernoctantes = await pernoctantesDeLaReserva(reservaUID)
-        reserva.desgloseFinanciero = await desgloseTotal(reservaUID)
-        switch (solo) {
-            case "informacionGlobal":
-                await informacionGlobal();
-                break;
-            case "globalYFinanciera":
-                await informacionGlobal();
-                await desgloseTotal();
-                break;
-            case "detallesAlojamiento":
-                await detallesAlojamiento();
-                break;
-            case "pernoctantes":
-                await pernoctantes();
-                break;
-            case "desgloseTotal":
-                await desgloseTotal();
-                break;
-            default:
-                await informacionGlobal();
-                await detallesAlojamiento();
-                await desgloseTotal();
-                break;
+        const reserva = {
+            global: await obtenerReservaPorReservaUID(reservaUID)
+        }
+        const contenedorCapas = [
+            "titular",
+            "alojamiento",
+            "pernoctantes",
+            "desgloseFinanciero"
+        ]
+
+        const capasNoIdentificadas = capas.filter(capaIDV => !contenedorCapas.includes(capaIDV));
+        if (capasNoIdentificadas.length > 0) {
+            const constructoCapasNoConocidas = utilidades.contructorComasEY(capasNoIdentificadas)
+            const constructoCapasConocidas = utilidades.contructorComasEY(contenedorCapas)
+            const capasConocidasUI = `Las capas disponibles son ${constructoCapasConocidas}`
+            let error
+            if (capasNoIdentificadas.length === 1) {
+                error = `No se reconoce la capa ${constructoCapasNoConocidas}. ${capasConocidasUI}`
+            } else {
+                error = `No se reconocem las capas ${constructoCapasNoConocidas}. ${capasConocidasUI}`
+            }
+            throw new Error(error)
+        }
+        if (capas.includes(contenedorCapas[0])) {
+            reserva.titular = await detallesTitular(reservaUID)
+        }
+        // 
+        // if (capas.includes(contenedorCapas[1])) {
+        //     reserva.clientes = await clientesReserva({
+        //         reservaUID: reservaUID,
+        //        // habitacionUID: habitacionUID
+        //     })
+        // }
+        // 
+
+        // if (capas.includes(contenedorCapas[2])) {
+        //     reserva.pernoctantesSinHabitacion = await recuperarClientesSinHabitacionAsignada(reservaUID)
+        // }
+        if (capas.includes(contenedorCapas[1])) {
+            reserva.alojamiento = await detallesAlojamiento(reservaUID)
+        }
+        if (capas.includes(contenedorCapas[2])) {
+            reserva.pernoctantes = await pernoctantesDeLaReserva(reservaUID)
+        }
+        if (capas.includes(contenedorCapas[3])) {
+            reserva.contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
         }
         return reserva
     } catch (errorCapturado) {

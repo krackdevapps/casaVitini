@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../../casaVitini.mjs';
 
 describe('controlHTTPS middleware', () => {
-  it('should redirect to casavitini.com if host is lripoll.ddns.net', async () => {
+   it('should redirect to casavitini.com if host is lripoll.ddns.net', async () => {
     const response = await request(app)
       .get('/')
       .set('host', 'lripoll.ddns.net');

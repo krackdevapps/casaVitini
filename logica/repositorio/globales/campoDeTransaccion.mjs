@@ -10,9 +10,10 @@ export const campoDeTransaccion = async (operacion) => {
             await conexion.query("ROLLBACK")
         } else {
             const msg = "El campo de transaccion necesita un identificador de operacion valida"
-            throw new error(msg)
+            throw new Error(msg)
         }
     } catch (errorCapturado) {
+        await conexion.query("ROLLBACK")
         throw errorCapturado
     }
 }

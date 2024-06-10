@@ -4,12 +4,14 @@ export const obtenerOfertasPorRangoPorEstado = async (data) => {
     try {
         const fechaEntradaReserva_ISO = data.fechaEntradaReserva_ISO
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
-        const estado = data.estado
-        const zonasDeLaOferta = data.zonasDeLaOferta
+        const estadoIDV = data.estadoIDV
+        const zonasArray = data.zonasArray
+        const entidadIDV = data.entidadIDV
         const consulta = `
         SELECT 
         "ofertaUID",
         "nombreOferta",
+        "entidadIDV",
         to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
         to_char("fechaFinal", 'YYYY-MM-DD') as "fechaFinal", 
         "condicionesArray",
@@ -36,15 +38,18 @@ export const obtenerOfertasPorRangoPorEstado = async (data) => {
             )
         )
         AND
-        estado = $3::text
+        "estadoIDV" = $3::text
         AND
-        "zonaIDV" = ANY($4)
+        "entidadIDV" = $4::text
+        AND
+        "zonaIDV" = ANY($5)
         ;`
         const parametros = [
             fechaSalidaReserva_ISO,
             fechaEntradaReserva_ISO,
-            estado,
-            zonasDeLaOferta
+            estadoIDV,
+            entidadIDV,
+            zonasArray
         ]
         const resuelve = await conexion.query(consulta, parametros)
         return resuelve.rows

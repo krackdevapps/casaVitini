@@ -147,6 +147,6 @@ export const rango = async (data) => {
             throw new Error(error);
         }
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 };

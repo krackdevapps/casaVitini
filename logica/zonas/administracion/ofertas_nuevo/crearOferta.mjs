@@ -2,8 +2,8 @@ import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { obtenerOfertasPorNombreUI } from "../../../repositorio/ofertas/obtenerOfertasPorNombreUI.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
-import { validarObjetoOferta } from "../../../sistema/ofertas/validarObjetoOferta.mjs";
 import { insertarOferta } from "../../../repositorio/ofertas/insertarOferta.mjs";
+import { validarObjetoOferta } from "../../../sistema/ofertas/entidades/reserva/validarObjetoOferta.mjs";
 
 export const crearOferta = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -16,6 +16,7 @@ export const crearOferta = async (entrada, salida) => {
         await mutex.acquire();
 
         const nombreOferta = entrada.body.nombreOferta
+        const entidad = entrada.body.entidad
         const fechaInicio = entrada.body.fechaInicio
         const fechaFinal = entrada.body.fechaFinal
         const condiciones = entrada.body.condiciones
@@ -24,6 +25,7 @@ export const crearOferta = async (entrada, salida) => {
 
         const oferta = {
             nombreOferta,
+            entidad,
             fechaInicio,
             fechaFinal,
             condiciones,

@@ -1,24 +1,26 @@
 import Decimal from "decimal.js"
-import { obtenerTotalesReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerTotalesReservaPorReservaUID.mjs"
-import { obtenerPagosPorReservaUID } from "../../repositorio/reservas/transacciones/pagos/obtenerPagosPorReservaUID.mjs"
+import { obtenerPagosPorReservaUID } from "../../../../repositorio/reservas/transacciones/pagos/obtenerPagosPorReservaUID.mjs"
+import { actualizarEstadoPagoPorReservaUID } from "../../../../repositorio/reservas/transacciones/pagos/actualizarEstadoPagoPorReservaUID.mjs"
+import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerDesgloseFinancieroPorReservaUID.mjs"
 
 export const actualizarEstadoPago = async (reservaUID) => {
 
     try {
         // Seleccionar el total
-        const totalesDeLaReserva = await obtenerTotalesReservaPorReservaUID(reservaUID)
-        const totalConImpuestos = totalesDeLaReserva.totalConImpuestos
+        const desgloseGlobal = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
+        const totalFinal = desgloseGlobal.desgloseFinanciero.global.totales.totalFinal
 
         // Seleccionar todos los pagos de la reserva
         const pagosDeLaReserva = await obtenerPagosPorReservaUID(reservaUID)
         const pagos = pagosDeLaReserva.map((pago) => {
             return pago.cantidad
         })
-        let totalPagado = "0"
+        let totalPagado = new Decimal("0")
         for (const pago of pagos) {
-            totalPagado = new Decimal(totalPagado).plus(pago)
+            totalPagado = totalPagado.plus(pago)
         }
-        const faltantePorPagar = new Decimal(totalConImpuestos).minus(totalPagado)
+
+        const faltantePorPagar = new Decimal(totalFinal).minus(totalPagado)
         const totalPagadoDecimal = new Decimal(totalPagado);
         const faltantePorPagarDecimal = new Decimal(faltantePorPagar);
 
@@ -29,13 +31,16 @@ export const actualizarEstadoPago = async (reservaUID) => {
             estadoDelpago = "pagado";
         } else if (faltantePorPagarDecimal.lessThan(0)) {
             estadoDelpago = "pagadoSuperadamente";
-        } else if (faltantePorPagarDecimal.lessThan(totalConImpuestos)) {
+        } else if (faltantePorPagarDecimal.lessThan(totalFinal)) {
             estadoDelpago = "pagadoParcialmente";
         } else {
             const error = "Error en el calculo del estado del pago"
             throw new Error(error)
         }
-        await actualizarEstadoPago(reservaUID)
+        await actualizarEstadoPagoPorReservaUID({
+            reservaUID,
+            estadoPagoIDV: estadoDelpago
+        })
     } catch (errorCapturado) {
         throw errorCapturado
     }

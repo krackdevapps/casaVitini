@@ -1,5 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { obtenerOfertaConApartamentos } from "../../../sistema/ofertas/obtenerOfertaConApartamentos.mjs";
+import { obtenerOfertaConApartamentos } from "../../../sistema/ofertas/obsoleto/obtenerOfertaConApartamentos.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 

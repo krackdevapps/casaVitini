@@ -1,5 +1,5 @@
-import { obtenerConfiguracionPorArrayDeApartamentoIDV } from "../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorArrayDeApartamentoIDV.mjs"
-import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
+import { obtenerConfiguracionPorArrayDeApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorArrayDeApartamentoIDV.mjs"
+import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs"
 
 export const validarApartamentos = async (data) => {
 

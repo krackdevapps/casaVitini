@@ -1,14 +1,13 @@
-import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { obtenerOfertaConApartamentos } from "../../../sistema/ofertas/obtenerOfertaConApartamentos.mjs";
-import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { obtenerOfertaConApartamentos } from "../../../../sistema/ofertas/obsoleto/obtenerOfertaConApartamentos.mjs";
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { Mutex } from "async-mutex";
-
-import { obtenerOferatPorOfertaUID } from "../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs";
-import { actualizarOferta as actualizarOferta_ } from "../../../repositorio/ofertas/actualizarOferta.mjs";
-import { eliminarApartamentosDeLaOferta } from "../../../repositorio/ofertas/eliminarApartamentosDeLaOferta.mjs";
-import { insertarApartamentosEnOferta } from "../../../repositorio/ofertas/insertarApartamentosEnOferta.mjs";
-import { validadoresLocales } from "../../../sistema/ofertas/validadoresLocales.mjs";
-import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
+import { obtenerOferatPorOfertaUID } from "../../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs";
+import { actualizarOferta as actualizarOferta_ } from "../../../../repositorio/ofertas/actualizarOferta.mjs";
+import { eliminarApartamentosDeLaOferta } from "../../../../repositorio/ofertas/eliminarApartamentosDeLaOferta.mjs";
+import { insertarApartamentosEnOferta } from "../../../../repositorio/ofertas/insertarApartamentosEnOferta.mjs";
+import { validadoresLocales } from "../../../../sistema/ofertas/entidades/reserva/validadoresLocales.mjs";
+import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const actualizarOferta = async (entrada, salida) => {
     const mutex = new Mutex()

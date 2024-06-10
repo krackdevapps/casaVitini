@@ -12,13 +12,13 @@ export const insertarEnlacePDF = async (data) => {
         "enlacesPdf"
         (
         "reservaUID",
-        enlace,
-        caducidad
+        "publicoUID",
+        "fechaCaducidad"
         )
         VALUES 
         ($1, $2, $3)
         RETURNING
-        enlace;`;
+        "enlaceUID";`;
         const parametros = [
             reservaUID,
             enlaceUPID,

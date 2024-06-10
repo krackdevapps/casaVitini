@@ -1,7 +1,7 @@
 import Decimal from "decimal.js"
-import { obtenerPagosPorReservaUID } from "../../repositorio/reservas/transacciones/pagos/obtenerPagosPorReservaUID.mjs"
-import { obtenerReembolsosPorPagoUID } from "../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID.mjs"
-import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
+import { obtenerPagosPorReservaUID } from "../../../../repositorio/reservas/transacciones/pagos/obtenerPagosPorReservaUID.mjs"
+import { obtenerReembolsosPorPagoUID } from "../../../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID.mjs"
+import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 
 export const obtenerTotalReembolsado = async (reservaUID) => {
     try {

@@ -1,48 +1,48 @@
 import { DateTime } from 'luxon';
-import { insertarTotalesReserva } from './insertarTotalesReserva.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { insertarReservaAdministrativa } from '../../repositorio/reservas/reserva/insertarReservaAdministrativa.mjs';
-import { Mutex } from 'async-mutex';
-import { insertarClientePool } from '../../repositorio/pool/insertarClientePool.mjs';
+import { insertarTitularPool } from '../../repositorio/pool/insertarTitularPool.mjs';
 import { insertarApartamentoEnReserva } from '../../repositorio/reservas/apartamentos/insertarApartamentoEnReserva.mjs';
-import { insertarHabitacionEnApartamento } from '../../repositorio/arquitectura/configuraciones/insertarHabitacionEnApartamento.mjs';
 import { insertarCamaEnLaHabitacion } from '../../repositorio/reservas/apartamentos/insertarCamaEnLaHabitacion.mjs';
-import { campoDeTransaccion } from '../../repositorio/globales/campoDeTransaccion.mjs';
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from '../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
+import { insertarDesgloseFinacieroPorReservaUID } from '../../repositorio/reservas/transacciones/totales/insertarDesgloseFinacieroPorReservaUID.mjs';
+import { insertarHabitacionEnApartamento } from '../../repositorio/reservas/apartamentos/insertarHabitacionEnApartamento.mjs';
+import { obtenerCamaComoEntidadPorCamaIDV } from '../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs';
+import { procesador } from '../precios/procesador.mjs';
 
 export const insertarReserva = async (reserva) => {
-    const mutex = new Mutex()
     try {
 
-        mutex.acquire()
-        const fechaEntrada_Humano = reserva.entrada
-        const fechaSalida_Humano = reserva.salida
-
-        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_Humano)).fecha_ISO
-        const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_Humano)).fecha_ISO
+        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: reserva.fechaEntrada,
+            nombreCampo: "La fecha de entrada de la reserva a confirmar"
+        }))
+        const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: reserva.fechaSalida,
+            nombreCampo: "La fecha de entrada de la reserva a confirmar"
+        }))
         const estadoReserva = "confirmada"
         const estadoPago = "noPagado"
         const origen = "cliente"
-        const fechaReserva = DateTime.utc().toISO()
+        const fechaCreacion = DateTime.utc().toISO()
         const alojamiento = reserva.alojamiento
-        const titularReservaPool = reserva.datosTitular.nombreTitular
-        const pasaporteTitularPool = reserva.datosTitular.pasaporteTitular
-        const correoTitular = reserva.datosTitular.correoTitular
-        const telefonoTitular = reserva.datosTitular.telefonoTitular
-        await campoDeTransaccion("iniciar")
+        const datosTitular = reserva.datosTitular
+        const titularReservaPool = datosTitular.nombreTitular
+        const pasaporteTitularPool = datosTitular.pasaporteTitular
+        const correoTitular = datosTitular.correoTitular
+        const telefonoTitular = datosTitular.telefonoTitular
 
         const nuevaReserva = await insertarReservaAdministrativa({
             fechaEntrada_ISO: fechaEntrada_ISO,
             fechaSalida_ISO: fechaSalida_ISO,
             estadoReserva: estadoReserva,
             origen: origen,
-            fechaReserva: fechaReserva,
+            fechaCreacion,
             estadoPago: estadoPago
         })
         const reservaUID = nuevaReserva.reservaUID;
-
-        const nuevoClientePool = await insertarClientePool({
+        await insertarTitularPool({
             titularReservaPool: titularReservaPool,
             pasaporteTitularPool: pasaporteTitularPool,
             correoTitular: correoTitular,
@@ -53,20 +53,22 @@ export const insertarReserva = async (reserva) => {
             const apartamentoIDV = apartamentoConfiguracion
             const habitaciones = alojamiento[apartamentoConfiguracion].habitaciones
 
-            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+            const apartamentoUI = apartamento.apartamentoUI
 
             const nuevoApartamentoEnReserva = await insertarApartamentoEnReserva({
                 reservaUID: reservaUID,
                 apartamentoIDV: apartamentoIDV,
                 apartamentoUI: apartamentoUI
             })
-            const apartamentoUID = nuevoApartamentoEnReserva.uid
+            const apartamentoUID = nuevoApartamentoEnReserva.componenteUID
 
             for (const habitacionConfiguracion in habitaciones) {
                 const habitacionIDV = habitacionConfiguracion
                 const camaIDV = habitaciones[habitacionIDV].camaSeleccionada.camaIDV
                 const pernoctantesPool = habitaciones[habitacionIDV].pernoctantes
-                const habitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
+                const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
+                const habitacionUI = habitacion.habitacionUI
 
                 const nuevoHabitacionEnElApartamento = await insertarHabitacionEnApartamento({
                     apartamentoUID: apartamentoUID,
@@ -87,26 +89,30 @@ export const insertarReserva = async (reserva) => {
                 const camaUID = nuevaCamaEnLaHabitacion.componenteUID
             }
         }
+        const apartamentosArray = Object.keys(alojamiento);
 
-        const transaccion = {
-            tipoProcesadorPrecio: "objeto",
-            reserva: reserva,
-            reservaUID: reservaUID
-        }
-        await insertarTotalesReserva(transaccion)
-        //resolverPrecio = resolverPrecio.ok
-        await campoDeTransaccion("confirmar")
-        const ok = {
-            ok: "reserva insertada con exito",
-            reservaUID: reservaUID
-        }
-        return ok
+        const desgloseFinanciero = await procesador({
+            entidades: {
+                reserva: {
+                    tipoOperacion: "crearDesglose",
+                    fechaEntrada: fechaEntrada_ISO,
+                    fechaSalida: fechaSalida_ISO,
+                    apartamentosArray: apartamentosArray,
+                    capaOfertas: "si",
+                    zonasDeLaOferta: ["global", "publica"],
+                    capaDescuentosPersonalizados: "no",
+                }
+            },
+            capaImpuestos: "si",
+            reservaUID
+        })
+
+        await insertarDesgloseFinacieroPorReservaUID({
+            reservaUID,
+            desgloseFinanciero
+        })
+        return nuevaReserva
     } catch (errorCapturado) {
-        await campoDeTransaccion("cancelar")
-        throw error;
-    } finally {
-        if (mutex) {
-            mutex.release()
-        }
+        throw errorCapturado
     }
 }

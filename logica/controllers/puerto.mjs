@@ -25,33 +25,29 @@ export const puerto = async (entrada, salida) => {
 
         const ruta = arbol.join(".")
         const contructorArbol = async (zonaBusqueda) => {
-            try {
-                const arbol = {}
-                const cargarModulosDesdeDirectorio = async (rutaActual, arbol) => {
-                    const arbolDeLaRuta = await fs.promises.readdir(rutaActual, { withFileTypes: true })
-                    for (const ramaDeLaRuta of arbolDeLaRuta) {
-                        const rutaEntrada = path.join(ramaDeLaRuta.path, ramaDeLaRuta.name)
-                        if (ramaDeLaRuta.isDirectory()) {
-                            arbol[ramaDeLaRuta.name] = {}
-                            await cargarModulosDesdeDirectorio(rutaEntrada, arbol[ramaDeLaRuta.name])
-                        } else if (ramaDeLaRuta.isFile() && ramaDeLaRuta.name.endsWith('.mjs')) {
-                            const nombreModulo = ramaDeLaRuta.name.replace('.mjs', '')
-                            // 
-                            const rutaDeImportacion = path.relative('./zonas/logica', rutaEntrada)
-                            arbol[nombreModulo] = await import(rutaDeImportacion)
-                        }
+            const arbol = {}
+            const cargarModulosDesdeDirectorio = async (rutaActual, arbol) => {
+                const arbolDeLaRuta = await fs.promises.readdir(rutaActual, { withFileTypes: true })
+                for (const ramaDeLaRuta of arbolDeLaRuta) {
+                    const rutaEntrada = path.join(ramaDeLaRuta.path, ramaDeLaRuta.name)
+                    if (ramaDeLaRuta.isDirectory()) {
+                        arbol[ramaDeLaRuta.name] = {}
+                        await cargarModulosDesdeDirectorio(rutaEntrada, arbol[ramaDeLaRuta.name])
+                    } else if (ramaDeLaRuta.isFile() && ramaDeLaRuta.name.endsWith('.mjs')) {
+                        const nombreModulo = ramaDeLaRuta.name.replace('.mjs', '')
+                        //
+
+                        const rutaDeImportacion = path.relative('./zonas/logica', rutaEntrada)
+                        arbol[nombreModulo] = await import(rutaDeImportacion)
                     }
                 }
-                await cargarModulosDesdeDirectorio(zonaBusqueda, arbol)
-                return arbol
-            } catch (errorCapturado) {
-                throw errorCapturado
             }
+            await cargarModulosDesdeDirectorio(zonaBusqueda, arbol)
+            return arbol
         }
 
         const directorioZonas = './logica/zonas'
         const zonas = await contructorArbol(directorioZonas)
-
         const exploradorArbol = (zonas, ruta) => {
             const partes = ruta.split('.')
             let rama = zonas;
@@ -59,23 +55,23 @@ export const puerto = async (entrada, salida) => {
                 if (rama && typeof rama === 'object' && rama.hasOwnProperty(part)) {
                     rama = rama[part]
                 } else {
-                    const error = "zonaInexistente1"
+                    const error = "No se enceuntra la zona."
                     throw new Error(error)
                 }
             }
             return rama
         }
-        
 
         const estructura = exploradorArbol(zonas, ruta)
         const X = estructura[arbol.pop()]
         if (typeof X !== "function") {
-            const error = "zonaInexistente2"
+            const error = "Dentro de esta zona no hay ninguna funcion."
             throw new Error(error)
         }
         const respuesta = await X(entrada, salida)
         salida.json(respuesta)
     } catch (errorCapturado) {
+        console.error(errorCapturado.stack);
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }

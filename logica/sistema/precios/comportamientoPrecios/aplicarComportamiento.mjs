@@ -23,7 +23,7 @@ export const aplicarComportamiento = (data) => {
             throw new Error(error)
         }
         if (precioFinalPorNoche.isPositive()) {
-            return precioFinalPorNoche
+            return precioFinalPorNoche.toFixed(2)
         }
         return "0.00";
     } catch (error) {

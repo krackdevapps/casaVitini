@@ -2,7 +2,6 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { detallesReserva as detallesReserva_ } from "../../../sistema/reservas/detallesReserva.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
-
 export const detallesReserva = async (entrada, salida) => {
     try {
 
@@ -21,30 +20,23 @@ export const detallesReserva = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        const solo = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.solo,
-            nombreCampo: "EL campo de solo",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
 
-        if (solo) {
-            if (solo !== "detallesAlojamiento" &&
-                solo !== "desgloseTotal" &&
-                solo !== "informacionGlobal" &&
-                solo !== "globalYFinanciera" &&
-                solo !== "pernoctantes") {
-                const error = "el campo 'zona' solo puede ser detallesAlojamiento, desgloseTotal, informacionGlobal o pernoctantes.";
-                throw new Error(error);
-            }
-        }
+        const capas = validadoresCompartidos.tipos.array({
+            array: entrada.body.capas,
+            nombreCampo: "El campo capas",
+            filtro: "soloCadenasIDV",
+            sePermitenDuplicados: "no",
+            sePermiteArrayVacio: "si"
+        })
         const metadatos = {
             reservaUID: reservaUID,
-            solo: solo
+            capas
         };
         const resuelveDetallesReserva = await detallesReserva_(metadatos);
-        salida.json(resuelveDetallesReserva);
+        const ok = {
+            ok: resuelveDetallesReserva
+        }
+        return ok
     } catch (errorCapturado) {
         throw errorCapturado
     }

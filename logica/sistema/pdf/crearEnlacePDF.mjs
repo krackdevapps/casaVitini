@@ -1,4 +1,4 @@
-import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
+import { DateTime } from "luxon";
 import { eliminarEnlacesPDFPorReservaUID } from "../../repositorio/pdf/eliminarEnlacesPDFPorReservaUID.mjs";
 import { insertarEnlacePDF } from "../../repositorio/pdf/insertarEnlacePDF.mjs";
 import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -7,7 +7,6 @@ import { controlCaducidad } from "./controlCaducidad.mjs";
 
 export const crearEnlacePDF = async (reservaUID) => {
     try {
-        await campoDeTransaccion("iniciar")
         
         await obtenerReservaPorReservaUID(reservaUID)
         await controlCaducidad();
@@ -31,11 +30,9 @@ export const crearEnlacePDF = async (reservaUID) => {
             enlaceUPID: generarCadenaAleatoria(100),
             fechaCaducidad: fechaCaducidad,
         })
-        const enlacePDF = nuevoEnlace.enlace;
-        await campoDeTransaccion("confirmar")
+        const enlacePDF = nuevoEnlace.publicoUID;
         return enlacePDF;
     } catch (errorCapturado) {
-        await campoDeTransaccion("cancelar")
-        throw error;
+        throw errorCapturado;
     }
 }
