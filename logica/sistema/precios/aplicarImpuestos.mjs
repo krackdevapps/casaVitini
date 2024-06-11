@@ -3,7 +3,8 @@ import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../repositorio/imp
 Decimal.set({ precision: 50 });
 export const aplicarImpuestos = async (estructura) => {
     try {
-        const totalFinal = new Decimal(estructura.global.totales.totalFinal)
+        console.log(">>>", estructura.global)
+        const totalNeto = new Decimal(estructura.global.totales.totalNeto)
         const impuestos = await obtenerImpuestosPorAplicacionIDVPorEstado({
             estadoIDV: "activado",
             aplicacionSobre_array: [
@@ -22,9 +23,11 @@ export const aplicarImpuestos = async (estructura) => {
                 tipoValor: tipoValorIDV,
             }
             if (tipoValorIDV === "porcentaje") {
-                const calculoImpuestoPorcentaje = totalFinal.times(tipoImpositivo).dividedBy(100);
+                console.log("totalNeto", totalNeto, "tipoImpositivo", tipoImpositivo)
+                const calculoImpuestoPorcentaje = totalNeto.times(tipoImpositivo).dividedBy(100)
+                console.log/("calculoImpuestoPorcentaje", calculoImpuestoPorcentaje)
                 presentacionImpuesto.porcentaje = tipoImpositivo
-                presentacionImpuesto.tipoImpositivo = calculoImpuestoPorcentaje,
+                presentacionImpuesto.tipoImpositivo = calculoImpuestoPorcentaje
                 sumaImpuestos = sumaImpuestos.plus(calculoImpuestoPorcentaje)
             }
             if (tipoValorIDV === "tasa") {
@@ -37,7 +40,7 @@ export const aplicarImpuestos = async (estructura) => {
 
         estructura.impuestos = objetoImpuestos
         estructura.global.totales.impuestosAplicados = sumaImpuestos.toFixed(2)
-        estructura.global.totales.totalFinal = totalFinal.plus(sumaImpuestos).toFixed(2)
+        estructura.global.totales.totalFinal = totalNeto.plus(sumaImpuestos).toFixed(2)
         // const estructoraFinal = {
         //     impuestos: objetoImpuestos,
         //     sumaImpuestos: sumaImpuestos

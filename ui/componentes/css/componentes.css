@@ -4128,7 +4128,7 @@
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_bloque {
-    padding: 10px;
+    padding: 6px;
     border-radius: 12px;
     gap: 6px;
     display: flex;

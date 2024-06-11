@@ -37,7 +37,6 @@ export const aplicarOfertas = async (data) => {
             resultadoSelector.autorizacion = "aceptada"
             ofertaAnalizadasPorCondiciones.push(resultadoSelector)
         }
-
         await aplicarDescuento({
             origen: "porCondicion",
             ofertarParaAplicarDescuentos: ofertaAnalizadasPorCondiciones,

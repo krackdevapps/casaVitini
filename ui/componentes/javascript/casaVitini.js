@@ -9432,44 +9432,76 @@ const casaVitini = {
 
                     const destino = data.destino
                     const contenedorFinanciero = data.contenedorFinanciero
-                    console.log("data", data)
+                    const global = contenedorFinanciero.desgloseFinanciero.global
+                    const entidades = contenedorFinanciero.desgloseFinanciero.entidades
+                    const ofertasAplicadas = contenedorFinanciero.desgloseFinanciero.ofertasAplicadas
+                    const impuestos = contenedorFinanciero.desgloseFinanciero.impuestos
+                    const totales = global.totales
 
-
-                    const contenedor = this.componentesUI.contenedor()
-                    const entidades = this.componentesUI.entidades.hub()
-                    contenedor.appendChild(entidades)
-                    const ofertas = this.componentesUI.ofertas()
-                    contenedor.appendChild(ofertas)
-                    const sobreControlPrecios = this.componentesUI.ofertas()
-                    contenedor.appendChild(sobreControlPrecios)
-                    const impuestos = this.componentesUI.ofertas()
-                    contenedor.appendChild(impuestos)
-                    const totales = this.componentesUI.ofertas()
-                    contenedor.appendChild(totales)
-
-                    document.querySelector(destino).appendChild(contenedor)
+                    this.componentesUI.contenedor(destino)
+                    this.componentesUI.entidades.hub({
+                        destino,
+                        entidades
+                    })
+                    // this.componentesUI.ofertas()                   
+                    this.componentesUI.impuestos({
+                        destino,
+                        impuestos
+                    })
+                    this.componentesUI.ofertas.hub({
+                        destino,
+                        ofertasAplicadas
+                    })
+                    // this.componentesUI.sobreControlDePrecios()
+                    this.componentesUI.totales({
+                        destino,
+                        totales
+                    })
 
 
                 },
                 componentesUI: {
-                    contenedor: function (data) {
+                    contenedor: function (destino) {
                         const contenedor = document.createElement("div")
                         contenedor.classList.add("componentes_ui_desloseTotales_contenedor")
                         contenedor.setAttribute("contenedor", "financiero")
-                        return contenedor
+                        document.querySelector(destino).appendChild(contenedor)
                     },
                     entidades: {
-                        hub: function (entidades) {
+                        hub: function (data) {
+                            const destino = data.destino
+                            const entidades = data.entidades
+
                             for (const [entidadIDV, entidad] of Object.entries(entidades)) {
-
-
-
+                                console.log("entiadIDV", entidadIDV)
+                                if (entidadIDV === "reserva") {
+                                    const desglosePorNoche = entidad.desglosePorNoche
+                                    const desglosePorApartamento = entidad.desglosePorApartamento
+                                    this.reserva.contenedor({
+                                        destino
+                                    })
+                                    this.reserva.porNoche({
+                                        destino,
+                                        desglosePorNoche
+                                    })
+                                    this.reserva.porApartamento({
+                                        destino,
+                                        desglosePorApartamento
+                                    })
+                                }
                             }
-                        
                         },
                         reserva: {
-                            porNoche: () => {
-
+                            contenedor: (data) => {
+                                const destino = data.destino
+                                const contenedor = document.createElement("div")
+                                contenedor.classList.add("contenedorEntidad")
+                                contenedor.setAttribute("entidad", "reserva")
+                                document.querySelector(destino).appendChild(contenedor)
+                            },
+                            porNoche: (data) => {
+                                const destino = data.destino
+                                const desglosePorNoche = data.desglosePorNoche
 
                                 const contenedorPorNoche = document.createElement("div")
                                 contenedorPorNoche.classList.add("reserva_resumen_desglose_pago_bloque")
@@ -9483,13 +9515,16 @@ const casaVitini = {
                                 const contenedorDesglosePorNoche = document.createElement("div")
                                 contenedorDesglosePorNoche.classList.add("reserva_resumen_desglose_porNoche")
 
-                                if (arrayFechas.length === 0) {
+                                if (Object.keys(desglosePorNoche).length === 0) {
                                     const info = document.createElement("div")
                                     info.classList.add("componentes_ui_totales_mensajeInfoSinInformacion")
                                     info.innerText = "No hay información financiera para desglosar por noche"
                                     contenedorDesglosePorNoche.appendChild(info)
                                 }
-                                for (const fechaNoche of arrayFechas) {
+                                for (const [fechaNoche, desglose] of Object.entries(desglosePorNoche)) {
+                                    const precioNetoNoche = desglose.precioNetoNoche
+                                    const apartamentosPorNoche = desglose.apartamentosPorNoche
+
                                     const contenedorNoche = document.createElement("div")
                                     contenedorNoche.classList.add("contenedorDiaConNoche")
                                     contenedorNoche.setAttribute("noche", fechaNoche)
@@ -9498,42 +9533,480 @@ const casaVitini = {
                                     titulo.classList.add("negrita")
                                     titulo.innerText = fechaNoche
                                     contenedorNoche.appendChild(titulo)
+
+                                    const totalNetoNocheUI = document.createElement("div")
+                                    totalNetoNocheUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                    totalNetoNocheUI.classList.add("negrita")
+                                    totalNetoNocheUI.innerText = precioNetoNoche + "$ Total neto noche"
+                                    contenedorNoche.appendChild(totalNetoNocheUI)
+                                    for (const [apartamentoIDV, desglosePorApartamento] of Object.entries(apartamentosPorNoche)) {
+                                        const apartamentoUI = desglosePorApartamento.apartamentoUI
+                                        const precioNetoApartamento = desglosePorApartamento.precioNetoApartamento
+                                        const apartamentoContenedor = document.createElement("div")
+                                        apartamentoContenedor.setAttribute("apartamentoIDV", apartamentoIDV)
+                                        apartamentoContenedor.classList.add("reserva_resumen_apartamentoUIPrecio")
+                                        apartamentoContenedor.classList.add("negrita")
+                                        apartamentoContenedor.classList.add("colorGris")
+                                        apartamentoContenedor.innerText = apartamentoUI
+                                        contenedorNoche.appendChild(apartamentoContenedor)
+                                        const detalleApartamentosUIPreciNetoNoche = document.createElement("div")
+                                        detalleApartamentosUIPreciNetoNoche.classList.add("reserva_resumen_apartamentoUIPrecio")
+                                        detalleApartamentosUIPreciNetoNoche.innerText = precioNetoApartamento + "$ Neto por noche"
+                                        contenedorNoche.appendChild(detalleApartamentosUIPreciNetoNoche)
+                                    }
+
                                     contenedorDesglosePorNoche.appendChild(contenedorNoche)
                                 }
                                 contenedorPorNoche.appendChild(contenedorDesglosePorNoche)
-                                return contenedorPorNoche
+                                document.querySelector(destino).querySelector("[entidad=reserva]").appendChild(contenedorPorNoche)
                             },
                             porApartamento: (data) => {
-                                const contenedorPorApartamento = data.contenedorPorApartamento
-                                for (const [apartamentoIDV, detalles] of contenedorPorApartamento) {
-                                    const apartamentoUI_ = detalleDesglosePorApartamento.apartamentoUI
-                                    const totalNetoApartamento = detalleDesglosePorApartamento.totalNetoRango
-                                    const precioNetoMedioPorNoche = detalleDesglosePorApartamento.precioMedioNocheRango
-                                    const apartamentoUI = document.createElement("div")
-                                    apartamentoUI.classList.add("contenedorApartamento")
+                                const destino = data.destino
+                                const desglosePorApartamento = data.desglosePorApartamento
+                                const contenedor = document.createElement("div")
+                                contenedor.classList.add("contenedorPorApartamento")
+                                contenedor.setAttribute("contenedor", "porApartamento")
+
+                                for (const [apartamentoIDV, detalles] of Object.entries(desglosePorApartamento)) {
+                                    const apartamentoUI = detalles.apartamentoUI
+                                    const totalNeto = detalles.totalNeto
+                                    const precioMedioNetoNoche = detalles.precioMedioNetoNoche
+                                    const contenedorApartamento = document.createElement("div")
+                                    contenedorApartamento.classList.add("contenedorApartamento")
                                     const apartamentoUITitulo = document.createElement("div")
                                     apartamentoUITitulo.classList.add("contenedorTextoOferta")
                                     apartamentoUITitulo.classList.add("negrita")
-                                    apartamentoUITitulo.innerText = apartamentoUI_
-                                    apartamentoUI.appendChild(apartamentoUITitulo)
+                                    apartamentoUITitulo.innerText = apartamentoUI
+                                    contenedorApartamento.appendChild(apartamentoUITitulo)
                                     const apartamentoUIPrecioNetoTotal = document.createElement("div")
                                     apartamentoUIPrecioNetoTotal.classList.add("textoDetallesPorApartamento")
-                                    apartamentoUIPrecioNetoTotal.innerText = "Total neto: " + totalNetoApartamento + "$"
-                                    apartamentoUI.appendChild(apartamentoUIPrecioNetoTotal)
+                                    apartamentoUIPrecioNetoTotal.innerText = "Total neto: " + totalNeto + "$"
+                                    contenedorApartamento.appendChild(apartamentoUIPrecioNetoTotal)
                                     const apartamentoUIPrecioPromedioPorNoche = document.createElement("div")
                                     apartamentoUIPrecioPromedioPorNoche.classList.add("textoDetallesPorApartamento")
-                                    apartamentoUIPrecioPromedioPorNoche.innerText = "Precio medio neto por noche: " + precioNetoMedioPorNoche + "$"
-                                    apartamentoUI.appendChild(apartamentoUIPrecioPromedioPorNoche)
-                                    alojamientoUI.appendChild(apartamentoUI)
+                                    apartamentoUIPrecioPromedioPorNoche.innerText = "Precio medio neto por noche: " + precioMedioNetoNoche + "$"
+                                    contenedorApartamento.appendChild(apartamentoUIPrecioPromedioPorNoche)
+                                    contenedor.appendChild(contenedorApartamento)
                                 }
-                            },
+                                document.querySelector(destino).querySelector("[entidad=reserva]").appendChild(contenedor)
+
+                            }
                         },
 
                     },
-                    ofertas: () => { },
+                    ofertas: {
+                        hub: function (data) {
+                            const destino = data.destino
+                            const ofertasAplicadas = data.ofertasAplicadas
+                            const ofertas = ofertasAplicadas.ofertas
+                            const porTotal = ofertasAplicadas.porTotal
+                            const entidades = ofertasAplicadas.entidades
+
+
+                            this.ofertaUI({
+                                destino,
+                                ofertas
+                            })
+                        },
+                        ofertaUI: function (data) {
+                            const destino = data.destino
+                            const ofertas = data.ofertas
+                            const ofertasPorCondicion = ofertas.porCondicion
+                            const ofertasPorAdminsitrador = ofertas.porAdministrador
+                            const contenedor = document.createElement("div")
+                            contenedor.classList.add("contenedorOfertas")
+                            contenedor.setAttribute("contenedor", "ofertas")
+                            document.querySelector(destino).appendChild(contenedor)
+           
+
+                            Object.entries(ofertasPorCondicion).forEach(([ofertaUID, contenedorOferta]) => {
+
+                                this.componentesUI.globalUI({
+                                    destino,
+                                    ofertaUID,
+                                    contenedorOferta
+                                })
+
+                                this.componentesUI.desceuntosUI({
+                                    destino,
+                                    ofertaUID,
+                                    contenedorOferta
+                               })     
+                            })
+
+                        },
+                        componentesUI: {
+                            globalUI: (data) => {
+                                const destino = data.destino
+                                const ofertaUID = data.ofertaUID
+                                const contenedorOferta = data.contenedorOferta
+
+                                const contenedorData = contenedorOferta.contenedor
+                                const autorizacion = contenedorData.autorizacion
+                                const oferta = contenedorData.oferta
+
+                                const entidadIDV = oferta.entidadIDV
+                                const fechaFinal = oferta.fechaFinal
+                                const fechaInicio = oferta.fechaInicio
+                                const nombreOferta = oferta.nombreOferta
+                 
+
+                                const autorizacionUI = (autorizacion) => {
+                                    if (autorizacion === "aceptada") {
+                                        return "Aceptada"
+                                    } else if (autorizacion === "rechazada") {
+                                        return "Rechazada"
+                                    }
+                                }
+    
+                                const entidadUI_ = (entidadIDV) => {
+                                    if (entidadIDV === "reserva") {
+                                        return "Reserva"
+                                    }
+                                }
+
+                                const contenedorOfertaUI = document.createElement("div")
+                                contenedorOfertaUI.classList.add("contenedorOfertaUI")
+                                contenedorOfertaUI.setAttribute("ofertaUID", ofertaUID)
+
+                                const nombreOfertaUI = document.createElement("div")
+                                nombreOfertaUI.innerText = nombreOferta
+                                contenedorOfertaUI.appendChild(nombreOfertaUI)
+
+                                const entidadUI = document.createElement("div")
+                                entidadUI.innerText = entidadUI_(entidadIDV)
+                                contenedorOfertaUI.appendChild(entidadUI)
+
+                                const contenedorAutorizacion = document.createElement("div")
+                                contenedorAutorizacion.classList.add("contenedorAutorizacion")
+                                contenedorAutorizacion.setAttribute("contenedor", "autorizacion")
+
+                                const textoAutorizacion = document.createElement("div")
+                                textoAutorizacion.innerText = "Estado de la autorizacíon"
+                                contenedorAutorizacion.appendChild(textoAutorizacion)
+
+
+                                const estadoAutorizacionUI = document.createElement("div")
+                                estadoAutorizacionUI.innerText = autorizacionUI(autorizacion)
+                                contenedorAutorizacion.appendChild(estadoAutorizacionUI)
+                                contenedorOfertaUI.appendChild(contenedorAutorizacion)
+
+                                const contenedorFechas = document.createElement("div")
+                                contenedorFechas.classList.add("contenedorFechas")
+
+                                const fechaInicioUI = document.createElement("div")
+                                fechaInicioUI.innerText = fechaInicio
+                                contenedorFechas.appendChild(fechaInicioUI)
+
+                                const fechaFinalUI = document.createElement("div")
+                                fechaFinalUI.innerText = fechaFinal
+                                contenedorFechas.appendChild(fechaFinalUI)
+                                contenedorOfertaUI.appendChild(contenedorFechas)
+
+                                document.querySelector(destino).querySelector("[contenedor=ofertas]").appendChild(contenedorOfertaUI)
+
+
+
+
+
+                            },
+                            condicionesUI: (data) => {
+                                const destino = data.destino
+                                const ofertaUID = data.ofertaUID
+                                const contenedorOferta = data.contenedorOferta
+
+                                const contenedorData = contenedorOferta.contenedor
+                                const oferta = contenedorData.oferta
+                                const condicionesArray = oferta.condicionesArray
+
+
+                                const contenedorCondiciones = document.createElement("div")
+                                contenedorCondiciones.setAttribute("contenedor", "condiciones")
+
+                                condicionesArray.forEach((condicion) => {
+                                    const tipoCondicion = condicion.tipoCondicion
+
+                                    const contendorCondicion = document.createElement("div")
+                                    contendorCondicion.classList.add("contenedorCondicion")
+
+                                    if (tipoCondicion === "conFechaEntradaEntreRango") {
+                                        const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
+                                        const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
+
+                                        const tituloCondicion = document.createElement("div")
+                                        tituloCondicion.innerText = "Por fecha de entrada"
+                                        contendorCondicion.appendChild(tituloCondicion)
+
+
+                                        const descripcionCondicion = document.createElement("div")
+                                        descripcionCondicion.innerText = "Esta condicion determina que la oferta se aplica cuando la fecha de entrada de la reserva esta entre el rango de vigencia de la oferta"
+                                        contendorCondicion.appendChild(descripcionCondicion)
+
+                                        const rangoVigencia = document.createElement("div")
+                                        rangoVigencia.innerText = `${fechaInicioRango_ISO} >>> ${fechaFinalRango_ISO}`
+                                        contendorCondicion.appendChild(rangoVigencia)
+
+                                    } else if (tipoCondicion === "conFechaCreacionEntreRango") {
+                                        const tituloCondicion = document.createElement("div")
+                                        tituloCondicion.innerText = "Por fecha de creacion entre el rango"
+                                        contendorCondicion.appendChild(tituloCondicion)
+
+                                        const descripcionCondicion = document.createElement("div")
+                                        descripcionCondicion.innerText = "Esta condicion determina que la oferta se aplica cuando la fecha de creacion de la reserva esta entr el rango de vigencia de la oferta"
+                                        contendorCondicion.appendChild(descripcionCondicion)
+
+
+                                    } else if (tipoCondicion === "porNumeroDeApartamentos") {
+                                        const tipoConteo = condicion.tipoConteo
+                                        const numeroDeApartamentos = condicion.numeroDeApartamentos
+
+                                        const tituloCondicion = document.createElement("div")
+                                        tituloCondicion.innerText = "Por numero de apartamentos"
+                                        contendorCondicion.appendChild(tituloCondicion)
+
+
+                                        if (tipoConteo === "aPartirDe") {
+                                            const descripcionCondicion = document.createElement("div")
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} o mas apartamentos`
+                                            contendorCondicion.appendChild(descripcionCondicion)
+
+                                        } else if (tipoConteo === "numeroExacto") {
+                                            const descripcionCondicion = document.createElement("div")
+                                            if (numeroDeApartamentos === "1") {
+                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} apartamento exactamente. Ni mas ni menos.`
+                                                contendorCondicion.appendChild(descripcionCondicion)
+                                            } else {
+                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} apartamentos exactamente. Ni mas ni menos.`
+                                                contendorCondicion.appendChild(descripcionCondicion)
+                                            }
+                                        }
+
+
+                                    } else if (tipoCondicion === "porApartamentosEspecificos") {
+                                        const apartamentos = condicion.apartamentos
+                                        const apartametnosFormateados = casaVitini.utilidades.cadenas.contructorComasEY(apartamentos)
+                                        const tituloCondicion = document.createElement("div")
+                                        tituloCondicion.innerText = "Por apartamentos especificos"
+                                        contendorCondicion.appendChild(tituloCondicion)
+
+                                        const descripcionCondicion = document.createElement("div")
+                                        descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva contiene los apartamentos en especifico: ${apartametnosFormateados}`
+                                        contendorCondicion.appendChild(descripcionCondicion)
+
+                                    } else if (tipoCondicion === "porDiasDeAntelacion") {
+                                        const numeroDeDias = condicion.numeroDeDias
+                                        const tipoConteo = condicion.tipoConteo
+
+                                        const tituloCondicion = document.createElement("div")
+                                        tituloCondicion.innerText = "Por dias de antelacion"
+                                        contendorCondicion.appendChild(tituloCondicion)
+
+                                        const descripcionCondicion = document.createElement("div")
+                                        if (tipoConteo === "aPartirDe") {
+                                            if (numeroDeDias === "1") {
+                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dia de antelación o mas`
+                                                contendorCondicion.appendChild(descripcionCondicion)
+
+                                            } else {
+                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dias de antelación o mas`
+                                                contendorCondicion.appendChild(descripcionCondicion)
+
+                                            }
+                                        } else if (tipoConteo === "numeroExacto") {
+                                            if (numeroDeDias === "1") {
+                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dia de antelación exactamente`
+                                                contendorCondicion.appendChild(descripcionCondicion)
+
+                                            } else {
+                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dias de antelación exactamente`
+                                                contendorCondicion.appendChild(descripcionCondicion)
+
+                                            }
+                                        }
+
+                                    } else if (tipoCondicion === "porDiasDeReserva") {
+                                        const diasDeReserva = condicion.diasDeReserva
+                                        const tipoConteo = condicion.tipoConteo
+
+                                        const tituloCondicion = document.createElement("div")
+                                        tituloCondicion.innerText = "Por dias de duración"
+                                        contendorCondicion.appendChild(tituloCondicion)
+
+                                        const descripcionCondicion = document.createElement("div")
+                                        if (tipoConteo === "aPartirDe") {
+                                            if (diasDeReserva === "1") {
+                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dia de duración o mas`
+                                                contendorCondicion.appendChild(descripcionCondicion)
+
+                                            } else {
+                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dias de duración o mas`
+                                                contendorCondicion.appendChild(descripcionCondicion)
+
+                                            }
+                                        } else if (tipoConteo === "numeroExacto") {
+                                            if (diasDeReserva === "1") {
+                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dia de duración exactamente`
+                                                contendorCondicion.appendChild(descripcionCondicion)
+
+                                            } else {
+                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dias de duración exactamente`
+                                                contendorCondicion.appendChild(descripcionCondicion)
+
+                                            }
+                                        }
+
+                                    } else if (tipoCondicion === "porRangoDeFechas") {
+                                        const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
+                                        const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
+
+                                        const tituloCondicion = document.createElement("div")
+                                        tituloCondicion.innerText = "Por rango de fechas"
+                                        contendorCondicion.appendChild(tituloCondicion)
+
+                                        const descripcionCondicion = document.createElement("div")
+                                        descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando el rango de la reserva se cruza con el rango determinado en esta condicion. Del ${fechaInicioRango_ISO} al ${fechaFinalRango_ISO}`
+                                        contendorCondicion.appendChild(descripcionCondicion)
+
+                                    } else if (tipoCondicion === "porCodigoDescuento") {
+                                        // const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
+                                        // const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
+
+                                        // const tituloCondicion = document.createElement("div")
+                                        // tituloCondicion.innerText = "Por rango de fechas"
+                                        // contendorCondicion.appendChild(tituloCondicion)
+
+                                        // const descripcionCondicion = document.createElement("div")
+                                        // descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando el rango de la reserva se cruza con el rango determinado en esta condicion. Del ${fechaInicioRango_ISO} al ${fechaFinalRango_ISO}`
+                                        // contendorCondicion.appendChild(descripcionCondicion)
+
+                                    } else {
+                                        const error = "El renderizador de condiciones de oferta ha recibido un identifcador no reconocido: " + tipoCondicion
+                                        return casaVitini.ui.componentes.advertenciaInmersiva(error)
+                                    }
+
+
+                                    contenedorCondiciones.appendChild(contendorCondicion)
+
+                                })
+                                document.querySelector(destino).querySelectorç("[contenedor=ofertas]").querySelector(`[ofertaUID="${ofertaUID}"]`).appendChild(contenedorCondiciones)
+
+
+                            },
+                            desceuntosUI: () => { }
+                        },
+                        porTotal: {},
+                        entidades: {
+
+                        }
+                    },
                     sobreControlPrecios: () => { },
-                    impuestos: () => { },
-                    totales: () => {
+                    impuestos: (data) => {
+                        const destino = data.destino
+                        const impuestos = data.impuestos
+
+                        const contenedor = document.createElement("div")
+                        contenedor.classList.add("contenedorImpuestos")
+                        contenedor.setAttribute("contenedor", "impuestos")
+
+                        impuestos.forEach((impuesto) => {
+                            const impuestoTitulo = impuesto.nombreImpuesto
+                            const tipoValor = impuesto.tipoValor
+                            const tipoImpositivo = impuesto.tipoImpositivo
+                            const calculoImpuestoPorcentaje = impuesto.calculoImpuestoPorcentaje
+
+                            const impuestoUI = document.createElement("div")
+                            impuestoUI.classList.add("reserva_resumen_desglose_pago_elemento")
+
+                            const nombreImpuestoUI = document.createElement("div")
+                            nombreImpuestoUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                            nombreImpuestoUI.classList.add("negrita")
+                            nombreImpuestoUI.innerText = impuestoTitulo
+                            impuestoUI.appendChild(nombreImpuestoUI)
+
+                            let simboloTipoImpuesto;
+                            if (tipoValor === "porcentaje") {
+                                simboloTipoImpuesto = "%";
+                            }
+                            if (tipoValor === "tasa") {
+                                simboloTipoImpuesto = "$";
+                            }
+
+                            const tipoImpositivoUI = document.createElement("div")
+                            tipoImpositivoUI.classList.add("reserva_resumen_impuestoUITipoImpositivo")
+                            tipoImpositivoUI.innerText = tipoImpositivo + simboloTipoImpuesto
+                            impuestoUI.appendChild(tipoImpositivoUI)
+
+                            const valorUI = document.createElement("div")
+                            valorUI.classList.add("resumen_reserva_impuestoUITipoValor")
+                            valorUI.innerText = tipoValor
+                            impuestoUI.appendChild(valorUI)
+
+                            if (tipoValor === "porcentaje") {
+                                const porcentajeCalculado = document.createElement("div")
+                                porcentajeCalculado.classList.add("resumen_reserva_impuestoUICalculoImpuestoPorcentaje")
+                                porcentajeCalculado.innerText = calculoImpuestoPorcentaje + "$"
+                                impuestoUI.appendChild(porcentajeCalculado)
+                            }
+                            contenedor.appendChild(impuestoUI)
+                        })
+                        document.querySelector(destino).appendChild(contenedor)
+
+                    },
+                    totales: (data) => {
+                        const destino = data.destino
+                        const totales = data.totales
+
+                        const totalNeto = totales?.totalNeto
+                        const totalFinal = totales?.totalFinal
+                        const totalDescuento = totales?.totalDescuento
+                        const impuestosAplicados = totales?.impuestosAplicados
+                        const promedioNocheNeto = totales?.promedioNocheNeto
+
+
+                        const totalesUI = document.createElement("div")
+                        totalesUI.classList.add("reserva_resumen_desglose_pago_bloque")
+
+                        const totalesUITituloBloque = document.createElement("div")
+                        totalesUITituloBloque.classList.add("reserva_resumen_desglose_pago_titulo")
+                        totalesUITituloBloque.innerText = "Totales"
+                        totalesUI.appendChild(totalesUITituloBloque)
+
+                        if (totalNeto) {
+                            const totalReservaNetoDiaUI = document.createElement("div")
+                            totalReservaNetoDiaUI.classList.add("detalleDelTotal")
+                            totalReservaNetoDiaUI.innerText = "Precio medio neto de la reserva por noche: " + promedioNocheNeto
+                            totalesUI.appendChild(totalReservaNetoDiaUI)
+                            if (totalDescuento) {
+                                const totalDescuentosAplicadosUI = document.createElement("div")
+                                totalDescuentosAplicadosUI.classList.add("detalleDelTotal")
+                                totalDescuentosAplicadosUI.innerText = "Descuento total por todas las ofertas aplicadas: " + totalDescuento
+                                totalesUI.appendChild(totalDescuentosAplicadosUI)
+                                // const totalReservaNetoSinOfertasUI = document.createElement("div")
+                                // totalReservaNetoSinOfertasUI.classList.add("detalleDelTotal")
+                                // totalReservaNetoSinOfertasUI.innerText = "Total neto sin ofertas aplicadas: " + totalReservaNetoSinDescuentos
+                                // totalesUI.appendChild(totalReservaNetoSinOfertasUI)
+                            }
+                            const totalReservaNetoUI = document.createElement("div")
+                            totalReservaNetoUI.classList.add("detalleDelTotal")
+                            totalReservaNetoUI.innerText = "Total reserva neto: " + totalNeto
+                            totalesUI.appendChild(totalReservaNetoUI)
+                            const totalImpuestosUI = document.createElement("div")
+                            totalImpuestosUI.classList.add("detalleDelTotal")
+                            totalImpuestosUI.innerText = "Total impuestos aplicados: " + impuestosAplicados
+                            totalesUI.appendChild(totalImpuestosUI)
+                            const totalConImpuestosUI = document.createElement("div")
+                            totalConImpuestosUI.classList.add("detalleDelTotal")
+                            totalConImpuestosUI.classList.add("negrita")
+                            totalConImpuestosUI.innerText = "Total final bruto a pagar: " + totalFinal + "$"
+                            totalesUI.appendChild(totalConImpuestosUI)
+                        } else {
+                            const info = document.createElement("div")
+                            info.classList.add("componentes_ui_totales_mensajeInfoSinInformacion")
+                            info.innerText = "No hay información de totales"
+                            totalesUI.appendChild(info)
+                        }
+                        document.querySelector(destino).appendChild(totalesUI)
+
                     },
                 },
 
@@ -10017,6 +10490,9 @@ const casaVitini = {
                     }
                     contenedorDesgloseTotales.appendChild(totalesUI)
                     selectorDestino.appendChild(contenedorDesgloseTotales)
+
+
+
                 },
 
 
@@ -10416,6 +10892,15 @@ const casaVitini = {
                 return camel.replace(/[A-Z]/g, (match) => {
                     return '_' + match.toLowerCase();
                 });
+            },
+            contructorComasEY: (array) => {
+                if (array.length === 1) {
+                    return array[0];
+                } else {
+                    const formattedString = array.slice(0, -1).join(', ') + ' y ' + array.slice(-1);
+                    return formattedString;
+                }
+
             }
         },
         conversor: {

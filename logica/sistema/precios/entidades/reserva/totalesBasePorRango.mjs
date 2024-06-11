@@ -70,7 +70,7 @@ export const totalesBasePorRango = async (data) => {
                 continue
             }
             const totalesPorNoche = {
-                fechaDiaConNoche: fecha_ISO,
+                //fechaDiaConNoche: fecha_ISO,
                 precioNetoNoche: new Decimal("0"),
                 apartamentosPorNoche: {}
             }
@@ -82,7 +82,7 @@ export const totalesBasePorRango = async (data) => {
                 const apartamentosPorNoche = totalesPorNoche.apartamentosPorNoche
                 if (!apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {
                     apartamentosPorNoche[apartamentoIDV] = {
-                        apartamentoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV),
+                        apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI,
                         precioNetoApartamento: precioBase
                     }
                 }
@@ -106,7 +106,7 @@ export const totalesBasePorRango = async (data) => {
                 totalesPorNoche.precioNetoNoche = totalesPorNoche.precioNetoNoche.plus(precioNetoApartamento)
                 if (!desglosePorApartamento.hasOwnProperty(apartamentoIDV)) {
                     desglosePorApartamento[apartamentoIDV] = {
-                        apartamentoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV),
+                        apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI,
                         totalNeto: new Decimal(0)
                     }
                 }
@@ -130,6 +130,7 @@ export const totalesBasePorRango = async (data) => {
         })
         const totalNeto = totales.totalNeto
         totales.totalNeto = totalNeto.toFixed(2)
+        totales.promedioNocheNeto = totalNeto.div(diasArray.length).toDecimalPlaces(2).toFixed(2)
         totales.totalFinal = totalNeto.toFixed(2)
     } catch (errorCapturado) {
         throw errorCapturado

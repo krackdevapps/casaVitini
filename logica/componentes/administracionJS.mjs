@@ -7401,15 +7401,11 @@ const casaVitini = {
 
                             if (respuestaServidor?.ok) {
                                 const contenedorFinanciero = respuestaServidor.ok.contenedorFinanciero
-
                                 casaVitini.ui.componentes.contenedorFinanciero.constructor({
-                                    destino: "[componente=contenedorDesgloseTotal]",
+                                    destino: `[instanciaUID="${instanciaUID}"][componente=contenedorDesgloseTotal]`,
                                     contenedorFinanciero
 
                                 })
-
-
-
 
 
                                 // const desgloseFinanciero = respuestaServidor.ok.desgloseFinanciero
@@ -17154,7 +17150,7 @@ const casaVitini = {
                         {
                             tipo: 'porRangoDeFechas',
                             titulo: 'Por rango de fechas de la reserva',
-                            descripcion: 'Aplicar esta oferta cuando se realiza una reserva cuyo rango determinado por la fecha de entrada y la fecha de salida se cruza con el rango de duración de la oferta determinado. Esta oferta solo aplica el descuento a los dias de la reserva que estan dentro de este rango.'
+                            descripcion: 'Aplicar esta oferta cuando se realiza una reserva cuyo rango determinado por la fecha de entrada y la fecha de salida se cruza con el rango de duración determinado en esta condicion.'
                         }, {
                             tipo: 'porCodigoDescuento',
                             titulo: 'Por codigo de descuento',

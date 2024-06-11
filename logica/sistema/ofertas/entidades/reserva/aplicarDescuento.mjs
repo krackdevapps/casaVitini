@@ -46,12 +46,12 @@ export const aplicarDescuento = async (data) => {
         const controlCantidadOfertas = (data) => {
             const contenedorOfertas = data.contenedorOfertas
             const ofertaUID = data.ofertaUID
-            const oferta = data.oferta
+            const contenedor = data.contenedor
 
             if (!contenedorOfertas.hasOwnProperty(ofertaUID)) {
                 contenedorOfertas[ofertaUID] = {
                     cantidad: new Decimal("1"),
-                    oferta
+                    contenedor
                 }
             } else {
                 const cantidad = contenedorOfertas[ofertaUID].cantidad
@@ -74,7 +74,7 @@ export const aplicarDescuento = async (data) => {
                 const descuentoTotal = descuentos.descuentoTotal
                 controlCantidadOfertas({
                     ofertaUID,
-                    oferta,
+                    contenedor: oferta,
                     contenedorOfertas
                 })
                 const totalCalculado = calcularTotal({
@@ -95,7 +95,7 @@ export const aplicarDescuento = async (data) => {
                 const apartamentos = descuentos.apartamentos
                 controlCantidadOfertas({
                     ofertaUID,
-                    oferta,
+                    contenedor: oferta,
                     contenedorOfertas
                 })
                 for (const descuentoDelApartamento of apartamentos) {
@@ -166,7 +166,7 @@ export const aplicarDescuento = async (data) => {
                         if (tipoDescuento === "netoPorApartamentoDelDia") {
                             controlCantidadOfertas({
                                 ofertaUID,
-                                oferta,
+                                contenedor: oferta,
                                 contenedorOfertas
                             })
 
@@ -174,11 +174,6 @@ export const aplicarDescuento = async (data) => {
                                 const apartamentoIDV = apartamento.apartamentoIDV
                                 const descuentoTotal = new Decimal(apartamento.descuentoTotal)
                                 const tipoAplicacion = apartamento.tipoAplicacion
-
-                                //     desglosePorNoche
-                                // [fechaDelDia]
-                                //     .apartamentosPorNoche
-                                // [apartamentoIDV]
 
                                 const totalPorApartamento = estructura.entidades.reserva
                                     ?.desglosePorNoche
@@ -230,7 +225,7 @@ export const aplicarDescuento = async (data) => {
                         if (tipoDescuento === "netoPorDia") {
                             controlCantidadOfertas({
                                 ofertaUID,
-                                oferta,
+                                contenedor: oferta,
                                 contenedorOfertas
                             })
 
@@ -269,7 +264,7 @@ export const aplicarDescuento = async (data) => {
                 if (subTipoDescuento === "totalNetoPorRango") {
                     controlCantidadOfertas({
                         ofertaUID,
-                        oferta,
+                        contenedor: oferta,
                         contenedorOfertas
                     })
                     const diasArrayReserva = constructorObjetoEstructuraPrecioDia(fechaEntradaReserva_ISO, fechaSalidaReserva_ISO)

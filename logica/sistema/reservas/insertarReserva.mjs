@@ -99,7 +99,7 @@ export const insertarReserva = async (reserva) => {
                     fechaSalida: fechaSalida_ISO,
                     apartamentosArray: apartamentosArray,
                     capaOfertas: "si",
-                    zonasDeLaOferta: ["global", "publica"],
+                    zonasArray: ["global", "publica"],
                     capaDescuentosPersonalizados: "no",
                 }
             },
