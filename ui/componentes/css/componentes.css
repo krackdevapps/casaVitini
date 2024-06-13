@@ -6583,7 +6583,7 @@
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontal {
     /*width: 100%; */
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr auto 1fr;
     grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
     padding: 0px;
@@ -6591,6 +6591,11 @@
     justify-content: center;
     align-content: center;
     align-items: stretch;
+}
+
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorZonaOferta {
+    display: flex;
 }
 
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaContenedorHorizontalV2 {
@@ -13690,4 +13695,15 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.3);
     appearance: none;
+}
+
+
+.selector {
+    margin: 0px;
+    padding: 10px;
+    appearance: none;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    outline: none;
 }

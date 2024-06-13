@@ -4,6 +4,7 @@ import { validadoresCompartidos } from "../../../validadores/validadoresComparti
 import { constructorObjetoEstructuraPrecioDia } from "../../../precios/entidades/reserva/constructorObjetoEstructuraPrecioDia.mjs"
 import { calcularTotal } from "./calcularTotal.mjs"
 import { controlInstanciaDecimal } from "./controlInstanciaDecimal.mjs"
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 
 export const aplicarDescuento = async (data) => {
     try {
@@ -65,6 +66,7 @@ export const aplicarDescuento = async (data) => {
             const ofertaUID = oferta.oferta.ofertaUID
             const tipoDescuento = descuentos.tipoDescuento
             const autorizacion = oferta.autorizacion
+            const nombreOferta = oferta.oferta.nombreOferta
 
             if (origen === "porCondicion" && autorizacion !== "aceptada") {
                 continue
@@ -87,6 +89,7 @@ export const aplicarDescuento = async (data) => {
                 const descuentoAplicado = {
                     tipoAplicacion,
                     ofertaUID,
+                    nombreOferta,
                     ...totalCalculado
                 }
                 contenedorPorTotal.push(descuentoAplicado)
@@ -102,6 +105,7 @@ export const aplicarDescuento = async (data) => {
                     const apartamentoIDV = descuentoDelApartamento.apartamentoIDV
                     const descuentoTotal = descuentoDelApartamento.descuentoTotal
                     const tipoAplicacion = descuentoDelApartamento.tipoAplicacion
+                    descuentoDelApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI
 
                     const totalPorApartametno = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]?.totalNeto
                     if (!totalPorApartametno) {
@@ -127,6 +131,7 @@ export const aplicarDescuento = async (data) => {
                     const porApartamento = {
                         apartamentoIDV,
                         ofertaUID,
+                        nombreOferta,
                         tipoAplicacion: tipoAplicacion,
                         ...totalCalculado
                     }
@@ -174,6 +179,8 @@ export const aplicarDescuento = async (data) => {
                                 const apartamentoIDV = apartamento.apartamentoIDV
                                 const descuentoTotal = new Decimal(apartamento.descuentoTotal)
                                 const tipoAplicacion = apartamento.tipoAplicacion
+                                apartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI
+
 
                                 const totalPorApartamento = estructura.entidades.reserva
                                     ?.desglosePorNoche
@@ -208,6 +215,7 @@ export const aplicarDescuento = async (data) => {
                                 const porDia = {
                                     apartamentoIDV,
                                     ofertaUID,
+                                    nombreOferta,
                                     tipoAplicacion: tipoAplicacion,
                                     fecha: fechaDelDia,
                                     ...totalCalculado
@@ -245,6 +253,7 @@ export const aplicarDescuento = async (data) => {
 
                             const porDia = {
                                 ofertaUID,
+                                nombreOferta,
                                 tipoAplicacion: tipoAplicacion,
                                 fecha: fechaDelDia,
                                 ...totalCalculado
@@ -302,6 +311,7 @@ export const aplicarDescuento = async (data) => {
 
                         const porDia = {
                             ofertaUID,
+                            nombreOferta,
                             tipoAplicacion: tipoAplicacion,
                             fecha: fechaDelDia,
                             ...totalCalculado

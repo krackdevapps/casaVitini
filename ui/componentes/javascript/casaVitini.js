@@ -6854,7 +6854,6 @@ const casaVitini = {
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                     const metodoSelectorDia = data?.metodoSelectorDia || "casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia"
                     const areaContenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
-
                     const rangoIDV = data.rangoIDV
 
                     const contenedorOrigen = areaContenedorFechas.querySelector(contenedorOrigenIDV)
@@ -6887,7 +6886,6 @@ const casaVitini = {
                         metodoAlternativo,
                         metodoSelectorDia,
                     }
-
 
                     if (rangoIDV === "inicioRango") {
                         if (selectorCalendario?.getAttribute("calendarioIO") === "salida") {
@@ -9443,7 +9441,6 @@ const casaVitini = {
                         destino,
                         entidades
                     })
-                    // this.componentesUI.ofertas()                   
                     this.componentesUI.impuestos({
                         destino,
                         impuestos
@@ -9473,7 +9470,6 @@ const casaVitini = {
                             const entidades = data.entidades
 
                             for (const [entidadIDV, entidad] of Object.entries(entidades)) {
-                                console.log("entiadIDV", entidadIDV)
                                 if (entidadIDV === "reserva") {
                                     const desglosePorNoche = entidad.desglosePorNoche
                                     const desglosePorApartamento = entidad.desglosePorApartamento
@@ -9542,17 +9538,28 @@ const casaVitini = {
                                     for (const [apartamentoIDV, desglosePorApartamento] of Object.entries(apartamentosPorNoche)) {
                                         const apartamentoUI = desglosePorApartamento.apartamentoUI
                                         const precioNetoApartamento = desglosePorApartamento.precioNetoApartamento
-                                        const apartamentoContenedor = document.createElement("div")
-                                        apartamentoContenedor.setAttribute("apartamentoIDV", apartamentoIDV)
-                                        apartamentoContenedor.classList.add("reserva_resumen_apartamentoUIPrecio")
-                                        apartamentoContenedor.classList.add("negrita")
-                                        apartamentoContenedor.classList.add("colorGris")
-                                        apartamentoContenedor.innerText = apartamentoUI
-                                        contenedorNoche.appendChild(apartamentoContenedor)
-                                        const detalleApartamentosUIPreciNetoNoche = document.createElement("div")
-                                        detalleApartamentosUIPreciNetoNoche.classList.add("reserva_resumen_apartamentoUIPrecio")
-                                        detalleApartamentosUIPreciNetoNoche.innerText = precioNetoApartamento + "$ Neto por noche"
-                                        contenedorNoche.appendChild(detalleApartamentosUIPreciNetoNoche)
+
+                                        const contenedorApartamento = document.createElement("div")
+                                        contenedorApartamento.classList.add("contenedorApartamento")
+                                        contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
+
+                                        const tituloApartamento = document.createElement("div")
+                                        tituloApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
+                                        tituloApartamento.classList.add("reserva_resumen_apartamentoUIPrecio")
+                                        tituloApartamento.classList.add("negrita")
+                                        tituloApartamento.classList.add("colorGris")
+                                        tituloApartamento.innerText = apartamentoUI
+                                        contenedorApartamento.appendChild(tituloApartamento)
+
+                                        const precioNetoApartamentoUI = document.createElement("div")
+                                        precioNetoApartamentoUI.classList.add("reserva_resumen_apartamentoUIPrecio")
+                                        precioNetoApartamentoUI.setAttribute("contenedor", "precioNetoApartamento")
+
+                                        precioNetoApartamentoUI.innerText = precioNetoApartamento + "$ Neto por noche"
+                                        contenedorApartamento.appendChild(precioNetoApartamentoUI)
+
+                                        contenedorNoche.appendChild(contenedorApartamento)
+
                                     }
 
                                     contenedorDesglosePorNoche.appendChild(contenedorNoche)
@@ -9573,6 +9580,7 @@ const casaVitini = {
                                     const precioMedioNetoNoche = detalles.precioMedioNetoNoche
                                     const contenedorApartamento = document.createElement("div")
                                     contenedorApartamento.classList.add("contenedorApartamento")
+                                    contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
                                     const apartamentoUITitulo = document.createElement("div")
                                     apartamentoUITitulo.classList.add("contenedorTextoOferta")
                                     apartamentoUITitulo.classList.add("negrita")
@@ -9580,6 +9588,7 @@ const casaVitini = {
                                     contenedorApartamento.appendChild(apartamentoUITitulo)
                                     const apartamentoUIPrecioNetoTotal = document.createElement("div")
                                     apartamentoUIPrecioNetoTotal.classList.add("textoDetallesPorApartamento")
+                                    apartamentoUIPrecioNetoTotal.setAttribute("dato", "totalNeto")
                                     apartamentoUIPrecioNetoTotal.innerText = "Total neto: " + totalNeto + "$"
                                     contenedorApartamento.appendChild(apartamentoUIPrecioNetoTotal)
                                     const apartamentoUIPrecioPromedioPorNoche = document.createElement("div")
@@ -9605,7 +9614,10 @@ const casaVitini = {
 
                             this.ofertaUI({
                                 destino,
-                                ofertas
+                                ofertas,
+                                porTotal,
+                                entidades
+
                             })
                         },
                         ofertaUI: function (data) {
@@ -9613,25 +9625,42 @@ const casaVitini = {
                             const ofertas = data.ofertas
                             const ofertasPorCondicion = ofertas.porCondicion
                             const ofertasPorAdminsitrador = ofertas.porAdministrador
+                            const porTotal = data.porTotal
+                            const entidades = data.entidades
                             const contenedor = document.createElement("div")
                             contenedor.classList.add("contenedorOfertas")
                             contenedor.setAttribute("contenedor", "ofertas")
                             document.querySelector(destino).appendChild(contenedor)
-           
 
                             Object.entries(ofertasPorCondicion).forEach(([ofertaUID, contenedorOferta]) => {
-
                                 this.componentesUI.globalUI({
                                     destino,
                                     ofertaUID,
                                     contenedorOferta
                                 })
 
-                                this.componentesUI.desceuntosUI({
+                                this.componentesUI.condicionesUI({
                                     destino,
                                     ofertaUID,
                                     contenedorOferta
-                               })     
+                                })
+
+                                this.componentesUI.descuentosUI({
+                                    destino,
+                                    ofertaUID,
+                                    contenedorOferta
+                                })
+                      
+
+                            })
+                            this.porTotal({
+                                destino,
+                                porTotal
+                            })
+
+                            this.entidades.hub({
+                                destino,
+                                entidades
                             })
 
                         },
@@ -9649,7 +9678,7 @@ const casaVitini = {
                                 const fechaFinal = oferta.fechaFinal
                                 const fechaInicio = oferta.fechaInicio
                                 const nombreOferta = oferta.nombreOferta
-                 
+
 
                                 const autorizacionUI = (autorizacion) => {
                                     if (autorizacion === "aceptada") {
@@ -9658,7 +9687,7 @@ const casaVitini = {
                                         return "Rechazada"
                                     }
                                 }
-    
+
                                 const entidadUI_ = (entidadIDV) => {
                                     if (entidadIDV === "reserva") {
                                         return "Reserva"
@@ -9888,15 +9917,321 @@ const casaVitini = {
                                     contenedorCondiciones.appendChild(contendorCondicion)
 
                                 })
-                                document.querySelector(destino).querySelectorç("[contenedor=ofertas]").querySelector(`[ofertaUID="${ofertaUID}"]`).appendChild(contenedorCondiciones)
+                                document.querySelector(destino).querySelector("[contenedor=ofertas]").querySelector(`[ofertaUID="${ofertaUID}"]`).appendChild(contenedorCondiciones)
 
 
                             },
-                            desceuntosUI: () => { }
-                        },
-                        porTotal: {},
-                        entidades: {
+                            descuentosUI: (data) => {
+                                const destino = data.destino
+                                const ofertaUID = data.ofertaUID
+                                const contenedorOferta = data.contenedorOferta
 
+                                const descuentosJSON = contenedorOferta.contenedor.oferta.descuentosJSON
+                                const tipoDescuento = descuentosJSON?.tipoDescuento
+                                const subTipoDescuento = descuentosJSON?.subTipoDescuento
+
+                                const contenedor = document.createElement("div")
+                                contenedor.classList.add("contenedorDescuento")
+
+                                const descripcionDescuento = document.createElement("p")
+
+                                if (tipoDescuento === "porRango" && subTipoDescuento === "porDiasDelRango") {
+
+                                    // {
+                                    //     "tipoDescuento": "porRango",
+                                    //     "descuentoPorDias": [
+                                    //         {
+                                    //             "fecha": "2024-05-30",
+                                    //             "apartamentos": [
+                                    //                 {
+                                    //                     "apartamentoIDV": "apartamento5",
+                                    //                     "descuentoTotal": "10.00",
+                                    //                     "tipoAplicacion": "porcentaje"
+                                    //                 },
+                                    //                 {
+                                    //                     "apartamentoIDV": "apartamento7",
+                                    //                     "descuentoTotal": "10.00",
+                                    //                     "tipoAplicacion": "cantidadFija"
+                                    //                 },
+                                    //                 {
+                                    //                     "apartamentoIDV": "apartamento3",
+                                    //                     "descuentoTotal": "4.00",
+                                    //                     "tipoAplicacion": "porcentaje"
+                                    //                 }
+                                    //             ],
+                                    //             "tipoDescuento": "netoPorApartamentoDelDia"
+                                    //         },
+                                    //         {
+                                    //             "fecha": "2024-05-31",
+                                    //             "tipoDescuento": "netoPorDia",
+                                    //             "descuentoTotal": "10.00",
+                                    //             "tipoAplicacion": "porcentaje"
+                                    //         }
+                                    //     ],
+                                    //     "subTipoDescuento": "porDiasDelRango",
+                                    //     "fechaFinalRango_ISO": "2024-05-31",
+                                    //     "fechaInicioRango_ISO": "2024-05-30"
+                                    // }
+
+                                    const fechaInicioRango_ISO = descuentosJSON.fechaInicioRango_ISO
+                                    const fechaFinalRango_ISO = descuentosJSON.fechaFinalRango_ISO
+                                    const descuentoPorDias = descuentosJSON.descuentoPorDias
+
+
+                                    for (const descuentoPorDia of descuentoPorDias) {
+                                        const tipoDescuentoPorDia = descuentoPorDia.tipoDescuento
+                                        const descuentoTotal = descuentoPorDia.descuentoTotal
+
+
+                                        if (tipoDescuentoPorDia === "netoPorDia") {
+                                            const tipoAplicacion = descuentoPorDia.tipoAplicacion
+
+                                            if (tipoAplicacion === "porcentaje") {
+                                                descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% a los netos de los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
+                                            } else if (tipoAplicacion === "cantidadFija") {
+                                                descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal} a los netos de los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
+                                            }
+                                            contenedor.appendChild(descripcionDescuento)
+
+                                        } else if (tipoDescuentoPorDia === "netoPorApartamentoDelDia") {
+
+                                            const apartamentos = descuentoPorDia.apartamentos
+                                            for (const apartamento of apartamentos) {
+                                                const apartamentoUI = apartamento.apartamentoUI
+                                                const apartamentoIDV = apartamento.apartamentoIDV
+                                                const descuentoTotal = apartamento.descuentoTotal
+                                                const tipoAplicacion = apartamento.tipoAplicacion
+
+                                                const contenedorApartamento = document.createElement("div")
+                                                contenedorApartamento.classList.add("contenedorApartamento")
+                                                contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
+
+                                                const tituloApartamento = document.createElement("div")
+                                                tituloApartamento.innerText = apartamentoUI
+
+                                                const descuentoApartamento = document.createElement("div")
+                                                if (tipoAplicacion === "porcentaje") {
+                                                    descuentoApartamento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% al apartamento`
+                                                } else if (tipoAplicacion === "cantidadFija") {
+                                                    descuentoApartamento.innerText = `Esta oferta aplica un descuento de ${descuentoTotal} al apartamento`
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                } else if (tipoDescuento === "porRango" && subTipoDescuento === "totalNetoPorRango") {
+                                    // {
+                                    //     "tipoDescuento": "porRango",
+                                    //     "descuentoTotal": "10.00",
+                                    //     "tipoAplicacion": "porcentaje",
+                                    //     "subTipoDescuento": "totalNetoPorRango",
+                                    //     "fechaFinalRango_ISO": "2024-06-13",
+                                    //     "fechaInicioRango_ISO": "2024-06-11"
+                                    // }
+                                    const fechaInicioRango_ISO = descuentosJSON.fechaInicioRango_ISO
+                                    const fechaFinalRango_ISO = descuentosJSON.fechaFinalRango_ISO
+                                    const descuentoTotal = descuentosJSON.descuentoTotal
+                                    const tipoAplicacion = descuentosJSON.tipoAplicacion
+
+                                    if (tipoAplicacion === "porcentaje") {
+                                        descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% a los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}`
+                                    } else if (tipoAplicacion === "cantidadFija") {
+                                        descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal} al total neto de la reserva.`
+                                    }
+                                    contenedor.appendChild(descripcionDescuento)
+
+                                } else if (tipoDescuento === "totalNeto") {
+                                    const descuentoTotal = descuentosJSON.descuentoTotal
+                                    const tipoAplicacion = descuentosJSON.tipoAplicacion
+
+
+                                    if (tipoAplicacion === "porcentaje") {
+                                        descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% al total neto de la reserva.`
+                                    } else if (tipoAplicacion === "cantidadFija") {
+                                        descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal} al total neto de la reserva.`
+                                    }
+                                    contenedor.appendChild(descripcionDescuento)
+
+                                    // {
+                                    //     "tipoDescuento": "totalNeto",
+                                    //     "descuentoTotal": "10.00",
+                                    //     "tipoAplicacion": "porcentaje"
+                                    // }
+
+
+                                } else if (tipoDescuento === "individualPorApartamento") {
+                                    // {
+                                    //     "apartamentos": [
+                                    //         {
+                                    //             "apartamentoIDV": "apartamento5",
+                                    //             "descuentoTotal": "10.00",
+                                    //             "tipoAplicacion": "porcentaje"
+                                    //         },
+                                    //         {
+                                    //             "apartamentoIDV": "apartamento7",
+                                    //             "descuentoTotal": "20.00",
+                                    //             "tipoAplicacion": "cantidadFija"
+                                    //         },
+                                    //         {
+                                    //             "apartamentoIDV": "apartamento3",
+                                    //             "descuentoTotal": "30.00",
+                                    //             "tipoAplicacion": "porcentaje"
+                                    //         }
+                                    //     ],
+                                    //     "tipoDescuento": "individualPorApartamento"
+                                    // }
+
+                                    descripcionDescuento.innerText = `Esta oferta aplica un descuento al total de los apartamentos especificados. A continuacion se detallan los apartamentos que esta oferta aplica descuentos. Si la reserva no tiene todos los apartamentos especificados en esta oferta, entonces solo aplicara el descunetos en los apartamentos que coincidan de la oferta en la reserva.`
+                                    contenedor.appendChild(descripcionDescuento)
+
+                                    const apartamentos = descuentosJSON.apartamentos
+                                    for (const apartamento of apartamentos) {
+                                        const apartamentoIDV = apartamento.apartamentoIDV
+                                        const apartamentoUI = apartamento.apartamentoUI
+                                        const descuentoTotal = apartamento.descuentoTotal
+                                        const tipoAplicacion = apartamento.tipoAplicacion
+
+                                        const contenedorApartamento = document.createElement("div")
+                                        contenedorApartamento.classList.add("contenedorApartamento")
+                                        contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
+
+                                        const apartamentoTitulo = document.createElement("div")
+                                        apartamentoTitulo.classList.add("negrita")
+                                        apartamentoTitulo.innerHTML = apartamentoUI
+
+                                        const tipoAplicacionUI = document.createElement("div")
+                                        tipoAplicacionUI.classList.add("tipoAplicacionUI")
+                                        if (tipoAplicacion === "cantidadFija") {
+                                            tipoAplicacionUI.innerText = `Descuento de ${descuentoTotal}`
+                                        } else if (tipoAplicacion === "porcentaje") {
+                                            tipoAplicacionUI.innerText = `Descuento del ${descuentoTotal}`
+                                        }
+                                        contenedor.appendChild(contenedorApartamento)
+                                    }
+                                } else {
+                                    const mensaje = "No se reconoce el tipo de descuento resibido"
+                                    return casaVitini.ui.componentes.advertenciaInmersiva(mensaje)
+                                }
+
+
+
+                            }
+                        },
+                        porTotal: (data) => {
+
+                            const destino = data.destino
+                            const porTotal = data.porTotal
+
+                            const contenedor = document.createElement("div")
+                            contenedor.classList.add("contenedorPorTotal")
+                            contenedor.setAttribute("contenedor", "porTotal")
+
+                            porTotal.forEach((detallesDelTotal) => {
+
+                                const ofertaUID = detallesDelTotal.ofertaUID
+                                const nombreOferta = detallesDelTotal.nombreOferta
+                                const porcentaje = detallesDelTotal.porcentaje
+                                const tipoAplicacion = detallesDelTotal.tipoAplicacion
+                                const descuentoAplicado = detallesDelTotal.descuentoAplicado
+                                const totalConDescuento = detallesDelTotal.totalConDescuento
+
+                                const contenedorDescuentoTotal = document.createElement("div")
+                                contenedorDescuentoTotal.classList.add("contenedorDelDescuentoDelTotal")
+                                contenedorDescuentoTotal.setAttribute("ofertaUID", ofertaUID)
+
+                                const tituloOferta = document.createElement("div")
+                                tituloOferta.innerText = nombreOferta
+                                contenedorDescuentoTotal.appendChild(tituloOferta)
+
+                                if (tipoAplicacion === "porcentaje") {
+                                    const porcentajeUI = document.createElement("div")
+                                    porcentajeUI.innerText = `${porcentaje}%`
+                                    contenedorDescuentoTotal.appendChild(porcentajeUI)
+
+
+                                }
+                                const descuentoAplicadoUI = document.createElement("div")
+                                descuentoAplicadoUI.innerText = `Descuneto aplicado: ${descuentoAplicado}`
+                                contenedorDescuentoTotal.appendChild(descuentoAplicadoUI)
+                                contenedor.appendChild(contenedorDescuentoTotal)
+
+
+                            })
+                            document.querySelector(destino).querySelector("[contenedor=ofertas]").appendChild(contenedor)
+                        },
+                        entidades: {
+                            hub: function (data) {
+                                const destino = data.destino
+                                const entidades = data.entidades
+                                Object.entries(entidades).forEach(([entidadIDV, detalleEntidad]) => {
+                                    if (entidadIDV === "reserva") {
+                                        console.log("entidades", entidadIDV)
+                                        this.reserva({
+                                            destino,
+                                            detalleEntidad
+                                        })
+                                    }
+                                })
+                            },
+                            reserva: (data) => {
+                                const destino = data.destino
+                                const detalleEntidad = data.detalleEntidad
+
+
+
+                                const porDia = detalleEntidad.porDia
+                                const porApartamento = detalleEntidad.porApartamento
+
+
+                                Object.entries(porApartamento).forEach(([apartamentoIDV, descuentosDelApartamento]) => {
+
+
+                                    const selector = document.querySelector(destino).querySelector("[contenedor=porApartamento]").querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
+                                    const descuentosAplicados = descuentosDelApartamento.descuentosAplicados
+                                    const totalConDescuentos = descuentosDelApartamento.totalConDescuentos
+
+                                    const totalCOnDescuentosUI = document.createElement("div")
+
+                                    descuentosAplicados.forEach((detallesDelDescuento) => {
+                                        const ofertaUID = detallesDelDescuento.ofertaUID
+                                        const nombreOferta = detallesDelDescuento.nombreOferta
+                                        const apartamentoIDV = detallesDelDescuento.apartamentoIDV
+                                        const tipoAplicacion = detallesDelDescuento.tipoAplicacion
+                                        const descuentoAplicado = detallesDelDescuento.descuentoAplicado
+                                        const totalConDescuento = detallesDelDescuento.totalConDescuento
+                                        console.log("detallesDelDescuento",  detallesDelDescuento.nombreOferta)
+
+                                        const contenedor = document.createElement("div")
+                                        contenedor.classList.add("porApartamento")
+                                        contenedor.setAttribute("ofertaUID", ofertaUID)
+
+                                        const nombreOfertaUI = document.createElement("div")
+                                        nombreOfertaUI.innerText = "Nombre de la oferta:"+ nombreOferta
+                                        contenedor.appendChild(nombreOfertaUI)
+
+                                        const descripcionDescuento = document.createElement("div")
+                                        if (tipoAplicacion === "porcentaje") {
+                                            descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoAplicado}% y generando un descuento del ${totalConDescuento}.`
+                                        } else if (tipoAplicacion === "cantidadFija") {
+                                            descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${totalConDescuento}`
+                                        }
+                                        contenedor.appendChild(descripcionDescuento)
+                                        selector.appendChild(contenedor)
+
+                                    })
+
+
+
+
+                                })
+
+
+                                Object.entries(porDia).forEach(([fechaNoche, detallesDelDia])=> {
+
+
+
+                                })
+                            }
                         }
                     },
                     sobreControlPrecios: () => { },

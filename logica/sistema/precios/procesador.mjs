@@ -30,7 +30,6 @@ export const procesador = async (data) => {
             throw new Error(error)
         }
         if (capaImpuestos === "si") {
-            console.log("impuestos")
             await aplicarImpuestos(estructura)
         }
         return estructura

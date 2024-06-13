@@ -15817,7 +15817,6 @@ const casaVitini = {
                     casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
                     const transaccion = casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorObjeto()
                     transaccion.zona = "administracion/ofertas_nuevo/crearOferta"
-                    console.log("tran", transaccion)
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                     if (!pantallaDeCargaRenderizada) {
@@ -15847,10 +15846,13 @@ const casaVitini = {
 
                     const fechaInicio_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaInicio_humana)
                     const fechaFinal_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaFinal_humana)
+                    const zonaIDV = document.querySelector("[campo=zonaIDV").value
+
                     const contenedorCondiciones = document.querySelector("[contenedor=condiciones]")
 
                     const oferta = {
-                        nombreOferta: nombreOferta,
+                        nombreOferta,
+                        zonaIDV,
                         entidad: "reserva",
                         fechaInicio: fechaInicio_ISO,
                         fechaFinal: fechaFinal_ISO,
@@ -16760,6 +16762,10 @@ const casaVitini = {
                         instanciaUID_contenedorFechas
                     })
                 })
+
+
+
+
                 // Crear el párrafo de la fecha de inicio
                 const pFechaInicio = document.createElement('p');
                 pFechaInicio.classList.add('tituloFecha');
@@ -16784,6 +16790,32 @@ const casaVitini = {
                         instanciaUID_contenedorFechas
                     })
                 })
+
+                const contenedorZonaOferta = document.createElement("div")
+                contenedorZonaOferta.classList.add("contenedorZonaOferta")
+
+                const selectorZonaOferta = document.createElement("select")
+                selectorZonaOferta.classList.add("selector")
+                selectorZonaOferta.setAttribute("campo", "zonaIDV")
+                const opcionPredeterminada = document.createElement("option")
+                opcionPredeterminada.selected = true
+                opcionPredeterminada.disabled = true;
+                opcionPredeterminada.value = "no"
+                opcionPredeterminada.text = "Zona de la oferta"
+                selectorZonaOferta.appendChild(opcionPredeterminada)
+                const opciones = [
+                    { value: "publica", text: "Zona publica" },
+                    { value: "global", text: "Zona global" },
+                    { value: "privada", text: "Zona privada" }
+                ]
+                for (const opcionData of opciones) {
+                    const opcion = document.createElement("option");
+                    opcion.value = opcionData.value;
+                    opcion.text = opcionData.text;
+                    selectorZonaOferta.appendChild(opcion);
+                }
+                contenedorZonaOferta.appendChild(selectorZonaOferta)
+
                 // Crear el párrafo de la fecha de fin
                 const pFechaFin = document.createElement('p');
                 pFechaFin.classList.add('tituloFecha');
@@ -16798,6 +16830,7 @@ const casaVitini = {
                 divContenedorFechaFin.appendChild(pFechaFinSeleccionada);
                 // Agregar los elementos al primer div contenedor horizontal
                 divContenedorHorizontal.appendChild(divContenedorFechaInicio);
+                divContenedorHorizontal.appendChild(contenedorZonaOferta);
                 divContenedorHorizontal.appendChild(divContenedorFechaFin);
                 // Agregar el primer div contenedor horizontal al div contenedor
                 divContenedor.appendChild(divContenedorHorizontal);
@@ -16926,10 +16959,12 @@ const casaVitini = {
                     divContenedorFechaInicio.setAttribute('componente', 'inicioOferta');
                     divContenedorFechaInicio.setAttribute('paralizadorEvento', 'ocultadorCalendarios');
                     divContenedorFechaInicio.addEventListener("click", (e) => {
-                        casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorCalendario({
-                            e,
-                            instanciaUID_contenedorFechas,
-                            metodoSelectorDia
+                        casaVitini.ui.componentes.calendario.configurarCalendario({
+                            rangoIDV: "inicioRango",
+                            contenedorOrigenIDV: "[calendario=entrada]",
+                            perfilMes: "calendario_entrada_perfilSimple",
+                            metodoSelectorDia,
+                            instanciaUID_contenedorFechas
                         })
                     })
                     // Crear el párrafo de la fecha de inicio
@@ -16950,13 +16985,17 @@ const casaVitini = {
                     divContenedorFechaFin.setAttribute('calendario', 'salida');
                     divContenedorFechaFin.setAttribute('paralizadorEvento', 'ocultadorCalendarios');
                     divContenedorFechaFin.setAttribute('componente', 'finOferta');
-                    divContenedorFechaFin.addEventListener("click", (e) => {
-                        casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorCalendario({
-                            e,
+                    divContenedorFechaFin.addEventListener("click", () => {
+                        casaVitini.ui.componentes.calendario.configurarCalendario({
+                            rangoIDV: "finalRango",
+                            contenedorOrigenIDV: "[calendario=salida]",
+                            perfilMes: "calendario_salida_perfilSimple",
                             metodoSelectorDia,
                             instanciaUID_contenedorFechas
                         })
                     })
+
+          
                     // Crear el párrafo de la fecha de fin
                     const pFechaFin = document.createElement('p');
                     pFechaFin.classList.add('tituloFecha');
@@ -17193,7 +17232,6 @@ const casaVitini = {
                         return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                     })
                     constructor.appendChild(botonCancelar)
-
                     document.querySelector("main").appendChild(pantallaInmersiva)
                 },
                 eliminarContenedorCondicion: (tipoCondicion) => {
@@ -17686,14 +17724,12 @@ const casaVitini = {
                         },
                         porDiasDelRango: {
                             arranque: () => {
-
                                 const contenedor = document.createElement("div")
                                 contenedor.setAttribute("contenedor", "porDiasDentroDelRango")
                                 contenedor.setAttribute("contenedorPorRango", "porDiasDelRango")
                                 contenedor.classList.add("estadoInicialInvisible", "contenedorInternoPorRango")
                                 const info = casaVitini.administracion.gestion_de_ofertas.componenteUI.tipoDescuentosUI.porRango.infoInicialSinApartametno()
                                 contenedor.appendChild(info)
-
                                 return contenedor
                             },
                             totalNetoPorDiaUI: (data) => {
@@ -17800,7 +17836,6 @@ const casaVitini = {
                                 const fechaFinalRango = area.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
 
                                 contenedorPorDiasDentro.innerHTML = null
-
                                 if (fechaInicioRango && fechaFinalRango) {
                                     const fechaInicioRango_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaInicioRango)
                                     const fechaFinalRango_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaFinalRango)

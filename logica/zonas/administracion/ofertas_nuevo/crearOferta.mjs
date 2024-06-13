@@ -16,6 +16,7 @@ export const crearOferta = async (entrada, salida) => {
         await mutex.acquire();
 
         const nombreOferta = entrada.body.nombreOferta
+        const zonaIDV = entrada.body.zonaIDV
         const entidad = entrada.body.entidad
         const fechaInicio = entrada.body.fechaInicio
         const fechaFinal = entrada.body.fechaFinal
@@ -25,6 +26,7 @@ export const crearOferta = async (entrada, salida) => {
 
         const oferta = {
             nombreOferta,
+            zonaIDV,
             entidad,
             fechaInicio,
             fechaFinal,
