@@ -9,10 +9,10 @@ export const calcularTotal = (data) => {
     if (tipoAplicacion === "porcentaje") {
         const descuentoFinal = total.mul(descuentoTotal).div(100);
         estructura.descuentoAplicado = descuentoFinal.toFixed(2)
-        estructura.porcentaje = descuentoTotal
+        estructura.porcentaje = descuentoTotal.toFixed(2)
         const totalConDescuento = total.minus(descuentoTotal)
         if (totalConDescuento.isPositive()) {
-            estructura.totalConDescuento = total.minus(descuentoTotal).toFixed(2)
+            estructura.totalConDescuento = total.minus(descuentoFinal).toFixed(2)
         } else {
             estructura.totalConDescuento = "0.00"
         }

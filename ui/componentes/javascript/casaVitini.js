@@ -10165,7 +10165,6 @@ const casaVitini = {
                                 const entidades = data.entidades
                                 Object.entries(entidades).forEach(([entidadIDV, detalleEntidad]) => {
                                     if (entidadIDV === "reserva") {
-                                        console.log("entidades", entidadIDV)
                                         this.reserva({
                                             destino,
                                             detalleEntidad
@@ -10190,7 +10189,10 @@ const casaVitini = {
                                     const descuentosAplicados = descuentosDelApartamento.descuentosAplicados
                                     const totalConDescuentos = descuentosDelApartamento.totalConDescuentos
 
-                                    const totalCOnDescuentosUI = document.createElement("div")
+                                    const totalConDescuentosUI = document.createElement("div")
+                                    totalConDescuentosUI.innerText = `Total descuentos aplicados al apartamento: ${totalConDescuentos}`
+                                    selector.appendChild(totalConDescuentosUI)
+
 
                                     descuentosAplicados.forEach((detallesDelDescuento) => {
                                         const ofertaUID = detallesDelDescuento.ofertaUID
@@ -10199,7 +10201,6 @@ const casaVitini = {
                                         const tipoAplicacion = detallesDelDescuento.tipoAplicacion
                                         const descuentoAplicado = detallesDelDescuento.descuentoAplicado
                                         const totalConDescuento = detallesDelDescuento.totalConDescuento
-                                        console.log("detallesDelDescuento",  detallesDelDescuento.nombreOferta)
 
                                         const contenedor = document.createElement("div")
                                         contenedor.classList.add("porApartamento")

@@ -1,10 +1,10 @@
 import Decimal from "decimal.js"
-import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs"
-//import { constructorIndiceTotales } from "./constructorInficeTotales.mjs"
-import { constructorObjetoEstructuraPrecioDia } from "../../../precios/entidades/reserva/constructorObjetoEstructuraPrecioDia.mjs"
-import { calcularTotal } from "./calcularTotal.mjs"
 import { controlInstanciaDecimal } from "./controlInstanciaDecimal.mjs"
-import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
+import { perfil_totalNeto } from "./perfilesDescuentos/perfil_totalNeto.mjs"
+import { perfil_individualPorApartamento } from "./perfilesDescuentos/perfil_individualPorApartamento.mjs"
+import { perfil_porDiasDelRango } from "./perfilesDescuentos/porRango/perfil_porDiasDelRango.mjs"
+import { perfil_totalNetoPorRango } from "./perfilesDescuentos/porRango/perfil_totalNetoPorRango.mjs"
+import { constructorEstructuraDescuentos } from "./contructorEstructuraDescuentos.mjs"
 
 export const aplicarDescuento = async (data) => {
     try {
@@ -18,21 +18,7 @@ export const aplicarDescuento = async (data) => {
             throw new Error(error)
         }
 
-        if (!estructura.hasOwnProperty("ofertasAplicadas")) {
-            estructura.ofertasAplicadas = {
-                ofertas: {
-                    porCondicion: {},
-                    porAdministrador: {}
-                },
-                porTotal: [],
-                entidades: {
-                    reserva: {
-                        porApartamento: {},
-                        porDia: {},
-                    }
-                }
-            }
-        }
+        constructorEstructuraDescuentos(estructura)
 
         const contenedorTotalesBase = estructura.global.totales
         const totalNeto = new Decimal(contenedorTotalesBase.totalNeto)
@@ -41,24 +27,9 @@ export const aplicarDescuento = async (data) => {
         const contenedorPorApartamento = estructura.ofertasAplicadas.entidades.reserva.porApartamento
         const contenedorPorDia = estructura.ofertasAplicadas.entidades.reserva.porDia
 
-
         let totalGlobalDescuento = new Decimal("0.00")
-
-        const controlCantidadOfertas = (data) => {
-            const contenedorOfertas = data.contenedorOfertas
-            const ofertaUID = data.ofertaUID
-            const contenedor = data.contenedor
-
-            if (!contenedorOfertas.hasOwnProperty(ofertaUID)) {
-                contenedorOfertas[ofertaUID] = {
-                    cantidad: new Decimal("1"),
-                    contenedor
-                }
-            } else {
-                const cantidad = contenedorOfertas[ofertaUID].cantidad
-                contenedorOfertas[ofertaUID].cantidad = cantidad.plus("1")
-            }
-
+        if (!contenedorTotalesBase.hasOwnProperty("totalDescuento")) {
+            contenedorTotalesBase.totalDescuento = "0.00"
         }
 
         for (const oferta of ofertarParaAplicarDescuentos) {
@@ -72,72 +43,30 @@ export const aplicarDescuento = async (data) => {
                 continue
             }
             if (tipoDescuento === "totalNeto") {
-                const tipoAplicacion = descuentos.tipoAplicacion
-                const descuentoTotal = descuentos.descuentoTotal
-                controlCantidadOfertas({
+                perfil_totalNeto({
                     ofertaUID,
-                    contenedor: oferta,
-                    contenedorOfertas
-                })
-                const totalCalculado = calcularTotal({
-                    tipoAplicacion,
-                    descuentoTotal,
-                    total: totalNeto
-                })
-                totalGlobalDescuento = totalGlobalDescuento.plus(totalCalculado.descuentoAplicado)
-
-                const descuentoAplicado = {
-                    tipoAplicacion,
-                    ofertaUID,
+                    oferta,
+                    descuentos,
+                    contenedorOfertas,
+                    totalNeto,
                     nombreOferta,
-                    ...totalCalculado
-                }
-                contenedorPorTotal.push(descuentoAplicado)
-
-            } else if (tipoDescuento === "individualPorApartamento") {
-                const apartamentos = descuentos.apartamentos
-                controlCantidadOfertas({
-                    ofertaUID,
-                    contenedor: oferta,
-                    contenedorOfertas
+                    contenedorPorTotal,
+                    estructura
                 })
-                for (const descuentoDelApartamento of apartamentos) {
-                    const apartamentoIDV = descuentoDelApartamento.apartamentoIDV
-                    const descuentoTotal = descuentoDelApartamento.descuentoTotal
-                    const tipoAplicacion = descuentoDelApartamento.tipoAplicacion
-                    descuentoDelApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI
+            }
 
-                    const totalPorApartametno = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]?.totalNeto
-                    if (!totalPorApartametno) {
-                        continue
-                    }
+            else if (tipoDescuento === "individualPorApartamento") {
+                await perfil_individualPorApartamento({
+                    descuentos,
+                    nombreOferta,
+                    oferta,
+                    ofertaUID,
+                    estructura,
+                    contenedorPorApartamento,
+                    contenedorOfertas,
+                    estructura
+                })
 
-                    if (!contenedorPorApartamento.hasOwnProperty(apartamentoIDV)) {
-                        contenedorPorApartamento[apartamentoIDV] = {
-                            totalConDescuentos: new Decimal("0.00"),
-                            descuentosAplicados: []
-                        }
-                    } else {
-                        contenedorPorApartamento[apartamentoIDV].totalConDescuentos = controlInstanciaDecimal(contenedorPorApartamento[apartamentoIDV].totalConDescuentos);
-                    }
-                    const contenedorDelApartamento = contenedorPorApartamento[apartamentoIDV]
-                    const totalCalculado = calcularTotal({
-                        tipoAplicacion,
-                        descuentoTotal,
-                        total: totalPorApartametno
-                    })
-                    const totalConDescuentos = totalCalculado.totalConDescuento
-                    totalGlobalDescuento = totalGlobalDescuento.plus(totalConDescuentos)
-                    const porApartamento = {
-                        apartamentoIDV,
-                        ofertaUID,
-                        nombreOferta,
-                        tipoAplicacion: tipoAplicacion,
-                        ...totalCalculado
-                    }
-                    contenedorDelApartamento.descuentosAplicados.push(porApartamento)
-                    contenedorDelApartamento.totalConDescuentos = contenedorDelApartamento.totalConDescuentos.plus(totalConDescuentos)
-                }
             } else if (tipoDescuento === "porRango") {
                 const dias = descuentos.descuentoPorDias
                 const subTipoDescuento = descuentos.subTipoDescuento
@@ -145,210 +74,67 @@ export const aplicarDescuento = async (data) => {
                 const fechaFinalRango_ISO = descuentos.fechaFinalRango_ISO
 
                 if (subTipoDescuento === "porDiasDelRango") {
-
-                    for (const descuentoPorDia of dias) {
-                        const fechaDelDia = descuentoPorDia.fecha
-                        const apartamentos = descuentoPorDia.apartamentos
-                        const tipoDescuento = descuentoPorDia.tipoDescuento
-
-                        const fechaDentroDelRango = await validadoresCompartidos.fechas.fechaEnRango({
-                            fechaAComprobrarDentroDelRango: fechaDelDia,
-                            fechaInicioRango_ISO: fechaEntradaReserva_ISO,
-                            fechaFinRango_ISO: fechaSalidaReserva_ISO
-                        })
-                        if (!fechaDentroDelRango) {
-                            continue
-                        }
-                        if (!contenedorPorDia.hasOwnProperty(fechaDelDia)) {
-                            contenedorPorDia[fechaDelDia] = {}
-                        }
-                        if (!contenedorPorDia[fechaDelDia].hasOwnProperty("totalConDescuentos")) {
-                            contenedorPorDia[fechaDelDia].totalConDescuentos = new Decimal("0.00")
-                        } else {
-                            contenedorPorDia[fechaDelDia].totalConDescuentos = controlInstanciaDecimal(contenedorPorDia[fechaDelDia].totalConDescuentos);
-                        }
-
-                        if (tipoDescuento === "netoPorApartamentoDelDia") {
-                            controlCantidadOfertas({
-                                ofertaUID,
-                                contenedor: oferta,
-                                contenedorOfertas
-                            })
-
-                            for (const apartamento of apartamentos) {
-                                const apartamentoIDV = apartamento.apartamentoIDV
-                                const descuentoTotal = new Decimal(apartamento.descuentoTotal)
-                                const tipoAplicacion = apartamento.tipoAplicacion
-                                apartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI
-
-
-                                const totalPorApartamento = estructura.entidades.reserva
-                                    ?.desglosePorNoche
-                                [fechaDelDia]
-                                    ?.apartamentosPorNoche
-                                [apartamentoIDV]
-                                    ?.precioNetoApartamento
-                                if (!totalPorApartamento) {
-                                    continue
-                                }
-
-                                if (!contenedorPorDia[fechaDelDia].hasOwnProperty("porApartamento")) {
-                                    contenedorPorDia[fechaDelDia].porApartamento = {}
-                                }
-                                const contenedorApartamentoMismoDia = contenedorPorDia[fechaDelDia].porApartamento
-
-                                if (!contenedorApartamentoMismoDia.hasOwnProperty(apartamentoIDV)) {
-                                    contenedorApartamentoMismoDia[apartamentoIDV] = {
-                                        totalConDescuentos: new Decimal("0.00"),
-                                        descuentosAplicados: []
-                                    }
-                                } else {
-                                    contenedorApartamentoMismoDia[apartamentoIDV].totalConDescuentos = controlInstanciaDecimal(contenedorApartamentoMismoDia[apartamentoIDV].totalConDescuentos);
-                                }
-                                const totalCalculado = calcularTotal({
-                                    tipoAplicacion,
-                                    descuentoTotal,
-                                    total: totalPorApartamento
-                                })
-                                totalGlobalDescuento = totalGlobalDescuento.plus(totalCalculado.descuentoAplicado)
-
-                                const porDia = {
-                                    apartamentoIDV,
-                                    ofertaUID,
-                                    nombreOferta,
-                                    tipoAplicacion: tipoAplicacion,
-                                    fecha: fechaDelDia,
-                                    ...totalCalculado
-                                }
-                                const contenedorApartamento = contenedorApartamentoMismoDia[apartamentoIDV]
-                                contenedorApartamento.descuentosAplicados.push(porDia)
-                                contenedorApartamento.totalConDescuentos = contenedorApartamento.totalConDescuentos
-                                    .plus(totalCalculado.totalConDescuento)
-                                contenedorPorDia[fechaDelDia].totalConDescuentos = contenedorPorDia[fechaDelDia]
-                                    .totalConDescuentos
-                                    .plus(totalCalculado.totalConDescuento)
-                            }
-                        }
-
-                        if (tipoDescuento === "netoPorDia") {
-                            controlCantidadOfertas({
-                                ofertaUID,
-                                contenedor: oferta,
-                                contenedorOfertas
-                            })
-
-                            const descuentoTotal = descuentoPorDia.descuentoTotal
-                            const tipoAplicacion = descuentoPorDia.tipoAplicacion
-                            const totalNetoPorDia = estructura.entidades.reserva.
-                                desglosePorNoche
-                            [fechaDelDia]
-                                .precioNetoNoche
-
-                            const totalCalculado = calcularTotal({
-                                tipoAplicacion,
-                                descuentoTotal,
-                                total: totalNetoPorDia
-                            })
-                            totalGlobalDescuento = totalGlobalDescuento.plus(totalCalculado.descuentoAplicado)
-
-                            const porDia = {
-                                ofertaUID,
-                                nombreOferta,
-                                tipoAplicacion: tipoAplicacion,
-                                fecha: fechaDelDia,
-                                ...totalCalculado
-                            }
-
-                            if (!contenedorPorDia[fechaDelDia].hasOwnProperty("porTotalNetoDia")) {
-                                contenedorPorDia[fechaDelDia].porTotalNetoDia = []
-                            }
-                            contenedorPorDia[fechaDelDia].porTotalNetoDia.push(porDia)
-                            contenedorPorDia[fechaDelDia].totalConDescuentos = contenedorPorDia[fechaDelDia]
-                                .totalConDescuentos
-                                .plus(totalCalculado.totalConDescuento)
-                        }
-                    }
+                    await perfil_porDiasDelRango({
+                        ofertaUID,
+                        nombreOferta,
+                        oferta,
+                        dias,
+                        contenedorPorDia,
+                        fechaEntradaReserva_ISO,
+                        fechaSalidaReserva_ISO,
+                        estructura,
+                        contenedorOfertas
+                    })
                 }
 
                 if (subTipoDescuento === "totalNetoPorRango") {
-                    controlCantidadOfertas({
+                    await perfil_totalNetoPorRango({
                         ofertaUID,
-                        contenedor: oferta,
-                        contenedorOfertas
+                        nombreOferta,
+                        oferta,
+                        dias,
+                        contenedorPorDia,
+                        fechaInicioRango_ISO,
+                        fechaFinalRango_ISO,
+                        fechaEntradaReserva_ISO,
+                        fechaSalidaReserva_ISO,
+                        estructura,
+                        contenedorOfertas,
+                        descuentos,
                     })
-                    const diasArrayReserva = constructorObjetoEstructuraPrecioDia(fechaEntradaReserva_ISO, fechaSalidaReserva_ISO)
-                    for (const fechaDelDia of diasArrayReserva) {
-                        const fechaDentroDelRango = await validadoresCompartidos.fechas.fechaEnRango({
-                            fechaAComprobrarDentroDelRango: fechaDelDia,
-                            fechaInicioRango_ISO: fechaInicioRango_ISO,
-                            fechaFinRango_ISO: fechaFinalRango_ISO
-                        })
-
-                        if (!fechaDentroDelRango) {
-                            continue
-                        }
-                        if (!contenedorPorDia.hasOwnProperty(fechaDelDia)) {
-                            contenedorPorDia[fechaDelDia] = {}
-                        }
-                        if (!contenedorPorDia[fechaDelDia].hasOwnProperty("totalConDescuentos")) {
-                            contenedorPorDia[fechaDelDia].totalConDescuentos = new Decimal("0.00")
-                        } else {
-                            contenedorPorDia[fechaDelDia].totalConDescuentos = controlInstanciaDecimal(contenedorPorDia[fechaDelDia].totalConDescuentos);
-                        }
-                        const descuentoTotal = descuentos.descuentoTotal
-                        const tipoAplicacion = descuentos.tipoAplicacion
-                        const totalNetoPorDia = estructura.entidades.reserva
-                            .desglosePorNoche
-                        [fechaDelDia]
-                            .precioNetoNoche
-
-                        const totalCalculado = calcularTotal({
-                            tipoAplicacion,
-                            descuentoTotal,
-                            total: totalNetoPorDia
-                        })
-                        totalGlobalDescuento = totalGlobalDescuento.plus(totalCalculado.descuentoAplicado)
-
-                        const porDia = {
-                            ofertaUID,
-                            nombreOferta,
-                            tipoAplicacion: tipoAplicacion,
-                            fecha: fechaDelDia,
-                            ...totalCalculado
-                        }
-
-                        if (!contenedorPorDia[fechaDelDia].hasOwnProperty("porTotalNetoDia")) {
-                            contenedorPorDia[fechaDelDia].porTotalNetoDia = []
-                        }
-                        contenedorPorDia[fechaDelDia].porTotalNetoDia.push(porDia)
-                        contenedorPorDia[fechaDelDia].totalConDescuentos = contenedorPorDia[fechaDelDia]
-                            .totalConDescuentos
-                            .plus(totalCalculado.totalConDescuento)
-                    }
                 }
             }
         }
+        const totalDescuento = estructura.global.totales.totalDescuento
 
-        // Redondeos
-        Object.entries(contenedorPorApartamento).forEach((apartamento) => {
-            const totalConDescuentoApartamento = controlInstanciaDecimal(apartamento[1].totalConDescuentos)
-            apartamento[1].totalConDescuentos = totalConDescuentoApartamento.toFixed(2)
-        })
+        // Redondeos y totalNetoConDescunetos
+        // Object.entries(contenedorPorApartamento).forEach(([apartamentoIDV, detallesApartamento]) => {
+        //     const totalDescuentosAplicados = controlInstanciaDecimal(detallesApartamento.totalDescuentosAplicados)
+        //     const totalPorApartamento = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]?.totalNeto
+        //     const totalNetoConDescuentos = totalPorApartamento.minus(totalDescuentosAplicados).toFixed(2)
 
-        Object.entries(contenedorPorDia).forEach(([fecha, datosDia]) => {
-            const totalConDescuentosDia = controlInstanciaDecimal(datosDia.totalConDescuentos)
-            datosDia.totalConDescuentos = totalConDescuentosDia.toFixed(2)
-            if (datosDia.porApartamento) {
-                Object.entries(datosDia.porApartamento).forEach(([apartamentoIDV, datosApartamento]) => {
-                    const totalConDescuentosApartamento = controlInstanciaDecimal(datosApartamento.totalConDescuentos)
-                    datosApartamento.totalConDescuentos = totalConDescuentosApartamento.toFixed(2)
-                }
-                )
-            }
-        })
+        //     if (new Decimal(totalNetoConDescuentos).isPositive()) {
+        //         detallesApartamento.totalNetoConDescuentos = totalNetoConDescuentos
+        //     } else {
+        //         detallesApartamento.totalNetoConDescuentos = "0.00"
+        //     }
+        //     detallesApartamento.totalDescuentosAplicados = totalDescuentosAplicados.toFixed(2)
+        // })
 
-        contenedorTotalesBase.totalDescuento = totalGlobalDescuento.toFixed(2)
-        const totalFinalConDescuentos = totalNeto.minus(totalGlobalDescuento)
+        // Object.entries(contenedorPorDia).forEach(([fecha, datosDia]) => {
+        //     const totalConDescuentosDia = controlInstanciaDecimal(datosDia.totalConDescuentos)
+        //     datosDia.totalConDescuentos = totalConDescuentosDia.toFixed(2)
+        //     if (datosDia.porApartamento) {
+        //         Object.entries(datosDia.porApartamento).forEach(([apartamentoIDV, datosApartamento]) => {
+        //             const totalConDescuentosApartamento = controlInstanciaDecimal(datosApartamento.totalConDescuentos)
+        //             datosApartamento.totalConDescuentos = totalConDescuentosApartamento.toFixed(2)
+        //         }
+        //         )
+        //     }
+        // })
+
+        // contenedorTotalesBase.totalDescuento = totalGlobalDescuento.toFixed(2)
+        const totalFinalConDescuentos = totalNeto.minus(totalDescuento)
         if (totalFinalConDescuentos.isPositive()) {
             contenedorTotalesBase.totalFinal = totalFinalConDescuentos.toFixed(2)
         } else {
