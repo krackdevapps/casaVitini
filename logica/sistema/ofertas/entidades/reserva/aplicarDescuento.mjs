@@ -1,5 +1,4 @@
 import Decimal from "decimal.js"
-import { controlInstanciaDecimal } from "./controlInstanciaDecimal.mjs"
 import { perfil_totalNeto } from "./perfilesDescuentos/perfil_totalNeto.mjs"
 import { perfil_individualPorApartamento } from "./perfilesDescuentos/perfil_individualPorApartamento.mjs"
 import { perfil_porDiasDelRango } from "./perfilesDescuentos/porRango/perfil_porDiasDelRango.mjs"
@@ -17,7 +16,6 @@ export const aplicarDescuento = async (data) => {
             const error = "aplicarDescuento necesita llave origen, esta puede ser porCondicion o porAdminstrador"
             throw new Error(error)
         }
-
         constructorEstructuraDescuentos(estructura)
 
         const contenedorTotalesBase = estructura.global.totales
@@ -27,7 +25,6 @@ export const aplicarDescuento = async (data) => {
         const contenedorPorApartamento = estructura.ofertasAplicadas.entidades.reserva.porApartamento
         const contenedorPorDia = estructura.ofertasAplicadas.entidades.reserva.porDia
 
-        let totalGlobalDescuento = new Decimal("0.00")
         if (!contenedorTotalesBase.hasOwnProperty("totalDescuento")) {
             contenedorTotalesBase.totalDescuento = "0.00"
         }
@@ -107,39 +104,16 @@ export const aplicarDescuento = async (data) => {
         }
         const totalDescuento = estructura.global.totales.totalDescuento
 
-        // Redondeos y totalNetoConDescunetos
-        // Object.entries(contenedorPorApartamento).forEach(([apartamentoIDV, detallesApartamento]) => {
-        //     const totalDescuentosAplicados = controlInstanciaDecimal(detallesApartamento.totalDescuentosAplicados)
-        //     const totalPorApartamento = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]?.totalNeto
-        //     const totalNetoConDescuentos = totalPorApartamento.minus(totalDescuentosAplicados).toFixed(2)
-
-        //     if (new Decimal(totalNetoConDescuentos).isPositive()) {
-        //         detallesApartamento.totalNetoConDescuentos = totalNetoConDescuentos
-        //     } else {
-        //         detallesApartamento.totalNetoConDescuentos = "0.00"
-        //     }
-        //     detallesApartamento.totalDescuentosAplicados = totalDescuentosAplicados.toFixed(2)
-        // })
-
-        // Object.entries(contenedorPorDia).forEach(([fecha, datosDia]) => {
-        //     const totalConDescuentosDia = controlInstanciaDecimal(datosDia.totalConDescuentos)
-        //     datosDia.totalConDescuentos = totalConDescuentosDia.toFixed(2)
-        //     if (datosDia.porApartamento) {
-        //         Object.entries(datosDia.porApartamento).forEach(([apartamentoIDV, datosApartamento]) => {
-        //             const totalConDescuentosApartamento = controlInstanciaDecimal(datosApartamento.totalConDescuentos)
-        //             datosApartamento.totalConDescuentos = totalConDescuentosApartamento.toFixed(2)
-        //         }
-        //         )
-        //     }
-        // })
-
-        // contenedorTotalesBase.totalDescuento = totalGlobalDescuento.toFixed(2)
         const totalFinalConDescuentos = totalNeto.minus(totalDescuento)
         if (totalFinalConDescuentos.isPositive()) {
             contenedorTotalesBase.totalFinal = totalFinalConDescuentos.toFixed(2)
         } else {
             contenedorTotalesBase.totalFinal = "0.00"
         }
+        const totalFinal = contenedorTotalesBase.totalFinal
+        const nochesReserva = estructura.entidades.reserva.nochesReserva
+        const promedioNocheNetoConDescuentos = new Decimal(totalFinal).div(nochesReserva)
+        contenedorTotalesBase.promedioNocheNetoConDescuentos = promedioNocheNetoConDescuentos.isPositive() ? promedioNocheNetoConDescuentos.toFixed(2) : "0.00"
     } catch (error) {
         throw error
     }

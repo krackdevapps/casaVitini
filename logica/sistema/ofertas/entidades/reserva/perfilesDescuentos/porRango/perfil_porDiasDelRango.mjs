@@ -19,7 +19,6 @@ export const perfil_porDiasDelRango = async (data) => {
         const contenedorOfertas = data.contenedorOfertas
         const totalDescuento = new Decimal(estructura.global.totales.totalDescuento)
 
-
         for (const descuentoPorDia of dias) {
             const fechaDelDia = descuentoPorDia.fecha
             const apartamentos = descuentoPorDia.apartamentos
@@ -104,8 +103,7 @@ export const perfil_porDiasDelRango = async (data) => {
                         .minus(totalCalculado.descuentoAplicado)
                     contenedorPorApartamentoDentroDelDia.totalConDescuentos = new Decimal(totalConDescuentosPorApartamento).isPositive() ? totalConDescuentosPorApartamento.toFixed(2) : "0.00"
 
-
-                    const totalConDescuentosPorDia = new Decimal(contenedorPorDia[fechaDelDia].totalConDescuentos).minus(totalCalculado.totalConDescuento)
+                    const totalConDescuentosPorDia = new Decimal(contenedorPorDia[fechaDelDia].totalConDescuentos).minus(totalCalculado.descuentoAplicado)
                     contenedorPorDia[fechaDelDia].totalConDescuentos = totalConDescuentosPorDia.isPositive() ? totalConDescuentosPorDia.toFixed(2) : "0.00"
                     const descuentosAplicados = new Decimal(contenedorPorDia[fechaDelDia]
                         .totalDescuentosAplicados)
@@ -161,13 +159,9 @@ export const perfil_porDiasDelRango = async (data) => {
 
                 contenedorPorDia[fechaDelDia].totalConDescuentos = totalConDescuentosPorDia.isPositive() ? totalConDescuentosPorDia.toFixed(2) : "0.00"
                 contenedorPorDia[fechaDelDia].totalDescuentosAplicados = new Decimal(contenedorPorDia[fechaDelDia].totalDescuentosAplicados).plus(totalCalculado.descuentoAplicado).toFixed(2)
-
             }
         }
     } catch (error) {
         throw error
     }
-
-
-
 }

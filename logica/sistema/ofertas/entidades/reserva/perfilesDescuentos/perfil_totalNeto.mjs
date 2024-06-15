@@ -15,7 +15,6 @@ export const perfil_totalNeto = (data) => {
         const estructura = data.estructura
         const totalDescuento = new Decimal(estructura.global.totales.totalDescuento)
 
-
         const tipoAplicacion = descuentos.tipoAplicacion
         const descuentoTotal = descuentos.descuentoTotal
         controlCantidadOfertas({
@@ -28,7 +27,8 @@ export const perfil_totalNeto = (data) => {
             descuentoTotal,
             total: totalNeto
         })
-        estructura.global.totales.totalDescuento = totalDescuento.plus(totalCalculado.descuentoAplicado)
+        const totalConDescuento = new Decimal(totalDescuento).plus(totalCalculado.descuentoAplicado)
+        estructura.global.totales.totalDescuento = totalConDescuento.isPositive() ? totalConDescuento.toFixed(2) : "0.00"
 
         const descuentoAplicado = {
             tipoAplicacion,

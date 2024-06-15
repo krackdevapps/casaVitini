@@ -4138,6 +4138,44 @@
     /* background: #bababa; */
     /* border: 1px solid rgba(0, 0, 0, 0.4); */
 }
+[zonaCSS="administracion/reservas/detallesReserva"] .contenedorTotalesNocheDescuentos {
+    border-radius: 12px;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 6px;
+    border: 1px solid #8080809c;
+
+}
+[zonaCSS="administracion/reservas/detallesReserva"] .contenedorDescuentosPorApartamento {
+    border-radius: 6px;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 6px;
+    border: 1px solid #8080809c;
+
+}
+
+[zonaCSS="administracion/reservas/detallesReserva"]  .reserva_resumen_apartamentoIUTitulo {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+
+[zonaCSS="administracion/reservas/detallesReserva"] .contenedorDescuentoPorApartamento {
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 10px;
+    /* border: 1px solid #8080809c; */
+    background: #8080802e;
+
+}
+
 
 [zonaCSS="miCasa"] .reserva_resumen_desglose_porNoche {
     width: 100%;
@@ -4190,7 +4228,7 @@
 [zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_porNoche {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
     grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
     padding: 0px;
@@ -4221,6 +4259,7 @@
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_titulo {
     font-weight: bold;
+    text-align: center;
 }
 
 [zonaCSS="miCasa"] .reserva_resumen_desglose_pago_elemento {
@@ -4248,9 +4287,15 @@
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .contenedorDiaConNoche {
-    background-color: #ffffff73;
-    padding: 10px;
-    border-radius: 10px;
+     /* background-color: #ffffff73; */
+     padding: 6px;
+     border-radius: 14px;
+     gap: 6px;
+     display: flex;
+     flex-direction: column;
+     align-items: stretch;
+     flex-wrap: nowrap;
+     border: 1px solid #80808078;
 }
 
 [zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
@@ -4265,13 +4310,25 @@
 
 [zonaCSS="administracion/reservas/detallesReserva"] .contenedorApartamento {
     background-color: #ffffff73;
-    padding: 10px;
+    padding: 6px;
     border-radius: 10px;
+    display: flex;
+    align-content: column;
+    gap: 6px;
+    flex-direction: column;
+}
+
+
+[zonaCSS="administracion/reservas/detallesReserva"] .contenedorDescuentosAlTotalNetoNoche {
+    background-color: #746c6c29;
+    padding: 10px;
+    border-radius: 6px;
     display: flex;
     align-content: column;
     gap: 2px;
     flex-direction: column;
 }
+
 
 
 [zonaCSS="alojamiento/resumen"] .contenedorApartamento {
@@ -13591,7 +13648,8 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="alojamiento/resumen"] .reserva_resumen_apartamentoIUTitulo {
-    padding: 0px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 [zonaCSS="alojamiento/resumen"] .contenedorTextoOferta {
@@ -13706,4 +13764,17 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
     outline: none;
+}
+
+.textCentrado {
+    text-align: center;
+}
+
+.padding6Horizontal {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+.padding6Vertical {
+    padding-top: 6px;
+    padding-bottom: 6px;
 }

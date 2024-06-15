@@ -9522,41 +9522,65 @@ const casaVitini = {
                                     const apartamentosPorNoche = desglose.apartamentosPorNoche
 
                                     const contenedorNoche = document.createElement("div")
-                                    contenedorNoche.classList.add("contenedorDiaConNoche")
+                                    contenedorNoche.classList.add(
+                                        "contenedorDiaConNoche",
+                                    )
                                     contenedorNoche.setAttribute("noche", fechaNoche)
                                     const titulo = document.createElement("div")
-                                    titulo.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                    titulo.classList.add(
+                                        "reserva_resumen_apartamentoIUTitulo",
+                                        "textoCentrado"
+                                    )
                                     titulo.classList.add("negrita")
                                     titulo.innerText = fechaNoche
                                     contenedorNoche.appendChild(titulo)
 
+                                    const totalesNoche = document.createElement("div")
+                                    totalesNoche.classList.add("padding6")
+                                    totalesNoche.setAttribute("contenedor", "totalesNoche")
+
                                     const totalNetoNocheUI = document.createElement("div")
-                                    totalNetoNocheUI.classList.add("reserva_resumen_apartamentoIUTitulo")
+                                    totalNetoNocheUI.setAttribute("componente", "totalNetoNoche")
                                     totalNetoNocheUI.classList.add("negrita")
                                     totalNetoNocheUI.innerText = precioNetoNoche + "$ Total neto noche"
-                                    contenedorNoche.appendChild(totalNetoNocheUI)
+                                    totalesNoche.appendChild(totalNetoNocheUI)
+                                    contenedorNoche.appendChild(totalesNoche)
+
+
+
                                     for (const [apartamentoIDV, desglosePorApartamento] of Object.entries(apartamentosPorNoche)) {
                                         const apartamentoUI = desglosePorApartamento.apartamentoUI
                                         const precioNetoApartamento = desglosePorApartamento.precioNetoApartamento
 
                                         const contenedorApartamento = document.createElement("div")
-                                        contenedorApartamento.classList.add("contenedorApartamento")
+                                        contenedorApartamento.classList.add(
+                                            "contenedorApartamento",
+                                        )
                                         contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
+
+                                        const contenedorApartamentoYTotal = document.createElement("div")
+                                        contenedorApartamentoYTotal.classList.add("padding6")
+                                        contenedorApartamentoYTotal.setAttribute("contenedor", "tituloApartamentoYTotales")
 
                                         const tituloApartamento = document.createElement("div")
                                         tituloApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-                                        tituloApartamento.classList.add("reserva_resumen_apartamentoUIPrecio")
+                                        tituloApartamento.classList.add(
+                                            "reserva_resumen_apartamentoUIPrecio",
+                                        )
                                         tituloApartamento.classList.add("negrita")
                                         tituloApartamento.classList.add("colorGris")
                                         tituloApartamento.innerText = apartamentoUI
-                                        contenedorApartamento.appendChild(tituloApartamento)
+                                        contenedorApartamentoYTotal.appendChild(tituloApartamento)
 
                                         const precioNetoApartamentoUI = document.createElement("div")
-                                        precioNetoApartamentoUI.classList.add("reserva_resumen_apartamentoUIPrecio")
+                                        precioNetoApartamentoUI.classList.add(
+                                            "reserva_resumen_apartamentoUIPrecio",                                           
+                                        )
                                         precioNetoApartamentoUI.setAttribute("contenedor", "precioNetoApartamento")
 
-                                        precioNetoApartamentoUI.innerText = precioNetoApartamento + "$ Neto por noche"
-                                        contenedorApartamento.appendChild(precioNetoApartamentoUI)
+                                        precioNetoApartamentoUI.innerText = precioNetoApartamento + "$ Neto del apartamento"
+                                        contenedorApartamentoYTotal.appendChild(precioNetoApartamentoUI)
+                                        contenedorApartamento.appendChild(contenedorApartamentoYTotal)
 
                                         contenedorNoche.appendChild(contenedorApartamento)
 
@@ -9650,7 +9674,7 @@ const casaVitini = {
                                     ofertaUID,
                                     contenedorOferta
                                 })
-                      
+
 
                             })
                             this.porTotal({
@@ -9733,9 +9757,6 @@ const casaVitini = {
                                 contenedorOfertaUI.appendChild(contenedorFechas)
 
                                 document.querySelector(destino).querySelector("[contenedor=ofertas]").appendChild(contenedorOfertaUI)
-
-
-
 
 
                             },
@@ -10153,6 +10174,11 @@ const casaVitini = {
                                 const descuentoAplicadoUI = document.createElement("div")
                                 descuentoAplicadoUI.innerText = `Descuneto aplicado: ${descuentoAplicado}`
                                 contenedorDescuentoTotal.appendChild(descuentoAplicadoUI)
+
+                                const totalConDescuentoUI = document.createElement("div")
+                                totalConDescuentoUI.innerText = `Este descuneto aplicado deja el total en ${totalConDescuento}`
+                                contenedorDescuentoTotal.appendChild(totalConDescuentoUI)
+
                                 contenedor.appendChild(contenedorDescuentoTotal)
 
 
@@ -10175,23 +10201,27 @@ const casaVitini = {
                             reserva: (data) => {
                                 const destino = data.destino
                                 const detalleEntidad = data.detalleEntidad
-
-
-
                                 const porDia = detalleEntidad.porDia
                                 const porApartamento = detalleEntidad.porApartamento
-
 
                                 Object.entries(porApartamento).forEach(([apartamentoIDV, descuentosDelApartamento]) => {
 
 
                                     const selector = document.querySelector(destino).querySelector("[contenedor=porApartamento]").querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
-                                    const descuentosAplicados = descuentosDelApartamento.descuentosAplicados
-                                    const totalConDescuentos = descuentosDelApartamento.totalConDescuentos
 
-                                    const totalConDescuentosUI = document.createElement("div")
-                                    totalConDescuentosUI.innerText = `Total descuentos aplicados al apartamento: ${totalConDescuentos}`
-                                    selector.appendChild(totalConDescuentosUI)
+                                    const descuentosAplicados = descuentosDelApartamento.descuentosAplicados
+                                    const totalNetoConDescuentos = descuentosDelApartamento.totalNetoConDescuentos
+                                    const totalNetoSinDescuentos = descuentosDelApartamento.totalNetoSinDescuentos
+                                    const totalDescuentosAplicados = descuentosDelApartamento.totalDescuentosAplicados
+
+                                    const totalDescuentosAplicadosUI = document.createElement("div")
+                                    totalDescuentosAplicadosUI.innerText = `Total descuentos aplicados al apartamento: ${totalDescuentosAplicados}`
+                                    selector.appendChild(totalDescuentosAplicadosUI)
+
+                                    const totalNetoConDescuentosUI = document.createElement("div")
+                                    totalNetoConDescuentosUI.innerText = `Neto del apartamento con descuentos aplicados: ${totalNetoConDescuentos}`
+                                    selector.appendChild(totalNetoConDescuentosUI)
+
 
 
                                     descuentosAplicados.forEach((detallesDelDescuento) => {
@@ -10199,6 +10229,7 @@ const casaVitini = {
                                         const nombreOferta = detallesDelDescuento.nombreOferta
                                         const apartamentoIDV = detallesDelDescuento.apartamentoIDV
                                         const tipoAplicacion = detallesDelDescuento.tipoAplicacion
+                                        const porcentaje = detallesDelDescuento.porcentaje
                                         const descuentoAplicado = detallesDelDescuento.descuentoAplicado
                                         const totalConDescuento = detallesDelDescuento.totalConDescuento
 
@@ -10207,14 +10238,14 @@ const casaVitini = {
                                         contenedor.setAttribute("ofertaUID", ofertaUID)
 
                                         const nombreOfertaUI = document.createElement("div")
-                                        nombreOfertaUI.innerText = "Nombre de la oferta:"+ nombreOferta
+                                        nombreOfertaUI.innerText = nombreOferta
                                         contenedor.appendChild(nombreOfertaUI)
 
                                         const descripcionDescuento = document.createElement("div")
                                         if (tipoAplicacion === "porcentaje") {
-                                            descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoAplicado}% y generando un descuento del ${totalConDescuento}.`
+                                            descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${porcentaje}% y generando un descuento del ${descuentoAplicado}.`
                                         } else if (tipoAplicacion === "cantidadFija") {
-                                            descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${totalConDescuento}`
+                                            descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoAplicado}`
                                         }
                                         contenedor.appendChild(descripcionDescuento)
                                         selector.appendChild(contenedor)
@@ -10226,11 +10257,137 @@ const casaVitini = {
 
                                 })
 
+                                Object.entries(porDia).forEach(([fechaNoche, detallesDelDia]) => {
 
-                                Object.entries(porDia).forEach(([fechaNoche, detallesDelDia])=> {
+                                    const totalConDescuentos = detallesDelDia.totalConDescuentos
+                                    const totalDescuentosAplicados = detallesDelDia.totalDescuentosAplicados
+                                    const totalSinDescuentos = detallesDelDia.totalSinDescuentos
+                                    const porApartamento = detallesDelDia.porApartamento ?? []
+                                    const porTotalNetoDia = detallesDelDia.porTotalNetoDia ?? {}
+
+                                    const contendor = document.querySelector(destino).querySelector("[contenedor=porNoche]").querySelector(`[noche="${fechaNoche}"]`)
+                                    const contendorTotalesNoche = contendor.querySelector("[contenedor=totalesNoche]")
+                         
+                                    const totalDescuentosAplicadosUI = document.createElement("p")
+                                    totalDescuentosAplicadosUI.innerText = totalDescuentosAplicados + "$ Suma total de los descuentos aplicados" 
+                                    contendorTotalesNoche.appendChild(totalDescuentosAplicadosUI)
+
+                                    const totalConDescuentosUI = document.createElement("p")
+                                    totalConDescuentosUI.innerText = totalConDescuentos + "$ Total neto noche con descuentos aplicados"
+                                    contendorTotalesNoche.appendChild(totalConDescuentosUI)
+
+                    
+
+
+                                    const selector = document.querySelector(destino).querySelector("[contenedor=porNoche]").querySelector(`[noche="${fechaNoche}"]`).querySelector("[contenedor=totalesNocheDescuentos]")
+                                    if (!selector) {
+                                        const contenedorTotalesNocheDescuentos = document.createElement("div")
+                                        contenedorTotalesNocheDescuentos.setAttribute("contenedor", "totalesNocheDescuentos")
+                                        contenedorTotalesNocheDescuentos.classList.add("contenedorTotalesNocheDescuentos")
+                                        contendor.insertBefore(contenedorTotalesNocheDescuentos, contendorTotalesNoche.nextSibling);
+                                    }
+                                    const selectorDestino = document.querySelector(destino).querySelector("[contenedor=porNoche]").querySelector(`[noche="${fechaNoche}"]`).querySelector("[contenedor=totalesNocheDescuentos]")
+
+                      
+
+
+                                    porTotalNetoDia.forEach((detallesDelNetoPorDia) => {
+
+                                        const fecha = detallesDelNetoPorDia.fecha
+                                        const ofertaUID = detallesDelNetoPorDia.ofertaUID
+                                        const porcentaje = detallesDelNetoPorDia.porcentaje
+                                        const nombreOferta = detallesDelNetoPorDia.nombreOferta
+                                        const tipoAplicacion = detallesDelNetoPorDia.tipoAplicacion
+                                        const descuentoAplicado = detallesDelNetoPorDia.descuentoAplicado
+                                        const totalConDescuento = detallesDelNetoPorDia.totalConDescuento
 
 
 
+                                        const contenedorDescuentosAlTotalNetoNoche = document.createElement("div")
+                                        contenedorDescuentosAlTotalNetoNoche.setAttribute("contenedor", "descuento")
+                                        contenedorDescuentosAlTotalNetoNoche.classList.add("contenedorDescuentosAlTotalNetoNoche")
+                                        contenedorDescuentosAlTotalNetoNoche.setAttribute("ofertaUID", ofertaUID)
+
+                                        const nombreOfertaUI = document.createElement("div")
+                                        nombreOfertaUI.classList.add("negrita")
+                                        nombreOfertaUI.innerText = nombreOferta
+                                        contenedorDescuentosAlTotalNetoNoche.appendChild(nombreOfertaUI)
+
+
+                                        const descripcionDescuento = document.createElement("div")
+                                        if (tipoAplicacion === "porcentaje") {
+                                            descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${porcentaje}% al total neto de la noche generando un descuento del ${descuentoAplicado}.`
+                                        } else if (tipoAplicacion === "cantidadFija") {
+                                            descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoAplicado} al total neto de la noche.`
+                                        }
+                                        contenedorDescuentosAlTotalNetoNoche.appendChild(descripcionDescuento)
+                                        selectorDestino.appendChild(contenedorDescuentosAlTotalNetoNoche)
+
+                                    })
+                                    Object.entries(porApartamento).forEach(([apartamentoIDV, desgloseDelApartamento]) => {
+
+                                        const selectorApartamentoDelaNoche = document.querySelector(destino).querySelector("[contenedor=porNoche]").querySelector(`[noche="${fechaNoche}"]`).querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
+
+                                        const totalConDescuentos = desgloseDelApartamento.totalConDescuentos
+                                        const totalSinDescuentos = desgloseDelApartamento.totalSinDescuentos
+                                        const descuentosAplicados = desgloseDelApartamento.descuentosAplicados
+                                        const totalDescuentosAplicados = desgloseDelApartamento.totalDescuentosAplicados
+
+                                        const selectorContenedorTituloApartamento = selectorApartamentoDelaNoche.querySelector("[contenedor=tituloApartamentoYTotales]")
+
+                                        const totalDescuentosAplicadosUI = document.createElement("p")
+                                        totalDescuentosAplicadosUI.innerText = totalDescuentosAplicados + "$ Descuentos aplicados al neto del apartamento"
+                                        selectorContenedorTituloApartamento.appendChild(totalDescuentosAplicadosUI)
+
+                                        const totalConDescuentosUI = document.createElement("p")
+                                        totalConDescuentosUI.innerText = totalConDescuentos + "$ Neto del apartamento con descuentos aplicados" 
+                                        selectorContenedorTituloApartamento.appendChild(totalConDescuentosUI)
+
+           
+
+
+
+
+                                        const contenedorDescuentos = document.createElement("div")
+                                        contenedorDescuentos.setAttribute("contenedor", "descuentosPorApartamento")
+                                        contenedorDescuentos.classList.add("contenedorDescuentosPorApartamento")
+
+
+
+
+                                        descuentosAplicados.forEach((detallesDelDescuento) => {
+                                            const fecha = detallesDelDescuento.fecha
+                                            const ofertaUID = detallesDelDescuento.ofertaUID
+                                            const porcentaje = detallesDelDescuento.porcentaje
+                                            const nombreOferta = detallesDelDescuento.nombreOferta
+                                            const apartamentoIDV = detallesDelDescuento.apartamentoIDV
+                                            const tipoAplicacion = detallesDelDescuento.tipoAplicacion
+                                            const descuentoAplicado = detallesDelDescuento.descuentoAplicado
+                                            const totalConDescuento = detallesDelDescuento.totalConDescuento
+
+                                            const contenedor = document.createElement("div")
+                                            contenedor.classList.add("contenedorDescuentoPorApartamento")
+                                            contenedor.setAttribute("ofertaUID", ofertaUID)
+
+                                            const nombreOfertaUI = document.createElement("div")
+                                            nombreOfertaUI.classList.add("negrita")
+                                            nombreOfertaUI.innerText =  nombreOferta
+                                            contenedor.appendChild(nombreOfertaUI)
+
+                                            const descripcionDescuento = document.createElement("div")
+                                            if (tipoAplicacion === "porcentaje") {
+                                                descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${porcentaje}% al total neto del apartmento, generando un descuento del ${descuentoAplicado}.`
+                                            } else if (tipoAplicacion === "cantidadFija") {
+                                                descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoAplicado}, al total neto del apartmento`
+                                            }
+                                            contenedor.appendChild(descripcionDescuento)
+                                            contenedorDescuentos.appendChild(contenedor)
+                                        })
+                                        selectorApartamentoDelaNoche.appendChild(contenedorDescuentos)
+
+
+
+                                    })
                                 })
                             }
                         }

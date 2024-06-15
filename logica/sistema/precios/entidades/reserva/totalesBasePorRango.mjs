@@ -17,7 +17,6 @@ export const totalesBasePorRango = async (data) => {
 
         const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada_ISO, fechaSalida_ISO)
         diasArray.pop()
-
         const contenedorEntidadtes = estructura.entidades
 
         if (!contenedorEntidadtes.hasOwnProperty("reserva")) {
@@ -27,7 +26,7 @@ export const totalesBasePorRango = async (data) => {
         const reservaEntidad = contenedorEntidadtes.reserva
         reservaEntidad.fechaEntrada = fechaEntrada_ISO
         reservaEntidad.fechaSalida = fechaEntrada_ISO
-        reservaEntidad.nochesReserva = fechaEntrada_ISO
+        reservaEntidad.nochesReserva = diasArray.length.toString()
 
         if (!reservaEntidad.hasOwnProperty("desglosePorNoche")) {
             reservaEntidad.desglosePorNoche = {}
