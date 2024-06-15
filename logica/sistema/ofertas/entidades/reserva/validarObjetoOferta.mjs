@@ -416,7 +416,7 @@ export const validarObjetoOferta = async (oferta) => {
                 throw new Error(error)
             }
         } else {
-            const error = "No se reconoce el tipo de descuneto, el tipo de descuento solo puede ser totalNetoApartamentoDedicado, totalNetoReserva o porRango"
+            const error = "No se reconoce el tipo de Descuento, el tipo de descuento solo puede ser totalNetoApartamentoDedicado, totalNetoReserva o porRango"
             throw new Error(error)
         }
     } catch (error) {

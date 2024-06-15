@@ -114,6 +114,12 @@ export const aplicarDescuento = async (data) => {
         const nochesReserva = estructura.entidades.reserva.nochesReserva
         const promedioNocheNetoConDescuentos = new Decimal(totalFinal).div(nochesReserva)
         contenedorTotalesBase.promedioNocheNetoConDescuentos = promedioNocheNetoConDescuentos.isPositive() ? promedioNocheNetoConDescuentos.toFixed(2) : "0.00"
+
+        const totalNetoSinDescuentosAplicados = new Decimal(totalNeto).minus(totalDescuento)
+        contenedorTotalesBase.totalNetoConDescuentos = totalNetoSinDescuentosAplicados.isPositive() ? totalNetoSinDescuentosAplicados.toFixed(2) : "0.00"
+
+
+
     } catch (error) {
         throw error
     }

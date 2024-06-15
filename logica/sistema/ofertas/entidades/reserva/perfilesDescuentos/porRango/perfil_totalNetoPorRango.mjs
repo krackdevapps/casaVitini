@@ -38,7 +38,7 @@ export const perfil_totalNetoPorRango = async (data) => {
             }
 
             if (!contenedorPorDia.hasOwnProperty(fechaDelDia)) {
-                const precioNetoNoche =  estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNoche
+                const precioNetoNoche = estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNoche
                 contenedorPorDia[fechaDelDia] = {
                     totalSinDescuentos: precioNetoNoche,
                     totalConDescuentos: precioNetoNoche,
@@ -75,10 +75,10 @@ export const perfil_totalNetoPorRango = async (data) => {
             }
             contenedorPorDia[fechaDelDia].porTotalNetoDia.push(porDia)
             contenedorPorDia[fechaDelDia].totalConDescuentos = new Decimal(contenedorPorDia[fechaDelDia].totalConDescuentos).minus(totalCalculado.descuentoAplicado).toFixed(2)
-            const totalDescunetosAplicados = controlInstanciaDecimal(contenedorPorDia[fechaDelDia]
+            const totalDescuentosAplicados = controlInstanciaDecimal(contenedorPorDia[fechaDelDia]
                 .totalDescuentosAplicados).plus(totalCalculado.descuentoAplicado).toFixed(2)
 
-            contenedorPorDia[fechaDelDia].totalDescuentosAplicados = totalDescunetosAplicados
+            contenedorPorDia[fechaDelDia].totalDescuentosAplicados = totalDescuentosAplicados
         }
     } catch (error) {
         throw error

@@ -13778,3 +13778,40 @@ grid-template-columns: 0.5fr 1.5fr;
     padding-top: 6px;
     padding-bottom: 6px;
 }
+.gap6 {
+    gap: 6px;
+}
+.flexVertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.flexHorizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+.flexJustificacion_space-around {
+    justify-content: space-around;
+}
+
+.borderRadius6 {
+    border-radius: 6px;
+}
+.borderRadius8 {
+    border-radius: 8px;
+}
+
+.borderRadius10 {
+    border-radius: 10px;
+}
+.borderRadius12 {
+    border-radius: 12px;
+}
+.backgroundGrey1 {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.borderGrey1 {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}

@@ -10,7 +10,7 @@ export const aplicarDescuentosDesdeInstantanea = async (data) => {
     const ofertasSeleccionadas = await obtenerOfertasPorArrayUID(descuentosArray)
     // revice el reservaUID, 
     // estrae la instantanea
-    // aplicar los descunetos
+    // aplicar los Descuentos
 
     const ofertaAnalizadasPorCondiciones = []
     for (const oferta of ofertasSeleccionadas) {
