@@ -804,12 +804,12 @@ export const validadoresCompartidos = {
                     array.forEach((item, posicion) => {
                         validadoresCompartidos.tipos.cadena({
                             string: item,
-                            nombreCampo: `${nombreCampo} es un array que en la posicion ${(posicion+1)} tiene un tipo que no es cadena, este array solo acepta cadenas.`,
+                            nombreCampo: `${nombreCampo} es un array que en la posicion ${(posicion + 1)} tiene un tipo que no es cadena, este array solo acepta cadenas.`,
                             filtro: "strictoIDV",
                             sePermiteVacio: "no",
                             limpiezaEspaciosAlrededor: "si"
-                        }) 
-                    })           
+                        })
+                    })
                 }
                 if (filtro === "soloNumerosEnteros") {
                     array.every((cadena, index) => {
@@ -940,7 +940,18 @@ export const validadoresCompartidos = {
             }
             return urlPath
         },
-
+        json: (configuracion) => {
+            const json = configuracion.json
+            if (Array.isArray(json)) {
+                return json.map(quoteKeys);
+            } else if (json !== null && typeof json === 'object') {
+                return Object.keys(json).reduce((acc, key) => {
+                    acc[`"${key}"`] = quoteKeys(json[key]);
+                    return acc;
+                }, {});
+            }
+            return json;
+        }
     },
     baseDeDatos: {
         validarNombreColumna: async (configuracion) => {

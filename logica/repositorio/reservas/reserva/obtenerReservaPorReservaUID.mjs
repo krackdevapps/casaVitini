@@ -11,6 +11,7 @@ export const obtenerReservaPorReservaUID = async (reservaUID) => {
         "estadoPagoIDV",
         "origenIDV",
         to_char("fechaCreacion",  'YYYY-MM-DD HH24:MI:SS.MS') AS "fechaCreacion",
+        to_char("fechaCreacion",  'YYYY-MM-DD') AS "fechaCreacion_simple",
         to_char("fechaCancelacion",  'YYYY-MM-DD HH24:MI:SS.MS') AS "fechaCancelacion"
         FROM reservas
         WHERE "reservaUID" = $1;`;

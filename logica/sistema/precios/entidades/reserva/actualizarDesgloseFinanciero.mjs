@@ -4,480 +4,12 @@ import { validadoresCompartidos } from "../../../validadores/validadoresComparti
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
 import { aplicarDescuentosDesdeInstantanea } from "../../../ofertas/entidades/reserva/aplicarDescuentosDesdeInstantanea.mjs";
-import { aplicarOfertas } from "../../../ofertas/entidades/reserva/aplicarOfertas.mjs";
+// import { aplicarOfertas } from "../../../ofertas/entidades/reserva/selecionarOfertasPorCondicion.mjs";
+import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/obtenerDesgloseFinancieroPorReservaUID.mjs";
 
 export const actualizarDesgloseFinanciero = async (data) => {
     try {
         const estructura = data.estructura
-        estructura.entidades.reserva = {
-            desglosePorNoche: {
-                "2024-05-22": {
-                    "fechaDiaConNoche": "2024-05-22",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-05-23": {
-                    "fechaDiaConNoche": "2024-05-23",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-05-24": {
-                    "fechaDiaConNoche": "2024-05-24",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-05-25": {
-                    "fechaDiaConNoche": "2024-05-25",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-05-26": {
-                    "fechaDiaConNoche": "2024-05-26",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-05-27": {
-                    "fechaDiaConNoche": "2024-05-27",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-05-28": {
-                    "fechaDiaConNoche": "2024-05-28",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-05-29": {
-                    "fechaDiaConNoche": "2024-05-29",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-05-30": {
-                    "fechaDiaConNoche": "2024-05-30",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-05-31": {
-                    "fechaDiaConNoche": "2024-05-31",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-01": {
-                    "fechaDiaConNoche": "2024-06-01",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-02": {
-                    "fechaDiaConNoche": "2024-06-02",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-03": {
-                    "fechaDiaConNoche": "2024-06-03",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-04": {
-                    "fechaDiaConNoche": "2024-06-04",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-05": {
-                    "fechaDiaConNoche": "2024-06-05",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-06": {
-                    "fechaDiaConNoche": "2024-06-06",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-07": {
-                    "fechaDiaConNoche": "2024-06-07",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-08": {
-                    "fechaDiaConNoche": "2024-06-08",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-09": {
-                    "fechaDiaConNoche": "2024-06-09",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-10": {
-                    "fechaDiaConNoche": "2024-06-10",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-11": {
-                    "fechaDiaConNoche": "2024-06-11",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-12": {
-                    "fechaDiaConNoche": "2024-06-12",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-13": {
-                    "fechaDiaConNoche": "2024-06-13",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-14": {
-                    "fechaDiaConNoche": "2024-06-14",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-15": {
-                    "fechaDiaConNoche": "2024-06-15",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-16": {
-                    "fechaDiaConNoche": "2024-06-16",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-17": {
-                    "fechaDiaConNoche": "2024-06-17",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-18": {
-                    "fechaDiaConNoche": "2024-06-18",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-19": {
-                    "fechaDiaConNoche": "2024-06-19",
-                    "precioNetoNoche": "150.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "50.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "70.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-20": {
-                    "fechaDiaConNoche": "2024-06-20",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                },
-                "2024-06-21": {
-                    "fechaDiaConNoche": "2024-06-21",
-                    "precioNetoNoche": "167.00",
-                    "apartamentosPorNoche": {
-                        "apartamento5": {
-                            "precioNetoApartamento": "60.00"
-                        },
-                        "apartamento7": {
-                            "precioNetoApartamento": "77.00"
-                        },
-                        "apartamento3": {
-                            "precioNetoApartamento": "30.00"
-                        }
-                    }
-                }
-            }
-        }
         const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaEntrada,
             nombreCampo: "La fecha de entrada del procesador de precios"
@@ -499,19 +31,24 @@ export const actualizarDesgloseFinanciero = async (data) => {
             fecha_ISO: data?.fechaActual || DateTime.now().setZone(zonaHoraria).toISODate(),
             nombreCampo: "La fecha de actual del procesador de precios"
         })
-
         const apartamentosArray = validadoresCompartidos.tipos.array({
             array: data.apartamentosArray,
             nombreCampo: "El array de apartamentos en el procesador de precios",
             filtro: "soloCadenasIDV",
             sePermitenDuplicados: "no"
         })
+        const reservaUID = validadoresCompartidos.tipos.numero({
+            number: data?.reservaUID ?? "",
+            nombreCampo: "El campo de reservaUID dentro dle procesadorReserva",
+            filtro: "numeroSimple",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+        })
 
-        
         // Ojo por que puede que la reserva tenga un apartametnoque ya no existe en configuraciones de alojamiento entonces aqui hay un debate
-        for (const apartamentoIDV of apartamentosArray) {
-            await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        }
+        // for (const apartamentoIDV of apartamentosArray) {
+        //     await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        // }
 
         const capaOfertas = data?.capaOfertas
         const capaDescuentosPersonalizados = data?.capaDescuentosPersonalizados
@@ -531,12 +68,18 @@ export const actualizarDesgloseFinanciero = async (data) => {
             sePermitenDuplicados: "si"
         })
 
+
+        const desgloseFinancieroReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
+        const instantaneaNoches = desgloseFinancieroReserva.instantaneaNoches
+
         await totalesBasePorRango({
             estructura,
+            instantaneaNoches,
             fechaEntrada_ISO: fechaEntrada,
             fechaSalida_ISO: fechaSalida,
             apartamentosArray
         })
+
 
         const zonasDeLaOferta = ["publica", "privada", "global"]
 
@@ -548,16 +91,20 @@ export const actualizarDesgloseFinanciero = async (data) => {
             sePermiteArrayVacio: "si"
         })
 
-        await aplicarOfertas({
-            estructura,
-            fechaActual,
-            fechaEntrada,
-            fechaSalida,
-            apartamentosArray,
-            zonasDeLaOferta,
-            descuentosParaRechazar
-        })
+        // Obtenemos la instantanea de ofertas y la pasamos a aplicar descuentos
 
+
+
+        // await aplicarOfertas({
+        //     estructura,
+        //     fechaActual,
+        //     fechaEntrada,
+        //     fechaSalida,
+        //     apartamentosArray,
+        //     zonasDeLaOferta,
+        //     descuentosParaRechazar
+        // })
+        return
         await aplicarDescuentosDesdeInstantanea({
             estructura,
             descuentosArray,

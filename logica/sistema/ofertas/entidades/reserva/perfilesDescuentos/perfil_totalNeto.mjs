@@ -17,11 +17,8 @@ export const perfil_totalNeto = (data) => {
 
         const tipoAplicacion = descuentos.tipoAplicacion
         const descuentoTotal = descuentos.descuentoTotal
-        controlCantidadOfertas({
-            ofertaUID,
-            contenedor: oferta,
-            contenedorOfertas
-        })
+        contenedorOfertas.push(oferta)
+
         const totalCalculado = calcularTotal({
             tipoAplicacion,
             descuentoTotal,

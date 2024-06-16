@@ -16,13 +16,8 @@ export const aplicarDescuentosPersonalizados = async (data) => {
         }
         ofertaAnalizadasPorCondiciones.push(ofertaEstructura)
     }
-    await aplicarDescuento({
-        origen: "porAdministrador",
-        ofertarParaAplicarDescuentos: ofertaAnalizadasPorCondiciones,
-        estructura: estructura,
-        fechaEntradaReserva_ISO,
-        fechaSalidaReserva_ISO
-    })
+
+    return ofertaAnalizadasPorCondiciones
 
 
 

@@ -3,7 +3,6 @@ import { perfil_totalNeto } from "./perfilesDescuentos/perfil_totalNeto.mjs"
 import { perfil_individualPorApartamento } from "./perfilesDescuentos/perfil_individualPorApartamento.mjs"
 import { perfil_porDiasDelRango } from "./perfilesDescuentos/porRango/perfil_porDiasDelRango.mjs"
 import { perfil_totalNetoPorRango } from "./perfilesDescuentos/porRango/perfil_totalNetoPorRango.mjs"
-import { constructorEstructuraDescuentos } from "./contructorEstructuraDescuentos.mjs"
 
 export const aplicarDescuento = async (data) => {
     try {
@@ -16,14 +15,12 @@ export const aplicarDescuento = async (data) => {
             const error = "aplicarDescuento necesita llave origen, esta puede ser porCondicion o porAdminstrador"
             throw new Error(error)
         }
-        constructorEstructuraDescuentos(estructura)
-
         const contenedorTotalesBase = estructura.global.totales
         const totalNeto = new Decimal(contenedorTotalesBase.totalNeto)
-        const contenedorOfertas = estructura.ofertasAplicadas.ofertas[origen]
-        const contenedorPorTotal = estructura.ofertasAplicadas.porTotal
-        const contenedorPorApartamento = estructura.ofertasAplicadas.entidades.reserva.porApartamento
-        const contenedorPorDia = estructura.ofertasAplicadas.entidades.reserva.porDia
+        const contenedorOfertas = estructura.contenedorOfertas.entidades.reserva.ofertas[origen]
+        const contenedorPorTotal = estructura.contenedorOfertas.entidades.reserva.desgloses.porTotal
+        const contenedorPorApartamento = estructura.contenedorOfertas.entidades.reserva.desgloses.porApartamento
+        const contenedorPorDia = estructura.contenedorOfertas.entidades.reserva.desgloses.porDia
 
         if (!contenedorTotalesBase.hasOwnProperty("totalDescuento")) {
             contenedorTotalesBase.totalDescuento = "0.00"
@@ -117,8 +114,6 @@ export const aplicarDescuento = async (data) => {
 
         const totalNetoSinDescuentosAplicados = new Decimal(totalNeto).minus(totalDescuento)
         contenedorTotalesBase.totalNetoConDescuentos = totalNetoSinDescuentosAplicados.isPositive() ? totalNetoSinDescuentosAplicados.toFixed(2) : "0.00"
-
-
 
     } catch (error) {
         throw error

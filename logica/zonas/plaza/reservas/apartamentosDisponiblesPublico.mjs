@@ -50,9 +50,9 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
                     apartamentosArray: apartamentosDisponiblesEncontrados,
                     capaOfertas: "si",
                     zonasArray: ["global", "publica"],
-                    descuentosParaRechazar: ["51"],
+                    descuentosParaRechazar: [],
                     capaDescuentosPersonalizados: "si",
-                    descuentosArray: ["52", "50", "51", "50", "50"]
+                    descuentosArray: ["50", "50"]
                 }
             },
             capaImpuestos: "no",

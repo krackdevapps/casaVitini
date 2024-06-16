@@ -5,6 +5,9 @@ export const controlCantidadOfertas = (data) => {
     const ofertaUID = data.ofertaUID
     const contenedor = data.contenedor
 
+
+    contenedorOfertas.push(contenedor)
+
     if (!contenedorOfertas.hasOwnProperty(ofertaUID)) {
         contenedorOfertas[ofertaUID] = {
             cantidad: new Decimal("1"),

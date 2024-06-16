@@ -4,27 +4,21 @@ export const obtenerTodasLasOfertas = async () => {
         const consulta = `
         SELECT
         "nombreOferta",
-        uid,
+        "ofertaUID",
         to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
-        to_char("fechaFin", 'DD/MM/YYYY') as "fechaFin",
-        "numero",
-        "simboloNumero",
-        "descuentoAplicadoA" ,
-        "estadoOferta",
-        "tipoOferta",
-        "cantidad",
-        "tipoDescuento"
+        to_char("fechaFinal", 'DD/MM/YYYY') as "fechaFinal",
+        "condicionesArray",
+        "descuentosJSON",
+        "estadoIDV",
+        "zonaIDV",
+        "entidadIDV"
         FROM 
         ofertas 
         ORDER BY 
         "fechaInicio" ASC;
         `;
         const resuelve = await conexion.query(consulta)
-        if (resuelve.rowCount === 0) {
-            const error = "No hay ofertas configuradas"
-            throw new Error(error)
-        }
-        return resuelve.rows[0]
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

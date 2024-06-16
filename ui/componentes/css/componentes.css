@@ -4138,6 +4138,7 @@
     /* background: #bababa; */
     /* border: 1px solid rgba(0, 0, 0, 0.4); */
 }
+
 [zonaCSS="administracion/reservas/detallesReserva"] .contenedorTotalesNocheDescuentos {
     border-radius: 12px;
     gap: 6px;
@@ -4148,6 +4149,7 @@
     border: 1px solid #8080809c;
 
 }
+
 [zonaCSS="administracion/reservas/detallesReserva"] .contenedorDescuentosPorApartamento {
     border-radius: 6px;
     gap: 6px;
@@ -4159,7 +4161,7 @@
 
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"]  .reserva_resumen_apartamentoIUTitulo {
+[zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_apartamentoIUTitulo {
     padding-left: 4px;
     padding-right: 4px;
 }
@@ -4287,15 +4289,15 @@
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .contenedorDiaConNoche {
-     /* background-color: #ffffff73; */
-     padding: 6px;
-     border-radius: 14px;
-     gap: 6px;
-     display: flex;
-     flex-direction: column;
-     align-items: stretch;
-     flex-wrap: nowrap;
-     border: 1px solid #80808078;
+    /* background-color: #ffffff73; */
+    padding: 6px;
+    border-radius: 14px;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    border: 1px solid #80808078;
 }
 
 [zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
@@ -4960,6 +4962,7 @@
     color: white;
     background: #0040ff;
 }
+
 [zonaCSS="administracion/ofertas/ofertaUI"] .contenedorCondicion {
     display: flex;
     flex-direction: column;
@@ -4968,6 +4971,7 @@
     padding: 6px;
     border-radius: 16px;
 }
+
 [zonaCSS="administracion/ofertas/ofertaUI"] .contenedorCondiciones {
     display: flex;
     flex-direction: column;
@@ -4987,6 +4991,7 @@
     display: flex;
     flex-direction: column;
 }
+
 [zonaCSS="administracion/ofertas/ofertaUI"] .contenedorDescuento {
     display: flex;
     flex-direction: column;
@@ -6348,6 +6353,7 @@
 
 .contenidoAdvertenciaInmersiva {
     max-width: 1280px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -6806,10 +6812,9 @@
     text-align: center;
 }
 
- .textoCentrado {
+.textoCentrado {
     text-align: center;
 }
-
 
 .contenedorVertical {
     text-align: center;
@@ -6821,6 +6826,15 @@
 
 .padding6 {
     padding: 6px;
+}
+
+
+.padding8 {
+    padding: 8px;
+}
+
+.padding10 {
+    padding: 10px;
 }
 
 .gap6 {
@@ -10450,15 +10464,13 @@ grid-template-columns: 0.5fr 1.5fr;
 } */
 
 @keyframes parpadeo {
-    0% {
-    }
+    0% {}
 
     50% {
         color: red;
     }
 
-    100% {
-    }
+    100% {}
 }
 
 @keyframes parpadeaFondoTransparente {
@@ -13746,7 +13758,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-.campoTextoSimple  {
+.campoTextoSimple {
     outline: none;
     border: none;
     padding: 10px;
@@ -13774,13 +13786,16 @@ grid-template-columns: 0.5fr 1.5fr;
     padding-left: 6px;
     padding-right: 6px;
 }
+
 .padding6Vertical {
     padding-top: 6px;
     padding-bottom: 6px;
 }
+
 .gap6 {
     gap: 6px;
 }
+
 .flexVertical {
     display: flex;
     flex-direction: column;
@@ -13798,6 +13813,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .borderRadius6 {
     border-radius: 6px;
 }
+
 .borderRadius8 {
     border-radius: 8px;
 }
@@ -13805,13 +13821,31 @@ grid-template-columns: 0.5fr 1.5fr;
 .borderRadius10 {
     border-radius: 10px;
 }
+
 .borderRadius12 {
     border-radius: 12px;
 }
+
 .backgroundGrey1 {
     background: rgba(0, 0, 0, 0.1);
 }
-
+.maxWidth1280px {
+    max-width: 1280px;
+}
+.width100 {
+    width: 100%;
+}
 .borderGrey1 {
     border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.comportamientoBoton {
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.comportamientoBoton:hover {
+    transition: all 250ms;
+    background: rgba(0, 0, 0, 0.3);
 }

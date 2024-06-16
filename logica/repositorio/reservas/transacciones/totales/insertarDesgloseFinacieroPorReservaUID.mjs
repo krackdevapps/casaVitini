@@ -2,11 +2,10 @@ import { conexion } from "../../../../componentes/db.mjs";
 
 export const insertarDesgloseFinacieroPorReservaUID = async (data) => {
     try {
-
-
         const desgloseFinanciero = data.desgloseFinanciero
-        const contenedorNoches = desgloseFinanciero.entidades.reserva.desglosePorNoche
-        const contenedorOfertas = desgloseFinanciero.ofertasAplicadas.ofertas
+        const instantaneaNoches = desgloseFinanciero.entidades.reserva.desglosePorNoche
+        const instantaneaOfertasPorCondicion = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porCondicion)
+        const instantaneaOfertasPorAdministrador = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador)
         const reservaUID = data.reservaUID
         const consulta = `
         INSERT INTO
@@ -14,16 +13,18 @@ export const insertarDesgloseFinacieroPorReservaUID = async (data) => {
         (
         "desgloseFinanciero",
         "instantaneaNoches",
-        "instantaneaOfertas",
+        "instantaneaOfertasPorCondicion",
+        "instantaneaOfertasPorAdministrador",
         "reservaUID"
         )
-        VALUES ($1,$2,$3,$4)
+        VALUES ($1,$2,$3,$4,$5)
         RETURNING *
         `
         const parametros = [
             desgloseFinanciero,
-            contenedorNoches,
-            contenedorOfertas,
+            instantaneaNoches,
+            instantaneaOfertasPorCondicion,
+            instantaneaOfertasPorAdministrador,
             reservaUID,
         ]
         const resuelve = await conexion.query(consulta, parametros);
@@ -32,6 +33,7 @@ export const insertarDesgloseFinacieroPorReservaUID = async (data) => {
             throw new Error(error)
         }
         return resuelve.rows[0]
+
     } catch (errorCapturado) {
         throw errorCapturado
     }

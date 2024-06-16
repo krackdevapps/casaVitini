@@ -1,6 +1,5 @@
 import Decimal from "decimal.js"
 import { calcularTotal } from "../../calcularTotal.mjs"
-import { controlCantidadOfertas } from "../../controlCantidadOfertas.mjs"
 import { validadoresCompartidos } from "../../../../../validadores/validadoresCompartidos.mjs"
 import { controlInstanciaDecimal } from "../../controlInstanciaDecimal.mjs"
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
@@ -41,11 +40,7 @@ export const perfil_porDiasDelRango = async (data) => {
                 }
             }
             if (tipoDescuento === "netoPorApartamentoDelDia") {
-                controlCantidadOfertas({
-                    ofertaUID,
-                    contenedor: oferta,
-                    contenedorOfertas
-                })
+                contenedorOfertas.push(oferta)
 
                 for (const apartamento of apartamentos) {
                     const apartamentoIDV = apartamento.apartamentoIDV
@@ -120,11 +115,7 @@ export const perfil_porDiasDelRango = async (data) => {
             }
 
             if (tipoDescuento === "netoPorDia") {
-                controlCantidadOfertas({
-                    ofertaUID,
-                    contenedor: oferta,
-                    contenedorOfertas
-                })
+                contenedorOfertas.push(oferta)
 
                 const descuentoTotal = descuentoPorDia.descuentoTotal
                 const tipoAplicacion = descuentoPorDia.tipoAplicacion

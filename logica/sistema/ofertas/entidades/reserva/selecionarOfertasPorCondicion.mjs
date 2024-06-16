@@ -2,9 +2,8 @@ import { obtenerOfertasPorRangoPorEstado } from "../../../../repositorio/ofertas
 import { aplicarDescuento } from "./aplicarDescuento.mjs"
 import { selectorPorCondicion } from "./selectorPorCondicion.mjs"
 
-export const aplicarOfertas = async (data) => {
+export const selecionarOfertasPorCondicion = async (data) => {
     try {
-        const estructura = data.estructura
         const fechaActual = data.fechaActual
         const fechaEntrada = data.fechaEntrada
         const fechaSalida = data.fechaSalida
@@ -37,13 +36,7 @@ export const aplicarOfertas = async (data) => {
             resultadoSelector.autorizacion = "aceptada"
             ofertaAnalizadasPorCondiciones.push(resultadoSelector)
         }
-        await aplicarDescuento({
-            origen: "porCondicion",
-            ofertarParaAplicarDescuentos: ofertaAnalizadasPorCondiciones,
-            estructura,
-            fechaEntradaReserva_ISO: fechaEntrada,
-            fechaSalidaReserva_ISO: fechaSalida
-        })
+        return ofertaAnalizadasPorCondiciones
     } catch (error) {
         throw error
     }

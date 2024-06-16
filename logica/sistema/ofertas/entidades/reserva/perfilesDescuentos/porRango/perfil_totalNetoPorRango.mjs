@@ -1,6 +1,5 @@
 import Decimal from "decimal.js"
 import { calcularTotal } from "../../calcularTotal.mjs"
-import { controlCantidadOfertas } from "../../controlCantidadOfertas.mjs"
 import { validadoresCompartidos } from "../../../../../validadores/validadoresCompartidos.mjs"
 import { controlInstanciaDecimal } from "../../controlInstanciaDecimal.mjs"
 import { constructorObjetoEstructuraPrecioDia } from "../../../../../precios/entidades/reserva/constructorObjetoEstructuraPrecioDia.mjs"
@@ -20,11 +19,8 @@ export const perfil_totalNetoPorRango = async (data) => {
         const estructura = data.estructura
         const contenedorOfertas = data.contenedorOfertas
         const totalDescuento = new Decimal(estructura.global.totales.totalDescuento)
-        controlCantidadOfertas({
-            ofertaUID,
-            contenedor: oferta,
-            contenedorOfertas
-        })
+        contenedorOfertas.push(oferta)
+
         const diasArrayReserva = constructorObjetoEstructuraPrecioDia(fechaEntradaReserva_ISO, fechaSalidaReserva_ISO)
         for (const fechaDelDia of diasArrayReserva) {
             const fechaDentroDelRango = await validadoresCompartidos.fechas.fechaEnRango({

@@ -1,4 +1,3 @@
-import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs";
 import { actualizarDesgloseFinanciero } from "./actualizarDesgloseFinanciero.mjs";
 import { crearDesgloseFinanciero } from "./crearDesgloseFinanciero.mjs";
 
@@ -15,15 +14,7 @@ export const procesadorReserva = async (data) => {
         }
 
         if (tipoOperacion === "actualizarDesglose") {
-            const reservaUID = validadoresCompartidos.tipos.cadena({
-                string: data?.reservaUID,
-                nombreCampo: "El campo de reservaUID dentro dle procesadorReserva",
-                filtro: "strictoIDV",
-                sePermiteVacio: "no",
-                limpiezaEspaciosAlrededor: "si",
-            })
-            data.reservaUID = reservaUID,
-                await actualizarDesgloseFinanciero(data)
+            await actualizarDesgloseFinanciero(data)
         }
     } catch (error) {
         throw error

@@ -42,12 +42,12 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
             estadoOferta:estadoOferta,
         }
         const ofertaActualizada = await actualizarEstadoOferata(data)
-        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "El estado de la oferta se ha actualziado correctamente",
             estadoOferta: ofertaActualizada.estadoOferta
         };
         return ok
+        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         throw errorFinal

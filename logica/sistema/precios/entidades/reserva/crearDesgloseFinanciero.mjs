@@ -3,13 +3,16 @@ import { codigoZonaHoraria } from "../../../configuracion/codigoZonaHoraria.mjs"
 import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
-import { aplicarOfertas } from "../../../ofertas/entidades/reserva/aplicarOfertas.mjs";
+import { selecionarOfertasPorCondicion } from "../../../ofertas/entidades/reserva/selecionarOfertasPorCondicion.mjs";
 import { aplicarDescuentosPersonalizados } from "../../../ofertas/entidades/reserva/aplicarDescuentosPersonalizados.mjs";
+import { aplicarDescuento } from "../../../ofertas/entidades/reserva/aplicarDescuento.mjs";
+import { contructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/reserva/contructorEstructuraDescuentosReserva.mjs";
+import { constructorEstructuraDescuentos } from "../../../ofertas/global/contructorEstructuraDescuentos.mjs";
 
 export const crearDesgloseFinanciero = async (data) => {
     try {
         const estructura = data.estructura
-   
+
         const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaEntrada,
             nombreCampo: "La fecha de entrada del procesador de precios"
@@ -40,7 +43,6 @@ export const crearDesgloseFinanciero = async (data) => {
             sePermitenDuplicados: "no"
         })
 
-
         for (const apartamentoIDV of apartamentosArray) {
             await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
         }
@@ -57,14 +59,12 @@ export const crearDesgloseFinanciero = async (data) => {
             throw new Error(error)
         }
 
-
         await totalesBasePorRango({
             estructura,
             fechaEntrada_ISO: fechaEntrada,
             fechaSalida_ISO: fechaSalida,
             apartamentosArray,
         })
-
 
         if (capaOfertas === "si") {
 
@@ -88,8 +88,9 @@ export const crearDesgloseFinanciero = async (data) => {
                 sePermitenDuplicados: "si",
                 sePermiteArrayVacio: "si"
             })
-
-            await aplicarOfertas({
+            constructorEstructuraDescuentos(estructura)
+            contructorEstructuraDescuentosReserva(estructura)
+            const ofertasSelecionadasPorCondicion = await selecionarOfertasPorCondicion({
                 estructura,
                 fechaActual,
                 fechaEntrada,
@@ -97,6 +98,13 @@ export const crearDesgloseFinanciero = async (data) => {
                 apartamentosArray,
                 zonasArray,
                 descuentosParaRechazar
+            })
+            await aplicarDescuento({
+                origen: "porCondicion",
+                ofertarParaAplicarDescuentos: ofertasSelecionadasPorCondicion,
+                estructura,
+                fechaEntradaReserva_ISO: fechaEntrada,
+                fechaSalidaReserva_ISO: fechaSalida
             })
         }
         if (capaDescuentosPersonalizados === "si") {
@@ -106,10 +114,20 @@ export const crearDesgloseFinanciero = async (data) => {
                 filtro: "cadenaConNumerosEnteros",
                 sePermitenDuplicados: "si"
             })
+            constructorEstructuraDescuentos(estructura)
+            contructorEstructuraDescuentosReserva(estructura)
 
-            await aplicarDescuentosPersonalizados({
+            const ofertasSelecionadasPorAdminstrador = await aplicarDescuentosPersonalizados({
                 estructura,
                 descuentosArray,
+                fechaEntradaReserva_ISO: fechaEntrada,
+                fechaSalidaReserva_ISO: fechaSalida
+            })
+
+            await aplicarDescuento({
+                origen: "porAdministrador",
+                ofertarParaAplicarDescuentos: ofertasSelecionadasPorAdminstrador,
+                estructura: estructura,
                 fechaEntradaReserva_ISO: fechaEntrada,
                 fechaSalidaReserva_ISO: fechaSalida
             })

@@ -17,11 +17,8 @@ export const perfil_individualPorApartamento = async (data) => {
         const totalDescuento = new Decimal(estructura.global.totales.totalDescuento)
 
         const apartamentos = descuentos.apartamentos
-        controlCantidadOfertas({
-            ofertaUID,
-            contenedor: oferta,
-            contenedorOfertas
-        })
+        contenedorOfertas.push(oferta)
+
         for (const descuentoDelApartamento of apartamentos) {
             const apartamentoIDV = descuentoDelApartamento.apartamentoIDV
             const descuentoTotal = descuentoDelApartamento.descuentoTotal

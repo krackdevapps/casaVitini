@@ -14,6 +14,7 @@ export const totalesBasePorRango = async (data) => {
         const fechaEntrada_ISO = data.fechaEntrada_ISO
         const fechaSalida_ISO = data.fechaSalida_ISO
         const apartamentosArray = data.apartamentosArray
+        const instantaneaNoches = data.instantaneaNoches
 
         const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada_ISO, fechaSalida_ISO)
         diasArray.pop()
@@ -33,9 +34,13 @@ export const totalesBasePorRango = async (data) => {
         }
         reservaEntidad.desglosePorApartamento = {}
 
+        if (instantaneaNoches) {
+            reservaEntidad.desglosePorNoche = instantaneaNoches
+        }
         const desglosePorNoche = reservaEntidad.desglosePorNoche
         const desglosePorApartamento = reservaEntidad.desglosePorApartamento
-
+        
+   
         const indiceDias = await constructorIndiceDias({
             fechaEntrada_ISO: fechaEntrada_ISO,
             fechaSalida_ISO: fechaSalida_ISO
@@ -63,10 +68,12 @@ export const totalesBasePorRango = async (data) => {
                 delete desglosePorNoche[fecha_ISO]
             }
         }
-    
         for (const fecha_ISO of diasArray) {
-            if (desglosePorNoche.hasOwnProperty[fecha_ISO]) {
+            if (desglosePorNoche.hasOwnProperty(fecha_ISO)) {
+                //console.log("el dia existe", fecha_ISO)
                 continue
+            } else {
+                //console.log("el dia no existe", fecha_ISO)
             }
             const totalesPorNoche = {
                 //fechaDiaConNoche: fecha_ISO,

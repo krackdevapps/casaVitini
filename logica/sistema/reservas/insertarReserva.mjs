@@ -103,10 +103,9 @@ export const insertarReserva = async (reserva) => {
                     capaDescuentosPersonalizados: "no",
                 }
             },
-            capaImpuestos: "si",
-            reservaUID
+            capaImpuestos: "si"
         })
-
+        console.log("desgloseFinanciero",desgloseFinanciero)
         await insertarDesgloseFinacieroPorReservaUID({
             reservaUID,
             desgloseFinanciero

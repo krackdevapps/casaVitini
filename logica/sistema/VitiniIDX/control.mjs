@@ -2,7 +2,7 @@ export class VitiniIDX {
     constructor(session, salida) {
         this.usuario = session.usuario;
         this.rolIDV = session.rol;
-        this.salida = salida
+        // this.salida = salida
         this.contenedorGrupos = [];
     }
     administradores() {

@@ -748,7 +748,7 @@ const casaVitini = {
                 const respuestaServidor = await servidor.json();
                 if (!respuestaServidor) {
 
-                    return casaVitini.componentes.errorUI()
+                    return casaVitini.ui.componentes.errorUI()
                 }
                 if (respuestaServidor.tipo === "IDX") {
                     return casaVitini.componentes.loginUI()
@@ -10688,7 +10688,7 @@ const casaVitini = {
                         let contenedor = document.createElement("div")
                         contenedor.classList.add(
                             "backgroundGrey1",
-                            "borderRadius10",
+                            "borderRadius8",
                             "flexVertical",
                             "padding6",
                             "gap6"
@@ -10740,7 +10740,7 @@ const casaVitini = {
                         contenedor = document.createElement("div")
                         contenedor.classList.add(
                             "backgroundGrey1",
-                            "borderRadius10",
+                            "borderRadius8",
                             "flexVertical",
                             "padding6",
                             "gap6"
@@ -10813,7 +10813,7 @@ const casaVitini = {
                         contenedor = document.createElement("div")
                         contenedor.classList.add(
                             "backgroundGrey1",
-                            "borderRadius10",
+                            "borderRadius8",
                             "flexVertical",
                             "padding6",
                             "gap6"
