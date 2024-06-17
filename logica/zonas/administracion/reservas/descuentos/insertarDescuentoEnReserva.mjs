@@ -1,8 +1,10 @@
+import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs"
 import { obtenerOferatPorOfertaUID } from "../../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs"
 import { obtenerOfertasPorRangoPorEstado } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorRangoPorEstado.mjs"
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/obtenerDesgloseFinancieroPorReservaUID.mjs"
+import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/totales/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
 import { selectorPorCondicion } from "../../../../sistema/ofertas/entidades/reserva/selectorPorCondicion.mjs"
 import { procesador } from "../../../../sistema/precios/procesador.mjs"
@@ -53,6 +55,7 @@ export const insertarDescuentoEnReserva = async (entrada) => {
                 reserva: {
                     tipoOperacion: "actualizarDesglose",
                     reservaUID: reservaUID,
+                    ofertaUID: ofertaUID,
                     fechaEntrada: fechaEntradaReserva,
                     fechaSalida: fechaSalidaReserva,
                     fechaActual: fechaCreacion_simple,
@@ -66,47 +69,19 @@ export const insertarDescuentoEnReserva = async (entrada) => {
             },
             capaImpuestos: "no",
         })
-
-
-        return desgloseFinanciero
-        // const zonasArray = ["global", "publica", "privada"]
-        // const ofertasSeleccionadasPorRango = await obtenerOfertasPorRangoPorEstado({
-        //     fechaEntradaReserva_ISO: fechaEntradaReserva,
-        //     fechaSalidaReserva_ISO: fechaSalidaReserva,
-        //     estadoIDV: "activado",
-        //     zonasArray,
-        //     entidadIDV: "reserva"
-        // })
-        // const ofertaAnalizadasPorCondiciones = []
-        // for (const oferta of ofertasSeleccionadasPorRango) {
-        //     const resultadoSelector = await selectorPorCondicion({
-        //         oferta,
-        //         apartamentosArray,
-        //         fechaActual_reserva: fechaCreacionReserva,
-        //         fechaEntrada_reserva: fechaEntradaReserva,
-        //         fechaSalida_reserva: fechaSalidaReserva,
-        //     })
-        //     resultadoSelector.autorizacion = "aceptada"
-        //     ofertaAnalizadasPorCondiciones.push(resultadoSelector)
-        // }
-
-        // const desgloseFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
-        // const instantaneaOfertas = desgloseFinanciero.instantaneaOfertas.porCondicion
-        // const ofertaUIDArray = Object.keys(instantaneaOfertas)
-        // // const ofertaUIDArray = ["33"]
-
-        // const ofertasCompatiblesNoSelecciondas = []
-        // ofertaAnalizadasPorCondiciones.forEach((detallesOferta) => {
-        //     const ofertaUID = String(detallesOferta.oferta.ofertaUID)
-        //     if (!ofertaUIDArray.includes(ofertaUID)) {
-        //         ofertasCompatiblesNoSelecciondas.push(detallesOferta)
-        //     }
-        // })
-        // const ok = {
-        //     ok: ofertasCompatiblesNoSelecciondas
-        // }
-        // return ok
+        await campoDeTransaccion("iniciar")        
+        await actualizarDesgloseFinacieroPorReservaUID({
+            desgloseFinanciero,
+            reservaUID
+        })
+        await campoDeTransaccion("confirmar")        
+        const ok = {
+            ok: "Se ha actualizado el conenedorFinanciero",
+            contenedorFinanciero: desgloseFinanciero
+        }
+        return ok
     } catch (errorCapturado) {
+        await campoDeTransaccion("cancelar")        
         throw errorCapturado
     }
 }

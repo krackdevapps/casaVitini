@@ -118,10 +118,7 @@ export const crearDesgloseFinanciero = async (data) => {
             contructorEstructuraDescuentosReserva(estructura)
 
             const ofertasSelecionadasPorAdminstrador = await aplicarDescuentosPersonalizados({
-                estructura,
-                descuentosArray,
-                fechaEntradaReserva_ISO: fechaEntrada,
-                fechaSalidaReserva_ISO: fechaSalida
+                descuentosArray
             })
 
             await aplicarDescuento({
