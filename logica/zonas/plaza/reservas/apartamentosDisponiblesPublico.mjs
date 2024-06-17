@@ -6,7 +6,7 @@ import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apa
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
-import { procesador } from "../../../sistema/precios/procesador.mjs";
+import { procesador } from "../../../sistema/contenedorFinanciero/procesador.mjs";
 
 export const apartamentosDisponiblesPublico = async (entrada, salida) => {
     try {

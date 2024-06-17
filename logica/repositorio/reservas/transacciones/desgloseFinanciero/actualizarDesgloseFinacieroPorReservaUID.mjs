@@ -2,10 +2,12 @@ import { conexion } from "../../../../componentes/db.mjs";
 
 export const actualizarDesgloseFinacieroPorReservaUID = async (data) => {
     try {
+
         const desgloseFinanciero = data.desgloseFinanciero
         const instantaneaNoches = desgloseFinanciero.entidades.reserva.desglosePorNoche
         const instantaneaOfertasPorCondicion = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porCondicion)
         const instantaneaOfertasPorAdministrador = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador)
+
         const preciosAlterados = JSON.stringify([])
         const reservaUID = data.reservaUID
         const consulta = `

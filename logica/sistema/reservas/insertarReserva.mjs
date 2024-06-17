@@ -6,10 +6,10 @@ import { insertarApartamentoEnReserva } from '../../repositorio/reservas/apartam
 import { insertarCamaEnLaHabitacion } from '../../repositorio/reservas/apartamentos/insertarCamaEnLaHabitacion.mjs';
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from '../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
-import { insertarDesgloseFinacieroPorReservaUID } from '../../repositorio/reservas/transacciones/totales/insertarDesgloseFinacieroPorReservaUID.mjs';
 import { insertarHabitacionEnApartamento } from '../../repositorio/reservas/apartamentos/insertarHabitacionEnApartamento.mjs';
 import { obtenerCamaComoEntidadPorCamaIDV } from '../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs';
-import { procesador } from '../precios/procesador.mjs';
+import { procesador } from '../contenedorFinanciero/procesador.mjs';
+import { insertarDesgloseFinacieroPorReservaUID } from '../../repositorio/reservas/transacciones/desgloseFinanciero/insertarDesgloseFinacieroPorReservaUID.mjs';
 
 export const insertarReserva = async (reserva) => {
     try {
@@ -105,7 +105,6 @@ export const insertarReserva = async (reserva) => {
             },
             capaImpuestos: "si"
         })
-        console.log("desgloseFinanciero",desgloseFinanciero)
         await insertarDesgloseFinacieroPorReservaUID({
             reservaUID,
             desgloseFinanciero

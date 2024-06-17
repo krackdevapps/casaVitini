@@ -101,7 +101,7 @@ export const crearDesgloseFinanciero = async (data) => {
             })
             await aplicarDescuento({
                 origen: "porCondicion",
-                ofertarParaAplicarDescuentos: ofertasSelecionadasPorCondicion,
+                ofertasParaAplicarDescuentos: ofertasSelecionadasPorCondicion,
                 estructura,
                 fechaEntradaReserva_ISO: fechaEntrada,
                 fechaSalidaReserva_ISO: fechaSalida
@@ -123,7 +123,7 @@ export const crearDesgloseFinanciero = async (data) => {
 
             await aplicarDescuento({
                 origen: "porAdministrador",
-                ofertarParaAplicarDescuentos: ofertasSelecionadasPorAdminstrador,
+                ofertasParaAplicarDescuentos: ofertasSelecionadasPorAdminstrador,
                 estructura: estructura,
                 fechaEntradaReserva_ISO: fechaEntrada,
                 fechaSalidaReserva_ISO: fechaSalida

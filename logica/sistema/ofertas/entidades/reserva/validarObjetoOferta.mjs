@@ -331,6 +331,7 @@ export const validarObjetoOferta = async (oferta) => {
 
                 for (const dia of descuentoPorDias) {
                     const tipoDescuentoDelDia = dia.tipoDescuento
+
                     const fechaDelDia = await validadoresCompartidos.fechas.validarFecha_ISO({
                         fecha_ISO: dia.fecha,
                         nombreCampo: `La fecha del dia`
@@ -342,11 +343,11 @@ export const validarObjetoOferta = async (oferta) => {
                         fechaFinRango_ISO: fechaFinalRango_ISO,
                     })
 
+
                     if (!fechaEnRango) {
                         const error = `Dentro el dia con fecha ${fechaDelDia} esta fuera del rango entre ${fechaInicioRango_ISO} y ${fechaFinalRango_ISO}`
                         throw new Error(error)
                     }
-
                     if (!tipoDescuentoDelDia && tipoDescuentoDelDia !== "netoPorDia" && tipoDescuentoDelDia !== "netoPorApartamentoDelDia") {
                         const error = `Dentro el dia con fecha ${fechaDelDia} el tipo de descuento del dia solo puede ser netoPorDia o netoPorApartamentoDelDia`
                         throw new Error(error)
@@ -369,9 +370,7 @@ export const validarObjetoOferta = async (oferta) => {
                             devuelveUnTipoNumber: "no",
                             limpiezaEspaciosAlrededor: "si",
                         })
-                    }
-
-                    if (tipoDescuentoDelDia === "netoPorApartamentoDelDia") {
+                    } else if (tipoDescuentoDelDia === "netoPorApartamentoDelDia") {
 
                         const fechaDelDia = await validadoresCompartidos.fechas.validarFecha_ISO({
                             fecha_ISO: dia.fecha,
@@ -409,10 +408,13 @@ export const validarObjetoOferta = async (oferta) => {
                                 limpiezaEspaciosAlrededor: "si",
                             })
                         }
+                    } else {
+                        const error = "No se reconove subTipoDescuento, debe ser porDialDelRango o totalNetoPorRango: " + tipoDescuentoDelDia
+                        throw new Error(error)
                     }
                 }
             } else {
-                const error = "No se reconove subTipoDescuento, debe ser porDialDelRango o totalNetoPorRango"
+                const error = "No se reconoce subTipoDescuento, debe ser porDialDelRango o totalNetoPorRango"
                 throw new Error(error)
             }
         } else {

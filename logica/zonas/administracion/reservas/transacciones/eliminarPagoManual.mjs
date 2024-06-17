@@ -1,5 +1,5 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { actualizarEstadoPago } from "../../../../sistema/precios/entidades/reserva/actualizarEstadoPago.mjs";
+import { actualizarEstadoPago } from "../../../../sistema/contenedorFinanciero/entidades/reserva/actualizarEstadoPago.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { eliminarPagoPorPagoUID } from "../../../../repositorio/reservas/transacciones/pagos/eliminarPagoPorPagoUID.mjs";

@@ -17,6 +17,7 @@ export const perfil_porDiasDelRango = async (data) => {
         const estructura = data.estructura
         const contenedorOfertas = data.contenedorOfertas
         const totalDescuento = new Decimal(estructura.global.totales.totalDescuento)
+        contenedorOfertas.push(oferta)
 
         for (const descuentoPorDia of dias) {
             const fechaDelDia = descuentoPorDia.fecha
@@ -40,7 +41,6 @@ export const perfil_porDiasDelRango = async (data) => {
                 }
             }
             if (tipoDescuento === "netoPorApartamentoDelDia") {
-                contenedorOfertas.push(oferta)
 
                 for (const apartamento of apartamentos) {
                     const apartamentoIDV = apartamento.apartamentoIDV
@@ -112,10 +112,7 @@ export const perfil_porDiasDelRango = async (data) => {
 
                     contenedorPorApartamentoDentroDelDia.totalDescuentosAplicados = totalDescuentosAplicadosPorApartamento.toFixed(2)
                 }
-            }
-
-            if (tipoDescuento === "netoPorDia") {
-                contenedorOfertas.push(oferta)
+            } else if (tipoDescuento === "netoPorDia") {
 
                 const descuentoTotal = descuentoPorDia.descuentoTotal
                 const tipoAplicacion = descuentoPorDia.tipoAplicacion
@@ -150,6 +147,9 @@ export const perfil_porDiasDelRango = async (data) => {
 
                 contenedorPorDia[fechaDelDia].totalConDescuentos = totalConDescuentosPorDia.isPositive() ? totalConDescuentosPorDia.toFixed(2) : "0.00"
                 contenedorPorDia[fechaDelDia].totalDescuentosAplicados = new Decimal(contenedorPorDia[fechaDelDia].totalDescuentosAplicados).plus(totalCalculado.descuentoAplicado).toFixed(2)
+            } else {
+                const error = "No se reconoce el tipoDescuento en perfil_porDiasDelRango: " + tipoDescuento
+                throw new Error(error)
             }
         }
     } catch (error) {

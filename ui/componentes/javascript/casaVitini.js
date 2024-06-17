@@ -10602,7 +10602,6 @@ const casaVitini = {
 
 
                         impuestos.forEach((impuesto) => {
-                            console.log("impuesto", impuesto)
                             const impuestoTitulo = impuesto.nombreImpuesto
                             const tipoValor = impuesto.tipoValor
                             const tipoImpositivo = impuesto.tipoImpositivo

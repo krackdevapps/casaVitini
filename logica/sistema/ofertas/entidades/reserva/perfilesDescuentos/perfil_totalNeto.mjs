@@ -1,10 +1,9 @@
 import Decimal from "decimal.js"
 import { calcularTotal } from "../calcularTotal.mjs"
-import { controlCantidadOfertas } from "../controlCantidadOfertas.mjs"
-import { controlInstanciaDecimal } from "../controlInstanciaDecimal.mjs"
-
 export const perfil_totalNeto = (data) => {
     try {
+        console.log("data", data)
+
         const ofertaUID = data.ofertaUID
         const oferta = data.oferta
         const nombreOferta = data.nombreOferta

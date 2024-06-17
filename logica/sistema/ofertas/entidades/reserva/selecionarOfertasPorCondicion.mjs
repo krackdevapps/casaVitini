@@ -1,5 +1,4 @@
 import { obtenerOfertasPorRangoPorEstado } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorRangoPorEstado.mjs"
-import { aplicarDescuento } from "./aplicarDescuento.mjs"
 import { selectorPorCondicion } from "./selectorPorCondicion.mjs"
 
 export const selecionarOfertasPorCondicion = async (data) => {
@@ -9,7 +8,7 @@ export const selecionarOfertasPorCondicion = async (data) => {
         const fechaSalida = data.fechaSalida
         const apartamentosArray = data.apartamentosArray
         const zonasArray = data.zonasArray
-        const descuentosParaRechazar = data.descuentosParaRechazar // array
+        const descuentosParaRechazar = data?.descuentosParaRechazar || []
 
         const ofertasSeleccionadasPorRango = await obtenerOfertasPorRangoPorEstado({
             fechaEntradaReserva_ISO: fechaEntrada,

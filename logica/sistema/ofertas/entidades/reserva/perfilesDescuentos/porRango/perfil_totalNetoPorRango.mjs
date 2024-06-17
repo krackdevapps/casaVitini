@@ -2,7 +2,7 @@ import Decimal from "decimal.js"
 import { calcularTotal } from "../../calcularTotal.mjs"
 import { validadoresCompartidos } from "../../../../../validadores/validadoresCompartidos.mjs"
 import { controlInstanciaDecimal } from "../../controlInstanciaDecimal.mjs"
-import { constructorObjetoEstructuraPrecioDia } from "../../../../../precios/entidades/reserva/constructorObjetoEstructuraPrecioDia.mjs"
+import { constructorObjetoEstructuraPrecioDia } from "../../../../../contenedorFinanciero/entidades/reserva/constructorObjetoEstructuraPrecioDia.mjs"
 
 export const perfil_totalNetoPorRango = async (data) => {
     try {

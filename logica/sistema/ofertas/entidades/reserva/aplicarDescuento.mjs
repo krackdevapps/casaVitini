@@ -8,7 +8,8 @@ export const aplicarDescuento = async (data) => {
     try {
         const fechaEntradaReserva_ISO = data.fechaEntradaReserva_ISO
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
-        const ofertarParaAplicarDescuentos = data.ofertarParaAplicarDescuentos
+        const ofertasParaAplicarDescuentos = data.ofertasParaAplicarDescuentos
+
         const origen = data.origen
         const estructura = data.estructura
         if (origen !== "porCondicion" && origen !== "porAdministrador") {
@@ -26,17 +27,22 @@ export const aplicarDescuento = async (data) => {
             contenedorTotalesBase.totalDescuento = "0.00"
         }
 
-        for (const oferta of ofertarParaAplicarDescuentos) {
-            const descuentos = oferta.oferta.descuentosJSON
-            const ofertaUID = oferta.oferta.ofertaUID
-            const tipoDescuento = descuentos.tipoDescuento
-            const autorizacion = oferta.autorizacion
-            const nombreOferta = oferta.oferta.nombreOferta
+        for (const oferta of ofertasParaAplicarDescuentos) {
+
+            const descuentos = oferta?.oferta?.descuentosJSON || []
+            const ofertaUID = oferta?.oferta?.ofertaUID
+            const tipoDescuento = descuentos?.tipoDescuento
+            const autorizacion = oferta?.autorizacion
+            const nombreOferta = oferta?.oferta?.nombreOferta
+            console.log("autorizacion", autorizacion)
+
 
             if (origen === "porCondicion" && autorizacion !== "aceptada") {
+                console.log("no aceptada")
                 continue
             }
             if (tipoDescuento === "totalNeto") {
+                console.log("aqui")
                 perfil_totalNeto({
                     ofertaUID,
                     oferta,
@@ -58,7 +64,6 @@ export const aplicarDescuento = async (data) => {
                     estructura,
                     contenedorPorApartamento,
                     contenedorOfertas,
-                    estructura
                 })
 
             } else if (tipoDescuento === "porRango") {

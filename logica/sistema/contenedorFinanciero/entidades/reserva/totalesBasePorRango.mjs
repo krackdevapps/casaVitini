@@ -70,10 +70,7 @@ export const totalesBasePorRango = async (data) => {
         }
         for (const fecha_ISO of diasArray) {
             if (desglosePorNoche.hasOwnProperty(fecha_ISO)) {
-                //console.log("el dia existe", fecha_ISO)
-                continue
-            } else {
-                //console.log("el dia no existe", fecha_ISO)
+             //   continue
             }
             const totalesPorNoche = {
                 //fechaDiaConNoche: fecha_ISO,

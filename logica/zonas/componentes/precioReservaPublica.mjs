@@ -1,4 +1,4 @@
-import { procesador } from "../../sistema/precios/procesador.mjs"
+import { procesador } from "../../sistema/contenedorFinanciero/procesador.mjs"
 import { validarObjetoReserva } from "../../sistema/reservas/validarObjetoReserva.mjs"
 
 export const precioReservaPublica = async (entrada, salida) => {

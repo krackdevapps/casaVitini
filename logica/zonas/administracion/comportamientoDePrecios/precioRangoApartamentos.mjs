@@ -1,5 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-import { totalesBasePorRango } from "../../../sistema/precios/entidades/reserva/totalesBasePorRango.mjs";
+import { totalesBasePorRango } from "../../../sistema/contenedorFinanciero/entidades/reserva/totalesBasePorRango.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 

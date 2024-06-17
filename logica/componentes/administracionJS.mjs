@@ -7406,7 +7406,8 @@ const casaVitini = {
                                     "borderRadius10",
                                     "flexHorizontal",
                                     "gap6",
-                                    "padding6"
+                                    "padding6",
+                                    "elementosExpandidos"
 
                                 )
                                 instanciaDestino.appendChild(panelBotones)
@@ -7552,7 +7553,7 @@ const casaVitini = {
                                         )
 
                                         const contenedorGlobal = document.createElement("div")
-                                        
+
                                         const nombreOfertaUI = document.createElement("div")
                                         nombreOfertaUI.classList.add("negrita")
                                         nombreOfertaUI.innerText = nombreOferta
@@ -7568,7 +7569,7 @@ const casaVitini = {
                                         estadoUI.innerText = estadoUI_(estadoIDV)
                                         contenedorGlobal.appendChild(estadoUI)
                                         contenedorOferta.appendChild(contenedorGlobal)
-                                        
+
                                         const contendorBotones = document.createElement("div")
                                         contendorBotones.classList.add(
                                             "flexHorizontal",
@@ -15994,7 +15995,7 @@ const casaVitini = {
                     }
                     casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
                     const transaccion = casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorObjeto()
-                    transaccion.zona = "administracion/ofertas_nuevo/crearOferta"
+                    transaccion.zona = "administracion/ofertas/crearOferta"
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                     if (!pantallaDeCargaRenderizada) {
@@ -16207,8 +16208,10 @@ const casaVitini = {
 
                                     estructuraDescuentoPorDia.tipoAplicacion = tipoAplicacion
                                     estructuraDescuentoPorDia.descuentoTotal = descuentoTotal
-                                }
-                                if (tipoDescuentoEnElDia === "netoPorApartamentoDelDia") {
+
+                                    estructuraDescuento.descuentoPorDias.push(estructuraDescuentoPorDia)
+
+                                } else if (tipoDescuentoEnElDia === "netoPorApartamentoDelDia") {
                                     const contenedorApartamentos = dia.querySelectorAll("[apartamentoSeleccionado]")
                                     estructuraDescuentoPorDia.apartamentos = []
 
@@ -16226,9 +16229,9 @@ const casaVitini = {
                                         estructuraDescuentoPorDia.apartamentos.push(descuentoPorApartamento)
 
                                     })
+                                    estructuraDescuento.descuentoPorDias.push(estructuraDescuentoPorDia)
 
                                 }
-                                estructuraDescuento.descuentoPorDias.push(estructuraDescuentoPorDia)
                             })
                         }
                     }
@@ -18051,7 +18054,7 @@ const casaVitini = {
                                             areaDia.querySelector(`[contenedorDelDia="${conteneodrIDV}"]`).classList.remove("estadoInicialInvisible")
                                         })
                                         const opcionesSelector = [{
-                                            nombre: "Determina dentro de este dia, el se aplica un descuento al neto del dia o por apartamentos del dia",
+                                            nombre: "Determina dentro de este dia, como se aplica un descuento al neto del dia o por apartamentos del dia",
                                             inicial: "si",
                                         }, {
                                             nombre: "Aplicar descuento al total neto del dia",

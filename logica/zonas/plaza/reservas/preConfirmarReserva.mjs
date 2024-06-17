@@ -5,7 +5,7 @@ import { validarObjetoReserva } from "../../../sistema/reservas/validarObjetoRes
 import { insertarReserva } from "../../../sistema/reservas/insertarReserva.mjs";
 import { detallesReserva } from "../../../sistema/reservas/detallesReserva.mjs";
 import { enviarEmailReservaConfirmada } from "../../../sistema/Mail/enviarEmailReservaConfirmada.mjs";
-import { actualizarEstadoPago } from "../../../sistema/precios/entidades/reserva/actualizarEstadoPago.mjs";
+import { actualizarEstadoPago } from "../../../sistema/contenedorFinanciero/entidades/reserva/actualizarEstadoPago.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 import { crearEnlacePDF } from "../../../sistema/pdf/crearEnlacePDF.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";

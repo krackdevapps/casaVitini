@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { utilidades } from "../../../../componentes/utilidades.mjs";
-import { actualizarEstadoPago } from "../../../../sistema/precios/entidades/reserva/actualizarEstadoPago.mjs";
+import { actualizarEstadoPago } from "../../../../sistema/contenedorFinanciero/entidades/reserva/actualizarEstadoPago.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { detallesDelPago as detallesDelPago_square } from "../../../../componentes/pasarelas/square/detallesDelPago.mjs";
 import { insertarPago } from "../../../../repositorio/reservas/transacciones/pagos/insertarPago.mjs";
@@ -48,7 +48,7 @@ export const crearPagoManual = async (entrada, salida) => {
         await obtenerReservaPorReservaUID(reservaUID);
 
         const fechaActual = DateTime.utc().toISO();
-       
+
         const estructuraFinal = {};
 
         if (plataformaDePago === "efectivo") {

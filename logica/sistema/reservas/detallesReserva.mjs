@@ -1,11 +1,9 @@
 import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { detallesAlojamiento } from "./detallesReserva/detallesAlojamiento.mjs"
 import { detallesTitular } from "./detallesReserva/detallesTitular.mjs"
-import { clientesReserva } from "./detallesReserva/clientesReserva.mjs"
-import { recuperarClientesSinHabitacionAsignada } from "./detallesReserva/recuperarClientesSinHabitacionAsignada.mjs"
 import { pernoctantesDeLaReserva } from "./detallesReserva/pernoctantesDeLaReserva.mjs"
-import { obtenerDesgloseFinancieroPorReservaUID } from "../../repositorio/reservas/reserva/obtenerDesgloseFinancieroPorReservaUID.mjs"
 import { utilidades } from "../../componentes/utilidades.mjs"
+import { obtenerDesgloseFinancieroPorReservaUID } from "../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs"
 export const detallesReserva = async (data) => {
     try {
         const capas = data.capas

@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import { obtenerTotalReembolsado } from "../../../../sistema/precios/entidades/reserva/obtenerTotalReembolsado.mjs";
+import { obtenerTotalReembolsado } from "../../../../sistema/contenedorFinanciero/entidades/reserva/obtenerTotalReembolsado.mjs";
 import { detallesReserva } from "../../../../sistema/reservas/detallesReserva.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { pagosDeLaReserva as pagosDeLaReserva_ } from "../../../../sistema/reservas/pagosDeLaReserva.mjs";
@@ -23,7 +23,7 @@ export const obtenerPagosDeLaReserva = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-  
+
         const detallesPagosReserva = await pagosDeLaReserva_(reservaUID);
         const metadatos = {
             reservaUID: Number(reservaUID),

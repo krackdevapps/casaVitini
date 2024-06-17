@@ -1,5 +1,5 @@
 import { Mutex } from "async-mutex";
-import { evitarDuplicados } from "../../../sistema/precios/comportamientoPrecios/evitarDuplicados.mjs";
+import { evitarDuplicados } from "../../../sistema/contenedorFinanciero/comportamientoPrecios/evitarDuplicados.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { insertarComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/insertarComportamientoDePrecio.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -20,7 +20,7 @@ export const crearComportamiento = async (entrada, salida) => {
             transaccion: "crear"
         }
         await validarComportamiento(comportamiento)
-        
+
         await campoDeTransaccion("iniciar")
         // const dataEvitarDuplicados = {
         //     tipo: tipo,

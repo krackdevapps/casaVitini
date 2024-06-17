@@ -13805,6 +13805,10 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     flex-direction: row;
 }
+.elementosExpandidos{
+    display: flex;
+    justify-content: space-between;
+}
 
 .flexJustificacion_space-around {
     justify-content: space-around;

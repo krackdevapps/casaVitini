@@ -550,9 +550,8 @@ export const validadoresCompartidos = {
                         throw new Error(mensaje)
                     }
 
-                    const impedirCero = configuracion.impedirCero
-                    if (typeof impedirCero !== "string" &&
-                        (impedirCero !== "si" && impedirCero !== "no")) {
+                    const impedirCero = configuracion.impedirCero || "si"
+                    if (impedirCero !== "si" && impedirCero !== "no") {
                         const mensaje = `El validor de cadena esta mal configurado, impedirCero solo acepta si o no.`
                         throw new Error(mensaje)
                     }
@@ -583,7 +582,7 @@ export const validadoresCompartidos = {
                 try {
                     const filtro = /^[0-9]+$/
                     if (!filtro.test(string)) {
-                        const mensaje = `${nombreCampo} solo acepta una cadena con numeros con dos decimales separados por punto, por ejemplo 00.00`
+                        const mensaje = `${nombreCampo} solo acepta una cadena con numeros enteros`
                         throw new Error(mensaje)
                     }
                     const maximoDeLargo = configuracion.maximoDeLargo
@@ -597,9 +596,8 @@ export const validadoresCompartidos = {
                             throw new Error(mensaje)
                         }
                     }
-                    const impedirCero = configuracion.impedirCero
-                    if (typeof impedirCero !== "string" &&
-                        (impedirCero !== "si" && impedirCero !== "no")) {
+                    const impedirCero = configuracion.impedirCero || "si"
+                    if                        (impedirCero !== "si" && impedirCero !== "no") {
                         const mensaje = `El validor de cadena esta mal configurado, impedirCero solo acepta si o no.`
                         throw new Error(mensaje)
                     }
@@ -705,12 +703,10 @@ export const validadoresCompartidos = {
 
             if (filtro === "numeroSimple") {
                 try {
-                    const filtro = /^[0-9]+$/;
-                    if (!filtro.test(number)) {
-                        const mensaje = `${nombreCampo} solo acepta numeros`
+                    if (!Number.isInteger(number)) {
+                        const mensaje = `${nombreCampo} solo acepta numeros enteros, sin decimales.`
                         throw new Error(mensaje)
                     }
-
                 } catch (errorCapturado) {
                     throw errorCapturado
                 }

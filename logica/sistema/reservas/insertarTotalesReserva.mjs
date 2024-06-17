@@ -1,6 +1,6 @@
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 //import { actualizarEstadoPago } from '../precios/entidades/reseerva/entidades/reserva/actualizarEstadoPago.mjs';
-import { precioReserva } from '../precios/obsoleto/precioReserva.mjs';
+import { precioReserva } from '../contenedorFinanciero/obsoleto/precioReserva.mjs';
 import { eliminarTotalesPorNochePorReservaUID } from '../../repositorio/reservas/transacciones/totales/eliminarTotalesPorNochePorReservaUID.mjs';
 import { insertarTotalPorNohce } from '../../repositorio/reservas/transacciones/totales/insertarTotalPorNohce.mjs';
 import { eliminarTotalesPorApartamentoPorReservaUID } from '../../repositorio/reservas/transacciones/totales/eliminarTotalesPorApartamentoPorReservaUID.mjs';

@@ -20,7 +20,7 @@ export const aplicarDescuentosDesdeInstantanea = async (data) => {
         ofertaAnalizadasPorCondiciones.push(ofertaEstructura)
     }
     await aplicarDescuento({
-        ofertarParaAplicarDescuentos: ofertaAnalizadasPorCondiciones,
+        ofertasParaAplicarDescuentos: ofertaAnalizadasPorCondiciones,
         estructura: estructura,
         fechaEntradaReserva_ISO,
         fechaSalidaReserva_ISO

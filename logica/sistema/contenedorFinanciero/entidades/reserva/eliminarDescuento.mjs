@@ -1,40 +1,24 @@
-import { DateTime } from "luxon";
-import { codigoZonaHoraria } from "../../../configuracion/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs";
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
-import { aplicarDescuentosDesdeInstantanea } from "../../../ofertas/entidades/reserva/aplicarDescuentosDesdeInstantanea.mjs";
-// import { aplicarOfertas } from "../../../ofertas/entidades/reserva/selecionarOfertasPorCondicion.mjs";
-import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/obtenerDesgloseFinancieroPorReservaUID.mjs";
 import { aplicarDescuento } from "../../../ofertas/entidades/reserva/aplicarDescuento.mjs";
 import { constructorEstructuraDescuentos } from "../../../ofertas/global/contructorEstructuraDescuentos.mjs";
 import { contructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/reserva/contructorEstructuraDescuentosReserva.mjs";
-import { aplicarDescuentosPersonalizados } from "../../../ofertas/entidades/reserva/aplicarDescuentosPersonalizados.mjs";
-import { obtenerOfertasPorEntidadPorOfertaUID } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorEntidadPorOfertaUID.mjs";
-
-export const actualizarDesgloseFinanciero = async (data) => {
+import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
+import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
+export const eliminarDescuento = async (data) => {
     try {
         const estructura = data.estructura
         const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaEntrada,
             nombreCampo: "La fecha de entrada del actualizarDesgloseFinanciero"
         })
-
         const fechaSalida = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaSalida,
             nombreCampo: "La fecha de salida del actualizarDesgloseFinanciero"
         })
-
         await validadoresCompartidos.fechas.validacionVectorial({
             fechaEntrada_ISO: data.fechaEntrada,
             fechaSalida_ISO: data.fechaSalida,
             tipoVector: "diferente"
-        })
-
-        const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-        const fechaActual = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: data?.fechaActual || DateTime.now().setZone(zonaHoraria).toISODate(),
-            nombreCampo: "La fecha de actual del actualizarDesgloseFinanciero"
         })
         const apartamentosArray = validadoresCompartidos.tipos.array({
             array: data.apartamentosArray,
@@ -49,28 +33,66 @@ export const actualizarDesgloseFinanciero = async (data) => {
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
-
-        const capaDescuentosPersonalizados = data?.capaDescuentosPersonalizados
-        if (capaDescuentosPersonalizados !== "si" && capaDescuentosPersonalizados !== "no") {
-            const error = "El procesador de precios esta mal configurado, necesita parametro capaDescuentosPersonalizados con un si o un no"
-            throw new Error(error)
-        }
-        const ofertaUID = validadoresCompartidos.tipos.numero({
+        const ofertaUIDParaEliminar = validadoresCompartidos.tipos.numero({
             number: data?.ofertaUID,
             nombreCampo: "El campo de ofertaUID dentro del actualizarDesgloseFinanciero",
             filtro: "numeroSimple",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
-        await obtenerOfertasPorEntidadPorOfertaUID({
-            ofertaUID,
-            entidadIDV: "reserva"
+        const origen = validadoresCompartidos.tipos.cadena({
+            string: data.origen,
+            nombreCampo: "El campo origen",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
         })
-
+        const posicion = validadoresCompartidos.tipos.numero({
+            number: data.posicion,
+            nombreCampo: "El el campo de posicion",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        if (origen === "porAdministrador" && origen === "porCondicion") {
+            const error = "El campo origen solo puede ser porAdminsitrador o porCondicion"
+            throw new Error(error)
+        }
         const desgloseFinancieroReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
         const instantaneaNoches = desgloseFinancieroReserva.instantaneaNoches
         const instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion ?? []
         const instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador ?? []
+
+        if (origen === "porAdministrador") {
+            if (!instantaneaOfertasPorAdministrador[posicion]) {
+                const error = "No existe la posicion"
+                throw new Error(error)
+            }
+
+            const ofertaUID = instantaneaOfertasPorAdministrador[posicion].oferta.ofertaUID
+            if (ofertaUIDParaEliminar === ofertaUID) {
+                instantaneaOfertasPorAdministrador.splice(posicion, 1);
+            }
+        }
+
+        if (origen === "porCondicion") {
+            if (!instantaneaOfertasPorCondicion[posicion]) {
+                const error = "No existe la posicion"
+                throw new Error(error)
+            }
+
+
+            const ofertaUID = instantaneaOfertasPorCondicion[posicion].oferta.ofertaUID
+
+            if (ofertaUIDParaEliminar === ofertaUID) {
+                instantaneaOfertasPorCondicion.splice(posicion, 1);
+            } else {
+                const error = `Dentro de la posicion ${posicion}, no se encuentra en ofertaUID ${ofertaUIDParaEliminar}, en esta posicion está el ofertaUID ${ofertaUID}`
+                throw new Error(error)
+            }
+
+        }
 
         await totalesBasePorRango({
             estructura,
@@ -81,29 +103,16 @@ export const actualizarDesgloseFinanciero = async (data) => {
         })
         constructorEstructuraDescuentos(estructura)
         contructorEstructuraDescuentosReserva(estructura)
+
         await aplicarDescuento({
-            origen: "porCondicion",
-            ofertarParaAplicarDescuentos: instantaneaOfertasPorCondicion,
+            origen: origen,
+            ofertasParaAplicarDescuentos: instantaneaOfertasPorCondicion,
             estructura: estructura,
             fechaEntradaReserva_ISO: fechaEntrada,
             fechaSalidaReserva_ISO: fechaSalida
         })
 
-        const ofertasSelecionadasPorAdminstrador = await aplicarDescuentosPersonalizados({
-            descuentosArray: [ofertaUID]
-        })
 
-        const contenedorOfertasPorAdminstrador = [
-            ...instantaneaOfertasPorAdministrador,
-            ...ofertasSelecionadasPorAdminstrador
-        ]
-        await aplicarDescuento({
-            origen: "porAdministrador",
-            ofertarParaAplicarDescuentos: contenedorOfertasPorAdminstrador,
-            estructura: estructura,
-            fechaEntradaReserva_ISO: fechaEntrada,
-            fechaSalidaReserva_ISO: fechaSalida
-        })
     } catch (error) {
         throw error
     }
