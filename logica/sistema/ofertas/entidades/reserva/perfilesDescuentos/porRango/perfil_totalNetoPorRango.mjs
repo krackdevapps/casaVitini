@@ -19,7 +19,6 @@ export const perfil_totalNetoPorRango = async (data) => {
         const estructura = data.estructura
         const contenedorOfertas = data.contenedorOfertas
         const totalDescuento = new Decimal(estructura.global.totales.totalDescuento)
-        contenedorOfertas.push(oferta)
 
         const diasArrayReserva = constructorObjetoEstructuraPrecioDia(fechaEntradaReserva_ISO, fechaSalidaReserva_ISO)
         for (const fechaDelDia of diasArrayReserva) {

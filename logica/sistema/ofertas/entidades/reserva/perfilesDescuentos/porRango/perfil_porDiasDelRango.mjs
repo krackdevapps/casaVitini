@@ -17,7 +17,6 @@ export const perfil_porDiasDelRango = async (data) => {
         const estructura = data.estructura
         const contenedorOfertas = data.contenedorOfertas
         const totalDescuento = new Decimal(estructura.global.totales.totalDescuento)
-        contenedorOfertas.push(oferta)
 
         for (const descuentoPorDia of dias) {
             const fechaDelDia = descuentoPorDia.fecha

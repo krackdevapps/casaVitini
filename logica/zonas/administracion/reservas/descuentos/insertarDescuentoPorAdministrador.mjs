@@ -59,7 +59,7 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
                     apartamentosArray: apartamentosArray,
                 }
             },
-            capaImpuestos: "no",
+            capaImpuestos: "si",
         })
         await campoDeTransaccion("iniciar")
         await actualizarDesgloseFinacieroPorReservaUID({

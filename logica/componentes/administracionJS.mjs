@@ -7407,17 +7407,16 @@ const casaVitini = {
                                     "flexHorizontal",
                                     "gap6",
                                     "padding6",
-                                    "elementosExpandidos"
-
+                                    "elementosExpandidos",
+                                    
                                 )
                                 instanciaDestino.appendChild(panelBotones)
 
                                 const botonInsertarDescuento = document.createElement("div")
                                 botonInsertarDescuento.classList.add(
-                                    "borderRadius8",
-                                    "backgroundGrey1",
                                     "comportamientoBoton",
-                                    "padding8"
+                                    "botonV1",
+                                    "width100"
                                 )
                                 botonInsertarDescuento.innerText = "Insertar descuento"
                                 botonInsertarDescuento.addEventListener("click", this.componentesUI.insertarDescuentosUI)
@@ -7425,30 +7424,28 @@ const casaVitini = {
 
                                 const botonDescuentosCompatibles = document.createElement("div")
                                 botonDescuentosCompatibles.classList.add(
-                                    "borderRadius8",
-                                    "backgroundGrey1",
                                     "comportamientoBoton",
-                                    "padding8"
+                                    "botonV1",
+                                    "width100"
                                 )
                                 botonDescuentosCompatibles.innerText = "Descuentos compatibles"
                                 panelBotones.appendChild(botonDescuentosCompatibles)
 
                                 const botonSobreControlDePrecios = document.createElement("div")
                                 botonSobreControlDePrecios.classList.add(
-                                    "borderRadius8",
-                                    "backgroundGrey1",
                                     "comportamientoBoton",
-                                    "padding8"
+                                    "botonV1",
+                                    "width100"
                                 )
                                 botonSobreControlDePrecios.innerText = "Sobre control de precios"
+                                botonSobreControlDePrecios.addEventListener("click", this.componentesUI.sobreControlPrecios.arranque)
                                 panelBotones.appendChild(botonSobreControlDePrecios)
 
                                 const botonReconstruirTotal = document.createElement("div")
                                 botonReconstruirTotal.classList.add(
-                                    "borderRadius8",
-                                    "backgroundGrey1",
                                     "comportamientoBoton",
-                                    "padding8"
+                                    "botonV1",
+                                    "width100"
                                 )
                                 botonReconstruirTotal.innerText = "Reconstruir total"
                                 panelBotones.appendChild(botonReconstruirTotal)
@@ -7602,6 +7599,96 @@ const casaVitini = {
 
                                         contenedorOfertas.appendChild(contenedorOferta)
                                     })
+                                }
+                            },
+                            sobreControlPrecios: {
+                                arranque: function () {
+
+                                    const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada({
+                                        alineacion: "arriba"
+                                    })
+                            
+                                    document.querySelector("main").appendChild(ui)
+                                    const contenedor = ui.querySelector("[componente=contenedor]")
+                                    const botonCancelar = document.createElement("div")
+                                    botonCancelar.classList.add(
+                                        "botonV1",
+                                        "comportamientoBoton"
+                                    )
+                                    botonCancelar.innerText = "Cerrar y volver a la reserva"
+                                    botonCancelar.addEventListener("click", () => {
+                                        return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                    })
+                                    contenedor.appendChild(botonCancelar)
+
+                                    const navegacion = document.createElement("div")
+                                    navegacion.classList.add(
+                                        "flexHorizontal",
+                                        "gap6",
+                                        "flextJustificacion_center",
+                                    )
+                                    contenedor.appendChild(navegacion)
+
+                                    const botonPorTotal = document.createElement("div")
+                                    botonPorTotal.classList.add(
+                                        "botonV1",
+                                        "comportamientoBoton",
+                                        "width100",
+                                    )
+                                    botonPorTotal.innerText = "Por total"
+                                    navegacion.appendChild(botonPorTotal)
+
+                                    const botonPorApartamento = document.createElement("div")
+                                    botonPorApartamento.classList.add(
+                                        "botonV1",
+                                        "comportamientoBoton",
+                                        "width100",
+                                    )
+                                    botonPorApartamento.innerText = "Por apartamento"
+                                    navegacion.appendChild(botonPorApartamento)
+
+
+                                    const botonPorDia = document.createElement("div")
+                                    botonPorDia.classList.add(
+                                        "botonV1",
+                                        "comportamientoBoton",
+                                        "width100",
+                                    )
+                                    botonPorDia.innerText = "Por dia"
+                                    navegacion.appendChild(botonPorDia)
+
+                                    const seccion = document.createElement("div")
+                                    seccion.classList.add(
+                                        "maxWidth1280px",
+                                        "width100",
+                                        "padding8",
+                                        "borderRadius12"
+                                    )
+                                    seccion.setAttribute("contenedor","SobreContro")
+                                    seccion.innerText = "Selecciona en que parte de los totales quieres insertar un sobre control de precios. Existe una jearquia en los sobre controles de precios. Puedes añadir un sobrecontrol de precios al total de la reserva pero no podras poner otro sobre control. Puedes poner un sobre control de precio al total del apartamento pero no podra poner un sobre control de precios al dia donde se encuentre este apartamento, esto es debido a que el total del a reserva es la suma de los totales por apartamento. Luego las suma de los totales del apartamento, es la suma de los precios de los apartamentos de todos los dias."
+
+                                    contenedor.appendChild(seccion)
+
+                                },
+                                componentesUI: {
+                                    porTotal: () => {
+
+
+                                        
+
+
+
+
+
+
+
+
+
+
+                                    }
+                                },
+                                confirmar: () => {
+
                                 }
                             }
                         }
@@ -17321,7 +17408,7 @@ const casaVitini = {
                 selectorTipoOferta: () => {
 
                     const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
-                    const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+                    const constructor = pantallaInmersiva.querySelector("[componente=contenedor]")
                     const destino = pantallaInmersiva.querySelector("[destino=inyector]")
 
                     const tituloUI = document.createElement("p")

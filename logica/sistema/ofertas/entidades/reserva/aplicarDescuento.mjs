@@ -34,15 +34,12 @@ export const aplicarDescuento = async (data) => {
             const tipoDescuento = descuentos?.tipoDescuento
             const autorizacion = oferta?.autorizacion
             const nombreOferta = oferta?.oferta?.nombreOferta
-            console.log("autorizacion", autorizacion)
-
+            contenedorOfertas.push(oferta)
 
             if (origen === "porCondicion" && autorizacion !== "aceptada") {
-                console.log("no aceptada")
                 continue
             }
             if (tipoDescuento === "totalNeto") {
-                console.log("aqui")
                 perfil_totalNeto({
                     ofertaUID,
                     oferta,
@@ -53,9 +50,7 @@ export const aplicarDescuento = async (data) => {
                     contenedorPorTotal,
                     estructura
                 })
-            }
-
-            else if (tipoDescuento === "individualPorApartamento") {
+            } else if (tipoDescuento === "individualPorApartamento") {
                 await perfil_individualPorApartamento({
                     descuentos,
                     nombreOferta,
@@ -102,6 +97,9 @@ export const aplicarDescuento = async (data) => {
                         descuentos,
                     })
                 }
+            } else {
+                const error = "No se reconoce le tipoDescuento en aplicarDescuento"
+                throw new Error(error)
             }
         }
         const totalDescuento = estructura.global.totales.totalDescuento

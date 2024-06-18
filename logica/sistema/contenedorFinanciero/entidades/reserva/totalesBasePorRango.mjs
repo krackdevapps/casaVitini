@@ -125,9 +125,9 @@ export const totalesBasePorRango = async (data) => {
         totales.totalNeto = new Decimal("0.00")
         totales.totalFinal = "0.00"
 
-        Object.entries(desglosePorApartamento).forEach(([apartamentoIDV, totalPorApartamento]) => {
-            const totalNetoPorApartmento = totalPorApartamento.totalNeto
-            totalPorApartamento.precioMedioNetoNoche = new Decimal(totalNetoPorApartmento).div(diasArray.length).toDecimalPlaces(2).toFixed(2);
+        Object.entries(desglosePorApartamento).forEach(([apartamentoIDV, detallesApartamento]) => {
+            const totalNetoPorApartmento = detallesApartamento.totalNeto
+            detallesApartamento.precioMedioNetoNoche = new Decimal(totalNetoPorApartmento).div(diasArray.length).toDecimalPlaces(2).toFixed(2);
             const totalNeto = totales.totalNeto
             estructura.global.totales.totalNeto = totalNeto.plus(totalNetoPorApartmento)
         })

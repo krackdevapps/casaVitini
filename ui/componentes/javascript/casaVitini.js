@@ -6550,20 +6550,30 @@ const casaVitini = {
                 contenedorDesgloseTotales.appendChild(totalesUI)
                 selectorDestino.appendChild(contenedorDesgloseTotales)
             },
-            pantallaInmersivaPersonalizada: () => {
+            pantallaInmersivaPersonalizada: (data) => {
+
+                const alineacion = data?.alineacion
                 document.body.style.overflow = 'hidden';
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                 const pantallaInmersivaPersonalizadaUI = document.createElement("div")
                 pantallaInmersivaPersonalizadaUI.setAttribute("class", "advertenciaInmersiva")
                 pantallaInmersivaPersonalizadaUI.setAttribute("componente", "advertenciaInmersiva")
+                if (alineacion === "arriba") {
+                    pantallaInmersivaPersonalizadaUI.classList.add("flextJustificacion_arriba")
+                    console.log("si")
+                } else {
+                    pantallaInmersivaPersonalizadaUI.classList.add("flextJustificacion_center")
+                    console.log("no")
+                }
                 pantallaInmersivaPersonalizadaUI.setAttribute("instanciaUID", instanciaUID)
                 const contenedorAdvertenciaInmersiva = document.createElement("div")
                 contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
                 const contenidoAdvertenciaInmersiva = document.createElement("div")
                 contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
+
                 contenidoAdvertenciaInmersiva.setAttribute("contenedor", "contenidoAdvertenciaInmersiva")
                 contenidoAdvertenciaInmersiva.setAttribute("destino", "inyector")
-                contenidoAdvertenciaInmersiva.setAttribute("componente", "constructor")
+                contenidoAdvertenciaInmersiva.setAttribute("componente", "contenedor")
 
                 contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
                 pantallaInmersivaPersonalizadaUI.appendChild(contenedorAdvertenciaInmersiva)

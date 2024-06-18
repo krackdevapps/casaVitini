@@ -8,8 +8,9 @@ import { obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasP
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
 import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
+import { actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID.mjs"
 
-export const insertarDescuentoPorCompatible = async (entrada) => {
+export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
     const mutex = new Mutex()
     try {
         const session = entrada.session
@@ -36,6 +37,12 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
+
+        const nuevaAutorizacion = entrada.body.nuevaAutorizacion
+        if (nuevaAutorizacion !== "aceptada" && nuevaAutorizacion !== "rechazada") {
+            const error = "El campo nuevaAutorizacion solo puede ser aceptada o rechazada"
+            throw new Error(error)
+        }
         mutex.acquire()
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
@@ -48,27 +55,33 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
         await obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion({
             reservaUID,
             ofertaUID,
-            errorSi: "existe"
+            errorSi: "noExiste"
         })
         const fechaEntradaReserva = reserva.fechaEntrada
         const fechaSalidaReserva = reserva.fechaSalida
         const fechaCreacion_simple = reserva.fechaCreacion_simple
-        // validar aqui que la oferta por condicion no esta ya en la instantanea
         const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
         const apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
             return detallesApartamento.apartamentoIDV
         })
-        // Desde aqui se envia esto mas el ofertaUID
+
+        await actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID({
+            ofertaUID,
+            reservaUID,
+            nuevaAutorizacion
+        })
+
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
-                    tipoOperacion: "insertarDescuentoCompatibleConReserva",
+                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
                     reservaUID: reservaUID,
-                    ofertaUID: ofertaUID,
                     fechaEntrada: fechaEntradaReserva,
                     fechaSalida: fechaSalidaReserva,
                     fechaActual: fechaCreacion_simple,
                     apartamentosArray: apartamentosArray,
+                    nuevaAutorizacion: nuevaAutorizacion,
+                    ofertaUID: ofertaUID
                 }
             },
             capaImpuestos: "si",
