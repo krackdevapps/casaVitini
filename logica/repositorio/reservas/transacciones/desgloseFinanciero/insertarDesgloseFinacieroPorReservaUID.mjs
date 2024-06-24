@@ -6,6 +6,8 @@ export const insertarDesgloseFinacieroPorReservaUID = async (data) => {
         const instantaneaNoches = desgloseFinanciero.entidades.reserva.desglosePorNoche
         const instantaneaOfertasPorCondicion = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porCondicion)
         const instantaneaOfertasPorAdministrador = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador)
+        const instantaneaImpuestos = JSON.stringify(desgloseFinanciero.impuestos)
+
         const reservaUID = data.reservaUID
         const consulta = `
         INSERT INTO
@@ -15,9 +17,10 @@ export const insertarDesgloseFinacieroPorReservaUID = async (data) => {
         "instantaneaNoches",
         "instantaneaOfertasPorCondicion",
         "instantaneaOfertasPorAdministrador",
+        "instantaneaImpuestos",
         "reservaUID"
         )
-        VALUES ($1,$2,$3,$4,$5)
+        VALUES ($1,$2,$3,$4,$5,$6)
         RETURNING *
         `
         const parametros = [
@@ -25,6 +28,7 @@ export const insertarDesgloseFinacieroPorReservaUID = async (data) => {
             instantaneaNoches,
             instantaneaOfertasPorCondicion,
             instantaneaOfertasPorAdministrador,
+            instantaneaImpuestos,
             reservaUID,
         ]
         const resuelve = await conexion.query(consulta, parametros);

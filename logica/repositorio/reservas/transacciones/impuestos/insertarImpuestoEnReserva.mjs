@@ -4,14 +4,12 @@ export const insertarImpuestoEnReserva = async (data) => {
     try {
 
         const reservaUID = data.reservaUID
-        const impuestoNombre = data.impuestoNombre
-        const tipoImpositivo = data.tipoImpositivo
-        const tipoValor = data.tipoValor
-        const calculoImpuestoPorcentaje = data.calculoImpuestoPorcentaje
+        const instantaneaImpuestos = data.instantaneaImpuestos
+
 
         const consulta =`
         INSERT INTO
-        "reservaImpuestos"
+        "reservaFinanciero"
         (
         "reservaUID",
         "nombreImpuesto",

@@ -12,6 +12,7 @@ export const obtenerOfertasPorRangoPorEstado = async (data) => {
         "ofertaUID",
         "nombreOferta",
         "entidadIDV",
+        "estadoIDV",
         to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
         to_char("fechaFinal", 'YYYY-MM-DD') as "fechaFinal", 
         "condicionesArray",

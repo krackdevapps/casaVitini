@@ -5,58 +5,56 @@ import { contructorEstructuraDescuentosReserva } from "../../../ofertas/entidade
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
 import { actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID.mjs";
+import { aplicarImpuestos } from "./aplicarImpuestos.mjs";
+import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
     try {
         const estructura = data.estructura
-        const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: data.fechaEntrada,
-            nombreCampo: "La fecha de entrada del actualizarDesgloseFinanciero"
-        })
 
-        const fechaSalida = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: data.fechaSalida,
-            nombreCampo: "La fecha de salida del actualizarDesgloseFinanciero"
-        })
-
-        await validadoresCompartidos.fechas.validacionVectorial({
-            fechaEntrada_ISO: data.fechaEntrada,
-            fechaSalida_ISO: data.fechaSalida,
-            tipoVector: "diferente"
-        })
-
-        const apartamentosArray = validadoresCompartidos.tipos.array({
-            array: data.apartamentosArray,
-            nombreCampo: "El array de apartamentos en el actualizarDesgloseFinanciero",
-            filtro: "soloCadenasIDV",
-            sePermitenDuplicados: "no"
-        })
+        // const apartamentosArray = validadoresCompartidos.tipos.array({
+        //     array: data.apartamentosArray,
+        //     nombreCampo: "El array de apartamentos en el actualizarDesgloseFinanciero",
+        //     filtro: "soloCadenasIDV",
+        //     sePermitenDuplicados: "no"
+        // })
         const reservaUID = validadoresCompartidos.tipos.numero({
-            number: data?.reservaUID ?? "",
-            nombreCampo: "El campo de reservaUID dentro dle actualizarDesgloseFinanciero",
+            number: data.reservaUID,
+            nombreCampo: "El campo de reservaUID dentro dle actualizarDesgloseFinancieroDesdeInstantaneas",
             filtro: "numeroSimple",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
-        const ofertaUID = data.ofertaUID
-        const nuevaAutorizacion = data.nuevaAutorizacion
-        if (nuevaAutorizacion !== "aceptada" && nuevaAutorizacion !== "rechazada") {
-            const error = "El campo nuevaAutorizacion solo puede ser aceptada o rechazada actualizarDesgloseFinancieroDesdeInstantaneas"
-            throw new Error(error)
-        }
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
+        const fechaEntrada = reserva.fechaEntrada
+        const fechaSalida = reserva.fechaSalida
+
+        // const nuevaAutorizacion = data.nuevaAutorizacion
+        // if (nuevaAutorizacion !== "aceptada" && nuevaAutorizacion !== "rechazada") {
+        //     const error = "El campo nuevaAutorizacion solo puede ser aceptada o rechazada actualizarDesgloseFinancieroDesdeInstantaneas"
+        //     throw new Error(error)
+        // }
+
+        const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
+        const apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
+            return detallesApartamento.apartamentoIDV
+        })
 
         const desgloseFinancieroReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
         const instantaneaNoches = desgloseFinancieroReserva.instantaneaNoches
         const instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion ?? []
         const instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador ?? []
-
+        // Obtener el sobreControl completo y pasarlo a totalesBasesPorRAngo
         await totalesBasePorRango({
+            reservaUID,
             estructura,
             instantaneaNoches,
             fechaEntrada_ISO: fechaEntrada,
             fechaSalida_ISO: fechaSalida,
             apartamentosArray
         })
+
         constructorEstructuraDescuentos(estructura)
         contructorEstructuraDescuentosReserva(estructura)
 
@@ -82,6 +80,19 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
             fechaEntradaReserva_ISO: fechaEntrada,
             fechaSalidaReserva_ISO: fechaSalida
         })
+
+        const capaImpuestos = data.capaImpuestos
+        if (capaImpuestos !== "si" && capaImpuestos !== "no") {
+            const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos en si o no"
+            throw new Error(error)
+        }
+        if (capaImpuestos === "si") {
+            await aplicarImpuestos({
+                estructura,
+                reservaUID,
+                origen: "reserva"
+            })
+        }
     } catch (error) {
         throw error
     }

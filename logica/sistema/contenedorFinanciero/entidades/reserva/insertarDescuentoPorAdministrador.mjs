@@ -6,6 +6,7 @@ import { aplicarDescuentosPersonalizados } from "../../../ofertas/entidades/rese
 import { obtenerOfertasPorEntidadPorOfertaUID } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorEntidadPorOfertaUID.mjs";
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
+import { aplicarImpuestos } from "./aplicarImpuestos.mjs";
 
 export const insertarDescuentoPorAdministrador = async (data) => {
     try {
@@ -89,6 +90,20 @@ export const insertarDescuentoPorAdministrador = async (data) => {
             fechaEntradaReserva_ISO: fechaEntrada,
             fechaSalidaReserva_ISO: fechaSalida
         })
+        const capaImpuestos = data.capaImpuestos
+        if (capaImpuestos !== "si" && capaImpuestos !== "no") {
+            const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos en si o no"
+            throw new Error(error)
+        }
+        if (capaImpuestos === "si") {
+            await aplicarImpuestos({
+                estructura,
+                origen: "reserva",
+                reservaUID
+            })
+        }
+
+
     } catch (error) {
         throw error
     }

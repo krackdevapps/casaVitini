@@ -190,12 +190,9 @@ export const validadoresCompartidos = {
     fechas: {
         validarFecha_ISO: async (configuracion) => {
             try {
-
                 if (!configuracion.hasOwnProperty("nombreCampo")) {
                     throw new Error("El validador de fechas ISO mal configurado. no encuentra la llave nombreCampo en el objeto");
                 }
-
-
                 if (!configuracion.hasOwnProperty("fecha_ISO")) {
                     throw new Error("El validador de fechas ISO mal configurado. no encuentra la llave fecha_ISO en el objeto");
                 }

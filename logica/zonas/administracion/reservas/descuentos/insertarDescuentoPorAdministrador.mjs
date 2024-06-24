@@ -57,6 +57,7 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
                     fechaSalida: fechaSalidaReserva,
                     fechaActual: fechaCreacion_simple,
                     apartamentosArray: apartamentosArray,
+                    capaImpuestos: "si"
                 }
             },
             capaImpuestos: "si",

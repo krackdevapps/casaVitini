@@ -2585,7 +2585,7 @@
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reservaDetallesBloqueFecha {
-    background-color: rgba(255, 255, 255, 0.3);
+    /* background-color: rgba(255, 255, 255, 0.3); */
     display: flex;
     border-radius: 12px;
     padding: 4px;
@@ -2986,9 +2986,6 @@
     }
 }
 
-.paddgin6 {
-    padding: 6px;
-}
 
 [zonaCSS="miCasa"] .opcionMicasa {
     border-radius: 12px;
@@ -4233,9 +4230,9 @@
     grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
     padding: 0px;
-    justify-items: stretch;
     justify-content: center;
     align-content: center;
+    align-items: start;
 }
 
 [zonaCSS="miCasa"] .reserva_resumen_desglose_pago_titulo {
@@ -4317,6 +4314,7 @@
     align-content: column;
     gap: 6px;
     flex-direction: column;
+    cursor: default;
 }
 
 
@@ -13727,8 +13725,12 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 
-
-
+.textSize16 {
+    font-size: 16px;
+}
+.textSize26 {
+    font-size: 16px;
+}
 .botonV1:hover {
     background: rgba(255, 255, 255, 0.7);
 
@@ -13817,6 +13819,10 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 6px;
 }
 
+.borderRadius6 {
+    border-radius: 6px;
+}
+
 .borderRadius8 {
     border-radius: 8px;
 }
@@ -13833,6 +13839,20 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(0, 0, 0, 0.1);
 }
 
+.selectorLista {
+    padding: 10px;
+    border-radius: 12px;
+    outline: none;
+    border: none;
+    appearance: none;
+    background: rgb(255 255 255 / 0.4);
+
+}
+
+.backgroundWhite5 {
+    background: rgba(255, 255, 255, 0.5);
+}
+
 .maxWidth1280px {
     max-width: 1280px;
 }
@@ -13845,14 +13865,52 @@ grid-template-columns: 0.5fr 1.5fr;
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.borderWhite1 {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.selecionAzul {
+    color: white;
+    background: blue;
+}
+
 .comportamientoBoton:hover {
     transition: all 250ms;
     background: rgba(0, 0, 0, 0.3);
 }
-
+[contenedor=financiero] .comportamientoBotonApartamento:hover {
+    transition: all 500ms;
+    background: rgba(0, 0, 0, 0.1);
+}
 .blur {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
+}
+
+.padding6 {
+    padding: 6px;
+}
+
+.paddinHorizontal6 {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.paddinVertical6 {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.paddinTop6 {
+    padding-top: 6px;
+}
+
+.padding10 {
+    padding: 10px;
+}
+
+.padding12 {
+    padding: 12px;
 }
 
 .botonV1 {
@@ -13868,4 +13926,68 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
     justify-content: center;
     align-items: center;
+}
+
+.botonV2 {
+    padding: 8px;
+    border-radius: 6px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.limpiezaBotonA {
+    text-decoration: none;
+    cursor: default;
+    color: black;
+}
+
+
+[contenedor="financiero"] .contenedorNavegador {
+    display: grid;
+    grid-template-columns: repeat(1fr, auto);
+    grid-template-rows: 1fr;
+}
+
+[contenedor="financiero"] .navegador {
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.5);
+    user-select: none;
+    -webkit-user-select: none;
+    padding: 4px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 4px;
+    grid-row-gap: 4px;
+    width: 100%;
+}
+
+@media (max-width: 720px) {
+    [contenedor="financiero"] .navegador {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: 2fr;
+        grid-column-gap: 4px;
+        grid-row-gap: 4px;
+    }
+}
+
+
+.campoTexto {
+    outline: none;
+    border: none;
+    padding: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    background: rgb(255 255 255 / 0.4);
+    text-transform: uppercase;
+    border-radius: 12px;
 }

@@ -119,7 +119,7 @@ export const selectorOfertasPorCondiciones = async (ofertasEncontradasPorFecha) 
                     if (descuentoAplicadoA === "totalNetoReserva") {
                         ofertaEstructuraFinal.tipoDescuento = tipoDescuento
                         ofertaEstructuraFinal.cantidad = cantidad
-                        const formateoApartamentos = fusionaArrayConComaYUltimaConYGriega(apartamentosUIOferta);
+                        const formateoApartamentos =  fusionaArrayConComaYUltimaConYGriega(apartamentosUIOferta);
                         let definicionUI
                         if (apartamentosUIOferta.length > 1) {
                             definicionUI = `Oferta aplicada al neto de la reserva por contener los apartamentos: ${formateoApartamentos}`

@@ -6,6 +6,7 @@ import { obtenerOfertasPorEntidadPorOfertaUID } from "../../../../repositorio/of
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
 import { selectorPorCondicion } from "../../../ofertas/entidades/reserva/selectorPorCondicion.mjs";
+import { aplicarImpuestos } from "./aplicarImpuestos.mjs";
 
 export const insertarDescuentoCompatibleConReserva = async (data) => {
     try {
@@ -89,6 +90,12 @@ export const insertarDescuentoCompatibleConReserva = async (data) => {
             fechaEntradaReserva_ISO: fechaEntrada,
             fechaSalidaReserva_ISO: fechaSalida
         })
+
+        await aplicarImpuestos({
+            estructura,
+            origen: "reserva"
+        })
+
     } catch (error) {
         throw error
     }

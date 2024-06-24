@@ -101,9 +101,10 @@ export const insertarReserva = async (reserva) => {
                     capaOfertas: "si",
                     zonasArray: ["global", "publica"],
                     capaDescuentosPersonalizados: "no",
+                    capaImpuestos: "si"
+
                 }
             },
-            capaImpuestos: "si"
         })
         await insertarDesgloseFinacieroPorReservaUID({
             reservaUID,

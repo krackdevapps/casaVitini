@@ -6,7 +6,7 @@ import { actualizarDesgloseFinancieroDesdeInstantaneas } from "./actualizarDesgl
 
 export const procesadorReserva = async (data) => {
     try {
-        const tipoOperacion = data?.tipoOperacion
+         const tipoOperacion = data?.tipoOperacion
         if (tipoOperacion === "crearDesglose") {
             await crearDesgloseFinanciero(data)
         } else if (tipoOperacion === "actualizarDesgloseFinancieroDesdeInstantaneas") {

@@ -7,7 +7,6 @@ export const actualizarDesgloseFinacieroPorReservaUID = async (data) => {
         const instantaneaNoches = desgloseFinanciero.entidades.reserva.desglosePorNoche
         const instantaneaOfertasPorCondicion = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porCondicion)
         const instantaneaOfertasPorAdministrador = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador)
-
         const preciosAlterados = JSON.stringify([])
         const reservaUID = data.reservaUID
         const consulta = `

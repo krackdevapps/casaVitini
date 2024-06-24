@@ -7,6 +7,7 @@ import { comportamientosPorDias } from '../../comportamientoPrecios/comportamien
 import { aplicarCalculoDelComportamientoPorRango } from '../../comportamientoPrecios/aplicarCalculoDelComportamientoPorRango.mjs';
 import { aplicarCalculoDelComportamientoPorDias } from '../../comportamientoPrecios/aplicarCalculoDelComportamientoPorDias.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
+import { aplicarSobreControl } from './aplicarSobreControl.mjs';
 Decimal.set({ precision: 1000 });
 export const totalesBasePorRango = async (data) => {
     try {
@@ -23,7 +24,6 @@ export const totalesBasePorRango = async (data) => {
         if (!contenedorEntidadtes.hasOwnProperty("reserva")) {
             estructura.entidades.reserva = {}
         }
-
         const reservaEntidad = contenedorEntidadtes.reserva
         reservaEntidad.fechaEntrada = fechaEntrada_ISO
         reservaEntidad.fechaSalida = fechaEntrada_ISO
@@ -37,10 +37,10 @@ export const totalesBasePorRango = async (data) => {
         if (instantaneaNoches) {
             reservaEntidad.desglosePorNoche = instantaneaNoches
         }
+
         const desglosePorNoche = reservaEntidad.desglosePorNoche
         const desglosePorApartamento = reservaEntidad.desglosePorApartamento
-        
-   
+
         const indiceDias = await constructorIndiceDias({
             fechaEntrada_ISO: fechaEntrada_ISO,
             fechaSalida_ISO: fechaSalida_ISO
@@ -55,6 +55,7 @@ export const totalesBasePorRango = async (data) => {
             nombreDiasAgrupados: indiceDias.nombresDiasAgrupados,
             arrayApartamentos: apartamentosArray
         })
+        console.log("estructura", estructura)
 
         for (const [fecha_ISO, detallesDelDia] of Object.entries(desglosePorNoche)) {
             if (diasArray.includes(fecha_ISO)) {
@@ -68,45 +69,55 @@ export const totalesBasePorRango = async (data) => {
                 delete desglosePorNoche[fecha_ISO]
             }
         }
+
         for (const fecha_ISO of diasArray) {
-            if (desglosePorNoche.hasOwnProperty(fecha_ISO)) {
-             //   continue
+            if (!desglosePorNoche.hasOwnProperty(fecha_ISO)) {
+                desglosePorNoche[fecha_ISO] = {
+                    precioNetoNoche: "0.00",
+                    apartamentosPorNoche: {}
+                }
             }
-            const totalesPorNoche = {
-                //fechaDiaConNoche: fecha_ISO,
-                precioNetoNoche: new Decimal("0"),
-                apartamentosPorNoche: {}
-            }
+            const noche = desglosePorNoche[fecha_ISO]
             for (const apartamentoIDV of apartamentosArray) {
 
                 const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
                 const precioBase = perfilPrecio.precio
 
-                const apartamentosPorNoche = totalesPorNoche.apartamentosPorNoche
-                if (!apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {
+                const apartamentosPorNoche = noche.apartamentosPorNoche
+                if (apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {
+                    const reservaUID = data.reservaUID
+                    const netoApartamento = apartamentosPorNoche[apartamentoIDV].precioNetoApartamento
+                    apartamentosPorNoche[apartamentoIDV].precioNetoApartamento = await aplicarSobreControl({
+                        reservaUID,
+                        netoApartamento: netoApartamento,
+                        fechaNoche: fecha_ISO,
+                        apartamentoIDV: apartamentoIDV
+                    })
+
+                } else {
                     apartamentosPorNoche[apartamentoIDV] = {
                         apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI,
                         precioNetoApartamento: precioBase
                     }
+                    const apartamentoEstructura = apartamentosPorNoche[apartamentoIDV]
+                    apartamentoEstructura.precioNetoApartamento = await aplicarCalculoDelComportamientoPorRango({
+                        comportamientosPorRangoFormateados,
+                        apartamentoIDV,
+                        fechaDiaConNoche: fecha_ISO,
+                        precioNetoApartamento: apartamentoEstructura.precioNetoApartamento
+                    })
+                    apartamentoEstructura.precioNetoApartamento = await aplicarCalculoDelComportamientoPorDias({
+                        comportamientosPorDiasFormateados,
+                        apartamentoIDV,
+                        fechaDiaConNoche: fecha_ISO,
+                        precioNetoApartamento: apartamentoEstructura.precioNetoApartamento,
+                        indiceDias
+                    })
                 }
 
-                const apartamentoEstructura = apartamentosPorNoche[apartamentoIDV]
-                apartamentoEstructura.precioNetoApartamento = await aplicarCalculoDelComportamientoPorRango({
-                    comportamientosPorRangoFormateados,
-                    apartamentoIDV,
-                    fechaDiaConNoche: fecha_ISO,
-                    precioNetoApartamento: apartamentoEstructura.precioNetoApartamento
-                })
-                apartamentoEstructura.precioNetoApartamento = await aplicarCalculoDelComportamientoPorDias({
-                    comportamientosPorDiasFormateados,
-                    apartamentoIDV,
-                    fechaDiaConNoche: fecha_ISO,
-                    precioNetoApartamento: apartamentoEstructura.precioNetoApartamento,
-                    indiceDias
-                })
-                const precioNetoApartamento = new Decimal(apartamentoEstructura.precioNetoApartamento)
+                const precioNetoApartamento = new Decimal(apartamentosPorNoche[apartamentoIDV].precioNetoApartamento)
+                noche.precioNetoNoche = new Decimal(noche.precioNetoNoche).plus(precioNetoApartamento).toFixed(2)
 
-                totalesPorNoche.precioNetoNoche = totalesPorNoche.precioNetoNoche.plus(precioNetoApartamento)
                 if (!desglosePorApartamento.hasOwnProperty(apartamentoIDV)) {
                     desglosePorApartamento[apartamentoIDV] = {
                         apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI,
@@ -116,11 +127,7 @@ export const totalesBasePorRango = async (data) => {
                 const totalPorApartamento = desglosePorApartamento[apartamentoIDV].totalNeto
                 desglosePorApartamento[apartamentoIDV].totalNeto = new Decimal(totalPorApartamento).plus(precioNetoApartamento).toFixed(2)
             }
-            totalesPorNoche.precioNetoNoche = totalesPorNoche.precioNetoNoche.toFixed(2)
-            desglosePorNoche[fecha_ISO] = totalesPorNoche
         }
-
-
         const totales = estructura.global.totales
         totales.totalNeto = new Decimal("0.00")
         totales.totalFinal = "0.00"

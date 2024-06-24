@@ -8,6 +8,7 @@ import { aplicarDescuentosPersonalizados } from "../../../ofertas/entidades/rese
 import { aplicarDescuento } from "../../../ofertas/entidades/reserva/aplicarDescuento.mjs";
 import { contructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/reserva/contructorEstructuraDescuentosReserva.mjs";
 import { constructorEstructuraDescuentos } from "../../../ofertas/global/contructorEstructuraDescuentos.mjs";
+import { aplicarImpuestos } from "./aplicarImpuestos.mjs";
 
 export const crearDesgloseFinanciero = async (data) => {
     try {
@@ -127,6 +128,20 @@ export const crearDesgloseFinanciero = async (data) => {
                 estructura: estructura,
                 fechaEntradaReserva_ISO: fechaEntrada,
                 fechaSalidaReserva_ISO: fechaSalida
+            })
+        }
+
+
+
+        const capaImpuestos = data.capaImpuestos
+        if (capaImpuestos !== "si" && capaImpuestos !== "no") {
+            const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos en si o no"
+            throw new Error(error)
+        }
+        if (capaImpuestos === "si") {
+            await aplicarImpuestos({
+                estructura,
+                origen: "administracion"
             })
         }
     } catch (error) {

@@ -18,7 +18,6 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
         IDX.empleados()
         IDX.control()
 
-
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reserva (reservaUID)",
@@ -63,15 +62,14 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
             entidades: {
                 reserva: {
                     tipoOperacion: "insertarDescuentoCompatibleConReserva",
-                    reservaUID: reservaUID,
-                    ofertaUID: ofertaUID,
+                    reservaUID,
+                    ofertaUID,
                     fechaEntrada: fechaEntradaReserva,
                     fechaSalida: fechaSalidaReserva,
                     fechaActual: fechaCreacion_simple,
                     apartamentosArray: apartamentosArray,
                 }
-            },
-            capaImpuestos: "si",
+            }
         })
         // Ojo por que sobrescribe las ofertas existentes, debe de añadir en el array de ofertas por cocndicion otra mas
         await actualizarDesgloseFinacieroPorReservaUID({

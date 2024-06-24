@@ -4,6 +4,7 @@ import { constructorEstructuraDescuentos } from "../../../ofertas/global/contruc
 import { contructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/reserva/contructorEstructuraDescuentosReserva.mjs";
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
+import { aplicarImpuestos } from "./aplicarImpuestos.mjs";
 export const eliminarDescuento = async (data) => {
     try {
         const estructura = data.estructura
@@ -112,7 +113,13 @@ export const eliminarDescuento = async (data) => {
             fechaSalidaReserva_ISO: fechaSalida
         })
 
-
+        const capaImpuestos = data.capaImpuestos
+        if (capaImpuestos === "si") {
+            await aplicarImpuestos({
+                estructura,
+                origen: "reserva"
+            })
+        }
     } catch (error) {
         throw error
     }
