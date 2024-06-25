@@ -1,8 +1,8 @@
 import Decimal from 'decimal.js';
 import { obtenerDesgloseFinancieroPorReservaUID } from '../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs';
 import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../../../repositorio/impuestos/obtenerImpuestosPorAplicacionIDVPorEstado.mjs';
-import { validadoresCompartidos } from '../../../validadores/validadoresCompartidos.mjs';
-Decimal.set({ precision: 50 });
+const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
+Decimal.set({ precision: precisionDecimal });
 export const aplicarImpuestos = async (data) => {
     try {
         const estructura = data.estructura

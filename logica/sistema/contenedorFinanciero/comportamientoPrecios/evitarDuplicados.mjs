@@ -4,6 +4,7 @@ import { obtenerNombreComportamientoPorNombreUI } from "../../../repositorio/com
 import { obtenerComportamientosDistintosPorNombreUI } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosDistintosPorNombreUI.mjs"
 import { obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoUID.mjs"
 import { obtenerComportamientosDistintosPorTipoIDVPorDiasArray } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoIDVPorDiasArray.mjs"
+import { obtenerComportamientosPorAntelacionPorTipo } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorAntelacionPorTipo.mjs"
 import { obtenerComportamientosPorRangoPorTipoIDV } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs"
 import { obtenerComportamientosPorTipoIDVPorDiasArray } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorTipoIDVPorDiasArray.mjs"
 
@@ -14,7 +15,7 @@ export const evitarDuplicados = async (comportamiento) => {
         const contenedor = comportamiento.contenedor
         const tipoIDV = contenedor.tipoIDV
         const transaccion = comportamiento.transaccion
-   
+
         if (transaccion !== "crear" && transaccion !== "actualizar") {
             const error = `El sistema de evitar duplicados necesita un tipo de transaccion para ver si es un operacion de creacion o actualizacion`
             throw new Error(error)
@@ -36,8 +37,8 @@ export const evitarDuplicados = async (comportamiento) => {
                 throw new Error(mensajeNombreRepetido);
             }
         }
-       
-            if (tipoIDV === "porRango") {
+
+        if (tipoIDV === "porRango" || tipoIDV === "porAntelacion") {
             const fechaInicio_ISO = contenedor.fechaInicio
             const fechaFinal_ISO = contenedor.fechaFinal
 
@@ -46,15 +47,21 @@ export const evitarDuplicados = async (comportamiento) => {
                 const comportamientosPorRango = await obtenerComportamientosPorRangoPorTipoIDV({
                     fechaInicio_ISO: fechaInicio_ISO,
                     fechaFinal_ISO: fechaFinal_ISO,
-                    tipoIDV: tipoIDV
+                    tipoIDV: "porRango"
                 })
                 comportamientosEnElRango.push(...comportamientosPorRango)
+                const comportamientosPorAntelacion = await obtenerComportamientosPorAntelacionPorTipo({
+                    fechaInicio_ISO: fechaInicio_ISO,
+                    fechaFinal_ISO: fechaFinal_ISO,
+                    tipoIDV: "porAntelacion"
+                })
+                comportamientosEnElRango.push(...comportamientosPorAntelacion)
             }
             if (transaccion === "actualizar") {
                 const comportamientosDistintosPorRango = await obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoUID({
                     fechaInicio_ISO: fechaInicio_ISO,
                     fechaFinal_ISO: fechaFinal_ISO,
-                    tipoIDV: tipoIDV,
+                    tipoIDV: "porRango",
                     comportamientoUID: comportamientoUID
                 })
                 comportamientosEnElRango.push(...comportamientosDistintosPorRango)

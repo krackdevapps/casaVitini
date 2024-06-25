@@ -9,6 +9,7 @@ import { aplicarDescuento } from "../../../ofertas/entidades/reserva/aplicarDesc
 import { contructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/reserva/contructorEstructuraDescuentosReserva.mjs";
 import { constructorEstructuraDescuentos } from "../../../ofertas/global/contructorEstructuraDescuentos.mjs";
 import { aplicarImpuestos } from "./aplicarImpuestos.mjs";
+import { constructorInstantaneaNoches } from "./constructorInstantaneaNoches.mjs";
 
 export const crearDesgloseFinanciero = async (data) => {
     try {
@@ -59,6 +60,13 @@ export const crearDesgloseFinanciero = async (data) => {
             const error = "El procesador de precios esta mal configurado, necesita parametro capaDescuentosPersonalizados con un si o un no"
             throw new Error(error)
         }
+
+        await constructorInstantaneaNoches({
+            estructura,
+            fechaEntrada_ISO: fechaEntrada,
+            fechaSalida_ISO: fechaSalida,
+            apartamentosArray
+        })
 
         await totalesBasePorRango({
             estructura,

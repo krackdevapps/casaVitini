@@ -110,6 +110,7 @@ export const insertarReserva = async (reserva) => {
             reservaUID,
             desgloseFinanciero
         })
+        
         return nuevaReserva
     } catch (errorCapturado) {
         throw errorCapturado

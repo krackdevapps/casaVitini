@@ -1,7 +1,8 @@
 import Decimal from 'decimal.js';
 import { constructorObjetoEstructuraPrecioDia } from './constructorObjetoEstructuraPrecioDia.mjs';
 import { DateTime } from 'luxon';
-Decimal.set({ precision: 1000 });
+const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
+Decimal.set({ precision: precisionDecimal });
 export const constructorIndiceDias = async (data) => {
     try {
         const fechaEntrada_ISO = data.fechaEntrada_ISO
@@ -23,7 +24,7 @@ export const constructorIndiceDias = async (data) => {
                 .toLowerCase()
                 .normalize('NFD')
                 .replace(/[\u0300-\u036f]/g, '');
-                nombresDiasAgrupados.add(nombreDelDia);
+            nombresDiasAgrupados.add(nombreDelDia);
             nombresConFechas[fechaISO] = nombreDelDia
         })
         indiceDias.nombresDiasAgrupados = [...nombresDiasAgrupados]

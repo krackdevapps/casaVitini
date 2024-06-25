@@ -2,12 +2,10 @@
 
 import { estructuraDesgloseFinanciero } from "./estructuraDesgloseFinanciero.mjs"
 import { procesadorReserva } from "./entidades/reserva/procesadorReserva.mjs"
-import { aplicarImpuestos } from "./entidades/reserva/aplicarImpuestos.mjs"
 
 export const procesador = async (data) => {
+    // El procesador, solo construye el objeto contenedor del desglose financiero y lo devuelve, luego para guardar el objeto usar otro contexto.
     try {
-
-
         const estructura = estructuraDesgloseFinanciero()
         const entidades = data?.entidades || {}
         if (!entidades) {

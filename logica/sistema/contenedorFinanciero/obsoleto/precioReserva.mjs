@@ -5,7 +5,8 @@ import Decimal from 'decimal.js';
 // import { obtenerApartamentosDeLaReservaPorReservaUID } from '../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs';
 // import { calcularPrecioPorObjeto } from './calcularPrecioPorObjeto.mjs';
 // import { obtenerDesgloseFinancieroReservaPorReservaUID } from '../../repositorio/reservas/reserva/obtenerDesgloseFinancieroReservaPorReservaUID.mjs';
-Decimal.set({ precision: 100 });
+const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
+Decimal.set({ precision:precisionDecimal });
 
 export const precioReserva = async (metadatos) => {
      try {

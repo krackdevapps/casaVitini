@@ -1,13 +1,15 @@
+import _ from "lodash";
 import { conexion } from "../../../../componentes/db.mjs";
 
 export const insertarDesgloseFinacieroPorReservaUID = async (data) => {
     try {
         const desgloseFinanciero = data.desgloseFinanciero
-        const instantaneaNoches = desgloseFinanciero.entidades.reserva.desglosePorNoche
+        const instantaneaNoches = _.cloneDeep(desgloseFinanciero.entidades.reserva.instantaneaNoches);
+        delete desgloseFinanciero.entidades.reserva.instantaneaNoches
         const instantaneaOfertasPorCondicion = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porCondicion)
         const instantaneaOfertasPorAdministrador = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador)
         const instantaneaImpuestos = JSON.stringify(desgloseFinanciero.impuestos)
-
+        
         const reservaUID = data.reservaUID
         const consulta = `
         INSERT INTO

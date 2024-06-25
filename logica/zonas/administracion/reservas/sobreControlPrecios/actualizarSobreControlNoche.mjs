@@ -8,6 +8,8 @@ import { actualizarSobreControlDeLaNoche } from "../../../../repositorio/reserva
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
 import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
+import _ from 'lodash';
+
 
 export const actualizarSobreControlNoche = async (entrada) => {
     try {
@@ -104,13 +106,13 @@ export const actualizarSobreControlNoche = async (entrada) => {
             }
         })
 
-        // // Cambiar esto por actualizas
-        // await actualizarDesgloseFinacieroPorReservaUID({
-        //     desgloseFinanciero,
-        //     reservaUID
-        // })
+        await actualizarDesgloseFinacieroPorReservaUID({
+            desgloseFinanciero,
+            reservaUID
+        })
         const ok = {
             ok: {
+                ...desgloseFinanciero,
                 instantaneaNetoApartamento,
                 ...sobreControlActualizado
             }

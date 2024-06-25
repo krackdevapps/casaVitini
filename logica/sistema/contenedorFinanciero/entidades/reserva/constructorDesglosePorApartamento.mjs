@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js';
-Decimal.set({ precision: 1000 });
+const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
+Decimal.set({ precision: precisionDecimal });
 export const constructorDesglosePorApartamento = async (data) => {
     try {
         const estructuraDesglosePorApartamento = data.estructuraDesglosePorApartamento

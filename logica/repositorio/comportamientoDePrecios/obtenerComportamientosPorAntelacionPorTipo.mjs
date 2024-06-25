@@ -1,6 +1,6 @@
 import { conexion } from "../../componentes/db.mjs"
 
-export const obtenerComportamientosPorRangoPorTipoIDV = async (metadatos) => {
+export const obtenerComportamientosPorAntelacionPorTipo = async (metadatos) => {
   try {
     const fechaInicio_ISO = metadatos.fechaEntrada_ISO
     const fechaFinal_ISO = metadatos.fechaSalida_ISO
@@ -34,9 +34,12 @@ export const obtenerComportamientosPorRangoPorTipoIDV = async (metadatos) => {
             AND "contenedor"->>'tipo'= $3
             AND EXISTS
               ( SELECT 1
-               FROM jsonb_array_elements("contenedor"->'apartamentos') AS apt
-               WHERE apt->>'apartamentoIDV' = ANY($4)
-               )
+               FROM
+                  jsonb_array_elements("contenedor"->'perfilesAntelacion') AS perfil,
+                  jsonb_each(perfil -> 'apartamentos') AS apartamento
+               WHERE
+                  apartamento.key = ANY($4)
+                  )
             AND 
             "estadoIDV" = $5
               `

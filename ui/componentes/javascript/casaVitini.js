@@ -201,7 +201,6 @@ const casaVitini = {
                         //  
                     }
                     document.querySelector("[identificadorVisual=pantallaCargaDeTransicionEntreVistas]")?.remove()
-
                     try {
                         if (arranqueVistaPublica) {
                             const x = "casaVitini.ui.vistas." + arranqueVistaPublica + "()"
@@ -213,7 +212,7 @@ const casaVitini = {
 
                         }
                     } catch (error) {
-                        const info = "No existe el arranque de la vista"
+                        const info = "No existe el arranque de la vista" + error.message
                         casaVitini.ui.componentes.advertenciaInmersiva(info)
                     }
                 }
@@ -778,7 +777,7 @@ const casaVitini = {
                 if (errorCapturado.name === 'AbortError') {
                 }
                 if (errorCapturado instanceof TypeError) {
-                    return casaVitini.componentes.errorUI()
+                    return casaVitini.ui.componentes.errorUI()
                 }
             }
         },
@@ -9465,7 +9464,7 @@ const casaVitini = {
                         this.componentesUI.entidades.hub({
                             destino,
                             entidades,
-
+                            instanciaUID,
                         })
                         this.componentesUI.ofertas.hub({
                             destino,
@@ -9476,8 +9475,6 @@ const casaVitini = {
                             destino,
                             impuestos
                         })
-
-                        // this.componentesUI.sobreControlDePrecios()
                         this.componentesUI.totales({
                             destino,
                             totales
@@ -9669,17 +9666,21 @@ const casaVitini = {
                         hub: function (data) {
                             const destino = data.destino
                             const entidades = data.entidades
+                            const instanciaUID = data.instanciaUID
 
                             for (const [entidadIDV, entidad] of Object.entries(entidades)) {
                                 if (entidadIDV === "reserva") {
                                     const desglosePorNoche = entidad.desglosePorNoche
                                     const desglosePorApartamento = entidad.desglosePorApartamento
+                                    const contenedorSobreControles = entidad.contenedorSobreControles
                                     this.reserva.contenedor({
                                         destino
                                     })
                                     this.reserva.porNoche({
                                         destino,
-                                        desglosePorNoche
+                                        instanciaUID,
+                                        desglosePorNoche,
+                                        contenedorSobreControles
                                     })
                                     this.reserva.porApartamento({
                                         destino,
@@ -9702,6 +9703,8 @@ const casaVitini = {
                             porNoche: (data) => {
                                 const destino = data.destino
                                 const desglosePorNoche = data.desglosePorNoche
+                                const contenedorSobreControles = data.contenedorSobreControles
+                                const instanciaUID = data.instanciaUID
                                 const contenedorFinanciero = document.querySelector(destino).querySelector("[contenedor=financiero]")
                                 const contenedorEntidadReserva = contenedorFinanciero.querySelector("[entidad=reserva]")
                                 const conntenedorPorNoche_selector = contenedorEntidadReserva.querySelector("[contenedor=porNoche]")
@@ -9734,9 +9737,7 @@ const casaVitini = {
                                         )
                                         botonSobreControlDePrecios.innerText = "Alterar precios neto de la reserva"
                                         botonSobreControlDePrecios.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.sobreControlPrecios.arranque)
-                                       // contenedorBotones.appendChild(botonSobreControlDePrecios)
-
-
+                                        // contenedorBotones.appendChild(botonSobreControlDePrecios)
                                         contenedorPorNoche.appendChild(contenedorBotones)
                                     }
 
@@ -9813,15 +9814,7 @@ const casaVitini = {
                                             contenedorApartamento.classList.add(
                                                 "contenedorApartamento",
                                             )
-                                            if (modoUI === "administracion") {
-                                                contenedorApartamento.classList.add("comportamientoBotonApartamento")
-                                                contenedorApartamento.addEventListener("click", () => {
-                                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.sobreControlPrecios.componentesUI.nocheUI({
-                                                        fechaNoche,
-                                                        apartamentoIDV
-                                                    })
-                                                }) 
-                                            }
+
                                             contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
                                             contenedorNoche_renderizado.appendChild(contenedorApartamento)
 
@@ -9837,25 +9830,46 @@ const casaVitini = {
                                             tituloApartamento.classList.add("negrita")
                                             tituloApartamento.classList.add("colorGris")
                                             tituloApartamento.innerText = apartamentoUI + " -----1"
-                             
+
                                             contenedorApartamentoYTotal.appendChild(tituloApartamento)
-
-
                                             const precioNetoApartamentoUI = document.createElement("div")
                                             precioNetoApartamentoUI.setAttribute("contenedor", "precioNetoApartamento")
                                             precioNetoApartamentoUI.classList.add(
                                                 "reserva_resumen_apartamentoUIPrecio",
                                             )
+
+                                            if (modoUI === "administracion") {
+                                                contenedorApartamento.classList.add("comportamientoBotonApartamento")
+                                                contenedorApartamento.addEventListener("click", () => {
+                                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.sobreControlPrecios.componentesUI.nocheUI({
+                                                        fechaNoche,
+                                                        apartamentoIDV,
+                                                        instanciaUID_contenedorFinanciero: instanciaUID
+                                                    })
+                                                })
+
+                                                if (contenedorSobreControles
+                                                    &&
+                                                    contenedorSobreControles.hasOwnProperty(fechaNoche)
+                                                    &&
+                                                    contenedorSobreControles[fechaNoche].hasOwnProperty(apartamentoIDV)) {
+                                                    const contenedorSobreControlUI = document.createElement("div")
+                                                    contenedorSobreControlUI.setAttribute("contenedor", "sobreControl")
+                                                    contenedorSobreControlUI.classList.add(
+                                                        "negrita"
+                                                    )
+                                                    contenedorSobreControlUI.innerText = "Sobre control aplicado."
+                                                    contenedorApartamentoYTotal.appendChild(contenedorSobreControlUI)
+                                                } else {
+                                                    contenedorApartamentoYTotal.querySelector("[contenedor=sobreControl]")?.remove()
+                                                }
+                                            }
                                             contenedorApartamentoYTotal.appendChild(precioNetoApartamentoUI)
                                             contenedorApartamento.appendChild(contenedorApartamentoYTotal)
-
                                         }
                                         const precioNetoApartamentoSelector = contenedorNoche_renderizado.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`).querySelector("[contenedor=precioNetoApartamento]")
                                         precioNetoApartamentoSelector.innerText = precioNetoApartamento + "$ Neto del apartamento"
-
-
                                     }
-
                                 }
                             },
                             porApartamento: (data) => {
@@ -12734,14 +12748,14 @@ const casaVitini = {
             const minutos = String(fecha.getMinutes()).padStart(2, "0");
             const segundos = String(fecha.getSeconds()).padStart(2, "0");
             const milisegundos = String(fecha.getMilliseconds()).padStart(3, "0");
-            const fechaNumerica = `${año}${mes}${dia}${horas}${minutos}${segundos}${milisegundos}`;
+            const uid = `${año}${mes}${dia}${horas}${minutos}${segundos}${milisegundos}`;
 
             // Control para cuando halla una instancia con el mismo instanciaUID
-            const instanciaRenderizada = document.querySelector(`[instanciaUI="${fechaNumerica}"]`)
+            const instanciaRenderizada = document.querySelector(`[instanciaUID="${uid}"]`)
             if (instanciaRenderizada) {
-                return fechaNumerica + "_1"
+                return uid + "_r"
             } else {
-                return fechaNumerica;
+                return uid;
             }
         },
         ralentizador: async (milisegundos) => {

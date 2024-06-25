@@ -6558,9 +6558,9 @@
     gap: 6px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    display: none;
     flex-direction: row;
     justify-content: center;
+    display: flex;
 }
 
 
@@ -13988,6 +13988,10 @@ grid-template-columns: 0.5fr 1.5fr;
     margin-right: 0px;
     margin-bottom: 0px;
     background: rgb(255 255 255 / 0.4);
-    text-transform: uppercase;
     border-radius: 12px;
+}
+
+.contenedorOculto {
+    display: none;
+
 }

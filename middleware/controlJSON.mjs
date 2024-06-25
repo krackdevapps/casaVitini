@@ -1,8 +1,10 @@
-export const controlJSON = (err, entrada, salida, next) => {
-  if (entrada.method !== 'POST' && entrada.method !== 'GET') {
-    const error = {
-      error: "Casa Vitini solo maneja peticiones GET y POST"
-    };
-    salida.json(error)
+export const controlJSON = (err, req, res, next) => {
+  try {
+    console.log("req", req.body)
+    JSON.parse(req.body); 
+    next();
+  } catch (error) {
+    res.status(400).json({ "CasaVitini": 'Formato JSON inválido' });
   }
+  next()
 }

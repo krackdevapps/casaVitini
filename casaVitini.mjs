@@ -11,29 +11,34 @@ import { controlTipoVerbo } from './middleware/controlTipoVerbo.mjs';
 import { manejador404 } from './middleware/manejador404.mjs';
 import dotenv from 'dotenv'
 import { configuracionSession } from './middleware/almacenSessiones.mjs';
+import { detectorDeLlavesRepetidas } from './middleware/detectorDeLlavesRepetidas.mjs';
+import { controlInputRaw } from './middleware/controlInputRaw.mjs';
+import { jsonHeader } from './middleware/jsonHeader.mjs';
 dotenv.config()
 
 process.on('uncaughtException', (error) => {
   console.error('Alerta! ->>:', error.message);
 });
+
 const app = express()
-export default app
 app.use(controlHTTPS)
 app.set('views', './ui/constructor')
 app.set('view engine', 'ejs')
-app.use(express.raw({ limit: '50mb' }))
-app.use(controlSizePeticion);
-app.use(express.json({ limit: '10mb', extended: true }))
+app.use(jsonHeader)
+app.use(express.json({ limit: '50MB', extended: true }))
+app.use(controlJSON)
 app.use(express.urlencoded({ extended: true }))
+app.use(express.raw({ limit: '50MB' }))
+app.use(controlSizePeticion);
+app.use(controlTipoVerbo)
 app.set('trust proxy', true)
 app.disable('x-powered-by')
-app.use(controlJSON)
 app.use('/componentes', express.static(path.join('./ui/componentes')))
 app.use(controlBaseDeDatos)
 app.use(configuracionSession)
 app.use(router)
-app.use(controlTipoVerbo)
 app.use(manejador404)
+export default app
 
 const puerto = process.env.PORT_HTTP
 const puertoSec = process.env.PORT_HTTPS

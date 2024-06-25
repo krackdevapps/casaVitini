@@ -15,4 +15,4 @@ export const controlBaseDeDatos = async (entrada, salida, next) => {
       salida.json(error);
     }
   }
-};
+}

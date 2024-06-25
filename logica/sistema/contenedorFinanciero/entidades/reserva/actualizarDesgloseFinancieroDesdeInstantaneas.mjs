@@ -4,10 +4,10 @@ import { constructorEstructuraDescuentos } from "../../../ofertas/global/contruc
 import { contructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/reserva/contructorEstructuraDescuentosReserva.mjs";
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
-import { actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID.mjs";
 import { aplicarImpuestos } from "./aplicarImpuestos.mjs";
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { constructorInstantaneaNoches } from "./constructorInstantaneaNoches.mjs";
 
 export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
     try {
@@ -42,10 +42,20 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
         })
 
         const desgloseFinancieroReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
+
         const instantaneaNoches = desgloseFinancieroReserva.instantaneaNoches
         const instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion ?? []
         const instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador ?? []
-        // Obtener el sobreControl completo y pasarlo a totalesBasesPorRAngo
+
+        await constructorInstantaneaNoches({
+            estructura,
+            instantaneaNoches,
+            fechaEntrada_ISO: fechaEntrada,
+            fechaSalida_ISO: fechaSalida,
+            apartamentosArray
+        })
+
+
         await totalesBasePorRango({
             reservaUID,
             estructura,
@@ -80,7 +90,6 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
             fechaEntradaReserva_ISO: fechaEntrada,
             fechaSalidaReserva_ISO: fechaSalida
         })
-
         const capaImpuestos = data.capaImpuestos
         if (capaImpuestos !== "si" && capaImpuestos !== "no") {
             const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos en si o no"
@@ -93,6 +102,7 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
                 origen: "reserva"
             })
         }
+        
     } catch (error) {
         throw error
     }

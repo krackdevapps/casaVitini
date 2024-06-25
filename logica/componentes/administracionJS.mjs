@@ -2,7 +2,6 @@ const casaVitini = {
     administracion: {
         reservas: {
             arranque: async () => {
-                //   document.querySelector("main:not([estado=obsoleto])").setAttribute("tipoVista", "reservasPaginadas")
                 const main = document.querySelector("main")
                 const instanciaUID = main.getAttribute("instanciaUID")
 
@@ -2037,7 +2036,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: "Eliminando habitación..."
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
                         const pantallaDeCargaRenderizada = document
                             .querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUID}"]`)
                         const transaccion = {
@@ -2109,7 +2108,7 @@ const casaVitini = {
                             instanciaUID: instanciaUIDPantallaDeCarga,
                             mensaje: "Eliminando habitación..."
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
                         const pantallaDeCargaRenderizada = document
                             .querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
                         const transaccion = {
@@ -4249,7 +4248,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID_pantallaDeCarga,
                         mensaje: mensajes[sentidoRango][0]
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     const pantallaDeCargaRenderizada = document.querySelector(`[componente=advertenciaInmersiva][instanciaUID="${instanciaUID_pantallaDeCarga}"]`)
                     if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
@@ -5295,7 +5294,7 @@ const casaVitini = {
                                     instanciaUID: instanciaUID_pantallaCarga,
                                     mensaje: mensaje
                                 }
-                                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                                casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                                 const enlaceUID = datosElimiacion.enlaceUID
                                 const instanciaUID = datosElimiacion.instanciaUID
                                 const transaccion = {
@@ -5410,7 +5409,7 @@ const casaVitini = {
                                     instanciaUID: instanciaUID_pantallaCarga,
                                     mensaje: mensaje
                                 }
-                                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                                casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                                 const reservaUID = document.querySelector("[reservaUID]").getAttribute("reservaUID")
                                 const nombreEnlace = document.querySelector("[espacio=formularioCrearEnlaceDePago] [campo=nombreEnlace]")
                                 const cantidad = document.querySelector("[espacio=formularioCrearEnlaceDePago] [campo=cantidad]")
@@ -7466,24 +7465,10 @@ const casaVitini = {
                                 })
 
 
-                                // const desgloseFinanciero = respuestaServidor.ok.desgloseFinanciero
-                                // const totalesPorNoche = desgloseFinanciero.totalesPorNoche
-                                // const totalesPorApartamento = desgloseFinanciero.totalesPorApartamento
-                                // const ofertas = desgloseFinanciero.ofertas
-                                // const impuestos = desgloseFinanciero.impuestos
-                                // const totales = desgloseFinanciero.totales
-                                // const desgloseTotales = {
-                                //     totalesPorApartamento: totalesPorApartamento,
-                                //     totalesPorNoche: totalesPorNoche,
-                                //     totales: totales,
-                                //     impuestos: impuestos,
-                                //     ofertas: ofertas,
-                                //     destino: "[componente=contenedorDesgloseTotal]"
-                                // }
-                                // casaVitini.ui.componentes.totales(desgloseTotales)
 
                             }
                         },
+
                         componentesUI: {
                             insertarDescuentos: {
                                 ui: async function (data) {
@@ -8018,7 +8003,7 @@ const casaVitini = {
                                         const main = document.querySelector("main")
                                         const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
                                         const reservaUID = main.querySelector("[reservaUID]").getAttribute("reservaUID")
-                                        const instanciaUID_insertarDescuentosUI = ui.getAttribute("instanciaUID")
+                                        const instanciaUID_sobreControlUI = ui.getAttribute("instanciaUID")
                                         const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
                                         main.appendChild(ui)
                                         const contenedor = ui.querySelector("[componente=contenedor]")
@@ -8036,8 +8021,7 @@ const casaVitini = {
                                         }
 
                                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                                        console.log("respuestaServidor", respuestaServidor)
-                                        const uiRenderizada = document.querySelectorAll(`[instanciaUID="${instanciaUID_insertarDescuentosUI}"]`)
+                                        const uiRenderizada = document.querySelectorAll(`[instanciaUID="${instanciaUID_sobreControlUI}"]`)
                                         if (!uiRenderizada) { return }
                                         if (respuestaServidor?.error) {
                                             uiRenderizada?.remove()
@@ -8047,34 +8031,15 @@ const casaVitini = {
                                         if (respuestaServidor.ok) {
                                             contenedor.innerHTML = null
 
-                                            /*
-                                                {
-                                                        "instantaneaNetoApartamento": {
-                                                            "fecha": "2024-05-24",
-                                                            "apartamentoUI": "Apartamento 5",
-                                                            "precioNetoApartamento": "60.00"
-                                                        },
-                                                        "sobreControl": {
-                                                            "fechaNoche": "2024-05-24",
-                                                            "detallesSobreControl": {
-                                                                "valor": "50.0",
-                                                                "sentido": "aumento",
-                                                                "operacion": "suma/porcentaje/prefioFijo",
-                                                                "precioNeto": "0.00",
-                                                                "precioSobreControl": "100.00"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            */
                                             const data = respuestaServidor.ok
                                             const instantanea = data.instantaneaNetoApartamento
                                             const apartamentoUI = instantanea.apartamentoUI
                                             const precioNetoApartamento = instantanea.precioNetoApartamento
 
-                                            const detallesSobreControl = data?.sobreControl
+                                            const sobreControl = data?.sobreControl
+                                            const detallesSobreControl = sobreControl.detallesSobreControl
                                             const operacion = detallesSobreControl?.operacion
-                                            const precioSobreControl = detallesSobreControl?.precioSobreControl || "0.00"
+                                            const valorSobreControl = detallesSobreControl?.valor || "0.00"
 
                                             const titulo = document.createElement("div")
                                             titulo.classList.add(
@@ -8142,7 +8107,9 @@ const casaVitini = {
                                                 "campoTexto"
                                             )
                                             campoValor.setAttribute("campo", "valor")
-                                            campoValor.placeholder = precioSobreControl
+                                            campoValor.placeholder = "Escribe la cantidad con dos decimales separados por punto, por ejemplo 0.00"
+                                            campoValor.value = valorSobreControl
+
                                             contenedor.appendChild(campoValor)
 
 
@@ -8151,13 +8118,26 @@ const casaVitini = {
                                                 boton.classList.add("boton")
                                                 boton.innerText = "Actualizar sobre control de precio"
                                                 boton.addEventListener("click", () => {
+                                                    this.confirmar({
+                                                        instanciaUID_sobreControlUI,
+                                                        instanciaUID_contenedorFinanciero,
+                                                        reservaUID,
+                                                        apartamentoIDV,
+                                                        fechaNoche
+                                                    })
                                                 })
                                                 contenedor.appendChild(boton)
                                                 const botonEliminar = document.createElement("div")
                                                 botonEliminar.classList.add("boton")
-                                                botonEliminar.innerText = "Elimianr sobre control de precio"
+                                                botonEliminar.innerText = "Eliminar sobre control de precio"
                                                 botonEliminar.addEventListener("click", () => {
-
+                                                    this.confirmar({
+                                                        instanciaUID_sobreControlUI,
+                                                        instanciaUID_contenedorFinanciero,
+                                                        reservaUID,
+                                                        apartamentoIDV,
+                                                        fechaNoche
+                                                    })
                                                 })
                                                 contenedor.appendChild(botonEliminar)
                                             } else {
@@ -8170,9 +8150,6 @@ const casaVitini = {
                                                 contenedor.appendChild(boton)
                                             }
 
-
-
-
                                             const botonCancelar = document.createElement("div")
                                             botonCancelar.classList.add("boton")
                                             botonCancelar.innerText = "Cancelar y volver al desglose por noche."
@@ -8184,14 +8161,58 @@ const casaVitini = {
 
                                         }
                                     },
+                                    confirmar: async (data) => {
+                                        console.log("data", data)
+
+                                        const instanciaUID_sobreControlUI = data.instanciaUID_sobreControlUI
+                                        const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
+                                        const reservaUID = data.reservaUID
+                                        const apartamentoIDV = data.aparatmentoIDV
+                                        const fechaNoche = data.fechaNoche
+                                        const transaccion = {
+                                            zona: "administracion/reservas/sobreControlPrecios/obtenerDetallesSobreControlNoche",
+                                            reservaUID,
+                                            apartamentoIDV,
+                                            fechaNoche
+                                        }
+
+                                        const uiRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_sobreControlUI}"]`)
+                                        const contenedor = uiRenderizada.querySelector("[componente=contenedor]")
+                                        contenedor.innerHTML = null
+
+                                        const spinner = casaVitini.ui.componentes.spinner({
+                                            mensaje: "Aplicando sobre control, un momento por favor...",
+                                            textoBoton: "Ocultar ventana"
+                                        })
+                                        contenedor.appendChild(spinner)
+                                        return
+
+                                        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                        const uiContenedorFinanciero = document.querySelectorAll(`[instanciaUID="${instanciaUID_contenedorFinanciero}"]`)
+                                        if (!uiContenedorFinanciero) { return }
+                                        if (respuestaServidor?.error) {
+                                            uiRenderizada?.remove()
+                                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                                        }
+                                        if (respuestaServidor.ok) {
+                                            return casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desglegarContenedorFinanciero({
+                                                destino: `[instanciaUID="${instanciaUID_contenedorFinanciero}"][componente=contenedorDesgloseTotal]`,
+
+                                            })
+
+
+                                        }
+
+                                    }
+
                                 },
-                                confirmar: () => {
-                                }
+
                             },
 
                         },
                         controladores: {
-                            desglegarConteneorFinanciero: async (data) => {
+                            desglegarContenedorFinanciero: async (data) => {
                                 const destino = data.destino
                                 const reservaUID = data.reservaUID
 
@@ -8217,7 +8238,9 @@ const casaVitini = {
                                     const contenedorFinanciero = respuestaServidor.ok.contenedorFinanciero
                                     casaVitini.ui.componentes.contenedorFinanciero.constructor({
                                         destino,
-                                        contenedorFinanciero
+                                        contenedorFinanciero,
+                                        modoUI: "administracion"
+
                                     })
                                 }
                             }
@@ -9673,7 +9696,7 @@ const casaVitini = {
                                     instanciaUID: instanciaUIDPantallaDeCarga,
                                     mensaje: "Asociando cliente a la titularidad de esta reserva"
                                 }
-                                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
+                                casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
                                 const pantallaDeCargaRenderizada = document.querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
                                 const transaccion = {
                                     zona: "administracion/reservas/gestionTitular/asociarTitular",
@@ -9781,7 +9804,7 @@ const casaVitini = {
                                     instanciaUID: instanciaUIDPantallaDeCarga,
                                     mensaje: "Asociando cliente a la titularidad de esta reserva"
                                 }
-                                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
+                                casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
                                 const pantallaDeCargaRenderizada = document.querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
                                 const reservaUID = document.querySelector("[reservaUID]").getAttribute("reservaUID")
                                 const campos = document.querySelector(`[instanciaUID="${instanciaUID}"] [formulario=nuevoCliente]`).querySelectorAll("[campo]")
@@ -9837,7 +9860,7 @@ const casaVitini = {
                                 instanciaUID: instanciaUIDPantallaDeCarga,
                                 mensaje: "Desasociando cliente como titular de la reserva"
                             }
-                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
+                            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
                             const pantallaDeCargaRenderizada = document.querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
                             const metadatosPantallaDeCarga = {
                                 zona: "administracion/reservas/gestionTitular/desasociarClienteComoTitular",
@@ -10349,7 +10372,7 @@ const casaVitini = {
                                     instanciaUID: instanciaUIDPantallaDeCarga,
                                     mensaje: "Asociando cliente a la titularidad de esta reserva"
                                 }
-                                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
+                                casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
                                 const pantallaDeCargaRenderizada = document.querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
                                 const transaccion = {
                                     zona: "administracion/reservas/gestionTitular/asociarTitular",
@@ -10455,7 +10478,7 @@ const casaVitini = {
                                     instanciaUID: instanciaUIDPantallaDeCarga,
                                     mensaje: "Asociando cliente a la titularidad de esta reserva"
                                 }
-                                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
+                                casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(opcionesPantallaDeCarga)
                                 const pantallaDeCargaRenderizada = document.querySelector(`[pantallaSuperpuesta=pantallaCargaSuperpuesta][instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
                                 const reservaUID = document.querySelector("[reservaUID]").getAttribute("reservaUID")
                                 const campos = document.querySelector(`[instanciaUID="${instanciaUID}"] [formulario=nuevoCliente]`).querySelectorAll("[campo]")
@@ -11921,7 +11944,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const campos = document.querySelectorAll("[campo]")
                     const transacccion = {
                         zona: "administracion/configuracion/zonaHoraria/guardarConfiguracion"
@@ -12072,7 +12095,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const campos = document.querySelectorAll("[campo]")
                     const transacccion = {
                         zona: "administracion/configuracion/horaDeEntradaSalida/guardarConfiguracion"
@@ -12803,7 +12826,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const campos = document.querySelectorAll("[campo]")
                     const transacccion = {
                         zona: "administracion/configuracion/limitesReservaPublica/guardarConfiguracion"
@@ -13242,7 +13265,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensajeEsppera
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const transacccion = {
                             zona: "administracion/configuracion/mensajesEnPortada/crearMensaje",
                             mensaje: mensaje
@@ -13316,7 +13339,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensajeCarga
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const transacccion = {
                             zona: "administracion/configuracion/mensajesEnPortada/actualizarMensaje",
                             mensaje: mensaje,
@@ -13369,7 +13392,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID_pantalaDeCarga,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const transaccion = {
                             zona: "administracion/configuracion/mensajesEnPortada/eliminarMensaje",
                             mensajeUID: mensajeUID
@@ -13406,7 +13429,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID_pantalaDeCarga,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const transaccion = {
                         zona: "administracion/configuracion/mensajesEnPortada/moverPosicion",
                         mensajeUID: mensajeUIDActual,
@@ -13610,7 +13633,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const transaccion = {
                         zona: "administracion/clientes/crearCliente"
                     }
@@ -14823,7 +14846,7 @@ const casaVitini = {
                     instanciaUID: instanciaUID,
                     mensaje: mensaje
                 }
-                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                 const selectorCampoNuevoPrecio = document.querySelector("[componente=campoNuevoPrecio]")
                 const selectorApartamentoIDV = document.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")
                 const transaccion = {
@@ -14973,7 +14996,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const apartamentoIDV = document.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")
                     const transaccion = {
                         zona: "administracion/precios/eliminarPerfilPrecioApartamento",
@@ -15507,7 +15530,7 @@ const casaVitini = {
                     instanciaUID: instanciaUID,
                     mensaje: mensaje
                 }
-                casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                 const transaccion = {
                     zona: "administracion/impuestos/guardarModificacionImpuesto",
                     impuestoUID: Number(impuestoUID)
@@ -15596,7 +15619,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const impuestoUID = document.querySelector("[impuestoUID]").getAttribute("impuestoUID")
                     const transaccion = {
                         zona: "administracion/impuestos/eliminarPerfilImpuesto",
@@ -15731,7 +15754,7 @@ const casaVitini = {
                         mensaje: mensaje,
                         identificadorVisual: "pantallaDeCarga"
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const transaccion = {
                         zona: "administracion/impuestos/crearNuevoImpuesto"
                     }
@@ -17287,7 +17310,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID_pantallaEspera,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
 
                     const ofertaUID = document.querySelector("[ofertaUID]").getAttribute("ofertaUID")
                     const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
@@ -17466,7 +17489,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const ofertaUID = document.querySelector("[ofertaUID]").getAttribute("ofertaUID")
                         const transaccion = {
                             zona: "administracion/ofertas/eliminarOferta",
@@ -18937,8 +18960,9 @@ const casaVitini = {
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "administracion/comportamiento_de_precios/comportamientoUI")
                     const selector = document.querySelector("[componente=espacioBuscadorReservas]")
-                    const comportamientoUI = casaVitini.administracion.comportamiento_de_precios.detalleUI("crearOferta")
-                    selector.appendChild(comportamientoUI)
+                    // const comportamientoUI = 
+                    casaVitini.administracion.comportamiento_de_precios.detalleUI("crearOferta")
+                    //selector.appendChild(comportamientoUI)
                 },
                 desplegarOpcionesOferta: (opcionOferta) => {
                     const tipoOferta = opcionOferta.target.closest("[tipoOferta]").getAttribute("tipoOferta")
@@ -19384,7 +19408,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const nombreComportamiento = document.querySelector("[campoOferta=nombreOferta]").value
                     const fechaInicio_humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                     const fechaFinal_humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
@@ -19405,32 +19429,73 @@ const casaVitini = {
                         nombreComportamiento: nombreComportamiento,
                         contenedor: {
                             tipo,
-                            apartamentos: [],
                         }
                     }
+                    console.log("tipo", tipo)
                     if (tipo === "porRango") {
                         transaccion.contenedor.fechaInicio = fechaInicio_ISO
                         transaccion.contenedor.fechaFinal = fechaFinal_ISO
-
-
-
-
-                    }
-                    if (tipo === "porDias") {
+                        transaccion.contenedor.apartamentos = []
+                        const selectoresApartamentos = document.querySelectorAll(`[contenedor_tipobloqueo=porRango] [descuentoDedicadoIDV]`)
+                        selectoresApartamentos.forEach((apartamentos) => {
+                            const apartamentoIDV = apartamentos.getAttribute("descuentoDedicadoIDV")
+                            const cantidad = apartamentos.querySelector("[campoApartamentoSeleccionado=cantidad]").value
+                            const simbolo = apartamentos.querySelector("[campoApartamentoSeleccionado=simbolo]").value
+                            const apartamentoFinal = {
+                                apartamentoIDV: apartamentoIDV,
+                                cantidad: cantidad,
+                                simboloIDV: simbolo
+                            }
+                            transaccion.contenedor.apartamentos.push(apartamentoFinal)
+                        })
+                    } else if (tipo === "porDias") {
                         transaccion.contenedor.dias = diasSeleccionados
+                        const selectoresApartamentos = document.querySelectorAll(`[contenedor_tipobloqueo=porDias] [descuentoDedicadoIDV]`)
+                        transaccion.contenedor.apartamentos = []
+
+                        selectoresApartamentos.forEach((apartamentos) => {
+                            const apartamentoIDV = apartamentos.getAttribute("descuentoDedicadoIDV")
+                            const cantidad = apartamentos.querySelector("[campoApartamentoSeleccionado=cantidad]").value
+                            const simbolo = apartamentos.querySelector("[campoApartamentoSeleccionado=simbolo]").value
+                            const apartamentoFinal = {
+                                apartamentoIDV: apartamentoIDV,
+                                cantidad: cantidad,
+                                simboloIDV: simbolo
+                            }
+                            transaccion.contenedor.apartamentos.push(apartamentoFinal)
+                        })
+                    } else if (tipo === "porAntelacion") {
+                        const contenedorAntelaciones = []
+                        const selectorCotnenedorPorAntelacion = document.querySelectorAll(`[contenedor_tipobloqueo=porAntelacion] [diaAntelacion]`)
+
+                        selectorCotnenedorPorAntelacion.forEach((contenedor) => {
+                            console.log("contenedor", contenedor)
+                            const diasAntelacion = contenedor.getAttribute("diaAntelacion")
+                            const estructura = {
+                                diasAntelacion: diasAntelacion,
+                                apartamentos: {}
+                            }
+                            const selectorApartamentosPerfil = contenedor.querySelectorAll("[contenedor=apartamentoDedicado]")
+                            selectorApartamentosPerfil.forEach((apartamentoDedicado) => {
+                                console.log("apartametnoDEid", apartamentoDedicado)
+                                const apartamentoIDV = apartamentoDedicado.getAttribute("descuentoDedicadoIDV")
+                                const cantidad = apartamentoDedicado.querySelector("[campoApartamentoSeleccionado=cantidad]").value
+                                const simboloIDV = apartamentoDedicado.querySelector("[campoApartamentoSeleccionado=simbolo]").value
+
+                                const estructuraApartametno = {
+                                    cantidad,
+                                    simboloIDV
+                                }
+                                estructura.apartamentos[apartamentoIDV] = estructuraApartametno
+                            })
+                            contenedorAntelaciones.push(estructura)
+                        })
+                        console.log("contenedorAntelaciones", contenedorAntelaciones)
+                        transaccion.contenedor.perfilesAntelacion = contenedorAntelaciones
                     }
-                    const selectoresApartamentos = document.querySelectorAll(`[descuentoDedicadoIDV]`)
-                    selectoresApartamentos.forEach((apartamentos) => {
-                        const apartamentoIDV = apartamentos.getAttribute("descuentoDedicadoIDV")
-                        const cantidad = apartamentos.querySelector("[campoApartamentoSeleccionado=cantidad]").value
-                        const simbolo = apartamentos.querySelector("[campoApartamentoSeleccionado=simbolo]").value
-                        const apartamentoFinal = {
-                            apartamentoIDV: apartamentoIDV,
-                            cantidad: cantidad,
-                            simboloIDV: simbolo
-                        }
-                        transaccion.contenedor.apartamentos.push(apartamentoFinal)
-                    })
+
+                    console.log("transaccion", transaccion)
+                    return
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                     if (!instanciaRenderizada) { }
@@ -19448,11 +19513,16 @@ const casaVitini = {
                         casaVitini.shell.navegacion.controladorVista(navegacion)
                     }
                 },
-                apartamentosDisponibles: async (apartamento) => {
+                apartamentosDisponibles: async (data) => {
+                    console.log("data", data)
                     // apartamento.preventDefault()
+                    const apartamento = data.e
+                    const destino = data.destino
+
                     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                     apartamento.stopPropagation()
                     const selectorMenuObsoleto = document.querySelector("[comMenu=menuVolatilApartamentoDisponbiles]")
+
                     if (selectorMenuObsoleto) {
                         selectorMenuObsoleto.remove()
 
@@ -19476,7 +19546,7 @@ const casaVitini = {
                         zona: "administracion/componentes/apartamentosDisponiblesConfigurados"
                     }
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    const instanciaRenderizada = document.querySelector(`[componente=menuVolatil][instanciaUID="${instanciaUID}"]`)
                     if (!instanciaRenderizada) { }
                     if (respuestaServidor?.error) {
                         instanciaRenderizada.remove()
@@ -19491,7 +19561,12 @@ const casaVitini = {
                             const estadoUI = apartamentoDisponible.estadoUI
                             const apartamentoDetallesUI = document.createElement("div")
                             apartamentoDetallesUI.classList.add("crearOfertaApartamentoUI")
-                            apartamentoDetallesUI.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarApartamento)
+                            apartamentoDetallesUI.addEventListener("click", (e) => {
+                                casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarApartamento({
+                                    e,
+                                    destino: destino
+                                })
+                            })
                             apartamentoDetallesUI.setAttribute("apartamentoIDV", apartamentoIDV)
                             apartamentoDetallesUI.setAttribute("apartamentoUI", apartamentoUI)
                             apartamentoDetallesUI.setAttribute("apartamentoComoOpcion", apartamentoIDV)
@@ -19529,22 +19604,26 @@ const casaVitini = {
                         })
                     }
                 },
-                insertarApartamento: async (apartamento) => {
-                    let apartamentoIDV = apartamento.target.closest("[apartamentoIDV]").getAttribute("apartamentoIDV")
-                    let apartamentoUI = apartamento.target.closest("[apartamentoIDV]").getAttribute("apartamentoUI")
-                    let detallesApartamento = {
-                        "apartamentoIDV": apartamentoIDV,
-                        "apartamentoUI": apartamentoUI
+                insertarApartamento: (data) => {
+                    const apartamento = data.e
+                    const destino = data.destino
+                    const apartamentoIDV = apartamento.target.closest("[apartamentoIDV]").getAttribute("apartamentoIDV")
+                    const apartamentoUI = apartamento.target.closest("[apartamentoIDV]").getAttribute("apartamentoUI")
+                    const detallesApartamento = {
+                        apartamentoIDV: apartamentoIDV,
+                        apartamentoUI: apartamentoUI
                     }
                     // Descuento dedicado
-                    let opciones = {
-                        "apartamentoIDV": apartamentoIDV,
-                        "apartamentoUI": apartamentoUI
+                    const opciones = {
+                        apartamentoIDV: apartamentoIDV,
+                        apartamentoUI: apartamentoUI
                     }
-                    let descuentoDedicadoUI = await casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarOpcionesApartamento(opciones)
-                    let zonaDescuentoDedicados = document.querySelector("[componente=comportamientoSuperBloque]")
-                    //document.querySelector("[componente=infoDescuentoDedicados]").style.display = "none"
-                    document.querySelector("[componente=comportamientoSuperBloque]").style.display = "grid"
+                    const descuentoDedicadoUI = casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarOpcionesApartamento(opciones)
+                    console.log("destino", destino)
+
+                    const zonaDescuentoDedicados = document.querySelector(destino)
+                    console.log("zonaDescuentoDedicados", zonaDescuentoDedicados)
+                    zonaDescuentoDedicados.style.display = "grid"
                     zonaDescuentoDedicados.appendChild(descuentoDedicadoUI)
                 },
                 insertarApartamentoUI: async (detallesApartmento) => {
@@ -19565,11 +19644,11 @@ const casaVitini = {
                     apartamentoSeleccionadoUI
                 },
                 insertarOpcionesApartamento: (opcionesApartamento) => {
-                    let apartamentoIDV = opcionesApartamento.apartamentoIDV
-                    let apartamentoUI = opcionesApartamento.apartamentoUI
-                    let cantidad = opcionesApartamento.cantidad ? opcionesApartamento.cantidad : null
-                    let simbolo = opcionesApartamento.simbolo ? opcionesApartamento.simbolo : null
-                    let descuentoDedicadoUI = document.createElement("div")
+                    const apartamentoIDV = opcionesApartamento.apartamentoIDV
+                    const apartamentoUI = opcionesApartamento.apartamentoUI
+                    const cantidad = opcionesApartamento.cantidad ? opcionesApartamento.cantidad : null
+                    const simbolo = opcionesApartamento.simbolo ? opcionesApartamento.simbolo : null
+                    const descuentoDedicadoUI = document.createElement("div")
                     descuentoDedicadoUI.classList.add("administracion_comportamientosPrecios_crearComportamiento_contenedorapartamento")
                     descuentoDedicadoUI.setAttribute("descuentoDedicadoUI", apartamentoUI)
                     descuentoDedicadoUI.setAttribute("descuentoDedicadoIDV", apartamentoIDV)
@@ -19578,16 +19657,16 @@ const casaVitini = {
                     tituloApartamento.classList.add("crearOfertaDescuentoDedicadoUITitulo")
                     tituloApartamento.innerText = apartamentoUI
                     descuentoDedicadoUI.appendChild(tituloApartamento)
-                    let cantidadUI = document.createElement("input")
+                    const cantidadUI = document.createElement("input")
                     cantidadUI.classList.add("crearOferDescuentoDedicadoCantidad")
                     cantidadUI.setAttribute("campoApartamentoSeleccionado", "cantidad")
                     cantidadUI.placeholder = "Inserta la cantidad"
                     cantidadUI.value = cantidad
                     descuentoDedicadoUI.appendChild(cantidadUI)
-                    let tipoDescuento = document.createElement("select")
+                    const tipoDescuento = document.createElement("select")
                     tipoDescuento.classList.add("crearOfertaDescuentoDedicadoListaTipoDescuento")
                     tipoDescuento.setAttribute("campoApartamentoSeleccionado", "simbolo")
-                    let opcionPredeterminada = document.createElement("option")
+                    const opcionPredeterminada = document.createElement("option")
                     if (!simbolo) {
                         opcionPredeterminada.selected = true;
                     }
@@ -19613,7 +19692,7 @@ const casaVitini = {
                         tipoDescuento.appendChild(opcion);
                     }
                     descuentoDedicadoUI.appendChild(tipoDescuento)
-                    let botonEliminarApartamento = document.createElement("div")
+                    const botonEliminarApartamento = document.createElement("div")
                     botonEliminarApartamento.classList.add("crearComportamientoBotonEliminarApartamento")
                     botonEliminarApartamento.innerText = "Eliminar apartamento de esta oferta"
                     botonEliminarApartamento.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.crearComportamiento.eliminarApartamenro)
@@ -19705,7 +19784,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const main = document.querySelector("main")
                     const comportamientoUID = document.querySelector("[comportamientoUID]").getAttribute("comportamientoUID")
                     const nombreComportamiento_campo = document.querySelector("[campoOferta=nombreOferta]")
@@ -19883,7 +19962,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         let comportamientoUID = document.querySelector("[comportamientoUID]").getAttribute("comportamientoUID")
                         const transaccion = {
                             zona: "administracion/comportamientoDePrecios/eliminarComportamiento",
@@ -20025,7 +20104,9 @@ const casaVitini = {
                 }
                 casaVitini.shell.navegacion.controladorVista(entrada)
             },
-            detalleUI: (modo) => {
+            detalleUI: function (modo) {
+                const selector = document.querySelector("[componente=espacioBuscadorReservas]")
+
                 if (modo !== "editarOferta" && modo !== "crearOferta") {
                     const error = "En que modo quieres que despliegue la interfa de oferta en editarOferat o en crearOferta"
                     casaVitini.ui.vistas.advertenciaInmersiva(error)
@@ -20036,13 +20117,16 @@ const casaVitini = {
                 const divPrincipal = document.createElement('div');
                 divPrincipal.setAttribute('componente', 'espacioCrearOferta');
                 divPrincipal.classList.add('espacioComportamiento');
+                selector.appendChild(divPrincipal)
+                // document.querySelector("main").appendChild(divPrincipal)
+
                 if (modo === "editarOferta") {
                     divPrincipal.classList.add("eventosDesactivadosInicialmente")
                 }
 
 
                 const selectorBoton = (boton) => {
-                    botonID = boton.target.getAttribute("botonTipo")
+                    const botonID = boton.target.getAttribute("botonTipo")
                     casaVitini.administracion.comportamiento_de_precios.detallesComportamiento.controladoresUI.opcionesTipo(botonID)
                 }
                 const selectorDiaSemana = (e) => {
@@ -20108,7 +20192,24 @@ const casaVitini = {
                 botonTipoComportamiento_porDias.addEventListener("click", selectorBoton)
                 selectorTipoComportamiento.appendChild(botonTipoComportamiento_porDias)
 
+                const botonTipoComportamiento_porDiasAntelacion = document.createElement("div")
+                botonTipoComportamiento_porDiasAntelacion.classList.add("botonTipoComportamiento")
+                botonTipoComportamiento_porDiasAntelacion.setAttribute("botonTipo", "porAntelacion")
+                botonTipoComportamiento_porDiasAntelacion.innerText = "Por días de antelación"
+                botonTipoComportamiento_porDiasAntelacion.addEventListener("click", selectorBoton)
+                selectorTipoComportamiento.appendChild(botonTipoComportamiento_porDiasAntelacion)
+
                 divPrincipal.appendChild(selectorTipoComportamiento)
+
+                const contenedorTipoComportamiento = document.createElement("div")
+                contenedorTipoComportamiento.setAttribute("contenedor", "tipoComportamientos")
+                contenedorTipoComportamiento.classList.add(
+                    "flexVertical",
+                    "backgroundGrey1",
+                    "padding6",
+                    "borderRadius12"
+                )
+                divPrincipal.appendChild(contenedorTipoComportamiento)
 
                 const contenedorTipoPorRango = document.createElement('div');
                 contenedorTipoPorRango.classList.add('crearComportameintoContendorFechas');
@@ -20172,12 +20273,19 @@ const casaVitini = {
                 // Agregar el primer div contenedor horizontal al div contenedor
                 contenedorTipoPorRango.appendChild(divContenedorHorizontal);
                 // Agregar el div contenedor al div principal
-                divPrincipal.appendChild(contenedorTipoPorRango);
+                const contenedorApartamentos = casaVitini.administracion.comportamiento_de_precios.compomentesUI.contenedorSelectorApartamento()
+                contenedorTipoPorRango.appendChild(contenedorApartamentos);
+                contenedorTipoComportamiento.appendChild(contenedorTipoPorRango);
 
+                const comportamientoPorDias = document.createElement("div")
+                comportamientoPorDias.classList.add('contenedorOculto');
+                comportamientoPorDias.setAttribute("contenedor_tipoBloqueo", "porDias")
+                comportamientoPorDias.classList.add(
+                    "flexVertical",
+                )
 
                 const contenedorTipoPorDias = document.createElement('div');
                 contenedorTipoPorDias.classList.add('contenedorPorDias');
-                contenedorTipoPorDias.setAttribute("contenedor_tipoBloqueo", "porDias")
                 const dias = [
                     {
                         nombreIDV: "lunes",
@@ -20222,42 +20330,88 @@ const casaVitini = {
                     diaUI.addEventListener("click", selectorDiaSemana)
                     contenedorTipoPorDias.appendChild(diaUI)
                 }
+                comportamientoPorDias.appendChild(contenedorTipoPorDias);
+                const contenedorApartamentosParaDias = casaVitini.administracion.comportamiento_de_precios.compomentesUI.contenedorSelectorApartamento()
+                comportamientoPorDias.appendChild(contenedorApartamentosParaDias);
+                contenedorTipoComportamiento.appendChild(comportamientoPorDias);
 
-                divPrincipal.appendChild(contenedorTipoPorDias);
+                const comportamientoPorAntelacion = document.createElement("div")
+                comportamientoPorAntelacion.classList.add('contenedorOculto');
+                comportamientoPorAntelacion.setAttribute("contenedor_tipoBloqueo", "porAntelacion")
+                comportamientoPorAntelacion.classList.add(
+                    "flexVertical",
+                    "gap6",
+                    "padding6"
+                )
+
+                contenedorTipoComportamiento.appendChild(comportamientoPorAntelacion);
 
 
-                const contenedorBotones = document.createElement("div")
-                contenedorBotones.classList.add("crearComportameintoEspacioBotones")
-                // Crear el párrafo 'Anadir apartamento' dentro del segundo div interno
-                const pCrearOFertaBotonAnadirApartamento_31 = document.createElement('p');
-                pCrearOFertaBotonAnadirApartamento_31.classList.add('crearOFertaBotonAnadirApartamento');
-                pCrearOFertaBotonAnadirApartamento_31.setAttribute('componente', 'botonAnadirApartamentoOferta');
-                pCrearOFertaBotonAnadirApartamento_31.textContent = 'Anadir apartamento';
-                pCrearOFertaBotonAnadirApartamento_31.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.crearComportamiento.apartamentosDisponibles)
-                contenedorBotones.appendChild(pCrearOFertaBotonAnadirApartamento_31);
-                divPrincipal.appendChild(contenedorBotones)
-                // Crear el elemento div principal
-                const porApartamentoDedicado = document.createElement('div');
-                porApartamentoDedicado.classList.add('espaciadoInterno');
-                porApartamentoDedicado.setAttribute('zonaOferta', 'porApartamentoDedicado');
-                porApartamentoDedicado.setAttribute('contenedor', 'apartamentos');
-                // Crear el primer div interno
-                const divCrearOfertaEspacioOpciones_3 = document.createElement('div');
-                divCrearOfertaEspacioOpciones_3.classList.add('administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos');
-                divCrearOfertaEspacioOpciones_3.setAttribute("componente", "comportamientoSuperBloque")
-                porApartamentoDedicado.appendChild(divCrearOfertaEspacioOpciones_3);
-                // Crear el segundo párrafo dentro del quinto div interno
-                const pCrearOfertaTituloOpcion5_3 = document.createElement('p');
-                pCrearOfertaTituloOpcion5_3.classList.add('crearComportamientoConentenedor');
-                pCrearOfertaTituloOpcion5_3.setAttribute('componente', 'infoDescuentoDedicados');
-                pCrearOfertaTituloOpcion5_3.textContent =
-                    'Ahora mismo no tienes ningún apartamento seleccionado para poder aplicarle un comportamiento de precio. Pulsa en el botón Anadir apartamento para comenzar.';
-                divCrearOfertaEspacioOpciones_3.appendChild(pCrearOfertaTituloOpcion5_3);
-                // Crear el segundo div principal
+                const contenedorSelectorAntelacion = document.createElement("div")
+                contenedorSelectorAntelacion.classList.add(
+                    "flexVertical"
+                )
+                comportamientoPorAntelacion.appendChild(contenedorSelectorAntelacion)
+
+                const botonAnadirComportamientoPorDiasDeAntecion = document.createElement("div")
+                botonAnadirComportamientoPorDiasDeAntecion.classList.add("botonV1")
+                botonAnadirComportamientoPorDiasDeAntecion.innerText = "Añadir comportamiento por antelacion"
+                botonAnadirComportamientoPorDiasDeAntecion.addEventListener("click", () => {
+                    const campoDiasAntelacion = document.querySelector("[campo=diasAntelacion]").value
+                    this.compomentesUI.insertarComportamientoPorAntelacion({
+                        diasAntelacion: campoDiasAntelacion
+                    })
+                })
+                comportamientoPorAntelacion.appendChild(botonAnadirComportamientoPorDiasDeAntecion)
+
+                const entradDias = document.createElement("input")
+                entradDias.setAttribute("campo", "diasAntelacion")
+                entradDias.type = "number"
+                entradDias.classList.add(
+                    "padding6",
+                    "borderRadius6"
+                )
+                entradDias.placeholder = "Inserta el numero maximo de dias de antelacion"
+                comportamientoPorAntelacion.appendChild(entradDias)
+
+
+                const contenedorPerfilDiasAntelacion = document.createElement("div")
+                contenedorPerfilDiasAntelacion.setAttribute("contenedor", "comportamientosPorDiasAntelacion")
+                comportamientoPorAntelacion.appendChild(contenedorPerfilDiasAntelacion)
+
+                // const contenedorBotones = document.createElement("div")
+                // contenedorBotones.classList.add("crearComportameintoEspacioBotones")
+                // // Crear el párrafo 'Anadir apartamento' dentro del segundo div interno
+                // const pCrearOFertaBotonAnadirApartamento_31 = document.createElement('p');
+                // pCrearOFertaBotonAnadirApartamento_31.classList.add('crearOFertaBotonAnadirApartamento');
+                // pCrearOFertaBotonAnadirApartamento_31.setAttribute('componente', 'botonAnadirApartamentoOferta');
+                // pCrearOFertaBotonAnadirApartamento_31.textContent = 'Anadir apartamento';
+                // pCrearOFertaBotonAnadirApartamento_31.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.crearComportamiento.apartamentosDisponibles)
+                // contenedorBotones.appendChild(pCrearOFertaBotonAnadirApartamento_31);
+                // contenedorTipoComportamiento.appendChild(contenedorBotones)
+                // // Crear el elemento div principal
+                // const porApartamentoDedicado = document.createElement('div');
+                // porApartamentoDedicado.classList.add('espaciadoInterno');
+                // porApartamentoDedicado.setAttribute('zonaOferta', 'porApartamentoDedicado');
+                // porApartamentoDedicado.setAttribute('contenedor', 'apartamentos');
+                // // Crear el primer div interno
+                // const divCrearOfertaEspacioOpciones_3 = document.createElement('div');
+                // divCrearOfertaEspacioOpciones_3.classList.add('administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos');
+                // divCrearOfertaEspacioOpciones_3.setAttribute("componente", "comportamientoSuperBloque")
+                // porApartamentoDedicado.appendChild(divCrearOfertaEspacioOpciones_3);
+                // // Crear el segundo párrafo dentro del quinto div interno
+                // const pCrearOfertaTituloOpcion5_3 = document.createElement('p');
+                // pCrearOfertaTituloOpcion5_3.classList.add('crearComportamientoConentenedor');
+                // pCrearOfertaTituloOpcion5_3.setAttribute('componente', 'infoDescuentoDedicados');
+                // pCrearOfertaTituloOpcion5_3.textContent =
+                //     'Ahora mismo no tienes ningún apartamento seleccionado para poder aplicarle un comportamiento de precio. Pulsa en el botón Anadir apartamento para comenzar.';
+                // divCrearOfertaEspacioOpciones_3.appendChild(pCrearOfertaTituloOpcion5_3);
+
+                // // Crear el segundo div principal
                 const divCrearOfertaEpacioBotones_3 = document.createElement('div');
                 divCrearOfertaEpacioBotones_3.classList.add('crearOfertaEpacioBotones');
                 divCrearOfertaEpacioBotones_3.style.pointerEvents = "all"
-                porApartamentoDedicado.appendChild(divCrearOfertaEpacioBotones_3);
+                contenedorTipoPorRango.appendChild(divCrearOfertaEpacioBotones_3);
                 // Crear el párrafo 'Crear oferta' dentro del segundo div principal
                 const pCrearOfervaBotonV1_3 = document.createElement('p');
                 pCrearOfervaBotonV1_3.classList.add('crearOfervaBotonV1');
@@ -20273,7 +20427,7 @@ const casaVitini = {
                     pCrearOfervaBotonV1_3.style.pointerEvents = "all"
                     pCrearOfervaBotonV1_3.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.detallesComportamiento.comportamientoModos)
                 }
-                divCrearOfertaEpacioBotones_3.appendChild(pCrearOfervaBotonV1_3);
+                // divCrearOfertaEpacioBotones_3.appendChild(pCrearOfervaBotonV1_3);
                 const pBotonGuardarOferta_03 = document.createElement('p');
                 pBotonGuardarOferta_03.classList.add('crearOfervaBotonV1');
                 pBotonGuardarOferta_03.classList.add('elementoOcultoInicialmente');
@@ -20297,10 +20451,102 @@ const casaVitini = {
                 divCrearOfertaEpacioBotones_3.appendChild(pBotonGuardarOferta_03);
                 divCrearOfertaEpacioBotones_3.appendChild(pBotonCancelarCambiosOferta_O3);
                 divCrearOfertaEpacioBotones_3.appendChild(pBotonEliminarOferta_O3);
-                divPrincipal.appendChild(porApartamentoDedicado);
+                divPrincipal.appendChild(pCrearOfervaBotonV1_3)
+                divPrincipal.appendChild(divCrearOfertaEpacioBotones_3)
+
+                // contenedorTipoComportamiento.appendChild(porApartamentoDedicado);
                 // Agregar el div principal al documento body
-                return divPrincipal;
             },
+            compomentesUI: {
+                contenedorSelectorApartamento: () => {
+                    const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                    console.log("instancaiuID", instanciaUID)
+                    const contenedorApartamentos = document.createElement("div")
+                    contenedorApartamentos.setAttribute("instanciaUID", instanciaUID)
+                    contenedorApartamentos.setAttribute("contenedor", "apartamentosDelComportamiento")
+
+                    const contenedorBotones = document.createElement("div")
+                    contenedorBotones.classList.add("crearComportameintoEspacioBotones")
+                    // Crear el párrafo 'Anadir apartamento' dentro del segundo div interno
+                    const pCrearOFertaBotonAnadirApartamento_31 = document.createElement('p');
+                    pCrearOFertaBotonAnadirApartamento_31.classList.add('crearOFertaBotonAnadirApartamento');
+                    pCrearOFertaBotonAnadirApartamento_31.setAttribute('componente', 'botonAnadirApartamentoOferta');
+                    pCrearOFertaBotonAnadirApartamento_31.textContent = 'Anadir apartamento';
+                    pCrearOFertaBotonAnadirApartamento_31.addEventListener("click", (e) => {
+                        casaVitini.administracion.comportamiento_de_precios.crearComportamiento.apartamentosDisponibles({
+                            e: e,
+                            destino: `[instanciaUID="${instanciaUID}"] [componente=comportamientoSuperBloque]`
+                        })
+                    })
+                    contenedorBotones.appendChild(pCrearOFertaBotonAnadirApartamento_31);
+                    contenedorApartamentos.appendChild(contenedorBotones)
+                    // Crear el elemento div principal
+                    const porApartamentoDedicado = document.createElement('div');
+                    porApartamentoDedicado.classList.add('espaciadoInterno');
+                    porApartamentoDedicado.setAttribute('zonaOferta', 'porApartamentoDedicado');
+                    porApartamentoDedicado.setAttribute('contenedor', 'apartamentos');
+                    // Crear el primer div interno
+                    const divCrearOfertaEspacioOpciones_3 = document.createElement('div');
+                    divCrearOfertaEspacioOpciones_3.classList.add('administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos');
+                    divCrearOfertaEspacioOpciones_3.setAttribute("componente", "comportamientoSuperBloque")
+                    contenedorApartamentos.appendChild(divCrearOfertaEspacioOpciones_3);
+
+                    // Crear el segundo párrafo dentro del quinto div interno
+                    const pCrearOfertaTituloOpcion5_3 = document.createElement('p');
+                    pCrearOfertaTituloOpcion5_3.classList.add('crearComportamientoConentenedor');
+                    pCrearOfertaTituloOpcion5_3.setAttribute('componente', 'infoDescuentoDedicados');
+                    pCrearOfertaTituloOpcion5_3.textContent =
+                        'Ahora mismo no tienes ningún apartamento seleccionado para poder aplicarle un comportamiento de precio. Pulsa en el botón Anadir apartamento para comenzar.';
+                    divCrearOfertaEspacioOpciones_3.appendChild(pCrearOfertaTituloOpcion5_3);
+                    return contenedorApartamentos
+
+                },
+                insertarComportamientoPorAntelacion: function (data) {
+
+                    const diasAntelacion = data.diasAntelacion
+                    if (!diasAntelacion) {
+                        const error = "Inserta al menos un numero"
+                        return casaVitini.ui.componentes.advertenciaInmersiva(error)
+                    }
+
+                    const selectorPerfilRepedito = document.querySelector(`[perfil=diasAntelacion][diaAntelacion="${diasAntelacion}"]`)
+                    if (selectorPerfilRepedito) {
+                        const error = `Ya has insertar un perfil para ${diasAntelacion} de antelacion`
+                        return casaVitini.ui.componentes.advertenciaInmersiva(error)
+                    }
+
+                    const contenedor = document.createElement("div")
+                    contenedor.setAttribute("perfil", "diasAntelacion")
+                    contenedor.classList.add(
+                        "backgroundGrey1",
+                        "padding6"
+                    )
+                    contenedor.setAttribute("diaAntelacion", diasAntelacion)
+
+                    const botonEliminar = document.createElement("div")
+                    botonEliminar.classList.add("botonV1")
+                    botonEliminar.innerText = "Eliminar comportamiento"
+                    botonEliminar.addEventListener("click", (e) => {
+                        const contenedorUI = e.target.closest("[perfil=diasAntelacion]")
+                        contenedorUI.remove()
+                    })
+                    contenedor.appendChild(botonEliminar)
+
+                    const titulo = document.createElement("div")
+                    titulo.classList.add(
+                        "padding6"
+                    )
+                    titulo.innerText = `Aplicar comportamiento a los apartamento cuando se haga una reserva con ${diasAntelacion} o mas dias de antelacion`
+                    contenedor.appendChild(titulo)
+
+
+                    const selectorUI = this.contenedorSelectorApartamento()
+                    contenedor.appendChild(selectorUI)
+
+                    const destino = document.querySelector("[contenedor=comportamientosPorDiasAntelacion]")
+                    destino.appendChild(contenedor)
+                }
+            }
         },
         enlacesDePago: {
             arranque: async () => {
@@ -21484,7 +21730,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const selectorBloqueUID = document.querySelector("[bloqueoUID]")
                     const bloqueUID = selectorBloqueUID.getAttribute("bloqueoUID")
                     const selectorTipoBloqueo = document.querySelector("[datoBloqueo=tipoBloqueo]")
@@ -21556,7 +21802,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const bloqueoUID = document.querySelector("[bloqueoUID]").getAttribute("bloqueoUID")
                         const apartamentoIDV = document.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")
                         const transaccion = {
@@ -22063,7 +22309,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const apartamentoIDV = document.querySelector("[datoBloqueo=apartamento]").value
                     const tipoBloqueo = document.querySelector("[datoBloqueo=tipoBloqueo]").value
                     const zonaUI = document.querySelector("[datoBloqueo=zonaUI]").value
@@ -22492,7 +22738,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const transaccion = {
                             zona: "administracion/arquitectura/entidades/crearEntidadAlojamiento"
                         }
@@ -23019,7 +23265,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const metadatos = {
                             zona: "administracion/arquitectura/entidades/modificarEntidadAlojamiento"
                         }
@@ -23479,7 +23725,7 @@ const casaVitini = {
                                 instanciaUID: instanciaUID,
                                 mensaje: mensaje
                             }
-                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const apartamentoIDV = document.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")
                             const habitacionIDV = habitacion.target.getAttribute("habitacionIDV")
                             const transaccion = {
@@ -23590,7 +23836,7 @@ const casaVitini = {
                                 instanciaUID: instanciaUID,
                                 mensaje: mensaje
                             }
-                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const transaccion = {
                                 zona: "administracion/arquitectura/configuraciones/addCamaToConfiguracionApartamentoHabitacion",
                                 camaIDV: camaIDV,
@@ -23647,7 +23893,7 @@ const casaVitini = {
                                 instanciaUID: instanciaUID,
                                 mensaje: mensaje
                             }
-                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const transaccion = {
                                 zona: "administracion/arquitectura/configuraciones/eliminarConfiguracionDeAlojamiento",
                                 apartamentoIDV: apartamentoIDV
@@ -23726,7 +23972,7 @@ const casaVitini = {
                                 instanciaUID: instanciaUID,
                                 mensaje: mensaje
                             }
-                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const transaccion = {
                                 zona: "administracion/arquitectura/configuraciones/eliminarHabitacionDeConfiguracionDeAlojamiento",
                                 "habitacionUID": Number(habitacionUID)
@@ -23802,7 +24048,7 @@ const casaVitini = {
                                 instanciaUID: instanciaUID,
                                 mensaje: mensaje
                             }
-                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const transaccion = {
                                 zona: "administracion/arquitectura/configuraciones/eliminarCamaDeConfiguracionDeAlojamiento",
                                 "camaUID": Number(camaUID)
@@ -23887,7 +24133,7 @@ const casaVitini = {
                                 instanciaUID: instanciaUID,
                                 mensaje: mensaje
                             }
-                            casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const nuevoEstado_ = nuevoEstado.target.getAttribute("nuevoEstado")
                             const apartamentoIDV = document.querySelector(`[apartamentoIDV]`).getAttribute("apartamentoIDV")
                             const transaccion = {
@@ -24267,7 +24513,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const apartamentoSeleccionado = document.querySelector("[componente=selectorApartamentoIDV]").value
                         if (!apartamentoSeleccionado) {
                             const error = "Selecciona un apartamento primero desde el selector de lista"
@@ -25081,7 +25327,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const campos = document.querySelectorAll("[campo]")
                         const usuarioIDX = document.querySelector("[usuarioIDX]").getAttribute("usuarioIDX")
                         const datosParaActualizar = {
@@ -25194,7 +25440,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const usuarioIDX = document.querySelector("[usuarioIDX]").getAttribute("usuarioIDX")
                         const selectorRol = document.querySelector("[selector=roles]").value
                         const datosParaActualizar = {
@@ -25414,7 +25660,7 @@ const casaVitini = {
                             instanciaUID: instanciaUIDPantallaDeCarga,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const claveNueva = document.querySelector("[componente=claveNueva]")
                         const claveNuevaDos = document.querySelector("[componente=claveNuevaDos]")
                         const datosParaActualizar = {
@@ -25495,7 +25741,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const nuevoEstado_ = nuevoEstado.target.getAttribute("nuevoEstado")
                         const usuarioIDX = document.querySelector("[usuarioIDX]").getAttribute("usuarioIDX")
                         const transaccion = {
@@ -25560,7 +25806,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const usuarioIDX = document.querySelector("[usuarioIDX]").getAttribute("usuarioIDX")
                         const transaccion = {
                             zona: "administracion/usuarios/eliminarCuentaDesdeAdministracion",
@@ -25698,7 +25944,7 @@ const casaVitini = {
                             instanciaUID: instanciaUID,
                             mensaje: mensaje
                         }
-                        casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                         const usuarioIDX = document.querySelector("[usuarioIDX]")
                         const nuevoIDX = document.querySelector("[componente=nuevoIDX]")
                         const datosParaActualizar = {
@@ -25808,7 +26054,7 @@ const casaVitini = {
                         instanciaUID: instanciaUID,
                         mensaje: mensaje
                     }
-                    casaVitini.ui.vistas.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const nuevoUsuarioIDX = document.querySelector("[campo=usuarioIDX]").value
                     const clave = document.querySelector("[campo=clave]").value
                     const rol = document.querySelector("[campo=selectorRol]").value

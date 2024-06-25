@@ -82,10 +82,7 @@ export const eliminarDescuento = async (data) => {
                 const error = "No existe la posicion"
                 throw new Error(error)
             }
-
-
             const ofertaUID = instantaneaOfertasPorCondicion[posicion].oferta.ofertaUID
-
             if (ofertaUIDParaEliminar === ofertaUID) {
                 instantaneaOfertasPorCondicion.splice(posicion, 1);
             } else {

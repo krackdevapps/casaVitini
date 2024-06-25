@@ -1,13 +1,16 @@
+import _ from "lodash";
 import { conexion } from "../../../../componentes/db.mjs";
 
 export const actualizarDesgloseFinacieroPorReservaUID = async (data) => {
     try {
 
         const desgloseFinanciero = data.desgloseFinanciero
-        const instantaneaNoches = desgloseFinanciero.entidades.reserva.desglosePorNoche
+        const instantaneaNoches = _.cloneDeep(desgloseFinanciero.entidades.reserva.instantaneaNoches);
+        delete desgloseFinanciero.entidades.reserva.instantaneaNoches
+
         const instantaneaOfertasPorCondicion = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porCondicion)
         const instantaneaOfertasPorAdministrador = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador)
-        const preciosAlterados = JSON.stringify([])
+        const instantaneaSobreControlPrecios = desgloseFinanciero.entidades.reserva.contenedorSobreControles
         const reservaUID = data.reservaUID
         const consulta = `
         UPDATE
@@ -17,7 +20,7 @@ export const actualizarDesgloseFinacieroPorReservaUID = async (data) => {
             "instantaneaNoches" = COALESCE($2, "instantaneaNoches"),
             "instantaneaOfertasPorCondicion" = COALESCE($3, "instantaneaOfertasPorCondicion"),
             "instantaneaOfertasPorAdministrador" = COALESCE($4, "instantaneaOfertasPorAdministrador"),
-            "preciosAlterados" = COALESCE($5, "preciosAlterados")
+            "instantaneaSobreControlPrecios" = COALESCE($5, "instantaneaSobreControlPrecios")
         WHERE 
             "reservaUID" = $6
         RETURNING *;
@@ -28,7 +31,7 @@ export const actualizarDesgloseFinacieroPorReservaUID = async (data) => {
             instantaneaNoches,
             instantaneaOfertasPorCondicion,
             instantaneaOfertasPorAdministrador,
-            preciosAlterados,
+            instantaneaSobreControlPrecios,
             reservaUID,
         ]
         const resuelve = await conexion.query(consulta, parametros);
