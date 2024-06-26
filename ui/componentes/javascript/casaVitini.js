@@ -9550,11 +9550,11 @@ const casaVitini = {
                         })
                         this.componentesUI.contenedor({
                             destino,
-                            modoUI
+                            modoUI,
+                            instanciaUID
                         })
                         this.componentesUI.navegacion.ui({
                             destino,
-                            instanciaUID
                         })
                         this.componentesUI.entidades.hub({
                             destino,
@@ -9598,13 +9598,18 @@ const casaVitini = {
                     contenedor: function (data) {
                         const destino = data.destino
                         const modoUI = data.modoUI
+                        const instanciaUID = data.instanciaUID
                         const selector = document.querySelector(destino).querySelector("[contenedor=financiero]")
+                        console.log("selector", selector)
                         if (!selector) {
                             const contenedor = document.createElement("div")
                             contenedor.classList.add("componentes_ui_desloseTotales_contenedor")
                             contenedor.setAttribute("contenedor", "financiero")
                             contenedor.setAttribute("modoUI", modoUI)
+                            contenedor.setAttribute("instanciaUID", instanciaUID)
                             document.querySelector(destino).appendChild(contenedor)
+                        } else {
+                            selector.setAttribute("instanciaUID", instanciaUID)
                         }
 
 
@@ -12844,14 +12849,14 @@ const casaVitini = {
             const segundos = String(fecha.getSeconds()).padStart(2, "0");
             const milisegundos = String(fecha.getMilliseconds()).padStart(3, "0");
             const uid = `${año}${mes}${dia}${horas}${minutos}${segundos}${milisegundos}`;
-            console.log("uid", uid)
+
             // Control para cuando halla una instancia con el mismo instanciaUID
             const instanciaRenderizada = document.querySelector(`[instanciaUID="${uid}"]`)
             if (instanciaRenderizada) {
-                console.log("si")
+
                 return uid + "_r"
             } else {
-                console.log("no")
+
                 return uid;
             }
         },

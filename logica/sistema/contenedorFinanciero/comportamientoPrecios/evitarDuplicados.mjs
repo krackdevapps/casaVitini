@@ -119,7 +119,7 @@ export const evitarDuplicados = async (data) => {
         //             fechaFinal_ISO: fechaFinal_ISO,
         //             tipoIDV: "porAntelacion"
         //         })
-        //         console.log("comportamientosPorAntelacion", comportamientosPorAntelacion)
+        //         
         //         comportamientosEnElRango.push(...comportamientosPorAntelacion)
         //     }
         //     throw new Error("test")

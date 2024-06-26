@@ -56,7 +56,7 @@ export const aplicarSobreControl = async (data) => {
         } else if (operacion === "establecerCantidad") {
             respuesta.encontrado = "si"
             respuesta.detallesSobreControl = detallesSobreControl
-            respuesta.valorFinal = netoSobreControlado
+            respuesta.valorFinal = new Decimal(valor)
         } else {
             const error = "En aplicarSobreControl no reconoce la operacion"
             throw new Error(error)

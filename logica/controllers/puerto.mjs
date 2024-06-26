@@ -4,7 +4,7 @@ import { filtroError } from '../sistema/error/filtroError.mjs';
 
 export const puerto = async (entrada, salida) => {
     try {
-        console.log(typeof entrada.body)
+
         const zonaRaw = entrada.body.zona;
         if (!zonaRaw) {
             const error = "zonaIndefinida";

@@ -7963,7 +7963,6 @@ const casaVitini = {
 
                                                 contenedorApartamento.appendChild(contenedorAlterarPrecio)
 
-
                                             }
 
                                             contenedorDesglosePorNoche.appendChild(contenedorNoche)
@@ -7999,7 +7998,6 @@ const casaVitini = {
                                     nocheUI: async function (data) {
                                         const fechaNoche = data.fechaNoche
                                         const apartamentoIDV = data.apartamentoIDV
-
                                         const main = document.querySelector("main")
                                         const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
                                         const reservaUID = main.querySelector("[reservaUID]").getAttribute("reservaUID")
@@ -8037,7 +8035,7 @@ const casaVitini = {
                                             const precioNetoApartamento = instantanea.precioNetoApartamento
 
                                             const sobreControl = data?.sobreControl
-                                            const detallesSobreControl = sobreControl.detallesSobreControl
+                                            const detallesSobreControl = sobreControl.detallesSobreControl || {}
                                             const operacion = detallesSobreControl?.operacion
                                             const valorSobreControl = detallesSobreControl?.valor || "0.00"
 
@@ -8073,7 +8071,7 @@ const casaVitini = {
                                             selectorTipoSobreControl.classList.add(
                                                 "selectorLista"
                                             )
-                                            selectorTipoSobreControl.setAttribute("campo", "tipoSobreControl")
+                                            selectorTipoSobreControl.setAttribute("campo", "tipoOperacion")
 
                                             const tituloSelector = document.createElement("option");
                                             if (!operacion) {
@@ -8123,7 +8121,9 @@ const casaVitini = {
                                                         instanciaUID_contenedorFinanciero,
                                                         reservaUID,
                                                         apartamentoIDV,
-                                                        fechaNoche
+                                                        tipoOperacion: selectorTipoSobreControl.value,
+                                                        fechaNoche,
+                                                        valorSobreControl: campoValor.value
                                                     })
                                                 })
                                                 contenedor.appendChild(boton)
@@ -8131,7 +8131,7 @@ const casaVitini = {
                                                 botonEliminar.classList.add("boton")
                                                 botonEliminar.innerText = "Eliminar sobre control de precio"
                                                 botonEliminar.addEventListener("click", () => {
-                                                    this.confirmar({
+                                                    this.eliminarSobreControl({
                                                         instanciaUID_sobreControlUI,
                                                         instanciaUID_contenedorFinanciero,
                                                         reservaUID,
@@ -8145,7 +8145,15 @@ const casaVitini = {
                                                 boton.classList.add("boton")
                                                 boton.innerText = "Crear sobre control de precio"
                                                 boton.addEventListener("click", () => {
-
+                                                    this.confirmar({
+                                                        instanciaUID_sobreControlUI,
+                                                        instanciaUID_contenedorFinanciero,
+                                                        reservaUID,
+                                                        apartamentoIDV,
+                                                        tipoOperacion: selectorTipoSobreControl.value,
+                                                        fechaNoche,
+                                                        valorSobreControl: campoValor.value
+                                                    })
                                                 })
                                                 contenedor.appendChild(boton)
                                             }
@@ -8162,58 +8170,106 @@ const casaVitini = {
                                         }
                                     },
                                     confirmar: async (data) => {
-
-
                                         const instanciaUID_sobreControlUI = data.instanciaUID_sobreControlUI
                                         const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
                                         const reservaUID = data.reservaUID
-                                        const apartamentoIDV = data.aparatmentoIDV
+                                        const apartamentoIDV = data.apartamentoIDV
+                                        const tipoOperacion = data.tipoOperacion
+                                        const fechaNoche = data.fechaNoche
+                                        const valorSobreControl = data.valorSobreControl
+                                        const transaccion = {
+                                            zona: "administracion/reservas/sobreControlPrecios/actualizarSobreControlNoche",
+                                            reservaUID,
+                                            apartamentoIDV,
+                                            fechaNoche,
+                                            tipoOperacion,
+                                            valorSobreControl
+                                        }
+                                        const uiRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_sobreControlUI}"]`)
+                                        const contenedor = uiRenderizada.querySelector("[componente=contenedor]")
+                                        //contenedor.innerHTML = null
+
+                                        const instanciaPantallaCarga = casaVitini.utilidades.codigoFechaInstancia()
+                                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({
+                                            mensaje: "Aplicando sobrecontrol de precio",
+                                            textoBoton: "ocultar",
+                                            instanciaUID: instanciaPantallaCarga
+                                        })
+
+                                        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                        console.log("respuestaServidor", respuestaServidor.ok)
+                                        const instanciaPantallaCargaUI = document.querySelector(`[instanciaUID="${instanciaPantallaCarga}"]`)
+                                        instanciaPantallaCargaUI?.remove()
+
+                                        const uiContenedorFinanciero = document.querySelector(`[instanciaUID="${instanciaUID_contenedorFinanciero}"]`)
+                                        //if (!uiContenedorFinanciero) { return }
+
+                                        if (respuestaServidor?.error) {
+                                            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                                        }
+                                        if (respuestaServidor.ok) {
+                                            const sobreControlUI = document.querySelector(`[instanciaUID="${instanciaUID_sobreControlUI}"]`)
+                                            sobreControlUI?.remove()
+
+                                            const selectorDesgloseEnPantalla = document.querySelector(`[reservaUID="${reservaUID}"] [componente=contenedorDesgloseTotal]`)
+                                            if (!selectorDesgloseEnPantalla) {
+                                                return
+                                            }
+                                            return casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desglegarContenedorFinanciero({
+                                                instanciaUID_contenedorFinanciero,
+                                                reservaUID
+                                            })
+                                        }
+                                    },
+                                    eliminarSobreControl: async (data) => {
+                                        const instanciaUID_sobreControlUI = data.instanciaUID_sobreControlUI
+                                        const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
+                                        const reservaUID = data.reservaUID
+                                        const apartamentoIDV = data.apartamentoIDV
                                         const fechaNoche = data.fechaNoche
                                         const transaccion = {
-                                            zona: "administracion/reservas/sobreControlPrecios/obtenerDetallesSobreControlNoche",
+                                            zona: "administracion/reservas/sobreControlPrecios/eliminarSobreControlNoche",
                                             reservaUID,
                                             apartamentoIDV,
                                             fechaNoche
                                         }
-
                                         const uiRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_sobreControlUI}"]`)
                                         const contenedor = uiRenderizada.querySelector("[componente=contenedor]")
-                                        contenedor.innerHTML = null
 
-                                        const spinner = casaVitini.ui.componentes.spinner({
-                                            mensaje: "Aplicando sobre control, un momento por favor...",
-                                            textoBoton: "Ocultar ventana"
+                                        const instanciaPantallaCarga = casaVitini.utilidades.codigoFechaInstancia()
+                                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({
+                                            mensaje: "Eliminado sobrecontrol de precio",
+                                            textoBoton: "ocultar",
+                                            instanciaUID: instanciaPantallaCarga
                                         })
-                                        contenedor.appendChild(spinner)
-                                        return
 
                                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                                        const uiContenedorFinanciero = document.querySelectorAll(`[instanciaUID="${instanciaUID_contenedorFinanciero}"]`)
-                                        if (!uiContenedorFinanciero) { return }
+                                        const instanciaPantallaCargaUI = document.querySelector(`[instanciaUID="${instanciaPantallaCarga}"]`)
+                                        instanciaPantallaCargaUI?.remove()
+
                                         if (respuestaServidor?.error) {
-                                            uiRenderizada?.remove()
-                                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                                             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                                         }
                                         if (respuestaServidor.ok) {
+                                            const sobreControlUI = document.querySelector(`[instanciaUID="${instanciaUID_sobreControlUI}"]`)
+                                            sobreControlUI?.remove()
+
+                                            const selectorDesgloseEnPantalla = document.querySelector(`[reservaUID="${reservaUID}"] [componente=contenedorDesgloseTotal]`)
+                                            if (!selectorDesgloseEnPantalla) {
+                                                return
+                                            }
                                             return casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desglegarContenedorFinanciero({
-                                                destino: `[instanciaUID="${instanciaUID_contenedorFinanciero}"][componente=contenedorDesgloseTotal]`,
-
+                                                instanciaUID_contenedorFinanciero,
+                                                reservaUID
                                             })
-
-
                                         }
-
                                     }
-
                                 },
-
                             },
-
                         },
                         controladores: {
                             desglegarContenedorFinanciero: async (data) => {
-                                const destino = data.destino
+                                const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
                                 const reservaUID = data.reservaUID
 
                                 const transaccion = {
@@ -8224,8 +8280,9 @@ const casaVitini = {
                                     ]
                                 }
                                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                                const instanciaRenderizada = document.querySelector(destino)
-
+                                console.log("respiuestaServidor", respuestaServidor)
+                                const instanciaRenderizada = document.querySelector(`[reservaUID="${reservaUID}"] [componente=contenedorDesgloseTotal]`)
+                                console.log("instancaiRenderizda", instanciaRenderizada)
                                 if (!instanciaRenderizada) {
                                     return
                                 }
@@ -8237,7 +8294,7 @@ const casaVitini = {
                                 if (respuestaServidor?.ok) {
                                     const contenedorFinanciero = respuestaServidor.ok.contenedorFinanciero
                                     casaVitini.ui.componentes.contenedorFinanciero.constructor({
-                                        destino,
+                                        destino: `[reservaUID="${reservaUID}"] [componente=contenedorDesgloseTotal]`,
                                         contenedorFinanciero,
                                         modoUI: "administracion"
 
@@ -19537,7 +19594,7 @@ const casaVitini = {
 
                         transaccion.contenedor.perfilesAntelacion = contenedorAntelaciones
                     }
-                    console.log("transaccion", transaccion)
+
 
                     return
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
@@ -20415,7 +20472,7 @@ const casaVitini = {
                         contenedorTipoPorRango.appendChild(contenedorApartamentos);
                         return contenedorTipoPorRango
                     },
-                    porCreacion:async () => {
+                    porCreacion: async () => {
                         const instanciaUID_contenedorFechas = casaVitini.utilidades.codigoFechaInstancia()
 
                         const contenedorTipoPorCreacion = document.createElement('div');
@@ -20456,7 +20513,7 @@ const casaVitini = {
                     },
                     porDias: () => {
 
-            
+
                         const selectorDiaSemana = (e) => {
                             const dia = e.target
                             const estadoDia = dia.getAttribute("estado")

@@ -89,6 +89,7 @@ export const totalesBasePorRango = async (data) => {
                     if (sobreControl.encontrado === "si") {
                         const detallesSobreControl = sobreControl.detallesSobreControl
                         const valorSobreControl = sobreControl.valorFinal
+                        console.log("valorSobnreCotnro", valorSobreControl, typeof valorSobreControl)
                         apartamentosPorNoche[apartamentoIDV].precioNetoApartamento = valorSobreControl.toFixed(2)
                         if (!reservaEntidad.hasOwnProperty("contenedorSobreControles")) {
                             reservaEntidad.contenedorSobreControles = {}

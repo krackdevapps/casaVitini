@@ -18,7 +18,7 @@ export const controlInputRaw = (req, res, next) => {
   req.on('end', () => {
     // Reconstruir el cuerpo de la solicitud en formato Buffer
     if (cuerpoDatos.length > 0) {
-      console.log("antes",typeof req, req)
+
       req.body = Buffer.concat(cuerpoDatos).toString()
     }
     next();

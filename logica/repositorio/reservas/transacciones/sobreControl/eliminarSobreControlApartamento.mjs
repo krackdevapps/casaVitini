@@ -11,7 +11,7 @@ export const eliminarSobreControlApartamento = async (data) => {
       "instantaneaSobreControlPrecios" = jsonb_set(
       "instantaneaSobreControlPrecios",
       ARRAY[$2],
-      "instantaneaSobreControlPrecios"->$2 - $3
+      ("instantaneaSobreControlPrecios"->$2) - $3
         )
     WHERE
       "reservaUID" = $1

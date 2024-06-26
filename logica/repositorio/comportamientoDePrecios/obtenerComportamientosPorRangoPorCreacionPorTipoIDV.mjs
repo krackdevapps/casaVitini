@@ -1,16 +1,16 @@
 import { conexion } from "../../componentes/db.mjs"
 
 export const obtenerComportamientosPorRangoPorCreacionPorTipoIDV = async (metadatos) => {
-  try {
-    const fechaInicio_ISO = metadatos.fechaInicio_ISO
-    const fechaFinal_ISO = metadatos.fechaFinal_ISO
-    const fechaInicio_creacionReserva = metadatos.fechaInicio_creacionReserva
-    const fechaFinal_creacionReserva = metadatos.fechaFinal_creacionReserva
-    const arrayApartamentos = metadatos.arrayApartamentos
-    const tipoIDV = metadatos.tipoIDV
-    const estadoArray = metadatos.estadoArray
+    try {
+        const fechaInicio_ISO = metadatos.fechaInicio_ISO
+        const fechaFinal_ISO = metadatos.fechaFinal_ISO
+        const fechaInicio_creacionReserva = metadatos.fechaInicio_creacionReserva
+        const fechaFinal_creacionReserva = metadatos.fechaFinal_creacionReserva
+        const arrayApartamentos = metadatos.arrayApartamentos
+        const tipoIDV = metadatos.tipoIDV
+        const estadoArray = metadatos.estadoArray
 
-    const consulta = `
+        const consulta = `
              SELECT
              "comportamientoUID",
                "nombreComportamiento",
@@ -82,19 +82,19 @@ export const obtenerComportamientosPorRangoPorCreacionPorTipoIDV = async (metada
             AND 
             "estadoIDV" = ANY($7)
           ;`
-    const parametros = [
-      fechaInicio_ISO,
-      fechaFinal_ISO,
-      fechaInicio_creacionReserva,
-      fechaFinal_creacionReserva,
-      tipoIDV,
-      arrayApartamentos,
-      estadoArray
-    ]
-    console.log("parametros", parametros)
-    const resuelve = await conexion.query(consulta, parametros)
-    return resuelve.rows
-  } catch (errorCapturado) {
-    throw errorCapturado
-  }
+        const parametros = [
+            fechaInicio_ISO,
+            fechaFinal_ISO,
+            fechaInicio_creacionReserva,
+            fechaFinal_creacionReserva,
+            tipoIDV,
+            arrayApartamentos,
+            estadoArray
+        ]
+
+        const resuelve = await conexion.query(consulta, parametros)
+        return resuelve.rows
+    } catch (errorCapturado) {
+        throw errorCapturado
+    }
 }

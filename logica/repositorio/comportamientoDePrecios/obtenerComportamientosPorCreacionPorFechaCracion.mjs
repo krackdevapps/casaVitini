@@ -1,15 +1,15 @@
 import { conexion } from "../../componentes/db.mjs"
 
 export const obtenerComportamientosPorCreacionPorFechaCracion = async (metadatos) => {
-  try {
-    const fechaInicio_ISO = metadatos.fechaInicio_ISO
-    const fechaFinal_ISO = metadatos.fechaFinal_ISO
-    const fechaCreacionReserva = metadatos.fechaCreacionReserva
-    const arrayApartamentos = metadatos.arrayApartamentos
-    const tipoIDV = metadatos.tipoIDV
-    const estado = metadatos.estado
+    try {
+        const fechaInicio_ISO = metadatos.fechaInicio_ISO
+        const fechaFinal_ISO = metadatos.fechaFinal_ISO
+        const fechaCreacionReserva = metadatos.fechaCreacionReserva
+        const arrayApartamentos = metadatos.arrayApartamentos
+        const tipoIDV = metadatos.tipoIDV
+        const estado = metadatos.estado
 
-    const consulta = `
+        const consulta = `
              SELECT
              "comportamientoUID",
                "nombreComportamiento",
@@ -60,18 +60,18 @@ export const obtenerComportamientosPorCreacionPorFechaCracion = async (metadatos
             AND 
                 "estadoIDV" = $6
           ;`
-    const parametros = [
-      fechaInicio_ISO,
-      fechaFinal_ISO,
-      fechaCreacionReserva,
-      tipoIDV,
-      arrayApartamentos,
-      estado
-    ]
-    console.log(">>parametros", parametros)
-    const resuelve = await conexion.query(consulta, parametros)
-    return resuelve.rows
-  } catch (errorCapturado) {
-    throw errorCapturado
-  }
+        const parametros = [
+            fechaInicio_ISO,
+            fechaFinal_ISO,
+            fechaCreacionReserva,
+            tipoIDV,
+            arrayApartamentos,
+            estado
+        ]
+
+        const resuelve = await conexion.query(consulta, parametros)
+        return resuelve.rows
+    } catch (errorCapturado) {
+        throw errorCapturado
+    }
 }
