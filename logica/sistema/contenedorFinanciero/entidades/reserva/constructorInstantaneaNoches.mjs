@@ -14,6 +14,7 @@ export const constructorInstantaneaNoches = async (data) => {
         const estructura = data.estructura
         const fechaEntrada_ISO = data.fechaEntrada_ISO
         const fechaSalida_ISO = data.fechaSalida_ISO
+        const fechaCreacion_ISO = data.fechaCreacion_ISO
         const apartamentosArray = data.apartamentosArray
         const instantaneaNoches = data.instantaneaNoches
 
@@ -46,6 +47,7 @@ export const constructorInstantaneaNoches = async (data) => {
         const comportamientosPorRangoFormateados = await comportamientosPorRango({
             fechaEntrada_ISO: fechaEntrada_ISO,
             fechaSalida_ISO: fechaSalida_ISO,
+            fechaCreacionReserva: fechaCreacion_ISO,
             arrayApartamentos: apartamentosArray
         })
         const comportamientosPorDiasFormateados = await comportamientosPorDias({
@@ -79,17 +81,20 @@ export const constructorInstantaneaNoches = async (data) => {
 
                 const apartamentosPorNoche = noche.apartamentosPorNoche
                 if (!apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {
+                    
                     apartamentosPorNoche[apartamentoIDV] = {
                         apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI,
                         precioNetoApartamento: precioBase
                     }
                     const apartamentoEstructura = apartamentosPorNoche[apartamentoIDV]
+
                     apartamentoEstructura.precioNetoApartamento = await aplicarCalculoDelComportamientoPorRango({
                         comportamientosPorRangoFormateados,
                         apartamentoIDV,
                         fechaDiaConNoche: fecha_ISO,
                         precioNetoApartamento: apartamentoEstructura.precioNetoApartamento
                     })
+
                     apartamentoEstructura.precioNetoApartamento = await aplicarCalculoDelComportamientoPorDias({
                         comportamientosPorDiasFormateados,
                         apartamentoIDV,

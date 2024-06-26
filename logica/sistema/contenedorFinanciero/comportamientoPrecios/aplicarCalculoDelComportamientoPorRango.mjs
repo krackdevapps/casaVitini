@@ -1,9 +1,9 @@
-import Decimal from "decimal.js"
 import { selectorRangoUniversal } from "../../selectoresCompartidos/selectorRangoUniversal.mjs"
 import { aplicarComportamiento } from "./aplicarComportamiento.mjs"
 
 export const aplicarCalculoDelComportamientoPorRango = async (data) => {
     try {
+        console.log("data", data)
         const comportamientosPorRangoFormateados = data.comportamientosPorRangoFormateados
         const apartamentoIDV = data.apartamentoIDV
         const fechaDiaConNoche = data.fechaDiaConNoche
@@ -15,7 +15,7 @@ export const aplicarCalculoDelComportamientoPorRango = async (data) => {
             for (const comportamiento of comportamientosDelApartamento) {
 
                 const fechaInicioComportamiento = comportamiento.fechaInicio
-                const fechaFinalComportamiento = comportamiento.fechaInicio
+                const fechaFinalComportamiento = comportamiento.fechaFinal
                 const simboloIDV = comportamiento.simboloIDV
                 const cantidad = comportamiento.cantidad
 

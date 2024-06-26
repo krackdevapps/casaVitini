@@ -37,6 +37,9 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
             rol: rol,
             origen: "plaza"
         };
+
+        const fechaActual_ISO = tiempoZH.toISODate();
+
         //const resuelveADP = await apartamentosDisponiblesPublico(fecha)
         const resuelveApartametnoDisponiblesPublico = await apartamentosPorRango(configuracionApartamentosPorRango);
         const apartamentosDisponiblesEncontrados = resuelveApartametnoDisponiblesPublico.apartamentosDisponibles;
@@ -47,15 +50,16 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
                     tipoOperacion: "crearDesglose",
                     fechaEntrada: fechaEntrada_ISO,
                     fechaSalida: fechaSalida_ISO,
+                    fechaCreacion: fechaActual_ISO,
                     apartamentosArray: apartamentosDisponiblesEncontrados,
                     capaOfertas: "si",
                     zonasArray: ["global", "publica"],
                     descuentosParaRechazar: [],
                     capaDescuentosPersonalizados: "si",
-                    descuentosArray: ["50", "50"]
+                    descuentosArray: ["50", "50"],
+                    capaImpuestos: "si",
                 }
             },
-            capaImpuestos: "no",
         })
         const estructuraFinal = {
             desgloseFinanciero,

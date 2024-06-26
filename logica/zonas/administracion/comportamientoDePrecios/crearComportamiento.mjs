@@ -22,16 +22,14 @@ export const crearComportamiento = async (entrada, salida) => {
         await validarComportamiento(comportamiento)
 
         await campoDeTransaccion("iniciar")
-        // const dataEvitarDuplicados = {
-        //     tipo: tipo,
-        //     transaccion: "crear",
-        //     apartamentos: apartamentos,
-        //     fechaInicio_ISO: fechaInicio_ISO,
-        //     fechaFinal_ISO: fechaFinal_ISO,
-        //     diasArray: diasArray
-        // };
 
-        // await evitarDuplicados(dataEvitarDuplicados);
+        const dataEvitarDuplicados = {
+            transaccion: "crear",
+            comportamiento
+            
+        };
+
+        await evitarDuplicados(dataEvitarDuplicados);
         const nuevoComportamiento = await insertarComportamientoDePrecio(comportamiento)
         await campoDeTransaccion("confirmar")
         const ok = {

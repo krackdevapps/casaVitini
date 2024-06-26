@@ -6711,6 +6711,101 @@ const casaVitini = {
                 }
                 return iconoProcesoDiv;
             },
+            contenedorFechasUI: (data) => {
+                const metodoSelectorDia = data?.metodoSelectorDia
+                const nombreContenedor = data?.nombreContenedor
+                if (metodoSelectorDia) {
+                    const error = "el constructorFechaUI no encuentra el metodoSelectorDia especificado"
+                    try {
+                        if (eval("typeof " + metodoSelectorDia) !== "function") {
+                            casaVitini.ui.componentes.advertenciaInmersiva(error)
+                        }
+                    } catch (errorCapturado) {
+                        return casaVitini.ui.componentes.advertenciaInmersiva(error)
+                    }
+                }
+                if (nombreContenedor) {
+                    const selector = document.querySelector(nombreContenedor)
+                    if (selector) {
+                        const error = "Cuidado, el contenedor de fecha ui tiene un nombre de contenedor ya existente en el dom."
+                        return casaVitini.ui.componentes.advertenciaInmersiva(error)
+                    }
+                }
+                const instanciaUID_contenedorFechas = casaVitini.utilidades.codigoFechaInstancia()
+
+                const divContenedor = document.createElement('div');
+                divContenedor.classList.add('administracion_ofertas_crearOfertas_contenedorFecha');
+                divContenedor.setAttribute("instanciaUID_contenedorFechas", instanciaUID_contenedorFechas)
+                divContenedor.setAttribute('nombreContenedor', nombreContenedor);
+
+
+                // Crear el primer div contenedor horizontal
+                const divContenedorHorizontal = document.createElement('div');
+                divContenedorHorizontal.classList.add('crearOfertaContenedorHorizontal');
+                // Crear el div contenedor de fecha de inicio
+                const divContenedorFechaInicio = document.createElement('div');
+                divContenedorFechaInicio.classList.add('contenedorFecha');
+                divContenedorFechaInicio.setAttribute('calendario', 'entrada');
+                divContenedorFechaInicio.setAttribute('nombreContenedor', nombreContenedor);
+                divContenedorFechaInicio.setAttribute('componente', 'inicioOferta');
+                divContenedorFechaInicio.setAttribute('paralizadorEvento', 'ocultadorCalendarios');
+                divContenedorFechaInicio.addEventListener("click", (e) => {
+                    casaVitini.ui.componentes.calendario.configurarCalendario({
+                        rangoIDV: "inicioRango",
+                        contenedorOrigenIDV: "[calendario=entrada]",
+                        perfilMes: "calendario_entrada_perfilSimple",
+                        metodoSelectorDia,
+                        instanciaUID_contenedorFechas
+                    })
+                })
+                // Crear el párrafo de la fecha de inicio
+                const pFechaInicio = document.createElement('p');
+                pFechaInicio.classList.add('tituloFecha');
+                pFechaInicio.textContent = 'Fecha de inicio';
+                // Crear el párrafo de la fecha de inicio seleccionada
+                const pFechaInicioSeleccionada = document.createElement('p');
+                pFechaInicioSeleccionada.classList.add('fechaInicio');
+                pFechaInicioSeleccionada.setAttribute('fechaUI', 'fechaInicio');
+                pFechaInicioSeleccionada.textContent = '(Seleccionar)';
+                // Agregar los elementos al div contenedor de fecha de inicio
+                divContenedorFechaInicio.appendChild(pFechaInicio);
+                divContenedorFechaInicio.appendChild(pFechaInicioSeleccionada);
+                // Crear el div contenedor de fecha de fin
+                const divContenedorFechaFin = document.createElement('div');
+                divContenedorFechaFin.classList.add('contenedorFecha');
+                divContenedorFechaFin.setAttribute('calendario', 'salida');
+                divContenedorFechaFin.setAttribute('paralizadorEvento', 'ocultadorCalendarios');
+                divContenedorFechaFin.setAttribute('componente', 'finOferta');
+                divContenedorFechaFin.addEventListener("click", () => {
+                    casaVitini.ui.componentes.calendario.configurarCalendario({
+                        rangoIDV: "finalRango",
+                        contenedorOrigenIDV: "[calendario=salida]",
+                        perfilMes: "calendario_salida_perfilSimple",
+                        metodoSelectorDia,
+                        instanciaUID_contenedorFechas
+                    })
+                })
+
+                // Crear el párrafo de la fecha de fin
+                const pFechaFin = document.createElement('p');
+                pFechaFin.classList.add('tituloFecha');
+                pFechaFin.textContent = 'Fecha fin';
+                // Crear el párrafo de la fecha de fin seleccionada
+                const pFechaFinSeleccionada = document.createElement('p');
+                pFechaFinSeleccionada.classList.add('fechaFin');
+                pFechaFinSeleccionada.setAttribute('fechaUI', 'fechaFin');
+                pFechaFinSeleccionada.textContent = '(Seleccionar)';
+                // Agregar los elementos al div contenedor de fecha de fin
+                divContenedorFechaFin.appendChild(pFechaFin);
+                divContenedorFechaFin.appendChild(pFechaFinSeleccionada);
+                // Agregar los elementos al primer div contenedor horizontal
+                divContenedorHorizontal.appendChild(divContenedorFechaInicio);
+                divContenedorHorizontal.appendChild(divContenedorFechaFin);
+                // Agregar el primer div contenedor horizontal al div contenedor
+                divContenedor.appendChild(divContenedorHorizontal);
+                // Agregar el div contenedor al div principal
+                return divContenedor
+            },
             calendario: {
                 constructorCalendarioNuevo: (metadatos) => {
                     try {
@@ -12749,12 +12844,14 @@ const casaVitini = {
             const segundos = String(fecha.getSeconds()).padStart(2, "0");
             const milisegundos = String(fecha.getMilliseconds()).padStart(3, "0");
             const uid = `${año}${mes}${dia}${horas}${minutos}${segundos}${milisegundos}`;
-
+            console.log("uid", uid)
             // Control para cuando halla una instancia con el mismo instanciaUID
             const instanciaRenderizada = document.querySelector(`[instanciaUID="${uid}"]`)
             if (instanciaRenderizada) {
+                console.log("si")
                 return uid + "_r"
             } else {
+                console.log("no")
                 return uid;
             }
         },

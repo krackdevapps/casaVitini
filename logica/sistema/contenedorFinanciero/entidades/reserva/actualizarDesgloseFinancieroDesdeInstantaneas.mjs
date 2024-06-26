@@ -29,6 +29,8 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const fechaEntrada = reserva.fechaEntrada
         const fechaSalida = reserva.fechaSalida
+        const fechaCreacion_simple = reserva.fechaCreacion_simple
+
 
         // const nuevaAutorizacion = data.nuevaAutorizacion
         // if (nuevaAutorizacion !== "aceptada" && nuevaAutorizacion !== "rechazada") {
@@ -52,6 +54,7 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
             instantaneaNoches,
             fechaEntrada_ISO: fechaEntrada,
             fechaSalida_ISO: fechaSalida,
+            fechaCreacion_ISO: fechaCreacion_simple,
             apartamentosArray
         })
 
@@ -102,7 +105,7 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
                 origen: "reserva"
             })
         }
-        
+
     } catch (error) {
         throw error
     }

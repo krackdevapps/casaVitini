@@ -2,11 +2,11 @@ import { conexion } from "../../componentes/db.mjs"
 
 export const obtenerComportamientosPorRangoPorTipoIDV = async (metadatos) => {
   try {
-    const fechaInicio_ISO = metadatos.fechaEntrada_ISO
-    const fechaFinal_ISO = metadatos.fechaSalida_ISO
+    const fechaInicio_ISO = metadatos.fechaInicio_ISO
+    const fechaFinal_ISO = metadatos.fechaFinal_ISO
     const arrayApartamentos = metadatos.arrayApartamentos
     const tipoIDV = metadatos.tipoIDV
-    const estado = metadatos.estado
+    const estadoArray = metadatos.estadoArray
 
     const consulta = `
          SELECT "comportamientoUID",
@@ -38,18 +38,16 @@ export const obtenerComportamientosPorRangoPorTipoIDV = async (metadatos) => {
                WHERE apt->>'apartamentoIDV' = ANY($4)
                )
             AND 
-            "estadoIDV" = $5
+            "estadoIDV" = ANY($5)
               `
     const parametros = [
       fechaInicio_ISO,
       fechaFinal_ISO,
       tipoIDV,
       arrayApartamentos,
-      estado
+      estadoArray
     ]
-
     const resuelve = await conexion.query(consulta, parametros)
-
     return resuelve.rows
   } catch (errorCapturado) {
     throw errorCapturado

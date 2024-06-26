@@ -1,6 +1,7 @@
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import Decimal from "decimal.js";
+import { utilidades } from "../../../componentes/utilidades.mjs";
 export const validarComportamiento = async (comportamiento) => {
     try {
 
@@ -18,7 +19,7 @@ export const validarComportamiento = async (comportamiento) => {
         })
 
         const tipo = contenedor?.tipo
-        console.log("tipo", tipo)
+
         if (tipo === "porAntelacion") {
 
             const fechaInicio_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
@@ -48,12 +49,11 @@ export const validarComportamiento = async (comportamiento) => {
             })
 
             const diasAntelacionRepeditos = {}
-            const llavesRepetidas = {}
 
             for (const perfil of perfilesAntelacion) {
                 const diasAntelacion = validadoresCompartidos.tipos.cadena({
                     string: perfil.diasAntelacion,
-                    nombreCampo: "El campo diasAntelacion en el perfil " + tipoCondicionIDV,
+                    nombreCampo: "El campo diasAntelacion en el perfil " + tipo,
                     filtro: "cadenaConNumerosEnteros",
                     sePermiteVacio: "no",
                     devuelveUnTipoNumber: "no",
@@ -74,7 +74,7 @@ export const validarComportamiento = async (comportamiento) => {
                 }
 
                 const apartamentos = perfil.apartamentos
-                for (const [apartamentoIDV, comportamiento] of Object.entries(apartamentos)) {
+                   for (const [apartamentoIDV, comportamiento] of Object.entries(apartamentos)) {
 
                     validadoresCompartidos.tipos.cadena({
                         string: apartamentoIDV,
@@ -83,6 +83,8 @@ export const validarComportamiento = async (comportamiento) => {
                         sePermiteVacio: "no",
                         limpiezaEspaciosAlrededor: "si",
                     })
+                    await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+
 
                     const simboloIDV = comportamiento.simboloIDV
                     const cantidad = comportamiento.cantidad
@@ -98,7 +100,7 @@ export const validarComportamiento = async (comportamiento) => {
                     }
                     validadoresCompartidos.tipos.cadena({
                         string: cantidad,
-                        nombreCampo: "El campo cantidad",
+                        nombreCampo: `El campo cantidad en el ${apartamentoIDV}`,
                         filtro: "cadenaConNumerosConDosDecimales",
                         sePermiteVacio: "no",
                         impedirCero: "si",
@@ -208,6 +210,84 @@ export const validarComportamiento = async (comportamiento) => {
                 validadoresCompartidos.tipos.cadena({
                     string: cantidad,
                     nombreCampo: "El campo cantidad",
+                    filtro: "cadenaConNumerosConDosDecimales",
+                    sePermiteVacio: "no",
+                    impedirCero: "si",
+                    devuelveUnTipoNumber: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+            }
+
+        } else if (tipo === "porCreacion") {
+
+            const fechaInicio_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: contenedor.fechaInicio,
+                nombreCampo: "La fecha de inicio del comportamiento"
+            });
+            const fechaFinal_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: contenedor.fechaFinal,
+                nombreCampo: "La fecha final del comportameinto"
+            });
+
+            await validadoresCompartidos.fechas.validacionVectorial({
+                fechaEntrada_ISO: fechaInicio_ISO,
+                fechaSalida_ISO: fechaFinal_ISO,
+                tipoVector: "igual"
+            })
+            const fechaInicio_creacionReserva = await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: contenedor.fechaInicio_creacionReserva,
+                nombreCampo: "La fecha de inicio del comportamiento"
+            });
+            const fechaFinal_creacionReserva = await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: contenedor.fechaFinal_creacionReserva,
+                nombreCampo: "La fecha final del comportameinto"
+            });
+
+            await validadoresCompartidos.fechas.validacionVectorial({
+                fechaEntrada_ISO: fechaInicio_creacionReserva,
+                fechaSalida_ISO: fechaFinal_creacionReserva,
+                tipoVector: "igual"
+            })
+            const apartamentos = validadoresCompartidos.tipos.array({
+                array: contenedor.apartamentos,
+                nombreCampo: "Dentro del contenedor, en apartamentos"
+            })
+
+            const controladorIDVRepetidos = {}
+
+            for (const detallesApartamento of apartamentos) {
+                const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+                    string: detallesApartamento.apartamentoIDV,
+                    nombreCampo: "El campo apartamentoIDV",
+                    filtro: "strictoIDV",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+
+                const simboloIDV = detallesApartamento.simboloIDV
+                const cantidad = detallesApartamento.cantidad
+
+                const apartamentoIDV_minusculas = apartamentoIDV.toLowerCase()
+                if (controladorIDVRepetidos.hasOwnProperty(apartamentoIDV_minusculas)) {
+                    const error = `El identificador visual ${apartamentoIDV} esta repetido en el array de apartamentos`;
+                    throw new Error(error);
+                }
+                controladorIDVRepetidos[apartamentoIDV_minusculas] = null
+                await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+
+                if (
+                    simboloIDV !== "aumentoPorcentaje" &&
+                    simboloIDV !== "aumentoCantidad" &&
+                    simboloIDV !== "reducirCantidad" &&
+                    simboloIDV !== "reducirPorcentaje" &&
+                    simboloIDV !== "precioEstablecido"
+                ) {
+                    const error = `El campo simbolo de ${apartamentoIDV} solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido`;
+                    throw new Error(error);
+                }
+                validadoresCompartidos.tipos.cadena({
+                    string: cantidad,
+                    nombreCampo: `El campo cantidad del ${apartamentoIDV}`,
                     filtro: "cadenaConNumerosConDosDecimales",
                     sePermiteVacio: "no",
                     impedirCero: "si",

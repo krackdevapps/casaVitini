@@ -8162,7 +8162,7 @@ const casaVitini = {
                                         }
                                     },
                                     confirmar: async (data) => {
-                                        console.log("data", data)
+
 
                                         const instanciaUID_sobreControlUI = data.instanciaUID_sobreControlUI
                                         const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
@@ -17758,10 +17758,10 @@ const casaVitini = {
                         const error = "el constructorFechaUI no encuentra el metodoSelectorDia especificado"
                         try {
                             if (eval("typeof " + metodoSelectorDia) !== "function") {
-                                casaVitini.ui.vistas.advertenciaInmersiva(error)
+                                casaVitini.ui.componentes.advertenciaInmersiva(error)
                             }
                         } catch (errorCapturado) {
-                            return casaVitini.ui.vistas.advertenciaInmersiva(error)
+                            return casaVitini.ui.componentes.advertenciaInmersiva(error)
                         }
                     }
 
@@ -19410,11 +19410,7 @@ const casaVitini = {
                     }
                     casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                     const nombreComportamiento = document.querySelector("[campoOferta=nombreOferta]").value
-                    const fechaInicio_humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                    const fechaFinal_humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
 
-                    const fechaInicio_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaInicio_humana)
-                    const fechaFinal_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaFinal_humana)
 
 
                     const tipo = document.querySelector("[botonTipo][estado=activado]")?.getAttribute("botonTipo")
@@ -19431,12 +19427,50 @@ const casaVitini = {
                             tipo,
                         }
                     }
-                    console.log("tipo", tipo)
+
                     if (tipo === "porRango") {
+                        const area = document.querySelector(`[contenedor_tipobloqueo=porRango]`)
+                        const fechaInicio_humana = area.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                        const fechaFinal_humana = area.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+
+                        const fechaInicio_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaInicio_humana)
+                        const fechaFinal_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaFinal_humana)
                         transaccion.contenedor.fechaInicio = fechaInicio_ISO
                         transaccion.contenedor.fechaFinal = fechaFinal_ISO
                         transaccion.contenedor.apartamentos = []
                         const selectoresApartamentos = document.querySelectorAll(`[contenedor_tipobloqueo=porRango] [descuentoDedicadoIDV]`)
+                        selectoresApartamentos.forEach((apartamentos) => {
+                            const apartamentoIDV = apartamentos.getAttribute("descuentoDedicadoIDV")
+                            const cantidad = apartamentos.querySelector("[campoApartamentoSeleccionado=cantidad]").value
+                            const simbolo = apartamentos.querySelector("[campoApartamentoSeleccionado=simbolo]").value
+                            const apartamentoFinal = {
+                                apartamentoIDV: apartamentoIDV,
+                                cantidad: cantidad,
+                                simboloIDV: simbolo
+                            }
+                            transaccion.contenedor.apartamentos.push(apartamentoFinal)
+                        })
+                    } else if (tipo === "porCreacion") {
+                        const area = document.querySelector(`[contenedor_tipobloqueo=porCreacion]`)
+                        const contenedorRangoComportamiento = area.querySelector("[nombreContenedor=rangoComportamiento]")
+                        const contenedorRangoReservaCreacion = area.querySelector("[nombreContenedor=rangoReservaCreacion]")
+
+                        const fechaInicioRangoComportamiento_humana = contenedorRangoComportamiento.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                        const fechaFinalRangoComportamiento_humana = contenedorRangoComportamiento.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                        const fechaInicioRangoComportamiento_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaInicioRangoComportamiento_humana)
+                        const fechaFinalRangoComportamiento_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaFinalRangoComportamiento_humana)
+
+                        const fechaInicioCreacionReserva_humana = contenedorRangoReservaCreacion.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                        const fechaFinalCreacionReserva_humana = contenedorRangoReservaCreacion.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                        const fechaInicioRangoReservaCreacion_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaInicioCreacionReserva_humana)
+                        const fechaFinalRangoReservaCreacion_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaFinalCreacionReserva_humana)
+
+                        transaccion.contenedor.fechaInicio = fechaInicioRangoComportamiento_ISO
+                        transaccion.contenedor.fechaFinal = fechaFinalRangoComportamiento_ISO
+                        transaccion.contenedor.fechaInicio_creacionReserva = fechaInicioRangoReservaCreacion_ISO
+                        transaccion.contenedor.fechaFinal_creacionReserva = fechaFinalRangoReservaCreacion_ISO
+                        transaccion.contenedor.apartamentos = []
+                        const selectoresApartamentos = document.querySelectorAll(`[contenedor_tipobloqueo=porCreacion] [descuentoDedicadoIDV]`)
                         selectoresApartamentos.forEach((apartamentos) => {
                             const apartamentoIDV = apartamentos.getAttribute("descuentoDedicadoIDV")
                             const cantidad = apartamentos.querySelector("[campoApartamentoSeleccionado=cantidad]").value
@@ -19465,11 +19499,21 @@ const casaVitini = {
                             transaccion.contenedor.apartamentos.push(apartamentoFinal)
                         })
                     } else if (tipo === "porAntelacion") {
+
+                        const area = document.querySelector(`[contenedor_tipobloqueo=porAntelacion]`)
+                        const fechaInicio_humana = area.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                        const fechaFinal_humana = area.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+
+                        const fechaInicio_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaInicio_humana)
+                        const fechaFinal_ISO = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaFinal_humana)
+
+                        transaccion.contenedor.fechaInicio = fechaInicio_ISO
+                        transaccion.contenedor.fechaFinal = fechaFinal_ISO
                         const contenedorAntelaciones = []
                         const selectorCotnenedorPorAntelacion = document.querySelectorAll(`[contenedor_tipobloqueo=porAntelacion] [diaAntelacion]`)
 
                         selectorCotnenedorPorAntelacion.forEach((contenedor) => {
-                            console.log("contenedor", contenedor)
+
                             const diasAntelacion = contenedor.getAttribute("diaAntelacion")
                             const estructura = {
                                 diasAntelacion: diasAntelacion,
@@ -19477,7 +19521,7 @@ const casaVitini = {
                             }
                             const selectorApartamentosPerfil = contenedor.querySelectorAll("[contenedor=apartamentoDedicado]")
                             selectorApartamentosPerfil.forEach((apartamentoDedicado) => {
-                                console.log("apartametnoDEid", apartamentoDedicado)
+
                                 const apartamentoIDV = apartamentoDedicado.getAttribute("descuentoDedicadoIDV")
                                 const cantidad = apartamentoDedicado.querySelector("[campoApartamentoSeleccionado=cantidad]").value
                                 const simboloIDV = apartamentoDedicado.querySelector("[campoApartamentoSeleccionado=simbolo]").value
@@ -19490,11 +19534,11 @@ const casaVitini = {
                             })
                             contenedorAntelaciones.push(estructura)
                         })
-                        console.log("contenedorAntelaciones", contenedorAntelaciones)
+
                         transaccion.contenedor.perfilesAntelacion = contenedorAntelaciones
                     }
-
                     console.log("transaccion", transaccion)
+
                     return
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -19514,7 +19558,7 @@ const casaVitini = {
                     }
                 },
                 apartamentosDisponibles: async (data) => {
-                    console.log("data", data)
+
                     // apartamento.preventDefault()
                     const apartamento = data.e
                     const destino = data.destino
@@ -19619,10 +19663,10 @@ const casaVitini = {
                         apartamentoUI: apartamentoUI
                     }
                     const descuentoDedicadoUI = casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarOpcionesApartamento(opciones)
-                    console.log("destino", destino)
+
 
                     const zonaDescuentoDedicados = document.querySelector(destino)
-                    console.log("zonaDescuentoDedicados", zonaDescuentoDedicados)
+
                     zonaDescuentoDedicados.style.display = "grid"
                     zonaDescuentoDedicados.appendChild(descuentoDedicadoUI)
                 },
@@ -20104,55 +20148,30 @@ const casaVitini = {
                 }
                 casaVitini.shell.navegacion.controladorVista(entrada)
             },
-            detalleUI: function (modo) {
+            detalleUI: async function (modo) {
                 const selector = document.querySelector("[componente=espacioBuscadorReservas]")
 
                 if (modo !== "editarOferta" && modo !== "crearOferta") {
                     const error = "En que modo quieres que despliegue la interfa de oferta en editarOferat o en crearOferta"
                     casaVitini.ui.vistas.advertenciaInmersiva(error)
                 }
-                const instanciaUID_contenedorFechas = casaVitini.utilidades.codigoFechaInstancia()
 
-                // Crear el elemento div principal
                 const divPrincipal = document.createElement('div');
                 divPrincipal.setAttribute('componente', 'espacioCrearOferta');
                 divPrincipal.classList.add('espacioComportamiento');
                 selector.appendChild(divPrincipal)
-                // document.querySelector("main").appendChild(divPrincipal)
 
                 if (modo === "editarOferta") {
                     divPrincipal.classList.add("eventosDesactivadosInicialmente")
                 }
 
-
-                const selectorBoton = (boton) => {
-                    const botonID = boton.target.getAttribute("botonTipo")
-                    casaVitini.administracion.comportamiento_de_precios.detallesComportamiento.controladoresUI.opcionesTipo(botonID)
-                }
-                const selectorDiaSemana = (e) => {
-                    const dia = e.target
-                    const estadoDia = dia.getAttribute("estado")
-
-                    if (estadoDia === "activado") {
-                        dia.removeAttribute("style")
-                        dia.removeAttribute("estado")
-                    } else {
-                        dia.setAttribute("estado", "activado")
-                        dia.style.background = "blue"
-                        dia.style.color = "white"
-                    }
-
-                }
-
                 const divContenedorNombreYEstado = document.createElement('div');
                 if (modo === "editarOferta") {
                     divContenedorNombreYEstado.classList.add('crearOfertaContenedorHorizontalV2');
-
                 }
                 if (modo === "crearOferta") {
                     divContenedorNombreYEstado.classList.add('crearOfertaContenedorHorizontal_modoCrear');
                 }
-
 
                 if (modo === "editarOferta") {
                     const botonEstadoOferta = document.createElement("div")
@@ -20174,31 +20193,7 @@ const casaVitini = {
                 divPrincipal.appendChild(divContenedorNombreYEstado)
                 // Crear el div contenedor
 
-                const selectorTipoComportamiento = document.createElement("div")
-                selectorTipoComportamiento.classList.add("selectorTipoComportamiento")
-
-
-                const botonTipoComportamiento_porRango = document.createElement("div")
-                botonTipoComportamiento_porRango.classList.add("botonTipoComportamiento")
-                botonTipoComportamiento_porRango.setAttribute("botonTipo", "porRango")
-                botonTipoComportamiento_porRango.innerText = "Por rango de fechas"
-                botonTipoComportamiento_porRango.addEventListener("click", selectorBoton)
-                selectorTipoComportamiento.appendChild(botonTipoComportamiento_porRango)
-
-                const botonTipoComportamiento_porDias = document.createElement("div")
-                botonTipoComportamiento_porDias.classList.add("botonTipoComportamiento")
-                botonTipoComportamiento_porDias.setAttribute("botonTipo", "porDias")
-                botonTipoComportamiento_porDias.innerText = "Por días de la semana"
-                botonTipoComportamiento_porDias.addEventListener("click", selectorBoton)
-                selectorTipoComportamiento.appendChild(botonTipoComportamiento_porDias)
-
-                const botonTipoComportamiento_porDiasAntelacion = document.createElement("div")
-                botonTipoComportamiento_porDiasAntelacion.classList.add("botonTipoComportamiento")
-                botonTipoComportamiento_porDiasAntelacion.setAttribute("botonTipo", "porAntelacion")
-                botonTipoComportamiento_porDiasAntelacion.innerText = "Por días de antelación"
-                botonTipoComportamiento_porDiasAntelacion.addEventListener("click", selectorBoton)
-                selectorTipoComportamiento.appendChild(botonTipoComportamiento_porDiasAntelacion)
-
+                const selectorTipoComportamiento = this.compomentesUI.barraGlobal()
                 divPrincipal.appendChild(selectorTipoComportamiento)
 
                 const contenedorTipoComportamiento = document.createElement("div")
@@ -20211,207 +20206,17 @@ const casaVitini = {
                 )
                 divPrincipal.appendChild(contenedorTipoComportamiento)
 
-                const contenedorTipoPorRango = document.createElement('div');
-                contenedorTipoPorRango.classList.add('crearComportameintoContendorFechas');
-                contenedorTipoPorRango.setAttribute("contenedor_tipoBloqueo", "porRango")
-                contenedorTipoPorRango.setAttribute("instanciaUID_contenedorFechas", instanciaUID_contenedorFechas)
-
-                // Crear el primer div contenedor horizontal
-                const divContenedorHorizontal = document.createElement('div');
-                divContenedorHorizontal.classList.add('crearOfertaContenedorHorizontal');
-                // Crear el div contenedor de fecha de inicio
-                const divContenedorFechaInicio = document.createElement('div');
-                divContenedorFechaInicio.classList.add('contenedorFecha');
-                divContenedorFechaInicio.setAttribute('calendario', 'entrada');
-                divContenedorFechaInicio.setAttribute('componente', 'inicioOferta');
-                divContenedorFechaInicio.addEventListener("click", (e) => {
-                    casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorCalendario({
-                        e,
-                        instanciaUID_contenedorFechas
-                    })
-                })
-                divContenedorFechaInicio.setAttribute('paralizadorEvento', 'ocultadorCalendarios');
-                // Crear el párrafo de la fecha de inicio
-                const pFechaInicio = document.createElement('p');
-                pFechaInicio.classList.add('tituloFecha');
-                pFechaInicio.textContent = 'Fecha de inicio';
-                // Crear el párrafo de la fecha de inicio seleccionada
-                const pFechaInicioSeleccionada = document.createElement('p');
-                pFechaInicioSeleccionada.classList.add('fechaInicio');
-                pFechaInicioSeleccionada.setAttribute('fechaUI', 'fechaInicio');
-                pFechaInicioSeleccionada.textContent = '(Seleccionar)';
-                // Agregar los elementos al div contenedor de fecha de inicio
-                divContenedorFechaInicio.appendChild(pFechaInicio);
-                divContenedorFechaInicio.appendChild(pFechaInicioSeleccionada);
-                // Crear el div contenedor de fecha de fin
-                const divContenedorFechaFin = document.createElement('div');
-                divContenedorFechaFin.classList.add('contenedorFecha');
-                divContenedorFechaFin.setAttribute('calendario', 'salida');
-                divContenedorFechaFin.setAttribute('componente', 'finOferta');
-                divContenedorFechaFin.addEventListener("click", (e) => {
-                    casaVitini.administracion.gestion_de_ofertas.crearOferta.constructorCalendario({
-                        e,
-                        instanciaUID_contenedorFechas
-                    })
-                })
-                divContenedorFechaFin.setAttribute('paralizadorEvento', 'ocultadorCalendarios');
-                // Crear el párrafo de la fecha de fin
-                const pFechaFin = document.createElement('p');
-                pFechaFin.classList.add('tituloFecha');
-                pFechaFin.textContent = 'Fecha fin';
-                // Crear el párrafo de la fecha de fin seleccionada
-                const pFechaFinSeleccionada = document.createElement('p');
-                pFechaFinSeleccionada.classList.add('fechaFin');
-                pFechaFinSeleccionada.setAttribute('fechaUI', 'fechaFin');
-                pFechaFinSeleccionada.textContent = '(Seleccionar)';
-                // Agregar los elementos al div contenedor de fecha de fin
-                divContenedorFechaFin.appendChild(pFechaFin);
-                divContenedorFechaFin.appendChild(pFechaFinSeleccionada);
-                // Agregar los elementos al primer div contenedor horizontal
-                divContenedorHorizontal.appendChild(divContenedorFechaInicio);
-                divContenedorHorizontal.appendChild(divContenedorFechaFin);
-                // Agregar el primer div contenedor horizontal al div contenedor
-                contenedorTipoPorRango.appendChild(divContenedorHorizontal);
-                // Agregar el div contenedor al div principal
-                const contenedorApartamentos = casaVitini.administracion.comportamiento_de_precios.compomentesUI.contenedorSelectorApartamento()
-                contenedorTipoPorRango.appendChild(contenedorApartamentos);
-                contenedorTipoComportamiento.appendChild(contenedorTipoPorRango);
-
-                const comportamientoPorDias = document.createElement("div")
-                comportamientoPorDias.classList.add('contenedorOculto');
-                comportamientoPorDias.setAttribute("contenedor_tipoBloqueo", "porDias")
-                comportamientoPorDias.classList.add(
-                    "flexVertical",
-                )
-
-                const contenedorTipoPorDias = document.createElement('div');
-                contenedorTipoPorDias.classList.add('contenedorPorDias');
-                const dias = [
-                    {
-                        nombreIDV: "lunes",
-                        nombreUI: "Lunes"
-                    },
-                    {
-                        nombreIDV: "martes",
-                        nombreUI: "Martes"
-                    },
-                    {
-                        nombreIDV: "miercoles",
-                        nombreUI: "Miercoles"
-                    },
-                    {
-                        nombreIDV: "jueves",
-                        nombreUI: "Jueves"
-                    },
-                    {
-                        nombreIDV: "viernes",
-                        nombreUI: "Viernes"
-                    },
-                    {
-                        nombreIDV: "sabado",
-                        nombreUI: "Sabado"
-                    },
-                    {
-                        nombrbeIDV: "domingo",
-                        nombreUI: "Domingo"
-                    }
-                ]
-
-                for (const dia of dias) {
-                    const nombreUI = dia.nombreUI
-                    const nombreIDV = dia.nombreIDV
-
-                    const diaUI = document.createElement("div")
-                    diaUI.classList.add("diaUI")
-                    diaUI.classList.add("negrita")
-                    diaUI.setAttribute("componente", "diaUI")
-                    diaUI.setAttribute("diaIDV", nombreIDV)
-                    diaUI.innerText = nombreUI
-                    diaUI.addEventListener("click", selectorDiaSemana)
-                    contenedorTipoPorDias.appendChild(diaUI)
-                }
-                comportamientoPorDias.appendChild(contenedorTipoPorDias);
-                const contenedorApartamentosParaDias = casaVitini.administracion.comportamiento_de_precios.compomentesUI.contenedorSelectorApartamento()
-                comportamientoPorDias.appendChild(contenedorApartamentosParaDias);
-                contenedorTipoComportamiento.appendChild(comportamientoPorDias);
-
-                const comportamientoPorAntelacion = document.createElement("div")
-                comportamientoPorAntelacion.classList.add('contenedorOculto');
-                comportamientoPorAntelacion.setAttribute("contenedor_tipoBloqueo", "porAntelacion")
-                comportamientoPorAntelacion.classList.add(
-                    "flexVertical",
-                    "gap6",
-                    "padding6"
-                )
-
-                contenedorTipoComportamiento.appendChild(comportamientoPorAntelacion);
+                const contenedorPorRango = this.compomentesUI.perfilesComportamiento.porRango()
+                contenedorTipoComportamiento.appendChild(contenedorPorRango)
+                const contenedorPorDias = this.compomentesUI.perfilesComportamiento.porDias()
+                contenedorTipoComportamiento.appendChild(contenedorPorDias)
+                const contenedorPorCreacion = await this.compomentesUI.perfilesComportamiento.porCreacion()
+                contenedorTipoComportamiento.appendChild(contenedorPorCreacion)
 
 
-                const contenedorSelectorAntelacion = document.createElement("div")
-                contenedorSelectorAntelacion.classList.add(
-                    "flexVertical"
-                )
-                comportamientoPorAntelacion.appendChild(contenedorSelectorAntelacion)
-
-                const botonAnadirComportamientoPorDiasDeAntecion = document.createElement("div")
-                botonAnadirComportamientoPorDiasDeAntecion.classList.add("botonV1")
-                botonAnadirComportamientoPorDiasDeAntecion.innerText = "Añadir comportamiento por antelacion"
-                botonAnadirComportamientoPorDiasDeAntecion.addEventListener("click", () => {
-                    const campoDiasAntelacion = document.querySelector("[campo=diasAntelacion]").value
-                    this.compomentesUI.insertarComportamientoPorAntelacion({
-                        diasAntelacion: campoDiasAntelacion
-                    })
-                })
-                comportamientoPorAntelacion.appendChild(botonAnadirComportamientoPorDiasDeAntecion)
-
-                const entradDias = document.createElement("input")
-                entradDias.setAttribute("campo", "diasAntelacion")
-                entradDias.type = "number"
-                entradDias.classList.add(
-                    "padding6",
-                    "borderRadius6"
-                )
-                entradDias.placeholder = "Inserta el numero maximo de dias de antelacion"
-                comportamientoPorAntelacion.appendChild(entradDias)
-
-
-                const contenedorPerfilDiasAntelacion = document.createElement("div")
-                contenedorPerfilDiasAntelacion.setAttribute("contenedor", "comportamientosPorDiasAntelacion")
-                comportamientoPorAntelacion.appendChild(contenedorPerfilDiasAntelacion)
-
-                // const contenedorBotones = document.createElement("div")
-                // contenedorBotones.classList.add("crearComportameintoEspacioBotones")
-                // // Crear el párrafo 'Anadir apartamento' dentro del segundo div interno
-                // const pCrearOFertaBotonAnadirApartamento_31 = document.createElement('p');
-                // pCrearOFertaBotonAnadirApartamento_31.classList.add('crearOFertaBotonAnadirApartamento');
-                // pCrearOFertaBotonAnadirApartamento_31.setAttribute('componente', 'botonAnadirApartamentoOferta');
-                // pCrearOFertaBotonAnadirApartamento_31.textContent = 'Anadir apartamento';
-                // pCrearOFertaBotonAnadirApartamento_31.addEventListener("click", casaVitini.administracion.comportamiento_de_precios.crearComportamiento.apartamentosDisponibles)
-                // contenedorBotones.appendChild(pCrearOFertaBotonAnadirApartamento_31);
-                // contenedorTipoComportamiento.appendChild(contenedorBotones)
-                // // Crear el elemento div principal
-                // const porApartamentoDedicado = document.createElement('div');
-                // porApartamentoDedicado.classList.add('espaciadoInterno');
-                // porApartamentoDedicado.setAttribute('zonaOferta', 'porApartamentoDedicado');
-                // porApartamentoDedicado.setAttribute('contenedor', 'apartamentos');
-                // // Crear el primer div interno
-                // const divCrearOfertaEspacioOpciones_3 = document.createElement('div');
-                // divCrearOfertaEspacioOpciones_3.classList.add('administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos');
-                // divCrearOfertaEspacioOpciones_3.setAttribute("componente", "comportamientoSuperBloque")
-                // porApartamentoDedicado.appendChild(divCrearOfertaEspacioOpciones_3);
-                // // Crear el segundo párrafo dentro del quinto div interno
-                // const pCrearOfertaTituloOpcion5_3 = document.createElement('p');
-                // pCrearOfertaTituloOpcion5_3.classList.add('crearComportamientoConentenedor');
-                // pCrearOfertaTituloOpcion5_3.setAttribute('componente', 'infoDescuentoDedicados');
-                // pCrearOfertaTituloOpcion5_3.textContent =
-                //     'Ahora mismo no tienes ningún apartamento seleccionado para poder aplicarle un comportamiento de precio. Pulsa en el botón Anadir apartamento para comenzar.';
-                // divCrearOfertaEspacioOpciones_3.appendChild(pCrearOfertaTituloOpcion5_3);
-
-                // // Crear el segundo div principal
                 const divCrearOfertaEpacioBotones_3 = document.createElement('div');
                 divCrearOfertaEpacioBotones_3.classList.add('crearOfertaEpacioBotones');
                 divCrearOfertaEpacioBotones_3.style.pointerEvents = "all"
-                contenedorTipoPorRango.appendChild(divCrearOfertaEpacioBotones_3);
                 // Crear el párrafo 'Crear oferta' dentro del segundo div principal
                 const pCrearOfervaBotonV1_3 = document.createElement('p');
                 pCrearOfervaBotonV1_3.classList.add('crearOfervaBotonV1');
@@ -20460,7 +20265,7 @@ const casaVitini = {
             compomentesUI: {
                 contenedorSelectorApartamento: () => {
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                    console.log("instancaiuID", instanciaUID)
+
                     const contenedorApartamentos = document.createElement("div")
                     contenedorApartamentos.setAttribute("instanciaUID", instanciaUID)
                     contenedorApartamentos.setAttribute("contenedor", "apartamentosDelComportamiento")
@@ -20545,6 +20350,242 @@ const casaVitini = {
 
                     const destino = document.querySelector("[contenedor=comportamientosPorDiasAntelacion]")
                     destino.appendChild(contenedor)
+                },
+                barraGlobal: () => {
+                    const selectorBoton = (boton) => {
+                        const botonID = boton.target.getAttribute("botonTipo")
+                        casaVitini.administracion.comportamiento_de_precios.detallesComportamiento.controladoresUI.opcionesTipo(botonID)
+                    }
+                    const selectorTipoComportamiento = document.createElement("div")
+                    selectorTipoComportamiento.classList.add("selectorTipoComportamiento")
+
+                    const botonTipoComportamiento_porRango = document.createElement("div")
+                    botonTipoComportamiento_porRango.classList.add("botonTipoComportamiento")
+                    botonTipoComportamiento_porRango.setAttribute("botonTipo", "porRango")
+                    botonTipoComportamiento_porRango.innerText = "Por rango de fechas"
+                    botonTipoComportamiento_porRango.addEventListener("click", selectorBoton)
+                    selectorTipoComportamiento.appendChild(botonTipoComportamiento_porRango)
+
+                    const botonTipoComportamiento_porCreacion = document.createElement("div")
+                    botonTipoComportamiento_porCreacion.classList.add("botonTipoComportamiento")
+                    botonTipoComportamiento_porCreacion.setAttribute("botonTipo", "porCreacion")
+                    botonTipoComportamiento_porCreacion.innerText = "Por rango de fechas y rango de creacion de reserva"
+                    botonTipoComportamiento_porCreacion.addEventListener("click", selectorBoton)
+                    selectorTipoComportamiento.appendChild(botonTipoComportamiento_porCreacion)
+
+                    const botonTipoComportamiento_porDias = document.createElement("div")
+                    botonTipoComportamiento_porDias.classList.add("botonTipoComportamiento")
+                    botonTipoComportamiento_porDias.setAttribute("botonTipo", "porDias")
+                    botonTipoComportamiento_porDias.innerText = "Por días de la semana"
+                    botonTipoComportamiento_porDias.addEventListener("click", selectorBoton)
+                    selectorTipoComportamiento.appendChild(botonTipoComportamiento_porDias)
+
+                    const botonTipoComportamiento_porDiasAntelacion = document.createElement("div")
+                    botonTipoComportamiento_porDiasAntelacion.classList.add("botonTipoComportamiento")
+                    botonTipoComportamiento_porDiasAntelacion.setAttribute("botonTipo", "porAntelacion")
+                    botonTipoComportamiento_porDiasAntelacion.innerText = "Por días de antelación"
+                    botonTipoComportamiento_porDiasAntelacion.addEventListener("click", selectorBoton)
+                    // selectorTipoComportamiento.appendChild(botonTipoComportamiento_porDiasAntelacion)
+                    return selectorTipoComportamiento
+                },
+                perfilesComportamiento: {
+
+                    porRango: () => {
+
+                        const instanciaUID_contenedorFechas = casaVitini.utilidades.codigoFechaInstancia()
+
+
+                        const contenedorTipoPorRango = document.createElement('div');
+                        contenedorTipoPorRango.classList.add('crearComportameintoContendorFechas');
+                        contenedorTipoPorRango.setAttribute("contenedor_tipoBloqueo", "porRango")
+                        contenedorTipoPorRango.setAttribute("instanciaUID_contenedorFechas", instanciaUID_contenedorFechas)
+
+                        const info = document.createElement("p")
+                        info.classList.add(
+                            "padding6",
+                            "textoCentrado"
+                        )
+                        info.innerText = "Seleciona el rango de dias en los cuales se aplicara el comportamiento de precio de los apartamentos"
+                        contenedorTipoPorRango.appendChild(info)
+                        const fechasRangoAplicacion = casaVitini.ui.componentes.contenedorFechasUI({
+                            // metodoSelectorDia: "null"
+                        })
+                        contenedorTipoPorRango.appendChild(fechasRangoAplicacion);
+                        const contenedorApartamentos = casaVitini.administracion.comportamiento_de_precios.compomentesUI.contenedorSelectorApartamento()
+                        contenedorTipoPorRango.appendChild(contenedorApartamentos);
+                        return contenedorTipoPorRango
+                    },
+                    porCreacion:async () => {
+                        const instanciaUID_contenedorFechas = casaVitini.utilidades.codigoFechaInstancia()
+
+                        const contenedorTipoPorCreacion = document.createElement('div');
+                        contenedorTipoPorCreacion.classList.add('crearComportameintoContendorFechas');
+                        contenedorTipoPorCreacion.setAttribute("contenedor_tipoBloqueo", "porCreacion")
+                        contenedorTipoPorCreacion.setAttribute("instanciaUID_contenedorFechas", instanciaUID_contenedorFechas)
+
+                        const info = document.createElement("p")
+                        info.classList.add(
+                            "padding6",
+                            "textoCentrado"
+                        )
+                        info.innerText = "Seleciona el rango de dias en los cuales se aplicara el comportamiento de precio de los apartamentos"
+                        contenedorTipoPorCreacion.appendChild(info)
+                        const fechasRangoAplicacion = casaVitini.ui.componentes.contenedorFechasUI({
+                            // metodoSelectorDia: "null"
+                            nombreContenedor: "rangoComportamiento"
+                        })
+                        contenedorTipoPorCreacion.appendChild(fechasRangoAplicacion);
+                        await casaVitini.utilidades.ralentizador(1)
+                        const info1 = document.createElement("p")
+                        info1.classList.add(
+                            "padding6",
+                            "textoCentrado"
+                        )
+                        info1.innerText = "Seleciona el rango en el cual tiene que estar la fecha de creacion de la reserva para aplicarse este comportamiento."
+                        contenedorTipoPorCreacion.appendChild(info1)
+                        const fechasRangoCreacion = casaVitini.ui.componentes.contenedorFechasUI({
+                            // metodoSelectorDia: "null"
+                            nombreContenedor: "rangoReservaCreacion"
+                        })
+                        contenedorTipoPorCreacion.appendChild(fechasRangoCreacion);
+
+                        const contenedorApartamentos = casaVitini.administracion.comportamiento_de_precios.compomentesUI.contenedorSelectorApartamento()
+                        contenedorTipoPorCreacion.appendChild(contenedorApartamentos);
+
+                        return contenedorTipoPorCreacion
+                    },
+                    porDias: () => {
+
+            
+                        const selectorDiaSemana = (e) => {
+                            const dia = e.target
+                            const estadoDia = dia.getAttribute("estado")
+
+                            if (estadoDia === "activado") {
+                                dia.removeAttribute("style")
+                                dia.removeAttribute("estado")
+                            } else {
+                                dia.setAttribute("estado", "activado")
+                                dia.style.background = "blue"
+                                dia.style.color = "white"
+                            }
+                        }
+
+                        const comportamientoPorDias = document.createElement("div")
+                        comportamientoPorDias.classList.add('contenedorOculto');
+                        comportamientoPorDias.setAttribute("contenedor_tipoBloqueo", "porDias")
+                        comportamientoPorDias.classList.add(
+                            "flexVertical",
+                        )
+
+                        const contenedorTipoPorDias = document.createElement('div');
+                        contenedorTipoPorDias.classList.add('contenedorPorDias');
+                        const dias = [
+                            {
+                                nombreIDV: "lunes",
+                                nombreUI: "Lunes"
+                            },
+                            {
+                                nombreIDV: "martes",
+                                nombreUI: "Martes"
+                            },
+                            {
+                                nombreIDV: "miercoles",
+                                nombreUI: "Miercoles"
+                            },
+                            {
+                                nombreIDV: "jueves",
+                                nombreUI: "Jueves"
+                            },
+                            {
+                                nombreIDV: "viernes",
+                                nombreUI: "Viernes"
+                            },
+                            {
+                                nombreIDV: "sabado",
+                                nombreUI: "Sabado"
+                            },
+                            {
+                                nombrbeIDV: "domingo",
+                                nombreUI: "Domingo"
+                            }
+                        ]
+
+                        for (const dia of dias) {
+                            const nombreUI = dia.nombreUI
+                            const nombreIDV = dia.nombreIDV
+
+                            const diaUI = document.createElement("div")
+                            diaUI.classList.add("diaUI")
+                            diaUI.classList.add("negrita")
+                            diaUI.setAttribute("componente", "diaUI")
+                            diaUI.setAttribute("diaIDV", nombreIDV)
+                            diaUI.innerText = nombreUI
+                            diaUI.addEventListener("click", selectorDiaSemana)
+                            contenedorTipoPorDias.appendChild(diaUI)
+                        }
+                        comportamientoPorDias.appendChild(contenedorTipoPorDias);
+                        const contenedorApartamentosParaDias = casaVitini.administracion.comportamiento_de_precios.compomentesUI.contenedorSelectorApartamento()
+                        comportamientoPorDias.appendChild(contenedorApartamentosParaDias);
+                        return comportamientoPorDias
+
+                    },
+                    porDiasDeAntelacion: () => {
+                        const comportamientoPorAntelacion = document.createElement("div")
+                        comportamientoPorAntelacion.classList.add('contenedorOculto');
+                        comportamientoPorAntelacion.setAttribute("contenedor_tipoBloqueo", "porAntelacion")
+                        comportamientoPorAntelacion.classList.add(
+                            "flexVertical",
+                            "gap6",
+                            "padding6"
+                        )
+
+                        contenedorTipoComportamiento.appendChild(comportamientoPorAntelacion);
+                        const fechasUI = casaVitini.ui.componentes.contenedorFechasUI({
+                            // metodoSelectorDia: "null"
+                        })
+                        comportamientoPorAntelacion.appendChild(fechasUI)
+
+                        const contenedorSelectorAntelacion = document.createElement("div")
+                        contenedorSelectorAntelacion.classList.add(
+                            "flexVertical"
+                        )
+                        comportamientoPorAntelacion.appendChild(contenedorSelectorAntelacion)
+
+                        const botonAnadirComportamientoPorDiasDeAntecion = document.createElement("div")
+                        botonAnadirComportamientoPorDiasDeAntecion.classList.add("botonV1")
+                        botonAnadirComportamientoPorDiasDeAntecion.innerText = "Añadir comportamiento por antelacion"
+                        botonAnadirComportamientoPorDiasDeAntecion.addEventListener("click", () => {
+                            const campoDiasAntelacion = document.querySelector("[campo=diasAntelacion]").value
+                            this.compomentesUI.insertarComportamientoPorAntelacion({
+                                diasAntelacion: campoDiasAntelacion
+                            })
+                        })
+                        comportamientoPorAntelacion.appendChild(botonAnadirComportamientoPorDiasDeAntecion)
+
+                        const entradDias = document.createElement("input")
+                        entradDias.setAttribute("campo", "diasAntelacion")
+                        entradDias.type = "number"
+                        entradDias.classList.add(
+                            "padding6",
+                            "borderRadius6"
+                        )
+                        entradDias.placeholder = "Inserta el numero maximo de dias de antelacion"
+                        comportamientoPorAntelacion.appendChild(entradDias)
+
+
+                        const contenedorPerfilDiasAntelacion = document.createElement("div")
+                        contenedorPerfilDiasAntelacion.setAttribute("contenedor", "comportamientosPorDiasAntelacion")
+                        comportamientoPorAntelacion.appendChild(contenedorPerfilDiasAntelacion)
+                        return comportamientoPorAntelacion
+                    }
+
+
+
+
+
+
+
                 }
             }
         },

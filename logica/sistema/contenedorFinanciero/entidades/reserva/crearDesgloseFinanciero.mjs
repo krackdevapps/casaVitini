@@ -60,11 +60,13 @@ export const crearDesgloseFinanciero = async (data) => {
             const error = "El procesador de precios esta mal configurado, necesita parametro capaDescuentosPersonalizados con un si o un no"
             throw new Error(error)
         }
+        // Aqui falta enviar la fecha de creacion a constructorInstantaneaNoche
 
         await constructorInstantaneaNoches({
             estructura,
             fechaEntrada_ISO: fechaEntrada,
             fechaSalida_ISO: fechaSalida,
+            fechaCreacion_ISO: data.fechaCreacion,
             apartamentosArray
         })
 

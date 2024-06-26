@@ -1,6 +1,8 @@
+import { obtenerComportamientosPorCreacionPorFechaCracion } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorCreacionPorFechaCracion.mjs"
 import { obtenerComportamientosPorRangoPorTipoIDV } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs"
 
 export const comportamientosPorRango = async (data) => {
+    const contenedorCompportamientos = []
     const comportamientosDePrecioPorRango = await obtenerComportamientosPorRangoPorTipoIDV({
         fechaEntrada_ISO: data.fechaEntrada_ISO,
         fechaSalida_ISO: data.fechaSalida_ISO,
@@ -8,8 +10,19 @@ export const comportamientosPorRango = async (data) => {
         arrayApartamentos: data.arrayApartamentos,
         estado: "activado"
     })
+    contenedorCompportamientos.push(...comportamientosDePrecioPorRango)
+    const comportamientosDePrecioPorFechaCreacion = await obtenerComportamientosPorCreacionPorFechaCracion({
+        fechaInicio_ISO: data.fechaEntrada_ISO,
+        fechaFinal_ISO: data.fechaSalida_ISO,
+        fechaCreacionReserva: data.fechaCreacionReserva,
+        tipoIDV: "porCreacion",
+        arrayApartamentos: data.arrayApartamentos,
+        estado: "activado"
+    })
+    contenedorCompportamientos.push(...comportamientosDePrecioPorFechaCreacion)
+
     const comportamientosPorRangoFormateados = {}
-    comportamientosDePrecioPorRango.forEach((comportamiento, i) => {
+    contenedorCompportamientos.forEach((comportamiento, i) => {
         const fechaInicio = comportamiento.fechaInicio
         const fechaFinal = comportamiento.fechaFinal
         const apartamentosDelComportamiento = comportamiento.contenedor.apartamentos

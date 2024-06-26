@@ -112,5 +112,26 @@ export const utilidades = {
             return formattedString;
         }
 
+    },
+    evitarLlavesDuplicas: (objeto) => {
+        const keys = Object.keys(objeto);
+        const set = new Set(keys);
+        
+        // Verificar si hay llaves duplicadas en el nivel actual
+        if (keys.length !== set.size) {
+          return true; // Hay llaves duplicadas en este nivel
+        }
+        
+        // Recorrer recursivamente los valores del objeto si son objetos anidados
+        for (let key in objeto) {
+          if (typeof objeto[key] === 'object' && objeto[key] !== null) {
+            if (evitarLlavesDuplicas(objeto[key])) {
+              return true; // Hay llaves duplicadas en niveles más profundos
+            }
+          }
+        }
+        
+        return false; // No se encontraron llaves duplicadas en ningún nivel
+
     }
 }

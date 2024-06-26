@@ -22,14 +22,15 @@ process.on('uncaughtException', (error) => {
 
 const app = express()
 app.use(controlHTTPS)
+//app.use(controlInputRaw)
 app.set('views', './ui/constructor')
 app.set('view engine', 'ejs')
+app.use(controlSizePeticion);
 app.use(jsonHeader)
 app.use(express.json({ limit: '50MB', extended: true }))
 app.use(controlJSON)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.raw({ limit: '50MB' }))
-app.use(controlSizePeticion);
 app.use(controlTipoVerbo)
 app.set('trust proxy', true)
 app.disable('x-powered-by')
