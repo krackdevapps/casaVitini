@@ -7,32 +7,14 @@ import { obtenerOfertasPorEntidadPorOfertaUID } from "../../../../repositorio/of
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
 import { aplicarImpuestos } from "./aplicarImpuestos.mjs";
+import { constructorInstantaneaNoches } from "./constructorInstantaneaNoches.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
 
 export const insertarDescuentoPorAdministrador = async (data) => {
     try {
         const estructura = data.estructura
-        const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: data.fechaEntrada,
-            nombreCampo: "La fecha de entrada del actualizarDesgloseFinanciero"
-        })
 
-        const fechaSalida = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: data.fechaSalida,
-            nombreCampo: "La fecha de salida del actualizarDesgloseFinanciero"
-        })
-
-        await validadoresCompartidos.fechas.validacionVectorial({
-            fechaEntrada_ISO: data.fechaEntrada,
-            fechaSalida_ISO: data.fechaSalida,
-            tipoVector: "diferente"
-        })
-
-        const apartamentosArray = validadoresCompartidos.tipos.array({
-            array: data.apartamentosArray,
-            nombreCampo: "El array de apartamentos en el actualizarDesgloseFinanciero",
-            filtro: "soloCadenasIDV",
-            sePermitenDuplicados: "no"
-        })
         const reservaUID = validadoresCompartidos.tipos.numero({
             number: data?.reservaUID ?? "",
             nombreCampo: "El campo de reservaUID dentro dle actualizarDesgloseFinanciero",
@@ -40,7 +22,6 @@ export const insertarDescuentoPorAdministrador = async (data) => {
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
-
         const ofertaUID = validadoresCompartidos.tipos.numero({
             number: data?.ofertaUID,
             nombreCampo: "El campo de ofertaUID dentro del actualizarDesgloseFinanciero",
@@ -48,6 +29,16 @@ export const insertarDescuentoPorAdministrador = async (data) => {
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
+
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
+        const fechaEntrada = reserva.fechaEntrada
+        const fechaSalida = reserva.fechaSalida
+        const fechaCreacion_simple = reserva.fechaCreacion_simple
+        const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
+        const apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
+            return detallesApartamento.apartamentoIDV
+        })
+
         await obtenerOfertasPorEntidadPorOfertaUID({
             ofertaUID,
             entidadIDV: "reserva"
@@ -57,6 +48,15 @@ export const insertarDescuentoPorAdministrador = async (data) => {
         const instantaneaNoches = desgloseFinancieroReserva.instantaneaNoches
         const instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion ?? []
         const instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador ?? []
+
+        await constructorInstantaneaNoches({
+            estructura,
+            instantaneaNoches,
+            fechaEntrada_ISO: fechaEntrada,
+            fechaSalida_ISO: fechaSalida,
+            fechaCreacion_ISO: fechaCreacion_simple,
+            apartamentosArray
+        })
 
         await totalesBasePorRango({
             estructura,
@@ -102,8 +102,6 @@ export const insertarDescuentoPorAdministrador = async (data) => {
                 reservaUID
             })
         }
-
-
     } catch (error) {
         throw error
     }

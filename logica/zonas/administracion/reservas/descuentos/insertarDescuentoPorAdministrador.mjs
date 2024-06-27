@@ -1,6 +1,5 @@
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs"
 import { obtenerOferatPorOfertaUID } from "../../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs"
-import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
@@ -37,26 +36,13 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
             const error = "La reserva esta cancelada, no se puede alterar los descuentos"
             throw new Error(error)
         }
-
         await obtenerOferatPorOfertaUID(ofertaUID)
-        const fechaEntradaReserva = reserva.fechaEntrada
-        const fechaSalidaReserva = reserva.fechaSalida
-        const fechaCreacion_simple = reserva.fechaCreacion_simple
-        const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
-        const apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
-            return detallesApartamento.apartamentoIDV
-        })
-
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
                     tipoOperacion: "insertarDescuentoPorAdministrador",
                     reservaUID: reservaUID,
                     ofertaUID: ofertaUID,
-                    fechaEntrada: fechaEntradaReserva,
-                    fechaSalida: fechaSalidaReserva,
-                    fechaActual: fechaCreacion_simple,
-                    apartamentosArray: apartamentosArray,
                     capaImpuestos: "si"
                 }
             },

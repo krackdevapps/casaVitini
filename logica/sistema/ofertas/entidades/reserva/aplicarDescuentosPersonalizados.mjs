@@ -5,6 +5,7 @@ export const aplicarDescuentosPersonalizados = async (data) => {
     const ofertasSeleccionadas = await obtenerOfertasPorArrayUID(descuentosArray)
     const ofertaAnalizadasPorCondiciones = []
     for (const oferta of ofertasSeleccionadas) {
+        oferta.entidadIDV = "reserva"
         const ofertaEstructura = {
             oferta
         }

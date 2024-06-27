@@ -7649,10 +7649,9 @@ const casaVitini = {
                                         return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                                     }
                                     if (respuestaServidor?.ok) {
-                                        casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desglegarConteneorFinanciero({
+                                        casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desplegarContenedorFinanciero({
                                             instanciaUID_contenedorFinanciero,
-                                            // reservaUID,
-                                            destino: `[instanciaUID="${instanciaUID_contenedorFinanciero}"][componente=contenedorDesgloseTotal]`
+                                            reservaUID
                                         })
                                         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                                     }
@@ -7851,128 +7850,8 @@ const casaVitini = {
 
                             },
                             sobreControlPrecios: {
-                                arranque: async function (e) {
-                                    // const contenedorFinanciero = e.target.closest("[contenedor=financiero]")
-                                    // const selectorApartamentosUI = contenedorFinanciero.querySelector("[contenedor=porNoche]").querySelectorAll("[apartamentoIDV]")
-                                    // selectorApartamentosUI.forEach((apartamentoUI) => {
-
-                                    //     apartamentoUI.style.background = "red"
-
-
-
-                                    // })
-
-
-
-
-
-
-
-                                },
                                 componentesUI: {
-                                    nochesSobreControlUI: function (data) {
-                                        const destino = data.destino
-                                        const desglosePorNoche = data.desglosePorNoche
-
-                                        const contenedorPorNoche = document.createElement("div")
-                                        contenedorPorNoche.classList.add("reserva_resumen_desglose_pago_bloque")
-                                        contenedorPorNoche.setAttribute("contenedor", "porNoche")
-
-                                        const detalleDiaUITitulo = document.createElement("div")
-                                        detalleDiaUITitulo.classList.add("reserva_resumen_desglose_pago_titulo")
-                                        detalleDiaUITitulo.innerText = "Detalle por noche"
-                                        contenedorPorNoche.appendChild(detalleDiaUITitulo)
-
-                                        const contenedorDesglosePorNoche = document.createElement("div")
-                                        contenedorDesglosePorNoche.classList.add("reserva_resumen_desglose_porNoche")
-
-                                        if (Object.keys(desglosePorNoche).length === 0) {
-                                            const info = document.createElement("div")
-                                            info.classList.add("componentes_ui_totales_mensajeInfoSinInformacion")
-                                            info.innerText = "No hay información financiera para desglosar por noche"
-                                            contenedorDesglosePorNoche.appendChild(info)
-                                        }
-                                        for (const [fechaNoche, desglose] of Object.entries(desglosePorNoche)) {
-                                            const precioNetoNoche = desglose.precioNetoNoche
-                                            const apartamentosPorNoche = desglose.apartamentosPorNoche
-
-                                            const contenedorNoche = document.createElement("div")
-                                            contenedorNoche.classList.add(
-                                                "contenedorDiaConNoche",
-                                            )
-                                            contenedorNoche.setAttribute("noche", fechaNoche)
-                                            const titulo = document.createElement("div")
-                                            titulo.classList.add(
-                                                "reserva_resumen_apartamentoIUTitulo",
-                                                "textoCentrado"
-                                            )
-                                            titulo.classList.add("negrita")
-                                            titulo.innerText = fechaNoche
-                                            contenedorNoche.appendChild(titulo)
-
-                                            const totalesNoche = document.createElement("div")
-                                            totalesNoche.classList.add("padding6")
-                                            totalesNoche.setAttribute("contenedor", "totalesNoche")
-
-                                            const totalNetoNocheUI = document.createElement("div")
-                                            totalNetoNocheUI.setAttribute("componente", "totalNetoNoche")
-                                            totalNetoNocheUI.classList.add("negrita")
-                                            totalNetoNocheUI.innerText = precioNetoNoche + "$ Total neto noche"
-                                            totalesNoche.appendChild(totalNetoNocheUI)
-                                            contenedorNoche.appendChild(totalesNoche)
-
-                                            for (const [apartamentoIDV, desglosePorApartamento] of Object.entries(apartamentosPorNoche)) {
-                                                const apartamentoUI = desglosePorApartamento.apartamentoUI
-                                                const precioNetoApartamento = desglosePorApartamento.precioNetoApartamento
-
-                                                const contenedorApartamento = document.createElement("div")
-                                                contenedorApartamento.classList.add(
-                                                    "contenedorApartamento",
-                                                )
-                                                contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-
-                                                const contenedorApartamentoYTotal = document.createElement("div")
-                                                contenedorApartamentoYTotal.classList.add("padding6")
-                                                contenedorApartamentoYTotal.setAttribute("contenedor", "tituloApartamentoYTotales")
-
-                                                const tituloApartamento = document.createElement("div")
-                                                tituloApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-                                                tituloApartamento.classList.add(
-                                                    "reserva_resumen_apartamentoUIPrecio",
-                                                )
-                                                tituloApartamento.classList.add("negrita")
-                                                tituloApartamento.classList.add("colorGris")
-                                                tituloApartamento.innerText = apartamentoUI
-                                                contenedorApartamentoYTotal.appendChild(tituloApartamento)
-
-                                                const precioNetoApartamentoUI = document.createElement("div")
-                                                precioNetoApartamentoUI.classList.add(
-                                                    "reserva_resumen_apartamentoUIPrecio",
-                                                )
-                                                precioNetoApartamentoUI.setAttribute("contenedor", "precioNetoApartamento")
-
-                                                precioNetoApartamentoUI.innerText = precioNetoApartamento + "$ Neto del apartamento"
-                                                contenedorApartamentoYTotal.appendChild(precioNetoApartamentoUI)
-                                                contenedorApartamento.appendChild(contenedorApartamentoYTotal)
-
-                                                contenedorNoche.appendChild(contenedorApartamento)
-
-                                                const contenedorAlterarPrecio = document.createElement("div")
-                                                contenedorAlterarPrecio.setAttribute("contenedor", "alterarPrecio")
-                                                contenedorAlterarPrecio.appendChild(this.botonAlterarPrecio())
-
-                                                contenedorApartamento.appendChild(contenedorAlterarPrecio)
-
-                                            }
-
-                                            contenedorDesglosePorNoche.appendChild(contenedorNoche)
-                                        }
-                                        contenedorPorNoche.appendChild(contenedorDesglosePorNoche)
-                                        document.querySelector(destino).appendChild(contenedorPorNoche)
-                                    },
                                     botonAlterarPrecio: () => {
-
-
                                         const botonDeslegarOpciones = document.createElement("div")
                                         botonDeslegarOpciones.classList.add(
                                             "padding6",
@@ -7980,20 +7859,7 @@ const casaVitini = {
                                             "comportamientoBoton"
                                         )
                                         botonDeslegarOpciones.innerText = "Alterar precio"
-
                                         return botonDeslegarOpciones
-
-
-
-                                    },
-                                    contenedorAlterarPrecioOpciones: () => {
-
-
-
-
-
-
-
                                     },
                                     nocheUI: async function (data) {
                                         const fechaNoche = data.fechaNoche
@@ -8082,7 +7948,7 @@ const casaVitini = {
                                             selectorTipoSobreControl.appendChild(tituloSelector);
 
                                             const opciones = [
-                                                { value: "aumentarPorPorcentajes", text: "Aumentar por porcentaje" },
+                                                { value: "aumentarPorPorcentaje", text: "Aumentar por porcentaje" },
                                                 { value: "reducirPorPorcentaje", text: "Reducir por porcentaje" },
                                                 { value: "aumentarPorCantidadFija", text: "Aumentar por cantidad fija" },
                                                 { value: "reducirPorCantidadFila", text: "Reducir por cantidad fila" },
@@ -8165,8 +8031,6 @@ const casaVitini = {
                                                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                                             })
                                             contenedor.appendChild(botonCancelar)
-
-
                                         }
                                     },
                                     confirmar: async (data) => {
@@ -8197,7 +8061,6 @@ const casaVitini = {
                                         })
 
                                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                                        console.log("respuestaServidor", respuestaServidor.ok)
                                         const instanciaPantallaCargaUI = document.querySelector(`[instanciaUID="${instanciaPantallaCarga}"]`)
                                         instanciaPantallaCargaUI?.remove()
 
@@ -8209,13 +8072,15 @@ const casaVitini = {
                                         }
                                         if (respuestaServidor.ok) {
                                             const sobreControlUI = document.querySelector(`[instanciaUID="${instanciaUID_sobreControlUI}"]`)
-                                            sobreControlUI?.remove()
+                                            if (sobreControlUI) {
+                                                casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                            }
 
                                             const selectorDesgloseEnPantalla = document.querySelector(`[reservaUID="${reservaUID}"] [componente=contenedorDesgloseTotal]`)
                                             if (!selectorDesgloseEnPantalla) {
                                                 return
                                             }
-                                            return casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desglegarContenedorFinanciero({
+                                            return casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desplegarContenedorFinanciero({
                                                 instanciaUID_contenedorFinanciero,
                                                 reservaUID
                                             })
@@ -8252,13 +8117,15 @@ const casaVitini = {
                                         }
                                         if (respuestaServidor.ok) {
                                             const sobreControlUI = document.querySelector(`[instanciaUID="${instanciaUID_sobreControlUI}"]`)
-                                            sobreControlUI?.remove()
+                                            if (sobreControlUI) {
+                                                casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                            }
 
                                             const selectorDesgloseEnPantalla = document.querySelector(`[reservaUID="${reservaUID}"] [componente=contenedorDesgloseTotal]`)
                                             if (!selectorDesgloseEnPantalla) {
                                                 return
                                             }
-                                            return casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desglegarContenedorFinanciero({
+                                            return casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desplegarContenedorFinanciero({
                                                 instanciaUID_contenedorFinanciero,
                                                 reservaUID
                                             })
@@ -8266,10 +8133,138 @@ const casaVitini = {
                                     }
                                 },
                             },
+                            eliminarOfertaEnReserva: {
+                                ui: async function (data) {
+                                    console.log("data", data)
+                                    const nombreOferta = data.nombreOferta
+                                    const ofertaUID = data.ofertaUID
+                                    const posicion = data.posicion
+                                    const reservaUID = document.querySelector("[reservaUID]").getAttribute("reservaUID")
+                                    const origen = data.origen
+
+                                    const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                    const instanciaUID = pantallaInmersiva.getAttribute("instanciaUID")
+                                    const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+
+                                    const titulo = constructor.querySelector("[componente=titulo]")
+                                    titulo.classList.add(
+                                        "negrita"
+                                    )
+                                    titulo.innerText = nombreOferta
+                                    const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                                    mensaje.innerText = `Confirmas o no la eliminación de la oferta de la reserva, ¿Estas de acuerdo?`
+
+                                    const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                                    botonAceptar.innerText = "Confirmar la eliminación de la oferta de esta reserva"
+                                    botonAceptar.addEventListener("click", () => {
+                                        this.confirmar({
+                                            reservaUID,
+                                            ofertaUID,
+                                            posicion,
+                                            origen,
+                                            instanciaUID
+                                        })
+                                    })
+                                    const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                                    botonCancelar.innerText = "Cancelar y volver a la reserva"
+                                    document.querySelector("main").appendChild(pantallaInmersiva)
+
+                                },
+                                confirmar: async (data) => {
+
+                                    const ofertaUID = data.ofertaUID
+                                    const posicion = data.posicion
+                                    const reservaUID = data.reservaUID
+                                    const origen = data.origen
+
+                                    const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                                    const mensaje = "Elimiando oferta de la reserva..."
+                                    const datosPantallaSuperpuesta = {
+                                        instanciaUID: instanciaUID,
+                                        mensaje: mensaje
+                                    }
+                                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                                    const transaccion = {
+                                        zona: "administracion/reservas/descuentos/eliminarDescuentoEnReserva",
+                                        reservaUID: String(reservaUID),
+                                        ofertaUID: String(ofertaUID),
+                                        origen,
+                                        posicion: String(posicion)
+                                    }
+                                    console.log("transaccion", transaccion)
+
+                                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                                    instanciaRenderizada.remove()
+                                    console.log("respuestaSeervidor", respuestaServidor)
+                                    if (respuestaServidor?.error) {
+                                        return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                                    }
+                                    if (respuestaServidor?.ok) {
+                                        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                        return casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desplegarContenedorFinanciero({
+                                            reservaUID
+                                        })
+                                    }
+                                }
+
+                            },
+                            actualizarEstadoAutorizacion: async (data) => {
+
+                                const ofertaUID = data.ofertaUID
+                                const reservaUID = document.querySelector("[reservaUID]").getAttribute("reservaUID")
+                                const e = data.e
+                                const area = e.target.closest("[ofertaUID][posicion]")
+                                const autorizacionUI = area.querySelector("[dato=autorizacion]")
+                                const estadoActualData = area.querySelector("[estadoActual]")
+                                const estadoActual = estadoActualData.getAttribute("estadoActual")
+
+
+
+
+                                const transaccion = {
+                                    zona: "administracion/reservas/descuentos/actualizarAutorizacionDescuentoCompatible",
+                                    reservaUID: String(reservaUID),
+                                    ofertaUID: String(ofertaUID),
+                                }
+
+                                if (estadoActual === "aceptada") {
+                                    autorizacionUI.innerText = "Rechazando..."
+                                    transaccion.nuevaAutorizacion = "rechazada"
+                                } else if (estadoActual === "rechazada") {
+                                    autorizacionUI.innerText = "Aceptando..."
+                                    transaccion.nuevaAutorizacion = "aceptada"
+                                }
+
+
+                                console.log("transacion", transaccion)
+                                const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+
+                                if (respuestaServidor?.error) {
+                                    casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desplegarContenedorFinanciero({
+                                        reservaUID
+                                    })
+                                }
+                                if (respuestaServidor?.ok) {
+                                    const estadoAutorizado = respuestaServidor.autorizacion
+                                    estadoActualData.setAttribute("estadoActual", estadoAutorizado)
+
+                                    if (estadoAutorizado === "aceptada") {
+                                        autorizacionUI.innerText = "Aceptada"
+                                        estadoActualData.innerText = "Rechazar oferta"
+                                    } else if (estadoAutorizado === "rechazada") {
+                                        autorizacionUI.innerText = "Rechazada"
+                                        estadoActualData.innerText = "Aceptar oferta"
+                                    }
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desplegarContenedorFinanciero({
+                                        reservaUID
+                                    })
+                                }
+                            }
                         },
                         controladores: {
-                            desglegarContenedorFinanciero: async (data) => {
-                                const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
+                            desplegarContenedorFinanciero: async (data) => {
                                 const reservaUID = data.reservaUID
 
                                 const transaccion = {
@@ -8280,9 +8275,7 @@ const casaVitini = {
                                     ]
                                 }
                                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                                console.log("respiuestaServidor", respuestaServidor)
                                 const instanciaRenderizada = document.querySelector(`[reservaUID="${reservaUID}"] [componente=contenedorDesgloseTotal]`)
-                                console.log("instancaiRenderizda", instanciaRenderizada)
                                 if (!instanciaRenderizada) {
                                     return
                                 }

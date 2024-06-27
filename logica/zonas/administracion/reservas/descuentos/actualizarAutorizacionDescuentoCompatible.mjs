@@ -1,7 +1,6 @@
 import { Mutex } from "async-mutex"
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs"
 import { obtenerOferatPorOfertaUID } from "../../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs"
-import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
@@ -18,7 +17,6 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
@@ -57,44 +55,28 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             ofertaUID,
             errorSi: "noExiste"
         })
-        const fechaEntradaReserva = reserva.fechaEntrada
-        const fechaSalidaReserva = reserva.fechaSalida
-        const fechaCreacion_simple = reserva.fechaCreacion_simple
-        const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
-        const apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
-            return detallesApartamento.apartamentoIDV
-        })
-
-        await actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID({
+           await actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID({
             ofertaUID,
             reservaUID,
             nuevaAutorizacion
         })
-
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
                     tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
                     reservaUID: reservaUID,
-                    fechaEntrada: fechaEntradaReserva,
-                    fechaSalida: fechaSalidaReserva,
-                    fechaActual: fechaCreacion_simple,
-                    apartamentosArray: apartamentosArray,
-                    nuevaAutorizacion: nuevaAutorizacion,
-                    ofertaUID: ofertaUID
+                    capaImpuestos: "si"
                 }
             },
-            capaImpuestos: "si",
         })
-        // Ojo por que sobrescribe las ofertas existentes, debe de añadir en el array de ofertas por cocndicion otra mas
         await actualizarDesgloseFinacieroPorReservaUID({
             desgloseFinanciero,
             reservaUID
         })
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha actualizado el conenedorFinanciero",
-            contenedorFinanciero: desgloseFinanciero
+            ok: "Se ha actualizado el estado de autorizacion de la oferta en la reserva",
+            autorizacion: nuevaAutorizacion
         }
         return ok
     } catch (errorCapturado) {
