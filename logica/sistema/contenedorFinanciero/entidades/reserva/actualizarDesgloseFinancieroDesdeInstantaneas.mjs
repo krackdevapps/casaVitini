@@ -12,13 +12,6 @@ import { constructorInstantaneaNoches } from "./constructorInstantaneaNoches.mjs
 export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
     try {
         const estructura = data.estructura
-
-        // const apartamentosArray = validadoresCompartidos.tipos.array({
-        //     array: data.apartamentosArray,
-        //     nombreCampo: "El array de apartamentos en el actualizarDesgloseFinanciero",
-        //     filtro: "soloCadenasIDV",
-        //     sePermitenDuplicados: "no"
-        // })
         const reservaUID = validadoresCompartidos.tipos.numero({
             number: data.reservaUID,
             nombreCampo: "El campo de reservaUID dentro dle actualizarDesgloseFinancieroDesdeInstantaneas",
@@ -31,23 +24,15 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
         const fechaSalida = reserva.fechaSalida
         const fechaCreacion_simple = reserva.fechaCreacion_simple
 
-
-        // const nuevaAutorizacion = data.nuevaAutorizacion
-        // if (nuevaAutorizacion !== "aceptada" && nuevaAutorizacion !== "rechazada") {
-        //     const error = "El campo nuevaAutorizacion solo puede ser aceptada o rechazada actualizarDesgloseFinancieroDesdeInstantaneas"
-        //     throw new Error(error)
-        // }
-
         const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
         const apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
             return detallesApartamento.apartamentoIDV
         })
-
         const desgloseFinancieroReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
 
         const instantaneaNoches = desgloseFinancieroReserva.instantaneaNoches
-        const instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion ?? []
-        const instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador ?? []
+        const instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion || []
+        const instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador || []
 
         await constructorInstantaneaNoches({
             estructura,
@@ -57,7 +42,6 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
             fechaCreacion_ISO: fechaCreacion_simple,
             apartamentosArray
         })
-
 
         await totalesBasePorRango({
             reservaUID,
@@ -70,14 +54,6 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
 
         constructorEstructuraDescuentos(estructura)
         contructorEstructuraDescuentosReserva(estructura)
-
-        // for (const contenedorOferta of instantaneaOfertasPorCondicion) {
-        //     const ofertaUIDContenedor = contenedorOferta.oferta.ofertaUID
-        //     if (ofertaUIDContenedor === ofertaUID) {
-        //         contenedorOferta.oferta.autorizacion = nuevaAutorizacion
-        //         break
-        //     }
-        // }
 
         await aplicarDescuento({
             origen: "porCondicion",
@@ -93,19 +69,11 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
             fechaEntradaReserva_ISO: fechaEntrada,
             fechaSalidaReserva_ISO: fechaSalida
         })
-        const capaImpuestos = data.capaImpuestos
-        if (capaImpuestos !== "si" && capaImpuestos !== "no") {
-            const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos en si o no"
-            throw new Error(error)
-        }
-        if (capaImpuestos === "si") {
-            await aplicarImpuestos({
-                estructura,
-                reservaUID,
-                origen: "reserva"
-            })
-        }
-
+        await aplicarImpuestos({
+            estructura,
+            reservaUID,
+            origen: "reserva"
+        })
     } catch (error) {
         throw error
     }

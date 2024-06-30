@@ -6,10 +6,13 @@ export const insertarDesgloseFinacieroPorReservaUID = async (data) => {
         const desgloseFinanciero = data.desgloseFinanciero
         const instantaneaNoches = _.cloneDeep(desgloseFinanciero.entidades.reserva.instantaneaNoches);
         delete desgloseFinanciero.entidades.reserva.instantaneaNoches
+
+        const instantaneaImpuestos = JSON.stringify(_.cloneDeep(desgloseFinanciero.entidades.reserva.instantaneaImpuestos));
+        delete desgloseFinanciero.entidades.reserva.instantaneaImpuestos
+
         const instantaneaOfertasPorCondicion = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porCondicion)
         const instantaneaOfertasPorAdministrador = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador)
-        const instantaneaImpuestos = JSON.stringify(desgloseFinanciero.impuestos)
-        
+
         const reservaUID = data.reservaUID
         const consulta = `
         INSERT INTO

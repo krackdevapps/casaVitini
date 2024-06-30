@@ -8,7 +8,7 @@ import { eliminarSessionPorRolPorCaducidad } from "../../repositorio/sessiones/e
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { actualizarUltimoLogin } from "../../repositorio/usuarios/actualizarUltimoLogin.mjs";
 
-export const conectar = async (entrada, salida) => {
+export const conectar = async (entrada) => {
     try {
         await eliminarUsuarioPorRolPorEstadoVerificacion();
         await eliminarSessionPorRolPorCaducidad();

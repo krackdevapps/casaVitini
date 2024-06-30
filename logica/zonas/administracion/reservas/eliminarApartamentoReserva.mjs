@@ -1,5 +1,4 @@
 import { Mutex } from "async-mutex";
-import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotalesReserva.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { bloquearApartamentos } from "../../../sistema/bloqueos/bloquearApartamentos.mjs";
 
@@ -81,7 +80,6 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
             tipoProcesadorPrecio: "uid",
             reservaUID: reserva
         };
-        await insertarTotalesReserva(transaccionPrecioReserva);
         await campoDeTransaccion("confirmar")
         const ok = {};
         ok.estadoDesgloseFinanciero = estadoInfomracionFinanciera;

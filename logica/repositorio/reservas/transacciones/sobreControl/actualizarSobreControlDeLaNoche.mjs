@@ -25,6 +25,8 @@ export const actualizarSobreControlDeLaNoche = async (data) => {
           END
       WHERE "reservaUID" = $1
       RETURNING "instantaneaSobreControlPrecios"->$2->$3 AS "sobreControl";`;
+    
+    
     const parametros = [
       reservaUID,
       fechaNoche,

@@ -2703,7 +2703,7 @@
     padding: 8px;
     cursor: default;
     background: 6px;
-    border-radius: 6px;
+    border-radius: 10px;
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_panel_bloqueTitular:hover {
@@ -3100,7 +3100,7 @@
     display: grid;
     grid-template-columns: 1fr 7fr;
     grid-auto-rows: minmax(auto, auto);
-    padding: 4px;
+    padding: 6 px;
     justify-items: stretch;
     justify-content: center;
     align-content: center;

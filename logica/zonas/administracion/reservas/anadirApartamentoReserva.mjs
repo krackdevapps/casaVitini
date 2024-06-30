@@ -1,6 +1,5 @@
 import { Mutex } from "async-mutex";
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
-import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotalesReserva.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
@@ -93,7 +92,6 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
                 tipoProcesadorPrecio: "uid",
                 reservaUID: reservaUID
             };
-            await insertarTotalesReserva(transaccionPrecioReserva);
             const ok = {
                 ok: "apartamento anadido correctamente",
                 apartamentoIDV: apartamentoIDV,

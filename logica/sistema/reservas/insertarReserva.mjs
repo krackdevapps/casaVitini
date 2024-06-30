@@ -106,6 +106,7 @@ export const insertarReserva = async (reserva) => {
                 }
             },
         })
+
         await insertarDesgloseFinacieroPorReservaUID({
             reservaUID,
             desgloseFinanciero

@@ -27,7 +27,7 @@ export const obtenerTodosImpuestosConOrdenamiento = async (data) => {
         nombre,
         "tipoImpositivo",
         "tipoValorIDV",
-        "aplicacionSobreIDV",
+        "entidadIDV",
         "estadoIDV",
         COUNT(*) OVER() as total_filas
         FROM 

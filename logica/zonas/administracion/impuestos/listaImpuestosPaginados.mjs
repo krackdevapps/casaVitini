@@ -3,7 +3,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
-export const listaImpuestos = async (entrada, salida) => {
+export const listaImpuestosPaginados = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -11,14 +11,14 @@ export const listaImpuestos = async (entrada, salida) => {
         IDX.control()
 
         const nombreColumna = validadoresCompartidos.tipos.cadena({
-            string: configuracion.nombreColumna || "",
+            string: entrada.body.nombreColumna || "",
             nombreCampo: "El campo del nombre de la columna",
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
         const sentidoColumna = validadoresCompartidos.tipos.cadena({
-            string: configuracion.sentidoColumna || "",
+            string: entrada.body.sentidoColumna || "",
             nombreCampo: "El campo del sentido de la columna",
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",
@@ -34,7 +34,13 @@ export const listaImpuestos = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        await validadoresCompartidos.baseDeDatos.validarNombreColumna(nombreColumna)
+
+        if (nombreColumna) {
+            await validadoresCompartidos.baseDeDatos.validarNombreColumna({
+                nombreColumna: nombreColumna,
+                tabla: "impuestos"
+            })
+        }
         validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
 
         const numeroPorPagina = 10;

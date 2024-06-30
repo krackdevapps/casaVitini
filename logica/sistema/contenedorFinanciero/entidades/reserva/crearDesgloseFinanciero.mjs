@@ -32,12 +32,8 @@ export const crearDesgloseFinanciero = async (data) => {
         })
 
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-        const fechaActual = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: data?.fechaActual || DateTime.now().setZone(zonaHoraria).toISODate(),
-            nombreCampo: "La fecha de actual del procesador de precios"
-        })
-
-
+        const fechaActual = DateTime.now().setZone(zonaHoraria).toISODate()
+        
         const apartamentosArray = validadoresCompartidos.tipos.array({
             array: data.apartamentosArray,
             nombreCampo: "El array de apartamentos en el procesador de precios",
@@ -60,13 +56,12 @@ export const crearDesgloseFinanciero = async (data) => {
             const error = "El procesador de precios esta mal configurado, necesita parametro capaDescuentosPersonalizados con un si o un no"
             throw new Error(error)
         }
-        // Aqui falta enviar la fecha de creacion a constructorInstantaneaNoche
 
         await constructorInstantaneaNoches({
             estructura,
             fechaEntrada_ISO: fechaEntrada,
             fechaSalida_ISO: fechaSalida,
-            fechaCreacion_ISO: data.fechaCreacion,
+            fechaCreacion_ISO: fechaActual,
             apartamentosArray
         })
 
@@ -78,7 +73,6 @@ export const crearDesgloseFinanciero = async (data) => {
         })
 
         if (capaOfertas === "si") {
-
             const zonasArray = validadoresCompartidos.tipos.array({
                 array: data?.zonasArray,
                 nombreCampo: "El array de zonasArray en el procesador de precios",
@@ -140,8 +134,6 @@ export const crearDesgloseFinanciero = async (data) => {
                 fechaSalidaReserva_ISO: fechaSalida
             })
         }
-
-
 
         const capaImpuestos = data.capaImpuestos
         if (capaImpuestos !== "si" && capaImpuestos !== "no") {

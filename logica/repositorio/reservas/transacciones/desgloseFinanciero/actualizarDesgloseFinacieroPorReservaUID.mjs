@@ -11,6 +11,10 @@ export const actualizarDesgloseFinacieroPorReservaUID = async (data) => {
         const instantaneaOfertasPorCondicion = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porCondicion)
         const instantaneaOfertasPorAdministrador = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador)
         const instantaneaSobreControlPrecios = desgloseFinanciero.entidades.reserva.contenedorSobreControles
+
+        const instantaneaImpuestos = JSON.stringify(_.cloneDeep(desgloseFinanciero.entidades.reserva.instantaneaImpuestos));
+        delete desgloseFinanciero.entidades.reserva.instantaneaImpuestos
+
         const reservaUID = data.reservaUID
         const consulta = `
         UPDATE
@@ -20,9 +24,10 @@ export const actualizarDesgloseFinacieroPorReservaUID = async (data) => {
             "instantaneaNoches" = COALESCE($2, "instantaneaNoches"),
             "instantaneaOfertasPorCondicion" = COALESCE($3, "instantaneaOfertasPorCondicion"),
             "instantaneaOfertasPorAdministrador" = COALESCE($4, "instantaneaOfertasPorAdministrador"),
-            "instantaneaSobreControlPrecios" = COALESCE($5, "instantaneaSobreControlPrecios")
+            "instantaneaSobreControlPrecios" = COALESCE($5, "instantaneaSobreControlPrecios"),
+            "instantaneaImpuestos" = COALESCE($6, "instantaneaImpuestos")
         WHERE 
-            "reservaUID" = $6
+            "reservaUID" = $7
         RETURNING *;
            `;
 
@@ -32,6 +37,7 @@ export const actualizarDesgloseFinacieroPorReservaUID = async (data) => {
             instantaneaOfertasPorCondicion,
             instantaneaOfertasPorAdministrador,
             instantaneaSobreControlPrecios,
+            instantaneaImpuestos,
             reservaUID,
         ]
         const resuelve = await conexion.query(consulta, parametros);

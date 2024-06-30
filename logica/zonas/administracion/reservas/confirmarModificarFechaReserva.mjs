@@ -2,7 +2,6 @@ import { Mutex } from "async-mutex";
 import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
-import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotalesReserva.mjs";
 import { vitiniSysError } from "../../../sistema/vitiniSysError.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validarModificacionRangoFechaResereva } from "../../../sistema/reservas/validarModificacionRangoFechaResereva.mjs";
@@ -114,7 +113,6 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 reservaUID: reservaUID
             })
             const nuevaFechaEntrada = reservaActualizada.fechaEntrada;
-            await insertarTotalesReserva(transaccionPrecioReserva);
             const ok = {
                 ok: "Se ha actualizado correctamente la fecha de entrada en la reserva",
                 sentidoRango: "pasado",

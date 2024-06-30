@@ -9568,11 +9568,13 @@ const casaVitini = {
                         })
                         this.componentesUI.impuestos({
                             destino,
-                            impuestos
+                            impuestos,
+                            instanciaUID
                         })
                         this.componentesUI.totales({
                             destino,
-                            totales
+                            totales,
+                            instanciaUID
                         })
                     } catch (error) {
                         throw error
@@ -10089,8 +10091,8 @@ const casaVitini = {
                             const ofertasPorAdministrador = ofertas.porAdministrador
                             const porTotal = data.porTotal
                             const entidades = data.entidades
-                            console.log("ofertasPorCondicion", ofertasPorCondicion)
-                            console.log("ofertaPor")
+
+
                             const ofertasPorCondicionArray = Object.keys(ofertasPorCondicion)
                             const ofertasPorAdministradorArray = Object.keys(ofertasPorAdministrador)
                             const contenedorFinanciero = document.querySelector(destino).querySelector("[contenedor=financiero]")
@@ -10156,7 +10158,7 @@ const casaVitini = {
 
                             }
                             const contenedorOfertas_renderizado = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[contenedor=ofertas]")
-                            console.log("contneedorOFoerta", contenedorOfertas_renderizado)
+
                             this.componentesUI.utilidades.limpiarOfertasObsoletas({
                                 contenedores: ofertasPorCondicion,
                                 origen: "porCondicion",
@@ -10176,7 +10178,7 @@ const casaVitini = {
                                 contenedorOfertas_renderizado?.querySelector(`[contenedor=porAdministrador]`)?.remove()
                             }
 
-                            console.log("antes")
+
                             ofertasPorCondicion.forEach((contenedorOferta, posicion) => {
 
                                 const selectorContenedorPorCondicion = contenedorOfertas_renderizado.querySelector(`[contenedor=porCondicion]`)
@@ -10220,7 +10222,7 @@ const casaVitini = {
                                     contenedorOferta
                                 })
                             })
-                            console.log("despues")
+
                             ofertasPorAdministrador.forEach((contenedorOferta, posicion) => {
 
                                 const selectorContenedorPorAdministrador = contenedorOfertas_renderizado.querySelector(`[contenedor=porAdministrador]`)
@@ -11166,6 +11168,10 @@ const casaVitini = {
                             const destino = data.destino
                             const porTotal = data.porTotal
 
+                            if (porTotal.length === 0) {
+                                document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[contenedor=ofertas]").querySelector("[contenedor=porTotal]")?.remove()
+                                return
+                            }
 
                             const contenedorPorTotal_selector = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[contenedor=ofertas]").querySelector("[contenedor=porTotal]")
                             if (!contenedorPorTotal_selector) {
@@ -11177,20 +11183,22 @@ const casaVitini = {
                                     "gap6"
                                 )
                                 document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[contenedor=ofertas]").appendChild(contenedor)
+
+                                const tituloContendor = document.createElement("div")
+                                tituloContendor.classList.add(
+                                    "negrita",
+                                    "textoCentrado",
+                                )
+                                tituloContendor.innerText = "Descuentos aplicados a total neto de la reserva"
+                                contenedor.appendChild(tituloContendor)
+
+                                const contenedorPorTotal = document.createElement("div")
+                                contenedorPorTotal.setAttribute("contenedor", "descuentos")
+                                contenedor.appendChild(contenedorPorTotal)
                             }
                             const contenedorPorTotal_renderizado = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[contenedor=ofertas]").querySelector("[contenedor=porTotal]")
-                            contenedorPorTotal_renderizado.innerHTML = null
-
-
-                            const tituloContendor = document.createElement("div")
-                            tituloContendor.classList.add(
-                                "negrita",
-                                "textoCentrado",
-                            )
-                            tituloContendor.innerText = "Descuentos aplicados a total neto de la reserva"
-                            contenedorPorTotal_renderizado.appendChild(tituloContendor)
-
-
+                            const contenedorDeDescuentos = contenedorPorTotal_renderizado.querySelector("[contenedor=descuentos]")
+                            contenedorDeDescuentos.innerHTML = null
 
                             porTotal.forEach((detallesDelTotal) => {
 
@@ -11234,7 +11242,7 @@ const casaVitini = {
                                 totalConDescuentoUI.innerText = `Este Descuento aplicado deja el total en ${totalConDescuento}`
                                 contenedorDescuentoTotal.appendChild(totalConDescuentoUI)
 
-                                contenedorPorTotal_renderizado.appendChild(contenedorDescuentoTotal)
+                                contenedorDeDescuentos.appendChild(contenedorDescuentoTotal)
 
 
                             })
@@ -11582,10 +11590,12 @@ const casaVitini = {
                     impuestos: (data) => {
                         const destino = data.destino
                         const impuestos = data.impuestos
+                        const instanciaUID = data.instanciaUID
                         const contenedorFinanciero = document.querySelector(destino).querySelector("[contenedor=financiero]")
                         const modoUI = contenedorFinanciero.getAttribute("modoUI")
 
                         const contenedorImpuestos_selector = contenedorFinanciero.querySelector("[contenedor=impuestos]")
+
                         if (!contenedorImpuestos_selector) {
                             const contenedor = document.createElement("div")
                             contenedor.classList.add(
@@ -11622,6 +11632,11 @@ const casaVitini = {
                                     "comportamientoBoton"
                                 )
                                 botonInsertarImpuesto.innerText = "Insertar impuesto"
+                                botonInsertarImpuesto.addEventListener("click", () => {
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.insertarImpuesto.ui({
+                                        instanciaUID_contenedorFinanciero: instanciaUID
+                                    })
+                                })
                                 contenedorBotones.appendChild(botonInsertarImpuesto)
                                 contenedor.appendChild(contenedorBotones)
 
@@ -11632,6 +11647,11 @@ const casaVitini = {
                                     "comportamientoBoton"
                                 )
                                 botonInsertarImpuestoAdHoc.innerText = "Crear e insertar impuesto ad hoc"
+                                botonInsertarImpuestoAdHoc.addEventListener("click", () => {
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.crearImpuestoAdHoc.ui({
+                                        instanciaUID_contenedorFinanciero: instanciaUID
+                                    })
+                                })
                                 contenedorBotones.appendChild(botonInsertarImpuestoAdHoc)
                                 contenedor.appendChild(contenedorBotones)
                             }
@@ -11642,6 +11662,10 @@ const casaVitini = {
 
 
                         if (impuestos.length === 0) {
+
+                            const impuestosRenderizadosObsoletos = contenedorImpuestos_renderizado.querySelectorAll("[contenedor=impuesto]")
+                            impuestosRenderizadosObsoletos.forEach(impuestoRenderizado => { impuestoRenderizado.remove() })
+
                             const info = document.createElement("div")
                             info.setAttribute("elemento", "info")
                             info.classList.add(
@@ -11655,10 +11679,7 @@ const casaVitini = {
                             contenedorImpuestos_renderizado.querySelector("[elemento=info]")?.remove()
                         }
 
-                        const selectorImpuestosRenderizadosObsoletos = contenedorImpuestos_renderizado.querySelectorAll("[contenedor=impuesto]")
-                        selectorImpuestosRenderizadosObsoletos.forEach((impuestoRenderizado) => {
-                            impuestoRenderizado?.remove()
-                        })
+
 
                         const tasaUI = (tasaIDV) => {
                             if (tasaIDV === "porcentaje") {
@@ -11668,8 +11689,26 @@ const casaVitini = {
                             }
                         }
 
-                        impuestos.forEach((impuesto) => {
+                        const impuestosIDV = impuestos.map((impuesto) => {
+                            console.log("impuesto", impuesto)
+                            return String(impuesto.impuestoUID)
+                        })
+                        console.log("impuestosIDV", impuestosIDV)
 
+                        const selectorImpuestosRenderizadosObsoletos = contenedorImpuestos_renderizado.querySelectorAll("[contenedor=impuesto]")
+                        selectorImpuestosRenderizadosObsoletos.forEach((impuestoRenderizado) => {
+                            const impuestoUID_renderizado = impuestoRenderizado.getAttribute("impuestoUID")
+                            if (!impuestosIDV.includes(impuestoUID_renderizado)) {
+                                impuestoRenderizado?.remove()
+                            }
+                        })
+
+                        for (const impuesto of impuestos) {
+                            const impuestoUID = impuesto.impuestoUID
+                            const impuestoRenderizado = contenedorImpuestos_renderizado.querySelector(`[impuestoUID="${impuestoUID}"]`)
+                            if (impuestoRenderizado) {
+                                continue
+                            }
                             const impuestoTitulo = impuesto.nombre
                             const tipoValor = impuesto.tipoValorIDV
                             const tipoImpositivo = impuesto.tipoImpositivo
@@ -11684,7 +11723,7 @@ const casaVitini = {
                                 "gap6"
                             )
                             impuestoUI.setAttribute("contenedor", "impuesto")
-
+                            impuestoUI.setAttribute("impuestoUID", impuestoUID)
                             const nombreImpuestoUI = document.createElement("div")
                             nombreImpuestoUI.classList.add("negrita")
                             nombreImpuestoUI.innerText = impuestoTitulo
@@ -11736,17 +11775,26 @@ const casaVitini = {
                                     "comportamientoBoton"
                                 )
                                 botonEliminarImpuesto.innerText = "Eliminar impuesto de la reserva"
+                                botonEliminarImpuesto.addEventListener("click", () => {
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.eliminarImpuesto.ui({
+                                        instanciaUID_contenedorFinanciero: instanciaUID,
+                                        nombreImpuesto: impuestoTitulo,
+                                        impuestoUID
+                                    })
+                                })
                                 contenedorBotones.appendChild(botonEliminarImpuesto)
                                 impuestoUI.appendChild(contenedorBotones)
                             }
 
                             contenedorImpuestos_renderizado.appendChild(impuestoUI)
-                        })
+                        }
+
 
                     },
                     totales: (data) => {
                         const destino = data.destino
                         const totales = data.totales
+                        const instanciaUID = data.instanciaUID
 
                         const totalNeto = totales?.totalNeto
                         const totalFinal = totales?.totalFinal
@@ -11784,11 +11832,14 @@ const casaVitini = {
                                     "botonV1",
                                     "comportamientoBoton"
                                 )
-                                botonInsertarDescuento.innerText = "Reconstruir instantaneas del contenedor financiero"
+                                botonInsertarDescuento.innerText = "Reconstruir desglose financerio"
                                 botonInsertarDescuento.addEventListener("click", () => {
-
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.reconstruirDesgloseFinanciero.ui({
+                                        instanciaUID_contenedorFinanciero: instanciaUID,
+                                    })
                                 })
                                 contenedorBotones.appendChild(botonInsertarDescuento)
+
                                 totalesUI.appendChild(contenedorBotones)
                             }
                         }

@@ -7,31 +7,12 @@ import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
 import { selectorPorCondicion } from "../../../ofertas/entidades/reserva/selectorPorCondicion.mjs";
 import { aplicarImpuestos } from "./aplicarImpuestos.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { constructorInstantaneaNoches } from "./constructorInstantaneaNoches.mjs";
 
 export const insertarDescuentoCompatibleConReserva = async (data) => {
     try {
         const estructura = data.estructura
-        const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: data.fechaEntrada,
-            nombreCampo: "La fecha de entrada del insertarDescuentoCompatibleConReserva"
-        })
-
-        const fechaSalida = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: data.fechaSalida,
-            nombreCampo: "La fecha de salida del insertarDescuentoCompatibleConReserva"
-        })
-
-        await validadoresCompartidos.fechas.validacionVectorial({
-            fechaEntrada_ISO: data.fechaEntrada,
-            fechaSalida_ISO: data.fechaSalida,
-            tipoVector: "diferente"
-        })
-
-        const fechaActual = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: data.fechaActual,
-            nombreCampo: "La fecha de actual del insertarDescuentoCompatibleConReserva"
-        })
-
         const apartamentosArray = validadoresCompartidos.tipos.array({
             array: data.apartamentosArray,
             nombreCampo: "El array de apartamentos en el insertarDescuentoCompatibleConReserva",
@@ -44,12 +25,25 @@ export const insertarDescuentoCompatibleConReserva = async (data) => {
             ofertaUID,
             entidadIDV: "reserva"
         })
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
+        const fechaEntrada = reserva.fechaEntrada
+        const fechaSalida = reserva.fechaSalida
+        const fechaCreacion_simple = reserva.fechaCreacion_simple
 
         const desgloseFinancieroReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
         const instantaneaNoches = desgloseFinancieroReserva.instantaneaNoches
         const instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion || []
         const instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador || []
 
+
+        await constructorInstantaneaNoches({
+            estructura,
+            instantaneaNoches,
+            fechaEntrada_ISO: fechaEntrada,
+            fechaSalida_ISO: fechaSalida,
+            fechaCreacion_ISO: fechaCreacion_simple,
+            apartamentosArray
+        })
 
         await totalesBasePorRango({
             estructura,
@@ -64,7 +58,7 @@ export const insertarDescuentoCompatibleConReserva = async (data) => {
         const ofertaFormateada = await selectorPorCondicion({
             oferta,
             apartamentosArray,
-            fechaActual_reserva: fechaActual,
+            fechaActual_reserva: fechaCreacion_simple,
             fechaEntrada_reserva: fechaEntrada,
             fechaSalida_reserva: fechaSalida,
         })
@@ -90,11 +84,18 @@ export const insertarDescuentoCompatibleConReserva = async (data) => {
             fechaEntradaReserva_ISO: fechaEntrada,
             fechaSalidaReserva_ISO: fechaSalida
         })
-
-        await aplicarImpuestos({
-            estructura,
-            origen: "reserva"
-        })
+        const capaImpuestos = data.capaImpuestos
+        if (capaImpuestos !== "si" && capaImpuestos !== "no") {
+            const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos en si o no"
+            throw new Error(error)
+        }
+        if (capaImpuestos === "si") {
+            await aplicarImpuestos({
+                estructura,
+                origen: "reserva",
+                reservaUID
+            })
+        }
 
     } catch (error) {
         throw error

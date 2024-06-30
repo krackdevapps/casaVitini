@@ -3,14 +3,13 @@ import { obtenerDesgloseFinancieroPorReservaUID } from '../../../../repositorio/
 import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../../../repositorio/impuestos/obtenerImpuestosPorAplicacionIDVPorEstado.mjs';
 const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
 Decimal.set({ precision: precisionDecimal });
-export const aplicarImpuestos = async (data) => {
+export const aplicarImpuestosDesdeInstantaneaReserva = async (data) => {
     try {
         const estructura = data.estructura
         const origen = data.origen
+        const instantaneaImpuestos = data.instantaneaImpuestos
         const totalNeto = new Decimal(estructura.global.totales.totalNeto)
         const totalFinal = new Decimal(estructura.global.totales.totalFinal)
-        estructura.entidades.reserva.instantaneaImpuestos = []
-        const instantaneaImpuestos = estructura.entidades.reserva.instantaneaImpuestos
         const impuestos = []
 
         if (origen === "administracion") {
@@ -19,21 +18,22 @@ export const aplicarImpuestos = async (data) => {
                 entidad: "reserva"
             })
             impuestos.push(...impuestosDeAdministracion)
-            instantaneaImpuestos.push(...impuestosDeAdministracion)
         } else if (origen === "reserva") {
             const reservaUID = data.reservaUID
+
             if (typeof reservaUID !== "number") {
                 const error = "reservaUID en aplicarImpuestos debe de ser un numero."
                 throw new Error(error)
             }
+
             const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
-            const impuestosDeLaReserva = contenedorFinanciero.instantaneaImpuestos || []
-            impuestos.push(...impuestosDeLaReserva)
-            instantaneaImpuestos.push(...impuestosDeLaReserva)
+            const instantaneaImpuestos = contenedorFinanciero.instantaneaImpuestos
+            impuestos.push(...instantaneaImpuestos)
         } else {
             const error = "aplicarImpuestos necesita un origen, este puede ser administracion o reserva"
             throw new Error(error)
         }
+
         const objetoImpuestos = []
         let sumaImpuestos = new Decimal("0")
         for (const impuesto of impuestos) {

@@ -1,6 +1,5 @@
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { apartamentosPorRango } from "../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
-import { insertarTotalesReserva } from "../../../sistema/reservas/insertarTotalesReserva.mjs";
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
@@ -108,7 +107,6 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 tipoProcesadorPrecio: "uid",
                 reservaUID: Number(reservaUIDNuevo)
             };
-            await insertarTotalesReserva(transaccionPrecioReserva);
             await campoDeTransaccion("confirmar")
             const ok = {
                 ok: "Se ha anadido al reserva vacia",

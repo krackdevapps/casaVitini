@@ -1,15 +1,14 @@
 import { Mutex } from "async-mutex"
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs"
-import { obtenerOferatPorOfertaUID } from "../../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs"
-import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
-import { obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
 import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
+import { obtenerImpuestoPorImpuestoUIDPorReservaUID } from "../../../../repositorio/reservas/transacciones/impuestos/obtenerImpuestoPorImpuestoUIDPorReservaUID.mjs"
+import { eliminarImpuestoPorImpuestoUIDPorReservaUID } from "../../../../repositorio/reservas/transacciones/impuestos/eliminarImpuestoPorImpuestoUIDPorReservaUID.mjs"
 
-export const insertarDescuentoPorCompatible = async (entrada) => {
+export const eliminarImpuestoEnReserva = async (entrada) => {
     const mutex = new Mutex()
     try {
         const session = entrada.session
@@ -27,14 +26,15 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
 
-        const ofertaUID = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.ofertaUID,
-            nombreCampo: "El identificador universal de la oferta (ofertaUID)",
+        const impuestoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.impuestoUID,
+            nombreCampo: "El identificador universal del impuesto (impuestoUID)",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
+
         mutex.acquire()
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
@@ -42,49 +42,41 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
             const error = "La reserva esta cancelada, no se puede alterar los descuentos"
             throw new Error(error)
         }
-        await campoDeTransaccion("iniciar")
-        await obtenerOferatPorOfertaUID(ofertaUID)
-        await obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion({
+
+        await obtenerImpuestoPorImpuestoUIDPorReservaUID({
             reservaUID,
-            ofertaUID,
-            errorSi: "existe"
+            impuestoUID,
+            errorSi: "noExiste"
         })
-        const fechaEntradaReserva = reserva.fechaEntrada
-        const fechaSalidaReserva = reserva.fechaSalida
-        const fechaCreacion_simple = reserva.fechaCreacion_simple
-        // validar aqui que la oferta por condicion no esta ya en la instantanea
-        const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
-        const apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
-            return detallesApartamento.apartamentoIDV
+
+     //   await campoDeTransaccion("iniciar")
+        // Eliminar impuesto
+        await eliminarImpuestoPorImpuestoUIDPorReservaUID({
+            reservaUID,
+            impuestoUID
         })
-        // Desde aqui se envia esto mas el ofertaUID
+
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
-                    tipoOperacion: "insertarDescuentoCompatibleConReserva",
-                    reservaUID,
-                    ofertaUID,
-                    fechaEntrada: fechaEntradaReserva,
-                    fechaSalida: fechaSalidaReserva,
-                    fechaActual: fechaCreacion_simple,
-                    apartamentosArray: apartamentosArray,
-                    capaImpuestos: "si"
+                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
+                    reservaUID: reservaUID
                 }
-            }
+            },
         })
-        // Ojo por que sobrescribe las ofertas existentes, debe de añadir en el array de ofertas por cocndicion otra mas
         await actualizarDesgloseFinacieroPorReservaUID({
             desgloseFinanciero,
             reservaUID
         })
-        await campoDeTransaccion("confirmar")
+
+       // await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",
             contenedorFinanciero: desgloseFinanciero
         }
         return ok
     } catch (errorCapturado) {
-        await campoDeTransaccion("cancelar")
+        //await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
         mutex.release()
