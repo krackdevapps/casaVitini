@@ -26,7 +26,7 @@ describe('crud bed as entity', () => {
         expect(typeof respons).toBe('object');
     })
     test('select bed by camaIDV', async () => {
-        const respons = await obtenerCamaComoEntidadPorCamaIDV(IDVStart)
+        const respons = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV(IDVStart)
         expect(respons).not.toBeUndefined();
         expect(typeof respons).toBe('object');
     })

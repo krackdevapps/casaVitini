@@ -1,22 +1,30 @@
 
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { actualizarApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/actualizarApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { eliminarCaracteristicasDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/eliminarCaracteristicasDelApartamentoPorApartamentoIDV.mjs";
 import { insertarCaracteristicaDelApartamento } from "../../../../repositorio/arquitectura/entidades/apartamento/insertarCaracteristicaDelApartamento.mjs";
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 import { actualizarHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/actualizarHabitacionComoEntidadPorHabitacionIDV.mjs";
-import { obtenerCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs";
 import { actualizarCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/entidades/cama/actualizarCamaComoEntidadPorCamaIDV.mjs";
+import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs";
+import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
+import { Mutex } from "async-mutex";
+import { obtenerReservasPresentesFuturas } from "../../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPresentesFuturas.mjs";
+import { codigoZonaHoraria } from "../../../../sistema/configuracion/codigoZonaHoraria.mjs";
+import { DateTime } from "luxon";
+import { actualizaCamaPorCamaIDVPorReservaUID } from "../../../../repositorio/reservas/apartamentos/actualizaCamaPorCamaIDVPorReservaUID.mjs";
 
 export const modificarEntidadAlojamiento = async (entrada, salida) => {
+    const mutex = new Mutex();
+
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
+        await mutex.acquire();
 
         const tipoEntidad = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoEntidad,
@@ -65,6 +73,7 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                     limpiezaEspaciosAlrededor: "si",
                 })
             }
+            await campoDeTransaccion("iniciar")
 
             const apartamentEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV(entidadIDV)
             if (!apartamentEntidad.apartamento) {
@@ -101,13 +110,14 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                     }
                     await insertarCaracteristicaDelApartamento(dataInsertarCaracteristicaDelApartamento)
                 }
+                await campoDeTransaccion("confirmar")
+
                 const ok = {
                     ok: "Se ha actualizado correctamente el apartamento"
                 };
                 return ok
             }
-        }
-        if (tipoEntidad === "habitacion") {
+        } else if (tipoEntidad === "habitacion") {
 
             const habitacionIDV = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.habitacionIDV,
@@ -124,6 +134,7 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                 sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
+            await campoDeTransaccion("iniciar")
 
             const habitacionEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(entidadIDV)
             if (!habitacionEntidad.habitacion) {
@@ -145,19 +156,14 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                 habitacionUI: habitacionUI,
                 entidadIDV: entidadIDV
             }
-            const habitacionActualizada = await actualizarHabitacionComoEntidadPorHabitacionIDV(dataActualizarHabitacionComoEntidadPorHabitacionIDV)
-            if (habitacionActualizada.rowCount === 0) {
-                const error = "No se ha podido guardar los datosd por que no se han encontrado la habitacion";
-                throw new Error(error);
-            }
-            if (habitacionActualizada.rowCount === 1) {
-                const ok = {
-                    ok: "Se ha actualizado correctamente la habitacion"
-                };
-                return ok
-            }
-        }
-        if (tipoEntidad === "cama") {
+            await actualizarHabitacionComoEntidadPorHabitacionIDV(dataActualizarHabitacionComoEntidadPorHabitacionIDV)
+            await campoDeTransaccion("confirmar")
+            const ok = {
+                ok: "Se ha actualizado correctamente la habitacion"
+            };
+            return ok
+
+        } else if (tipoEntidad === "cama") {
             const camaIDV = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.camaIDV,
                 nombreCampo: "El camaIDV",
@@ -174,7 +180,6 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                 limpiezaEspaciosAlrededor: "si",
             })
 
-
             const capacidad = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.capacidad,
                 nombreCampo: "El campo capacidad",
@@ -183,40 +188,62 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                 limpiezaEspaciosAlrededor: "si",
                 devuelveUnTipoNumber: "si"
             })
+            await campoDeTransaccion("iniciar")
 
-            const camaEntidad = await obtenerCamaComoEntidadPorCamaIDV(entidadIDV)
-            if (!camaEntidad.cama) {
-                const error = "No existe la habitacion, revisa el habitacionIDV";
-                throw new Error(error);
-            }
+            const camaEntidad = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+                camaIDV: entidadIDV,
+                tipoIDVArray: ["compartida", "fisica"],
+                errorSi: "noExiste"
+            })
             // Comprobar que no existe el nuevo IDV
             if (entidadIDV !== camaIDV) {
-                const camaEntidad = await obtenerCamaComoEntidadPorCamaIDV(camaIDV)
+                await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+                    camaIDV: camaIDV,
+                    tipoIDVArray: ["compartida", "fisica"],
+                    errorSi: "existe"
 
-                if (camaEntidad.cama) {
-                    const error = "El nuevo identificador de la entidad ya existe, escoge otro por favor";
-                    throw new Error(error);
-                }
+                })
             }
-            const dataActualizarCamaComoEntidadPorCamaIDV = [
-                camaIDV,
+            await actualizarCamaComoEntidadPorCamaIDV({
+                camaIDVNuevo: camaIDV,
                 camaUI,
                 capacidad,
-                entidadIDV,
-            ];
-            const nuevaCamaEntidad = await actualizarCamaComoEntidadPorCamaIDV(dataActualizarCamaComoEntidadPorCamaIDV)
-            if (nuevaCamaEntidad.rowCount === 0) {
-                const error = "No se ha podido guardar los datosd por que no se han encontrado la cama";
-                throw new Error(error);
-            }
-            if (nuevaCamaEntidad.rowCount === 1) {
-                const ok = {
-                    ok: "Se ha actualizado correctamente la cama"
-                };
-                return ok
-            }
+                camaIDV: entidadIDV,
+            })
+            const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
+            const tiempoZH = DateTime.now().setZone(zonaHoraria);
+            const fechaActual = tiempoZH.toISODate();
+            // Selecionar reservas presentes y futuras
+            const reservasActivas = await obtenerReservasPresentesFuturas({
+                fechaActual: fechaActual,
+            })
+            console.log("reservasActivas", reservasActivas)
+            // Actualizar las camas de reseervas presentes y futuras
+            const reservasUIDArray = reservasActivas.map((reserva) => {
+                return reserva.reservaUID
+            })
+            console.log("reservasUIDArray", reservasUIDArray)
+            await actualizaCamaPorCamaIDVPorReservaUID({
+                reservasUIDArray,
+                antiguoCamaIDV: entidadIDV,
+                nuevoCamaIDV: camaIDV,
+                camaUI: camaUI
+
+            })
+            await campoDeTransaccion("confirmar")
+            const ok = {
+                ok: "Se ha actualizado correctamente la cama"
+            };
+            return ok
+
+        } else {
+            const m = "No se reconoce el tipo de entidad"
+            throw new Error(m)
         }
     } catch (errorCapturado) {
+        await campoDeTransaccion("cancelar")
         throw errorCapturado
+    } finally {
+        mutex.release();
     }
 }

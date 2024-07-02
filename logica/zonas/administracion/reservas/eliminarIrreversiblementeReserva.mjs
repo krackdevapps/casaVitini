@@ -2,31 +2,28 @@ import { Mutex } from "async-mutex";
 import { vitiniCrypto } from "../../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
+import { eliminarReservaIrreversiblementePorReservaUID } from "../../../repositorio/reservas/reserva/eliminarReservaIrreversiblementePorReservaUID.mjs";
 
-export const eliminarIrreversiblementeReserva = async (entrada, salida) => {
+export const eliminarIrreversiblementeReserva = async (entrada) => {
     const mutex = new Mutex()
-
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
 
-
         await mutex.acquire();
-
-        const reservaUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.reservaUID,
-            nombreCampo: "El identificador universal de la reservaUID (reservaUID)",
-            filtro: "numeroSimple",
+        const reservaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
         const clave = entrada.body.clave;
         if (!clave) {
@@ -36,6 +33,7 @@ export const eliminarIrreversiblementeReserva = async (entrada, salida) => {
         const usuarioIDX = entrada.session.usuario;
         await campoDeTransaccion("iniciar")
         const usuario = await obtenerUsuario(usuarioIDX)
+        console.log("usuario", usuario)
         const claveActualHASH = usuario.clave;
         const sal = usuario.sal;
         const metadatos = {
@@ -49,24 +47,22 @@ export const eliminarIrreversiblementeReserva = async (entrada, salida) => {
             const error = "Revisa la contrasena actual que has escrito por que no es correcta por lo tanto no se puede eliminar tu cuenta";
             throw new Error(error);
         }
-        // Validar si es un usuario administrador
-        const rol = usuario.rol;
+        const rol = usuario.rolIDV;
         const rolAdministrador = "administrador";
         if (rol !== rolAdministrador) {
             const error = "Tu cuenta no esta autorizada para eliminar reservas. Puedes cancelar reservas pero no eliminarlas.";
             throw new Error(error);
         }
         await obtenerReservaPorReservaUID(reservaUID)
-        await eliminarIrreversiblementeReserva(reservaUID)
+        await eliminarReservaIrreversiblementePorReservaUID(reservaUID)
         await campoDeTransaccion("confirmar")
-
         const ok = {
             ok: "Se ha eliminado la reserva y su informacion asociada de forma irreversible"
         };
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release();

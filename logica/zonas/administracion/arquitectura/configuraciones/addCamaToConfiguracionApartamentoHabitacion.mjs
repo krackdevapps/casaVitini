@@ -2,7 +2,7 @@ import { insertarCamaEnHabitacion } from "../../../../repositorio/arquitectura/c
 import { obtenerCamaDeLaHabitacionPorHabitacionUID } from "../../../../repositorio/arquitectura/configuraciones/obtenerCamaDeLaHabitacionPorHabitacionUID.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
-import { obtenerCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs";
+import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
@@ -31,7 +31,10 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
             sePermitenNegativos: "no"
         })
 
-        const obtenerDetallesPorCama_ = await obtenerCamaComoEntidadPorCamaIDV(camaIDV)
+        const obtenerDetallesPorCama_ = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+            camaIDV,
+            tipoIDVArray: ["compartida"]
+        })
         if (obtenerDetallesPorCama_.length === 0) {
             const error = "No existe ninguna cama con ese identificador visual";
             throw new Error(error);

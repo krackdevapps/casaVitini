@@ -84,7 +84,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 tipoProcesadorPrecio: "uid",
                 reservaUID: reserva
             };
-            const mensajeSinPasado = "No se puede aplicar esa fecha de entrada a la reserva por que en base a los apartamentos de esa reserva no hay dias libres. Puedes ver a continuacíon lo eventos que lo impiden.";
+            const mensajeSinPasado = "No se puede aplicar esa fecha de entrada a la reserva por que en base a los apartamentos de esta reserva no hay dias libres. Puedes ver a continuacíon lo eventos que lo impiden.";
 
             if ((codigoFinal === "noHayRangoPasado")
                 &&

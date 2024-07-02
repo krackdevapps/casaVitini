@@ -4,6 +4,7 @@ import { detallesTitular } from "./detallesReserva/detallesTitular.mjs"
 import { pernoctantesDeLaReserva } from "./detallesReserva/pernoctantesDeLaReserva.mjs"
 import { utilidades } from "../../componentes/utilidades.mjs"
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs"
+import { porcentajeTranscurrido } from "./utilidades/porcentajeTranscurrido.mjs"
 export const detallesReserva = async (data) => {
     try {
         const capas = data.capas
@@ -12,6 +13,7 @@ export const detallesReserva = async (data) => {
         const reserva = {
             global: await obtenerReservaPorReservaUID(reservaUID)
         }
+        reserva.global.porcentajeTranscurrido = await porcentajeTranscurrido(reservaUID)
         const contenedorCapas = [
             "titular",
             "alojamiento",

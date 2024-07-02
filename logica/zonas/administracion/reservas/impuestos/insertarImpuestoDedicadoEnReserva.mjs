@@ -63,7 +63,7 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
             const error = "La reserva esta cancelada, es inmutable"
             throw new Error(error)
         }
-        console.log("1")
+
         const controlCodigoUnico = async () => {
             const longitudCodigo = 10;
             let codigoGenerado;
@@ -78,7 +78,7 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
             } while (codigoExiste);
             return codigoGenerado;
         }
-        console.log("2")
+
         const codigoGenerado = await controlCodigoUnico();
         const estructura = {
             impuestoUID: codigoGenerado,
@@ -89,7 +89,7 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
             estadoIDV: "activado",
             impuestoTVI: null
         }
-        console.log("3")
+
 
         await campoDeTransaccion("iniciar")
         await insertarImpuestoPorReservaUID({

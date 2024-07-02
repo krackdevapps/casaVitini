@@ -19,7 +19,7 @@ export const obtenerImpuestoPorImpuestoUIDPorReservaUID_simple = async (data) =>
             reservaUID,
             impuestoUID
         ]
-        console.log("parametros", parametros)
+
         const resuelve = await conexion.query(consulta, parametros);
 
         if (resuelve.rowCount === 0) {

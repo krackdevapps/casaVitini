@@ -2,11 +2,11 @@ import { conexion } from "../../../../componentes/db.mjs"
 
 export const actualizarCamaComoEntidadPorCamaIDV = async (data) => {
     try {
-        
+
         const camaIDVNuevo = data.camaIDVNuevo
         const camaUI = data.camaUI
         const capacidad = data.capacidad
-        const camaIDVSelector = data.camaIDVSelector
+        const camaIDV = data.camaIDV
 
         const consulta = `
         UPDATE camas
@@ -23,17 +23,16 @@ export const actualizarCamaComoEntidadPorCamaIDV = async (data) => {
             camaIDVNuevo,
             camaUI,
             capacidad,
-            camaIDVSelector,
-        ];
+            camaIDV
+        ]
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
             const error = "No se encuntra ninguna cama con ese camaIDV para actualizar"
-            throw error
+            throw new Error(error)
         }
         return resuelve.rows[0]
     } catch (errorAdaptador) {
-        const error = "Error en el adaptador actualizarCamaComoEntidadPorCamaIDV"
-        throw new Error(error)
+        throw errorAdaptador
     }
 
 }

@@ -7,7 +7,6 @@ import { insertarCamaEnLaHabitacion } from '../../repositorio/reservas/apartamen
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from '../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 import { insertarHabitacionEnApartamento } from '../../repositorio/reservas/apartamentos/insertarHabitacionEnApartamento.mjs';
-import { obtenerCamaComoEntidadPorCamaIDV } from '../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs';
 import { procesador } from '../contenedorFinanciero/procesador.mjs';
 import { insertarDesgloseFinacieroPorReservaUID } from '../../repositorio/reservas/transacciones/desgloseFinanciero/insertarDesgloseFinacieroPorReservaUID.mjs';
 
@@ -22,7 +21,7 @@ export const insertarReserva = async (reserva) => {
             fecha_ISO: reserva.fechaSalida,
             nombreCampo: "La fecha de entrada de la reserva a confirmar"
         }))
-        const estadoReserva = "confirmada"
+        const estadoReserva = "pendiente"
         const estadoPago = "noPagado"
         const origen = "cliente"
         const fechaCreacion = DateTime.utc().toISO()
@@ -77,7 +76,10 @@ export const insertarReserva = async (reserva) => {
                     habitacionUI: habitacionUI
                 })
                 const habitacionUID = nuevoHabitacionEnElApartamento.componenteUID
-                const cama = await obtenerCamaComoEntidadPorCamaIDV(camaIDV)
+                const cama = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+                    camaIDV,
+                    tipoIDVArray: ["compartida"]
+                })
                 const camaUI = cama.camaUI
 
                 const nuevaCamaEnLaHabitacion = await insertarCamaEnLaHabitacion({
@@ -111,7 +113,7 @@ export const insertarReserva = async (reserva) => {
             reservaUID,
             desgloseFinanciero
         })
-        
+
         return nuevaReserva
     } catch (errorCapturado) {
         throw errorCapturado

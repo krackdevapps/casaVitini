@@ -3,6 +3,7 @@ import { validadoresCompartidos } from "../../../../sistema/validadores/validado
 
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerTodasLasCaracteristicasDelApartamento } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerTodasLasCaracteristicasDelApartamento.mjs";
+import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs";
 
 export const detallesDeEntidadDeAlojamiento = async (entrada, salida) => {
     try {
@@ -29,18 +30,18 @@ export const detallesDeEntidadDeAlojamiento = async (entrada, salida) => {
         })
 
         if (tipoEntidad === "apartamento") {
-            const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV(entidadIDV)
-            if (!apartamentoEntidad.apartamento) {
-                const error = "No existe el apartamento";
-                throw new Error(error);
-            } else {
-                const caracteristicasDelApartamento = await obtenerTodasLasCaracteristicasDelApartamento(entidadIDV)
-                const ok = {
-                    ok: apartamentoEntidad,
-                    caracteristicas: caracteristicasDelApartamento
-                };
-                return ok
-            }
+            const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV: entidadIDV,
+                errorSi: "noExiste"
+            })
+
+            const caracteristicasDelApartamento = await obtenerTodasLasCaracteristicasDelApartamento(entidadIDV)
+            const ok = {
+                ok: apartamentoEntidad,
+                caracteristicas: caracteristicasDelApartamento
+            };
+            return ok
+
         }
         if (tipoEntidad === "habitacion") {
             const habitacionesComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(entidadIDV)
@@ -55,11 +56,13 @@ export const detallesDeEntidadDeAlojamiento = async (entrada, salida) => {
 
         }
         if (tipoEntidad === "cama") {
-            const camaComoEntidad = await obtenerCamaComoEntidadPorCamaIDV(entidadIDV)
-            if (!camaComoEntidad.cama) {
-                const error = "No existe la cama";
-                throw new Error(error);
-            }
+
+            const camaComoEntidad = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+                camaIDV: entidadIDV,
+                tipoIDVArray: ["fisica", "compartida"],
+                errorSi: "noExiste"
+            })
+
             const ok = {
                 ok: camaComoEntidad
             };

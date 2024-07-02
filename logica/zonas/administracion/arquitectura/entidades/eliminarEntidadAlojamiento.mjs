@@ -1,10 +1,9 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { eliminarApartamentoComoEntidad } from "../../../../repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs";
 import { eliminarHabitacionComoEntidad } from "../../../../repositorio/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs";
-import { obtenerCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs";
 import { eliminarCamaComoEntidad } from "../../../../repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs";
+import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs";
 
 export const eliminarEntidadAlojamiento = async (entrada, salida) => {
     try {
@@ -70,7 +69,18 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
             }
         }
         if (tipoEntidad === "cama") {
-            const camaComoEntidad = await obtenerCamaComoEntidadPorCamaIDV(entidadIDV)
+            const tipoIDV = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.tipoIDV,
+                nombreCampo: "El campo tipoIDV de la cama",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+            
+            const camaComoEntidad = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+                camaIDV: entidadIDV,
+                tipoIDV: [tipoIDV]
+            })
             if (!camaComoEntidad.cama) {
                 const error = "No existe la cama, revisa el camaIDV";
                 throw new Error(error);

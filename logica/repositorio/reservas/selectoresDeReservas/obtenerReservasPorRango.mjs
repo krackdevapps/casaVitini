@@ -5,7 +5,7 @@ export const obtenerReservasPorRango = async (metadatos) => {
         // En el caso y caso 3, los operadores son mayos que e igual que. Si se quiera que se seleccionaran reservas del mismo dia incluido acuerdate del igual. Pero como las reservas pueden compartir dias de salida y de entrada, por el tema de las horas de salida y de entrada, este script funciona asi.
         const fechaIncioRango_ISO = metadatos.fechaIncioRango_ISO
         const fechaFinRango_ISO = metadatos.fechaFinRango_ISO
-        const estadoReservaCancelada = "cancelada"
+        const estadosReservaIDV = ["pendiente", "confirmada"]
         const consultaReservas = `
         SELECT 
         "reservaUID",
@@ -36,11 +36,11 @@ export const obtenerReservasPorRango = async (metadatos) => {
                 "fechaEntrada" < $1::DATE AND "fechaSalida" > $2::DATE
             )
         )
-        AND "estadoReservaIDV" <> $3;`
+        AND "estadoReservaIDV" = ANY($3);`
         const parametros = [
             fechaIncioRango_ISO,
             fechaFinRango_ISO,
-            estadoReservaCancelada
+            estadosReservaIDV
         ]
         const resuelveRreservas = await conexion.query(consultaReservas, parametros)
         return resuelveRreservas.rows

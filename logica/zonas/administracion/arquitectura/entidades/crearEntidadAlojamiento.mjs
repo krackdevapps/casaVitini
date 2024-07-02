@@ -1,15 +1,14 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoUI } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoUI.mjs";
 import { insertarApartamentoComoEntidad } from "../../../../repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs";
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 import { obtenerHabitacionComoEntidadPorHabitacionUI } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionUI.mjs";
 import { insertarHabitacionComoEntidad } from "../../../../repositorio/arquitectura/entidades/habitacion/insertarHabitacionComoEntidad.mjs";
-import { obtenerCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs";
 import { obtenerCamaComoEntidadPorCamaUI } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaUI.mjs";
 import { insertarCamaComoEntidad } from "../../../../repositorio/arquitectura/entidades/cama/insertarCamaComoEntidad.mjs";
+import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs";
 
 export const crearEntidadAlojamiento = async (entrada, salida) => {
     try {
@@ -169,18 +168,33 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 soloMinusculas: "si"
             })
 
-            const capacidad = validadoresCompartidos.tipos.numero({
+            const capacidad = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.capacidad,
                 nombreCampo: "El campo capacidad",
-                filtro: "numeroSimple",
+                filtro: "cadenaConNumerosEnteros",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
-                sePermitenNegativos: "no"
+                sePermitenNegativos: "no",
+                devuelveUnTipoNumber: "si"
+            })
+
+
+            const tipoCama = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.tipoCama,
+                nombreCampo: "El campo tipoCama",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
             })
 
             const validarCodigo = async (camaIDV) => {
-                const camaEntidad = await obtenerCamaComoEntidadPorCamaIDV(camaIDV)
-                if (camaEntidad.cama) {
+                const camaEntidad = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+                    camaIDV,
+                    tipoIDVArray: ["compartida", "fisica"],
+                    errorSi: "desactivado"
+                })
+                console.log("camaEbntidad", camaEntidad)
+                if (camaEntidad?.camaIDV) {
                     return true;
                 }
             };
@@ -190,7 +204,6 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 do {
                     codigoExiste = await validarCodigo(codigoGenerado);
                     if (codigoExiste) {
-                        // Si el código ya existe, agrega un cero al final y vuelve a verificar
                         codigoGenerado = codigoGenerado + "0";
                     }
                 } while (codigoExiste);
@@ -198,30 +211,28 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             };
             const camaIDV_unico = await controlCamaIDV(camaIDV);
 
-            const camaEntidad = await obtenerCamaComoEntidadPorCamaIDV(camaIDV_unico)
+            await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+                camaIDV,
+                tipoIDVArray: ["compartida", "fisica"],
+                errorSi: "existe"
+            })
+            console.log("test")
 
-            if (camaEntidad.cama) {
-                const error = "Ya existe un identificador visual igual que la cama que propones, escoge otro";
-                throw new Error(error);
-            }
-            const camaUIExistene = await obtenerCamaComoEntidadPorCamaUI(camaUI)
-
-            if (camaUIExistene.cama) {
-                const error = "Ya existe una cama con ese nombre, por tema de legibilidad escoge otro";
-                throw new Error(error);
-            }
+            await obtenerCamaComoEntidadPorCamaUI({
+                camaUI,
+                errorSi: "existe"
+            })
             const dataInsertarCamaComoEntidad = {
-
                 camaIDV: camaIDV_unico,
-                camaUI: camaUI,
-                capacidad: capacidad
+                camaUI,
+                capacidad,
+                tipoCama
             }
 
             const nuevaCama = await insertarCamaComoEntidad(dataInsertarCamaComoEntidad)
-
             const ok = {
                 ok: "Se ha creado correctament la nuevo entidad como cama",
-                nuevoUID: nuevaCama.cama
+                nuevoUID: nuevaCama.camaIDV
             };
             return ok
 

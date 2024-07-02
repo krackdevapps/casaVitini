@@ -53,7 +53,8 @@ export const actualizarSobreControlNoche = async (entrada) => {
             filtro: "cadenaConNumerosConDosDecimales",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "no"
+            devuelveUnTipoNumber: "no",
+            impedirCero: "no"
         })
 
         const operacionIDV = [

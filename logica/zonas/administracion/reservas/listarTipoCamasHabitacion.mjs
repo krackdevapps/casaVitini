@@ -3,8 +3,9 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
 import { obtenerHabitacionDelApartamentoPorHabitacionIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionIDV.mjs";
 import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../../../repositorio/arquitectura/configuraciones/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs";
-import { obtenerCamaComoEntidadPorCamaIDV } from "../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from "../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs";
+import { obtenerTodasLasCamaPorTipoIDV } from "../../../repositorio/arquitectura/entidades/cama/obtenerTodasLasCamaPorTipoIDV.mjs";
 
 export const listarTipoCamasHabitacion = async (entrada, salida) => {
     try {
@@ -50,20 +51,24 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
             const error = "No existe ningun tipo de camas configuradas para esta habitacion";
             throw new Error(error);
         }
-        const listaCamasDisponiblesPorHabitacion = [];
+        const estructura = {
+            ok: "Lista de camas disponbiles para este apartamento",
+            listaCamasDisponiblesPorHabitacion: []
+        }
         for (const configuracionCama of camasDeLaHabitacion) {
             const camaIDV = configuracionCama.camaIDV;
-            const cama = await obtenerCamaComoEntidadPorCamaIDV(camaIDV)
-            const camaResuelta = {
-                cama: cama.camaIDV,
-                camaUI: cama.camaUI
-            };
-            listaCamasDisponiblesPorHabitacion.push(camaResuelta);
+            const cama = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+                camaIDV,
+                tipoIDVArray: ["compartida"],
+                errorSi: "desactivado"
+            })
+            estructura.listaCamasDisponiblesPorHabitacion.push(cama);
         }
-        const ok = {
-            camasDisponibles: listaCamasDisponiblesPorHabitacion
-        }
-        return ok
+        const camasFisicas = await obtenerTodasLasCamaPorTipoIDV("fisica")
+
+        estructura.listaCamasFisicas = camasFisicas
+  
+        return estructura
 
     } catch (errorCapturado) {
         throw errorCapturado

@@ -12,7 +12,8 @@ export const actualizaCamaDeLaHabitacion = async (data) => {
         SET
         "camaIDV" = $3,
         "camaUI" = $4
-        WHERE "reservaUID" = $1 
+        WHERE
+        "reservaUID" = $1
         AND 
         "habitacionUID" = $2;`;
         const parametros = [
@@ -24,7 +25,7 @@ export const actualizaCamaDeLaHabitacion = async (data) => {
         const resuelve = await conexion.query(consulta, [parametros]);
         if (resuelve.rowCount === 0) {
             const msg = "No se ha actualizado la cama en la habitacion."
-            throw new Erro(msg)
+            throw new Error(msg)
         }
         return resuelve.rows[0]
     } catch (errorCapturado) {

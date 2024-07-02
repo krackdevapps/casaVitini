@@ -2609,7 +2609,7 @@
 }
 
 .marcoGlobalReserva {
-    gap: 4px;
+    gap: 6px;
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .administracionReservaDetallesBloqueContendioAlojamiento {
@@ -2843,7 +2843,6 @@
     padding: 4px;
     padding-left: 10px;
     user-select: none;
-    border-radius: 7px;
     cursor: default;
 }
 
@@ -2853,7 +2852,6 @@
     padding: 6px;
     padding-left: 10px;
     user-select: none;
-    border-radius: 7px;
     cursor: default;
 }
 
@@ -3100,7 +3098,7 @@
     display: grid;
     grid-template-columns: 1fr 7fr;
     grid-auto-rows: minmax(auto, auto);
-    padding: 6 px;
+    padding: 8px;
     justify-items: stretch;
     justify-content: center;
     align-content: center;
@@ -3380,11 +3378,9 @@
 
 [zonaCSS="administracion/reservas/detallesReserva"] .opcionCambioCama {
     background-color: rgba(255, 255, 255, 0.3);
-    margin: 4px;
-    padding: 8px;
+    padding: 10px;
     user-select: none;
     cursor: default;
-    padding-left: 10px;
     border-radius: 6px;
 }
 
@@ -13728,9 +13724,11 @@ grid-template-columns: 0.5fr 1.5fr;
 .textSize16 {
     font-size: 16px;
 }
+
 .textSize26 {
     font-size: 16px;
 }
+
 .botonV1:hover {
     background: rgba(255, 255, 255, 0.7);
 
@@ -13878,10 +13876,12 @@ grid-template-columns: 0.5fr 1.5fr;
     transition: all 250ms;
     background: rgba(0, 0, 0, 0.3);
 }
+
 [contenedor=financiero] .comportamientoBotonApartamento:hover {
     transition: all 500ms;
     background: rgba(0, 0, 0, 0.1);
 }
+
 .blur {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -13994,4 +13994,16 @@ grid-template-columns: 0.5fr 1.5fr;
 .contenedorOculto {
     display: none;
 
+}
+
+[zonaCSS="administracion/reservas/detallesReserva"] .contenedorPendiente {
+    display: grid;
+    flex: 1;
+    grid-template-columns: auto auto;
+}
+
+.simplificadorCampo {
+    appearance: none;
+    outline: none;
+    border: none;
 }

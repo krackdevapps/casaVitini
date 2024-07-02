@@ -33,7 +33,7 @@ export const crearDesgloseFinanciero = async (data) => {
 
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const fechaActual = DateTime.now().setZone(zonaHoraria).toISODate()
-        
+
         const apartamentosArray = validadoresCompartidos.tipos.array({
             array: data.apartamentosArray,
             nombreCampo: "El array de apartamentos en el procesador de precios",
@@ -104,6 +104,7 @@ export const crearDesgloseFinanciero = async (data) => {
                 zonasArray,
                 descuentosParaRechazar
             })
+
             await aplicarDescuento({
                 origen: "porCondicion",
                 ofertasParaAplicarDescuentos: ofertasSelecionadasPorCondicion,

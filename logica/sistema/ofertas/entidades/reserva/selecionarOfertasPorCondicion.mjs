@@ -1,3 +1,4 @@
+import { obtenerOfertasPorRangoActualPorEstado } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorRangoActualPorEstado.mjs"
 import { obtenerOfertasPorRangoPorEstado } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorRangoPorEstado.mjs"
 import { selectorPorCondicion } from "./selectorPorCondicion.mjs"
 
@@ -10,9 +11,8 @@ export const selecionarOfertasPorCondicion = async (data) => {
         const zonasArray = data.zonasArray
         const descuentosParaRechazar = data?.descuentosParaRechazar || []
 
-        const ofertasSeleccionadasPorRango = await obtenerOfertasPorRangoPorEstado({
-            fechaEntradaReserva_ISO: fechaEntrada,
-            fechaSalidaReserva_ISO: fechaSalida,
+        const ofertasSeleccionadasPorRango = await obtenerOfertasPorRangoActualPorEstado({
+            fechaActual: fechaActual,
             estadoIDV: "activado",
             zonasArray,
             entidadIDV: "reserva"
@@ -33,7 +33,11 @@ export const selecionarOfertasPorCondicion = async (data) => {
                 fechaSalida_reserva: fechaSalida,
             })
             resultadoSelector.autorizacion = "aceptada"
-            ofertaAnalizadasPorCondiciones.push(resultadoSelector)
+            const condicionesQueNoSeCumple = resultadoSelector.condicionesQueNoSeCumple
+            if (condicionesQueNoSeCumple.length === 0) {
+                ofertaAnalizadasPorCondiciones.push(resultadoSelector)
+            }
+
         }
         return ofertaAnalizadasPorCondiciones
     } catch (error) {

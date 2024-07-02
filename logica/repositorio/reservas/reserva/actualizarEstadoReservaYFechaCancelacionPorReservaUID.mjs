@@ -1,20 +1,25 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const actualizarEstadoReservaPorReservaUID = async (data) => {
+export const actualizarEstadoReservaYFechaCancelacionPorReservaUID = async (data) => {
     try {
-        const nuevoEstado = data.nuevoEstado
+
+        const estadoReserva = data.estadoReserva
+        const fechaCancelacion = data.fechaCancelacion
         const reservaUID = data.reservaUID
+
         const consulta = `          
             UPDATE reservas
             SET 
-            "estadoReservaIDV" = $1
+            "estadoReservaIDV" = $1,
+            "fechaCancelacion" = $2
             WHERE
-            "reservaUID" = $2
+            "reservaUID"  = $3
             RETURNING *;
             `
             ;
         const parametros = [
-            nuevoEstado,
+            estadoReserva,
+            fechaCancelacion,
             reservaUID
         ]
         const resuelve = await conexion.query(consulta, parametros);

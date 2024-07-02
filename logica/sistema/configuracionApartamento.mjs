@@ -1,6 +1,6 @@
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs"
-import { obtenerCamaComoEntidadPorCamaIDV } from "../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs"
+import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from "../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../repositorio/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs"
 import { obtenerTodasLasCaracteristicasDelApartamento } from "../repositorio/arquitectura/entidades/apartamento/obtenerTodasLasCaracteristicasDelApartamento.mjs"
@@ -54,7 +54,10 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
                 for (const configuracionHabitacion of camasDeLaHabitacion) {
                     configuracionNumero += 1
                     const camaIDV = configuracionHabitacion.camaIDV
-                    const cama = await obtenerCamaComoEntidadPorCamaIDV(camaIDV)
+                    const cama = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+                        camaIDV,
+                        tipoIDVArray: ["compartida"]
+                    })
                     const camaUI = cama.camaUI
                     const capacidad = cama.capacidad
                     configuracion[apartamentoIDV].habitaciones[habiacionIDV].configuraciones["configuracion" + configuracionNumero] = {}

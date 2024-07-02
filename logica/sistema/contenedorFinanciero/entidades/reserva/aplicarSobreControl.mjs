@@ -35,7 +35,7 @@ export const aplicarSobreControl = async (data) => {
             respuesta.detallesSobreControl = detallesSobreControl
 
             if (netoSobreControlado.isNegative()) {
-                respuesta.valorFinal = "0.00"
+                respuesta.valorFinal = new Decimal("0.00")
             } else {
                 respuesta.valorFinal = netoSobreControlado
             }
@@ -49,7 +49,7 @@ export const aplicarSobreControl = async (data) => {
             respuesta.encontrado = "si"
             respuesta.detallesSobreControl = detallesSobreControl
             if (netoSobreControlado.isNegative()) {
-                respuesta.valorFinal = "0.00"
+                respuesta.valorFinal = new Decimal("0.00")
             } else {
                 respuesta.valorFinal = netoSobreControlado
             }

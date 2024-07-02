@@ -504,7 +504,7 @@ const casaVitini = {
 
                     // Aquí puedes colocar el código que deseas ejecutar cuando el ancho cambia
                     // Actualizar el valor del ancho anterior
-                    casaVitini.componentes.ocultarMenusVolatiles()
+                    casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
                 } else {
 
                 }
@@ -594,10 +594,11 @@ const casaVitini = {
                 //componente.preventDefault();
                 let componenteID = componente.target
                 if (componenteID.id !== "navegadorResponsivo" && componenteID.id !== "botonMenuResponsivo" && !componenteID.getAttribute("vista") && componenteID?.getAttribute("class") !== "contenedorMenu") {
-                    casaVitini.componentes.menuResponsivo()
+                    casaVitini.shell.controladoresUI.menuResponsivo()
                 }
             },
             ocultarMenusVolatiles: (menuVolatil) => {
+                console.log("2")
                 window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizotnalVetana)
                 window.removeEventListener("resize", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
                 screen.orientation?.removeEventListener("change", casaVitini.shell.controladoresUI.ocultarMenusVolatiles);
@@ -606,10 +607,10 @@ const casaVitini = {
                 if (componente === "menuDesplegable") {
                     return
                 }
-                window.removeEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
+                window.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
 
                 if (componente !== "menuVolatil") {
-                    document.removeEventListener("click", casaVitini.componentes.ocultarMenusVolatiles)
+                    document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
                     const selectorMenusVolatiles = document.querySelectorAll("[componente=menuVolatil]")
                     selectorMenusVolatiles.forEach(menuVolatil => {
                         menuVolatil.remove()
@@ -621,7 +622,9 @@ const casaVitini = {
                 })
 
             },
-            ocultarMenusVolatilesPorRedimension: () => {
+            ocultarMenusVolatilesSimple: () => {
+                window.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
+                window.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatilesSimple)
                 const selectorMenusVolatiles = document.querySelectorAll("[componente=menuVolatil]")
                 selectorMenusVolatiles.forEach(menuVolatil => {
                     menuVolatil.remove()
@@ -5581,7 +5584,7 @@ const casaVitini = {
                 document.querySelectorAll("[tipoMenu=volatil]").forEach((menu) => {
                     menu.removeAttribute("style")
                 })
-                casaVitini.componentes.limpiarTodoElementoVolatil()
+                casaVitini.shell.controladoresUI.limpiarTodoElementoVolatil()
 
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                 const mensaje = "Se ha producido un error en la red y no se ha podido comunicar con el servidor, si es por una causa circunstancial de la red, reintentalo y deberia funcionar. Comprueba que tienes acceso a la red. Por ejemplo, comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos es probable que el problema este en el servidor de Casa Vitini"
@@ -11690,10 +11693,10 @@ const casaVitini = {
                         }
 
                         const impuestosIDV = impuestos.map((impuesto) => {
-                            console.log("impuesto", impuesto)
+
                             return String(impuesto.impuestoUID)
                         })
-                        console.log("impuestosIDV", impuestosIDV)
+
 
                         const selectorImpuestosRenderizadosObsoletos = contenedorImpuestos_renderizado.querySelectorAll("[contenedor=impuesto]")
                         selectorImpuestosRenderizadosObsoletos.forEach((impuestoRenderizado) => {

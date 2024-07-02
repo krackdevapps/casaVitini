@@ -37,6 +37,7 @@ export const apartamentosPorRango = async (metadatos) => {
             fechaFinRango_ISO: fechaSalida_ISO,
         }
         const reservas = await obtenerReservasPorRango(configuracionReservas)
+
         const apartametnosIDVBloqueoados = []
         const configuracionBloqueos = {
             fechaInicioRango_ISO: fechaEntrada_ISO,
@@ -55,8 +56,9 @@ export const apartamentosPorRango = async (metadatos) => {
             apartametnosIDVBloqueoados.push(apartamento.apartamento)
         })
         for (const reserva of reservas) {
-            const reservaUID = reserva["reserva"]
+            const reservaUID = reserva.reservaUID
             const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
+
             apartamentosDeLaReserva.forEach((apartamentoDeLaReserva) => {
                 const apartamentoIDV = apartamentoDeLaReserva.apartamentoIDV
                 apartametnosIDVBloqueoados.push(apartamentoIDV)

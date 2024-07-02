@@ -7,7 +7,7 @@ import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reser
 import { eliminarEnlaceDePagoPorReservaUID } from "../../../repositorio/enlacesDePago/eliminarEnlaceDePagoPorReservaUID.mjs";
 import { DateTime } from "luxon";
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
-import { actualizarEstadoReservaPorReservaUID } from "../../../repositorio/reservas/reserva/actualizarEstadoReservaPorReservaUID.mjs";
+import { actualizarEstadoReservaYFechaCancelacionPorReservaUID } from "../../../repositorio/reservas/reserva/actualizarEstadoReservaYFechaCancelacionPorReservaUID.mjs";
 
 export const cancelarReserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -65,7 +65,7 @@ export const cancelarReserva = async (entrada, salida) => {
         const estadoReserva = "cancelada";
         const fechaCancelacion = DateTime.utc().toISO();
 
-        await actualizarEstadoReservaPorReservaUID({
+        await actualizarEstadoReservaYFechaCancelacionPorReservaUID({
             estadoReserva: estadoReserva,
             fechaCancelacion: fechaCancelacion,
             reservaUID: reservaUID

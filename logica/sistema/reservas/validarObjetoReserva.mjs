@@ -53,6 +53,10 @@ export const validarObjetoReserva = async (data) => {
             const error = "La fecha de entrada no puede ser anterior a la fecha actual"
             throw new Error(error)
         }
+        if (fechaEntradaReserva_ISO >= fechaSalidaReserva_ISO) {
+            const error = "La fecha de entrada no puede ser anterior o igual a la fecha de salida"
+            throw new Error(error)
+        }
 
         const fechasParaValidarLimites = {
             fechaEntrada_ISO: fechaEntrada_ISO,
@@ -112,12 +116,12 @@ export const validarObjetoReserva = async (data) => {
             apartamentosIDV_array: apartemtosIDVarray
         }
         const resueleApartamentosDisponibles = await apartamentosPorRango(fecha)
+
         const apartamentosDisponibles = resueleApartamentosDisponibles?.apartamentosDisponibles
         if (apartamentosDisponibles.length === 0) {
             const error = "Sentimos informar que no ya no hay ningún apartamento disponible de su reserva para reservas por que estan ocupados."
             throw new Error(error)
         }
-
         const apartamentosOcupados = []
         for (const apartamento of Object.entries(alojamiento)) {
             const apartamentoIDV = apartamento[0]
@@ -128,12 +132,16 @@ export const validarObjetoReserva = async (data) => {
         }
 
         if (apartamentosOcupados.length > 0) {
-            const constructo = utilidades.contructorComasEY(apartamentosOcupados)
+            const apartamentoUIOcupados = apartamentosOcupados.map((detallesApartamento) => {
+                return detallesApartamento.apartamentoUI
+            })
+
+            const constructo = utilidades.contructorComasEY(apartamentoUIOcupados)
             let error
             if (apartamentosOcupados.length === 1) {
                 error = `Sentimos informar que el ${constructo} no esta disponible para las fechas seleccionadas.`
             } else {
-                error = `Sentimos informar que ${constructo} ya no estan dipsonibles para las fechas seleccionadas.`
+                error = `Sentimos informar que el ${constructo} ya no estan dipsonibles para las fechas seleccionadas.`
             }
             throw new Error(error)
         }

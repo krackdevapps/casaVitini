@@ -5,6 +5,7 @@ export const insertarCamaComoEntidad = async (data) => {
     const camaIDV = data.camaIDV
     const camaUI = data.camaUI
     const capacidad = data.capacidad
+    const tipoCama = data.tipoCama
 
     try {
         const consulta = `
@@ -12,17 +13,25 @@ export const insertarCamaComoEntidad = async (data) => {
         (
         "camaIDV",
         "camaUI",
-        capacidad
+        capacidad,
+        "tipoIDV"
         )
         VALUES 
         (
         $1,
         $2,
-        $3
+        $3,
+        $4
         )
         RETURNING *
         `;
-        const resuelve = await conexion.query(consulta, [camaIDV, camaUI, capacidad]);
+        const parametros = [
+            camaIDV,
+            camaUI,
+            capacidad,
+            tipoCama
+        ]
+        const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
             const error = "No seha insertado la cama como entidad"
             throw error

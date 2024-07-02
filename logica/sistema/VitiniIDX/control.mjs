@@ -1,6 +1,7 @@
 export class VitiniIDX {
     constructor(session, salida) {
         this.usuario = session.usuario;
+        console.log(this.usuario)
         this.rolIDV = session.rol;
         // this.salida = salida
         this.contenedorGrupos = [];

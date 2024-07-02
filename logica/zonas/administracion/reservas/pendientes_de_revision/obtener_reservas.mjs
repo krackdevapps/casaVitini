@@ -11,11 +11,8 @@ export const obtener_reservas = async (entrada, salida) => {
         IDX.control()
 
         // Obtener todas las reservas no pagadas de origen cliente
-
         const dataReservas = {
-            origen: "cliente",
-            estadoPago: "noPagado",
-            estadoReserva: "confirmada"
+            estadoReserva: "pendiente"
         }
         const reseervasPendientesDeRevision = await obtenerReservaPendientesDeRevision(dataReservas)
         const ok = {

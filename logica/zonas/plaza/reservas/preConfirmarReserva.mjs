@@ -19,12 +19,11 @@ export const preConfirmarReserva = async (entrada) => {
         }
         const reserva = entrada.body.reserva;
 
-        //ALERTA - ACTIVAME!!!, SISTEMA DE VALIDACIO DESACTIVADO POR TEMAS DE DEV
-        // await validarObjetoReserva({
-        //     reservaObjeto: reserva,
-        //     filtroHabitacionesCamas: "si",
-        //     filtroTitular: "si"
-        // })
+        await validarObjetoReserva({
+            reservaObjeto: reserva,
+            filtroHabitacionesCamas: "si",
+            filtroTitular: "si"
+        })
 
         await campoDeTransaccion("iniciar")
         await eliminarBloqueoCaducado()
