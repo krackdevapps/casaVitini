@@ -3,9 +3,9 @@ import { codigoZonaHoraria } from "../../sistema/configuracion/codigoZonaHoraria
 import { obtenerTodosLosCalendarios } from "../../sistema/calendariosSincronizados/airbnb/obtenerTodosLosCalendarios.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { obtenerReservasPorMes } from "../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorMesPorAno.mjs";
-import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from "../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs";
 import { obtenerBloqueosPorMes } from "../../repositorio/bloqueos/obtenerBloqueosPorMes.mjs";
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
+import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../../repositorio/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs";
 
 
 export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
@@ -62,7 +62,10 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
             estadoReservaCancelada: "cancelada",
         })
         // Cuantos apartamentos disponibles existen
-        const configuracionesDisponibles = await obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles()
+        const configuracionesDisponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
+            estadoIDV: "disponible",
+            zonaArray: ["publica", "global", "privada"]
+        })
         if (configuracionesDisponibles.length === 0) {
             const error = "No hay ningun apartamento disponible";
             throw new Error(error);

@@ -395,7 +395,7 @@ const casaVitini = {
             await casaVitini.shell.controladoresUI.controladorEstadoIDX()
 
             document.getElementById("botonMenuResponsivo").addEventListener("click", casaVitini.componentes.menuResponsivo)
-            window.addEventListener("resize", casaVitini.componentes.limpiarTodoElementoVolatil)
+            window.addEventListener("resize", casaVitini.componentes.limpiarTodoElementoFlotante)
             //  casaVitini.componentes.controlGlobalScroll()
             const vistas = document.querySelectorAll("[vista]")
 
@@ -639,15 +639,21 @@ const casaVitini = {
                     advertenciaInmersiva.remove()
                 })
             },
-            limpiarTodoElementoVolatil: () => {
+            limpiarTodoElementoFlotante: () => {
                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                 document.querySelectorAll("[componente=menuVolatil]").forEach((menuVolatil) => {
                     menuVolatil.remove()
                 })
                 document.querySelectorAll("[componente=advertenciaIntegrada]").forEach((menuVolatil) => {
                     menuVolatil.remove()
-
                 })
+                window.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
+                window.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatilesSimple)
+                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizotnalVetana)
+                window.removeEventListener("resize", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
+                document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
+
+
 
             },
             ocultarElementos: (e) => {
@@ -3070,7 +3076,7 @@ const casaVitini = {
                             const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
                             const transacccion = {
                                 zona: "miCasa/misReservas/detallesReserva",
-                                reservaUID: Number(reservaUID)
+                                reservaUID: reservaUID
                             }
                             const respuestaServidor = await casaVitini.shell.servidor(transacccion)
                             const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -5584,7 +5590,7 @@ const casaVitini = {
                 document.querySelectorAll("[tipoMenu=volatil]").forEach((menu) => {
                     menu.removeAttribute("style")
                 })
-                casaVitini.shell.controladoresUI.limpiarTodoElementoVolatil()
+                casaVitini.shell.controladoresUI.limpiarTodoElementoFlotante()
 
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                 const mensaje = "Se ha producido un error en la red y no se ha podido comunicar con el servidor, si es por una causa circunstancial de la red, reintentalo y deberia funcionar. Comprueba que tienes acceso a la red. Por ejemplo, comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos es probable que el problema este en el servidor de Casa Vitini"
@@ -10702,7 +10708,10 @@ const casaVitini = {
 
                                     } else if (tipoCondicion === "porApartamentosEspecificos") {
                                         const apartamentos = condicion.apartamentos
-                                        const apartametnosFormateados = casaVitini.utilidades.cadenas.contructorComasEY(apartamentos)
+                                        const apartametnosFormateados = casaVitini.utilidades.cadenas.contructorComasEY({
+                                            array: apartamentos,
+                                            articulo: "el"
+                                        })
                                         const tituloCondicion = document.createElement("div")
                                         tituloCondicion.innerText = "Por apartamentos especificos"
                                         tituloCondicion.classList.add(

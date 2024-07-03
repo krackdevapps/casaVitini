@@ -15,11 +15,14 @@ export const listarConfiguracionApartamentos = async (entrada, salida) => {
         const apartamentosConConfiguracion = [];
         for (const detallesDelApartamento of configuracionesDeLosApartamento) {
             const apartamentoIDV = detallesDelApartamento.apartamentoIDV;
-            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
-            const estadoConfiguracion = detallesDelApartamento.estadoConfiguracion;
+            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "desactivado"
+            });
+            const estadoConfiguracion = detallesDelApartamento.estadoConfiguracionIDV;
             const estructuraFinal = {
                 apartamentoIDV: apartamentoIDV,
-                apartamentoUI: apartamentoUI,
+                apartamentoUI: apartamento.apartamentoUI,
                 estadoConfiguracion: estadoConfiguracion
             };
             apartamentosConConfiguracion.push(estructuraFinal);

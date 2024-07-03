@@ -2,28 +2,27 @@ import { DateTime } from 'luxon';
 import { apartamentosOcupadosAirbnb } from '../calendariosSincronizados/airbnb/apartamentosOcudaosAirbnb.mjs';
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { obtenerApartamentosDeLaReservaPorReservaUID } from '../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs';
-import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from '../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs';
-import { obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles } from '../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles.mjs';
 import { obtenerBloqueosPorRangoPorApartamentoIDV } from '../../repositorio/bloqueos/obtenerBloqueosPorRangoPorApartamentoIDV.mjs';
 import { obtenerReservasPorRango } from '../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorRango.mjs';
+import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from '../../repositorio/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs';
 
-export const apartamentosPorRango = async (metadatos) => {
+export const apartamentosPorRango = async (data) => {
 
-    const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
-    const fechaSalida_ISO = metadatos.fechaSalida_ISO
-    const apartamentosIDV = metadatos.apartamentosIDV
-    const origen = metadatos.origen || "plaza"
-    const rol = metadatos.rol || ""
+    const fechaEntrada_ISO = data.fechaEntrada_ISO
+    const fechaSalida_ISO = data.fechaSalida_ISO
+    const apartamentosIDV = data.apartamentosIDV
+    const zonaConfiguracionAlojamientoArray = data.zonaConfiguracionAlojamientoArray
+    const zonaBloqueo_array = data.zonaBloqueo_array
 
     try {
 
         await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: fechaEntrada_ISO,
-            nombreCampo: "La fecha de entrada de la reserva"
+            nombreCampo: "La fecha de entrada de la reserva en apartamentosPorRango"
         })
         await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: fechaSalida_ISO,
-            nombreCampo: "La fecha de salida de la reserva"
+            nombreCampo: "La fecha de salida de la reserva en apartamentosPorRango"
         })
         const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO); // El formato es día/mes/ano
         const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO);
@@ -32,24 +31,19 @@ export const apartamentosPorRango = async (metadatos) => {
             throw new Error(error)
         }
         const apartamentosDisponiblesArray = []
-        const configuracionReservas = {
+        const reservas = await obtenerReservasPorRango({
             fechaIncioRango_ISO: fechaEntrada_ISO,
             fechaFinRango_ISO: fechaSalida_ISO,
-        }
-        const reservas = await obtenerReservasPorRango(configuracionReservas)
+        })
 
         const apartametnosIDVBloqueoados = []
         const configuracionBloqueos = {
             fechaInicioRango_ISO: fechaEntrada_ISO,
             fechaFinRango_ISO: fechaSalida_ISO,
             apartamentoIDV: apartamentosIDV,
-            zonaBloqueo_array: ["publico", "global"],
+            zonaBloqueo_array: zonaBloqueo_array
         }
-        if (origen === "administracion"
-            &&
-            (rol === "administrador" || rol === "empleado")) {
-            configuracionBloqueos.zonaBloqueo_array = ["privado", "global"]
-        }
+
         const bloqueos = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
 
         bloqueos.forEach((apartamento) => {
@@ -63,14 +57,19 @@ export const apartamentosPorRango = async (metadatos) => {
                 const apartamentoIDV = apartamentoDeLaReserva.apartamentoIDV
                 apartametnosIDVBloqueoados.push(apartamentoIDV)
             })
-
         }
-        const configuracionesAlojamientoSoloDisponible = await obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles()
+        const configuracionesAlojamientoSoloDisponible = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
+            estadoIDV: "disponible",
+            zonaArray: zonaConfiguracionAlojamientoArray
+        })
         if (configuracionesAlojamientoSoloDisponible.length === 0) {
             const error = "No hay ningun apartamento disponible"
             throw new Error(error)
         }
-        const configuracionesAlojaminetoNODisponbiles = await obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles()
+        const configuracionesAlojaminetoNODisponbiles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
+            estadoIDV: "nodisponible",
+            zonaArray: zonaConfiguracionAlojamientoArray
+        })
         configuracionesAlojaminetoNODisponbiles.forEach((apartamentoNoDisponible) => {
             apartametnosIDVBloqueoados.push(apartamentoNoDisponible.apartamentoIDV)
         })
@@ -86,7 +85,6 @@ export const apartamentosPorRango = async (metadatos) => {
             apartamentosDisponibles: apartamentosDisponiblesFinal,
         }
         const apartamentosOcupadosPorEliminar_Airbnb = await apartamentosOcupadosAirbnb(datosAirbnb)
-
 
         for (const apartamentoIDV of apartamentosOcupadosPorEliminar_Airbnb) {
             const elementoParaBorrar = apartamentosDisponiblesFinal.indexOf(apartamentoIDV);

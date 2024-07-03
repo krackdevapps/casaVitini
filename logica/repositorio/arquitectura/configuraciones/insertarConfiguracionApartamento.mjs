@@ -5,22 +5,30 @@ export const insertarConfiguracionApartamento = async (data) => {
 
         const apartamentoIDV = data.apartamentoIDV
         const estadoInicial = data.estadoInicial
+        const zonaIDV = data.zonaIDV
 
         const consulta = `
         INSERT INTO "configuracionApartamento"
         (
         "apartamentoIDV",
-        "estadoConfiguracionIDV"
+        "estadoConfiguracionIDV",
+        "zonaIDV"
         )
         VALUES 
         (
         $1,
-        $2
+        $2,
+        $3
         )
         RETURNING 
         *
         `;
-        const resuelve = await conexion.query(consulta, [apartamentoIDV, estadoInicial]);
+        const parametros = [
+            apartamentoIDV,
+            estadoInicial,
+            zonaIDV
+        ]
+        const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
             const error = "No se ha insertado la nueva configuracion de alojamiento"
             throw new Error(error)

@@ -5,6 +5,14 @@ export const obtenerCamaComoEntidadPorCamaIDVPorTipoIDV = async (data) => {
         const tipoIDVArray = data.tipoIDVArray
         const errorSi = data.errorSi
 
+        if (!data.hasOwnProperty("camaIDV")) {
+            const error = "el adaptador obtenerCamaComoEntidadPorCamaIDVPorTipoIDV no esta recibineod el camaIDV"
+            throw new Error(error)
+        }
+        if (!data.hasOwnProperty("tipoIDVArray")) {
+            const error = "el adaptador obtenerCamaComoEntidadPorCamaIDVPorTipoIDV no esta recibineod el tipoIDVArray"
+            throw new Error(error)
+        }
         const consulta = `
         SELECT *
         FROM camas 

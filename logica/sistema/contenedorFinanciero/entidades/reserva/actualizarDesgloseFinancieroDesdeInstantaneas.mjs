@@ -12,13 +12,15 @@ import { constructorInstantaneaNoches } from "./constructorInstantaneaNoches.mjs
 export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
     try {
         const estructura = data.estructura
-        const reservaUID = validadoresCompartidos.tipos.numero({
-            number: data.reservaUID,
-            nombreCampo: "El campo de reservaUID dentro dle actualizarDesgloseFinancieroDesdeInstantaneas",
-            filtro: "numeroSimple",
-            sePermiteVacio: "si",
+        const reservaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
+
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const fechaEntrada = reserva.fechaEntrada
         const fechaSalida = reserva.fechaSalida

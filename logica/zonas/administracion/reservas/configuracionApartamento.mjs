@@ -3,11 +3,11 @@ import { configuracionApartamento as configuracionApartamento_ } from "../../../
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
-export const configuracionApartamento = async (entrada, salida) => {
+export const configuracionApartamento = async (entrada) => {
     try {
 
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -19,7 +19,7 @@ export const configuracionApartamento = async (entrada, salida) => {
             sePermitenDuplicados: "no"
         })
         const transactor = await configuracionApartamento_(apartamentos);
-        salida.json(transactor);
+       return transactor
     } catch (errorCapturado) {
         throw errorCapturado
     }

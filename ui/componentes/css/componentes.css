@@ -2823,10 +2823,9 @@
 
 [zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesTituloHabitacion {
     /* background: yellowgreen;*/
-    padding: 6px;
+    padding: 10px;
     border-radius: 7px;
     font-weight: bold;
-    padding-left: 10px;
     user-select: none;
     cursor: default;
     color: rgb(62, 62, 62);
@@ -2848,17 +2847,11 @@
 
 [zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesTituloTipoCama {
     background: rgba(0, 0, 0, 0.2);
-    margin: 0px;
-    padding: 6px;
-    padding-left: 10px;
     user-select: none;
     cursor: default;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesTituloTipoCama:hover {
-    background: rgba(0, 0, 0, 0.3);
-    color: white;
-}
+
 
 [zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesBloquePernoctantes {
     user-select: none;
@@ -13874,7 +13867,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .comportamientoBoton:hover {
     transition: all 250ms;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.2);
 }
 
 [contenedor=financiero] .comportamientoBotonApartamento:hover {

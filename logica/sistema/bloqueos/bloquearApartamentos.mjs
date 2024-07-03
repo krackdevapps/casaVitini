@@ -5,22 +5,22 @@ import { obtenerReservaPorReservaUID } from '../../repositorio/reservas/reserva/
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 export const bloquearApartamentos = async (metadatos) => {
     try {
-        const reservaUID = validadoresCompartidos.tipos.numero({
-            number: metadatos.reservaUID,
-            nombreCampo: "El identificador universal de la reservaUID (reservaUID)",
-            filtro: "numeroSimple",
+        const reservaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
 
-        const apartamentoUID = validadoresCompartidos.tipos.numero({
-            number: metadatos.apartamentoUID,
-            nombreCampo: "El apartamentoUID",
-            filtro: "numeroSimple",
+        const apartamentoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoUID,
+            nombreCampo: "El identificador universal de la reserva (apartamentoUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
 
         const tipoBloqueo = metadatos.tipoBloqueo

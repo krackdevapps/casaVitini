@@ -1,9 +1,9 @@
-import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from "../../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs";
+import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
-export const apartamentosDisponiblesConfigurados = async (entrada, salida) => {
+export const apartamentosDisponiblesConfigurados = async (entrada) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -11,7 +11,10 @@ export const apartamentosDisponiblesConfigurados = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        const apartamentosDisponiblesConfigurados_ = await obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles()
+        const apartamentosDisponiblesConfigurados_ = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
+            estadoIDV: "disponible",
+            zonaArray: ["publica", "global", "privada"]
+        })
 
         if (apartamentosDisponiblesConfigurados_.length === 0) {
             const error = "No hay ningun apartamento disponible configurado";
@@ -24,7 +27,7 @@ export const apartamentosDisponiblesConfigurados = async (entrada, salida) => {
             const apartamentoEntidadad = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
             detallesApartamento.apartamentoUI = apartamentoEntidadad.apartamentoUI
         }
- 
+
         const ok = {
             ok: apartamentosDisponiblesConfigurados_
         }

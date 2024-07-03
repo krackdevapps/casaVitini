@@ -22,53 +22,65 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
             fecha_ISO: entrada.body.fechaSalida,
             nombreCampo: "La fecha de salida en apartametnosDisponbiblesPublico"
         }))
+        await validadoresCompartidos.fechas.validacionVectorial({
+            fechaEntrada_ISO: fechaEntrada_ISO,
+            fechaSalida_ISO: fechaSalida_ISO,
+            tipoVector: "diferente"
+        })
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaEntrad_objeto = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
         if (fechaEntrad_objeto < tiempoZH.startOf('day')) {
             const error = "La fecha de entrada no puede ser inferior a la fecha actual. Solo se pueden hacer reservas a partir de hoy";
-            // throw new Error(error);
+            throw new Error(error);
         }
         await eliminarBloqueoCaducado();
         const rol = entrada.session.rol;
-        const configuracionApartamentosPorRango = {
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
-            rol: rol,
-            origen: "plaza"
-        };
-
         const fechaActual_ISO = tiempoZH.toISODate();
 
         //const resuelveADP = await apartamentosDisponiblesPublico(fecha)
-        const resuelveApartametnoDisponiblesPublico = await apartamentosPorRango(configuracionApartamentosPorRango);
-        const apartamentosDisponiblesEncontrados = resuelveApartametnoDisponiblesPublico.apartamentosDisponibles;
-        const configuracionesApartamentosVerificadas = await configuracionApartamento(apartamentosDisponiblesEncontrados);
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                reserva: {
-                    tipoOperacion: "crearDesglose",
-                    fechaEntrada: fechaEntrada_ISO,
-                    fechaSalida: fechaSalida_ISO,
-                    fechaCreacion: fechaActual_ISO,
-                    apartamentosArray: apartamentosDisponiblesEncontrados,
-                    capaOfertas: "si",
-                    zonasArray: ["global", "publica"],
-                    descuentosParaRechazar: [],
-                    capaDescuentosPersonalizados: "si",
-                    descuentosArray: ["50", "50"],
-                    capaImpuestos: "si",
-                }
-            },
+        const resuelveApartametnoDisponiblesPublico = await apartamentosPorRango({
+            fechaEntrada_ISO: fechaEntrada_ISO,
+            fechaSalida_ISO: fechaSalida_ISO,
+            zonaConfiguracionAlojamientoArray: ["publica", "global"],
+            zonaBloqueo_array: ["publico", "global"],
         })
-        const estructuraFinal = {
-            desgloseFinanciero,
-            apartamentosDisponibles: configuracionesApartamentosVerificadas.configuracionApartamento
-        }
-        const ok = {
-            ok: estructuraFinal
+
+        const apartamentosDisponiblesEncontrados = resuelveApartametnoDisponiblesPublico.apartamentosDisponibles;
+        const estructura = {
+            ok: {}
         };
-        return ok
+        if (apartamentosDisponiblesEncontrados.length === 0) {
+            estructura.ok = {
+                apartamentosDisponibles: []
+            }
+        }
+        if (apartamentosDisponiblesEncontrados.length > 0) {
+            const configuracionesApartamentosVerificadas = await configuracionApartamento(apartamentosDisponiblesEncontrados);
+            const desgloseFinanciero = await procesador({
+                entidades: {
+                    reserva: {
+                        tipoOperacion: "crearDesglose",
+                        fechaEntrada: fechaEntrada_ISO,
+                        fechaSalida: fechaSalida_ISO,
+                        fechaCreacion: fechaActual_ISO,
+                        apartamentosArray: apartamentosDisponiblesEncontrados,
+                        capaOfertas: "si",
+                        zonasArray: ["global", "publica"],
+                        descuentosParaRechazar: [],
+                        capaDescuentosPersonalizados: "si",
+                        descuentosArray: ["50", "50"],
+                        capaImpuestos: "si",
+                    }
+                },
+            })
+            estructura.ok = {
+                desgloseFinanciero,
+                apartamentosDisponibles: configuracionesApartamentosVerificadas.configuracionApartamento
+            }
+        }
+
+        return estructura
     } catch (errorCapturado) {
         throw errorCapturado
     }

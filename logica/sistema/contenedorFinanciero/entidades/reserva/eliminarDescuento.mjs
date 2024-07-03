@@ -27,13 +27,15 @@ export const eliminarDescuento = async (data) => {
             filtro: "soloCadenasIDV",
             sePermitenDuplicados: "no"
         })
-        const reservaUID = validadoresCompartidos.tipos.numero({
-            number: data?.reservaUID ?? "",
-            nombreCampo: "El campo de reservaUID dentro dle actualizarDesgloseFinanciero",
-            filtro: "numeroSimple",
-            sePermiteVacio: "si",
+        const reservaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
+
         const ofertaUIDParaEliminar = validadoresCompartidos.tipos.numero({
             number: data?.ofertaUID,
             nombreCampo: "El campo de ofertaUID dentro del actualizarDesgloseFinanciero",

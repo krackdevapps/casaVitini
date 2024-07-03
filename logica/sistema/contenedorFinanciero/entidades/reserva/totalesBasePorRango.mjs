@@ -108,7 +108,10 @@ export const totalesBasePorRango = async (data) => {
 
                 if (!desglosePorApartamento.hasOwnProperty(apartamentoIDV)) {
                     desglosePorApartamento[apartamentoIDV] = {
-                        apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI,
+                        apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV,
+                            errorSi: "desactivado"
+                        })).apartamentoUI,
                         totalNeto: new Decimal(0)
                     }
                 }

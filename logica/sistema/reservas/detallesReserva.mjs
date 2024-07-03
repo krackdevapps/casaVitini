@@ -23,8 +23,14 @@ export const detallesReserva = async (data) => {
 
         const capasNoIdentificadas = capas.filter(capaIDV => !contenedorCapas.includes(capaIDV));
         if (capasNoIdentificadas.length > 0) {
-            const constructoCapasNoConocidas = utilidades.contructorComasEY(capasNoIdentificadas)
-            const constructoCapasConocidas = utilidades.contructorComasEY(contenedorCapas)
+            const constructoCapasNoConocidas = utilidades.contructorComasEY({
+                array: capasNoIdentificadas,
+                articulo: "la"
+            })
+            const constructoCapasConocidas = utilidades.contructorComasEY({
+                array: contenedorCapas,
+                arituclo: "la"
+            })
             const capasConocidasUI = `Las capas disponibles son ${constructoCapasConocidas}`
             let error
             if (capasNoIdentificadas.length === 1) {

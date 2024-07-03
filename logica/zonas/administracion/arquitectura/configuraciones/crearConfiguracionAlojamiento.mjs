@@ -26,6 +26,23 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
+        const zonaIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.apartamentoIDV,
+            nombreCampo: "El zonaIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+
+        if (
+            zonaIDV !== "global" ||
+            zonaIDV !== "publica" ||
+            zonaIDV !== "privada"
+        ) {
+            const error = "El campo de zonaIDV solo admite globa, publica y privada";
+            throw new Error(error);
+        }
+
         const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
         if (!apartamentoUI) {
             const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon";
@@ -40,7 +57,8 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
 
         const dataInsertarConfiguracionApartamento = {
             apartamentoIDV: apartamentoIDV,
-            estadoInicial: estadoInicial
+            estadoInicial: estadoInicial,
+            zonaIDV: zonaIDV
         }
         await insertarConfiguracionApartamento(dataInsertarConfiguracionApartamento).apartamentoIDV
         await insertarPerfilPrecio({

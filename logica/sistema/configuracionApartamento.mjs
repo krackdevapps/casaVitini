@@ -14,7 +14,8 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
             array: apartamentosIDVArray,
             nombreCampo: "El sistema de configuracion",
             filtro: "soloCadenasIDV",
-            sePermitenDuplicados: "no"
+            sePermitenDuplicados: "no",
+            sePermiteArrayVacio: "si"
         })
 
         const apartamentosValidados = []
@@ -32,7 +33,10 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
             const apartamentoIDV = detallesApartamento.apartamentoIDV
             configuracion[apartamentoIDV] = {}
 
-            const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+            const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "desactivado"
+            })
             configuracion[apartamentoIDV].apartamentoUI = apartamentoEntidad.apartamentoUI
             const caracteristicasDeLApartamento = await obtenerTodasLasCaracteristicasDelApartamento(apartamentoIDV)
             configuracion[apartamentoIDV].caracteristicas = caracteristicasDeLApartamento
@@ -56,7 +60,8 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
                     const camaIDV = configuracionHabitacion.camaIDV
                     const cama = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                         camaIDV,
-                        tipoIDVArray: ["compartida"]
+                        tipoIDVArray: ["compartida"],
+                        errorSi: "desactivado"
                     })
                     const camaUI = cama.camaUI
                     const capacidad = cama.capacidad

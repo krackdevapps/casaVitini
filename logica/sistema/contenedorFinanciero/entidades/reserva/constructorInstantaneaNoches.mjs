@@ -83,7 +83,10 @@ export const constructorInstantaneaNoches = async (data) => {
                 if (!apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {
                     
                     apartamentosPorNoche[apartamentoIDV] = {
-                        apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI,
+                        apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV,
+                            errorSi: "desactivado"
+                        })).apartamentoUI,
                         precioNetoApartamento: precioBase
                     }
                     const apartamentoEstructura = apartamentosPorNoche[apartamentoIDV]

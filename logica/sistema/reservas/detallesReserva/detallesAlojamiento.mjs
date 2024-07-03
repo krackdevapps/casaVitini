@@ -1,5 +1,6 @@
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
-import { obtenerCamaDeLaHabitacion } from "../../../repositorio/reservas/apartamentos/obtenerCamaDeLaHabitacion.mjs";
+import { obtenerCamaCompartidaDeLaHabitacion } from "../../../repositorio/reservas/apartamentos/obtenerCamaCompartidaDeLaHabitacion.mjs";
+import { obtenerCamasFisicasPorReservaUIDPorHabitacionUID } from "../../../repositorio/reservas/apartamentos/obtenerCamasFisicasPorReservaUIDPorHabitacionUID.mjs";
 import { obtenerHabitacionesDelApartamento } from "../../../repositorio/reservas/apartamentos/obtenerHabitacionDelApartamento.mjs";
 import { obtenerPernoctantesDeLaHabitacion } from "../../../repositorio/reservas/pernoctantes/obtenerPernoctantesDeLaHabitacion.mjs";
 import { recuperarClientesSinHabitacionAsignada } from "./recuperarClientesSinHabitacionAsignada.mjs";
@@ -46,26 +47,46 @@ export const detallesAlojamiento = async (reservaUID) => {
                 habitacionObjeto[habitacionIDV] = {}
                 alojamiento[apartamentoIDV].habitaciones[habitacionIDV] = {}
                 alojamiento[apartamentoIDV].habitaciones[habitacionIDV].habitacionUI = habitacionUI
-                const camaDeLaHabitacion = await obtenerCamaDeLaHabitacion({
-                    reservaUID: reservaUID,
-                    habitacionUID: habitacionUID
-                })
-                if (camaDeLaHabitacion) {
-                    const camaIDV = camaDeLaHabitacion.camaIDV
-                    const camaUID = camaDeLaHabitacion.componenteUID
-                    const camaUI = camaDeLaHabitacion.camaUI
-                    alojamiento[apartamentoIDV].habitaciones[habitacionIDV].camaUI = camaUI
-                    alojamiento[apartamentoIDV].habitaciones[habitacionIDV].camaIDV = camaIDV
-                    alojamiento[apartamentoIDV].habitaciones[habitacionIDV].camaUID = camaUID
-                } else {
-                    alojamiento[apartamentoIDV].habitaciones[habitacionIDV].camaUI = "Sin cama asignada"
-                }
                 alojamiento[apartamentoIDV].habitaciones[habitacionIDV].habitacionUID = habitacionUID
+                alojamiento[apartamentoIDV].habitaciones[habitacionIDV].camas = {
+                    compartida: {},
+                    fisicas: []
+                }
+                const contenedorCamaCompartida = alojamiento[apartamentoIDV].habitaciones[habitacionIDV].camas.compartida
+                const contenedorCamasFisicas = alojamiento[apartamentoIDV].habitaciones[habitacionIDV].camas.fisicas
+
+                const camaCommpartidaDeLaHabitacion = await obtenerCamaCompartidaDeLaHabitacion({
+                    reservaUID,
+                    habitacionUID
+                })
+                if (camaCommpartidaDeLaHabitacion) {
+                    const camaIDV = camaCommpartidaDeLaHabitacion.camaIDV
+                    const camaUID = camaCommpartidaDeLaHabitacion.componenteUID
+                    const camaUI = camaCommpartidaDeLaHabitacion.camaUI
+
+                    contenedorCamaCompartida.camaUI = camaUI
+                    contenedorCamaCompartida.camaIDV = camaIDV
+                    contenedorCamaCompartida.camaUID = camaUID
+
+                } else {
+                    contenedorCamaCompartida.camaUI = "Sin cama asignada"
+                }
+
+                const camasFisicasDeLaHabitacion = await obtenerCamasFisicasPorReservaUIDPorHabitacionUID({
+                    reservaUID,
+                    habitacionUID,
+                    errorSi: "desactivado"
+                })
+
+                camasFisicasDeLaHabitacion.forEach((camaFisica) => {
+                    contenedorCamasFisicas.push(camaFisica)
+                })
+
                 const pernoctanesEnHabitacion = await obtenerPernoctantesDeLaHabitacion({
                     reservaUID,
                     habitacionUID
                 })
-              //  alojamiento[apartamentoIDV].habitaciones[habitacionIDV].pernoctantes = pernoctanesEnHabitacion
+                //  alojamiento[apartamentoIDV].habitaciones[habitacionIDV].pernoctantes = pernoctanesEnHabitacion
             }
         }
         const pernoctantesSinHabitacion = await recuperarClientesSinHabitacionAsignada(reservaUID)

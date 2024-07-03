@@ -1,0 +1,94 @@
+import { Mutex } from "async-mutex";
+import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerHabitacionDelLaReserva } from "../../../../../repositorio/reservas/apartamentos/obtenerHabitacionDelLaReserva.mjs";
+import { obtenerDetallesCliente } from "./../../../../../repositorio/clientes/obtenerDetallesCliente.mjs";
+import { obtenerPernoctanteDeLaReservaPorClienteUID } from "../../../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorClienteUID.mjs";
+import { insertarPernoctanteEnLaHabitacion } from "../../../../../repositorio/reservas/pernoctantes/insertarPernoctanteEnLaHabitacion.mjs";
+import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
+
+export const anadirPernoctanteHabitacion = async (entrada, salida) => {
+    const mutex = new Mutex()
+    try {
+
+        const session = entrada.session
+        const IDX = new VitiniIDX(session, salida)
+        IDX.administradores()
+        IDX.empleados()
+        IDX.control()
+
+        await mutex.acquire();
+
+        const reservaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
+        })
+        const habitacionUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la habitacionUID (habitacionUID)",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
+        })
+
+        const clienteUID = validadoresCompartidos.tipos.numero({
+            number: entrada.body.clienteUID,
+            nombreCampo: "El identificador universal de la clienteUID (clienteUID)",
+            filtro: "numeroSimple",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no"
+        })
+        await campoDeTransaccion("iniciar")
+
+        // Comprobar que la reserva exisste
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
+        if (reserva.estadoReservaIDV === "cancelada") {
+            const error = "La reserva no se puede modificar por que esta cancelada";
+            throw new Error(error);
+        }
+        // validar habitacion
+        await obtenerHabitacionDelLaReserva({
+            reservaUID: reservaUID,
+            habitacionUID: habitacionUID,
+        })
+        // validar cliente
+        await obtenerDetallesCliente(clienteUID)
+        // No se puede anadir un pernoctante ya existen a la reserva, proponer moverlo de habitacion
+        const pernoctanteDeLaReserva = await obtenerPernoctanteDeLaReservaPorClienteUID({
+            reservaUID: reservaUID,
+            clienteUID: clienteUID
+        })
+        if (pernoctanteDeLaReserva.componenteUID) {
+            const error = "Este cliente ya es un pernoctante dentro de esta reserva, mejor muevalo de habitacion";
+            throw new Error(error);
+        }
+
+        const nuevoPernoctanteEnLaHabitacion = await insertarPernoctanteEnLaHabitacion({
+            reservaUID: reservaUID,
+            clienteUID: clienteUID,
+            habitacionUID: habitacionUID
+        })
+        await campoDeTransaccion("confirmar")
+
+        const ok = {
+            ok: "Se ha anadido correctamente el cliente en la habitacin de la reserva",
+            nuevoUID: nuevoPernoctanteEnLaHabitacion.componenteUID
+        };
+        return ok
+    }
+    catch (errorCapturado) {
+        await campoDeTransaccion("cancelar")
+        throw errorFinal
+    } finally {
+        if (mutex) {
+            mutex.release()
+        }
+    }
+}

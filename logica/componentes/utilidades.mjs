@@ -104,11 +104,13 @@ export const utilidades = {
         // Comparar las fechas
         return date1.getTime() === date2.getTime();
     },
-    contructorComasEY: (array) => {
+    contructorComasEY: (data) => {
+        const array = data.array
+        const articulo = data.articulo
         if (array.length === 1) {
             return array[0];
         } else {
-            const formattedString = array.slice(0, -1).join(', ') + ' y ' + array.slice(-1);
+            const formattedString = array.slice(0, -1).join(', ' + articulo + " ") + ' y '+ articulo + " " + array.slice(-1);
             return formattedString;
         }
 

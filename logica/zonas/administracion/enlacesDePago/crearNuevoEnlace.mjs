@@ -12,14 +12,15 @@ export const crearNuevoEnlace = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-        const reservaUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.reservaUID,
-            nombreCampo: "El identificador universal de la reser (reservaUID)",
-            filtro: "numeroSimple",
+        const reservaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
+
 
         const nombreEnlace = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombreEnlace || `Enlace de pago de la reserva ${reservaUID}`,

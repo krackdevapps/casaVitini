@@ -110,12 +110,14 @@ export const validarObjetoReserva = async (data) => {
 
         }
 
-        const fecha = {
+
+        const resueleApartamentosDisponibles = await apartamentosPorRango({
             fechaEntrada_ISO: fechaEntrada_ISO,
             fechaSalida_ISO: fechaSalida_ISO,
-            apartamentosIDV_array: apartemtosIDVarray
-        }
-        const resueleApartamentosDisponibles = await apartamentosPorRango(fecha)
+            apartamentosIDV_array: apartemtosIDVarray,
+            zonaConfiguracionAlojamientoArray: ["publica", "global"],
+            zonaBloqueo_array: ["publico", "global"],
+        })
 
         const apartamentosDisponibles = resueleApartamentosDisponibles?.apartamentosDisponibles
         if (apartamentosDisponibles.length === 0) {
@@ -126,7 +128,10 @@ export const validarObjetoReserva = async (data) => {
         for (const apartamento of Object.entries(alojamiento)) {
             const apartamentoIDV = apartamento[0]
             if (!apartamentosDisponibles.includes(apartamentoIDV)) {
-                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "noExiste"
+                })
                 apartamentosOcupados.push(apartamentoUI)
             }
         }
@@ -136,7 +141,10 @@ export const validarObjetoReserva = async (data) => {
                 return detallesApartamento.apartamentoUI
             })
 
-            const constructo = utilidades.contructorComasEY(apartamentoUIOcupados)
+            const constructo = utilidades.contructorComasEY({
+                array: apartamentoUIOcupados,
+                articulo: "el"
+            })
             let error
             if (apartamentosOcupados.length === 1) {
                 error = `Sentimos informar que el ${constructo} no esta disponible para las fechas seleccionadas.`

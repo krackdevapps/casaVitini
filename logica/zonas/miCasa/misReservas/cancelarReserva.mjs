@@ -14,13 +14,13 @@ export const cancelarReserva = async (entrada, salida) => {
         IDX.control()
 
         const usuario = entrada.session.usuario;
-        const reservaUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.reservaUID,
-            nombreCampo: "El identificador universal de la reser (reservaUID)",
-            filtro: "numeroSimple",
+        const reservaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
         const mensaje = {
             error: "Funcion temporalmente deshabilitdad"

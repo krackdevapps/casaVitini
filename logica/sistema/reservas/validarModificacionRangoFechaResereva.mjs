@@ -1,10 +1,10 @@
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import { obtenerReservaPorReservaUID } from '../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs';
 import { obtenerApartamentosDeLaReservaPorReservaUID } from '../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs';
-import { obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles } from '../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles.mjs';
 import { validadorPasado } from './rangoFlexible/pasado.mjs';
 import { validadorFuturo } from './rangoFlexible/futuro.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
+import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from '../../repositorio/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs';
 export const validarModificacionRangoFechaResereva = async (metadatos) => {
     try {
         const mesCalendario = metadatos.mesCalendario.padStart(2, '0');
@@ -13,15 +13,16 @@ export const validarModificacionRangoFechaResereva = async (metadatos) => {
 
         validadoresCompartidos.fechas.cadenaAno(anoCalendario)
         validadoresCompartidos.fechas.cadenaMes(mesCalendario)
-
-        const reservaUID = validadoresCompartidos.tipos.numero({
-            number: metadatos.reservaUID,
-            nombreCampo: "El identificador universal de la reservaUID (reservaUID)",
-            filtro: "numeroSimple",
+        
+        const reservaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
+
 
         if (sentidoRango !== "pasado" && sentidoRango !== "futuro") {
             const error = "El campo 'sentidoRango' solo puede ser pasado o futuro"
@@ -51,7 +52,10 @@ export const validarModificacionRangoFechaResereva = async (metadatos) => {
         const apartamentosConConfiguracionDisponible = []
         // consulta apartamentos NO diponibles en configuracion global
 
-        const configuracionesApartamentosSoloDiponibles = await obtenerTodasLasConfiguracionDeLosApartamentosSoloDisponibles()
+        const configuracionesApartamentosSoloDiponibles = await  obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
+            estadoIDV: "disponible",
+            zonaArray: ["publica", "global", "privada"]
+        })
         configuracionesApartamentosSoloDiponibles.forEach((apartamentoConConfiguracionDisponible) => {
             apartamentosConConfiguracionDisponible.push(apartamentoConConfiguracionDisponible.apartamentoIDV)
         })
