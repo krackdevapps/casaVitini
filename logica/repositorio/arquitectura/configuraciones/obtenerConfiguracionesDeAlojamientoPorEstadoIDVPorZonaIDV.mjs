@@ -20,7 +20,7 @@ export const obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV = async (
             estadoIDV,
             zonaArray
         ]
-        console.log("parametros",parametros)
+
 
         const resuelve = await conexion.query(consulta, parametros)
         return resuelve.rows

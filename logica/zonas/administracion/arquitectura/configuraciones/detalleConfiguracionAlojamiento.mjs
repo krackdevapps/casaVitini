@@ -27,7 +27,7 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
 
         const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
 
-        const estadoConfiguracion = configuracionApartamento.estadoConfiguracion;
+        const estadoConfiguracion = configuracionApartamento.estadoConfiguracionIDV;
         const zonaIDV = configuracionApartamento.zonaIDV;
 
         const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
@@ -49,23 +49,27 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
             detalleHabitacion.camas = [];
             if (camasDeLaHabitacion.length > 0) {
                 for (const detallesCamaEnLaHabitacion of camasDeLaHabitacion) {
-                    const camaUID = detallesCamaEnLaHabitacion.camaUID;
                     const camaIDV = detallesCamaEnLaHabitacion.camaIDV;
+
                     const detallesCama = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                         camaIDV,
                         tipoIDVArray: ["compartida"],
                         errorSi: "desactivado"
                     })
+
+
                     if (!detallesCama) {
                         const error = "No existe el identificador de la camaIDV";
                         throw new Error(error);
                     }
                     const camaUI = detallesCama.camaUI
                     const capacidad = detallesCama.capacidad;
+                    const tipoIDV = detallesCama.tipoIDV;
+
                     const estructuraCama = {
-                        camaUID: camaUID,
                         camaIDV: camaIDV,
                         camaUI: camaUI,
+                        tipoIDV: tipoIDV,
                         capacidad: capacidad
                     };
                     detalleHabitacion.camas.push(estructuraCama);

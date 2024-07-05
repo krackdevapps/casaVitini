@@ -8,6 +8,8 @@ import { validarModificacionRangoFechaResereva } from "../../../../../sistema/re
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { actualizarFechaEntradaReserva } from "../../../../../repositorio/reservas/rangoFlexible/actualizarFechaEntradaReserva.mjs";
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
+import { actualizarFechaSalidaReserva } from "../../../../../repositorio/reservas/rangoFlexible/actualizarFechaSalidaReserva.mjs";
+import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -56,8 +58,8 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         await campoDeTransaccion("iniciar")
         const mesSeleccionado = fechaSolicitada_array[1];
         const anoSeleccionado = fechaSolicitada_array[0];
-
         const reserva = obtenerReservaPorReservaUID(reservaUID)
+
         if (reserva.estadoReservaIDV === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada, una reserva cancelada no interfiere en los dias ocupados";
             throw new Error(error);
@@ -67,7 +69,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         const fechaSalida_ISO = reserva.fechaSalida;
         const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria });
         const metadatos = {
-            reserva: reserva,
+            reservaUID,
             mesCalendario: mesSeleccionado,
             anoCalendario: anoSeleccionado,
             sentidoRango: sentidoRango
@@ -79,10 +81,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
             }
             const transaccionInterna = await validarModificacionRangoFechaResereva(metadatos);
             const codigoFinal = transaccionInterna.ok;
-            const transaccionPrecioReserva = {
-                tipoProcesadorPrecio: "uid",
-                reservaUID: reserva
-            };
+
             const mensajeSinPasado = "No se puede aplicar esa fecha de entrada a la reserva por que en base a los apartamentos de esta reserva no hay dias libres. Puedes ver a continuacíon lo eventos que lo impiden.";
 
             if ((codigoFinal === "noHayRangoPasado")
@@ -111,11 +110,16 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 fechaSolicitada_ISO: fechaSolicitada_ISO,
                 reservaUID: reservaUID
             })
+            const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+            
+            await campoDeTransaccion("confirmar")
+            console.log("actualiza", reservaActualizada)
             const nuevaFechaEntrada = reservaActualizada.fechaEntrada;
             const ok = {
                 ok: "Se ha actualizado correctamente la fecha de entrada en la reserva",
                 sentidoRango: "pasado",
-                fecha_ISO: nuevaFechaEntrada
+                fecha_ISO: nuevaFechaEntrada,
+                desgloseFinanciero
             };
             return ok
 
@@ -127,10 +131,6 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
             }
             const transaccionInterna = await validarModificacionRangoFechaResereva(metadatos);
             const codigoFinal = transaccionInterna.ok;
-            const transaccionPrecioReserva = {
-                tipoProcesadorPrecio: "uid",
-                reservaUID: reserva
-            };
             const mensajeSinFuturo = "No se puede seleccionar esa fecha de salida. Con los apartamentos existentes en la reserva no se puede por que hay otros eventos que lo impiden. Puedes ver los eventos que lo impiden detallados a continuación.";
             if ((codigoFinal === "noHayRangoFuturo")
                 &&
@@ -154,23 +154,24 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                     throw new vitiniSysError(estructura);
                 }
             }
-            const reservaActualizada = await actualizarFechaEntradaReserva({
+            const reservaActualizada = await actualizarFechaSalidaReserva({
                 fechaSolicitada_ISO: fechaSolicitada_ISO,
                 reservaUID: reservaUID
             })
             const nuevaFechaSalida = reservaActualizada.fechaSalida;
-            await insertarTotalesReserva(transaccionPrecioReserva);
+            const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+            await campoDeTransaccion("confirmar")
             const ok = {
                 ok: "Se ha actualizado correctamente la fecha de entrada en la reserva",
                 sentidoRango: "futuro",
-                fecha_ISO: nuevaFechaSalida
-            };
+                fecha_ISO: nuevaFechaSalida,
+                desgloseFinanciero
+            }
             return ok
         }
-        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release()

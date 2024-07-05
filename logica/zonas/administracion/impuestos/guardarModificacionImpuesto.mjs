@@ -5,11 +5,11 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { obtenerImpuestosPorNombreDelImpuesto } from "../../../repositorio/impuestos/obtenerImpuestosPorNombreDelImpuesto.mjs";
 import { actualizarImpuesto } from "../../../repositorio/impuestos/actualizarImpuesto.mjs";
 import { obtenerImpuestosPorImppuestoUID } from "../../../repositorio/impuestos/obtenerImpuestosPorImpuestoUID.mjs";
+import { validarImpuesto } from "./validarImpuesto.mjs";
 
 export const guardarModificacionImpuesto = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
-
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
@@ -24,45 +24,12 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        const nombreImpuesto = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.nombreImpuesto,
-            nombreCampo: "El nombre del impuesto",
-            filtro: "strictoConEspacios",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
 
-        const tipoImpositivo = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoImpositivo,
-            nombreCampo: "El tipo impositivo",
-            filtro: "cadenaConNumerosConDosDecimales",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
-        const tipoValor = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoValor,
-            nombreCampo: "El tipo valor",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
-        const aplicacionSobre = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.aplicacionSobre,
-            nombreCampo: "El campo de la aplicacion sobre",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
-        const estado = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.estado,
-            nombreCampo: "El campo de la aplicacion sobre",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
-        })
+        const impuesto = entrada.body
+        const impuestoValidado = validarImpuesto(impuesto)
+        const nombreImpuesto = impuestoValidado.nombre
+        impuestoValidado.impuestoUID = impuestoUID
 
-        // Validar si el nombre del impuesto es unico        
         const impuestosPorNombre = await obtenerImpuestosPorNombreDelImpuesto(nombreImpuesto)
         for (const detallesDelImpuesto of impuestosPorNombre) {
             if (detallesDelImpuesto.impuestoUID !== impuestoUID) {
@@ -70,27 +37,11 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
                 throw new Error(error);
             }
         }
+        const impuestoActualizado = await actualizarImpuesto(impuestoValidado)
 
-        validadoresCompartidos.filtros.estados(estado)
-
-        await obtenerTipoValorPorTipoValorIDV(tipoValor)
-        await obtenerAplicacionIDVporAplicacionIDV(aplicacionSobre)
-
-        const dataActualizarImpuesto = {
-            impuestoUID: impuestoUID,
-            nombreImpuesto: nombreImpuesto,
-            tipoImpositivo: tipoImpositivo,
-            tipoValor: tipoValor,
-            aplicacionSobre: aplicacionSobre,
-            estado: estado,
-        }
-
-        await actualizarImpuesto(dataActualizarImpuesto)
-
-        const perfilImpuesto = await obtenerImpuestosPorImppuestoUID(impuestoUID)
         const ok = {
             ok: "El impuesto se ha actualizado correctamente",
-            detallesImpuesto: perfilImpuesto
+            detallesImpuesto: impuestoActualizado
         };
         return ok
     } catch (errorCapturado) {

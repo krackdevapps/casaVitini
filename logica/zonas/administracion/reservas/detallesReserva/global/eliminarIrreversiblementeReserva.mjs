@@ -13,7 +13,6 @@ export const eliminarIrreversiblementeReserva = async (entrada) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session)
         IDX.administradores()
-        IDX.empleados()
         IDX.control()
 
         await mutex.acquire();
@@ -33,7 +32,7 @@ export const eliminarIrreversiblementeReserva = async (entrada) => {
         const usuarioIDX = entrada.session.usuario;
         await campoDeTransaccion("iniciar")
         const usuario = await obtenerUsuario(usuarioIDX)
-        console.log("usuario", usuario)
+
         const claveActualHASH = usuario.clave;
         const sal = usuario.sal;
         const metadatos = {

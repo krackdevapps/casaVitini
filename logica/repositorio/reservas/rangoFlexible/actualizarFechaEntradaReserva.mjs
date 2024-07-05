@@ -11,7 +11,7 @@ export const actualizarFechaEntradaReserva = async (data) => {
         SET "fechaEntrada" = $1
         WHERE "reservaUID" = $2
         RETURNING
-        to_char(fechaEntrada, 'YYYY-MM-DD');
+        to_char("fechaEntrada", 'YYYY-MM-DD') AS "fechaEntrada";
         `;
         const parametros = [
             fechaSolicitada_ISO,

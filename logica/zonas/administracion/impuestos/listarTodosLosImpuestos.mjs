@@ -8,7 +8,6 @@ export const listarTodosLosImpuestos = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-
         const impuestos = await obtenerTodosLosImpuestos()
         const ok = {
             ok: "Lista de los todos impuestos",

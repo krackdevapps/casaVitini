@@ -793,7 +793,9 @@ export const validadoresCompartidos = {
                     const error = `${nombreCampo} es un array vacío`;
                     throw new Error(error);
                 }
-                if (filtro === "soloCadenasIDV") {
+
+
+                if (filtro === "strictoIDV") {
                     array.forEach((item, posicion) => {
                         validadoresCompartidos.tipos.cadena({
                             string: item,
@@ -803,8 +805,17 @@ export const validadoresCompartidos = {
                             limpiezaEspaciosAlrededor: "si"
                         })
                     })
-                }
-                if (filtro === "soloNumerosEnteros") {
+                } else if (filtro === "strictoConEspacios") {
+                    array.forEach((item, posicion) => {
+                        validadoresCompartidos.tipos.cadena({
+                            string: item,
+                            nombreCampo: `${nombreCampo} es un array que en la posicion ${(posicion + 1)}`,
+                            filtro: "strictoConEspacios",
+                            sePermiteVacio: "no",
+                            limpiezaEspaciosAlrededor: "si"
+                        })
+                    })
+                }else if (filtro === "soloNumerosEnteros") {
                     array.every((cadena, index) => {
                         validadoresCompartidos.tipos.cadena({
                             string: cadena,

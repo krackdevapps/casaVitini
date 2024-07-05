@@ -10,15 +10,23 @@ export const detallesOferta = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-        const ofertaUID = validadoresCompartidos.tipos.numero({
+        const ofertaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.ofertaUID,
-            nombreCampo: "El identificador universal de la oferta (ofertaUID)",
-            filtro: "numeroSimple",
+            nombreCampo: "El identificador universal de la reserva (ofertaUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
         const detallesOferta = await obtenerOfertaConApartamentos(ofertaUID);
+        detallesOferta.condicionesArray.forEach((condicion) => {
+            const tipoCondicion = condicion.tipoCondicion
+            if (tipoCondicion === "porCodigoDescuento") {
+                const codigoDescuentoB64 = condicion.codigoDescuento
+                condicion.codigoDescuento = Buffer.from(codigoDescuentoB64, 'base64').toString('utf-8');
+            }
+        })
+
         const ok = {
             ok: detallesOferta
         };

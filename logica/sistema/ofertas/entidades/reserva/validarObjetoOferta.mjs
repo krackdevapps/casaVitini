@@ -21,16 +21,16 @@ export const validarObjetoOferta = async (oferta) => {
             nombreCampo: "La fecha fin de la vigencia de la oferta"
         })
 
-        const entidad = validadoresCompartidos.tipos.cadena({
-            string: oferta.entidad,
-            nombreCampo: "El campo de entidad",
+        const entidadIDV = validadoresCompartidos.tipos.cadena({
+            string: oferta.entidadIDV,
+            nombreCampo: "El campo de entidadIDV",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
 
         const entidadesIDV = ["reserva"]
-        if (!entidadesIDV.includes(entidad)) {
+        if (!entidadesIDV.includes(entidadIDV)) {
             const error = "No se reconoce el campo entidad"
             throw new Error(error)
         }
@@ -41,15 +41,15 @@ export const validarObjetoOferta = async (oferta) => {
             tipoVector: "igual"
         })
 
-        const condiciones = validadoresCompartidos.tipos.array({
-            array: oferta.condiciones,
-            nombreCampo: "El array de condiciones"
+        const condicionesArray = validadoresCompartidos.tipos.array({
+            array: oferta.condicionesArray,
+            nombreCampo: "El array de condicionesArray"
         })
-        const descuentos = validadoresCompartidos.tipos.objetoLiteral({
-            objetoLiteral: oferta.descuentos,
-            nombreCampo: "El objeto de descuentos"
+        const descuentosJSON = validadoresCompartidos.tipos.objetoLiteral({
+            objetoLiteral: oferta.descuentosJSON,
+            nombreCampo: "El objeto de descuentosJSON"
         })
-        if (condiciones.length === 0) {
+        if (condicionesArray.length === 0) {
             const error = "Añade al menos una condiciona la oferta"
             throw new Error(error)
         }
@@ -59,7 +59,7 @@ export const validarObjetoOferta = async (oferta) => {
             throw new Error(error)
         }
 
-        for (const condicion of condiciones) {
+        for (const condicion of condicionesArray) {
             const tipoCondicionIDV = condicion?.tipoCondicion
             if (tipoCondicionIDV === "conFechaEntradaEntreRango") {
                 const fechaInicioRango_ISO = condicion?.fechaInicioRango_ISO
@@ -107,26 +107,26 @@ export const validarObjetoOferta = async (oferta) => {
                 })
 
             } else if (tipoCondicionIDV === "porApartamentosEspecificos") {
-
+                const tipoDeEspecificidad = condicion.tipoDeEspecificidad
+                if (tipoDeEspecificidad !== "exactamente"
+                    &&
+                    tipoDeEspecificidad !== "alguno"
+                    &&
+                    tipoDeEspecificidad !== "exactamenteEntreOtros"
+                ) {
+                    const error = "el campo tipoDeEspecificidad solo admite exactamente, alguno o exactamenteEntreOtros"
+                    throw new Error(error)
+                }
                 const apartamentos = condicion.apartamentos
                 validadoresCompartidos.tipos.array({
                     array: apartamentos,
                     nombreCampo: "Array de apartamento en la condicion de porApartamentosEspecificos",
-                    filtro: "soloCadenasIDV",
+                    filtro: "strictoIDV",
                     sePermitenDuplicados: "no"
                 })
-                for (const apartamento of apartamentos) {
-                    const apartamentoIDV = validadoresCompartidos.tipos.cadena({
-                        string: apartamento,
-                        nombreCampo: "El campo apartamentoIDV dentro del array de apartamentos en la condicion del tipo porApartamentosDedicados",
-                        filtro: "strictoIDV",
-                        sePermiteVacio: "no",
-                        limpiezaEspaciosAlrededor: "si",
-                    })
+                for (const apartamentoIDV of apartamentos) {
                     await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
                 }
-
-
             } else if (tipoCondicionIDV === "porDiasDeAntelacion") {
                 const tipoConteo = condicion.tipoConteo
                 if (tipoConteo !== "aPartirDe" && tipoConteo !== "numeroExacto") {
@@ -152,8 +152,8 @@ export const validarObjetoOferta = async (oferta) => {
 
                 }
                 validadoresCompartidos.tipos.cadena({
-                    string: condicion.diasDeReserva,
-                    nombreCampo: "El campo diasDeReserva en la condicion " + tipoCondicionIDV,
+                    string: condicion.numeroDeDias,
+                    nombreCampo: "El campo numeroDeDias en la condicion " + tipoCondicionIDV,
                     filtro: "cadenaConNumerosEnteros",
                     sePermiteVacio: "no",
                     impedirCero: "si",
@@ -200,47 +200,14 @@ export const validarObjetoOferta = async (oferta) => {
             } else {
                 const error = "No se reconoce el tipo de la condiciones"
                 throw new Error(error)
-
             }
         }
 
-        const tipoDescuento = descuentos.tipoDescuento
-        // if (tipoDescuento === "totalNetoApartamentoDedicado") {
-        //     const apartamentos = validadoresCompartidos.tipos.array({
-        //         array: descuentos.apartamentos,
-        //         nombreCampo: "En desceuntos, en el totalNetoApartametnoDedicado, el array"
-        //     })
-        //     for (const detallesApartamento of apartamentos) {
-        //         const apartamentoIDV = detallesApartamento.apartamentoIDV
-        //         const cantidad = detallesApartamento.cantidad
-        //         const tipoDescuento = detallesApartamento.tipoDescuento
-        //         validadoresCompartidos.tipos.cadena({
-        //             string: apartamentoIDV,
-        //             nombreCampo: "el identificador visual del apartamento dentro de descuentos no tiene un formato esperado.",
-        //             filtro: "strictoIDV",
-        //             sePermiteVacio: "no",
-        //             limpiezaEspaciosAlrededor: "si",
-        //         })
-        //         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        //         validadoresCompartidos.tipos.cadena({
-        //             string: cantidad,
-        //             nombreCampo: `El campo cantidad del ${apartamentoIDV} en la seccion de descuentos`,
-        //             filtro: "cadenaConNumerosConDosDecimales",
-        //             sePermiteVacio: "no",
-        //             impedirCero: "si",
-        //             devuelveUnTipoNumber: "no",
-        //             limpiezaEspaciosAlrededor: "si",
-        //         })
-        //         if (tipoDescuento !== "porcentaje" && tipoDescuento !== "cantidadFija") {
-        //             const error = `En la descuentos, en el apartamento ${apartamentoIDV} el campo tipoDescuento solo puede ser porcentaje o cantidadFija`
-        //             throw new Error(error)
-        //         }
-        //     }
-        // } else 
+        const tipoDescuento = descuentosJSON.tipoDescuento
         if (tipoDescuento === "totalNeto") {
 
-            const tipoAplicacion = descuentos.tipoAplicacion
-            const descuentoTotal = descuentos.descuentoTotal
+            const tipoAplicacion = descuentosJSON.tipoAplicacion
+            const descuentoTotal = descuentosJSON.descuentoTotal
 
             if (tipoAplicacion !== "porcentaje" && tipoAplicacion !== "cantidadFija") {
                 const error = `En la descuentos, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
@@ -259,7 +226,7 @@ export const validarObjetoOferta = async (oferta) => {
         } else if (tipoDescuento === "individualPorApartamento") {
 
             const apartamentos = validadoresCompartidos.tipos.array({
-                array: descuentos.apartamentos,
+                array: descuentosJSON.apartamentos,
                 nombreCampo: "El array de descuentoPorDias"
             })
 
@@ -285,8 +252,8 @@ export const validarObjetoOferta = async (oferta) => {
             }
         } else if (tipoDescuento === "porRango") {
 
-            const fechaInicioRango_ISO = descuentos.fechaInicioRango_ISO
-            const fechaFinalRango_ISO = descuentos.fechaFinalRango_ISO
+            const fechaInicioRango_ISO = descuentosJSON.fechaInicioRango_ISO
+            const fechaFinalRango_ISO = descuentosJSON.fechaFinalRango_ISO
 
             await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: fechaInicioRango_ISO,
@@ -303,11 +270,11 @@ export const validarObjetoOferta = async (oferta) => {
             })
 
 
-            const subTipoDescuento = descuentos.subTipoDescuento
+            const subTipoDescuento = descuentosJSON.subTipoDescuento
 
             if (subTipoDescuento === "totalNetoPorRango") {
-                const tipoAplicacion = descuentos.tipoAplicacion
-                const descuentoTotal = descuentos.descuentoTotal
+                const tipoAplicacion = descuentosJSON.tipoAplicacion
+                const descuentoTotal = descuentosJSON.descuentoTotal
 
                 if (tipoAplicacion !== "porcentaje" && tipoAplicacion !== "cantidadFija") {
                     const error = `En ${subTipoDescuento} el tipo aplicacion del descuento solo puede ser porcentaje o cantidadFija`
@@ -325,7 +292,7 @@ export const validarObjetoOferta = async (oferta) => {
             } else if (subTipoDescuento === "porDiasDelRango") {
 
                 const descuentoPorDias = validadoresCompartidos.tipos.array({
-                    array: descuentos.descuentoPorDias,
+                    array: descuentosJSON.descuentoPorDias,
                     nombreCampo: "El array de descuentoPorDias"
                 })
 
@@ -391,7 +358,10 @@ export const validarObjetoOferta = async (oferta) => {
                             })
 
                             await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-                            const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI
+                            const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                                apartamentoIDV,
+                                errorSi: "noExiste"
+                            })).apartamentoUI
                             const tipoAplicacionDentroDelDia = apartmentoDelDia.tipoAplicacion
                             if (tipoAplicacionDentroDelDia !== "porcentaje" && tipoAplicacionDentroDelDia !== "cantidadFija") {
                                 const error = `Dentro el dia con fecha ${fechaDelDia} el tipo de descuento del ${apartamentoUI} (${apartamentoIDV}) solo puede ser porcentaje o cantidadFija`

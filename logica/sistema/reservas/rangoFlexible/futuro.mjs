@@ -11,8 +11,13 @@ export const validadorFuturo = async (data) => {
         const anoCalendario = data.anoCalendario
         const mesCalendario = data.mesCalendario
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
+        const fechaEntradaReserva_ISO = data.fechaEntradaReserva_ISO
+        const reservaUID = data.reservaUID
+
         const apartamentosReservaActual = data.apartamentosReservaActual
 
+        const anoReservaEntrada = fechaEntradaReserva_ISO.split("-")[0]
+        const mesReservaEntrada = fechaEntradaReserva_ISO.split("-")[1] 
 
         const fechaSeleccionadaParaFuturo_Objeto = DateTime.fromObject({
             year: anoCalendario,
@@ -58,7 +63,7 @@ export const validadorFuturo = async (data) => {
         const configuracionReservas = {
             fechaInicioRango_ISO: fechaSalidaReserva_ISO,
             fechaFinRango_ISO: fechaSeleccionadaParaFuturo_ISO,
-            reservaUID: reserva,
+            reservaUID: reservaUID,
             apartamentosIDV_array: apartamentosReservaActual,
         }
 

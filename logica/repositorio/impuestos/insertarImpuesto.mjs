@@ -2,11 +2,11 @@ import { conexion } from "../../componentes/db.mjs";
 
 export const insertarImpuesto = async (data) => {
     try {
-        const nombreImpuesto = data.nombreImpuesto
+        const nombre = data.nombre
         const tipoImpositivo = data.tipoImpositivo
-        const tipoValor = data.tipoValor
-        const aplicacionSobre = data.aplicacionSobre
-        const estado = data.estado
+        const tipoValorIDV = data.tipoValorIDV
+        const entidadIDV = data.entidadIDV
+        const estadoIDV = data.estadoIDV
         const impuestoTVI = data.impuestoTVI
 
         const consulta = `
@@ -15,7 +15,7 @@ export const insertarImpuesto = async (data) => {
         nombre,
         "tipoImpositivo",
         "tipoValorIDV",
-        "aplicacionSobreIDV",
+        "entidadIDV",
         "estadoIDV",
         "impuestoTVI"
         )
@@ -23,11 +23,11 @@ export const insertarImpuesto = async (data) => {
         RETURNING *
         `;
         const parametros = [
-            nombreImpuesto,
+            nombre,
             tipoImpositivo,
-            tipoValor,
-            aplicacionSobre,
-            estado,
+            tipoValorIDV,
+            entidadIDV,
+            estadoIDV,
             impuestoTVI
         ];
         const resuelve = await conexion.query(consulta, parametros);

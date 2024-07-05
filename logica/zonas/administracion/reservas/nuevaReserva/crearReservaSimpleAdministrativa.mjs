@@ -9,6 +9,7 @@ import { insertarApartamentoEnReservaAdministrativa } from "../../../../reposito
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs";
+import { actualizadorIntegradoDesdeInstantaneas } from "../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
 
 export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -62,7 +63,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             throw new Error(error);
         }
         const rol = entrada.session.rol;
- 
+
         const resuelveApartamentosDisponibles = await apartamentosPorRango({
             fechaEntrada_ISO: fechaEntrada_ISO,
             fechaSalida_ISO: fechaSalida_ISO,
@@ -106,10 +107,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                     apartamentoUI: apartamentoUI,
                 })
             }
-            const transaccionPrecioReserva = {
-                tipoProcesadorPrecio: "uid",
-                reservaUID: Number(reservaUIDNuevo)
-            };
+            await actualizadorIntegradoDesdeInstantaneas(reservaUIDNuevo)
             await campoDeTransaccion("confirmar")
             const ok = {
                 ok: "Se ha anadido al reserva vacia",

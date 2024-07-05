@@ -1,9 +1,9 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
 import { bloquearApartamentos } from "../../../../../sistema/bloqueos/bloquearApartamentos.mjs";
-
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
+import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
 
 export const eliminarApartamentoReserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -77,10 +77,7 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
             reservaUID: reservaUID,
             apartamentoUID: apartamentoUID
         })   
-        const transaccionPrecioReserva = {
-            tipoProcesadorPrecio: "uid",
-            reservaUID: reserva
-        };
+        await actualizadorIntegradoDesdeInstantaneas(reservaUID)
         await campoDeTransaccion("confirmar")
         const ok = {};
         ok.estadoDesgloseFinanciero = estadoInfomracionFinanciera;

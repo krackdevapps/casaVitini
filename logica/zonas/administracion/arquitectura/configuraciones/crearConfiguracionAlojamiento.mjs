@@ -6,7 +6,6 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repo
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarConfiguracionApartamento } from "../../../../repositorio/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs";
 
-
 export const crearConfiguracionAlojamiento = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
@@ -26,23 +25,6 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const zonaIDV = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.apartamentoIDV,
-            nombreCampo: "El zonaIDV",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
-
-        if (
-            zonaIDV !== "global" ||
-            zonaIDV !== "publica" ||
-            zonaIDV !== "privada"
-        ) {
-            const error = "El campo de zonaIDV solo admite globa, publica y privada";
-            throw new Error(error);
-        }
-
         const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
         if (!apartamentoUI) {
             const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon";
@@ -53,14 +35,12 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
             const error = "Ya existe una configuracion para la entidad del apartamento por favor selecciona otro apartamento como entidad";
             throw new Error(error);
         }
-        const estadoInicial = "nodisponible";
 
-        const dataInsertarConfiguracionApartamento = {
+        await insertarConfiguracionApartamento({
             apartamentoIDV: apartamentoIDV,
-            estadoInicial: estadoInicial,
-            zonaIDV: zonaIDV
-        }
-        await insertarConfiguracionApartamento(dataInsertarConfiguracionApartamento).apartamentoIDV
+            estadoInicial: "nodisponible",
+            zonaIDV: "privada"
+        })
         await insertarPerfilPrecio({
             apartamentoIDV: apartamentoIDV,
             precioInicial: "0.00"
@@ -70,7 +50,6 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
             apartamentoIDV: apartamentoIDV
         };
         return ok
-
     } catch (errorCapturado) {
         throw errorCapturado
     } finally {

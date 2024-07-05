@@ -6,7 +6,7 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 export const apartamentosDisponiblesConfigurados = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -24,7 +24,10 @@ export const apartamentosDisponiblesConfigurados = async (entrada) => {
 
         for (const detallesApartamento of apartamentosDisponiblesConfigurados_) {
             const apartamentoIDV = detallesApartamento.apartamentoIDV
-            const apartamentoEntidadad = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+            const apartamentoEntidadad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "desactivado"
+            })
             detallesApartamento.apartamentoUI = apartamentoEntidadad.apartamentoUI
         }
 

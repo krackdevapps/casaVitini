@@ -19,9 +19,9 @@ export const actualizaCamaPorCamaIDVPorReservaUID = async (data) => {
             nuevoCamaIDV,
             camaUI,
             reservasUIDArray,
-            antiguoCamaIDV          
+            antiguoCamaIDV
         ]
-        console.log("parametros", parametros)
+
 
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows[0]

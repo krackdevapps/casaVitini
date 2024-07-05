@@ -1,184 +1,78 @@
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { Mutex } from "async-mutex";
-
 import { obtenerOferatPorOfertaUID } from "../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs";
-import { actualizarOferta as actualizarOferta_ } from "../../../repositorio/ofertas/actualizarOferta.mjs";
-import { eliminarApartamentosDeLaOferta } from "../../../repositorio/ofertas/eliminarApartamentosDeLaOferta.mjs";
-import { insertarApartamentosEnOferta } from "../../../repositorio/ofertas/insertarApartamentosEnOferta.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
-import { obtenerOfertaConApartamentos } from "../../../sistema/ofertas/obsoleto/obtenerOfertaConApartamentos.mjs";
-import { validadoresLocales } from "../../../sistema/ofertas/entidades/reserva/validadoresLocales.mjs";
+import { validarObjetoOferta } from "../../../sistema/ofertas/entidades/reserva/validarObjetoOferta.mjs";
+import { actualizarOfertaPorOfertaUID } from "../../../repositorio/ofertas/actualizarOfertaPorOfertaUID.mjs";
 
-export const actualizarOferta = async (entrada, salida) => {
+export const actualizarOferta = async (entrada) => {
     const mutex = new Mutex()
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
         await mutex.acquire()
 
-        const nombreOferta = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.nombreOferta,
-            nombreCampo: "El campo del nombre de la oferta",
-            filtro: "strictoConEspacios",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
-
-        const fechaInicio_ISO = entrada.body.fechaInicio_ISO;
-        const fechaFin_ISO = entrada.body.fechaFin_ISO;
-        const tipoOferta = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoOferta,
-            nombreCampo: "El tipo de oferta",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
-        const ofertaUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.ofertaUID,
+        const ofertaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.ofertaUID,
             nombreCampo: "El identificador universal de la oferta (ofertaUID)",
-            filtro: "numeroSimple",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
-        })
-
-
-        const tipoDescuento = entrada.body.tipoDescuento ? entrada.body.tipoDescuento : null;
-        const cantidad = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.cantidad,
-            nombreCampo: "El campo cantidad",
-            filtro: "cadenaConNumerosConDosDecimales",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no",
             devuelveUnTipoNumber: "si"
         })
-        const numero = entrada.body.numero;
-        const simboloNumero = entrada.body.simboloNumero;
-        const contextoAplicacion = entrada.body.contextoAplicacion;
-        const apartamentosSeleccionados = entrada.body.apartamentosSeleccionados;
 
-        await validadoresCompartidos.fechas.fechaFin_ISO(fechaInicio_ISO)
-        await validadoresCompartidos.fechas.fechaFin_ISO(fechaFin_ISO)
-        validadoresCompartidos.fechas.validacionVectorial({
-            fechaEntrada_ISO: fechaInicio_ISO,
-            fechaSalida_ISO: fechaFin_ISO
-        })
-
-        if (tipoOferta !== "porNumeroDeApartamentos" &&
-            tipoOferta !== "porApartamentosEspecificos" &&
-            tipoOferta !== "porDiasDeAntelacion" &&
-            tipoOferta !== "porRangoDeFechas" &&
-            tipoOferta !== "porDiasDeReserva") {
-            const error = "No se reconoce el tipo de oferta";
-            throw new Error(error);
-        }
-        // Validar existencia de la oferta y estado
         const oferta = await obtenerOferatPorOfertaUID(ofertaUID)
-
         const estadoOferta = oferta.estadoOferta;
         if (estadoOferta === "activada") {
             const error = "No se puede modificar una oferta activa. Primero desactiva con el boton de estado.";
             throw new Error(error);
         }
+
+        const nombreOferta = entrada.body.nombreOferta
+        const zonaIDV = entrada.body.zonaIDV
+        const entidadIDV = entrada.body.entidadIDV
+        const fechaInicio = entrada.body.fechaInicio
+        const fechaFinal = entrada.body.fechaFinal
+        const condicionesArray = entrada.body.condicionesArray
+        const descuentosJSON = entrada.body.descuentosJSON
+
+        const ofertaPorActualizar = {
+            nombreOferta,
+            zonaIDV,
+            entidadIDV,
+            fechaInicio,
+            fechaFinal,
+            condicionesArray,
+            descuentosJSON,
+            ofertaUID
+        }
+        await validarObjetoOferta(ofertaPorActualizar)
         await campoDeTransaccion("iniciar")
+        const ofertaActualizada = await actualizarOfertaPorOfertaUID(ofertaPorActualizar);
+        await campoDeTransaccion("confirmar")
 
-        if (tipoOferta === "porNumeroDeApartamentos" ||
-            tipoOferta === "porDiasDeAntelacion" ||
-            tipoOferta === "porDiasDeReserva") {
-            validadoresLocales.tipoDescuento(tipoDescuento);
-            validadoresLocales.numero(numero);
-            validadoresLocales.simboloNumero(simboloNumero);
-            validadoresLocales.controlLimitePorcentaje(tipoDescuento, cantidad);
-            await eliminarApartamentosDeLaOferta(ofertaUID)
-            const metadatos = {
-                nombreOferta: nombreOferta,
-                fechaInicio_ISO: fechaInicio_ISO,
-                fechaFin_ISO: fechaFin_ISO,
-                numero: numero,
-                simboloNumero: simboloNumero,
-                // contextoAplicacion: contextoAplicacion,
-                tipoOferta: tipoOferta,
-                cantidad: cantidad,
-                tipoDescuento: tipoDescuento,
-                ofertaUID: ofertaUID,
-            };
-            await actualizarOferta_(metadatos);
+        ofertaActualizada.condicionesArray.forEach((condicion) => {
+            const tipoCondicion = condicion.tipoCondicion
+            if (tipoCondicion === "porCodigoDescuento") {
+                const codigoDescuentoB64 = condicion.codigoDescuento
+                condicion.codigoDescuento = Buffer.from(codigoDescuentoB64, 'base64').toString('utf-8');
+               
+            }
+        })
 
-            const ok = {
-                ok: "Se ha acualizado correctamente la oferta",
-                detallesOferta: await obtenerOfertaConApartamentos(ofertaUID)
-            };
-            return ok
-        }
-        if (tipoOferta === "porRangoDeFechas") {
-            validadoresLocales.tipoDescuento(tipoDescuento);
-            validadoresLocales.controlLimitePorcentaje(tipoDescuento, cantidad);
-            await eliminarApartamentosDeLaOferta(ofertaUID)
-            const metadatos = {
-                nombreOferta: nombreOferta,
-                fechaInicio_ISO: fechaInicio_ISO,
-                fechaFin_ISO: fechaFin_ISO,
-                numero: numero,
-                simboloNumero: simboloNumero,
-                // contextoAplicacion: contextoAplicacion,
-                tipoOferta: tipoOferta,
-                cantidad: cantidad,
-                tipoDescuento: tipoDescuento,
-                ofertaUID: ofertaUID,
-            };
-            await actualizarOferta_(metadatos);
-            const ok = {
-                ok: "Se ha acualizado correctamente la oferta",
-                detallesOferta: await obtenerDetallesOferta(ofertaUID)
-            };
-            return ok
-        }
-        if (tipoOferta === "porApartamentosEspecificos") {
-            validadoresLocales.contextoAplicacion(contextoAplicacion);
-            if (contextoAplicacion === "totalNetoReserva") {
-                validadoresLocales.tipoDescuento(tipoDescuento);
-                validadoresLocales.controlLimitePorcentaje(tipoDescuento, cantidad);
-            }
-            if (contextoAplicacion === "totalNetoApartamentoDedicado") {
-            }
-            await eliminarApartamentosDeLaOferta(ofertaUID)
-            const metadatos = {
-                nombreOferta: nombreOferta,
-                fechaInicio_ISO: fechaInicio_ISO,
-                fechaFin_ISO: fechaFin_ISO,
-                contextoAplicacion: contextoAplicacion,
-                tipoOferta: tipoOferta,
-                cantidad: cantidad,
-                tipoDescuento: tipoDescuento,
-                ofertaUID: ofertaUID,
-            };
-            await actualizarOferta_(metadatos);
-
-            const apartamentosPorValidar = {
-                apartamentos: apartamentosSeleccionados,
-                contextoAplicacion: contextoAplicacion
-            }
-            await validarApartamentos(apartamentosPorValidar)
-            const nuevosApartametnos = {
-                ofertaUID: ofertaUID,
-                apartamentos: apartamentosSeleccionados,
-                contextoAplicacion: contextoAplicacion
-            }
-            await insertarApartamentosEnOferta(nuevosApartametnos)
-            await campoDeTransaccion("confirmar")
-            const ok = {
-                ok: "La oferta  se ha actualizado bien junto con los apartamentos dedicados",
-                detallesOferta: await obtenerDetallesOferta(ofertaUID)
-            };
-            return ok
-        }
+        const ok = {
+            ok: "La oferta  se ha actualizado bien junto con los apartamentos dedicados",
+            ofertaActualizada: ofertaActualizada
+        };
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release();

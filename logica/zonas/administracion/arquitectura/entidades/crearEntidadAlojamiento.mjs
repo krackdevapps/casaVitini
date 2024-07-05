@@ -193,7 +193,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                     tipoIDVArray: ["compartida", "fisica"],
                     errorSi: "desactivado"
                 })
-                console.log("camaEbntidad", camaEntidad)
+
                 if (camaEntidad?.camaIDV) {
                     return true;
                 }
@@ -216,7 +216,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 tipoIDVArray: ["compartida", "fisica"],
                 errorSi: "existe"
             })
-            console.log("test")
+
 
             await obtenerCamaComoEntidadPorCamaUI({
                 camaUI,

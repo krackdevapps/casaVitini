@@ -4,7 +4,6 @@ import { validadoresCompartidos } from "../../../../sistema/validadores/validado
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { actualizarApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/actualizarApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { eliminarCaracteristicasDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/eliminarCaracteristicasDelApartamentoPorApartamentoIDV.mjs";
-import { insertarCaracteristicaDelApartamento } from "../../../../repositorio/arquitectura/entidades/apartamento/insertarCaracteristicaDelApartamento.mjs";
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 import { actualizarHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/actualizarHabitacionComoEntidadPorHabitacionIDV.mjs";
 import { actualizarCamaComoEntidadPorCamaIDV } from "../../../../repositorio/arquitectura/entidades/cama/actualizarCamaComoEntidadPorCamaIDV.mjs";
@@ -15,6 +14,8 @@ import { obtenerReservasPresentesFuturas } from "../../../../repositorio/reserva
 import { codigoZonaHoraria } from "../../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { DateTime } from "luxon";
 import { actualizaCamaPorCamaIDVPorReservaUID } from "../../../../repositorio/reservas/apartamentos/actualizaCamaPorCamaIDVPorReservaUID.mjs";
+import { actualizaApartamentoPorApartamentoIDVPorReservaUID } from "../../../../repositorio/reservas/apartamentos/actualizaApartamentoPorApartamentoIDVPorReservaUID.mjs";
+import { insertarCaracteristicaArrayEnConfiguracionDeAlojamiento } from "../../../../repositorio/arquitectura/entidades/apartamento/insertarCaracteristicaArrayEnConfiguracionDeAlojamiento.mjs";
 
 export const modificarEntidadAlojamiento = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -58,65 +59,70 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                 sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
-            const caracteristicas = entrada.body.caracteristicas;
+            const caracteristicas = validadoresCompartidos.tipos.array({
+                array: entrada.body.caracteristicas,
+                nombreCampo: "El campo de caracteristicas",
+                filtro: "strictoConEspacios",
+                sePermitenDuplicados: "no",
+                sePermiteArrayVacio: "si"
+            })
 
-            if (!Array.isArray(caracteristicas)) {
-                const error = "el campo 'caractaristicas' solo puede ser un array";
-                throw new Error(error);
-            }
-            for (const caractaristica of caracteristicas) {
-                validadoresCompartidos.tipos.cadena({
-                    string: caractaristica,
-                    nombreCampo: "El campo caracteristicas",
-                    filtro: "strictoConEspacios",
-                    sePermiteVacio: "no",
-                    limpiezaEspaciosAlrededor: "si",
-                })
-            }
             await campoDeTransaccion("iniciar")
 
-            const apartamentEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV(entidadIDV)
-            if (!apartamentEntidad.apartamento) {
-                const error = "No existe el apartamento, revisa el apartamentopIDV";
-                throw new Error(error);
-            }
+            await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV: entidadIDV,
+                errorSi: "noExiste"
+            })
+
             // Comprobar que no existe el nuevo IDV
             if (entidadIDV !== apartamentoIDV) {
-                const apartamentEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
-
-                if (apartamentEntidad.apartamento) {
-                    const error = "El nuevo identificador de la entidad ya existe, escoge otro por favor";
-                    throw new Error(error);
-                }
+                await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "existe"
+                })
             }
 
-            const dataActualizarApartamentoComoEntidadPorApartamentoIDV = {
-                apartamentoIDV: apartamentoIDV,
+            const nuevoApartamentoComoEntidad = await actualizarApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDVNuevo: apartamentoIDV,
                 apartamentoUI: apartamentoUI,
-                entidadIDV: entidadIDV
-            }
-            const nuevoApartamentoComoEntidad = await actualizarApartamentoComoEntidadPorApartamentoIDV(dataActualizarApartamentoComoEntidadPorApartamentoIDV)
+                apartamentoIDVSelector: entidadIDV
+            })
             if (nuevoApartamentoComoEntidad.rowCount === 0) {
                 const error = "No se ha podido guardar los datos por que no se han encontrado el apartamento";
                 throw new Error(error);
             }
-            if (nuevoApartamentoComoEntidad.rowCount === 1) {
-                await eliminarCaracteristicasDelApartamentoPorApartamentoIDV(apartamentoIDV)
-
-                if (caracteristicas.length > 0) {
-                    const dataInsertarCaracteristicaDelApartamento = {
-                        caracteristicas: caracteristicas,
-                        apartamentoIDV: apartamentoIDV
-                    }
-                    await insertarCaracteristicaDelApartamento(dataInsertarCaracteristicaDelApartamento)
-                }
-                await campoDeTransaccion("confirmar")
-
-                const ok = {
-                    ok: "Se ha actualizado correctamente el apartamento"
-                };
-                return ok
+            await eliminarCaracteristicasDelApartamentoPorApartamentoIDV(apartamentoIDV)
+            if (caracteristicas.length > 0) {
+                await insertarCaracteristicaArrayEnConfiguracionDeAlojamiento({
+                    caracteristicasArray: caracteristicas,
+                    apartamentoIDV: apartamentoIDV
+                })
             }
+
+            const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
+            const tiempoZH = DateTime.now().setZone(zonaHoraria);
+            const fechaActual = tiempoZH.toISODate();
+
+            const reservasActivas = await obtenerReservasPresentesFuturas({
+                fechaActual: fechaActual,
+            })
+            const reservasUIDArray = reservasActivas.map((reserva) => {
+                return reserva.reservaUID
+            })
+
+            await actualizaApartamentoPorApartamentoIDVPorReservaUID({
+                reservasUIDArray,
+                antiguoApartamentoIDV: entidadIDV,
+                nuevoApartamentoIDV: apartamentoIDV,
+                apartamentoUI: apartamentoUI
+            })
+
+            await campoDeTransaccion("confirmar")
+            const ok = {
+                ok: "Se ha actualizado correctamente el apartamento"
+            };
+            return ok
+
         } else if (tipoEntidad === "habitacion") {
 
             const habitacionIDV = validadoresCompartidos.tipos.cadena({
@@ -190,7 +196,7 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
             })
             await campoDeTransaccion("iniciar")
 
-            const camaEntidad = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+           await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                 camaIDV: entidadIDV,
                 tipoIDVArray: ["compartida", "fisica"],
                 errorSi: "noExiste"
@@ -217,12 +223,9 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
             const reservasActivas = await obtenerReservasPresentesFuturas({
                 fechaActual: fechaActual,
             })
-            console.log("reservasActivas", reservasActivas)
-            // Actualizar las camas de reseervas presentes y futuras
             const reservasUIDArray = reservasActivas.map((reserva) => {
                 return reserva.reservaUID
             })
-            console.log("reservasUIDArray", reservasUIDArray)
             await actualizaCamaPorCamaIDVPorReservaUID({
                 reservasUIDArray,
                 antiguoCamaIDV: entidadIDV,

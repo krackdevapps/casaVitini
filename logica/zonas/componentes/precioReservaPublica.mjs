@@ -1,9 +1,9 @@
 import { procesador } from "../../sistema/contenedorFinanciero/procesador.mjs"
 import { validarObjetoReserva } from "../../sistema/reservas/validarObjetoReserva.mjs"
 
-export const precioReservaPublica = async (entrada, salida) => {
+export const precioReservaPublica = async (entrada) => {
     try {
-        const reservaObjeto = entrada.body?.reservaObjeto
+        const reservaObjeto = entrada.body?.reserva
         await validarObjetoReserva({
             reservaObjeto: reservaObjeto,
             filtroTitular: "no",
@@ -16,19 +16,24 @@ export const precioReservaPublica = async (entrada, salida) => {
         const apartamentosIDV = Object.keys(alojamiento)
 
         const desgloseFinanciero = await procesador({
-            fechaEntrada: fechaEntradaReserva,
-            fechaSalida: fechaSalidaReserva,
-            apartamentosArray: apartamentosIDV,
-            capaImpuestos: "si",
-            capaOfertas: "si",
-            zonasDeLaOferta: ["publica", "global"],
-            capaDescuentosPersonalizados: "no",
+            entidades: {
+                reserva: {
+                    tipoOperacion: "crearDesglose",
+                    fechaEntrada: fechaEntradaReserva,
+                    fechaSalida: fechaSalidaReserva,
+                    apartamentosArray: apartamentosIDV,
+                    capaOfertas: "si",
+                    zonasArray: ["global", "publica"],
+                    capaDescuentosPersonalizados: "no",
+                    capaImpuestos: "si"
 
+                }
+            }
         })
         const ok = {
             ok: desgloseFinanciero
         }
-        salida.json(ok)
+        return ok
     } catch (error) {
 
         throw error

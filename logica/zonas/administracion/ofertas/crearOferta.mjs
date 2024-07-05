@@ -17,21 +17,21 @@ export const crearOferta = async (entrada, salida) => {
 
         const nombreOferta = entrada.body.nombreOferta
         const zonaIDV = entrada.body.zonaIDV
-        const entidad = entrada.body.entidad
+        const entidadIDV = entrada.body.entidadIDV
         const fechaInicio = entrada.body.fechaInicio
         const fechaFinal = entrada.body.fechaFinal
-        const condiciones = entrada.body.condiciones
-        const descuentos = entrada.body.descuentos
+        const condicionesArray = entrada.body.condicionesArray
+        const descuentosJSON = entrada.body.descuentosJSON
         const estadoInicial = "desactivado"
 
         const oferta = {
             nombreOferta,
             zonaIDV,
-            entidad,
+            entidadIDV,
             fechaInicio,
             fechaFinal,
-            condiciones,
-            descuentos,
+            condicionesArray,
+            descuentosJSON,
             estado: estadoInicial
         }
         await validarObjetoOferta(oferta)

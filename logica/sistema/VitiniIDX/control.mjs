@@ -1,7 +1,7 @@
 export class VitiniIDX {
     constructor(session, salida) {
         this.usuario = session.usuario;
-        console.log(this.usuario)
+
         this.rolIDV = session.rol;
         // this.salida = salida
         this.contenedorGrupos = [];
@@ -22,7 +22,7 @@ export class VitiniIDX {
         try {
             const VitiniIDX = this.usuario;
             if (!VitiniIDX) {
-                 const msgError = {
+                const msgError = {
                     tipo: "IDX",
                     mensaje: "Tienes que identificarte para seguir"
                 };

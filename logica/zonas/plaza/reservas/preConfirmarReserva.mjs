@@ -34,7 +34,12 @@ export const preConfirmarReserva = async (entrada) => {
         await campoDeTransaccion("confirmar")
         const resolverDetallesReserva = await detallesReserva({
             reservaUID: reservaUID,
-            capas: ["desgloseFinanciero"]
+            capas: [
+                "titular",
+                "alojamiento",
+                "pernoctantes",
+                "desgloseFinanciero"
+            ]
         })
         const enlacePDF = await crearEnlacePDF(reservaUID);
 

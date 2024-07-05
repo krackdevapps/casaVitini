@@ -3,11 +3,11 @@ import { conexion } from "../../componentes/db.mjs";
 export const actualizarImpuesto = async (data) => {
     try {
         const impuestoUID = data.impuestoUID
-        const nombreImpuesto = data.nombreImpuesto
+        const nombre = data.nombre
         const tipoImpositivo = data.tipoImpositivo
-        const tipoValor = data.tipoValor
-        const aplicacionSobre = data.aplicacionSobre
-        const estado = data.estado
+        const tipoValorIDV = data.tipoValorIDV
+        const entidadIDV = data.entidadIDV
+        const estadoIDV = data.estadoIDV
 
         const consulta = `
         UPDATE impuestos
@@ -15,20 +15,20 @@ export const actualizarImpuesto = async (data) => {
         nombre = COALESCE($1, nombre),
         "tipoImpositivo" = COALESCE($2, "tipoImpositivo"),
         "tipoValorIDV" = COALESCE($3, "tipoValorIDV"),
-        "aplicacionSobreIDV" = COALESCE($4, "aplicacionSobreIDV"),
+        "entidadIDV" = COALESCE($4, "entidadIDV"),
         "estadoIDV" = COALESCE($5, "estadoIDV")
         WHERE "impuestoUID" = $6
         RETURNING
         *
         `;
         const parametros = [
-            nombreImpuesto,
+            nombre,
             tipoImpositivo,
-            tipoValor,
-            aplicacionSobre,
-            estado,
+            tipoValorIDV,
+            entidadIDV,
+            estadoIDV,
             impuestoUID
-        ];
+        ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
             const error = "No existe el perfil del impuesto que quieres actualizar";

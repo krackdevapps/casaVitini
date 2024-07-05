@@ -4,16 +4,15 @@ import { validarModificacionRangoFechaResereva } from "../../../../../sistema/re
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
-export const obtenerElasticidadDelRango = async (entrada, salida) => {
+export const obtenerElasticidadDelRango = async (entrada) => {
     const mutex = new Mutex()
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
 
-        mutex = new Mutex()
         await mutex.acquire()
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
@@ -38,6 +37,7 @@ export const obtenerElasticidadDelRango = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "no"
         })
         const anoCalendario = validadoresCompartidos.tipos.cadena({
             string: entrada.body.anoCalendario,
@@ -45,6 +45,7 @@ export const obtenerElasticidadDelRango = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "no"
         })
 
         if (sentidoRango !== "pasado" && sentidoRango !== "futuro") {
@@ -54,22 +55,18 @@ export const obtenerElasticidadDelRango = async (entrada, salida) => {
         validadoresCompartidos.fechas.cadenaMes(mesCalendario)
         validadoresCompartidos.fechas.cadenaAno(anoCalendario)
 
-        const metadatos = {
-            reserva: reserva,
-            sentidoRango: sentidoRango,
-            anoCalendario: anoCalendario,
-            mesCalendario: mesCalendario
-        };
-        const reserva = await obtenerReservaPorReservaUID(reserva)
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
         if (reserva.estadoReservaIDV === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);
         }
-        const transaccionInterna = await validarModificacionRangoFechaResereva(metadatos);
-        const ok = {
-            ok: transaccionInterna
-        };
-        salida.json(transaccionInterna);
+        const transaccionInterna = await validarModificacionRangoFechaResereva({
+            reservaUID: reservaUID,
+            sentidoRango: sentidoRango,
+            anoCalendario: anoCalendario,
+            mesCalendario: mesCalendario
+        })
+        return transaccionInterna
     } catch (errorCapturado) {
         throw errorCapturado
     } finally {

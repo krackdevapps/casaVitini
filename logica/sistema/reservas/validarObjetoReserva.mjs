@@ -190,7 +190,10 @@ export const validarObjetoReserva = async (data) => {
                     const habitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
                     const habitacionUID = habitacionesEstructura[habitacionIDV]
                     const habitacionUI = habitacionComoEntidad.habitacionUI
-                    const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                    const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                        apartamentoIDV,
+                        errorSi: "noExiste"
+                    })
                     const apartamentoUI = apartamento.apartamentoUI
 
                     const camaIDV = validadoresCompartidos.tipos.cadena({

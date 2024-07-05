@@ -3,11 +3,11 @@ export const insertarOferta = async (data) => {
     try {
 
         const nombreOferta = data.nombreOferta
-        const entidad = data.entidad
+        const entidadIDV = data.entidadIDV
         const fechaInicio = data.fechaInicio
         const fechaFinal = data.fechaFinal
-        const condiciones = JSON.stringify(data.condiciones)
-        const descuentos = JSON.stringify(data.descuentos)
+        const condicionesArray = JSON.stringify(data.condicionesArray)
+        const descuentosJSON = JSON.stringify(data.descuentosJSON)
         const estado = data.estado
         const zonaIDV = data.zonaIDV
 
@@ -40,11 +40,11 @@ export const insertarOferta = async (data) => {
 
         const parametros = [
             nombreOferta,
-            entidad,
+            entidadIDV,
             fechaInicio,
             fechaFinal,
-            condiciones,
-            descuentos,
+            condicionesArray,
+            descuentosJSON,
             estado,
             zonaIDV
         ];

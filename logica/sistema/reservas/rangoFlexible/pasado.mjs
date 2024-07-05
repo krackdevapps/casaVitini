@@ -10,8 +10,9 @@ export const validadorPasado = async (data) => {
         const anoCalendario = data.anoCalendario
         const mesCalendario = data.mesCalendario
         const fechaEntradaReserva_ISO = data.fechaEntradaReserva_ISO
+        const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
         const apartamentosReservaActual = data.apartamentosReservaActual
-
+        const reservaUID = data.reservaUID
 
         // cuidado con el primer rangoPasadoLibre, si no hay apartamentos en futuro tambien da rangoPasadolibre
         // if (resuelveConsultaAlojamientoReservaActual.rowCount === 0) {
@@ -20,6 +21,9 @@ export const validadorPasado = async (data) => {
         //     }
         //     return ok
         // }
+
+        const anoReservaSalida = fechaSalidaReserva_ISO.split("-")[0]
+        const mesReservaSalida = fechaSalidaReserva_ISO.split("-")[1]
 
         const fechaSeleccionadaParaPasado_Objeto = DateTime.fromObject({
             year: anoCalendario,
@@ -31,7 +35,7 @@ export const validadorPasado = async (data) => {
             const error = "El mes de entrada seleccionado no puede ser igual o superior a al mes de fecha de salida de la reserva"
             throw new Error(error)
         }
-        /// No se tiene en en cuenta los apartamentos, solo busca bloqueos a sacoa partir de la fecha
+        /// No se tiene en en cuenta los apartamentos, solo busca bloqueos a saco partir de la fecha
         const configuracionBloqueos = {
             fechaInicioRango_ISO: fechaSeleccionadaParaPasado_ISO,
             fechaFinRango_ISO: fechaEntradaReserva_ISO,
@@ -39,7 +43,7 @@ export const validadorPasado = async (data) => {
             zonaBloqueo_array: [
                 "global",
                 "privado"
-            ],
+            ]
         }
         const bloqueosSeleccionados = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
         const contenedorBloqueosEncontrados = []
@@ -62,13 +66,13 @@ export const validadorPasado = async (data) => {
             contenedorBloqueosEncontrados.push(estructura)
         }
         const contenedorReservaEncontradas = []
-        const configuracionReservas = {
+
+        const reservasSeleccionadas = await reservasPorRangoPorApartamentosArray( {
             fechaInicioRango_ISO: fechaSeleccionadaParaPasado_ISO,
             fechaFinRango_ISO: fechaEntradaReserva_ISO,
             reservaUID: reservaUID,
             apartamentosIDV_array: apartamentosReservaActual,
-        }
-        const reservasSeleccionadas = await reservasPorRangoPorApartamentosArray(configuracionReservas)
+        })
 
         for (const detallesReserva of reservasSeleccionadas) {
             const reservaUID = detallesReserva.reservaUID
@@ -124,7 +128,6 @@ export const validadorPasado = async (data) => {
                             tipoElemento: "eventoSincronizado"
                         }
                         contenedorEventosCalendariosSincronizados.push(estructura)
-
                     }
                 }
             }

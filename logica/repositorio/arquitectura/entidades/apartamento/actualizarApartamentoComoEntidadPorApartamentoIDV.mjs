@@ -7,7 +7,6 @@ export const actualizarApartamentoComoEntidadPorApartamentoIDV = async (data) =>
         const apartamentoUI = data.apartamentoUI
         const apartamentoIDVSelector = data.apartamentoIDVSelector
 
-
         const consulta = `
         UPDATE apartamentos
         SET 

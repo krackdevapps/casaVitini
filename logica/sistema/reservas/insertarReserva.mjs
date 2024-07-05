@@ -9,6 +9,7 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositori
 import { insertarHabitacionEnApartamento } from '../../repositorio/reservas/apartamentos/insertarHabitacionEnApartamento.mjs';
 import { procesador } from '../contenedorFinanciero/procesador.mjs';
 import { insertarDesgloseFinacieroPorReservaUID } from '../../repositorio/reservas/transacciones/desgloseFinanciero/insertarDesgloseFinacieroPorReservaUID.mjs';
+import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from '../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs';
 
 export const insertarReserva = async (reserva) => {
     try {
@@ -52,7 +53,10 @@ export const insertarReserva = async (reserva) => {
             const apartamentoIDV = apartamentoConfiguracion
             const habitaciones = alojamiento[apartamentoConfiguracion].habitaciones
 
-            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            })
             const apartamentoUI = apartamento.apartamentoUI
 
             const nuevoApartamentoEnReserva = await insertarApartamentoEnReserva({
@@ -78,7 +82,8 @@ export const insertarReserva = async (reserva) => {
                 const habitacionUID = nuevoHabitacionEnElApartamento.componenteUID
                 const cama = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                     camaIDV,
-                    tipoIDVArray: ["compartida"]
+                    tipoIDVArray: ["compartida"],
+                    errorSi: "noExiste"
                 })
                 const camaUI = cama.camaUI
 
