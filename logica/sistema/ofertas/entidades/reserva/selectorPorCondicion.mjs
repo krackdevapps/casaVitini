@@ -10,7 +10,7 @@ export const selectorPorCondicion = async (data) => {
         const fechaActual_reserva = data.fechaActual_reserva
         const fechaEntrada_reserva = data.fechaEntrada_reserva
         const fechaSalida_reserva = data.fechaSalida_reserva
-
+        const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64
         const resultadoSelector = {
             oferta,
             condicionesQueSeCumplen: [],
@@ -157,7 +157,12 @@ export const selectorPorCondicion = async (data) => {
                     }
                 }
             } else if (tipoCondicion === "porCodigoDescuento") {
-                // implementar
+                const codigoDescuentoBase64 = condicion.codigoDescuento
+                if (codigoDescuentosArrayBASE64.includes(codigoDescuentoBase64)) {
+                    resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
+                } else {
+                    resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
+                }
             } else {
                 const error = `En la oferta ${nombreOferta} no se reconoce el identificador de condicion ${tipoCondicion}`
                 throw new Error(error)

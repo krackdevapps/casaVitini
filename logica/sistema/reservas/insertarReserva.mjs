@@ -32,6 +32,8 @@ export const insertarReserva = async (reserva) => {
         const pasaporteTitularPool = datosTitular.pasaporteTitular
         const correoTitular = datosTitular.correoTitular
         const telefonoTitular = datosTitular.telefonoTitular
+        const codigoDescuentosArrayBASE64 = reserva.codigosDescuento
+
 
         const nuevaReserva = await insertarReservaAdministrativa({
             fechaEntrada_ISO: fechaEntrada_ISO,
@@ -108,8 +110,8 @@ export const insertarReserva = async (reserva) => {
                     capaOfertas: "si",
                     zonasArray: ["global", "publica"],
                     capaDescuentosPersonalizados: "no",
-                    capaImpuestos: "si"
-
+                    capaImpuestos: "si",
+                    codigoDescuentosArrayBASE64
                 }
             },
         })

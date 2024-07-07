@@ -29,7 +29,7 @@ export const detallesTitular = async (reservaUID) => {
             const titularPool = await obtenerTitularPoolReservaPorReservaUID(reservaUID)
             t.nombreTitular = titularPool.nombreTitular
             t.pasaporteTitular = titularPool.pasaporteTitular
-            t.emailTitular = titularPool.emailTitular
+            t.mailTitular = titularPool.mailTitular
             t.telefonoTitular = titularPool.telefonoTitular
             t.tipoTitularIDV = "titularPool"
         }

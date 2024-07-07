@@ -1,11 +1,13 @@
 export const controlJSON = (err, req, res, next) => {
   try {
-
-
-    JSON.parse(req.body);
+    const json = JSON.parse(req.body);
+    console.log("json", json);
     next();
   } catch (error) {
-    res.status(400).json({ "CasaVitini": 'Formato JSON inválido' });
+    console.log("error", error);
+    const errorMensaje = {
+      error: "Formato JSON invalido"
+    }
+    res.status(400).json(errorMensaje);
   }
-  next()
 }

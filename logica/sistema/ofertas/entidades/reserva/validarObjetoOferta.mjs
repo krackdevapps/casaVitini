@@ -1,9 +1,18 @@
 import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
-export const validarObjetoOferta = async (oferta) => {
+import { obtenerOfertasPorCodigoDescuentoArray } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorCodigoDescuentoArray.mjs"
+import { obtenerOfertasPorCodigoDescuentoArrayIgnorandoOfertaUID } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorCodigoDescuentoArrayIgnorandoOfertaUID.mjs"
+export const validarObjetoOferta = async (data) => {
 
     try {
+        const oferta = data.oferta
+        const modo = data.modo
+        if (modo !== "actualizarOferta" && modo !== "crearOferta") {
+            const m = "validarObjetOferta requiero campo modo en actualizarOferta o crearOfert para procesar el objeto"
+            throw new Error(m)
+        }
+
         validadoresCompartidos.tipos.cadena({
             string: oferta.nombreOferta,
             nombreCampo: "El campo del nombre de la oferta",
@@ -58,7 +67,7 @@ export const validarObjetoOferta = async (oferta) => {
             const error = "el campo zonaIDV solo admite global, publica o privada"
             throw new Error(error)
         }
-
+        const codigosDescuentosBase64DeLaMismaOferta = []
         for (const condicion of condicionesArray) {
             const tipoCondicionIDV = condicion?.tipoCondicion
             if (tipoCondicionIDV === "conFechaEntradaEntreRango") {
@@ -130,7 +139,7 @@ export const validarObjetoOferta = async (oferta) => {
             } else if (tipoCondicionIDV === "porDiasDeAntelacion") {
                 const tipoConteo = condicion.tipoConteo
                 if (tipoConteo !== "aPartirDe" && tipoConteo !== "numeroExacto") {
-                    const error = `En la condiicon ${tipoCondicionIDV} el campo tipoConteo solo puede ser aPartirDe o numeroExacto`
+                    const error = `En la condicion ${tipoCondicionIDV} el campo tipoConteo solo puede ser aPartirDe o numeroExacto`
                     throw new Error(error)
 
                 }
@@ -189,17 +198,51 @@ export const validarObjetoOferta = async (oferta) => {
 
                 })
             } else if (tipoCondicionIDV === "porCodigoDescuento") {
-                const codigoDescuento = condicion?.codigoDescuento
-                if (!codigoDescuento) {
-                    const error = "Te falta el codigo de descuento en la condicion de codigo de descuento."
-                    throw new Error(error)
-                }
-                const codigoDescuentoComoBuffer = Buffer.from(codigoDescuento, "utf8")
-                const codigoDescuentoB64 = codigoDescuentoComoBuffer.toString("base64")
-                condicion.codigoDescuento = codigoDescuentoB64
+                const codigoDescuentoAsci = condicion?.codigoDescuento
+                const codigoDescuentoBase64 = validadoresCompartidos.tipos.cadena({
+                    string: codigoDescuentoAsci,
+                    nombreCampo: "Te falta el codigo de descuento en la condicion de codigo de descuento.",
+                    filtro: "transformaABase64",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+                condicion.codigoDescuento = codigoDescuentoBase64
+                codigosDescuentosBase64DeLaMismaOferta.push(codigoDescuentoBase64)
             } else {
                 const error = "No se reconoce el tipo de la condiciones"
                 throw new Error(error)
+            }
+        }
+
+        if (codigosDescuentosBase64DeLaMismaOferta.length > 0) {
+            const controlDescuentosRepetidos = new Set(codigosDescuentosBase64DeLaMismaOferta).size !== codigosDescuentosBase64DeLaMismaOferta.length;
+            if (controlDescuentosRepetidos) {
+                const error = "Dentro de esta oferta tienes codigos de descuento repetidos"
+                throw new Error(error)
+            }
+            if (modo === "crearOferta") {
+                const ofertasConElMismoCodigo = await obtenerOfertasPorCodigoDescuentoArray(codigosDescuentosBase64DeLaMismaOferta)
+                if (ofertasConElMismoCodigo.length > 0) {
+                    const e = {
+                        error: `Revisa los codigos de descuento de esta oferta por que existen en otras ofertas. Cada codigo de descuento sirve para cada oferta, aunque una oferta puede tener varios codigos de descuento, no pueden existir codigo de descuentos iguales. A continguacions se muestran las ofertas con el mismo codigo.`,
+                        ofertasConElMismoCodigo: ofertasConElMismoCodigo
+                    }
+                    throw e
+                }
+            }
+            if (modo === "actualizarOferta") {
+                const ofertasConElMismoCodigo = await obtenerOfertasPorCodigoDescuentoArrayIgnorandoOfertaUID({
+                    ofertaUID: oferta.ofertaUID,
+                    codigosDescuentosArray: codigosDescuentosBase64DeLaMismaOferta
+
+                })
+                if (ofertasConElMismoCodigo.length > 0) {
+                    const e = {
+                        error: `Revisa los codigos de descuento de esta oferta por que existen en otras ofertas. Cada codigo de descuento sirve para cada oferta, aunque una oferta puede tener varios codigos de descuento, no pueden existir codigo de descuentos iguales. A continguacions se muestran las ofertas con el mismo codigo.`,
+                        ofertasConElMismoCodigo: ofertasConElMismoCodigo
+                    }
+                    throw e
+                }
             }
         }
 

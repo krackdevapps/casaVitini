@@ -11,9 +11,9 @@ import { utilidades } from '../../componentes/utilidades.mjs';
 
 export const validarObjetoReserva = async (data) => {
     try {
-        const filtroTitular = data.filtroTitular
-        const filtroHabitacionesCamas = data.filtroHabitacionesCamas
-        const reservaObjeto = data.reservaObjeto
+        const filtroTitular = data?.filtroTitular
+        const filtroHabitacionesCamas = data?.filtroHabitacionesCamas
+        const reservaObjeto = data?.reservaObjeto
 
         if (filtroTitular !== "si" && filtroTitular !== "no") {
             const error = "El validadorObjetoReserva mal configrado. Necesita el filtroTitular en si o no."
@@ -27,7 +27,7 @@ export const validarObjetoReserva = async (data) => {
 
         validadoresCompartidos.tipos.objetoLiteral({
             objetoLiteral: reservaObjeto,
-            nombreCampo: "el campo reservaObjeto"
+            nombreCampo: "el campo reserva"
         })
         const fechaEntrada_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: reservaObjeto?.fechaEntrada,
@@ -65,14 +65,45 @@ export const validarObjetoReserva = async (data) => {
 
 
         await limitesReservaPublica(fechasParaValidarLimites)
+        if (reservaObjeto.hasOwnProperty("codigosDescuento")) {
+            const codigosDescuentoArray = []
+
+            const codigoDescuentoArrayAsci = validadoresCompartidos.tipos.array({
+                array: reservaObjeto.codigosDescuento,
+                nombreCampo: "El campo codigoDescuento",
+                sePermitenDuplicados: "no"
+            })
+            codigoDescuentoArrayAsci.forEach((codigo) => {
+                const codigoDescuentoB64 = validadoresCompartidos.tipos.cadena({
+                    string: codigo,
+                    nombreCampo: "No has escrito ningún codigo de descuento, recuerda que",
+                    filtro: "transformaABase64",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+                codigosDescuentoArray.push(codigoDescuentoB64)
+            })
+            
+            if (codigosDescuentoArray.length > 0) {
+                reservaObjeto.codigosDescuento = codigosDescuentoArray
+                console.log("ss", reservaObjeto.codigosDescuento)
+            }
+
+        }
+
 
         if (!reservaObjeto.hasOwnProperty("alojamiento")) {
             const error = "No exite la llave de 'alojamiento' esperada dentro del objeto, por lo tante hasta aquí hemos llegado"
             throw new Error(error)
         }
         const alojamiento = reservaObjeto?.alojamiento
-
         const apartemtosIDVarray = Object.keys(alojamiento)
+
+        if (apartemtosIDVarray.length === 0) {
+            const error = "El objeto de lar eserva no tiene ningun apartamento definido en alojamiento"
+            throw new Error(error)
+        }
+
         const controlApartamentosIDVUnicos = new Set(apartemtosIDVarray);
         if (controlApartamentosIDVUnicos.size !== apartemtosIDVarray.length) {
             const error = "Existen apartamentosIDV repetidos en el objeto de la reserva"
@@ -218,9 +249,14 @@ export const validarObjetoReserva = async (data) => {
 
         }
         if (filtroTitular === "si") {
+            if (!reservaObjeto.hasOwnProperty("datosTitular")) {
+                const error = "No exite la llave de 'datosTitular' esperada dentro del objeto, por lo tante hasta aquí hemos llegado"
+                throw new Error(error)
+            }
+
             const datosTitular = reservaObjeto.datosTitular
             const nombreTitular = validadoresCompartidos.tipos.cadena({
-                string: datosTitular.nombreTitular || "",
+                string: datosTitular?.nombreTitular || "",
                 nombreCampo: "El campo del nombre del titular",
                 filtro: "strictoConEspacios",
                 sePermiteVacio: "no",
@@ -230,7 +266,7 @@ export const validarObjetoReserva = async (data) => {
             })
 
             const pasaporteTitular = validadoresCompartidos.tipos.cadena({
-                string: datosTitular.pasaporteTitular || "",
+                string: datosTitular?.pasaporteTitular || "",
                 nombreCampo: "El campo del pasaporte del titular",
                 filtro: "strictoConEspacios",
                 sePermiteVacio: "no",

@@ -9,11 +9,11 @@ export const precioReservaPublica = async (entrada) => {
             filtroTitular: "no",
             filtroHabitacionesCamas: "no"
         })
-
         const fechaEntradaReserva = reservaObjeto.fechaEntrada
         const fechaSalidaReserva = reservaObjeto.fechaSalida
         const alojamiento = reservaObjeto.alojamiento
         const apartamentosIDV = Object.keys(alojamiento)
+        const codigoDescuentosArrayBASE64 = reservaObjeto.codigosDescuento
 
         const desgloseFinanciero = await procesador({
             entidades: {
@@ -25,7 +25,8 @@ export const precioReservaPublica = async (entrada) => {
                     capaOfertas: "si",
                     zonasArray: ["global", "publica"],
                     capaDescuentosPersonalizados: "no",
-                    capaImpuestos: "si"
+                    capaImpuestos: "si",
+                    codigoDescuentosArrayBASE64: codigoDescuentosArrayBASE64
 
                 }
             }

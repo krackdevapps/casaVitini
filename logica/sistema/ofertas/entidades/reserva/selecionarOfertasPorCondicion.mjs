@@ -10,6 +10,7 @@ export const selecionarOfertasPorCondicion = async (data) => {
         const apartamentosArray = data.apartamentosArray
         const zonasArray = data.zonasArray
         const descuentosParaRechazar = data?.descuentosParaRechazar || []
+        const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64 || []
 
         const ofertasSeleccionadasPorRango = await obtenerOfertasPorRangoActualPorEstado({
             fechaActual: fechaActual,
@@ -31,6 +32,7 @@ export const selecionarOfertasPorCondicion = async (data) => {
                 fechaActual_reserva: fechaActual,
                 fechaEntrada_reserva: fechaEntrada,
                 fechaSalida_reserva: fechaSalida,
+                codigoDescuentosArrayBASE64: codigoDescuentosArrayBASE64
             })
             resultadoSelector.autorizacion = "aceptada"
             const condicionesQueNoSeCumple = resultadoSelector.condicionesQueNoSeCumple

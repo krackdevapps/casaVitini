@@ -950,12 +950,13 @@
     flex-wrap: nowrap;
     align-content: center;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     margin: 0px;
     gap: 6px;
     user-select: none;
     cursor: default;
     -webkit-user-select: none;
+
 }
 
 [zonaCSS=alojamiento] .plaza_alojamiento_botonBorrarBusquedaAlojamiento {
@@ -965,6 +966,9 @@
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+
 }
 
 .formatoBloqueDiaNuevo {
@@ -981,14 +985,17 @@
 
 [zonaCSS=alojamiento] .plaza_alojamiento_marcoFechaCompartido {
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    flex-direction: column;
     justify-content: center;
     align-items: stretch;
     background-color: #ffffff61;
-    border-radius: 6px;
+    border-radius: 10px;
     overflow: hidden;
     transition: all 250ms linear;
+    padding: 10px;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
 }
 
 .plaza_alojamiento_marcoFechaCompartido:hover {
@@ -1002,13 +1009,16 @@
 }
 
 .plaza_alojamiento_contenedor {
-    display: flex;
-    gap: 4px;
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
-    background: rgba(255, 255, 255, 0.3);
-    padding: 4px;
-    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 0px;
+    grid-auto-rows: minmax(auto, auto);
+    gap: 6px;
+    /* backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px); */
+    /* background: rgba(255, 255, 255, 0.3); */
+    padding: 0px;
+    border-radius: 16px;
 }
 
 [zonaCSS=alojamiento] .plaza_alojamiento_superBloque {
@@ -1031,8 +1041,6 @@
 }
 
 [zonaCSS=alojamiento] .textoDiaNuevo {
-    padding: 10px;
-    padding-right: 10px;
     pointer-events: none;
     user-select: none;
     transition: all 250ms linear;
@@ -1040,7 +1048,7 @@
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: center;
-    align-items: stretch;
+    align-items: center;
 }
 
 [zonaCSS="administracion/reservas/buscador"] .fechaNuevo {
@@ -1055,16 +1063,15 @@
 }
 
 [zonaCSS=alojamiento] .plaza_alojamiento_marcoFechaCompartido_contenedorFecha {
-    pointer-events: none;
-    user-select: none;
-    transition: all 250ms linear;
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
     flex-wrap: nowrap;
     justify-content: center;
-    align-content: center;
-    padding: 10px;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 250ms linear;
+
 }
 
 [zonaCSS="administracion/reservas/buscador"] .botonMostrarDisponibilidad {
@@ -1089,11 +1096,15 @@
     user-select: none;
     cursor: default;
     -webkit-user-select: none;
-    border-radius: 6px;
+    border-radius: 10px;
     display: flex;
     flex-direction: row;
     align-items: center;
     transition: background 250ms linear;
+    align-content: center;
+    justify-content: center;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
 }
 
 [zonaCSS=alojamiento] .botonMostrarDisponibilidad:hover {
@@ -1748,7 +1759,7 @@
     align-content: center;
     flex-wrap: nowrap;
     width: 100%;
-    padding: 6px;
+    padding: 30px;
     gap: 6px;
 }
 
@@ -3993,7 +4004,7 @@
 [zonaCSS="alojamiento/resumen"] .ressumenReservaBloquePago {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 2fr));
+    /* grid-template-columns: repeat(auto-fit, minmax(350px, 2fr)); */
     grid-gap: 4px;
     grid-auto-rows: minmax(auto, auto);
     padding: 0px;
@@ -6761,6 +6772,11 @@
     padding: 6px;
 }
 
+.padding14 {
+    padding: 14px;
+}
+
+
 
 .padding8 {
     padding: 8px;
@@ -8185,14 +8201,16 @@ grid-template-columns: 0.5fr 1.5fr;
 @media (max-width: 720px) {
     [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorBotonesGlobales {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows:repeat(2, 1fr);;
+        grid-template-rows: repeat(2, 1fr);
+        ;
     }
 }
 
 @media (max-width: 320px) {
     [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorBotonesGlobales {
         grid-template-columns: repeat(1, 1fr);
-        grid-template-rows:repeat(4, 1fr);;
+        grid-template-rows: repeat(4, 1fr);
+        ;
     }
 }
 
@@ -10806,8 +10824,8 @@ grid-template-columns: 0.5fr 1.5fr;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 20px;
+    padding: 30px;
     user-select: none;
     -webkit-user-select: none;
     text-decoration: none;
@@ -11467,13 +11485,13 @@ grid-template-columns: 0.5fr 1.5fr;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     text-align: justify;
-    margin-bottom: 6px;
-    padding-top: 0px;
+    margin: 6px;
+
 }
 
 .plaza_servicios_bloqueCaracteristica {
     padding: 0px;
-    border-radius: 10px;
+    border-radius: 30px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -11495,7 +11513,7 @@ grid-template-columns: 0.5fr 1.5fr;
     grid-template-rows: repeat(2, 1fr);
     grid-column-gap: 0px;
     grid-row-gap: 0px;
-    gap: 40px;
+    gap: 30px;
     padding: 30px;
 }
 
@@ -11514,7 +11532,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .plaza_servicios_contenedorCaracteristicaTexto {
-    padding: 10px;
+    padding: 20px;
     display: flex;
     gap: 0px;
     flex-direction: column;
@@ -13023,7 +13041,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: #f6e1af;
     margin-right: 30px;
     margin-left: 30px;
-    border-radius: 10px;
+    border-radius: 30px;
     padding: 15px;
     /* border: 1px solid #00000047; */
 }
@@ -13057,7 +13075,7 @@ grid-template-columns: 0.5fr 1.5fr;
     height: 200px;
     width: 100%;
     background-color: whitesmoke;
-    border-radius: 8px;
+    border-radius: 18px;
     transition: all 100ms linear;
 }
 
@@ -13299,7 +13317,7 @@ grid-template-columns: 0.5fr 1.5fr;
 [zonaCSS=conozcanos] .contenedorParalax {
     display: flex;
     flex-direction: column;
-    width: 90vw;
+    width: 98vw;
 }
 
 [zonaCSS=conozcanos] .contenedorParalax .parallax {
@@ -13751,7 +13769,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: space-between;
 }
 
-.flexJustificacion_space-around {
+.flexJustificacion_spacearound {
     justify-content: space-around;
 }
 
@@ -13770,8 +13788,8 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    padding: 6px;
-    gap: 6px;
+    padding: 30px;
+    gap: 30px;
     padding-top: 80px;
     align-items: stretch;
 }
@@ -13869,6 +13887,14 @@ grid-template-columns: 0.5fr 1.5fr;
     padding-bottom: 6px;
 }
 
+.gap14 {
+    gap: 14px;
+}
+
+.padding14 {
+    padding: 14px;
+}
+
 .paddinTop6 {
     padding-top: 6px;
 }
@@ -13917,6 +13943,17 @@ grid-template-columns: 0.5fr 1.5fr;
     color: black;
 }
 
+.blackgroundWhite30O {
+    background-color: rgb(255 255 255 / 30%);
+}
+.noSelecionable {
+    user-select: none;
+    -webkit-user-select: none;
+
+}
+.ratonDefault {
+    cursor:default;
+}
 
 [contenedor="financiero"] .contenedorNavegador {
     display: grid;
@@ -13961,7 +13998,6 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .contenedorOculto {
     display: none;
-
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .contenedorPendiente {
@@ -14029,7 +14065,7 @@ grid-template-columns: 0.5fr 1.5fr;
     cursor: default;
 }
 
-[contenedor="financiero"]  .contenedorDiaConNoche {
+[contenedor="financiero"] .contenedorDiaConNoche {
     /* background-color: #ffffff73; */
     padding: 6px;
     border-radius: 14px;
@@ -14069,4 +14105,15 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: stretch;
     /* background: #bababa; */
     /* border: 1px solid rgba(0, 0, 0, 0.4); */
+}
+
+[ui="pantallaDeCarga"] {
+    display: flex;
+    position: absolute;
+    height: 100%;
+}
+
+.areaSinDecoracionPredeterminada {
+    text-decoration: none;
+    color: black;
 }

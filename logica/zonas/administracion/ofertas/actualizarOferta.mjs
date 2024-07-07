@@ -51,7 +51,10 @@ export const actualizarOferta = async (entrada) => {
             descuentosJSON,
             ofertaUID
         }
-        await validarObjetoOferta(ofertaPorActualizar)
+        await validarObjetoOferta({
+            oferta: ofertaPorActualizar,
+            modo: "actualizarOferta"
+        })
         await campoDeTransaccion("iniciar")
         const ofertaActualizada = await actualizarOfertaPorOfertaUID(ofertaPorActualizar);
         await campoDeTransaccion("confirmar")

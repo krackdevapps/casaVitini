@@ -1,100 +1,70 @@
 <arranque publico="alojamiento.resumen.arranque" square="motorarranque"></arranque>
-<link rel="stylesheet" href="/componentes/css/square.css">
-<div class="bloqueResumenReservaGlobal" componente="espacioConfirmarReserva">
+<!-- <div class="bloqueResumenReservaGlobal" componente="espacioConfirmarReserva">
+
     <p class="tituloBloque">Resumen de la reserva</p>
-    <div class="bloqueSeccion">
-        <p class="infoResumenReserva">Aquí tienes el resumen de tu reserva. Es importante para nosotros que tus fechas de entrada y salida sean exactamente como las planeaste, así que tómate un momento para verificarlas. Además, te recomendaría revisar los detalles del alojamiento. Queremos asegurarnos de que estés completamente satisfecho con tu elección, así que asegúrate de que los apartamentos estén especificados correctamente. Si hay algo más en lo que podamos ayudarte o si tienes alguna pregunta, no dudes en ponerte en contacto con nosotros.</p>
-    </div>
-    <div class="bloqueSeccion">
-        <!--<p class="tituloBloqueSeccion">Estancia</p>-->
-        <div class="bloqueHorizontal">
-            <div class="bloqueResumenDia">
-                <p class="diaTipo">Fecha de entrada</p>
-                <p id="fechaEntrada" class="diaParrafo">fecha de entrada</p>
-            </div>
-            <div class="bloqueResumenDia">
-                <p class="diaTipo">Fecha de salida</p>
-                <p id="fechaSalida" class="diaParrafo">fecha de salidap>
-            </div>
+    <p class="infoResumenReserva">Aquí tienes el resumen de tu reserva. Es importante para nosotros que tus fechas
+        de entrada y salida sean exactamente como las planeaste, así que tómate un momento para verificarlas.
+        Además, te recomendaría revisar los detalles del alojamiento. Queremos asegurarnos de que estés
+        completamente satisfecho con tu elección, así que asegúrate de que los apartamentos estén especificados
+        correctamente. Si hay algo más en lo que podamos ayudarte o si tienes alguna pregunta, no dudes en ponerte
+        en contacto con nosotros.</p>
+    <div class="bloqueSeccion bloqueHorizontal">
+        <div class="bloqueResumenDia">
+            <p class="diaTipo">Fecha de entrada</p>
+            <p id="fechaEntrada" class="diaParrafo">fecha de entrada</p>
         </div>
+        <div class="bloqueResumenDia">
+            <p class="diaTipo">Fecha de salida</p>
+            <p id="fechaSalida" class="diaParrafo">fecha de salidap>
+        </div>
+
     </div>
     <div resumen="alojamiento" class="bloqueSeccion">
         <p class="tituloBloqueSeccion">Alojamiento</p>
     </div>
-    <div class="plaza_alojamiento_resumenReserva_marcoBotones">
-        <!-- <div class="botonResumenReserva" boton="modificarReserva">Modificar los apartamentos seleccionados</div> -->
-        <!--  
-         <div class="botonResumenReserva" boton="baypasearPasarela">Baypasear pasarela (este boton esta para pruebas,
-            desaparecera pronto, este boton por lo general esta desactivado, solo)</div>
-        </div>
-        -->
-        <!--replica esquema formulario square-->
-        <div class="ressumenReservaBloquePago" componenete="espacioInfoPago">
-            <div componente="espacioInfoTotales" class="resumenReservaInfoPago"></div>
-            <div class="plaza_alojamiento_resumenReserva_contenedorTitualPago">
-                <div class="plaza_alojamiento_resumenReserva_titular_contenedor">
-                    <div class="plaza_alojamiento_resumenReserva_titular_informacion">
-                        Datos del titular de la reserva y pago.
-                    </div>
-                    <div class="infoResumenReserva">
-                        Para garantizar una reserva exitosa, por favor sigue las siguientes instrucciones:
-                        Ingresa los datos del titular de la reserva.
-                        Si estás viajando desde fuera de Nicaragua, proporciona los detalles de tu pasaporte.
-                        Si eres residente de Nicaragua, proporciona tu número de identificación nacional.
-                        Es crucial asegurar la precisión de esta información para confirmar tu reserva de manera eficiente y proporcionarte una experiencia fluida. Agradecemos tu atención a estos detalles. ¡Gracias!
-                    </div>
-                    <input type="text" class="campoTitular"
-                        placeholder="Nombre del titular de la reserva" campo="nombreTitular">
-                    <input type="text" class="campoTitular"
-                        placeholder="Pasaporte del titular de la reserva" campo="pasaporteTitular">
-                    <input type="text" class="campoTitular"
-                        placeholder="Telefono del titular de la reserva" campo="telefonoTitular">
-                    <input type="text" class="campoTitular"
-                        placeholder="Correo del titular de la reserva" campo="correoTitular">
-                </div>
-                <div class="plaza_resumenReserva_contenedorTotalAPagar">
-                    <p >Total a pagar:</p>
-                    <p class="plaza_resumenReserva_totalFinal" componente="totalConImpuestos">Calculando total...</p>
-                    <p class="botonDespliegueDesgloseTotal" componente="botonDespliegaDesgloseTotal">Puedes ver un
-                        desglose detallado del total pulsando aquí
-                    </p>
-                </div>
-                <!--
-                <select name="formaDePago" class="formaDePago">
-                    <option value="tarjeta" selected="true" disabled>Escoger forma de pago</option>
-                    <option value="tarjeta">Pagar con tarjeta</option>
-                    <option value="tarjeta">Pagar con transferencia bancaria</option>
-                </select>
-                <form class="payment-form" id="fast-checkout">
-                    <div class="wrapper">
-                         <div id="apple-pay-button" alt="apple-pay" type="button"></div>
-                        <div id="google-pay-button" alt="google-pay" type="button"></div>
-                        <div class="border">
-                            <span>0</span>
-                        </div>
-                        <div id="ach-wrapper">
-                            <label for="ach-account-holder-name">Full Name</label>
-                            <input id="ach-account-holder-name" type="text" placeholder="Jane Doe"
-                                name="ach-account-holder-name" autocomplete="name">
-                            <span id="ach-message"></span>
-                            <button id="ach-button" type="button"> Pay with Bank Account </button>
-                            <div class="border">
-                                <span>OR</span>
-                            </div>
-                        </div>
-                        <div id="card-container"></div>
-                        <button id="card-button" type="button"> Pagar reserva y confirmarla </button>
-                        <span id="payment-flow-message"></span>
-                    </div>
-                </form>
-            -->
-                <div class="infoResumenReserva">Para preconfirmar la reserva, haz clic en el botón de abajo. Una vez preconfirmada la reserva, los apartamentos quedarán bloqueados y tendrás 48 horas para realizar la transferencia bancaria. Si no realizas la transferencia bancaria en ese plazo, los apartamentos volverán a estar disponibles para reservar.</div>
-                <div class="infoResumenReserva">Confirmar esta reserva implica la aceptación de las políticas de privacidad y el consentimiento de estas. Por favor, lea detenidamente toda la información sobre nuestras políticas de privacidad, uso de cookies y condiciones de uso haciendo clic aquí.<br>
-                    <a class="infoPrivacidad" href="/privacidad" target="_blank">Ver políticas de privacidad, condiciones de uso y gestión de cookies.</a>
-                </div>
-      
 
-                <div class="botonConfirmar" boton="preConfirmar">Confirmar reserva</div>
-            </div>
+    <div class="plaza_alojamiento_resumenReserva_titular_contenedor">
+        <div class="plaza_alojamiento_resumenReserva_titular_informacion">
+            Datos del titular de la reserva y pago.
         </div>
+        <div class="infoResumenReserva">
+            Para garantizar una reserva exitosa, por favor sigue las siguientes instrucciones:
+            Ingresa los datos del titular de la reserva.
+            Si estás viajando desde fuera de Nicaragua, proporciona los detalles de tu pasaporte.
+            Si eres residente de Nicaragua, proporciona tu número de identificación nacional.
+            Es crucial asegurar la precisión de esta información para confirmar tu reserva de manera
+            eficiente y proporcionarte una experiencia fluida. Agradecemos tu atención a estos detalles.
+            ¡Gracias!
+        </div>
+        <input type="text" class="campoTitular" placeholder="Nombre del titular de la reserva" campo="nombreTitular">
+        <input type="text" class="campoTitular" placeholder="Pasaporte del titular de la reserva"
+            campo="pasaporteTitular">
+        <input type="text" class="campoTitular" placeholder="Telefono del titular de la reserva"
+            campo="telefonoTitular">
+        <input type="text" class="campoTitular" placeholder="Correo del titular de la reserva" campo="correoTitular">
     </div>
+    <div contenedor="codigoDescuentos" class="padding14"></div>
+
+    <div class="plaza_resumenReserva_contenedorTotalAPagar">
+        <p>Total a pagar:</p>
+        <p class="plaza_resumenReserva_totalFinal" componente="totalConImpuestos">Calculando total...</p>
+        <p class="botonDespliegueDesgloseTotal" componente="botonDespliegaDesgloseTotal">Puedes ver un
+            desglose detallado del total pulsando aquí
+        </p>
+    </div>
+
+    <div class="infoResumenReserva">Para preconfirmar la reserva, haz clic en el botón de abajo. Una vez
+        preconfirmada la reserva, los apartamentos quedarán bloqueados y tendrás 48 horas para realizar la
+        transferencia bancaria. Si no realizas la transferencia bancaria en ese plazo, los apartamentos
+        volverán a estar disponibles para reservar.</div>
+    <div class="infoResumenReserva">Confirmar esta reserva implica la aceptación de las políticas de
+        privacidad y el consentimiento de estas. Por favor, lea detenidamente toda la información sobre
+        nuestras políticas de privacidad, uso de cookies y condiciones de uso haciendo clic aquí.<br>
+        <a class="infoPrivacidad" href="/privacidad" target="_blank">Ver políticas de privacidad,
+            condiciones de uso y gestión de cookies.</a>
+    </div>
+
+    <div class="botonConfirmar" boton="preConfirmar">Confirmar reserva</div>
+
+
+</div> -->

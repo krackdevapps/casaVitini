@@ -34,7 +34,10 @@ export const crearOferta = async (entrada, salida) => {
             descuentosJSON,
             estado: estadoInicial
         }
-        await validarObjetoOferta(oferta)
+        await validarObjetoOferta({
+            oferta: oferta,
+            modo: "crearOferta"
+        })
         await campoDeTransaccion("iniciar")
         const ofertasPorNombre = await obtenerOfertasPorNombreUI(nombreOferta)
         if (ofertasPorNombre.length > 0) {

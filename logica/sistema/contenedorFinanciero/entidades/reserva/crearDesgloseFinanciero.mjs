@@ -95,6 +95,8 @@ export const crearDesgloseFinanciero = async (data) => {
             })
             constructorEstructuraDescuentos(estructura)
             contructorEstructuraDescuentosReserva(estructura)
+
+            const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64
             const ofertasSelecionadasPorCondicion = await selecionarOfertasPorCondicion({
                 estructura,
                 fechaActual,
@@ -102,7 +104,8 @@ export const crearDesgloseFinanciero = async (data) => {
                 fechaSalida,
                 apartamentosArray,
                 zonasArray,
-                descuentosParaRechazar
+                descuentosParaRechazar,
+                codigoDescuentosArrayBASE64
             })
 
             await aplicarDescuento({

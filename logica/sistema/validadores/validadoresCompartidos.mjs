@@ -411,7 +411,7 @@ export const validadoresCompartidos = {
     },
     tipos: {
         cadena: (configuracion) => {
-            let string = configuracion.string
+            let string = configuracion?.string
             const nombreCampo = configuracion.nombreCampo
             const filtro = configuracion.filtro
             const sePermiteVacio = configuracion.sePermiteVacio
@@ -525,13 +525,15 @@ export const validadoresCompartidos = {
                     throw errorCapturado
                 }
             } else if (filtro === "sustitucionSinEspacios") {
-                const string = this.string
                 const filtro = /[^a-zA-Z0-9_\-\/\.]/g;
-                stringLimpio = string.replace(filtro, '');
+                string = string.replace(filtro, '');
+            } else if (filtro === "transformaABase64") {
+                const codigoDescuentoComoBuffer = Buffer.from(string, "utf8")
+                const codigoDescuentoB64 = codigoDescuentoComoBuffer.toString("base64")
+                string = codigoDescuentoB64
             } else if (filtro === "sustitucionConEspacios") {
-                const string = this.string
                 const filtro = /^[a-zA-Z0-9_ \-\/\.]+$/;
-                stringLimpio = string.replace(filtro, '');
+                string = string.replace(filtro, '');
             } else if (filtro === "cadenaConNumerosConDosDecimales") {
                 try {
                     const filtroComa = /^\d+\,\d{2}$/
@@ -539,7 +541,6 @@ export const validadoresCompartidos = {
                         const mensaje = `${nombreCampo} cambia la coma por un punto, gracias.`
                         throw new Error(mensaje)
                     }
-
 
                     const filtro = /^\d+\.\d{2}$/
                     if (!filtro.test(string)) {
@@ -594,7 +595,7 @@ export const validadoresCompartidos = {
                         }
                     }
                     const impedirCero = configuracion.impedirCero || "si"
-                    if                        (impedirCero !== "si" && impedirCero !== "no") {
+                    if (impedirCero !== "si" && impedirCero !== "no") {
                         const mensaje = `El validor de cadena esta mal configurado, impedirCero solo acepta si o no.`
                         throw new Error(mensaje)
                     }
@@ -815,7 +816,7 @@ export const validadoresCompartidos = {
                             limpiezaEspaciosAlrededor: "si"
                         })
                     })
-                }else if (filtro === "soloNumerosEnteros") {
+                } else if (filtro === "soloNumerosEnteros") {
                     array.every((cadena, index) => {
                         validadoresCompartidos.tipos.cadena({
                             string: cadena,

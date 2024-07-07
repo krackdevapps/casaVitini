@@ -42,7 +42,6 @@ export const preConfirmarReserva = async (entrada) => {
             ]
         })
         const enlacePDF = await crearEnlacePDF(reservaUID);
-
         resolverDetallesReserva.enlacePDF = enlacePDF;
         //enviarEmailReservaConfirmada(reservaUID);
         const ok = {
