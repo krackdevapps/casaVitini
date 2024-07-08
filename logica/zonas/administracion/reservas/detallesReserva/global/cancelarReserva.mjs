@@ -45,8 +45,8 @@ export const cancelarReserva = async (entrada, salida) => {
             throw new Error(error);
         }
         await eliminarEnlaceDePagoPorReservaUID(reservaUID)
-        const fechaEntrada_ISO = reserva.fechaEntrada;
-        const fechaSalida_ISO = reserva.fechaSalida;
+        const fechaEntrada = reserva.fechaEntrada;
+        const fechaSalida = reserva.fechaSalida;
         // extraer todos los apartamentos de la reserva
         const apartamentosDeLaReserva = obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
         for (const apartamento of apartamentosDeLaReserva) {
@@ -54,8 +54,8 @@ export const cancelarReserva = async (entrada, salida) => {
                 reserva: reserva,
                 apartamentoUID: apartamento.apartamentoUID,
                 tipoBloqueo: tipoBloqueo,
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 zonaBloqueo: "publico",
                 origen: "cancelacionDeReserva"
             };

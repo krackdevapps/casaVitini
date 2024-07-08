@@ -4,16 +4,16 @@ import { obtenerComportamientosPorRangoPorTipoIDV } from "../../../repositorio/c
 export const comportamientosPorRango = async (data) => {
     const contenedorCompportamientos = []
     const comportamientosDePrecioPorRango = await obtenerComportamientosPorRangoPorTipoIDV({
-        fechaEntrada_ISO: data.fechaEntrada_ISO,
-        fechaSalida_ISO: data.fechaSalida_ISO,
+        fechaEntrada: data.fechaEntrada,
+        fechaSalida: data.fechaSalida,
         tipoIDV: "porRango",
         arrayApartamentos: data.arrayApartamentos,
         estado: "activado"
     })
     contenedorCompportamientos.push(...comportamientosDePrecioPorRango)
     const comportamientosDePrecioPorFechaCreacion = await obtenerComportamientosPorCreacionPorFechaCracion({
-        fechaInicio_ISO: data.fechaEntrada_ISO,
-        fechaFinal_ISO: data.fechaSalida_ISO,
+        fechaInicio_ISO: data.fechaEntrada,
+        fechaFinal_ISO: data.fechaSalida,
         fechaCreacionReserva: data.fechaCreacionReserva,
         tipoIDV: "porCreacion",
         arrayApartamentos: data.arrayApartamentos,

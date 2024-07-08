@@ -12,23 +12,23 @@ export const apartamentosDisponiblesAdministracion = async (entrada, salida) => 
         IDX.empleados()
         IDX.control()
 
-        const fechaEntrada_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: entrada.body.fechaEntrada_ISO,
+        const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: entrada.body.fechaEntrada,
             nombreCampo: "La fecha de entrada de la reserva"
         })
-        const fechaSalida_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: entrada.body.fechaSalida_ISO,
+        const fechaSalida = await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: entrada.body.fechaSalida,
             nombreCampo: "La fecha de salida de la reserva"
         })
 
         await validadoresCompartidos.fechas.validacionVectorial({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             tipoVector: "diferente"
         })
         const apartamentosCribados = await apartamentosPorRango({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             zonaConfiguracionAlojamientoArray: ["privada", "global"],
             zonaBloqueo_array: ["privado", "global"],
         });

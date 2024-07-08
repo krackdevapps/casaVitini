@@ -4,12 +4,12 @@ import { validadoresCompartidos } from "../../sistema/validadores/validadoresCom
 
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
-export const actualizarDatosUsuarioDesdeMiCas = async (entrada, salida) => {
+export const actualizarDatosUsuarioDesdeMiCasa = async (entrada) => {
 
     try {
 
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.control()
 
         const usuarioIDX = entrada.session.usuario;
@@ -18,33 +18,31 @@ export const actualizarDatosUsuarioDesdeMiCas = async (entrada, salida) => {
             primerApellido: entrada.body.primerApellido,
             segundoApellido: entrada.body.segundoApellido,
             pasaporte: entrada.body.pasaporte,
-            email: entrada.body.email.DateTime,
-            telefono: entrada.body.telefono
-        }
-        validadoresCompartidos.usuarios.datosUsuario(datosUsuario)
-
-        const datosUnicos = {
-            usuarioIDX: usuarioIDX,
-            pasaporte: datosUsuario.pasaporte,
-            email: datosUsuario.email,
+            mail: entrada.body.mail,
+            telefono: entrada.body.telefono,
             operacion: "actualizar",
-        }
-        await campoDeTransaccion("iniciar")
+            usuario: usuarioIDX,
 
-        validadoresCompartidos.usuarios.unicidadPasaporteYCorrreo(datosUnicos)
-        datosUsuario.usuarioIDX = usuarioIDX
-        await actualizarDatos(datosUsuario)
+        }
+
+        validadoresCompartidos.usuarios.datosUsuario(datosUsuario)
+        await campoDeTransaccion("iniciar")
+        await validadoresCompartidos.usuarios.unicidadCorreo({
+            usuario: usuarioIDX,
+            mail: datosUsuario.mail,
+            operacion: "actualizar"
+        })
+
+        const usuraioActualziad = await actualizarDatos(datosUsuario)
 
         await campoDeTransaccion("confirmar")
-        if (resuelveActualizarDatosUsuario.rowCount === 1) {
-            const ok = {
-                ok: "Se ha actualiza correctamente los datos del usuario",
-                datosActualizados: resuelveActualizarDatosUsuario.rows
-            };
-            return ok
+        const ok = {
+            ok: "Se ha actualiza correctamente los datos del usuario",
+            datosActualizados: usuraioActualziad
         }
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
-    } 
+        throw errorCapturado
+    }
 }

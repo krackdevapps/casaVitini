@@ -8,7 +8,7 @@ export const obtenerOfertasPorRangoFechaPorEstadoPorTipo = async (data) => {
         const estadoOferta = data.estadoOferta
         const tipoOferta = data.tipoOferta
 
-        const consulta =`
+        const consulta = `
         SELECT 
         uid,
         to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio_Humano", 

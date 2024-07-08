@@ -51,8 +51,8 @@ export const cambiarTipoCliente = async (entrada, salida) => {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);
         }
-        const fechaEntrada_ISO = reserva.fechaEntrada;
-        const fechaSalida_ISO = reserva.fechaSalida_ISO;
+        const fechaEntrada = reserva.fechaEntrada;
+        const fechaSalida = reserva.fechaSalida;
         const estadoReservaCancelado = "cancelada";
 
         await campoDeTransaccion("iniciar")
@@ -75,8 +75,8 @@ export const cambiarTipoCliente = async (entrada, salida) => {
         }
         // Buscar reservas que interfieren para verificar que el pernoctante no esta en otra reserva del mismo rango
         const selectorReservaInterfirientes = await obtenerReservasPorRango({
-            fechaInicioRango_ISO: fechaEntrada_ISO,
-            fechaSalidaRango_ISO: fechaSalida_ISO
+            fechaInicioRango_ISO: fechaEntrada,
+            fechaSalidaRango_ISO: fechaSalida
         })
         let interruptorClienteEncontrado;
         if (selectorReservaInterfirientes.length > 0) {

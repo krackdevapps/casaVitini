@@ -1,43 +1,38 @@
 import { conexion } from "../../../../componentes/db.mjs"
 
-export const hoy = async (data) => {
+export const selector_hoy = async (data) => {
     try {
         const fechaActual_ISO = data.fechaActual_ISO
         const numeroPorPagina = data.numeroPorPagina
         const numeroPagina = data.numeroPagina
 
         const consulta = `
-        SELECT 
-            r.reserva,
-            to_char(r.entrada, 'DD/MM/YYYY') as "fechaEntrada",
-            to_char(r.salida, 'DD/MM/YYYY') as "fechaSalida",
-            r."estadoReserva",
-            COALESCE(
-                CONCAT_WS(' ', c.nombre, c."primerApellido", c."segundoApellido"),
-                CONCAT_WS(' ', ptr."nombreTitular")
-            ) AS "nombreCompleto",
-            c.pasaporte AS "pasaporteTitular",
-            ptr."pasaporteTitular" AS "pasaporteTitular",
-            c.email AS "emailTitular",
-            ptr."emailTitular" AS "emailTitular",
-            ptr."nombreTitular" AS "nombreCompleto",
-            to_char(r.creacion, 'DD/MM/YYYY') as creacion,
-            COUNT(*) OVER() as total_filas,
-        CASE
-            WHEN ptr.uid IS NOT NULL THEN CONCAT_WS(' ', ptr."nombreTitular", '(pool)')
-            END AS "nombreCompleto"
-        FROM 
-            reservas r
-        LEFT JOIN
-            "reservaTitulares" rt ON r.reserva = rt."reservaUID"
-        LEFT JOIN 
-            clientes c ON rt."titularUID" = c.uid
-        LEFT JOIN
-            "poolTitularesReserva" ptr ON r.reserva = ptr.reserva
+         SELECT r."reservaUID",
+                   to_char(r."fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada",
+                   to_char(r."fechaSalida", 'YYYY-MM-DD') as "fechaSalida",
+                   r."estadoReservaIDV",
+                   CASE
+                       WHEN c."clienteUID" IS NOT NULL THEN CONCAT_WS(' ', c.nombre, c."primerApellido", c."segundoApellido")
+                       WHEN ptr."titularPoolUID" IS NOT NULL THEN CONCAT_WS(' ', ptr."nombreTitular", '(pool)')
+                   END AS "nombreCompleto",
+                   CASE
+                       WHEN c."clienteUID" IS NOT NULL THEN c.pasaporte
+                       WHEN ptr."titularPoolUID" IS NOT NULL THEN CONCAT_WS(' ', ptr."pasaporteTitular", '(pool)')
+                   END AS "pasaporteTitular",
+                   CASE
+                       WHEN c."clienteUID" IS NOT NULL THEN c.mail
+                       WHEN ptr."titularPoolUID" IS NOT NULL THEN CONCAT_WS(' ', ptr."mailTitular", '(pool)')
+                   END AS "mailTitular",
+                   to_char(r."fechaCreacion", 'YYYY-MM-DD') as "fechaCreacion",
+                   COUNT(*) OVER() as total_filas
+            FROM reservas r
+            LEFT JOIN "reservaTitulares" rt ON r."reservaUID" = rt."reservaUID"
+            LEFT JOIN clientes c ON rt."titularUID" = c."clienteUID"
+            LEFT JOIN "poolTitularesReserva" ptr ON r."reservaUID" = ptr."reservaUID"
         WHERE 
-            entrada = $1
+            "fechaEntrada" = $1
         ORDER BY 
-            "entrada" ASC
+            "fechaEntrada" ASC
         LIMIT $2
         OFFSET $3;
         `;

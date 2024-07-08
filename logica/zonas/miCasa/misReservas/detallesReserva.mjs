@@ -27,13 +27,13 @@ export const detallesReserva = async (entrada, salida) => {
 
         const datosDelUsuario = await obtenerDatosPersonales(usuario)
         const usuarioMail = datosDelUsuario.mail;
-        if (!email) {
+        if (!usuarioMail) {
             const error = "Se necesita que definas tu dirección de correo elecroníco en Mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo eletroníco que usastes para confirmar la reserva. Es decir debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de correo electronico y confirmarlo con el correo de confirmacion que te enviaremos. Una vez hecho eso podras ver tus reservas";
             throw new Error(error);
         }
         // Comporbar si el email esta verificado
         const cuentaUsuario = await obtenerUsuario(usuario)
-        const estadoCuentaVerificada = cuentaUsuario.cuentaVerificada;
+        const estadoCuentaVerificada = cuentaUsuario.cuentaVerificadaIDV;
         if (estadoCuentaVerificada !== "si") {
             const error = "Tienes que verificar tu dirección de correo electronico para poder acceder a las reservas asociadas a tu direcíon de correo electroníco. Para ello pulsa en verificar tu correo electrónico.";
             throw new Error(error);
@@ -41,9 +41,9 @@ export const detallesReserva = async (entrada, salida) => {
         await obtenerReservaPorReservaUID(reservaUID)
 
         const titular = await obtenerTitularReservaPorReservaUID(reservaUID)
-        const titularUID = titular.titularUID
-        const clienteUID = titular.clienteUID
-        if (!titularUID) {
+        const titularUID = titular?.titularUID
+        const clienteUID = titular?.clienteUID
+        if (titularUID) {
             const cliente = await obtenerDetallesCliente(clienteUID)
             const clienteMail = cliente.mail
             if (clienteMail !== usuarioMail) {
@@ -52,20 +52,29 @@ export const detallesReserva = async (entrada, salida) => {
             }
         } else {
             const titularPool = await obtenerTitularPoolReservaPorReservaUID(reservaUID)
-            const titularPoolMail = titularPool.mail
+            const titularPoolMail = titularPool?.mailTitular
             if (titularPoolMail !== usuarioMail) {
                 const error = "No tienes acceso a esta reserva";
                 throw new Error(error);
             }
         }
 
-        const metadatos = {
-            reservaUID: reservaUID,
-            // solo: solo
-        };
-        const resuelveDetallesReserva = await detallesReserva_(metadatos);
-        delete resuelveDetallesReserva.reserva.origen;
-        salida.json(resuelveDetallesReserva);
+        const resuelveDetallesReserva = await detallesReserva_({
+            reservaUID,
+            capas: [
+                "titular",
+                "alojamiento",
+                "pernoctantes",
+                "desgloseFinanciero"
+            ]
+
+        });
+        delete resuelveDetallesReserva.global.origenIDV;
+        const ok = {
+            ok: "Aquí estan los detalles de su reserva",
+            reserva: resuelveDetallesReserva
+        }
+        return ok
 
     } catch (errorCapturado) {
         throw errorCapturado

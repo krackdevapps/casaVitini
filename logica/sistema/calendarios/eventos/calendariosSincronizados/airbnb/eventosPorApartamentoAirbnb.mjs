@@ -60,33 +60,33 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
         const arrayEventosAirbnb = eventosCalendarioAirbnb.calendariosPorApartamento[0].calendarioObjeto
         for (const detallesDelEvento of arrayEventosAirbnb) {
             const eventoUID = detallesDelEvento.uid
-            const fechaEntrada_ISO = detallesDelEvento.fechaInicio
-            const fechaSalida_ISO = detallesDelEvento.fechaFinal
+            const fechaEntrada = detallesDelEvento.fechaInicio
+            const fechaSalida = detallesDelEvento.fechaFinal
             delete detallesDelEvento.fechaInicio
             delete detallesDelEvento.fechaFinal
             uidTemporalContador = uidTemporalContador + 1
             // Definir las fechas en formato ISO
             detallesDelEvento.eventoUID = "calendarioAirbnbUID_" + calendarioUID + "_apartamentoIDV_" + apartamentoIDV + "_uidEvento_" + uidTemporalContador
-            const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada_ISO);
-            const fechaSalida_objeto = DateTime.fromISO(fechaSalida_ISO);
+            const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada);
+            const fechaSalida_objeto = DateTime.fromISO(fechaSalida);
             const diferenciaEnDias = fechaSalida_objeto.diff(fechaEntrada_objeto, 'days').days;
             detallesDelEvento.duracion_en_dias = diferenciaEnDias + 1
-            detallesDelEvento.fechaEntrada_ISO = fechaEntrada_ISO
-            detallesDelEvento.fechaSalida_ISO = fechaSalida_ISO
+            detallesDelEvento.fechaEntrada = fechaEntrada
+            detallesDelEvento.fechaSalida = fechaSalida
             detallesDelEvento.apartamentoUI = apartamentoUI
             detallesDelEvento.apartamentoIDV = apartamentoIDV
             // Hay un error por aqui, encontrarlo
-            if (controlRango(fechaCalendario_ConCeros, fechaEntrada_ISO, fechaSalida_ISO)) {
+            if (controlRango(fechaCalendario_ConCeros, fechaEntrada, fechaSalida)) {
                 eventosSeleccionados.push(detallesDelEvento)
             }
         }
         for (const detallesDelEvento of arrayEventosAirbnb) {
             const eventoUID = detallesDelEvento.uid
-            const fechaEntrada_ISO = detallesDelEvento.fechaEntrada_ISO
-            const fechaSalida_ISO = detallesDelEvento.fechaSalida_ISO
+            const fechaEntrada = detallesDelEvento.fechaEntrada
+            const fechaSalida = detallesDelEvento.fechaSalida
             const uidEvento = detallesDelEvento.uidEvento
             detallesDelEvento.tipoEvento = "calendarioAirbnb"
-            const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO)
+            const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada, fechaSalida)
             for (const fechaInterna_ISO of arrayConFechasInternas) {
                 const fechaInternaObjeto = DateTime.fromISO(fechaInterna_ISO)
                 const diaFechaInterna = fechaInternaObjeto.day
@@ -94,8 +94,8 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
                 const anoFechaInterna = fechaInternaObjeto.year
                 const fechaInternaHumana = `${anoFechaInterna}-${mesFechaInterna}-${diaFechaInterna}`
                 const estructuraReservaEnDia = {
-                    fechaEntrada_ISO: fechaEntrada_ISO,
-                    fechaSalida_ISO: fechaSalida_ISO,
+                    fechaEntrada: fechaEntrada,
+                    fechaSalida: fechaSalida,
                     apartamentoIDV: apartamentoIDV,
                     apartamentoUI: apartamentoUI,
                     eventoUID: detallesDelEvento.eventoUID

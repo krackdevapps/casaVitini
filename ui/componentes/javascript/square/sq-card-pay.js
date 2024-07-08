@@ -40,13 +40,13 @@ async function CardPay(fieldEl, buttonEl) {
     const destinoDinamico = document.querySelector("[pasarelaZonaDePago]")?.getAttribute("pasarelaZonaDePago")
     if (!destinoDinamico) {
       const error = "sq-cardpay necesita un elmeneto pasarela=zonaDePago donde se defina el objeto"
-      return casaVitini.ui.vistas.advertenciaInmersiva(error)
+      return casaVitini.ui.componentes.advertenciaInmersiva(error)
     }
     if (destinoDinamico === "confirmarReserva") {
       try {
         casaVitini.ui.vistas.reservasNuevo.controlPrevioEnvioDatos()
       } catch (errorCapturado) {
-        return casaVitini.ui.vistas.advertenciaInmersiva(error.message)
+        return casaVitini.ui.componentes.advertenciaInmersiva(error.message)
       }
     }
     try {
@@ -64,10 +64,10 @@ async function CardPay(fieldEl, buttonEl) {
       if (e.message) {
         casaVitini.componentes.flujoPagoUI.errorInfo(e.message)
         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-        
+
         //window.showError(`Error: ${e.message}`);
       } else {
-        
+
         const errorGenerico = "Ha ocurrido un error"
         casaVitini.componentes.flujoPagoUI.errorInfo(errorGenerico)
         window.showError('Something went wrong');

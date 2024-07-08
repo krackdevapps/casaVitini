@@ -7,7 +7,7 @@ export const obtenerTitularReservaPoolPorMail = async (mail) => {
         FROM
         "poolTitularesReserva"
         WHERE
-        "mail" = $1`;
+        "mailTitular" = $1`;
 
         const resuelve = await conexion.query(consulta, [mail])
         return resuelve.rows

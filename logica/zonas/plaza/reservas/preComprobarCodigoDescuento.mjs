@@ -32,7 +32,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             })
 
             codigoDescuentoArrayAsci.forEach((codigo) => {
-             const codigoDescuentoB64 = validadoresCompartidos.tipos.cadena({
+                const codigoDescuentoB64 = validadoresCompartidos.tipos.cadena({
                     string: codigo,
                     nombreCampo: "No has escrito ningún codigo de descuento, recuerda que",
                     filtro: "transformaABase64",
@@ -47,7 +47,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             throw new Error(error)
         }
 
-        console.log("codigosDescuentoArray", codigosDescuentoArray)
+
 
         const reserva = entrada.body.reserva;
         await validarObjetoReserva({
@@ -113,7 +113,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
                 throw new Error(error)
             } else {
                 const ok = {
-                    error: "Tu codigo es valido, pero para acceder a esta oferta debes de cumplir las condiciones de la oferta, revisa las condicones de la oferta para ver si las cumples",
+                    error: "Tu código es válido, pero para acceder a esta oferta debes cumplir con las condiciones establecidas. Revisa las condiciones de la oferta para verificar si las cumples. Fíjate en el apartado 'Condiciones de la oferta'. En este apartado encontrarás las condiciones y una definición de las mismas.",
                     ofertas: ofertasExistentesPeroConCondicionesQueNoSeCumplen,
                 }
                 return ok

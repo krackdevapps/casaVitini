@@ -3645,9 +3645,9 @@
     align-items: stretch;
     justify-content: center;
     align-content: center;
-    gap: 4px;
+    gap: 6px;
     background: rgba(255, 255, 255, 0.3);
-    padding: 4px;
+    padding: 6px;
     border-radius: 13px;
 }
 

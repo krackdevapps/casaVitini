@@ -84,10 +84,10 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
             bloqueoTemporal: bloqueoTemporal
         })
         // Seleccionar apartamentos bloqueados
-        const obtenerFechasInternas = (fechaEntrada_ISO, fechaSalida_ISO) => {
+        const obtenerFechasInternas = (fechaEntrada, fechaSalida) => {
             const fechasInternas = [];
-            let fechaActual = DateTime.fromISO(fechaEntrada_ISO);
-            const fechaFin = DateTime.fromISO(fechaSalida_ISO);
+            let fechaActual = DateTime.fromISO(fechaEntrada);
+            const fechaFin = DateTime.fromISO(fechaSalida);
             while (fechaActual <= fechaFin) {
                 const diaInterno = fechaActual.day;
                 const mesInterno = fechaActual.month;
@@ -110,9 +110,9 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
                 apartamentosDeLaReserva.forEach((apartamento) => {
                     apartamentosPorReservaArray.push(apartamento.apartamentoIDV);
                 });
-                const fechaEntrada_ISO = reservaCoincidente.fechaEntrada_ISO;
-                const fechaSalida_ISO = reservaCoincidente.fechaSalida_ISO;
-                const fechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO);
+                const fechaEntrada = reservaCoincidente.fechaEntrada;
+                const fechaSalida = reservaCoincidente.fechaSalida;
+                const fechasInternas = obtenerFechasInternas(fechaEntrada, fechaSalida);
                 fechasInternas.forEach((fechaInterna) => {
                     if (!objetoFechasInternas[fechaInterna]?.apartamentos) {
                         const detalleDia = {
@@ -132,11 +132,11 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         for (const bloqueoCoincidente of bloqueosCoincidentes) {
             const bloqueoUID = bloqueoCoincidente.uid;
             const apartamentoIDV = bloqueoCoincidente.apartamento;
-            const fechaEntrada_ISO = bloqueoCoincidente.fechaEntrada_ISO;
-            const fechaSalida_ISO = bloqueoCoincidente.fechaSalida_ISO;
+            const fechaEntrada = bloqueoCoincidente.fechaEntrada;
+            const fechaSalida = bloqueoCoincidente.fechaSalida;
             const tipoBloqueo = bloqueoCoincidente.tipoBloqueo;
             if (tipoBloqueo === "rangoTemporal") {
-                const fechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO);
+                const fechasInternas = obtenerFechasInternas(fechaEntrada, fechaSalida);
                 fechasInternas.forEach((fechaInterna) => {
                     if (!objetoFechasInternas[fechaInterna]?.apartamentos) {
                         const detalleDia = {
@@ -236,5 +236,5 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         salida.json(objetofinal);
     } catch (errorCapturado) {
         throw errorCapturado
-    } 
+    }
 }

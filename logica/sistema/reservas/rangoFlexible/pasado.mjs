@@ -48,15 +48,15 @@ export const validadorPasado = async (data) => {
         const bloqueosSeleccionados = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
         const contenedorBloqueosEncontrados = []
         for (const detallesDelBloqueo of bloqueosSeleccionados) {
-            const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada_ISO
-            const fechaSalidaBloqueo_ISO = detallesDelBloqueo.fechaSalida_ISO
+            const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada
+            const fechaSalidaBloqueo_ISO = detallesDelBloqueo.fechaSalida
             const apartamento = detallesDelBloqueo.apartamento
             const bloqueoUID = detallesDelBloqueo.uid
             const motivo = detallesDelBloqueo.motivo
             const tipoBloqueo = detallesDelBloqueo.tipoBloqueo
             const estructura = {
-                fechaEntrada_ISO: fechaEntradaBloqueo_ISO,
-                fechaSalida_ISO: fechaSalidaBloqueo_ISO,
+                fechaEntrada: fechaEntradaBloqueo_ISO,
+                fechaSalida: fechaSalidaBloqueo_ISO,
                 uid: bloqueoUID,
                 tipoElemento: "bloqueo",
                 apartamentoIDV: apartamento,
@@ -67,7 +67,7 @@ export const validadorPasado = async (data) => {
         }
         const contenedorReservaEncontradas = []
 
-        const reservasSeleccionadas = await reservasPorRangoPorApartamentosArray( {
+        const reservasSeleccionadas = await reservasPorRangoPorApartamentosArray({
             fechaInicioRango_ISO: fechaSeleccionadaParaPasado_ISO,
             fechaFinRango_ISO: fechaEntradaReserva_ISO,
             reservaUID: reservaUID,
@@ -76,12 +76,12 @@ export const validadorPasado = async (data) => {
 
         for (const detallesReserva of reservasSeleccionadas) {
             const reservaUID = detallesReserva.reservaUID
-            const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
-            const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
+            const fechaEntrada = detallesReserva.fechaEntrada
+            const fechaSalida = detallesReserva.fechaSalida
             const apartamentos = detallesReserva.apartamentos
             const estructura = {
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 uid: reservaUID,
                 tipoElemento: "reserva",
                 apartamentos: apartamentos
@@ -120,8 +120,8 @@ export const validadorPasado = async (data) => {
                     if (rangoInterno) {
                         const estructura = {
                             apartamentoIDV: apartamentoIDV,
-                            fechaEntrada_ISO: fechaInicio,
-                            fechaSalida_ISO: fechaFinal,
+                            fechaEntrada: fechaInicio,
+                            fechaSalida: fechaFinal,
                             tipoElemento: "eventoCalendarioSincronizado",
                             nombreEvento: nombreEvento,
                             descripcion: descripcion,
@@ -141,8 +141,8 @@ export const validadorPasado = async (data) => {
         const contenedorDeEventosQueDejanSinRangoDisponible = []
         // Ojo: lo que se es haciendo aqui en este loop no es ver cuales estan dentro del mes, eso ya esta hecho, aquí lo que se mira es si los eventos estan enganchados al a fecha de entrada de la reserva para ver en primera instancia si hay algun tipo de rango disponible
         for (const detallesDelEvento of contenedorGlobal) {
-            const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada_ISO)
-            const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida_ISO)
+            const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada)
+            const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida)
             const tipoElemento = detallesDelEvento.tipoElemento
             if ((tipoElemento === "reserva" || tipoElemento === "eventoSincronizado")
                 &&
@@ -178,8 +178,8 @@ export const validadorPasado = async (data) => {
         // Aqui se mira si habiendo algo de rango disponible. Aqui entonces se mira cuanto rango disponbile hay en el mes solicitaado
         const contenedorQueDejanRangoDisponbile = []
         for (const detallesDelEvento of contenedorGlobal) {
-            const fechaInicioEvento_ISO = detallesDelEvento.fechaEntrada_ISO
-            const fechaFinEvento_ISO = detallesDelEvento.fechaSalida_ISO
+            const fechaInicioEvento_ISO = detallesDelEvento.fechaEntrada
+            const fechaFinEvento_ISO = detallesDelEvento.fechaSalida
             const tipoElemento = detallesDelEvento.tipoElemento
             if (tipoElemento === "reserva" || tipoElemento === "eventoSincronizado") {
                 const eventoBloqueanteDeRango = await selectorRangoUniversal({
@@ -213,8 +213,8 @@ export const validadorPasado = async (data) => {
         }
         if (contenedorQueDejanRangoDisponbile.length) {
             const eventosOrdenadorPorFechaDeSalida = contenedorQueDejanRangoDisponbile.sort((evento1, evento2) => {
-                const fechaSalidaA = DateTime.fromISO(evento1.fechaSalida_ISO); // Convertir fecha de salida del evento 1 a objeto DateTime
-                const fechaSalidaB = DateTime.fromISO(evento2.fechaSalida_ISO); // Convertir fecha de salida del evento 2 a objeto DateTime
+                const fechaSalidaA = DateTime.fromISO(evento1.fechaSalida); // Convertir fecha de salida del evento 1 a objeto DateTime
+                const fechaSalidaB = DateTime.fromISO(evento2.fechaSalida); // Convertir fecha de salida del evento 2 a objeto DateTime
                 // Ordenar de manera descendente según la fecha de salida
                 if (fechaSalidaA < fechaSalidaB) {
                     return 1; // Si la fecha de salida del evento 1 es menor, lo colocamos después en el array
@@ -225,10 +225,10 @@ export const validadorPasado = async (data) => {
                 }
             });
             // Hay mas de un evento con la fecha mas cercana?
-            let fechaMasCercana = eventosOrdenadorPorFechaDeSalida[0].fechaSalida_ISO
+            let fechaMasCercana = eventosOrdenadorPorFechaDeSalida[0].fechaSalida
             let sePermiteElMismoDia = "si"
             for (const detallesDeLosEventosOrdenados of eventosOrdenadorPorFechaDeSalida) {
-                const fechaPorBuscar = detallesDeLosEventosOrdenados.fechaSalida_ISO
+                const fechaPorBuscar = detallesDeLosEventosOrdenados.fechaSalida
                 const tipoElemento = detallesDeLosEventosOrdenados.tipoElemento
                 if (fechaMasCercana === fechaPorBuscar &&
                     tipoElemento === "bloqueo") {

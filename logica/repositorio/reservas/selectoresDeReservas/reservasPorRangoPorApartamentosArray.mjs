@@ -9,8 +9,8 @@ export const reservasPorRangoPorApartamentosArray = async (metadatos) => {
         const consultaReservas = `
         SELECT 
         r."reservaUID",        
-        to_char(r."fechaEntrada", 'YYYY-MM-DD') AS "fechaEntrada_ISO", 
-        to_char(r."fechaSalida", 'YYYY-MM-DD') AS "fechaSalida_ISO",
+        to_char(r."fechaEntrada", 'YYYY-MM-DD') AS "fechaEntrada", 
+        to_char(r."fechaSalida", 'YYYY-MM-DD') AS "fechaSalida",
         ARRAY_AGG(ra."apartamentoIDV") AS "apartamentosIDV"    
         FROM 
         reservas r

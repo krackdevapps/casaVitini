@@ -42,13 +42,13 @@ export const eventosTodosLosApartamentos = async (fecha) => {
         for (const detallesReserva of reservasSelecciondas) {
             const reservaUID = detallesReserva.reserva
             const apartamentoUID = detallesReserva.uid
-            const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
-            const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
+            const fechaEntrada = detallesReserva.fechaEntrada
+            const fechaSalida = detallesReserva.fechaSalida
             const apartamentoIDVReserva = detallesReserva.apartamentoIDV
             detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
             detallesReserva.tipoEvento = "todosLosApartamentos"
             detallesReserva.eventoUID = "todosLosApartamentos_" + apartamentoUID
-            const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO)
+            const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada, fechaSalida)
             for (const fechaInterna_ISO of arrayConFechasInternas) {
                 const fechaInternaObjeto = DateTime.fromISO(fechaInterna_ISO)
                 const diaFechaInterna = fechaInternaObjeto.day
@@ -59,8 +59,8 @@ export const eventosTodosLosApartamentos = async (fecha) => {
                     eventoUID: "todosLosApartamentos_" + apartamentoUID,
                     reservaUID: reservaUID,
                     apartamentoUID: apartamentoUID,
-                    fechaEntrada_ISO: fechaEntrada_ISO,
-                    fechaSalida_ISO: fechaSalida_ISO,
+                    fechaEntrada: fechaEntrada,
+                    fechaSalida: fechaSalida,
                     apartamentoIDV: apartamentoIDVReserva,
                     apartamentoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDVReserva)
                 }

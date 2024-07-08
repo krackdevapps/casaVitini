@@ -4,12 +4,13 @@ import { bloquearApartamentos } from "../../../../../sistema/bloqueos/bloquearAp
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
+import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
 
-export const eliminarApartamentoReserva = async (entrada, salida) => {
+export const eliminarApartamentoReserva = async (entrada) => {
     const mutex = new Mutex()
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -57,16 +58,16 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
         }
         // Comprobar si existen totales en esta reserva
         const estadoInfomracionFinanciera = "actualizar";
-        const fechaEntrada_ISO = reserva.fechaEntrada;
-        const fechaSalida_ISO = reserva.fechaSalida;
+        const fechaEntrada = reserva.fechaEntrada;
+        const fechaSalida = reserva.fechaSalida;
 
         if (tipoBloqueo === "permanente" || tipoBloqueo === "rangoTemporal") {
             const metadatos = {
                 reserva: reservaUID,
                 apartamentoUID: apartamentoUID,
                 tipoBloqueo: tipoBloqueo,
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 zonaBloqueo: "publico",
                 origen: "eliminacionApartamentoDeReserva"
             };
@@ -76,7 +77,7 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
         await eliminarApartamentoReserva({
             reservaUID: reservaUID,
             apartamentoUID: apartamentoUID
-        })   
+        })
         await actualizadorIntegradoDesdeInstantaneas(reservaUID)
         await campoDeTransaccion("confirmar")
         const ok = {};
@@ -91,10 +92,9 @@ export const eliminarApartamentoReserva = async (entrada, salida) => {
             ok.ok = "Se ha eliminado el apartamento de la reserva y se ha liberado";
         }
         return ok
-
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release()

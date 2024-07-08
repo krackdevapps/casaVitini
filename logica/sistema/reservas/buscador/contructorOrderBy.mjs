@@ -2,11 +2,16 @@ import { validadoresCompartidos } from "../../validadores/validadoresCompartidos
 
 export const constructorOrderBy = async (nombreColumna, sentidoColumna) => {
 
+    if (!nombreColumna) {
+        return ""
+    }
+
     const columnasVirtuales = [
         'nombreCompleto',
         'pasaporteTitular',
-        'emailTitular'
+        'mailTitular'
     ];
+
 
     if (!columnasVirtuales.includes(nombreColumna)) {
         await validadoresCompartidos.baseDeDatos.validarNombreColumna({
@@ -21,13 +26,13 @@ export const constructorOrderBy = async (nombreColumna, sentidoColumna) => {
         } else if (sentidoColumna === "descendente") {
             return "DESC";
         } else {
-            return null
+            return ""
         }
     }
 
     const nombreColumnaSQL = (nombreColumna) => {
         if (!nombreColumna || nombreColumna === "") {
-            return null;
+            return "";
         } else {
             return nombreColumna
         }
@@ -38,7 +43,7 @@ export const constructorOrderBy = async (nombreColumna, sentidoColumna) => {
     if (nombreColumnaSQL_ && sentidoColumnaSQL_) {
         const inyector = `
         ORDER BY
-        ${nombreColumnaSQL_} ${sentidoColumnaSQL_}
+        "${nombreColumnaSQL_}" ${sentidoColumnaSQL_}
         `
         return inyector
     } else {

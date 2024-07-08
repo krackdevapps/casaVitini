@@ -54,8 +54,8 @@ export const insertarDescuentoPorAdministrador = async (data) => {
         await constructorInstantaneaNoches({
             estructura,
             instantaneaNoches,
-            fechaEntrada_ISO: fechaEntrada,
-            fechaSalida_ISO: fechaSalida,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             fechaCreacion_ISO: fechaCreacion_simple,
             apartamentosArray
         })
@@ -63,8 +63,8 @@ export const insertarDescuentoPorAdministrador = async (data) => {
         await totalesBasePorRango({
             estructura,
             instantaneaNoches,
-            fechaEntrada_ISO: fechaEntrada,
-            fechaSalida_ISO: fechaSalida,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             apartamentosArray
         })
         constructorEstructuraDescuentos(estructura)

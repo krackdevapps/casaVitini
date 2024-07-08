@@ -22,8 +22,8 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
 
         await mutex.acquire();
 
-        const fechaEntrada_ISO = entrada.body.fechaEntrada_ISO;
-        const fechaSalida_ISO = entrada.body.fechaSalida_ISO;
+        const fechaEntrada = entrada.body.fechaEntrada;
+        const fechaSalida = entrada.body.fechaSalida;
         const apartamentos = validadoresCompartidos.tipos.array({
             array: entrada.body.apartamentos,
             nombreCampo: "El array de apartamentoIDV",
@@ -32,15 +32,15 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         })
         // Control validez fecha
         await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: fechaEntrada_ISO,
+            fecha_ISO: fechaEntrada,
             nombreCampo: "La fecha de entrada de la reserva"
         })
         await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: fechaSalida_ISO,
+            fecha_ISO: fechaSalida,
             nombreCampo: "La fecha de salida de la reserva"
         })
-        const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada_ISO)
-        const fechaSalida_objeto = DateTime.fromISO(fechaSalida_ISO)
+        const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada)
+        const fechaSalida_objeto = DateTime.fromISO(fechaSalida)
 
         await eliminarBloqueoCaducado();
         // validar que en el array hay un maximo de posiciones no superior al numero de filas que existen en los apartementos
@@ -65,8 +65,8 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         const rol = entrada.session.rol;
 
         const resuelveApartamentosDisponibles = await apartamentosPorRango({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             zonaConfiguracionAlojamientoArray: ["privada", "global"],
             zonaBloqueo_array: ["privado", "global"],
         });
@@ -91,8 +91,8 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             const estadoPago = "noPagado";
             await campoDeTransaccion("iniciar")
             const reservaInsertada = await insertarReservaAdministrativa({
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 estadoReserva: estadoReserva,
                 origen: origen,
                 creacionFechaReserva: creacionFechaReserva,

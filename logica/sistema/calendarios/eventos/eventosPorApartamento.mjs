@@ -57,14 +57,14 @@ export const eventosPorApartamneto = async (metadatos) => {
         for (const detallesReserva of reservasSelecciondas) {
             const reservaUID = detallesReserva.reservaUID
             const apartamentoUID = detallesReserva.apartamentoUID
-            const fechaEntrada_ISO = detallesReserva.fechaEntrada
-            const fechaSalida_ISO = detallesReserva.fechaSalida
+            const fechaEntrada = detallesReserva.fechaEntrada
+            const fechaSalida = detallesReserva.fechaSalida
             const apartamentoIDVReserva = detallesReserva.apartamentoIDV
             detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
             detallesReserva.tipoEvento = "porApartamento"
             detallesReserva.eventoUID = "porApartamento_" + apartamentoUID
             detallesReserva.apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDVReserva)
-            const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO)
+            const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada, fechaSalida)
             for (const fechaInterna_ISO of arrayConFechasInternas) {
                 const fechaInternaObjeto = DateTime.fromISO(fechaInterna_ISO)
                 const diaFechaInterna = fechaInternaObjeto.day
@@ -73,8 +73,8 @@ export const eventosPorApartamneto = async (metadatos) => {
                 const fechaInternaHumana = `${anoFechaInterna}-${mesFechaInterna}-${diaFechaInterna}`
                 const estructuraReservaEnDia = {
                     eventoUID: "porApartamento_" + apartamentoUID,
-                    fechaEntrada_ISO: fechaEntrada_ISO,
-                    fechaSalida_ISO: fechaSalida_ISO
+                    fechaEntrada: fechaEntrada,
+                    fechaSalida: fechaSalida
                 }
                 if (calendarioObjeto[fechaInternaHumana]) {
                     calendarioObjeto[fechaInternaHumana].push(estructuraReservaEnDia)

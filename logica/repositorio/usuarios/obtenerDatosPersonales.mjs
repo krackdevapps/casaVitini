@@ -9,7 +9,7 @@ export const obtenerDatosPersonales = async (usuario) => {
         "segundoApellido",
         pasaporte,
         telefono,
-        email
+        mail
         FROM 
         "datosDeUsuario"
         WHERE 

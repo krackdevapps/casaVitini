@@ -32,8 +32,8 @@ export const validarComportamiento = async (comportamiento) => {
             });
 
             await validadoresCompartidos.fechas.validacionVectorial({
-                fechaEntrada_ISO: fechaInicio_ISO,
-                fechaSalida_ISO: fechaFinal_ISO,
+                fechaEntrada: fechaInicio_ISO,
+                fechaSalida: fechaFinal_ISO,
                 tipoVector: "igual"
             })
 
@@ -74,7 +74,7 @@ export const validarComportamiento = async (comportamiento) => {
                 }
 
                 const apartamentos = perfil.apartamentos
-                   for (const [apartamentoIDV, comportamiento] of Object.entries(apartamentos)) {
+                for (const [apartamentoIDV, comportamiento] of Object.entries(apartamentos)) {
 
                     validadoresCompartidos.tipos.cadena({
                         string: apartamentoIDV,
@@ -165,8 +165,8 @@ export const validarComportamiento = async (comportamiento) => {
             });
 
             await validadoresCompartidos.fechas.validacionVectorial({
-                fechaEntrada_ISO: fechaInicio_ISO,
-                fechaSalida_ISO: fechaFinal_ISO,
+                fechaEntrada: fechaInicio_ISO,
+                fechaSalida: fechaFinal_ISO,
                 tipoVector: "igual"
             })
 
@@ -230,8 +230,8 @@ export const validarComportamiento = async (comportamiento) => {
             });
 
             await validadoresCompartidos.fechas.validacionVectorial({
-                fechaEntrada_ISO: fechaInicio_ISO,
-                fechaSalida_ISO: fechaFinal_ISO,
+                fechaEntrada: fechaInicio_ISO,
+                fechaSalida: fechaFinal_ISO,
                 tipoVector: "igual"
             })
             const fechaInicio_creacionReserva = await validadoresCompartidos.fechas.validarFecha_ISO({
@@ -244,8 +244,8 @@ export const validarComportamiento = async (comportamiento) => {
             });
 
             await validadoresCompartidos.fechas.validacionVectorial({
-                fechaEntrada_ISO: fechaInicio_creacionReserva,
-                fechaSalida_ISO: fechaFinal_creacionReserva,
+                fechaEntrada: fechaInicio_creacionReserva,
+                fechaSalida: fechaFinal_creacionReserva,
                 tipoVector: "igual"
             })
             const apartamentos = validadoresCompartidos.tipos.array({

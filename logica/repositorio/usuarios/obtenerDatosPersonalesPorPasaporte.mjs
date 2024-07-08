@@ -1,35 +1,14 @@
 import { conexion } from "../../componentes/db.mjs";
 
-export const obtenerDatosPersonalesPorPasaporteDual = async (data) => {
+export const obtenerDatosPersonalesPorPasaporte = async (pasaporte) => {
     try {
-
-        const pasaporte = data.pasaporte
-        const operacion = data.operacion
-        const usuario = data.usuario
-
-        const constructorSQL = (operacion, usuario) => {
-            try {
-                if (operacion === "actualizar") {
-                    return `AND "usuariosIDX" <> '${usuario}'`
-                } else if (operacion === "crear") {
-                    return ""
-                } else {
-                    const error = "El validador de unicidadPasaporteYCorrreo esta mal configurado. Debe de especificarse el tipo de operacion."
-                    throw new Error(error)
-                }
-            } catch (errorCapturado) {
-                throw errorCapturado
-            }
-        }
-        const inyectorSQL = constructorSQL(operacion, usuario)
         const consulta = `
         SELECT 
         *
         FROM 
         "datosDeUsuario"
         WHERE
-        pasaporte = $1
-        ${inyectorSQL};`;
+        pasaporte = $1;`;
         const resuelve = await conexion.query(consulta, [pasaporte]);
         return resuelve.rows[0]
     } catch (errorCapturado) {

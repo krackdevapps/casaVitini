@@ -5,8 +5,8 @@ import { porRango_soloDentroDelRango } from "../../../repositorio/reservas/busca
 
 export const rango = async (data) => {
     try {
-        const fechaEntrada_ISO = data.fechaEntrada_ISO;
-        const fechaSalida_ISO = data.fechaSalida_ISO;
+        const fechaEntrada = data.fechaEntrada;
+        const fechaSalida = data.fechaSalida;
         const tipoCoincidencia = data.tipoCoincidencia;
         const nombreColumna = data.nombreColumna;
         const sentidoColumna = data.sentidoColumna;
@@ -14,18 +14,17 @@ export const rango = async (data) => {
         const numeroPorPagina = data.numeroPorPagina;
 
         if (tipoCoincidencia === "cualquieraQueCoincida") {
-
             const reservas = await porRango_cualquieraQueCoincida({
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 numeroPorPagina: numeroPorPagina,
                 numeroPagina: numeroPagina,
                 sentidoColumna: sentidoColumna,
-                numeroPagina: numeroPagina
+                nombreColumna: nombreColumna
             })
 
-            const consultaConteoTotalFilas = reservas?.total_filas
-                ? reservas.total_filas
+            const consultaConteoTotalFilas = reservas.length > 0
+                ? reservas[0].total_filas
                 : 0;
             for (const detallesFila of reservas) {
                 delete detallesFila.total_filas;
@@ -39,8 +38,8 @@ export const rango = async (data) => {
                 totalReservas: Number(consultaConteoTotalFilas),
                 paginasTotales: totalPaginas,
                 tipoConsulta: "rango",
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 pagina: Number(corretorNumeroPagina) + 1,
                 nombreColumna: nombreColumna,
                 sentidoColumna: sentidoColumna,
@@ -49,15 +48,15 @@ export const rango = async (data) => {
             return ok;
         } else if (tipoCoincidencia === "soloDentroDelRango") {
             const reservas = await porRango_soloDentroDelRango({
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 numeroPorPagina: numeroPorPagina,
                 numeroPagina: numeroPagina,
                 nombreColumna: nombreColumna,
                 sentidoColumna: sentidoColumna
             })
-            const consultaConteoTotalFilas = reservas?.total_filas
-                ? reservas.total_filas
+            const consultaConteoTotalFilas = reservas.length > 0
+                ? reservas[0].total_filas
                 : 0;
             for (const detallesFila of reservas) {
                 delete detallesFila.total_filas;
@@ -71,8 +70,8 @@ export const rango = async (data) => {
                 totalReservas: Number(consultaConteoTotalFilas),
                 paginasTotales: totalPaginas,
                 tipoConsulta: "rango",
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 pagina: Number(corretorNumeroPagina) + 1,
                 nombreColumna: nombreColumna,
                 sentidoColumna: sentidoColumna,
@@ -81,14 +80,14 @@ export const rango = async (data) => {
             return ok
         } else if (tipoCoincidencia === "porFechaDeEntrada") {
             const reservas = await porRango_porFechaDeEntrada({
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
                 numeroPorPagina: numeroPorPagina,
                 numeroPagina: numeroPagina,
                 nombreColumna: nombreColumna,
                 sentidoColumna: sentidoColumna
             })
-            const consultaConteoTotalFilas = reservas?.total_filas
-                ? reservas.total_filas
+            const consultaConteoTotalFilas = reservas.length > 0
+                ? reservas[0].total_filas
                 : 0;
             for (const detallesFila of reservas) {
                 delete detallesFila.total_filas;
@@ -102,8 +101,8 @@ export const rango = async (data) => {
                 totalReservas: Number(consultaConteoTotalFilas),
                 paginasTotales: totalPaginas,
                 tipoConsulta: "rango",
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 pagina: Number(corretorNumeroPagina) + 1,
                 nombreColumna: nombreColumna,
                 sentidoColumna: sentidoColumna,
@@ -113,14 +112,14 @@ export const rango = async (data) => {
         } else if (tipoCoincidencia === "porFechaDeSalida") {
 
             const reservas = await porRango_porFechaDeSalida({
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaSalida: fechaSalida,
                 numeroPorPagina: numeroPorPagina,
                 numeroPagina: numeroPagina,
                 nombreColumna: nombreColumna,
                 sentidoColumna: sentidoColumna
             })
-            const consultaConteoTotalFilas = reservas?.total_filas
-                ? reservas.total_filas
+            const consultaConteoTotalFilas = reservas.length > 0
+                ? reservas[0].total_filas
                 : 0;
             for (const detallesFila of reservas) {
                 delete detallesFila.total_filas;
@@ -134,8 +133,8 @@ export const rango = async (data) => {
                 totalReservas: Number(consultaConteoTotalFilas),
                 paginasTotales: totalPaginas,
                 tipoConsulta: "rango",
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 pagina: Number(corretorNumeroPagina) + 1,
                 nombreColumna: nombreColumna,
                 sentidoColumna: sentidoColumna,

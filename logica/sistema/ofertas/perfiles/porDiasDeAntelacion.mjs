@@ -6,11 +6,11 @@ export const porDiasDeAntelacion = async (reserva) => {
     try {
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
         const fechaEntradaReserva_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: reserva.fechas.fechaEntrada_ISO,
+            fecha_ISO: reserva.fechas.fechaEntrada,
             nombreCampo: "La fecha de entrada de la reserva"
         })
         const fechaSalidaReserva_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO:reserva.fechas.fechaSalida_ISO,
+            fecha_ISO: reserva.fechas.fechaSalida,
             nombreCampo: "La fecha de salida de la reserva"
         })
         const totalReservaNeto = new Decimal(reserva.desgloseFinanciero.totales.totalReservaNeto)

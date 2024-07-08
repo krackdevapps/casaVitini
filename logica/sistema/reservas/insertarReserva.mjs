@@ -14,11 +14,11 @@ import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from '../../repositorio/ar
 export const insertarReserva = async (reserva) => {
     try {
 
-        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_ISO({
+        const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: reserva.fechaEntrada,
             nombreCampo: "La fecha de entrada de la reserva a confirmar"
         }))
-        const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_ISO({
+        const fechaSalida = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: reserva.fechaSalida,
             nombreCampo: "La fecha de entrada de la reserva a confirmar"
         }))
@@ -36,8 +36,8 @@ export const insertarReserva = async (reserva) => {
 
 
         const nuevaReserva = await insertarReservaAdministrativa({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             estadoReserva: estadoReserva,
             origen: origen,
             fechaCreacion,
@@ -104,8 +104,8 @@ export const insertarReserva = async (reserva) => {
             entidades: {
                 reserva: {
                     tipoOperacion: "crearDesglose",
-                    fechaEntrada: fechaEntrada_ISO,
-                    fechaSalida: fechaSalida_ISO,
+                    fechaEntrada: fechaEntrada,
+                    fechaSalida: fechaSalida,
                     apartamentosArray: apartamentosArray,
                     capaOfertas: "si",
                     zonasArray: ["global", "publica"],

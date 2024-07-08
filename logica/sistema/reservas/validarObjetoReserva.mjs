@@ -29,23 +29,23 @@ export const validarObjetoReserva = async (data) => {
             objetoLiteral: reservaObjeto,
             nombreCampo: "el campo reserva"
         })
-        const fechaEntrada_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+        const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: reservaObjeto?.fechaEntrada,
             nombreCampo: "El campo fechaEntrada del objetoReserva"
         })
-        const fechaSalida_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
+        const fechaSalida = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: reservaObjeto?.fechaSalida,
             nombreCampo: "El campo fechaSalida del objetoReserva"
         })
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaActualTZ = tiempoZH.toISODate()
-        const fechaEntradaReserva_ISO = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
-        const fechaSalidaReserva_ISO = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria });
+        const fechaEntradaReserva_ISO = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
+        const fechaSalidaReserva_ISO = DateTime.fromISO(fechaSalida, { zone: zonaHoraria });
 
         await validadoresCompartidos.fechas.validacionVectorial({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             tipoVector: "diferente"
         })
 
@@ -59,8 +59,8 @@ export const validarObjetoReserva = async (data) => {
         }
 
         const fechasParaValidarLimites = {
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida
         }
 
 
@@ -83,10 +83,10 @@ export const validarObjetoReserva = async (data) => {
                 })
                 codigosDescuentoArray.push(codigoDescuentoB64)
             })
-            
+
             if (codigosDescuentoArray.length > 0) {
                 reservaObjeto.codigosDescuento = codigosDescuentoArray
-                console.log("ss", reservaObjeto.codigosDescuento)
+
             }
 
         }
@@ -143,8 +143,8 @@ export const validarObjetoReserva = async (data) => {
 
 
         const resueleApartamentosDisponibles = await apartamentosPorRango({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             apartamentosIDV_array: apartemtosIDVarray,
             zonaConfiguracionAlojamientoArray: ["publica", "global"],
             zonaBloqueo_array: ["publico", "global"],

@@ -102,21 +102,21 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
             for (const reserva of reservasPorRango) {
 
                 const reservaUID = reserva.reservaUID;
-                const fechaEntrada_ISO = reserva.fechaEntrada;
-                const fechaSalida_ISO = reserva.fechaSalida;
+                const fechaEntrada = reserva.fechaEntrada;
+                const fechaSalida = reserva.fechaSalida;
                 const fechaEntrada_objeto = (DateTime.fromObject({
-                    year: fechaEntrada_ISO.split("-")[0],
-                    month: fechaEntrada_ISO.split("-")[1],
-                    day: fechaEntrada_ISO.split("-")[2],
+                    year: fechaEntrada.split("-")[0],
+                    month: fechaEntrada.split("-")[1],
+                    day: fechaEntrada.split("-")[2],
                     hour: matrizHoraEntradaSalida.horaEntrada_objeto.hora,
                     minute: matrizHoraEntradaSalida.horaEntrada_objeto.minuto
                 }, {
                     zone: zonaHoraria
                 }));
                 const fechaSalida_objeto = (DateTime.fromObject({
-                    year: fechaSalida_ISO.split("-")[0],
-                    month: fechaSalida_ISO.split("-")[1],
-                    day: fechaSalida_ISO.split("-")[2],
+                    year: fechaSalida.split("-")[0],
+                    month: fechaSalida.split("-")[1],
+                    day: fechaSalida.split("-")[2],
                     hour: matrizHoraEntradaSalida.horaSalida_objeto.hora,
                     minute: matrizHoraEntradaSalida.horaSalida_objeto.minuto
                 }, {
@@ -137,8 +137,8 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
 
                 if (apartamentoPorApartamentoIDVPorReservaUID) {
                     const evento = {
-                        start: DateTime.fromISO(fechaEntrada_ISO),
-                        end: DateTime.fromISO(fechaSalida_ISO),
+                        start: DateTime.fromISO(fechaEntrada),
+                        end: DateTime.fromISO(fechaSalida),
                         sumario: "Reserva " + reservaUID,
                         descripcion: "Reserva en CasaVitini del " + apartamentoUI
                     };

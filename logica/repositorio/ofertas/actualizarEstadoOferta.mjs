@@ -3,17 +3,17 @@ export const actualizarEstadoOferata = async (data) => {
     try {
 
         const ofertaUID = data.ofertaUID
-        const estado = data.estado
+        const estadoIDV = data.estadoIDV
 
         const consulta = `
         UPDATE ofertas
-        SET "estadoOferta" = $2
-        WHERE uid = $1
-        RETURNING "estadoOferta";
+        SET "estadoIDV" = $2
+        WHERE "ofertaUID" = $1
+        RETURNING "estadoIDV";
         `;
         const parametros = [
             ofertaUID,
-            estado,
+            estadoIDV,
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {

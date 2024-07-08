@@ -11,13 +11,13 @@ Decimal.set({ precision: precisionDecimal });
 export const totalesBasePorRango = async (data) => {
     try {
         const estructura = data.estructura
-        const fechaEntrada_ISO = data.fechaEntrada_ISO
-        const fechaSalida_ISO = data.fechaSalida_ISO
+        const fechaEntrada = data.fechaEntrada
+        const fechaSalida = data.fechaSalida
         const apartamentosArray = data.apartamentosArray
         const reservaUID = data.reservaUID
 
 
-        const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada_ISO, fechaSalida_ISO)
+        const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada, fechaSalida)
         diasArray.pop()
         const contenedorEntidadtes = estructura.entidades
 
@@ -25,8 +25,8 @@ export const totalesBasePorRango = async (data) => {
             estructura.entidades.reserva = {}
         }
         const reservaEntidad = contenedorEntidadtes.reserva
-        reservaEntidad.fechaEntrada = fechaEntrada_ISO
-        reservaEntidad.fechaSalida = fechaEntrada_ISO
+        reservaEntidad.fechaEntrada = fechaEntrada
+        reservaEntidad.fechaSalida = fechaEntrada
         reservaEntidad.nochesReserva = diasArray.length.toString()
         const instantaneaNoches = reservaEntidad.instantaneaNoches
 
@@ -45,8 +45,8 @@ export const totalesBasePorRango = async (data) => {
         const desglosePorApartamento = reservaEntidad.desglosePorApartamento
 
         const indiceDias = await constructorIndiceDias({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida
         })
 
         for (const [fecha_ISO, detallesDelDia] of Object.entries(desglosePorNoche)) {

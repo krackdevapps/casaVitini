@@ -8,8 +8,8 @@ export const obtenerReservasPorMes = async (data) => {
         const consulta = `
         SELECT 
         reserva,
-        to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-        to_char(salida, 'YYYY-MM-DD') as "fechaSalida_ISO"
+        to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada", 
+        to_char(salida, 'YYYY-MM-DD') as "fechaSalida"
         FROM 
         reservas
         WHERE

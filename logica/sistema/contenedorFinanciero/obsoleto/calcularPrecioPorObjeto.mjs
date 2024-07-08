@@ -10,11 +10,11 @@ export const calcularPrecioPorObjeto = async (reserva) => {
         const fechaEntrada_Humano = reserva.entrada;
         const fechaSalida_Humano = reserva.salida;
 
-        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana({
+        const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_Humana({
             fecha_ISO: fechaEntrada_Humano,
             nombreCampo: "La fecha de entrad en calcularPrecioPorObjeto"
         })).fecha_ISO;
-        const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana({
+        const fechaSalida = (await validadoresCompartidos.fechas.validarFecha_Humana({
             fecha_ISO: fechaSalida_Humano,
             nombreCampo: "LA fecha de saldai en calcularPrecioPorObjeto"
         })).fecha_ISO;
@@ -22,8 +22,8 @@ export const calcularPrecioPorObjeto = async (reserva) => {
         const alojamientoArreglo = Object.keys(alojamiento);
 
         const desglosePrecioApartamentos = await totalesBasePorRango({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             apartamentosIDVArreglo: alojamientoArreglo
         })
 

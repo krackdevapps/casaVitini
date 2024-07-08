@@ -6,10 +6,10 @@ import { resolverComportamientosDePrecio } from './resolverComportamientosDePrec
 import { obtenerPerfilPrecioPorApartamentoUID } from '../../repositorio/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
 
 // Pasas una fecha de a un fecha de salida y un apartmaento y te da todos el tema
-const constructorObjetoEstructuraPrecioDia = (fechaEntrada_ISO, fechaSalida_ISO) => {
+const constructorObjetoEstructuraPrecioDia = (fechaEntrada, fechaSalida) => {
     const arregloFechas = [];
-    let fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO); // Convertir la fecha de entrada a un objeto DateTime
-    const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO)
+    let fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada); // Convertir la fecha de entrada a un objeto DateTime
+    const fechaSalida_Objeto = DateTime.fromISO(fechaSalida)
     while (fechaEntrada_Objeto <= fechaSalida_Objeto) {
         arregloFechas.push(fechaEntrada_Objeto.toISODate());
         fechaEntrada_Objeto = fechaEntrada_Objeto.plus({ days: 1 }); // Avanzar al siguiente día
@@ -19,12 +19,12 @@ const constructorObjetoEstructuraPrecioDia = (fechaEntrada_ISO, fechaSalida_ISO)
 export const precioRangoApartamento = async (metadatos) => {
 
     try {
-        
-        const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
-        const fechaSalida_ISO = metadatos.fechaSalida_ISO
+
+        const fechaEntrada = metadatos.fechaEntrada
+        const fechaSalida = metadatos.fechaSalida
 
         const apartamentosIDVArreglo = metadatos.apartamentosIDVArreglo
-        const estructuraArregloDiasEnEspera = constructorObjetoEstructuraPrecioDia(fechaEntrada_ISO, fechaSalida_ISO);
+        const estructuraArregloDiasEnEspera = constructorObjetoEstructuraPrecioDia(fechaEntrada, fechaSalida);
 
         const desglosePreciosBaseApartamentos = []
         const estructuraFinal = {}
@@ -57,8 +57,8 @@ export const precioRangoApartamento = async (metadatos) => {
             desglosePreciosBaseApartamentos.push(detalleApartamento)
         }
 
-        const comportamientosPorProcesarComoPerfiles = await resolverComportamientosDePrecio(fechaEntrada_ISO, fechaSalida_ISO)
-        
+        const comportamientosPorProcesarComoPerfiles = await resolverComportamientosDePrecio(fechaEntrada, fechaSalida)
+
         // Borrar la ultima fecha por que se esta calculano noches no dias
         estructuraArregloDiasEnEspera.pop()
         const numeroNoches = estructuraArregloDiasEnEspera.length

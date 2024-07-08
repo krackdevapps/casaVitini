@@ -2,8 +2,8 @@ import { conexion } from "../../../componentes/db.mjs"
 
 export const insertarReservaAdministrativa = async (data) => {
     try {
-        const fechaEntrada_ISO = data.fechaEntrada_ISO
-        const fechaSalida_ISO = data.fechaSalida_ISO
+        const fechaEntrada = data.fechaEntrada
+        const fechaSalida = data.fechaSalida
         const estadoReserva = data.estadoReserva
         const origen = data.origen
         const fechaCreacion_ISO = data.fechaCreacion
@@ -26,8 +26,8 @@ export const insertarReservaAdministrativa = async (data) => {
         RETURNING 
         * `;
         const parametros = [
-            fechaEntrada_ISO,
-            fechaSalida_ISO,
+            fechaEntrada,
+            fechaSalida,
             estadoReserva,
             origen,
             fechaCreacion_ISO,

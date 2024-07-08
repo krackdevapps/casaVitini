@@ -42,18 +42,18 @@ export const insertarOferta = async (data) => {
             RETURNING *;
             `;
 
-            const parametros = [
-                nombreOferta,
-                fechaInicio_ISO,
-                fechaFin_ISO,
-                simboloNumero,
-                numero,
-                descuentoAplicadoA,
-                estadoInicalDesactivado,
-                tipoOferta,
-                cantidad,
-                tipoDescuento
-            ];
+        const parametros = [
+            nombreOferta,
+            fechaInicio_ISO,
+            fechaFin_ISO,
+            simboloNumero,
+            numero,
+            descuentoAplicadoA,
+            estadoInicalDesactivado,
+            tipoOferta,
+            cantidad,
+            tipoDescuento
+        ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
             const error = "Ha ocurrido un error y no se ha insertado la nueva oferta";

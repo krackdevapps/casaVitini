@@ -24,17 +24,17 @@ export const bloquearApartamentos = async (metadatos) => {
         })
 
         const tipoBloqueo = metadatos.tipoBloqueo
-        const fechaEntrada_ISO = metadatos.fechaEntrada_ISO
-        const fechaSalida_ISO = metadatos.fechaSalida_ISO
+        const fechaEntrada = metadatos.fechaEntrada
+        const fechaSalida = metadatos.fechaSalida
         const zonaBloqueo = metadatos.zonaBloqueo
         const origen = metadatos.origen
 
         await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: fechaEntrada_ISO,
+            fecha_ISO: fechaEntrada,
             nombreCampo: "La fecha de entrada"
         })
         await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: fechaSalida_ISO,
+            fecha_ISO: fechaSalida,
             nombreCampo: "La fecha de salida"
         })
 
@@ -74,8 +74,8 @@ export const bloquearApartamentos = async (metadatos) => {
             await insertarNuevoBloqueo({
                 apartamentoIDV: apartamentoIDV,
                 tipoBloqueo: tipoBloqueo,
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 motivoFinal: motivoDelBloqueo(origen),
                 zonaBloqueo: zonaBloqueo
             })

@@ -41,15 +41,15 @@ export const eventosTodosLosBloqueos = async (fecha) => {
         for (const detallesReserva of bloqueosSeleccionados) {
             const bloqueoUID = detallesReserva.uid
             const tipoBloqueo = detallesReserva.tipoBloqueo
-            const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
-            const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
+            const fechaEntrada = detallesReserva.fechaEntrada
+            const fechaSalida = detallesReserva.fechaSalida
             const apartamentoUI = detallesReserva.apartamentoUI
             const apartamentoIDV = detallesReserva.apartamentoIDV
             detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
             detallesReserva.tipoEvento = "todosLosBloqueos"
             detallesReserva.eventoUID = "todosLosBloqueos_" + bloqueoUID
             if (tipoBloqueo === "rangoTemporal") {
-                const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO)
+                const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada, fechaSalida)
                 for (const fechaInterna_ISO of arrayConFechasInternas) {
                     const fechaInternaObjeto = DateTime.fromISO(fechaInterna_ISO)
                     const diaFechaInterna = fechaInternaObjeto.day
@@ -58,8 +58,8 @@ export const eventosTodosLosBloqueos = async (fecha) => {
                     const fechaInternaHumana = `${anoFechaInterna}-${mesFechaInterna}-${diaFechaInterna}`
                     const estructuraBloqueoDia = {
                         eventoUID: "todosLosBloqueos_" + bloqueoUID,
-                        fechaEntrada_ISO: fechaEntrada_ISO,
-                        fechaSalida_ISO: fechaSalida_ISO
+                        fechaEntrada: fechaEntrada,
+                        fechaSalida: fechaSalida
                     }
                     if (calendarioBloqueosObjeto[fechaInternaHumana]) {
                         calendarioBloqueosObjeto[fechaInternaHumana].push(estructuraBloqueoDia)

@@ -13,23 +13,23 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
         if (!await interruptor("aceptarReservasPublicas")) {
             throw new Error(mensajesUI.aceptarReservasPublicas);
         }
-        const fechaEntrada_ISO = (await validadoresCompartidos.fechas.validarFecha_ISO({
+        const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaEntrada,
             nombreCampo: "La fecha de entrada en apartamentosDisponiblesPublico"
         }
         ))
-        const fechaSalida_ISO = (await validadoresCompartidos.fechas.validarFecha_ISO({
+        const fechaSalida = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaSalida,
             nombreCampo: "La fecha de salida en apartametnosDisponbiblesPublico"
         }))
         await validadoresCompartidos.fechas.validacionVectorial({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             tipoVector: "diferente"
         })
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
-        const fechaEntrad_objeto = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
+        const fechaEntrad_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
         if (fechaEntrad_objeto < tiempoZH.startOf('day')) {
             const error = "La fecha de entrada no puede ser inferior a la fecha actual. Solo se pueden hacer reservas a partir de hoy";
             throw new Error(error);
@@ -40,8 +40,8 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
 
         //const resuelveADP = await apartamentosDisponiblesPublico(fecha)
         const resuelveApartametnoDisponiblesPublico = await apartamentosPorRango({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             zonaConfiguracionAlojamientoArray: ["publica", "global"],
             zonaBloqueo_array: ["publico", "global"],
         })
@@ -61,8 +61,8 @@ export const apartamentosDisponiblesPublico = async (entrada, salida) => {
                 entidades: {
                     reserva: {
                         tipoOperacion: "crearDesglose",
-                        fechaEntrada: fechaEntrada_ISO,
-                        fechaSalida: fechaSalida_ISO,
+                        fechaEntrada: fechaEntrada,
+                        fechaSalida: fechaSalida,
                         fechaCreacion: fechaActual_ISO,
                         apartamentosArray: apartamentosDisponiblesEncontrados,
                         capaOfertas: "si",

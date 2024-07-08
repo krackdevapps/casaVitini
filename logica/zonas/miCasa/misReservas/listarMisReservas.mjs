@@ -5,6 +5,9 @@ import { obtenerClientesPorMail } from "../../../repositorio/clientes/obtenerCli
 import { obtenerTitularReservaPorClienteUID_array } from "../../../repositorio/reservas/titulares/obtenerTitularReservaPorClienteUID.mjs";
 import { obtenerTitularReservaPoolPorMail } from "../../../repositorio/reservas/titulares/obtenerTitularReservaPoolPorMail.mjs";
 import { obtenerReservasComoLista } from "../../../repositorio/miCasa/reservas/obtenerReservasComoLista.mjs";
+import { obtenerDatosPersonalesPorMail } from "../../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs";
+import { obtenerDatosPersonales } from "../../../repositorio/usuarios/obtenerDatosPersonales.mjs";
+import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
 
 export const listarMisReservas = async (entrada, salida) => {
     try {
@@ -23,22 +26,31 @@ export const listarMisReservas = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
 
-        const nombreColumna = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.nombreColumna,
+        let nombreColumna = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.nombreColumna || "",
             nombreCampo: "El campo del nombre de la columna",
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
 
+        if (nombreColumna === "reserva") {
+            nombreColumna = "reservaUID"
+        } else if (nombreColumna === "estadoPago") {
+            nombreColumna = "estadoPagoIDV"
+        } else if (nombreColumna === "estadoReserva") {
+            nombreColumna = "estadoReservaIDV"
+        }
+
         const sentidoColumna = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.sentidoColumna,
+            string: entrada.body.sentidoColumna || "",
             nombreCampo: "El campo del sentido de la columna",
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
+
         if (nombreColumna) {
             const nombreColumnaVirtual = [
                 'nombreCompleto',
@@ -51,13 +63,13 @@ export const listarMisReservas = async (entrada, salida) => {
             } else {
                 await validadoresCompartidos.baseDeDatos.validarNombreColumna({
                     nombreColumna: nombreColumna,
-                    table: "reservas"
+                    tabla: "reservas"
                 })
             }
             validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
         }
 
-        const paginaActualSQL = Number((paginaActual - 1) + "0");
+        const paginaActualSQL = Number((paginaActual - 1));
         const numeroPorPagina = 10;
         // Comprobar si la cuenta tiene un email
         const datosDelUsuario = await obtenerDatosPersonales(usuario)
@@ -69,30 +81,44 @@ export const listarMisReservas = async (entrada, salida) => {
         // Comporbar si el email esta verificado
 
         const cuentaUsuario = await obtenerUsuario(usuario)
-        const estadoCuentaVerificada = cuentaUsuario.cuentaVerificada;
+        const estadoCuentaVerificada = cuentaUsuario.cuentaVerificadaIDV;
+
         if (estadoCuentaVerificada !== "si") {
             const error = "Tienes que verificar tu dirección de correo electronico para poder acceder a las reservas asociadas a tu direcíon de correo electroníco.";
             throw new Error(error);
         }
+
+
+
+
+
+
+        const reservasUIDArray = []
+
         // Buscar el email verificado, en titulares poll y titulares vitini
-        const clientesPorMail = await obtenerClientesPorMail(usuarioMail)
-        const clientesUID = clientesPorMail.map((detallesDelCliente) => {
-            return detallesDelCliente.clienteUID
-        });
-        // Ojo por que puede que se deba pasar el numero en number y no en cadena
-        const titulares = await obtenerTitularReservaPorClienteUID_array(clientesUID)
-
-        const reservasUID = titulares.map((detallesTitular) => {
-            return detallesTitular.reservaUID
+        const clientesPorMail = await obtenerClientesPorMail({
+            mail: usuarioMail,
+            errorSi: "desactivado"
         })
-        const titularesPool = await obtenerTitularReservaPoolPorMail(usuarioMail)
-        for (const reservaUID of titularesPool) {
-            reservasUID.push(reservaUID.reserva);
+        if (clientesPorMail.length > 0) {
+            const clientesUID = clientesPorMail.map((cliente) => {
+                return cliente.clienteUID
+            });
+            const titulares = await obtenerTitularReservaPorClienteUID_array(clientesUID)
+            titulares.forEach((detallesTitular) => {
+                reservasUIDArray.push(detallesTitular.reservaUID)
+            })
         }
+        const titularesPool = await obtenerTitularReservaPoolPorMail(usuarioMail)
 
+        if (titularesPool.length > 0) {
+            titularesPool.forEach((titularPool) => {
+                reservasUIDArray.push(titularPool.reservaUID);
+            })
+        }
         // extraer las reservasa asociadas a esos titulares  
         const listaReservas = await obtenerReservasComoLista({
-            reservasUID: reservasUID,
+            reservasUIDArray: reservasUIDArray,
             numeroPorPagina: numeroPorPagina,
             paginaActualSQL: paginaActualSQL,
             sentidoColumna: sentidoColumna,
@@ -115,6 +141,15 @@ export const listarMisReservas = async (entrada, salida) => {
             totalReservas: Number(consultaConteoTotalFilas),
         };
         if (nombreColumna) {
+            if (nombreColumna === "reservaUID") {
+                nombreColumna = "reserva"
+            } else if (nombreColumna === "estadoPagoIDV") {
+                nombreColumna = "estadoPago"
+            } else if (nombreColumna === "estadoReservaIDV") {
+                nombreColumna = "estadoReserva"
+            }
+
+
             ok.nombreColumna = nombreColumna;
             ok.sentidoColumna = sentidoColumna;
         }

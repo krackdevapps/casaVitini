@@ -61,16 +61,16 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             const reservaUID = reservaEncontrada.reservaUID;
             // Fecha de la base de datos
             const reserva = await obtenerReservaPorReservaUID(reservaUID)
-            const fechaEntrada_ISO = reserva.fechaEntrada;
-            const fechaSalida_ISO = reserva.fechaSalida;
+            const fechaEntrada = reserva.fechaEntrada;
+            const fechaSalida = reserva.fechaSalida;
 
             // Formatos fecha
             const fechaConHoraEntrada_ISO_ZH = DateTime.fromISO(
-                `${fechaEntrada_ISO}T${horaEntradaTZ}`,
+                `${fechaEntrada}T${horaEntradaTZ}`,
                 { zone: zonaHoraria })
                 .toISO();
             const fechaConHoraSalida_ISO_ZH = DateTime.fromISO(
-                `${fechaSalida_ISO}T${horaSalidaTZ}`,
+                `${fechaSalida}T${horaSalidaTZ}`,
                 { zone: zonaHoraria })
                 .toISO();
 
@@ -81,7 +81,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             if (apartamentoDeLaReserva.componenteUID) {
                 identificadoresReservasValidas.push(reservaUID)
                 const tiempoRestante = utilidades.calcularTiempoRestanteEnFormatoISO(fechaConHoraSalida_ISO_ZH, fechaActualCompletaTZ);
-                const cantidadDias = utilidades.calcularDiferenciaEnDias(fechaEntrada_ISO, fechaSalida_ISO);
+                const cantidadDias = utilidades.calcularDiferenciaEnDias(fechaEntrada, fechaSalida);
                 const porcentajeTranscurrido = utilidades.calcularPorcentajeTranscurridoUTC(fechaConHoraEntrada_ISO_ZH, fechaConHoraSalida_ISO_ZH, fechaActualCompletaTZ);
                 let porcentajeFinal = porcentajeTranscurrido;
                 if (porcentajeTranscurrido >= 100) {
@@ -90,8 +90,8 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                 if (porcentajeTranscurrido <= 0) {
                     porcentajeFinal = "0";
                 }
-                const diaEntrada = utilidades.comparadorFechas_ISO(fechaEntrada_ISO, fechaActualTZ);
-                const diaSalida = utilidades.comparadorFechas_ISO(fechaSalida_ISO, fechaActualTZ);
+                const diaEntrada = utilidades.comparadorFechas_ISO(fechaEntrada, fechaActualTZ);
+                const diaSalida = utilidades.comparadorFechas_ISO(fechaSalida, fechaActualTZ);
                 let identificadoDiaLimite = "diaInterno";
                 if (diaEntrada) {
                     identificadoDiaLimite = "diaDeEntrada";
@@ -101,8 +101,8 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                 }
                 const estructuraReserva = {
                     reservaUID: reservaUID,
-                    fechaEntrada: fechaEntrada_ISO,
-                    fechaSalida: fechaSalida_ISO,
+                    fechaEntrada: fechaEntrada,
+                    fechaSalida: fechaSalida,
                     diaLimite: identificadoDiaLimite,
                     tiempoRestante: tiempoRestante,
                     cantidadDias: cantidadDias,

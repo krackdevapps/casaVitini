@@ -1,5 +1,6 @@
 import { obtenerConfiguracionPorApartamentoIDV } from '../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs';
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../repositorio/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
+import { obtenerApartamentoDeLaReservaPorApartamentoUID } from '../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoUID.mjs';
 import { obtenerHabitacionesDelApartamento } from '../../repositorio/reservas/apartamentos/obtenerHabitacionDelApartamento.mjs';
 
 export const estadoHabitacionesApartamento = async (transacion) => {
@@ -7,16 +8,18 @@ export const estadoHabitacionesApartamento = async (transacion) => {
         const reservaUID = transacion.reservaUID
         const apartamentoUID = transacion.apartamentoUID
         // compruebo que eso sea un apartamento dentro de la reserva
-
+        console.log("tr", transacion)
         const apartamentoDeLaReserva = await obtenerApartamentoDeLaReservaPorApartamentoUID({
             reservaUID: reservaUID,
             apartamentoUID: apartamentoUID
         })
-        if (apartamentoDeLaReserva.length === 0) {
+        console.log("apartamentoDeLaReserva", apartamentoDeLaReserva)
+
+        if (!apartamentoDeLaReserva?.componenteUID) {
             const error = "No existe el apartamento dentro de esta reserva"
             throw new Error(error)
         }
-        const apartamentoIDV = apartamentoDeLaReserva?.apartamento
+        const apartamentoIDV = apartamentoDeLaReserva?.apartamentoIDV
 
         const habitacionesDelApartamento = await obtenerHabitacionesDelApartamento({
             reservaUID: reservaUID,
@@ -48,6 +51,6 @@ export const estadoHabitacionesApartamento = async (transacion) => {
         }
         return ok
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 }

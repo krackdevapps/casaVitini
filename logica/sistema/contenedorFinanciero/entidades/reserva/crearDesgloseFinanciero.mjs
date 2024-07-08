@@ -26,8 +26,8 @@ export const crearDesgloseFinanciero = async (data) => {
         })
 
         await validadoresCompartidos.fechas.validacionVectorial({
-            fechaEntrada_ISO: data.fechaEntrada,
-            fechaSalida_ISO: data.fechaSalida,
+            fechaEntrada: data.fechaEntrada,
+            fechaSalida: data.fechaSalida,
             tipoVector: "diferente"
         })
 
@@ -59,16 +59,16 @@ export const crearDesgloseFinanciero = async (data) => {
 
         await constructorInstantaneaNoches({
             estructura,
-            fechaEntrada_ISO: fechaEntrada,
-            fechaSalida_ISO: fechaSalida,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             fechaCreacion_ISO: fechaActual,
             apartamentosArray
         })
 
         await totalesBasePorRango({
             estructura,
-            fechaEntrada_ISO: fechaEntrada,
-            fechaSalida_ISO: fechaSalida,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             apartamentosArray,
         })
 

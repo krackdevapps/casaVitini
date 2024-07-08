@@ -22,7 +22,9 @@ export const porTerminos = async (data) => {
             nombreColumna: nombreColumna,
             termino: termino,
         })
-        const consultaConteoTotalFilas = reservas[0]?.total_filas ? reservas[0].total_filas : 0;
+        const consultaConteoTotalFilas = reservas.length > 0
+            ? reservas[0].total_filas
+            : 0;
         for (const detallesFila of reservas) {
             delete detallesFila.total_filas;
         }

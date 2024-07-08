@@ -8,12 +8,12 @@ import { obtenerPernoctanteDeLaReservaPorClienteUID } from "../../../../../repos
 import { insertarPernoctanteEnLaHabitacion } from "../../../../../repositorio/reservas/pernoctantes/insertarPernoctanteEnLaHabitacion.mjs";
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
 
-export const anadirPernoctanteHabitacion = async (entrada, salida) => {
+export const anadirPernoctanteHabitacion = async (entrada) => {
     const mutex = new Mutex()
     try {
 
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -29,7 +29,7 @@ export const anadirPernoctanteHabitacion = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
         const habitacionUID = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.reservaUID,
+            string: entrada.body.habitacionUID,
             nombreCampo: "El identificador universal de la habitacionUID (habitacionUID)",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
@@ -37,13 +37,15 @@ export const anadirPernoctanteHabitacion = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
 
-        const clienteUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.clienteUID,
+        const clienteUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.clienteUID,
             nombreCampo: "El identificador universal de la clienteUID (clienteUID)",
-            filtro: "numeroSimple",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            sePermitenNegativos: "no",
+            devuelveUnTipoNumber: "si"
+
         })
         await campoDeTransaccion("iniciar")
 
@@ -59,13 +61,14 @@ export const anadirPernoctanteHabitacion = async (entrada, salida) => {
             habitacionUID: habitacionUID,
         })
         // validar cliente
-        await obtenerDetallesCliente(clienteUID)
+        const cliente = await obtenerDetallesCliente(clienteUID)
         // No se puede anadir un pernoctante ya existen a la reserva, proponer moverlo de habitacion
         const pernoctanteDeLaReserva = await obtenerPernoctanteDeLaReservaPorClienteUID({
-            reservaUID: reservaUID,
-            clienteUID: clienteUID
+            reservaUID,
+            clienteUID
         })
-        if (pernoctanteDeLaReserva.componenteUID) {
+        console.log("pernoctanteDeLaReserva",pernoctanteDeLaReserva)
+        if (pernoctanteDeLaReserva.length > 0) {
             const error = "Este cliente ya es un pernoctante dentro de esta reserva, mejor muevalo de habitacion";
             throw new Error(error);
         }
@@ -79,13 +82,14 @@ export const anadirPernoctanteHabitacion = async (entrada, salida) => {
 
         const ok = {
             ok: "Se ha anadido correctamente el cliente en la habitacin de la reserva",
-            nuevoUID: nuevoPernoctanteEnLaHabitacion.componenteUID
+            pernoctante: nuevoPernoctanteEnLaHabitacion,
+            cliente
         };
         return ok
     }
     catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release()

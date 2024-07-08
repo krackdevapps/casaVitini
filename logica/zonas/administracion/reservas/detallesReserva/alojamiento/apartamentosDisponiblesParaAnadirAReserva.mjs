@@ -11,16 +11,19 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
         IDX.empleados()
         IDX.control()
 
+        const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: entrada.body.fechaEntrada,
+            nombreCampo: "La fecha de entrada"
+        })
 
-        const fechaEntrada_ISO = entrada.body.fechaEntrada_ISO;
-        const fechaSalida_ISO = entrada.body.fechaSalida_ISO;
-        await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_ISO)
-        await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_ISO)
-        const rol = entrada.session.rol;
-   
+        const fechaSalida = await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: entrada.body.fechaSalida,
+            nombreCampo: "La fecha de salida"
+        })
+
         const transactor = await apartamentosPorRango({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             zonaConfiguracionAlojamientoArray: ["privada", "global"],
             zonaBloqueo_array: ["privado", "global"],
         });
@@ -31,28 +34,33 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             apartamentosNoDisponibles: []
         };
         for (const apartamentoIDV of apartamentosDisponbilesIDV) {
-            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            });
             const detalleApartamento = {
                 apartamentoIDV: apartamentoIDV,
-                apartamentoUI: apartamentoUI
+                apartamentoUI: apartamento.apartamentoUI
             };
             estructuraFinal.apartamentosDisponibles.push(detalleApartamento);
         }
         for (const apartamentoIDV of apartamentosNoDisponiblesIDV) {
-            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            });
             const detalleApartamento = {
                 apartamentoIDV: apartamentoIDV,
-                apartamentoUI: apartamentoUI
+                apartamentoUI: apartamento.apartamentoUI
             };
             estructuraFinal.apartamentosNoDisponibles.push(detalleApartamento);
         }
-        if (transactor) {
-            const ok = {
-                ok: estructuraFinal
-            };
-            return ok
+        const ok = {
+            ok: estructuraFinal
         }
-        salida.end();
+        return ok
+
+
     } catch (errorCapturado) {
         throw errorCapturado
     }

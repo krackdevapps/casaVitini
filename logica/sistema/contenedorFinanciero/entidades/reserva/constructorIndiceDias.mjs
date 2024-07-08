@@ -5,9 +5,9 @@ const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
 Decimal.set({ precision: precisionDecimal });
 export const constructorIndiceDias = async (data) => {
     try {
-        const fechaEntrada_ISO = data.fechaEntrada_ISO
-        const fechaSalida_ISO = data.fechaSalida_ISO
-        const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada_ISO, fechaSalida_ISO)
+        const fechaEntrada = data.fechaEntrada
+        const fechaSalida = data.fechaSalida
+        const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada, fechaSalida)
         diasArray.pop()
         const diasAgrupados = []
         const indiceDias = {

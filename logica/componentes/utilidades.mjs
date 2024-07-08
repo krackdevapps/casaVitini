@@ -61,9 +61,9 @@ export const utilidades = {
         const valorString = numeroInstanciado.toString();
         return valorString;
     },
-    calcularTiempoRestanteEnFormatoISO: (fechaSalida_ISO, fechaActual_ISO) => {
+    calcularTiempoRestanteEnFormatoISO: (fechaSalida, fechaActual_ISO) => {
         const fechaHoy = DateTime.fromISO(fechaActual_ISO);
-        const fechaSalidaObj = DateTime.fromISO(fechaSalida_ISO);
+        const fechaSalidaObj = DateTime.fromISO(fechaSalida);
         const diferencia = fechaSalidaObj.diff(fechaHoy, ['days', 'hours']);
         const dias = diferencia.days;
         const horas = Math.floor(diferencia.hours);
@@ -110,7 +110,7 @@ export const utilidades = {
         if (array.length === 1) {
             return array[0];
         } else {
-            const formattedString = array.slice(0, -1).join(', ' + articulo + " ") + ' y '+ articulo + " " + array.slice(-1);
+            const formattedString = array.slice(0, -1).join(', ' + articulo + " ") + ' y ' + articulo + " " + array.slice(-1);
             return formattedString;
         }
 
@@ -118,21 +118,21 @@ export const utilidades = {
     evitarLlavesDuplicas: (objeto) => {
         const keys = Object.keys(objeto);
         const set = new Set(keys);
-        
+
         // Verificar si hay llaves duplicadas en el nivel actual
         if (keys.length !== set.size) {
-          return true; // Hay llaves duplicadas en este nivel
+            return true; // Hay llaves duplicadas en este nivel
         }
-        
+
         // Recorrer recursivamente los valores del objeto si son objetos anidados
         for (let key in objeto) {
-          if (typeof objeto[key] === 'object' && objeto[key] !== null) {
-            if (evitarLlavesDuplicas(objeto[key])) {
-              return true; // Hay llaves duplicadas en niveles más profundos
+            if (typeof objeto[key] === 'object' && objeto[key] !== null) {
+                if (evitarLlavesDuplicas(objeto[key])) {
+                    return true; // Hay llaves duplicadas en niveles más profundos
+                }
             }
-          }
         }
-        
+
         return false; // No se encontraron llaves duplicadas en ningún nivel
 
     }

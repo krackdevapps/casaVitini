@@ -45,8 +45,8 @@ export const validarObjetoOferta = async (data) => {
         }
 
         await validadoresCompartidos.fechas.validacionVectorial({
-            fechaEntrada_ISO: fechaEntrada,
-            fechaSalida_ISO: fechaSalida,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             tipoVector: "igual"
         })
 
@@ -91,8 +91,8 @@ export const validarObjetoOferta = async (data) => {
                 })
 
                 validadoresCompartidos.fechas.validacionVectorial({
-                    fechaEntrada_ISO: fechaInicioRango_ISO,
-                    fechaSalida_ISO: fechaFinalRango_ISO,
+                    fechaEntrada: fechaInicioRango_ISO,
+                    fechaSalida: fechaFinalRango_ISO,
                     tipoVector: "diferente"
                 })
 
@@ -192,8 +192,8 @@ export const validarObjetoOferta = async (data) => {
                     nombreCampo: `La fecha de final de la condicion ${tipoCondicionIDV}`
                 })
                 validadoresCompartidos.fechas.validacionVectorial({
-                    fechaEntrada_ISO: fechaInicioRango_ISO,
-                    fechaSalida_ISO: fechaFinalRango_ISO,
+                    fechaEntrada: fechaInicioRango_ISO,
+                    fechaSalida: fechaFinalRango_ISO,
                     tipoVector: "diferente"
 
                 })
@@ -307,8 +307,8 @@ export const validarObjetoOferta = async (data) => {
                 nombreCampo: `La fecha de final de la condicion ${fechaFinalRango_ISO}`
             })
             await validadoresCompartidos.fechas.validacionVectorial({
-                fechaEntrada_ISO: fechaInicioRango_ISO,
-                fechaSalida_ISO: fechaFinalRango_ISO,
+                fechaEntrada: fechaInicioRango_ISO,
+                fechaSalida: fechaFinalRango_ISO,
                 tipoVector: "diferente"
             })
 

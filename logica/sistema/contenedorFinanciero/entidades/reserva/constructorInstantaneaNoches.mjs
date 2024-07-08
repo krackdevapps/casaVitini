@@ -12,13 +12,13 @@ Decimal.set({ precision: precisionDecimal });
 export const constructorInstantaneaNoches = async (data) => {
     try {
         const estructura = data.estructura
-        const fechaEntrada_ISO = data.fechaEntrada_ISO
-        const fechaSalida_ISO = data.fechaSalida_ISO
+        const fechaEntrada = data.fechaEntrada
+        const fechaSalida = data.fechaSalida
         const fechaCreacion_ISO = data.fechaCreacion_ISO
         const apartamentosArray = data.apartamentosArray
         const instantaneaNoches = data.instantaneaNoches
 
-        const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada_ISO, fechaSalida_ISO)
+        const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada, fechaSalida)
         diasArray.pop()
         const contenedorEntidadtes = estructura.entidades
 
@@ -26,8 +26,8 @@ export const constructorInstantaneaNoches = async (data) => {
             estructura.entidades.reserva = {}
         }
         const reservaEntidad = contenedorEntidadtes.reserva
-        reservaEntidad.fechaEntrada = fechaEntrada_ISO
-        reservaEntidad.fechaSalida = fechaEntrada_ISO
+        reservaEntidad.fechaEntrada = fechaEntrada
+        reservaEntidad.fechaSalida = fechaEntrada
         reservaEntidad.nochesReserva = diasArray.length.toString()
 
         if (!reservaEntidad.hasOwnProperty("instantaneaNoches")) {
@@ -40,13 +40,13 @@ export const constructorInstantaneaNoches = async (data) => {
         const contenedorInstantaneaNoche = reservaEntidad.instantaneaNoches
 
         const indiceDias = await constructorIndiceDias({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida
         })
 
         const comportamientosPorRangoFormateados = await comportamientosPorRango({
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             fechaCreacionReserva: fechaCreacion_ISO,
             arrayApartamentos: apartamentosArray
         })
@@ -81,7 +81,7 @@ export const constructorInstantaneaNoches = async (data) => {
 
                 const apartamentosPorNoche = noche.apartamentosPorNoche
                 if (!apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {
-                    
+
                     apartamentosPorNoche[apartamentoIDV] = {
                         apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV({
                             apartamentoIDV,

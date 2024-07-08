@@ -40,11 +40,11 @@ export const eventosReservas = async (fecha) => {
         })
         for (const detallesReserva of reservasSelecciondas) {
             const reservaUID = detallesReserva.reserva
-            const fechaEntrada_ISO = detallesReserva.fechaEntrada_ISO
-            const fechaSalida_ISO = detallesReserva.fechaSalida_ISO
+            const fechaEntrada = detallesReserva.fechaEntrada
+            const fechaSalida = detallesReserva.fechaSalida
             detallesReserva.tipoEvento = "reserva"
             detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
-            const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada_ISO, fechaSalida_ISO)
+            const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada, fechaSalida)
             for (const fechaInterna_ISO of arrayConFechasInternas) {
                 const fechaInternaObjeto = DateTime.fromISO(fechaInterna_ISO)
                 const diaFechaInterna = fechaInternaObjeto.day
@@ -53,8 +53,8 @@ export const eventosReservas = async (fecha) => {
                 const fechaInternaHumana = `${anoFechaInterna}-${mesFechaInterna}-${diaFechaInterna}`
                 const estructuraReservaEnDia = {
                     eventoUID: "reservaUID_" + reservaUID,
-                    fechaEntrada_ISO: fechaEntrada_ISO,
-                    fechaSalida_ISO: fechaSalida_ISO
+                    fechaEntrada: fechaEntrada,
+                    fechaSalida: fechaSalida
                 }
                 if (calendarioObjeto[fechaInternaHumana]) {
                     calendarioObjeto[fechaInternaHumana].push(estructuraReservaEnDia)

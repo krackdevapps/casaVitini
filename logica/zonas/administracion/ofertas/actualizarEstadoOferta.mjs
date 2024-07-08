@@ -24,9 +24,9 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const estadoOferta = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.estadoOferta,
-            nombreCampo: "El campo estadoOferta",
+        const estadoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.estadoIDV,
+            nombreCampo: "El campo estadoIDV",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -39,18 +39,18 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
 
         const data = {
             ofertaUID:ofertaUID,
-            estadoOferta:estadoOferta,
+            estadoIDV:estadoIDV,
         }
         const ofertaActualizada = await actualizarEstadoOferata(data)
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "El estado de la oferta se ha actualziado correctamente",
-            estadoOferta: ofertaActualizada.estadoOferta
+            ok: "El estado de la oferta se ha actualizado correctamente",
+            estadoIDV: ofertaActualizada.estadoIDV
         };
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release();

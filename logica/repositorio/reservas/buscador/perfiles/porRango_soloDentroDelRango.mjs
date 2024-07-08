@@ -4,61 +4,46 @@ import { constructorOrderBy } from "../../../../sistema/reservas/buscador/contru
 
 export const porRango_soloDentroDelRango = async (data) => {
     try {
-        const fechaEntrada_ISO = data.fechaEntrada_ISO
-        const fechaSalida_ISO = data.fechaSalida_ISO
+        const fechaEntrada = data.fechaEntrada
+        const fechaSalida = data.fechaSalida
         const numeroPorPagina = data.numeroPorPagina
         const numeroPagina = data.numeroPagina
         const nombreColumna = data.nombreColumna
         const sentidoColumna = data.sentidoColumna
 
 
-        const constructorOrderByPorTerminos = (sqlORderBy) => {
-            if (sqlORderBy) {
-                return sqlORderBy
-            } else {
-                const inyector = `
-            ORDER BY
-            ${ordenamientoPorRelevancia}`
-                return inyector
-            }
-        }
+
         const sqlORderBy = await constructorOrderBy(nombreColumna, sentidoColumna)
 
         const consulta = `
-                SELECT
-                    r.reserva,
-                    to_char(r.entrada, 'DD/MM/YYYY') as "fechaEntrada",
-                    to_char(r.salida, 'DD/MM/YYYY') as "fechaSalida",
-                    r."estadoReserva",
-                    CASE 
-                        WHEN c.uid IS NOT NULL THEN 
-                                CONCAT_WS(' ', c.nombre, c."primerApellido", c."segundoApellido")
-                        WHEN ptr.uid IS NOT NULL THEN 
-                            CONCAT_WS(' ', ptr."nombreTitular", '(pool)')
-                    END AS "nombreCompleto",
-                    CASE 
-                        WHEN c.uid IS NOT NULL THEN 
-                            c.pasaporte
-                        WHEN ptr.uid IS NOT NULL THEN 
-                            CONCAT_WS(' ', ptr."pasaporteTitular", '(pool)')
-                    END AS "pasaporteTitula
-                    CASE 
-                        WHEN c.uid IS NOT NULL THEN 
-                            c.email
-                        WHEN ptr.uid IS NOT NULL THEN 
-                            CONCAT_WS(' ', ptr."emailTitular", '(pool)')
-                    END AS "emailTitula
-                    to_char(r.creacion, 'DD/MM/YYYY') as creacion,
-                    COUNT(*) OVER() as total_filas
+        SELECT
+            r."reservaUID",
+            to_char(r."fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada",
+            to_char(r."fechaSalida", 'YYYY-MM-DD') as "fechaSalida",
+            r."estadoReservaIDV",
+            CASE 
+                WHEN c."clienteUID" IS NOT NULL THEN CONCAT_WS(' ', c.nombre, c."primerApellido", c."segundoApellido")
+                WHEN ptr."titularPoolUID" IS NOT NULL THEN CONCAT_WS(' ', ptr."nombreTitular", '(pool)')
+            END AS "nombreCompleto",
+            CASE
+                WHEN c."clienteUID" IS NOT NULL THEN  c.pasaporte
+                WHEN ptr."titularPoolUID" IS NOT NULL THEN CONCAT_WS(' ', ptr."pasaporteTitular", '(pool)')
+            END AS "pasaporteTitular",
+            CASE
+                WHEN c."clienteUID" IS NOT NULL THEN c.mail
+                WHEN ptr."titularPoolUID" IS NOT NULL THEN CONCAT_WS(' ', ptr."mailTitular", '(pool)')
+            END AS "mailTitular",
+            to_char(r."fechaCreacion", 'YYYY-MM-DD') as "fechaCreacion",
+            COUNT(*) OVER() as total_filas
                 FROM 
                     reservas r
                 LEFT JOIN
-                    "reservaTitulares" rt ON r.reserva = rt."reservaUID"
+                    "reservaTitulares" rt ON r."reservaUID" = rt."reservaUID"
                 LEFT JOIN 
-                    clientes c ON rt."titularUID" = c.uid
+                    clientes c ON rt."titularUID" = c."clienteUID"
                 LEFT JOIN
-                    "poolTitularesReserva" ptr ON r.reserva = ptr.reserva
-                WHERE 
+                "poolTitularesReserva" ptr ON r."reservaUID" = ptr."reservaUID"
+                WHERE
                     (
                         -- Caso 1: Evento totalmente dentro del rango
                         "fechaEntrada" >= $1::DATE AND "fechaSalida" <= $2::DATE
@@ -70,8 +55,8 @@ export const porRango_soloDentroDelRango = async (data) => {
 
 
         const parametros = [
-            fechaEntrada_ISO,
-            fechaSalida_ISO,
+            fechaEntrada,
+            fechaSalida,
             numeroPorPagina,
             numeroPagina
         ]

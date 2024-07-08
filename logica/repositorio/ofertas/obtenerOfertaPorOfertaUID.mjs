@@ -1,7 +1,7 @@
 import { conexion } from "../../componentes/db.mjs";
 export const obtenerOferatPorOfertaUID = async (ofertaUID) => {
     try {
-        const consulta =  `
+        const consulta = `
         SELECT
         "ofertaUID",
         to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 

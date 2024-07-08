@@ -26,10 +26,10 @@ export const buscar = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
         const nombreColumna = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.nombreColumna,
+            string: entrada.body.nombreColumna || "",
             nombreCampo: "El campo del nombre de la columna",
             filtro: "strictoConEspacios",
-            sePermiteVacio: "no",
+            sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
         const sentidoColumna = validadoresCompartidos.tipos.cadena({

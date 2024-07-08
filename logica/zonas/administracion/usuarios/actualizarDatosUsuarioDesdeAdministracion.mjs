@@ -52,17 +52,17 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             limpiezaEspaciosInternos: "si"
         })
 
-        const email = validadoresCompartidos.tipos
-            .correoElectronico(entrada.body.email)
+        const mail = validadoresCompartidos.tipos
+            .correoElectronico(entrada.body.mail)
         const telefono = validadoresCompartidos.tipos
             .telefono(entrada.body.telefono)
 
         const validarDatosUsuario = {
-            usuarioIDX: usuarioIDX,
-            pasaporte: pasaporte,
-            email: email
+            usuario: usuario,
+            operacion: "actualizar",
+            mail: mail
         };
-        await validadoresCompartidos.usuarios.unicidadPasaporteYCorrreo(validarDatosUsuario);
+        await validadoresCompartidos.usuarios.unicidadCorreo(validarDatosUsuario);
         await campoDeTransaccion("iniciar")
 
         // validar existencia de contrasena

@@ -30,11 +30,11 @@ export const estadoHabitacionesApartamento = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
 
-        const transaccionInterna = {
-            apartamento: apartamentoUID,
-            reserva: reservaUID
-        };
-        const resuelveHabitaciones = await estadoHabitacionesApartamento_(transaccionInterna);
+      
+        const resuelveHabitaciones = await estadoHabitacionesApartamento_({
+            apartamentoUID: apartamentoUID,
+            reservaUID: reservaUID
+        });
         if (resuelveHabitaciones.info) {
             return salida.json(resuelveHabitaciones);
         }

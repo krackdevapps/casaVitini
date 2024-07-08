@@ -9,7 +9,7 @@ export const porTerminos_ = async (data) => {
         const sentidoColumna = data.sentidoColumna
         const nombreColumna = data.nombreColumna
         const termino = data.termino
-        
+
         const arrayTerminmos = termino.toLowerCase().split(" ");
 
         const terminosFormateados = [];
@@ -23,33 +23,33 @@ export const porTerminos_ = async (data) => {
             CASE
             WHEN
             (
-                (LOWER(COALESCE(CAST(r.reserva AS TEXT), '')) ILIKE ANY($1))::int + 
-                (LOWER(COALESCE(to_char(r.entrada, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
-                (LOWER(COALESCE(to_char(r.salida, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
-                (LOWER(COALESCE(to_char(r.creacion, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(CAST(r."reservaUID" AS TEXT), '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(to_char(r."fechaEntrada", 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(to_char(r."fechaSalida", 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(to_char(r."fechaCreacion", 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(ptr."nombreTitular", '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(ptr."pasaporteTitular", '')) ILIKE ANY($1))::int + 
-                (LOWER(COALESCE(ptr."emailTitular", '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(ptr."mailTitular", '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(c.nombre, '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(c."primerApellido", '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(c."segundoApellido", '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(c.telefono, '')) ILIKE ANY($1))::int + 
-                (LOWER(COALESCE(c.email, '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(c.mail, '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(c.pasaporte, '')) ILIKE ANY($1))::int
             ) = 1 THEN 1
             WHEN (
-                (LOWER(COALESCE(CAST(r.reserva AS TEXT), '')) ILIKE ANY($1))::int + 
-                (LOWER(COALESCE(to_char(r.entrada, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
-                (LOWER(COALESCE(to_char(r.salida, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
-                (LOWER(COALESCE(to_char(r.creacion, 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(CAST(r."reservaUID" AS TEXT), '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(to_char(r."fechaEntrada", 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(to_char(r."fechaSalida", 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(to_char(r."fechaCreacion", 'DD/MM/YYYY'), '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(ptr."nombreTitular", '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(ptr."pasaporteTitular", '')) ILIKE ANY($1))::int + 
-                (LOWER(COALESCE(ptr."emailTitular", '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(ptr."mailTitular", '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(c.nombre, '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(c."primerApellido", '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(c."segundoApellido", '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(c.telefono, '')) ILIKE ANY($1))::int + 
-                (LOWER(COALESCE(c.email, '')) ILIKE ANY($1))::int + 
+                (LOWER(COALESCE(c.mail, '')) ILIKE ANY($1))::int + 
                 (LOWER(COALESCE(c.pasaporte, '')) ILIKE ANY($1))::int
             ) = 3 THEN 3              
                 ELSE 2
@@ -60,6 +60,8 @@ export const porTerminos_ = async (data) => {
 
         const constructorOrderByPorTerminos = (sqlORderBy) => {
             if (sqlORderBy) {
+
+
                 return sqlORderBy
             } else {
                 const inyector = `
@@ -71,55 +73,55 @@ export const porTerminos_ = async (data) => {
 
         const consulta = `                         
         SELECT 
-            r.reserva,
-            to_char(r.entrada, 'DD/MM/YYYY') as "fechaEntrada",
-            to_char(r.salida, 'DD/MM/YYYY') as "fechaSalida",
-            r."estadoReserva",
+            r."reservaUID",
+            to_char(r."fechaEntrada", 'DD/MM/YYYY') as "fechaEntrada",
+            to_char(r."fechaSalida", 'DD/MM/YYYY') as "fechaSalida",
+            r."estadoReservaIDV",
             CASE 
-                WHEN c.uid IS NOT NULL THEN 
+                WHEN c."clienteUID" IS NOT NULL THEN 
                     CONCAT_WS(' ', c.nombre, c."primerApellido", c."segundoApellido")
-                WHEN ptr.uid IS NOT NULL THEN 
+                WHEN ptr."titularPoolUID" IS NOT NULL THEN 
                     CONCAT_WS(' ', ptr."nombreTitular", '(pool)')
             END AS "nombreCompleto",
 
             CASE 
-                WHEN c.uid IS NOT NULL THEN 
+                WHEN c."clienteUID" IS NOT NULL THEN 
                     c.pasaporte
-                WHEN ptr.uid IS NOT NULL THEN 
+                WHEN ptr."titularPoolUID" IS NOT NULL THEN 
                     CONCAT_WS(' ', ptr."pasaporteTitular", '(pool)')
             END AS "pasaporteTitular",
 
             CASE 
-                WHEN c.uid IS NOT NULL THEN 
-                    c.email
-                WHEN ptr.uid IS NOT NULL THEN 
-                    CONCAT_WS(' ', ptr."emailTitular", '(pool)')
-            END AS "emailTitular",
-            to_char(r.creacion, 'DD/MM/YYYY') as creacion,
+                WHEN c."clienteUID" IS NOT NULL THEN 
+                    c.mail
+                WHEN ptr."titularPoolUID" IS NOT NULL THEN 
+                    CONCAT_WS(' ', ptr."mailTitular", '(pool)')
+            END AS "mailTitular",
+            to_char(r."fechaCreacion", 'DD/MM/YYYY') as "fechaCreacion",
             COUNT(*) OVER() as total_filas
         FROM 
             reservas r
         LEFT JOIN
-            "reservaTitulares" rt ON r.reserva = rt."reservaUID"
+            "reservaTitulares" rt ON r."reservaUID" = rt."reservaUID"
         LEFT JOIN 
-            clientes c ON rt."titularUID" = c.uid
+            clientes c ON rt."titularUID" = c."clienteUID"
         LEFT JOIN
-            "poolTitularesReserva" ptr ON r.reserva = ptr.reserva
+            "poolTitularesReserva" ptr ON r."reservaUID" = ptr."reservaUID"
         WHERE
             (
-            LOWER(COALESCE(CAST(r.reserva AS TEXT), '')) ILIKE ANY($1)
-            OR LOWER(COALESCE(to_char(r.entrada, 'DD/MM/YYYY'), '')) ILIKE ANY($1)
-            OR LOWER(COALESCE(to_char(r.salida, 'DD/MM/YYYY'), '')) ILIKE ANY($1)
-            OR LOWER(COALESCE(to_char(r.creacion, 'DD/MM/YYYY'), '')) ILIKE ANY($1)
+            LOWER(COALESCE(CAST(r."reservaUID" AS TEXT), '')) ILIKE ANY($1)
+            OR LOWER(COALESCE(to_char(r."fechaEntrada", 'DD/MM/YYYY'), '')) ILIKE ANY($1)
+            OR LOWER(COALESCE(to_char(r."fechaSalida", 'DD/MM/YYYY'), '')) ILIKE ANY($1)
+            OR LOWER(COALESCE(to_char(r."fechaCreacion", 'DD/MM/YYYY'), '')) ILIKE ANY($1)
             OR LOWER(COALESCE(c.nombre, '')) ILIKE ANY($1)
             OR LOWER(COALESCE(c."primerApellido", '')) ILIKE ANY($1)
             OR LOWER(COALESCE(c."segundoApellido", '')) ILIKE ANY($1)
             OR LOWER(COALESCE(c.telefono, '')) ILIKE ANY($1)
-            OR LOWER(COALESCE(c.email, '')) ILIKE ANY($1)
+            OR LOWER(COALESCE(c.mail, '')) ILIKE ANY($1)
             OR LOWER(COALESCE(c.pasaporte, '')) ILIKE ANY($1)
             OR LOWER(COALESCE(ptr."nombreTitular", '')) ILIKE ANY($1)
             OR LOWER(COALESCE(ptr."pasaporteTitular", '')) ILIKE ANY($1)
-            OR LOWER(COALESCE(ptr."emailTitular", '')) ILIKE ANY($1)
+            OR LOWER(COALESCE(ptr."mailTitular", '')) ILIKE ANY($1)
             )
         ${constructorOrderByPorTerminos(sqlORderBy)}
         LIMIT $2

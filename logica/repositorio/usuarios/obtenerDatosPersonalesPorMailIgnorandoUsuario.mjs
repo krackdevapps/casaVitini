@@ -1,24 +1,21 @@
 import { conexion } from "../../componentes/db.mjs";
 
-export const obtenerNombreColumnaPorTabla = async (data) => {
+export const obtenerDatosPersonalesPorMailIgnorandoUsuario = async (data) => {
     try {
-
-        const tabla = data.tabla
-        const nombreColumna = data.nombreColumna
+        const mail = data.mail
+        const usuario = data.usuario
 
         const consulta = `
         SELECT 
-        column_name
+        *
         FROM 
-        information_schema.columns
+        "datosDeUsuario"
         WHERE 
-        table_name = $1 
-        AND 
-        column_name = $2;
-        `;
+        mail = $1
+        AND usuario <> $2;`;
         const parametros = [
-            tabla,
-            nombreColumna
+            mail,
+            usuario
         ]
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows
@@ -26,4 +23,3 @@ export const obtenerNombreColumnaPorTabla = async (data) => {
         throw errorCapturado
     }
 }
-

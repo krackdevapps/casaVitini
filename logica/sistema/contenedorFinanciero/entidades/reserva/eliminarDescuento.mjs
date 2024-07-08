@@ -17,8 +17,8 @@ export const eliminarDescuento = async (data) => {
             nombreCampo: "La fecha de salida del actualizarDesgloseFinanciero"
         })
         await validadoresCompartidos.fechas.validacionVectorial({
-            fechaEntrada_ISO: data.fechaEntrada,
-            fechaSalida_ISO: data.fechaSalida,
+            fechaEntrada: data.fechaEntrada,
+            fechaSalida: data.fechaSalida,
             tipoVector: "diferente"
         })
         const apartamentosArray = validadoresCompartidos.tipos.array({
@@ -97,8 +97,8 @@ export const eliminarDescuento = async (data) => {
         await totalesBasePorRango({
             estructura,
             instantaneaNoches,
-            fechaEntrada_ISO: fechaEntrada,
-            fechaSalida_ISO: fechaSalida,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             apartamentosArray
         })
         constructorEstructuraDescuentos(estructura)

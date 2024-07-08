@@ -3,8 +3,8 @@ import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs"
 import Decimal from "decimal.js"
 import { obtenerClientesPorPasaporte } from "../../repositorio/clientes/obtenerClientesPorPasaporte.mjs"
 import { obtenerDatosPersonalesPorMail } from "../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs"
-import { obtenerDatosPersonalesPorPasaporteDual } from "../../repositorio/usuarios/obtenerDatosPersonalesPorPasaporte.mjs"
 import { obtenerNombreColumnaPorTabla } from "../../repositorio/globales/obtenerNombreColumnaPorTabla.mjs"
+import { obtenerDatosPersonalesPorMailIgnorandoUsuario } from "../../repositorio/usuarios/obtenerDatosPersonalesPorMailIgnorandoUsuario.mjs"
 export const validadoresCompartidos = {
     clientes: {
         validarCliente: async (cliente) => {
@@ -57,7 +57,6 @@ export const validadoresCompartidos = {
                     limpiezaEspaciosAlrededor: "si",
                 })
 
-
                 const clienteConMismoPasaporte = await obtenerClientesPorPasaporte(pasaporte)
                 if (clienteConMismoPasaporte.length > 0) {
                     const nombreClienteExistente = clienteConMismoPasaporte.nombre
@@ -85,57 +84,33 @@ export const validadoresCompartidos = {
 
     },
     usuarios: {
-        unicidadPasaporteYCorrreo: async (datosUsuario) => {
+        unicidadCorreo: async (data) => {
             try {
-                const usuarioIDX = datosUsuario.usuarioIDX
-                const pasaporte = datosUsuario.pasaporte
-                const email = datosUsuario.email
-                const operacion = datosUsuario.operacion
+                const usuario = data.usuario
+                const mail = data.mail
+                const operacion = data.operacion
 
-                if (!usuarioIDX && operacion !== "actualizar") {
-                    const error = "El validador de unicidadPasaporteYCorrreo esta mal configurado. Si la operacio es actualizar, falta el usuarioIDX."
-                    throw new Error(error)
-                }
-
-                const constructorSQL = (operacion, usuario) => {
-                    try {
-                        if (operacion === "actualizar") {
-                            return `AND "usuariosIDX" <> '${usuario}'`
-                        } else if (operacion === "crear") {
-                            return ""
-                        } else {
-                            const error = "El validador de unicidadPasaporteYCorrreo esta mal configurado. Debe de especificarse el tipo de operacion."
-                            throw new Error(error)
-                        }
-                    } catch (errorCapturado) {
-                        throw error
+                if (operacion === "actualizar") {
+                    if (!usuario) {
+                        const error = "En unicidadCorreo falta pasar el usuario"
+                        throw new Error(error)
                     }
-                }
-                const inyectorSQL = constructorSQL(operacion, usuarioIDX)
-                // validar existencia de correo
-                const usuarioConMismoMail = await obtenerDatosPersonalesPorMail(email)
-                if (usuarioConMismoMail.length > 0) {
-                    const usuariosExistentes = usuarioConMismoMail.map((usuario) => {
-                        return usuario.usuario
+                    const otroUsuariosConMismoMail = await obtenerDatosPersonalesPorMailIgnorandoUsuario({
+                        mail,
+                        usuario
                     })
-                    const ultimoElemento = usuariosExistentes.pop();
-                    const constructorCadenaFinalUI = usuariosExistentes.join(", ") + (usuariosExistentes.length > 0 ? " y " : "") + ultimoElemento;
-                    const error = `Ya existe un usuario con el correo electroníco que estas intentando guardar: ${constructorCadenaFinalUI}`
-                    throw new Error(error)
-                }
-                // validar existencia de pasaporte
-                const usaurioConMismoPasaporte = await obtenerDatosPersonalesPorPasaporteDual({
-                    pasaporte: pasaporte,
-                    opoeracion: operacion,
-                    usuario: usuario
-                })
-                if (usaurioConMismoPasaporte.length > 0) {
-                    const usuariosExistentes = usaurioConMismoPasaporte.map((usuario) => {
-                        return usuario.usuario
-                    })
-                    const ultimoElemento = usuariosExistentes.pop();
-                    const constructorCadenaFinalUI = usuariosExistentes.join(", ") + (usuariosExistentes.length > 0 ? " y " : "") + ultimoElemento;
-                    const error = `Ya existe un usuario con el pasaporte que estas intentando guardar: ${constructorCadenaFinalUI}`
+                    if (otroUsuariosConMismoMail.length > 0) {
+                        const m = "Este email se esta usando en otra cuenta, por favor escoge otro o recupera tu cuenta."
+                        throw new Error(m)
+                    }
+                } else if (operacion === "crear") {
+                    const otroUsuariosConMismoMail = await obtenerDatosPersonalesPorMail(mail)
+                    if (otroUsuariosConMismoMail.length > 0) {
+                        const m = "Este email se esta usando en otra cuenta, por favor escoge otro o recupera tu cuenta."
+                        throw new Error(m)
+                    }
+                } else {
+                    const error = "El validador de unicidadCorreo esta mal configurado. Si la operacio es actualizar, falta el usuario."
                     throw new Error(error)
                 }
 
@@ -145,42 +120,55 @@ export const validadoresCompartidos = {
         },
         datosUsuario: (data) => {
             try {
-                const nombre = validadoresCompartidos.tipos.cadena({
+
+
+                data.nombre = validadoresCompartidos.tipos.cadena({
                     string: data.nombre,
                     nombreCampo: "El campo del nombre",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
                     limpiezaEspaciosAlrededor: "si",
+                    soloMayusculas: "si"
                 })
-                const primerApellido = validadoresCompartidos.tipos.cadena({
+                data.primerApellido = validadoresCompartidos.tipos.cadena({
                     string: data.primerApellido,
                     nombreCampo: "El campo del primer apellido",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
                     limpiezaEspaciosAlrededor: "si",
+                    soloMayusculas: "si"
+
                 })
 
-                const segundoApellido = validadoresCompartidos.tipos.cadena({
+                data.segundoApellido = validadoresCompartidos.tipos.cadena({
                     string: data.segundoApellido,
                     nombreCampo: "El campo del segundo apellido",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
                     limpiezaEspaciosAlrededor: "si",
+                    soloMayusculas: "si"
                 })
 
-                const pasaporte = validadoresCompartidos.tipos.cadena({
+                data.pasaporte = validadoresCompartidos.tipos.cadena({
                     string: data.pasaporte,
                     nombreCampo: "El campo del pasaporte",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
                     limpiezaEspaciosAlrededor: "si",
-                    limpiezaEspaciosInternos: "si"
-                })
+                    limpiezaEspaciosInternos: "si",
+                    soloMayusculas: "si"
 
-                const email = validadoresCompartidos.tipos
-                    .correoElectronico(data.email)
-                const telefono = validadoresCompartidos.tipos
-                    .telefono(data.telefono)
+                })
+                if (data.mail) {
+                    validadoresCompartidos.tipos
+                        .correoElectronico(data.mail)
+                }
+
+                if (data.telefono) {
+                    validadoresCompartidos.tipos
+                        .telefono(data.telefono)
+                }
+
 
             } catch (errorCapturado) {
                 throw errorCapturado
@@ -278,17 +266,17 @@ export const validadoresCompartidos = {
         },
         validacionVectorial: async (configuracion) => {
             try {
-                const fechaEntrada_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
-                    fecha_ISO: configuracion.fechaEntrada_ISO,
+                const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
+                    fecha_ISO: configuracion.fechaEntrada,
                     nombreCampo: "La fecha de entrada en el validor vectorial"
                 })
-                const fechaSalida_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
-                    fecha_ISO: configuracion.fechaSalida_ISO,
+                const fechaSalida = await validadoresCompartidos.fechas.validarFecha_ISO({
+                    fecha_ISO: configuracion.fechaSalida,
                     nombreCampo: "La fecha de salida en el validador vectorial"
                 })
 
-                const fechaEntrada_obejto = DateTime.fromISO(fechaEntrada_ISO)
-                const fechaSalida_obejto = DateTime.fromISO(fechaSalida_ISO)
+                const fechaEntrada_obejto = DateTime.fromISO(fechaEntrada)
+                const fechaSalida_obejto = DateTime.fromISO(fechaSalida)
                 const tipoVector = configuracion.tipoVector
 
                 if (tipoVector === "igual") {
@@ -421,6 +409,7 @@ export const validadoresCompartidos = {
             const soloMinusculas = configuracion.soloMinusculas || "no"
             const soloMayusculas = configuracion.soloMayusculas || "no"
 
+
             if (!configuracion.hasOwnProperty("string")) {
                 throw new Error("El validador de numeros no encuentra la llave string en el objeto");
             }
@@ -473,10 +462,10 @@ export const validadoresCompartidos = {
                 const mensaje = `El validor de cadena esta mal configurado, soloMayusculas solo acepta si o no.`
                 throw new Error(mensaje)
             }
+
             if (sePermiteVacio === "si" && string === "") {
                 return string
-            }
-            if (string.length === 0 || string === "") {
+            } else if (string.length === 0 || string === "") {
                 const mensaje = `${nombreCampo} esta vacío.`
                 throw new Error(mensaje)
             }
@@ -491,7 +480,7 @@ export const validadoresCompartidos = {
             }
             if (soloMayusculas === "si") {
                 string = string
-                    .toLowerCase()
+                    .toUpperCase()
             }
             if (filtro === "strictoSinEspacios") {
                 try {
@@ -963,7 +952,7 @@ export const validadoresCompartidos = {
             try {
                 const nombreColumna = validadoresCompartidos.tipos.cadena({
                     string: configuracion.nombreColumna,
-                    nombreCampo: "El campo de nombreColumnade validador de columnas",
+                    nombreCampo: "El campo de nombreColumna del validador de columnas",
                     filtro: "strictoIDV",
                     sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
@@ -981,8 +970,9 @@ export const validadoresCompartidos = {
                     tabla: tabla,
                     nombreColumna: nombreColumna
                 })
-                if (columna.length === 0) {
-                    const error = `No existe el nombre de la columna ${nombreColumna} en la tabla ${tabla}`;
+
+                if (columna?.length === 0) {
+                    const error = `No existe el la columna ${nombreColumna}`;
                     throw new Error(error);
                 }
             } catch (errorCapturado) {

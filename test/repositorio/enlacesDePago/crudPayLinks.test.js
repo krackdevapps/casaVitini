@@ -24,8 +24,8 @@ describe('crud pay links', () => {
         await eliminarEnlaceDePagoPorEnlaceTVI(enlaceTVI)
         await eliminarReservaPorReservaTVI(reservaTVI)
         const nuevaReserva = await insertarReservaAdministrativa({
-            fechaEntrada_ISO: "2020-10-10",
-            fechaSalida_ISO: "2020-11-11",
+            fechaEntrada: "2020-10-10",
+            fechaSalida: "2020-11-11",
             estadoReserva: "confirmada",
             origen: "test",
             creacion: "2020-11-11",

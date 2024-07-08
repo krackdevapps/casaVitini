@@ -1,19 +1,20 @@
 import { conexion } from "../../../componentes/db.mjs"
-
 export const obtenerReservasComoLista = async (data) => {
     try {
-        const reservasUID = data.reservasUID
+        const reservasUIDArray = data.reservasUIDArray
         const numeroPorPagina = data.numeroPorPagina
-        const paginaActualSQL = Number(numeroPorPagina - 1)
+        const paginaActualSQL = data.paginaActualSQL
+
         const sentidoColumna = data.sentidoColumna
-        const nombreColumna = data.nombreColumna
+        const nombreColumna = data?.nombreColumna
 
         const sentidoColumnaSQLFiltro = (sentidoColumna) => {
             if (sentidoColumna === "ascendente") {
                 return "ASC"
-            }
-            if (sentidoColumna === "descendente") {
+            } else if (sentidoColumna === "descendente") {
                 return "DESC"
+            } else {
+                return "ASC"
             }
         }
 
@@ -25,8 +26,12 @@ export const obtenerReservasComoLista = async (data) => {
             "${nombreColumna}" ${sentidoColumnaSQL}`
             if (nombreColumna) {
                 return ordenColumnaSQL
+            } else {
+                return ""
             }
+
         }
+
         const consulta = `
         SELECT 
                 "reservaUID",
@@ -39,17 +44,18 @@ export const obtenerReservasComoLista = async (data) => {
         FROM
                 reservas
         WHERE
-            ($1::int[] IS NOT NULL AND "reservaUID" = ANY($1::int[])) 
+        "reservaUID" = ANY($1::int[])
         ${constructorSQL(nombreColumna, sentidoColumna)}
         LIMIT
-            $2
+           $2
         OFFSET
             $3;`;
         const parametros = [
-            reservasUID,
+            reservasUIDArray,
             numeroPorPagina,
             paginaActualSQL
         ];
+
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows
     } catch (errorCapturado) {

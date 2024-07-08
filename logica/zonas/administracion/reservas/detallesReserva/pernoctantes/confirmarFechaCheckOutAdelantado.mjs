@@ -66,10 +66,10 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
             const error = "No se puede alterar una fecha de checkin de una reserva cancelada";
             throw new Error(error);
         }
-        const fechaEntrada_ISO = reserva.fechaEntrada;
-        const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO);
-        const fechaSalida_ISO = reserva.fechaSalida;
-        const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO);
+        const fechaEntrada = reserva.fechaEntrada;
+        const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada);
+        const fechaSalida = reserva.fechaSalida;
+        const fechaSalida_Objeto = DateTime.fromISO(fechaSalida);
         if (fechaCheckOut_Objeto >= fechaSalida_Objeto) {
             const error = "La fecha de Checkout adelantado no puede ser superior o igual a la fecha de salida de la reserva, si el checkout se hace el mismo dia que finaliza la reserva no hace falta has un checkout adelantado";
             throw new Error(error);

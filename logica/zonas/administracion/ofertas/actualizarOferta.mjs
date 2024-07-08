@@ -64,7 +64,7 @@ export const actualizarOferta = async (entrada) => {
             if (tipoCondicion === "porCodigoDescuento") {
                 const codigoDescuentoB64 = condicion.codigoDescuento
                 condicion.codigoDescuento = Buffer.from(codigoDescuentoB64, 'base64').toString('utf-8');
-               
+
             }
         })
 

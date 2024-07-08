@@ -4,7 +4,7 @@ export const obtenerApartamentoDeLaReservaPorApartamentoUID = async (data) => {
     try {
         const reservaUID = data.reservaUID
         const apartamentoUID = data.apartamentoUID
-
+        console.log("data", data)
         const consulta = `
         SELECT 
         *
@@ -12,7 +12,7 @@ export const obtenerApartamentoDeLaReservaPorApartamentoUID = async (data) => {
         WHERE 
         "reservaUID" = $1
         AND 
-        "apartamentoUID" = $2
+        "componenteUID" = $2
         `;
         const parametros = [
             reservaUID,

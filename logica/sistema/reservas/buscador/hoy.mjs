@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../configuracion/codigoZonaHoraria.mjs";
+import { selector_hoy } from "../../../repositorio/reservas/buscador/perfiles/hoy.mjs";
 
 export const hoy = async (data) => {
     try {
@@ -14,13 +15,15 @@ export const hoy = async (data) => {
         const mes = String(tiempoZH.month).padStart("2", "0");
         const ano = tiempoZH.year;
         //const numeroPagina = pagina - 1
-  
-        const reservas = await hoy({
-            numeroPorPagina:numeroPorPagina,
-            numeroPagina:numeroPagina,
-            fechaActual_ISO:fechaActual_ISO
+
+        const reservas = await selector_hoy({
+            numeroPorPagina: numeroPorPagina,
+            numeroPagina: 0,
+            fechaActual_ISO: fechaActual_ISO
         })
-        const consultaConteoTotalFilas = reservas[0]?.total_filas ? reservas[0].total_filas : 0;
+        const consultaConteoTotalFilas = reservas.length > 0
+            ? reservas[0].total_filas
+            : 0;
         for (const detallesFila of reservas) {
             delete detallesFila.total_filas;
         }
@@ -32,7 +35,7 @@ export const hoy = async (data) => {
             fechaEntrada: fechaActual_ISO,
             paginasTotales: totalPaginas,
             totalReservas: Number(consultaConteoTotalFilas),
-            nombreColumna: "entrada",
+            nombreColumna: "fechaEntrada",
             sentidoColumna: "ascendente",
             reservas: reservas
         };

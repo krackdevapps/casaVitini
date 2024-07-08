@@ -6,11 +6,11 @@ import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas
 import { insertarHabitacionEnApartamento } from "../../../../../repositorio/reservas/apartamentos/insertarHabitacionEnApartamento.mjs";
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 
-export const anadirHabitacionAlApartamentoEnReserva = async (entrada, salida) => {
+export const anadirHabitacionAlApartamentoEnReserva = async (entrada) => {
     const mutex = new Mutex()
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session,)
         IDX.administradores()
         IDX.empleados()
         IDX.control()

@@ -22,12 +22,12 @@ window.showError = function (message) {
 }
 window.createPayment = async function (token, verificationToken) {
   casaVitini.componentes.flujoPagoUI.infoDuranteFlujo()
-  
+
   // Aqui se deberua recoger el objeto reserva e intergrarlo en el objeto que hay dentro de dataJsonString
   const destinoDinamico = document.querySelector("[pasarelaZonaDePago]")?.getAttribute("pasarelaZonaDePago")
   if (!destinoDinamico) {
     const error = "windows.createPayment necesita un elmeneto pasarela=zonaDePago donde se defina el objeto"
-    return casaVitini.ui.vistas.advertenciaInmersiva(error)
+    return casaVitini.ui.componentes.advertenciaInmersiva(error)
   }
   const acoplador = {}
   if (destinoDinamico === "confirmarReserva") {
@@ -47,9 +47,9 @@ window.createPayment = async function (token, verificationToken) {
     acoplador.zona = "plaza/reservas/confirmarReserva"
     acoplador.reserva = reservaLocal
   }
-  
+
   if (destinoDinamico === "enlaceDePago") {
-    
+
     const enlaceUID = document.querySelector("[pagoUID]").getAttribute("pagoUID")
     acoplador.zona = "plaza/enlaceDePago/realizarPago"
     acoplador.enlaceUID = enlaceUID
@@ -104,7 +104,7 @@ window.createPayment = async function (token, verificationToken) {
           return x(detalles);
         } else {
           const error = "No exista la funcion a la que se esta llamando tras confirmar la reserva"
-          return casaVitini.ui.vistas.advertenciaInmersiva(error)
+          return casaVitini.ui.componentes.advertenciaInmersiva(error)
         }
       } else {
         window.showError('Ha ocurrido un error inesperado!');

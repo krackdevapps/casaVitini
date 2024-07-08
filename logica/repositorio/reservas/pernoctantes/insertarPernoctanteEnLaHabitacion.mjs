@@ -14,7 +14,7 @@ export const insertarPernoctanteEnLaHabitacion = async (data) => {
         "clienteUID"
         )
         VALUES ($1, $2,$3) 
-        RETURNING "componenteUID"
+        RETURNING *
         `;
         const parametros = [
             reservaUID,

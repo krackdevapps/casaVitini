@@ -23,8 +23,18 @@ export const listarReservas = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
         const pagina = entrada.body.pagina
-        const nombreColumna = entrada.body.nombreColumna
+        let nombreColumna = entrada.body.nombreColumna
         const sentidoColumna = entrada.body.sentidoColumna
+
+
+
+        if (nombreColumna === "reserva") {
+            nombreColumna = "reservaUID"
+        } else if (nombreColumna === "estadoPago") {
+            nombreColumna = "estadoPagoIDV"
+        } else if (nombreColumna === "estadoReserva") {
+            nombreColumna = "estadoReservaIDV"
+        }
 
         const configuracionValidador = {
             pagina: pagina,
@@ -40,20 +50,15 @@ export const listarReservas = async (entrada, salida) => {
                 numeroPorPagina: numeroPorPagina,
                 numeroPagina: 1
             }
+
+
             const resultados = await hoy(data)
+
             Object.assign(ok, resultados)
 
         }
         else if (tipoConsulta === "rango") {
             validadorBusqueda(configuracionValidador)
-            const fechaEntrada_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
-                fecha_ISO: entrada.body.fechaEntrada_ISO,
-                nombreCampo: "La fecha de entrada para listar reservas por rango"
-            })
-            const fechaSalida_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
-                fecha_ISO: entrada.body.fechaSalida_ISO,
-                nombreCampo: "La fecha de salida para listar reservas por rango"
-            })
 
             const tipoCoincidencia = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.tipoCoincidencia,
@@ -62,20 +67,47 @@ export const listarReservas = async (entrada, salida) => {
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
+            const fechaEntrada = entrada.body.fechaEntrada
+            const fechaSalida = entrada.body.fechaSalida
 
-            await validadoresCompartidos.fechas.validacionVectorial({
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
-                tipoVector: "diferente"
-            })
+            if (
+                tipoCoincidencia === "soloDentroDelRango" ||
+                tipoCoincidencia === "cualquieraQueCoincida" ||
+                tipoCoincidencia === "porFechaDeEntrada"
+            ) {
+                await validadoresCompartidos.fechas.validarFecha_ISO({
+                    fecha_ISO: entrada.body.fechaEntrada,
+                    nombreCampo: "La fecha de entrada para listar reservas por rango"
+                })
+            }
+
+            if (
+                tipoCoincidencia === "soloDentroDelRango" ||
+                tipoCoincidencia === "cualquieraQueCoincida" ||
+                tipoCoincidencia === "porFechaDeSalida"
+            ) {
+                await validadoresCompartidos.fechas.validarFecha_ISO({
+                    fecha_ISO: entrada.body.fechaSalida,
+                    nombreCampo: "La fecha de salida para listar reservas por rango"
+                })
+            }
+
+            if (fechaEntrada && fechaSalida) {
+                await validadoresCompartidos.fechas.validacionVectorial({
+                    fechaEntrada: fechaEntrada,
+                    fechaSalida: fechaSalida,
+                    tipoVector: "diferente"
+                })
+            }
+
 
             const data = {
                 numeroPorPagina: numeroPorPagina,
                 numeroPagina: numeroPagina,
                 sentidoColumna: sentidoColumna,
                 nombreColumna: nombreColumna,
-                fechaEntrada_ISO: fechaEntrada_ISO,
-                fechaSalida_ISO: fechaSalida_ISO,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
                 tipoCoincidencia: tipoCoincidencia,
             }
             const resultados = await rango(data)
@@ -84,7 +116,6 @@ export const listarReservas = async (entrada, salida) => {
         }
         else if (tipoConsulta === "porTerminos") {
             validadorBusqueda(configuracionValidador)
-
             const termino = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.termino,
                 nombreCampo: "El campo del termino",
@@ -92,6 +123,9 @@ export const listarReservas = async (entrada, salida) => {
                 sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
+
+
+
             const data = {
                 numeroPorPagina: numeroPorPagina,
                 numeroPagina: numeroPagina,
@@ -107,7 +141,18 @@ export const listarReservas = async (entrada, salida) => {
             const error = "Hay que especificar el tipo de consulta, si es hoy, rango o porTerminos, revisa los parametros de tu busqueda";
             throw new Error(error);
         }
-        salida.json(ok)
+
+
+        if (ok.nombreColumna === "reservaUID") {
+            ok.nombreColumna = "reserva"
+        } else if (ok.nombreColumna === "estadoPagoIDV") {
+            ok.nombreColumna = "estadoPago"
+        } else if (ok.nombreColumna === "estadoReservaIDV") {
+            ok.nombreColumna = "estadoReserva"
+        }
+
+
+        return ok
     } catch (errorCapturado) {
         throw errorCapturado
     }

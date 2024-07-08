@@ -8,8 +8,8 @@ import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from '../..
 
 export const apartamentosPorRango = async (data) => {
 
-    const fechaEntrada_ISO = data.fechaEntrada_ISO
-    const fechaSalida_ISO = data.fechaSalida_ISO
+    const fechaEntrada = data.fechaEntrada
+    const fechaSalida = data.fechaSalida
     const apartamentosIDV = data.apartamentosIDV
     const zonaConfiguracionAlojamientoArray = data.zonaConfiguracionAlojamientoArray
     const zonaBloqueo_array = data.zonaBloqueo_array
@@ -17,29 +17,29 @@ export const apartamentosPorRango = async (data) => {
     try {
 
         await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: fechaEntrada_ISO,
+            fecha_ISO: fechaEntrada,
             nombreCampo: "La fecha de entrada de la reserva en apartamentosPorRango"
         })
         await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: fechaSalida_ISO,
+            fecha_ISO: fechaSalida,
             nombreCampo: "La fecha de salida de la reserva en apartamentosPorRango"
         })
-        const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO); // El formato es día/mes/ano
-        const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO);
+        const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada); // El formato es día/mes/ano
+        const fechaSalida_Objeto = DateTime.fromISO(fechaSalida);
         if (fechaEntrada_Objeto >= fechaSalida_Objeto) {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
             throw new Error(error)
         }
         const apartamentosDisponiblesArray = []
         const reservas = await obtenerReservasPorRango({
-            fechaIncioRango_ISO: fechaEntrada_ISO,
-            fechaFinRango_ISO: fechaSalida_ISO,
+            fechaIncioRango_ISO: fechaEntrada,
+            fechaFinRango_ISO: fechaSalida,
         })
 
         const apartametnosIDVBloqueoados = []
         const configuracionBloqueos = {
-            fechaInicioRango_ISO: fechaEntrada_ISO,
-            fechaFinRango_ISO: fechaSalida_ISO,
+            fechaInicioRango_ISO: fechaEntrada,
+            fechaFinRango_ISO: fechaSalida,
             apartamentoIDV: apartamentosIDV,
             zonaBloqueo_array: zonaBloqueo_array
         }
@@ -80,8 +80,8 @@ export const apartamentosPorRango = async (data) => {
         const apartamentosNoDisponiblesArray = Array.from(new Set(apartametnosIDVBloqueoados));
         const apartamentosDisponiblesFinal = apartamentosDisponiblesArray.filter(apartamento => !apartamentosNoDisponiblesArray.includes(apartamento));
         const datosAirbnb = {
-            fechaEntrada_ISO: fechaEntrada_ISO,
-            fechaSalida_ISO: fechaSalida_ISO,
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
             apartamentosDisponibles: apartamentosDisponiblesFinal,
         }
         const apartamentosOcupadosPorEliminar_Airbnb = await apartamentosOcupadosAirbnb(datosAirbnb)

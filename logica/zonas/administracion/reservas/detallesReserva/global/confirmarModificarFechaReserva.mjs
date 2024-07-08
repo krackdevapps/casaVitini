@@ -64,10 +64,10 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
             const error = "La reserva no se puede modificar por que esta cancelada, una reserva cancelada no interfiere en los dias ocupados";
             throw new Error(error);
         }
-        const fechaEntrada_ISO = reserva.fechaEntrada;
-        const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada_ISO, { zone: zonaHoraria });
-        const fechaSalida_ISO = reserva.fechaSalida;
-        const fechaSalida_Objeto = DateTime.fromISO(fechaSalida_ISO, { zone: zonaHoraria });
+        const fechaEntrada = reserva.fechaEntrada;
+        const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
+        const fechaSalida = reserva.fechaSalida;
+        const fechaSalida_Objeto = DateTime.fromISO(fechaSalida, { zone: zonaHoraria });
         const metadatos = {
             reservaUID,
             mesCalendario: mesSeleccionado,
@@ -111,9 +111,9 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 reservaUID: reservaUID
             })
             const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)
-            
+
             await campoDeTransaccion("confirmar")
-            console.log("actualiza", reservaActualizada)
+
             const nuevaFechaEntrada = reservaActualizada.fechaEntrada;
             const ok = {
                 ok: "Se ha actualizado correctamente la fecha de entrada en la reserva",

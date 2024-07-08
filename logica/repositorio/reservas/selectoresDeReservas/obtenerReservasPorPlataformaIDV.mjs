@@ -13,8 +13,8 @@ export const obtenerReservasPorApartamentoIDVPorMesPorAno = async (data) => {
         SELECT 
           r.reserva,
           ra.uid,
-          to_char(r.entrada, 'YYYY-MM-DD') as "fechaEntrada_ISO", 
-          to_char(r.salida, 'YYYY-MM-DD') as "fechaSalida_ISO",
+          to_char(r.entrada, 'YYYY-MM-DD') as "fechaEntrada", 
+          to_char(r.salida, 'YYYY-MM-DD') as "fechaSalida",
           ra.apartamento as "apartamentoIDV",
           (salida - entrada) as duracion_en_dias
         FROM reservas r

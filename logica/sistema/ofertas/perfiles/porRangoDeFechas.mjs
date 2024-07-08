@@ -15,9 +15,9 @@ export const porRangoDeFechas = async (reserva) => {
     const fechaActualTZ = reserva.fechas.fechaActualProcesada_ISO
     const totalesPorNoche = reserva.desgloseFinanciero.totalesPorNoche
     const totalReservaNeto = new Decimal(reserva.desgloseFinanciero.totales.totalReservaNeto)
-    const estadoOferta = "activada"
+    const estadoOferta = "activado"
     const tipoOferta = "porRangoDeFechas"
-  
+
     const ofertasEncontradas = await obtenerOfertasPorRangoFechaPorEstadoPorTipo({
         fechaSalidaReserva_ISO: fechaSalidaReserva_ISO,
         fechaEntradaReserva_ISO: fechaEntradaReserva_ISO,
