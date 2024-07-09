@@ -6,9 +6,9 @@ export const eliminarTitularPoolPorReservaUID = async (reservaUID) => {
         DELETE FROM 
         "poolTitularesReserva"
         WHERE
-        reserva = $1;
+        "reservaUID" = $1;
         `;
-        const resuelve = await conexion.query(consulta, reservaUID)
+        const resuelve = await conexion.query(consulta, [reservaUID])
         return resuelve.rows[0]
     } catch (errorCapturado) {
         throw errorCapturado

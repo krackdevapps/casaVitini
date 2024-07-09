@@ -93,7 +93,7 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
                 habitacionUID: habitacionUID
             })
             const ok = {}
-            if (camaDeLaHabitacion.componenteUID) {
+            if (camaDeLaHabitacion?.componenteUID) {
                 await actualizaCamaDeLaHabitacion({
                     reservaUID: reservaUID,
                     habitacionUID: habitacionUID,

@@ -3,6 +3,7 @@ import { validadoresCompartidos } from "../../../../../sistema/validadores/valid
 import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../../../repositorio/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
 import { obtenerClientePoolPorPernoctanteUID } from "../../../../../repositorio/pool/obtenerClientePoolPorPernoctanteUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerDetallesCliente } from "../../../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 
 export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
     try {
@@ -20,7 +21,6 @@ export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-        await obtenerReservaPorReservaUID(reservaUID);
 
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pernoctanteUID,
@@ -30,29 +30,46 @@ export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
+
+        await obtenerReservaPorReservaUID(reservaUID);
+        
         const pernoctante = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
             reservaUID: reservaUID,
             pernoctanteUID: pernoctanteUID
         })
-        if (!pernoctante.componenteUID) {
+        if (!pernoctante?.componenteUID) {
             const error = "No existe ningun pernoctante con ese UID dentro del la reserva";
             throw new Error(error);
         }
         const clienteUID = pernoctante.clienteUID;
+        const ok = {
+            ok: {
+                pernoctanteUID: pernoctanteUID
+               
+           }
+        }
+
         if (clienteUID) {
-            const error = "El pernoctante ya ha pasado el proceso de comporbacion";
-            throw new Error(error);
+            const cliente = await obtenerDetallesCliente(clienteUID)
+            const nombre = cliente.nombre
+            const primerApellido = cliente.primerApellidos
+            const segundoApellido = cliente.segundoApellido
+            const nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`
+            const pasaporte = cliente.pasaporte;
+
+            ok.ok.nombreCompleto = nombreCompleto
+            ok.ok.pasaporte = pasaporte
+            ok.ok.tipoPernoctant = "cliente"
         } else {
             const clientePool = await obtenerClientePoolPorPernoctanteUID(pernoctanteUID)
             const nombreCompleto = clientePool.nombreCompleto;
             const pasaporte = clientePool.pasaporte;
-            const ok = {
-                pernoctanteUID: pernoctanteUID,
-                nombreCompleto: nombreCompleto,
-                pasaporte: pasaporte
-            };
-            return ok
+
+            ok.ok.nombreCompleto = nombreCompleto
+            ok.ok.pasaporte = pasaporte
+            ok.ok.tipoPernoctant = "clientePool"
         }
+        return ok
     } catch (errorCapturado) {
         throw errorCapturado
     }

@@ -6,12 +6,12 @@ import { obtenerHabitacionDelLaReserva } from "../../../../../repositorio/reserv
 import { insertarPernoctanteEnLaHabitacion } from "../../../../../repositorio/reservas/pernoctantes/insertarPernoctanteEnLaHabitacion.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
-export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida) => {
+export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
     const mutex = new Mutex()
     try {
 
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -35,7 +35,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
             devuelveUnTipoNumber: "si"
         })
   
-        const resolverReserva = await obtenerReservaPorReservaUID(reserva)
+        const resolverReserva = await obtenerReservaPorReservaUID(reservaUID)
         if (resolverReserva.estadoReserva === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);
@@ -46,7 +46,8 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
             habitacionUID: habitacionUID
         })
 
-        const nuevoCliente = {
+ 
+        const datosValidados = await validadoresCompartidos.clientes.validarCliente({
             nombre: entrada.body.nombre,
             primerApellido: entrada.body.primerApellido,
             segundoApellido: entrada.body.segundoApellido,
@@ -54,16 +55,15 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada, salida)
             telefono: entrada.body.telefono,
             correoElectronico: entrada.body.correoElectronico,
             notas: entrada.body.notas,
-        };
-        const datosValidados = await validadoresCompartidos.clientes.validarCliente(nuevoCliente);
+        });
 
-        const nuevoClienteInsertado = await insertarCliente(datosValidados);
-        const nuevoUIDCliente = nuevoClienteInsertado.uid;
+        const nuevoCliente = await insertarCliente(datosValidados);
+        const nuevoUIDCliente = nuevoCliente.clienteUID;
 
         const nuevoPernoctaneInsertado = await insertarPernoctanteEnLaHabitacion({
             reservaUID: reservaUID,
             habitacionUID: habitacionUID,
-            clienteUID: clienteUID
+            clienteUID: nuevoUIDCliente
         })
         const ok = {
             ok: "Se ha anadido correctamente el cliente en la habitacin de la reserva",

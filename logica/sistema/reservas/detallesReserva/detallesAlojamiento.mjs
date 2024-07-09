@@ -10,10 +10,10 @@ export const detallesAlojamiento = async (reservaUID) => {
         const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
         const alojamiento = {
         }
-        if (apartamentosDeLaReserva.length === 0) {
-            reserva.alojamiento = {}
-        }
-        const habitacionObjeto = {}
+        // if (apartamentosDeLaReserva.length === 0) {
+        //     reserva.alojamiento = {}
+        // }
+        // const habitacionObjeto = {}
         const apartamentosIndiceOrdenado = []
         apartamentosDeLaReserva.forEach((apartamento) => {
             apartamentosIndiceOrdenado.push(apartamento.apartamento)

@@ -30,37 +30,25 @@ export const estadoHabitacionesApartamento = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
 
-      
+
         const resuelveHabitaciones = await estadoHabitacionesApartamento_({
             apartamentoUID: apartamentoUID,
             reservaUID: reservaUID
-        });
-        if (resuelveHabitaciones.info) {
-            return salida.json(resuelveHabitaciones);
+        })
+        const ok = {
+            ok: []
         }
-        const habitacionesResuelvas = resuelveHabitaciones.ok;
-        if (habitacionesResuelvas.length === 0) {
-            const ok = {
-                ok: []
-            };
-            return ok
-        }
-        if (habitacionesResuelvas.length > 0) {
-            const habitacionesProcesdas = [];
-            for (const habitacionIDV of habitacionesResuelvas) {
-                const habitacion = obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
+            for (const habitacionIDV of resuelveHabitaciones) {
+                const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
                 const habitaconUI = habitacion.habitacionUI;
                 const habitacionResuelta = {
                     habitacionIDV: habitacionIDV,
                     habitacionUI: habitaconUI
                 };
-                habitacionesProcesdas.push(habitacionResuelta);
+                ok.ok.push(habitacionResuelta);
             }
-            const ok = {
-                ok: habitacionesProcesdas
-            };
-            return ok
-        }
+        
+        return ok
     } catch (errorCapturado) {
         throw errorCapturado
     }

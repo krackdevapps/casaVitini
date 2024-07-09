@@ -20,11 +20,7 @@ export const actualizarHabitacionDelPernoctantePorHabitacionUID = async (data) =
             habitacionUID
         ]
         const resuelve = await conexion.query(consulta, parametros);
-        if (resuelve.rowCount === 0) {
-            const error = "No se puede cambiar la habitacion del pernoctante por que no existe la habitacion dentro de la reserva";
-            throw new Error(error);
-        }
-        return resuelve.rows[0]
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

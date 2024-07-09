@@ -39,8 +39,9 @@ export const buscar = async (entrada, salida) => {
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
-        if (tipoBusqueda !== "rapido") {
-            tipoBusqueda = null;
+        if (tipoBusqueda && tipoBusqueda !== "rapido") {
+            const m = "Si se defdine tipoBusqueda, solo puede ser rapido o no definnirse"
+            throw new Error(m)
         }
 
         const pagina = validadoresCompartidos.tipos.numero({
@@ -60,14 +61,13 @@ export const buscar = async (entrada, salida) => {
         }
 
         const numeroPorPagina = 10;
-        const configuracionBusqueda = {
+        const resultadosBusqueda = await obtenerResultadosBusqueda({
             numeroPagina: pagina,
             numeroPorPagina: numeroPorPagina,
             nombreColumna: nombreColumna,
             terminoBusqueda: buscar,
             sentidoColumna: sentidoColumna,
-        }
-        const resultadosBusqueda = await obtenerResultadosBusqueda(configuracionBusqueda)
+        })
 
         const consultaConteoTotalFilas = resultadosBusqueda[0]?.totalClientes ? resultadosBusqueda[0].totalClientes : 0;
         if (tipoBusqueda === "rapido") {

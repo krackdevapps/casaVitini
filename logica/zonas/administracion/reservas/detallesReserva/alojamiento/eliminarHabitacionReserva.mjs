@@ -8,11 +8,11 @@ import { eliminarPernoctanteDeLaHabitacion } from "../../../../../repositorio/re
 import { eliminarHabitacionDelApartamento } from "../../../../../repositorio/reservas/apartamentos/eliminarHabitacionDelApartamento.mjs";
 import { actualizarHabitacionDelPernoctantePorHabitacionUID } from "../../../../../repositorio/reservas/pernoctantes/actualizarHabitacionDelPernoctantePorHabitacionUID.mjs";
 
-export const eliminarHabitacionReserva = async (entrada, salida) => {
+export const eliminarHabitacionReserva = async (entrada) => {
     const mutex = new Mutex()
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -76,8 +76,7 @@ export const eliminarHabitacionReserva = async (entrada, salida) => {
             })
             ok.ok = "Se ha eliminado al habitacion correctamente y los pernoctanes que contenia"
 
-        }
-        if (pernoctantes === "conservar") {
+        } else if (pernoctantes === "conservar") {
             await actualizarHabitacionDelPernoctantePorHabitacionUID({
                 reservaUID: reservaUID,
                 habitacionUID: habitacionUID

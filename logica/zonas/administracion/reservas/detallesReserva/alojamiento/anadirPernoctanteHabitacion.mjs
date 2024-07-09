@@ -67,7 +67,7 @@ export const anadirPernoctanteHabitacion = async (entrada) => {
             reservaUID,
             clienteUID
         })
-        console.log("pernoctanteDeLaReserva",pernoctanteDeLaReserva)
+
         if (pernoctanteDeLaReserva.length > 0) {
             const error = "Este cliente ya es un pernoctante dentro de esta reserva, mejor muevalo de habitacion";
             throw new Error(error);

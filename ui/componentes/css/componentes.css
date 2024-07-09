@@ -2709,7 +2709,7 @@
 [zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_panel_bloqueTitular {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     flex-direction: column;
     flex-wrap: nowrap;
     padding: 8px;
@@ -10296,7 +10296,6 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .administracion_reservas_detallesReservas_gestionTitular_listaBuscador {
     background-color: #898989;
-    width: 100px;
     border-radius: 10px;
     overflow: hidden;
     padding: 0px;

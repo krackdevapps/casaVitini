@@ -7,7 +7,7 @@ export const eliminarTitularPorReservaUID = async (reservaUID) => {
         WHERE
         "reservaUID" = $1;
         `;
-        const resuelve = await conexion.query(consulta, reservaUID)
+        const resuelve = await conexion.query(consulta, [reservaUID])
         return resuelve.rows[0]
     } catch (errorCapturado) {
         throw errorCapturado

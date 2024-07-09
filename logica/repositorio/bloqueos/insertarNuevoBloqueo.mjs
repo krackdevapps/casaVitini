@@ -5,12 +5,10 @@ export const insertarNuevoBloqueo = async (data) => {
 
         const apartamentoIDV = data.apartamentoIDV
         const tipoBloqueo = data.tipoBloqueo
-        const fechaInicio_ISO = data.fechaInicio_ISO || null
-        const fechaFin_ISO = data.fechaFin_ISO || null
+        const fechaInicio = data.fechaInicio || null
+        const fechaFin = data.fechaFin || null
         const motivo = data.motivo
         const zonaIDV = data.zonaIDV
-        // bloqueoIDV para tests
-        const bloqueoIDV = data.bloqueIDV || null
 
         const consulta = `
         INSERT INTO "bloqueosApartamentos"
@@ -20,21 +18,19 @@ export const insertarNuevoBloqueo = async (data) => {
         "fechaInicio",
         "fechaFin",
         motivo,
-        "zonaIDV",
-        "bloqueoIDV"
+        "zonaIDV"
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7) 
+        VALUES ($1, $2, $3, $4, $5, $6) 
         RETURNING 
         *
         `;
         const parametros = [
             apartamentoIDV,
             tipoBloqueo,
-            fechaInicio_ISO,
-            fechaFin_ISO,
+            fechaInicio,
+            fechaFin,
             motivo,
-            zonaIDV,
-            bloqueoIDV
+            zonaIDV
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {

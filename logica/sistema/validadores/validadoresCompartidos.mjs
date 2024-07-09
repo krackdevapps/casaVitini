@@ -22,7 +22,7 @@ export const validadoresCompartidos = {
                     string: cliente.primerApellido,
                     nombreCampo: "El campo del primer apellido",
                     filtro: "strictoConEspacios",
-                    sePermiteVacio: "no",
+                    sePermiteVacio: "si",
                     limpiezaEspaciosAlrededor: "si",
                     limpiezaEspaciosInternos: "si"
 
@@ -31,7 +31,7 @@ export const validadoresCompartidos = {
                     string: cliente.segundoApellido,
                     nombreCampo: "El campo del segundo apellido",
                     filtro: "strictoConEspacios",
-                    sePermiteVacio: "no",
+                    sePermiteVacio: "si",
                     limpiezaEspaciosAlrededor: "si",
                     limpiezaEspaciosInternos: "si"
 
@@ -44,21 +44,31 @@ export const validadoresCompartidos = {
                     limpiezaEspaciosAlrededor: "si",
                     limpiezaEspaciosInternos: "si"
                 })
-                const correoElectronico = validadoresCompartidos.tipos
-                    .correoElectronico(entrada.body.correoElectronico)
-                const telefono = validadoresCompartidos.tipos
-                    .telefono(entrada.body.telefono)
+                
+                const correoElectronico = validadoresCompartidos.tipos.correoElectronico({
+                    mail: cliente.correoElectronico,
+                    nombreCampo: "El coreo electronico instroducido",
+                    sePermiteVacio: "si"
+                })
+                const telefono = validadoresCompartidos.tipos.telefono({
+                    phone: cliente.telefono,
+                    nombreCampo: "El teelfono instroducido",
+                    sePermiteVacio: "si"
+                })
 
                 const notas = validadoresCompartidos.tipos.cadena({
-                    string: cliente.notas,
+                    string: cliente.notas || "",
                     nombreCampo: "El campo de notas",
                     filtro: "strictoConEspacios",
-                    sePermiteVacio: "no",
+                    sePermiteVacio: "si",
                     limpiezaEspaciosAlrededor: "si",
                 })
 
-                const clienteConMismoPasaporte = await obtenerClientesPorPasaporte(pasaporte)
-                if (clienteConMismoPasaporte.length > 0) {
+                const clienteConMismoPasaporte = await obtenerClientesPorPasaporte({
+                    pasaporte,
+                    errorSi: "existe"
+                })
+                if (clienteConMismoPasaporte?.clienteUID) {
                     const nombreClienteExistente = clienteConMismoPasaporte.nombre
                     const primerApellidoClienteExistente = clienteConMismoPasaporte.primerApellido
                     const segundoApellidoClienteExistente = clienteConMismoPasaporte.segundoApellido
@@ -707,18 +717,37 @@ export const validadoresCompartidos = {
 
 
         },
-        correoElectronico: (correoElectronico) => {
+        correoElectronico: (configuracion) => {
             try {
-                if (!correoElectronico) {
-                    const error = "El campo de correo electroníco está vacío."
-                    throw new Error(error)
+                let mail = configuracion.mail
+                const nombreCampo = configuracion.nombreCampo
+                const sePermiteVacio = configuracion.sePermiteVacio
+
+                if (!configuracion.hasOwnProperty("mail")) {
+                    throw new Error("El validador de mail no encuentra la llave mail en el objeto");
                 }
-                if (typeof correoElectronico !== "string") {
+
+                if (!configuracion.hasOwnProperty("nombreCampo")) {
+                    throw new Error("El validador de numeros no encuentra la llave nombreCampo en el objeto");
+                }
+                if (typeof sePermiteVacio !== "mail" &&
+                    (sePermiteVacio !== "si" && sePermiteVacio !== "no")) {
+                    const mensaje = `El validor de mail esta mal configurado, sePermiteVacio solo acepta si o no y es obligatorio declararlo en la configuracíon.`
+                    throw new Error(mensaje)
+                }
+
+                if (sePermiteVacio === "si" && mail === "") {
+                    return mail
+                } else if (mail.length === 0 || mail === "") {
+                    const mensaje = `${nombreCampo} esta vacío.`
+                    throw new Error(mensaje)
+                }
+                if (typeof mail !== "string") {
                     const error = "El campo de correo electroníco debe de ser una cadena"
                     throw new Error(error)
                 }
                 const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
-                const cadenaCorreoLimpia = correoElectronico
+                const cadenaCorreoLimpia = mail
                     .trim()
                     .toLowerCase()
                 if (!filtroCorreoElectronico.test(cadenaCorreoLimpia)) {
@@ -731,18 +760,37 @@ export const validadoresCompartidos = {
             }
 
         },
-        telefono: (telefono) => {
+        telefono: (configuracion) => {
             try {
-                if (!telefono) {
+
+                let phone = configuracion.phone
+                const nombreCampo = configuracion.nombreCampo
+                const sePermiteVacio = configuracion.sePermiteVacio
+
+                if (!configuracion.hasOwnProperty("phone")) {
+                    throw new Error("El validador de phone no encuentra la llave phone en el objeto");
+                }
+
+                if (!configuracion.hasOwnProperty("nombreCampo")) {
+                    throw new Error("El validador de mail no encuentra la llave nombreCampo en el objeto");
+                }
+                if (sePermiteVacio === "si" && phone === "") {
+                    return phone
+                } else if (phone.length === 0 || phone === "") {
+                    const mensaje = `${nombreCampo} esta vacío.`
+                    throw new Error(mensaje)
+                }
+
+                if (!phone) {
                     const error = "El campo del telefono está vacío."
                     throw new Error(error)
                 }
-                if (typeof telefono !== "string") {
+                if (typeof phone !== "string") {
                     const error = "el campo Telefono debe de ser una cadena."
                     throw new Error(error)
                 }
                 const filtroTelefono = /[^0-9]+/g
-                const telefonoLimpio = telefono
+                const telefonoLimpio = phone
                     .replace(/\s+/g, '')
                     .replace("+", '00')
                     .trim()

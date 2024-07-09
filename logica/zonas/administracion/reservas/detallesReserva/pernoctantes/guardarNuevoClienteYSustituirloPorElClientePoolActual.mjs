@@ -56,17 +56,17 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
             reservaUID: reservaUID,
             pernoctanteUID: pernoctanteUID
         })
-        if (!pernoctante.componenteUID) {
+        if (!pernoctante?.componenteUID) {
             const error = "No existe el pernoctanteUID dentro de esta reserva";
             throw new Error(error);
         }
-        const clienteUID = pernoctante.clienteUID;
+        const clienteUID = pernoctante?.clienteUID;
         if (clienteUID) {
             const error = "El pernoctnte ya es un cliente y no un clientePool";
             throw new Error(error);
         }
         const nuevoClienteAdd = await insertarCliente(datosValidados);
-        const nuevoUIDCliente = nuevoClienteAdd.uid;
+        const nuevoUIDCliente = nuevoClienteAdd.clienteUID;
         // Borrar clientePool       
         await eliminarClientePool(pernoctanteUID)
         const pernoctanteActualizado = await actualizarClienteUIDDelPernoctantePorComponenteUID({

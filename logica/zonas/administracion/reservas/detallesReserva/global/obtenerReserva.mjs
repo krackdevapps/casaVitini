@@ -2,11 +2,11 @@ import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
 import { detallesReserva as detallesReserva_ } from "../../../../../sistema/reservas/detallesReserva.mjs";
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
 
-export const obtenerReserva = async (entrada, salida) => {
+export const obtenerReserva = async (entrada) => {
     try {
 
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()

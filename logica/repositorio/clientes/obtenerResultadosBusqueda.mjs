@@ -3,8 +3,8 @@ import { conexion } from "../../componentes/db.mjs";
 export const obtenerResultadosBusqueda = async (data) => {
     try {
 
-        const numeroPagina = data.numeroPagina
-        const numeroPorPagina =   Number((data.numeroPorPagina - 1) + "0");
+        const numeroPorPagina = data.numeroPorPagina
+        const numeroPagina = Number((data.numeroPagina - 1) + "0");
         const nombreColumna = data.nombreColumna
         const terminoBusqueda = data.terminoBusqueda
         const sentidoColumna = data.sentidoColumna
@@ -17,19 +17,19 @@ export const obtenerResultadosBusqueda = async (data) => {
         });
 
         const sqlDinamicoConstructor = (nombreColumna, sentidoColumna) => {
-                if (sentidoColumna !== "descendente" && sentidoColumna !== "ascendente") {
-                    sentidoColumna = "ascendente";
-                }
-                if (sentidoColumna == "ascendente") {
-                    sentidoColumna = "ASC";
-                }
-                if (sentidoColumna == "descendente") {
-                    sentidoColumna = "DESC";
-                }            
+            if (sentidoColumna !== "descendente" && sentidoColumna !== "ascendente") {
+                sentidoColumna = "ascendente";
+            }
+            if (sentidoColumna == "ascendente") {
+                sentidoColumna = "ASC";
+            }
+            if (sentidoColumna == "descendente") {
+                sentidoColumna = "DESC";
+            }
             if (nombreColumna) {
                 // OJO con la coma, OJO LA COMA ES IMPORTANTISMA!!!!!!!!
                 return `,"${nombreColumna}" ${sentidoColumna}`;
-            }else {
+            } else {
                 return ""
             }
         }
@@ -71,6 +71,7 @@ export const obtenerResultadosBusqueda = async (data) => {
             ) 
         ${sqlDinamicoConstructor(nombreColumna, sentidoColumna)}
         LIMIT $2 OFFSET $3;`;
+
         const resuelve = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina, numeroPagina]);
         return resuelve.rows
     } catch (errorCapturado) {

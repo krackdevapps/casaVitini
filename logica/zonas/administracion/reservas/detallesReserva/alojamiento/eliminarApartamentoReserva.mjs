@@ -5,6 +5,7 @@ import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
+import { eliminarApartamentoPorReservaUIDPorApartamentoUID } from "../../../../../repositorio/reservas/apartamentos/eliminarApartamentoPorReservaUIDPorApartamentoUID.mjs";
 
 export const eliminarApartamentoReserva = async (entrada) => {
     const mutex = new Mutex()
@@ -61,20 +62,27 @@ export const eliminarApartamentoReserva = async (entrada) => {
         const fechaEntrada = reserva.fechaEntrada;
         const fechaSalida = reserva.fechaSalida;
 
-        if (tipoBloqueo === "permanente" || tipoBloqueo === "rangoTemporal") {
-            const metadatos = {
-                reserva: reservaUID,
-                apartamentoUID: apartamentoUID,
-                tipoBloqueo: tipoBloqueo,
-                fechaEntrada: fechaEntrada,
-                fechaSalida: fechaSalida,
-                zonaBloqueo: "publico",
-                origen: "eliminacionApartamentoDeReserva"
-            };
-            await bloquearApartamentos(metadatos);
 
+
+
+        if (tipoBloqueo === "permanente" || tipoBloqueo === "rangoTemporal") {
+            await bloquearApartamentos({
+                reservaUID,
+                apartamentoUID,
+                tipoBloqueo,
+                 fechaEntrada,
+                 fechaSalida,
+                zonaIDV: "publico",
+                origen: "eliminacionApartamentoDeReserva"
+            })
         }
-        await eliminarApartamentoReserva({
+
+
+
+
+
+        // LKoop
+        await eliminarApartamentoPorReservaUIDPorApartamentoUID({
             reservaUID: reservaUID,
             apartamentoUID: apartamentoUID
         })

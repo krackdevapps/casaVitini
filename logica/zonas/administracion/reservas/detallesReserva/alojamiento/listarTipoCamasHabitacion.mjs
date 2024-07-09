@@ -37,7 +37,8 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
         }
         const habitacion = await obtenerHabitacionDelApartamentoPorHabitacionIDV({
             apartamentoIDV: apartamentoIDV,
-            habitacionIDV: habitacionIDV
+            habitacionIDV: habitacionIDV,
+            errorSi: "noExiste"
         })
         const nombreUIApartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,

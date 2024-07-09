@@ -4,7 +4,7 @@ export const obtenerApartamentoDeLaReservaPorApartamentoUID = async (data) => {
     try {
         const reservaUID = data.reservaUID
         const apartamentoUID = data.apartamentoUID
-        console.log("data", data)
+
         const consulta = `
         SELECT 
         *

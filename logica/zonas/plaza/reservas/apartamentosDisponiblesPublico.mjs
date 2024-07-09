@@ -8,11 +8,12 @@ import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqu
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 import { procesador } from "../../../sistema/contenedorFinanciero/procesador.mjs";
 
-export const apartamentosDisponiblesPublico = async (entrada, salida) => {
+export const apartamentosDisponiblesPublico = async (entrada) => {
     try {
         if (!await interruptor("aceptarReservasPublicas")) {
             throw new Error(mensajesUI.aceptarReservasPublicas);
         }
+
         const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaEntrada,
             nombreCampo: "La fecha de entrada en apartamentosDisponiblesPublico"

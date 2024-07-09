@@ -14,7 +14,7 @@ export const actualizarClienteUIDDelPernoctantePorComponenteUID = async (data) =
         AND
         "componenteUID" = $2
         RETURNING
-        habitacion;
+        "habitacionUID";
         `;
         const parametros = [
             reservaUID,

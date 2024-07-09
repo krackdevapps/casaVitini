@@ -1195,15 +1195,16 @@ const casaVitini = {
                             const botonBorrarBusquedaAlojamiento = document.querySelector("[componente=botonBorrarBusquedaAlojamiento]")
                             botonBorrarBusquedaAlojamiento.style.display = "flex"
 
-                            const fechaEntrada = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaEntradaVolatil_Humana)
-                            const fechaSalida = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaSalidaVolatil_Humana)
+                            // const fechaEntrada = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaEntradaVolatil_Humana)
+                            // const fechaSalida = casaVitini.utilidades.conversor.fecha_humana_hacia_ISO(fechaSalidaVolatil_Humana)
 
                             document.querySelector("[componente=botonDisponibilidad]").classList.remove("parpadeaFondo")
                             const transaccion = {
                                 zona: "plaza/reservas/apartamentosDisponiblesPublico",
-                                fechaEntrada: fechaEntrada,
-                                fechaSalida: fechaSalida
+                                fechaEntrada: fechaEntradaVolatil_Humana,
+                                fechaSalida: fechaSalidaVolatil_Humana
                             }
+
                             const respuestaServidor = await casaVitini.shell.servidor(transaccion)
 
                             if (!document.querySelector(`[instanciaUID="${instanciaUID}"]`)) {
@@ -1450,19 +1451,11 @@ const casaVitini = {
                     },
                     iraResumenReserva: function () {
                         const reservaLocal = {}
-                        const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                        const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                        const fechaEntradaVolatil_ISO = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                        const fechaSalidaVolatil_ISO = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
 
-                        const fechaEntradaArray = fechaEntradaVolatil_Humana.split("/")
-                        const fechaSalidaArray = fechaSalidaVolatil_Humana.split("/")
-                        const diaEntrada = fechaEntradaArray[0].padStart("2", 0)
-                        const mesEntrada = fechaEntradaArray[1].padStart("2", 0)
-                        const anoEntrada = fechaEntradaArray[2].padStart("4", 0)
-                        const diaSalida = fechaSalidaArray[0].padStart("2", 0)
-                        const mesSalida = fechaSalidaArray[1].padStart("2", 0)
-                        const anoSalida = fechaSalidaArray[2].padStart("4", 0)
-                        reservaLocal.fechaEntrada = `${anoEntrada}-${mesEntrada}-${diaEntrada}`
-                        reservaLocal.fechaSalida = `${anoSalida}-${mesSalida}-${diaSalida}`
+                        reservaLocal.fechaEntrada = fechaEntradaVolatil_ISO
+                        reservaLocal.fechaSalida = fechaSalidaVolatil_ISO
                         reservaLocal.alojamiento = {}
                         const apartamentosSeleccionados = document.querySelectorAll("[estadoApartamento=seleccionado]")
                         apartamentosSeleccionados.forEach((apartamento) => {
@@ -4834,7 +4827,7 @@ const casaVitini = {
                                 camaUI.setAttribute("camaUID", metadatos.camaUID)
                                 camaUI.setAttribute("componente", "menuDesplegable")
                                 camaUI.innerText = metadatos.camaUI
-                 
+
                                 return camaUI
                             },
                             "pernoctanteUI": (metadatos) => {
@@ -5001,7 +4994,7 @@ const casaVitini = {
                                 botonGuardarNuevoCliente.classList.add("botonCancelarBuscadoRapidoInsertar")
                                 botonGuardarNuevoCliente.innerText = "Guardar nuevo cliente y anadirlo a esta habitacion"
                                 botonGuardarNuevoCliente.setAttribute("habitacionUID_botonAsociaNueoCliente", habitacionUID)
-                   
+
                                 nuevoClienteUI.appendChild(botonGuardarNuevoCliente)
                                 buscadorRapidoClienteUI.appendChild(nuevoClienteUI)
                                 let botonCancelar = document.createElement("div")
@@ -5013,7 +5006,7 @@ const casaVitini = {
                                     })*/
                                 }
                                 if (origen === "opcionesClientePool") {
-                     
+
                                 }
                                 buscadorRapidoClienteUI.appendChild(botonCancelar)
                                 if (origen === "habitacion") {
@@ -5130,7 +5123,7 @@ const casaVitini = {
                                 botonOpcionesCliente.setAttribute("componente", "botonCancelarPropuesta")
                                 botonOpcionesCliente.setAttribute("habitacionUID_", habitacionUID)
                                 botonOpcionesCliente.innerText = "Cancelar"
-        
+
                                 bloquePropuestaCambio.appendChild(botonOpcionesCliente)
                                 //document.querySelector("[componente=buscadorRapido]").style.display = "none"
                                 let selectorComponentesOcultables = document.querySelectorAll("[componente=botonOpcionClientePool]")
@@ -9833,7 +9826,7 @@ const casaVitini = {
                                     bloqueDia.style.gridColumnStart = posicionDia1
                                 }
                                 bloqueDia.setAttribute("dia", diaFinal_decimal)
-  
+
                                 bloqueDia.style.pointerEvents = "none"
                                 if (calendario.tiempo === "presente") {
                                     if (diaFinal_decimal === diaActual_decimal) {

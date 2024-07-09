@@ -44,6 +44,7 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             };
             estructuraFinal.apartamentosDisponibles.push(detalleApartamento);
         }
+
         for (const apartamentoIDV of apartamentosNoDisponiblesIDV) {
             const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,

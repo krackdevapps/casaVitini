@@ -18,11 +18,7 @@ export const eliminarPernoctanteDeLaHabitacion = async (data) => {
             reservaUID
         ]
         const resuelve = await conexion.query(consulta, parametros);
-        if (resuelve.rowCount === 0) {
-            const error = "No se ha elimnado el pernoctante de la habitacion por que no se encuentra.";
-            throw new Error(error);
-        }
-        return resuelve.rows[0]
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

@@ -1,8 +1,8 @@
 import { conexion } from "../../componentes/db.mjs"
 export const obtenerBloqueosPorRangoPorApartamentoIDV = async (metadatos) => {
   try {
-    const fechaInicio_ISO = metadatos.fechaInicio_ISO
-    const fechaFinal_ISO = metadatos.fechaFinal_ISO
+    const fechaInicio_ISO = metadatos.fechaInicioRango
+    const fechaFinal_ISO = metadatos.fechaFinRango
     const apartamentosIDV_array = metadatos.apartamentosIDV_array || []
     const zonaBloqueoIDV_array = metadatos.zonaBloqueoIDV_array
 

@@ -36,26 +36,27 @@ export const apartamentosPorRango = async (data) => {
             fechaFinRango_ISO: fechaSalida,
         })
 
-        const apartametnosIDVBloqueoados = []
-        const configuracionBloqueos = {
-            fechaInicioRango_ISO: fechaEntrada,
-            fechaFinRango_ISO: fechaSalida,
-            apartamentoIDV: apartamentosIDV,
-            zonaBloqueo_array: zonaBloqueo_array
-        }
+        const apartamentosIDVBloqueados = []
 
-        const bloqueos = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
+        const bloqueos = await obtenerBloqueosPorRangoPorApartamentoIDV({
+            fechaInicioRango: fechaEntrada,
+            fechaFinRango: fechaSalida,
+            apartamentosIDV_array: apartamentosIDV,
+            zonaBloqueoIDV_array: zonaBloqueo_array
+        })
 
         bloqueos.forEach((apartamento) => {
-            apartametnosIDVBloqueoados.push(apartamento.apartamento)
+            apartamentosIDVBloqueados.push(apartamento.apartamentoIDV)
         })
+
+
         for (const reserva of reservas) {
             const reservaUID = reserva.reservaUID
             const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
 
             apartamentosDeLaReserva.forEach((apartamentoDeLaReserva) => {
                 const apartamentoIDV = apartamentoDeLaReserva.apartamentoIDV
-                apartametnosIDVBloqueoados.push(apartamentoIDV)
+                apartamentosIDVBloqueados.push(apartamentoIDV)
             })
         }
         const configuracionesAlojamientoSoloDisponible = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
@@ -66,24 +67,29 @@ export const apartamentosPorRango = async (data) => {
             const error = "No hay ningun apartamento disponible"
             throw new Error(error)
         }
-        const configuracionesAlojaminetoNODisponbiles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
+        const configuracionesAlojamientoNODisponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
             estadoIDV: "nodisponible",
             zonaArray: zonaConfiguracionAlojamientoArray
         })
-        configuracionesAlojaminetoNODisponbiles.forEach((apartamentoNoDisponible) => {
-            apartametnosIDVBloqueoados.push(apartamentoNoDisponible.apartamentoIDV)
+
+        configuracionesAlojamientoNODisponibles.forEach((apartamentoNoDisponible) => {
+            apartamentosIDVBloqueados.push(apartamentoNoDisponible.apartamentoIDV)
         })
 
         configuracionesAlojamientoSoloDisponible.forEach((apartamento) => {
             apartamentosDisponiblesArray.push(apartamento.apartamentoIDV)
         })
-        const apartamentosNoDisponiblesArray = Array.from(new Set(apartametnosIDVBloqueoados));
+
+
+        const apartamentosNoDisponiblesArray = Array.from(new Set(apartamentosIDVBloqueados));
         const apartamentosDisponiblesFinal = apartamentosDisponiblesArray.filter(apartamento => !apartamentosNoDisponiblesArray.includes(apartamento));
+
         const datosAirbnb = {
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
             apartamentosDisponibles: apartamentosDisponiblesFinal,
         }
+
         const apartamentosOcupadosPorEliminar_Airbnb = await apartamentosOcupadosAirbnb(datosAirbnb)
 
         for (const apartamentoIDV of apartamentosOcupadosPorEliminar_Airbnb) {
@@ -93,6 +99,7 @@ export const apartamentosPorRango = async (data) => {
                 apartamentosNoDisponiblesArray.push(apartamentoIDV)
             }
         }
+
         const ok = {
             apartamentosNoDisponibles: apartamentosNoDisponiblesArray,
             apartamentosDisponibles: apartamentosDisponiblesFinal,

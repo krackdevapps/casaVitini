@@ -7,13 +7,11 @@ export const estadoHabitacionesApartamento = async (transacion) => {
     try {
         const reservaUID = transacion.reservaUID
         const apartamentoUID = transacion.apartamentoUID
-        // compruebo que eso sea un apartamento dentro de la reserva
-        console.log("tr", transacion)
+
         const apartamentoDeLaReserva = await obtenerApartamentoDeLaReservaPorApartamentoUID({
             reservaUID: reservaUID,
             apartamentoUID: apartamentoUID
         })
-        console.log("apartamentoDeLaReserva", apartamentoDeLaReserva)
 
         if (!apartamentoDeLaReserva?.componenteUID) {
             const error = "No existe el apartamento dentro de esta reserva"
@@ -27,8 +25,8 @@ export const estadoHabitacionesApartamento = async (transacion) => {
         })
 
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-
         const configuracionDeHabitacionesDelApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
+
         if (configuracionDeHabitacionesDelApartamento.length === 0) {
             const error = `Este apartamento no tiene habitaciones disponbiles para seleccionar. Si desea tener disponibles habitaciones a este apartamento, añada habitaciones seleccionables en la configuracion de alojamiento con identificador visual ${apartamentoIDV}`
             throw new Error(error)
@@ -37,19 +35,16 @@ export const estadoHabitacionesApartamento = async (transacion) => {
         const habitacionesDelApartamentoPostProcesado = []
         const habitacionesDelApartamentoDeLaReservaPostProcesado = []
         configuracionDeHabitacionesDelApartamento.forEach((habitacionPreProcesda) => {
-            const habitacionPostProcesada = habitacionPreProcesda.habitacion
+            const habitacionPostProcesada = habitacionPreProcesda.habitacionIDV
             habitacionesDelApartamentoPostProcesado.push(habitacionPostProcesada)
         })
         habitacionesDelApartamento.forEach((habitacionPreProcesda) => {
-            const habitacionPostProcesada = habitacionPreProcesda.habitacion
+            const habitacionPostProcesada = habitacionPreProcesda.habitacionIDV
             habitacionesDelApartamentoDeLaReservaPostProcesado.push(habitacionPostProcesada)
         })
         const habitaconesDipsoniblesDelapartamentoPostProcesado = habitacionesDelApartamentoPostProcesado.filter(habitacion => !habitacionesDelApartamentoDeLaReservaPostProcesado.includes(habitacion));
 
-        const ok = {
-            ok: habitaconesDipsoniblesDelapartamentoPostProcesado
-        }
-        return ok
+        return habitaconesDipsoniblesDelapartamentoPostProcesado
     } catch (errorCapturado) {
         throw errorCapturado;
     }

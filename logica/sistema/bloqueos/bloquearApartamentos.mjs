@@ -5,28 +5,13 @@ import { obtenerReservaPorReservaUID } from '../../repositorio/reservas/reserva/
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 export const bloquearApartamentos = async (metadatos) => {
     try {
-        const reservaUID = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.reservaUID,
-            nombreCampo: "El identificador universal de la reserva (reservaUID)",
-            filtro: "cadenaConNumerosEnteros",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
-        })
-
-        const apartamentoUID = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.apartamentoUID,
-            nombreCampo: "El identificador universal de la reserva (apartamentoUID)",
-            filtro: "cadenaConNumerosEnteros",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
-        })
+        const reservaUID = metadatos.reservaUID
+        const apartamentoUID = metadatos.apartamentoUID
 
         const tipoBloqueo = metadatos.tipoBloqueo
         const fechaEntrada = metadatos.fechaEntrada
         const fechaSalida = metadatos.fechaSalida
-        const zonaBloqueo = metadatos.zonaBloqueo
+        const zonaIDV = metadatos.zonaIDV
         const origen = metadatos.origen
 
         await validadoresCompartidos.fechas.validarFecha_ISO({
@@ -42,8 +27,8 @@ export const bloquearApartamentos = async (metadatos) => {
             const error = "El campo 'tipoBloqueo' solo puede ser rangoTemporal, permanente, sinBloqueo"
             throw new Error(error)
         }
-        if (zonaBloqueo !== "publico" && zonaBloqueo !== "privado" && zonaBloqueo !== "global") {
-            const error = "El campo 'zonaBloqueo' solo puede ser publico, privado, global"
+        if (zonaIDV !== "publico" && zonaIDV !== "privado" && zonaIDV !== "global") {
+            const error = "El campo 'zonaIDV' solo puede ser publico, privado, global"
             throw new Error(error)
         }
         if (origen !== "cancelacionDeReserva" && origen !== "eliminacionApartamentoDeReserva") {
@@ -52,11 +37,12 @@ export const bloquearApartamentos = async (metadatos) => {
         }
 
         await obtenerReservaPorReservaUID(reservaUID)
-        const apartamentoDeLaReserva = obtenerApartamentoDeLaReservaPorApartamentoUID({
-            reservaUID: reservaUID,
-            apartamentoUID: apartamentoUID
+        const apartamentoDeLaReserva = await obtenerApartamentoDeLaReservaPorApartamentoUID({
+            reservaUID,
+            apartamentoUID
         })
         const apartamentoIDV = apartamentoDeLaReserva.apartamentoIDV
+
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
 
 
@@ -74,18 +60,18 @@ export const bloquearApartamentos = async (metadatos) => {
             await insertarNuevoBloqueo({
                 apartamentoIDV: apartamentoIDV,
                 tipoBloqueo: tipoBloqueo,
-                fechaEntrada: fechaEntrada,
-                fechaSalida: fechaSalida,
-                motivoFinal: motivoDelBloqueo(origen),
-                zonaBloqueo: zonaBloqueo
+                fechaInicio: fechaEntrada,
+                fechaFin: fechaSalida,
+                motivo: motivoDelBloqueo(origen),
+                zonaIDV: zonaIDV
             })
         }
         if (tipoBloqueo === "permanente") {
             await insertarNuevoBloqueo({
                 apartamentoIDV: apartamentoIDV,
                 tipoBloqueo: tipoBloqueo,
-                motivoFinal: motivoDelBloqueo(origen),
-                zonaBloqueo: zonaBloqueo
+                motivo: motivoDelBloqueo(origen),
+                zonaIDV: zonaIDV
             })
         }
         const ok = {}

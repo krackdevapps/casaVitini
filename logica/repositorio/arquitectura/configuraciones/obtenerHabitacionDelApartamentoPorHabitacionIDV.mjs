@@ -4,6 +4,7 @@ export const obtenerHabitacionDelApartamentoPorHabitacionIDV = async (data) => {
     try {
         const apartamentoIDV = data.apartamentoIDV
         const habitacionIDV = data.habitacionIDV
+        const errorSi = data.errorSi
         const consulta = `
         SELECT 
         *
@@ -20,11 +21,25 @@ export const obtenerHabitacionDelApartamentoPorHabitacionIDV = async (data) => {
         ]
 
         const resuelve = await conexion.query(consulta, parametros)
-        if (resuelve.rowCount === 0) {
-            const error = "No existe ningua habitacion dentro del apartmento con ese habitacionIDV";
-            throw new Error(error);
+        if (errorSi === "noExiste") {
+            if (resuelve.rowCount === 0) {
+                const error = "No existe la habitacion"
+                throw new Error(error)
+            }
+            return resuelve.rows[0]
+
+        } else if (errorSi === "existe") {
+            if (resuelve.rowCount > 0) {
+                const error = "Ya exiete la habitacion en el apartamento";
+                throw new Error(error)
+            }
+            return resuelve.rows[0]
+
+        } else if (errorSi === "desactivado") {
+            return resuelve.rows[0]
+        } else {
+            const error = "el adaptador obtenerHabitacionDelApartamentoPorHabitacionIDV necesita errorSi en existe, noExiste o desactivado"
         }
-        return resuelve.rows[0]
     } catch (errorAdaptador) {
         throw errorAdaptador
     }

@@ -365,7 +365,6 @@ header {
     flex-direction: row;
     pointer-events: all;
     right: 2px;
-    z-index: 1000;
 }
 
 #errorVista {

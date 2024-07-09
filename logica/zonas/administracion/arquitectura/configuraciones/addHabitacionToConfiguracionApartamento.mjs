@@ -47,7 +47,8 @@ export const addHabitacionToConfiguracionApartamento = async (entrada, salida) =
             }
             const habitacionDelApartamento = await obtenerHabitacionDelApartamentoPorHabitacionIDV({
                 apartamentoIDV:apartamentoIDV,
-                habitacionIDV:habitacionIDV
+                habitacionIDV: habitacionIDV,
+                errorSi: "existe"
             })
 
             if (habitacionDelApartamento.length > 0) {

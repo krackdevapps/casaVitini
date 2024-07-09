@@ -274,11 +274,18 @@ export const validarObjetoReserva = async (data) => {
                 limpiezaEspaciosInternos: "si"
             })
 
-            const telefonoTitular = validadoresCompartidos.tipos
-                .telefono(datosTitular.telefonoTitular)
+            const correoTitular = validadoresCompartidos.tipos.correoElectronico({
+                mail: datosTitular.correoTitular,
+                nombreCampo: "El coreo electronico instroducido",
+                sePermiteVacio: "no"
+            })
+            const telefonoTitular = validadoresCompartidos.tipos.telefono({
+                phone: datosTitular.telefonoTitular,
+                nombreCampo: "El telelfono instroducido",
+                sePermiteVacio: "no"
+            })
 
-            const correoTitular = validadoresCompartidos.tipos
-                .correoElectronico(datosTitular.correoTitular)
+
 
             reservaObjeto.datosTitular.nombreTitular = nombreTitular
             reservaObjeto.datosTitular.pasaporteTitular = pasaporteTitular

@@ -6,15 +6,15 @@ export const insertarTitularEnReserva = async (data) => {
         const consulta = `
         INSERT INTO "reservaTitulares"
         (
-        "titularUID",
+        "clienteUID",
         "reservaUID"
         )
         VALUES ($1, $2);`;
-        const parametros = {
+        const parametros = [
             clienteUID,
             reservaUID
-        }
-        const resuelve = await conexion.query(consulta, [parametros])
+        ]
+        const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
             const error = "No se ha podido actualizar el titular de la reserva";
             throw new Error(error);

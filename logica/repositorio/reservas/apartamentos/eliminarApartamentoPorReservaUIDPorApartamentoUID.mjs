@@ -1,6 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const eliminarApartamentoDeLaReserva = async (data) => {
+export const eliminarApartamentoPorReservaUIDPorApartamentoUID = async (data) => {
     try {
         const reservaUID = data.reservaUID
         const apartamentoUID = data.apartamentoUID

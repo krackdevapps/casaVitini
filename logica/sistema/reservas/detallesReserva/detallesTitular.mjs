@@ -9,10 +9,12 @@ export const detallesTitular = async (reservaUID) => {
         const titular = await obtenerTitularReservaPorReservaUID(reservaUID)
     
         const titularUID = titular?.titularUID
+        const clienteUID = titular?.clienteUID
+
         const t = {}
         if (titularUID) {
             await eliminarTitularPoolPorReservaUID(reservaUID)
-            const cliente = await obtenerDetallesCliente(titularUID)
+            const cliente = await obtenerDetallesCliente(clienteUID)
     
             const nombre = cliente.nombre
             const primerApellido = cliente.primerApellido
