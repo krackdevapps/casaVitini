@@ -4,7 +4,18 @@ export const obtenerPagosPorReservaUIDConOrdenamiento = async (reservaUID) => {
     try {
         const consulta = `
         SELECT
-        *
+        "pagoUID",
+        "plataformaDePagoIDV",
+        "tarjetaDigitos",
+        "pagoUIDPasarela",
+        "reservaUID",
+        tarjeta,
+        cantidad,
+        to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS') as "fechaPago",
+        "pagadorNombre",
+        "pagadorPasaporte",
+        "chequeUID",
+        "transferenciaUID"
         FROM 
         "reservaPagos"
         WHERE 

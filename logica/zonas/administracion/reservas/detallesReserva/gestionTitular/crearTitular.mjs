@@ -6,6 +6,7 @@ import { eliminarTitularPoolPorReservaUID } from "../../../../../repositorio/res
 import { eliminarTitularPorReservaUID } from "../../../../../repositorio/reservas/titulares/eliminarTitularPorReservaUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
+import { insertarTitularEnReserva } from "../../../../../repositorio/reservas/titulares/insertarTitularEnReserva.mjs";
 
 export const crearTitular = async (entrada, salida) => {
     try {
@@ -41,7 +42,7 @@ export const crearTitular = async (entrada, salida) => {
         await eliminarTitularPorReservaUID(reservaUID)
 
         const nuevoCliente = await insertarCliente(datosValidados);
-        const clienteUID = nuevoCliente.uid;
+        const clienteUID = nuevoCliente.clienteUID;
         const nombre_ = datosValidados.nombre;
         const primerApellido_ = datosValidados.primerApellido ? datosValidados.primerApellido : "";
         const segundoApellido_ = datosValidados.segundoApellido ? nuevoCliente.segundoApellido : "";
@@ -72,6 +73,6 @@ export const crearTitular = async (entrada, salida) => {
     }
     catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 }

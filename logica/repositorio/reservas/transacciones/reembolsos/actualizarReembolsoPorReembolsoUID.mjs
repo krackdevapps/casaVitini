@@ -15,7 +15,7 @@ export const actualizarReembolsoPorReembolsoUID = async (data) => {
             "reservaReembolsos"
         SET 
             cantidad = $1,
-            "plataformaDePago" = $2,
+            "plataformaDePagoIDV" = $2,
             "estadoIDV" = $3,
             "fechaCreacion" = $4,
             "fechaActualizacion" =

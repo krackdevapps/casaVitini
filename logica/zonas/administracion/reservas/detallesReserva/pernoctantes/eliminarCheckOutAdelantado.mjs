@@ -30,33 +30,32 @@ export const eliminarCheckOutAdelantado = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-
-        await campoDeTransaccion("iniciar")
-
-        // Validar pernoctanteUID
-        const pernoctante = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
-            reservaUID: reservaUID,
-            pernoctanteUID: pernoctanteUID
-        })
-        // Validar que el pernoctatne sea cliente y no cliente pool
         const reserva = obtenerReservaPorReservaUID(reservaUID)
         // validar que la reserva no este cancelada
         if (reserva.estadoReservaIDV === "cancelada") {
             const error = "No se puede alterar una fecha de checkin de una reserva cancelada";
             throw new Error(error);
         }
+
+        await campoDeTransaccion("iniciar")
+        // Validar pernoctanteUID
+        await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
+            reservaUID,
+            pernoctanteUID
+        })
+        // Validar que el pernoctatne sea cliente y no cliente pool
+
         await actualizarFechaCheckOutPernoctante({
-            pernoctanteUID: pernoctanteUID,
-            fechaCheckOut_ISO: null
+            pernoctanteUID,
+            fechaCheckOut: null
         })
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha eliminado la fecha de checkin correctamente"
-        };
+        }
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
-    } finally {
+        throw errorCapturado
     }
 }

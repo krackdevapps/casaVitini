@@ -14,8 +14,8 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-        const pernoctantaUID = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.pernoctantaUID,
+        const pernoctanteUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.pernoctanteUID,
             nombreCampo: "El identificador universal de la pernoctantaUID (pernoctantaUID)",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
@@ -32,18 +32,18 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
 
-        const fechaCheckIn_ISO = entrada.body.fechaCheckIn_ISO;
-        await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: fechaCheckIn_ISO,
+
+        const fechaCheckIn = await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: entrada.body.fechaCheckIn,
             nombreCampo: "La fecha de checkin"
         })
-        const fechaCheckIn_Objeto = DateTime.fromISO(fechaCheckIn_ISO);
+        const fechaCheckIn_Objeto = DateTime.fromISO(fechaCheckIn);
         await campoDeTransaccion("iniciar")
 
         // Validar pernoctanteUID
         const pernoctate = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
             reservaUID: reservaUID,
-            pernoctantaUID: pernoctantaUID
+            pernoctanteUID: pernoctanteUID
         })
         if (!pernoctate.componenteUID) {
             const error = "No existe el pernoctante en la reserva, revisa el pernoctanteUID";
@@ -83,8 +83,8 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
             throw new Error(error);
         }
         await actualizarFechaCheckinPernoctante({
-            fechaCheckIn_ISO: fechaCheckIn_ISO,
-            pernoctantaUID: pernoctantaUID
+            fechaCheckIn,
+            pernoctanteUID
         })
         await campoDeTransaccion("confirmar")
         const ok = {
@@ -94,6 +94,6 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 }

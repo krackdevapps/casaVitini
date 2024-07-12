@@ -1,11 +1,11 @@
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
-import { generadorPDF } from "../../../../../sistema/PDF/generadorPDF.mjs";
+import { generadorPDF } from "../../../../../sistema/pdf/generadorPDF.mjs";
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { detallesReserva } from "../../../../../sistema/reservas/detallesReserva.mjs";
 
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
-export const generarPdf = async (entrada, salida) => {
+export const pdfReserva = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -22,11 +22,16 @@ export const generarPdf = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
 
-        await obtenerReservaPorReservaUID(reservaUID);
-        const metadatos = {
-            reservaUID: reservaUID
-        };
-        const reserva = await detallesReserva(metadatos);
+        await obtenerReservaPorReservaUID(reservaUID)
+    
+        const reserva = await detallesReserva({
+            reservaUID: reservaUID,
+            capas: [
+                "titular",
+                "alojamiento",
+                "desgloseFinanciero"
+            ]
+        })
 
         const pdf = await generadorPDF(reserva);
         salida.setHeader('Content-Type', 'application/pdf');

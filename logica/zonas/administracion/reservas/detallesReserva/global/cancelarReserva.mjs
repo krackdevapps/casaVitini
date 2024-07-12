@@ -48,11 +48,12 @@ export const cancelarReserva = async (entrada, salida) => {
         const fechaEntrada = reserva.fechaEntrada;
         const fechaSalida = reserva.fechaSalida;
         // extraer todos los apartamentos de la reserva
-        const apartamentosDeLaReserva = obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
+        const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
+        console.log("apartamentosDeLaReserva", apartamentosDeLaReserva)
         for (const apartamento of apartamentosDeLaReserva) {
             const metadatos = {
-                reserva: reserva,
-                apartamentoUID: apartamento.apartamentoUID,
+                reservaUID: reservaUID,
+                apartamentoUID: apartamento.componenteUID,
                 tipoBloqueo: tipoBloqueo,
                 fechaEntrada: fechaEntrada,
                 fechaSalida: fechaSalida,

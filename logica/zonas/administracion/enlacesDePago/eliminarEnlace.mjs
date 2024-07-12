@@ -13,10 +13,11 @@ export const eliminarEnlace = async (entrada, salida) => {
 
         const enlaceUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.enlaceUID,
-            nombreCampo: "El campo nuevoPreci",
+            nombreCampo: "El campo enlaceUID",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
         
         await obtenerEnlaceDePagoPorEnlaceUID(enlaceUID)

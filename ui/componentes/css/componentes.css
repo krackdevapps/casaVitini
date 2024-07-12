@@ -797,7 +797,6 @@
 }
 
 .calendarioIncrustado {
-    overflow: hidden;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
@@ -813,8 +812,7 @@
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    /* padding: 10px; */
-    max-width: 720px;
+
 }
 
 .navegacionMes {
@@ -906,7 +904,8 @@
     }
 }
 
-[zonaCSS="administracion/calendario"] .navegacionMesReferencia {
+.navegacionMesReferencia {
+
     padding-top: 4px;
     padding-bottom: 4px;
     padding-left: 8px;
@@ -1971,7 +1970,33 @@
     justify-content: flex-end;
 }
 
+
+[zonaCSS="/administracion/reservas"] .tituloContextoAdministracion {
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 10px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 250ms linear;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    padding-top: 40px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+
 [zonaCSS="administracion"] .tituloContextoAdministracion:hover {
+    background-color: rgba(0, 0, 0, 0.45);
+    color: white;
+}
+
+[zonaCSS="/administracion/reservas"] .tituloContextoAdministracion:hover {
     background-color: rgba(0, 0, 0, 0.45);
     color: white;
 }
@@ -2181,10 +2206,37 @@
     }
 }
 
+.gridColumnas8 {
+    grid-template-columns: auto auto auto auto auto auto auto auto;
+}
+
+.gridColumnas7 {
+    grid-template-columns: auto auto auto auto auto auto auto;
+}
+
+.gridColumnas6 {
+    grid-template-columns: auto auto auto auto auto auto;
+}
+
+.gridColumnas5 {
+    grid-template-columns: auto auto auto auto auto;
+}
+
+.gridColumnas4 {
+    grid-template-columns: auto auto auto auto;
+}
+
+.gridColumnas3 {
+    grid-template-columns: auto auto auto;
+}
+
+.gridColumnas2 {
+    grid-template-columns: auto auto;
+}
+
 .administracionGridReservas {
     background-color: rgba(255, 255, 255, 0.3);
     display: grid;
-    grid-template-columns: 100px auto auto auto auto;
     gap: 0px;
     /* min-width: 800px; */
     text-align: center;
@@ -2196,6 +2248,56 @@
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     scroll-behavior: auto;
+}
+
+
+[zonaCSS="administracion/reservas/buscador"] [contenedor="filtrosOrden"] {
+    display: none;
+    flex-direction: row;
+
+}
+
+
+
+@media (max-width: 1300px) {
+    [gridUID="gridReservas"] {
+        grid-template-columns: auto auto auto auto auto;
+    }
+
+    [zonaCSS="administracion/reservas/buscador"] [nombreColumna="nombreCompleto"],
+    [zonaCSS="administracion/reservas/buscador"] [celdaIDV="nombreCompleto"],
+    [zonaCSS="administracion/reservas/buscador"] [nombreColumna="pasaporteTitular"],
+    [zonaCSS="administracion/reservas/buscador"] [celdaIDV="pasaporteTitular"],
+    [zonaCSS="administracion/reservas/buscador"] [nombreColumna="mailTitular"],
+    [zonaCSS="administracion/reservas/buscador"] [celdaIDV="mailTitular"] {
+        display: none
+    }
+
+    [zonaCSS="administracion/reservas/buscador"] [contenedor="filtrosOrden"] {
+        display: flex
+    }
+
+    [zonaCSS="administracion/reservas/buscador"] [contenedor="resultados"] {
+        gap: 6px;
+    }
+
+    [gridUID="gridClientes"] {
+        grid-template-columns: auto auto auto auto auto;
+    }
+
+
+    [zonaCSS="administracion/clientes/buscador"] [nombreColumna="mail"],
+    [zonaCSS="administracion/clientes/buscador"] [celdaIDV="mail"] ,
+    [zonaCSS="administracion/clientes/buscador"] [nombreColumna="telefono"],
+    [zonaCSS="administracion/clientes/buscador"] [celdaIDV="telefono"] {
+        display: none
+    }
+}
+
+@media (max-width: 720px) {
+    .administracionGridReservas {
+        display: none;
+    }
 }
 
 /*
@@ -2541,11 +2643,11 @@
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reservaDetallesBloqueAlojamineto {
     border-radius: 12px;
-    padding: 4px;
+    padding: 6px;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 4px;
+    gap: 6px;
 }
 
 .resertaDetallesEspacioTotales {
@@ -2574,13 +2676,12 @@
 [zonaCSS="administracion/reservas/nueva"] .reservaDetallesBloqueFecha {
     background-color: rgba(255, 255, 255, 0.3);
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 1fr auto 1fr;
     grid-template-rows: 1fr;
-    gap: 0px 0px;
-    grid-template-areas:
-        ". . .";
+    gap: 6px;
+    grid-template-areas: ". . .";
     border-radius: 12px;
-    padding: 4px;
+    padding: 6px;
     justify-content: space-around;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -2649,7 +2750,6 @@
     justify-content: center;
     flex-direction: column;
     flex-wrap: nowrap;
-    padding: 8px;
     cursor: default;
 }
 
@@ -2759,14 +2859,14 @@
     flex-wrap: nowrap;
     /* width: 100%; */
     /* max-width: 589px; */
-    padding: 4px;
+    padding: 6px;
     border-radius: 12px;
     /* overflow: hidden; */
     display: flex;
     align-items: stretch;
     justify-content: flex-start;
     border: 1px solid #0000003b;
-    gap: 4px;
+    gap: 6px;
 }
 
 [zonaCSS="miCasa"] .administracionReservasDetallesTituloApartamento {
@@ -2812,9 +2912,8 @@
     background: #00000014;
     /* margin: 4px; */
     border-radius: 10px;
-    padding: 4px;
-    gap: 4px;
-    margin-top: 0px;
+    padding: 6px;
+    gap: 6px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -2956,7 +3055,7 @@
 
 [zonaCSS="administracion/reservas/detallesReserva"] .reservasDetallesBloqueAlojamiennto {
     display: grid;
-    grid-gap: 4px;
+    grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
     justify-items: stretch;
     justify-content: center;
@@ -3666,7 +3765,7 @@
 .administracion_reservas_detallesReservas_gestionTitular_botonCerrar {
     background: rgba(255, 255, 255, 0.3);
     display: flex;
-    padding: 10px;
+    padding: 12px;
     border-radius: 10px;
     text-decoration: none;
     color: black;
@@ -3830,9 +3929,8 @@
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_contenedorPernoctantesSinHabitacion {
-    padding: 4px;
+    padding: 6px;
     border-radius: 12px;
-    margin: 0px;
     max-width: 1920px;
     display: grid;
     grid-auto-rows: minmax(auto, auto);
@@ -3841,7 +3939,7 @@
     align-content: center;
     grid-template-columns: repeat(3, 1fr);
     align-items: stretch;
-    gap: 4px;
+    gap: 6px;
 }
 
 [zonaCSS="miCasa"] .resertaDetallesPropuestaCambioFechaReserva {
@@ -4978,7 +5076,7 @@
     background: rgba(255, 255, 255, 0.3);
     margin: 0px;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 7px;
     user-select: none;
     -webkit-user-select: none;
     cursor: default;
@@ -6788,6 +6886,11 @@
 
 .gap6 {
     gap: 6px;
+}
+
+
+.margin10 {
+    margin: 10px;
 }
 
 .crearComportamientoConentenedor {
@@ -9754,7 +9857,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .administracion_reservas_detallesReserva_contenedorMisleanea {
     display: flex;
     flex-direction: column;
-    padding: 2px;
+    padding: 6px;
     gap: 6px;
 }
 
@@ -10098,7 +10201,6 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
     transition: all 500ms linear;
     display: flex;
-    margin: 6px;
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserfa_miscelanea_botonOpcion:hover {
@@ -10982,11 +11084,11 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS="administracion/calendario"] .administracion_calendario_contenedorCalentadioIntermedio {
+[zonaCSS="administracion/reservas/detallesReserva"] .administracion_calendario_contenedorCalentadioIntermedio {
     display: flex;
     /* width: 100%; */
     /* max-width: 720px; */
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-content: center;
     align-items: stretch;
@@ -11947,7 +12049,54 @@ grid-template-columns: 0.5fr 1.5fr;
     }
 }
 
+
+
+
+
+
+[zonaCSS="/administracion/reservas"] .administracion_portada_contenedorContextual_contenedorBotones {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 0px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    /* justify-items: stretch; */
+    justify-content: left;
+    /* align-content: center; */
+    gap: 6px;
+}
+
+@media (max-width: 1280px) {
+    [zonaCSS="/administracion/reservas"] .administracion_portada_contenedorContextual_contenedorBotones {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="/administracion/reservas"] .administracion_portada_contenedorContextual_contenedorBotones {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    [zonaCSS="/administracion/reservas"] .administracion_portada_contenedorContextual_contenedorBotones {
+        grid-template-columns: 1fr;
+    }
+}
+
+
 [zonaCSS="administracion"] .administracion_portada_contenedorContextual_titulo {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    font-weight: bold;
+    color: #00000091;
+
+
+}
+
+
+[zonaCSS="/administracion/reservas"] .administracion_portada_contenedorContextual_titulo {
     padding: 10px;
     display: flex;
     justify-content: flex-start;
@@ -13764,7 +13913,6 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .elementosExpandidos {
-    display: flex;
     justify-content: space-between;
 }
 
@@ -13780,6 +13928,10 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: flex-start;
 }
 
+.flexDerecha {
+    justify-content: flex-end;
+}
+
 
 .contenidoAdvertenciaInmersiva {
     max-width: 1280px;
@@ -13788,7 +13940,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     flex-wrap: nowrap;
     padding: 30px;
-    gap: 30px;
+    gap: 10px;
     padding-top: 80px;
     align-items: stretch;
 }
@@ -13945,13 +14097,15 @@ grid-template-columns: 0.5fr 1.5fr;
 .blackgroundWhite30O {
     background-color: rgb(255 255 255 / 30%);
 }
+
 .noSelecionable {
     user-select: none;
     -webkit-user-select: none;
 
 }
+
 .ratonDefault {
-    cursor:default;
+    cursor: default;
 }
 
 [contenedor="financiero"] .contenedorNavegador {
@@ -14115,4 +14269,42 @@ grid-template-columns: 0.5fr 1.5fr;
 .areaSinDecoracionPredeterminada {
     text-decoration: none;
     color: black;
+}
+
+.textDerecha {
+    text-align: right;
+}
+
+
+[contenedor="tarjetas"] .tarjeta {
+    display: none;
+    grid-template-columns: 1fr 1fr 1fr;
+    text-wrap: nowrap;
+}
+
+[contenedor="tarjetas"] .contenedorGlobal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+[contenedor="tarjetas"] .contenedorFechas {
+    display: flex;
+    flex-direction: row;
+}
+
+
+@media (max-width: 720px) {
+    [contenedor="tarjetas"] .tarjeta {
+        display: flex;
+        grid-template-columns: 1fr;
+    }
+
+    /* [contenedor="tarjetas"] .contenedorFechas {
+        flex-direction: row;
+    } */
+    [contenedor="tarjetas"] .contenedorGlobal {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
 }

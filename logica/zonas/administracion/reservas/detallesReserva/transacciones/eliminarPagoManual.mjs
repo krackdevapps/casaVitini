@@ -5,11 +5,11 @@ import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas
 import { eliminarPagoPorPagoUID } from "../../../../../repositorio/reservas/transacciones/pagos/eliminarPagoPorPagoUID.mjs";
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
 
-export const eliminarPagoManual = async (entrada, salida) => {
+export const eliminarPagoManual = async (entrada) => {
     try {
 
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -32,6 +32,7 @@ export const eliminarPagoManual = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
@@ -42,7 +43,7 @@ export const eliminarPagoManual = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
 
-        await campoDeTransaccion("inicair")
+        await campoDeTransaccion("iniciar")
         await obtenerReservaPorReservaUID(reservaUID)
         await eliminarPagoPorPagoUID({
             pagoUID: pagoUID,
@@ -57,6 +58,6 @@ export const eliminarPagoManual = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 }

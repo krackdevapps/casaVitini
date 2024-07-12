@@ -6,7 +6,7 @@ export const insertarReservaAdministrativa = async (data) => {
         const fechaSalida = data.fechaSalida
         const estadoReserva = data.estadoReserva
         const origen = data.origen
-        const fechaCreacion_ISO = data.fechaCreacion
+        const fechaCreacion = data.fechaCreacion
         const estadoPago = data.estadoPago
         const reservaTVI = data.reservaTVI
 
@@ -30,7 +30,7 @@ export const insertarReservaAdministrativa = async (data) => {
             fechaSalida,
             estadoReserva,
             origen,
-            fechaCreacion_ISO,
+            fechaCreacion,
             estadoPago,
             reservaTVI
         ]

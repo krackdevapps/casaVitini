@@ -29,11 +29,14 @@ export const detallesTitular = async (reservaUID) => {
             t.tipoTitularIDV = "titularCliente"
         } else {
             const titularPool = await obtenerTitularPoolReservaPorReservaUID(reservaUID)
-            t.nombreTitular = titularPool.nombreTitular
-            t.pasaporteTitular = titularPool.pasaporteTitular
-            t.mailTitular = titularPool.mailTitular
-            t.telefonoTitular = titularPool.telefonoTitular
-            t.tipoTitularIDV = "titularPool"
+            if (titularPool) {
+                t.nombreTitular = titularPool.nombreTitular
+                t.pasaporteTitular = titularPool.pasaporteTitular
+                t.mailTitular = titularPool.mailTitular
+                t.telefonoTitular = titularPool.telefonoTitular
+                t.tipoTitularIDV = "titularPool" 
+            } 
+      
         }
         //delete reserva.titularPool
         return t

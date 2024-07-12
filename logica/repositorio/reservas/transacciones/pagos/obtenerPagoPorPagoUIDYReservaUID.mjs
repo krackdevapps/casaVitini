@@ -8,11 +8,11 @@ export const obtenerPagoPorPagoUIDYReservaUID = async (data) => {
         const consulta = `
         SELECT
         "pagoUID",
-        "plataformaDePago",
+        "plataformaDePagoIDV",
         cantidad,
         "pagoUIDPasarela"
         FROM "reservaPagos"
-        WHERE reserva = $1 AND "pagoUID" = $2`;
+        WHERE "reservaUID" = $1 AND "pagoUID" = $2`;
         const parametros = [
             reservaUID,
             pagoUID

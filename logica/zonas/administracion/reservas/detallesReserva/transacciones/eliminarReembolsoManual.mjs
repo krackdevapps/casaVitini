@@ -29,6 +29,7 @@ export const eliminarReembolsoManual = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "no"
         })
         await campoDeTransaccion("iniciar")
         await eliminarReembolsoPorReembosloUID(reembolsoUID)
@@ -40,6 +41,6 @@ export const eliminarReembolsoManual = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 }

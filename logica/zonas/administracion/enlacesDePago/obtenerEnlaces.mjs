@@ -3,12 +3,11 @@ import { obtenerDesgloseFinancieroPorReservaUID } from "../../../repositorio/res
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 
-
-export const obtenerEnlaces = async (entrada, salida) => {
+export const obtenerEnlaces = async (entrada,) => {
     try {
 
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
@@ -19,26 +18,27 @@ export const obtenerEnlaces = async (entrada, salida) => {
             ok: []
         };
         for (const detallesEnlace of enlacesDePago) {
+            console.log("detalleSenlace", detallesEnlace)
             const nombreEnlace = detallesEnlace.nombreEnlace;
             const enlaceUID = detallesEnlace.enlaceUID;
-            const reservaUID = detallesEnlace.reserva;
+            const reservaUID = detallesEnlace.reservaUID;
             const codigo = detallesEnlace.codigo;
             const estadoPago = detallesEnlace.estadoPago;
             const cantidad = detallesEnlace.cantidad;
             const descripcion = detallesEnlace.descripcion;
-            const totalIDV = "totalConImpuestos";
-            const totalesReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
-            const totalDeLaReservaConImpuestos = totalesReserva.totalConImpuestos
-            const precio = totalDeLaReservaConImpuestos ? totalDeLaReservaConImpuestos : "Reserva sin total"
+
+            const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
+            const totalFinal = contenedorFinanciero.desgloseFinanciero.global.totales.totalFinal
+            const precio = totalFinal ? totalFinal : "Reserva sin total"
 
             const estructuraFinal = {
-                enlaceUID: enlaceUID,
-                nombreEnlace: nombreEnlace,
-                reservaUID: reservaUID,
-                estadoPago: estadoPago,
-                descripcion: descripcion,
+                enlaceUID,
+                nombreEnlace,
+                reservaUID,
+                estadoPago,
+                descripcion,
                 enlace: codigo,
-                cantidad: cantidad,
+                cantidad,
                 totalReserva: precio,
             };
             ok.ok.push(estructuraFinal);

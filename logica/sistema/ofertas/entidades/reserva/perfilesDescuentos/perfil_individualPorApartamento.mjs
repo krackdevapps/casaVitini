@@ -22,7 +22,10 @@ export const perfil_individualPorApartamento = async (data) => {
             const apartamentoIDV = descuentoDelApartamento.apartamentoIDV
             const descuentoTotal = descuentoDelApartamento.descuentoTotal
             const tipoAplicacion = descuentoDelApartamento.tipoAplicacion
-            descuentoDelApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI
+            descuentoDelApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            })).apartamentoUI
 
             const totalPorApartametno = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]?.totalNeto
             if (!totalPorApartametno) {

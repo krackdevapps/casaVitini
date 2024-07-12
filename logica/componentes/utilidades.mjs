@@ -135,5 +135,59 @@ export const utilidades = {
 
         return false; // No se encontraron llaves duplicadas en ningún nivel
 
-    }
+    },
+    conversor: {
+        fecha_humana_hacia_ISO: (fecha) => {
+            try {
+                const filtroFechaHumana = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
+                if (filtroFechaHumana.test(fecha)) {
+                    const fechaArray = fecha.split("/")
+                    const dia = fechaArray[0]
+                    const mes = fechaArray[1]
+                    const ano = fechaArray[2]
+                    const fechaISO = `${ano}-${mes}-${dia}`
+                    return fechaISO
+                } else {
+                    const m = "En fecha_humana_hacia_ISO no se reconoce el formato humano"
+                    throw new Error(m)
+                }
+            } catch (error) {
+                throw error
+            }
+
+        },
+        fecha_ISO_hacia_humana: (fecha) => {
+            try {
+                const filtroFechaISO = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+                if (filtroFechaISO.test(fecha)) {
+                    const fechaArray = fecha.split("-")
+                    const dia = fechaArray[2]
+                    const mes = fechaArray[1]
+                    const ano = fechaArray[0]
+                    const fechaHumana = `${dia}/${mes}/${ano}`
+                    return fechaHumana
+                } else {
+                    const m = "En fecha_ISO_hacia_humana no se reconoce el formato ISO"
+                    throw new Error(m)
+                }
+            } catch (error) {
+                throw error
+            }
+
+        },
+        extraerFechasInternas: (inicio, fin) => {
+            const fechas = [];
+            const inicio_objeto = new Date(inicio);
+            const fin_objeto = new Date(fin);
+
+            // Asegurarse de incluir la fecha final en el rango
+            fin_objeto.setDate(fin_objeto.getDate() + 1);
+
+            while (inicio_objeto < fin_objeto) {
+                fechas.push(inicio_objeto.toISOString().split("T")[0]);
+                inicio_objeto.setDate(inicio_objeto.getDate() + 1);
+            }
+            return fechas;
+        }
+    },
 }

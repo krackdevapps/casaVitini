@@ -8,7 +8,7 @@ import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas
 import { insertarApartamentoEnReserva } from "../../../../../repositorio/reservas/apartamentos/insertarApartamentoEnReserva.mjs";
 import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from "../../../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
-
+import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
 
 export const anadirApartamentoReserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -22,7 +22,6 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
 
         await mutex.acquire();
 
-
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reserva (reservaUID)",
@@ -31,7 +30,6 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -92,6 +90,9 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
                 apartamentoIDV: apartamentoIDV,
                 apartamentoUI: apartamento.apartamentoUI
             })
+
+            await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+
             const ok = {
                 ok: "apartamento anadido correctamente",
                 apartamentoIDV: apartamentoIDV,

@@ -4,6 +4,7 @@ export const obtenerTodosEnlaceDePago = async () => {
     try {
         const consulta = `
             SELECT
+            "enlaceUID",
             "nombreEnlace", 
             codigo, 
             "reservaUID",

@@ -10,7 +10,7 @@ export const obtenerReembolsosPorPagoUIDPorReembolsoUIDPasarela = async (data) =
         SELECT
             "reembolsoUID",
             cantidad,
-            "plataformaDePago",
+            "plataformaDePagoIDV",
             "reembolsoUIDPasarela",
             "estadoIDV",
             to_char("fechaCreacion", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaCreacionUTC_ISO", 

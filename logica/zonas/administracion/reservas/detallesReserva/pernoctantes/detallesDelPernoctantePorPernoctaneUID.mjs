@@ -5,7 +5,7 @@ import { obtenerClientePoolPorPernoctanteUID } from "../../../../../repositorio/
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerDetallesCliente } from "../../../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 
-export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
+export const detallesDelPernoctantePorPernoctaneUID = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -32,7 +32,7 @@ export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
         })
 
         await obtenerReservaPorReservaUID(reservaUID);
-        
+
         const pernoctante = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
             reservaUID: reservaUID,
             pernoctanteUID: pernoctanteUID
@@ -44,30 +44,42 @@ export const detallesDelPernoctantePorComprobar = async (entrada, salida) => {
         const clienteUID = pernoctante.clienteUID;
         const ok = {
             ok: {
-                pernoctanteUID: pernoctanteUID
-               
-           }
+                pernoctante
+            }
         }
 
         if (clienteUID) {
             const cliente = await obtenerDetallesCliente(clienteUID)
             const nombre = cliente.nombre
+            const mail = cliente.mail
+            const telefono = cliente.telefono
+
             const primerApellido = cliente.primerApellidos
             const segundoApellido = cliente.segundoApellido
             const nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`
             const pasaporte = cliente.pasaporte;
 
-            ok.ok.nombreCompleto = nombreCompleto
-            ok.ok.pasaporte = pasaporte
-            ok.ok.tipoPernoctant = "cliente"
+            ok.ok.cliente = {
+                clienteUID,
+                telefono,
+                mail,
+                nombreCompleto,
+                pasaporte,
+                tipoPernoctante: "cliente"
+            }
+
         } else {
             const clientePool = await obtenerClientePoolPorPernoctanteUID(pernoctanteUID)
             const nombreCompleto = clientePool.nombreCompleto;
             const pasaporte = clientePool.pasaporte;
+            const clienteUID = clientePool.clienteUID
 
-            ok.ok.nombreCompleto = nombreCompleto
-            ok.ok.pasaporte = pasaporte
-            ok.ok.tipoPernoctant = "clientePool"
+            ok.ok.cliente = {
+                clienteUID,
+                nombreCompleto,
+                pasaporte,
+                tipoPernoctante: "clientePool"
+            }
         }
         return ok
     } catch (errorCapturado) {

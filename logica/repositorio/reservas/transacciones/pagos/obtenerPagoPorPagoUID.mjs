@@ -5,7 +5,7 @@ export const obtenerPagoPorPagoUID = async (pagoUID) => {
 
         const consulta = `
         SELECT
-            "plataformaDePago",
+            "plataformaDePagoIDV",
             "pagoUID",
             "pagoUIDPasarela",
             "tarjetaDigitos",

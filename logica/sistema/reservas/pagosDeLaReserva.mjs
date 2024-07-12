@@ -1,10 +1,11 @@
 import Decimal from "decimal.js";
-import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs";
 import { DateTime } from "luxon";
 import { obtenerTotalesGlobal } from "../../repositorio/reservas/transacciones/totales/obtenerTotalesGlobal.mjs";
 import { obtenerPagosPorReservaUIDConOrdenamiento } from "../../repositorio/reservas/transacciones/pagos/obtenerPagosPorReservaUIDConOrdenamiento.mjs";
 import { obtenerReembolsosPorPagoUID } from "../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerDesgloseFinancieroPorReservaUID } from "../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
+import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs";
 
 export const pagosDeLaReserva = async (reservaUID) => {
     try {
@@ -15,7 +16,7 @@ export const pagosDeLaReserva = async (reservaUID) => {
         }
         await obtenerReservaPorReservaUID(reservaUID);
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-
+        console.log("!zona", zonaHoraria)
         /*
         promedioNetoPorNoche
         totalReservaNetoSinOfertas
@@ -25,8 +26,9 @@ export const pagosDeLaReserva = async (reservaUID) => {
         totalConImpuestos
         */
 
-        const totalesReserva = await obtenerTotalesGlobal(reservaUID)
-        const totalConImpuestos = totalesReserva?.totalConImpuestos ? totalesReserva.totalConImpuestos : "0.00";
+        const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
+        const totalFinal = contenedorFinanciero?.desgloseFinanciero?.global?.totales?.totalFinal
+        const totalConImpuestos = totalFinal || "0.00";
         const totalConImpuestosDecimal = new Decimal(totalConImpuestos);
         const ok = {
             totalReserva: totalConImpuestos,
@@ -41,16 +43,15 @@ export const pagosDeLaReserva = async (reservaUID) => {
             let pagoResultadoFinal = 0;
             for (const detallesDelPago of pagosDeLaReserva) {
                 const pagoUID = detallesDelPago.pagoUID;
-                const plataformaDePago = detallesDelPago.plataformaDePago;
+                const plataformaDePagoIDV = detallesDelPago.plataformaDePagoIDV;
                 const pagoUIDPasarela = detallesDelPago.pagoUIDPasarela;
-                const fechaPagoUTC_ISO = detallesDelPago.fechaPagoUTC_ISO;
-                const fechaPagoTZ_ISO = DateTime.fromISO(fechaPagoUTC_ISO, { zone: 'utc' })
+
+                const fechaPago = detallesDelPago.fechaPago;
+                const fechaPagoTZ_ISO = DateTime.fromISO(fechaPago, { zone: 'utc' })
                     .setZone(zonaHoraria)
-                    .toISO();
+                    .toISO()
                 detallesDelPago.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
-
                 const cantidadDelPago = new Decimal(detallesDelPago.cantidad);
-
                 const reembolsosDelPago = await obtenerReembolsosPorPagoUID(pagoUID)
                 if (reembolsosDelPago.length === 0) {
                     ok.pagos.push(detallesDelPago);

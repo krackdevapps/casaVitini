@@ -19,6 +19,7 @@ export const obtenerDetallesDelPago = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
 
         const detallesDelPago = await obtenerPagoPorPagoUID(pagoUID)

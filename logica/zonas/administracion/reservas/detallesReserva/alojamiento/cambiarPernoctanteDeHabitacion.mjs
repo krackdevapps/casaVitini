@@ -36,7 +36,7 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.reservaUID,
+            string: entrada.body.pernoctanteUID,
             nombreCampo: "El identificador universal de la pernoctanteUID (pernoctanteUID)",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
@@ -58,10 +58,10 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
             throw new Error(error);
         }
         const pernoctanteDeLaReserva = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
-            reservaUID: reservaUID,
-            pernoctanteUID: pernoctanteUID
+             reservaUID,
+             pernoctanteUID
         })
-        if (!pernoctanteDeLaReserva.componenteUID) {
+        if (!pernoctanteDeLaReserva?.componenteUID) {
             const error = "No existe el pernoctante, por lo tanto no se puede mover de habitacion";
             throw new Error(error);
         }

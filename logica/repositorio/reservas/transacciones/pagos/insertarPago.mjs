@@ -17,11 +17,11 @@ export const insertarPago = async (data) => {
         INSERT INTO
         "reservaPagos"
         (
-        "plataformaDePago",
+        "plataformaDePagoIDV",
         tarjeta,
         "tarjetaDigitos",
         "pagoUIDPasarela",
-        reserva,
+        "reservaUID",
         cantidad,
         "fechaPago",
         "chequeUID",
@@ -31,16 +31,13 @@ export const insertarPago = async (data) => {
         ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING
         "pagoUID",
-        "plataformaDePago",
+        "plataformaDePagoIDV",
         "tarjetaDigitos",
         "pagoUIDPasarela",
         cantidad,
-        to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPagoUTC_ISO", 
+        to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPago", 
         "chequeUID",
-        "transferenciaUID"
-        RETURNING
-        *
-        `;
+        "transferenciaUID"        `;
         const parametros = [
             plataformaDePago,
             tarjeta,

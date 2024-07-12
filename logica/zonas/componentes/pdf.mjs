@@ -1,5 +1,5 @@
-import { generadorPDF } from "../../sistema/PDF/generadorPDF.mjs";
-import { controlCaducidad } from "../../sistema/PDF/controlCaducidad.mjs";
+import { generadorPDF } from "../../sistema/pdf/generadorPDF.mjs";
+import { controlCaducidad } from "../../sistema/pdf/controlCaducidad.mjs";
 import { detallesReserva } from "../../sistema/reservas/detallesReserva.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
@@ -7,6 +7,7 @@ import { obtenerPDFPorEnlaceUID } from "../../repositorio/pdf/obtenerPDFPorEnlac
 
 export const pdf = async (entrada, salida) => {
     try {
+    return 
         const nombreEnlace = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombreEnlace,
             nombreCampo: "El campo del nombre del enlace",

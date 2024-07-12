@@ -14,9 +14,9 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-        const pernoctantaUID = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.pernoctantaUID,
-            nombreCampo: "El identificador universal de la reserva (pernoctantaUID)",
+        const pernoctanteUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.pernoctanteUID,
+            nombreCampo: "El identificador universal de la reserva (pernoctanteUID)",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -30,19 +30,18 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-        const fechaCheckOut_ISO = entrada.body.fechaCheckOut_ISO;
-        await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: fechaCheckOut_ISO,
+        const fechaCheckOut = await validadoresCompartidos.fechas.validarFecha_ISO({
+            fecha_ISO: entrada.body.fechaCheckOut,
             nombreCampo: "La fecha de checkout"
         })
-        const fechaCheckOut_Objeto = DateTime.fromISO(fechaCheckOut_ISO);
+        const fechaCheckOut_Objeto = DateTime.fromISO(fechaCheckOut);
         await campoDeTransaccion("iniciar")
 
 
         // Validar pernoctanteUID
         const pernoctate = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
-            reservaUID: reservaUID,
-            pernoctantaUID: pernoctantaUID
+            reservaUID,
+            pernoctanteUID
         })
         if (!pernoctate.componenteUID) {
             const error = "No existe el pernoctante en la reserva, revisa el pernoctanteUID";
@@ -86,21 +85,17 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
             throw new Error(error);
         }
         await actualizarFechaCheckOutPernoctante({
-            fechaCheckOut_ISO: fechaCheckOut_ISO,
-            pernoctantaUID: pernoctantaUID
-        })
-        await actualizarFechaCheckOutPernoctante({
-            fechaCheckOut_ISO: fechaCheckOut_ISO,
-            pernoctantaUID: pernoctantaUID
+            fechaCheckOut,
+            pernoctanteUID
         })
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado la fecha de checkin correctamente",
-            fechaCheckOut_ISO: fechaCheckOut_ISO
+            fechaCheckOut: fechaCheckOut
         };
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 }

@@ -19,8 +19,11 @@ export const obtenerPago = async (entrada, salida) => {
             const error = "el codigo de un enlace de pago solo puede ser una cadena de minuscuals y numeros y ya esta";
             throw new Error(error);
         }
-        const enalceDePago = await obtenerEnlaceDePagoPorCodigoUPID(pagoUID)
-        const estadoPago = enalceDePago.estadoPago;
+        const enalceDePago = await obtenerEnlaceDePagoPorCodigoUPID({
+            codigoUPID: pagoUID,
+            errorSi: "noExiste"
+        })
+        const estadoPago = enalceDePago?.estadoPago;
         if (estadoPago === "pagado") {
             const error = "Este enlace de pago esta pagado";
             throw new Error(error);

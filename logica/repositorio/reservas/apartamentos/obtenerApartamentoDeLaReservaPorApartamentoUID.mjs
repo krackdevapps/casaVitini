@@ -2,6 +2,7 @@ import { conexion } from "../../../componentes/db.mjs"
 
 export const obtenerApartamentoDeLaReservaPorApartamentoUID = async (data) => {
     try {
+        console.log("daTA", data)
         const reservaUID = data.reservaUID
         const apartamentoUID = data.apartamentoUID
 

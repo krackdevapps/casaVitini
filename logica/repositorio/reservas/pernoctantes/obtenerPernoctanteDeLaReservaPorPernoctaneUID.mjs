@@ -11,8 +11,8 @@ export const obtenerPernoctanteDeLaReservaPorPernoctaneUID = async (data) => {
         "reservaUID",
         "habitacionUID",
         "clienteUID",
-        to_char("fechaCheckIn", 'YYYY-MM-DD'), 
-        to_char("fechaCheckOutAdelantado", 'YYYY-MM-DD')
+        to_char("fechaCheckIn", 'YYYY-MM-DD') AS "fechaCheckIn", 
+        to_char("fechaCheckOutAdelantado", 'YYYY-MM-DD') AS "fechaCheckOutAdelantado"
         FROM
          "reservaPernoctantes" 
         WHERE

@@ -7,11 +7,12 @@ import { detallesDelPago as detallesDelPago_square } from "../../../../../compon
 import { insertarPago } from "../../../../../repositorio/reservas/transacciones/pagos/insertarPago.mjs";
 import { obtenerPagoPorPagoUIDPasaresa } from "../../../../../repositorio/reservas/transacciones/pagos/obtenerPagoPorPagoUIDPasaresa.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { codigoZonaHoraria } from "../../../../../sistema/configuracion/codigoZonaHoraria.mjs";
 
-export const crearPagoManual = async (entrada, salida) => {
+export const crearPagoManual = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -41,6 +42,7 @@ export const crearPagoManual = async (entrada, salida) => {
                 filtro: "cadenaConNumerosConDosDecimales",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
+                devuelveUnTipoNumber: "no"
             })
             return cv
         }
@@ -50,6 +52,7 @@ export const crearPagoManual = async (entrada, salida) => {
         const fechaActual = DateTime.utc().toISO();
 
         const estructuraFinal = {};
+        const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
 
         if (plataformaDePago === "efectivo") {
             const cantidad_ = cantidadValidada(cantidad)
@@ -61,6 +64,11 @@ export const crearPagoManual = async (entrada, salida) => {
 
             };
             const pagoUID = await insertarPago(nuevoPago)
+            const fechaPago = pagoUID.fechaPago;
+            const fechaPagoTZ_ISO = DateTime.fromISO(fechaPago, { zone: 'utc' })
+                .setZone(zonaHoraria)
+                .toISO()
+            pagoUID.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
             estructuraFinal.ok = "Se ha insertado el nuevo pago en efectivo";
             estructuraFinal.detallesDelPago = pagoUID;
         } else if (plataformaDePago === "cheque") {
@@ -191,7 +199,7 @@ export const crearPagoManual = async (entrada, salida) => {
         }
 
         await actualizarEstadoPago(reservaUID);
-        salida.json(estructuraFinal);
+        return estructuraFinal
     } catch (errorCapturado) {
         throw errorCapturado
     }

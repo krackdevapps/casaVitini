@@ -22,6 +22,8 @@ export const porTerminos = async (data) => {
             nombreColumna: nombreColumna,
             termino: termino,
         })
+
+        console.log("reservas", reservas)
         const consultaConteoTotalFilas = reservas.length > 0
             ? reservas[0].total_filas
             : 0;

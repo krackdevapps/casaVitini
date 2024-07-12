@@ -27,10 +27,10 @@ export const obtenerPagosDeLaReserva = async (entrada, salida) => {
         const detallesPagosReserva = await pagosDeLaReserva_(reservaUID);
         const metadatos = {
             reservaUID: reservaUID,
-            solo: "informacionGlobal"
+            capas: []
         };
         const resuelveDetallesReserva = await detallesReserva(metadatos);
-        const estadoPago = resuelveDetallesReserva.reserva.estadoPago;
+        const estadoPago = resuelveDetallesReserva.global.estadoPagoIDV;
         const totalReembolsado = await obtenerTotalReembolsado(reservaUID);
         const totalReserva = detallesPagosReserva.totalReserva;
         const totalPagado = detallesPagosReserva.totalPagado;

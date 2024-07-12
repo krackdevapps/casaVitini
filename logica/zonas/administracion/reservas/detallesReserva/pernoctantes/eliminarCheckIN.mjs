@@ -14,6 +14,7 @@ export const eliminarCheckIN = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+        console.log("e", entrada.body)
 
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pernoctanteUID,
@@ -32,30 +33,31 @@ export const eliminarCheckIN = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
         await obtenerReservaPorReservaUID(reservaUID);
-
-        // Validar pernoctanteUID
-        const pernoctante = obtenerPernoctanteDeLaReservaPorPernoctaneUID({
-            pernoctanteUID: pernoctanteUID,
-            reservaUID: reservaUID
-        })
-        if (!pernoctante.compoenteUID) {
-            const error = "No existe el pernoctanteUID";
-            throw new Error(error);
-        }
-        await campoDeTransaccion("iniciar")
         // Validar que el pernoctatne sea cliente y no cliente pool  
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         if (reserva.estadoReservaIDV === "cancelada") {
             const error = "No se puede alterar una fecha de checkin de una reserva cancelada";
             throw new Error(error);
         }
+        // Validar pernoctanteUID
+        const pernoctante = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
+            pernoctanteUID,
+            reservaUID
+        })
+        console.log(">>>",pernoctante)
+        if (!pernoctante?.componenteUID) {
+            const error = "No existe el pernoctanteUID";
+            throw new Error(error);
+        }
+        await campoDeTransaccion("iniciar")
+
         await actualizarFechaCheckinPernoctante({
-            fechaCheckIn_ISO: null,
-            pernoctanteUID: pernoctanteUID
+            fechaCheckIn: null,
+            pernoctanteUID
         })
         await actualizarFechaCheckOutPernoctante({
-            fechaCheckOut_ISO: null,
-            pernoctanteUID: pernoctanteUID
+            fechaCheckOut: null,
+            pernoctanteUID
         })
         await campoDeTransaccion("confirmar")
         const ok = {
@@ -64,6 +66,6 @@ export const eliminarCheckIN = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 }

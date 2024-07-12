@@ -15,7 +15,8 @@ export const validadoresCompartidos = {
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
-                    limpiezaEspaciosInternos: "si"
+                    limpiezaEspaciosInternos: "si",
+                    soloMayusculas: "si"
 
                 })
                 const primerApellido = validadoresCompartidos.tipos.cadena({
@@ -24,7 +25,8 @@ export const validadoresCompartidos = {
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
                     limpiezaEspaciosAlrededor: "si",
-                    limpiezaEspaciosInternos: "si"
+                    limpiezaEspaciosInternos: "si",
+                    soloMayusculas: "si"
 
                 })
                 const segundoApellido = validadoresCompartidos.tipos.cadena({
@@ -33,7 +35,8 @@ export const validadoresCompartidos = {
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
                     limpiezaEspaciosAlrededor: "si",
-                    limpiezaEspaciosInternos: "si"
+                    limpiezaEspaciosInternos: "si",
+                    soloMayusculas: "si"
 
                 })
                 const pasaporte = validadoresCompartidos.tipos.cadena({
@@ -652,6 +655,7 @@ export const validadoresCompartidos = {
             const nombreCampo = configuracion.nombreCampo
             const filtro = configuracion.filtro
             const sePermiteVacio = configuracion.sePermiteVacio
+            const sePermiteCero = configuracion.sePermiteCero
             const limpiezaEspaciosAlrededor = configuracion.limpiezaEspaciosAlrededor
             const sePermitenNegativos = configuracion.sePermitenNegativos || "no"
 
@@ -698,6 +702,12 @@ export const validadoresCompartidos = {
                 }
             }
 
+            if (sePermiteCero === "no") {
+                if (number === 0) {
+                    const mensaje = `No se permiten el cero, por favor revisalo.`
+                    throw new Error(mensaje)
+                }
+            }
             if (filtro === "numeroSimple") {
                 try {
                     if (!Number.isInteger(number)) {

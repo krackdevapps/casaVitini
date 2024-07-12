@@ -36,18 +36,20 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             filtro: "cadenaConNumerosConDosDecimales",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "no"
         })
 
         const horasCaducidad = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.horasCaducidad || 72,
+            string: entrada.body.horasCaducidad || "72",
             nombreCampo: "El campo horasCaducidad",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "no"
         })
-
+        
         const descripcion = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.descripcion,
+            string: entrada.body.descripcion || "",
             nombreCampo: "El campo del descripcion",
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",
@@ -56,7 +58,7 @@ export const crearNuevoEnlace = async (entrada, salida) => {
         await controlCaducidadEnlacesDePago();
         const resuelveValidarReserva = await obtenerReservaPorReservaUID(reservaUID);
         const estadoReserva = resuelveValidarReserva.estadoReservaIDV;
-
+        console.log("1")
         if (estadoReserva === "cancelada") {
             const error = "No se puede generar un enlace de pago una reserva cancelada";
             throw new Error(error);
@@ -74,12 +76,23 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             }
             return cadenaAleatoria;
         };
+        console.log("2")
         const validarCodigo = async (codigoAleatorio) => {
             // Se esta validando que no existe ningun enlace de pago con el mismo codiog UPID. Si no existe, el adaptaador manera el error de enlace inexistente y el trycatch de aqui devuelve true
             try {   
-                await obtenerEnlaceDePagoPorCodigoUPID(codigoAleatorio)
-            } catch (error) {
+              const codigoRepetidos =  await obtenerEnlaceDePagoPorCodigoUPID({
+                    codigoUPID: codigoAleatorio,
+                    errorSi: "desactivado"
+              })
+                console.log("codigoRepetidos", codigoRepetidos)
+            if (codigoRepetidos.length === 0) {
+                return false
+            } else {
                 return true
+            }
+                
+            } catch (error) {
+               throw error
             }
         };
         const controlCodigo = async () => {
@@ -88,12 +101,20 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             let codigoExiste;
             do {
                 codigoGenerado = generarCadenaAleatoria(longitudCodigo);
+                console.log("codigoGenrado", codigoGenerado)
                 codigoExiste = await validarCodigo(codigoGenerado);
+                console.log("codigoExiste", codigoExiste)
             } while (codigoExiste);
             // En este punto, tenemos un código único que no existe en la base de datos
             return codigoGenerado;
         };
+        console.log("3")
+
         const codigoAleatorioUnico = await controlCodigo();
+        console.log("4")
+
+
+
         const fechaActual = new Date();
         const fechaDeCaducidad = new Date(fechaActual.getTime() + (horasCaducidad * 60 * 60 * 1000));
         const estadoPagoInicial = "noPagado";

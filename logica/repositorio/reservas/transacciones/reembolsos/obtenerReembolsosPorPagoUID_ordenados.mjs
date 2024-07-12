@@ -7,7 +7,7 @@ export const obtenerReembolsosPorPagoUID_ordenados = async (pagoUID) => {
         SELECT
             "reembolsoUID",
             cantidad,
-            "plataformaDePago",
+            "plataformaDePagoIDV",
             "reembolsoUIDPasarela",
             "estadoIDV",
             to_char("fechaCreacion", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaCreacionUTC_ISO", 
@@ -20,10 +20,6 @@ export const obtenerReembolsosPorPagoUID_ordenados = async (pagoUID) => {
             "reembolsoUID" DESC;`;
 
         const resuelve = await conexion.query(consulta, [pagoUID]);
-        if (resuelve.rowCount === 0) {
-            const error = "No existe ningún reembolso con ese pagoUID";
-            throw new Error(error);
-        }
         return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado

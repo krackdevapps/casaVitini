@@ -1,7 +1,6 @@
 import { conexion } from "../../../../componentes/db.mjs"
 import { constructorOrderBy } from "../../../../sistema/reservas/buscador/contructorOrderBy.mjs"
 
-
 export const porTerminos_ = async (data) => {
     try {
         const numeroPorPagina = data.numeroPorPagina
@@ -60,8 +59,6 @@ export const porTerminos_ = async (data) => {
 
         const constructorOrderByPorTerminos = (sqlORderBy) => {
             if (sqlORderBy) {
-
-
                 return sqlORderBy
             } else {
                 const inyector = `
@@ -104,7 +101,7 @@ export const porTerminos_ = async (data) => {
         LEFT JOIN
             "reservaTitulares" rt ON r."reservaUID" = rt."reservaUID"
         LEFT JOIN 
-            clientes c ON rt."titularUID" = c."clienteUID"
+            clientes c ON rt."clienteUID" = c."clienteUID"
         LEFT JOIN
             "poolTitularesReserva" ptr ON r."reservaUID" = ptr."reservaUID"
         WHERE

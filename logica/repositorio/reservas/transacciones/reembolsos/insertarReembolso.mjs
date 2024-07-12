@@ -5,7 +5,7 @@ export const insertarReembolso = async (data) => {
 
         const pagoUID = data.pagoUID
         const cantidad = data.cantidad
-        const plataformaDePago = data.plataformaDePago
+        const plataformaDePagoIDV = data.plataformaDePagoIDV
         const reembolsoUIDPasarela = data.reembolsoUIDPasarela
         const estadoReembolso = data.estadoReembolso
         const fechaCreacion = data.fechaCreacion
@@ -17,9 +17,9 @@ export const insertarReembolso = async (data) => {
             (
             "pagoUID",
             cantidad,
-            "plataformaDePago",
+            "plataformaDePagoIDV",
             "reembolsoUIDPasarela",
-            estado,
+            "estadoIDV",
             "fechaCreacion",
             "fechaActualizacion"
             )
@@ -31,7 +31,7 @@ export const insertarReembolso = async (data) => {
         const parametros = [
             pagoUID,
             cantidad,
-            plataformaDePago,
+            plataformaDePagoIDV,
             reembolsoUIDPasarela,
             estadoReembolso,
             fechaCreacion,

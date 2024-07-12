@@ -7,6 +7,7 @@ import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../../../re
 import { actualizarHabitacionDelPernoctantePorComponenteUID } from "../../../../../repositorio/reservas/pernoctantes/actualizarHabitacionDelPernoctantePorComponenteUID.mjs";
 import { eliminarPernoctantePorPernoctanteUID } from "../../../../../repositorio/reservas/pernoctantes/eliminarPernoctantePorPernoctanteUID.mjs";
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
+import { eliminarClientePoolPorPernoctanteUID } from "../../../../../repositorio/clientes/eliminarClientePoolPorPernoctanteUID.mjs";
 
 export const eliminarPernoctanteReserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -37,7 +38,7 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
         const tipoElinacion = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoElinacion,
+            string: entrada.body.tipoEliminacion,
             nombreCampo: "El tipoElinacion",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
@@ -67,7 +68,7 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
             const error = "No existe el pernoctante en la reserva";
             throw new Error(error);
         }
-        await eliminaClientePool(pernoctanteUID)
+        await eliminarClientePoolPorPernoctanteUID(pernoctanteUID)
         if (tipoElinacion === "habitacion") {
             await actualizarHabitacionDelPernoctantePorComponenteUID({
                 reservaUID: reservaUID,
@@ -90,10 +91,9 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
             ok.ok = "Se ha eliminar al pernoctante de la reserva"
         }
         return ok
-
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release()

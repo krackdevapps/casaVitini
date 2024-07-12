@@ -25,7 +25,7 @@ export const buscar = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        const nombreColumna = validadoresCompartidos.tipos.cadena({
+        let nombreColumna = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombreColumna || "",
             nombreCampo: "El campo del nombre de la columna",
             filtro: "strictoConEspacios",
@@ -50,8 +50,13 @@ export const buscar = async (entrada, salida) => {
             filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            sePermiteCero: "no",
             sePermitenNegativos: "no"
         })
+        if (nombreColumna === "uid") {
+            nombreColumna = "clienteUID"
+        }
+
 
         if (nombreColumna) {
             await validadoresCompartidos.baseDeDatos.validarNombreColumna({
@@ -84,13 +89,17 @@ export const buscar = async (entrada, salida) => {
         const corretorNumeroPagina = String(pagina).replace("0", "");
         const respuesta = {
             buscar: buscar,
-            totalClientes: consultaConteoTotalFilas,
+            totalClientes: Number(consultaConteoTotalFilas),
             paginasTotales: totalPaginas,
-            pagina: Number(corretorNumeroPagina) + 1,
+            pagina: pagina,
         };
         if (nombreColumna) {
+            if (nombreColumna === "clienteUID") {
+                nombreColumna = "uid"
+            }
+    
             respuesta.nombreColumna = nombreColumna;
-            respuesta.sentidoColumna = nombreColumna;
+            respuesta.sentidoColumna = sentidoColumna;
         }
         respuesta.clientes = resultadosBusqueda;
         salida.json(respuesta);

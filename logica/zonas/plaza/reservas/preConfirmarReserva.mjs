@@ -9,6 +9,7 @@ import { actualizarEstadoPago } from "../../../sistema/contenedorFinanciero/enti
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 import { crearEnlacePDF } from "../../../sistema/pdf/crearEnlacePDF.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
+import { generadorPDF } from "../../../sistema/pdf/generadorPDF.mjs";
 
 export const preConfirmarReserva = async (entrada) => {
     const mutex = new Mutex()
@@ -32,6 +33,7 @@ export const preConfirmarReserva = async (entrada) => {
 
         await actualizarEstadoPago(reservaUID)
         await campoDeTransaccion("confirmar")
+        console.log("1")
         const resolverDetallesReserva = await detallesReserva({
             reservaUID: reservaUID,
             capas: [
@@ -41,12 +43,18 @@ export const preConfirmarReserva = async (entrada) => {
                 "desgloseFinanciero"
             ]
         })
-        const enlacePDF = await crearEnlacePDF(reservaUID);
-        resolverDetallesReserva.enlacePDF = enlacePDF;
-        //enviarEmailReservaConfirmada(reservaUID);
+        //const enlacePDF = await crearEnlacePDF(reservaUID);
+        console.log("2")
+        //resolverDetallesReserva.enlacePDF = enlacePDF;
+        const pdf = await generadorPDF(resolverDetallesReserva);
+        console.log("3")
+
+        enviarEmailReservaConfirmada(reservaUID);
+        console.log("4")
         const ok = {
             ok: "Reserva confirmada",
-            detalles: resolverDetallesReserva
+            detalles: resolverDetallesReserva,
+            pdf
         };
         return ok
     } catch (errorCapturado) {

@@ -15,15 +15,19 @@ export const pernoctantesDeLaReserva = async (reservaUID) => {
             const clienteUID = pernoctante.clienteUID
             const habitacionUID = pernoctante.habitacionUID
             const reservaUID = pernoctante.reservaUID
+            const fechaCheckIn = pernoctante.fechaCheckIn
+            const fechaCheckOutAdelantado = pernoctante.fechaCheckOutAdelantado
+
             const datosPernoctante = {
                 reservaUID,
                 pernoctanteUID,
-                habitacionUID
+                habitacionUID,
+                fechaCheckIn,
+                fechaCheckOutAdelantado
             }
             if (clienteUID) {
 
                 await eliminarClientePoolPorPernoctanteUID(pernoctanteUID)
-
                 datosPernoctante.tipoPernoctante = "cliente"
                 const cliente = await obtenerDetallesCliente(clienteUID)
                 const primeroApellido = cliente.primerApellido ? cliente.primerApellido : ""

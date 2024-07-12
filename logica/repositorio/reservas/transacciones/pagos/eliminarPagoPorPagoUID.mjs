@@ -8,7 +8,7 @@ export const eliminarPagoPorPagoUID = async (data) => {
   
         const consulta = `
         DELETE FROM "reservaPagos"
-        WHERE "pagoUID" = $1 AND reserva = $2;
+        WHERE "pagoUID" = $1 AND "reservaUID" = $2;
         `;
         const parametros = [
             pagoUID,

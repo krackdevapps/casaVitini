@@ -3,9 +3,11 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { createRequire } from 'module';
-import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 import Decimal from 'decimal.js';
 import { DateTime } from 'luxon';
+import { utilidades } from '../../componentes/utilidades.mjs';
+import QRCode from 'qrcode'
+
 const require = createRequire(import.meta.url);
 export const generadorPDF = async (reserva) => {
     try {
@@ -330,27 +332,39 @@ export const generadorPDF = async (reserva) => {
             }
         }
         //
-        const datosGlobales = reserva.reserva
-        const numeroReserva = datosGlobales.reserva
-        const fechaEntrada_humana = reserva.reserva.entrada
-        const fechaSalida_humana = reserva.reserva.salida
-        const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_humana)).fecha_ISO
-        const fechaSalida = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaSalida_humana)).fecha_ISO
+        const global = reserva.global
+        const reservaUID = global.reservaUID
+        const fechaEntrada = global.fechaEntrada
+        const fechaSalida = global.fechaSalida
 
-        const estadoReserva = reserva.reserva.estadoReserva
-        const estadoPAgo = reserva.reserva.estadoPago
-        if (!reserva.reserva.titular) {
+        const fechaEntrada_humana = utilidades.conversor.fecha_ISO_hacia_humana(fechaEntrada)
+        const fechaSalida_humana = utilidades.conversor.fecha_ISO_hacia_humana(fechaSalida)
+
+        const estadoReserva = global.estadoReservaIDV
+        const estadoPAgo = global.estadoPagoIDV
+        const contenedorFinanciero = reserva.contenedorFinanciero
+
+        const contenedorTitular = reserva.titular
+
+        if (!contenedorTitular.hasOwnProperty("tipoTitularIDV")) {
             const error = "No se puede generar un pdf de una reserva que no tiene un titular asingado, primero asocia o crea un titular para esta reserva"
             throw new Error(error)
         }
-        const nombreTitular = reserva.reserva.titular.nombreTitular || ""
-        const pasaporteTitular = reserva.reserva.titular.pasaporteTitular || ""
-        const telefonoTitular = reserva.reserva.titular.telefonoTitular || ""
-        const emailTitular = reserva.reserva.titular.emailTitular || ""
+        const nombreTitular = contenedorTitular.nombreTitular || ""
+        const pasaporteTitular = contenedorTitular.pasaporteTitular || ""
+        const telefonoTitular = contenedorTitular.telefonoTitular || ""
+        const emailTitular = contenedorTitular.emailTitular || ""
         // Definir dos fechasc
         const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada);
         const fechaSalida_objeto = DateTime.fromISO(fechaSalida);
         // Obtener la diferencia en días
+
+        const opciones = {
+            margin: 0
+        }
+
+        const urlQR = `https://casavitini.com/qr/${reservaUID}`
+        const qr = await QRCode.toDataURL(urlQR, opciones)
 
         const numeroDeDias = (fechaSalida_objeto.diff(fechaEntrada_objeto, "days").days) + 1;
         const numeroDeNoches = new Decimal(numeroDeDias).minus(1).toString()
@@ -365,25 +379,67 @@ export const generadorPDF = async (reserva) => {
         const __dirname = path.dirname(__filename);
         const fonts = {
             Roboto: {
-                normal: require.resolve('../../componentes/pdf/fuentes/roboto-regular.ttf'),
-                bold: require.resolve('../../componentes/pdf/fuentes/roboto-bold.ttf'),
+                normal: require.resolve('../../../componentes/pdf/fuentes/roboto-regular.ttf'),
+                bold: require.resolve('../../../componentes/pdf/fuentes/roboto-bold.ttf'),
             },
         };
         const docDefinition = {
             header: {
-                alignment: 'justify',
                 style: "cabecera",
-                columns: [
-                    {
-                        image: require.resolve('../../componentes/pdf/logo.png'),
-                        width: 100
-                    },
-                    {
-                        text: numeroReserva,
-                        style: "tituloReserva"
-                    }
-                ]
+                layout: 'noBorders',
+                table: {
+                    widths: ['auto', '*', 'auto'],
+                    headerRows: 0,
+                    body: [
+                        [
+
+                            {
+                                image: require.resolve('../../../componentes/pdf/logo.png'),
+                                width: 100,
+                            },
+                            {
+                                layout: 'noBorders',
+                                table: {
+                                    widths: ['*'],
+                                    headerRows: 1,
+                                    body: [
+                                        [
+                                            {
+                                                text: reservaUID,
+                                                style: "tituloReserva"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                text: nombreTitular,
+                                                style: 'textoTitular',
+                                            },
+                                        ],
+                                        [
+                                            {
+                                                text: emailTitular,
+                                                style: 'textoTitular',
+                                            },
+                                        ],
+                                        [
+                                            {
+                                                text: telefonoTitular,
+                                                style: 'textoTitular',
+                                            },
+                                        ],
+                                    ]
+                                },
+                            },
+                            {
+                                image: qr,
+                                width: 90,
+                            },
+                        ],
+                    ]
+                }
             },
+
+
             footer: (currentPage, pageCount) => {
                 return [
                     {
@@ -393,40 +449,6 @@ export const generadorPDF = async (reserva) => {
                 ]
             },
             content: [
-                {
-                    style: 'tablaTitular',
-                    layout: 'headerLineOnly',
-                    table: {
-                        headerRows: 0,
-                        widths: ['*'],
-                        body: [
-                            [
-                                {
-                                    text: nombreTitular,
-                                    style: 'apartamentoNombre',
-                                },
-                            ],
-                            [
-                                {
-                                    text: pasaporteTitular,
-                                    style: 'apartamentoNombre',
-                                },
-                            ],
-                            [
-                                {
-                                    text: emailTitular,
-                                    style: 'apartamentoNombre',
-                                },
-                            ],
-                            [
-                                {
-                                    text: telefonoTitular,
-                                    style: 'apartamentoNombre',
-                                },
-                            ],
-                        ]
-                    },
-                },
                 {
                     style: 'tablaGlobalReserva',
                     layout: 'lightHorizontalLines',
@@ -467,19 +489,6 @@ export const generadorPDF = async (reserva) => {
                                         colSpan: 2,
                                         alignment: 'center'
                                     },
-                                    /*  {
-                                          text: 'Hora de entrada'
-                                          , style: 'celdaTablaGlobalReserva'
-                                          , alignment: 'center'
-      
-                                      }
-                                      ,
-                                      {
-                                          text: 'A partir de las 14:00 (Hora local Nicaranguense)'
-                                          , style: 'celdaTablaGlobalReserva'
-                                          , alignment: 'center'
-      
-                                      }*/
                                 ],
                                 [
                                     {
@@ -489,7 +498,6 @@ export const generadorPDF = async (reserva) => {
                                     },
                                     {
                                         text: nochesUI,
-                                        //  style: 'celdaTablaGlobalReserva',
                                         alignment: 'center'
                                     }
                                 ],
@@ -500,21 +508,6 @@ export const generadorPDF = async (reserva) => {
                                         colSpan: 2,
                                         alignment: 'center'
                                     },
-                                    /* 
-                                    {
-                                                                          text: 'Hora de salida',
-                                          style: 'celdaTablaGlobalReserva',
-                                          alignment: 'center'
-      
-                                      }
-                                      ,
-                                      {
-                                          text: 'A partir de las 11:00 (Hora local Nicaranguense)',
-                                          style: 'celdaTablaGlobalReserva',
-                                          alignment: 'center'
-      
-                                      }
-                                      */
                                 ]
                             ]
                         ]
@@ -522,25 +515,31 @@ export const generadorPDF = async (reserva) => {
                 },
             ],
             pageSize: 'A4',
-            pageMargins: [20, 70, 20, 20],
+            pageMargins: [20, 120, 20, 20],
             styles: {
                 textoPaginacion: {
                     fontSize: 8,
                     alignment: "center"
                 },
                 cabecera: {
-                    margin: [10, 10, 10, 10]
+                    margin: [20, 20, 20, 0],
+                    width: 100
                 },
-                tituloReserva: {
-                    fontSize: 16,
-                    bold: true,
-                    margin: [5, 15, 14, 10],
+                logo: {
+                    alignment: "left",
+                },
+                qr: {
                     alignment: "right"
                 },
-                apartamentoNombre: {
-                    fontSize: 8,
+                tituloReserva: {
+                    fontSize: 10,
                     bold: true,
-                    alignment: "left"
+                    //  margin: [5, 0, 14, 10],
+                    alignment: "right"
+                },
+                textoTitular: {
+                    fontSize: 8,
+                    alignment: "right"
                 },
                 valorTotal: {
                     fontSize: 8,
@@ -593,14 +592,18 @@ export const generadorPDF = async (reserva) => {
                 textoSimple: {
                     fontSize: 8,
                     color: 'black',
+                    margin: [0, 0, 0, 10],
+                    alignment: "justify"
+
+
                 }
             },
             defaultStyle: {
                 columnGap: 0
             }
         };
-        const totalesPorApartamento = reserva.desgloseFinanciero.totalesPorApartamento
-        if (totalesPorApartamento.length > 0) {
+        const totalesPorApartamento = contenedorFinanciero.desgloseFinanciero.entidades.reserva.desglosePorApartamento
+        if (Object.entries(totalesPorApartamento).length > 0) {
             const tablaFormatoPDFMake = {
                 style: 'tablaTotales',
                 layout: 'lightHorizontalLines',
@@ -624,9 +627,9 @@ export const generadorPDF = async (reserva) => {
                     ]
                 }
             }
-            for (const detallesPorApartamento of totalesPorApartamento) {
-                const apartamentoUI = detallesPorApartamento.apartamentoUI
-                const totalNetoRango = detallesPorApartamento.totalNetoRango
+            for (const [apartamentoIDV, contenedor] of Object.entries(totalesPorApartamento)) {
+                const apartamentoUI = contenedor.apartamentoUI
+                const totalNeto = contenedor.totalNeto
                 const fila = [
                     [
                         {
@@ -636,7 +639,7 @@ export const generadorPDF = async (reserva) => {
                     ],
                     [
                         {
-                            text: totalNetoRango + '$',
+                            text: totalNeto + '$',
                             style: 'valorTotal',
                         },
                     ],
@@ -645,8 +648,7 @@ export const generadorPDF = async (reserva) => {
             }
             docDefinition.content.push(tablaFormatoPDFMake)
         }
-        const ofertasAplicadas = reserva.desgloseFinanciero.ofertas
-        const impuestos = reserva.desgloseFinanciero.impuestos
+        const impuestos = contenedorFinanciero.desgloseFinanciero.impuestos
         if (impuestos.length > 0) {
             const tablaFormatoPDFMake = {
                 style: 'tablaTotales',
@@ -672,21 +674,21 @@ export const generadorPDF = async (reserva) => {
                 }
             }
             for (const detallesImpuesto of impuestos) {
-                const nombreImpuesto = detallesImpuesto.nombreImpuesto
+                const nombre = detallesImpuesto.nombre
                 const tipoImpositivo = detallesImpuesto.tipoImpositivo
-                const tipoValor = detallesImpuesto.tipoValor
-                const calculoImpuestoPorcentaje = detallesImpuesto.calculoImpuestoPorcentaje
+                const tipoValor = detallesImpuesto.tipoValorIDV
+                const porcentaje = detallesImpuesto.porcentaje
                 let valorFinal
                 if (tipoValor === "tasa") {
                     valorFinal = tipoImpositivo + "$"
                 }
                 if (tipoValor === "porcentaje") {
-                    valorFinal = `(${tipoImpositivo}%) ${calculoImpuestoPorcentaje}$`
+                    valorFinal = `(${porcentaje}%) ${tipoImpositivo}$`
                 }
                 const fila = [
                     [
                         {
-                            text: nombreImpuesto,
+                            text: nombre,
                             style: 'apartamentoNombre',
                         },
                     ],
@@ -701,17 +703,18 @@ export const generadorPDF = async (reserva) => {
             }
             docDefinition.content.push(tablaFormatoPDFMake)
         }
-        const totales = reserva.desgloseFinanciero.totales
+        const totales = contenedorFinanciero.desgloseFinanciero.global.totales
         const objetoTraductor = {
-            promedioNetoPorNoche: "Promedio neto por noche ponderado",
-            totalReservaNetoSinOfertas: "Total de la reserva neto sin ofertas aplicadas",
-            totalReservaNeto: "Total reserva neto",
-            totalDescuentos: "Total suma descuentos aplicados",
-            totalImpuestos: "Total impuestos aplicados",
-            totalConImpuestos: "Total bruto final a pagar",
+            totalNeto: "Total reserva neto",
+            totalFinal: "Total bruto final a pagar",
+            totalDescuento: "Total suma descuentos aplicados",
+            promedioNocheNeto: "Promedio neto por noche ponderado",
+            impuestosAplicados: "Total impuestos aplicados",
+            totalNetoConDescuentos: "Total neto con descuentos aplicados",
+            promedioNocheNetoConDescuentos: "Promedio noche neto con descuentos",
         }
-        if (!totales.totalDescuentos) {
-            delete totales.totalDescuentos
+        if (!totales.totalDescuento) {
+            delete totales.totalDescuento
             delete totales.totalReservaNetoSinOfertas
         }
         const tablaTotales = {
@@ -723,7 +726,7 @@ export const generadorPDF = async (reserva) => {
                     [
                         [
                             {
-                                text: 'Totales',
+                                text: 'Definición de los totales',
                                 style: 'tituloColumnaIzquierda',
                             }
                         ],
@@ -771,9 +774,12 @@ export const generadorPDF = async (reserva) => {
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje3)
-        // Totales por noche
-        // Ofertas aplicadas
-        // Totales
+        const mensaje4 = {
+            text: 'Puede usar el codigo qr para ir a los detalles de esta reserva de una manera fácil y comoda.',
+            style: 'textoSimple'
+        }
+        docDefinition.content.push(mensaje4)
+
         const generarPDF = async (docDefinition) => {
             return new Promise((resolve, reject) => {
                 const printer = new pdfmake(fonts);
@@ -786,7 +792,10 @@ export const generadorPDF = async (reserva) => {
                     const archivo = Buffer.concat(chunks);
                     // Puedes hacer lo que necesites con 'archivo' antes de resolver la promesa
                     // Por ejemplo, guardar en un archivo, enviar como respuesta HTTP, etc.
-                    resolve(archivo);
+                   // resolve(archivo);
+                    const base64String = archivo.toString('base64');
+                    resolve(base64String);
+
                 });
                 pdf.on('error', error => {
                     reject(error);

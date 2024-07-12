@@ -26,8 +26,6 @@ export const listarReservas = async (entrada, salida) => {
         let nombreColumna = entrada.body.nombreColumna
         const sentidoColumna = entrada.body.sentidoColumna
 
-
-
         if (nombreColumna === "reserva") {
             nombreColumna = "reservaUID"
         } else if (nombreColumna === "estadoPago") {
@@ -50,14 +48,9 @@ export const listarReservas = async (entrada, salida) => {
                 numeroPorPagina: numeroPorPagina,
                 numeroPagina: 1
             }
-
-
             const resultados = await hoy(data)
-
             Object.assign(ok, resultados)
-
-        }
-        else if (tipoConsulta === "rango") {
+        } else if (tipoConsulta === "rango") {
             validadorBusqueda(configuracionValidador)
 
             const tipoCoincidencia = validadoresCompartidos.tipos.cadena({
@@ -113,8 +106,7 @@ export const listarReservas = async (entrada, salida) => {
             const resultados = await rango(data)
             Object.assign(ok, resultados)
 
-        }
-        else if (tipoConsulta === "porTerminos") {
+        } else if (tipoConsulta === "porTerminos") {
             validadorBusqueda(configuracionValidador)
             const termino = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.termino,
@@ -123,8 +115,6 @@ export const listarReservas = async (entrada, salida) => {
                 sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
-
-
 
             const data = {
                 numeroPorPagina: numeroPorPagina,

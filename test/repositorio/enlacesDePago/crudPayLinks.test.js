@@ -87,7 +87,10 @@ describe('crud pay links', () => {
     })
 
     test('select link pay by codigoUPID', async () => {
-        const response = await obtenerEnlaceDePagoPorCodigoUPID(codigoPublico);
+        const response = await obtenerEnlaceDePagoPorCodigoUPID({
+            codigoUPID: codigoPublico,
+            errorSi: "noExiste"
+        });
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
 

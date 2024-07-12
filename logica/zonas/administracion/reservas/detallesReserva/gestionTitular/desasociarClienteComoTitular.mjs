@@ -1,6 +1,8 @@
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { eliminarTitularPorReservaUID } from "../../../../../repositorio/reservas/titulares/eliminarTitularPorReservaUID.mjs";
+import { eliminarTitularPoolPorReservaUID } from "../../../../../repositorio/reservas/titulares/eliminarTitularPoolPorReservaUID.mjs";
 
 export const desasociarClienteComoTitular = async (entrada, salida) => {
     try {

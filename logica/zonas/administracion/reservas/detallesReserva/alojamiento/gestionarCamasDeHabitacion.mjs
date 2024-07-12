@@ -130,6 +130,13 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
                 errorSi: "existe"
             })
 
+            // Falta si la cama fisica existe en la misma reserva pero en otra habitacion
+            await obtenerCamasFisicasPorReservaUID({
+                reservaUID_array: [reservaUID],
+                camaIDV: nuevaCamaIDV,
+                errorSi: "existe"
+            })
+
             // Si no existe la cama fisica se compreuba que no exista en otra reserva al mismo tiempo
             const reservasConflicto = await obtenerReservasPorRango({
                 fechaIncioRango_ISO: fechaInicio,

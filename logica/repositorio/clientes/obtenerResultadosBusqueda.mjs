@@ -4,7 +4,15 @@ export const obtenerResultadosBusqueda = async (data) => {
     try {
 
         const numeroPorPagina = data.numeroPorPagina
-        const numeroPagina = Number((data.numeroPagina - 1) + "0");
+        const numeroPagina_humano = data.numeroPagina
+        const numeroPagina = (numeroPagina_humano) => {
+            if (numeroPagina_humano === 1) {
+                return 0
+            } else {
+                return (numeroPagina_humano - 1) * 10
+            }              
+        }
+        console.log(" numeroPagina(numeroPagina_humano)",  numeroPagina(numeroPagina_humano))
         const nombreColumna = data.nombreColumna
         const terminoBusqueda = data.terminoBusqueda
         const sentidoColumna = data.sentidoColumna
@@ -72,7 +80,7 @@ export const obtenerResultadosBusqueda = async (data) => {
         ${sqlDinamicoConstructor(nombreColumna, sentidoColumna)}
         LIMIT $2 OFFSET $3;`;
 
-        const resuelve = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina, numeroPagina]);
+        const resuelve = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina,  numeroPagina(numeroPagina_humano)]);
         return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado

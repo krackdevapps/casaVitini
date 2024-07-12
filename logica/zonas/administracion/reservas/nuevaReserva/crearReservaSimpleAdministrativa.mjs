@@ -10,6 +10,8 @@ import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTran
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs";
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
+import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.mjs";
+import { insertarDesgloseFinacieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/insertarDesgloseFinacieroPorReservaUID.mjs";
 
 export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -87,7 +89,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             // insertar fila reserva y en la tabla reservarAartametnos insertar las correspondientes filas
             const estadoReserva = "confirmada";
             const origen = "administracion";
-            const creacionFechaReserva = new Date().toISOString();
+            const fechaCreacion = DateTime.utc().toISO();
             const estadoPago = "noPagado";
             await campoDeTransaccion("iniciar")
             const reservaInsertada = await insertarReservaAdministrativa({
@@ -95,19 +97,45 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 fechaSalida: fechaSalida,
                 estadoReserva: estadoReserva,
                 origen: origen,
-                creacionFechaReserva: creacionFechaReserva,
+                fechaCreacion: fechaCreacion,
                 estadoPago: estadoPago
             })
             const reservaUIDNuevo = reservaInsertada.reservaUID;
             for (const apartamentoIDV of apartamentos) {
-                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+                const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "noExiste"
+                });
+                const apartamentoUI = apartamento.apartamentoUI
                 await insertarApartamentoEnReservaAdministrativa({
                     reservaUIDNuevo: reservaUIDNuevo,
                     apartamentoIDV: apartamentoIDV,
                     apartamentoUI: apartamentoUI,
                 })
             }
-            await actualizadorIntegradoDesdeInstantaneas(reservaUIDNuevo)
+
+
+            const desgloseFinanciero = await procesador({
+                entidades: {
+                    reserva: {
+                        tipoOperacion: "crearDesglose",
+                        fechaEntrada: fechaEntrada,
+                        fechaSalida: fechaSalida,
+                        apartamentosArray: apartamentos,
+                        capaOfertas: "si",
+                        zonasArray: ["global", "privada"],
+                        capaDescuentosPersonalizados: "no",
+                        capaImpuestos: "si"
+                    }
+                },
+            })
+
+            await insertarDesgloseFinacieroPorReservaUID({
+                reservaUID: reservaUIDNuevo,
+                desgloseFinanciero
+            })
+
+            //await actualizadorIntegradoDesdeInstantaneas(reservaUIDNuevo)
             await campoDeTransaccion("confirmar")
             const ok = {
                 ok: "Se ha anadido al reserva vacia",

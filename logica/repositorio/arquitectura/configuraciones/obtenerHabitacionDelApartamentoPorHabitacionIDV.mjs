@@ -39,6 +39,7 @@ export const obtenerHabitacionDelApartamentoPorHabitacionIDV = async (data) => {
             return resuelve.rows[0]
         } else {
             const error = "el adaptador obtenerHabitacionDelApartamentoPorHabitacionIDV necesita errorSi en existe, noExiste o desactivado"
+           throw new Error(error)
         }
     } catch (errorAdaptador) {
         throw errorAdaptador

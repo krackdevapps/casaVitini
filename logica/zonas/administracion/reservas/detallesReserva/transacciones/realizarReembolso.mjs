@@ -2,10 +2,10 @@ import Decimal from "decimal.js";
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
-import { eliminarPagoPorPagoUID } from "../../../../../repositorio/reservas/transacciones/pagos/eliminarPagoPorPagoUID.mjs";
 import { insertarReembolso } from "../../../../../repositorio/reservas/transacciones/reembolsos/insertarReembolso.mjs";
 import { obtenerReembolsosPorPagoUID_ordenados } from "../../../../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID_ordenados.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerPagoPorPagoUIDYReservaUID } from "../../../../../repositorio/reservas/transacciones/pagos/obtenerPagoPorPagoUIDYReservaUID.mjs";
 
 export const realizarReembolso = async (entrada, salida) => {
     try {
@@ -28,14 +28,16 @@ export const realizarReembolso = async (entrada, salida) => {
             filtro: "cadenaConNumerosConDosDecimales",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "no"
         })
-        const pagoUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.pagoUID,
+        const pagoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.pagoUID,
             nombreCampo: "El identificador universal del pago (pagoUID)",
-            filtro: "numeroSimple",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
+
         })
 
         const palabra = validadoresCompartidos.tipos.cadena({
@@ -57,8 +59,8 @@ export const realizarReembolso = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
+        console.log("tipoReembolso", tipoReembolso)
         if (tipoReembolso !== "porPorcentaje" && tipoReembolso !== "porCantidad") {
             const error = "el campo 'tipoReembolso' solo puede ser porPorcentaje o porCantidad.";
             throw new Error(error)
@@ -70,7 +72,6 @@ export const realizarReembolso = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
 
         const tipoDeReembolso = ["efectivo", "cheque", "pasarela", "tarjeta"];
@@ -86,11 +87,11 @@ export const realizarReembolso = async (entrada, salida) => {
             // throw new Error(error)
         }
 
-        const detallesDelPago = await eliminarPagoPorPagoUID({
+        const detallesDelPago = await obtenerPagoPorPagoUIDYReservaUID({
             reservaUID: reservaUID,
             pagoUID: pagoUID
         })
-        const plataformaDePago = detallesDelPago.plataformaDePago;
+        const plataformaDePago = detallesDelPago.plataformaDePagoIDV;
         const pagoUIDPasarela = detallesDelPago.pagoUIDPasarela;
         const controlTotalPago = detallesDelPago.cantidad;
         let reembolsoUIPasarela;
@@ -164,7 +165,7 @@ export const realizarReembolso = async (entrada, salida) => {
         const nuevoReembolso = await insertarReembolso({
             pagoUID: pagoUID,
             cantidad: cantidad,
-            plataformaDePagoEntrada: plataformaDePagoEntrada,
+            plataformaDePagoIDV: plataformaDePagoEntrada,
             reembolsoUIPasarela: reembolsoUIPasarela,
             estadoReembolso: estadoReembolso,
             fechaCreacion: fechaCreacion,

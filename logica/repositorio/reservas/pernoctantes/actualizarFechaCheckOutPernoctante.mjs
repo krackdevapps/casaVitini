@@ -2,7 +2,7 @@ import { conexion } from "../../../componentes/db.mjs"
 
 export const actualizarFechaCheckOutPernoctante = async (data) => {
     try {
-        const fechaCheckOut_ISO = data.fechaCheckOut_ISO !== undefined ? data.fechaCheckOut_ISO : null;
+        const fechaCheckOut = data.fechaCheckOut;
         const pernoctanteUID = data.pernoctanteUID
 
         const consulta = `
@@ -10,10 +10,10 @@ export const actualizarFechaCheckOutPernoctante = async (data) => {
         SET
           "fechaCheckOutAdelantado" = $1
         WHERE
-          "pernoctanteUID" = $2;
+          "componenteUID" = $2;
         `;
         const parametros = [
-            fechaCheckOut_ISO,
+            fechaCheckOut,
             pernoctanteUID
         ]
         const resuelve = await conexion.query(consulta, parametros);

@@ -7,7 +7,7 @@ export const obtenerReembolsoPorReembolsoUID = async (reembolsoUID) => {
         SELECT
             "pagoUID",
             cantidad,
-            "plataformaDePago",
+            "plataformaDePagoIDV",
             "reembolsoUIDPasarela",
             "estado",
             "fechaCreacion"::text AS "fechaCreacion",

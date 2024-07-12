@@ -862,6 +862,8 @@ const casaVitini = {
                     main.style.height = "100%";
                     main.style.overflow = "hidden";
                     main.style.gap = "6px";
+                    main.style.zIndex = "-1";
+
                     main.style.position = "absolute";
                     const titulo = main.querySelector("[componente=titulo]")
                     titulo.style.marginTop = "100px"
@@ -2037,6 +2039,7 @@ const casaVitini = {
                         }
                         if (respuestaServidor.ok) {
                             const reservaConfirmada = respuestaServidor.detalles
+                            reservaConfirmada.pdf = respuestaServidor.pdf
                             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                             sessionStorage.removeItem("reservaNoConfirmada");
                             localStorage.setItem("reservaConfirmada", JSON.stringify(reservaConfirmada))
@@ -3126,77 +3129,77 @@ const casaVitini = {
                             document.body.style.background = "rgb(214 192 157)"
                             const main = document.querySelector("main")
                             main.setAttribute("zonaCSS", "alojamiento/reserva_confirmada")
-                            const obtenerPDF = async (enlaceUID) => {
-                                const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                                const advertenciaInmersivaIU = document.createElement("div")
-                                advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                                advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                                advertenciaInmersivaIU.setAttribute("instanciaUID", instanciaUID)
-                                const contenedorAdvertenciaInmersiva = document.createElement("div")
-                                contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                                const contenidoAdvertenciaInmersiva = document.createElement("div")
-                                contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
-                                contenidoAdvertenciaInmersiva.setAttribute("espacio", "gestionPDF")
-                                const mensajeSpinner = "Generando PDF...."
-                                const spinner = casaVitini.ui.componentes.spinner(mensajeSpinner)
-                                contenidoAdvertenciaInmersiva.appendChild(spinner)
-                                contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
-                                advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                                document.querySelector("main").appendChild(advertenciaInmersivaIU)
-                                const advertenciaInmersivaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                                try {
-                                    const metadatospdf = {
-                                        zona: "componentes/pdf",
-                                        enlace: enlaceUID
-                                    }
-                                    const puerto = '/puerto';
-                                    const peticion = {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json'
-                                        },
-                                        body: JSON.stringify(metadatospdf)
-                                    };
-                                    const respuestaServidor = await fetch(puerto, peticion);
-                                    const contentType = respuestaServidor.headers.get('content-type');
-                                    if (contentType === "application/json; charset=utf-8") {
-                                        const respuestaServidorJSON = await respuestaServidor.json() || {};
-                                        advertenciaInmersivaRenderizada?.remove()
-                                        return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidorJSON.error)
-                                    }
-                                    if (contentType === "application/pdf" && advertenciaInmersivaRenderizada) {
-                                        const BLOB = await respuestaServidor.blob();
-                                        const selectorZonaGestion = advertenciaInmersivaRenderizada.querySelector("[espacio=gestionPDF]");
-                                        selectorZonaGestion.innerHTML = null;
-                                        selectorZonaGestion.style.alignItems = "center"
-                                        selectorZonaGestion.innerText = "Se ha generado el archivo PDF con el resumen de su reserva. Para descargar el pdf pulse en el boton desde mi reserva en PDF, el enlace de descarga estara vigente durante 48 horas";
-                                        const PDFGenerado = new Blob([BLOB], { type: 'application/pdf' });
-                                        const pdfGenerado = document.createElement('a');
-                                        pdfGenerado.href = window.URL.createObjectURL(PDFGenerado);
-                                        pdfGenerado.classList.add("plaza_alojamiento_reservaConfirmada_botoDescargaPDF")
-                                        pdfGenerado.download = 'Reserva.pdf';
-                                        pdfGenerado.innerText = "Descargar mi reserva en PDF";
-                                        selectorZonaGestion.appendChild(pdfGenerado)
-                                        const botonCancelarProcesoCancelacion = document.createElement("div")
-                                        botonCancelarProcesoCancelacion.classList.add("plaza_alojamiento_reservaConfirmada_botoDescargaPDF")
-                                        botonCancelarProcesoCancelacion.innerText = "Cancelar y volver al resumen de mi reserva"
-                                        botonCancelarProcesoCancelacion.addEventListener("click", (e) => {
-                                            return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                                        })
-                                        selectorZonaGestion.appendChild(botonCancelarProcesoCancelacion)
-                                    }
-                                } catch (errorCapturado) {
-                                    advertenciaInmersivaRenderizada?.remove()
-                                    if (errorCapturado instanceof TypeError && errorCapturado.message === 'Failed to fetch') {
-                                        const mensaje = "No se ha podido contactar con el servidor, revisa tu conexión y reintentalo."
-                                        casaVitini.ui.componentes.advertenciaInmersiva(mensaje)
-                                    } else {
-                                        casaVitini.ui.componentes.advertenciaInmersiva(errorCapturado.message)
-                                    }
-                                }
-                            }
+                            // const obtenerPDF = async (enlaceUID) => {
+                            //     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                            //     const advertenciaInmersivaIU = document.createElement("div")
+                            //     advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
+                            //     advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
+                            //     advertenciaInmersivaIU.setAttribute("instanciaUID", instanciaUID)
+                            //     const contenedorAdvertenciaInmersiva = document.createElement("div")
+                            //     contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
+                            //     const contenidoAdvertenciaInmersiva = document.createElement("div")
+                            //     contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
+                            //     contenidoAdvertenciaInmersiva.setAttribute("espacio", "gestionPDF")
+                            //     const mensajeSpinner = "Generando PDF...."
+                            //     const spinner = casaVitini.ui.componentes.spinner(mensajeSpinner)
+                            //     contenidoAdvertenciaInmersiva.appendChild(spinner)
+                            //     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
+                            //     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
+                            //     document.querySelector("main").appendChild(advertenciaInmersivaIU)
+                            //     const advertenciaInmersivaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                            //     try {
+                            //         const metadatospdf = {
+                            //             zona: "componentes/pdf",
+                            //             enlace: enlaceUID
+                            //         }
+                            //         const puerto = '/puerto';
+                            //         const peticion = {
+                            //             method: 'POST',
+                            //             headers: {
+                            //                 'Content-Type': 'application/json'
+                            //             },
+                            //             body: JSON.stringify(metadatospdf)
+                            //         };
+                            //         const respuestaServidor = await fetch(puerto, peticion);
+                            //         const contentType = respuestaServidor.headers.get('content-type');
+                            //         if (contentType === "application/json; charset=utf-8") {
+                            //             const respuestaServidorJSON = await respuestaServidor.json() || {};
+                            //             advertenciaInmersivaRenderizada?.remove()
+                            //             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidorJSON.error)
+                            //         }
+                            //         if (contentType === "application/pdf" && advertenciaInmersivaRenderizada) {
+                            //             const BLOB = await respuestaServidor.blob();
+                            //             const selectorZonaGestion = advertenciaInmersivaRenderizada.querySelector("[espacio=gestionPDF]");
+                            //             selectorZonaGestion.innerHTML = null;
+                            //             selectorZonaGestion.style.alignItems = "center"
+                            //             selectorZonaGestion.innerText = "Se ha generado el archivo PDF con el resumen de su reserva. Para descargar el pdf pulse en el boton desde mi reserva en PDF, el enlace de descarga estara vigente durante 48 horas";
+                            //             const PDFGenerado = new Blob([BLOB], { type: 'application/pdf' });
+                            //             const pdfGenerado = document.createElement('a');
+                            //             pdfGenerado.href = window.URL.createObjectURL(PDFGenerado);
+                            //             pdfGenerado.classList.add("plaza_alojamiento_reservaConfirmada_botoDescargaPDF")
+                            //             pdfGenerado.download = 'Reserva.pdf';
+                            //             pdfGenerado.innerText = "Descargar mi reserva en PDF";
+                            //             selectorZonaGestion.appendChild(pdfGenerado)
+                            //             const botonCancelarProcesoCancelacion = document.createElement("div")
+                            //             botonCancelarProcesoCancelacion.classList.add("plaza_alojamiento_reservaConfirmada_botoDescargaPDF")
+                            //             botonCancelarProcesoCancelacion.innerText = "Cancelar y volver al resumen de mi reserva"
+                            //             botonCancelarProcesoCancelacion.addEventListener("click", (e) => {
+                            //                 return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                            //             })
+                            //             selectorZonaGestion.appendChild(botonCancelarProcesoCancelacion)
+                            //         }
+                            //     } catch (errorCapturado) {
+                            //         advertenciaInmersivaRenderizada?.remove()
+                            //         if (errorCapturado instanceof TypeError && errorCapturado.message === 'Failed to fetch') {
+                            //             const mensaje = "No se ha podido contactar con el servidor, revisa tu conexión y reintentalo."
+                            //             casaVitini.ui.componentes.advertenciaInmersiva(mensaje)
+                            //         } else {
+                            //             casaVitini.ui.componentes.advertenciaInmersiva(errorCapturado.message)
+                            //         }
+                            //     }
+                            // }
                             // Codigo enlaces PDF
-                            const codigoEnlacePDF = reservaConfirmada.enlacePDF
+                            const pdfCodificado = reservaConfirmada.pdf
                             // Datos globales
                             const reservaUID = reservaConfirmada.global.reservaUID
                             const fechaEntrada = reservaConfirmada.global.fechaEntrada
@@ -3265,12 +3268,16 @@ const casaVitini = {
                             numeroReservaUID.innerText = reservaUID
                             reversaUI.appendChild(numeroReservaUID)
                             espacioDatosGlobalesReserva.appendChild(reversaUI)
-                            const botonDescargarPDF = document.createElement("div")
-                            botonDescargarPDF.classList.add("plaza_reservas_reservaConfirmada_botonV1")
+                            const botonDescargarPDF = document.createElement("a")
+                            botonDescargarPDF.classList.add(
+                                "plaza_reservas_reservaConfirmada_botonV1",
+                                "areaSinDecoracionPredeterminada")
                             botonDescargarPDF.innerText = "Descargar un resumen de la reserva en PDF"
-                            botonDescargarPDF.addEventListener("click", () => {
-                                obtenerPDF(codigoEnlacePDF)
-                            })
+                            botonDescargarPDF.download = "Reserva.pdf"
+                            botonDescargarPDF.href = `data:application/pdf;base64,${pdfCodificado}`
+                            // botonDescargarPDF.addEventListener("click", () => {
+                            //     obtenerPDF(codigoEnlacePDF)
+                            // })
                             espacioDatosGlobalesReserva.appendChild(botonDescargarPDF)
                             // Contenedor datos titular
                             const contenedorTitular = document.createElement("div")
@@ -6975,12 +6982,32 @@ const casaVitini = {
             urlDesconocida: function () {
                 const main = document.querySelector("main")
                 main.innerHTML = null
+
                 const info = document.createElement("div")
                 info.classList.add(
-                    "textoCentrado"
+                    "textoCentrado",
+                    "negrita",
+                    "padding12"
+
                 )
-                info.innerText = "No existe nada en esta dirección, revisa la url."
+                info.innerText = "No existe nada en esta dirección :)"
                 main.appendChild(info)
+
+                const boton = document.createElement("a")
+                boton.classList.add(
+                    "botonV1",
+                    "comportamientoBoton",
+                    "areaSinDecoracionPredeterminada",
+                    "margin10"
+                )
+                boton.innerText = "Ir a Administración"
+                boton.setAttribute("href", "/administracion")
+                boton.setAttribute("vista", "/administracion")
+                boton.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                main.appendChild(boton)
+
+
+
 
             },
             errorVista: () => {
@@ -7153,15 +7180,6 @@ const casaVitini = {
                     const error = "Falta especificar el numero de columnas"
                     return casaVitini.ui.componentes.advertenciaInmersiva(error)
                 }
-                // grid-template-columns: 100px auto auto auto auto auto;
-                let valorCssGridColumnas = "";
-                for (let i = 0; i < numeroColumnas; i++) {
-                    if (i === 0) {
-                        valorCssGridColumnas += "auto";
-                    } else {
-                        valorCssGridColumnas += " auto";
-                    }
-                }
                 const metadatosBusqueda = {
                     buscar: buscar,
                     pagina: pagina,
@@ -7172,8 +7190,10 @@ const casaVitini = {
                 }
                 const gridConstruido = document.querySelector(`[gridUID=${gridUID}]`)
                 const constructorGrid = document.createElement("div")
-                constructorGrid.setAttribute("class", "administracionGridReservas")
-                constructorGrid.style.gridTemplateColumns = valorCssGridColumnas
+                constructorGrid.classList.add(
+                    "administracionGridReservas",
+                    `gridColumnas${numeroColumnas}`
+                )
                 constructorGrid.setAttribute("gridUID", gridUID)
                 constructorGrid.setAttribute("terminoBusqueda", buscar)
                 constructorGrid.setAttribute("nombreColumnaSeleccionada", nombreColumna)
@@ -7214,7 +7234,7 @@ const casaVitini = {
                         iconoColumna.classList.add("icononombreColumna");
                         iconoColumna.setAttribute("sentidoIconos", sentidoColumna)
                         columnaSeleccionada.appendChild(iconoColumna)
-                        gridConstruido.setAttribute("nombreColumna", nombreColumna)
+                        //gridConstruido.setAttribute("nombreColumna", nombreColumna)
                         gridConstruido.setAttribute("sentidoColumna", sentidoColumna)
                     }
                 }
@@ -7339,6 +7359,7 @@ const casaVitini = {
                         const estructura = {
                             gridUID: gridUID,
                             componenteID: "botonAtrasPaginacion",
+                            paginaTipo: "otra"
                         }
                         const x = eval(metodoBoton)
                         return x(estructura);
@@ -7392,10 +7413,14 @@ const casaVitini = {
                 listaPaginacionResponsiva.classList.add("componentes_ui_paginador_listaResponsiva")
                 listaPaginacionResponsiva.addEventListener("change", (e) => {
                     e.preventDefault()
+                    const elemento = e.target
+                    const selectedOption = elemento.options[elemento.selectedIndex];
+
                     const estructura = {
                         gridUID: gridUID,
                         componenteID: "numeroPagina",
-                        numeroPagina: e.target.value
+                        numeroPagina: e.target.value,
+                        paginaTipo: selectedOption.getAttribute("paginaTipo")
                     }
                     const x = eval(metodoBoton)
                     return x(estructura);
@@ -7433,6 +7458,7 @@ const casaVitini = {
                         const estructura = {
                             gridUID: gridUID,
                             componenteID: "botonAdelantePaginacion",
+                            paginaTipo: "otra"
                         }
                         const x = eval(metodoBoton)
                         return x(estructura);
@@ -8364,7 +8390,7 @@ const casaVitini = {
                     document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
 
                     const calendarioResuelvo = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(resolverCalendario)
-
+                    console.log("2")
                     calendarioResuelvo.instanciaUID = instanciaUID
                     calendarioResuelvo.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
                     await casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelvo)
@@ -8487,12 +8513,11 @@ const casaVitini = {
                         bloqueCalendario.setAttribute("componente", "bloqueCalendario")
                         bloqueCalendario.style.top = alturaDinamica + "px"
                         const contenedoCalendarioIntermedio = document.createElement("div")
-                        contenedoCalendarioIntermedio.setAttribute("class", "componentes_calendarioIncrustado_contenedorCalentadioIntermedio")
+                        contenedoCalendarioIntermedio.setAttribute("class", "administracion_calendario_contenedorCalentadioIntermedio")
                         contenedoCalendarioIntermedio.setAttribute("instanciaUID", instanciaUID)
                         //bloqueCalendario.appendChild(cartelInfoCalendarioEstado)
                         //bloqueCalendario.style.visibility = "hidden"
-                        const mensajeSpinner = "Construyendo calendario..."
-                        const spinner = casaVitini.ui.componentes.spinner(mensajeSpinner)
+                        const spinner = casaVitini.ui.componentes.spinnerSimple()
                         const contenedorCarga = document.createElement("div")
                         contenedorCarga.classList.add("componente_calendario_contenedoCarga_calendarioIncrustado")
                         contenedorCarga.setAttribute("contenedor", "contruyendoCalendario")
@@ -9291,7 +9316,7 @@ const casaVitini = {
                                     }
                                     if (diaFinal_decimal < diaEntradaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaDisponible")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                     if (diaFinal_decimal === diaEntradaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaSeleccionado")
@@ -9301,7 +9326,7 @@ const casaVitini = {
                                     }
                                     if (diaFinal_decimal > diaEntradaReserva_decimal && diaFinal_decimal < diaSalidaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaReserva")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                     if (diaFinal_decimal > diaSalidaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaNoDisponible")
@@ -9316,17 +9341,17 @@ const casaVitini = {
                                     }
                                     if (diaFinal_decimal > diaEntradaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaReserva")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                     if (diaFinal_decimal < diaEntradaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaDisponible")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                 } else if (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal) {
                                     // si es mes de salida pero no de entrada
                                     if (diaFinal_decimal < diaSalidaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaReserva")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                     if (diaFinal_decimal > diaSalidaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaNoDisponible")
@@ -9340,10 +9365,10 @@ const casaVitini = {
                                     // Entonces ver si es mes intermedio
                                     if (verificaRangoInternamente(mesActual_decimal, anoActual_decimal, fechaEntrada, fechaSalida)) {
                                         bloqueDia.classList.add("calendarioDiaReserva")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     } else {
                                         bloqueDia.classList.add("calendarioDiaDisponible")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                 }
                                 if (resolverLimitePasado.limitePasado) {
@@ -9354,7 +9379,7 @@ const casaVitini = {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
                                             bloqueDia.style.pointerEvents = "none"
                                             bloqueDia.setAttribute("estadoDia", "deshabilitado")
-                                            bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                            bloqueDia.removeEventListener("click", eval(metodoSelectorDia))
                                         }
                                         if (fechaLimitePasado.dia > diaFinal_decimal) {
                                             bloqueDia.classList.remove("calendarioDiaDisponible")
@@ -9362,7 +9387,7 @@ const casaVitini = {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
                                             bloqueDia.style.pointerEvents = "none"
                                             bloqueDia.setAttribute("estadoDia", "deshabilitado")
-                                            bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                            bloqueDia.removeEventListener("click", eval(metodoSelectorDia))
                                         }
                                     }
                                 }
@@ -9487,11 +9512,11 @@ const casaVitini = {
                                     }
                                     if (diaFinal_decimal > diaEntradaReserva_decimal && diaFinal_decimal < diaSalidaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaReserva")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                     if (diaFinal_decimal > diaSalidaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaDisponible")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                 } else if ((mesActual_decimal === mesEntradaReserva_decimal && anoActual_decimal === anoEntradaReserva_decimal)) {
                                     // Si es mes de entrada
@@ -9502,7 +9527,7 @@ const casaVitini = {
                                     }
                                     if (diaFinal_decimal > diaEntradaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaReserva")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                     if (diaFinal_decimal < diaEntradaReserva_decimal) {
                                         // replicar esto
@@ -9520,11 +9545,11 @@ const casaVitini = {
                                     // si es mes de salida pero no de entrada
                                     if (diaFinal_decimal < diaSalidaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaReserva")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                     if (diaFinal_decimal > diaSalidaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaDisponible")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                     if (diaFinal_decimal === diaSalidaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaReservaLimite")
@@ -9536,10 +9561,10 @@ const casaVitini = {
                                     // Entonces ver si es mes intermedio
                                     if (verificaRangoInternamente(mesActual_decimal, anoActual_decimal, fechaEntrada, fechaSalida)) {
                                         bloqueDia.classList.add("calendarioDiaReserva")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     } else {
                                         bloqueDia.classList.add("calendarioDiaDisponible")
-                                        bloqueDia.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                     }
                                 }
                                 if (resolverLimiteFuturo.limiteFuturo) {
@@ -9549,14 +9574,14 @@ const casaVitini = {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
                                             bloqueDia.style.pointerEvents = "none"
                                             bloqueDia.setAttribute("estadoDia", "deshabilitado")
-                                            bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                            bloqueDia.removeEventListener("click", eval(metodoSelectorDia))
                                         }
                                         if (fechaLimiteFuturo.dia <= diaFinal_decimal) {
                                             bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
                                             bloqueDia.style.pointerEvents = "none"
                                             bloqueDia.setAttribute("estadoDia", "deshabilitado")
-                                            bloqueDia.removeEventListener("click", casaVitini.administracion.reservas.detallesReserva.seleccionarDia)
+                                            bloqueDia.removeEventListener("click", eval(metodoSelectorDia))
                                         }
                                     }
                                 }
@@ -9577,8 +9602,6 @@ const casaVitini = {
                             }
                         }
                         if (perfilMes === "calendario_entrada_asistido_detallesReserva_checkIn_conPasado") {
-                            const mesActual_string = String(calendario.mes).padStart(2, '0');
-                            const anoActual_string = String(calendario.ano).padStart(4, '0');
                             const mesActual_decimal = parseInt(calendario.mes, 10)
                             const anoActual_decimal = parseInt(calendario.ano, 10)
                             const fechaCheckIN = document
@@ -9589,11 +9612,11 @@ const casaVitini = {
                                 .querySelector(`[instanciaUID="${instanciaUID}"]`)
                                 .closest("[fechaCheckOut]")
                                 ?.getAttribute("fechaCheckOut")
-                            const fechaSalidaReservaArray = document.querySelector("[calendario=salida][fechaSalida]")?.getAttribute("fechaSalida").split("-")
+                            const fechaSalidaReservaArray = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil").split("-")
                             const diaSalidaReserva_decimal = parseInt(fechaSalidaReservaArray[2], 10)
                             const mesSalidaReserva_decimal = parseInt(fechaSalidaReservaArray[1], 10)
                             const anoSalidaReserva_decimal = parseInt(fechaSalidaReservaArray[0], 10)
-                            const fechaEntradaReserva = document.querySelector("[calendario=entrada][fechaEntrada]")?.getAttribute("fechaEntrada").split("-")
+                            const fechaEntradaReserva = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil").split("-")
                             const diaEntradaReserva_decimal = parseInt(fechaEntradaReserva[2], 10)
                             const mesEntradaReserva_decimal = parseInt(fechaEntradaReserva[1], 10)
                             const anoEntradaReserva_decimal = parseInt(fechaEntradaReserva[0], 10)
@@ -9719,10 +9742,10 @@ const casaVitini = {
                                     bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                 }
                                 if (fechaCheckIN) {
-                                    const fechaCheckIN_array = fechaCheckIN.split("/")
-                                    const diaCheckIn = Number(fechaCheckIN_array[0])
+                                    const fechaCheckIN_array = fechaCheckIN.split("-")
+                                    const diaCheckIn = Number(fechaCheckIN_array[2])
                                     const mesCheckIn = Number(fechaCheckIN_array[1])
-                                    const anoCheckIn = Number(fechaCheckIN_array[2])
+                                    const anoCheckIn = Number(fechaCheckIN_array[0])
                                     if (mesActual_decimal === mesCheckIn && anoActual_decimal === anoCheckIn) {
                                         if (diaCheckIn === diaFinal_decimal) {
                                             bloqueDia.classList.remove("calendarioDiaReserva")
@@ -9734,10 +9757,10 @@ const casaVitini = {
                                     }
                                 }
                                 if (fechaCheckOutAdelantado) {
-                                    const fechaCheckOutAdelantado_array = fechaCheckOutAdelantado.split("/")
-                                    const diaCheckOut = Number(fechaCheckOutAdelantado_array[0])
+                                    const fechaCheckOutAdelantado_array = fechaCheckOutAdelantado.split("-")
+                                    const diaCheckOut = Number(fechaCheckOutAdelantado_array[2])
                                     const mesCheckOut = Number(fechaCheckOutAdelantado_array[1])
-                                    const anoCheckOut = Number(fechaCheckOutAdelantado_array[2])
+                                    const anoCheckOut = Number(fechaCheckOutAdelantado_array[0])
                                     if (mesActual_decimal === mesCheckOut && anoActual_decimal === anoCheckOut) {
                                         if (diaCheckOut === diaFinal_decimal) {
                                             bloqueDia.classList.remove("calendarioDiaReserva")
@@ -9780,11 +9803,11 @@ const casaVitini = {
                                 .querySelector(`[instanciaUID="${instanciaUID}"]`)
                                 .closest("[fechaCheckIn]")
                                 ?.getAttribute("fechaCheckIn")
-                            const fechaSalidaReservaArray = document.querySelector("[calendario=salida][fechaSalida]")?.getAttribute("fechaSalida").split("-")
+                            const fechaSalidaReservaArray = document.querySelector("[calendario=salida]")?.getAttribute("memoriaVolatil").split("-")
                             const diaSalidaReserva_decimal = parseInt(fechaSalidaReservaArray[2], 10)
                             const mesSalidaReserva_decimal = parseInt(fechaSalidaReservaArray[1], 10)
                             const anoSalidaReserva_decimal = parseInt(fechaSalidaReservaArray[0], 10)
-                            const fechaEntradaReserva = document.querySelector("[calendario=entrada][fechaEntrada]")?.getAttribute("fechaEntrada").split("-")
+                            const fechaEntradaReserva = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil").split("-")
                             const diaEntradaReserva_decimal = parseInt(fechaEntradaReserva[2], 10)
                             const mesEntradaReserva_decimal = parseInt(fechaEntradaReserva[1], 10)
                             const anoEntradaReserva_decimal = parseInt(fechaEntradaReserva[0], 10)
@@ -9917,10 +9940,10 @@ const casaVitini = {
                                     bloqueDia.addEventListener("click", eval(metodoSelectorDia))
                                 }
                                 if (fechaCheckIN) {
-                                    const fechaCheckIN_Array = fechaCheckIN.split("/")
-                                    const diaCheckIn = Number(fechaCheckIN_Array[0])
+                                    const fechaCheckIN_Array = fechaCheckIN.split("-")
+                                    const diaCheckIn = Number(fechaCheckIN_Array[2])
                                     const mesCheckIn = Number(fechaCheckIN_Array[1])
-                                    const anoCheckIn = Number(fechaCheckIN_Array[2])
+                                    const anoCheckIn = Number(fechaCheckIN_Array[0])
                                     if (mesActual_decimal === mesCheckIn && anoActual_decimal === anoCheckIn) {
                                         if (diaCheckIn === diaFinal_decimal) {
                                             bloqueDia.classList.remove("calendarioDiaReserva")
@@ -9948,10 +9971,10 @@ const casaVitini = {
                                     }
                                 }
                                 if (fechaCheckOut) {
-                                    const fechaCheckOut_array = fechaCheckOut.split("/")
-                                    const diaCheckOut = Number(fechaCheckOut_array[0])
+                                    const fechaCheckOut_array = fechaCheckOut.split("-")
+                                    const diaCheckOut = Number(fechaCheckOut_array[2])
                                     const mesCheckOut = Number(fechaCheckOut_array[1])
-                                    const anoCheckOut = Number(fechaCheckOut_array[2])
+                                    const anoCheckOut = Number(fechaCheckOut_array[0])
                                     if (mesActual_decimal === mesCheckOut && anoActual_decimal === anoCheckOut) {
                                         if (diaCheckOut === diaFinal_decimal) {
                                             bloqueDia.classList.remove("calendarioDiaDisponible")
@@ -11117,7 +11140,7 @@ const casaVitini = {
                                             "comportamientoBoton"
                                         )
                                         botonSobreControlDePrecios.innerText = "Alterar precios neto de la reserva"
-                                        botonSobreControlDePrecios.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.categoriasGlobales.desgloseTotal.componentesUI.sobreControlPrecios.arranque)
+                                        botonSobreControlDePrecios.addEventListener("click", casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.sobreControlPrecios.arranque)
                                         // contenedorBotones.appendChild(botonSobreControlDePrecios)
                                         contenedorPorNoche.appendChild(contenedorBotones)
                                     }
@@ -11200,7 +11223,7 @@ const casaVitini = {
                                             if (modoUI === "administracion") {
                                                 contenedorApartamento.classList.add("comportamientoBotonApartamento")
                                                 contenedorApartamento.addEventListener("click", () => {
-                                                    casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.categoriasGlobales.desgloseTotal.componentesUI.sobreControlPrecios.componentesUI.nocheUI({
+                                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.sobreControlPrecios.componentesUI.nocheUI({
                                                         fechaNoche,
                                                         apartamentoIDV,
                                                         instanciaUID_contenedorFinanciero: instanciaUID
@@ -11379,7 +11402,10 @@ const casaVitini = {
                             const modoUI = contenedorFinanciero.getAttribute("modoUI")
                             const instanciaUID = data.instanciaUID
 
-                            if (ofertasPorCondicionArray.length === 0 && ofertasPorAdministradorArray.length === 0) {
+                            if (ofertasPorCondicionArray.length === 0
+                                &&
+                                ofertasPorAdministradorArray.length === 0
+                                && modoUI === "plaza") {
                                 document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[contenedor=ofertas]")?.remove()
                                 return
                             }
@@ -11419,7 +11445,7 @@ const casaVitini = {
                                     )
                                     botonInsertarDescuento.innerText = "Insertar descuento"
                                     botonInsertarDescuento.addEventListener("click", () => {
-                                        casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.categoriasGlobales.desgloseTotal.componentesUI.insertarDescuentos.ui({
+                                        casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.insertarDescuentos.ui({
                                             instanciaUID_contenedorFinanciero: instanciaUID
                                         })
                                     })
@@ -11433,7 +11459,7 @@ const casaVitini = {
                                     )
                                     botonDescuentosCompatibles.innerText = "Descuentos compatibles"
                                     botonDescuentosCompatibles.addEventListener("click", () => {
-                                        casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.categoriasGlobales.desgloseTotal.componentesUI.insertarOfertasCompatibles.ui({
+                                        casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.insertarOfertasCompatibles.ui({
                                             instanciaUID_contenedorFinanciero: instanciaUID
                                         })
                                     })
@@ -11459,7 +11485,14 @@ const casaVitini = {
 
                             if (ofertasPorAdministradorArray.length === 0) {
                                 contenedorOfertas_renderizado?.querySelector(`[contenedor=porAdministrador]`)?.remove()
+
                             }
+
+                            if (ofertasPorCondicionArray.length === 0) {
+                                contenedorOfertas_renderizado?.querySelector(`[contenedor=porCondicion]`)?.remove()
+
+                            }
+
 
                             ofertasPorCondicion.forEach((contenedorOferta, posicion) => {
 
@@ -11727,7 +11760,7 @@ const casaVitini = {
                                                 botonRechazar.innerText = "Aceptar oferta"
                                             }
                                             botonRechazar.addEventListener("click", (e) => {
-                                                casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.categoriasGlobales.desgloseTotal.componentesUI.actualizarEstadoAutorizacion({
+                                                casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.actualizarEstadoAutorizacion({
                                                     e,
                                                     ofertaUID
                                                 })
@@ -11743,7 +11776,7 @@ const casaVitini = {
                                         )
                                         botonEliminar.innerText = "Elimnar oferta de la reserva " + posicion
                                         botonEliminar.addEventListener("click", () => {
-                                            casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.categoriasGlobales.desgloseTotal.componentesUI.eliminarOfertaEnReserva.ui({
+                                            casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.eliminarOfertaEnReserva.ui({
                                                 origen: destinoOrigenOferta,
                                                 ofertaUID,
                                                 posicion,
@@ -12930,7 +12963,7 @@ const casaVitini = {
                                 )
                                 botonInsertarImpuesto.innerText = "Insertar impuesto"
                                 botonInsertarImpuesto.addEventListener("click", () => {
-                                    casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.categoriasGlobales.desgloseTotal.componentesUI.insertarImpuesto.ui({
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.insertarImpuesto.ui({
                                         instanciaUID_contenedorFinanciero: instanciaUID
                                     })
                                 })
@@ -12945,7 +12978,7 @@ const casaVitini = {
                                 )
                                 botonInsertarImpuestoAdHoc.innerText = "Crear e insertar impuesto ad hoc"
                                 botonInsertarImpuestoAdHoc.addEventListener("click", () => {
-                                    casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.categoriasGlobales.desgloseTotal.componentesUI.crearImpuestoAdHoc.ui({
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.crearImpuestoAdHoc.ui({
                                         instanciaUID_contenedorFinanciero: instanciaUID
                                     })
                                 })
@@ -13073,7 +13106,7 @@ const casaVitini = {
                                 )
                                 botonEliminarImpuesto.innerText = "Eliminar impuesto de la reserva"
                                 botonEliminarImpuesto.addEventListener("click", () => {
-                                    casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.categoriasGlobales.desgloseTotal.componentesUI.eliminarImpuesto.ui({
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.eliminarImpuesto.ui({
                                         instanciaUID_contenedorFinanciero: instanciaUID,
                                         nombreImpuesto: impuestoTitulo,
                                         impuestoUID
@@ -13131,7 +13164,7 @@ const casaVitini = {
                                 )
                                 botonInsertarDescuento.innerText = "Reconstruir desglose financerio"
                                 botonInsertarDescuento.addEventListener("click", () => {
-                                    casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.categoriasGlobales.desgloseTotal.componentesUI.reconstruirDesgloseFinanciero.ui({
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.reconstruirDesgloseFinanciero.ui({
                                         instanciaUID_contenedorFinanciero: instanciaUID,
                                     })
                                 })

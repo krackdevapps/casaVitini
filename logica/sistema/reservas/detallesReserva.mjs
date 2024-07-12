@@ -5,6 +5,7 @@ import { pernoctantesDeLaReserva } from "./detallesReserva/pernoctantesDeLaReser
 import { utilidades } from "../../componentes/utilidades.mjs"
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs"
 import { porcentajeTranscurrido } from "./utilidades/porcentajeTranscurrido.mjs"
+import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
 export const detallesReserva = async (data) => {
     try {
         const capas = data.capas
@@ -19,7 +20,12 @@ export const detallesReserva = async (data) => {
             "alojamiento",
             "pernoctantes",
             "desgloseFinanciero"
-        ]
+        ]   
+        validadoresCompartidos.tipos.array({
+            array: capas,
+            nombreCampo: "El array capas en detallesReserva",
+            filtro: "strictoIDV"
+        })
 
         const capasNoIdentificadas = capas.filter(capaIDV => !contenedorCapas.includes(capaIDV));
         if (capasNoIdentificadas.length > 0) {

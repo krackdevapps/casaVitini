@@ -20,7 +20,10 @@ export const realizarPago = async (entrada, salida) => {
         })
         mutex.acquire()
         await campoDeTransaccion("iniciar")
-        const enlaceDePago = await obtenerEnlaceDePagoPorCodigoUPID(enlaceUPID)
+        const enlaceDePago = await obtenerEnlaceDePagoPorCodigoUPID({
+            codigoUPID: enlaceUPID,
+            errorSi: "noExiste"
+        })
         const enlaceUID = enlaceDePago.enlaceUID
         const reservaUID = enlaceDePago.reservaUID;
         const totalPago = enlaceDePago.cantidad;

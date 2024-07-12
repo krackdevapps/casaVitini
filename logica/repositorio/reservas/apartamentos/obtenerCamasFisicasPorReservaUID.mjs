@@ -27,7 +27,7 @@ export const obtenerCamasFisicasPorReservaUID = async (data) => {
             return resuelve.rows
         } else if (errorSi === "existe") {
             if (resuelve.rowCount > 0) {
-                const error = "Ya existe la cama fisica en la reserva"
+                const error = "Ya existe la cama fisica en esta reserva"
                 throw new Error(error)
             }
             return resuelve.rows

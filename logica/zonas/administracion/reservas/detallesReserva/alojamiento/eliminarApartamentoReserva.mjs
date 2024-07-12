@@ -87,6 +87,7 @@ export const eliminarApartamentoReserva = async (entrada) => {
             apartamentoUID: apartamentoUID
         })
         await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+
         await campoDeTransaccion("confirmar")
         const ok = {};
         ok.estadoDesgloseFinanciero = estadoInfomracionFinanciera;
