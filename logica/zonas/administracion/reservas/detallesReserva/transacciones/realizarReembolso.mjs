@@ -60,7 +60,7 @@ export const realizarReembolso = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        console.log("tipoReembolso", tipoReembolso)
+
         if (tipoReembolso !== "porPorcentaje" && tipoReembolso !== "porCantidad") {
             const error = "el campo 'tipoReembolso' solo puede ser porPorcentaje o porCantidad.";
             throw new Error(error)

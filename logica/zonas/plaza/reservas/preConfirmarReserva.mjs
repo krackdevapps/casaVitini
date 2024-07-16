@@ -33,7 +33,7 @@ export const preConfirmarReserva = async (entrada) => {
 
         await actualizarEstadoPago(reservaUID)
         await campoDeTransaccion("confirmar")
-        console.log("1")
+
         const resolverDetallesReserva = await detallesReserva({
             reservaUID: reservaUID,
             capas: [
@@ -44,13 +44,13 @@ export const preConfirmarReserva = async (entrada) => {
             ]
         })
         //const enlacePDF = await crearEnlacePDF(reservaUID);
-        console.log("2")
+
         //resolverDetallesReserva.enlacePDF = enlacePDF;
         const pdf = await generadorPDF(resolverDetallesReserva);
-        console.log("3")
+
 
         enviarEmailReservaConfirmada(reservaUID);
-        console.log("4")
+
         const ok = {
             ok: "Reserva confirmada",
             detalles: resolverDetallesReserva,

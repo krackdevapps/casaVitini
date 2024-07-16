@@ -5,7 +5,7 @@ export const eliminarClientePorClienteUID = async (clienteUID) => {
         DELETE FROM clientes
         WHERE "clienteUID" = $1;
         `;
-        const resuelve = await conexion.query(consulta, clienteUID)
+        const resuelve = await conexion.query(consulta, [clienteUID])
         if (resuelve.rowCount === 0) {
             const error = "No existe el cliente, revisa su identificador";
             throw new Error(error)

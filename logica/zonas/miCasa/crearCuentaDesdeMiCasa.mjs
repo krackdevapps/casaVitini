@@ -54,7 +54,11 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
         await eliminarUsuarioPorRolPorEstadoVerificacion();
         await eliminarSessionPorRolPorCaducidad();
         await campoDeTransaccion("iniciar")
-        await obtenerUsuario(usuarioIDX)
+        await obtenerUsuario({
+            usuario: usuarioIDX,
+            errorSi: "noExiste"
+        })
+        usuariosLimite(usuarioIDX)
         await obtenerDatosPersonalesPorMail(email)
         const cryptoData = {
             sentido: "cifrar",
@@ -110,17 +114,17 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
             email: email,
             usuario: usuarioIDX
         })
-        const ok = {
-            ok: "Se ha creado el nuevo usuario",
-            usuarioIDX: nuevoUsuario.usuario
-        };
-        return ok
         await campoDeTransaccion("confirmar");
         const datosVerificacion = {
             email: email,
             codigoVerificacion: codigoAleatorioUnico
         };
         enviarEmailAlCrearCuentaNueva(datosVerificacion);
+        const ok = {
+            ok: "Se ha creado el nuevo usuario",
+            usuarioIDX: nuevoUsuario.usuario
+        }
+        return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
         throw errorFinal

@@ -5,10 +5,10 @@ import { detallesReserva } from "../../../../../sistema/reservas/detallesReserva
 
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
-export const pdfReserva = async (entrada, salida) => {
+export const pdfReserva = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -34,9 +34,11 @@ export const pdfReserva = async (entrada, salida) => {
         })
 
         const pdf = await generadorPDF(reserva);
-        salida.setHeader('Content-Type', 'application/pdf');
-        salida.setHeader('Content-Disposition', 'attachment; filename=documento.pdf');
-        salida.send(pdf);
+        const ok = {
+            ok: "Aquí esta el pdf en base64",
+            pdf: pdf
+        }
+        return ok
     } catch (errorCapturado) {
         throw errorCapturado
     }

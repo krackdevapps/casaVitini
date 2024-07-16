@@ -7,7 +7,7 @@ export const obtenerReservasDelClienteComoTitular = async (clienteUID) => {
             FROM 
             "reservaTitulares" 
             WHERE 
-            "titularUID" = $1`;
+            "clienteUID" = $1`;
         const resuelve = await conexion.query(consulta, [clienteUID]);
         return resuelve.rows
     } catch (errorCapturado) {

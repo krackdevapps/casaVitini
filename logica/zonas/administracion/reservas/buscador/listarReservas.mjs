@@ -24,7 +24,7 @@ export const listarReservas = async (entrada, salida) => {
         })
         const pagina = entrada.body.pagina
         let nombreColumna = entrada.body.nombreColumna
-        const sentidoColumna = entrada.body.sentidoColumna
+        let sentidoColumna = entrada.body.sentidoColumna
 
         if (nombreColumna === "reserva") {
             nombreColumna = "reservaUID"
@@ -32,6 +32,10 @@ export const listarReservas = async (entrada, salida) => {
             nombreColumna = "estadoPagoIDV"
         } else if (nombreColumna === "estadoReserva") {
             nombreColumna = "estadoReservaIDV"
+        }
+
+        if (nombreColumna && !sentidoColumna) {
+            sentidoColumna = "ascendente"
         }
 
         const configuracionValidador = {

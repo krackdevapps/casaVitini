@@ -32,7 +32,7 @@ export const buscar = async (entrada, salida) => {
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
-        const sentidoColumna = validadoresCompartidos.tipos.cadena({
+        let sentidoColumna = validadoresCompartidos.tipos.cadena({
             string: entrada.body.sentidoColumna || "",
             nombreCampo: "El campo del sentido de la columna",
             filtro: "strictoConEspacios",
@@ -63,7 +63,12 @@ export const buscar = async (entrada, salida) => {
                 nombreColumna: nombreColumna,
                 tabla: "clientes"
             })
+            sentidoColumna = sentidoColumna ? sentidoColumna : "ascendente"
+            validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
+
         }
+
+
 
         const numeroPorPagina = 10;
         const resultadosBusqueda = await obtenerResultadosBusqueda({
@@ -97,7 +102,7 @@ export const buscar = async (entrada, salida) => {
             if (nombreColumna === "clienteUID") {
                 nombreColumna = "uid"
             }
-    
+
             respuesta.nombreColumna = nombreColumna;
             respuesta.sentidoColumna = sentidoColumna;
         }

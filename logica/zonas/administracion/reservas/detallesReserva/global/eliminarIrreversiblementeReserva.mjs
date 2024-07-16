@@ -31,7 +31,11 @@ export const eliminarIrreversiblementeReserva = async (entrada) => {
         }
         const usuarioIDX = entrada.session.usuario;
         await campoDeTransaccion("iniciar")
-        const usuario = await obtenerUsuario(usuarioIDX)
+        const usuario = await obtenerUsuario({
+            usuario: usuarioIDX,
+            errorSi: "noExiste"
+
+        })
 
         const claveActualHASH = usuario.clave;
         const sal = usuario.sal;

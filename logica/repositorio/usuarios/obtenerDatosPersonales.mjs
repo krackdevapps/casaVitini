@@ -3,7 +3,8 @@ import { conexion } from "../../componentes/db.mjs";
 export const obtenerDatosPersonales = async (usuario) => {
     try {
         const consulta = `
-        SELECT 
+        SELECT
+        usuario,
         nombre,
         "primerApellido",
         "segundoApellido",

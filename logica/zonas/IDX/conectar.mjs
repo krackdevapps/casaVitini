@@ -96,7 +96,7 @@ export const conectar = async (entrada) => {
             fechaActualISO: fechaActualISO
         })
         entrada.session.usuario = usuario;
-        entrada.session.IDX = usuario;
+        //entrada.session.IDX = usuario;
         entrada.session.rol = rol;
         entrada.session.ip = ip;
         entrada.session.userAgent = userAgent;

@@ -9,11 +9,11 @@ import { obtenerDatosPersonalesPorMail } from "../../../repositorio/usuarios/obt
 import { obtenerDatosPersonales } from "../../../repositorio/usuarios/obtenerDatosPersonales.mjs";
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
 
-export const listarMisReservas = async (entrada, salida) => {
+export const listarMisReservas = async (entrada) => {
     try {
 
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.control()
 
         const usuario = entrada.session.usuario
@@ -80,21 +80,17 @@ export const listarMisReservas = async (entrada, salida) => {
         }
         // Comporbar si el email esta verificado
 
-        const cuentaUsuario = await obtenerUsuario(usuario)
+        const cuentaUsuario = await obtenerUsuario({
+            usuario,
+            errorSi: "noExiste"
+        })
         const estadoCuentaVerificada = cuentaUsuario.cuentaVerificadaIDV;
 
         if (estadoCuentaVerificada !== "si") {
             const error = "Tienes que verificar tu dirección de correo electronico para poder acceder a las reservas asociadas a tu direcíon de correo electroníco.";
             throw new Error(error);
         }
-
-
-
-
-
-
         const reservasUIDArray = []
-
         // Buscar el email verificado, en titulares poll y titulares vitini
         const clientesPorMail = await obtenerClientesPorMail({
             mail: usuarioMail,

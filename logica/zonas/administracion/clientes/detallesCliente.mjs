@@ -11,15 +11,15 @@ export const detallesCliente = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        const cliente = validadoresCompartidos.tipos.numero({
-            number: entrada.body.cliente,
+        const clienteUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.clienteUID,
             nombreCampo: "El identificador universal del cliente (clienteUID)",
-            filtro: "numeroSimple",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
-        const detallesCliente = await obtenerDetallesCliente(cliente)
+        const detallesCliente = await obtenerDetallesCliente(clienteUID)
         const ok = {
             ok: detallesCliente
         };

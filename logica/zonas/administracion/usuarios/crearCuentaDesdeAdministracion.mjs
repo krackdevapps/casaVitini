@@ -9,6 +9,7 @@ import { Mutex } from "async-mutex";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
+import { usuariosLimite } from "../../../sistema/usuarios/usuariosLimite.mjs";
 
 export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -42,7 +43,12 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
         // validar rol      
         await obtenerRol(rolIDV)
         // comporbar que no exista la el usuario
-        await obtenerUsuario(usuarioIDX)
+        await obtenerUsuario({
+            usuario: usuarioIDX,
+            errorSi: "existe"
+        })
+        usuariosLimite(usuarioIDX)
+
         await eliminarUsuarioPorRolPorEstadoVerificacion();
         const estadoCuenta = "desactivado";
         await campoDeTransaccion("iniciar")
@@ -72,7 +78,7 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
-        throw errorFinal
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release()

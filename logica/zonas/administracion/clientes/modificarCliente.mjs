@@ -16,13 +16,14 @@ export const modificarCliente = async (entrada, salida) => {
         IDX.control()
 
         bloqueoModificarClinete = await mutex.acquire();
-        const cliente = validadoresCompartidos.tipos.numero({
-            number: entrada.body.cliente,
+        const clienteUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.clienteUID,
             nombreCampo: "El identificador universal del cliente (clienteUID)",
-            filtro: "numeroSimple",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            sePermitenNegativos: "no",
+            devuelveUnTipoNumber: "si"
         })
 
         const datosDelCliente = {
@@ -33,9 +34,13 @@ export const modificarCliente = async (entrada, salida) => {
             telefono: entrada.body.telefono,
             correoElectronico: entrada.body.correoElectronico,
             notas: entrada.body.notas,
+            clienteUID
         }
-        const datosValidados = await validadoresCompartidos.clientes.validarCliente(datosDelCliente);
-        await obtenerDetallesCliente(cliente)
+        const datosValidados = await validadoresCompartidos.clientes.validarCliente({
+            cliente: datosDelCliente,
+            operacion: "actualizar"
+        });
+        //await obtenerDetallesCliente(clienteUID)
         const clienteActualziado = await actualizarCliente(datosValidados)
         const ok = {
             ok: "Se ha anadido correctamente el cliente",
@@ -45,6 +50,7 @@ export const modificarCliente = async (entrada, salida) => {
     } catch (errorCapturado) {
         throw errorCapturado
     } finally {
+        
         bloqueoModificarClinete();
     }
 }

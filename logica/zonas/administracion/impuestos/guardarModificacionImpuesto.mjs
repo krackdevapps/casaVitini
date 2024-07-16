@@ -6,6 +6,7 @@ import { obtenerImpuestosPorNombreDelImpuesto } from "../../../repositorio/impue
 import { actualizarImpuesto } from "../../../repositorio/impuestos/actualizarImpuesto.mjs";
 import { obtenerImpuestosPorImppuestoUID } from "../../../repositorio/impuestos/obtenerImpuestosPorImpuestoUID.mjs";
 import { validarImpuesto } from "./validarImpuesto.mjs";
+import { obtenerImpuestosPorNombreDelImpuestoIgnorandoImpuestoUID } from "../../../repositorio/impuestos/obtenerImpuestosPorNombreDelImpuestoIgnorandoImpuestoUID.mjs";
 
 export const guardarModificacionImpuesto = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -17,12 +18,13 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
 
         await mutex.acquire();
 
-        const impuestoUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.impuestoUID,
+        const impuestoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.impuestoUID,
             nombreCampo: "El UID del impuesto",
-            filtro: "numeroSimple",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
 
         const impuesto = entrada.body
@@ -30,8 +32,12 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
         const nombreImpuesto = impuestoValidado.nombre
         impuestoValidado.impuestoUID = impuestoUID
 
-        const impuestosPorNombre = await obtenerImpuestosPorNombreDelImpuesto(nombreImpuesto)
-        for (const detallesDelImpuesto of impuestosPorNombre) {
+        // Se debe de ignorar el impuesto actual, este adaptador no lo hace !!!!!!
+        const impuestosPorNombre = await obtenerImpuestosPorNombreDelImpuestoIgnorandoImpuestoUID({
+            nombre: nombreImpuesto,
+            impuestoUID
+        })
+        if (impuestosPorNombre.length > 0) {
             if (detallesDelImpuesto.impuestoUID !== impuestoUID) {
                 const error = "Ya existe un impuesto con ese nombre exacto. Por favor selecciona otro nombre para este impuesto con el fin de tener nombres unicos en los impuestos y poder distingirlos correctamente.";
                 throw new Error(error);

@@ -29,7 +29,11 @@ export const actualizarIDX = async (entrada, salida) => {
             throw new Error(error)
 
         }
-        await obtenerUsuario(nuevoIDX)
+        await obtenerUsuario({
+            usuario: nuevoIDX,
+            errorSi: "noExiste"
+        })
+        usuariosLimite(usuarioIDX)
         await eliminarUsuarioPorRolPorEstadoVerificacion();
         await campoDeTransaccion("iniciar")
 

@@ -12,13 +12,14 @@ export const eliminar = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        const clienteUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.clienteUID,
+        const clienteUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.clienteUID,
             nombreCampo: "El identificador universal del cliente (clienteUID)",
-            filtro: "numeroSimple",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            sePermitenNegativos: "no",
+            devuelveUnTipoNumber: "si"
         })
         await obtenerDetallesCliente(clienteUID)
         await eliminarClientePorClienteUID(clienteUID)

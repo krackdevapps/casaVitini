@@ -41,7 +41,7 @@ export const bloquearApartamentos = async (metadatos) => {
             reservaUID,
             apartamentoUID
         })
-        console.log("apartamentoDeLaReserva", apartamentoDeLaReserva)
+
         const apartamentoIDV = apartamentoDeLaReserva.apartamentoIDV
 
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)

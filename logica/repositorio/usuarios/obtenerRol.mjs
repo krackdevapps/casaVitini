@@ -10,7 +10,7 @@ export const obtenerRol = async (rolIDV) => {
         WHERE "rolIDV" = $1;
         `;
 
-        const resuelve = await conexion.query(consulta, rolIDV);
+        const resuelve = await conexion.query(consulta, [rolIDV]);
         if (resuelve.rowCount === 0) {
             const error = "No existe el identificador visual del rol";
             throw new Error(error);

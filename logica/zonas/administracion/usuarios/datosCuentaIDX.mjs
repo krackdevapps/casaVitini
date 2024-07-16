@@ -18,7 +18,10 @@ export const datosCuentaIDX = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-        const usuario = await obtenerUsuario(usuarioIDX)
+        const usuario = await obtenerUsuario({
+            usuario: usuarioIDX,
+            errorSi: "noExiste"
+        })
         const detallesCliente = {
             usuario: usuario.usuario,
             rol: usuario.rolIDV,

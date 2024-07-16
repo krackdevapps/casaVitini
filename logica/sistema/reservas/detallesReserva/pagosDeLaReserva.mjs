@@ -1,11 +1,11 @@
 import Decimal from "decimal.js";
 import { DateTime } from "luxon";
-import { obtenerTotalesGlobal } from "../../repositorio/reservas/transacciones/totales/obtenerTotalesGlobal.mjs";
-import { obtenerPagosPorReservaUIDConOrdenamiento } from "../../repositorio/reservas/transacciones/pagos/obtenerPagosPorReservaUIDConOrdenamiento.mjs";
-import { obtenerReembolsosPorPagoUID } from "../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID.mjs";
-import { obtenerReservaPorReservaUID } from "../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
-import { obtenerDesgloseFinancieroPorReservaUID } from "../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
-import { codigoZonaHoraria } from "../configuracion/codigoZonaHoraria.mjs";
+import { obtenerTotalesGlobal } from "../../../repositorio/reservas/transacciones/totales/obtenerTotalesGlobal.mjs";
+import { obtenerPagosPorReservaUIDConOrdenamiento } from "../../../repositorio/reservas/transacciones/pagos/obtenerPagosPorReservaUIDConOrdenamiento.mjs";
+import { obtenerReembolsosPorPagoUID } from "../../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID.mjs";
+import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerDesgloseFinancieroPorReservaUID } from "../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
+import { codigoZonaHoraria } from "../../configuracion/codigoZonaHoraria.mjs";
 
 export const pagosDeLaReserva = async (reservaUID) => {
     try {
@@ -16,15 +16,6 @@ export const pagosDeLaReserva = async (reservaUID) => {
         }
         await obtenerReservaPorReservaUID(reservaUID);
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-        console.log("!zona", zonaHoraria)
-        /*
-        promedioNetoPorNoche
-        totalReservaNetoSinOfertas
-        totalReservaNeto
-        totalDescuentosAplicados
-        totalImpuestos
-        totalConImpuestos
-        */
 
         const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
         const totalFinal = contenedorFinanciero?.desgloseFinanciero?.global?.totales?.totalFinal

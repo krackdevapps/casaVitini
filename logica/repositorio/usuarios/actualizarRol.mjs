@@ -8,7 +8,7 @@ export const actualizarRol = async (data) => {
         UPDATE
         usuarios
         SET
-        rol = $1
+        "rolIDV" = $1
         WHERE
         usuario = $2;
         `;
@@ -23,6 +23,6 @@ export const actualizarRol = async (data) => {
         }
         return resuelve.rows[0]
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 };

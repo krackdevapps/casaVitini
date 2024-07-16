@@ -26,11 +26,11 @@ export const buscarUsuarios = async (entrada, salida) => {
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
-        const sentidoColumna = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.sentidoColumna,
+        let sentidoColumna = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.sentidoColumna || "",
             nombreCampo: "El campo del sentido de la columna",
             filtro: "strictoConEspacios",
-            sePermiteVacio: "no",
+            sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
@@ -43,8 +43,9 @@ export const buscarUsuarios = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-
+        console.log("nombreColumna", nombreColumna, "sentidoColumna", sentidoColumna)
         if (nombreColumna) {
+            sentidoColumna = !sentidoColumna ? "ascendente" : sentidoColumna
             await validadoresCompartidos.baseDeDatos.validarNombreColumna({
                 nombreColumna: nombreColumna,
                 tabla: "datosDeUsuario"
@@ -73,10 +74,10 @@ export const buscarUsuarios = async (entrada, salida) => {
         const corretorNumeroPagina = String(numeroPagina).replace("0", "");
         const Respuesta = {
             buscar: buscar,
-            totalUsuarios: consultaConteoTotalFilas,
+            totalUsuarios: Number(consultaConteoTotalFilas),
             nombreColumna: nombreColumna,
             paginasTotales: totalPaginas,
-            pagina: Number(corretorNumeroPagina) + 1,
+            pagina: Number(corretorNumeroPagina) ,
         };
         if (nombreColumna) {
             Respuesta.nombreColumna;
@@ -86,7 +87,7 @@ export const buscarUsuarios = async (entrada, salida) => {
             delete detallesUsuario.totalUsuarios;
         });
         Respuesta.usuarios = usuariosEncontrados;
-        salida.json(Respuesta);
+        return Respuesta
     } catch (errorCapturado) {
         throw errorCapturado
     }

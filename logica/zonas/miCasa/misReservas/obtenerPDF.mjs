@@ -8,8 +8,9 @@ import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reser
 import { obtenerTitularPoolReservaPorReservaUID } from "../../../repositorio/reservas/titulares/obtenerTitularPoolReservaPorReservaUID.mjs";
 import { obtenerTitularReservaPorReservaUID } from "../../../repositorio/reservas/titulares/obtenerTitularReservaPorReservaUID.mjs";
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
+import { generadorPDF } from "../../../sistema/pdf/generadorPDF.mjs";
 
-export const detallesReserva = async (entrada, salida) => {
+export const obtenerPDF = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -69,13 +70,13 @@ export const detallesReserva = async (entrada, salida) => {
                 "alojamiento",
                 "pernoctantes",
                 "desgloseFinanciero", 
-                "detallesPagos"
             ]
         });
-        delete resuelveDetallesReserva.global.origenIDV;
+
+        const pdf = await generadorPDF(resuelveDetallesReserva);
         const ok = {
-            ok: "Aquí estan los detalles de su reserva",
-            reserva: resuelveDetallesReserva
+            ok: "Aquí esta el pdf en base64",
+            pdf: pdf
         }
         return ok
 

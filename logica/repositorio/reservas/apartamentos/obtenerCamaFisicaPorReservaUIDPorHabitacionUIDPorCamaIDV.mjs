@@ -30,7 +30,7 @@ export const obtenerCamaFisicaPorReservaUIDPorHabitacionUIDPorCamaIDV = async (d
             }
             return resuelve.rows[0]
         } else if (errorSi === "existe") {
-            console.log("esuelve.rowCount ", resuelve.rowCount )
+
             if (resuelve.rowCount > 0) {
                 const error = "Ya existe la cama fisica en la habitacion"
                 throw new Error(error)

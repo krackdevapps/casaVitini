@@ -15,7 +15,7 @@ export const enviarEmailReservaConfirmada = async (reservaUID) => {
             ]
         })
 
-        console.log("reserva", reserva)
+
         const global = reserva.global
         const nombreCompletoTitularReserva = reserva.titular.nombreTitular
         const emailDestinoTitular = reserva.titular.mailTitular

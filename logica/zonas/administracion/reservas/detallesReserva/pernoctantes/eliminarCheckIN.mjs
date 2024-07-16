@@ -14,7 +14,7 @@ export const eliminarCheckIN = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-        console.log("e", entrada.body)
+
 
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pernoctanteUID,
@@ -44,7 +44,7 @@ export const eliminarCheckIN = async (entrada, salida) => {
             pernoctanteUID,
             reservaUID
         })
-        console.log(">>>",pernoctante)
+
         if (!pernoctante?.componenteUID) {
             const error = "No existe el pernoctanteUID";
             throw new Error(error);

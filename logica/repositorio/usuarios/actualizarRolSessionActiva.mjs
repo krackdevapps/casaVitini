@@ -16,12 +16,8 @@ export const actualizarRolSessionActiva = async (data) => {
             nuevoRol
         ];
         const resuelve = await conexion.query(consulta, parametros)
-        if (resuelve.rowCount === 0) {
-            const error = "No existe el usuario";
-            throw new Error(error);
-        }
         return resuelve.rows[0]
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 };

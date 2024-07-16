@@ -4,6 +4,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { actualizarUsuarioSessionActiva } from "../../../repositorio/usuarios/actualizarSessionActiva.mjs";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
+import { actualizarIDX } from "../../../repositorio/usuarios/actualizarIDX.mjs";
 
 export const actualizarIDXAdministracion = async (entrada, salida) => {
     try {
@@ -14,7 +15,7 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
 
         const usuarioIDX = validadoresCompartidos.tipos.cadena({
             string: entrada.body.usuarioIDX,
-            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            nombreCampo: "El usuarioIDX",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -23,13 +24,14 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
 
         const nuevoIDX = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nuevoIDX,
-            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            nombreCampo: "El nombre nuevoIDX",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
         await eliminarUsuarioPorRolPorEstadoVerificacion();
+        usuariosLimite(usuarioIDX)
         await campoDeTransaccion("iniciar")
         await actualizarIDX({
             usuarioIDX: usuarioIDX,
@@ -42,11 +44,11 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el IDX correctamente",
-            usuarioIDX: sessionActivaActualizada.usuario
+            usuarioIDX: nuevoIDX
         };
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 }

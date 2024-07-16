@@ -23,7 +23,7 @@ export const crearNuevoImpuesto = async (entrada, salida) => {
             const error = "Ya existe un impuesto con ese nombre exacto. Por favor selecciona otro nombre para este impuesto con el fin de tener nombres unicos en los impuestos y poder distingirlos correctamente.";
             throw new Error(error);
         }
-        impuestosPorNombre.estadoIDV = "desactivado"
+        impuestoValidado.estadoIDV = "desactivado"
         const nuevoImpuesto = await insertarImpuesto(impuestoValidado)
         const ok = {
             ok: "Se ha creado el nuevo impuesto",

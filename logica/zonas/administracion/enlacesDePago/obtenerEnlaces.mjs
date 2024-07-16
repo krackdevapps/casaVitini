@@ -18,7 +18,7 @@ export const obtenerEnlaces = async (entrada,) => {
             ok: []
         };
         for (const detallesEnlace of enlacesDePago) {
-            console.log("detalleSenlace", detallesEnlace)
+
             const nombreEnlace = detallesEnlace.nombreEnlace;
             const enlaceUID = detallesEnlace.enlaceUID;
             const reservaUID = detallesEnlace.reservaUID;

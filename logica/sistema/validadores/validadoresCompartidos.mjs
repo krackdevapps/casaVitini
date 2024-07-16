@@ -5,10 +5,16 @@ import { obtenerClientesPorPasaporte } from "../../repositorio/clientes/obtenerC
 import { obtenerDatosPersonalesPorMail } from "../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs"
 import { obtenerNombreColumnaPorTabla } from "../../repositorio/globales/obtenerNombreColumnaPorTabla.mjs"
 import { obtenerDatosPersonalesPorMailIgnorandoUsuario } from "../../repositorio/usuarios/obtenerDatosPersonalesPorMailIgnorandoUsuario.mjs"
+import { obtenerClientesPorPasaporteIgnorandoClienteUID } from "../../repositorio/clientes/obtenerClientesPorPasaporteIgnorandoClienteUID.mjs"
 export const validadoresCompartidos = {
     clientes: {
-        validarCliente: async (cliente) => {
+        validarCliente: async (data) => {
             try {
+                const operacion = data.operacion
+                const cliente = data.cliente
+                const clienteUID = cliente.clienteUID
+
+
                 const nombre = validadoresCompartidos.tipos.cadena({
                     string: cliente.nombre,
                     nombreCampo: "El campo del nombre",
@@ -17,7 +23,6 @@ export const validadoresCompartidos = {
                     limpiezaEspaciosAlrededor: "si",
                     limpiezaEspaciosInternos: "si",
                     soloMayusculas: "si"
-
                 })
                 const primerApellido = validadoresCompartidos.tipos.cadena({
                     string: cliente.primerApellido,
@@ -27,7 +32,6 @@ export const validadoresCompartidos = {
                     limpiezaEspaciosAlrededor: "si",
                     limpiezaEspaciosInternos: "si",
                     soloMayusculas: "si"
-
                 })
                 const segundoApellido = validadoresCompartidos.tipos.cadena({
                     string: cliente.segundoApellido,
@@ -37,7 +41,6 @@ export const validadoresCompartidos = {
                     limpiezaEspaciosAlrededor: "si",
                     limpiezaEspaciosInternos: "si",
                     soloMayusculas: "si"
-
                 })
                 const pasaporte = validadoresCompartidos.tipos.cadena({
                     string: cliente.pasaporte,
@@ -47,7 +50,7 @@ export const validadoresCompartidos = {
                     limpiezaEspaciosAlrededor: "si",
                     limpiezaEspaciosInternos: "si"
                 })
-                
+
                 const correoElectronico = validadoresCompartidos.tipos.correoElectronico({
                     mail: cliente.correoElectronico,
                     nombreCampo: "El coreo electronico instroducido",
@@ -67,17 +70,29 @@ export const validadoresCompartidos = {
                     limpiezaEspaciosAlrededor: "si",
                 })
 
-                const clienteConMismoPasaporte = await obtenerClientesPorPasaporte({
-                    pasaporte,
-                    errorSi: "existe"
-                })
-                if (clienteConMismoPasaporte?.clienteUID) {
-                    const nombreClienteExistente = clienteConMismoPasaporte.nombre
-                    const primerApellidoClienteExistente = clienteConMismoPasaporte.primerApellido
-                    const segundoApellidoClienteExistente = clienteConMismoPasaporte.segundoApellido
-                    const error = `Ya existe un cliente con ese pasaporte: ${nombreClienteExistente} ${primerApellidoClienteExistente} ${segundoApellidoClienteExistente}`
-                    throw new Error(error)
+                if (operacion === "actualizar") {
+                    await obtenerClientesPorPasaporteIgnorandoClienteUID({
+                        clienteUID,
+                        pasaporte,
+                        errorSi: "existe"
+                    })
+                } else if (operacion === "crear") {
+                    await obtenerClientesPorPasaporte({
+                        pasaporte,
+                        errorSi: "existe"
+                    })
+                } else {
+                    const m = "validarClinete necesita el parametro operacion en actualizar o crear"
+                    throw new Error(m)
                 }
+
+                // if (clienteConMismoPasaporte?.clienteUID) {
+                //     const nombreClienteExistente = clienteConMismoPasaporte.nombre
+                //     const primerApellidoClienteExistente = clienteConMismoPasaporte.primerApellido
+                //     const segundoApellidoClienteExistente = clienteConMismoPasaporte.segundoApellido
+                //     const error = `Ya existe un cliente con ese pasaporte: ${nombreClienteExistente} ${primerApellidoClienteExistente} ${segundoApellidoClienteExistente}`
+                //     throw new Error(error)
+                // }
                 const datosValidados = {
                     nombre: nombre,
                     primerApellido: primerApellido,
@@ -85,9 +100,8 @@ export const validadoresCompartidos = {
                     pasaporte: pasaporte,
                     telefono: telefono,
                     correoElectronico: correoElectronico,
-                }
-                if (notas) {
-                    datosValidados.notas = notas
+                    notas: notas,
+                    clienteUID
                 }
                 return datosValidados
             } catch (errorCapturado) {
@@ -173,13 +187,22 @@ export const validadoresCompartidos = {
 
                 })
                 if (data.mail) {
-                    validadoresCompartidos.tipos
-                        .correoElectronico(data.mail)
+
+                    validadoresCompartidos.tipos.correoElectronico({
+                        mail: data.mail,
+                        nombreCampo: "El coreo electronico instroducido",
+                        sePermiteVacio: "no"
+                    })
+
                 }
 
                 if (data.telefono) {
-                    validadoresCompartidos.tipos
-                        .telefono(data.telefono)
+
+                    validadoresCompartidos.tipos.telefono({
+                        phone: data.telefono,
+                        nombreCampo: "El telefono instroducido",
+                        sePermiteVacio: "no"
+                    })
                 }
 
 
@@ -634,9 +657,9 @@ export const validadoresCompartidos = {
                 }
             } else if (filtro === "url") {
                 try {
-                    const filtro = /^[A-Za-z0-9_\-/=:]*$/;
+                    const filtro = /^[A-Za-z0-9_\-/%=:]*$/;
                     if (!filtro.test(string)) {
-                        const mensaje = `${nombreCampo} solo acepta una cadena de minusculas, mayusculas, numeros y estos caracteres: _, \, -, /, = y :`
+                        const mensaje = `${nombreCampo} solo acepta una cadena de minusculas, mayusculas, numeros y estos caracteres: _, \, %, -, /, = y :`
                         throw new Error(mensaje)
                     }
                 } catch (errorCapturado) {

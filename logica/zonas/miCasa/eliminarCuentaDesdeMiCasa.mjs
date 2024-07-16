@@ -25,7 +25,10 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
 
-        const cuentaDeUsuario = await obtenerUsuario(usuarioIDX)
+        const cuentaDeUsuario = await obtenerUsuario({
+            usuario: usuarioIDX,
+            errorSi: "noExiste"
+        })
         const claveActualHASH = cuentaDeUsuario.clave;
         const sal = cuentaDeUsuario.sal;
         const metadatos = {

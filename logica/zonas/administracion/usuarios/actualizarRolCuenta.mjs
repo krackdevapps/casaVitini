@@ -24,7 +24,7 @@ export const actualizarRolCuenta = async (entrada, salida) => {
         })
         const nuevoRol = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nuevoRol,
-            nombreCampo: "El nombre del rol",
+            nombreCampo: "El nombre del nuevoRol",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -32,7 +32,10 @@ export const actualizarRolCuenta = async (entrada, salida) => {
         })
         await campoDeTransaccion("iniciar")
         // Validas usaurios
-        await obtenerUsuario(usuarioIDX)
+        await obtenerUsuario({
+            usuario: usuarioIDX,
+            errorSi: "noExiste"
+        })
         // Validar rol
         const rolValidado = await obtenerRol(usuarioIDX)
         const rolUI = rolValidado.rolUI;
@@ -59,6 +62,6 @@ export const actualizarRolCuenta = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 }

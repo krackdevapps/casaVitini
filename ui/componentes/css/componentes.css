@@ -10,7 +10,7 @@
     font-weight: bold;
 }
 
-[zonaCSS=portada] .tituloPortada {
+[zonaCSS="/"] .tituloPortada {
     display: flex;
     place-content: center;
     align-items: flex-start;
@@ -18,7 +18,20 @@
     font-weight: bold;
     color: #0000009e;
     z-index: 5;
+    margin-Top: 100px;
+
 }
+
+main[zonaCSS="/"] {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    overflow: hidden;
+    gap: 6px;
+    z-Index: -1;
+    position: absolute;
+}
+
 
 .plaza_marcoError_seccion {
     display: flex;
@@ -61,13 +74,13 @@
     color: white;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_resumenReserva_bloqueHabitacion {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_resumenReserva_bloqueHabitacion {
     display: flex;
     flex-direction: column;
     padding: 0px;
 }
 
-[zonaCSS="alojamiento/resumen"] .plaza_alojamiento_resumenReserva_bloqueHabitacion {
+[zonaCSS="/alojamiento/resumen"] .plaza_alojamiento_resumenReserva_bloqueHabitacion {
     display: flex;
     flex-direction: column;
     padding: 0px;
@@ -185,7 +198,7 @@
     outline: none;
 }
 
-[zonaCSS=portada] .bloqueReservasPortada {
+[zonaCSS="/"] .bloqueReservasPortada {
     margin: 0px;
     padding: 0px;
     color: rgba(0, 0, 0, 0.8);
@@ -201,7 +214,7 @@
     z-index: 5;
 }
 
-[zonaCSS=portada] .tituloUI {
+[zonaCSS="/"] .tituloUI {
     margin: 0px;
     padding: 10px;
     color: black;
@@ -252,7 +265,7 @@
     }
 }
 
-[zonaCSS=portada] .conenedorReserva {
+[zonaCSS="/"] .conenedorReserva {
     background: rgba(255, 255, 255, 0.3);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
@@ -312,7 +325,7 @@
     flex-wrap: nowrap;
 }
 
-[zonaCSS="miCasa"] .miCasa_marcoVitiniIDX {
+[zonaCSS="/micasa"] .miCasa_marcoVitiniIDX {
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -958,7 +971,7 @@
 
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_botonBorrarBusquedaAlojamiento {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_botonBorrarBusquedaAlojamiento {
     display: none;
     padding: 10px;
     backdrop-filter: blur(50px);
@@ -982,7 +995,7 @@
     align-content: stretch;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_marcoFechaCompartido {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_marcoFechaCompartido {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1002,7 +1015,7 @@
 }
 
 @media (max-width: 720px) {
-    [zonaCSS=alojamiento] .plaza_alojamiento_marcoFechaCompartido {
+    [zonaCSS="/alojamiento"] .plaza_alojamiento_marcoFechaCompartido {
         flex-direction: column;
     }
 }
@@ -1020,7 +1033,7 @@
     border-radius: 16px;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_superBloque {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_superBloque {
     display: flex;
     gap: 6px;
     /*
@@ -1039,7 +1052,7 @@
     color: white;
 }
 
-[zonaCSS=alojamiento] .textoDiaNuevo {
+[zonaCSS="/alojamiento"] .textoDiaNuevo {
     pointer-events: none;
     user-select: none;
     transition: all 250ms linear;
@@ -1061,7 +1074,7 @@
     align-content: center;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_marcoFechaCompartido_contenedorFecha {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_marcoFechaCompartido_contenedorFecha {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -1089,7 +1102,7 @@
     background: #8ac4ff;
 }
 
-[zonaCSS=alojamiento] .botonMostrarDisponibilidad {
+[zonaCSS="/alojamiento"] .botonMostrarDisponibilidad {
     background-color: rgb(225 225 225 / 70%);
     padding: 10px;
     user-select: none;
@@ -1106,7 +1119,7 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS=alojamiento] .botonMostrarDisponibilidad:hover {
+[zonaCSS="/alojamiento"] .botonMostrarDisponibilidad:hover {
     background: #ffa84b;
 }
 
@@ -1118,7 +1131,7 @@
     margin-left: 10px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reservaDetalles_transacciones_enlacesDePago_infoSinEnlaces {
+[ui="reservaUI"] .reservaDetalles_transacciones_enlacesDePago_infoSinEnlaces {
     display: flex;
     padding: 10px;
     justify-content: center;
@@ -1148,7 +1161,7 @@
     flex: 1;
 }
 
-[zonaCSS=alojamiento] .bloqueAlojamiento {
+[zonaCSS="/alojamiento"] .bloqueAlojamiento {
     display: flex;
     grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
     grid-auto-rows: minmax(100px, auto);
@@ -1161,7 +1174,7 @@
     align-content: stretch;
 }
 
-[zonaCSS=alojamiento] .bloquePasosReservaNuevo {
+[zonaCSS="/alojamiento"] .bloquePasosReservaNuevo {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -1173,7 +1186,7 @@
     gap: 6px;
 }
 
-[zonaCSS=alojamiento] .bloqueResumenReservaGlobal {
+[zonaCSS="/alojamiento"] .bloqueResumenReservaGlobal {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -1186,7 +1199,7 @@
     gap: 4px;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_contenedorApartmento_check {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_contenedorApartmento_check {
     position: relative;
     cursor: default;
     user-select: none;
@@ -1210,7 +1223,7 @@
     border-radius: 15px;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_marcoBotonIreAResumenReserva {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_marcoBotonIreAResumenReserva {
     position: sticky;
     left: 0px;
     color: #fff;
@@ -1226,7 +1239,7 @@
     margin-top: 8px;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_marcoIntermedioBotonIrResumenReserva {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_marcoIntermedioBotonIrResumenReserva {
     max-width: 720px;
     width: 100%;
     display: flex;
@@ -1237,7 +1250,7 @@
     flex-wrap: nowrap;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_boronResumenReservaEnMarcoFlotante {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_boronResumenReservaEnMarcoFlotante {
     padding: 10px;
     color: black;
     display: flex;
@@ -1258,7 +1271,7 @@
     background: rgba(255, 255, 255, 0.8);
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_contenedorApartamento {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_contenedorApartamento {
     display: flex;
     border-radius: 20px;
     align-items: flex-start;
@@ -1292,11 +1305,11 @@
     justify-content: flex-start;
 }
 
-[zonaCSS=alojamiento] .elementoTitulo {
+[zonaCSS="/alojamiento"] .elementoTitulo {
     font-weight: bold;
 }
 
-[zonaCSS=alojamiento] .elementoTituloPrincipal {
+[zonaCSS="/alojamiento"] .elementoTituloPrincipal {
     font-weight: bold;
     font-size: 16px;
 }
@@ -1325,7 +1338,7 @@
     min-height: 400px;
 }
 
-[zonaCSS=alojamiento] .bloqueVerticalTitulo {
+[zonaCSS="/alojamiento"] .bloqueVerticalTitulo {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -1367,7 +1380,7 @@
     color: white
 }
 
-[zonaCSS="alojamiento/resumen"] .componentes_ui_totales_mensajeInfoSinInformacion {
+[zonaCSS="/alojamiento/resumen"] .componentes_ui_totales_mensajeInfoSinInformacion {
     padding: 4px;
 }
 
@@ -1382,7 +1395,7 @@
     gap: 4px;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_contenedorApartamento_contenedorTitulo {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_contenedorApartamento_contenedorTitulo {
     display: flex;
     border-radius: 16px;
     align-items: stretch;
@@ -1397,7 +1410,7 @@
     background: #ffffff6e;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_contenedorApartmento_contenedorCaracteristicas {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_contenedorApartmento_contenedorCaracteristicas {
     display: flex;
     align-items: stretch;
     padding-top: 6px;
@@ -1487,7 +1500,7 @@
     text-align: center;
 }
 
-[zonaCSS=alojamiento] .tituloBloqueAlojamiento {
+[zonaCSS="/alojamiento"] .tituloBloqueAlojamiento {
     /* background-color: #ffffff59; */
     margin: 0px;
     border-radius: 10px;
@@ -1505,7 +1518,7 @@
     align-content: center;
 }
 
-[zonaCSS=alojamiento] .tituloApartamentoComponenteUI {
+[zonaCSS="/alojamiento"] .tituloApartamentoComponenteUI {
     padding: 0px;
 }
 
@@ -1545,7 +1558,7 @@
     align-items: stretch;
 }
 
-[zonaCSS="alojamiento/resumen"] .plaza_alojamiento_resumenReserva_marcoBotones {
+[zonaCSS="/alojamiento/resumen"] .plaza_alojamiento_resumenReserva_marcoBotones {
     font-weight: bold;
     border-radius: 9px;
     display: flex;
@@ -1555,7 +1568,7 @@
     align-items: stretch;
 }
 
-[zonaCSS=alojamiento] .botonResumenReserva {
+[zonaCSS="/alojamiento"] .botonResumenReserva {
     background: rgba(255, 255, 255, 0.3);
     padding: 12px;
     border-radius: 10px;
@@ -1572,7 +1585,7 @@
     background: rgba(255, 255, 255, 0.9);
 }
 
-[zonaCSS=alojamiento] .tituloBloque {
+[zonaCSS="/alojamiento"] .tituloBloque {
     margin: 4px;
     font-size: 16px;
     font-weight: bold;
@@ -1580,7 +1593,7 @@
     border-radius: 8px;
 }
 
-[zonaCSS="alojamiento/resumen"] .tituloBloque {
+[zonaCSS="/alojamiento/resumen"] .tituloBloque {
     margin: 4px;
     font-size: 16px;
     font-weight: bold;
@@ -1588,17 +1601,17 @@
     border-radius: 8px;
 }
 
-[zonaCSS=alojamiento] .bloqueSeccion {
+[zonaCSS="/alojamiento"] .bloqueSeccion {
     margin: 10px;
     border-radius: 8px;
 }
 
-[zonaCSS="alojamiento/resumen"] .bloqueSeccion {
+[zonaCSS="/alojamiento/resumen"] .bloqueSeccion {
     margin: 10px;
     border-radius: 8px;
 }
 
-[zonaCSS=alojamiento] .tituloBloqueSeccion {
+[zonaCSS="/alojamiento"] .tituloBloqueSeccion {
     font-size: 14px;
     font-weight: bold;
     margin: 0px;
@@ -1606,7 +1619,7 @@
     padding: 10px;
 }
 
-[zonaCSS="alojamiento/resumen"] .tituloBloqueSeccion {
+[zonaCSS="/alojamiento/resumen"] .tituloBloqueSeccion {
     font-size: 14px;
     font-weight: bold;
     margin: 0px;
@@ -1614,7 +1627,7 @@
     padding: 10px;
 }
 
-[zonaCSS="alojamiento/resumen"] .bloqueResumenDia {
+[zonaCSS="/alojamiento/resumen"] .bloqueResumenDia {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -1627,52 +1640,52 @@
     gap: 4px;
 }
 
-[zonaCSS="alojamiento/resumen"] .diaTipo {
+[zonaCSS="/alojamiento/resumen"] .diaTipo {
     padding: 0px;
     margin: 0px;
     text-align: center;
 }
 
-[zonaCSS="alojamiento/resumen"] .diaParrafo {
+[zonaCSS="/alojamiento/resumen"] .diaParrafo {
     padding: 0px;
     margin: 0px;
     text-align: center;
 }
 
-[zonaCSS=alojamiento] .bloqueApartamenteo {
+[zonaCSS="/alojamiento"] .bloqueApartamenteo {
     border-radius: 16px;
     background-color: rgba(255, 255, 255, 0.3);
     padding: 14px;
 }
 
-[zonaCSS="alojamiento/resumen"] .bloqueApartamenteo {
+[zonaCSS="/alojamiento/resumen"] .bloqueApartamenteo {
     border-radius: 16px;
     background-color: rgba(255, 255, 255, 0.3);
     padding: 14px;
 }
 
-[zonaCSS=alojamiento] .tituloMedia {
+[zonaCSS="/alojamiento"] .tituloMedia {
     margin: 2px;
     font-size: 14px;
     font-weight: bold;
     padding: 10px;
 }
 
-[zonaCSS="alojamiento/resumen"] .tituloMedia {
+[zonaCSS="/alojamiento/resumen"] .tituloMedia {
     margin: 2px;
     font-size: 14px;
     font-weight: bold;
     padding: 10px;
 }
 
-[zonaCSS=alojamiento] .tituloBloqueHabitacion {
+[zonaCSS="/alojamiento"] .tituloBloqueHabitacion {
     margin: 2px;
     color: grey;
     font-weight: bold;
     padding: 10px;
 }
 
-[zonaCSS="alojamiento/resumen"] .tituloBloqueHabitacion {
+[zonaCSS="/alojamiento/resumen"] .tituloBloqueHabitacion {
     margin: 2px;
     color: grey;
     font-weight: bold;
@@ -1687,7 +1700,7 @@
     margin: 2px;
 }
 
-[zonaCSS=alojamiento] .bloqueConjuntoApartamentos {
+[zonaCSS="/alojamiento"] .bloqueConjuntoApartamentos {
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -1697,7 +1710,7 @@
     gap: 16px;
 }
 
-[zonaCSS="alojamiento/resumen"] .bloqueConjuntoApartamentos {
+[zonaCSS="/alojamiento/resumen"] .bloqueConjuntoApartamentos {
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -1707,7 +1720,7 @@
     gap: 16px;
 }
 
-[zonaCSS="miCasa"] .vitiniIdLogin {
+[zonaCSS="/micasa"] .vitiniIdLogin {
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -1725,7 +1738,7 @@
     justify-content: center;
 }
 
-[zonaCSS="miCasa"] .botonID {
+[zonaCSS="/micasa"] .botonID {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background-color: rgba(0, 0, 0, 0.2);
@@ -1740,11 +1753,11 @@
     padding-right: 20px;
 }
 
-[zonaCSS="miCasa"] .botonID:hover {
+[zonaCSS="/micasa"] .botonID:hover {
     background-color: rgba(0, 0, 0, 0.6);
 }
 
-[zonaCSS="miCasa"] .botonID:active {
+[zonaCSS="/micasa"] .botonID:active {
     background-color: black;
 }
 
@@ -1758,11 +1771,11 @@
     align-content: center;
     flex-wrap: nowrap;
     width: 100%;
-    padding: 30px;
+    padding: 12px;
     gap: 6px;
 }
 
-[zonaCSS="miCasa"] .bloqueBotonesID {
+[zonaCSS="/micasa"] .bloqueBotonesID {
     display: flex;
     visibility: hidden;
     pointer-events: none;
@@ -1772,8 +1785,8 @@
     justify-content: flex-start;
 }
 
-[zonaCSS="miCasa"] .campoID {
-    background: rgba(255, 255, 255, 0.8);
+[zonaCSS="/micasa"] .campoID {
+    background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     padding: 10px;
@@ -1786,11 +1799,11 @@
     transition: background 500ms linear;
 }
 
-[zonaCSS="miCasa"] .campoID::placeholder {
+[zonaCSS="/micasa"] .campoID::placeholder {
     color: rgba(0, 0, 0, 0.337);
 }
 
-[zonaCSS="miCasa"] .bloqueRespuesta {
+[zonaCSS="/micasa"] .bloqueRespuesta {
     background-color: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -1810,7 +1823,7 @@
     border-radius: 10px;
 }
 
-[zonaCSS=alojamiento] .bloqueHorizontal {
+[zonaCSS="/alojamiento"] .bloqueHorizontal {
     border-radius: 14px;
     background-color: rgb(255 255 255 / 30%);
     display: flex;
@@ -1821,7 +1834,7 @@
     justify-content: space-around;
 }
 
-[zonaCSS="alojamiento/resumen"] .bloqueHorizontal {
+[zonaCSS="/alojamiento/resumen"] .bloqueHorizontal {
     border-radius: 14px;
     background-color: rgb(255 255 255 / 30%);
     display: flex;
@@ -1832,7 +1845,7 @@
     justify-content: space-around;
 }
 
-[zonaCSS="alojamiento/resumen"] .plaza_alojamiento_resumenReserva_contenedorTitualPago {
+[zonaCSS="/alojamiento/resumen"] .plaza_alojamiento_resumenReserva_contenedorTitualPago {
     border-radius: 13px;
 }
 
@@ -1896,7 +1909,7 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="miCasa"] .botonUsuario,
+[zonaCSS="/micasa"] .botonUsuario,
 .informacionCerrarSession {
     border-radius: 8px;
     padding: 10px;
@@ -1914,7 +1927,7 @@
     display: block;
 }
 
-[zonaCSS="miCasa"] .botonUsuario:hover {
+[zonaCSS="/micasa"] .botonUsuario:hover {
     background-color: rgb(58, 13, 221);
     color: white;
 }
@@ -2075,7 +2088,7 @@
     align-items: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracion_reservas_DetallesReserva_botonCategoria {
+[ui="reservaUI"] .adminitracion_reservas_DetallesReserva_botonCategoria {
     text-decoration: none;
     color: black;
     background-color: rgba(255, 255, 255, 0.3);
@@ -2098,7 +2111,7 @@
 }
 
 @media (max-width: 720px) {
-    [zonaCSS="administracion/reservas/detallesReserva"] .adminitracion_reservas_DetallesReserva_botonCategoria {
+    [ui="reservaUI"] .adminitracion_reservas_DetallesReserva_botonCategoria {
         padding-top: 18px;
         padding-bottom: 18px;
     }
@@ -2109,7 +2122,7 @@
     color: white;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracion_reservas_DetallesReserva_botonCategoria:hover {
+[ui="reservaUI"] .adminitracion_reservas_DetallesReserva_botonCategoria:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
@@ -2184,7 +2197,7 @@
     gap: 4px;
 }
 
-[zonaCSS=alojamiento] .adminsitracionBloqueSelecionDias {
+[zonaCSS="/alojamiento"] .adminsitracionBloqueSelecionDias {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -2240,24 +2253,23 @@
     gap: 0px;
     /* min-width: 800px; */
     text-align: center;
-    overflow-x: auto;
+    /* overflow-x: auto; */
     border-radius: 10px;
     user-select: none;
     -webkit-user-select: none;
     cursor: default;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    scroll-behavior: auto;
+    
+    overflow: hidden;
 }
 
 
-[zonaCSS="administracion/reservas/buscador"] [contenedor="filtrosOrden"] {
+[contenedor="filtrosOrden"] {
     display: none;
     flex-direction: row;
 
 }
-
-
 
 @media (max-width: 1300px) {
     [gridUID="gridReservas"] {
@@ -2285,19 +2297,114 @@
         grid-template-columns: auto auto auto auto auto;
     }
 
-
     [zonaCSS="administracion/clientes/buscador"] [nombreColumna="mail"],
-    [zonaCSS="administracion/clientes/buscador"] [celdaIDV="mail"] ,
+    [zonaCSS="administracion/clientes/buscador"] [celdaIDV="mail"],
     [zonaCSS="administracion/clientes/buscador"] [nombreColumna="telefono"],
     [zonaCSS="administracion/clientes/buscador"] [celdaIDV="telefono"] {
         display: none
     }
+
+
+    [gridUID="gridUsuarios"] {
+        grid-template-columns: auto auto auto auto auto;
+    }
+
+    [zonaCSS="administracion/usuarios/buscador"] [nombreColumna="mail"],
+    [zonaCSS="administracion/usuarios/buscador"] [celdaIDV="mail"],
+    [zonaCSS="administracion/usuarios/buscador"] [nombreColumna="telefono"],
+    [zonaCSS="administracion/usuarios/buscador"] [celdaIDV="telefono"] {
+        display: none
+    }
+
+
+    [gridUID="gridMisReservas"] {
+        grid-template-columns: auto auto auto auto;
+    }
+
+    [zonaCSS="/micasa"] [nombreColumna="fechaCreacion"],
+    [zonaCSS="/micasa"] [celdaIDV="fechaCreacion"],
+    [zonaCSS="/micasa"] [nombreColumna="estadoPago"],
+    [zonaCSS="/micasa"] [celdaIDV="estadoPagoIDV"] {
+        display: none
+    }
+
+    [zonaCSS="/micasa"] [contenedor="filtrosOrden"] {
+        display: flex
+    }
+
+    [zonaCSS="/micasa"] [contenedor="resultados"] {
+        gap: 3px;
+    }
+
+
+
+
+
+
 }
 
 @media (max-width: 720px) {
-    .administracionGridReservas {
+    [gridUID="gridClientes"] {
         display: none;
     }
+
+    [gridUID="gridReservas"] {
+        display: none;
+    }
+
+    [zonaCSS="administracion/clientes/buscador"] [contenedor="resultados"] {
+        gap: 6px;
+    }
+
+    [zonaCSS="administracion/clientes/buscador"] [contenedor="filtrosOrden"] {
+        display: flex
+    }
+
+    [zonaCSS="administracion/usuarios/buscador"] [contenedor="filtrosOrden"] {
+        display: flex
+    }
+
+    [zonaCSS="administracion/usuarios/buscador"] [contenedor="resultados"] {
+        gap: 6px;
+    }
+
+    [gridUID="gridUsuarios"] {
+        display: none;
+    }
+
+    [gridUID="gridReservaDelCliente"] {
+        display: none;
+    }
+
+    [zonaCSS="administracion/clientes/detalles"] [contenedor="resultados"] {
+        gap: 6px;
+    }
+
+    [zonaCSS="administracion/clientes/detalles"] [contenedor="filtrosOrden"] {
+        display: flex
+    }
+
+    [gridUID="gridImpuestos"] {
+        display: none;
+    }
+
+    [zonaCSS="administracion/impuestos"] [contenedor="resultados"] {
+        gap: 6px;
+    }
+
+    [zonaCSS="administracion/impuestos"] [contenedor="filtrosOrden"] {
+        display: flex
+    }
+
+
+    [gridUID="gridMisReservas"] {
+        display: none;
+    }
+    [zonaCSS="/micasa"] [contenedor="resultados"] {
+        gap: 6px;
+    }
+
+
 }
 
 /*
@@ -2458,11 +2565,15 @@
 .administracionCeldaEstiloCompartido {
     background-color: #8ac4ff00;
     padding: 10px;
-    display: flex;
+    /* display: flex; */
     align-content: center;
     justify-content: center;
     white-space: nowrap;
-    align-items: center;
+    align-items: stretch;
+    text-overflow: ellipsis;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow: hidden;
 }
 
 .adminitracionReservasFila {
@@ -2480,9 +2591,9 @@
 }
 
 .administracionNavegacionPaginacion {
-    background-color: rgba(255, 255, 255, 0.3);
+    /* background-color: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px); */
     display: flex;
     user-select: none;
     cursor: default;
@@ -2505,21 +2616,21 @@
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
-    padding: 8px;
+    padding: 10px;
     /* margin-right: 0px; */
     padding-left: 14px;
     padding-right: 14px;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .navegacionPaginacion {
     text-decoration: none;
     color: black;
     background: rgb(187, 187, 187);
-    padding: 8px;
+    padding: 10px;
     padding-left: 14px;
     padding-right: 14px;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
@@ -2541,7 +2652,7 @@
     text-align: center;
 }
 
-[zonaCSS="miCasa"] .reservaDetallesBloqueGeneral {
+[zonaCSS="/micasa"] .reservaDetallesBloqueGeneral {
     border-radius: 12px;
     background-color: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
@@ -2557,7 +2668,7 @@
     align-content: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reservaDetallesBloqueGeneral {
+[ui="reservaUI"] .reservaDetallesBloqueGeneral {
     border-radius: 12px;
     background-color: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
@@ -2573,7 +2684,7 @@
     align-content: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reserva_detallesReserva_marcoMenuExpandido_horizontal {
+[ui="reservaUI"] .administracion_reserva_detallesReserva_marcoMenuExpandido_horizontal {
     width: 100%;
     display: grid;
     grid-gap: 4px;
@@ -2587,6 +2698,22 @@
     grid-template-areas:
         ". . . . . .";
 }
+
+[ui="reservaUI"] .miCasa_reserva_detallesReserva_marcoMenuExpandido_horizontal {
+    width: 100%;
+    display: grid;
+    grid-gap: 4px;
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: 1fr 1fr 1fr 0.3fr;
+    grid-template-rows: 1fr;
+    grid-auto-flow: row;
+    grid-template-areas:
+        ". . . .";
+}
+
 
 .administracion_reserva_detallesReserva_marcoMenuExpandido_vertical {
     display: flex;
@@ -2607,7 +2734,7 @@
     border-radius: 100px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reserva_detallesReserva_marcoMenuResponsivo {
+[ui="reservaUI"] .administracion_reserva_detallesReserva_marcoMenuResponsivo {
     border-radius: 12px;
     background-color: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
@@ -2623,16 +2750,16 @@
 }
 
 @media screen and (max-width: 720px) {
-    [zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
+    [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
         display: none;
     }
 
-    [zonaCSS="administracion/reservas/detallesReserva"] .administracion_reserva_detallesReserva_marcoMenuResponsivo {
+    [ui="reservaUI"] .administracion_reserva_detallesReserva_marcoMenuResponsivo {
         display: flex;
     }
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reserva_detallesReserva_marcoMenuResponsivo:hover {
+[ui="reservaUI"] .administracion_reserva_detallesReserva_marcoMenuResponsivo:hover {
     background: #0040ff;
     color: white;
 }
@@ -2641,7 +2768,7 @@
     display: none;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reservaDetallesBloqueAlojamineto {
+[ui="reservaUI"] .reservaDetallesBloqueAlojamineto {
     border-radius: 12px;
     padding: 6px;
     display: flex;
@@ -2663,7 +2790,7 @@
     flex-wrap: nowrap;
 }
 
-[zonaCSS="miCasa"] .reservaDetallesBloqueFecha {
+[zonaCSS="/micasa"] .reservaDetallesBloqueFecha {
     background-color: rgba(255, 255, 255, 0.3);
     display: flex;
     border-radius: 12px;
@@ -2697,7 +2824,7 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reservaDetallesBloqueFecha {
+[ui="reservaUI"] .reservaDetallesBloqueFecha {
     /* background-color: rgba(255, 255, 255, 0.3); */
     display: flex;
     border-radius: 12px;
@@ -2725,7 +2852,7 @@
     gap: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracionReservaDetallesBloqueContendioAlojamiento {
+[ui="reservaUI"] .administracionReservaDetallesBloqueContendioAlojamiento {
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -2735,7 +2862,7 @@
     gap: 4px;
 }
 
-[zonaCSS="miCasa"] .administracionReservaBloqueDual {
+[zonaCSS="/micasa"] .administracionReservaBloqueDual {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2753,7 +2880,7 @@
     cursor: default;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracionReservaBloqueDual {
+[ui="reservaUI"] .administracionReservaBloqueDual {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2762,16 +2889,25 @@
     padding: 8px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_contenedorReservaUID {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorReservaUID {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     flex-direction: column;
     flex-wrap: nowrap;
     padding: 8px;
+    overflow: hidden;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_contenedorRestoGlobal {
+[ui="reservaUI"] .contenedroTextoEspansivo {
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorRestoGlobal {
     display: grid;
     grid-auto-columns: 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -2781,8 +2917,19 @@
         ". . . . . .";
 }
 
+[ui="reservaUI"] .contenedorInternoGlobal {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        ". . . . .";
+}
+
+
 @media screen and (max-width: 1200px) {
-    [zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_contenedorRestoGlobal {
+    [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorRestoGlobal {
         grid-auto-columns: 1fr;
         grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: 1fr 1fr;
@@ -2794,7 +2941,7 @@
 }
 
 @media screen and (max-width: 600px) {
-    [zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_contenedorRestoGlobal {
+    [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorRestoGlobal {
         grid-auto-columns: 1fr;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr 1fr;
@@ -2806,7 +2953,20 @@
     }
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_panel_bloqueTitular {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_panel_bloqueTitular {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 8px;
+    cursor: default;
+    background: 6px;
+    border-radius: 10px;
+    overflow: hidden; 
+}
+
+[ui="reservaUI"] .bloqueGlobalInerte {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2818,11 +2978,12 @@
     border-radius: 10px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_panel_bloqueTitular:hover {
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_panel_bloqueTitular:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 
-[zonaCSS="miCasa"] .miCasa_reservas_detallesReservas_bloqueDual {
+[zonaCSS="/micasa"] .miCasa_reservas_detallesReservas_bloqueDual {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2831,7 +2992,7 @@
     padding: 8px;
 }
 
-[zonaCSS="miCasa"] .adminitracionReservasDetallesBloqueApartamento {
+[zonaCSS="/micasa"] .adminitracionReservasDetallesBloqueApartamento {
     /*   background: rgb(255 255 255 / 0.5); */
     margin: 0px;
     display: block;
@@ -2850,7 +3011,7 @@
     gap: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesBloqueApartamento {
+[ui="reservaUI"] .adminitracionReservasDetallesBloqueApartamento {
     /*   background: rgb(255 255 255 / 0.5); */
     margin: 0px;
     display: block;
@@ -2869,7 +3030,7 @@
     gap: 6px;
 }
 
-[zonaCSS="miCasa"] .administracionReservasDetallesTituloApartamento {
+[zonaCSS="/micasa"] .administracionReservasDetallesTituloApartamento {
     margin: 0px;
     padding-left: 10px;
     font-weight: bold;
@@ -2880,11 +3041,23 @@
     cursor: default;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracionReservasDetallesTituloApartamento:hover {
+
+[zonaCSS="/micasa"] .apartamentoTituloUIInerte {
+    margin: 0px;
+    padding-left: 10px;
+    font-weight: bold;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    /* margin-bottom: 4px; */
+    border-radius: 7px;
+    cursor: default;
+}
+
+[ui="reservaUI"] .administracionReservasDetallesTituloApartamento:hover {
     background: rgba(0, 0, 0, 0.1);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracionReservasDetallesTituloApartamento {
+[ui="reservaUI"] .administracionReservasDetallesTituloApartamento {
     padding: 10px;
     font-weight: bold;
     /* margin-bottom: 4px; */
@@ -2892,7 +3065,7 @@
     cursor: default;
 }
 
-[zonaCSS="miCasa"] .adminitracionReservasDetallesBloqueHabitacion {
+[zonaCSS="/micasa"] .adminitracionReservasDetallesBloqueHabitacion {
     overflow: hidden;
     background: #00000014;
     /* margin: 4px; */
@@ -2907,7 +3080,7 @@
     align-items: stretch;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesBloqueHabitacion {
+[ui="reservaUI"] .adminitracionReservasDetallesBloqueHabitacion {
     overflow: hidden;
     background: #00000014;
     /* margin: 4px; */
@@ -2921,7 +3094,7 @@
     align-items: stretch;
 }
 
-[zonaCSS="miCasa"] .adminitracionReservasDetallesTituloHabitacion {
+[zonaCSS="/micasa"] .adminitracionReservasDetallesTituloHabitacion {
     /* background: yellowgreen;*/
     padding: 6px;
     border-radius: 7px;
@@ -2932,7 +3105,18 @@
     color: rgb(62, 62, 62);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesTituloHabitacion {
+[zonaCSS="/micasa"] .habitacionUIInerte {
+    /* background: yellowgreen;*/
+    padding: 6px;
+    border-radius: 7px;
+    font-weight: bold;
+    padding-left: 10px;
+    user-select: none;
+    cursor: default;
+    color: rgb(62, 62, 62);
+}
+
+[ui="reservaUI"] .adminitracionReservasDetallesTituloHabitacion {
     /* background: yellowgreen;*/
     padding: 10px;
     border-radius: 7px;
@@ -2942,12 +3126,12 @@
     color: rgb(62, 62, 62);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesTituloHabitacion:hover {
+[ui="reservaUI"] .adminitracionReservasDetallesTituloHabitacion:hover {
     background: rgba(0, 0, 0, 0.1);
     color: black;
 }
 
-[zonaCSS="miCasa"] .adminitracionReservasDetallesTituloTipoCama {
+[zonaCSS="/micasa"] .adminitracionReservasDetallesTituloTipoCama {
     background: rgba(0, 0, 0, 0.2);
     margin: 0px;
     padding: 4px;
@@ -2956,7 +3140,7 @@
     cursor: default;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesTituloTipoCama {
+[ui="reservaUI"] .adminitracionReservasDetallesTituloTipoCama {
     background: rgba(0, 0, 0, 0.2);
     user-select: none;
     cursor: default;
@@ -2964,7 +3148,7 @@
 
 
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesBloquePernoctantes {
+[ui="reservaUI"] .adminitracionReservasDetallesBloquePernoctantes {
     user-select: none;
     -webkit-user-select: none;
     padding: 10px;
@@ -2974,7 +3158,19 @@
     gap: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesBloquePernoctantesNoAlojado {
+
+[ui="reservaUI"] .pernoctanteUIInerte {
+    user-select: none;
+    -webkit-user-select: none;
+    padding: 10px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+
+[ui="reservaUI"] .adminitracionReservasDetallesBloquePernoctantesNoAlojado {
     background: rgba(0, 0, 0, 0.139);
     user-select: none;
     padding: 10px;
@@ -2988,7 +3184,22 @@
     gap: 4px
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesBloquePernoctantesNoAlojado:hover {
+
+[ui="reservaUI"] .bloquePernoctanteNoAlojadoInerte {
+    background: rgba(0, 0, 0, 0.139);
+    user-select: none;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: stretch;
+    gap: 4px
+}
+
+[ui="reservaUI"] .adminitracionReservasDetallesBloquePernoctantesNoAlojado:hover {
     background-color: rgba(1, 1, 1, 0.3);
 }
 
@@ -3017,7 +3228,7 @@
     background: #0026f0;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminitracionReservasDetallesNombrePernoctante {
+[ui="reservaUI"] .adminitracionReservasDetallesNombrePernoctante {
     font-weight: bold;
 }
 
@@ -3025,11 +3236,11 @@
     color: rgb(0, 140, 40);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_tituloCheckIn {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_tituloCheckIn {
     color: rgb(0, 140, 40);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .letraRoja {
+[ui="reservaUI"] .letraRoja {
     color: red;
 }
 
@@ -3042,7 +3253,7 @@
     color: rgb(0 11 168);
 }
 
-[zonaCSS="miCasa"] .reservasDetallesBloqueAlojamiennto {
+[zonaCSS="/micasa"] .reservasDetallesBloqueAlojamiennto {
     display: grid;
     grid-gap: 4px;
     grid-auto-rows: minmax(auto, auto);
@@ -3053,7 +3264,7 @@
     align-items: start;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reservasDetallesBloqueAlojamiennto {
+[ui="reservaUI"] .reservasDetallesBloqueAlojamiennto {
     display: grid;
     grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
@@ -3065,31 +3276,31 @@
 }
 
 @media screen and (max-width: 1280px) {
-    [zonaCSS="miCasa"] .reservasDetallesBloqueAlojamiennto {
+    [zonaCSS="/micasa"] .reservasDetallesBloqueAlojamiennto {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media screen and (max-width: 720px) {
-    [zonaCSS="miCasa"] .reservasDetallesBloqueAlojamiennto {
+    [zonaCSS="/micasa"] .reservasDetallesBloqueAlojamiennto {
         grid-template-columns: repeat(1, 1fr);
     }
 }
 
 @media screen and (max-width: 1280px) {
-    [zonaCSS="administracion/reservas/detallesReserva"] .reservasDetallesBloqueAlojamiennto {
+    [ui="reservaUI"] .reservasDetallesBloqueAlojamiennto {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media screen and (max-width: 720px) {
-    [zonaCSS="administracion/reservas/detallesReserva"] .reservasDetallesBloqueAlojamiennto {
+    [ui="reservaUI"] .reservasDetallesBloqueAlojamiennto {
         grid-template-columns: repeat(1, 1fr);
     }
 }
 
 
-[zonaCSS="miCasa"] .opcionMicasa {
+[zonaCSS="/micasa"] .opcionMicasa {
     border-radius: 12px;
     padding: 10px;
     margin: 0px;
@@ -3104,7 +3315,7 @@
     transition: background 250ms linear;
 }
 
-[zonaCSS="miCasa"] .opcionMicasa:hover {
+[zonaCSS="/micasa"] .opcionMicasa:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
@@ -3169,7 +3380,7 @@
     height: 10px;
 }
 
-[zonaCSS="miCasa"] .adminsitracionReservasTituloNombre {
+[zonaCSS="/micasa"] .adminsitracionReservasTituloNombre {
     font-weight: bold;
     text-align: center;
 }
@@ -3179,7 +3390,7 @@
     text-align: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminsitracionReservasTituloNombre {
+[ui="reservaUI"] .adminsitracionReservasTituloNombre {
     font-weight: bold;
     text-align: center;
 }
@@ -3192,11 +3403,11 @@
     border-top-left-radius: 8px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .adminsitracion_reservas_detallesReserva_contenedorDatoGlobal {
+[ui="reservaUI"] .adminsitracion_reservas_detallesReserva_contenedorDatoGlobal {
     text-align: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracionReservasDetalesMarcoEnvolventeInformacionGeneral {
+[ui="reservaUI"] .administracionReservasDetalesMarcoEnvolventeInformacionGeneral {
     border-radius: 12px;
     /* width: 100%; */
     display: grid;
@@ -3208,7 +3419,7 @@
     align-content: center;
 }
 
-[zonaCSS="miCasa"] .miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
+[zonaCSS="/micasa"] .miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
     border-radius: 12px;
     /* width: 100%; */
     display: flex;
@@ -3222,12 +3433,12 @@
 }
 
 @media screen and (max-width: 720px) {
-    [zonaCSS="administracion/reservas/detallesReserva"] .administracionReservasDetalesMarcoEnvolventeInformacionGeneral {
+    [ui="reservaUI"] .administracionReservasDetalesMarcoEnvolventeInformacionGeneral {
         display: flex;
         flex-direction: column;
     }
 
-    [zonaCSS="miCasa"] .miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
+    [zonaCSS="/micasa"] .miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
         display: flex;
         flex-direction: column;
     }
@@ -3237,7 +3448,7 @@
     background: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracionReservasDetallesBloqueOpcionesCliente {
+[ui="reservaUI"] .administracionReservasDetallesBloqueOpcionesCliente {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -3283,7 +3494,7 @@
     color: rgb(63, 63, 63);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracionReservasDetallesBotonOpcionCliente {
+[ui="reservaUI"] .administracionReservasDetallesBotonOpcionCliente {
     padding: 10px;
     border-radius: 10px;
     cursor: default;
@@ -3334,13 +3545,13 @@
     padding: 8px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .fechaEntradaElemento,
-[zonaCSS="administracion/reservas/detallesReserva"] .fechaSalidaElemento {
+[ui="reservaUI"] .fechaEntradaElemento,
+[ui="reservaUI"] .fechaSalidaElemento {
     border-radius: 7px;
     padding: 8px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .fechaEntradaElemento:hover {
+[ui="reservaUI"] .fechaEntradaElemento:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 
@@ -3352,7 +3563,7 @@
     background: rgba(255, 255, 255, 0.3);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .fechaSalidaElemento:hover {
+[ui="reservaUI"] .fechaSalidaElemento:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 
@@ -3360,7 +3571,7 @@
     background: rgba(255, 255, 255, 0.3);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .componenteFechaEntrada:hover~.fechaSalidaElemento {
+[ui="reservaUI"] .componenteFechaEntrada:hover~.fechaSalidaElemento {
     background: rgba(255, 255, 255, 0.3);
 }
 
@@ -3467,7 +3678,7 @@
     background: rgb(17, 17, 17);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .panelOpcionesCambioCama {
+[ui="reservaUI"] .panelOpcionesCambioCama {
     background: rgba(255, 255, 255, 0.3);
     position: absolute;
     border-radius: 8px 8px 8px 8px;
@@ -3480,7 +3691,7 @@
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .opcionCambioCama {
+[ui="reservaUI"] .opcionCambioCama {
     background-color: rgba(255, 255, 255, 0.3);
     padding: 10px;
     user-select: none;
@@ -3488,7 +3699,7 @@
     border-radius: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .errorCategorialGlobal {
+[ui="reservaUI"] .errorCategorialGlobal {
     margin: 4px;
     padding: 8px;
     user-select: none;
@@ -3498,7 +3709,7 @@
     border-radius: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .opcionDeInformacion {
+[ui="reservaUI"] .opcionDeInformacion {
     margin: 4px;
     padding: 8px;
     user-select: none;
@@ -3508,7 +3719,7 @@
 }
 
 
-[zonaCSS="administracion/reservas/detallesReserva"] .opcionCambioCama:hover {
+[ui="reservaUI"] .opcionCambioCama:hover {
     background: #0040ff;
     color: white;
 }
@@ -3801,7 +4012,7 @@
     margin-top: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_menuAnadirApartamento {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_menuAnadirApartamento {
     position: absolute;
     width: 100%;
     display: grid;
@@ -3819,19 +4030,19 @@
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.3);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_menuAnadirApartamento .infoCargando {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_menuAnadirApartamento .infoCargando {
     padding: 10px;
     text-align: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reservaDetalles_menu_apartamentosDipsonbiles {
+[ui="reservaUI"] .reservaDetalles_menu_apartamentosDipsonbiles {
     display: flex;
     flex-direction: column;
     padding: 6px;
     gap: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reservaDetalles_menu_apartamentosNoDipsonbiles {
+[ui="reservaUI"] .reservaDetalles_menu_apartamentosNoDipsonbiles {
     display: flex;
     flex-direction: column;
     padding: 6px;
@@ -3847,7 +4058,7 @@
     border-radius: 10px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .menuFlotanteOpcionApartamentoNoDisponible {
+[ui="reservaUI"] .menuFlotanteOpcionApartamentoNoDisponible {
     background-color: rgb(255 255 255 / 0.3);
     display: flex;
     flex-direction: column;
@@ -3856,7 +4067,7 @@
     border-radius: 10px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reservaDetalles_menu_titutloapartamentosDisponibles {
+[ui="reservaUI"] .reservaDetalles_menu_titutloapartamentosDisponibles {
     padding: 10px;
     font-weight: bold;
 }
@@ -3866,7 +4077,7 @@
     color: white;
 }
 
-[zonaCSS="miCasa"] .resertaDetallesPernoctantesSinAlojameinto {
+[zonaCSS="/micasa"] .resertaDetallesPernoctantesSinAlojameinto {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     margin: 0px;
@@ -3882,7 +4093,7 @@
     flex-direction: column;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .resertaDetallesPernoctantesSinAlojameinto {
+[ui="reservaUI"] .resertaDetallesPernoctantesSinAlojameinto {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     margin: 0px;
@@ -3897,7 +4108,7 @@
     flex-direction: column;
 }
 
-[zonaCSS="miCasa"] .administracion_reservas_detallesReservas_tituloPernoctantesSinHabitacion {
+[zonaCSS="/micasa"] .administracion_reservas_detallesReservas_tituloPernoctantesSinHabitacion {
     display: flex;
     padding: 4px;
     flex-direction: column;
@@ -3905,7 +4116,7 @@
     align-content: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_tituloPernoctantesSinHabitacion {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_tituloPernoctantesSinHabitacion {
     display: flex;
     padding: 4px;
     flex-direction: column;
@@ -3913,7 +4124,7 @@
     align-content: center;
 }
 
-[zonaCSS="miCasa"] .administracion_reservas_detallesReserva_contenedorPernoctantesSinHabitacion {
+[zonaCSS="/micasa"] .administracion_reservas_detallesReserva_contenedorPernoctantesSinHabitacion {
     padding: 4px;
     border-radius: 12px;
     margin: 0px;
@@ -3928,7 +4139,7 @@
     gap: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_contenedorPernoctantesSinHabitacion {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorPernoctantesSinHabitacion {
     padding: 6px;
     border-radius: 12px;
     max-width: 1920px;
@@ -3942,7 +4153,7 @@
     gap: 6px;
 }
 
-[zonaCSS="miCasa"] .resertaDetallesPropuestaCambioFechaReserva {
+[zonaCSS="/micasa"] .resertaDetallesPropuestaCambioFechaReserva {
     padding: 4px;
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
@@ -3960,7 +4171,7 @@
     gap: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .resertaDetallesPropuestaCambioFechaReserva {
+[ui="reservaUI"] .resertaDetallesPropuestaCambioFechaReserva {
     padding: 4px;
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
@@ -3992,7 +4203,7 @@
     gap: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .desactivaEventos {
+[ui="reservaUI"] .desactivaEventos {
     pointer-events: none;
 }
 
@@ -4099,7 +4310,7 @@
     border: 3px solid transparent;
 }
 
-[zonaCSS="alojamiento/resumen"] .ressumenReservaBloquePago {
+[zonaCSS="/alojamiento/resumen"] .ressumenReservaBloquePago {
     width: 100%;
     display: grid;
     /* grid-template-columns: repeat(auto-fit, minmax(350px, 2fr)); */
@@ -4111,7 +4322,7 @@
     align-content: center;
 }
 
-[zonaCSS="alojamiento/resumen"] .resumenReservaInfoPago {
+[zonaCSS="/alojamiento/resumen"] .resumenReservaInfoPago {
     display: none;
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 13px;
@@ -4124,7 +4335,7 @@
     align-items: stretch;
 }
 
-[zonaCSS="miCasa"] .marcoIDX {
+[zonaCSS="/micasa"] .marcoIDX {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -4136,7 +4347,7 @@
     max-width: 720px;
 }
 
-[zonaCSS="miCasa"] .vitiniID_contenedor_opciones {
+[zonaCSS="/micasa"] .vitiniID_contenedor_opciones {
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -4147,7 +4358,7 @@
     margin-top: 12px;
 }
 
-[zonaCSS="miCasa"] .marcoCuenta {
+[zonaCSS="/micasa"] .marcoCuenta {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -4159,13 +4370,13 @@
     padding: 10px;
 }
 
-[zonaCSS="alojamiento/resumen"] .infoResumenReserva {
+[zonaCSS="/alojamiento/resumen"] .infoResumenReserva {
     margin: 16px;
     font-weight: normal;
     text-align: center;
 }
 
-[zonaCSS="alojamiento/resumen"] .infoPrivacidad {
+[zonaCSS="/alojamiento/resumen"] .infoPrivacidad {
     text-align: center;
     user-select: none;
     -webkit-user-select: none;
@@ -4174,20 +4385,7 @@
     color: black;
 }
 
-
-[zonaCSS="miCasa"] .reserva_resumen_desglose_pago_bloque {
-    padding: 4px;
-    border-radius: 12px;
-    gap: 4px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: stretch;
-    /* background: #bababa; */
-    border: 1px solid rgba(0, 0, 0, 0.4);
-}
-
-[zonaCSS="alojamiento"] .reserva_resumen_desglose_pago_bloque {
+[zonaCSS="/alojamiento"] .reserva_resumen_desglose_pago_bloque {
     padding: 4px;
     border-radius: 12px;
     gap: 4px;
@@ -4200,7 +4398,7 @@
 }
 
 
-[zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_pago_bloque {
+[zonaCSS="/alojamiento/resumen"] .reserva_resumen_desglose_pago_bloque {
     padding: 6px;
     border-radius: 12px;
     gap: 6px;
@@ -4212,7 +4410,7 @@
 }
 
 
-[zonaCSS="administracion/reservas/detallesReserva"] .contenedorTotalesNocheDescuentos {
+[ui="reservaUI"] .contenedorTotalesNocheDescuentos {
     border-radius: 12px;
     gap: 6px;
     display: flex;
@@ -4223,7 +4421,7 @@
 
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .contenedorDescuentosPorApartamento {
+[ui="reservaUI"] .contenedorDescuentosPorApartamento {
     border-radius: 6px;
     gap: 6px;
     display: flex;
@@ -4234,13 +4432,13 @@
 
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_apartamentoIUTitulo {
+[ui="reservaUI"] .reserva_resumen_apartamentoIUTitulo {
     padding-left: 4px;
     padding-right: 4px;
 }
 
 
-[zonaCSS="administracion/reservas/detallesReserva"] .contenedorDescuentoPorApartamento {
+[ui="reservaUI"] .contenedorDescuentoPorApartamento {
     border-radius: 3px;
     display: flex;
     flex-direction: column;
@@ -4252,7 +4450,7 @@
 }
 
 
-[zonaCSS="miCasa"] .reserva_resumen_desglose_porNoche {
+[zonaCSS="/micasa"] .reserva_resumen_desglose_porNoche {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -4264,7 +4462,7 @@
     align-content: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .reserva_resumen_desglose_porNoche {
+[zonaCSS="/alojamiento/reserva_confirmada"] .reserva_resumen_desglose_porNoche {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -4276,7 +4474,7 @@
     align-content: center;
 }
 
-[zonaCSS="alojamiento"] .reserva_resumen_desglose_porNoche {
+[zonaCSS="/alojamiento"] .reserva_resumen_desglose_porNoche {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -4288,7 +4486,7 @@
     align-content: center;
 }
 
-[zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_porNoche {
+[zonaCSS="/alojamiento/resumen"] .reserva_resumen_desglose_porNoche {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -4302,53 +4500,53 @@
 
 
 
-[zonaCSS="miCasa"] .reserva_resumen_desglose_pago_titulo {
+[zonaCSS="/micasa"] .reserva_resumen_desglose_pago_titulo {
     padding: 4px;
     font-weight: bold;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .reserva_resumen_desglose_pago_titulo {
+[zonaCSS="/alojamiento/reserva_confirmada"] .reserva_resumen_desglose_pago_titulo {
     padding: 4px;
     font-weight: bold;
 }
 
-[zonaCSS="alojamiento"] .reserva_resumen_desglose_pago_titulo {
+[zonaCSS="/alojamiento"] .reserva_resumen_desglose_pago_titulo {
     padding: 4px;
     font-weight: bold;
 }
 
-[zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_pago_titulo {
+[zonaCSS="/alojamiento/resumen"] .reserva_resumen_desglose_pago_titulo {
     padding: 4px;
     font-weight: bold;
 }
 
 
 
-[zonaCSS="miCasa"] .reserva_resumen_desglose_pago_elemento {
+[zonaCSS="/micasa"] .reserva_resumen_desglose_pago_elemento {
     background-color: #ffffff73;
     padding: 10px;
     border-radius: 10px;
 }
 
-[zonaCSS="alojamiento"] .reserva_resumen_desglose_pago_elemento {
+[zonaCSS="/alojamiento"] .reserva_resumen_desglose_pago_elemento {
     background-color: #ffffff73;
     padding: 10px;
     border-radius: 10px;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .reserva_resumen_desglose_pago_elemento {
+[zonaCSS="/alojamiento/reserva_confirmada"] .reserva_resumen_desglose_pago_elemento {
     background-color: #ffffff73;
     padding: 10px;
     border-radius: 10px;
 }
 
-[zonaCSS="alojamiento/resumen"] .contenedorDiaConNoche {
+[zonaCSS="/alojamiento/resumen"] .contenedorDiaConNoche {
     background-color: #ffffff73;
     padding: 10px;
     border-radius: 10px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .contenedorDiaConNoche {
+[ui="reservaUI"] .contenedorDiaConNoche {
     /* background-color: #ffffff73; */
     padding: 6px;
     border-radius: 14px;
@@ -4360,12 +4558,12 @@
     border: 1px solid #80808078;
 }
 
-[zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
+[zonaCSS="/alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
     padding: 2px;
     border-radius: 10px;
 }
 
-[zonaCSS="alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
+[zonaCSS="/alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
     padding: 2px;
     border-radius: 10px;
 }
@@ -4373,7 +4571,7 @@
 
 
 
-[zonaCSS="administracion/reservas/detallesReserva"] .contenedorDescuentosAlTotalNetoNoche {
+[ui="reservaUI"] .contenedorDescuentosAlTotalNetoNoche {
     background-color: #746c6c29;
     padding: 10px;
     border-radius: 6px;
@@ -4385,7 +4583,7 @@
 
 
 
-[zonaCSS="alojamiento/resumen"] .contenedorApartamento {
+[zonaCSS="/alojamiento/resumen"] .contenedorApartamento {
     background-color: #ffffff73;
     padding: 10px;
     border-radius: 10px;
@@ -4395,24 +4593,24 @@
     flex-direction: column;
 }
 
-[zonaCSS="alojamiento/resumen"] .textoDetallesPorApartamento {
+[zonaCSS="/alojamiento/resumen"] .textoDetallesPorApartamento {
     padding: 0px;
 }
 
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reserva_resumen_desglose_pago_elemento {
+[ui="reservaUI"] .reserva_resumen_desglose_pago_elemento {
     border-radius: 10px;
     padding: 10px;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.3);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detalleDelTotal {
+[ui="reservaUI"] .detalleDelTotal {
     border-radius: 10px;
     padding: 00px;
 }
 
-[zonaCSS="alojamiento/resumen"] .detalleDelTotal {
+[zonaCSS="/alojamiento/resumen"] .detalleDelTotal {
     border-radius: 10px;
     padding: 6px;
 }
@@ -4422,7 +4620,7 @@
     text-align: center;
 }
 
-[zonaCSS=alojamiento] .detallesReservaTituloCancelarReserva {
+[zonaCSS="/alojamiento"] .detallesReservaTituloCancelarReserva {
     font-size: 20px;
     font-weight: bold;
     margin: 4px;
@@ -4447,7 +4645,7 @@
     align-items: stretch;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+[ui="reservaUI"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
     border-radius: 12px;
     gap: 6px;
     display: flex;
@@ -4560,7 +4758,7 @@
     align-items: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+[ui="reservaUI"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
     margin: 0px;
     padding: 6px;
     display: flex;
@@ -4624,7 +4822,7 @@
     align-items: center;
 }
 
-[zonaCSS=alojamiento] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+[zonaCSS="/alojamiento"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
     margin: 0px;
     padding: 6px;
     display: flex;
@@ -4632,7 +4830,7 @@
     align-items: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+[zonaCSS="/alojamiento/reserva_confirmada"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
     margin: 0px;
     padding: 6px;
     display: flex;
@@ -4746,10 +4944,10 @@
     flex-direction: column;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReservaCancelarReservabloqueBotones {
+[ui="reservaUI"] .detallesReservaCancelarReservabloqueBotones {
     /* width: 100%; */
     display: flex;
-    gap: 6px;
+    gap: 10px;
     justify-items: stretch;
     justify-content: center;
     align-content: center;
@@ -4757,9 +4955,10 @@
     flex-direction: column;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] [espacio=formularioCrearPagoManual] .info {
+[ui="reservaUI"] [espacio=formularioCrearPagoManual] .info {
     display: flex;
-    gap: 6px;
+    gap: 10px;
+    padding: 10px;
     justify-items: stretch;
     justify-content: center;
     align-content: center;
@@ -4802,7 +5001,7 @@
     text-align: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .detallesReservaCancelarBoton {
+[zonaCSS="/alojamiento/reserva_confirmada"] .detallesReservaCancelarBoton {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
@@ -4810,7 +5009,7 @@
     text-align: center;
 }
 
-[zonaCSS="alojamiento"] .detallesReservaCancelarBoton {
+[zonaCSS="/alojamiento"] .detallesReservaCancelarBoton {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
@@ -4818,7 +5017,7 @@
     text-align: center;
 }
 
-[zonaCSS="alojamiento/resumen"] .detallesReservaCancelarBoton {
+[zonaCSS="/alojamiento/resumen"] .detallesReservaCancelarBoton {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
@@ -4850,7 +5049,7 @@
     justify-content: center;
 }
 
-[zonaCSS="alojamiento"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
+[zonaCSS="/alojamiento"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -4858,7 +5057,7 @@
     justify-content: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -4925,7 +5124,7 @@
     cursor: default;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReservaCancelarBoton {
+[ui="reservaUI"] .detallesReservaCancelarBoton {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
@@ -4936,7 +5135,7 @@
     cursor: default;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_check_botonConfirmar {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_check_botonConfirmar {
     background: #00000036;
     padding: 8px;
     pointer-events: none;
@@ -4945,12 +5144,12 @@
     text-align: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_check_botonConfirmar:hover {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_check_botonConfirmar:hover {
     background: green;
     color: white;
 }
 
-[zonaCSS=alojamiento] .administracion_reservas_detallesReserva_cancelarReserva_botonV1 {
+[zonaCSS="/alojamiento"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1 {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
@@ -4958,7 +5157,7 @@
     text-align: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1 {
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1 {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
@@ -4966,17 +5165,17 @@
     text-align: center;
 }
 
-[zonaCSS=alojamiento] .administracion_reservas_detallesReserva_cancelarReserva_botonV1:hover {
+[zonaCSS="/alojamiento"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1:hover {
     color: white;
     background: red;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1:hover {
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1:hover {
     color: white;
     background: red;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1 {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1 {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
@@ -4984,12 +5183,12 @@
     text-align: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1:hover {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1:hover {
     color: white;
     background: red;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -4997,7 +5196,7 @@
     justify-content: center;
 }
 
-[zonaCSS=alojamiento] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
+[zonaCSS="/alojamiento"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -5005,12 +5204,12 @@
     justify-content: center;
 }
 
-[zonaCSS=alojamiento] .detallesReservaCancelarBoton:hover {
+[zonaCSS="/alojamiento"] .detallesReservaCancelarBoton:hover {
     color: white;
     background: #0040ff;
 }
 
-[zonaCSS="alojamiento/resumen"] .detallesReservaCancelarBoton:hover {
+[zonaCSS="/alojamiento/resumen"] .detallesReservaCancelarBoton:hover {
     color: white;
     background: #0040ff;
 }
@@ -5169,7 +5368,7 @@
     display: none;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .elementoOcultoInicialmente {
+[ui="reservaUI"] .elementoOcultoInicialmente {
     display: none;
 }
 
@@ -5843,11 +6042,22 @@
     align-content: center;
     align-items: stretch;
     justify-content: center;
-    padding: 6px;
+    padding: 0px;
     gap: 6px;
     border-radius: 10px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteUIBotones {
+    display: flex;
+    gap: 6px;
+    border-radius: 10px;
+    justify-content: flex-start;
+    align-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
 }
 
 [zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueHorizontal {
@@ -5855,8 +6065,89 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+    background: #dbdbdb;
+    padding: 16px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueHorizontal {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 10px;
+
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueDato {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    flex-wrap: nowrap;
     justify-content: center;
     gap: 6px;
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteUI {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: stretch;
+    justify-content: center;
+    padding: 0px;
+    gap: 6px;
+    border-radius: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/clientes/editar"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueVertical {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    width: 100%;
+    border-radius: 6px;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteTituloDato {
+    /* padding: 12px; */
+    font-weight: bold;
+    padding: 6px;
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueHorizontalNotas {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 6px;
+    align-content: center;
+    padding: 16px;
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteDatoCampo {
+    resize: none;
 }
 
 @media (max-width: 720px) {
@@ -5895,21 +6186,16 @@
 }
 
 [zonaCSS="administracion/clientes/detalles"] .detallesClienteTituloDato {
-    margin: 0px;
-    padding: 6px;
+    /* padding: 12px; */
     font-weight: bold;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesClienteDatoCampo {
-    margin: 0px;
-    padding: 6px;
-}
 
 [zonaCSS="administracion/clientes/detalles"] .detallesClienteUIBotones {
     display: flex;
     gap: 6px;
     border-radius: 10px;
-    justify-content: center;
+    justify-content: flex-start;
     align-content: center;
     flex-wrap: wrap;
     flex-direction: row;
@@ -5928,8 +6214,8 @@
 }
 
 .detallesClienteCampoEditable {
-    padding: 6px;
-    border-radius: 6px;
+    padding: 12px;
+    border-radius: 10px;
     border: none;
     outline: none;
     resize: none;
@@ -6399,13 +6685,12 @@
     flex-direction: column;
     width: 100%;
     justify-content: flex-start;
-    align-items: center;
-    overflow-x: hidden;
+    align-items: stretch;
 }
 
 
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_contenedorCategoriasGlobales {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorCategoriasGlobales {
     display: flex;
     align-items: stretch;
     flex-direction: column;
@@ -7222,7 +7507,7 @@ grid-template-columns: 0.5fr 1.5fr;
     margin: 0px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .compomentes_ui_totales_ofertas_contenedorConjuntoOferta {
+[ui="reservaUI"] .compomentes_ui_totales_ofertas_contenedorConjuntoOferta {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -8557,7 +8842,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS="miCasa"] .miCasa_marcoIDX_contenedor {
+[zonaCSS="/micasa"] .miCasa_marcoIDX_contenedor {
     padding: 10px;
     border-radius: 25px;
     backdrop-filter: blur(50px);
@@ -8568,7 +8853,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS="miCasa"] .infoCuenta {
+[zonaCSS="/micasa"] .infoCuenta {
     padding: 10px;
     border-radius: 25px;
     backdrop-filter: blur(50px);
@@ -8576,7 +8861,7 @@ grid-template-columns: 0.5fr 1.5fr;
     text-align: center;
 }
 
-[zonaCSS="miCasa"] .enlace {
+[zonaCSS="/micasa"] .enlace {
     text-decoration: none;
     color: black;
     font-weight: bold;
@@ -8584,7 +8869,7 @@ grid-template-columns: 0.5fr 1.5fr;
     height: fit-content;
 }
 
-[zonaCSS="miCasa"] .detallesUsuario_contenedorUsuarioIDX {
+[zonaCSS="/micasa"] .detallesUsuario_contenedorUsuarioIDX {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -8602,11 +8887,11 @@ grid-template-columns: 0.5fr 1.5fr;
     text-align: center;
 }
 
-[zonaCSS="miCasa"] .detallesUsuario_rolUI {
+[zonaCSS="/micasa"] .detallesUsuario_rolUI {
     text-align: center;
 }
 
-[zonaCSS="miCasa"] .miCuenta_cambiarClave_testo {
+[zonaCSS="/micasa"] .miCuenta_cambiarClave_testo {
     padding: 6px;
     margin: 0px;
     display: flex;
@@ -8622,7 +8907,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
 }
 
-[zonaCSS="miCasa"] .miCuenta_cambiarClave_contenedor {
+[zonaCSS="/micasa"] .miCuenta_cambiarClave_contenedor {
     padding: 10px;
     border-radius: 16px;
     gap: 6px;
@@ -8634,7 +8919,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: stretch;
 }
 
-[zonaCSS="miCasa"] .miCuenta_cambiarClave_botonV1 {
+[zonaCSS="/micasa"] .miCuenta_cambiarClave_botonV1 {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
@@ -8644,16 +8929,16 @@ grid-template-columns: 0.5fr 1.5fr;
     cursor: default;
 }
 
-[zonaCSS="miCasa"] .miCuenta_cambiarClave_botonV1:hover {
+[zonaCSS="/micasa"] .miCuenta_cambiarClave_botonV1:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="miCasa"] .miCuenta_cambioClave_contenedorBotones {
+[zonaCSS="/micasa"] .miCuenta_cambioClave_contenedorBotones {
     display: flex;
     justify-content: flex-start;
 }
 
-[zonaCSS="miCasa"] .miCuenta_cambiarClave_campoClave {
+[zonaCSS="/micasa"] .miCuenta_cambiarClave_campoClave {
     outline: none;
     border: none;
     background: rgba(255, 255, 255, 0.3);
@@ -8662,7 +8947,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-[zonaCSS="miCasa"] .detallesUsuario_esferaUsuario {
+[zonaCSS="/micasa"] .detallesUsuario_esferaUsuario {
     background: rgba(255, 255, 255, 0.1);
     background-image: url(/componentes/imagenes/iconoUsuario.svg);
     background-size: cover;
@@ -8680,7 +8965,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 100%;
 }
 
-[zonaCSS="miCasa"] .detallesUsuario_contenedorDatosGlobales {
+[zonaCSS="/micasa"] .detallesUsuario_contenedorDatosGlobales {
     padding: 10px;
 }
 
@@ -8688,7 +8973,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
 }
 
-[zonaCSS="miCasa"] .detallesUsuario_usuarioUI {
+[zonaCSS="/micasa"] .detallesUsuario_usuarioUI {
     font-size: 40px;
     font-weight: bold;
 }
@@ -8699,12 +8984,12 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 @media (max-width: 720px) {
-    [zonaCSS="miCasa"] .detallesUsuario_esferaUsuario {
+    [zonaCSS="/micasa"] .detallesUsuario_esferaUsuario {
         height: 80px;
         width: 80px;
     }
 
-    [zonaCSS="miCasa"] .detallesUsuario_usuarioUI {
+    [zonaCSS="/micasa"] .detallesUsuario_usuarioUI {
         font-weight: bold;
     }
 
@@ -8712,7 +8997,7 @@ grid-template-columns: 0.5fr 1.5fr;
         font-weight: bold;
     }
 
-    [zonaCSS="miCasa"] .detallesUsuario_contenedorGlobal {
+    [zonaCSS="/micasa"] .detallesUsuario_contenedorGlobal {
         border-radius: 16px;
     }
 
@@ -8758,7 +9043,7 @@ grid-template-columns: 0.5fr 1.5fr;
         text-align: left;
     }
 
-    [zonaCSS="miCasa"] .miCasa_marcoIDX_contenedor {
+    [zonaCSS="/micasa"] .miCasa_marcoIDX_contenedor {
         padding: 10px;
         border-radius: 25px;
         backdrop-filter: blur(50px);
@@ -8769,14 +9054,14 @@ grid-template-columns: 0.5fr 1.5fr;
         align-items: flex-start;
     }
 
-    [zonaCSS="miCasa"] .detallesUsuario_contenedorUsuarioIDX {
+    [zonaCSS="/micasa"] .detallesUsuario_contenedorUsuarioIDX {
         display: flex;
         align-items: center;
         justify-content: flex-start;
         flex-direction: row;
     }
 
-    [zonaCSS="miCasa"] .detallesUsuario_rolUI {
+    [zonaCSS="/micasa"] .detallesUsuario_rolUI {
         text-align: left;
     }
 }
@@ -8816,7 +9101,7 @@ grid-template-columns: 0.5fr 1.5fr;
     color: white;
 }
 
-[zonaCSS="miCasa"] .detallesUsuario_contenedorDatosUsuario {
+[zonaCSS="/micasa"] .detallesUsuario_contenedorDatosUsuario {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     border-radius: 20px;
@@ -8842,7 +9127,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-[zonaCSS="miCasa"] .detallesUsuario_campoDatosUsuario {
+[zonaCSS="/micasa"] .detallesUsuario_campoDatosUsuario {
     padding: 10px;
     border-radius: 10px;
     font-size: 13;
@@ -8864,7 +9149,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="miCasa"] .detallesUsuario_contenedorCampoEInfo {
+[zonaCSS="/micasa"] .detallesUsuario_contenedorCampoEInfo {
     border-radius: 16px;
     text-decoration: none;
     color: black;
@@ -8890,7 +9175,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-[zonaCSS="miCasa"] .detallesUsuario_contenedorBotones {
+[zonaCSS="/micasa"] .detallesUsuario_contenedorBotones {
     display: flex;
     border-radius: 16px;
     gap: 6px;
@@ -8912,7 +9197,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: none;
 }
 
-[zonaCSS="miCasa"] .detallesUsuario_botonV1 {
+[zonaCSS="/micasa"] .detallesUsuario_botonV1 {
     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -8936,7 +9221,7 @@ grid-template-columns: 0.5fr 1.5fr;
     cursor: default;
 }
 
-[zonaCSS="miCasa"] .marcoCuenta .tituloDato {
+[zonaCSS="/micasa"] .marcoCuenta .tituloDato {
     padding: 8px;
     user-select: none;
     -webkit-user-select: none;
@@ -9018,7 +9303,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 6px;
 }
 
-[zonaCSS="alojamiento/resumen"] .selectorCama {
+[zonaCSS="/alojamiento/resumen"] .selectorCama {
     border-radius: 10px;
     padding: 10px;
     border: none;
@@ -9030,7 +9315,7 @@ grid-template-columns: 0.5fr 1.5fr;
     transition: background 250ms linear;
 }
 
-[zonaCSS="alojamiento/resumen"] .selectorCama:hover {
+[zonaCSS="/alojamiento/resumen"] .selectorCama:hover {
     background: rgba(255, 255, 255, 0.7);
 }
 
@@ -9044,7 +9329,7 @@ grid-template-columns: 0.5fr 1.5fr;
     appearance: none;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .usuariosCrearCuenta_campoUsuario {
+[ui="reservaUI"] .usuariosCrearCuenta_campoUsuario {
     border-radius: 10px;
     padding: 10px;
     border: none;
@@ -9074,7 +9359,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="miCasa"] .miCasa_sessiones_contenedorSession {
+[zonaCSS="/micasa"] .miCasa_sessiones_contenedorSession {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 16px;
     padding: 6px;
@@ -9085,7 +9370,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-[zonaCSS="miCasa"] .miCasa_sessiones_contenedorBloque {
+[zonaCSS="/micasa"] .miCasa_sessiones_contenedorBloque {
     display: flex;
     gap: 2px;
     border-radius: 10px;
@@ -9093,7 +9378,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
 }
 
-[zonaCSS="miCasa"] .miCasa_sessiones_textoIP {
+[zonaCSS="/micasa"] .miCasa_sessiones_textoIP {
     display: flex;
     gap: 2px;
     border-radius: 10px;
@@ -9101,12 +9386,12 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
 }
 
-[zonaCSS="miCasa"] .miCasa_sessiones_texto {
+[zonaCSS="/micasa"] .miCasa_sessiones_texto {
     display: flex;
     flex-direction: column;
 }
 
-[zonaCSS="miCasa"] .miCasa_sessiones_marcoGlobal {
+[zonaCSS="/micasa"] .miCasa_sessiones_marcoGlobal {
     display: flex;
     gap: 6px;
     padding: 10px;
@@ -9117,7 +9402,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-[zonaCSS="miCasa"] .miCasa_sessiones_botonCerrarSession {
+[zonaCSS="/micasa"] .miCasa_sessiones_botonCerrarSession {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 10px;
@@ -9131,11 +9416,11 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-user-select: none;
 }
 
-[zonaCSS="miCasa"] .miCasa_sessiones_botonCerrarSession:hover {
+[zonaCSS="/micasa"] .miCasa_sessiones_botonCerrarSession:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="miCasa"] .miCasa_sessiones_botonV2 {
+[zonaCSS="/micasa"] .miCasa_sessiones_botonV2 {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
     padding: 10px;
@@ -9154,7 +9439,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="miCasa"] .miCasa_sessiones_marcoBotones {
+[zonaCSS="/micasa"] .miCasa_sessiones_marcoBotones {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -9162,7 +9447,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
 }
 
-[zonaCSS="miCasa"] .miCasa_marcoUsuario {
+[zonaCSS="/micasa"] .miCasa_marcoUsuario {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -9174,7 +9459,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
 }
 
-[zonaCSS="miCasa"] .miCasa_marcoUsuario_opcion {
+[zonaCSS="/micasa"] .miCasa_marcoUsuario_opcion {
     background-color: rgba(255, 255, 255, 0.4);
     padding: 10px;
     border-radius: 16px;
@@ -9192,7 +9477,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-[zonaCSS="miCasa"] .miCasa_crearCuenta_contenedorCrearCuenta {
+[zonaCSS="/micasa"] .miCasa_crearCuenta_contenedorCrearCuenta {
     /* background: rgba(255, 255, 255, 0.3);*/
     border-radius: 16px;
     padding: 6px;
@@ -9203,7 +9488,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-[zonaCSS="miCasa"] .miCasa_crearCuenta_campo {
+[zonaCSS="/micasa"] .miCasa_crearCuenta_campo {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
     padding: 10px;
@@ -9315,7 +9600,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: none;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_campoNombreEnlace {
+[ui="reservaUI"] .detallesReserva_campoNombreEnlace {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
     padding: 10px;
@@ -9539,7 +9824,7 @@ grid-template-columns: 0.5fr 1.5fr;
     transition: all 200ms linear;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reembolso_tituloGlobal {
+[ui="reservaUI"] .detallesReserva_reembolso_tituloGlobal {
     font-size: 20px;
     font-weight: bold;
     margin: 4px;
@@ -9550,14 +9835,14 @@ grid-template-columns: 0.5fr 1.5fr;
     overflow-wrap: anywhere;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reembolso_campoConfirmacion {
+[ui="reservaUI"] .detallesReserva_reembolso_campoConfirmacion {
     padding: 9px;
     outline: none;
     border: none;
     border-radius: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reembolso_bloqueInterno_campoConfiramcion {
+[ui="reservaUI"] .detallesReserva_reembolso_bloqueInterno_campoConfiramcion {
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -9624,7 +9909,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_rembolso_contenedorEmitirReembolso {
+[ui="reservaUI"] .detallesReserva_rembolso_contenedorEmitirReembolso {
     background: rgba(255, 255, 255, 0.3);
     display: flex;
     flex-direction: column;
@@ -9635,14 +9920,14 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reembolso_campo {
+[ui="reservaUI"] .detallesReserva_reembolso_campo {
     padding: 10px;
     border-radius: 10px;
     outline: none;
     border: none;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reemboldo_bloqueEmitirReembolso {
+[ui="reservaUI"] .detallesReserva_reemboldo_bloqueEmitirReembolso {
     gap: 6px;
     row-gap: 6px;
     column-gap: 6px;
@@ -9652,11 +9937,11 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: stretch;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reembolso_emitirReembolso_texto {
+[ui="reservaUI"] .detallesReserva_reembolso_emitirReembolso_texto {
     padding: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reembolso_emitirReembolso_contenedorBotones {
+[ui="reservaUI"] .detallesReserva_reembolso_emitirReembolso_contenedorBotones {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(380px, 2fr));
     gap: 6px;
@@ -9667,7 +9952,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 12px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reembolso_emitirReembolso_botonTipoReembolso {
+[ui="reservaUI"] .detallesReserva_reembolso_emitirReembolso_botonTipoReembolso {
     background: rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
@@ -9679,7 +9964,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reembolso_emitirReembolso_contenedorTipoReembolsos {
+[ui="reservaUI"] .detallesReserva_reembolso_emitirReembolso_contenedorTipoReembolsos {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     grid-gap: 6px;
@@ -9690,7 +9975,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_rembolso_contenedorDiamicoTipo {
+[ui="reservaUI"] .detallesReserva_rembolso_contenedorDiamicoTipo {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -9698,7 +9983,7 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_rembolso_contenedorPorCantidad {
+[ui="reservaUI"] .detallesReserva_rembolso_contenedorPorCantidad {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -9706,7 +9991,7 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_rembolso_contenedorPorPorcentaje {
+[ui="reservaUI"] .detallesReserva_rembolso_contenedorPorPorcentaje {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -9714,7 +9999,7 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_transacciones_bloqueGlobal {
+[ui="reservaUI"] .detallesReserva_transacciones_bloqueGlobal {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -9724,7 +10009,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: stretch;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_transacciones_bloqueDatosGenerales {
+[ui="reservaUI"] .detallesReserva_transacciones_bloqueDatosGenerales {
     background: rgba(255, 255, 255, 0.4);
     display: flex;
     flex-direction: row;
@@ -9737,7 +10022,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: space-between;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_enlacesDePago_botonV1 {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_botonV1 {
     background: rgba(255, 255, 255, 0.4);
     display: flex;
     border-radius: 11px;
@@ -9753,16 +10038,16 @@ grid-template-columns: 0.5fr 1.5fr;
     cursor: default;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_enlacesDePago_botonV1:hover {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_botonV1:hover {
     background: white;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_enlacesDePago_botonCopiarPulsacion:active {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_botonCopiarPulsacion:active {
     background: black;
     color: white;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_enlacesDePago_contenedorBotones {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_contenedorBotones {
     display: flex;
     gap: 4px;
 }
@@ -9773,7 +10058,7 @@ grid-template-columns: 0.5fr 1.5fr;
     }
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_transacciones_bloqueBotones {
+[ui="reservaUI"] .detallesReserva_transacciones_bloqueBotones {
     display: flex;
     justify-items: end;
     justify-content: flex-start;
@@ -9783,7 +10068,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 0px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_enlacesDePago_bloqueBotones {
+[ui="reservaUI"] .detallesReserva_enlacesDePago_bloqueBotones {
     display: flex;
     justify-items: end;
     justify-content: flex-start;
@@ -9793,7 +10078,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 0px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_transacciones_botonV1 {
+[ui="reservaUI"] .detallesReserva_transacciones_botonV1 {
     display: flex;
     padding: 10px;
     border-radius: 11px;
@@ -9804,7 +10089,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-user-select: none;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_transacciones_botonV1:hover {
+[ui="reservaUI"] .detallesReserva_transacciones_botonV1:hover {
     background: white;
 }
 
@@ -9819,7 +10104,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: space-around;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reservaDetalles_transacciones_bloqueDetallesDelPago {
+[ui="reservaUI"] .reservaDetalles_transacciones_bloqueDetallesDelPago {
     /* border: 1px solid rgba(0, 0, 0, 0.1); */
     padding: 10px;
     border-radius: 9px;
@@ -9831,11 +10116,23 @@ grid-template-columns: 0.5fr 1.5fr;
     background: #0000001c;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reservaDetalles_transacciones_bloqueDetallesDelPago:hover {
+[ui="reservaUI"] .reservaDetalles_transacciones_bloque_miCasa {
+    /* border: 1px solid rgba(0, 0, 0, 0.1); */
+    padding: 10px;
+    border-radius: 9px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 4px;
+    background: #0000001c;
+}
+
+[ui="reservaUI"] .reservaDetalles_transacciones_bloqueDetallesDelPago:hover {
     background: rgba(0, 0, 0, 0.3);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_contenedorDinamico {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorDinamico {
     border-radius: 12px;
     background-color: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
@@ -9850,7 +10147,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: stretch;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .infoBuscando {
+[ui="reservaUI"] .infoBuscando {
     padding: 10px;
 }
 
@@ -9861,20 +10158,20 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_contenedorListaDePagos {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorListaDePagos {
     display: flex;
     flex-direction: column;
     padding: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_enlacesDePago_contenedorEnlacesDePago {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_enlacesDePago_contenedorEnlacesDePago {
     display: flex;
     gap: 4px;
     flex-direction: column;
     padding: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_contenedorListaEnlacesDePago {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorListaEnlacesDePago {
     display: flex;
     gap: 4px;
     flex-direction: column;
@@ -10129,7 +10426,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: white;
 }
 
-[zonaCSS="miCasa"] .miCasa_reservas_detallesReservas_marcoAlojamiento {
+[zonaCSS="/micasa"] .miCasa_reservas_detallesReservas_marcoAlojamiento {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
@@ -10141,7 +10438,7 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 4px;
 }
 
-[zonaCSS="miCasa"] .miCasa_reservas_detallesReservas_contenedorGeneralReserva {
+[zonaCSS="/micasa"] .miCasa_reservas_detallesReservas_contenedorGeneralReserva {
     /* height: 100%; */
     display: flex;
     flex-direction: column;
@@ -10155,21 +10452,21 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 6px;
 }
 
-[zonaCSS=alojamiento] .administracion_reservas_detallesReservas_contenedorTotales {
+[zonaCSS="/alojamiento"] .administracion_reservas_detallesReservas_contenedorTotales {
     display: flex;
     padding: 16px;
     gap: 10px;
     flex-direction: column;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_contenedorTotales {
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_contenedorTotales {
     display: flex;
     padding: 16px;
     gap: 10px;
     flex-direction: column;
 }
 
-[zonaCSS="miCasa"] .miCasa_reservas_detallesReservas_contenedorTotales {
+[zonaCSS="/micasa"] .miCasa_reservas_detallesReservas_contenedorTotales {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
@@ -10191,7 +10488,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: flex-start;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserfa_miscelanea_botonOpcion {
+[ui="reservaUI"] .administracion_reservas_detallesReserfa_miscelanea_botonOpcion {
     cursor: default;
     user-select: none;
     text-decoration: none;
@@ -10203,11 +10500,11 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserfa_miscelanea_botonOpcion:hover {
+[ui="reservaUI"] .administracion_reservas_detallesReserfa_miscelanea_botonOpcion:hover {
     background-color: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReserva_reembolso_infoGlobal {
+[ui="reservaUI"] .detallesReserva_reembolso_infoGlobal {
     display: flex;
     justify-content: center;
     padding: 8px;
@@ -10238,7 +10535,7 @@ grid-template-columns: 0.5fr 1.5fr;
     }
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_enlacesDePago_contenedorDatosEnlace {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_contenedorDatosEnlace {
     display: flex;
     gap: 10px;
     padding: 4px;
@@ -10270,15 +10567,15 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 20px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_tituloReembolso {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_tituloReembolso {
     margin: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloque {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloque {
     margin: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle {
     display: flex;
     flex-direction: column;
     padding: 6px;
@@ -10288,19 +10585,19 @@ grid-template-columns: 0.5fr 1.5fr;
     overflow-wrap: anywhere;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorReembolso {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorReembolso {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorCrearReembolso {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorCrearReembolso {
     display: none;
     flex-direction: column;
     gap: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_reservaDetalles_transacciones_reembolsos_bloqueDetallePago {
+[ui="reservaUI"] .administracion_reservas_reservaDetalles_transacciones_reembolsos_bloqueDetallePago {
     background: rgba(0, 0, 0, 0.1);
     padding: 14px;
     border-radius: 9px;
@@ -10311,12 +10608,12 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 10px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_reservaDetalles_transacciones_reembolsos_tituloDetallesPago {
+[ui="reservaUI"] .administracion_reservas_reservaDetalles_transacciones_reembolsos_tituloDetallesPago {
     margin: 0px;
     padding: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_reservaDetalles_transacciones_reembolsos_bloqueTitulo {
+[ui="reservaUI"] .administracion_reservas_reservaDetalles_transacciones_reembolsos_bloqueTitulo {
     border-radius: 12px;
     padding: 4px;
     gap: 4px;
@@ -10328,30 +10625,34 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: stretch;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorBotones {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorBotones {
     border-radius: 12px;
-    gap: 6px;
+    gap: 10px;
     display: flex;
     justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_transacciones_reembolsos_botonV1 {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_botonV1 {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
+    text-align: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .boton_opciones_reembolso_v2 {
+[ui="reservaUI"] .boton_opciones_reembolso_v2 {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_transacciones_reembolsos_botonV1:hover {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_botonV1:hover {
     background: white;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_transacciones_reembolsos_detallesReembolso_contenedorBotones {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_detallesReembolso_contenedorBotones {
     border-radius: 12px;
     gap: 6px;
     display: flex;
@@ -10360,12 +10661,13 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_transacciones_contenedorListaDePagos {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_transacciones_contenedorListaDePagos {
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_transacciones_pagoManual_contenedorTipoPago {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_pagoManual_contenedorTipoPago {
     display: none;
     flex-direction: column;
     align-items: stretch;
@@ -10403,7 +10705,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 0px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_infoTitular_contenedorGlobal {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_infoTitular_contenedorGlobal {
     background: rgb(255 255 255 / 0.3);
     border-radius: 10px;
     padding: 10px;
@@ -10412,7 +10714,7 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_checkin_infoTitular_contenedorGlobal {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_checkin_infoTitular_contenedorGlobal {
     background: rgb(255 255 255 / 0.3);
     border-radius: 20px;
     padding: 20px;
@@ -10421,11 +10723,12 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 6px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .reservaDetalles_transacciones_textoV1 {
+[ui="reservaUI"] .reservaDetalles_transacciones_textoV1 {
     padding: 6px;
+    text-align: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReserva_transacciones_eliminarPagoManual {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_eliminarPagoManual {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -10435,7 +10738,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 10px;
 }
 
-[zonaCSS="alojamiento/resumen"] .campoTitular {
+[zonaCSS="/alojamiento/resumen"] .campoTitular {
     padding: 20px;
     border-radius: 16px;
     outline: none;
@@ -10444,17 +10747,17 @@ grid-template-columns: 0.5fr 1.5fr;
     transition: background 250ms linear;
 }
 
-[zonaCSS="alojamiento/resumen"] .campoTitular:hover {
+[zonaCSS="/alojamiento/resumen"] .campoTitular:hover {
     background: rgba(255, 255, 255, 0.7);
     color: black;
 }
 
-[zonaCSS="alojamiento/resumen"] .campoTitular::selection {
+[zonaCSS="/alojamiento/resumen"] .campoTitular::selection {
     background: rgba(255, 255, 255);
     color: black;
 }
 
-[zonaCSS="alojamiento/resumen"] .plaza_alojamiento_resumenReserva_titular_contenedor {
+[zonaCSS="/alojamiento/resumen"] .plaza_alojamiento_resumenReserva_titular_contenedor {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -10462,7 +10765,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 14px;
 }
 
-[zonaCSS="alojamiento/resumen"] .plaza_alojamiento_resumenReserva_titular_informacion {
+[zonaCSS="/alojamiento/resumen"] .plaza_alojamiento_resumenReserva_titular_informacion {
     display: flex;
     justify-content: center;
     font-weight: bold;
@@ -10491,7 +10794,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-animation-iteration-count: infinite;
 }
 
-[zonaCSS=alojamiento] .parpadeaFondoTransparente {
+[zonaCSS="/alojamiento"] .parpadeaFondoTransparente {
     animation-name: parpadeaFondoTransparente;
     animation-duration: 1450ms;
     animation-timing-function: linear;
@@ -10615,19 +10918,19 @@ grid-template-columns: 0.5fr 1.5fr;
     color: white;
 }
 
-[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_infoGlobal {
+[zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_infoGlobal {
     padding: 16px;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 16px;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_infoGlobal {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_infoGlobal {
     padding: 16px;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 16px;
 }
 
-[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_infoIngreso {
+[zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_infoIngreso {
     text-align: center;
     display: flex;
     padding: 16px;
@@ -10640,7 +10943,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_infoIngreso {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_infoIngreso {
     text-align: center;
     display: flex;
     padding: 16px;
@@ -10653,7 +10956,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_contenedor {
+[zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_contenedor {
     background: white;
     border-radius: 16px;
     display: flex;
@@ -10663,7 +10966,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: nowrap;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedor {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedor {
     background: white;
     border-radius: 16px;
     display: flex;
@@ -10673,7 +10976,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: nowrap;
 }
 
-[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_contenedorFechas {
+[zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_contenedorFechas {
     display: flex;
     flex-direction: row;
     align-items: stretch;
@@ -10681,7 +10984,7 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 4px;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorFechas {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorFechas {
     display: flex;
     flex-direction: row;
     align-items: stretch;
@@ -10689,7 +10992,7 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 4px;
 }
 
-[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_contenedorFechas_contenedorFecha {
+[zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_contenedorFechas_contenedorFecha {
     border-radius: 10px;
     padding: 10px;
     display: flex;
@@ -10697,7 +11000,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorFechas_contenedorFecha {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorFechas_contenedorFecha {
     border-radius: 10px;
     padding: 10px;
     display: flex;
@@ -10705,7 +11008,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular {
     padding: 10px;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
@@ -10713,15 +11016,15 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_contenedorFechas_contenedorFecha_fecha {
+[zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_contenedorFechas_contenedorFecha_fecha {
     font-size: 20px;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorFechas_contenedorFecha_fecha {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorFechas_contenedorFecha_fecha {
     font-size: 20px;
 }
 
-[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
+[zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
@@ -10730,7 +11033,7 @@ grid-template-columns: 0.5fr 1.5fr;
         ". . . .";
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
@@ -10740,7 +11043,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 @media (max-width: 720px) {
-    [zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
+    [zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
@@ -10750,7 +11053,7 @@ grid-template-columns: 0.5fr 1.5fr;
             ". .";
     }
 
-    [zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
+    [zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
@@ -10781,7 +11084,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_botonV1 {
+[zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_botonV1 {
     display: flex;
     font-weight: bold;
     justify-content: center;
@@ -10794,7 +11097,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-user-select: none;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_botonV1 {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_botonV1 {
     display: flex;
     font-weight: bold;
     justify-content: center;
@@ -10807,7 +11110,7 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-user-select: none;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_botonV1:hover {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_botonV1:hover {
     background: rgba(255, 255, 255, 0.9);
 }
 
@@ -10815,7 +11118,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.9);
 }
 
-[zonaCSS=alojamiento] .administracion_reservas_detallesReservas_contenedorReservaUID {
+[zonaCSS="/alojamiento"] .administracion_reservas_detallesReservas_contenedorReservaUID {
     display: flex;
     justify-content: center;
     align-content: center;
@@ -10824,7 +11127,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_contenedorReservaUID {
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_contenedorReservaUID {
     display: flex;
     justify-content: center;
     align-content: center;
@@ -10833,29 +11136,29 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS=alojamiento] .administracion_reservas_detallesReservas_contenedorResevaUID_UID {
+[zonaCSS="/alojamiento"] .administracion_reservas_detallesReservas_contenedorResevaUID_UID {
     font-size: 20px;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_contenedorResevaUID_UID {
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_contenedorResevaUID_UID {
     font-size: 20px;
 }
 
-[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular_bloque {
+[zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular_bloque {
     display: flex;
     flex-direction: column;
     align-content: center;
     align-items: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular_bloque {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular_bloque {
     display: flex;
     flex-direction: column;
     align-content: center;
     align-items: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTotales_TituloTotal {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTotales_TituloTotal {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -10921,7 +11224,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_banner {
+[zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_banner {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
@@ -10938,7 +11241,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS=alojamiento] .plaza_reservas_reservaConfirmada_banner:hover {
+[zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_banner:hover {
     background: rgba(255, 255, 255, 0.8);
 }
 
@@ -10964,7 +11267,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.8);
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF {
     text-decoration: none;
     background: rgb(255 255 255 / 0.3);
     border-radius: 10px;
@@ -10976,7 +11279,7 @@ grid-template-columns: 0.5fr 1.5fr;
     transition: all 500ms;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF {
     text-decoration: none;
     background: rgb(255 255 255 / 0.3);
     border-radius: 10px;
@@ -10988,15 +11291,15 @@ grid-template-columns: 0.5fr 1.5fr;
     transition: all 500ms;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF:hover {
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF:hover {
     background: white;
 }
 
-[zonaCSS=alojamiento] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF:hover {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF:hover {
     background: white;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF {
+[ui="reservaUI"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF {
     text-decoration: none;
     background: rgb(255 255 255 / 0.3);
     border-radius: 10px;
@@ -11008,7 +11311,7 @@ grid-template-columns: 0.5fr 1.5fr;
     transition: all 500ms;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF:hover {
+[ui="reservaUI"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF:hover {
     background: white;
 }
 
@@ -11084,7 +11387,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_calendario_contenedorCalentadioIntermedio {
+[ui="reservaUI"] .administracion_calendario_contenedorCalentadioIntermedio {
     display: flex;
     /* width: 100%; */
     /* max-width: 720px; */
@@ -11151,40 +11454,33 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 4px;
 }
 
-[zonaCSS="alojamiento/resumen"] .componentes_ui_desloseTotales_contenedor,
-[zonaCSS="alojamiento/reserva_confirmada"] .componentes_ui_desloseTotales_contenedor {
+[zonaCSS="/alojamiento/resumen"] .componentes_ui_desloseTotales_contenedor,
+[zonaCSS="/alojamiento/reserva_confirmada"] .componentes_ui_desloseTotales_contenedor {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-[zonaCSS="miCasa"] .componentes_ui_desloseTotales_contenedor {
+[zonaCSS="/micasa"] .componentes_ui_desloseTotales_contenedor {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .componentes_ui_desloseTotales_contenedor {
+[ui="reservaUI"] .componentes_ui_desloseTotales_contenedor {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reserver_detallesReserva_contenedorDesgloseTotal {
+[ui="reservaUI"] .administracion_reserver_detallesReserva_contenedorDesgloseTotal {
     display: flex;
     flex-direction: column;
     align-items: stretch;
 }
 
 .componentes_ui_paginador_listaResponsiva {
-    padding: 6px;
-    border-radius: 8px;
-    outline: none;
-    user-select: none;
-    -webkit-user-select: none;
-    cursor: default;
-    border: none;
-    background: rgba(255, 255, 255, 0.3);
+
     display: none;
 }
 
@@ -11229,7 +11525,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
 }
 
-[zonaCSS="alojamiento/resumen"] .compomentes_ui_totales_ofertas_contenedorConjuntoOferta {
+[zonaCSS="/alojamiento/resumen"] .compomentes_ui_totales_ofertas_contenedorConjuntoOferta {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -11255,7 +11551,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
 }
 
-[zonaCSS="contacto"] .plaza_contacto_gridContacto {
+[zonaCSS="/contacto"] .plaza_contacto_gridContacto {
     display: grid;
     grid-template-columns: 2fr 1fr;
     grid-template-rows: 1fr;
@@ -11269,26 +11565,26 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 @media (max-width: 720px) {
-    [zonaCSS="contacto"] .plaza_contacto_gridContacto {
+    [zonaCSS="/contacto"] .plaza_contacto_gridContacto {
         display: flex;
         flex-direction: column;
         align-items: stretch;
     }
 }
 
-[zonaCSS="contacto"] .plaza_contacto_tituloInfo {
+[zonaCSS="/contacto"] .plaza_contacto_tituloInfo {
     margin: 0px;
     padding: 6px;
     color: white;
     font-weight: bold;
 }
 
-[zonaCSS="contacto"] .plaza_contacto_tituloContenedor {
+[zonaCSS="/contacto"] .plaza_contacto_tituloContenedor {
     color: white;
     margin: 0px;
 }
 
-[zonaCSS="contacto"] .plaza_contacto_datoContenedor {
+[zonaCSS="/contacto"] .plaza_contacto_datoContenedor {
     font-size: 16px;
     color: white;
     margin: 0px;
@@ -11296,11 +11592,11 @@ grid-template-columns: 0.5fr 1.5fr;
     text-decoration: none;
 }
 
-[zonaCSS="contacto"] .plaza_contacto_contenedorInformacion {
+[zonaCSS="/contacto"] .plaza_contacto_contenedorInformacion {
     padding: 6px;
 }
 
-[zonaCSS="contacto"] .plaza_contacto_cuadrado {
+[zonaCSS="/contacto"] .plaza_contacto_cuadrado {
     background: rgba(0, 0, 0, 0.1);
     border-radius: 20px;
     color: rgba(0, 0, 0, 0.6);
@@ -11318,7 +11614,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
 }
 
-[zonaCSS="contacto"] .marcoParaGoogleMaps {
+[zonaCSS="/contacto"] .marcoParaGoogleMaps {
     overflow: hidden;
     border-radius: 20px;
     display: flex;
@@ -11327,7 +11623,7 @@ grid-template-columns: 0.5fr 1.5fr;
     height: 100%;
 }
 
-[zonaCSS="contacto"] .frameGoogleMaps {
+[zonaCSS="/contacto"] .frameGoogleMaps {
     height: 100%;
     border-radius: 20px;
 }
@@ -11336,7 +11632,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: green;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reservas_detallesReservas_check_contenedor {
+[ui="reservaUI"] .administracion_reservas_detallesReservas_check_contenedor {
     padding: 10px;
     display: flex;
     gap: 6px;
@@ -11898,7 +12194,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: flex-start;
 }
 
-[zonaCSS="alojamiento/resumen"] .plaza_resumenReserva_contenedorTotalAPagar {
+[zonaCSS="/alojamiento/resumen"] .plaza_resumenReserva_contenedorTotalAPagar {
     margin: 13px;
     padding: 10px;
     border-radius: 16px;
@@ -11909,7 +12205,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
-[zonaCSS=alojamiento] .botonDespliegueDesgloseTotal {
+[zonaCSS="/alojamiento"] .botonDespliegueDesgloseTotal {
     margin: 0px;
     font-weight: normal;
     cursor: default;
@@ -11920,7 +12216,7 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 16px;
 }
 
-[zonaCSS="alojamiento/resumen"] .botonDespliegueDesgloseTotal {
+[zonaCSS="/alojamiento/resumen"] .botonDespliegueDesgloseTotal {
     margin: 0px;
     font-weight: normal;
     cursor: default;
@@ -11931,26 +12227,26 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 16px;
 }
 
-[zonaCSS=alojamiento] .botonDespliegueDesgloseTotal:hover {
+[zonaCSS="/alojamiento"] .botonDespliegueDesgloseTotal:hover {
     background: rgba(255, 255, 255, 0.7);
 }
 
-[zonaCSS="alojamiento/resumen"] .botonDespliegueDesgloseTotal:hover {
+[zonaCSS="/alojamiento/resumen"] .botonDespliegueDesgloseTotal:hover {
     background: rgba(255, 255, 255, 0.7);
 }
 
-[zonaCSS="alojamiento/resumen"] .plaza_resumenReserva_totalFinal {
+[zonaCSS="/alojamiento/resumen"] .plaza_resumenReserva_totalFinal {
     font-weight: bold;
     margin: 0px;
     font-size: 16px;
 }
 
-[zonaCSS="alojamiento"] .plaza_resumenReserva_textoInfo {
+[zonaCSS="/alojamiento"] .plaza_resumenReserva_textoInfo {
     font-weight: normal;
     text-align: justify;
 }
 
-[zonaCSS="alojamiento"] .plaza_alojamiento_contenedorEsperaAlojamiento {
+[zonaCSS="/alojamiento"] .plaza_alojamiento_contenedorEsperaAlojamiento {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -12642,7 +12938,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 4px;
 }
 
-[zonaCSS=alojamiento] .bloqueResumenReservaGlobal .formaDePago {
+[zonaCSS="/alojamiento"] .bloqueResumenReservaGlobal .formaDePago {
     padding: 10px;
     outline: none;
     border: none;
@@ -12650,7 +12946,7 @@ grid-template-columns: 0.5fr 1.5fr;
     appearance: none;
 }
 
-[zonaCSS="alojamiento/resumen"] .bloqueResumenReservaGlobal .botonConfirmar {
+[zonaCSS="/alojamiento/resumen"] .bloqueResumenReservaGlobal .botonConfirmar {
     background: rgba(255, 255, 255, 0.3);
     padding: 20px;
     outline: none;
@@ -12667,8 +12963,8 @@ grid-template-columns: 0.5fr 1.5fr;
     cursor: default;
 }
 
-[zonaCSS=alojamiento] .bloqueResumenReservaGlobal .botonConfirmar:hover,
-[zonaCSS="alojamiento/resumen"] .bloqueResumenReservaGlobal .botonConfirmar:hover {
+[zonaCSS="/alojamiento"] .bloqueResumenReservaGlobal .botonConfirmar:hover,
+[zonaCSS="/alojamiento/resumen"] .bloqueResumenReservaGlobal .botonConfirmar:hover {
     background: blue;
     color: white;
 }
@@ -12684,7 +12980,7 @@ grid-template-columns: 0.5fr 1.5fr;
     color: red;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_campo {
+[ui="reservaUI"] .administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_campo {
     outline: none;
     border: none;
     padding: 10px;
@@ -12721,17 +13017,17 @@ grid-template-columns: 0.5fr 1.5fr;
     background: #0040ff;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReservaCancelarBoton:hover {
+[ui="reservaUI"] .detallesReservaCancelarBoton:hover {
     color: white;
     background: #0040ff;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .detallesReservaCancelarBoton:hover {
+[zonaCSS="/alojamiento/reserva_confirmada"] .detallesReservaCancelarBoton:hover {
     color: white;
     background: #0040ff;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] .detallesReservaTituloCancelarReserva {
+[zonaCSS="/alojamiento/reserva_confirmada"] .detallesReservaTituloCancelarReserva {
     font-size: 20px;
     font-weight: bold;
     margin: 4px;
@@ -12801,7 +13097,7 @@ grid-template-columns: 0.5fr 1.5fr;
     text-align: center;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .detallesReservaTituloCancelarReserva {
+[ui="reservaUI"] .detallesReservaTituloCancelarReserva {
     font-size: 20px;
     font-weight: bold;
     margin: 4px;
@@ -12882,7 +13178,7 @@ grid-template-columns: 0.5fr 1.5fr;
     text-align: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal {
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -12892,17 +13188,17 @@ grid-template-columns: 0.5fr 1.5fr;
     text-align: center;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal .tituloContenedor {
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal .tituloContenedor {
     color: black;
     font-weight: bold;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal .totalReserva {
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal .totalReserva {
     margin: 0px;
     font-weight: bold;
 }
 
-[zonaCSS="alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal .info {
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal .info {
     margin: 0px;
     padding: 10px;
     border-radius: 10px;
@@ -12949,11 +13245,11 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgb(255 255 255 / 50%);
 }
 
-[zonaCSS=conozcanos] .texto111 {
+[zonaCSS="/conozcanos"] .texto111 {
     transform: translateY(0) translateZ(0) !important;
 }
 
-[zonaCSS=conozcanos] .fondoInicio {
+[zonaCSS="/conozcanos"] .fondoInicio {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -12961,28 +13257,28 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-[zonaCSS=conozcanos] .fondo1 {
+[zonaCSS="/conozcanos"] .fondo1 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     background-image: url("/componentes/imagenes/fotos/zonas_comunes/image00004.jpeg");
 }
 
-[zonaCSS=conozcanos] .fondo2 {
+[zonaCSS="/conozcanos"] .fondo2 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     background-image: url("/componentes/imagenes/zonas_comunes/image00006.jpeg");
 }
 
-[zonaCSS=conozcanos] .fondo3 {
+[zonaCSS="/conozcanos"] .fondo3 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     background-image: url("/componentes/imagenes/zonas_comunes/image00002.jpeg");
 }
 
-[zonaCSS=conozcanos] .fondo4 {
+[zonaCSS="/conozcanos"] .fondo4 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -12991,35 +13287,35 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
 
-[zonaCSS=conozcanos] .fondo5 {
+[zonaCSS="/conozcanos"] .fondo5 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     background-image: url("/componentes/imagenes/f5.jpeg");
 }
 
-[zonaCSS=conozcanos] .fondo6 {
+[zonaCSS="/conozcanos"] .fondo6 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     background-image: url("/componentes/imagenes/nic.jpeg");
 }
 
-[zonaCSS=conozcanos] .fondo7 {
+[zonaCSS="/conozcanos"] .fondo7 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     background-image: url("/componentes/imagenes/fotos/image00016.jpeg");
 }
 
-[zonaCSS=conozcanos] .fondo8 {
+[zonaCSS="/conozcanos"] .fondo8 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     background-image: url("/componentes/imagenes/montana.jpg");
 }
 
-[zonaCSS=conozcanos] .fondo8 {
+[zonaCSS="/conozcanos"] .fondo8 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -13027,7 +13323,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 /*Parallax*/
-[zonaCSS=conozcanos] .conozcanos .parallax {
+[zonaCSS="/conozcanos"] .conozcanos .parallax {
     /* fallback for older browsers */
     height: 100vh;
     overflow-x: hidden;
@@ -13037,19 +13333,19 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-perspective-origin-x: 100%;
 }
 
-[zonaCSS=conozcanos] .contenedorParalax .texto {
+[zonaCSS="/conozcanos"] .contenedorParalax .texto {
     z-index: 2;
     padding: 40px;
 }
 
-[zonaCSS=conozcanos] .conozcanos .parallax::-webkit-scrollbar {
+[zonaCSS="/conozcanos"] .conozcanos .parallax::-webkit-scrollbar {
     width: 0px;
     /* Ancho del scrollbar */
     height: 0px;
     /* Altura del scrollbar */
 }
 
-[zonaCSS=conozcanos] .conozcanos .parallax__group {
+[zonaCSS="/conozcanos"] .conozcanos .parallax__group {
     position: relative;
     height: 500px;
     /* fallback for older browsers */
@@ -13058,7 +13354,7 @@ grid-template-columns: 0.5fr 1.5fr;
     transform-style: preserve-3d;
 }
 
-[zonaCSS=conozcanos] .conozcanos .parallax__layer {
+[zonaCSS="/conozcanos"] .conozcanos .parallax__layer {
     position: absolute;
     top: 0;
     left: 0;
@@ -13069,24 +13365,24 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 /*Modifcaciones dev*/
-[zonaCSS=conozcanos] .conozcanos .rojo {
+[zonaCSS="/conozcanos"] .conozcanos .rojo {
     /*   background: #ff00007a; */
     background: grey;
     /* backdrop-filter: blur(100px);*/
 }
 
-[zonaCSS=conozcanos] .conozcanos .azul {
+[zonaCSS="/conozcanos"] .conozcanos .azul {
     background: blue;
 }
 
-[zonaCSS=conozcanos] .conozcanos .turquesa {
+[zonaCSS="/conozcanos"] .conozcanos .turquesa {
     background: turquoise;
 }
 
 
 
 /*fin modificaciones*/
-[zonaCSS=conozcanos] .conozcanos .capaFondoFinal {
+[zonaCSS="/conozcanos"] .conozcanos .capaFondoFinal {
     background-color: cornflowerblue;
     position: absolute;
     height: 100%;
@@ -13094,13 +13390,13 @@ grid-template-columns: 0.5fr 1.5fr;
     z-index: -10;
 }
 
-[zonaCSS=conozcanos] .conozcanos .parallax__layer--fore {
+[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--fore {
     -webkit-transform: translateZ(90px) scale(.7);
     transform: translateZ(90px) scale(.7);
     z-index: 1;
 }
 
-[zonaCSS=conozcanos] .conozcanos .parallax__layer--base {
+[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--base {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     z-index: 4;
@@ -13109,20 +13405,20 @@ grid-template-columns: 0.5fr 1.5fr;
     overflow: hidden;
 }
 
-[zonaCSS=conozcanos] .conozcanos .parallax__layer--back {
+[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--back {
     -webkit-transform: translateZ(-300px) scale(2);
     transform: translateZ(-300px) scale(2);
     z-index: 3;
 }
 
-[zonaCSS=conozcanos] .conozcanos .parallax__layer--deep {
+[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--deep {
     -webkit-transform: translateZ(-600px) scale(3);
     transform: translateZ(-600px) scale(3);
     z-index: 2;
 }
 
 /* centre the content in the parallax layers */
-[zonaCSS=conozcanos] .conozcanos .title {
+[zonaCSS="/conozcanos"] .conozcanos .title {
     color: white;
     text-align: center;
     position: absolute;
@@ -13134,13 +13430,13 @@ grid-template-columns: 0.5fr 1.5fr;
     font-size: 15px;
 }
 
-[zonaCSS=conozcanos] .conozcanos .textoAnterior {
+[zonaCSS="/conozcanos"] .conozcanos .textoAnterior {
     top: -50vh;
     color: white;
     font-size: 30px;
 }
 
-[zonaCSS=conozcanos] .conozcanos .ultimoTexto {
+[zonaCSS="/conozcanos"] .conozcanos .ultimoTexto {
     top: 225vh;
     color: white;
     font-size: 30px;
@@ -13148,39 +13444,39 @@ grid-template-columns: 0.5fr 1.5fr;
 
 /* style the groups
   --------------------------------------------- */
-[zonaCSS=conozcanos] .conozcanos #group1 {
+[zonaCSS="/conozcanos"] .conozcanos #group1 {
     z-index: 10;
 }
 
-[zonaCSS=conozcanos] .conozcanos #group2 {
+[zonaCSS="/conozcanos"] .conozcanos #group2 {
     z-index: 11;
 }
 
-[zonaCSS=conozcanos] .conozcanos #group3 {
+[zonaCSS="/conozcanos"] .conozcanos #group3 {
     z-index: 9;
 }
 
-[zonaCSS=conozcanos] .conozcanos #group4 {
+[zonaCSS="/conozcanos"] .conozcanos #group4 {
     z-index: 11;
 }
 
-[zonaCSS=conozcanos] .conozcanos #group5 {
+[zonaCSS="/conozcanos"] .conozcanos #group5 {
     z-index: 3;
 }
 
-[zonaCSS=conozcanos] .conozcanos #group6 {
+[zonaCSS="/conozcanos"] .conozcanos #group6 {
     z-index: 4;
 }
 
-[zonaCSS=conozcanos] .conozcanos #group7 {
+[zonaCSS="/conozcanos"] .conozcanos #group7 {
     z-index: 2;
 }
 
-[zonaCSS=conozcanos] .conozcanos #group8 {
+[zonaCSS="/conozcanos"] .conozcanos #group8 {
     z-index: 3;
 }
 
-[zonaCSS=conozcanos] .conozcanos .transparente {
+[zonaCSS="/conozcanos"] .conozcanos .transparente {
     background: transparent;
 }
 
@@ -13437,7 +13733,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 
-[zonaCSS=conozcanos] .texto_v2_parallax {
+[zonaCSS="/conozcanos"] .texto_v2_parallax {
     font-size: 50px;
     font-weight: bold;
     color: white;
@@ -13451,7 +13747,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-[zonaCSS=conozcanos] [animacion="contenedorTexto"] {
+[zonaCSS="/conozcanos"] [animacion="contenedorTexto"] {
     view-timeline-name: --text;
     view-timeline-axis: block;
     animation-timeline: --text;
@@ -13462,13 +13758,13 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
 /* Inicio paralaje diseño 2*/
-[zonaCSS=conozcanos] .contenedorParalax {
+[zonaCSS="/conozcanos"] .contenedorParalax {
     display: flex;
     flex-direction: column;
     width: 98vw;
 }
 
-[zonaCSS=conozcanos] .contenedorParalax .parallax {
+[zonaCSS="/conozcanos"] .contenedorParalax .parallax {
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -13478,11 +13774,11 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-[zonaCSS=conozcanos] .contenedorParalax .primera_imagen {
+[zonaCSS="/conozcanos"] .contenedorParalax .primera_imagen {
     transition: all 1ms linear;
 }
 
-[zonaCSS=conozcanos] .contenedorParalax .parallax img {
+[zonaCSS="/conozcanos"] .contenedorParalax .parallax img {
     max-width: none;
     width: auto;
     height: 100%;
@@ -13492,7 +13788,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background-size: cover;
 }
 
-[zonaCSS=conozcanos] .contenedorParalax .imagenParalaje {
+[zonaCSS="/conozcanos"] .contenedorParalax .imagenParalaje {
     max-width: none;
     width: auto;
     height: 100vh;
@@ -13503,7 +13799,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background-size: cover;
 }
 
-[zonaCSS=conozcanos] .contenedorParalax .parallax_comenzado {
+[zonaCSS="/conozcanos"] .contenedorParalax .parallax_comenzado {
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -13516,13 +13812,13 @@ grid-template-columns: 0.5fr 1.5fr;
     text-align: center;
 }
 
-[zonaCSS=conozcanos] .contenedorImagenNecesario {
+[zonaCSS="/conozcanos"] .contenedorImagenNecesario {
     overflow: hidden;
     border-radius: 40px;
     z-index: 100;
 }
 
-[zonaCSS=conozcanos] .contenedorParalax .texto_animado {
+[zonaCSS="/conozcanos"] .contenedorParalax .texto_animado {
     font-size: 50px;
     font-weight: bold;
     color: white;
@@ -13535,9 +13831,9 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 
-[zonaCSS=conozcanos] .contenedorParalax .icon-scroll,
+[zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll,
 
-[zonaCSS=conozcanos] .contenedorParalax .icon-scroll {
+[zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll {
     pointer-events: none;
     width: 40px;
     height: 70px;
@@ -13552,7 +13848,7 @@ grid-template-columns: 0.5fr 1.5fr;
     position: absolute;
 }
 
-[zonaCSS=conozcanos] .contenedorParalax .icon-scroll:before {
+[zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll:before {
     content: '';
     width: 8px;
     height: 8px;
@@ -13594,7 +13890,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 /* fin paralaje diseño 2*/
-[zonaCSS=portada] .videoPresentacion {
+[zonaCSS="/"] .videoPresentacion {
     min-width: 100%;
     min-height: 100%;
     width: auto;
@@ -13606,28 +13902,41 @@ grid-template-columns: 0.5fr 1.5fr;
     pointer-events: none;
 }
 
+[zonaCSS="/micasa"] .videoPresentacion {
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
 /* Ocultar el icono de reproducción */
-[zonaCSS=portada] .videoPresentacion::-webkit-media-controls-start-playback-button {
+[zonaCSS="/"] .videoPresentacion::-webkit-media-controls-start-playback-button {
     display: none !important;
 }
 
-[zonaCSS=portada] .videoPresentacion::-webkit-media-controls-play-button {
+[zonaCSS="/"] .videoPresentacion::-webkit-media-controls-play-button {
     display: none !important;
 }
 
-[zonaCSS=portada] .videoPresentacion::-webkit-media-controls-overlay-play-button {
+[zonaCSS="/"] .videoPresentacion::-webkit-media-controls-overlay-play-button {
     display: none !important;
 }
 
-[zonaCSS=portada] .videoPresentacion::-webkit-media-controls-play-button-overlay {
+[zonaCSS="/"] .videoPresentacion::-webkit-media-controls-play-button-overlay {
     display: none !important;
 }
 
-[zonaCSS=portada] .videoPresentacion::-webkit-media-controls {
+[zonaCSS="/"] .videoPresentacion::-webkit-media-controls {
     visibility: hidden !important;
 }
 
-[zonaCSS=portada] .videoPresentacion ::-webkit-media-controls-enclosure {
+[zonaCSS="/"] .videoPresentacion ::-webkit-media-controls-enclosure {
     visibility: hidden !important;
 }
 
@@ -13772,12 +14081,12 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-[zonaCSS="alojamiento/resumen"] .reserva_resumen_apartamentoIUTitulo {
+[zonaCSS="/alojamiento/resumen"] .reserva_resumen_apartamentoIUTitulo {
     padding-left: 6px;
     padding-right: 6px;
 }
 
-[zonaCSS="alojamiento/resumen"] .contenedorTextoOferta {
+[zonaCSS="/alojamiento/resumen"] .contenedorTextoOferta {
     padding: 4px;
 }
 
@@ -14033,6 +14342,12 @@ grid-template-columns: 0.5fr 1.5fr;
     padding-right: 6px;
 }
 
+.textoElipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .paddinVertical6 {
     padding-top: 6px;
     padding-bottom: 6px;
@@ -14153,7 +14468,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: none;
 }
 
-[zonaCSS="administracion/reservas/detallesReserva"] .contenedorPendiente {
+[ui="reservaUI"] .contenedorPendiente {
     display: grid;
     flex: 1;
     grid-template-columns: auto auto;

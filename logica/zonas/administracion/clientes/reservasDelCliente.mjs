@@ -5,32 +5,31 @@ import { obtenerReservasDelClienteComoTitular } from "../../../repositorio/clien
 import { obtenerReservasDelClienteComoPernoctante } from "../../../repositorio/clientes/obtenerReservasDelClienteComoPernoctante.mjs";
 import { obtenerReservasDelCliente } from "../../../repositorio/clientes/obtenerReservasDelCliente.mjs";
 
-export const reservasDelCliente = async (entrada, salida) => {
+export const reservasDelCliente = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
-        const cliente = validadoresCompartidos.tipos.numero({
-            number: entrada.body.cliente,
+        console.log("clienteUID entrante", entrada.body.clienteUID, typeof entrada.body.clienteUID)
+        const clienteUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.clienteUID,
             nombreCampo: "El identificador universal del cliente (clienteUID)",
-            filtro: "numeroSimple",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
-
-        const nombreColumna = validadoresCompartidos.tipos.cadena({
+        let nombreColumna = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombreColumna || "",
             nombreCampo: "El campo del nombre de la columna",
-            filtro: "strictoSinnEspacios",
+            filtro: "strictoSinEspacios",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const sentidoColumna = validadoresCompartidos.tipos.cadena({
+        let sentidoColumna = validadoresCompartidos.tipos.cadena({
             string: entrada.body.sentidoColumna || "",
             nombreCampo: "El campo del sentido de la columna",
             filtro: "strictoSinEspacios",
@@ -48,28 +47,36 @@ export const reservasDelCliente = async (entrada, salida) => {
             sePermitenNegativos: "no"
         })
 
-        if (nombreColumna !== "como" && nombreColumna !== "") {
+        
+        if (nombreColumna !== "como" && nombreColumna) {
+            if (nombreColumna === "reserva") {
+                nombreColumna = "reservaUID"
+            }
+
             await validadoresCompartidos.baseDeDatos.validarNombreColumna({
                 nombreColumna: nombreColumna,
                 tabla: "reservas"
-            })    
+            })
+            if (!sentidoColumna) {
+                sentidoColumna = "ascendente"
+            }
             validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
         }
 
         const comoTitularPreProcesado = [];
         const comoPernoctantePreProcesado = [];
-        const reservasUIDComoTitular = await obtenerReservasDelClienteComoTitular(cliente)
+        const reservasUIDComoTitular = await obtenerReservasDelClienteComoTitular(clienteUID)
         if (reservasUIDComoTitular.length > 0) {
             reservasUIDComoTitular.forEach((detallesReserva) => {
-                const uid = detallesReserva.reservaUID;
-                comoTitularPreProcesado.push(uid);
+                const reservaUID = detallesReserva.reservaUID;
+                comoTitularPreProcesado.push(reservaUID);
             });
         }
-        const reservasUIDComoPernoctante = await obtenerReservasDelClienteComoPernoctante(cliente)
+        const reservasUIDComoPernoctante = await obtenerReservasDelClienteComoPernoctante(clienteUID)
         if (reservasUIDComoPernoctante.length > 0) {
             reservasUIDComoPernoctante.forEach((detallesReserva) => {
-                const reserva = detallesReserva.reserva;
-                comoPernoctantePreProcesado.push(reserva);
+                const reservaUID = detallesReserva.reservaUID;
+                comoPernoctantePreProcesado.push(reservaUID);
             });
         }
         const encontrarRepetidosEliminar = (comoTitular, comoPernoctante) => {
@@ -98,8 +105,8 @@ export const reservasDelCliente = async (entrada, salida) => {
             UIDSreservasComoAmbos: UIDSreservasComoAmbos,
             numeroPorPagina: numeroPorPagina,
             numeroPagina: pagina,
-            sentidoColumna:sentidoColumna,
-            nombreColumna:nombreColumna
+            sentidoColumna: sentidoColumna,
+            nombreColumna: nombreColumna
         }
 
         const reservasDelClietne = await obtenerReservasDelCliente(dataObtenerReservasDelCliente)
@@ -111,6 +118,11 @@ export const reservasDelCliente = async (entrada, salida) => {
             delete detallesFila.total_filas;
         }
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
+
+        if (nombreColumna === "reservaUID") {
+            nombreColumna = "reserva"
+        }
+
         const estructuraFinal = {
             ok: "Reservas del cliente encontradas",
             totalReservas: Number(consultaConteoTotalFilas),
@@ -120,7 +132,7 @@ export const reservasDelCliente = async (entrada, salida) => {
             sentidoColumna: sentidoColumna,
             reservas: reservasClasificadas
         };
-        salida.json(estructuraFinal);
+        return estructuraFinal
     } catch (errorCapturado) {
         throw errorCapturado
     }

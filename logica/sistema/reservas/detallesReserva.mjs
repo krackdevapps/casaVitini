@@ -6,6 +6,7 @@ import { utilidades } from "../../componentes/utilidades.mjs"
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs"
 import { porcentajeTranscurrido } from "./utilidades/porcentajeTranscurrido.mjs"
 import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
+import { detallesPagos } from "./detallesReserva/detallesPagos.mjs"
 export const detallesReserva = async (data) => {
     try {
         const capas = data.capas
@@ -19,7 +20,8 @@ export const detallesReserva = async (data) => {
             "titular",
             "alojamiento",
             "pernoctantes",
-            "desgloseFinanciero"
+            "desgloseFinanciero",
+            "detallesPagos"
         ]   
         validadoresCompartidos.tipos.array({
             array: capas,
@@ -49,18 +51,7 @@ export const detallesReserva = async (data) => {
         if (capas.includes(contenedorCapas[0])) {
             reserva.titular = await detallesTitular(reservaUID)
         }
-        // 
-        // if (capas.includes(contenedorCapas[1])) {
-        //     reserva.clientes = await clientesReserva({
-        //         reservaUID: reservaUID,
-        //        // habitacionUID: habitacionUID
-        //     })
-        // }
-        // 
-
-        // if (capas.includes(contenedorCapas[2])) {
-        //     reserva.pernoctantesSinHabitacion = await recuperarClientesSinHabitacionAsignada(reservaUID)
-        // }
+      
         if (capas.includes(contenedorCapas[1])) {
             reserva.alojamiento = await detallesAlojamiento(reservaUID)
         }
@@ -69,6 +60,9 @@ export const detallesReserva = async (data) => {
         }
         if (capas.includes(contenedorCapas[3])) {
             reserva.contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
+        }
+        if (capas.includes(contenedorCapas[4])) {
+            reserva.detallesPagos = await detallesPagos(reservaUID)
         }
         return reserva
     } catch (errorCapturado) {

@@ -18,6 +18,6 @@ export const insertarFilaDatosPersonales = async (usuarioIDX) => {
         }
         return resuelve.rows[0]
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 };

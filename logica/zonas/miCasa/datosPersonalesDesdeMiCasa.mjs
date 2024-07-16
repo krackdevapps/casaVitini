@@ -19,7 +19,10 @@ export const datosPersonalesDesdeMiCasa = async (entrada, salida) => {
         const ok = {
             ok: {}
         };
-        const cuentaDeUsuario = await obtenerUsuario(usuarioIDX)
+        const cuentaDeUsuario = await obtenerUsuario({
+            usuario: usuarioIDX,
+            errorSi: "noExiste"
+        })
         const rol = cuentaDeUsuario.rolIDV;
         const estadoCuenta = cuentaDeUsuario.estadoCuentaIDV;
         ok.ok.usuarioIDX = usuarioIDX;

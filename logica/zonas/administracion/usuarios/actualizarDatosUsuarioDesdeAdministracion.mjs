@@ -53,12 +53,21 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
         })
 
         const mail = validadoresCompartidos.tipos
-            .correoElectronico(entrada.body.mail)
+            .correoElectronico({
+                mail: entrada.body.mail,
+                nombreCampo: "El campo del email", 
+                sePermiteVacio: "si"
+            })
         const telefono = validadoresCompartidos.tipos
-            .telefono(entrada.body.telefono)
+            .telefono(
+                {
+                    phone: entrada.body.telefono ,
+                    nombreCampo: "el campo del telefono",
+                    sePermiteVacio: "si"
+                })
 
         const validarDatosUsuario = {
-            usuario: usuario,
+            usuario: usuarioIDX,
             operacion: "actualizar",
             mail: mail
         };
@@ -70,7 +79,7 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
 
         const datosUsuario = {
             usuario: usuarioIDX,
-            email: email,
+            mail: mail,
             nombre: nombre,
             primerApellido: primerApellido,
             segundoApellido: segundoApellido,
@@ -78,15 +87,15 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             telefono: telefono,
         }
         await actualizarDatos(datosUsuario)
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
             datosActualizados: datosUsuario
         };
         return ok
 
-        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 }

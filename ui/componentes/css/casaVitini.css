@@ -12,6 +12,8 @@
     font-style: normal;
 }
 
+
+
 * {
     font-family: vitiniFuente, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 13px;
@@ -152,9 +154,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
+    height: 100%;
     width: 100%;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     -webkit-tap-highlight-color: transparent;
 }
 

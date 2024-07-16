@@ -16,7 +16,10 @@ export const estado = async (entrada, salida) => {
             respuesta.usuario = usuario;
             respuesta.rol = rol;
             respuesta.cuentaVerificada = "no";
-            const cuentaUsuario = await obtenerUsuario(usuario)
+            const cuentaUsuario = await obtenerUsuario({
+                usuario,
+                errorSi: "noExiste"
+            })
             const estadoCuenta = cuentaUsuario.cuentaVerificadaIDX;
             if (estadoCuenta === "si") {
                 respuesta.cuentaVerificada = "si";

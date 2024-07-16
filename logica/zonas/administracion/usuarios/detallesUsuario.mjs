@@ -24,21 +24,24 @@ export const detallesUsuario = async (entrada, salida) => {
         const ok = {
             ok: {}
         };
-        const usaurio = await obtenerUsuario(usuarioIDX)
+        const usaurio = await obtenerUsuario({
+            usuario: usuarioIDX,
+            errorSi: "noExiste"
+        })
         const rol = usaurio.rolIDV;
         const estadoCuenta = usaurio.estadoCuentaIDV;
         ok.ok.usuarioIDX = usuarioIDX;
         ok.ok.rol = rol;
         ok.ok.estadoCuenta = estadoCuenta;
+        ok.ok.datosUsuario = []
+        const datosUsuario = await obtenerDatosPersonales(usuarioIDX)
 
-        const detallesCliente = obtenerDatosPersonales(usuarioIDX)
-        if (!detallesCliente.usuario) {
-            detallesCliente = resuelveCrearFicha.rows[0];
+        if (!datosUsuario?.usuario) {
             const nuevaFicha = await insertarFilaDatosPersonales(usuarioIDX)
-            detallesCliente.push(...nuevaFicha)
-        }
-        for (const [dato, valor] of Object.entries(detallesCliente)) {
-            ok.ok[dato] = valor;
+            ok.ok.datosUsuario = nuevaFicha
+        } else {
+            delete datosUsuario.usuario
+            ok.ok.datosUsuario = datosUsuario
         }
         return ok
     } catch (errorCapturado) {

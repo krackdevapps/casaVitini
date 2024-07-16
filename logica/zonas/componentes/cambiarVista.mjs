@@ -1,8 +1,10 @@
 import { cambiarVista as cambiarVista_ } from "../../sistema/cambiarVista.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
-export const cambiarVista = async (entrada, salida) => {
+export const cambiarVista = async (entrada) => {
     try {
+
+        console.log("visa",  entrada.body.vista)
         const vista = validadoresCompartidos.tipos.cadena({
             string: entrada.body.vista,
             nombreCampo: "La url como vista",
@@ -24,7 +26,7 @@ export const cambiarVista = async (entrada, salida) => {
     } catch (errorCapturado) {
         //  const error = new Error("noExisteLaVista")
         // const errorFinal = filtroError(error)
-        throw errorFinal
+        throw errorCapturado
     }
 }
 

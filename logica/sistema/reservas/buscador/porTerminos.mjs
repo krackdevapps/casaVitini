@@ -23,7 +23,7 @@ export const porTerminos = async (data) => {
             termino: termino,
         })
 
-        console.log("reservas", reservas)
+
         const consultaConteoTotalFilas = reservas.length > 0
             ? reservas[0].total_filas
             : 0;

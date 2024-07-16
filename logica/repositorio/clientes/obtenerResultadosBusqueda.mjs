@@ -10,9 +10,9 @@ export const obtenerResultadosBusqueda = async (data) => {
                 return 0
             } else {
                 return (numeroPagina_humano - 1) * 10
-            }              
+            }
         }
-        console.log(" numeroPagina(numeroPagina_humano)",  numeroPagina(numeroPagina_humano))
+
         const nombreColumna = data.nombreColumna
         const terminoBusqueda = data.terminoBusqueda
         const sentidoColumna = data.sentidoColumna
@@ -26,7 +26,7 @@ export const obtenerResultadosBusqueda = async (data) => {
 
         const sqlDinamicoConstructor = (nombreColumna, sentidoColumna) => {
             if (sentidoColumna !== "descendente" && sentidoColumna !== "ascendente") {
-                sentidoColumna = "ascendente";
+                sentidoColumna = "descendente";
             }
             if (sentidoColumna == "ascendente") {
                 sentidoColumna = "ASC";
@@ -38,7 +38,7 @@ export const obtenerResultadosBusqueda = async (data) => {
                 // OJO con la coma, OJO LA COMA ES IMPORTANTISMA!!!!!!!!
                 return `,"${nombreColumna}" ${sentidoColumna}`;
             } else {
-                return ""
+                return "DESC"
             }
         }
 
@@ -62,16 +62,16 @@ export const obtenerResultadosBusqueda = async (data) => {
                   (LOWER(COALESCE(nombre, '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE("primerApellido", '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE("segundoApellido", '')) ILIKE ANY($1))::int +
-                  (LOWER(COALESCE("mail", '')) ILIKE ANY($1))::int +
-                  (LOWER(COALESCE("telefono", '')) ILIKE ANY($1))::int +
+                  (LOWER(COALESCE(mail, '')) ILIKE ANY($1))::int +
+                  (LOWER(COALESCE(telefono, '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1))::int
                 ) = 1 THEN 1
                 WHEN (
                   (LOWER(COALESCE(nombre, '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE("primerApellido", '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE("segundoApellido", '')) ILIKE ANY($1))::int +
-                  (LOWER(COALESCE("mail", '')) ILIKE ANY($1))::int +
-                  (LOWER(COALESCE("telefono", '')) ILIKE ANY($1))::int +
+                  (LOWER(COALESCE(mail, '')) ILIKE ANY($1))::int +
+                  (LOWER(COALESCE(telefono, '')) ILIKE ANY($1))::int +
                   (LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1))::int
                 ) = 3 THEN 3
                 ELSE 2
@@ -80,7 +80,7 @@ export const obtenerResultadosBusqueda = async (data) => {
         ${sqlDinamicoConstructor(nombreColumna, sentidoColumna)}
         LIMIT $2 OFFSET $3;`;
 
-        const resuelve = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina,  numeroPagina(numeroPagina_humano)]);
+        const resuelve = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina, numeroPagina(numeroPagina_humano)]);
         return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
