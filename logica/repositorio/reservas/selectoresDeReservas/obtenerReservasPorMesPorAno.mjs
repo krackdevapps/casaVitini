@@ -1,34 +1,34 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const obtenerReservasPorMes = async (data) => {
+export const obtenerReservasPorMesPorAno = async (data) => {
     try {
         const mes = data.mes
         const ano = data.ano
         const estadoReservaCancelada = data.estadoReservaCancelada
         const consulta = `
         SELECT 
-        reserva,
-        to_char(entrada, 'YYYY-MM-DD') as "fechaEntrada", 
-        to_char(salida, 'YYYY-MM-DD') as "fechaSalida"
+        "reservaUID",
+        to_char("fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada", 
+        to_char("fechaSalida", 'YYYY-MM-DD') as "fechaSalida"
         FROM 
         reservas
         WHERE
         (
-            DATE_PART('YEAR', entrada) < $2
+            DATE_PART('YEAR', "fechaEntrada") < $2
             OR (
-                DATE_PART('YEAR', entrada) = $2
-                AND DATE_PART('MONTH', entrada) <= $1
+                DATE_PART('YEAR', "fechaEntrada") = $2
+                AND DATE_PART('MONTH', "fechaEntrada") <= $1
             )
         )
         AND 
         (
-            DATE_PART('YEAR', salida) > $2
+            DATE_PART('YEAR', "fechaSalida") > $2
             OR (
-                DATE_PART('YEAR', salida) = $2
-                AND DATE_PART('MONTH', salida) >= $1
+                DATE_PART('YEAR', "fechaSalida") = $2
+                AND DATE_PART('MONTH', "fechaSalida") >= $1
             )
         )
-        AND "estadoReserva" <> $3
+        AND "estadoReservaIDV" <> $3
        `;
         const parametros = [
             mes,

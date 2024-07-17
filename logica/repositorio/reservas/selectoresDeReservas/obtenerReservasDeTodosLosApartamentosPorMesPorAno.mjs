@@ -8,30 +8,30 @@ export const obtenerReservasDeTodosLosApartamentosPorMesPorAno = async (data) =>
 
         const consulta = `
         SELECT 
-          r.reserva,
-          ra.uid,
-          to_char(r.entrada, 'YYYY-MM-DD') as "fechaEntrada", 
-          to_char(r.salida, 'YYYY-MM-DD') as "fechaSalida",
-          ra.apartamento as "apartamentoIDV",
-          (salida - entrada) as duracion_en_dias
+          r."reservaUID",
+          ra."componenteUID",
+          to_char(r."fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada", 
+          to_char(r."fechaSalida", 'YYYY-MM-DD') as "fechaSalida",
+          ra."apartamentoIDV" as "apartamentoIDV",
+          ("fechaSalida" - "fechaEntrada") as duracion_en_dias
         FROM reservas r
-        JOIN "reservaApartamentos" ra ON r.reserva = ra.reserva 
+        JOIN "reservaApartamentos" ra ON r."reservaUID" = ra."reservaUID" 
         WHERE 
         (
-            DATE_PART('YEAR', entrada) < $2
+            DATE_PART('YEAR', "fechaEntrada") < $2
             OR (
-                DATE_PART('YEAR', entrada) = $2
-                AND DATE_PART('MONTH', entrada) <= $1
+                DATE_PART('YEAR', "fechaEntrada") = $2
+                AND DATE_PART('MONTH', "fechaEntrada") <= $1
             )
         )
         AND (
-            DATE_PART('YEAR', salida) > $2
+            DATE_PART('YEAR', "fechaSalida") > $2
             OR (
-                DATE_PART('YEAR', salida) = $2
-                AND DATE_PART('MONTH', salida) >= $1
+                DATE_PART('YEAR', "fechaSalida") = $2
+                AND DATE_PART('MONTH', "fechaSalida") >= $1
             )
         )
-          AND "estadoReserva" <> $3;
+          AND "estadoReservaIDV" <> $3;
         `
         const parametros = [
             mes,

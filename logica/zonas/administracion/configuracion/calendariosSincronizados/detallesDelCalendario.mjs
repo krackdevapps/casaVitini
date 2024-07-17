@@ -20,7 +20,10 @@ export const detallesDelCalendario = async (entrada, salida) => {
 
         const calendarioSincronziado = await obtenerCalendarioPorCalendarioUID(calendarioUID)
         const apartamentoIDV = calendarioSincronziado.apartamentoIDV;
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        }).apartamentoUI;
         calendarioSincronziado.apartamentoUI = apartamentoUI;
 
         const ok = {

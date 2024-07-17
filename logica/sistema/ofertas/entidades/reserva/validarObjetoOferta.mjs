@@ -405,6 +405,7 @@ export const validarObjetoOferta = async (data) => {
                                 apartamentoIDV,
                                 errorSi: "noExiste"
                             })).apartamentoUI
+                            
                             const tipoAplicacionDentroDelDia = apartmentoDelDia.tipoAplicacion
                             if (tipoAplicacionDentroDelDia !== "porcentaje" && tipoAplicacionDentroDelDia !== "cantidadFija") {
                                 const error = `Dentro el dia con fecha ${fechaDelDia} el tipo de descuento del ${apartamentoUI} (${apartamentoIDV}) solo puede ser porcentaje o cantidadFija`

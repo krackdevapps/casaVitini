@@ -42,7 +42,10 @@ describe('crud apartament as entity', () => {
         expect(Array.isArray(respons)).toBe(true);
     })
     test('select apartament by IDV', async () => {
-        const respons = await obtenerApartamentoComoEntidadPorApartamentoIDV(IDVStart)
+        const respons = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV: IDVStart,
+            errorSi:"noExiste"
+        })
         expect(respons).not.toBeUndefined();
         expect(typeof respons).toBe('object');
     })

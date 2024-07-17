@@ -63,6 +63,8 @@ export const multiCapa = async (entrada, salida) => {
             },
             todosLosApartamentos: async () => {
                 const eventosTodosLosApartamentos_ = await eventosTodosLosApartamentos(fecha);
+
+
                 for (const [fechaDia, contenedorEventos] of Object.entries(eventosTodosLosApartamentos_.eventosMes)) {
                     const selectorDia = estructuraGlobal.eventosMes[fechaDia];
                     selectorDia.push(...contenedorEventos);
@@ -126,7 +128,7 @@ export const multiCapa = async (entrada, salida) => {
                 const calendariosPorPlataforma = await obtenerCalendariosPorPlataformaIDV(plataformaAibnb)
                 if (calendariosPorPlataforma.length > 0) {
                     const calendariosUIDS = calendariosPorPlataforma.map((calendario) => {
-                        return calendario.uid;
+                        return calendario.calendarioUID;
                     });
                     for (const calendarioUID of calendariosUIDS) {
                         const metadatosEventos = {

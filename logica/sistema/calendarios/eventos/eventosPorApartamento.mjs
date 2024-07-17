@@ -20,7 +20,10 @@ export const eventosPorApartamneto = async (metadatos) => {
 
 
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+        await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
         const ano = fechaArray[1]
@@ -51,7 +54,10 @@ export const eventosPorApartamneto = async (metadatos) => {
         const reservasSelecciondas = []
         for (const detalles of reservasPorApartentoIDV) {
             const apartamentoIDV = detalles.apartamentoIDV
-            detalles.apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+            detalles.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            })).apartamentoUI
             reservasSelecciondas.push(detalles)
         }
         for (const detallesReserva of reservasSelecciondas) {
@@ -63,7 +69,10 @@ export const eventosPorApartamneto = async (metadatos) => {
             detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
             detallesReserva.tipoEvento = "porApartamento"
             detallesReserva.eventoUID = "porApartamento_" + apartamentoUID
-            detallesReserva.apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDVReserva)
+            detallesReserva.apartamentoUI = ((await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV: apartamentoIDVReserva,
+                errorSi: "noExiste"
+            }))).apartamentoUI
             const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada, fechaSalida)
             for (const fechaInterna_ISO of arrayConFechasInternas) {
                 const fechaInternaObjeto = DateTime.fromISO(fechaInterna_ISO)

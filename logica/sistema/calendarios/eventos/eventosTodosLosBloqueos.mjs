@@ -39,8 +39,8 @@ export const eventosTodosLosBloqueos = async (fecha) => {
             return detallesBloqueo
         })
         for (const detallesReserva of bloqueosSeleccionados) {
-            const bloqueoUID = detallesReserva.uid
-            const tipoBloqueo = detallesReserva.tipoBloqueo
+            const bloqueoUID = detallesReserva.bloqueUID
+            const tipoBloqueo = detallesReserva.tipoBloqueoIDV
             const fechaEntrada = detallesReserva.fechaEntrada
             const fechaSalida = detallesReserva.fechaSalida
             const apartamentoUI = detallesReserva.apartamentoUI

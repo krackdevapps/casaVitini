@@ -63,12 +63,14 @@ export const puerto = async (entrada, salida) => {
             return rama
         }
 
+
         const estructura = exploradorArbol(zonas, ruta)
         const X = estructura[arbol.pop()]
         if (typeof X !== "function") {
             const error = "Dentro de esta zona no hay ninguna funcion."
             throw new Error(error)
         }
+
         const respuesta = await X(entrada, salida)
         salida.json(respuesta)
     } catch (errorCapturado) {

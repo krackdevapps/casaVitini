@@ -2,7 +2,7 @@
 import { describe, expect, test } from '@jest/globals';
 
 import { obtenerParConfiguracion } from '../../../../logica/repositorio/configuracion/parConfiguracion/obtenerParConfiguracion.mjs';
-import { actualizarParConfiguracion } from '../../../../logica/repositorio/configuracion/parconfiguracion/actualizarParConfiguracion.mjs';
+import { actualizarParConfiguracion } from '../../../../logica/repositorio/configuracion/parConfiguracion/actualizarParConfiguracion.mjs';
 
 describe('handler configruacion', () => {
 

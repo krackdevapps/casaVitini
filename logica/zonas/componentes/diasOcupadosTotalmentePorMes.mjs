@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { obtenerTodosLosCalendarios } from "../../sistema/calendariosSincronizados/airbnb/obtenerTodosLosCalendarios.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
-import { obtenerReservasPorMes } from "../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorMesPorAno.mjs";
+import { obtenerReservasPorMesPorAno } from "../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorMesPorAno.mjs";
 import { obtenerBloqueosPorMes } from "../../repositorio/bloqueos/obtenerBloqueosPorMes.mjs";
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
 import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../../repositorio/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs";
@@ -56,11 +56,12 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
                 throw new Error(error);
             }
         }
-        const reservasCoincidentes = await obtenerReservasPorMes({
+        const reservasCoincidentes = await obtenerReservasPorMesPorAno({
             mes: mes,
             ano: ano,
             estadoReservaCancelada: "cancelada",
         })
+
         // Cuantos apartamentos disponibles existen
         const configuracionesDisponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
             estadoIDV: "disponible",
@@ -103,7 +104,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         };
         const objetoFechasInternas = {};
         for (const reservaCoincidente of reservasCoincidentes) {
-            const reservaUID = reservaCoincidente.reserva;
+            const reservaUID = reservaCoincidente.reservaUID;
             const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
             if (apartamentosDeLaReserva.length > 0) {
                 const apartamentosPorReservaArray = [];
@@ -131,7 +132,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         }
         for (const bloqueoCoincidente of bloqueosCoincidentes) {
             const bloqueoUID = bloqueoCoincidente.uid;
-            const apartamentoIDV = bloqueoCoincidente.apartamento;
+            const apartamentoIDV = bloqueoCoincidente.apartamentoIDV;
             const fechaEntrada = bloqueoCoincidente.fechaEntrada;
             const fechaSalida = bloqueoCoincidente.fechaSalida;
             const tipoBloqueo = bloqueoCoincidente.tipoBloqueo;

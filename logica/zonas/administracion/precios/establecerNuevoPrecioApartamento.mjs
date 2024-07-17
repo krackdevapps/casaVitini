@@ -38,7 +38,10 @@ export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
             throw new Error(error);
         }
         const detallesApartamento = {};
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        }).apartamentoUI
         detallesApartamento.apartamentoUI = apartamentoUI;
         detallesApartamento.apartamentoIDV = apartamentoIDV;       
   

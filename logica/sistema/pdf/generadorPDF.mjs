@@ -363,7 +363,7 @@ export const generadorPDF = async (reserva) => {
             margin: 0
         }
 
-        const urlQR = `https://casavitini.com/qr/${reservaUID}`
+        const urlQR = `https://casavitini.com/qr/reserva:${reservaUID}`
         const qr = await QRCode.toDataURL(urlQR, opciones)
 
         const numeroDeDias = (fechaSalida_objeto.diff(fechaEntrada_objeto, "days").days) + 1;
@@ -775,7 +775,7 @@ export const generadorPDF = async (reserva) => {
         }
         docDefinition.content.push(mensaje3)
         const mensaje4 = {
-            text: 'Puede usar el codigo qr para ir a los detalles de esta reserva de una manera fácil y comoda.',
+            text: 'Puede usar el codigo qr para ir a los detalles de esta reserva de una manera fácil y comoda. Si necesitas otra copia de este pdf, tambien puedes obtenerla mediante el qr.',
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje4)

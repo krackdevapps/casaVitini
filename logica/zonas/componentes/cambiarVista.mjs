@@ -4,7 +4,7 @@ import { validadoresCompartidos } from "../../sistema/validadores/validadoresCom
 export const cambiarVista = async (entrada) => {
     try {
 
-        console.log("visa",  entrada.body.vista)
+
         const vista = validadoresCompartidos.tipos.cadena({
             string: entrada.body.vista,
             nombreCampo: "La url como vista",

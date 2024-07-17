@@ -162,7 +162,7 @@ export const validarObjetoReserva = async (data) => {
                 const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                     apartamentoIDV,
                     errorSi: "noExiste"
-                })
+                }).apartamentoUI
                 apartamentosOcupados.push(apartamentoUI)
             }
         }
@@ -210,7 +210,10 @@ export const validarObjetoReserva = async (data) => {
                         limpiezaEspaciosAlrededor: "si",
                     })
                     if (!habitacionesSoloIDV.includes(habitacionIDVPorValidar)) {
-                        const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                        const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV,
+                            errorSi: "noExiste"
+                        })
                         const apartamentoUI = apartamento.apartamentoUI
                         const error = `El ${apartamentoUI} contiene una habitacion que no existe, concretamente se hace referencia a un habitacionIDV: ${habitacionIDVPorValidar}`
                         throw new Error(error)

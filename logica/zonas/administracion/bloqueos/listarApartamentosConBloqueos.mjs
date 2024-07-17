@@ -29,7 +29,10 @@ export const listarApartamentosConBloqueos = async (entrada, salida) => {
             const apartamentosEncontrados = [...new Set(apartamentosEncontradosConDuplicados)];
             const estructuraSalidaFinal = [];
             for (const apartamento of apartamentosEncontrados) {
-                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamento);
+                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV: apartamento,
+                    errorSi: "noExiste"
+                }).apartamentoUI
                 const bloqueosDelApartamento = await obtenerBloqueosDelApartamentoPorApartamentoIDV(apartamento)
                 const estructuraFinal = {
                     apartamentoIDV: apartamento,

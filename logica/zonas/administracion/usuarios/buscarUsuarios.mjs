@@ -43,7 +43,7 @@ export const buscarUsuarios = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
-        console.log("nombreColumna", nombreColumna, "sentidoColumna", sentidoColumna)
+
         if (nombreColumna) {
             sentidoColumna = !sentidoColumna ? "ascendente" : sentidoColumna
             await validadoresCompartidos.baseDeDatos.validarNombreColumna({
@@ -77,7 +77,7 @@ export const buscarUsuarios = async (entrada, salida) => {
             totalUsuarios: Number(consultaConteoTotalFilas),
             nombreColumna: nombreColumna,
             paginasTotales: totalPaginas,
-            pagina: Number(corretorNumeroPagina) ,
+            pagina: Number(corretorNumeroPagina),
         };
         if (nombreColumna) {
             Respuesta.nombreColumna;

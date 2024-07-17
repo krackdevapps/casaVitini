@@ -1283,7 +1283,7 @@ const casaVitini = {
 
                         const columnaSeleccioanda = data?.columnaSeleccioanda || null
                         const sentidoSeleccionado = data?.sentidoSeleccionado || null
-                        console.log("columna", columnaSeleccioanda, sentidoSeleccionado)
+
 
                         const selectorFiltroOrden = document.querySelector("[contenedor=filtrosOrden]")
                         if (selectorFiltroOrden) {
@@ -1357,7 +1357,7 @@ const casaVitini = {
                             opcion.value = columnaIDV;
                             opcion.text = columnaUI;
                             if (columnaSeleccioanda === columnaIDV) {
-                                console.log("columna", columnaSeleccioanda)
+
                                 opcion.selected = "true"
                             }
                             selectorColumna.add(opcion);
@@ -1401,7 +1401,7 @@ const casaVitini = {
                             opcion.value = sentidoIDV;
                             opcion.text = sentidoUI;
                             if (sentidoSeleccionado === sentidoIDV) {
-                                console.log("sentidoSeleccionado", sentidoSeleccionado)
+
                                 opcion.selected = "true"
                             }
                             selectorSentido.add(opcion);
@@ -1428,7 +1428,7 @@ const casaVitini = {
                         transaccion.sentidoColumna = selectorSentido
                         transaccion.nombreColumna = selectorColumna
 
-                        console.log("transaccion", transaccion)
+
                         for (const [parametro, valor] of Object.entries(parametros)) {
                             transaccion[parametro] = valor
                         }
@@ -14299,7 +14299,7 @@ const casaVitini = {
                 const respuestaServidor = await casaVitini.shell.servidor(horaLocalPeticion)
                 if (respuestaServidor?.error) {
                     casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
-                    casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                    return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                 }
                 if (respuestaServidor.fechaISO) {
                     const zonaHoraria = respuestaServidor.zonaHoraria
@@ -14329,8 +14329,8 @@ const casaVitini = {
                     }
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-                    if (!instanciaRenderizada)
-                        instanciaRenderizada.querySelector("[contenedor=obteniendoSituacion]").remove()
+                    if (!instanciaRenderizada) { return }
+                    instanciaRenderizada.querySelector("[contenedor=obteniendoSituacion]").remove()
                     if (respuestaServidor?.error) {
                         casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
                         const titulo = document.querySelector(".titulo")
@@ -14392,17 +14392,10 @@ const casaVitini = {
                                 contenedorReserva.classList.add("administracion_situacion_portada_contenedorReserva")
                                 let bloqueEntidad = document.createElement("a")
                                 bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-                                bloqueEntidad.setAttribute("vista", `/administracion/reservas/${reservaUID}`)
-                                bloqueEntidad.setAttribute("href", `/administracion/reservas/${reservaUID}`)
-                                bloqueEntidad.addEventListener("click", (e) => {
-                                    e.preventDefault()
-                                    e.stopPropagation()
-                                    const navegacion = {
-                                        vista: `/administracion/reservas/${reservaUID}`,
-                                        tipoOrigen: "menuNavegador"
-                                    }
-                                    casaVitini.shell.navegacion.controladorVista(navegacion)
-                                })
+                                bloqueEntidad.setAttribute("vista", `/administracion/reservas/reserva:${reservaUID}`)
+                                bloqueEntidad.setAttribute("href", `/administracion/reservas/reserva:${reservaUID}`)
+                                bloqueEntidad.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+
                                 bloqueEntidad.classList.add("administracion_situacion_portada_contenedorSelecccionable")
                                 let tituloEntidad = document.createElement("div")
                                 tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
@@ -14599,8 +14592,8 @@ const casaVitini = {
                     }
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-                    if (!instanciaRenderizada)
-                        instanciaRenderizada.querySelector("[contenedor=obteniendoSituacion]").remove()
+                    if (!instanciaRenderizada) { return }
+                    instanciaRenderizada.querySelector("[contenedor=obteniendoSituacion]").remove()
                     if (respuestaServidor?.error) {
                         const info = {
                             titulo: "No existe el identificador del apartamento",
@@ -14610,13 +14603,13 @@ const casaVitini = {
                     }
                     if (respuestaServidor?.ok) {
                         const detallesApartamento = respuestaServidor?.ok
-                        let apartamentoUI = detallesApartamento.apartamentoUI
-                        let apartamentoIDV = detallesApartamento.apartamentoIDV
+                        const apartamentoUI = detallesApartamento.apartamentoUI
+                        const apartamentoIDV = detallesApartamento.apartamentoIDV
                         const zonaHoraria = detallesApartamento.zonaHoraria
                         const horaEntradaTZ = detallesApartamento.horaEntradaTZ
                         const horaSalidaTZ = detallesApartamento.horaSalidaTZ
                         let estadoPernoctacion = detallesApartamento.estadoPernoctacion
-                        let reservas = detallesApartamento.reservas
+                        const reservas = detallesApartamento.reservas
                         const calendariosSincronizados = detallesApartamento.calendariosSincronizados
                         const espacioEventosAirbnb = document.createElement("div")
                         espacioEventosAirbnb.classList.add("espacioEventosAirbnb")
@@ -14657,22 +14650,27 @@ const casaVitini = {
                         bloqueApartamentoUI.appendChild(estadoPernoctacionUI)
                         detallesGenerales.appendChild(bloqueApartamentoUI)
                         marcoElastico.appendChild(detallesGenerales)
-                        for (const detallesReservas of reservas) {
+                        for (const [reservaUID, detallesReservas] of Object.entries(reservas)) {
                             const reservaUID = detallesReservas.reservaUID
                             const fechaEntrada = detallesReservas.fechaEntrada
                             const fechaSalida = detallesReservas.fechaSalida
                             const diaLimite = detallesReservas.diaLimite
                             const tiempoRestante = detallesReservas.tiempoRestante
                             const cantidadDias = detallesReservas.cantidadDias
+                            const pernoctantes = detallesReservas.pernoctantes
                             const porcentajeTranscurrido = detallesReservas.porcentajeTranscurrido
                             const habitaciones = detallesReservas.habitaciones
                             const bloqueReservaUI = document.createElement("div")
                             bloqueReservaUI.classList.add("administracion_situracion_detallesApartamento_bloqueReserva")
                             const reservaUI = document.createElement("a")
-                            reservaUI.classList.add("administracion_situracion_detallesApartamento_reservaUI")
-                            reservaUI.setAttribute("vista", `/administracion/reservas/${reservaUID}`)
-                            reservaUI.setAttribute("href", `/administracion/reservas/${reservaUID}`)
+                            reservaUI.classList.add(
+                                "administracion_situracion_detallesApartamento_reservaUI",
+                                "textoElipsis"
+                            )
+                            reservaUI.setAttribute("vista", `/administracion/reservas/reserva:${reservaUID}`)
+                            reservaUI.setAttribute("href", `/administracion/reservas/reserva:${reservaUID}`)
                             reservaUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+
                             reservaUI.innerText = "Reserva " + reservaUID
                             bloqueReservaUI.appendChild(reservaUI)
                             if (diaLimite === "diaDeSalida") {
@@ -14744,87 +14742,98 @@ const casaVitini = {
                             bloqueFechaSalida.appendChild(fechaSalidaUI)
                             contenedorFechas.appendChild(bloqueFechaSalida)
                             bloqueReservaUI.appendChild(contenedorFechas)
-                            if (Object.keys(habitaciones).length > 0) {
+                            if (habitaciones.length > 0) {
                                 const espacioHabitaciones = document.createElement("div")
                                 espacioHabitaciones.classList.add("sitaucionDetallesEspacioHabitaciones")
                                 for (const detallesHabitacion of habitaciones) {
                                     const habitacionUI = detallesHabitacion.habitacionUI
-                                    const pernoctantes = detallesHabitacion.pernoctantes
+                                    const habitacionUID = detallesHabitacion.componenteUID
+                                    //const pernoctantes = detallesHabitacion.pernoctantes
                                     const habitacionBloque = document.createElement("div")
+                                    habitacionBloque.setAttribute("habitacionUID", habitacionUID)
                                     habitacionBloque.classList.add("administracion_situacion_detallesApartamento_contenedorHabitacion")
                                     const tituloHabitacion = document.createElement("p")
                                     tituloHabitacion.classList.add("situacionDetallestituloHabitacion")
                                     tituloHabitacion.innerText = habitacionUI
                                     habitacionBloque.appendChild(tituloHabitacion)
-                                    if (pernoctantes) {
-                                        for (const pernoctante of pernoctantes) {
-                                            const nombreCompleto = pernoctante.nombreCompleto
-                                            const tipoCliente = pernoctante.tipoPernoctante
-                                            const uidCliente = pernoctante.uidCliente
-                                            const fechaCheckIn = pernoctante.fechaCheckIn
-                                            const fechaCheckOut = pernoctante.fechaCheckOut
-                                            let tipoClienteUI
-                                            if (tipoCliente === "cliente") {
-                                                tipoClienteUI = "Cliente de Casa Vitini"
-                                            }
-                                            if (tipoCliente === "clientePool") {
-                                                tipoClienteUI = "Cliente por validar"
-                                            }
-                                            const marcoPernoctante = document.createElement("a")
-                                            marcoPernoctante.classList.add("administracion_situacion_detallesApartamento_contenedorCliente")
-                                            if (tipoCliente === "cliente") {
-                                                marcoPernoctante.setAttribute("vista", `/administracion/clientes/${uidCliente}`)
-                                                marcoPernoctante.setAttribute("href", `/administracion/clientes/${uidCliente}`)
-                                                marcoPernoctante.addEventListener("click", casaVitini.administracion.situacion.resolutorEnlacesCliente)
-                                            }
-                                            marcoPernoctante.setAttribute("clienteUID", uidCliente)
-                                            if (!fechaCheckIn) {
-                                                const tipoPernoctanteUI = document.createElement("div")
-                                                tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
-                                                //tipoPernoctanteUI.classList.add("parpadea")
-                                                tipoPernoctanteUI.setAttribute("componente", "checkInInfo")
-                                                tipoPernoctanteUI.innerText = "Pendiente de checkin"
-                                                marcoPernoctante.appendChild(tipoPernoctanteUI)
-                                            } else {
-                                                const tipoPernoctanteUI = document.createElement("div")
-                                                tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
-                                                //tipoPernoctanteUI.classList.add("parpadea")
-                                                tipoPernoctanteUI.setAttribute("componente", "checkInInfo")
-                                                tipoPernoctanteUI.innerText = "> " + fechaCheckIn
-                                                marcoPernoctante.appendChild(tipoPernoctanteUI)
-                                            }
-                                            if (fechaCheckOut) {
-                                                const tipoPernoctanteUI = document.createElement("div")
-                                                tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
-                                                tipoPernoctanteUI.classList.add("letraRoja")
-                                                tipoPernoctanteUI.setAttribute("componente", "checkOutInfo")
-                                                tipoPernoctanteUI.innerText = "< " + fechaCheckOut
-                                                marcoPernoctante.appendChild(tipoPernoctanteUI)
-                                            }
-                                            if (tipoCliente === "clientePool") {
-                                                const tipoPernoctanteUI = document.createElement("div")
-                                                tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloPendienteComprobacion")
-                                                tipoPernoctanteUI.classList.add("parpadea")
-                                                tipoPernoctanteUI.setAttribute("componente", "pendienteComprobacion")
-                                                tipoPernoctanteUI.innerText = "Pendiente de comprobación documental"
-                                                marcoPernoctante.appendChild(tipoPernoctanteUI)
-                                            }
-                                            const nombreCompletoPernoctante = document.createElement("div")
-                                            nombreCompletoPernoctante.classList.add("administracion_situacion_detallesApartamento_nombrePernoctante")
-                                            nombreCompletoPernoctante.innerText = nombreCompleto
-                                            marcoPernoctante.appendChild(nombreCompletoPernoctante)
-                                            const tipoClientePernoctante = document.createElement("div")
-                                            tipoClientePernoctante.classList.add("administracion_situacion_detallesApartamento_tipoCliente")
-                                            tipoClientePernoctante.innerText = tipoClienteUI
-                                            marcoPernoctante.appendChild(tipoClientePernoctante)
-                                            habitacionBloque.appendChild(marcoPernoctante)
-                                        }
-                                    }
+
                                     espacioHabitaciones.appendChild(habitacionBloque)
                                 }
                                 bloqueReservaUI.appendChild(espacioHabitaciones)
                             }
                             marcoElastico.appendChild(bloqueReservaUI)
+                            if (pernoctantes.length > 0) {
+                                for (const pernoctante of pernoctantes) {
+
+                                    const nombreCompleto = pernoctante.nombreCompleto
+                                    const tipoPernoctante = pernoctante.tipoPernoctante
+                                    const clienteUID = pernoctante.clienteUID
+                                    const habitacionUID = pernoctante.habitacionUID
+                                    const fechaCheckIn = pernoctante.fechaCheckIn
+                                    const fechaCheckOut = pernoctante.fechaCheckOut
+
+                                    const habitacionDestino = document.querySelector(`[habitacionUID="${habitacionUID}"]`)
+                                    if (!habitacionDestino) {
+                                        continue
+                                    }
+
+                                    let tipoClienteUI
+                                    if (tipoPernoctante === "cliente") {
+                                        tipoClienteUI = "Cliente de Casa Vitini"
+                                    }
+                                    if (tipoPernoctante === "clientePool") {
+                                        tipoClienteUI = "Cliente por validar"
+                                    }
+                                    const marcoPernoctante = document.createElement("a")
+                                    marcoPernoctante.classList.add("administracion_situacion_detallesApartamento_contenedorCliente")
+                                    if (tipoPernoctante === "cliente") {
+                                        marcoPernoctante.setAttribute("vista", `/administracion/clientes/${clienteUID}`)
+                                        marcoPernoctante.setAttribute("href", `/administracion/clientes/${clienteUID}`)
+                                        marcoPernoctante.addEventListener("click", casaVitini.administracion.situacion.resolutorEnlacesCliente)
+                                    }
+                                    marcoPernoctante.setAttribute("clienteUID", clienteUID)
+                                    if (!fechaCheckIn) {
+                                        const tipoPernoctanteUI = document.createElement("div")
+                                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
+                                        //tipoPernoctanteUI.classList.add("parpadea")
+                                        tipoPernoctanteUI.setAttribute("componente", "checkInInfo")
+                                        tipoPernoctanteUI.innerText = "Pendiente de checkin"
+                                        marcoPernoctante.appendChild(tipoPernoctanteUI)
+                                    } else {
+                                        const tipoPernoctanteUI = document.createElement("div")
+                                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
+                                        //tipoPernoctanteUI.classList.add("parpadea")
+                                        tipoPernoctanteUI.setAttribute("componente", "checkInInfo")
+                                        tipoPernoctanteUI.innerText = "> " + fechaCheckIn
+                                        marcoPernoctante.appendChild(tipoPernoctanteUI)
+                                    }
+                                    if (fechaCheckOut) {
+                                        const tipoPernoctanteUI = document.createElement("div")
+                                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
+                                        tipoPernoctanteUI.classList.add("letraRoja")
+                                        tipoPernoctanteUI.setAttribute("componente", "checkOutInfo")
+                                        tipoPernoctanteUI.innerText = "< " + fechaCheckOut
+                                        marcoPernoctante.appendChild(tipoPernoctanteUI)
+                                    }
+                                    if (tipoPernoctante === "clientePool") {
+                                        const tipoPernoctanteUI = document.createElement("div")
+                                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloPendienteComprobacion")
+                                        tipoPernoctanteUI.classList.add("parpadea")
+                                        tipoPernoctanteUI.setAttribute("componente", "pendienteComprobacion")
+                                        tipoPernoctanteUI.innerText = "Pendiente de comprobación documental"
+                                        marcoPernoctante.appendChild(tipoPernoctanteUI)
+                                    }
+                                    const nombreCompletoPernoctante = document.createElement("div")
+                                    nombreCompletoPernoctante.classList.add("administracion_situacion_detallesApartamento_nombrePernoctante")
+                                    nombreCompletoPernoctante.innerText = nombreCompleto
+                                    marcoPernoctante.appendChild(nombreCompletoPernoctante)
+                                    const tipoClientePernoctante = document.createElement("div")
+                                    tipoClientePernoctante.classList.add("administracion_situacion_detallesApartamento_tipoCliente")
+                                    tipoClientePernoctante.innerText = tipoClienteUI
+                                    marcoPernoctante.appendChild(tipoClientePernoctante)
+                                    habitacionDestino.appendChild(marcoPernoctante)
+                                }
+                            }
                         }
                         const eventosAirbnb = calendariosSincronizados.airbnb.eventos
                         for (const detallesDelEvento of eventosAirbnb) {
@@ -16764,7 +16773,7 @@ const casaVitini = {
                     casaVitini.administracion.clientes.buscador.mostrarClientesResueltos(transaccion)
                 } else if (rawArray.length === 3) {
                     const cliente = comandoInicial
-                    console.log("cliente", cliente)
+
                     await casaVitini.administracion.clientes.detallesCliente.portada.UI(cliente)
                     main.setAttribute("zonaCSS", "administracion/clientes/detalles")
                     const transaccion = {
@@ -16786,7 +16795,7 @@ const casaVitini = {
                     }
                     await casaVitini.administracion.clientes.detallesCliente.portada.mostrarReservasDelClienteResueltas(transaccion)
                 } else if (rawArray.length === 4 && comandoInicial === "editar") {
-                    console.log("editar")
+
                     main.setAttribute("zonaCSS", "administracion/clientes/editar")
 
                     await casaVitini.administracion.clientes.detallesCliente.editar.UI()
@@ -17394,7 +17403,7 @@ const casaVitini = {
                         }
                         transaccion.sentidoColumna = selectorSentido
                         transaccion.nombreColumna = selectorColumna
-                        console.log("transaccio", transaccion)
+
                         // for (const [parametro, valor] of Object.entries(parametros)) {
                         //     transaccion[parametro] = valor
                         // }
@@ -17419,7 +17428,7 @@ const casaVitini = {
                             casaVitini.ui.componentes.mensajeSimple(info)
                         }
                         if (respuestaServidor?.ok) {
-                            console.log("respiue", respuestaServidor)
+
                             const detallesCliente = respuestaServidor?.ok
                             const clienteUID = detallesCliente.clienteUID
                             const nombre = detallesCliente.nombre
@@ -17734,7 +17743,7 @@ const casaVitini = {
                             tipoConstruccionGrid: "soloLista",
                             origen: "tituloColumna"
                         }
-                        console.log("salida", transaccion)
+
                         if (selectorColumnasentido === "ascendente") {
                             transaccion.sentidoColumna = "descendente"
                             transaccion.nombreColumna = nombreColumna
@@ -17943,7 +17952,7 @@ const casaVitini = {
                             */
 
                         )
-                        console.log("reservas", reservas)
+
                         reservas.forEach(r => {
                             const como = r.como
                             const reservaUID = r.reservaUID
@@ -18122,7 +18131,7 @@ const casaVitini = {
                                 }
                                 selectorSentido.add(opcion);
                             })
-                            console.log("destino", destino)
+
 
                             document.querySelector(destino).appendChild(contenedorFiltrosOrden)
                         },
@@ -18144,7 +18153,7 @@ const casaVitini = {
                             }
                             transaccion.sentidoColumna = selectorSentido
                             transaccion.nombreColumna = selectorColumna
-                            console.log("transaccio", transaccion)
+
                             // for (const [parametro, valor] of Object.entries(parametros)) {
                             //     transaccion[parametro] = valor
                             // }
@@ -18156,7 +18165,7 @@ const casaVitini = {
                     UI: async () => {
                         const granuladoURL = casaVitini.utilidades.granuladorURL()
                         const clienteUID = granuladoURL.directorios[granuladoURL.directorios.length - 2]
-                        console.log("granulado", granuladoURL)
+
 
                         const transaccion = {
                             zona: "administracion/clientes/detallesCliente",
@@ -18938,7 +18947,7 @@ const casaVitini = {
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
                 const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
                 const soloDigitos = /^\d+$/;
-                console.log("comandoInicial", comandoInicial)
+
                 if (comandoInicial === "impuestos") {
                     casaVitini.administracion.impuestos.contenedorBotones()
                     casaVitini.administracion.impuestos.mostrarImpuestosResueltos(granuladoURL.parametros)
@@ -18995,7 +19004,7 @@ const casaVitini = {
                 const tipoConstruccionGrid = transaccion.tipoConstruccionGrid
                 delete transaccion.tipoConstruccionGrid
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                console.log("rs", respuestaServidor)
+
                 const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (!seccionRenderizada) { return }
                 if (respuestaServidor?.error) {
@@ -28608,13 +28617,13 @@ const casaVitini = {
                 const numeroDirectorios = granuladoURL.directorios.length
                 const parametroBuscar = granuladoURL.parametros.buscar
                 const rawArray = granuladoURL.rawArray
-                console.log("granuladoURL", granuladoURL)
+
 
                 if (rawArray.length === 2) {
-                    console.log("test")
+
                     casaVitini.administracion.usuarios.portada.buscadorUI()
                 } else if (parametroBuscar?.length > 0) {
-                    console.log("eee")
+
                     main.setAttribute("zonaCSS", "administracion/usuarios/buscador")
                     casaVitini.administracion.usuarios.portada.buscadorUI()
                     if (!granuladoURL.parametros.buscar) {
@@ -28640,10 +28649,10 @@ const casaVitini = {
                     }
                     const campoBuscador = document.querySelector("[componente=zonaNavegacionPaginadaUsuarios]")
                     campoBuscador.value = transaccion.buscar
-                    console.log("transaccion", transaccion)
+
                     casaVitini.administracion.usuarios.portada.mostrarUsuariosResueltos(transaccion)
                 } else if (rawArray.length > 2) {
-                    console.log("test1")
+
                     casaVitini.administracion.usuarios.detallesUsuario.arranque()
                 }
 
@@ -28897,7 +28906,7 @@ const casaVitini = {
                     const paginaTipo = transaccion.paginaTipo
                     delete transaccion.paginaTipo
                     const resolverUsuarios = await casaVitini.administracion.usuarios.portada.resolverUsuarios(transaccion)
-                    console.log("resolverUsuarios", resolverUsuarios)
+
                     const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                     if (!instanciaRenderizada || !resolverUsuarios) {
                         return
@@ -28986,7 +28995,7 @@ const casaVitini = {
                         sentidoSeleccionado: sentidoColumna,
                         destino: "[contenedor=resultados]"
                     })
-                    console.log("u", usuarios)
+
                     this.constructorTarjetas({
                         tarjetas: usuarios,
                         destino: "[contenedor=resultados]"
@@ -29049,7 +29058,7 @@ const casaVitini = {
                 ordenarPorColumna: async (columna) => {
                     const main = document.querySelector("main")
                     const instanciaUID = main.getAttribute("instanciaUID")
-                    console.log("test")
+
                     const nombreColumna = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("nombreColumna")
                     const selectorColumnasentido = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("sentidoColumna")
                     const numeroPagina = columna.target.closest("[gridUID]").getAttribute("numeroPagina")
@@ -29148,7 +29157,7 @@ const casaVitini = {
                         "flexVertical",
                         "gap6"
                     )
-                    console.log("usauruiios", usuarios)
+
                     usuarios.forEach(u => {
                         const usuario = u.usuario
                         const nombre = u.nombre
@@ -29360,7 +29369,7 @@ const casaVitini = {
                         }
                         transaccion.sentidoColumna = selectorSentido
                         transaccion.nombreColumna = selectorColumna
-                        console.log("transaccio", transaccion)
+
                         // for (const [parametro, valor] of Object.entries(parametros)) {
                         //     transaccion[parametro] = valor
                         // }
@@ -29665,7 +29674,7 @@ const casaVitini = {
                             const campoDato = campo.value
                             datosParaActualizar[campoID] = campoDato
                         })
-                        console.log("dfatos", datosParaActualizar)
+
                         const respuestaServidor = await casaVitini.shell.servidor(datosParaActualizar)
                         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                         if (!instanciaRenderizada) { }
@@ -30421,8 +30430,12 @@ const casaVitini = {
         },
         calendario: {
             arranque: async () => {
+                const html = document.querySelector("html")
+                html.style.height = "100%"
+
                 const main = document.querySelector("main")
                 main.setAttribute("zonaCSS", "administracion/calendario")
+                //main.style.background = "pink"
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
                 const parametros = granuladoURL.parametros
                 const contenedorSeguroParaParametros = granuladoURL.contenedorSeguroParaParametros
@@ -30434,7 +30447,7 @@ const casaVitini = {
                 // window.removeEventListener("resize", casaVitini.administracion.calendario.controlVertical);
                 // window.addEventListener('resize', casaVitini.administracion.calendario.controlVertical);
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                const sectionRenderizada = document.querySelector("main[instanciaUID]")
+                const sectionRenderizada = document.querySelector("main")
                 sectionRenderizada.style.maxWidth = "100%"
                 const instanciaUID_seccion = sectionRenderizada.getAttribute("instanciaUID")
                 const metadatosControaldorLogo = {
@@ -30519,6 +30532,7 @@ const casaVitini = {
                 const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                 //const selectorCapas = calendarioRenderizado.querySelector("[componente=selectorCapas]")
                 const apartamentosLista = await casaVitini.administracion.calendario.obtenerConfiguracionesApartamento()
+
                 if (apartamentosLista.length > 0) {
                     const tituloApartamentos = document.createElement("option");
                     tituloApartamentos.value = "";
@@ -31568,7 +31582,7 @@ const casaVitini = {
                         fila: row,
                         columna: column
                     }
-                    estructuraFinal
+                    return estructuraFinal
                 }
                 const obtenerNumeroDeCeldasEnFila = (filaDeseada) => {
                     const gridContainer = document.querySelector('[componente=marcoMes]');
@@ -31583,7 +31597,7 @@ const casaVitini = {
                     const celdasEnFila = celdas.slice(indiceInicial, indiceFinal);
                     // Muestra el número de celdas en la fila deseada
                     // 
-                    celdasEnFila.length
+                    return celdasEnFila.length
                 }
                 const obtenerNumeroDeCeldasConAtributoEnFila = (filaDeseada, atributo) => {
                     const gridContainer = document.querySelector('[componente=marcoMes]');
@@ -31598,14 +31612,14 @@ const casaVitini = {
                     const celdasEnFilaConAtributo = celdas.slice(indiceInicial, indiceFinal).filter(celda => celda.getAttribute(atributo) !== null);
                     // Muestra el número de celdas en la fila deseada con el atributo específico
                     //
-                    celdasEnFilaConAtributo.length;
+                    return celdasEnFilaConAtributo.length;
                 }
                 const filaDeseada = 2; // Puedes cambiar esto según la fila que te interese
                 const numeroDeFilasTotales = (gridUID) => {
                     const grid = document.querySelector('[componente=marcoMes]');
                     const gridStyles = window.getComputedStyle(grid);
                     const gridRows = gridStyles.gridTemplateRows.split(' ').length;
-                    gridRows
+                    return gridRows
                 }
                 const diferenciaDeDias = (fechaIncioMes_ISO, fechaSalidaEvento_ISO) => {
                     const fecha1 = new Date(fechaIncioMes_ISO); // Primera fecha en formato ISO
@@ -31616,7 +31630,7 @@ const casaVitini = {
                     const diferenciaEnMilisegundos = Math.abs(fecha2.getTime() - fecha1.getTime());
                     // Convierte la diferencia a días
                     const diferenciaEnDiasSalida = Math.ceil(diferenciaEnMilisegundos / (1000 * 60 * 60 * 24));
-                    diferenciaEnDiasSalida
+                    return diferenciaEnDiasSalida
                 }
                 const constructorEventoUI = (metadatos) => {
                     const eventoUID = metadatos.eventoUID
@@ -31628,28 +31642,31 @@ const casaVitini = {
                     const inicioFila = metadatos.inicioFila
                     const tipoEvento = metadatos.tipoEvento
                     //detallesDelEvento
+
+
                     const detallesDelEvento = metadatos.detallesDelEvento
+
                     let nombreEventoFinal = "Evento sin infomración"
                     let urlUI
                     if (tipoEvento === "reserva") {
-                        const reservaUID = detallesDelEvento.reserva
+                        const reservaUID = detallesDelEvento.reservaUID
                         nombreEventoFinal = "Reserva " + reservaUID
-                        urlUI = "/administracion/reservas/" + reservaUID
+                        urlUI = "/administracion/reservas/reserva:" + reservaUID
                     }
                     if (tipoEvento === "todosLosApartamentos") {
-                        const reservaUID = detallesDelEvento.reserva
+                        const reservaUID = detallesDelEvento.reservaUID
                         const apartamentoUI = detallesDelEvento.apartamentoUI
                         nombreEventoFinal = apartamentoUI
-                        urlUI = `/administracion/reservas/${reservaUID}`
+                        urlUI = `/administracion/reservas/reserva:${reservaUID}`
                     }
                     if (tipoEvento === "porApartamento") {
-                        const reservaUID = detallesDelEvento.reserva
+                        const reservaUID = detallesDelEvento.reservaUID
                         const apartamentoUI = detallesDelEvento.apartamentoUI
                         nombreEventoFinal = apartamentoUI
-                        urlUI = `/administracion/reservas/${reservaUID}`
+                        urlUI = `/administracion/reservas/reserva:${reservaUID}`
                     }
                     if (tipoEvento === "todosLosBloqueos") {
-                        const bloqueoUID = detallesDelEvento.uid
+                        const bloqueoUID = detallesDelEvento.bloquoeUID
                         const apartamentoIDV = detallesDelEvento.apartamentoIDV
                         const apartamentoUI = detallesDelEvento.apartamentoUI
                         nombreEventoFinal = `Bloqueo ${apartamentoUI}`
@@ -31693,17 +31710,17 @@ const casaVitini = {
                             eventoRenderizado.classList.remove("administracion_calendario_eventoUI_selecionado")
                         })
                     })
-                    eventoUI
+                    return eventoUI
                 }
                 const siguienteLunes = (primerDiaDelMes) => {
                     if (primerDiaDelMes === 1) {
-                        8;
+                        return 8;
                     }
                     else if (primerDiaDelMes > 1) {
-                        8 - (primerDiaDelMes - 1);
+                        return 8 - (primerDiaDelMes - 1);
                     }
                     else {
-                        1 + (1 - primerDiaDelMes);
+                        return 1 + (1 - primerDiaDelMes);
                     }
                 }
                 const renderizadorEventos = (contenedorEventos) => {
@@ -31785,8 +31802,9 @@ const casaVitini = {
                             selectorMesDestino.querySelector(`[dia="${diaDestino}"]`)
                                 .setAttribute("eventosContenedor", JSON.stringify(objetoEventos))
                         }
+
                         for (const detallesDelEvento of eventosEnDetalle) {
-                            const reservaUID = detallesDelEvento.reserva
+                            const reservaUID = detallesDelEvento.reservaUID
                             const eventoUID = detallesDelEvento.eventoUID
                             const reservaUI = detallesDelEvento.reserva
                             const nombreEventoUI = detallesDelEvento.nombreEventoUI
@@ -31960,7 +31978,7 @@ const casaVitini = {
                 const capasCompuestas = contenedorCapas.capasCompuestas
                 const primerFormatoURL = []
                 for (const capaSimple of capasSimples) {
-                    const capaSimpleURL = casaVitini.componentes.utilidades.cadenas.camelToSnake(capaSimple)
+                    const capaSimpleURL = casaVitini.utilidades.cadenas.camelToSnake(capaSimple)
                     const composicioCapa = capasCompuestas[capaSimple]
                     let final
                     if (composicioCapa) {
@@ -31999,6 +32017,7 @@ const casaVitini = {
                     zona: "administracion/arquitectura/configuraciones/listarConfiguracionApartamentos"
                 }
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+
                 if (respuestaServidor?.error) {
                     casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                 }
@@ -32018,7 +32037,7 @@ const casaVitini = {
                             estructuraFinal.push(detallesApartamento)
                         }
                     }
-                    estructuraFinal
+                    return estructuraFinal
                 }
             },
             obtenerCalendariosSincronizados: {
@@ -32048,7 +32067,7 @@ const casaVitini = {
                                 estructuraFinal.push(detallesApartamento)
                             }
                         }
-                        estructuraFinal
+                        return estructuraFinal
                     }
                 }
             }

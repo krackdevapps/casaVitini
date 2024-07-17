@@ -45,7 +45,10 @@ export const perfil_porDiasDelRango = async (data) => {
                     const apartamentoIDV = apartamento.apartamentoIDV
                     const descuentoTotal = new Decimal(apartamento.descuentoTotal)
                     const tipoAplicacion = apartamento.tipoAplicacion
-                    apartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)).apartamentoUI
+                    apartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                        apartamentoIDV,
+                        errorSi: "noExiste"
+                    })).apartamentoUI
 
 
                     const totalPorApartamento = estructura.entidades.reserva

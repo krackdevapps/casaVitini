@@ -1,7 +1,8 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const obtenerReservasPorMesPorAno = async (data) => {
+export const obtenerReservasPorMes = async (data) => {
     try {
+        // Este scritp esta literalment mal
         const reservaUIDNuevo = data.reservaUIDNuevo
         const apartamentoIDV = data.apartamentoIDV
         const apartamentoUI = data.apartamentoUI

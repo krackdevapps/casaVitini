@@ -90,19 +90,18 @@ export const utilidades = {
     comparadorFechas_ISO: (fecha1, fecha2) => {
         // Obtener componentes de la primera fecha
         const partesFecha1 = fecha1.split('-');
-        const dia1 = parseInt(partesFecha1[2], 10);
-        const mes1 = parseInt(partesFecha1[1], 10) - 1; // Restar 1 al mes porque en JavaScript los meses van de 0 a 11
-        const anio1 = parseInt(partesFecha1[0], 10);
-        // Obtener componentes de la segunda fecha
+        const dia1 = parseInt(partesFecha1[2], 10)
+        const mes1 = parseInt(partesFecha1[1], 10)
+        const anio1 = parseInt(partesFecha1[0], 10)
+        
         const partesFecha2 = fecha2.split('-');
-        const dia2 = parseInt(partesFecha2[2], 10);
-        const mes2 = parseInt(partesFecha2[1], 10) - 1;
-        const anio2 = parseInt(partesFecha2[1], 10);
-        // Crear objetos Date para ambas fechas
-        const date1 = new Date(anio1, mes1, dia1);
-        const date2 = new Date(anio2, mes2, dia2);
-        // Comparar las fechas
-        return date1.getTime() === date2.getTime();
+        const dia2 = parseInt(partesFecha2[2], 10)
+        const mes2 = parseInt(partesFecha2[1], 10) 
+        const anio2 = parseInt(partesFecha2[0], 10)
+        
+        const date1 = DateTime.local(anio1, mes1, dia1);
+        const date2 = DateTime.local(anio2, mes2, dia2);
+        return date1.toISODate() === date2.toISODate();        
     },
     contructorComasEY: (data) => {
         const array = data.array

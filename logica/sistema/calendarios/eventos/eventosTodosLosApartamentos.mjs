@@ -36,15 +36,19 @@ export const eventosTodosLosApartamentos = async (fecha) => {
 
         for (const detalles of reservas) {
             const apartamentoIDV = detalles.apartamentoIDV
-            detalles.apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+            const apartamento =  await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            })
+            detalles.apartamentoUI = apartamento.apartamentoUI
             reservasSelecciondas.push(detalles)
         }
         for (const detallesReserva of reservasSelecciondas) {
-            const reservaUID = detallesReserva.reserva
-            const apartamentoUID = detallesReserva.uid
+            const reservaUID = detallesReserva.reservaUID
+            const apartamentoUID = detallesReserva.componenteUID
             const fechaEntrada = detallesReserva.fechaEntrada
             const fechaSalida = detallesReserva.fechaSalida
-            const apartamentoIDVReserva = detallesReserva.apartamentoIDV
+            const apartamentoIDV = detallesReserva.apartamentoIDV
             detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
             detallesReserva.tipoEvento = "todosLosApartamentos"
             detallesReserva.eventoUID = "todosLosApartamentos_" + apartamentoUID
@@ -55,18 +59,22 @@ export const eventosTodosLosApartamentos = async (fecha) => {
                 const mesFechaInterna = fechaInternaObjeto.month
                 const anoFechaInterna = fechaInternaObjeto.year
                 const fechaInternaHumana = `${anoFechaInterna}-${mesFechaInterna}-${diaFechaInterna}`
+                const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV: apartamentoIDV,
+                    errorSi: "noExiste"
+                })
                 const estructuraReservaEnDia = {
                     eventoUID: "todosLosApartamentos_" + apartamentoUID,
                     reservaUID: reservaUID,
                     apartamentoUID: apartamentoUID,
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
-                    apartamentoIDV: apartamentoIDVReserva,
-                    apartamentoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDVReserva)
+                    apartamentoIDV: apartamentoIDV,
+                    apartamentoUI: apartamento.apartamentoUI
                 }
                 if (calendarioObjeto[fechaInternaHumana]) {
                     calendarioObjeto[fechaInternaHumana].push(estructuraReservaEnDia)
-                }
+                } 
             }
         }
         const ok = {

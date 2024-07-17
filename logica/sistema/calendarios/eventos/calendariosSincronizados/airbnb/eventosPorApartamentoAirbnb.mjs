@@ -22,7 +22,12 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
 
         const calendario = await obtenerCalendarioPorCalendarioUID(calendarioUID)
         const apartamentoIDV = calendario.apartamentoIDV
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+        const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })).apartamentoUI
+
+        
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
         const ano = fechaArray[1]

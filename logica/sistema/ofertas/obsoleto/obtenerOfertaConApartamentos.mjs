@@ -11,7 +11,10 @@ export const obtenerOfertaConApartamentos = async (ofertaUID) => {
             oferta["apartamentosDedicados"] = []
             for (const apartamento of apartamentosDeLaOferta) {
                 const apartamentoIDV = apartamento.apartamentoIDV
-                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "noExiste"
+                }).apartamentoUI
                 const tipoDescuentoApartamento = apartamento.tipoDescuento
                 const cantidadApartamento = apartamento.cantidad
                 const detallesApartamentoDedicado = {

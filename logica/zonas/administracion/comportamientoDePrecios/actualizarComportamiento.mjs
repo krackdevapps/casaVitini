@@ -173,7 +173,10 @@ export const actualizarComportamiento = async (entrada, salida) => {
                 limpiezaEspaciosAlrededor: "si",
             })
             await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            }).apartamentoUI;
             if (simbolo !== "aumentoPorcentaje" &&
                 simbolo !== "aumentoCantidad" &&
                 simbolo !== "reducirCantidad" &&

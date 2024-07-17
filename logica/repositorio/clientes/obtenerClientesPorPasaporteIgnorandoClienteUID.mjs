@@ -28,7 +28,7 @@ export const obtenerClientesPorPasaporteIgnorandoClienteUID = async (data) => {
             return resuelve.rows[0]
 
         } else if (errorSi === "existe") {
-            console.log("res", resuelve.rows)
+
             if (resuelve.rowCount > 0) {
                 const error = "Ya existe un cliente distinco a ese clienteUID con ese pasaporte"
                 throw new Error(error)

@@ -24,7 +24,10 @@ export const listaPreciosApartamentos = async (entrada, salida) => {
         const objetoFInal = [];
         for (const apartamentoEncotrado of configuracionesDeAlojamiento) {
             const apartamentoIDV = apartamentoEncotrado.apartamentoIDV;
-            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            }).apartamentoUI
             const apartamento = {
                 apartamento: apartamentoIDV,
                 apartamentoUI: apartamentoUI

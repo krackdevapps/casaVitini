@@ -43,7 +43,10 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             })
 
             const validarCodigo = async (apartamentoIDV) => {
-                const detallesApartamentoComoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                const detallesApartamentoComoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "noExiste"
+                })
                 if (detallesApartamentoComoEntidad.apartamento) {
                     return true;
                 }
@@ -61,7 +64,10 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 return codigoGenerado;
             };
             const apartamentoIDV_unico = await controlApartamentoIDV(apartamentoIDV);
-            const detallesApartamentoComoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV_unico)
+            const detallesApartamentoComoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV: apartamentoIDV_unico,
+                errorSi: "noExiste"
+            })
 
             if (detallesApartamentoComoEntidad.rowCount === 1) {
                 const error = "Ya existe un identificador visual igual que el apartamento que propones, escoge otro";

@@ -50,7 +50,7 @@ export const listaImpuestosPaginados = async (entrada) => {
                 nombreColumna: nombreColumna,
                 tabla: "impuestos"
             })
-            console.log("sentidoColumna", sentidoColumna)
+
             if (!sentidoColumna) {
                 sentidoColumna = "ascendente"
             }

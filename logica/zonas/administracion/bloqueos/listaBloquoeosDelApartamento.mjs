@@ -23,7 +23,10 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
 
         await eliminarBloqueoCaducado();
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        }).apartamentoUI
         const bloqueosDelApartamento = await obtenerBloqueosDelApartamentoPorApartamentoIDV(apartamentoIDV)
 
         const ok = {};

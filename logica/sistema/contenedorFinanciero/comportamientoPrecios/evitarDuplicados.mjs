@@ -50,7 +50,10 @@ export const evitarDuplicados = async (data) => {
                 const apartamentoIDV = apartamento.apartamentoIDV
 
                 if (preContenedorApartamentos.hasOwnProperty(apartamentoIDV)) {
-                    const apartamentoUI = obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                    const apartamentoUI = obtenerApartamentoComoEntidadPorApartamentoIDV({
+                        apartamentoIDV,
+                        errorSi: "noExiste"
+                    })
                     const m = `El ${apartamentoUI} (${apartamentoIDV}) esta repetido`
                     throw new Error(m)
                 } else if (!preContenedorApartamentos.hasOwnProperty(apartamentoIDV)) {
@@ -164,7 +167,7 @@ export const evitarDuplicados = async (data) => {
         //                 comportamientoUID: comportamientoUID,
         //                 apartamentoIDV: apartamentoIDV,
         //                 componenteUID: componenteUID,
-        //                 apartametnoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+        //                 apartamentoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
         //             }
         //             arbolComportamientoCoincidentes[componenteUID].apartamento.push(estructuraApartamentoCoincidente)
 
@@ -223,7 +226,10 @@ export const evitarDuplicados = async (data) => {
                         comportamientoUID: comportamientoUID,
                         apartamentoIDV: apartamentoIDV,
                         componenteUID: componenteUID,
-                        apartametnoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+                        apartamentoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV,
+                            errorSi: "noExiste"
+                        }).apartamentoUI
                     }
                     arbolComportamientoCoincidentes[componenteUID].apartamento.push(estructuraApartamentoCoincidente)
 

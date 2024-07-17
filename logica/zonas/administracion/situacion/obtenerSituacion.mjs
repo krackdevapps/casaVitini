@@ -9,6 +9,7 @@ import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reser
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
 import { obtenerReservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorRango.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { obtenerReservasQueRodeanUnaFecha } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasQueRodeanUnaFecha.mjs";
 
 export const obtenerSituacion = async (entrada, salida) => {
     try {
@@ -24,12 +25,15 @@ export const obtenerSituacion = async (entrada, salida) => {
             const error = "No hay apartamentos configurados";
             throw new Error(error);
         }
-        for (const apartamento of configuracionesDeAlojamiento) {
-            const apartamentoIDV = apartamento.apartamentoIDV;
-            const estadoApartamento = apartamento.estadoConfiguracion;
-            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+        for (const configiguracionApartamento of configuracionesDeAlojamiento) {
+            const apartamentoIDV = configiguracionApartamento.apartamentoIDV;
+            const estadoApartamento = configiguracionApartamento.estadoConfiguracionIDV;
+            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            });
             apartamentosObjeto[apartamentoIDV] = {
-                apartamentoUI: apartamentoUI,
+                apartamentoUI: apartamento.apartamentoUI,
                 estadoApartamento: estadoApartamento,
                 reservas: [],
                 estadoPernoctacion: "libre"
@@ -46,10 +50,10 @@ export const obtenerSituacion = async (entrada, salida) => {
         const horaPresenteTZ = tiempoZH.hour;
         const minutoPresenteTZ = tiempoZH.minute;
 
-        const reservasUIDHoy = await obtenerReservasPorRango({
-            fechaIncioRango_ISO: fechaActualTZ,
-            fechaFinRango_ISO: fechaActualTZ
+        const reservasUIDHoy = await obtenerReservasQueRodeanUnaFecha({
+            fechaReferencia: fechaActualTZ,
         })
+
         const ok = {};
         if (reservasUIDHoy.length === 0) {
             ok.ok = apartamentosObjeto;

@@ -6,6 +6,7 @@ export const obtenerReservasPorRango = async (metadatos) => {
         const fechaIncioRango_ISO = metadatos.fechaIncioRango_ISO
         const fechaFinRango_ISO = metadatos.fechaFinRango_ISO
         const estadosReservaIDV = ["pendiente", "confirmada"]
+
         const consultaReservas = `
         SELECT 
         "reservaUID",
@@ -43,6 +44,7 @@ export const obtenerReservasPorRango = async (metadatos) => {
             estadosReservaIDV
         ]
         const resuelveRreservas = await conexion.query(consultaReservas, parametros)
+
         return resuelveRreservas.rows
     } catch (errorCapturado) {
         throw errorCapturado

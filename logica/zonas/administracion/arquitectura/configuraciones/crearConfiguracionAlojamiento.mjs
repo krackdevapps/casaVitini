@@ -25,7 +25,10 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        }).apartamentoUI
         if (!apartamentoUI) {
             const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon";
             throw new Error(error);

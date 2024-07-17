@@ -13,7 +13,10 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
     try {
         const calendariosporUIDPublico = await obtenerCalendarioPorCalendarioUIDPublico(calendarioUIDPublico)
         const apartamentoIDV = calendariosporUIDPublico.apartamentoIDV;
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi:"noExiste"
+        }).apartamentoUI
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaActual_ISO = tiempoZH.toISODate();

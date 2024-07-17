@@ -3,9 +3,9 @@ import { conexion } from "../../componentes/db.mjs";
 export const actualizarUsuarioSessionActiva = async (data) => {
     const usuarioIDX = data.usuarioIDX
     const nuevoIDX = data.nuevoIDX
-    console.log("data",data)
+
     try {
-        const consulta =`
+        const consulta = `
             UPDATE
             sessiones
             SET 

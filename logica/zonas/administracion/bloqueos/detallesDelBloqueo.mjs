@@ -30,7 +30,10 @@ export const detallesDelBloqueo = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
         await eliminarBloqueoCaducado();
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        }).apartamentoUI
         const detallesDelBloqueo = await obtenerBloqueoPorBloqueoUID(bloqueoUID)
         if (detallesDelBloqueo.rowCount === 0) {
             const error = "No existe el bloqueo, comprueba el apartamentoIDV y el bloqueoUID";

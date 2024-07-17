@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { obtenerReservasPorMesPorAno } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorMes.mjs";
+import { obtenerReservasPorMesPorAno } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorMesPorAno.mjs";
 
 export const eventosReservas = async (fecha) => {
     try {
@@ -34,12 +34,13 @@ export const eventosReservas = async (fecha) => {
             ano: ano,
             reservaCancelada: reservaCancelada
         })
+
         const reservasSelecciondas = reservas.map((detallesReserva) => {
-            detallesReserva.eventoUID = "reservaUID_" + detallesReserva.reserva
+            detallesReserva.eventoUID = "reservaUID_" + detallesReserva.reservaUID
             return detallesReserva
         })
         for (const detallesReserva of reservasSelecciondas) {
-            const reservaUID = detallesReserva.reserva
+            const reservaUID = detallesReserva.reservaUID
             const fechaEntrada = detallesReserva.fechaEntrada
             const fechaSalida = detallesReserva.fechaSalida
             detallesReserva.tipoEvento = "reserva"

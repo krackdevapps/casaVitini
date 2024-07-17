@@ -8,7 +8,10 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../../../repo
 export const precioBaseApartamento = async (apartamentoIDV) => {
     try {
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
+        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        }).apartamentoUI
         const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
         const precioNetoNoche = perfilPrecio.precio
 

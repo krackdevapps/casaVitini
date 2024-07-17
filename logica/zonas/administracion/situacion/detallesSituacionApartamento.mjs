@@ -12,8 +12,8 @@ import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDet
 import { obtenerClientePoolPorPernoctanteUID } from "../../../repositorio/pool/obtenerClientePoolPorPernoctanteUID.mjs";
 import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs";
 import { obtenerTodosLosPernoctantesDeLaReserva } from "../../../repositorio/reservas/pernoctantes/obtenerTodosLosPernoctantesDeLaReserva.mjs";
-import { obtenerReservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorRango.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { obtenerReservasQueRodeanUnaFecha } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasQueRodeanUnaFecha.mjs";
 
 export const detallesSituacionApartamento = async (entrada, salida) => {
     try {
@@ -33,7 +33,10 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
 
         // Validar que existe el apartamento
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV);
+        const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        });
         // Ver las reservas que existen hoy
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
@@ -43,7 +46,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         const horaEntradaTZ = horasSalidaEntrada.horaEntradaTZ;
         const horaSalidaTZ = horasSalidaEntrada.horaSalidaTZ;
         const objetoFinal = {
-            apartamentoUI: apartamentoUI,
+            apartamentoUI: apartamento.apartamentoUI,
             apartamentoIDV: apartamentoIDV,
             zonaHoraria: zonaHoraria,
             horaSalidaTZ: horaSalidaTZ,
@@ -52,10 +55,10 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             reservas: {}
         };
 
-        const reservasUIDHoy = await obtenerReservasPorRango({
-            fechaIncioRango_ISO: fechaActualTZ,
-            fechaFinRango_ISO: fechaActualTZ
+        const reservasUIDHoy = await obtenerReservasQueRodeanUnaFecha({
+            fechaReferencia: fechaActualTZ,
         })
+
         const identificadoresReservasValidas = []
         for (const reservaEncontrada of reservasUIDHoy) {
             const reservaUID = reservaEncontrada.reservaUID;
@@ -78,7 +81,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                 reservaUID: reservaUID,
                 apartamentoIDV: apartamentoIDV
             })
-            if (apartamentoDeLaReserva.componenteUID) {
+            if (apartamentoDeLaReserva?.componenteUID) {
                 identificadoresReservasValidas.push(reservaUID)
                 const tiempoRestante = utilidades.calcularTiempoRestanteEnFormatoISO(fechaConHoraSalida_ISO_ZH, fechaActualCompletaTZ);
                 const cantidadDias = utilidades.calcularDiferenciaEnDias(fechaEntrada, fechaSalida);
@@ -92,11 +95,11 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                 }
                 const diaEntrada = utilidades.comparadorFechas_ISO(fechaEntrada, fechaActualTZ);
                 const diaSalida = utilidades.comparadorFechas_ISO(fechaSalida, fechaActualTZ);
+
                 let identificadoDiaLimite = "diaInterno";
                 if (diaEntrada) {
                     identificadoDiaLimite = "diaDeEntrada";
-                }
-                if (diaSalida) {
+                } else if (diaSalida) {
                     identificadoDiaLimite = "diaDeSalida";
                 }
                 const estructuraReserva = {
@@ -117,13 +120,14 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                     reservaUID: reservaUID,
                     apartamentoUID: apartamentoUID
                 })
+
                 estructuraReserva.habitaciones = habitacionesDelApartamento
                 //  habitacionesDelApartamento[apartamentoIDV] = habitacionesDelApartamento
                 objetoFinal.reservas[reservaUID] = estructuraReserva
 
-
             }
         }
+
         const pernoctantesContenedorTemporal = []
         for (const reservaUIDValido of identificadoresReservasValidas) {
             const pernoctantesDeLaReserva = await obtenerTodosLosPernoctantesDeLaReserva(reservaUIDValido)
@@ -202,4 +206,5 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
     } catch (errorCapturado) {
         throw errorCapturado
     }
+
 }

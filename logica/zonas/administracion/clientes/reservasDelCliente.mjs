@@ -12,7 +12,7 @@ export const reservasDelCliente = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-        console.log("clienteUID entrante", entrada.body.clienteUID, typeof entrada.body.clienteUID)
+
         const clienteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.clienteUID,
             nombreCampo: "El identificador universal del cliente (clienteUID)",
@@ -47,7 +47,7 @@ export const reservasDelCliente = async (entrada) => {
             sePermitenNegativos: "no"
         })
 
-        
+
         if (nombreColumna !== "como" && nombreColumna) {
             if (nombreColumna === "reserva") {
                 nombreColumna = "reservaUID"

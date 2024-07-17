@@ -56,7 +56,7 @@ export const validarModificacionRangoFechaResereva = async (data) => {
                 const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                     apartamentoIDV: apartamentoIDV,
                     errorSi: "desactivado"
-                })
+                }).apartamentoUI
                 const nombreUI = `${apartamentoUI} (IDV: ${apartamentoIDV})`
                 arrayStringsPrePresentacionDatos.push(nombreUI)
             }

@@ -337,7 +337,7 @@ main[zonaCSS="/"] {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     padding: 0px;
-    margin: 2px;
+    margin: 0px;
     flex: 1;
     grid-template-rows: 0.01fr auto;
 }
@@ -5460,11 +5460,11 @@ main[zonaCSS="/"] {
 }
 
 [zonaCSS="administracion/situacion"] .situacionApartamentoEstadoPernoctacion {
-    /* background: #dfdfdf; */
+    background: #b8b8b88f;
     margin: 0;
     padding: 5px;
     border-radius: 6px;
-    border: 1px solid rgb(0 0 0 / 0.4);
+    /* border: 1px solid rgb(0 0 0 / 0.4); */
     padding-right: 10px;
     padding-left: 10px;
 }
@@ -5494,9 +5494,9 @@ main[zonaCSS="/"] {
 }
 
 [zonaCSS="administracion/situacion"] .situacionDetallesGenerales {
-    background: rgb(255 255 255 / 0.4);
+    /* background: rgb(255 255 255 / 0.4); */
     gap: 6px;
-    padding: 10px;
+    padding: 20px;
     border-radius: 16px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -11399,6 +11399,18 @@ grid-template-columns: 0.5fr 1.5fr;
     flex: 1;
 }
 
+[zonaCSS="administracion/calendario"] .administracion_calendario_contenedorCalentadioIntermedio {
+    display: flex;
+    /* width: 100%; */
+    /* max-width: 720px; */
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    /* height: 100%; */
+    flex: 1;
+}
+
 .componente_calendario_contenedoCarga_calendarioIncrustado {
     display: flex;
     /* width: 100%; */
@@ -12832,8 +12844,9 @@ grid-template-columns: 0.5fr 1.5fr;
 [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI .marcoBotonesGlobales {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     flex-direction: column;
+    padding: 6px;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI .botonSelectorMulticapa {

@@ -10,6 +10,7 @@ import { insertarHabitacionEnApartamento } from '../../repositorio/reservas/apar
 import { procesador } from '../contenedorFinanciero/procesador.mjs';
 import { insertarDesgloseFinacieroPorReservaUID } from '../../repositorio/reservas/transacciones/desgloseFinanciero/insertarDesgloseFinacieroPorReservaUID.mjs';
 import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from '../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs';
+import { generadorReservaUID } from '../../componentes/generadorReservaUID.mjs';
 
 export const insertarReserva = async (reserva) => {
     try {
@@ -34,16 +35,16 @@ export const insertarReserva = async (reserva) => {
         const telefonoTitular = datosTitular.telefonoTitular
         const codigoDescuentosArrayBASE64 = reserva.codigosDescuento
 
-
+        const reservaUID = await generadorReservaUID()
         const nuevaReserva = await insertarReservaAdministrativa({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
             estadoReserva: estadoReserva,
             origen: origen,
             fechaCreacion,
-            estadoPago: estadoPago
+            estadoPago: estadoPago,
+            reservaUID: reservaUID
         })
-        const reservaUID = nuevaReserva.reservaUID;
         await insertarTitularPool({
             titularReservaPool: titularReservaPool,
             pasaporteTitularPool: pasaporteTitularPool,
