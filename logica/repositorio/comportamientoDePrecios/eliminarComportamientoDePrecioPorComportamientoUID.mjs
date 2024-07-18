@@ -4,7 +4,7 @@ export const eliminarComportamientoDePrecioPorComportamientoUID = async (comport
 
         const consulta = `
         DELETE FROM "comportamientoPrecios"
-        WHERE uid = $1;
+        WHERE "comportamientoUID" = $1;
         `;
    
         const resuelve = await conexion.query(consulta, [comportamientoUID]);

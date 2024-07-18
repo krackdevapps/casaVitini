@@ -8,7 +8,7 @@ export const actualizarPerfilPrecioPorApartamentoUID = async (data) => {
         const consulta = `
         UPDATE "preciosApartamentos"
         SET precio = $1
-        WHERE "apartamento" = $2;
+        WHERE "apartamentoIDV" = $2;
         `;
         const parametros = [
             nuevoPrecio,
@@ -21,7 +21,7 @@ export const actualizarPerfilPrecioPorApartamentoUID = async (data) => {
         }
         return resuelve.rows[0]
     } catch (errorAdaptador) {
-        throw errorCapturado
+        throw errorAdaptador
     }
 
 }

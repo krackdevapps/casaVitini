@@ -93,7 +93,7 @@ export const listarReservas = async (entrada, salida) => {
                 await validadoresCompartidos.fechas.validacionVectorial({
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
-                    tipoVector: "diferente"
+                    tipoVector: "igual"
                 })
             }
 

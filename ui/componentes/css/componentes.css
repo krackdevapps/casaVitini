@@ -6000,8 +6000,8 @@ main[zonaCSS="/"] {
     -webkit-backdrop-filter: blur(50px);
 }
 
-.espacioBuscadorReservas {
-    margin-top: 100px;
+.espacioComportamiento {
+    /* margin-top: 100px; */
 }
 
 .reservasListaSinResultados {
@@ -6624,7 +6624,7 @@ main[zonaCSS="/"] {
     border: none;
     padding: 6px;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.1);
     appearance: none;
     backdrop-filter: blur(50px);
     display: grid;
@@ -6900,7 +6900,8 @@ main[zonaCSS="/"] {
     -webkit-backdrop-filter: blur(50px);
     flex-direction: row;
     justify-content: center;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
 }
 
 
@@ -7285,13 +7286,14 @@ main[zonaCSS="/"] {
 
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaEpacioBotones {
     /* background: yellow; */
-    display: flex;
+    display: grid;
     justify-content: center;
     align-items: center;
     align-content: center;
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 6px;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfervaBotonV1 {
@@ -7354,6 +7356,7 @@ main[zonaCSS="/"] {
     -webkit-backdrop-filter: blur(50px);
     cursor: default;
     transition: all 500ms;
+    gap: 10px;
 }
 
 .comportamientoUI:hover {
@@ -7378,7 +7381,7 @@ main[zonaCSS="/"] {
 }
 
 [zonaCSS="administracion/enlacesDePago"] .ofertaUINoHay {
-    background: rgba(255, 255, 255, 0.3);
+    /* background: rgba(255, 255, 255, 0.3); */
     padding: 6px;
     border-radius: 14px;
     display: flex;
@@ -7463,7 +7466,7 @@ main[zonaCSS="/"] {
 
 
 [zonaCSS="administracion/comportamiento_de_precios"] .contenedorDiasSelecionados {
-    display: flex;
+    display: grid;
     padding: 0;
     margin: 0;
     gap: 10px;
@@ -7528,7 +7531,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
 [zonaCSS="administracion/comportamiento_de_precios"] .contenedorTituloEstado {
-    padding: 6px;
+    padding: 0px;
 
 }
 
@@ -7612,6 +7615,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS="administracion/comportamiento_de_precios"] .ofertaUITituloFecha {
     font-weight: bold;
+    text-align: center;
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOFertaBotonAnadirApartamento {

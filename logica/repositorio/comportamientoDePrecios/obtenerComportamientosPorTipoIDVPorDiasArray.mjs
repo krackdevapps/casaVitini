@@ -7,15 +7,20 @@ export const obtenerComportamientosPorTipoIDVPorDiasArray = async (data) => {
         const consulta = `
         SELECT *
         FROM "comportamientoPrecios"
-        WHERE 
-        "tipoIDV" = $1
+        WHERE
+        contenedor->>'tipo' = $1
         AND
-        $2::text[] && "diasArray";
-        `
+            EXISTS (
+                   SELECT 1
+                   FROM jsonb_array_elements_text(contenedor->'diasArray') AS elem
+                   WHERE elem::text = ANY ($2::text[])
+            );;
+            `
         const parametros = [
             tipoIDV,
             diasArray
         ]
+        console.log("parametrosd", parametros)
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows
     } catch (errorCapturado) {

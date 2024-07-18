@@ -12,7 +12,7 @@ export const buscar = async (entrada, salida) => {
         IDX.control()
 
         const buscar = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.buscar,
+            string: entrada.body.buscar || "",
             nombreCampo: "El campo buscar esta vacío",
             filtro: "strictoConEspacios",
             sePermiteVacio: "no",
@@ -53,19 +53,21 @@ export const buscar = async (entrada, salida) => {
             sePermiteCero: "no",
             sePermitenNegativos: "no"
         })
-        if (nombreColumna === "uid") {
-            nombreColumna = "clienteUID"
-        }
+  
 
 
         if (nombreColumna) {
+            if (nombreColumna === "uid") {
+                nombreColumna = "clienteUID"
+            }
+            
             await validadoresCompartidos.baseDeDatos.validarNombreColumna({
                 nombreColumna: nombreColumna,
                 tabla: "clientes"
             })
             sentidoColumna = sentidoColumna ? sentidoColumna : "ascendente"
             validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
-
+ 
         }
 
 

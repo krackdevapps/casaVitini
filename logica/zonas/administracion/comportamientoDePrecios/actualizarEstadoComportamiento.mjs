@@ -1,9 +1,10 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
+import { actualizarEstadoDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/actualizarEstadoDelComportamientoDePrecio.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const actualizarEstadoComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -15,14 +16,13 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
         IDX.control()
 
         await mutex.acquire();
-
-        const comportamientoUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.comportamientoUID,
-            nombreCampo: "El identificador universal de la comportamiento (comportamientoUID)",
-            filtro: "numeroSimple",
+        const comportamientoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.comportamientoUID,
+            nombreCampo: "El identificador universal de la reserva (comportamientoUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
 
         const estadoPropuesto = validadoresCompartidos.tipos.cadena({
@@ -35,21 +35,22 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
         })
         await campoDeTransaccion("iniciar")
         await obtenerComportamientoDePrecioPorComportamientoUID(comportamientoUID)
-        
-        const dataActualizarComportamientoDePrecio = [
+        const comportamientoActualizado = await actualizarEstadoDelComportamientoDePrecio({
             estadoPropuesto,
             comportamientoUID
-        ]
-        await actualizarEstadoComportamiento(dataActualizarComportamientoDePrecio)
+        })
+
+    
+
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "El estado del comportamiento se ha actualziado correctamente",
-            estadoComportamiento: resuelveEstadoOferta.rows[0].estado
+            estadoComportamiento: comportamientoActualizado.estadoIDV
         };
         return ok
-        await campoDeTransaccion("confirmar")
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     } finally {
         mutex.release();
     }

@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import { obtenerTodosLosbloqueosPorMesPorAnoPorTipo } from "../../../repositorio/bloqueos/obtenerTodosLosbloqueosPorMesPorAnoPorTipo.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 export const eventosTodosLosBloqueos = async (fecha) => {
     try {
         const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
@@ -39,12 +40,24 @@ export const eventosTodosLosBloqueos = async (fecha) => {
             return detallesBloqueo
         })
         for (const detallesReserva of bloqueosSeleccionados) {
-            const bloqueoUID = detallesReserva.bloqueUID
+
+            console.log("detallesREserva", detallesReserva)
+            const bloqueoUID = detallesReserva.bloqueoUID
             const tipoBloqueo = detallesReserva.tipoBloqueoIDV
-            const fechaEntrada = detallesReserva.fechaEntrada
-            const fechaSalida = detallesReserva.fechaSalida
-            const apartamentoUI = detallesReserva.apartamentoUI
+            const fechaEntrada = detallesReserva.fechaInicio
+            const fechaSalida = detallesReserva.fechaFin
             const apartamentoIDV = detallesReserva.apartamentoIDV
+            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV: apartamentoIDV,
+                errorSi: "noExiste"
+            })
+            detallesReserva.apartamentoUI = apartamento.apartamentoUI
+            detallesReserva.fechaEntrada = fechaEntrada
+            detallesReserva.fechaSalida = fechaSalida
+            // El calenadrio espera que en detalles del evento, este el fechaEntrad y fechaSalida
+            delete detallesReserva.fechaInicio 
+            delete detallesReserva.fechaFin 
+
             detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
             detallesReserva.tipoEvento = "todosLosBloqueos"
             detallesReserva.eventoUID = "todosLosBloqueos_" + bloqueoUID

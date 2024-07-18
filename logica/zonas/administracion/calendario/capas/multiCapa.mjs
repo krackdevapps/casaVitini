@@ -11,10 +11,10 @@ import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../reposi
 import { obtenerCalendariosPorPlataformaIDV } from "../../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs";
 import { eventosPorApartamneto } from "../../../../sistema/calendarios/eventos/eventosPorApartamento.mjs";
 
-export const multiCapa = async (entrada, salida) => {
+export const multiCapa = async (entrada ) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -26,7 +26,7 @@ export const multiCapa = async (entrada, salida) => {
             objetoLiteral: entrada.body.contenedorCapas,
             nombreCampo: "El campo de contenedorCapas",
         })
-
+        console.log("contenedorCapas", contenedorCapas)
         const capas = validadoresCompartidos.tipos.array({
             array: contenedorCapas?.capas,
             nombreCampo: "El array de capas",
@@ -81,11 +81,21 @@ export const multiCapa = async (entrada, salida) => {
                 estructuraGlobal.eventosEnDetalle.push(...eventosTodosLosBloqueos_.eventosEnDetalle);
             },
             porApartamento: async () => {
+                if (!contenedorCapas.hasOwnProperty("capasCompuestas")) {
+                    const m = "En el objeto de contenedorCapas, en este tipo de capa, la de porApartamento, se espera una llave capasCompuestas"
+                    throw new Error(m)
+                }
+                const capasCompuestas = contenedorCapas?.capasCompuestas
+                if (!capasCompuestas.hasOwnProperty("porApartamento")) {
+                    const m = "Dentro de la llave capaCompuesta, se espera una llave porApartamento"
+                    throw new Error(m)
+                }
                 const apartamentosIDV = validadoresCompartidos.tipos.array({
-                    array: contenedorCapas.capasCompuestas.porApartamento,
-                    nombreCampo: "El array de capas",
-                    filtro: "soloCadenasIDV",
-                    nombreCompleto: "En el array de capasCompuestas porApartamento"
+                    array: capasCompuestas.porApartamento,
+                    nombreCampo: "La llave porApartamento",
+                    filtro: "strictoIDV",
+                    nombreCompleto: "En el array de capasCompuestas porApartamento",
+                    sePermitenDuplicados: "no"
                 })
                 const configuracionesApartamentos = await obtenerTodasLasConfiguracionDeLosApartamento()
                 if (configuracionesApartamentos.length > 0) {

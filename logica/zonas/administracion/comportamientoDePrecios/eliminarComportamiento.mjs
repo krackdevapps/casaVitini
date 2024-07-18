@@ -13,16 +13,15 @@ export const eliminarComportamiento = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-        mutex = new Mutex()
-        await mutex.acquire();
+        await mutex.acquire()
 
-        const comportamientoUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.comportamientoUID,
-            nombreCampo: "El identificador universal de la habitación (habitacionUID)",
-            filtro: "numeroSimple",
+        const comportamientoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.comportamientoUID,
+            nombreCampo: "El identificador universal de la reserva (comportamientoUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
 
         await obtenerComportamientoDePrecioPorComportamientoUID(comportamientoUID)
@@ -31,12 +30,11 @@ export const eliminarComportamiento = async (entrada, salida) => {
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha eliminado el comportamiento correctamente",
-        };
+        }
         return ok
-
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release();

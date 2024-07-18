@@ -12,11 +12,11 @@ export const validadoresCompartidos = {
             try {
                 const operacion = data.operacion
                 const cliente = data.cliente
-                const clienteUID = cliente.clienteUID
+                const clienteUID = data.clienteUID
 
 
                 const nombre = validadoresCompartidos.tipos.cadena({
-                    string: cliente.nombre,
+                    string: data.nombre,
                     nombreCampo: "El campo del nombre",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "no",
@@ -25,7 +25,7 @@ export const validadoresCompartidos = {
                     soloMayusculas: "si"
                 })
                 const primerApellido = validadoresCompartidos.tipos.cadena({
-                    string: cliente.primerApellido,
+                    string: data.primerApellido,
                     nombreCampo: "El campo del primer apellido",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
@@ -34,7 +34,7 @@ export const validadoresCompartidos = {
                     soloMayusculas: "si"
                 })
                 const segundoApellido = validadoresCompartidos.tipos.cadena({
-                    string: cliente.segundoApellido,
+                    string: data.segundoApellido,
                     nombreCampo: "El campo del segundo apellido",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
@@ -43,7 +43,7 @@ export const validadoresCompartidos = {
                     soloMayusculas: "si"
                 })
                 const pasaporte = validadoresCompartidos.tipos.cadena({
-                    string: cliente.pasaporte,
+                    string: data.pasaporte,
                     nombreCampo: "El campo del pasaporte",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "no",
@@ -52,18 +52,18 @@ export const validadoresCompartidos = {
                 })
 
                 const correoElectronico = validadoresCompartidos.tipos.correoElectronico({
-                    mail: cliente.correoElectronico,
+                    mail: data.correoElectronico,
                     nombreCampo: "El coreo electronico instroducido",
                     sePermiteVacio: "si"
                 })
                 const telefono = validadoresCompartidos.tipos.telefono({
-                    phone: cliente.telefono,
+                    phone: data.telefono,
                     nombreCampo: "El teelfono instroducido",
                     sePermiteVacio: "si"
                 })
 
                 const notas = validadoresCompartidos.tipos.cadena({
-                    string: cliente.notas || "",
+                    string: data.notas || "",
                     nombreCampo: "El campo de notas",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
@@ -498,18 +498,18 @@ export const validadoresCompartidos = {
                 const mensaje = `El validor de cadena esta mal configurado, soloMayusculas solo acepta si o no.`
                 throw new Error(mensaje)
             }
-
+            if (limpiezaEspaciosAlrededor === "si") {
+                string = string
+                    .replace(/\s+/g, ' ')
+                    .trim()
+            }
             if (sePermiteVacio === "si" && string === "") {
                 return string
             } else if (string.length === 0 || string === "") {
                 const mensaje = `${nombreCampo} esta vacío.`
                 throw new Error(mensaje)
             }
-            if (limpiezaEspaciosAlrededor === "si") {
-                string = string
-                    .replace(/\s+/g, ' ')
-                    .trim()
-            }
+
             if (soloMinusculas === "si") {
                 string = string
                     .toLowerCase()
@@ -520,9 +520,9 @@ export const validadoresCompartidos = {
             }
             if (filtro === "strictoSinEspacios") {
                 try {
-                    const filtro = /^[a-zA-Z0-9_\-\/\.]+$/;
+                    const filtro = /^[a-zA-Z0-9_\-\/\.\@]+$/;
                     if (!filtro.test(string)) {
-                        const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros y los siguientes caracteres: _, -, . y /`
+                        const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros y los siguientes caracteres: _, -, ., / y @`
                         throw new Error(mensaje)
                     }
                 } catch (errorCapturado) {
@@ -540,7 +540,8 @@ export const validadoresCompartidos = {
                 }
             } else if (filtro === "strictoConEspacios") {
                 try {
-                    const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ+]+$/;
+                    const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ\+@]+$/;
+                    console.log(">>", string, string.length)
                     if (!filtro.test(string)) {
                         const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros, espacios y los siguientes caracteres: _, -, . y /`
                         throw new Error(mensaje)
@@ -768,26 +769,27 @@ export const validadoresCompartidos = {
                     const mensaje = `El validor de mail esta mal configurado, sePermiteVacio solo acepta si o no y es obligatorio declararlo en la configuracíon.`
                     throw new Error(mensaje)
                 }
-
+                if (typeof mail !== "string") {
+                    const error = "El campo de correo electroníco debe de ser una cadena"
+                    throw new Error(error)
+                }
+                mail = mail
+                .trim()
+                .toLowerCase()
                 if (sePermiteVacio === "si" && mail === "") {
                     return mail
                 } else if (mail.length === 0 || mail === "") {
                     const mensaje = `${nombreCampo} esta vacío.`
                     throw new Error(mensaje)
                 }
-                if (typeof mail !== "string") {
-                    const error = "El campo de correo electroníco debe de ser una cadena"
-                    throw new Error(error)
-                }
+        
                 const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
-                const cadenaCorreoLimpia = mail
-                    .trim()
-                    .toLowerCase()
-                if (!filtroCorreoElectronico.test(cadenaCorreoLimpia)) {
+              
+                if (!filtroCorreoElectronico.test(mail)) {
                     const error = "El campo de correo electroníco no cumple con el formato esperado, el formato esperado es asi como usuario@servidor.com"
                     throw new Error(error)
                 }
-                return cadenaCorreoLimpia
+                return mail
             } catch (errorCapturado) {
                 throw errorCapturado
             }

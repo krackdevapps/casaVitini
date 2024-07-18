@@ -32,13 +32,14 @@ export const eventosReservas = async (fecha) => {
         const reservas = await obtenerReservasPorMesPorAno({
             mes: mes,
             ano: ano,
-            reservaCancelada: reservaCancelada
+            estadoReservaCancelada: reservaCancelada
         })
 
         const reservasSelecciondas = reservas.map((detallesReserva) => {
             detallesReserva.eventoUID = "reservaUID_" + detallesReserva.reservaUID
             return detallesReserva
         })
+
         for (const detallesReserva of reservasSelecciondas) {
             const reservaUID = detallesReserva.reservaUID
             const fechaEntrada = detallesReserva.fechaEntrada

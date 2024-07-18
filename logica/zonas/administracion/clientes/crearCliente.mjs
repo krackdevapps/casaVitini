@@ -17,20 +17,21 @@ export const crearCliente = async (entrada, salida) => {
         bloqueoCrearCliente = await mutex.acquire();
 
         const nuevoCliente = {
-             nombre: entrada.body.nombre,
+            nombre: entrada.body.nombre,
             primerApellido: entrada.body.primerApellido,
             segundoApellido: entrada.body.segundoApellido,
             pasaporte: entrada.body.pasaporte,
             telefono: entrada.body.telefono,
             correoElectronico: entrada.body.correoElectronico,
             notas: entrada.body.notas,
+            operacion: "crear"
         };
         const datosValidados = await validadoresCompartidos.clientes.validarCliente(nuevoCliente);
         const nuevoUIDCliente = await insertarCliente(datosValidados);
         if (nuevoUIDCliente) {
             const ok = {
                 ok: "Se ha anadido correctamente el cliente",
-                nuevoUIDCliente: nuevoUIDCliente.uid
+                nuevoUIDCliente: nuevoUIDCliente.clienteUID
             };
             return ok
         } else {

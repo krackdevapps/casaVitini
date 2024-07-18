@@ -23,31 +23,24 @@ export const eliminarBloqueo = async (entrada, salida) => {
         })
 
         const bloqueoSeleccionado = await obtenerBloqueoPorBloqueoUID(bloqueoUID)
-        if (bloqueoSeleccionado.length === 0) {
-            const error = "No existe el bloqueo que se quiere eliminar.";
-            throw new Error(error);
-        }
-        const apartmamentoIDV = bloqueoSeleccionado[0].apartamento;
+        const apartmamentoIDV = bloqueoSeleccionado.apartamentoIDV;
+        const eliminarBloqueo = await eliminarBloqueoPorBloqueoUID(bloqueoUID)
+
         const bloqueosPorApartamento = await obtenerBloqueosDelApartamentoPorApartamentoIDV(apartmamentoIDV)
         let tipoDeRetroceso;
-        if (bloqueosPorApartamento.length === 1) {
+        if (bloqueosPorApartamento.length === 0) {
             tipoDeRetroceso = "aPortada";
         }
-        if (bloqueosPorApartamento.length> 1) {
+        if (bloqueosPorApartamento.length >= 1) {
             tipoDeRetroceso = "aApartamento";
         }
-        const eliminarBloqueo = await eliminarBloqueoPorBloqueoUID(bloqueoUID)
-        if (eliminarBloqueo.rowCount === 0) {
-            const error = "No se ha eliminado el bloqueo";
-            throw new Error(error);
-        }
-        if (eliminarBloqueo.rowCount === 1) {
-            const ok = {
-                ok: "Se ha eliminado el bloqueo correctamente",
-                tipoRetroceso: tipoDeRetroceso
-            };
-            return ok
-        }
+
+        const ok = {
+            ok: "Se ha eliminado el bloqueo correctamente",
+            tipoRetroceso: tipoDeRetroceso
+        };
+        return ok
+
     } catch (errorCapturado) {
         throw errorCapturado
     }

@@ -62,7 +62,7 @@ export const eventosPorApartamneto = async (metadatos) => {
         }
         for (const detallesReserva of reservasSelecciondas) {
             const reservaUID = detallesReserva.reservaUID
-            const apartamentoUID = detallesReserva.apartamentoUID
+            const apartamentoUID = detallesReserva.componenteUID
             const fechaEntrada = detallesReserva.fechaEntrada
             const fechaSalida = detallesReserva.fechaSalida
             const apartamentoIDVReserva = detallesReserva.apartamentoIDV

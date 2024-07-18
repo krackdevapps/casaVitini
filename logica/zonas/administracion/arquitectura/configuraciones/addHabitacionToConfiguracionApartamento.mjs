@@ -39,10 +39,10 @@ export const addHabitacionToConfiguracionApartamento = async (entrada, salida) =
             throw new Error(error);
         }
         if (obtenerConfiguracionPorApartamento_.length === 1) {
-            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
                 errorSi: "noExiste"
-            }).apartamentoUI
+            })).apartamentoUI
             const habitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
             if (!habitacionUI) {
                 const error = "No existe el identificador visual de la habitacion";

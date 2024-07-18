@@ -5,11 +5,14 @@ export const obtenerReservasPorMesPorAno = async (data) => {
         const mes = data.mes
         const ano = data.ano
         const estadoReservaCancelada = data.estadoReservaCancelada
+
         const consulta = `
         SELECT 
         "reservaUID",
         to_char("fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada", 
-        to_char("fechaSalida", 'YYYY-MM-DD') as "fechaSalida"
+        to_char("fechaSalida", 'YYYY-MM-DD') as "fechaSalida",
+        ("fechaSalida" - "fechaEntrada") as duracion_en_dias
+
         FROM 
         reservas
         WHERE
@@ -35,7 +38,10 @@ export const obtenerReservasPorMesPorAno = async (data) => {
             ano,
             estadoReservaCancelada
         ]
+
+
         const resuelve = await conexion.query(consulta, parametros);
+
         return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado

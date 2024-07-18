@@ -18,10 +18,10 @@ export const airbnb = async (entrada, salida) => {
         const calenadriosPorPlataforam = await obtenerCalendariosPorPlataformaIDV(plataformaOrigen)
         for (const detallesDelCalendario of calenadriosPorPlataforam) {
             const apartamentoIDV = detallesDelCalendario.apartamentoIDV;
-            detallesDelCalendario.apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            detallesDelCalendario.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
                 errorSi: "noExiste"
-            }).apartamentoUI
+            })).apartamentoUI
         }
         ok.calendariosSincronizados = [...calenadriosPorPlataforam];
         return ok

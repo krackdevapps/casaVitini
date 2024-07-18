@@ -10,10 +10,14 @@ export const obtenerComportamientosDistintosPorTipoIDVPorDiasArray = async (data
         FROM 
         "comportamientoPrecios"
         WHERE 
-        "tipoIDV" = $1
+        contenedor->>'tipo' = $1
         AND
-        $2::text[] && "diasArray"
-        AND 
+          EXISTS (
+                   SELECT 1
+                   FROM jsonb_array_elements_text(contenedor->'diasArray') AS elem
+                   WHERE elem::text = ANY ($2::text[])
+            )
+        AND
         "comportamientoUID" <> $3;
         `
         const parametros = [

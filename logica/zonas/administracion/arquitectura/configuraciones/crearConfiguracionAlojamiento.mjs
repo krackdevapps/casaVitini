@@ -17,6 +17,8 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
 
         mutex.acquire()
 
+        // Esto tiene que ser una transaccion
+
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El apartamentoIDV",
@@ -25,10 +27,10 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+        const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
-        }).apartamentoUI
+        })).apartamentoUI
         if (!apartamentoUI) {
             const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon";
             throw new Error(error);

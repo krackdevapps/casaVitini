@@ -19449,7 +19449,8 @@ const casaVitini = {
                                 throw new Error(error)
                             }
                         }
-                        const seleccionableDiaLimite = metadatos.seleccionableDiaLimite
+                        const seleccionableDiaLimite = metadatos.seleccionableDiaLimite || "si"
+                        console.log("seleccionableDiaLimite 1", seleccionableDiaLimite)
                         const calendario = document.createElement("div")
                         calendario.setAttribute("class", "calendarioNuevo")
                         //calendario.setAttribute("campo", "calendario")
@@ -19459,9 +19460,9 @@ const casaVitini = {
                         calendario.setAttribute("tipoCalendario", tipoFecha)
                         calendario.setAttribute("calendarioIO", calendarioIO)
                         calendario.setAttribute("metodoSelectorDia", metodoSelectorDia)
-                        if (seleccionableDiaLimite === "si") {
-                            calendario.setAttribute("seleccionableDiaLimite", seleccionableDiaLimite)
-                        }
+
+                        calendario.setAttribute("seleccionableDiaLimite", seleccionableDiaLimite)
+
                         calendario.setAttribute("elemento", "flotante")
                         calendario.setAttribute("perfilMes", perfilMes)
                         calendario.setAttribute("IO", calendarioIO)
@@ -19548,6 +19549,9 @@ const casaVitini = {
                     const metodoSelectorDia = data?.metodoSelectorDia || "casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia"
                     const areaContenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
                     const rangoIDV = data.rangoIDV
+                    const seleccionableDiaLimite = data.seleccionableDiaLimite
+                    console.log("seleccionableDiaLimite", seleccionableDiaLimite)
+
 
                     const contenedorOrigen = areaContenedorFechas.querySelector(contenedorOrigenIDV)
                     const alturaDinamicaArriba = casaVitini.utilidades.observador.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(contenedorOrigen) + 20
@@ -19578,6 +19582,7 @@ const casaVitini = {
                         instanciaUID_contenedorFechas,
                         metodoAlternativo,
                         metodoSelectorDia,
+                        seleccionableDiaLimite
                     }
 
                     if (rangoIDV === "inicioRango") {
@@ -19601,7 +19606,7 @@ const casaVitini = {
                             configuracionCalendario.tipoFecha = "entrada"
                             configuracionCalendario.calendarioIO = "entrada"
                             configuracionCalendario.mensajeInfo = "Selecciona una fecha de entrada para buscar reservas por un rango"
-                            configuracionCalendario.seleccionableDiaLimite = "si"
+                            //configuracionCalendario.seleccionableDiaLimite = "si"
 
                         } else if (fechaSalidaVolatil_Humana) {
                             resolverCalendario.tipo = "personalizado"
@@ -19613,7 +19618,7 @@ const casaVitini = {
                             configuracionCalendario.tipoFecha = "entrada"
                             configuracionCalendario.calendarioIO = "entrada"
                             configuracionCalendario.mensajeInfo = "Selecciona una fecha de entrada para buscar reservas por un rango"
-                            configuracionCalendario.seleccionableDiaLimite = "si"
+                           // configuracionCalendario.seleccionableDiaLimite = "si"
 
                         } else {
                             resolverCalendario.tipo = "actual"
@@ -19622,7 +19627,7 @@ const casaVitini = {
                             configuracionCalendario.tipoFecha = "entrada"
                             configuracionCalendario.calendarioIO = "entrada"
                             configuracionCalendario.mensajeInfo = "Selecciona una fecha de entrada para buscar reservas por un rango"
-                            configuracionCalendario.seleccionableDiaLimite = "si"
+                            //configuracionCalendario.seleccionableDiaLimite = "si"
                         }
                     } else if (rangoIDV === "finalRango") {
                         if (selectorCalendario?.getAttribute("calendarioIO") === "salida") {
@@ -19645,7 +19650,7 @@ const casaVitini = {
                             configuracionCalendario.tipoFecha = "salida"
                             configuracionCalendario.calendarioIO = "salida"
                             configuracionCalendario.mensajeInfo = "Selecciona una fecha de salida para buscar reservas por un rango"
-                            configuracionCalendario.seleccionableDiaLimite = "si"
+                            //configuracionCalendario.seleccionableDiaLimite = "si"
 
                         } else if (fechaEntradaVolatil_Humana) {
 
@@ -19658,7 +19663,7 @@ const casaVitini = {
                             configuracionCalendario.tipoFecha = "salida"
                             configuracionCalendario.calendarioIO = "salida"
                             configuracionCalendario.mensajeInfo = "Selecciona una fecha de salida para buscar reservas por un rango"
-                            configuracionCalendario.seleccionableDiaLimite = "si"
+                          //  configuracionCalendario.seleccionableDiaLimite = "si"
 
                         } else {
                             resolverCalendario.tipo = "actual"
@@ -19667,7 +19672,7 @@ const casaVitini = {
                             configuracionCalendario.tipoFecha = "salida"
                             configuracionCalendario.calendarioIO = "salida"
                             configuracionCalendario.mensajeInfo = "Selecciona una fecha de salida para buscar reservas por un rango"
-                            configuracionCalendario.seleccionableDiaLimite = "si"
+                           // configuracionCalendario.seleccionableDiaLimite = "si"
                         }
                     } else {
                         const m = "configurarCalendario no reconoce el rango"

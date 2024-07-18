@@ -14,8 +14,7 @@ export const obtenerPerfilPrecioPorApartamentoUID = async (apartamentoIDV) => {
         }
         return resuelve.rows[0]
     } catch (errorAdaptador) {
-        const error = "Error en el adaptador obtenerCamasPorHabitacion"
-        throw new Error(error)
+        throw errorAdaptador
     }
 
 }

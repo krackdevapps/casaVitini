@@ -11,7 +11,6 @@ export const detallePrecioBaseApartamento = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El campo apartamentoIDV",
@@ -19,12 +18,7 @@ export const detallePrecioBaseApartamento = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-
         const transaccionInterna = await precioBaseApartamento(apartamentoIDV);
-
-        //  transaccionInterna.precioNetoPorDia = new Decimal(transaccionInterna.precioNetoPorDia).toFixed(2)
-        //  transaccionInterna.totalImpuestos = new Decimal(transaccionInterna.totalImpuestos).toFixed(2)
-        //  transaccionInterna.totalBrutoPordia = new Decimal(transaccionInterna.totalBrutoPordia).toFixed(2)
         transaccionInterna.impuestos.forEach((impuesto) => {
             const tipoImpositivo = impuesto.tipoImpositivo;
             const totalImpuesto = impuesto.totalImpuesto;
@@ -38,7 +32,5 @@ export const detallePrecioBaseApartamento = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         throw errorCapturado
-    } finally {
     }
-
 }

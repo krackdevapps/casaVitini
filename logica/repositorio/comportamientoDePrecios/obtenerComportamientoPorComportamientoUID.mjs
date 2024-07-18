@@ -4,13 +4,7 @@ export const obtenerComportamientoDePrecioPorComportamientoUID = async (comporta
 
         const consulta =  `
         SELECT
-        "comportamientoUID",
-        to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
-        to_char("fechaFinal", 'DD/MM/YYYY') as "fechaFinal", 
-        "nombreComportamiento",
-        "estadoIDV",
-        "tipoIDV",
-        "diasArray"
+        *
         FROM
         "comportamientoPrecios" 
         WHERE

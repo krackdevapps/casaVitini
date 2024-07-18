@@ -40,10 +40,10 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
             habitacionIDV: habitacionIDV,
             errorSi: "noExiste"
         })
-        const nombreUIApartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+        const nombreUIApartamento = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
-        }).apartamentoUI
+        })).apartamentoUI
         if (!habitacion.componenteUID) {
             const error = `Dentro de la configuración de este apartamento ya no esta disponible esta habitación para seleccionar. Para recuperar esta habitación en la configuración de alojamiento, crea una habitación como entidad con el identificador visual ${habitacionIDV} y añádela a la configuración del apartamento con nombre ${nombreUIApartamento} e identificador visual ${apartamentoIDV}`;
             throw new Error(error);

@@ -23,19 +23,20 @@ export const listarApartamentosConBloqueos = async (entrada, salida) => {
         if (todosLosBloqueos.length > 0) {
             const apartamentosEncontradosConDuplicados = [];
             todosLosBloqueos.forEach((detalleBloqueo) => {
-                const apartamento = detalleBloqueo.apartamento;
-                apartamentosEncontradosConDuplicados.push(apartamento);
+                const apartamentoIDV = detalleBloqueo.apartamentoIDV;
+                apartamentosEncontradosConDuplicados.push(apartamentoIDV);
             });
             const apartamentosEncontrados = [...new Set(apartamentosEncontradosConDuplicados)];
             const estructuraSalidaFinal = [];
-            for (const apartamento of apartamentosEncontrados) {
-                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
-                    apartamentoIDV: apartamento,
+            for (const apartamentoIDV of apartamentosEncontrados) {
+                const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV: apartamentoIDV,
                     errorSi: "noExiste"
-                }).apartamentoUI
-                const bloqueosDelApartamento = await obtenerBloqueosDelApartamentoPorApartamentoIDV(apartamento)
+                })
+                const apartamentoUI = apartamento.apartamentoUI
+                const bloqueosDelApartamento = await obtenerBloqueosDelApartamentoPorApartamentoIDV(apartamentoIDV)
                 const estructuraFinal = {
-                    apartamentoIDV: apartamento,
+                    apartamentoIDV: apartamentoIDV,
                     apartamentoUI: apartamentoUI,
                     numeroDeBloqueos: bloqueosDelApartamento.length,
                 };

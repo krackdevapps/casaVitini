@@ -1,9 +1,7 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
-import { obtenerApartamentosDelComportamientoPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerApartamentosDelComportamientoPorComportamientoUID.mjs";
-
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 export const detallesComportamiento = async (entrada, salida) => {
     try {
         const session = entrada.session
@@ -12,37 +10,34 @@ export const detallesComportamiento = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        const comportamientoUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.comportamientoUID,
-            nombreCampo: "El identificador universal de la habitación (habitacionUID)",
-            filtro: "numeroSimple",
+        const comportamientoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.comportamientoUID,
+            nombreCampo: "El identificador universal de la reserva (comportamientoUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
 
-        const detallesComportamiento = await obtenerComportamientoDePrecioPorComportamientoUID(comportamientoUID)
-        detallesComportamiento["apartamentos"] = [];
 
-        const apartamentosDelComportamiento = await obtenerApartamentosDelComportamientoPorComportamientoUID(comportamientoUID)
-        apartamentosDelComportamiento.forEach((apartamento) => {
-            const cantidad = apartamento.cantidad;
-            const apartamentoIDV = apartamento.apartamentoIDV;
-            const comportamientoUID = apartamento.comportamientoUID;
-            const simbolo = apartamento.simbolo;
-            const apartamentoUI = apartamento.apartamentoUI;
-            const detallesApartamentoDedicado = {
-                apartamentoIDV: apartamentoIDV,
-                apartamentoUI: apartamentoUI,
-                cantidad: cantidad,
-                comportamientoUID: comportamientoUID,
-                simbolo: simbolo
-            };
-            detallesComportamiento["apartamentos"].push(detallesApartamentoDedicado);
-        });
+        const detallesComportamiento = await obtenerComportamientoDePrecioPorComportamientoUID(comportamientoUID)
+
+        const apartamentosDelComportamiento = detallesComportamiento.contenedor.apartamentos
+
+        for (const detallesApartamento of apartamentosDelComportamiento) {
+            const apartamentoIDV = detallesApartamento.apartamentoIDV
+            const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "desactivado"
+            }))?.apartamentoUI || `Apartamento desconocido (${apartamentoIDV})`
+
+            detallesApartamento.apartamentoUI = apartamentoUI
+        }
+
 
         const ok = {
-            ok: detallesComportamiento
+            ok: "Aquí tiene los detalles del comportamient",
+            detallesComportamiento
         };
         return ok
 

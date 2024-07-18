@@ -24,10 +24,10 @@ export const obtenerCalendarios = async (entrada, salida) => {
         const calendarioSincronizado = await obtenerCalendariosPorPlataformaIDV(plataformaCalendarios)
         for (const detallesDelCalendario of calendarioSincronizado) {
             const apartamentoIDV = detallesDelCalendario.apartamentoIDV;
-            const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
                 errorSi: "noExiste"
-            }).apartamentoUI;
+            })).apartamentoUI;
             detallesDelCalendario.apartamentoUI = apartamentoUI;
             ok.ok.push(detallesDelCalendario)
         }

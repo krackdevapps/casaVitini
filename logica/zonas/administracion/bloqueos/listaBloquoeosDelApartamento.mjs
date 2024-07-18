@@ -23,10 +23,11 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
 
         await eliminarBloqueoCaducado();
         await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+        const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
-        }).apartamentoUI
+        })
+        const apartamentoUI = apartamento.apartamentoUI
         const bloqueosDelApartamento = await obtenerBloqueosDelApartamentoPorApartamentoIDV(apartamentoIDV)
 
         const ok = {};
@@ -38,19 +39,19 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
         if (bloqueosDelApartamento.length > 0) {
             const bloqueosDelApartamentoEntonctrado = [];
             bloqueosDelApartamento.forEach((bloqueoDelApartamento) => {
-                const uidBloqueo = bloqueoDelApartamento.uid;
-                const tipoBloqueo = bloqueoDelApartamento.tipoBloqueo;
-                const entrada = bloqueoDelApartamento.entrada;
-                const salida = bloqueoDelApartamento.salida;
+                const bloqueoUID = bloqueoDelApartamento.bloqueoUID;
+                const tipoBloqueoIDV = bloqueoDelApartamento.tipoBloqueoIDV;
+                const fechaInicio = bloqueoDelApartamento.fechaInicio;
+                const fechaFin = bloqueoDelApartamento.fechaFin;
                 const motivo = bloqueoDelApartamento.motivo;
-                const zona = bloqueoDelApartamento.zona;
+                const zonaIDV = bloqueoDelApartamento.zonaIDV;
                 const estructuraBloqueo = {
-                    uidBloqueo: uidBloqueo,
-                    tipoBloqueo: tipoBloqueo,
-                    entrada: entrada,
-                    salida: salida,
-                    motivo: motivo,
-                    zona: zona
+                    bloqueoUID,
+                    tipoBloqueoIDV,
+                    fechaInicio,
+                    fechaFin,
+                    motivo,
+                    zonaIDV
                 };
                 bloqueosDelApartamentoEntonctrado.push(estructuraBloqueo);
             });

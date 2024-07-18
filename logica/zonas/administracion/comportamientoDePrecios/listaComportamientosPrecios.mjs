@@ -2,25 +2,20 @@ import { obtenerComportamientosOrdenadorPorFechaInicio } from "../../../reposito
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 
-export const listaComportamientosPrecios = async (entrada, salida) => {
+export const listaComportamientosPrecios = async (entrada) => {
 
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
         const comportamientosDePrecio = await obtenerComportamientosOrdenadorPorFechaInicio()
-        const ok = {};
-        if (comportamientosDePrecio.length === 0) {
-            ok.ok = "No hay comportamiento de precios configurados";
-            return ok
+        const ok = {
+            ok: "Aquí tiene los comportamientos de precios",
+            comportamientosDePrecio: comportamientosDePrecio
         }
-
-        const listaComportamientos = comportamientosDePrecio
-        ok.ok = listaComportamientos;
         return ok
-
     } catch (errorCapturado) {
         throw errorCapturado
     }

@@ -45,13 +45,13 @@ export const porRango_cualquieraQueCoincida = async (data) => {
                 OR
                 (
                     -- Caso 2: Evento parcialmente dentro del rango
-                    ("fechaEntrada" < $1::DATE AND "fechaSalida" > $1::DATE)
-                    OR ("fechaEntrada" < $2::DATE AND "fechaSalida" > $2::DATE)
+                    ("fechaEntrada" <= $1::DATE AND "fechaSalida" >= $1::DATE)
+                    OR ("fechaEntrada" <= $2::DATE AND "fechaSalida" >= $2::DATE)
                 )
                 OR
                 (
                     -- Caso 3: Evento atraviesa el rango
-                    "fechaEntrada" < $1::DATE AND "fechaSalida" > $2::DATE
+                    "fechaEntrada" <= $1::DATE AND "fechaSalida" >= $2::DATE
                 )
             )
             ${sqlORderBy}

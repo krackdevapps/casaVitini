@@ -3,24 +3,19 @@ export const insertarComportamientoDePrecio = async (data) => {
     try {
         const nombreComportamiento = data.nombreComportamiento
         const contenedor = data.contenedor
-        const comportamientoTVI = data.comportamientoTVI
         const estadoInicalDesactivado = "desactivado";
-
-
         const consulta = `
             INSERT INTO "comportamientoPrecios"
             (
                 "nombreComportamiento",
                 "estadoIDV",
-                 contenedor,
-                "comportamientoTVI"
+                 contenedor
             )
             VALUES
             (
                 COALESCE($1::text, NULL),
                 COALESCE($2::text, NULL),
-                COALESCE($3::jsonb, NULL),
-                COALESCE($4::text, NULL)
+                COALESCE($3::jsonb, NULL)
             )
             RETURNING 
             *;
@@ -28,8 +23,7 @@ export const insertarComportamientoDePrecio = async (data) => {
         const parametros = [
             nombreComportamiento,
             estadoInicalDesactivado,
-            contenedor,
-            comportamientoTVI
+            contenedor
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

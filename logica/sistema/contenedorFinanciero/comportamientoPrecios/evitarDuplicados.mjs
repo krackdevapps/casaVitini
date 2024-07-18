@@ -2,10 +2,7 @@ import Decimal from "decimal.js"
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 import { obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array } from "../../../repositorio/comportamientoDePrecios/obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array.mjs"
 import { obtenerNombreComportamientoPorNombreUI } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorNombreUI.mjs"
-import { obtenerComportamientosDistintosPorNombreUI } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosDistintosPorNombreUI.mjs"
-import { obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoUID.mjs"
 import { obtenerComportamientosDistintosPorTipoIDVPorDiasArray } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoIDVPorDiasArray.mjs"
-import { obtenerComportamientosPorAntelacionPorTipo } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorAntelacionPorTipo.mjs"
 import { obtenerComportamientosPorRangoPorCreacionPorTipoIDV } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorRangoPorCreacionPorTipoIDV.mjs"
 import { obtenerComportamientosPorRangoPorTipoIDV } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs"
 import { obtenerComportamientosPorTipoIDVPorDiasArray } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorTipoIDVPorDiasArray.mjs"
@@ -32,7 +29,8 @@ export const evitarDuplicados = async (data) => {
                 comportamientosConNombreIgual.splice(comportamientosConNombreIgual, 1);
             }
         }
-        if (comportamientosConNombreIgual.length > 0) {
+
+        if (transaccion === "crear" && comportamientosConNombreIgual.length > 0) {
             throw new Error(mensajeNombreRepetido);
         }
         if (tipoIDV === "porCreacion" || tipoIDV === "porRango") {
@@ -46,25 +44,22 @@ export const evitarDuplicados = async (data) => {
             const apartamentos = contenedor.apartamentos
             const preContenedorApartamentos = {}
 
-            apartamentos.forEach((apartamento) => {
-                const apartamentoIDV = apartamento.apartamentoIDV
 
+            for (const apartamento of apartamentos) {
+                const apartamentoIDV = apartamento.apartamentoIDV
                 if (preContenedorApartamentos.hasOwnProperty(apartamentoIDV)) {
-                    const apartamentoUI = obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                         apartamentoIDV,
                         errorSi: "noExiste"
                     })
+                    const apartamentoUI = apartamento.apartamentoUI
                     const m = `El ${apartamentoUI} (${apartamentoIDV}) esta repetido`
                     throw new Error(m)
                 } else if (!preContenedorApartamentos.hasOwnProperty(apartamentoIDV)) {
                     preContenedorApartamentos[apartamentoIDV] = new Decimal(0)
                 }
-            })
+            }
 
-            // perfilesAntelacion.forEach((perfil) => {
-            //     const contenedorApartamentos = perfil.apartamentos
-            //     Object.keys(contenedorApartamentos).forEach(idv => apartamentosIDVContenedor[idv] = true)
-            // })
             const arrayApartamentos = Object.keys(preContenedorApartamentos)
 
             const comportamientosPorRango = await obtenerComportamientosPorRangoPorTipoIDV({
@@ -87,100 +82,21 @@ export const evitarDuplicados = async (data) => {
             })
             comportamientosEnConflicto.push(...comportamientosPorAntelacion)
 
-
-
-
             if (transaccion === "actualizar") {
                 const selector = comportamientosEnConflicto.findIndex(item => item.comportamientoUID === comportamientoUID);
                 if (selector !== -1) {
                     comportamientosEnConflicto.splice(comportamientosEnConflicto, 1);
                 }
             }
-            if (comportamientosEnConflicto.length > 0) {
+            if (transaccion === "crear" && comportamientosEnConflicto.length > 0) {
                 const error = {
                     error: "No se puede crear este comportamiento por que entra en conflicto con los apartamentos en otros comportamientos",
                     comportamientosEnConflicto: comportamientosEnConflicto,
                 }
                 throw error
             }
-        }
-        // else if (tipoIDV === "porRango") {
-        //     const fechaInicio_ISO = contenedor.fechaInicio
-        //     const fechaFinal_ISO = contenedor.fechaFinal
-
-        //     const comportamientosEnElRango = [] // Los comportamiento de precio que estan en el rango de nuevo comportamiento
-        //     if (transaccion === "crear") {
-        //         const comportamientosPorRango = await obtenerComportamientosPorRangoPorTipoIDV({
-        //             fechaInicio_ISO: fechaInicio_ISO,
-        //             fechaFinal_ISO: fechaFinal_ISO,
-        //             tipoIDV: "porRango",
-
-        //         })
-        //         comportamientosEnElRango.push(...comportamientosPorRango)
-        //         const comportamientosPorAntelacion = await obtenerComportamientosPorAntelacionPorTipo({
-        //             fechaInicio_ISO: fechaInicio_ISO,
-        //             fechaFinal_ISO: fechaFinal_ISO,
-        //             tipoIDV: "porAntelacion"
-        //         })
-        //         
-        //         comportamientosEnElRango.push(...comportamientosPorAntelacion)
-        //     }
-        //     throw new Error("test")
-        //     if (transaccion === "actualizar") {
-        //         const comportamientosDistintosPorRango = await obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoUID({
-        //             fechaInicio_ISO: fechaInicio_ISO,
-        //             fechaFinal_ISO: fechaFinal_ISO,
-        //             tipoIDV: "porRango",
-        //             comportamientoUID: comportamientoUID
-        //         })
-        //         comportamientosEnElRango.push(...comportamientosDistintosPorRango)
-        //     }
-        //     const soloUIDComportamientosCoincidentes = comportamientosEnElRango.map((detallesDelComportamiento, posicion) => {
-        //         return detallesDelComportamiento.comportamientoUID
-        //     })
-
-        //     if (soloUIDComportamientosCoincidentes.length > 0) {
-
-        //         const arbolComportamientoCoincidentes = {}
-        //         comportamientosEnElRango.forEach(detallesComportamiento => {
-        //             const comportamientoUID = detallesComportamiento.comportamientoUID
-        //             const nombreComportamiento = detallesComportamiento.nombreComportamiento
-
-        //             arbolComportamientoCoincidentes[comportamientoUID] = {
-        //                 nombreComportamiento: nombreComportamiento,
-        //                 comportamientoUID: comportamientoUID,
-        //                 apartamentos: []
-        //             }
-        //         })
-
-        //         const apartamentosDeLosComportamientos = await obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array({
-        //             apartamentosIDV_array: apartamentosIDV_array,
-        //             comportamientosUID_array: soloUIDComportamientosCoincidentes
-        //         })
-
-        //         for (const detallesDelApartamento of apartamentosDeLosComportamientos) {
-        //             const comportamientoUID = detallesDelApartamento.comportamientoUID
-        //             const apartamentoIDV = detallesDelApartamento.apartamentoIDV
-        //             const componenteUID = detallesDelApartamento.componenteUID
-
-        //             const estructuraApartamentoCoincidente = {
-        //                 comportamientoUID: comportamientoUID,
-        //                 apartamentoIDV: apartamentoIDV,
-        //                 componenteUID: componenteUID,
-        //                 apartamentoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV(apartamentoIDV)
-        //             }
-        //             arbolComportamientoCoincidentes[componenteUID].apartamento.push(estructuraApartamentoCoincidente)
-
-        //             const errorCompuesto = {
-        //                 error: `No se puede crear este comportamiento de precio por que hay apartamentos en este comportamiento que existen en otros comportamientos cuyos rangos de fechas se pisan`,
-        //                 comportamientosCoincidentes: arbolComportamientoCoincidentes
-        //             }
-        //             throw errorCompuesto
-        //         }
-        //     }
-        // }
-        else if (tipoIDV === "porDias") {
-            const diasArray = comportamiento.diasArray
+        } else if (tipoIDV === "porDias") {
+            const diasArray = contenedor.dias
             const comportamientosPorTipoPorDiasEnElRango = []
             if (transaccion === "crear") {
                 const comportamientosPorDiasArray = await obtenerComportamientosPorTipoIDVPorDiasArray({

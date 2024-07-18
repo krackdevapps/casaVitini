@@ -14,7 +14,7 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        console.log("en", entrada.body)
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El apartamentoIDV",
@@ -22,24 +22,24 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        const tipoBloqueo = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoBloqueo,
+        const tipoBloqueoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoBloqueoIDV,
             nombreCampo: "El tipoBloqueo",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        const motivo = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.motivo,
+        let motivo = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.motivo || "",
             nombreCampo: "El campo del motivo",
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const zonaUI = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.zonaUI,
-            nombreCampo: "El zonaUI",
+        const zonaIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.zonaIDV,
+            nombreCampo: "El zonaIDV",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -48,26 +48,32 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
 
         await eliminarBloqueoCaducado()
         const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        if (!configuracionApartamento.apartamento) {
+        if (!configuracionApartamento?.apartamentoIDV) {
             const error = "No existe el identificador del apartamento";
             throw new Error(error);
         }
-        if (tipoBloqueo !== "permanente" && tipoBloqueo !== "rangoTemporal") {
-            const error = "tipoBloqueo solo puede ser permanente o rangoTemporal";
+        if (tipoBloqueoIDV !== "permanente" && tipoBloqueoIDV !== "rangoTemporal") {
+            const error = "tipoBloqueoIDV solo puede ser permanente o rangoTemporal";
             throw new Error(error);
         }
-        if (zonaUI !== "global" && zonaUI !== "publico" && zonaUI !== "privado") {
+        if (zonaIDV !== "global" && zonaIDV !== "publico" && zonaIDV !== "privado") {
             const error = "zona solo puede ser global, publico o privado";
             throw new Error(error);
         }
         const filtroTextoSimple = /^[a-zA-Z0-9\s]+$/;
         let fechaInicio_ISO = null;
         let fechaFin_ISO = null;
-        if (tipoBloqueo === "rangoTemporal") {
-            const fechaInicio = entrada.body.fechaInicio;
-            const fechaFin = entrada.body.fechaFin;
-            fechaInicio_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaInicio)).fecha_ISO;
-            fechaFin_ISO = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaFin)).fecha_ISO;
+        if (tipoBloqueoIDV === "rangoTemporal") {
+            const fechaInicio = await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: entrada.body.fechaInicio,
+                nombreCampo: "La fecha de inicio"
+            })
+            const fechaFin = await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: entrada.body.fechaFin,
+                nombreCampo: "La fecha de fin"
+            })
+            fechaInicio_ISO = fechaInicio;
+            fechaFin_ISO = fechaFin;
             const fechaInicio_Objeto = DateTime.fromISO(fechaInicio_ISO);
             const fechaFin_Objeto = DateTime.fromISO(fechaFin_ISO);
             if (fechaInicio_Objeto > fechaFin_Objeto) {
@@ -91,18 +97,18 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             motivo = null;
         }
 
-        const datosNuevoBloqueo = [
+        const datosNuevoBloqueo = {
             apartamentoIDV,
-            tipoBloqueo,
+            tipoBloqueoIDV,
             fechaInicio_ISO,
             fechaFin_ISO,
             motivo,
-            zonaUI
-        ];
-
+            zonaIDV
+        }
+        console.log("datosNuevoBloqueo", datosNuevoBloqueo)
         const nuevoBloquoe = await insertarNuevoBloqueo(datosNuevoBloqueo)
 
-        const nuevoUIDBloqueo = nuevoBloquoe.resuelve;
+        const nuevoUIDBloqueo = nuevoBloquoe.bloqueoUID;
         const ok = {
             ok: "Se ha creado el bloqueo correctamente",
             nuevoBloqueoUID: nuevoUIDBloqueo,

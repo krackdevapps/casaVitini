@@ -34,7 +34,7 @@ export const crearComportamiento = async (entrada, salida) => {
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha creado correctamente el comportamiento",
-            nuevoComportamiento: nuevoComportamiento
+            comportamientoUID: nuevoComportamiento.comportamientoUID
         };
         return ok
 

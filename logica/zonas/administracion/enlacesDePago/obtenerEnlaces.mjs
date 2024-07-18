@@ -3,7 +3,7 @@ import { obtenerDesgloseFinancieroPorReservaUID } from "../../../repositorio/res
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 
-export const obtenerEnlaces = async (entrada,) => {
+export const obtenerEnlaces = async (entrada) => {
     try {
 
         const session = entrada.session
@@ -23,7 +23,7 @@ export const obtenerEnlaces = async (entrada,) => {
             const enlaceUID = detallesEnlace.enlaceUID;
             const reservaUID = detallesEnlace.reservaUID;
             const codigo = detallesEnlace.codigo;
-            const estadoPago = detallesEnlace.estadoPago;
+            const estadoPagoIDV = detallesEnlace.estadoPagoIDV;
             const cantidad = detallesEnlace.cantidad;
             const descripcion = detallesEnlace.descripcion;
 
@@ -35,7 +35,7 @@ export const obtenerEnlaces = async (entrada,) => {
                 enlaceUID,
                 nombreEnlace,
                 reservaUID,
-                estadoPago,
+                estadoPagoIDV,
                 descripcion,
                 enlace: codigo,
                 cantidad,

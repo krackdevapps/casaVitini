@@ -49,6 +49,8 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             const error = "La reserva no se puede modificar por que esta cancelada";
             throw new Error(error);
         }
+        await campoDeTransaccion("iniciar")
+
         const fechaEntrada = detallesReserva.fechaEntrada;
         const fechaSalida = detallesReserva.fechaSalida;
         // ACABAR ESTA SENTENCIA DE ABAJO--
@@ -92,6 +94,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             })
 
             await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+            await campoDeTransaccion("confirmar")
 
             const ok = {
                 ok: "apartamento anadido correctamente",
@@ -102,6 +105,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             return ok
         }
     } catch (errorCapturado) {
+        await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
         if (mutex) {

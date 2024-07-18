@@ -12,7 +12,7 @@ export const obtenerTodosLosbloqueosPorMesPorAnoPorTipo = async (data) => {
             "bloqueoUID",
             "tipoBloqueoIDV",
             "apartamentoIDV",
-            to_char("fechaInicio", 'YYYY-MM-DD') as "fechaEntradaa", 
+            to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
             to_char("fechaFin", 'YYYY-MM-DD') as "fechaFin",
             ("fechaFin" - "fechaInicio") as duracion_en_dias
         FROM "bloqueosApartamentos"
