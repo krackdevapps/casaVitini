@@ -221,7 +221,10 @@ export const validarObjetoReserva = async (data) => {
                 }
                 for (const habitacion of Object.entries(habitacionesDelApartamentoPorValidar)) {
                     const habitacionIDV = habitacion[0]
-                    const habitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
+                    const habitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                        habitacionIDV,
+                        errorSi: "noExiste"
+                    })
                     const habitacionUID = habitacionesEstructura[habitacionIDV]
                     const habitacionUI = habitacionComoEntidad.habitacionUI
                     const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({

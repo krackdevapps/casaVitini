@@ -44,7 +44,10 @@ export const actualizarCalendario = async (entrada, salida) => {
         })
 
         await obtenerCalendarioPorCalendarioUID(calendarioUID)
-        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
 
         let calendarioRaw = null;
         if (url) {

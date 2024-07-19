@@ -3,10 +3,10 @@ import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 
-export const obtenerImagenConfiguracionAdministracion = async (entrada, salida) => {
+export const obtenerImagenConfiguracionAdministracion = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -19,7 +19,10 @@ export const obtenerImagenConfiguracionAdministracion = async (entrada, salida) 
             limpiezaEspaciosAlrededor: "si"
         })
 
-        const configuracionDelApartamento = await obtenerImagenApartamentoPorApartamentoIDV(apartamentoIDV)
+        const configuracionDelApartamento = await obtenerImagenApartamentoPorApartamentoIDV({
+            apartamentoIDV,
+            estadoConfiguracionIDV_array: ["disponible", "nodisponible"]
+        })
 
         const imagen = configuracionDelApartamento.imagen;
         const ok = {

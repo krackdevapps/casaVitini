@@ -83,7 +83,10 @@ export const validarComportamiento = async (comportamiento) => {
                         sePermiteVacio: "no",
                         limpiezaEspaciosAlrededor: "si",
                     })
-                    await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+                    await obtenerConfiguracionPorApartamentoIDV({
+                        apartamentoIDV,
+                        errorSi: "noExiste"
+                    })
 
 
                     const simboloIDV = comportamiento.simboloIDV
@@ -195,7 +198,10 @@ export const validarComportamiento = async (comportamiento) => {
                     throw new Error(error);
                 }
                 controladorIDVRepetidos[apartamentoIDV_minusculas] = null
-                await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+                await obtenerConfiguracionPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "noExiste"
+                })
 
                 if (
                     simboloIDV !== "aumentoPorcentaje" &&
@@ -273,7 +279,10 @@ export const validarComportamiento = async (comportamiento) => {
                     throw new Error(error);
                 }
                 controladorIDVRepetidos[apartamentoIDV_minusculas] = null
-                await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+                await obtenerConfiguracionPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "noExiste"
+                })
 
                 if (
                     simboloIDV !== "aumentoPorcentaje" &&

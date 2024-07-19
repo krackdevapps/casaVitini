@@ -32,7 +32,10 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         })
 
         // Validar que existe el apartamento
-        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
         const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"

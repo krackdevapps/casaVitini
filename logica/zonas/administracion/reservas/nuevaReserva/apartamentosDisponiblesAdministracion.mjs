@@ -3,7 +3,7 @@ import { configuracionApartamento } from "../../../../sistema/configuracionApart
 import { apartamentosPorRango } from "../../../../sistema/selectoresCompartidos/apartamentosPorRango.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
-export const apartamentosDisponiblesAdministracion = async (entrada, salida) => {
+export const apartamentosDisponiblesAdministracion = async (entrada) => {
     try {
 
         const session = entrada.session

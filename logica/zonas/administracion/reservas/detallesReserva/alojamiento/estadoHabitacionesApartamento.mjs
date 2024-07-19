@@ -39,7 +39,10 @@ export const estadoHabitacionesApartamento = async (entrada, salida) => {
             ok: []
         }
             for (const habitacionIDV of resuelveHabitaciones) {
-                const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
+                const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                    habitacionIDV,
+                    errorSi: "noExiste"
+                })
                 const habitaconUI = habitacion.habitacionUI;
                 const habitacionResuelta = {
                     habitacionIDV: habitacionIDV,

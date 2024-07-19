@@ -19,7 +19,10 @@ export const eventosPorApartamneto = async (metadatos) => {
         // Validar que le nombre del apartamento existe como tal
 
 
-        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
         await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"

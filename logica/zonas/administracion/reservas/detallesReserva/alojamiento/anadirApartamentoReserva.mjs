@@ -41,7 +41,10 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
 
         await eliminarBloqueoCaducado();
         // Validar que le nombre del apartamento existe como tal
-        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
         // valida reserva y obten fechas
 
         const detallesReserva = await obtenerReservaPorReservaUID(reservaUID)

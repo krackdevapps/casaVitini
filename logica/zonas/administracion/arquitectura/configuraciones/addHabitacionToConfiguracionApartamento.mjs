@@ -29,56 +29,50 @@ export const addHabitacionToConfiguracionApartamento = async (entrada, salida) =
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const obtenerConfiguracionPorApartamento_ = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        if (obtenerConfiguracionPorApartamento_.length === 0) {
-            const error = "No hay ningun apartamento con ese identificador visual";
-            throw new Error(error);
-        }
-        if (obtenerConfiguracionPorApartamento_.estadoConfiguracion === "disponible") {
+        const obtenerConfiguracionPorApartamento_ = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
+        if (obtenerConfiguracionPorApartamento_.estadoConfiguracionIDV === "disponible") {
             const error = "No se puede anadir una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama";
             throw new Error(error);
         }
-        if (obtenerConfiguracionPorApartamento_.length === 1) {
-            const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
-                apartamentoIDV,
-                errorSi: "noExiste"
-            })).apartamentoUI
-            const habitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
-            if (!habitacionUI) {
-                const error = "No existe el identificador visual de la habitacion";
-                throw new Error(error);
-            }
-            const habitacionDelApartamento = await obtenerHabitacionDelApartamentoPorHabitacionIDV({
-                apartamentoIDV:apartamentoIDV,
+        const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })).apartamentoUI
+        const habitacionUI = (await obtenerHabitacionComoEntidadPorHabitacionIDV({
+            habitacionIDV,
+            errorSi: "noExiste"
+        })).habitacionUI
+
+        try {
+            await obtenerHabitacionDelApartamentoPorHabitacionIDV({
+                apartamentoIDV: apartamentoIDV,
                 habitacionIDV: habitacionIDV,
                 errorSi: "existe"
             })
-
-            if (habitacionDelApartamento.length > 0) {
-                const error = `Ya existe la ${habitacionUI} en esta configuracion del ${apartamentoUI}`;
-                throw new Error(error);
-            }
-
-            const dataInsertarHabitacionEnApartamento = {
-                apartamentoIDV: apartamentoIDV,
-                habitacionIDV: habitacionIDV
-            }
-            const insertarHabitacionEnApartamento_ = await insertarHabitacionEnApartamento(dataInsertarHabitacionEnApartamento)
-
-            if (insertarHabitacionEnApartamento_.length === 0) {
-                const error = `Se han pasado las validaciones pero la base de datos no ha insertado el registro`;
-                throw new Error(error);
-            }
-            if (insertarHabitacionEnApartamento_.length === 1) {
-                const ok = {
-                    ok: "Se ha insertado correctament la nueva habitacion",
-                    habitacionUID: insertarHabitacionEnApartamento_.uid,
-                    habitacionIDV: habitacionIDV,
-                    habitacionUI: habitacionUI
-                };
-                return ok
-            }
+        } catch (error) {
+            const m = `Ya existe la ${habitacionUI} en esta configuracion del ${apartamentoUI}`;
+            throw new Error(m);
         }
+
+
+        const dataInsertarHabitacionEnApartamento = {
+            apartamentoIDV: apartamentoIDV,
+            habitacionIDV: habitacionIDV
+        }
+        const nuevoHabitacion = await insertarHabitacionEnApartamento(dataInsertarHabitacionEnApartamento)
+
+        const ok = {
+            ok: "Se ha insertado correctamente la nueva habitacion",
+            habitacionUID: nuevoHabitacion.componenteUID,
+            habitacionIDV: habitacionIDV,
+            habitacionUI: habitacionUI
+        };
+        return ok
+
+
     } catch (errorCapturado) {
         throw errorCapturado
     }

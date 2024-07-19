@@ -28,12 +28,18 @@ describe('crud room as entity', () => {
         expect(typeof respuesta).toBe('object');
     })
     test('select room by habitacionIDV', async () => {
-        const respuesta = await obtenerHabitacionComoEntidadPorHabitacionIDV(IDVStart)
+        const respuesta = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+            habitacionIDV: IDVStart,
+            errorSi: "noExiste"
+        })
         expect(respuesta).not.toBeUndefined();
         expect(typeof respuesta).toBe('object');
     })
     test('select room by habitacionUI', async () => {
-        const respuesta = await obtenerHabitacionComoEntidadPorHabitacionUI(UIStart)
+        const respuesta = await obtenerHabitacionComoEntidadPorHabitacionUI({
+            habitacionII: UIStart,
+            errorSi: "desactivado"
+        })
         expect(respuesta).not.toBeUndefined();
         expect(typeof respuesta).toBe('object');
     })

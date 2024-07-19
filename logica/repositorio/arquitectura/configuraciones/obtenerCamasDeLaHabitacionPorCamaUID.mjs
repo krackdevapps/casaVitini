@@ -7,13 +7,12 @@ export const obtenerCamasDeLaHabitacionPorCamaUID = async (camaUID) => {
         SELECT 
         *
         FROM "configuracionCamasEnHabitacion"
-        WHERE uid = $1
+        WHERE "componenteUID" = $1
         `;
         const resuelve = await conexion.query(consulta, [camaUID])
         return resuelve.rows[0]
     } catch (errorAdaptador) {
-        const error = "Error en el adaptador obtenerCamasPorHabitacion"
-        throw new Error(error)
+        throw new Error(errorAdaptador)
     }
 
 }

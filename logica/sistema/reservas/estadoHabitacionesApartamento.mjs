@@ -24,7 +24,10 @@ export const estadoHabitacionesApartamento = async (transacion) => {
             apartamentoUID: apartamentoUID,
         })
 
-        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
         const configuracionDeHabitacionesDelApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
 
         if (configuracionDeHabitacionesDelApartamento.length === 0) {

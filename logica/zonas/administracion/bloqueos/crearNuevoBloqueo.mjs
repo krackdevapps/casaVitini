@@ -47,7 +47,10 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
         })
 
         await eliminarBloqueoCaducado()
-        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
         if (!configuracionApartamento?.apartamentoIDV) {
             const error = "No existe el identificador del apartamento";
             throw new Error(error);

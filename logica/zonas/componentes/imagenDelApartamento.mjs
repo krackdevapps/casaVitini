@@ -10,7 +10,10 @@ export const imagenDelApartamento = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        const configuracionDelApartamento = await obtenerImagenApartamentoPorApartamentoIDV(apartamentoIDV)
+        const configuracionDelApartamento = await obtenerImagenApartamentoPorApartamentoIDV({
+            apartamentoIDV,
+            estadoConfiguracionIDV: ["disponible"]
+        })
         const ok = {
             ok: "Imagen de apartamento PNG en base64",
             imagen: configuracionDelApartamento.imagen

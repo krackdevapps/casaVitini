@@ -1,9 +1,8 @@
 import { eliminarHabitacionDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/eliminarHabitacionDelApartamentoPorApartamentoIDV.mjs";
-import { obtenerConfiguracionPorArrayDeApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorArrayDeApartamentoIDV.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-
 
 export const eliminarHabitacionDeConfiguracionDeAlojamiento = async (entrada, salida) => {
     try {
@@ -12,29 +11,37 @@ export const eliminarHabitacionDeConfiguracionDeAlojamiento = async (entrada, sa
         IDX.administradores()
         IDX.control()
 
-        const habitacionUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.habitacionUID,
-            nombreCampo: "El identificador universal de la habitación (habitacionUID)",
-            filtro: "numeroSimple",
+        const habitacionUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.habitacionUID,
+            nombreCampo: "El habitacionUID",
+            filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
-
+        console.log("hjabitacion",habitacionUID, typeof habitacionUID)
         const detallesHabitacionDelApartamento = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
-        if (detallesHabitacionDelApartamento.length === 0) {
+        console.log("det", detallesHabitacionDelApartamento)
+        if (!detallesHabitacionDelApartamento?.componenteUID) {
             const error = "No existe la habitacion, revisa el habitacionUID";
             throw new Error(error);
         }
-        const apartamentoIDV = detallesHabitacionDelApartamento.apartamento;
+        const apartamentoIDV = detallesHabitacionDelApartamento.apartamentoIDV;
 
-        const configuracionApartamento = await obtenerConfiguracionPorArrayDeApartamentoIDV(apartamentoIDV)
-        if (configuracionApartamento.estadoConfiguracion === "disponible") {
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
+        if (configuracionApartamento?.estadoConfiguracionIDV === "disponible") {
             const error = "No se puede eliminar una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama";
             throw new Error(error);
         }
 
-        await eliminarHabitacionDelApartamentoPorApartamentoIDV(habitacionUID)
+        const habitacionEliminada = await eliminarHabitacionDelApartamentoPorApartamentoIDV(habitacionUID)
+        if (habitacionEliminada.length === 0) {
+            const error = "No se encuetra la habitaicon a eliminar";
+            throw new Error(error);
+        }
         const ok = {
             ok: "Se ha eliminado correctamente la habitacion como entidad",
         }

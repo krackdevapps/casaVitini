@@ -17,12 +17,12 @@ import { actualizaCamaPorCamaIDVPorReservaUID } from "../../../../repositorio/re
 import { actualizaApartamentoPorApartamentoIDVPorReservaUID } from "../../../../repositorio/reservas/apartamentos/actualizaApartamentoPorApartamentoIDVPorReservaUID.mjs";
 import { insertarCaracteristicaArrayEnConfiguracionDeAlojamiento } from "../../../../repositorio/arquitectura/entidades/apartamento/insertarCaracteristicaArrayEnConfiguracionDeAlojamiento.mjs";
 
-export const modificarEntidadAlojamiento = async (entrada, salida) => {
+export const modificarEntidadAlojamiento = async (entrada) => {
     const mutex = new Mutex();
 
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
         await mutex.acquire();
@@ -63,7 +63,7 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                 array: entrada.body.caracteristicas,
                 nombreCampo: "El campo de caracteristicas",
                 filtro: "strictoConEspacios",
-                sePermitenDuplicados: "no",
+                sePermitenDuplicados: "si",
                 sePermiteArrayVacio: "si"
             })
 
@@ -82,12 +82,12 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                 })
             }
 
-            const nuevoApartamentoComoEntidad = await actualizarApartamentoComoEntidadPorApartamentoIDV({
+            const apartamentoComoEntidadActualizado = await actualizarApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDVNuevo: apartamentoIDV,
                 apartamentoUI: apartamentoUI,
                 apartamentoIDVSelector: entidadIDV
             })
-            if (nuevoApartamentoComoEntidad.rowCount === 0) {
+            if (apartamentoComoEntidadActualizado.rowCount === 0) {
                 const error = "No se ha podido guardar los datos por que no se han encontrado el apartamento";
                 throw new Error(error);
             }
@@ -109,18 +109,20 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
             const reservasUIDArray = reservasActivas.map((reserva) => {
                 return reserva.reservaUID
             })
-
             await actualizaApartamentoPorApartamentoIDVPorReservaUID({
                 reservasUIDArray,
                 antiguoApartamentoIDV: entidadIDV,
                 nuevoApartamentoIDV: apartamentoIDV,
                 apartamentoUI: apartamentoUI
             })
-
             await campoDeTransaccion("confirmar")
+
+            console.log("a", apartamentoComoEntidadActualizado)
             const ok = {
-                ok: "Se ha actualizado correctamente el apartamento"
-            };
+                ok: "Se ha actualizado correctamente el apartamento",
+                apartamentoComoEntidadActualizado
+            }
+
             return ok
 
         } else if (tipoEntidad === "habitacion") {
@@ -137,32 +139,38 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
                 string: entrada.body.habitacionUI,
                 nombreCampo: "El campo habitacionUI",
                 filtro: "strictoConEspacios",
-                sePermiteVacio: "si",
+                sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
             await campoDeTransaccion("iniciar")
 
-            const habitacionEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(entidadIDV)
-            if (!habitacionEntidad.habitacion) {
+            const habitacionEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                habitacionIDV: entidadIDV,
+                errorSi: "noExiste"
+            })
+            if (!habitacionEntidad?.habitacionIDV) {
                 const error = "No existe la habitacion, revisa el habitacionIDV";
                 throw new Error(error);
             }
             // Comprobar que no existe el nuevo IDV
             if (entidadIDV !== habitacionIDV) {
 
-                const habitacionEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
-                if (habitacionEntidad.habitacion) {
+                const habitacionEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                    habitacionIDV,
+                    errorSi: "existe"
+                })
+                if (habitacionEntidad?.habitacionIDV) {
                     const error = "El nuevo identificador de la entidad ya existe, escoge otro por favor";
                     throw new Error(error);
                 }
             }
 
-            const dataActualizarHabitacionComoEntidadPorHabitacionIDV = {
-                habitacionIDV: habitacionIDV,
+    
+            await actualizarHabitacionComoEntidadPorHabitacionIDV({
+                habitacionIDVNuevo: habitacionIDV,
                 habitacionUI: habitacionUI,
-                entidadIDV: entidadIDV
-            }
-            await actualizarHabitacionComoEntidadPorHabitacionIDV(dataActualizarHabitacionComoEntidadPorHabitacionIDV)
+                habitacionIDVSelector: entidadIDV
+            })
             await campoDeTransaccion("confirmar")
             const ok = {
                 ok: "Se ha actualizado correctamente la habitacion"
@@ -196,7 +204,7 @@ export const modificarEntidadAlojamiento = async (entrada, salida) => {
             })
             await campoDeTransaccion("iniciar")
 
-           await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+            await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                 camaIDV: entidadIDV,
                 tipoIDVArray: ["compartida", "fisica"],
                 errorSi: "noExiste"

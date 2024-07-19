@@ -22,7 +22,10 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
         })
 
         await eliminarBloqueoCaducado();
-        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
         const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"

@@ -14,7 +14,8 @@ export const actualizaApartamentoPorApartamentoIDVPorReservaUID = async (data) =
         WHERE
         "reservaUID" = ANY($3)
         AND 
-        "apartamentoIDV" = $4;`;
+        "apartamentoIDV" = $4
+        RETURNING *;`;
         const parametros = [
             nuevoApartamentoIDV,
             apartamentoUI,
@@ -22,6 +23,7 @@ export const actualizaApartamentoPorApartamentoIDVPorReservaUID = async (data) =
             antiguoApartamentoIDV          
         ]
         const resuelve = await conexion.query(consulta, parametros);
+        console.log(resuelve.rows[0])
         return resuelve.rows[0]
     } catch (errorCapturado) {
         throw errorCapturado

@@ -11,6 +11,7 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repo
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { reservasPresentesFuturas } from "../../../../sistema/reservas/reservasPresentasFuturas.mjs";
 import { obtenerCamasFisicasPorReservaUIDArrayPorCamaIDV } from "../../../../repositorio/reservas/apartamentos/obtenerCamasFisicasPorReservaUIDArrayPorCamaIDV.mjs";
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 
 export const eliminarEntidadAlojamiento = async (entrada, salida) => {
     try {
@@ -42,37 +43,38 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
                 apartamentoIDV: entidadIDV,
                 errorSi: "noExiste"
             })
-
-            const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(entidadIDV)
-            if (configuracionApartamento?.configuracionUID) {
-                const error = "No se puede borrar esta apartamento como entidad por que esta en dentro de una configuracion de alojamiento, por favor borra primero al configuracion de alojamiento y despues borra esta entidad de apartamento."
-                throw new Error(error)
+            try {
+                await obtenerConfiguracionPorApartamentoIDV({
+                    apartamentoIDV: entidadIDV,
+                    errorSi: "existe"
+                })
+            } catch (error) {
+                const m = "Esta entidad de apartamento esta siendo usada comom base para una configuracion de alojamiento, no puedes eliminar esta entidad mientras sea usada com base para la configuracion de alojamiento. Puedes editarla pero no eliminarla."
+                throw new Error(m)
             }
-
+   
             await eliminarApartamentoComoEntidad(entidadIDV)
             const ok = {
                 ok: "Se ha eliminado correctamente el apartamento como entidad",
             };
             return ok
-
         }
         if (tipoEntidad === "habitacion") {
-            const obtenerHabitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(entidadIDV)
-            if (!obtenerHabitacionComoEntidad.habitacion) {
+            const obtenerHabitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                habitacionIDV: entidadIDV,
+                errorSi: "noExiste"
+            })
+            if (!obtenerHabitacionComoEntidad?.habitacionIDV) {
                 const error = "No existe la habitacion, revisa el habitacionIDV";
                 throw new Error(error);
             }
-            const eliminarHabitacion = await eliminarHabitacionComoEntidad(entidadIDV)
-            if (eliminarHabitacion.rowCount === 0) {
-                const error = "No se ha eliminado la habitacion por que no se ha entonctrado el registo en la base de datos";
-                throw new Error(error);
-            }
-            if (eliminarHabitacion.rowCount === 1) {
-                const ok = {
-                    ok: "Se ha eliminado correctamente la habitacion como entidad",
-                };
-                return ok
-            }
+            await eliminarHabitacionComoEntidad(entidadIDV)
+
+            const ok = {
+                ok: "Se ha eliminado correctamente la habitacion como entidad",
+            };
+            return ok
+
         }
         if (tipoEntidad === "cama") {
             const tipoIDV = validadoresCompartidos.tipos.cadena({

@@ -66,7 +66,10 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada) => {
         }
 
         if (resuelveHabitaciones.includes(habitacionIDV)) {
-            const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
+            const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                habitacionIDV,
+                errorSi: "noExiste"
+            })
             const habitacionUI = habitacion.habitacionUI
             const nuevaHabitacionDelApartamento = await insertarHabitacionEnApartamento({
                 reservaUID: reservaUID,

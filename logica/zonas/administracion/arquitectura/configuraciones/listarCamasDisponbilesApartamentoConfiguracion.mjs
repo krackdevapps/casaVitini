@@ -11,27 +11,26 @@ export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, sa
         IDX.administradores()
         IDX.control()
 
-        const habitacionUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.habitacionUID,
-            nombreCampo: "El identificador universal de la habitación (habitacionUID)",
-            filtro: "numeroSimple",
+        const habitacionUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.habitacionUID,
+            nombreCampo: "El habitacionUID",
+            filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            soloMinusculas: "si"
         })
 
         const detallesHabitacionDelApartamento = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
-        if (detallesHabitacionDelApartamento.length === 0) {
+        if (!detallesHabitacionDelApartamento?.componenteUID) {
             const ok = {
                 ok: "No hay ninguna habitacion con ese identificador disponible para este apartamento"
             };
             return ok
         }
-        if (detallesHabitacionDelApartamento.length > 0) {
             const camasDeLaHabitacion = await obtenerCamasDeLaHabitacionPorHabitacionUID(habitacionUID)
             const camasArrayLimpioEnHabitacion = [];
             for (const detalleHabitacion of camasDeLaHabitacion) {
-                const camaIDV = detalleHabitacion.cama;
+                const camaIDV = detalleHabitacion.camaIDV;
                 camasArrayLimpioEnHabitacion.push(camaIDV);
             }
             const todasLasCamasDelTipoCompartida = await obtenerCamaComoEntidadPorTipoIDV("compartida")
@@ -39,7 +38,7 @@ export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, sa
             const camasComoEntidadEstructuraFinal = {};
             for (const detalleHabitacion of todasLasCamasDelTipoCompartida) {
                 const camaUI = detalleHabitacion.camaUI;
-                const camaIDV = detalleHabitacion.cama;
+                const camaIDV = detalleHabitacion.camaIDV;
                 camasComoEntidadArrayLimpio.push(camaIDV);
                 camasComoEntidadEstructuraFinal[camaIDV] = camaUI;
             }
@@ -58,7 +57,7 @@ export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, sa
                 ok: estructuraFinal
             };
             return ok
-        }
+        
     } catch (errorCapturado) {
         throw errorCapturado
     }

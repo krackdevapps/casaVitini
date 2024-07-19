@@ -44,7 +44,10 @@ export const bloquearApartamentos = async (metadatos) => {
 
         const apartamentoIDV = apartamentoDeLaReserva.apartamentoIDV
 
-        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
 
 
         const motivoDelBloqueo = (origen) => {

@@ -4,10 +4,11 @@ export const eliminarHabitacionComoEntidad = async (habitacionIDV) => {
     try {
         const consulta = `
         DELETE FROM "habitaciones"
-        WHERE "habitacionIDV" = $1;
-        `;
+        WHERE "habitacionIDV" = $1
+        RETURNING
+        *;`;
         const resuelve = await conexion.query(consulta, [habitacionIDV]);
-        return resuelve.rows[0]
+        return resuelve.rows
     } catch (errorAdaptador) {
         throw errorAdaptador
     }

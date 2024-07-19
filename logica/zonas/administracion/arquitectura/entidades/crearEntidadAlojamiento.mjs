@@ -45,9 +45,9 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             const validarCodigo = async (apartamentoIDV) => {
                 const detallesApartamentoComoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                     apartamentoIDV,
-                    errorSi: "noExiste"
+                    errorSi: "desactivado"
                 })
-                if (detallesApartamentoComoEntidad.apartamento) {
+                if (detallesApartamentoComoEntidad?.apartamentoIDV) {
                     return true;
                 }
             };
@@ -64,21 +64,15 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 return codigoGenerado;
             };
             const apartamentoIDV_unico = await controlApartamentoIDV(apartamentoIDV);
-            const detallesApartamentoComoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV: apartamentoIDV_unico,
-                errorSi: "noExiste"
+                errorSi: "existe"
+            })
+            await obtenerApartamentoComoEntidadPorApartamentoUI({
+                apartamentoUI,
+                errorSi: "existe"
             })
 
-            if (detallesApartamentoComoEntidad.rowCount === 1) {
-                const error = "Ya existe un identificador visual igual que el apartamento que propones, escoge otro";
-                throw new Error(error);
-            }
-            const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoUI(apartamentoUI)
-
-            if (apartamentoEntidad.apartamentoUI) {
-                const error = "Ya existe un apartamento con ese nombre, por tema de legibilidad escoge otro";
-                throw new Error(error);
-            }
             const dataInsertarApartamentoComoEntidad = {
                 apartamentoIDV: apartamentoIDV_unico,
                 apartamentoUI: apartamentoUI
@@ -86,12 +80,10 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             const nuevoApartamentoComEntidad = await insertarApartamentoComoEntidad(dataInsertarApartamentoComoEntidad)
             const ok = {
                 ok: "Se ha creado correctament la nuevo entidad como apartamento",
-                nuevoUID: nuevoApartamentoComEntidad.apartamento
+                nuevoUID: nuevoApartamentoComEntidad.apartamentoIDV
             };
             return ok
-
-        }
-        if (tipoEntidad === "habitacion") {
+        } else if (tipoEntidad === "habitacion") {
 
             const habitacionUI = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.habitacionUI,
@@ -111,9 +103,14 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             })
             const validarCodigo = async (habitacionIDV) => {
 
-                const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
-                if (habitacion.habitacionUI) {
+                const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                    habitacionIDV,
+                    errorSi: "desactivado"
+                })
+                if (habitacion?.habitacionIDV) {
                     return true;
+                } else {
+                    return false
                 }
             };
             const controlHabitacionIDV = async (habitacionIDV) => {
@@ -129,33 +126,37 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 return codigoGenerado;
             };
             const habitacionIDV_unico = await controlHabitacionIDV(habitacionIDV);
-
-            const habitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV_unico)
-
-            if (habitacionComoEntidad.habitacion) {
+            console.log("test1")
+            const habitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                habitacionIDV: habitacionIDV_unico,
+                errorSi: "existe"
+            })
+            console.log("test2")
+            if (habitacionComoEntidad?.habitacionIDV) {
                 const error = "Ya existe un identificador visual igual que el que propones, escoge otro";
                 throw new Error(error);
             }
-            const nombreHabitacionUI = await obtenerHabitacionComoEntidadPorHabitacionUI(habitacionUI).habitacionUI
-            if (nombreHabitacionUI.habitacion) {
-                const error = "Ya existe un nombre de la habitacion exactamente igual, por tema de legibilidad escoge otro";
-                throw new Error(error);
-            }
+            console.log("test3")
+            await obtenerHabitacionComoEntidadPorHabitacionUI({
+                habitacionUI,
+                errorSi: "existe"
+            })
 
+            console.log("test4")
             const dataInsertarHabitacionComoEntidad = {
                 habitacionIDV: habitacionIDV_unico,
                 habitacionUI: habitacionUI
             }
+            console.log("test5")
             const nuevaHabitacionComoEntidad = await insertarHabitacionComoEntidad(dataInsertarHabitacionComoEntidad)
-
+            console.log("test6")
             const ok = {
                 ok: "Se ha creado correctament la nuevo entidad como habitacion",
-                nuevoUID: nuevaHabitacionComoEntidad.habitacion
+                nuevoUID: nuevaHabitacionComoEntidad.habitacionIDV
             };
             return ok
 
-        }
-        if (tipoEntidad === "cama") {
+        } else if (tipoEntidad === "cama") {
 
             const camaUI = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.camaUI,
@@ -194,15 +195,20 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             })
 
             const validarCodigo = async (camaIDV) => {
-                const camaEntidad = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
-                    camaIDV,
-                    tipoIDVArray: ["compartida", "fisica"],
-                    errorSi: "desactivado"
-                })
+                try {
+                    const camaEntidad = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+                        camaIDV,
+                        tipoIDVArray: ["compartida", "fisica"],
+                        errorSi: "desactivado"
+                    })
 
-                if (camaEntidad?.camaIDV) {
-                    return true;
+                    if (camaEntidad?.camaIDV) {
+                        return true;
+                    }
+                } catch (error) {
+                    throw error
                 }
+
             };
             const controlCamaIDV = async (camaIDV) => {
                 let codigoGenerado = camaIDV;
@@ -216,18 +222,18 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 return codigoGenerado;
             };
             const camaIDV_unico = await controlCamaIDV(camaIDV);
-
+            console.log("test1")
             await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                 camaIDV,
                 tipoIDVArray: ["compartida", "fisica"],
                 errorSi: "existe"
             })
-
-
+            console.log("test2")
             await obtenerCamaComoEntidadPorCamaUI({
                 camaUI,
                 errorSi: "existe"
             })
+            console.log("test3")
             const dataInsertarCamaComoEntidad = {
                 camaIDV: camaIDV_unico,
                 camaUI,
@@ -242,6 +248,9 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             };
             return ok
 
+        } else {
+            const error = "No se reconoce el tipo de entidad";
+            throw new Error(error);
         }
     } catch (errorCapturado) {
         throw errorCapturado

@@ -37,7 +37,10 @@ export const crearCalendario = async (entrada, salida) => {
             ]
         })
         await campoDeTransaccion("inicar")
-        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
 
         const errorDeFormato = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb";
         let calendarioRaw;

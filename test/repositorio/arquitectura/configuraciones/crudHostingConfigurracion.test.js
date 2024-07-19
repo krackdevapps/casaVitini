@@ -91,7 +91,10 @@ describe('crud hosting configuracion', () => {
     })
 
     test('select hosting by apartamentoIDV', async () => {
-        const response = await obtenerConfiguracionPorApartamentoIDV(IDVStart)
+        const response = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV: IDVStart,
+            errorSi: "noExiste"
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })

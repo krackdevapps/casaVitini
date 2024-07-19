@@ -39,7 +39,10 @@ export const actualizarZonaDeLaConfiguracionApartamento = async (entrada, salida
             const m = "El campo nueva zona solo espera, publica, privadao o global"
             throw new Error(m)
         }
-        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
         await actualizarZonaIDVDeLaConfiguracion({
             apartamentoIDV,
             nuevaZona

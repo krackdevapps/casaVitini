@@ -4,6 +4,7 @@ import { validadoresCompartidos } from "../../../../sistema/validadores/validado
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerTodasLasCaracteristicasDelApartamento } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerTodasLasCaracteristicasDelApartamento.mjs";
 import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs";
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 
 export const detallesDeEntidadDeAlojamiento = async (entrada, salida) => {
     try {
@@ -42,10 +43,12 @@ export const detallesDeEntidadDeAlojamiento = async (entrada, salida) => {
             };
             return ok
 
-        }
-        if (tipoEntidad === "habitacion") {
-            const habitacionesComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(entidadIDV)
-            if (!habitacionesComoEntidad.habitacion) {
+        } else if (tipoEntidad === "habitacion") {
+            const habitacionesComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                habitacionIDV: entidadIDV,
+                errorSi: "noExiste"
+            })
+            if (!habitacionesComoEntidad?.habitacionIDV) {
                 const error = "No existe la habitacion";
                 throw new Error(error);
             }
@@ -54,8 +57,7 @@ export const detallesDeEntidadDeAlojamiento = async (entrada, salida) => {
             };
             return ok
 
-        }
-        if (tipoEntidad === "cama") {
+        } else if (tipoEntidad === "cama") {
 
             const camaComoEntidad = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                 camaIDV: entidadIDV,
@@ -68,6 +70,9 @@ export const detallesDeEntidadDeAlojamiento = async (entrada, salida) => {
             };
             return ok
 
+        } else {
+            const m = "No se reconoce el tipo de entidad"
+            throw new Error(m)
         }
     } catch (errorCapturado) {
         throw errorCapturado

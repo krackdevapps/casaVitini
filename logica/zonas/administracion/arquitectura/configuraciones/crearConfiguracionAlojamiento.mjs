@@ -35,7 +35,10 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
             const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon";
             throw new Error(error);
         }
-        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "existe"
+        })
         if (configuracionApartamento.length > 0) {
             const error = "Ya existe una configuracion para la entidad del apartamento por favor selecciona otro apartamento como entidad";
             throw new Error(error);

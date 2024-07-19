@@ -29,7 +29,10 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
 
-        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
 
         const detallesApartamento = {};
         const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({

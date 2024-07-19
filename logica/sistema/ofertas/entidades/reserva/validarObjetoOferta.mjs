@@ -134,7 +134,10 @@ export const validarObjetoOferta = async (data) => {
                     sePermitenDuplicados: "no"
                 })
                 for (const apartamentoIDV of apartamentos) {
-                    await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+                    await obtenerConfiguracionPorApartamentoIDV({
+                        apartamentoIDV,
+                        errorSi: "noExiste"
+                    })
                 }
             } else if (tipoCondicionIDV === "porDiasDeAntelacion") {
                 const tipoConteo = condicion.tipoConteo
@@ -400,7 +403,10 @@ export const validarObjetoOferta = async (data) => {
                                 limpiezaEspaciosAlrededor: "si",
                             })
 
-                            await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+                            await obtenerConfiguracionPorApartamentoIDV({
+                                apartamentoIDV,
+                                errorSi: "noExiste"
+                            })
                             const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
                                 apartamentoIDV,
                                 errorSi: "noExiste"

@@ -52,7 +52,10 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
             const error = "Solo se acetan imagenes PNG, TIFF, JPEG y JPG.";
             throw new Error(error);
         }
-        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
 
         if (configuracionApartamento.length === 0) {
             const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon";

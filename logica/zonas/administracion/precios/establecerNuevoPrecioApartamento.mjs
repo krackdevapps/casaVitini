@@ -33,7 +33,10 @@ export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
 
-        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
         if (configuracionApartamento.estadoConfiguracion === "disponible") {
             const error = "No se puede puede establecer un precio a este apartmento cuadno la configuracion esta en modo disponible. Primero desactive la configuracion del apartmento dejandola en estado No disponible y luego podra hacer las modificaciones que necesite";
             throw new Error(error);

@@ -25,7 +25,10 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
         })
 
 
-        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
 
         const estadoConfiguracion = configuracionApartamento.estadoConfiguracionIDV;
         const zonaIDV = configuracionApartamento.zonaIDV;
@@ -41,7 +44,10 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
 
             const habitacionUID = detalleHabitacion.componenteUID;
             const habitacionIDV = detalleHabitacion.habitacionIDV;
-            const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
+            const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                habitacionIDV,
+                errorSi: "noExiste"
+            })
             const habitacionUI = habitacion.habitacionUI
             detalleHabitacion.habitacionUI = habitacionUI;
 
@@ -50,13 +56,13 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
             if (camasDeLaHabitacion.length > 0) {
                 for (const detallesCamaEnLaHabitacion of camasDeLaHabitacion) {
                     const camaIDV = detallesCamaEnLaHabitacion.camaIDV;
+                    const camaUID = detallesCamaEnLaHabitacion.componenteUID;
 
                     const detallesCama = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                         camaIDV,
                         tipoIDVArray: ["compartida"],
                         errorSi: "desactivado"
                     })
-
 
                     if (!detallesCama) {
                         const error = "No existe el identificador de la camaIDV";
@@ -66,11 +72,13 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
                     const capacidad = detallesCama.capacidad;
                     const tipoIDV = detallesCama.tipoIDV;
 
+
                     const estructuraCama = {
                         camaIDV: camaIDV,
                         camaUI: camaUI,
                         tipoIDV: tipoIDV,
-                        capacidad: capacidad
+                        capacidad: capacidad,
+                        camaUID: camaUID
                     };
                     detalleHabitacion.camas.push(estructuraCama);
                 }

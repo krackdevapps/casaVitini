@@ -8,12 +8,12 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/a
 import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../../../../repositorio/arquitectura/configuraciones/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs";
 import { actualizarEstadoPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/actualizarEstadoPorApartamentoIDV.mjs";
 
-export const cambiarEstadoConfiguracionAlojamiento = async (entrada, salida) => {
+export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
     const mutex = new Mutex()
     try {
 
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
@@ -35,11 +35,16 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada, salida) => 
         })
         validadoresCompartidos.filtros.estados(nuevoEstado)
 
-        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        if (configuracionApartamento.length === 0) {
-            const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crea la configuiracíon";
-            throw new Error(error);
+        try {
+            const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            })
+        } catch (error) {
+            const m = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crea la configuiracíon";
+            throw new Error(m);
         }
+
         if (nuevoEstado === "disponible") {
 
             const zonaIDV = configuracionApartamento.zonaIDV
@@ -58,9 +63,12 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada, salida) => 
                 const habitacionesSinCama = [];
                 const habitacionesEnConfiguracion = habitacionesPorApartmento;
                 for (const detalleHabitacion of habitacionesEnConfiguracion) {
-                    const habitacionUID = detalleHabitacion.uid;
-                    const habitacionIDV = detalleHabitacion.habitacion;
-                    const nombreHabitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
+                    const habitacionUID = detalleHabitacion.componenteUID;
+                    const habitacionIDV = detalleHabitacion.habitacionIDV;
+                    const nombreHabitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                        habitacionIDV,
+                        errorSi: "noExiste"
+                    })
                     if (!nombreHabitacionUI) {
                         const error = "No existe el identificador de la habitacionIDV";
                         throw new Error(error);
@@ -98,7 +106,7 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada, salida) => 
             ok: "Se ha actualizado el estado correctamente",
             nuevoEstado: nuevoEstado
         };
-        salida.json(ok)
+        return ok
 
     } catch (errorCapturado) {
         throw errorCapturado

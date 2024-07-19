@@ -1,6 +1,8 @@
 import { conexion } from "../../../componentes/db.mjs";
-export const obtenerImagenApartamentoPorApartamentoIDV = async (apartamentoIDV) => {
+export const obtenerImagenApartamentoPorApartamentoIDV = async (data) => {
     try {
+        const apartamentoIDV = data.apartamentoIDV
+        const estadoConfiguracionIDV_array = data.estadoConfiguracionIDV_array
         const consulta = `
         SELECT 
         imagen
@@ -8,11 +10,11 @@ export const obtenerImagenApartamentoPorApartamentoIDV = async (apartamentoIDV) 
         WHERE 
         "apartamentoIDV" = $1
         AND 
-        "estadoConfiguracionIDV" = $2;
+        "estadoConfiguracionIDV" = ANY($2);
         `;
         const parametros = [
             apartamentoIDV,
-            "disponible"
+            estadoConfiguracionIDV_array
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

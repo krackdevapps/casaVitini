@@ -5,10 +5,10 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/a
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
 import { obtenerTodasLasHabitaciones } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerTodasLasHabitaciones.mjs";
 
-export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entrada, salida) => {
+export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
@@ -21,16 +21,16 @@ export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entr
             soloMinusculas: "si"
         })
             
-        const configuracionDelApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
-        if (configuracionDelApartamento.length === 0) {
-            const error = "No hay ninguna configuracion disponible para este apartamento";
-            throw new Error(error);
-        }
-        if (configuracionDelApartamento.length > 0) {
+        const configuracionDelApartamento = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
+
+        
             const habitacionesDelApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
             const habitacionesEnConfiguracionArrayLimpio = [];
             for (const detalleHabitacion of habitacionesDelApartamento) {
-                const habitacionIDV = detalleHabitacion.habitacion;
+                const habitacionIDV = detalleHabitacion.habitacionIDV;
                 habitacionesEnConfiguracionArrayLimpio.push(habitacionIDV);
             }
             const todasLasHabitacione = await obtenerTodasLasHabitaciones()
@@ -38,7 +38,7 @@ export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entr
             const habitacionesComoEntidadEstructuraFinal = {};
             for (const detalleHabitacion of todasLasHabitacione) {
                 const habitacionUI = detalleHabitacion.habitacionUI;
-                const habitacionIDV = detalleHabitacion.habitacion;
+                const habitacionIDV = detalleHabitacion.habitacionIDV;
                 habitacionComoEntidadArrayLimpio.push(habitacionIDV);
                 habitacionesComoEntidadEstructuraFinal[habitacionIDV] = habitacionUI;
             }
@@ -57,9 +57,8 @@ export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entr
                 ok: estructuraFinal
             };
             return ok
-        }
+        
     } catch (errorCapturado) {
         throw errorCapturado
     }
-
 }

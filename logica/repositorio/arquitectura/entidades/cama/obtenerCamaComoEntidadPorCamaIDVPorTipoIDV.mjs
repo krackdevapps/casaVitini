@@ -25,7 +25,6 @@ export const obtenerCamaComoEntidadPorCamaIDVPorTipoIDV = async (data) => {
             tipoIDVArray
         ]
         const resuelve = await conexion.query(consulta, parametros)
-
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {
                 const error = "No se encuentra ninguna cama con ese camaIDV y tipoIDVArray"

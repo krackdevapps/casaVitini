@@ -24,7 +24,10 @@ export const eliminarConfiguracionDeAlojamiento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
         if (configuracionApartamento.length === 0) {
             const error = "No existe el perfil de configuracion del apartamento";
             throw new Error(error);

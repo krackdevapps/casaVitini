@@ -73,7 +73,10 @@ export const insertarReserva = async (reserva) => {
                 const habitacionIDV = habitacionConfiguracion
                 const camaIDV = habitaciones[habitacionIDV].camaSeleccionada.camaIDV
                 const pernoctantesPool = habitaciones[habitacionIDV].pernoctantes
-                const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV(habitacionIDV)
+                const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                    habitacionIDV,
+                    errorSi: "noExiste"
+                })
                 const habitacionUI = habitacion.habitacionUI
 
                 const nuevoHabitacionEnElApartamento = await insertarHabitacionEnApartamento({

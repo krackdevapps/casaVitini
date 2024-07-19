@@ -22,7 +22,10 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
         const configuracion = {}
 
         for (const apartamentoIDV of apartamentosIDVArray) {
-            const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+            const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            })
             const estructuraApartamentoInicial = {
                 apartamentoIDV: configuracionApartamento.apartamentoIDV,
             }
@@ -35,7 +38,7 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
 
             const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
-                errorSi: "desactivado"
+                errorSi: "noExiste"
             })
             configuracion[apartamentoIDV].apartamentoUI = apartamentoEntidad.apartamentoUI
             const caracteristicasDeLApartamento = await obtenerTodasLasCaracteristicasDelApartamento(apartamentoIDV)
@@ -44,16 +47,19 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
             configuracion[apartamentoIDV].habitaciones = {}
 
             for (const habitacion of configuracionHabitacionesPorApartamento) {
-                const habiacionIDV = habitacion.habitacionIDV
+                const habitacionIDV = habitacion.habitacionIDV
                 const habitacionUID = habitacion.componenteUID
-                const habitacionEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV(habiacionIDV)
-                configuracion[apartamentoIDV].habitaciones[habiacionIDV] = {}
-                configuracion[apartamentoIDV].habitaciones[habiacionIDV].habitacionUI = habitacionEntidad.habitacionUI
+                const habitacionEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                    habitacionIDV,
+                    errorSi: "noExiste"
+                })
+                configuracion[apartamentoIDV].habitaciones[habitacionIDV] = {}
+                configuracion[apartamentoIDV].habitaciones[habitacionIDV].habitacionUI = habitacionEntidad.habitacionUI
 
                 const camasDeLaHabitacion = await obtenerCamasDeLaHabitacionPorHabitacionUID(habitacionUID)
 
                 let configuracionNumero = 0
-                configuracion[apartamentoIDV].habitaciones[habiacionIDV].configuraciones = {}
+                configuracion[apartamentoIDV].habitaciones[habitacionIDV].configuraciones = {}
 
                 for (const configuracionHabitacion of camasDeLaHabitacion) {
                     configuracionNumero += 1
@@ -65,8 +71,8 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
                     })
                     const camaUI = cama.camaUI
                     const capacidad = cama.capacidad
-                    configuracion[apartamentoIDV].habitaciones[habiacionIDV].configuraciones["configuracion" + configuracionNumero] = {}
-                    configuracion[apartamentoIDV].habitaciones[habiacionIDV].configuraciones["configuracion" + configuracionNumero] = {
+                    configuracion[apartamentoIDV].habitaciones[habitacionIDV].configuraciones["configuracion" + configuracionNumero] = {}
+                    configuracion[apartamentoIDV].habitaciones[habitacionIDV].configuraciones["configuracion" + configuracionNumero] = {
                         camaIDV: camaIDV,
                         camaUI: camaUI,
                         capacidad: capacidad

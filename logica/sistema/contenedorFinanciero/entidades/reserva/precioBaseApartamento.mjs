@@ -7,7 +7,10 @@ import { obtenerImpuestosPorEntidadIDV } from '../../../../repositorio/impuestos
 
 export const precioBaseApartamento = async (apartamentoIDV) => {
     try {
-        await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+        await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
         const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"

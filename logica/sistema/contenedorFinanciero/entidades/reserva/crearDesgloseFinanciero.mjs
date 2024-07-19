@@ -42,7 +42,10 @@ export const crearDesgloseFinanciero = async (data) => {
         })
 
         for (const apartamentoIDV of apartamentosArray) {
-            await obtenerConfiguracionPorApartamentoIDV(apartamentoIDV)
+            await obtenerConfiguracionPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            })
         }
 
         const capaOfertas = data?.capaOfertas
