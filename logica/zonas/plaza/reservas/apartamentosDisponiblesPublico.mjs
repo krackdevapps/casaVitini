@@ -7,8 +7,11 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 import { procesador } from "../../../sistema/contenedorFinanciero/procesador.mjs";
+import { utilidades } from "../../../componentes/utilidades.mjs";
+import { Mutex } from "async-mutex";
 
 export const apartamentosDisponiblesPublico = async (entrada) => {
+    const mutex = new Mutex()
     try {
         if (!await interruptor("aceptarReservasPublicas")) {
             throw new Error(mensajesUI.aceptarReservasPublicas);
@@ -28,6 +31,9 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
             fechaSalida: fechaSalida,
             tipoVector: "diferente"
         })
+        await utilidades.ralentizador(2000)
+        mutex.acquire()
+
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaEntrad_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
@@ -84,5 +90,9 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
         return estructura
     } catch (errorCapturado) {
         throw errorCapturado
+    } finally {
+        if (mutex) {
+            mutex.release()
+        }
     }
 }

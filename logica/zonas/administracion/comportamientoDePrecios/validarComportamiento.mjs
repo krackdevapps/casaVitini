@@ -242,11 +242,11 @@ export const validarComportamiento = async (comportamiento) => {
             })
             const fechaInicio_creacionReserva = await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: contenedor.fechaInicio_creacionReserva,
-                nombreCampo: "La fecha de inicio del comportamiento"
+                nombreCampo: "La fecha de inicio del rango de creación"
             });
             const fechaFinal_creacionReserva = await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: contenedor.fechaFinal_creacionReserva,
-                nombreCampo: "La fecha final del comportameinto"
+                nombreCampo: "La fecha del fin del rango de creación"
             });
 
             await validadoresCompartidos.fechas.validacionVectorial({

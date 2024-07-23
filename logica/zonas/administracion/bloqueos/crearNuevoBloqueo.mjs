@@ -14,7 +14,7 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-        console.log("en", entrada.body)
+
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El apartamentoIDV",
@@ -108,7 +108,7 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             motivo,
             zonaIDV
         }
-        console.log("datosNuevoBloqueo", datosNuevoBloqueo)
+
         const nuevoBloquoe = await insertarNuevoBloqueo(datosNuevoBloqueo)
 
         const nuevoUIDBloqueo = nuevoBloquoe.bloqueoUID;

@@ -32,17 +32,17 @@ export const crearMensaje = async (entrada, salida) => {
             estadoInicial: "desactivado",
             posicionInicial: posicionInicial
         }
-        await insertarMensajeEnPortada(dataNuevoMensaje)
+        const nuevoMensaje = await insertarMensajeEnPortada(dataNuevoMensaje)
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha creado el nuevo mensaje",
-            mensajeUID: resuelveCreacion.rows[0].mensajeUID,
+            mensajeUID: nuevoMensaje.mensajeUID,
         };
         return ok
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 
 }

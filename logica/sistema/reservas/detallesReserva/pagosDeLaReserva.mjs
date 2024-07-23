@@ -49,7 +49,7 @@ export const pagosDeLaReserva = async (reservaUID) => {
                     pagoResultadoFinal = cantidadDelPago.plus(pagoResultadoFinal);
                 }
                 if (reembolsosDelPago.length > 0) {
-                    // if (plataformaDePago === "pasarela") {
+                    // if (plataformaDePagoIDV === "pasarela") {
                     //     const actualizarReembolsos = await componentes.administracion.reservas.transacciones.actualizarReembolsosDelPagoDesdeSquare(pagoUID, pagoUIDPasarela)
                     //     if (actualizarReembolsos?.error) {
                     //         ok.estadoPasarela = actualizarReembolsos.error

@@ -18,30 +18,19 @@ export const guardarConfiguracion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-
-        // Validar que la zona horarai exista
-        const validarZonaHoraria = (zonaHorariaAValidar) => {
-            let resultadoFinal = "no";
-            for (const zonaHoraria of listaZonasHorarias) {
-                if (zonaHoraria === zonaHorariaAValidar) {
-                    resultadoFinal = "si";
-                }
-            }
-            return resultadoFinal;
-        };
-        if (validarZonaHoraria(zonaHoraria) === "no") {
-            const error = "el campo 'zonaHorariaGlobal' no existe";
+        if (!listaZonasHorarias.includes(zonaHoraria)) {
+            const error = "El codigo de la zona horaria no existe";
             throw new Error(error);
         }
-        const paresConf = {
-            "zonaHoraria": zonaHoraria
-        }
 
+        await actualizarParConfiguracion({
+            zonaHoraria: zonaHoraria
+        })
         const ok = {
             ok: "Se ha actualizado correctamente la configuracion"
-        };
+        }
         return ok
     } catch (errorCapturado) {
-        throw errorFinal
+        throw errorCapturado
     }
 }

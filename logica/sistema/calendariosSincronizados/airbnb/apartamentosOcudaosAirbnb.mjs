@@ -6,9 +6,12 @@ export const apartamentosOcupadosAirbnb = async (datos) => {
     const fechaSalida = datos.fechaSalida
     const apartamentosDisponibles = datos.apartamentosDisponibles
 
+
+
     const apartamentosOcupados = []
     for (const apartamentoDisponible of apartamentosDisponibles) {
         const calendarioExterno = await sincronizarCalendariosAirbnbPorIDV(apartamentoDisponible)
+
         const calendariosPorApartamento = calendarioExterno.calendariosPorApartamento
         const apartamentoIDV = calendarioExterno.apartamentoIDV
         for (const calendarioDelApartamento of calendariosPorApartamento) {

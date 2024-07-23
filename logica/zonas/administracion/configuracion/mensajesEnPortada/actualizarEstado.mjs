@@ -18,11 +18,12 @@ export const actualizarEstado = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
 
-        const estado = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.estado,
-            nombreCampo: "El estado",
+        const estadoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.estadoIDV,
+            nombreCampo: "El estadoIDV",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -33,19 +34,19 @@ export const actualizarEstado = async (entrada, salida) => {
 
         const dataActualizarEstadoMensaje = {
             mensajeUID: mensajeUID,
-            estado: estado
+            estadoIDV: estadoIDV
         }
         await actualizarEstadoMensajeDePortada(dataActualizarEstadoMensaje)
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el estado correctamente",
             mensajeUID: mensajeUID,
-            estado: estado
+            estadoIDV: estadoIDV
         };
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 
 }

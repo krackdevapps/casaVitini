@@ -54,8 +54,8 @@ export const detallesDelPernoctantePorPernoctaneUID = async (entrada, salida) =>
             const mail = cliente.mail
             const telefono = cliente.telefono
 
-            const primerApellido = cliente.primerApellidos
-            const segundoApellido = cliente.segundoApellido
+            const primerApellido = cliente.primerApellido || ""
+            const segundoApellido = cliente.segundoApellido || ""
             const nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`
             const pasaporte = cliente.pasaporte;
 

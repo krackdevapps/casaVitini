@@ -11,7 +11,10 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositori
 
 export const calendariosCompartidos = async (calendarioUIDPublico) => {
     try {
-        const calendariosporUIDPublico = await obtenerCalendarioPorCalendarioUIDPublico(calendarioUIDPublico)
+        const calendariosporUIDPublico = await obtenerCalendarioPorCalendarioUIDPublico({
+            publicoUID: calendarioUIDPublico,
+            errorSi: "no Existe"
+        })
         const apartamentoIDV = calendariosporUIDPublico.apartamentoIDV;
         const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,

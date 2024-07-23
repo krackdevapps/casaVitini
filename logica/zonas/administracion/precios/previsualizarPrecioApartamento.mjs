@@ -3,6 +3,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerImpuestosPorEntidadIDV } from "../../../repositorio/impuestos/obtenerImpuestosPorEntidadIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import Decimal from "decimal.js";
 
 export const previsualizarPrecioApartamento = async (entrada, salida) => {
     try {
@@ -79,8 +80,8 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
             });
             let totalDiaBruto = Number(sumaTotalImpuestos) + Number(precioNetoApartamentoPorNoche);
             totalDiaBruto = totalDiaBruto.toFixed(2);
-            detallesApartamento.totalImpuestos = sumaTotalImpuestos;
-            detallesApartamento.totalBrutoPordia = totalDiaBruto;
+            detallesApartamento.totalImpuestos = Decimal(sumaTotalImpuestos).toFixed(2);
+            detallesApartamento.totalBrutoPordia = Decimal(totalDiaBruto).toFixed(2);
         }
         const ok = {
             ok: detallesApartamento

@@ -3,6 +3,8 @@ import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
+import { desactivarCuenta } from "../../repositorio/usuarios/desactivarCuenta.mjs";
+import { obtenerDatosPersonales } from "../../repositorio/usuarios/obtenerDatosPersonales.mjs";
 
 export const actualizarDatosUsuarioDesdeMiCasa = async (entrada) => {
 
@@ -22,7 +24,6 @@ export const actualizarDatosUsuarioDesdeMiCasa = async (entrada) => {
             telefono: entrada.body.telefono,
             operacion: "actualizar",
             usuario: usuarioIDX,
-
         }
 
         validadoresCompartidos.usuarios.datosUsuario(datosUsuario)
@@ -32,13 +33,20 @@ export const actualizarDatosUsuarioDesdeMiCasa = async (entrada) => {
             mail: datosUsuario.mail,
             operacion: "actualizar"
         })
-
-        const usuraioActualziad = await actualizarDatos(datosUsuario)
-
+        const datosAnteriores = await obtenerDatosPersonales(usuarioIDX)
+        const usurarioActualizado = await actualizarDatos(datosUsuario)
+        const mailAntiguo = datosAnteriores.mail
+        const mailNuevo = usurarioActualizado.mail
+        console.log("mailAntiguo", mailAntiguo, "mailNuevo", mailNuevo, mailAntiguo !== mailNuevo)
+        if (mailAntiguo !== mailNuevo) {
+            await desactivarCuenta({
+                usuario: usuarioIDX
+            })           
+        }
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualiza correctamente los datos del usuario",
-            datosActualizados: usuraioActualziad
+            datosActualizados: usurarioActualizado
         }
         return ok
     } catch (errorCapturado) {

@@ -6,6 +6,7 @@ import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../repositori
 import { campoDeTransaccion } from '../../../../../repositorio/globales/campoDeTransaccion.mjs';
 import { obtenerCalendarioPorCalendarioUIDPublico } from '../../../../../repositorio/calendario/obtenerCalendarioPorCalendarioUIDPublico.mjs';
 import { insertarCalendarioSincronizado } from '../../../../../repositorio/calendario/insertarCalendarioSincronizado.mjs';
+import axios from 'axios';
 
 export const crearCalendario = async (entrada, salida) => {
     try {
@@ -36,7 +37,7 @@ export const crearCalendario = async (entrada, salida) => {
                 "airbnb.com"
             ]
         })
-        await campoDeTransaccion("inicar")
+        await campoDeTransaccion("iniciar")
         await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
@@ -58,6 +59,7 @@ export const crearCalendario = async (entrada, salida) => {
                 throw new Error(errorDeFormato);
             }
         } catch (errorCapturado) {
+
             throw new Error(errorDeFormato);
         }
         const generarCadenaAleatoria = (longitud) => {
@@ -70,9 +72,14 @@ export const crearCalendario = async (entrada, salida) => {
             return cadenaAleatoria + ".ics";
         };
         const validarCodigo = async (codigoAleatorio) => {
-            const calendario = await obtenerCalendarioPorCalendarioUIDPublico(codigoAleatorio)
+            const calendario = await obtenerCalendarioPorCalendarioUIDPublico({
+                publicoUID: codigoAleatorio,
+                errorSi: "desactivado"
+            })
             if (calendario.length > 0) {
                 return true;
+            } else {
+                return false
             }
         };
         const controlCodigo = async () => {
@@ -101,12 +108,12 @@ export const crearCalendario = async (entrada, salida) => {
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha guardado el nuevo calendario y esta listo para ser sincronizado",
-            nuevoUID: nuevoCalendario.uid
+            nuevoUID: nuevoCalendario.calendarioUID
         };
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 
 }

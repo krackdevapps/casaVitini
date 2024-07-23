@@ -6,13 +6,16 @@ export const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
     const plataformaOrigen = "airbnb"
 
     const calendariosSincronizados = await obtenerCalendariosPorPlataformaIDV(plataformaOrigen)
+
     // const fechaHoy_ISO = "2024-05-05"
     // Sincronizar y obtener los dtos
     const eventosPorApartamento = []
     for (const apartamentoIDV_porCalendario of calendariosSincronizados) {
         const apartamentoIDV_porComprovar = apartamentoIDV_porCalendario.apartamentoIDV
         const calendarioExterno = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV_porComprovar)
+
         const calendariosPorApartamento = calendarioExterno.calendariosPorApartamento
+
         const apartamentoIDV = calendarioExterno.apartamentoIDV
         const detallesDelApartamento = {
             apartamentoIDV: apartamentoIDV,
@@ -21,6 +24,8 @@ export const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
         for (const calendarioDelApartamento of calendariosPorApartamento) {
             const calendariosObjetoDelApartamento = calendarioDelApartamento.calendarioObjeto
             for (const detallesDelCalendario of calendariosObjetoDelApartamento) {
+                console.log("detallesDelCalendario", detallesDelCalendario)
+
                 const fechaInicioComparar = detallesDelCalendario.fechaInicio
                 const fechaFinalComparar = detallesDelCalendario.fechaFinal
                 //
@@ -30,7 +35,7 @@ export const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
                     fechaFin_rango_ISO: fechaHoy_ISO,
                     fechaInicio_elemento_ISO: fechaInicioComparar,
                     fechaFin_elemento_ISO: fechaFinalComparar,
-                    tipoLimite: "noIncluido"
+                    tipoLimite: "incluido"
                 })
                 if (controlOcupacional) {
                     //apartamentosOcupados.push(apartamentoIDV)

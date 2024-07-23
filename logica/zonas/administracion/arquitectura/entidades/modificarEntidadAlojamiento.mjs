@@ -117,7 +117,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
             })
             await campoDeTransaccion("confirmar")
 
-            console.log("a", apartamentoComoEntidadActualizado)
+
             const ok = {
                 ok: "Se ha actualizado correctamente el apartamento",
                 apartamentoComoEntidadActualizado
@@ -165,7 +165,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 }
             }
 
-    
+
             await actualizarHabitacionComoEntidadPorHabitacionIDV({
                 habitacionIDVNuevo: habitacionIDV,
                 habitacionUI: habitacionUI,

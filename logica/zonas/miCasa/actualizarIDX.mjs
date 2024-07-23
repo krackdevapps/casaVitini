@@ -5,6 +5,9 @@ import { validadoresCompartidos } from "../../sistema/validadores/validadoresCom
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
+import { actualizarIDX as actualizarIDV_} from "../../repositorio/usuarios/actualizarIDX.mjs";
+import { usuariosLimite } from "../../sistema/usuarios/usuariosLimite.mjs";
+import { actualizarUsuarioSessionActiva } from "../../repositorio/usuarios/actualizarSessionActiva.mjs";
 
 export const actualizarIDX = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -16,7 +19,7 @@ export const actualizarIDX = async (entrada, salida) => {
 
         const actualIDX = entrada.session.usuario;
         const nuevoIDX = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.usuarioIDX,
+            string: entrada.body.nuevoIDX,
             nombreCampo: "El nombre de usuario (VitiniIDX)",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
@@ -29,20 +32,29 @@ export const actualizarIDX = async (entrada, salida) => {
             throw new Error(error)
 
         }
+        console.log("usuari", actualIDX)
         await obtenerUsuario({
-            usuario: nuevoIDX,
+            usuario: actualIDX,
             errorSi: "noExiste"
         })
-        usuariosLimite(usuarioIDX)
+        
+        usuariosLimite(nuevoIDX)
         await eliminarUsuarioPorRolPorEstadoVerificacion();
         await campoDeTransaccion("iniciar")
 
-        const data = {
-            actualIDX: actualIDX,
+        await obtenerUsuario({
+            usuario: nuevoIDX,
+            errorSi: "existe"
+        })
+        await actualizarIDV_({
+            usuarioIDX: actualIDX,
             nuevoIDX: nuevoIDX
-        }
-        await actualizarIDX(data)
-
+        })
+        await actualizarUsuarioSessionActiva({
+            usuarioIDX: actualIDX,
+            nuevoIDX: nuevoIDX
+        })
+        // No ha actualizado la session
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el IDX correctamente",
@@ -52,8 +64,10 @@ export const actualizarIDX = async (entrada, salida) => {
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     } finally {
-        mutex.release()
+        if (mutex) {
+            mutex.release()
+        }
     }
 }

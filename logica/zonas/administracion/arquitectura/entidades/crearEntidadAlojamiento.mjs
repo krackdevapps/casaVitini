@@ -126,30 +126,30 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 return codigoGenerado;
             };
             const habitacionIDV_unico = await controlHabitacionIDV(habitacionIDV);
-            console.log("test1")
+
             const habitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
                 habitacionIDV: habitacionIDV_unico,
                 errorSi: "existe"
             })
-            console.log("test2")
+
             if (habitacionComoEntidad?.habitacionIDV) {
                 const error = "Ya existe un identificador visual igual que el que propones, escoge otro";
                 throw new Error(error);
             }
-            console.log("test3")
+
             await obtenerHabitacionComoEntidadPorHabitacionUI({
                 habitacionUI,
                 errorSi: "existe"
             })
 
-            console.log("test4")
+
             const dataInsertarHabitacionComoEntidad = {
                 habitacionIDV: habitacionIDV_unico,
                 habitacionUI: habitacionUI
             }
-            console.log("test5")
+
             const nuevaHabitacionComoEntidad = await insertarHabitacionComoEntidad(dataInsertarHabitacionComoEntidad)
-            console.log("test6")
+
             const ok = {
                 ok: "Se ha creado correctament la nuevo entidad como habitacion",
                 nuevoUID: nuevaHabitacionComoEntidad.habitacionIDV
@@ -222,18 +222,18 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 return codigoGenerado;
             };
             const camaIDV_unico = await controlCamaIDV(camaIDV);
-            console.log("test1")
+
             await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                 camaIDV,
                 tipoIDVArray: ["compartida", "fisica"],
                 errorSi: "existe"
             })
-            console.log("test2")
+
             await obtenerCamaComoEntidadPorCamaUI({
                 camaUI,
                 errorSi: "existe"
             })
-            console.log("test3")
+
             const dataInsertarCamaComoEntidad = {
                 camaIDV: camaIDV_unico,
                 camaUI,

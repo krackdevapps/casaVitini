@@ -5,8 +5,8 @@ import { detallesDelReembolso } from "./detallesDelReembolso.mjs";
 
 export const actualizarSOLOreembolsoDesdeSquare = async (reembolsoUID) => {
         const reembolso = await obtenerReembolsoPorReembolsoUID(reembolsoUID)
-        const plataformaDePago = reembolso.plataformaDePago;
-        if (plataformaDePago !== "pasarela") {
+        const plataformaDePagoIDV = reembolso.plataformaDePagoIDV;
+        if (plataformaDePagoIDV !== "pasarela") {
             const error = "El reembolso no es de pasarela";
             throw new Error(error);
         }
@@ -28,7 +28,7 @@ export const actualizarSOLOreembolsoDesdeSquare = async (reembolsoUID) => {
         await actualizarReembolsoPorReembolsoUID({
             reembolsoUID: reembolsoUID,
             cantidad: cantidad,
-            plataformaDePago: plataformaDePago,
+            plataformaDePagoIDV: plataformaDePagoIDV,
             estadoReembolso: estadoReembolso,
             fechaCreacion: creacionUTC,
             fechaActualizacion: actualizacionUTC,

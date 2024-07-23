@@ -90,7 +90,13 @@ export const crearPagoManual = async (entrada) => {
                 chequeUID: chequeUID
             };
             const pagoUID = await insertarPago(nuevoPago)
+            const fechaPago = pagoUID.fechaPago;
+            const fechaPagoTZ_ISO = DateTime.fromISO(fechaPago, { zone: 'utc' })
+                .setZone(zonaHoraria)
+                .toISO()
+            pagoUID.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
             estructuraFinal.ok = "Se ha insertado el nuevo pago en cheque";
+
             estructuraFinal.detallesDelPago = pagoUID;
         } else if (plataformaDePago === "transferenciaBancaria") {
             const cantidad_ = cantidadValidada(cantidad)
@@ -113,6 +119,11 @@ export const crearPagoManual = async (entrada) => {
                 transferenciaUID: transferenciaUID
             };
             const pagoUID = await insertarPago(nuevoPago)
+            const fechaPago = pagoUID.fechaPago;
+            const fechaPagoTZ_ISO = DateTime.fromISO(fechaPago, { zone: 'utc' })
+                .setZone(zonaHoraria)
+                .toISO()
+            pagoUID.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
             estructuraFinal.ok = "Se ha insertado el nuevo pago en cheque";
             estructuraFinal.detallesDelPago = pagoUID;
 
@@ -181,7 +192,8 @@ export const crearPagoManual = async (entrada) => {
                 filtro: "cadenaConNumerosEnteros",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
-                maximoDeLargo: 4
+                maximoDeLargo: 4,
+                devuelveUnTipoNumber: "no"
             })
             const nuevoPago = {
                 plataformaDePago: plataformaDePago,
@@ -191,6 +203,11 @@ export const crearPagoManual = async (entrada) => {
                 tarjetaDigitos: tarjetaUltimos
             };
             const pagoUID = await insertarPago(nuevoPago)
+            const fechaPago = pagoUID.fechaPago;
+            const fechaPagoTZ_ISO = DateTime.fromISO(fechaPago, { zone: 'utc' })
+                .setZone(zonaHoraria)
+                .toISO()
+            pagoUID.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
             estructuraFinal.ok = "Se ha insertado el nuevo pago hecho con tarjeta de manera externa como en un TPV";
             estructuraFinal.detallesDelPago = pagoUID;
         } else {

@@ -4,6 +4,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
 import { eliminarSessionUsuario } from "../../../repositorio/usuarios/eliminarSessionUsuario.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
+import { actualizarEstadoCuenta } from "../../../repositorio/usuarios/actualizarEstadoCuenta.mjs";
 
 export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida) => {
     try {
@@ -33,7 +34,11 @@ export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida)
             const error = "El campo nuevoEstado solo puede ser activado o desactivado";
             throw new Error(error);
         }
-        const cuentaIDX = obtenerUsuario(usuarioIDX)
+        const cuentaIDX = await obtenerUsuario({
+            usuario: usuarioIDX,
+            errorSi: "noExiste"
+        })
+
         if (!cuentaIDX.clave) {
             const error = "No se puede activar una cuenta que carece de contrasena, por favor establece una contrasena primero";
             throw new Error(error);
@@ -54,6 +59,6 @@ export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida)
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 }

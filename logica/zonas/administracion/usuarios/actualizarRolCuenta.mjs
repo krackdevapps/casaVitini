@@ -32,12 +32,12 @@ export const actualizarRolCuenta = async (entrada, salida) => {
         })
         await campoDeTransaccion("iniciar")
         // Validas usaurios
-        await obtenerUsuario({
+        const usuario = await obtenerUsuario({
             usuario: usuarioIDX,
             errorSi: "noExiste"
         })
         // Validar rol
-        const rolValidado = await obtenerRol(usuarioIDX)
+        const rolValidado = await obtenerRol(nuevoRol)
         const rolUI = rolValidado.rolUI;
         const rolIDV = rolValidado.rolIDV;
         // Validar que el usuario que hace el cambio sea administrador

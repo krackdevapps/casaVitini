@@ -6,10 +6,10 @@ import { validadoresCompartidos } from "../../../../../sistema/validadores/valid
 import { obtenerPagoPorPagoUID } from "../../../../../repositorio/reservas/transacciones/pagos/obtenerPagoPorPagoUID.mjs";
 import { obtenerReembolsosPorPagoUID_ordenados } from "../../../../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID_ordenados.mjs";
 
-export const obtenerDetallesDelPago = async (entrada, salida) => {
+export const obtenerDetallesDelPago = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -24,7 +24,6 @@ export const obtenerDetallesDelPago = async (entrada, salida) => {
 
         const detallesDelPago = await obtenerPagoPorPagoUID(pagoUID)
         // Determinar tipo de pago
-        const plataformaDePagoControl = detallesDelPago.plataformaDePago;
         const cantidadDelPago = detallesDelPago.cantidad;
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const fechaPagoUTC_ISO = detallesDelPago.fechaPagoUTC_ISO;
@@ -44,7 +43,7 @@ export const obtenerDetallesDelPago = async (entrada, salida) => {
             let sumaDeLoReembolsado = 0;
             for (const detallesDelReembolso of reembolsosDelPago) {
                 const reembolsoUID = detallesDelReembolso.reembolsoUID;
-                const plataformaDePagoObtenida = detallesDelReembolso.plataformaDePago;
+                const plataformaDePagoIDV = detallesDelReembolso.plataformaDePagoIDV;
                 const cantidadDelReembolso = new Decimal(detallesDelReembolso.cantidad);
                 const reembolsoUIDPasarela = detallesDelReembolso.reembolsoUIDPasarela;
                 const estado = detallesDelReembolso.estado;
@@ -62,7 +61,7 @@ export const obtenerDetallesDelPago = async (entrada, salida) => {
                 detallesDelReembolso.fechaActualizacionTZ_ISO = fechaActualizacionTZ_ISO;
                 const estructuraReembolso = {
                     reembolsoUID: reembolsoUID,
-                    plataformaDePago: plataformaDePagoObtenida,
+                    plataformaDePagoIDV: plataformaDePagoIDV,
                     cantidad: cantidadDelReembolso,
                     reembolsoUIDPasarela: reembolsoUIDPasarela,
                     estado: estado,

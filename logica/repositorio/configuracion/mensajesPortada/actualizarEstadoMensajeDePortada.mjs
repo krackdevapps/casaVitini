@@ -4,7 +4,7 @@ export const actualizarEstadoMensajeDePortada = async (data) => {
     try {
 
         const mensajeUID = data.mensajeUID
-        const estado = data.estado
+        const estadoIDV = data.estadoIDV
 
         const consulta = `
         UPDATE 
@@ -17,7 +17,7 @@ export const actualizarEstadoMensajeDePortada = async (data) => {
         *;`;
 
         const parametros = [
-            estado,
+            estadoIDV,
             mensajeUID
         ]
         const resuelve = await conexion.query(consulta, parametros);

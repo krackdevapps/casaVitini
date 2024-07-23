@@ -24,13 +24,13 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
         } else {
             const apartamentoEntidades = todosLosApartamentosComoEntidad;
             apartamentoEntidades.forEach((detallesApartamento) => {
-                const apartamentoIDV = detallesApartamento.apartamento;
+                const apartamentoIDV = detallesApartamento.apartamentoIDV;
                 const apartamentoUI = detallesApartamento.apartamentoUI;
                 estructuraApartamentosObjeto[apartamentoIDV] = apartamentoUI;
             });
             const apartamentosComoEntidades_formatoArrayString = [];
             apartamentoEntidades.forEach((detallesDelApartamento) => {
-                const apartamentoIDV = detallesDelApartamento.apartamento;
+                const apartamentoIDV = detallesDelApartamento.apartamentoIDV;
                 apartamentosComoEntidades_formatoArrayString.push(apartamentoIDV);
             });
 

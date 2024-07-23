@@ -9,6 +9,7 @@ import { insertarApartamentoEnReserva } from "../../../../../repositorio/reserva
 import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from "../../../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
+import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const anadirApartamentoReserva = async (entrada, salida) => {
     const mutex = new Mutex()

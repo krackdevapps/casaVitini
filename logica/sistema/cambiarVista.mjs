@@ -4,7 +4,7 @@ export const cambiarVista = async (transaccion) => {
         const vista = transaccion.vista
         const arbol = vista.split("/").filter(n => n)
         const usuarioIDX = transaccion.usuario
-        const rolIDX = transaccion.rol
+        const rolIDV = transaccion.rolIDV
         let selectorRama = './ui/vistas'
         let urlResuelta = "";
         // si solo hay adminitracion
@@ -31,7 +31,7 @@ export const cambiarVista = async (transaccion) => {
                         roles = roles.replaceAll(" ", "")
                         roles = roles.split(",")
                         roles = roles.filter(espacio => espacio)
-                        if (roles.length > 0 && !roles.includes(rolIDX)) {
+                        if (roles.length > 0 && !roles.includes(rolIDV)) {
                             portal = "ROL"
                             urlResuelta = ""
                             break

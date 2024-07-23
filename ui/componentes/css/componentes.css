@@ -4406,7 +4406,7 @@ main[zonaCSS="/"] {
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
-    background: #00000012;
+    /* background: #00000012; */
 }
 
 
@@ -4541,7 +4541,7 @@ main[zonaCSS="/"] {
 }
 
 [zonaCSS="/alojamiento/resumen"] .contenedorDiaConNoche {
-    background-color: #ffffff73;
+    /* background-color: #ffffff73; */
     padding: 10px;
     border-radius: 10px;
 }
@@ -6826,6 +6826,22 @@ main[zonaCSS="/"] {
 }
 
 
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaConentenedor {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+
 [zonaCSS="administracion/ofertas/ofertaUI"] .contenedorInternoPorRango {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -7775,6 +7791,22 @@ grid-template-columns: 0.5fr 1.5fr;
     border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaZonaAnadirApartamento {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    /* background: rgba(245, 245, 245, 0.3); */
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    padding: 6px;
+    gap: 6px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
 .crearOfertaApartamentoSeleccionadoUITitulo {
     font-weight: bold;
     padding: 6px;
@@ -7798,6 +7830,13 @@ grid-template-columns: 0.5fr 1.5fr;
     margin: 0px;
     text-align: center;
 }
+
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearApartamentoInfoSinApartamento {
+    padding: 6px;
+    margin: 0px;
+    text-align: center;
+}
+
 
 .crearOfertaBoton {
     padding: 10px;
@@ -9610,9 +9649,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(255, 255, 255, 0.6);
 }
 
-.ocultoInicial {
-    display: none;
-}
+
 
 [ui="reservaUI"] .detallesReserva_campoNombreEnlace {
     background: rgba(255, 255, 255, 0.3);
@@ -14649,4 +14686,8 @@ grid-template-columns: 0.5fr 1.5fr;
         grid-template-columns: 1fr;
     }
 
+}
+
+.ocultoInicial {
+    display: none;
 }

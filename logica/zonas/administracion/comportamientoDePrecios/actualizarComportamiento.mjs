@@ -29,6 +29,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
         const comportamiento = {
             nombreComportamiento: entrada.body.nombreComportamiento,
             contenedor: entrada.body.contenedor,
+            comportamientoUID: comportamientoUID,
             transaccion: "actualizar"
         }
         await validarComportamiento(comportamiento)

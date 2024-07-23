@@ -6,7 +6,6 @@ export const obtenerImpuestoPorImpuestoUIDPorReservaUID = async (data) => {
         const impuestoUID = data.impuestoUID
         const reservaUID = data.reservaUID
         const errorSi = data.errorSi
-
         const consulta = `
         SELECT *
             FROM
@@ -16,12 +15,14 @@ export const obtenerImpuestoPorImpuestoUIDPorReservaUID = async (data) => {
             AND EXISTS (
                 SELECT 1
                 FROM jsonb_array_elements("instantaneaImpuestos") AS impuesto_control
-                WHERE impuesto_control ->'impuestoUID' = $2
+                WHERE impuesto_control ->>'impuestoUID' = $2
             );`
         const parametros = [
             reservaUID,
             impuestoUID
         ]
+        console.log("parametros", parametros)
+
         const resuelve = await conexion.query(consulta, parametros);
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {

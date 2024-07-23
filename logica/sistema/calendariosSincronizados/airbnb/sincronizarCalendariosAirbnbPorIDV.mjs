@@ -1,7 +1,7 @@
 import axios from 'axios';
 import ICAL from 'ical.js';
-import { obtenerCalendariosPorPlataformaIDV } from '../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs';
 import { actualizarEventosCalendarioPorCalendarioUID } from '../../../repositorio/calendario/actualizarEventosCalendarioPorCalendarioUID.mjs';
+import { obtenerCalendariosPorPlataformaIDVPorApartamentoIDV } from '../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDVPorApartamentoIDV.mjs';
 
 export const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
     try {
@@ -11,19 +11,20 @@ export const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
             throw new Error(error);
         }
         const plataformaDeOrigen = "airbnb"
-        const calendarios = await obtenerCalendariosPorPlataformaIDV({
+        const calendarios = await obtenerCalendariosPorPlataformaIDVPorApartamentoIDV({
             apartamentoIDV: apartamentoIDV,
-            plataformaDeOrigen: plataformaDeOrigen
+            plataformaIDV: plataformaDeOrigen
         })
         const ok = {
             apartamentoIDV: apartamentoIDV,
             calendariosPorApartamento: []
         }
-        if (calendarios.rowCount > 0) {
+        if (calendarios.length > 0) {
             const errorDeFormato = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb"
             const calendariosPorApartamento = []
             for (const detallesDelCalendario of calendarios) {
-                const calendarioUID = detallesDelCalendario.uid
+
+                const calendarioUID = detallesDelCalendario.calendarioUID
                 const url = detallesDelCalendario.url
                 let estadoSincronizacion = null
                 const nombre = detallesDelCalendario.nombre

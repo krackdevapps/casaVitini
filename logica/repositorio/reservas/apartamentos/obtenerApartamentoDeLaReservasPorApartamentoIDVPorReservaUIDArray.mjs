@@ -1,6 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs"
 
-export const obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUIDArray = async (data) => {
+export const obtenerApartamentoDeLaReservasPorApartamentoIDVPorReservaUIDArray = async (data) => {
     try {
         const reservaUIDArray = data.reservaUIDArray
         const apartamentoIDV = data.apartamentoIDV
@@ -19,7 +19,7 @@ export const obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUIDArray = 
             apartamentoIDV
         ]
         const resuelve = await conexion.query(consulta, parametros);
-        return resuelve.rows[0]
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

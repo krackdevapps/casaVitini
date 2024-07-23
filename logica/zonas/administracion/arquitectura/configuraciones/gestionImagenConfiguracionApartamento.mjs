@@ -57,15 +57,14 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
             errorSi: "noExiste"
         })
 
-        if (configuracionApartamento.length === 0) {
-            const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon";
-            throw new Error(error);
-        }
-        if (configuracionApartamento.estadoConfiguracion === "disponible") {
+        if (configuracionApartamento.estadoConfiguracionIDV === "disponible") {
             const error = "No se puede actualizar la imagen de una configuracion de apartamento cuando esta disponbile,cambie el estado primero";
             throw new Error(error);
         }
-        await actualizarImagenDelApartamentoPorApartamentoIDV(apartamentoIDV)
+        await actualizarImagenDelApartamentoPorApartamentoIDV({
+            apartamentoIDV,
+            imagen: contenidoArchivo
+        })
 
         const ok = {
             ok: "Se ha actualizado imagen correctamnte",
@@ -73,7 +72,7 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
         };
         return ok
     } catch (errorCapturado) {
-        throw errorFinal
+        throw errorCapturado
     }
 
 }

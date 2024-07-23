@@ -11,7 +11,7 @@ import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../reposi
 import { obtenerCalendariosPorPlataformaIDV } from "../../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs";
 import { eventosPorApartamneto } from "../../../../sistema/calendarios/eventos/eventosPorApartamento.mjs";
 
-export const multiCapa = async (entrada ) => {
+export const multiCapa = async (entrada) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session)
@@ -26,7 +26,7 @@ export const multiCapa = async (entrada ) => {
             objetoLiteral: entrada.body.contenedorCapas,
             nombreCampo: "El campo de contenedorCapas",
         })
-        console.log("contenedorCapas", contenedorCapas)
+
         const capas = validadoresCompartidos.tipos.array({
             array: contenedorCapas?.capas,
             nombreCampo: "El array de capas",

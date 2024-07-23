@@ -13,8 +13,11 @@ export const obtenerConfiguracion = async (entrada, salida) => {
         const paresConf = ["zonaHoraria"]
         const paresConfiguracion = await obtenerParConfiguracion(paresConf)
         const ok = {
-            ok: paresConfiguracion,
-            listaZonasHorarias: listaZonasHorarias
+            ok: {
+                zonaHoraria: paresConfiguracion.zonaHoraria,
+                listaZonasHorarias: listaZonasHorarias
+
+            },
         };
         return ok
     } catch (errorCapturado) {

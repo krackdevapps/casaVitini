@@ -7,6 +7,7 @@ export const insertarUsuario = async (data) => {
     const nuevaSal = data.nuevaSal
     const hashCreado = data.hashCreado
     const cuentaVerificada = data.cuentaVerificada
+    const codigoAleatorioUnico = data.codigoAleatorioUnico
     const fechaCaducidadCuentaNoVerificada = data.fechaCaducidadCuentaNoVerificada
 
     try {
@@ -19,10 +20,11 @@ export const insertarUsuario = async (data) => {
         sal,
         clave,
         "cuentaVerificadaIDV",
+        "codigoVerificacion",
         "fechaCaducidadCuentaNoVerificada"
         )
         VALUES 
-        ($1, $2, $3, $4, $5, $6, $7)
+        ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING
         *
         `;
@@ -33,6 +35,7 @@ export const insertarUsuario = async (data) => {
             nuevaSal,
             hashCreado,
             cuentaVerificada,
+            codigoAleatorioUnico,
             fechaCaducidadCuentaNoVerificada
         ];
         const resuelve = await conexion.query(consulta, parametros)

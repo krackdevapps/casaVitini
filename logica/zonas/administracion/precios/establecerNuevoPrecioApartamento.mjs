@@ -26,7 +26,7 @@ export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
         })
         const nuevoPrecio = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nuevoPrecio,
-            nombreCampo: "El campo nuevoPreci",
+            nombreCampo: "El campo nuevoPrecio",
             filtro: "cadenaConNumerosConDosDecimales",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",

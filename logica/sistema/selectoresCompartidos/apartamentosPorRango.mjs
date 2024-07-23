@@ -80,17 +80,14 @@ export const apartamentosPorRango = async (data) => {
             apartamentosDisponiblesArray.push(apartamento.apartamentoIDV)
         })
 
-
         const apartamentosNoDisponiblesArray = Array.from(new Set(apartamentosIDVBloqueados));
         const apartamentosDisponiblesFinal = apartamentosDisponiblesArray.filter(apartamento => !apartamentosNoDisponiblesArray.includes(apartamento));
 
-        const datosAirbnb = {
+        const apartamentosOcupadosPorEliminar_Airbnb = await apartamentosOcupadosAirbnb({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
             apartamentosDisponibles: apartamentosDisponiblesFinal,
-        }
-
-        const apartamentosOcupadosPorEliminar_Airbnb = await apartamentosOcupadosAirbnb(datosAirbnb)
+        })
 
         for (const apartamentoIDV of apartamentosOcupadosPorEliminar_Airbnb) {
             const elementoParaBorrar = apartamentosDisponiblesFinal.indexOf(apartamentoIDV);

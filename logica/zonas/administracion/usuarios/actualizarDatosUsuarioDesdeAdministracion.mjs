@@ -26,6 +26,7 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
+            soloMayusculas: "si"
         })
         const primerApellido = validadoresCompartidos.tipos.cadena({
             string: entrada.body.primerApellido,
@@ -33,6 +34,8 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
+            soloMayusculas: "si"
+
         })
 
         const segundoApellido = validadoresCompartidos.tipos.cadena({
@@ -41,6 +44,8 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
+            soloMayusculas: "si"
+
         })
 
         const pasaporte = validadoresCompartidos.tipos.cadena({
@@ -49,7 +54,9 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
-            limpiezaEspaciosInternos: "si"
+            limpiezaEspaciosInternos: "si",
+            soloMayusculas: "si"
+
         })
 
         const mail = validadoresCompartidos.tipos
@@ -86,6 +93,7 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             pasaporte: pasaporte,
             telefono: telefono,
         }
+        console.log("datosUS", datosUsuario)
         await actualizarDatos(datosUsuario)
         await campoDeTransaccion("confirmar")
         const ok = {

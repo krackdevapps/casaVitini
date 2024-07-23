@@ -159,17 +159,18 @@ export const validarObjetoReserva = async (data) => {
         for (const apartamento of Object.entries(alojamiento)) {
             const apartamentoIDV = apartamento[0]
             if (!apartamentosDisponibles.includes(apartamentoIDV)) {
-                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                     apartamentoIDV,
                     errorSi: "noExiste"
-                }).apartamentoUI
+                })
+                const apartamentoUI = apartamento.apartamentoUI
                 apartamentosOcupados.push(apartamentoUI)
             }
         }
 
         if (apartamentosOcupados.length > 0) {
-            const apartamentoUIOcupados = apartamentosOcupados.map((detallesApartamento) => {
-                return detallesApartamento.apartamentoUI
+            const apartamentoUIOcupados = apartamentosOcupados.map((apartamentoUI) => {
+                return apartamentoUI
             })
 
             const constructo = utilidades.contructorComasEY({

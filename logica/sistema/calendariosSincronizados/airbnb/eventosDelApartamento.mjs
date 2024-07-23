@@ -1,6 +1,6 @@
 import { selectorRangoUniversal } from "../../selectoresCompartidos/selectorRangoUniversal.mjs"
 import { sincronizarCalendariosAirbnbPorIDV } from "./sincronizarCalendariosAirbnbPorIDV.mjs"
-const eventosDelApartamento = async (datos) => {
+export const eventosDelApartamento = async (datos) => {
     // AL LORO DESCOMENTAR LO DE ABAJO CUANDO SE ACABEN LAS PRUEBAS!!!!!
     const fechaHoy_ISO = datos.fechaHoy_ISO
     const apartamentoIDV = datos.apartamentoIDV
@@ -24,16 +24,16 @@ const eventosDelApartamento = async (datos) => {
                 fechaFin_rango_ISO: fechaHoy_ISO,
                 fechaInicio_elemento_ISO: fechaInicioComparar,
                 fechaFin_elemento_ISO: fechaFinalComparar,
-                tipoLimite: "noIncluido"
+                tipoLimite: "incluido"
             })
-            if (controlOcupacional === "ocupado") {
+
+            if (controlOcupacional) {
                 //apartamentosOcupados.push(apartamentoIDV)
                 detallesDelApartamento.eventos.push(detallesDelCalendario)
             }
         }
     }
+
+
     return detallesDelApartamento
-}
-export {
-    eventosDelApartamento
 }

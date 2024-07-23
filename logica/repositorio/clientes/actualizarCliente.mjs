@@ -27,7 +27,7 @@ export const actualizarCliente = async (data) => {
             `;
         const datosCliente = [
             nombre,
-            primerApellido, 
+            primerApellido,
             segundoApellido,
             pasaporte,
             telefono,

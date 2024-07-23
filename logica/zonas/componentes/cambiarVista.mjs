@@ -3,8 +3,6 @@ import { validadoresCompartidos } from "../../sistema/validadores/validadoresCom
 
 export const cambiarVista = async (entrada) => {
     try {
-
-
         const vista = validadoresCompartidos.tipos.cadena({
             string: entrada.body.vista,
             nombreCampo: "La url como vista",
@@ -16,12 +14,11 @@ export const cambiarVista = async (entrada) => {
             const error = "Tienes que definir 'Vista' con el nombre de la vista";
             throw new Error(error);
         }
-        const transaccion = {
+        const transaccionInterna = await cambiarVista_({
             vista: vista,
             usuario: entrada.session?.usuario,
-            rol: entrada.session?.rol
-        };
-        const transaccionInterna = await cambiarVista_(transaccion);
+            rolIDV: entrada.session?.rolIDV
+        })
         return transaccionInterna
     } catch (errorCapturado) {
         //  const error = new Error("noExisteLaVista")

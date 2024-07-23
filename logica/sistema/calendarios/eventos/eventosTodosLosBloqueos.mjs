@@ -41,7 +41,7 @@ export const eventosTodosLosBloqueos = async (fecha) => {
         })
         for (const detallesReserva of bloqueosSeleccionados) {
 
-            console.log("detallesREserva", detallesReserva)
+
             const bloqueoUID = detallesReserva.bloqueoUID
             const tipoBloqueo = detallesReserva.tipoBloqueoIDV
             const fechaEntrada = detallesReserva.fechaInicio
@@ -55,8 +55,8 @@ export const eventosTodosLosBloqueos = async (fecha) => {
             detallesReserva.fechaEntrada = fechaEntrada
             detallesReserva.fechaSalida = fechaSalida
             // El calenadrio espera que en detalles del evento, este el fechaEntrad y fechaSalida
-            delete detallesReserva.fechaInicio 
-            delete detallesReserva.fechaFin 
+            delete detallesReserva.fechaInicio
+            delete detallesReserva.fechaFin
 
             detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
             detallesReserva.tipoEvento = "todosLosBloqueos"

@@ -14,7 +14,7 @@ export const obtenerInterruptores = async (entrada, salida) => {
         const ok = { ok: {} };
         for (const parConfiguracion of interruptores) {
             const interruptorIDV = parConfiguracion.interruptorIDV;
-            const estado = parConfiguracion.estado || "";
+            const estado = parConfiguracion.estadoIDV || "";
             ok.ok[interruptorIDV] = estado;
         }
         return ok

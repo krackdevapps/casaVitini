@@ -4,19 +4,19 @@ import { validadoresCompartidos } from "../../../../sistema/validadores/validado
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
 import { actualizarParConfiguracion } from "../../../../repositorio/configuracion/parConfiguracion/actualizarParConfiguracion.mjs";
 
-export const guardarConfiguracion = async (entrada, salida) => {
+export const guardarConfiguracion = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
         const horaEntradaTZ = validadoresCompartidos.tipos.horas({
-            hola: entrada.body.horaEntradaTZ,
+            hora: entrada.body.horaEntradaTZ,
             nombreCampo: "El campo de la hora de entrada"
         })
         const horaSalidaTZ = validadoresCompartidos.tipos.horas({
-            hola: entrada.body.horaSalidaTZ,
+            hora: entrada.body.horaSalidaTZ,
             nombreCampo: "El campo de la hora de entrada"
         })
 
@@ -25,7 +25,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
         const horaSalidaControl = DateTime.fromFormat(horaSalidaTZ, 'HH:mm');
         // Comparar las horas
         if (horaSalidaControl >= horaEntradaControl) {
-            const error = "La hora de entrada no puede ser anterior o igual a la hora de salida. Los pernoctantes primero salen del apartamento a su hora de salida y luego los nuevos pernoctantes entran en el apartamento a su hora de entrada. Por eso la hora de entrada tiene que ser mas tarde que al hora de salida. Por que primero salen del apartamento ocupado, el apartmento entonces pasa a estar libre y luego entran los nuevo pernoctantes al apartamento ahora libre de los anteriores pernoctantes.";
+            const error = "La hora de entrada no puede ser anterior o igual a la hora de salida. Los pernoctantes primero salen del apartamento a su hora de salida y luego los nuevos pernoctantes entran en el apartamento a su hora de entrada. Por eso la hora de entrada tiene que ser más tarde que la hora de salida. Primero, los pernoctantes actuales salen del apartamento ocupado, el apartamento entonces pasa a estar libre y luego entran los nuevos pernoctantes al apartamento ahora libre de los anteriores pernoctantes.";
             throw new Error(error);
         }
 
@@ -35,14 +35,14 @@ export const guardarConfiguracion = async (entrada, salida) => {
             "horaSalidaTZ": horaSalidaTZ
         }
         await actualizarParConfiguracion(dataActualizarConfiguracion)
-        await campoDeTransaccion("confiramr")
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado correctamente la configuracion"
         };
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 
 }

@@ -56,7 +56,7 @@ export const puerto = async (entrada, salida) => {
                 if (rama && typeof rama === 'object' && rama.hasOwnProperty(part)) {
                     rama = rama[part]
                 } else {
-                    const error = "No se enceuntra la zona."
+                    const error = "No se encuentra la zona."
                     throw new Error(error)
                 }
             }

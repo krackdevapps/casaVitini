@@ -1,6 +1,5 @@
 import Decimal from "decimal.js"
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
-import { obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array } from "../../../repositorio/comportamientoDePrecios/obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array.mjs"
 import { obtenerNombreComportamientoPorNombreUI } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorNombreUI.mjs"
 import { obtenerComportamientosDistintosPorTipoIDVPorDiasArray } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoIDVPorDiasArray.mjs"
 import { obtenerComportamientosPorRangoPorCreacionPorTipoIDV } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientosPorRangoPorCreacionPorTipoIDV.mjs"
@@ -24,7 +23,10 @@ export const evitarDuplicados = async (data) => {
         const comportamientosConNombreIgual = await obtenerNombreComportamientoPorNombreUI(nombreComportamiento)
 
         if (transaccion === "actualizar") {
-            const selector = comportamientosConNombreIgual.findIndex(item => item.comportamientoUID === comportamientoUID);
+            const selector = comportamientosConNombreIgual.findIndex((item) => {
+                const comportamientoUID_interno = Number(item.comportamientoUID)
+                return comportamientoUID_interno === comportamientoUID
+            });
             if (selector !== -1) {
                 comportamientosConNombreIgual.splice(comportamientosConNombreIgual, 1);
             }
@@ -44,7 +46,6 @@ export const evitarDuplicados = async (data) => {
             const apartamentos = contenedor.apartamentos
             const preContenedorApartamentos = {}
 
-
             for (const apartamento of apartamentos) {
                 const apartamentoIDV = apartamento.apartamentoIDV
                 if (preContenedorApartamentos.hasOwnProperty(apartamentoIDV)) {
@@ -59,9 +60,7 @@ export const evitarDuplicados = async (data) => {
                     preContenedorApartamentos[apartamentoIDV] = new Decimal(0)
                 }
             }
-
             const arrayApartamentos = Object.keys(preContenedorApartamentos)
-
             const comportamientosPorRango = await obtenerComportamientosPorRangoPorTipoIDV({
                 fechaInicio_ISO: fechaInicio_ISO,
                 fechaFinal_ISO: fechaFinal_ISO,
@@ -83,12 +82,15 @@ export const evitarDuplicados = async (data) => {
             comportamientosEnConflicto.push(...comportamientosPorAntelacion)
 
             if (transaccion === "actualizar") {
-                const selector = comportamientosEnConflicto.findIndex(item => item.comportamientoUID === comportamientoUID);
+                const selector = comportamientosEnConflicto.findIndex((item) => {
+                    const comportamientoUID_interno = Number(item.comportamientoUID)
+                    return comportamientoUID_interno === comportamientoUID
+                })
                 if (selector !== -1) {
                     comportamientosEnConflicto.splice(comportamientosEnConflicto, 1);
                 }
             }
-            if (transaccion === "crear" && comportamientosEnConflicto.length > 0) {
+            if (comportamientosEnConflicto.length > 0) {
                 const error = {
                     error: "No se puede crear este comportamiento por que entra en conflicto con los apartamentos en otros comportamientos",
                     comportamientosEnConflicto: comportamientosEnConflicto,
@@ -97,6 +99,8 @@ export const evitarDuplicados = async (data) => {
             }
         } else if (tipoIDV === "porDias") {
             const diasArray = contenedor.dias
+            const apartamentos = contenedor.apartamentos
+
             const comportamientosPorTipoPorDiasEnElRango = []
             if (transaccion === "crear") {
                 const comportamientosPorDiasArray = await obtenerComportamientosPorTipoIDVPorDiasArray({
@@ -113,48 +117,50 @@ export const evitarDuplicados = async (data) => {
                 })
                 comportamientosPorTipoPorDiasEnElRango.push(...comportamientosDistintosPorDiasArray)
             }
-            const soloUIDComportamientosCoincidentes = comportamientosPorTipoPorDiasEnElRango.map((detallesDelComportamiento) => {
-                return detallesDelComportamiento.comportamientoUID
+            const contenedorApartamentosIDV = []
+
+            apartamentos.forEach((detallesApartmento) => {
+                const apartamentoIDV = detallesApartmento.apartamentoIDV
+                contenedorApartamentosIDV.push(apartamentoIDV)
             })
 
-            if (soloUIDComportamientosCoincidentes.length > 0) {
-                const arbolComportamientoCoincidentes = {}
-                comportamientosEnElRango.forEach(detallesComportamiento => {
-                    const comportamientoUID = detallesComportamiento.comportamientoUID
-                    const nombreComportamiento = detallesComportamiento.nombreComportamiento
+            const arbolComportamientoCoincidentes = {}
 
-                    arbolComportamientoCoincidentes[comportamientoUID] = {
-                        nombreComportamiento: nombreComportamiento,
-                        comportamientoUID: comportamientoUID,
-                        apartamentos: []
-                    }
-                })
-                const apartamentosDeLosComportamientos = await obtenerApartamentosPorComportamientoUID_arrayPorApartamentoIDV_array({
-                    apartamentosIDV_array: apartamentosIDV_array,
-                    comportamientosUID_array: soloUIDComportamientosCoincidentes
-                })
-                for (const detallesDelApartamento of apartamentosDeLosComportamientos) {
-                    const comportamientoUID = detallesDelApartamento.comportamientoUID
-                    const apartamentoIDV = detallesDelApartamento.apartamentoIDV
-                    const componenteUID = detallesDelApartamento.componenteUID
+            for (const detallesComportamiento of comportamientosPorTipoPorDiasEnElRango) {
+                const comportamientoUID = detallesComportamiento.comportamientoUID
+                const nombreComportamiento = detallesComportamiento.nombreComportamiento
+                const apartamentos = detallesComportamiento.contenedor.apartamentos
+                const apartamentosEnConflicto = []
 
-                    const estructuraApartamentoCoincidente = {
-                        comportamientoUID: comportamientoUID,
-                        apartamentoIDV: apartamentoIDV,
-                        componenteUID: componenteUID,
-                        apartamentoUI: await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                for (const detallesApartmento of apartamentos) {
+                    const apartamentoIDV = detallesApartmento.apartamentoIDV
+                    if (contenedorApartamentosIDV.includes(apartamentoIDV)) {
+
+                        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                             apartamentoIDV,
                             errorSi: "noExiste"
                         }).apartamentoUI
+                        const apartamentosEnClicto = {
+                            apartamentoIDV,
+                            apartamentoUI
+                        }
+                        apartamentosEnConflicto.push(apartamentosEnClicto)
                     }
-                    arbolComportamientoCoincidentes[componenteUID].apartamento.push(estructuraApartamentoCoincidente)
-
-                    const errorCompuesto = {
-                        error: `No se puede crear este comportamiento de por dias por que hay apartamentos en este comportamiento que existen en otros comportamientos por dias que coinciden en el dias y el apartamento. Es decir hay comportamientos que tiene el mismo dia y el mismo apartamento coincidiendo.`,
-                        comportamientosCoincidentes: arbolComportamientoCoincidentes
-                    }
-                    throw new Error(errorCompuesto)
                 }
+                if (apartamentosEnConflicto.length > 0) {
+                    arbolComportamientoCoincidentes[comportamientoUID] = {
+                        nombreComportamiento: nombreComportamiento,
+                        comportamientoUID: comportamientoUID,
+                        apartamentos: apartamentosEnConflicto
+                    }
+                }
+            }
+            if (Object.keys(arbolComportamientoCoincidentes).length > 0) {
+                const errorCompuesto = {
+                    error: `No se puede crear este comportamiento de por dias por que hay apartamentos en este comportamiento que existen en otros comportamientos por dias que coinciden en el dias y el apartamento. Es decir hay comportamientos que tiene el mismo dia y el mismo apartamento coincidiendo.`,
+                    comportamientosCoincidentes: arbolComportamientoCoincidentes
+                }
+                throw errorCompuesto
             }
         } else {
             const m = "No se reconode el tipoIDV"

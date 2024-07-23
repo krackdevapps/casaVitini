@@ -24,9 +24,11 @@ export const crearCliente = async (entrada, salida) => {
             telefono: entrada.body.telefono,
             correoElectronico: entrada.body.correoElectronico,
             notas: entrada.body.notas,
-            operacion: "crear"
         };
-        const datosValidados = await validadoresCompartidos.clientes.validarCliente(nuevoCliente);
+        const datosValidados = await validadoresCompartidos.clientes.validarCliente({
+            cliente: nuevoCliente,
+            operacion: "crear"
+        });
         const nuevoUIDCliente = await insertarCliente(datosValidados);
         if (nuevoUIDCliente) {
             const ok = {

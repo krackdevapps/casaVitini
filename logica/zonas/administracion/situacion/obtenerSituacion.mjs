@@ -139,7 +139,6 @@ export const obtenerSituacion = async (entrada, salida) => {
         }
         // buscar reservas en el dia actual
         const eventosCalendarios_airbnb = await apartamentosOcupadosHoy_paraSitaucion(fechaActualTZ);
-
         for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnb) {
             const apartamentoIDV_destino = calendariosSincronizadosAirbnb.apartamentoIDV;
             const eventosDelApartamento = calendariosSincronizadosAirbnb.eventos;

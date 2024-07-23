@@ -5,6 +5,8 @@ import { actualizarUsuarioSessionActiva } from "../../../repositorio/usuarios/ac
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { actualizarIDX } from "../../../repositorio/usuarios/actualizarIDX.mjs";
+import { usuariosLimite } from "../../../sistema/usuarios/usuariosLimite.mjs";
+import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
 
 export const actualizarIDXAdministracion = async (entrada, salida) => {
     try {
@@ -31,13 +33,21 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
             soloMinusculas: "si"
         })
         await eliminarUsuarioPorRolPorEstadoVerificacion();
-        usuariosLimite(usuarioIDX)
+        usuariosLimite(nuevoIDX)    
+        await obtenerUsuario({
+            usuario: nuevoIDX,
+            errorSi: "existe"
+        })
+
+
+
+
         await campoDeTransaccion("iniciar")
         await actualizarIDX({
             usuarioIDX: usuarioIDX,
             nuevoIDX: nuevoIDX
         })
-        const sessionActivaActualizada = await actualizarUsuarioSessionActiva({
+        await actualizarUsuarioSessionActiva({
             usuarioIDX: usuarioIDX,
             nuevoIDX: nuevoIDX
         })

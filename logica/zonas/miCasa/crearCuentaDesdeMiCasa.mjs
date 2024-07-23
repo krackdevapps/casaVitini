@@ -12,6 +12,7 @@ import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/us
 import { obtenerDatosPersonalesPorMail } from "../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs";
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
+import { usuariosLimite } from "../../sistema/usuarios/usuariosLimite.mjs";
 
 export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
     try {
@@ -29,7 +30,11 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
         })
 
         const email = validadoresCompartidos.tipos
-            .correoElectronico(entrada.body.email)
+            .correoElectronico({
+                mail: entrada.body.email,
+                nombreCampo: "El campo del email", 
+                sePermiteVacio: "no"
+            })
 
         validadoresCompartidos.claves.minimoRequisitos(claveNueva);
 
@@ -56,7 +61,7 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
         await campoDeTransaccion("iniciar")
         await obtenerUsuario({
             usuario: usuarioIDX,
-            errorSi: "noExiste"
+            errorSi: "existe"
         })
         usuariosLimite(usuarioIDX)
         await obtenerDatosPersonalesPorMail(email)
@@ -107,11 +112,12 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
             nuevaSal: nuevaSal,
             hashCreado: hashCreado,
             cuentaVerificada: cuentaVerificada,
+            codigoAleatorioUnico:codigoAleatorioUnico,
             fechaCaducidadCuentaNoVerificada: fechaCaducidadCuentaNoVerificada,
         })
         await insertarFilaDatosPersonales(usuarioIDX)
         await actualizarDatos({
-            email: email,
+            mail: email,
             usuario: usuarioIDX
         })
         await campoDeTransaccion("confirmar");
@@ -127,6 +133,6 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
-        throw errorFinal
+        throw errorCapturado
     }
 }

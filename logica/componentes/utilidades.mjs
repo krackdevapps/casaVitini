@@ -189,4 +189,7 @@ export const utilidades = {
             return fechas;
         }
     },
+    ralentizador: async (milisegundos) => {
+        await new Promise(resolve => setTimeout(resolve, Number(milisegundos)));
+    },
 }

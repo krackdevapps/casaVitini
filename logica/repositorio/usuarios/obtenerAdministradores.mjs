@@ -4,9 +4,9 @@ export const obtenerAdministradores = async (rolAdministrador) => {
     try {
         const consulta = `
         SELECT 
-        rol
+        "rolIDV"
         FROM usuarios
-        WHERE rol = $1;
+        WHERE "rolIDV" = $1;
         `;
         const resuelve = await conexion.query(consulta, [rolAdministrador]);
         return resuelve.rows

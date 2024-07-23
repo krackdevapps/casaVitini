@@ -45,7 +45,7 @@ export const eliminarImpuestoEnReserva = async (entrada) => {
 
         await obtenerImpuestoPorImpuestoUIDPorReservaUID({
             reservaUID,
-            impuestoUID,
+            impuestoUID: String(impuestoUID),
             errorSi: "noExiste"
         })
 

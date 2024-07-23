@@ -1,7 +1,7 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
-import { actualizarParConfiguracion } from "../../../../repositorio/configuracion/parconfiguracion/actualizarParConfiguracion.mjs";
+import { actualizarParConfiguracion } from "../../../../repositorio/configuracion/parConfiguracion/actualizarParConfiguracion.mjs";
 
 export const guardarConfiguracion = async (entrada, salida) => {
     try {
@@ -16,6 +16,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
 
         const limiteFuturoReserva = validadoresCompartidos.tipos.cadena({
@@ -24,6 +25,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
         const diasMaximosReserva = validadoresCompartidos.tipos.cadena({
             string: entrada.body.diasMaximosReserva,
@@ -31,6 +33,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
 
         if (Number(diasAntelacionReserva) >= Number(limiteFuturoReserva)) {
@@ -52,10 +55,12 @@ export const guardarConfiguracion = async (entrada, salida) => {
         }
         await campoDeTransaccion("iniciar")
         const dataActualizarParConfiguracion = {
-            "diasAntelacionReserva": diasAntelacionReserva,
-            "limiteFuturoReserva": limiteFuturoReserva,
-            "diasMaximosReserva": diasMaximosReserva
+            diasAntelacionReserva: diasAntelacionReserva,
+            diasMaximosReserva: diasMaximosReserva,
+            limiteFuturoReserva: limiteFuturoReserva,
+
         }
+
         await actualizarParConfiguracion(dataActualizarParConfiguracion)
 
         await campoDeTransaccion("confirmar")
@@ -65,7 +70,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 
 }

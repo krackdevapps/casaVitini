@@ -14,7 +14,7 @@ export const obtenerComportamientosDistintosPorTipoIDVPorDiasArray = async (data
         AND
           EXISTS (
                    SELECT 1
-                   FROM jsonb_array_elements_text(contenedor->'diasArray') AS elem
+                   FROM jsonb_array_elements_text(contenedor->'dias') AS elem
                    WHERE elem::text = ANY ($2::text[])
             )
         AND
@@ -25,6 +25,8 @@ export const obtenerComportamientosDistintosPorTipoIDVPorDiasArray = async (data
             diasArray,
             comportamientoUID
         ]
+
+
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows
     } catch (errorCapturado) {

@@ -19,6 +19,7 @@ export const actualizarMensaje = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
         const mensaje = validadoresCompartidos.tipos.cadena({
             string: entrada.body.mensaje,
@@ -32,7 +33,7 @@ export const actualizarMensaje = async (entrada, salida) => {
         const mensajeB64 = bufferObj.toString("base64");
 
         const mensajeEnPortada = await obtenerMensajePorMensajeUID(mensajeUID)
-        const estadoActual = mensajeEnPortada.estado;
+        const estadoActual = mensajeEnPortada.estadoIDV;
         if (estadoActual !== "desactivado") {
             const error = "No se puede modificar un mensaje activo, primero desactiva el mensaje";
             throw new Error(error);
@@ -52,7 +53,7 @@ export const actualizarMensaje = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 
 }

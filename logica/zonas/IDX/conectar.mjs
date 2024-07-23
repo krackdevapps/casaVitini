@@ -12,7 +12,7 @@ export const conectar = async (entrada) => {
     try {
         await eliminarUsuarioPorRolPorEstadoVerificacion();
         await eliminarSessionPorRolPorCaducidad();
-
+        const errorUI_IDX = "Datos de identificación incorrectos.";
         const usuario = validadoresCompartidos.tipos.cadena({
             string: entrada.body.usuario,
             nombreCampo: "El nombre de usuario (VitiniIDX)",
@@ -30,7 +30,7 @@ export const conectar = async (entrada) => {
         const controladorIntentos = {
             suma: async (numeroIntentosActuales, IDX_) => {
                 try {
-                    const intento = numeroIntentosActuales + 1;
+                    const intento = Number(numeroIntentosActuales) + 1;
                     const nuevoIntento = await actualizarIntentoLogin({
                         usuarioIDX: IDX_,
                         intento: intento
@@ -55,9 +55,17 @@ export const conectar = async (entrada) => {
         }
 
         // Se valida si existe el usuario
+
+        try {
+            await obtenerIDX(usuario)
+        } catch (error) {
+            const m = errorUI_IDX
+            throw new Error(m);
+        }
+
         const cuentaUsuario = await obtenerIDX(usuario)
         // Se recupera el hash y la sal
-        const rol = cuentaUsuario.rolIDV;
+        const rolIDV = cuentaUsuario.rolIDV;
         const sal = cuentaUsuario.sal;
         const claveHash = cuentaUsuario.clave;
         const estadoCuenta = cuentaUsuario.estadoCuentaIDV;
@@ -65,7 +73,7 @@ export const conectar = async (entrada) => {
         const ip = entrada.socket.remoteAddress;
         const userAgent = entrada.get('User-Agent');
         if (intentos >= intentosMaximos) {
-            const error = "1Cuenta bloqueada tras 10 intentos. Recupera tu cuenta con tu correo.";
+            const error = "Cuenta bloqueada tras 10 intentos. Recupera tu cuenta con tu correo.";
             throw new Error(error);
         }
         const metadatos = {
@@ -81,7 +89,7 @@ export const conectar = async (entrada) => {
                 const error = "Cuenta bloqueada tras 10 intentos. Recupera tu cuenta con tu correo.";
                 throw new Error(error);
             } else {
-                const error = "Datos de identificación incorrectos.";
+                const error = errorUI_IDX
                 throw new Error(error);
             }
         }
@@ -97,12 +105,12 @@ export const conectar = async (entrada) => {
         })
         entrada.session.usuario = usuario;
         //entrada.session.IDX = usuario;
-        entrada.session.rol = rol;
+        entrada.session.rolIDV = rolIDV;
         entrada.session.ip = ip;
         entrada.session.userAgent = userAgent;
         const ok = {
             ok: usuario,
-            rol: rol,
+            rolIDV: rolIDV,
             //controlEstado: "Objeto en IF IDX",
         };
         return ok

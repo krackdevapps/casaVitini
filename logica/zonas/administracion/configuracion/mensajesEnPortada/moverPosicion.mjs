@@ -21,6 +21,7 @@ export const moverPosicion = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
         const nuevaPosicion = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nuevaPosicion,
@@ -28,10 +29,10 @@ export const moverPosicion = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
 
         const mensajeDePortadaa = await obtenerMensajePorMensajeUID(mensajeUID)
-
         const posicionAntigua = mensajeDePortadaa.posicion;
         if (Number(posicionAntigua) === Number(nuevaPosicion)) {
             const error = "El mensaje ya esta en esa posicion";
@@ -55,20 +56,20 @@ export const moverPosicion = async (entrada, salida) => {
         const mensajeSeleccionado_texto = mensajeDePortadaa.mensaje;
         const bufferObjPreDecode = Buffer.from(mensajeSeleccionado_texto, "base64");
 
-        mensajeSeleccionado.uid = mensajeUID;
+        mensajeSeleccionado.mensajeUID = mensajeUID;
         mensajeSeleccionado.mensaje = bufferObjPreDecode.toString("utf8");
-        mensajeSeleccionado.estado = mensajeDePortadaa.estado;
+        mensajeSeleccionado.estadoIDV = mensajeDePortadaa.estadoIDV;
 
         const detallesMensajeAfectado = await obtenerMensajePorPosicion(nuevaPosicion)
 
-        const mensajeUIDAfectado = detallesMensajeAfectado.uid;
+        const mensajeUIDAfectado = detallesMensajeAfectado.mensajeUID;
         const mensajeUIDAfectado_mensaje = detallesMensajeAfectado.mensaje;
         const buffer_mensajeAfectado = Buffer.from(mensajeUIDAfectado_mensaje, "base64");
 
         const mensajeAfectado = {
-            uid: String(mensajeUIDAfectado),
+            mensajeUID: mensajeUIDAfectado,
             mensaje: buffer_mensajeAfectado.toString("utf8"),
-            estado: detallesMensajeAfectado.estado
+            estadoIDV: detallesMensajeAfectado.estadoIDV
         };
         await campoDeTransaccion("iniciar")
 
@@ -100,7 +101,7 @@ export const moverPosicion = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 
 }

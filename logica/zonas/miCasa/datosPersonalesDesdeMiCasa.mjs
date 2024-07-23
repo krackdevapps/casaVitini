@@ -23,11 +23,11 @@ export const datosPersonalesDesdeMiCasa = async (entrada, salida) => {
             usuario: usuarioIDX,
             errorSi: "noExiste"
         })
-        const rol = cuentaDeUsuario.rolIDV;
-        const estadoCuenta = cuentaDeUsuario.estadoCuentaIDV;
+        const rolIDV = cuentaDeUsuario.rolIDV;
+        const estadoCuentaIDV = cuentaDeUsuario.estadoCuentaIDV;
         ok.ok.usuarioIDX = usuarioIDX;
-        ok.ok.rol = rol;
-        ok.ok.estadoCuenta = estadoCuenta;
+        ok.ok.rolIDV = rolIDV;
+        ok.ok.estadoCuentaIDV = estadoCuentaIDV;
 
         const datosDelUsuario = await obtenerDatosPersonales(usuarioIDX)
         await campoDeTransaccion("confirmar")

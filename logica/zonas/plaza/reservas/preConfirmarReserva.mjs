@@ -7,17 +7,19 @@ import { detallesReserva } from "../../../sistema/reservas/detallesReserva.mjs";
 import { enviarEmailReservaConfirmada } from "../../../sistema/Mail/enviarEmailReservaConfirmada.mjs";
 import { actualizarEstadoPago } from "../../../sistema/contenedorFinanciero/entidades/reserva/actualizarEstadoPago.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
-import { crearEnlacePDF } from "../../../sistema/pdf/crearEnlacePDF.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { generadorPDF } from "../../../sistema/pdf/generadorPDF.mjs";
+import { utilidades } from "../../../componentes/utilidades.mjs";
 
 export const preConfirmarReserva = async (entrada) => {
     const mutex = new Mutex()
     try {
-        await mutex.acquire();
         if (!await interruptor("aceptarReservasPublicas")) {
             throw new Error(mensajesUI.aceptarReservasPublicas);
         }
+        await utilidades.ralentizador(2000)
+        await mutex.acquire()
+
         const reserva = entrada.body.reserva;
 
         await validarObjetoReserva({
@@ -47,19 +49,15 @@ export const preConfirmarReserva = async (entrada) => {
 
         //resolverDetallesReserva.enlacePDF = enlacePDF;
         const pdf = await generadorPDF(resolverDetallesReserva);
-
-
         enviarEmailReservaConfirmada(reservaUID);
-
         const ok = {
             ok: "Reserva confirmada",
             detalles: resolverDetallesReserva,
             pdf
-        };
+        }
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
-
         throw errorCapturado
     } finally {
         if (mutex) {

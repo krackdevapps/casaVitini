@@ -19,9 +19,9 @@ export const eliminarHabitacionDeConfiguracionDeAlojamiento = async (entrada, sa
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-        console.log("hjabitacion",habitacionUID, typeof habitacionUID)
+
         const detallesHabitacionDelApartamento = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
-        console.log("det", detallesHabitacionDelApartamento)
+
         if (!detallesHabitacionDelApartamento?.componenteUID) {
             const error = "No existe la habitacion, revisa el habitacionUID";
             throw new Error(error);

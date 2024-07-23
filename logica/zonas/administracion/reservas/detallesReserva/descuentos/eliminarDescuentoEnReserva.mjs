@@ -58,7 +58,7 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
             const error = "La reserva esta cancelada, no se puede alterar los descuentos"
             throw new Error(error)
         }
-
+        console.log("1")
         if (origen === "porAdministrador") {
             await eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID({
                 reservaUID,
@@ -77,7 +77,7 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
             const error = "El campo origen solo puede ser porAdminsitrador o porCondicion"
             throw new Error(error)
         }
-
+        console.log("2")
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
@@ -93,6 +93,7 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
             reservaUID
         })
         await campoDeTransaccion("confirmar")
+        console.log("3")
         const ok = {
             ok: "Se ha eliminado correctamente la oferta de la instantanea de la reserva",
             orgien: origen,

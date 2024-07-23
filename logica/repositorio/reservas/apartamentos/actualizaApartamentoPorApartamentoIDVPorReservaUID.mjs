@@ -20,10 +20,10 @@ export const actualizaApartamentoPorApartamentoIDVPorReservaUID = async (data) =
             nuevoApartamentoIDV,
             apartamentoUI,
             reservasUIDArray,
-            antiguoApartamentoIDV          
+            antiguoApartamentoIDV
         ]
         const resuelve = await conexion.query(consulta, parametros);
-        console.log(resuelve.rows[0])
+
         return resuelve.rows[0]
     } catch (errorCapturado) {
         throw errorCapturado

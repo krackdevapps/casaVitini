@@ -6,17 +6,18 @@ import { obtenerDatosPersonalesPorMail } from "../../repositorio/usuarios/obtene
 import { obtenerNombreColumnaPorTabla } from "../../repositorio/globales/obtenerNombreColumnaPorTabla.mjs"
 import { obtenerDatosPersonalesPorMailIgnorandoUsuario } from "../../repositorio/usuarios/obtenerDatosPersonalesPorMailIgnorandoUsuario.mjs"
 import { obtenerClientesPorPasaporteIgnorandoClienteUID } from "../../repositorio/clientes/obtenerClientesPorPasaporteIgnorandoClienteUID.mjs"
+import validator from "validator"
 export const validadoresCompartidos = {
     clientes: {
         validarCliente: async (data) => {
             try {
                 const operacion = data.operacion
                 const cliente = data.cliente
-                const clienteUID = data.clienteUID
+                const clienteUID = cliente.clienteUID
 
 
                 const nombre = validadoresCompartidos.tipos.cadena({
-                    string: data.nombre,
+                    string: cliente.nombre,
                     nombreCampo: "El campo del nombre",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "no",
@@ -25,7 +26,7 @@ export const validadoresCompartidos = {
                     soloMayusculas: "si"
                 })
                 const primerApellido = validadoresCompartidos.tipos.cadena({
-                    string: data.primerApellido,
+                    string: cliente.primerApellido,
                     nombreCampo: "El campo del primer apellido",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
@@ -34,7 +35,7 @@ export const validadoresCompartidos = {
                     soloMayusculas: "si"
                 })
                 const segundoApellido = validadoresCompartidos.tipos.cadena({
-                    string: data.segundoApellido,
+                    string: cliente.segundoApellido,
                     nombreCampo: "El campo del segundo apellido",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
@@ -43,7 +44,7 @@ export const validadoresCompartidos = {
                     soloMayusculas: "si"
                 })
                 const pasaporte = validadoresCompartidos.tipos.cadena({
-                    string: data.pasaporte,
+                    string: cliente.pasaporte,
                     nombreCampo: "El campo del pasaporte",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "no",
@@ -52,18 +53,18 @@ export const validadoresCompartidos = {
                 })
 
                 const correoElectronico = validadoresCompartidos.tipos.correoElectronico({
-                    mail: data.correoElectronico,
+                    mail: cliente.correoElectronico,
                     nombreCampo: "El coreo electronico instroducido",
                     sePermiteVacio: "si"
                 })
                 const telefono = validadoresCompartidos.tipos.telefono({
-                    phone: data.telefono,
+                    phone: cliente.telefono,
                     nombreCampo: "El teelfono instroducido",
                     sePermiteVacio: "si"
                 })
 
                 const notas = validadoresCompartidos.tipos.cadena({
-                    string: data.notas || "",
+                    string: cliente.notas || "",
                     nombreCampo: "El campo de notas",
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
@@ -187,24 +188,20 @@ export const validadoresCompartidos = {
 
                 })
                 if (data.mail) {
-
                     validadoresCompartidos.tipos.correoElectronico({
                         mail: data.mail,
                         nombreCampo: "El coreo electronico instroducido",
                         sePermiteVacio: "no"
                     })
-
                 }
 
                 if (data.telefono) {
-
                     validadoresCompartidos.tipos.telefono({
                         phone: data.telefono,
                         nombreCampo: "El telefono instroducido",
                         sePermiteVacio: "no"
                     })
                 }
-
 
             } catch (errorCapturado) {
                 throw errorCapturado
@@ -540,8 +537,8 @@ export const validadoresCompartidos = {
                 }
             } else if (filtro === "strictoConEspacios") {
                 try {
-                    const filtro =   /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ\+@\u00E1\u00E9\u00ED\u00F3\u00FA\u00C1\u00C9\u00CD\u00D3\u00DA]+$/g;
-                    console.log(">>", string, string.length)
+                    const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ\+@\u00E1\u00E9\u00ED\u00F3\u00FA\u00C1\u00C9\u00CD\u00D3\u00DA]+$/g;
+
                     if (!filtro.test(string)) {
                         const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y /`
                         throw new Error(mensaje)
@@ -551,7 +548,7 @@ export const validadoresCompartidos = {
                     throw errorCapturado
                 }
             } else if (filtro === "sustitucionSinEspacios") {
-              
+
 
                 const filtro = /[^a-zA-Z0-9_\-\/\.]/g;
                 string = string.replace(filtro, '');
@@ -776,17 +773,17 @@ export const validadoresCompartidos = {
                     throw new Error(error)
                 }
                 mail = mail
-                .trim()
-                .toLowerCase()
+                    .trim()
+                    .toLowerCase()
                 if (sePermiteVacio === "si" && mail === "") {
                     return mail
                 } else if (mail.length === 0 || mail === "") {
                     const mensaje = `${nombreCampo} esta vacío.`
                     throw new Error(mensaje)
                 }
-        
+
                 const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
-              
+
                 if (!filtroCorreoElectronico.test(mail)) {
                     const error = "El campo de correo electroníco no cumple con el formato esperado, el formato esperado es asi como usuario@servidor.com"
                     throw new Error(error)
@@ -989,8 +986,8 @@ export const validadoresCompartidos = {
         },
         horas: (configuracion) => {
 
-            const hora = configuracion.hora
-            const nombreCampo = configuracion.nombreCampo
+            const hora = configuracion?.hora
+            const nombreCampo = configuracion?.nombreCampo
             const filtroHora = /^(0\d|1\d|2[0-3]):([0-5]\d)$/;
 
             if (!hora) {

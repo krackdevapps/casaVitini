@@ -17,6 +17,7 @@ export const eliminarCalendario = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
 
         await obtenerCalendarioPorCalendarioUID(calendarioUID)

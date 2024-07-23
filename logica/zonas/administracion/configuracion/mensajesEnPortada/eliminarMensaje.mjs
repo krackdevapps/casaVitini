@@ -19,6 +19,7 @@ export const eliminarMensaje = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
         await campoDeTransaccion("iniciar")
         const mensajeEnPortada = await obtenerMensajePorMensajeUID(mensajeUID)
@@ -34,7 +35,6 @@ export const eliminarMensaje = async (entrada, salida) => {
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
-    } finally {
-    }
+        throw errorCapturado
+    } 
 }

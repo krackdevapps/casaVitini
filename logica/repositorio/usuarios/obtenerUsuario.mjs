@@ -21,7 +21,7 @@ export const obtenerUsuario = async (data) => {
 
         } else if (errorSi === "existe") {
             if (resuelve.rowCount > 0) {
-                const error = "Ya exiete un usuario con ese nombre de usuario";
+                const error = "Ya existe un usuario con ese nombre de usuario";
                 throw new Error(error)
             }
             return resuelve.rows[0]

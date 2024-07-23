@@ -7,7 +7,6 @@ import { actualizarCliente } from "../../../repositorio/clientes/actualizarClien
 
 export const modificarCliente = async (entrada, salida) => {
     const mutex = new Mutex();
-    let bloqueoModificarClinete
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -15,7 +14,7 @@ export const modificarCliente = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        bloqueoModificarClinete = await mutex.acquire();
+        await mutex.acquire();
         const clienteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.clienteUID,
             nombreCampo: "El identificador universal del cliente (clienteUID)",
@@ -36,6 +35,8 @@ export const modificarCliente = async (entrada, salida) => {
             notas: entrada.body.notas,
             clienteUID
         }
+
+
         const datosValidados = await validadoresCompartidos.clientes.validarCliente({
             cliente: datosDelCliente,
             operacion: "actualizar"
@@ -50,7 +51,8 @@ export const modificarCliente = async (entrada, salida) => {
     } catch (errorCapturado) {
         throw errorCapturado
     } finally {
-        
-        bloqueoModificarClinete();
+        if (mutex) {
+            mutex.release()
+        }
     }
 }

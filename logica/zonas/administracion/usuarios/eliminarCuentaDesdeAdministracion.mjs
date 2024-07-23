@@ -41,6 +41,6 @@ export const eliminarCuentaDesdeAdministracion = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
-        throw errorFinal
+        throw errorCapturado
     }
 }

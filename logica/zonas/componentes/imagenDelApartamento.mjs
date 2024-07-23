@@ -12,7 +12,7 @@ export const imagenDelApartamento = async (entrada) => {
         })
         const configuracionDelApartamento = await obtenerImagenApartamentoPorApartamentoIDV({
             apartamentoIDV,
-            estadoConfiguracionIDV: ["disponible"]
+            estadoConfiguracionIDV_array: ["disponible"]
         })
         const ok = {
             ok: "Imagen de apartamento PNG en base64",

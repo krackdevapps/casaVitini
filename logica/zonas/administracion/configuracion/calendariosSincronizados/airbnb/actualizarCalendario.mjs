@@ -4,12 +4,13 @@ import { validadoresCompartidos } from '../../../../../sistema/validadores/valid
 import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs';
 import { actualizarCalendarioSincronizado } from '../../../../../repositorio/calendario/actualizarCalendarioSincronizado.mjs';
 import { obtenerCalendarioPorCalendarioUID } from '../../../../../repositorio/calendario/obtenerCalendarioPorCalendarioUID.mjs';
+import axios from 'axios';
 
 
-export const actualizarCalendario = async (entrada, salida) => {
+export const actualizarCalendario = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
@@ -19,6 +20,7 @@ export const actualizarCalendario = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
         const nombre = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombre,

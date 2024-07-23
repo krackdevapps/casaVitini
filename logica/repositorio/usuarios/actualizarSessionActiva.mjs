@@ -14,9 +14,11 @@ export const actualizarUsuarioSessionActiva = async (data) => {
             sess::jsonb @> jsonb_build_object('usuario', $2::text);
         `;
         const parametros = [
-            usuarioIDX,
-            nuevoIDX
+            nuevoIDX,
+            usuarioIDX
+            
         ];
+        
         const resuelve = await conexion.query(consulta, parametros)
         return resuelve.rows[0]
     } catch (errorCapturado) {

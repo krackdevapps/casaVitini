@@ -6,12 +6,12 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repo
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarConfiguracionApartamento } from "../../../../repositorio/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs";
 
-export const crearConfiguracionAlojamiento = async (entrada, salida) => {
+export const crearConfiguracionAlojamiento = async (entrada) => {
     const mutex = new Mutex()
     try {
 
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
@@ -35,15 +35,10 @@ export const crearConfiguracionAlojamiento = async (entrada, salida) => {
             const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon";
             throw new Error(error);
         }
-        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+        await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "existe"
         })
-        if (configuracionApartamento.length > 0) {
-            const error = "Ya existe una configuracion para la entidad del apartamento por favor selecciona otro apartamento como entidad";
-            throw new Error(error);
-        }
-
         await insertarConfiguracionApartamento({
             apartamentoIDV: apartamentoIDV,
             estadoInicial: "nodisponible",

@@ -57,7 +57,8 @@ export const actualizarZonaDeLaConfiguracionApartamento = async (entrada, salida
     } catch (errorCapturado) {
         throw errorCapturado
     } finally {
-        mutex.release()
+        if (mutex) {
+            mutex.release()
+        }
     }
-
 }

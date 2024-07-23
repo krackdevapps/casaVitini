@@ -18,7 +18,6 @@ export const actualizarEstado = async (entrada, salida) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
         })
 
         const estado = validadoresCompartidos.tipos.cadena({
@@ -48,7 +47,7 @@ export const actualizarEstado = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 
 }

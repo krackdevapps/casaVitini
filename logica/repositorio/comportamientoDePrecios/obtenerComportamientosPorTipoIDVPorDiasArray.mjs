@@ -12,7 +12,7 @@ export const obtenerComportamientosPorTipoIDVPorDiasArray = async (data) => {
         AND
             EXISTS (
                    SELECT 1
-                   FROM jsonb_array_elements_text(contenedor->'diasArray') AS elem
+                   FROM jsonb_array_elements_text(contenedor->'dias') AS elem
                    WHERE elem::text = ANY ($2::text[])
             );;
             `
@@ -20,7 +20,7 @@ export const obtenerComportamientosPorTipoIDVPorDiasArray = async (data) => {
             tipoIDV,
             diasArray
         ]
-        console.log("parametrosd", parametros)
+
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows
     } catch (errorCapturado) {

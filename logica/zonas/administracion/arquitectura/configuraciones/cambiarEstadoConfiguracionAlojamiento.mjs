@@ -33,22 +33,21 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        validadoresCompartidos.filtros.estados(nuevoEstado)
 
-        try {
-            const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
-                apartamentoIDV,
-                errorSi: "noExiste"
-            })
-        } catch (error) {
-            const m = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crea la configuiracíon";
-            throw new Error(m);
+
+        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
+
+        if (nuevoEstado !== "disponible" && nuevoEstado !== "nodisponible") {
+            const m = "El campo nuevoEstado solo puede ser disponible o nodisponible"
+            throw new Error(m)
         }
-
         if (nuevoEstado === "disponible") {
 
             const zonaIDV = configuracionApartamento.zonaIDV
-            if (zonaIDV !== "privada" || zonaIDV !== "global" || zonaIDV !== "publica") {
+            if (zonaIDV !== "privada" && zonaIDV !== "global" && zonaIDV !== "publica") {
                 const error = "No se puede poner en disponible esta configuracíon por que no es valida. Necesitas establecer la zona de esta configuracuion de alojamiento en privada, publica o global";
                 throw new Error(error);
             }
@@ -65,22 +64,19 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
                 for (const detalleHabitacion of habitacionesEnConfiguracion) {
                     const habitacionUID = detalleHabitacion.componenteUID;
                     const habitacionIDV = detalleHabitacion.habitacionIDV;
-                    const nombreHabitacionUI = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                    const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV({
                         habitacionIDV,
                         errorSi: "noExiste"
                     })
-                    if (!nombreHabitacionUI) {
-                        const error = "No existe el identificador de la habitacionIDV";
-                        throw new Error(error);
-                    }
+                    const habitacionUI = habitacion.habitacionUI
                     const camasPorHabitacionUID = await obtenerCamasDeLaHabitacionPorHabitacionUID(habitacionUID)
                     if (camasPorHabitacionUID.length === 0) {
-                        habitacionesSinCama.push(nombreHabitacionUI);
+                        habitacionesSinCama.push(habitacionUI);
                     }
                 }
                 if (habitacionesSinCama.length > 0) {
                     const funsionArray = habitacionesSinCama.join(", ").replace(/,([^,]*)$/, ' y $1');
-                    const error = `No se puede establecer el estado disponible por que la configuracion no es valida. Por favor revisa las camas asignadas ne las habitaciones. En las habitaciones ${funsionArray} no hay una sola cama signada como opcion. Por favor asigna la camas`;
+                    const error = `No se puede establecer el estado disponible por que la configuracion no es valida. Por favor revisa las camas asignadas en las habitaciones. En las habitaciones ${funsionArray} no hay una sola cama signada como opcion. Por favor asigna la camas`;
                     throw new Error(error);
                 }
             }

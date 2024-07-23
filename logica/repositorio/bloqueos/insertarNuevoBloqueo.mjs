@@ -32,7 +32,7 @@ export const insertarNuevoBloqueo = async (data) => {
             motivo,
             zonaIDV
         ];
-        console.log("parametros", parametros)
+
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
             const error = "No se ha podido insertar el nuevo bloqueo";

@@ -8,6 +8,6 @@ export const eliminarSessionPorUsuario = async (usuarioIDX) => {
         `;
         await conexion.query(consulta, [usuarioIDX])
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 };

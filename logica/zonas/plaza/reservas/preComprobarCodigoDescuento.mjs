@@ -4,9 +4,11 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { selectorPorCondicion } from "../../../sistema/ofertas/entidades/reserva/selectorPorCondicion.mjs";
 import { validarObjetoReserva } from "../../../sistema/reservas/validarObjetoReserva.mjs";
 import { obtenerOfertasPorRangoActualPorEstadoPorCodigoDescuentoArray } from "../../../repositorio/ofertas/perfiles/obtenerOfertasPorRangoActualPorEstadoPorCodigoDescuentoArray.mjs";
+import { Mutex } from "async-mutex";
+import { utilidades } from "../../../componentes/utilidades.mjs";
 export const preComprobarCodigoDescuento = async (entrada) => {
+    const mutex = new Mutex()
     try {
-
         const tipoContenedorCodigo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoContenedorCodigo,
             nombreCampo: "El campo de tipoContenedorCodigo",
@@ -48,6 +50,8 @@ export const preComprobarCodigoDescuento = async (entrada) => {
         }
 
 
+        await utilidades.ralentizador(2000)
+        mutex.acquire()
 
         const reserva = entrada.body.reserva;
         await validarObjetoReserva({
@@ -129,5 +133,10 @@ export const preComprobarCodigoDescuento = async (entrada) => {
         return estructura
     } catch (errorCapturado) {
         throw errorCapturado
+    } finally {
+        if (mutex) {
+            mutex.release()
+        }
     }
+
 }

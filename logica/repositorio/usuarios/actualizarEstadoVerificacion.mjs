@@ -8,7 +8,7 @@ export const actualizarEstadoVerificacion = async (data) => {
         UPDATE 
         usuarios
         SET
-        "cuentaVerificada" = $1,
+        "cuentaVerificadaIDV" = $1,
         "codigoVerificacion" = NULL,
         "fechaCaducidadCuentaNoVerificada" = NULL
         WHERE
@@ -27,6 +27,6 @@ export const actualizarEstadoVerificacion = async (data) => {
         }
         return resuelve.rows[0]
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 };

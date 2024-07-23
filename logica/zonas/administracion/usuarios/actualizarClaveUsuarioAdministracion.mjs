@@ -24,13 +24,14 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-        validadoresCompartidos.claves.minimoRequisitos(claveNueva);
-        validadoresCompartidos.claves.minimoRequisitos(claveNuevaDos);
-
+        //validadoresCompartidos.claves.minimoRequisitos(claveNueva);
         if (claveNueva !== claveNuevaDos) {
             const error = "No has escrito dos veces la misma nueva contrasena";
             throw new Error(error);
         }
+        validadoresCompartidos.claves.minimoRequisitos(claveNuevaDos);
+
+   
         const cryptoData = {
             sentido: "cifrar",
             clavePlana: claveNueva
@@ -52,6 +53,6 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 }

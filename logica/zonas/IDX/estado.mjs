@@ -3,31 +3,31 @@ import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { eliminarSessionPorRolPorCaducidad } from "../../repositorio/sessiones/eliminarSessionPorRolPorCaducidad.mjs";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 
-export const estado = async (entrada, salida) => {
+export const estado = async (entrada) => {
     try {
         await eliminarUsuarioPorRolPorEstadoVerificacion();
         await eliminarSessionPorRolPorCaducidad();
 
         const usuario = entrada.session?.usuario;
-        const rol = entrada.session?.rol;
+        const rolIDV = entrada.session?.rolIDV;
         const respuesta = {};
         if (usuario) {
-            respuesta.estado = "conectado";
+            respuesta.estadoIDV = "conectado";
             respuesta.usuario = usuario;
-            respuesta.rol = rol;
-            respuesta.cuentaVerificada = "no";
+            respuesta.rolIDV = rolIDV;
+            respuesta.cuentaVerificadaIDV = "no";
             const cuentaUsuario = await obtenerUsuario({
                 usuario,
                 errorSi: "noExiste"
             })
-            const estadoCuenta = cuentaUsuario.cuentaVerificadaIDX;
+            const estadoCuenta = cuentaUsuario.cuentaVerificadaIDV;
             if (estadoCuenta === "si") {
-                respuesta.cuentaVerificada = "si";
+                respuesta.cuentaVerificadaIDV = "si";
             }
         } else {
-            respuesta.estado = "desconectado";
+            respuesta.estadoIDV = "desconectado";
         }
-        salida.json(respuesta);
+        return respuesta;
 
     } catch (errorCapturado) {
         throw errorCapturado
