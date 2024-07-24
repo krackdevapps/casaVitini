@@ -21,8 +21,6 @@ export const cambiarVista = async (entrada) => {
         })
         return transaccionInterna
     } catch (errorCapturado) {
-        //  const error = new Error("noExisteLaVista")
-        // const errorFinal = filtroError(error)
         throw errorCapturado
     }
 }

@@ -7,8 +7,10 @@ import { actualizarEstadoEnlaceDePagoPorEnlaceUID } from "../../../repositorio/e
 import { insertarPago } from "../../../repositorio/reservas/transacciones/pagos/insertarPago.mjs";
 
 export const realizarPago = async (entrada, salida) => {
-    const mutex = new Mutex()
+    //const mutex = new Mutex()
     try {
+        const error = "Función deshabilitada";
+        throw new Error(error);
 
         const enlaceUPID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.enlaceUID,

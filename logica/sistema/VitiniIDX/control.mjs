@@ -1,7 +1,7 @@
 export class VitiniIDX {
     constructor(session) {
         this.usuario = session.usuario
-        this.rolIDV = session.rol;
+        this.rolIDV = session.rolIDV;
         // this.salida = salida
         this.contenedorGrupos = [];
     }
@@ -36,6 +36,7 @@ export class VitiniIDX {
                     }
                     throw msgError
                 }
+
             }
         } catch (errorCapturado) {
             throw errorCapturado

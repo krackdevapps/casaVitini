@@ -6,6 +6,7 @@ import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/en
 import { actualizarClave } from "../../../repositorio/usuarios/actualizarClave.mjs";
 import { eliminarEnlacesDeRecuperacionPorUsuario } from "../../../repositorio/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorUsuario.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
+import { vitiniCrypto } from "../../../sistema/VitiniIDX/vitiniCrypto.mjs";
 
 export const restablecerClave = async (entrada, salida) => {
     try {
@@ -21,7 +22,6 @@ export const restablecerClave = async (entrada, salida) => {
         const clave = entrada.body.clave;
         const claveConfirmada = entrada.body.claveConfirmada;
         validadoresCompartidos.claves.minimoRequisitos(clave);
-        validadoresCompartidos.claves.minimoRequisitos(claveConfirmada);
 
         if (clave !== claveConfirmada) {
             const error = "Las claves no coinciden. Por favor escribe tu nueva clave dos veces.";
@@ -32,12 +32,14 @@ export const restablecerClave = async (entrada, salida) => {
         await eliminarEnlacesDeRecuperacionPorFechaCaducidad(fechaActual_ISO)
         await campoDeTransaccion("iniciar")
         const enlacesDeRecuperacion = await obtenerEnlacesRecuperacionPorCodigoUPID(codigo)
+
+
         if (enlacesDeRecuperacion.length === 0) {
             const error = "El código que has introducido no existe. Si estás intentando recuperar tu cuenta, recuerda que los códigos son de un solo uso y duran una hora. Si has generado varios códigos, solo es válido el más nuevo.";
             throw new Error(error);
         }
         if (enlacesDeRecuperacion.length === 1) {
-            const usuario = enlacesDeRecuperacion.usuario;
+            const usuario = enlacesDeRecuperacion[0].usuario;
             const crypto = {
                 sentido: "cifrar",
                 clavePlana: clave
@@ -60,7 +62,6 @@ export const restablecerClave = async (entrada, salida) => {
         }
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        console.info(errorCapturado.message);
-        throw errorFinal
+        throw errorCapturado
     }
 }

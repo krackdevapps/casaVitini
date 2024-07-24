@@ -9,10 +9,13 @@ import { actualizarEnlaceDeRecuperacionPorUsuario } from "../../../repositorio/e
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { eliminarEnlacesDeRecuperacionPorUsuario } from "../../../repositorio/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorUsuario.mjs";
 
-export const enviarCorreo = async (entrada, salida) => {
+export const enviarCorreo = async (entrada) => {
     try {
-        const email = validadoresCompartidos.tipos
-            .correoElectronico(entrada.body.email)
+        const email = validadoresCompartidos.tipos.correoElectronico({
+            mail: entrada.body.email,
+            nombreCampo: "El campo del email de recuperación",
+            sePermiteVacio: "no"
+        })
 
         const generarCadenaAleatoria = (longitud) => {
             const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -45,14 +48,19 @@ export const enviarCorreo = async (entrada, salida) => {
         const fechaCaducidadUTC = fechaActualUTC.plus({ hours: 1 });
         const hostActual = process.env.HOST_CASAVITINI;
         await campoDeTransaccion("iniciar")
-        const datosDelUsuario = obtenerDatosPersonalesPorMail(email)
-        if (datosDelUsuario.email) {
+
+        const datosDelUsuario = await obtenerDatosPersonalesPorMail(email)
+        if (!datosDelUsuario?.mail) {
             const error = "La dirección de correo electrònico no consta en nínguna cuenta de usuario. Registrate y crea tu VitiniID si lo neceistas.";
             throw new Error(error);
         }
+
         const usuarioIDX = datosDelUsuario.usuario;
         // Comporbar si es una recuperacion de contraseña o una verificacion de email
-        const cuentaDeUsuario = obtenerUsuario(usuarioIDX)
+        const cuentaDeUsuario = await obtenerUsuario({
+            usuario: usuarioIDX,
+            errorSi: "noExiste"
+        })
 
         const estadoVerificacion = cuentaDeUsuario.cuentaVerificadaIDV;
         const usuario = cuentaDeUsuario.usuario;
@@ -82,11 +90,12 @@ export const enviarCorreo = async (entrada, salida) => {
                 mensaje: mensaje,
             };
             // Enviamos el mensaje
+            await campoDeTransaccion("confirmar")
             enviarMail(composicionDelMensaje);
             const ok = {
                 ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para recuperar tu cuenta",
             };
-            salida.json(ok)
+            return ok
 
         } else {
             // Cuenta NO verificada, se busca verificar el correo
@@ -123,7 +132,6 @@ export const enviarCorreo = async (entrada, salida) => {
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        console.info(errorCapturado.message);
-        throw errorFinal
+        throw errorCapturado
     }
 }

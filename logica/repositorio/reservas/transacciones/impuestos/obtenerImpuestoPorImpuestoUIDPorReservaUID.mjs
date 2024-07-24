@@ -21,7 +21,7 @@ export const obtenerImpuestoPorImpuestoUIDPorReservaUID = async (data) => {
             reservaUID,
             impuestoUID
         ]
-        console.log("parametros", parametros)
+
 
         const resuelve = await conexion.query(consulta, parametros);
         if (errorSi === "noExiste") {

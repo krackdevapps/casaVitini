@@ -9,9 +9,9 @@ export const desconectar = async (entrada, salida) => {
         entrada.session.destroy();
         salida.clearCookie("VitiniID");
         const respuesta = {
-            IDX: "desconectado"
+            estadoIDV: "desconectado"
         };
-        salida.json(respuesta);
+        return respuesta
 
 
     } catch (errorCapturado) {

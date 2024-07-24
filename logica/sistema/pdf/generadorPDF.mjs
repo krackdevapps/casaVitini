@@ -11,7 +11,7 @@ import QRCode from 'qrcode'
 const require = createRequire(import.meta.url);
 export const generadorPDF = async (reserva) => {
     try {
-         const global = reserva.global
+        const global = reserva.global
         const reservaUID = global.reservaUID
         const fechaEntrada = global.fechaEntrada
         const fechaSalida = global.fechaSalida
@@ -29,7 +29,7 @@ export const generadorPDF = async (reserva) => {
             const error = "No se puede generar un pdf de una reserva que no tiene un titular asingado, primero asocia o crea un titular para esta reserva"
             throw new Error(error)
         }
-        console.log("contenedorReserva", contenedorTitular)
+
 
         const nombreTitular = contenedorTitular.nombreTitular || ""
         const pasaporteTitular = contenedorTitular.pasaporteTitular || ""
@@ -473,7 +473,7 @@ export const generadorPDF = async (reserva) => {
                     const archivo = Buffer.concat(chunks);
                     // Puedes hacer lo que necesites con 'archivo' antes de resolver la promesa
                     // Por ejemplo, guardar en un archivo, enviar como respuesta HTTP, etc.
-                   // resolve(archivo);
+                    // resolve(archivo);
                     const base64String = archivo.toString('base64');
                     resolve(base64String);
 

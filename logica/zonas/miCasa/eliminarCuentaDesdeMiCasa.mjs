@@ -54,7 +54,8 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
         await eliminarUsuario(usuarioIDX)
         await eliminarSessionPorUsuario(usuarioIDX)
         await campoDeTransaccion("confirmar")
-
+        entrada.session.destroy();
+        salida.clearCookie("VitiniID");
         const ok = {
             ok: "Se ha eliminado correctamente la cuenta"
         }

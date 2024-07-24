@@ -194,7 +194,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             fechaHoy_ISO: fechaActualTZ
         };
         const eventosSincronizadosAirbnb = await eventosDelApartamento(datosAirbnb);
-        console.log("eventosSincronizadosAirbnb", eventosSincronizadosAirbnb)
+
         objetoFinal.calendariosSincronizados = {};
         objetoFinal.calendariosSincronizados.airbnb = {
             eventos: eventosSincronizadosAirbnb.eventos

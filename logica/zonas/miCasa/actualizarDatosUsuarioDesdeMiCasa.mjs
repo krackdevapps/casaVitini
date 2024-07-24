@@ -37,11 +37,11 @@ export const actualizarDatosUsuarioDesdeMiCasa = async (entrada) => {
         const usurarioActualizado = await actualizarDatos(datosUsuario)
         const mailAntiguo = datosAnteriores.mail
         const mailNuevo = usurarioActualizado.mail
-        console.log("mailAntiguo", mailAntiguo, "mailNuevo", mailNuevo, mailAntiguo !== mailNuevo)
+
         if (mailAntiguo !== mailNuevo) {
             await desactivarCuenta({
                 usuario: usuarioIDX
-            })           
+            })
         }
         await campoDeTransaccion("confirmar")
         const ok = {

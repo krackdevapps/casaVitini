@@ -27,10 +27,10 @@ export const cambiarVista = async (transaccion) => {
                             urlResuelta = ""
                             break
                         }
-                        let roles = fs.readFileSync(archivoIDX, 'utf-8');
-                        roles = roles.replaceAll(" ", "")
-                        roles = roles.split(",")
-                        roles = roles.filter(espacio => espacio)
+                        const roles = fs.readFileSync(archivoIDX, 'utf-8')
+                        .replaceAll(" ", "")
+                        .split(",")
+                        .filter(espacio => espacio)
                         if (roles.length > 0 && !roles.includes(rolIDV)) {
                             portal = "ROL"
                             urlResuelta = ""
@@ -88,6 +88,6 @@ export const cambiarVista = async (transaccion) => {
             throw new Error(error)
         }
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 }

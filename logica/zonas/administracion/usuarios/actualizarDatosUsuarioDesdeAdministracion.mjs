@@ -62,13 +62,13 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
         const mail = validadoresCompartidos.tipos
             .correoElectronico({
                 mail: entrada.body.mail,
-                nombreCampo: "El campo del email", 
+                nombreCampo: "El campo del email",
                 sePermiteVacio: "si"
             })
         const telefono = validadoresCompartidos.tipos
             .telefono(
                 {
-                    phone: entrada.body.telefono ,
+                    phone: entrada.body.telefono,
                     nombreCampo: "el campo del telefono",
                     sePermiteVacio: "si"
                 })
@@ -93,7 +93,7 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             pasaporte: pasaporte,
             telefono: telefono,
         }
-        console.log("datosUS", datosUsuario)
+
         await actualizarDatos(datosUsuario)
         await campoDeTransaccion("confirmar")
         const ok = {

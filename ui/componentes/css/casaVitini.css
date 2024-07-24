@@ -143,9 +143,9 @@
 }
 
 body {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgb(206 206 206);
     background-image: url(/componentes/imagenes/transparente.png);
-    transition: background 250ms linear;
+    /* transition: background 250ms linear; */
     flex-wrap: nowrap;
     background-size: cover;
     background-repeat: no-repeat;
@@ -174,6 +174,7 @@ main {
 
 header {
     width: 100%;
+    z-index: 10;
 }
 
 @keyframes AnimacionSueave {
@@ -199,6 +200,14 @@ header {
     background-attachment: fixed;
     background-attachment: scroll
         /*  background-position: 100% 100%;*/
+}
+
+.esferaUI {
+    height: 16px;
+    width: 16px;
+    border-radius: 100%;
+    background: rgba(0, 0, 0, 0.317);
+
 }
 
 .tintadoVinculo {
@@ -256,7 +265,7 @@ header {
     padding: 6px;
     align-content: center;
     justify-content: center;
-    align-items: stretch;
+    align-items: center;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     display: flex;
@@ -314,6 +323,15 @@ header {
 
     .uiPanelGlobal {
         align-items: center;
+    }
+    .uiCategoria {
+        justify-content: flex-start;
+    }
+    .esferaUI {
+        height: 22px;
+        width: auto;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.317);
     }
 }
 

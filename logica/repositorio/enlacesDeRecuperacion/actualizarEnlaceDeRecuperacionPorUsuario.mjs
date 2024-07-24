@@ -22,6 +22,7 @@ export const actualizarEnlaceDeRecuperacionPorUsuario = async (data) => {
             fechaActualUTC,
             usuario
         ]
+
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
             const error = "No se ha actualizado el enlace de recuperacion"

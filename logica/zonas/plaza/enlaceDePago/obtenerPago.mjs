@@ -5,6 +5,9 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 
 export const obtenerPago = async (entrada, salida) => {
     try {
+        const error = "Función deshabilitada";
+        throw new Error(error);
+
         const pagoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pagoUID,
             nombreCampo: "El identificador universal del pago (pagoUID)",

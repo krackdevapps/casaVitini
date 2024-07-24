@@ -1,11 +1,10 @@
 import { administracionJS } from "../../../componentes/administracionJS.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
-export const administracionUI = async (entrada, salida) => {
+export const administracionUI = async (entrada) => {
     try {
-
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()

@@ -24,7 +24,7 @@ export const apartamentosOcupadosHoy_paraSitaucion = async (fechaHoy_ISO) => {
         for (const calendarioDelApartamento of calendariosPorApartamento) {
             const calendariosObjetoDelApartamento = calendarioDelApartamento.calendarioObjeto
             for (const detallesDelCalendario of calendariosObjetoDelApartamento) {
-                console.log("detallesDelCalendario", detallesDelCalendario)
+
 
                 const fechaInicioComparar = detallesDelCalendario.fechaInicio
                 const fechaFinalComparar = detallesDelCalendario.fechaFinal

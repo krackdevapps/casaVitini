@@ -6109,7 +6109,7 @@ const casaVitini = {
                                         reservaUID,
                                         pernoctanteUID: String(pernoctanteUID)
                                     })
-                                    console.log("r", respuestaServidor)
+
                                     const uiRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                                     if (!uiRenderizada) { return }
 
@@ -10375,7 +10375,7 @@ const casaVitini = {
                                     deglosePorReembolso.forEach((detallesDelReembolso) => {
                                         const reembolsoUID = detallesDelReembolso.reembolsoUID
                                         const plataformaDePagoIDV = detallesDelReembolso.plataformaDePagoIDV
-                                        console.log("plataformaDePago", plataformaDePagoIDV)
+
                                         const cantidad = detallesDelReembolso.cantidad
                                         const reembolsoUIDPasarela = detallesDelReembolso.reembolsoUIDPasarela
 
@@ -11755,7 +11755,7 @@ const casaVitini = {
                                         reservaUID,
                                         ofertaUID
                                     }
-                                    console.log("ss")
+
 
                                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                                     const uiRenderizada = document.querySelector(`[reservaUID="${reservaUID}"]`)
@@ -11766,7 +11766,7 @@ const casaVitini = {
                                         return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                                     }
                                     if (respuestaServidor?.ok) {
-                                        console.log("ss222222")
+
                                         casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desplegarContenedorFinanciero({
                                             instanciaUID_contenedorFinanciero,
                                             reservaUID
@@ -12333,7 +12333,7 @@ const casaVitini = {
                                 const estadoActualData = area.querySelector("[estadoActual]")
                                 const estadoActual = estadoActualData.getAttribute("estadoActual")
 
-                                console.log("testssssssss")
+
 
 
                                 const transaccion = {
@@ -12341,7 +12341,7 @@ const casaVitini = {
                                     reservaUID: String(reservaUID),
                                     ofertaUID: String(ofertaUID),
                                 }
-                                console.log("test >>>", transaccion)
+
                                 if (estadoActual === "aceptada") {
                                     autorizacionUI.innerText = "Rechazando..."
                                     transaccion.nuevaAutorizacion = "rechazada"
@@ -12349,11 +12349,11 @@ const casaVitini = {
                                     autorizacionUI.innerText = "Aceptando..."
                                     transaccion.nuevaAutorizacion = "aceptada"
                                 }
-                                
+
 
 
                                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                                
+
                                 if (respuestaServidor?.error) {
                                     casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                                 }
@@ -13023,7 +13023,7 @@ const casaVitini = {
                                     ]
                                 }
                                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                                
+
                                 const instanciaRenderizada = document.querySelector(`[reservaUID="${reservaUID}"] [componente=contenedorDesgloseTotal]`)
                                 if (!instanciaRenderizada) {
                                     return
@@ -13034,7 +13034,7 @@ const casaVitini = {
                                 }
                                 if (respuestaServidor?.ok) {
                                     const totalGlobal = document.querySelector("[dataReserva=totalReservaConImpuestos]")
-                                    
+
                                     const contenedorFinanciero = respuestaServidor.ok.contenedorFinanciero
                                     const totalFinal = contenedorFinanciero.desgloseFinanciero.global.totales.totalFinal
                                     totalGlobal.innerText = totalFinal
@@ -16161,6 +16161,8 @@ const casaVitini = {
         },
         clientes: {
             arranque: async () => {
+
+
                 // document.body.style.backgroundImage = 'url("/componentes/imagenes/f5.jpeg")';
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
                 const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
@@ -30744,7 +30746,7 @@ const casaVitini = {
                 const instanciaUIDMes = calendario.instanciaUIDMes
                 const selectorCalendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                 if (!selectorCalendarioRenderizado) {
-
+                    return
                 }
                 const nombreMes = ["Enero", "Febrero", "Marzo", "Abrir", "Mayo", "Junio", "Julio", "Agost", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
                 const nombreMesFinal = nombreMes[calendario.mes - 1]
@@ -30773,7 +30775,7 @@ const casaVitini = {
                 const resuelveDiasCompletos = await casaVitini.shell.servidor(controlDiasCompletos)
                 const selectorCalendarioRenderizado_control = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                 if (!selectorCalendarioRenderizado_control) {
-
+                    return
                 }
                 const detallesDiasOcupacion = resuelveDiasCompletos.ok.dias
                 let mesActual = calendario.mes
@@ -31151,7 +31153,7 @@ const casaVitini = {
                 const instanciaUID = metadatos.instanciaUID
                 const origen = metadatos.origen
                 const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                if (!document.querySelector(`[instanciaUID="${instanciaUID}"]`));
+                if (!document.querySelector(`[instanciaUID="${instanciaUID}"]`)) { return }
                 let instanciaUIDMes
                 if (origen === "navegacionEntreMeses" || origen === "menuDesplegable" || origen === "historial") {
                     instanciaUIDMes = metadatos.instanciaUIDMes

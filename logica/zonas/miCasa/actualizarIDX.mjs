@@ -5,7 +5,7 @@ import { validadoresCompartidos } from "../../sistema/validadores/validadoresCom
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
-import { actualizarIDX as actualizarIDV_} from "../../repositorio/usuarios/actualizarIDX.mjs";
+import { actualizarIDX as actualizarIDV_ } from "../../repositorio/usuarios/actualizarIDX.mjs";
 import { usuariosLimite } from "../../sistema/usuarios/usuariosLimite.mjs";
 import { actualizarUsuarioSessionActiva } from "../../repositorio/usuarios/actualizarSessionActiva.mjs";
 
@@ -32,12 +32,12 @@ export const actualizarIDX = async (entrada, salida) => {
             throw new Error(error)
 
         }
-        console.log("usuari", actualIDX)
+
         await obtenerUsuario({
             usuario: actualIDX,
             errorSi: "noExiste"
         })
-        
+
         usuariosLimite(nuevoIDX)
         await eliminarUsuarioPorRolPorEstadoVerificacion();
         await campoDeTransaccion("iniciar")

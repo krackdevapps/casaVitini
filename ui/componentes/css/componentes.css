@@ -14643,6 +14643,10 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     position: absolute;
     height: 100%;
+    /* background: rgb(206 206 206); */
+    width: 100%;
+    align-content: center;
+    justify-content: center;
 }
 
 .areaSinDecoracionPredeterminada {

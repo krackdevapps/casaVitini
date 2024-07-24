@@ -11,6 +11,9 @@ export const resolverQR = async (entrada) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session)
+        IDX.administradores()
+        IDX.empleados()
+        IDX.clientes()
         IDX.control()
 
         const usuario = entrada.session.usuario
@@ -26,6 +29,7 @@ export const resolverQR = async (entrada) => {
         const ok = {
             ok: "Aqui tiene la url de tu codigo qr resuelta"
         }
+
         if (codigoIDV === "reserva") {
             const reservaUID = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.reservaUID,
@@ -37,6 +41,7 @@ export const resolverQR = async (entrada) => {
             })
             await obtenerReservaPorReservaUID(reservaUID)
 
+
             if (rol === "administrador" || rol === "empleado") {
                 ok.url = "/administracion/reservas/reserva:" + reservaUID
             } else if (rol === "cliente") {
@@ -46,6 +51,8 @@ export const resolverQR = async (entrada) => {
                     const error = "Se necesita que definas tu dirección de correo elecroníco en Mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo eletroníco que usastes para confirmar la reserva. Es decir debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de correo electronico y confirmarlo con el correo de confirmacion que te enviaremos. Una vez hecho eso podras ver tus reservas";
                     throw new Error(error);
                 }
+
+
                 // Comporbar si el email esta verificado
                 const cuentaUsuario = await obtenerUsuario({
                     usuario,
@@ -56,6 +63,7 @@ export const resolverQR = async (entrada) => {
                     const error = "Tienes que verificar tu dirección de correo electronico para poder acceder a las reservas asociadas a tu direcíon de correo electroníco. Para ello pulsa en verificar tu correo electrónico.";
                     throw new Error(error);
                 }
+
 
                 const titular = await obtenerTitularReservaPorReservaUID(reservaUID)
                 const titularUID = titular?.titularUID
@@ -76,7 +84,12 @@ export const resolverQR = async (entrada) => {
                     }
                 }
                 ok.url = "/micasa/reservas/" + reservaUID
+
+
             }
+
+
+
         } else {
             const m = "No se reconode el codigoIDV"
             throw new Error(m)
