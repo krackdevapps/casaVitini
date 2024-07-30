@@ -18,7 +18,6 @@ export const selecionarOfertasPorCondicion = async (data) => {
             zonasArray,
             entidadIDV: "reserva"
         })
-
         const ofertaAnalizadasPorCondiciones = []
         for (const oferta of ofertasSeleccionadasPorRango) {
             const ofertaUID = String(oferta.ofertaUID)

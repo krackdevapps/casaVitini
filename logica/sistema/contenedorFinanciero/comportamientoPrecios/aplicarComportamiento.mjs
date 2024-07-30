@@ -6,6 +6,7 @@ export const aplicarComportamiento = (data) => {
         const simboloIDV = data.simboloIDV
         const cantidad = new Decimal(data.cantidad)
         let precioFinalPorNoche;
+
         if (simboloIDV === "aumentoPorcentaje") {
             const calculo = precioBase.times(cantidad.dividedBy(100));
             precioFinalPorNoche = precioBase.plus(calculo);

@@ -2,8 +2,11 @@ import session from 'express-session';
 import pgSession from 'connect-pg-simple';
 import { conexion } from '../logica/componentes/db.mjs';
 
-const duracionSessionServidor = parseInt(process.env.DURACION_SERVIDOR, 10)
-const duracionSessionCliente = parseInt(process.env.DURACION_CLIENTE, 10)
+// Duración de la sesión en el servidor en segundos (una semana)
+const duracionSessionServidor = 7 * 24 * 60 * 60;
+// Duración de la sesión en el cliente en milisegundos (una semana)
+const duracionSessionCliente = 7 * 24 * 60 * 60 * 1000;
+
 
 const almacenSessiones = new (pgSession(session))({
   pool: conexion,

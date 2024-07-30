@@ -145,7 +145,7 @@
 body {
     background: rgb(206 206 206);
     background-image: url(/componentes/imagenes/transparente.png);
-    /* transition: background 250ms linear; */
+    transition: background 250ms linear;
     flex-wrap: nowrap;
     background-size: cover;
     background-repeat: no-repeat;
@@ -207,7 +207,9 @@ header {
     width: 16px;
     border-radius: 100%;
     background: rgba(0, 0, 0, 0.317);
-
+}
+.esferaUI_flotante {
+    display: none;
 }
 
 .tintadoVinculo {
@@ -328,10 +330,20 @@ header {
         justify-content: flex-start;
     }
     .esferaUI {
-        height: 22px;
-        width: auto;
-        border-radius: 8px;
-        background: rgba(0, 0, 0, 0.317);
+        display: none;
+    }
+
+    .esferaUI_flotante {
+        display: flex;
+        position: absolute;
+        top: -46px;
+        left: 0px;
+        height: 40px;
+        width: 40px;
+        border-radius: 10px;
+        background: rgb(230 230 230);
+        z-index: 10;
+        box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
     }
 }
 
@@ -343,7 +355,7 @@ header {
     backdrop-filter: blur(50px);
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 17px;
-    overflow: hidden;
+    /* overflow: hidden; */
     width: fit-content;
     height: fit-content;
     margin: 14px;

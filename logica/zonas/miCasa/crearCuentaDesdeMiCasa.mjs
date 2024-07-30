@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { enviarEmailAlCrearCuentaNueva } from "../../sistema/Mail/enviarEmailAlCrearCuentaNueva.mjs";
+import { enviarMailAlCrearCuentaNueva } from "../../sistema/mail/enviarMailAlCrearCuentaNueva.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
 
@@ -29,10 +29,10 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
             soloMinusculas: "si"
         })
 
-        const email = validadoresCompartidos.tipos
+        const mail = validadoresCompartidos.tipos
             .correoElectronico({
-                mail: entrada.body.email,
-                nombreCampo: "El campo del email", 
+                mail: entrada.body.mail,
+                nombreCampo: "El campo del mail",
                 sePermiteVacio: "no"
             })
 
@@ -64,7 +64,7 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
             errorSi: "existe"
         })
         usuariosLimite(usuarioIDX)
-        await obtenerDatosPersonalesPorMail(email)
+        await obtenerDatosPersonalesPorMail(mail)
         const cryptoData = {
             sentido: "cifrar",
             clavePlana: claveNueva
@@ -112,20 +112,20 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
             nuevaSal: nuevaSal,
             hashCreado: hashCreado,
             cuentaVerificada: cuentaVerificada,
-            codigoAleatorioUnico:codigoAleatorioUnico,
+            codigoAleatorioUnico: codigoAleatorioUnico,
             fechaCaducidadCuentaNoVerificada: fechaCaducidadCuentaNoVerificada,
         })
         await insertarFilaDatosPersonales(usuarioIDX)
         await actualizarDatos({
-            mail: email,
+            mail: mail,
             usuario: usuarioIDX
         })
         await campoDeTransaccion("confirmar");
         const datosVerificacion = {
-            email: email,
+            mail: mail,
             codigoVerificacion: codigoAleatorioUnico
         };
-        enviarEmailAlCrearCuentaNueva(datosVerificacion);
+        enviarMailAlCrearCuentaNueva(datosVerificacion);
         const ok = {
             ok: "Se ha creado el nuevo usuario",
             usuarioIDX: nuevoUsuario.usuario

@@ -39,7 +39,7 @@ export const asociarTitular = async (entrada, salida) => {
         const primerApellido = detallesCliente.primerApellido ? detallesCliente.primerApellido : "";
         const segundoApellido = detallesCliente.segundoApellido ? detallesCliente.segundoApellido : "";
         const pasaporte = detallesCliente.pasaporte;
-        const email = detallesCliente.email ? detallesCliente.email : "";
+        const mail = detallesCliente.mail ? detallesCliente.mail : "";
         const telefono = detallesCliente.telefono ? detallesCliente.telefono : "";
         const nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`;
         await obtenerReservaPorReservaUID(reservaUID)
@@ -53,7 +53,7 @@ export const asociarTitular = async (entrada, salida) => {
             ok: "Se ha actualizado correctamente el titular en la reserva",
             clienteUID: clienteUID,
             nombreCompleto: nombreCompleto,
-            email: email,
+            mail: mail,
             nombre: nombre,
             telefono: telefono,
             primerApellido: primerApellido,

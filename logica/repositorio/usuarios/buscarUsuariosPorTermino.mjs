@@ -27,14 +27,14 @@ export const buscarUsuarios = async (data) => {
 
     try {
         const consulta = `    
-        SELECT "usuarioIDX", email, nombre, "primerApellido", "segundoApellido", pasaporte, telefono,
+        SELECT "usuarioIDX", mail, nombre, "primerApellido", "segundoApellido", pasaporte, telefono,
         COUNT(*) OVER() as "totalUsuarios"
         FROM "datosDeUsuario"
         WHERE  
         (
 
         LOWER(COALESCE("usuarioIDX", '')) ILIKE ANY($1) OR
-        LOWER(COALESCE(email, '')) ILIKE ANY($1) OR
+        LOWER(COALESCE(mail, '')) ILIKE ANY($1) OR
         LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1) OR
         LOWER(COALESCE(telefono, '')) ILIKE ANY($1) OR
 
@@ -50,7 +50,7 @@ export const buscarUsuarios = async (data) => {
             WHEN (
 
               (LOWER(COALESCE("usuarioIDX", '')) ILIKE ANY($1))::int +
-              (LOWER(COALESCE(email, '')) ILIKE ANY($1))::int +
+              (LOWER(COALESCE(mail, '')) ILIKE ANY($1))::int +
               (LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1))::int +
               (LOWER(COALESCE(telefono, '')) ILIKE ANY($1))::int +
 
@@ -63,7 +63,7 @@ export const buscarUsuarios = async (data) => {
 
 
               (LOWER(COALESCE("usuarioIDX", '')) ILIKE ANY($1))::int +
-              (LOWER(COALESCE(email, '')) ILIKE ANY($1))::int +
+              (LOWER(COALESCE(mail, '')) ILIKE ANY($1))::int +
               (LOWER(COALESCE(pasaporte, '')) ILIKE ANY($1))::int +
               (LOWER(COALESCE(telefono, '')) ILIKE ANY($1))::int +
 

@@ -6,6 +6,7 @@ import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"
 import { procesador } from "../../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs"
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 
 export const reconstruirDesgloseDesdeHubs = async (entrada) => {
     const mutex = new Mutex()
@@ -46,6 +47,8 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             const error = "La reserva esta cancelada, no se puede alterar los descuentos"
             throw new Error(error)
         }
+
+        // Informar si algun apartametnoIDV no exsite por modificiaones futura para decir que, no se puede recontruir desde los hubs y que si se quiere hacer esto se debrai de crear una reserva nueva
         await campoDeTransaccion("iniciar")
 
         const fechaEntrada = reserva.fechaEntrada
@@ -55,6 +58,18 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             return detallesApartamento.apartamentoIDV
         })
 
+        try {
+            for (const apartamentoIDV of apartamentosArray) {
+                await obtenerConfiguracionPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "noExiste"
+                })
+            }
+        } catch (error) {
+            const m = "No se puede reconstruir este desglose financiero de esta reserva desde los hubs de precios, por que hay apartamentos que ya no existen como configuracionn de alojamiento en el hub de configuraciones de alojamiento."
+            throw new Error(m)
+        }
+  
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {

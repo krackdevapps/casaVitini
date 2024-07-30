@@ -54,7 +54,7 @@ export const realizarPago = async (entrada, salida) => {
         // const pago = {
         //     idempotencyKey,
         //     sourceId: token,
-        //     //buyer_email_address: "test@test.com",
+        //     //buyer_mail_address: "test@test.com",
         //     amountMoney: {
         //         amount: totalConImpuestosFormatoFinal, // $1.00 charge
         //         currency

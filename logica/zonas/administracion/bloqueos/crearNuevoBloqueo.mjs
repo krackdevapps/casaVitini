@@ -64,28 +64,28 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             throw new Error(error);
         }
         const filtroTextoSimple = /^[a-zA-Z0-9\s]+$/;
-        let fechaInicio_ISO = null;
-        let fechaFin_ISO = null;
+        let fechaInicio = null;
+        let fechaFin = null;
         if (tipoBloqueoIDV === "rangoTemporal") {
-            const fechaInicio = await validadoresCompartidos.fechas.validarFecha_ISO({
+            const fechaInicio_validada = await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: entrada.body.fechaInicio,
                 nombreCampo: "La fecha de inicio"
             })
-            const fechaFin = await validadoresCompartidos.fechas.validarFecha_ISO({
+            const fechaFin_validada = await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: entrada.body.fechaFin,
                 nombreCampo: "La fecha de fin"
             })
-            fechaInicio_ISO = fechaInicio;
-            fechaFin_ISO = fechaFin;
-            const fechaInicio_Objeto = DateTime.fromISO(fechaInicio_ISO);
-            const fechaFin_Objeto = DateTime.fromISO(fechaFin_ISO);
+            fechaInicio = fechaInicio_validada;
+            fechaFin = fechaFin_validada;
+            const fechaInicio_Objeto = DateTime.fromISO(fechaInicio);
+            const fechaFin_Objeto = DateTime.fromISO(fechaFin);
             if (fechaInicio_Objeto > fechaFin_Objeto) {
                 const error = "La fecha de inicio del bloqueo no puede ser inferior a la fecha de fin del bloqueo, si puede ser igual para determinar un solo día.";
                 throw new Error(error);
             }
             const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
             const tiempoZH = DateTime.now().setZone(zonaHoraria).startOf('day');
-            const fechaFin_TZ_Objeto = DateTime.fromISO(fechaFin_ISO, { zone: zonaHoraria });
+            const fechaFin_TZ_Objeto = DateTime.fromISO(fechaFin, { zone: zonaHoraria });
             if (tiempoZH > fechaFin_TZ_Objeto) {
                 const error = "La fecha de fin del bloqueo no puede ser inferior a la fecha actual porque estarías creando un bloqueo enteramente en el pasado. Puedes crear un bloqueo que empieza en el pasado, pero debe que acabar en el futuro o en hoy. Los bloqueo que acaban en el pasado son automaticamente borrados por ser bloqueos caducos.";
                 throw new Error(error);
@@ -103,8 +103,8 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
         const datosNuevoBloqueo = {
             apartamentoIDV,
             tipoBloqueoIDV,
-            fechaInicio_ISO,
-            fechaFin_ISO,
+            fechaInicio,
+            fechaFin,
             motivo,
             zonaIDV
         }

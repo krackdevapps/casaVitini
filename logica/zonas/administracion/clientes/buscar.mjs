@@ -19,10 +19,10 @@ export const buscar = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
         const tipoBusqueda = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoBusqueda,
+            string: entrada.body.tipoBusqueda || "",
             nombreCampo: "El tipoBusqueda",
             filtro: "strictoIDV",
-            sePermiteVacio: "no",
+            sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
         let nombreColumna = validadoresCompartidos.tipos.cadena({
@@ -53,24 +53,18 @@ export const buscar = async (entrada, salida) => {
             sePermiteCero: "no",
             sePermitenNegativos: "no"
         })
-  
-
 
         if (nombreColumna) {
             if (nombreColumna === "uid") {
                 nombreColumna = "clienteUID"
             }
-            
             await validadoresCompartidos.baseDeDatos.validarNombreColumna({
                 nombreColumna: nombreColumna,
                 tabla: "clientes"
             })
             sentidoColumna = sentidoColumna ? sentidoColumna : "ascendente"
             validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
- 
         }
-
-
 
         const numeroPorPagina = 10;
         const resultadosBusqueda = await obtenerResultadosBusqueda({
@@ -85,12 +79,14 @@ export const buscar = async (entrada, salida) => {
         if (tipoBusqueda === "rapido") {
             resultadosBusqueda.forEach((cliente) => {
                 delete cliente.Telefono;
-                delete cliente.email;
+                delete cliente.mail;
                 delete cliente.notas;
             });
         }
         resultadosBusqueda.forEach((cliente) => {
             delete cliente.totalClientes;
+            delete cliente.notas;
+
         });
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
         const corretorNumeroPagina = String(pagina).replace("0", "");
@@ -104,7 +100,6 @@ export const buscar = async (entrada, salida) => {
             if (nombreColumna === "clienteUID") {
                 nombreColumna = "uid"
             }
-
             respuesta.nombreColumna = nombreColumna;
             respuesta.sentidoColumna = sentidoColumna;
         }

@@ -2,8 +2,8 @@ import { conexion } from "../../componentes/db.mjs"
 
 export const obtenerComportamientosPorCreacionPorFechaCracion = async (metadatos) => {
     try {
-        const fechaInicio_ISO = metadatos.fechaInicio_ISO
-        const fechaFinal_ISO = metadatos.fechaFinal_ISO
+        const fechaInicio = metadatos.fechaInicio
+        const fechaFinal = metadatos.fechaFinal
         const fechaCreacionReserva = metadatos.fechaCreacionReserva
         const arrayApartamentos = metadatos.arrayApartamentos
         const tipoIDV = metadatos.tipoIDV
@@ -61,8 +61,8 @@ export const obtenerComportamientosPorCreacionPorFechaCracion = async (metadatos
                 "estadoIDV" = $6
           ;`
         const parametros = [
-            fechaInicio_ISO,
-            fechaFinal_ISO,
+            fechaInicio,
+            fechaFinal,
             fechaCreacionReserva,
             tipoIDV,
             arrayApartamentos,

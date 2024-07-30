@@ -15,6 +15,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
             nombreCampo: "El campo diasAntelacionReserva",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
+            impedirCero: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
@@ -24,6 +25,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
             nombreCampo: "El campo limiteFuturoReserva",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
+            impedirCero: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })

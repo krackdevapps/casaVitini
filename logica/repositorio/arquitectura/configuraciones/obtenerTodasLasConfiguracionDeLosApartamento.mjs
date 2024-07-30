@@ -6,7 +6,8 @@ export const obtenerTodasLasConfiguracionDeLosApartamento = async () => {
         SELECT 
         "configuracionUID",
         "apartamentoIDV",
-        "estadoConfiguracionIDV"
+        "estadoConfiguracionIDV",
+        "zonaIDV"
         FROM
         "configuracionApartamento";
         `;

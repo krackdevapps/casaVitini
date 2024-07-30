@@ -3,7 +3,7 @@ import { enviarMail } from "./enviarMail.mjs"
 import { generadorPDF } from "../pdf/generadorPDF.mjs"
 import dotenv from "dotenv";
 dotenv.config();
-export const enviarEmailReservaConfirmada = async (reservaUID) => {
+export const enviarMailReservaConfirmada = async (reservaUID) => {
     try {
         const reserva = await detallesReserva({
             reservaUID: reservaUID,

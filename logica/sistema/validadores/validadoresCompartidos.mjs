@@ -13,7 +13,7 @@ export const validadoresCompartidos = {
             try {
                 const operacion = data.operacion
                 const cliente = data.cliente
-                const clienteUID = cliente.clienteUID
+                const clienteUID = cliente?.clienteUID
 
 
                 const nombre = validadoresCompartidos.tipos.cadena({
@@ -102,6 +102,7 @@ export const validadoresCompartidos = {
                     telefono: telefono,
                     correoElectronico: correoElectronico,
                     notas: notas,
+                    mail: correoElectronico,
                     clienteUID
                 }
                 return datosValidados
@@ -128,13 +129,13 @@ export const validadoresCompartidos = {
                         usuario
                     })
                     if (otroUsuariosConMismoMail.length > 0) {
-                        const m = "Este email se esta usando en otra cuenta, por favor escoge otro o recupera tu cuenta."
+                        const m = "Este mail se esta usando en otra cuenta, por favor escoge otro o recupera tu cuenta."
                         throw new Error(m)
                     }
                 } else if (operacion === "crear") {
                     const otroUsuariosConMismoMail = await obtenerDatosPersonalesPorMail(mail)
                     if (otroUsuariosConMismoMail.length > 0) {
-                        const m = "Este email se esta usando en otra cuenta, por favor escoge otro o recupera tu cuenta."
+                        const m = "Este mail se esta usando en otra cuenta, por favor escoge otro o recupera tu cuenta."
                         throw new Error(m)
                     }
                 } else {

@@ -105,6 +105,7 @@ export const constructorInstantaneaNoches = async (data) => {
                         precioNetoApartamento: apartamentoEstructura.precioNetoApartamento,
                         indiceDias
                     })
+
                 }
             }
         }

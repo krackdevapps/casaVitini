@@ -16,6 +16,8 @@ import { DateTime } from "luxon";
 import { actualizaCamaPorCamaIDVPorReservaUID } from "../../../../repositorio/reservas/apartamentos/actualizaCamaPorCamaIDVPorReservaUID.mjs";
 import { actualizaApartamentoPorApartamentoIDVPorReservaUID } from "../../../../repositorio/reservas/apartamentos/actualizaApartamentoPorApartamentoIDVPorReservaUID.mjs";
 import { insertarCaracteristicaArrayEnConfiguracionDeAlojamiento } from "../../../../repositorio/arquitectura/entidades/apartamento/insertarCaracteristicaArrayEnConfiguracionDeAlojamiento.mjs";
+import { actualizarIDVenOfertas } from "../../../../sistema/arquitectura/entidades/actualizarIDVenOfertas.mjs";
+import { actualizarIDVenInstantaneasContenedorFinanciero } from "../../../../sistema/arquitectura/entidades/actualizarIDVenInstantaneasContenedorFinanciero.mjs";
 
 export const modificarEntidadAlojamiento = async (entrada) => {
     const mutex = new Mutex();
@@ -67,6 +69,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 sePermiteArrayVacio: "si"
             })
 
+
             await campoDeTransaccion("iniciar")
 
             await obtenerApartamentoComoEntidadPorApartamentoIDV({
@@ -98,7 +101,6 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                     apartamentoIDV: apartamentoIDV
                 })
             }
-
             const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
             const tiempoZH = DateTime.now().setZone(zonaHoraria);
             const fechaActual = tiempoZH.toISODate();
@@ -109,12 +111,30 @@ export const modificarEntidadAlojamiento = async (entrada) => {
             const reservasUIDArray = reservasActivas.map((reserva) => {
                 return reserva.reservaUID
             })
-            await actualizaApartamentoPorApartamentoIDVPorReservaUID({
-                reservasUIDArray,
-                antiguoApartamentoIDV: entidadIDV,
-                nuevoApartamentoIDV: apartamentoIDV,
-                apartamentoUI: apartamentoUI
-            })
+
+
+            //if (apartamentoIDV !== entidadIDV) {
+                await actualizaApartamentoPorApartamentoIDVPorReservaUID({
+                    reservasUIDArray,
+                    antiguoApartamentoIDV: entidadIDV,
+                    nuevoApartamentoIDV: apartamentoIDV,
+                    apartamentoUI: apartamentoUI
+                })
+
+                // Actualizar en ofertas
+                await actualizarIDVenOfertas({
+                    origenIDV: entidadIDV,
+                    destinoIDV: apartamentoIDV
+                })
+                // Actualizar todos los IDV de todas las instantaneas
+                await actualizarIDVenInstantaneasContenedorFinanciero({
+                    origenIDV: entidadIDV,
+                    destinoIDV: apartamentoIDV,
+                    reservasUIDArray
+                })
+            //}
+
+            // Se recontruye el contendor fiancniero desde isntantaneas
             await campoDeTransaccion("confirmar")
 
 

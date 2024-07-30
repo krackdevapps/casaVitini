@@ -53,7 +53,7 @@ export const resolverQR = async (entrada) => {
                 }
 
 
-                // Comporbar si el email esta verificado
+                // Comporbar si el mail esta verificado
                 const cuentaUsuario = await obtenerUsuario({
                     usuario,
                     errorSi: "noExiste"

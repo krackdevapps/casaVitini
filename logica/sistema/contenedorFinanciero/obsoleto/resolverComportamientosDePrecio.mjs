@@ -15,8 +15,8 @@ export const resolverComportamientosDePrecio = async (fechaEntrada, fechaSalida)
     const estructuraComportamientos = [];
     const soloComportamientosActivados = "activado";
     const comportamientoDePrecios = await obtenerComportamientosPorRangoPorTipoIDV({
-        fechaInicio_ISO: fechaEntrada,
-        fechaFinal_ISO: fechaSalida,
+        fechaInicio: fechaEntrada,
+        fechaFinal: fechaSalida,
         tipoIDV: soloComportamientosActivados,
     })
     for (const detallesComportamiento of comportamientoDePrecios) {

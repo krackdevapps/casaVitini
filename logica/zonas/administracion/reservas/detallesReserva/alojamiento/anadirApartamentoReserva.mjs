@@ -67,7 +67,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             const error = "El apartamento ya existe en la reserva";
             throw new Error(error);
         }
-        const rol = entrada.session.rol;
+        const rol = entrada.session.rolIDV;
 
         const resuelveApartamentosDisponibles = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,

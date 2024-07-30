@@ -48,13 +48,17 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
 
  
         const datosValidados = await validadoresCompartidos.clientes.validarCliente({
-            nombre: entrada.body.nombre,
-            primerApellido: entrada.body.primerApellido,
-            segundoApellido: entrada.body.segundoApellido,
-            pasaporte: entrada.body.pasaporte,
-            telefono: entrada.body.telefono,
-            correoElectronico: entrada.body.correoElectronico,
-            notas: entrada.body.notas,
+            cliente: {
+                nombre: entrada.body.nombre,
+                primerApellido: entrada.body.primerApellido,
+                segundoApellido: entrada.body.segundoApellido,
+                pasaporte: entrada.body.pasaporte,
+                telefono: entrada.body.telefono,
+                correoElectronico: entrada.body.correoElectronico,
+                notas: entrada.body.notas,
+            },
+            operacion: "crear"
+          
         });
 
         const nuevoCliente = await insertarCliente(datosValidados);

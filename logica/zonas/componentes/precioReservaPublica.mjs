@@ -30,7 +30,9 @@ export const precioReservaPublica = async (entrada) => {
 
                 }
             }
+            
         })
+
         const ok = {
             ok: desgloseFinanciero
         }

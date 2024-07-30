@@ -5,7 +5,7 @@ import { obtenerReservasDeTodosLosApartamentosPorMesPorAno } from "../../../repo
 
 export const eventosTodosLosApartamentos = async (fecha) => {
     try {
-        validadoresCompartidos.fechas.fechaMesAno(fecha)
+      await  validadoresCompartidos.fechas.fechaMesAno(fecha)
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
         const ano = fechaArray[1]

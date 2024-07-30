@@ -36,12 +36,15 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
             devuelveUnTipoNumber: "si"
         })
         const nuevoCliente = {
-            nombre: entrada.body.nombre,
-            primerApellido: entrada.body.primerApellido,
-            segundoApellido: entrada.body.segundoApellido,
-            pasaporte: entrada.body.pasaporte,
-            telefono: entrada.body.telefono,
-            correoElectronico: entrada.body.correoElectronico
+            cliente: {
+                nombre: entrada.body.nombre,
+                primerApellido: entrada.body.primerApellido,
+                segundoApellido: entrada.body.segundoApellido,
+                pasaporte: entrada.body.pasaporte,
+                telefono: entrada.body.telefono,
+                correoElectronico: entrada.body.correoElectronico
+            },
+            operacion: "crear"
         };
         const datosValidados = await validadoresCompartidos.clientes.validarCliente(nuevoCliente);
 

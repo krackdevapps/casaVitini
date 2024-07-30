@@ -3,7 +3,7 @@ export const eliminarOferta = async (ofertaUID) => {
     try {
         const consulta =`
         DELETE FROM ofertas
-        WHERE uid = $1;
+        WHERE "ofertaUID" = $1;
         `;
         const resuelve = await conexion.query(consulta, [ofertaUID])
         if (resuelve.rowCount === 0) {

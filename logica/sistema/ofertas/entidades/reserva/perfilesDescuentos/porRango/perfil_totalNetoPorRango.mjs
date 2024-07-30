@@ -18,17 +18,18 @@ export const perfil_totalNetoPorRango = async (data) => {
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
         const estructura = data.estructura
         const contenedorOfertas = data.contenedorOfertas
-        const totalDescuento = new Decimal(estructura.global.totales.totalDescuento)
 
         const diasArrayReserva = constructorObjetoEstructuraPrecioDia(fechaEntradaReserva_ISO, fechaSalidaReserva_ISO)
         for (const fechaDelDia of diasArrayReserva) {
+            const nocheDeLaReserva = estructura.entidades.reserva.desglosePorNoche[fechaDelDia]
+
             const fechaDentroDelRango = await validadoresCompartidos.fechas.fechaEnRango({
                 fechaAComprobrarDentroDelRango: fechaDelDia,
                 fechaInicioRango_ISO: fechaInicioRango_ISO,
                 fechaFinRango_ISO: fechaFinalRango_ISO
             })
 
-            if (!fechaDentroDelRango) {
+            if (!fechaDentroDelRango || !nocheDeLaReserva) {
                 continue
             }
 
@@ -55,7 +56,8 @@ export const perfil_totalNetoPorRango = async (data) => {
                 descuentoTotal,
                 total: totalNetoPorDia
             })
-            estructura.global.totales.totalDescuento = totalDescuento.plus(totalCalculado.descuentoAplicado)
+            const totalDescuento = estructura.global.totales.totalDescuento
+            estructura.global.totales.totalDescuento = new Decimal(totalDescuento).plus(totalCalculado.descuentoAplicado)
 
             const porDia = {
                 ofertaUID,

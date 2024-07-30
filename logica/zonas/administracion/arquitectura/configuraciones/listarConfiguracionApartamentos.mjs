@@ -15,6 +15,7 @@ export const listarConfiguracionApartamentos = async (entrada, salida) => {
         const apartamentosConConfiguracion = [];
         for (const detallesDelApartamento of configuracionesDeLosApartamento) {
             const apartamentoIDV = detallesDelApartamento.apartamentoIDV;
+            const zonaIDV = detallesDelApartamento.zonaIDV;
             const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
                 errorSi: "desactivado"
@@ -22,6 +23,7 @@ export const listarConfiguracionApartamentos = async (entrada, salida) => {
             const estadoConfiguracion = detallesDelApartamento.estadoConfiguracionIDV;
             const estructuraFinal = {
                 apartamentoIDV: apartamentoIDV,
+                zonaIDV,
                 apartamentoUI: apartamento.apartamentoUI,
                 estadoConfiguracion: estadoConfiguracion
             };

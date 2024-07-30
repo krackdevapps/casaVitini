@@ -1281,7 +1281,7 @@ main[zonaCSS="/"] {
     justify-content: space-between;
     padding: 6px;
     gap: 6px;
-    min-height: 600px;
+    min-height: 200px;
     background: rgba(255, 255, 255, 0.2);
     cursor: default;
     user-select: none;
@@ -2260,7 +2260,7 @@ main[zonaCSS="/"] {
     cursor: default;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    
+
     overflow: hidden;
 }
 
@@ -2400,6 +2400,7 @@ main[zonaCSS="/"] {
     [gridUID="gridMisReservas"] {
         display: none;
     }
+
     [zonaCSS="/micasa"] [contenedor="resultados"] {
         gap: 6px;
     }
@@ -2458,7 +2459,7 @@ main[zonaCSS="/"] {
 }
 
 @media (max-width: 620px) {
-    [nombreColumna="email"] {
+    [nombreColumna="mail"] {
         display: none;
     }
 
@@ -2963,7 +2964,7 @@ main[zonaCSS="/"] {
     cursor: default;
     background: 6px;
     border-radius: 10px;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 [ui="reservaUI"] .bloqueGlobalInerte {
@@ -6001,7 +6002,7 @@ main[zonaCSS="/"] {
 }
 
 .espacioComportamiento {
-     margin-top: 0px; 
+    margin-top: 0px;
 }
 
 .reservasListaSinResultados {
@@ -6826,6 +6827,22 @@ main[zonaCSS="/"] {
 }
 
 
+[contenedor="apartamentosSeleccianados"] .crearOfertaConentenedor {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaConentenedor {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -7495,7 +7512,7 @@ main[zonaCSS="/"] {
 }
 
 @media (min-width: 720px) {
-/* 
+    /* 
     [zonaCSS="administracion/comportamiento_de_precios"] .contenedorDiasSelecionados {
         grid-template-areas: 
         ". . . . ."
@@ -7503,6 +7520,7 @@ main[zonaCSS="/"] {
         
     } */
 }
+
 @media (max-width: 720px) {
     [zonaCSS="administracion/ofertas"] .ofertaUIContenedorGlobalOferta {
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -7658,6 +7676,21 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-backdrop-filter: blur(50px);
 }
 
+
+[contenedor="apartamentosSeleccianados"] .crearOFertaBotonAnadirApartamento {
+    margin: 0px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOFertaBotonAnadirApartamento {
     margin: 0px;
     padding: 10px;
@@ -7733,6 +7766,25 @@ grid-template-columns: 0.5fr 1.5fr;
     background: black;
 }
 
+[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoUI {
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoUI:hover {
+    color: white;
+    background: black;
+}
+
+
+
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaApartamentoUI {
     background: rgba(0, 0, 0, 0.3);
     display: flex;
@@ -7752,6 +7804,13 @@ grid-template-columns: 0.5fr 1.5fr;
     color: white;
     background: black;
 }
+
+[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoTItulo {
+    font-weight: bold;
+    margin: 0px;
+    padding: 2px;
+}
+
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaApartamentoTItulo {
     font-weight: bold;
@@ -7776,6 +7835,23 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaZonaAnadirApartamento {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    /* background: rgba(245, 245, 245, 0.3); */
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    padding: 6px;
+    gap: 6px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+
+[contenedor="apartamentosSeleccianados"] .crearOfertaZonaAnadirApartamento {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     display: flex;
@@ -7824,6 +7900,13 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     gap: 6px;
 }
+
+[contenedor="apartamentosSeleccianados"] .crearApartamentoInfoSinApartamento {
+    padding: 6px;
+    margin: 0px;
+    text-align: center;
+}
+
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearApartamentoInfoSinApartamento {
     padding: 6px;
@@ -10683,7 +10766,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    
+
 }
 
 [ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_botonV1 {
@@ -13825,7 +13908,9 @@ grid-template-columns: 0.5fr 1.5fr;
 [zonaCSS="/conozcanos"] .contenedorParalax {
     display: flex;
     flex-direction: column;
-    width: 98vw;
+    width: 94vw;
+    /* margin-left: 10px;
+    margin-right: 10px; */
 }
 
 [zonaCSS="/conozcanos"] .contenedorParalax .parallax {
@@ -14612,7 +14697,7 @@ grid-template-columns: 0.5fr 1.5fr;
 [contenedor="financiero"] .reserva_resumen_desglose_porNoche {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
     padding: 0px;
@@ -14620,6 +14705,19 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
     align-items: start;
 }
+
+@media (max-width: 1280px) {
+    [contenedor="financiero"] .reserva_resumen_desglose_porNoche {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 820px) {
+    [contenedor="financiero"] .reserva_resumen_desglose_porNoche {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
 
 [contenedor="financiero"] .reserva_resumen_desglose_pago_titulo {
     font-weight: bold;

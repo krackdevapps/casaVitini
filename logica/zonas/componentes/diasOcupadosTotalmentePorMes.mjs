@@ -42,7 +42,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         const ultimoDiaDelMes = contructorMes.endOf("month");
         // Extrae el número del último día del mes
         const numeroUltimoDia = ultimoDiaDelMes.day;
-        const rol = entrada.session.rol;
+        const rol = entrada.session.rolIDV;
         const rolAdministrador = "administrador";
         const rolEmpleado = "empleado";
         if (anoActual > ano) {

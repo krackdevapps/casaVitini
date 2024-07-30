@@ -27,6 +27,7 @@ export const obtenerSituacion = async (entrada, salida) => {
         }
         for (const configiguracionApartamento of configuracionesDeAlojamiento) {
             const apartamentoIDV = configiguracionApartamento.apartamentoIDV;
+            const zonaIDV = configiguracionApartamento.zonaIDV;
             const estadoApartamento = configiguracionApartamento.estadoConfiguracionIDV;
             const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
@@ -35,6 +36,7 @@ export const obtenerSituacion = async (entrada, salida) => {
             apartamentosObjeto[apartamentoIDV] = {
                 apartamentoUI: apartamento.apartamentoUI,
                 estadoApartamento: estadoApartamento,
+                zonaIDV,
                 reservas: [],
                 estadoPernoctacion: "libre"
             };
@@ -142,11 +144,12 @@ export const obtenerSituacion = async (entrada, salida) => {
         for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnb) {
             const apartamentoIDV_destino = calendariosSincronizadosAirbnb.apartamentoIDV;
             const eventosDelApartamento = calendariosSincronizadosAirbnb.eventos;
-
             ok.ok[apartamentoIDV_destino].calendariosSincronizados = {};
             ok.ok[apartamentoIDV_destino].calendariosSincronizados.airbnb = {};
             ok.ok[apartamentoIDV_destino].calendariosSincronizados.airbnb.eventos = eventosDelApartamento;
-            ok.ok[apartamentoIDV_destino].estadoPernoctacion = "ocupado";
+            if (eventosDelApartamento.length > 0) {
+                ok.ok[apartamentoIDV_destino].estadoPernoctacion = "ocupado";
+            }
         }
         return ok
     } catch (errorCapturado) {

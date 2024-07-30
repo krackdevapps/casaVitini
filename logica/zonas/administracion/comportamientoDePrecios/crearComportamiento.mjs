@@ -19,6 +19,7 @@ export const crearComportamiento = async (entrada, salida) => {
             contenedor: entrada.body.contenedor,
             transaccion: "crear"
         }
+
         await validarComportamiento(comportamiento)
 
         await campoDeTransaccion("iniciar")
@@ -26,7 +27,7 @@ export const crearComportamiento = async (entrada, salida) => {
         const dataEvitarDuplicados = {
             transaccion: "crear",
             comportamiento
-            
+
         };
 
         await evitarDuplicados(dataEvitarDuplicados);

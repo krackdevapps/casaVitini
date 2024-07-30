@@ -4,7 +4,7 @@ import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqu
 import { validarObjetoReserva } from "../../../sistema/reservas/validarObjetoReserva.mjs";
 import { insertarReserva } from "../../../sistema/reservas/insertarReserva.mjs";
 import { detallesReserva } from "../../../sistema/reservas/detallesReserva.mjs";
-import { enviarEmailReservaConfirmada } from "../../../sistema/Mail/enviarEmailReservaConfirmada.mjs";
+import { enviarMailReservaConfirmada } from "../../../sistema/mail/enviarMailReservaConfirmada.mjs";
 import { actualizarEstadoPago } from "../../../sistema/contenedorFinanciero/entidades/reserva/actualizarEstadoPago.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -45,11 +45,8 @@ export const preConfirmarReserva = async (entrada) => {
                 "desgloseFinanciero"
             ]
         })
-        //const enlacePDF = await crearEnlacePDF(reservaUID);
-
-        //resolverDetallesReserva.enlacePDF = enlacePDF;
         const pdf = await generadorPDF(resolverDetallesReserva);
-        enviarEmailReservaConfirmada(reservaUID);
+        enviarMailReservaConfirmada(reservaUID);
         const ok = {
             ok: "Reserva confirmada",
             detalles: resolverDetallesReserva,

@@ -1,8 +1,6 @@
 import Decimal from "decimal.js"
 import { calcularTotal } from "../calcularTotal.mjs"
-import { controlCantidadOfertas } from "../controlCantidadOfertas.mjs"
 import { controlInstanciaDecimal } from "../controlInstanciaDecimal.mjs"
-import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 
 export const perfil_individualPorApartamento = async (data) => {
     try {
@@ -13,19 +11,16 @@ export const perfil_individualPorApartamento = async (data) => {
         const estructura = data.estructura
         const nombreOferta = data.nombreOferta
         const contenedorPorApartamento = data.contenedorPorApartamento
-        const contenedorOfertas = data.contenedorOfertas
-        const totalDescuento = new Decimal(estructura.global.totales.totalDescuento)
-
         const apartamentos = descuentos.apartamentos
 
         for (const descuentoDelApartamento of apartamentos) {
             const apartamentoIDV = descuentoDelApartamento.apartamentoIDV
             const descuentoTotal = descuentoDelApartamento.descuentoTotal
             const tipoAplicacion = descuentoDelApartamento.tipoAplicacion
-            descuentoDelApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
-                apartamentoIDV,
-                errorSi: "noExiste"
-            })).apartamentoUI
+            // descuentoDelApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            //     apartamentoIDV,
+            //     errorSi: "noExiste"
+            // })).apartamentoUI
 
             const totalPorApartametno = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]?.totalNeto
             if (!totalPorApartametno) {
@@ -48,9 +43,8 @@ export const perfil_individualPorApartamento = async (data) => {
                 descuentoTotal,
                 total: totalPorApartametno
             })
-            const totalConDescuentos = totalCalculado.totalConDescuento
-            const resultadoTotalCondescuentos = totalDescuento.plus(totalConDescuentos)
-            estructura.global.totales.totalDescuento = resultadoTotalCondescuentos.isPositive() ? resultadoTotalCondescuentos.toFixed(2) : "0.00"
+            const totalDescuento = estructura.global.totales.totalDescuento
+            estructura.global.totales.totalDescuento = new Decimal(totalDescuento).plus(totalCalculado.descuentoAplicado)
 
             const porApartamento = {
                 apartamentoIDV,

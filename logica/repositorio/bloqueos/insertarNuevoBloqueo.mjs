@@ -5,8 +5,8 @@ export const insertarNuevoBloqueo = async (data) => {
 
         const apartamentoIDV = data.apartamentoIDV
         const tipoBloqueoIDV = data.tipoBloqueoIDV
-        const fechaInicio_ISO = data.fechaInicio_ISO || null
-        const fechaFin_ISO = data.fechaFin_ISO || null
+        const fechaInicio = data.fechaInicio || null
+        const fechaFin = data.fechaFin || null
         const motivo = data.motivo
         const zonaIDV = data.zonaIDV
 
@@ -27,8 +27,8 @@ export const insertarNuevoBloqueo = async (data) => {
         const parametros = [
             apartamentoIDV,
             tipoBloqueoIDV,
-            fechaInicio_ISO,
-            fechaFin_ISO,
+            fechaInicio,
+            fechaFin,
             motivo,
             zonaIDV
         ];

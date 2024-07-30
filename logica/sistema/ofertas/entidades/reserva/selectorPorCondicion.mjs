@@ -25,9 +25,9 @@ export const selectorPorCondicion = async (data) => {
 
                 const fechaInicioRango_objeto = DateTime.fromISO(fechaInicioRango_ISO)
                 const fechaFinalRango_objeto = DateTime.fromISO(fechaFinalRango_ISO)
-                const fechaActual_objeto = DateTime.fromISO(fechaActual_reserva)
+                const fechaEntrada_reserva_objeto = DateTime.fromISO(fechaEntrada_reserva)
 
-                const fechaDentroDelRango = fechaActual_objeto >= fechaInicioRango_objeto && fechaActual_objeto <= fechaFinalRango_objeto;
+                const fechaDentroDelRango = fechaEntrada_reserva_objeto >= fechaInicioRango_objeto && fechaEntrada_reserva_objeto <= fechaFinalRango_objeto;
                 if (!fechaDentroDelRango) {
                     resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
                 } else {
@@ -66,6 +66,12 @@ export const selectorPorCondicion = async (data) => {
                     } else {
                         resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
                     }
+                } else if (tipoConteo === "hastaUnNumeroExacto") {
+                    if (Number(numeroApartamentosOferta) >= Number(numeroApartamentosReserva)) {
+                        resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
+                    } else {
+                        resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
+                    }
                 }
             } else if (tipoCondicion === "porDiasDeAntelacion") {
                 const fechaActual_objeto = DateTime.fromISO(fechaActual_reserva)
@@ -86,11 +92,17 @@ export const selectorPorCondicion = async (data) => {
                     } else {
                         resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
                     }
+                } else if (tipoConteo === "hastaUnNumeroExacto") {
+                    if (numeroDeDias >= diasAntelacion) {
+                        resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
+                    } else {
+                        resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
+                    }
                 }
 
             } else if (tipoCondicion === "porRangoDeFechas") {
-                const fechaInicio_oferta = oferta.fechaInicio
-                const fechaFinal_oferta = oferta.fechaFinal
+                const fechaInicio_oferta = condicion.fechaInicioRango_ISO
+                const fechaFinal_oferta = condicion.fechaFinalRango_ISO
 
                 const rangoFechasReservaEnRangoFechaOferta = await selectorRangoUniversal({
                     fechaInicio_rango_ISO: fechaInicio_oferta,
@@ -99,6 +111,7 @@ export const selectorPorCondicion = async (data) => {
                     fechaFin_elemento_ISO: fechaSalida_reserva,
                     tipoLimite: "incluido"
                 })
+
                 if (rangoFechasReservaEnRangoFechaOferta) {
                     resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
                 } else {
@@ -109,18 +122,24 @@ export const selectorPorCondicion = async (data) => {
                 const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada_reserva)
                 const fechaSalida_objeto = DateTime.fromISO(fechaSalida_reserva)
                 const tipoConteo = condicion.tipoConteo
-                const numeroDias = Number(condicion.numeroDias)
-                const diasAntelacion = Math.floor(fechaSalida_objeto.diff(fechaEntrada_objeto, 'days').days);
+                const numeroDias = Number(condicion.numeroDeDias)
+                const nochesDeLaReserva = Math.floor(fechaSalida_objeto.diff(fechaEntrada_objeto, 'days').days);
 
                 if (tipoConteo === "aPartirDe") {
-                    if (numeroDias <= diasAntelacion) {
+                    if (numeroDias <= nochesDeLaReserva) {
                         resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
                     } else {
                         resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
                     }
 
                 } else if (tipoConteo === "numeroExacto") {
-                    if (numeroDias === diasAntelacion) {
+                    if (numeroDias === nochesDeLaReserva) {
+                        resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
+                    } else {
+                        resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
+                    }
+                } else if (tipoConteo === "hastaUnNumeroExacto") {
+                    if (numeroDias >= nochesDeLaReserva) {
                         resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
                     } else {
                         resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
@@ -129,33 +148,76 @@ export const selectorPorCondicion = async (data) => {
 
             } else if (tipoCondicion === "porApartamentosEspecificos") {
                 const apartamentosDeLaReserva = apartamentosArray
-                const apartamentosOferta = condicion.apartamentos
+                const contenedorApartamentos = condicion.apartamentos
                 const tipoDeEspecificidad = condicion.tipoDeEspecificidad
-                // Revisar esta condicion
+                const apartamentosOferta = []
+                contenedorApartamentos.forEach(contenedor => {
+                    const apartamentoIDV = contenedor.apartamentoIDV
+                    apartamentosOferta.push(apartamentoIDV)
+                })
                 if (tipoDeEspecificidad === "exactamente") {
-                    const losArraysSonExactos = validadoresCompartidos.filtros.comparadorArraysExactos({
-                        arrayPrimero: apartamentosDeLaReserva,
-                        arraySegundo: apartamentosOferta
-                    })
-                    if (losArraysSonExactos) {
+
+                    const comparadorCantidad = apartamentosDeLaReserva.length === apartamentosOferta.length
+                    const selector = apartamentosDeLaReserva.every(apartamentoIDV => apartamentosOferta.includes(apartamentoIDV))
+
+                    if (selector && comparadorCantidad) {
                         resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
                     } else {
                         resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
                     }
                 } else if (tipoDeEspecificidad === "alguno") {
-                    if (apartamentosOferta.includes(apartamentosDeLaReserva)) {
+                    const selector = apartamentosOferta.some(apartamentoIDV => apartamentosDeLaReserva.includes(apartamentoIDV))
+                    if (selector) {
                         resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
                     } else {
                         resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
                     }
                 } else if (tipoDeEspecificidad === "exactamenteEntreOtros") {
-                    const control = oferta.every(apartamento => reserva.includes(apartamento));
-                    if (control) {
+                    const comparadorCantidad = apartamentosDeLaReserva.length >= apartamentosOferta.length
+                    const selector = apartamentosOferta.every(apartamentoIDV => apartamentosDeLaReserva.includes(apartamentoIDV))
+                    if (selector && comparadorCantidad) {
+                        resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
+                    } else {
+                        resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
+                    }
+                } else if (tipoDeEspecificidad === "noDebeContenedorExactamente") {
+
+                   // const comparadorCantidad = apartamentosDeLaReserva.length === apartamentosOferta.length
+                    const selector = apartamentosDeLaReserva.every(apartamentoIDV => !apartamentosOferta.includes(apartamentoIDV))
+
+                    if (selector /*&& comparadorCantidad*/) {
+                        resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
+                    } else {
+                        resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
+                    }
+                } if (tipoDeEspecificidad === "noDebeContenedorAlguno") {
+                    const selector = apartamentosOferta.some(apartamentoIDV => !apartamentosDeLaReserva.includes(apartamentoIDV))
+                    if (selector) {
                         resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
                     } else {
                         resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
                     }
                 }
+                // else if (tipoDeEspecificidad === "noDebeContenedorExactamenteEntreOtros") {
+                //     const comparadorCantidad = apartamentosDeLaReserva.length >= apartamentosOferta.length
+                //     const selector = apartamentosOferta.every(apartamentoIDV => !apartamentosDeLaReserva.includes(apartamentoIDV))
+                //     if (selector && comparadorCantidad) {
+                //         resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
+                //     } else {
+                //         resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
+                //     }
+                // }
+
+
+
+
+
+
+
+
+
+
+
             } else if (tipoCondicion === "porCodigoDescuento") {
                 const codigoDescuentoBase64 = condicion.codigoDescuento
                 if (codigoDescuentosArrayBASE64.includes(codigoDescuentoBase64)) {

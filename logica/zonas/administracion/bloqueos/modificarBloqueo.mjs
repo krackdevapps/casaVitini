@@ -84,9 +84,10 @@ export const modificarBloqueo = async (entrada, salida) => {
             zonaIDV,
             bloqueoUID
         }
-        await actualizarBloqueoPorBloqueoUID(dataActualizarBloqueoPorBloqueoUID)
+        const bloqueActualizado = await actualizarBloqueoPorBloqueoUID(dataActualizarBloqueoPorBloqueoUID)
         const ok = {
-            ok: "Se ha actualizado el bloqueo correctamente"
+            ok: "Se ha actualizado el bloqueo correctamente",
+            bloqueo: bloqueActualizado
         };
         return ok
     } catch (errorCapturado) {

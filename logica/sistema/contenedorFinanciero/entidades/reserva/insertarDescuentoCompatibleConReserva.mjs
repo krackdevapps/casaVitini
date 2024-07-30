@@ -63,7 +63,10 @@ export const insertarDescuentoCompatibleConReserva = async (data) => {
             fechaSalida_reserva: fechaSalida,
         })
         ofertaFormateada.autorizacion = "aceptada"
-        if (ofertaFormateada.oferta.ofertaUID !== ofertaUID) {
+
+
+
+        if (ofertaFormateada.oferta.ofertaUID !== String(ofertaUID)) {
             const error = "La oferta seleccionada no es compatible condicionalmente con esta reserva. Si desea igualmente aplicar los descuentos de esta oferta hazlo mediante el boton de insertar descuentos"
             throw new Error(error)
         }

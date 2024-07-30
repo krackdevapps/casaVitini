@@ -40,7 +40,7 @@ export const detallesDelBloqueo = async (entrada) => {
             const tipoBloqueoIDV = detallesDelBloqueo.tipoBloqueoIDV;
             const fechaInicio = detallesDelBloqueo.fechaInicio;
             const fechaFin = detallesDelBloqueo.fechaFin;
-            const motivo = detallesDelBloqueo.motivo;
+            const motivo = detallesDelBloqueo.motivo || "";
             const zonaIDV = detallesDelBloqueo.zonaIDV;
             const estructuraBloqueo = {
                 bloqueoUID,

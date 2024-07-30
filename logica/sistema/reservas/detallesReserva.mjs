@@ -7,6 +7,7 @@ import { obtenerDesgloseFinancieroPorReservaUID } from "../../repositorio/reserv
 import { porcentajeTranscurrido } from "./utilidades/porcentajeTranscurrido.mjs"
 import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
 import { detallesPagos } from "./detallesReserva/detallesPagos.mjs"
+import { insertarApartamentoUIEnObjetoOfertas } from "../ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs"
 export const detallesReserva = async (data) => {
     try {
         const capas = data.capas

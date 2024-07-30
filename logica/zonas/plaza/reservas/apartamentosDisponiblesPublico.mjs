@@ -42,7 +42,6 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
             throw new Error(error);
         }
         await eliminarBloqueoCaducado();
-        const rol = entrada.session.rol;
         const fechaActual_ISO = tiempoZH.toISODate();
 
         //const resuelveADP = await apartamentosDisponiblesPublico(fecha)
@@ -64,27 +63,30 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
         }
         if (apartamentosDisponiblesEncontrados.length > 0) {
             const configuracionesApartamentosVerificadas = await configuracionApartamento(apartamentosDisponiblesEncontrados);
-            const desgloseFinanciero = await procesador({
-                entidades: {
-                    reserva: {
-                        tipoOperacion: "crearDesglose",
-                        fechaEntrada: fechaEntrada,
-                        fechaSalida: fechaSalida,
-                        fechaCreacion: fechaActual_ISO,
-                        apartamentosArray: apartamentosDisponiblesEncontrados,
-                        capaOfertas: "si",
-                        zonasArray: ["global", "publica"],
-                        descuentosParaRechazar: [],
-                        capaDescuentosPersonalizados: "si",
-                        descuentosArray: ["50", "50"],
-                        capaImpuestos: "si",
-                    }
-                },
-            })
             estructura.ok = {
-                desgloseFinanciero,
+                contenedorFinanciero: {},
                 apartamentosDisponibles: configuracionesApartamentosVerificadas.configuracionApartamento
             }
+            for (const apartamentoIDV of apartamentosDisponiblesEncontrados) {
+                     const desgloseFinanciero = await procesador({
+                    entidades: {
+                        reserva: {
+                            tipoOperacion: "crearDesglose",
+                            fechaEntrada: fechaEntrada,
+                            fechaSalida: fechaSalida,
+                            fechaCreacion: fechaActual_ISO,
+                            apartamentosArray: [apartamentoIDV],
+                            capaOfertas: "si",
+                            zonasArray: ["global", "publica"],
+                            descuentosParaRechazar: [],
+                            capaDescuentosPersonalizados: "no",
+                            descuentosArray: [],
+                            capaImpuestos: "si",
+                        }
+                    },
+                })
+                estructura.ok.contenedorFinanciero[apartamentoIDV] = desgloseFinanciero
+            }    
         }
 
         return estructura

@@ -3,7 +3,6 @@ import { aplicarComportamiento } from "./aplicarComportamiento.mjs"
 
 export const aplicarCalculoDelComportamientoPorRango = async (data) => {
     try {
-
         const comportamientosPorRangoFormateados = data.comportamientosPorRangoFormateados
         const apartamentoIDV = data.apartamentoIDV
         const fechaDiaConNoche = data.fechaDiaConNoche
@@ -33,8 +32,6 @@ export const aplicarCalculoDelComportamientoPorRango = async (data) => {
                         cantidad: cantidad
                     })
                     comportamientoAplicado = precioNetoFinal
-
-
                 }
             }
         }

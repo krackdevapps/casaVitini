@@ -8,7 +8,7 @@ export const bloquearApartamentos = async (metadatos) => {
         const reservaUID = metadatos.reservaUID
         const apartamentoUID = metadatos.apartamentoUID
 
-        const tipoBloqueo = metadatos.tipoBloqueo
+        const tipoBloqueoIDV = metadatos.tipoBloqueoIDV
         const fechaEntrada = metadatos.fechaEntrada
         const fechaSalida = metadatos.fechaSalida
         const zonaIDV = metadatos.zonaIDV
@@ -23,8 +23,8 @@ export const bloquearApartamentos = async (metadatos) => {
             nombreCampo: "La fecha de salida"
         })
 
-        if (tipoBloqueo !== "rangoTemporal" && tipoBloqueo !== "permanente" && tipoBloqueo !== "sinBloqueo") {
-            const error = "El campo 'tipoBloqueo' solo puede ser rangoTemporal, permanente, sinBloqueo"
+        if (tipoBloqueoIDV !== "rangoTemporal" && tipoBloqueoIDV !== "permanente" && tipoBloqueoIDV !== "sinBloqueo") {
+            const error = "El campo 'tipoBloqueoIDV' solo puede ser rangoTemporal, permanente, sinBloqueo"
             throw new Error(error)
         }
         if (zonaIDV !== "publico" && zonaIDV !== "privado" && zonaIDV !== "global") {
@@ -60,32 +60,32 @@ export const bloquearApartamentos = async (metadatos) => {
             }
         }
 
-        if (tipoBloqueo === "rangoTemporal") {
+        if (tipoBloqueoIDV === "rangoTemporal") {
             await insertarNuevoBloqueo({
                 apartamentoIDV: apartamentoIDV,
-                tipoBloqueo: tipoBloqueo,
+                tipoBloqueoIDV: tipoBloqueoIDV,
                 fechaInicio: fechaEntrada,
                 fechaFin: fechaSalida,
                 motivo: motivoDelBloqueo(origen),
                 zonaIDV: zonaIDV
             })
         }
-        if (tipoBloqueo === "permanente") {
+        if (tipoBloqueoIDV === "permanente") {
             await insertarNuevoBloqueo({
                 apartamentoIDV: apartamentoIDV,
-                tipoBloqueo: tipoBloqueo,
+                tipoBloqueoIDV: tipoBloqueoIDV,
                 motivo: motivoDelBloqueo(origen),
                 zonaIDV: zonaIDV
             })
         }
         const ok = {}
-        if (tipoBloqueo === "rangoTemporal") {
+        if (tipoBloqueoIDV === "rangoTemporal") {
             ok.ok = "Se ha eliminado el apartamento y aplicado el bloqueo temporal"
         }
-        if (tipoBloqueo === "permanente") {
+        if (tipoBloqueoIDV === "permanente") {
             ok.ok = "Se ha eliminado el apartamento y aplicado el bloqueo permanente"
         }
-        if (tipoBloqueo === "sinBloqueo") {
+        if (tipoBloqueoIDV === "sinBloqueo") {
             ok.ok = "Se ha eliminado el apartamento de la reserva y se ha liberado"
         }
         return ok

@@ -32,7 +32,7 @@ export const obtenerPDF = async (entrada, salida) => {
             const error = "Se necesita que definas tu dirección de correo elecroníco en Mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo eletroníco que usastes para confirmar la reserva. Es decir debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de correo electronico y confirmarlo con el correo de confirmacion que te enviaremos. Una vez hecho eso podras ver tus reservas";
             throw new Error(error);
         }
-        // Comporbar si el email esta verificado
+        // Comporbar si el mail esta verificado
         const cuentaUsuario = await obtenerUsuario({
             usuario,
             errorSi: "noExiste"
@@ -69,7 +69,7 @@ export const obtenerPDF = async (entrada, salida) => {
                 "titular",
                 "alojamiento",
                 "pernoctantes",
-                "desgloseFinanciero", 
+                "desgloseFinanciero",
             ]
         });
 

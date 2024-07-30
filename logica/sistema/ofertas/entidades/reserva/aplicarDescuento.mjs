@@ -3,6 +3,7 @@ import { perfil_totalNeto } from "./perfilesDescuentos/perfil_totalNeto.mjs"
 import { perfil_individualPorApartamento } from "./perfilesDescuentos/perfil_individualPorApartamento.mjs"
 import { perfil_porDiasDelRango } from "./perfilesDescuentos/porRango/perfil_porDiasDelRango.mjs"
 import { perfil_totalNetoPorRango } from "./perfilesDescuentos/porRango/perfil_totalNetoPorRango.mjs"
+import { perfil_mismoDescuentoParaCadaApartamento } from "./perfilesDescuentos/perfil_mismoDescuentoParaCadaApartamento.mjs"
 
 export const aplicarDescuento = async (data) => {
     try {
@@ -22,6 +23,7 @@ export const aplicarDescuento = async (data) => {
         const contenedorPorTotal = estructura.contenedorOfertas.entidades.reserva.desgloses.porTotal
         const contenedorPorApartamento = estructura.contenedorOfertas.entidades.reserva.desgloses.porApartamento
         const contenedorPorDia = estructura.contenedorOfertas.entidades.reserva.desgloses.porDia
+        console.log("contenedorPorApartamento 11", contenedorPorApartamento)
 
         if (!contenedorTotalesBase.hasOwnProperty("totalDescuento")) {
             contenedorTotalesBase.totalDescuento = "0.00"
@@ -48,6 +50,18 @@ export const aplicarDescuento = async (data) => {
                     totalNeto,
                     nombreOferta,
                     contenedorPorTotal,
+                    estructura
+                })
+            } else if (tipoDescuento === "mismoDescuentoParaCadaApartamento") {
+                perfil_mismoDescuentoParaCadaApartamento({
+                    ofertaUID,
+                    oferta,
+                    descuentos,
+                    contenedorOfertas,
+                    totalNeto,
+                    nombreOferta,
+                    contenedorPorTotal,
+                    contenedorPorApartamento,
                     estructura
                 })
             } else if (tipoDescuento === "individualPorApartamento") {
@@ -102,7 +116,9 @@ export const aplicarDescuento = async (data) => {
                 throw new Error(error)
             }
         }
+
         const totalDescuento = estructura.global.totales.totalDescuento
+        estructura.global.totales.totalDescuento = new Decimal(totalDescuento).toFixed(2)
 
         const totalFinalConDescuentos = totalNeto.minus(totalDescuento)
         if (totalFinalConDescuentos.isPositive()) {

@@ -51,7 +51,8 @@ export const eventosTodosLosBloqueos = async (fecha) => {
                 apartamentoIDV: apartamentoIDV,
                 errorSi: "noExiste"
             })
-            detallesReserva.apartamentoUI = apartamento.apartamentoUI
+            const apartamentoUI = apartamento.apartamentoUI
+            detallesReserva.apartamentoUI = apartamentoUI
             detallesReserva.fechaEntrada = fechaEntrada
             detallesReserva.fechaSalida = fechaSalida
             // El calenadrio espera que en detalles del evento, este el fechaEntrad y fechaSalida

@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { enviarMail } from "../../../sistema/Mail/enviarMail.mjs";
+import { enviarMail } from "../../../sistema/mail/enviarMail.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorCodigoUPID.mjs";
 import { obtenerDatosPersonalesPorMail } from "../../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs";
@@ -11,9 +11,9 @@ import { eliminarEnlacesDeRecuperacionPorUsuario } from "../../../repositorio/en
 
 export const enviarCorreo = async (entrada) => {
     try {
-        const email = validadoresCompartidos.tipos.correoElectronico({
-            mail: entrada.body.email,
-            nombreCampo: "El campo del email de recuperación",
+        const mail = validadoresCompartidos.tipos.correoElectronico({
+            mail: entrada.body.mail,
+            nombreCampo: "El campo del mail de recuperación",
             sePermiteVacio: "no"
         })
 
@@ -49,14 +49,14 @@ export const enviarCorreo = async (entrada) => {
         const hostActual = process.env.HOST_CASAVITINI;
         await campoDeTransaccion("iniciar")
 
-        const datosDelUsuario = await obtenerDatosPersonalesPorMail(email)
+        const datosDelUsuario = await obtenerDatosPersonalesPorMail(mail)
         if (!datosDelUsuario?.mail) {
             const error = "La dirección de correo electrònico no consta en nínguna cuenta de usuario. Registrate y crea tu VitiniID si lo neceistas.";
             throw new Error(error);
         }
 
         const usuarioIDX = datosDelUsuario.usuario;
-        // Comporbar si es una recuperacion de contraseña o una verificacion de email
+        // Comporbar si es una recuperacion de contraseña o una verificacion de mail
         const cuentaDeUsuario = await obtenerUsuario({
             usuario: usuarioIDX,
             errorSi: "noExiste"
@@ -77,7 +77,7 @@ export const enviarCorreo = async (entrada) => {
             })
             // Contruimos el mensaje
             const origen = process.env.CORREO_DIRRECION_DE_ORIGEN;
-            const destino = email;
+            const destino = mail;
             const asunto = "Recuperar tu VitiniID";
             const mensaje = `<html>Aquí tíenes el enlace para recuperar tu cuenta. Este enlace tiene una duración de 30 minutos. <a href="https://${hostActual}/micasa/recuperar_cuenta/${codigoGenerado}">Recuperar mi cuenta</a>
                     <br>
@@ -106,7 +106,7 @@ export const enviarCorreo = async (entrada) => {
             })
             // Contruimos el mensaje
             const origen = process.env.CORREO_DIRRECION_DE_ORIGEN;
-            const destino = email;
+            const destino = mail;
             const asunto = "Verifica tu mail";
             const mensaje = `<html>Aquí tíenes el enlace de verificación. Los enlaces de verificación tienen una validez de una hora desde que se generan.
                     <br>

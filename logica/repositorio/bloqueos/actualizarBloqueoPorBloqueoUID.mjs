@@ -13,15 +13,20 @@ export const actualizarBloqueoPorBloqueoUID = async (data) => {
         UPDATE
         "bloqueosApartamentos"
         SET 
-        "tipoBloqueoIDV" = COALESCE($1, "tipoBloqueoIDV"),
-        "fechaInicio" = COALESCE($2, "fechaInicio"),
-        "fechaFin" = COALESCE($3, "fechaFin"),
+        "tipoBloqueoIDV" = $1,
+        "fechaInicio" = $2,
+        "fechaFin" = $3,
         motivo = $4,
-        "zonaIDV" = COALESCE($5, "zonaIDV")
+        "zonaIDV" = $5
         WHERE 
         "bloqueoUID" = $6
-        RETURNING 
-        *
+        RETURNING
+        "tipoBloqueoIDV",
+        to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
+        to_char("fechaFin", 'YYYY-MM-DD') as "fechaFin",
+        motivo,
+        "zonaIDV"
+        
         `;
         const datosParaActualizar = [
             tipoBloqueoIDV,

@@ -67,7 +67,6 @@ export const crearDesgloseFinanciero = async (data) => {
             fechaCreacion_ISO: fechaActual,
             apartamentosArray
         })
-
         await totalesBasePorRango({
             estructura,
             fechaEntrada: fechaEntrada,

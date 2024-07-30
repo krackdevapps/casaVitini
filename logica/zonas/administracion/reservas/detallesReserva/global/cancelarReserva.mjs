@@ -28,14 +28,14 @@ export const cancelarReserva = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-        const tipoBloqueo = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoBloqueo,
-            nombreCampo: "El nombre de tipoBloqueo",
+        const tipoBloqueoIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoBloqueoIDV,
+            nombreCampo: "El nombre de tipoBloqueoIDV",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        if (tipoBloqueo !== "rangoTemporal" && tipoBloqueo !== "permanente" && tipoBloqueo !== "sinBloqueo") {
+        if (tipoBloqueoIDV !== "rangoTemporal" && tipoBloqueoIDV !== "permanente" && tipoBloqueoIDV !== "sinBloqueo") {
             const error = "El campo 'tipoBloqueo' solo puede ser rangoTemporal, permanente, sinBloqueo";
             throw new Error(error);
         }
@@ -54,7 +54,7 @@ export const cancelarReserva = async (entrada, salida) => {
             const metadatos = {
                 reservaUID: reservaUID,
                 apartamentoUID: apartamento.componenteUID,
-                tipoBloqueo: tipoBloqueo,
+                tipoBloqueoIDV: tipoBloqueoIDV,
                 fechaEntrada: fechaEntrada,
                 fechaSalida: fechaSalida,
                 zonaIDV: "publico",

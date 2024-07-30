@@ -27,8 +27,8 @@ export const actualizarOferta = async (entrada) => {
         })
 
         const oferta = await obtenerOferatPorOfertaUID(ofertaUID)
-        const estadoOferta = oferta.estadoOferta;
-        if (estadoOferta === "activada") {
+        const estadoOferta = oferta.estadoIDV;
+        if (estadoOferta === "activado") {
             const error = "No se puede modificar una oferta activa. Primero desactiva con el boton de estado.";
             throw new Error(error);
         }
@@ -64,7 +64,6 @@ export const actualizarOferta = async (entrada) => {
             if (tipoCondicion === "porCodigoDescuento") {
                 const codigoDescuentoB64 = condicion.codigoDescuento
                 condicion.codigoDescuento = Buffer.from(codigoDescuentoB64, 'base64').toString('utf-8');
-
             }
         })
 

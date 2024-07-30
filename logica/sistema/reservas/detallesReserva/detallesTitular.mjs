@@ -7,7 +7,7 @@ export const detallesTitular = async (reservaUID) => {
 
     try {
         const titular = await obtenerTitularReservaPorReservaUID(reservaUID)
-    
+
         const titularUID = titular?.titularUID
         const clienteUID = titular?.clienteUID
 
@@ -15,16 +15,16 @@ export const detallesTitular = async (reservaUID) => {
         if (titularUID) {
             await eliminarTitularPoolPorReservaUID(reservaUID)
             const cliente = await obtenerDetallesCliente(clienteUID)
-    
+
             const nombre = cliente.nombre
             const primerApellido = cliente.primerApellido
             const segundoApellido = cliente.segundoApellido
             const nombreTitular = `${nombre} ${primerApellido} ${segundoApellido}`
-    
+
             t.clienteUID = titularUID
             t.nombreTitular = nombreTitular
             t.pasaporteTitular = cliente.pasaporte
-            t.emailTitular = cliente.mail
+            t.mailTitular = cliente.mail
             t.telefonoTitular = cliente.telefono
             t.tipoTitularIDV = "titularCliente"
         } else {
@@ -34,15 +34,15 @@ export const detallesTitular = async (reservaUID) => {
                 t.pasaporteTitular = titularPool.pasaporteTitular
                 t.mailTitular = titularPool.mailTitular
                 t.telefonoTitular = titularPool.telefonoTitular
-                t.tipoTitularIDV = "titularPool" 
-            } 
-      
+                t.tipoTitularIDV = "titularPool"
+            }
+
         }
         //delete reserva.titularPool
         return t
     } catch (error) {
         throw error
     }
-  
+
 
 }

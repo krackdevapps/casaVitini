@@ -5,8 +5,8 @@ export const obtenerTodasLasOfertas = async () => {
         SELECT
         "nombreOferta",
         "ofertaUID",
-        to_char("fechaInicio", 'DD/MM/YYYY') as "fechaInicio", 
-        to_char("fechaFinal", 'DD/MM/YYYY') as "fechaFinal",
+        to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
+        to_char("fechaFinal", 'YYYY-MM-DD') as "fechaFinal",
         "condicionesArray",
         "descuentosJSON",
         "estadoIDV",

@@ -29,15 +29,22 @@ export const crearTitular = async (entrada, salida) => {
         await campoDeTransaccion("iniciar")
 
         const datosCliente = {
-            nombre: entrada.body.nombre,
-            primerApellido: entrada.body.primerApellido,
-            segundoApellido: entrada.body.segundoApellido,
-            pasaporte: entrada.body.pasaporte,
-            telefono: entrada.body.telefono,
-            correoElectronico: entrada.body.correoElectronico,
-            notas: entrada.body.notas,
+            cliente: {
+                nombre: entrada.body.nombre,
+                primerApellido: entrada.body.primerApellido,
+                segundoApellido: entrada.body.segundoApellido,
+                pasaporte: entrada.body.pasaporte,
+                telefono: entrada.body.telefono,
+                correoElectronico: entrada.body.correoElectronico,
+                notas: entrada.body.notas,
+            },
+            operacion: "crear"
         };
+
+
         const datosValidados = await validadoresCompartidos.clientes.validarCliente(datosCliente);
+
+
         await eliminarTitularPoolPorReservaUID(reservaUID)
         await eliminarTitularPorReservaUID(reservaUID)
 
@@ -46,7 +53,7 @@ export const crearTitular = async (entrada, salida) => {
         const nombre_ = datosValidados.nombre;
         const primerApellido_ = datosValidados.primerApellido ? datosValidados.primerApellido : "";
         const segundoApellido_ = datosValidados.segundoApellido ? nuevoCliente.segundoApellido : "";
-        const email_ = datosValidados.email ? datosValidados.email : "";
+        const mail_ = datosValidados.mail ? datosValidados.mail : "";
         const pasaporte_ = datosValidados.pasaporte;
         const telefono_ = datosValidados.telefono ? datosValidados.telefono : "";
         const nombreCompleto = `${nombre_} ${primerApellido_} ${segundoApellido_}`;
@@ -65,7 +72,7 @@ export const crearTitular = async (entrada, salida) => {
             nombre: nombre_,
             primerApellido: primerApellido_,
             segundoApellido: segundoApellido_,
-            email: email_,
+            mail: mail_,
             telefono: telefono_,
             pasaporte: pasaporte_
         };

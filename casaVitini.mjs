@@ -3,7 +3,7 @@ import path from 'path';
 import { router } from './routes/rutas.mjs'
 import fs from 'fs';
 import https from 'https';
-import { controlHTTPS } from './logica/componentes/controlHttps.mjs'
+import { controlHTTPS } from './middleware/controlHttps.mjs'
 import { controlBaseDeDatos } from './middleware/controlBaseDeDatos.mjs';
 import { controlSizePeticion } from './middleware/controlSizePeticion.mjs';
 import { controlJSON } from './middleware/controlJSON.mjs';

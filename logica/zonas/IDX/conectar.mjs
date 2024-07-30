@@ -1,7 +1,6 @@
 import { DateTime } from "luxon";
 import { vitiniCrypto } from "../../sistema/VitiniIDX/vitiniCrypto.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { actualizarIntentoLogin } from "../../repositorio/usuarios/actualizarIntentoLogin.mjs";
 import { obtenerIDX } from "../../repositorio/usuarios/obtenerIDX.mjs";
 import { eliminarSessionPorRolPorCaducidad } from "../../repositorio/sessiones/eliminarSessionPorRolPorCaducidad.mjs";

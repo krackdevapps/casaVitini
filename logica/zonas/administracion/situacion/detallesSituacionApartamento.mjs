@@ -32,7 +32,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         })
 
         // Validar que existe el apartamento
-        await obtenerConfiguracionPorApartamentoIDV({
+       const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
         })
@@ -50,6 +50,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         const horaSalidaTZ = horasSalidaEntrada.horaSalidaTZ;
         const objetoFinal = {
             apartamentoUI: apartamento.apartamentoUI,
+            zonaIDV: configuracionApartamento.zonaIDV,
             apartamentoIDV: apartamentoIDV,
             zonaHoraria: zonaHoraria,
             horaSalidaTZ: horaSalidaTZ,

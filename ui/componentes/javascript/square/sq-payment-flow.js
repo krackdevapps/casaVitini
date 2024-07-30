@@ -132,7 +132,7 @@ window.getPaymentRequest = function () {
       addressLines: ['123 Test St', ''],
       city: 'San Francisco',
       countryCode: 'US',
-      email: 'test@test.com',
+      mail: 'test@test.com',
       familyName: 'Last Name',
       givenName: 'First Name',
       phone: '1111111111',

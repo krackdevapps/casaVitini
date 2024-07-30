@@ -2,8 +2,8 @@ import { conexion } from "../../componentes/db.mjs"
 
 export const obtenerComportamientosPorRangoPorTipoIDV = async (metadatos) => {
   try {
-    const fechaInicio_ISO = metadatos.fechaInicio_ISO
-    const fechaFinal_ISO = metadatos.fechaFinal_ISO
+    const fechaInicio = metadatos.fechaInicio
+    const fechaFinal = metadatos.fechaFinal
     const arrayApartamentos = metadatos.arrayApartamentos
     const tipoIDV = metadatos.tipoIDV
     const estadoArray = metadatos.estadoArray
@@ -41,8 +41,8 @@ export const obtenerComportamientosPorRangoPorTipoIDV = async (metadatos) => {
             "estadoIDV" = ANY($5)
               `
     const parametros = [
-      fechaInicio_ISO,
-      fechaFinal_ISO,
+      fechaInicio,
+      fechaFinal,
       tipoIDV,
       arrayApartamentos,
       estadoArray

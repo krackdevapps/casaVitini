@@ -16,23 +16,23 @@ export const perfil_porDiasDelRango = async (data) => {
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
         const estructura = data.estructura
         const contenedorOfertas = data.contenedorOfertas
-        const totalDescuento = new Decimal(estructura.global.totales.totalDescuento)
 
         for (const descuentoPorDia of dias) {
             const fechaDelDia = descuentoPorDia.fecha
             const apartamentos = descuentoPorDia.apartamentos
             const tipoDescuento = descuentoPorDia.tipoDescuento
+            const nocheDeLaReserva = estructura.entidades.reserva.desglosePorNoche[fechaDelDia]
 
             const fechaDentroDelRango = await validadoresCompartidos.fechas.fechaEnRango({
                 fechaAComprobrarDentroDelRango: fechaDelDia,
                 fechaInicioRango_ISO: fechaEntradaReserva_ISO,
                 fechaFinRango_ISO: fechaSalidaReserva_ISO
             })
-            if (!fechaDentroDelRango) {
+            if (!fechaDentroDelRango || !nocheDeLaReserva) {
                 continue
             }
             if (!contenedorPorDia.hasOwnProperty(fechaDelDia)) {
-                const precioNetoNoche = estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNoche
+                const precioNetoNoche = nocheDeLaReserva.precioNetoNoche
                 contenedorPorDia[fechaDelDia] = {
                     totalSinDescuentos: precioNetoNoche,
                     totalConDescuentos: precioNetoNoche,
@@ -81,8 +81,8 @@ export const perfil_porDiasDelRango = async (data) => {
                         descuentoTotal,
                         total: totalPorApartamento
                     })
-
-                    estructura.global.totales.totalDescuento = totalDescuento.plus(totalCalculado.descuentoAplicado)
+                    const totalDescuento = estructura.global.totales.totalDescuento
+                    estructura.global.totales.totalDescuento = new Decimal(totalDescuento).plus(totalCalculado.descuentoAplicado)
 
                     const porDia = {
                         apartamentoIDV,
@@ -128,7 +128,9 @@ export const perfil_porDiasDelRango = async (data) => {
                     descuentoTotal,
                     total: totalNetoPorDia
                 })
-                estructura.global.totales.totalDescuento = totalDescuento.plus(totalCalculado.descuentoAplicado)
+
+                const totalDescuento = estructura.global.totales.totalDescuento
+                estructura.global.totales.totalDescuento = new Decimal(totalDescuento).plus(totalCalculado.descuentoAplicado)
 
                 const porDia = {
                     ofertaUID,

@@ -5,7 +5,7 @@ async function verifyBuyer(payments, token) {
       addressLines: ['123 Main Street', 'Apartment 1'],
       familyName: 'Doe',
       givenName: 'John',
-      email: 'jondoe@gmail.com',
+      mail: 'jondoe@gmail.com',
       country: 'GB',
       phone: '3214563987',
       region: 'LND',

@@ -6,7 +6,8 @@ export const obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc = async () 
         SELECT 
         "configuracionUID",
         "apartamentoIDV",
-        "estadoConfiguracionIDV"
+        "estadoConfiguracionIDV",
+        "zonaIDV"
         FROM
         "configuracionApartamento"
         ORDER BY

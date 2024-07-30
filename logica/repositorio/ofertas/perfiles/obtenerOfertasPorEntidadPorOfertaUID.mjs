@@ -14,7 +14,8 @@ export const obtenerOfertasPorEntidadPorOfertaUID = async (data) => {
         "condicionesArray",
         "descuentosJSON",
         "estadoIDV",
-        "zonaIDV"
+        "zonaIDV",
+        "entidadIDV"
         FROM
         ofertas 
         WHERE                     

@@ -62,8 +62,8 @@ export const evitarDuplicados = async (data) => {
             }
             const arrayApartamentos = Object.keys(preContenedorApartamentos)
             const comportamientosPorRango = await obtenerComportamientosPorRangoPorTipoIDV({
-                fechaInicio_ISO: fechaInicio_ISO,
-                fechaFinal_ISO: fechaFinal_ISO,
+                fechaInicio: fechaInicio_ISO,
+                fechaFinal: fechaFinal_ISO,
                 arrayApartamentos,
                 tipoIDV: "porRango",
                 estadoArray: ["activado", "desactivado"]

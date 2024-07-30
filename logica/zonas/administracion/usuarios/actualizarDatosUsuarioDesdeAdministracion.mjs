@@ -62,7 +62,7 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
         const mail = validadoresCompartidos.tipos
             .correoElectronico({
                 mail: entrada.body.mail,
-                nombreCampo: "El campo del email",
+                nombreCampo: "El campo del mail",
                 sePermiteVacio: "si"
             })
         const telefono = validadoresCompartidos.tipos

@@ -55,7 +55,7 @@ export const listarMisReservas = async (entrada) => {
             const nombreColumnaVirtual = [
                 'nombreCompleto',
                 'pasaporteTitular',
-                'emailTitular'
+                'mailTitular'
             ]
             if (nombreColumnaVirtual.includes(nombreColumna)) {
                 const error = "No existe el nombre de la columna que quieres ordenar";
@@ -71,14 +71,14 @@ export const listarMisReservas = async (entrada) => {
 
         const paginaActualSQL = Number((paginaActual - 1));
         const numeroPorPagina = 10;
-        // Comprobar si la cuenta tiene un email
+        // Comprobar si la cuenta tiene un mail
         const datosDelUsuario = await obtenerDatosPersonales(usuario)
         const usuarioMail = datosDelUsuario.mail;
         if (!usuarioMail) {
             const error = "Se necesita que definas tu dirección de correo elecroníco en Mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo eletroníco que usastes para confirmar la reserva. Es decir debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de correo electronico y confirmarlo con el correo de confirmacion que te enviaremos. Una vez hecho eso podras ver tus reservas";
             throw new Error(error);
         }
-        // Comporbar si el email esta verificado
+        // Comporbar si el mail esta verificado
 
         const cuentaUsuario = await obtenerUsuario({
             usuario,
@@ -91,7 +91,7 @@ export const listarMisReservas = async (entrada) => {
             throw new Error(error);
         }
         const reservasUIDArray = []
-        // Buscar el email verificado, en titulares poll y titulares vitini
+        // Buscar el mail verificado, en titulares poll y titulares vitini
         const clientesPorMail = await obtenerClientesPorMail({
             mail: usuarioMail,
             errorSi: "desactivado"

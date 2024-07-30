@@ -6,6 +6,7 @@ import { validarObjetoReserva } from "../../../sistema/reservas/validarObjetoRes
 import { obtenerOfertasPorRangoActualPorEstadoPorCodigoDescuentoArray } from "../../../repositorio/ofertas/perfiles/obtenerOfertasPorRangoActualPorEstadoPorCodigoDescuentoArray.mjs";
 import { Mutex } from "async-mutex";
 import { utilidades } from "../../../componentes/utilidades.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 export const preComprobarCodigoDescuento = async (entrada) => {
     const mutex = new Mutex()
     try {
@@ -127,6 +128,32 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             const ok = {
                 ok: "El codigo de descuento es valido",
                 ofertas: ofertaAnalizadasPorCondiciones,
+            }
+            for (const contenedorOferta of ofertaAnalizadasPorCondiciones) {
+                const descuentosPorApartamentos = contenedorOferta?.oferta?.descuentosJSON?.apartamentos || []
+                for (const contenedorApartamento of descuentosPorApartamentos) {
+                    const apartamentoIDV = contenedorApartamento.apartamentoIDV
+                    const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                        apartamentoIDV,
+                        errorSi: "noExiste"
+                    })).apartamentoUI
+                    contenedorApartamento.apartamentoUI = apartamentoUI
+                }
+
+                // Descuentos por dias con apartamentos especificos
+                const descuentosPorDiasConApartamentos = contenedorOferta?.oferta?.descuentosJSON?.descuentoPorDias || []
+                for (const contenedorDia of descuentosPorDiasConApartamentos) {
+
+                    const contenedorApartametnos = contenedorDia?.apartamentos || []
+                    for (const contenedorApartamento of contenedorApartametnos) {
+                        const apartamentoIDV = contenedorApartamento.apartamentoIDV
+                        const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV,
+                            errorSi: "noExiste"
+                        })).apartamentoUI
+                        contenedorApartamento.apartamentoUI = apartamentoUI
+                    }
+                }
             }
             return ok
         }

@@ -64,7 +64,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida";
             throw new Error(error);
         }
-        const rol = entrada.session.rol;
+        const rol = entrada.session.rolIDV;
 
         const resuelveApartamentosDisponibles = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,
