@@ -68,10 +68,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 sePermitenDuplicados: "si",
                 sePermiteArrayVacio: "si"
             })
-
-
             await campoDeTransaccion("iniciar")
-
             await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV: entidadIDV,
                 errorSi: "noExiste"

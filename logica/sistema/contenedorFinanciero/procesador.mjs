@@ -1,6 +1,7 @@
 
 
 import { estructuraDesgloseFinanciero } from "./estructuraDesgloseFinanciero.mjs"
+import { procesadorSimulacion } from "./entidades/simulacion/procesadorSimulacion.mjs"
 import { procesadorReserva } from "./entidades/reserva/procesadorReserva.mjs"
 
 export const procesador = async (data) => {
@@ -19,7 +20,13 @@ export const procesador = async (data) => {
                 estructura,
                 ...reserva
             })
-        } else {
+        } else if (entidades.hasOwnProperty("simulacion")) {
+            const simulacion = entidades.simulacion
+            await procesadorSimulacion({
+                estructura,
+                ...simulacion
+            })
+        }else {
             const error = "El procesador de precios esta mal configurado, necesita dentro de la llave entidades un objeto con le nombre de la entidad."
             throw new Error(error)
         }

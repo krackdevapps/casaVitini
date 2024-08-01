@@ -1695,7 +1695,7 @@ const casaVitini = {
                                     const selectorContenedorApartamento = contenedorSobreBloque.querySelector(`[apartamentoIDV="${apartamentoIDV}"][instanciaUID="${instanciaUID}"]`)
                                     if (selectorContenedorApartamento) {
                                         const selectorTotalUI = selectorContenedorApartamento.querySelector(`[componente=valorTotal]`)
-                                        console.log("selectorTotalUI", selectorTotalUI)
+
                                         const valorFinalUI = preciosPorSeleccion[apartamentoIDV].precioEnBaseASeleccion
                                         selectorTotalUI.innerText = `${valorFinalUI}$ Total con impuestos y ofertas aplicadas`
                                     }
@@ -18546,7 +18546,7 @@ const casaVitini = {
                                     arbol: {},
                                     fecha: {}
                                 }
-                                console.log("fechaSeleccionada_ISO", fechaSeleccionada_ISO)
+
                                 if (fechaSeleccionada_ISO) {
                                     const fechaLimitePorSeleccion = new Date(fechaSeleccionada_ISO); // Asegúrate de que el formato de la fecha sea 'YYYY-MM-DD'
                                     // Definir el número de días que deseas sumar
@@ -18567,11 +18567,11 @@ const casaVitini = {
                                         }
                                     }
                                 }
-                                console.log("ok", ok)
+
                                 return ok
                             }
 
-                            console.log("fechaEntrada", fechaEntrada, "diasMaximoReserva", diasMaximoReserva)
+
                             const objetoFechaLimitePorDias = fechaLimitePorDiasDeDuracion(fechaEntrada, diasMaximoReserva)
                             for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
                                 const diaFinal_decimal = parseInt(numeroDia + 1, 10);
@@ -18794,7 +18794,7 @@ const casaVitini = {
                                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
                                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
                             }
-                            console.log("anoActual_decimal", anoActual_decimal, "mesActual_decimal", mesActual_decimal, "objetoFechaLimitePorDias.arbol", objetoFechaLimitePorDias.arbol)
+
 
 
                             if (objetoFechaLimitePorDias.arbol[anoActual_decimal]
@@ -20439,7 +20439,7 @@ const casaVitini = {
                             // Falta repllicar estoi en calendario de entrada
                             contendorDestino.querySelector("[calendario=salida]").setAttribute("memoriaVolatil", fechaSeleccionada_ISO)
                             contendorDestino.querySelector("[fechaUI=fechaFin]").innerText = fechaSeleccionada_humana
-                            console.log(">>>", fechasSeleccionadas)
+
                             if (fechasSeleccionadas().fechaEntrada?.volatil) {
                                 diasDelCalendario.forEach((dia) => {
                                     if (dia.getAttribute("estadoDia") === "disponible") {
@@ -20481,7 +20481,7 @@ const casaVitini = {
                             // Falta repllicar estoi en calendario de entrada
                             contendorDestino.querySelector("[calendario=unico]").setAttribute("memoriaVolatil", fechaSeleccionada_ISO)
                             contendorDestino.querySelector("[fechaUI=unico]").innerText = fechaSeleccionada_humana
-                            console.log(">>>>>", fechasSeleccionadas().fechaUnico?.volatil)
+
                             if (fechasSeleccionadas().fechaUnico?.volatil) {
                                 diasDelCalendario.forEach((dia) => {
                                     if (dia.getAttribute("estadoDia") === "disponible") {
@@ -20956,7 +20956,7 @@ const casaVitini = {
                                             if (modoUI === "simulador") {
                                                 contenedorApartamento.classList.add("comportamientoBotonApartamento")
                                                 contenedorApartamento.addEventListener("click", () => {
-                                                    casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.sobreControlPrecios.componentesUI.nocheUI({
+                                                    casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.sobreControlPrecios.nocheUI({
                                                         fechaNoche,
                                                         apartamentoIDV,
                                                         instanciaUID_contenedorFinanciero: instanciaUID
@@ -21244,7 +21244,7 @@ const casaVitini = {
                                     )
                                     botonDescuentosCompatibles.innerText = "Descuentos compatibles"
                                     botonDescuentosCompatibles.addEventListener("click", () => {
-                                        casaVitini.administracion.simuladorDePrecios.componentesUI.insertarOfertasCompatibles.ui({
+                                        casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.insertarOfertasCompatibles.ui({
                                             instanciaUID_contenedorFinanciero: instanciaUID
                                         })
                                     })
@@ -21611,7 +21611,7 @@ const casaVitini = {
                                         )
                                         botonEliminar.innerText = "Elimnar oferta de la reserva " + posicion
                                         botonEliminar.addEventListener("click", () => {
-                                            casaVitini.administracion.simuladorDePrecios.componentesUI.eliminarOfertaEnReserva.ui({
+                                            casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.eliminarOfertaEnReserva.ui({
                                                 origen: destinoOrigenOferta,
                                                 ofertaUID,
                                                 posicion,
@@ -22187,9 +22187,9 @@ const casaVitini = {
                                     }
                                     contenedorDescuentos_renderizado.appendChild(descripcionDescuento)
 
-                         
+
                                 } else if (tipoDescuento === "individualPorApartamento") {
-                    
+
 
                                     descripcionDescuento.innerText = `Esta oferta aplica un descuento al total de los apartamentos especificados. A continuacion se detallan los apartamentos que esta oferta aplica descuentos. Si la reserva no tiene todos los apartamentos especificados en esta oferta, entonces solo aplicara el Descuentos en los apartamentos que coincidan de la oferta en la reserva.`
                                     contenedorDescuentos_renderizado.appendChild(descripcionDescuento)
@@ -22236,7 +22236,7 @@ const casaVitini = {
                                     contenedorDescuentos_renderizado.appendChild(contenedorApartamentos)
 
 
-                                } else  if (tipoDescuento === "mismoDescuentoParaCadaApartamento") {
+                                } else if (tipoDescuento === "mismoDescuentoParaCadaApartamento") {
                                     const descuentoTotal = descuentosJSON.descuentoTotal
                                     const tipoAplicacion = descuentosJSON.tipoAplicacion
 
@@ -22248,8 +22248,8 @@ const casaVitini = {
                                     }
                                     contenedorDescuentos_renderizado.appendChild(descripcionDescuento)
 
-                         
-                                } else{
+
+                                } else {
                                     const mensaje = "No se reconoce el tipo de descuento resibido"
                                     return casaVitini.ui.componentes.advertenciaInmersiva(mensaje)
                                 }
@@ -22806,7 +22806,7 @@ const casaVitini = {
                                 )
                                 botonInsertarImpuesto.innerText = "Insertar impuesto"
                                 botonInsertarImpuesto.addEventListener("click", () => {
-                                    casaVitini.administracion.simuladorDePrecios.componentesUI.insertarImpuesto.ui({
+                                    casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.insertarImpuesto.ui({
                                         instanciaUID_contenedorFinanciero: instanciaUID
                                     })
                                 })
@@ -22828,14 +22828,9 @@ const casaVitini = {
                                 contenedorBotones.appendChild(botonInsertarImpuestoAdHoc)
                                 contenedor.appendChild(contenedorBotones)
                             }
-
                         }
-
                         const contenedorImpuestos_renderizado = contenedorFinanciero.querySelector("[contenedor=impuestos]")
-
-
                         if (impuestos.length === 0) {
-
                             const impuestosRenderizadosObsoletos = contenedorImpuestos_renderizado.querySelectorAll("[contenedor=impuesto]")
                             impuestosRenderizadosObsoletos.forEach(impuestoRenderizado => { impuestoRenderizado.remove() })
 
@@ -22847,13 +22842,13 @@ const casaVitini = {
                                 "textoCentrado"
                             )
                             info.innerText = "No hay impuestos en este contenedor financiero"
-                            contenedorImpuestos_renderizado.appendChild(info)
+                            const info_rederizado = contenedorImpuestos_renderizado.querySelector("[elemento=info]")
+                            if (!info_rederizado) {
+                                contenedorImpuestos_renderizado.appendChild(info)
+                            }
                         } else {
                             contenedorImpuestos_renderizado.querySelector("[elemento=info]")?.remove()
                         }
-
-
-
                         const tasaUI = (tasaIDV) => {
                             if (tasaIDV === "porcentaje") {
                                 return "Porcentaje"
@@ -22861,13 +22856,10 @@ const casaVitini = {
                                 return "Tasa"
                             }
                         }
-
                         const impuestosIDV = impuestos.map((impuesto) => {
 
                             return String(impuesto.impuestoUID)
                         })
-
-
                         const selectorImpuestosRenderizadosObsoletos = contenedorImpuestos_renderizado.querySelectorAll("[contenedor=impuesto]")
                         selectorImpuestosRenderizadosObsoletos.forEach((impuestoRenderizado) => {
                             const impuestoUID_renderizado = impuestoRenderizado.getAttribute("impuestoUID")
@@ -23925,6 +23917,18 @@ const casaVitini = {
                                 instanciaUID,
                                 tipoDespliegue
                             })
+                            const zonaApartamentos = document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=zonaAnadirApartamento]`)
+                            zonaApartamentos.appendChild(apartamentoSeleccionadoUI)
+                        } else if (metodoPersonalizado === "simulador") {
+                            apartamentoSeleccionadoUI = casaVitini.administracion.simuladorDePrecios.componentes.apartamentoUI({
+                                apartamentoIDV,
+                                apartamentoUI,
+                                instanciaUID,
+                                tipoDespliegue
+                            })
+                            const zonaApartamentos = document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=zonaAnadirApartamento]`)
+                            zonaApartamentos.appendChild(apartamentoSeleccionadoUI)
+                            casaVitini.administracion.simuladorDePrecios.componentes.actualizaSimulacion()
                         } else {
                             apartamentoSeleccionadoUI = this.apartamentoUI({
                                 apartamentoIDV,
@@ -23932,9 +23936,10 @@ const casaVitini = {
                                 instanciaUID,
                                 tipoDespliegue
                             })
+                            const zonaApartamentos = document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=zonaAnadirApartamento]`)
+                            zonaApartamentos.appendChild(apartamentoSeleccionadoUI)
                         }
-                        const zonaApartamentos = document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=zonaAnadirApartamento]`)
-                        zonaApartamentos.appendChild(apartamentoSeleccionadoUI)
+
                     },
                     apartamentoUI: (data) => {
                         const apartamentoIDV = data.apartamentoIDV

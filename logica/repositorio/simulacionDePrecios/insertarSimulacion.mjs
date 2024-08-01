@@ -4,6 +4,7 @@ import { conexion } from "../../componentes/db.mjs";
 export const insertarSimulacion = async (data) => {
     try {
         const nombre = data.nombre
+        const reservaUID = data.reservaUID
         const fechaCreacion = data.fechaCreacion
         const fechaEntrada = data.fechaEntrada
         const fechaSalida = data.fechaSalida
@@ -32,9 +33,10 @@ export const insertarSimulacion = async (data) => {
         "fechaCreacion",
         "fechaEntrada",
         "fechaSalida",
-        "apartamentosIDVARRAY"
+        "apartamentosIDVARRAY",
+        "reservaUID"
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
         RETURNING *
         `
         const parametros = [
@@ -47,7 +49,8 @@ export const insertarSimulacion = async (data) => {
             fechaCreacion,
             fechaEntrada,
             fechaSalida,
-            apartamentosIDVARRAY
+            apartamentosIDVARRAY,
+            reservaUID
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

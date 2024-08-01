@@ -50,10 +50,10 @@ export const generarSimulacion = async (entrada) => {
 
         mutex.acquire()
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-        const fechaEntrad_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
+        const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
         const fechaCreacion_objeto = DateTime.fromISO(fechaCreacion, { zone: zonaHoraria });
 
-        if (fechaEntrad_objeto < fechaCreacion_objeto) {
+        if (fechaEntrada_objeto < fechaCreacion_objeto) {
             const error = "La fecha de creacion simulada no puede ser superior a la fecha de entrada simulada.";
             throw new Error(error);
         }

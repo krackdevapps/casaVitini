@@ -4,21 +4,22 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { procesador } from "../../../sistema/contenedorFinanciero/procesador.mjs";
 import { Mutex } from "async-mutex";
-import { insertarSimulacion } from "../../../repositorio/simulacionDePrecios/insertarSimulacion.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { generadorReservaUID } from "../../../componentes/generadorReservaUID.mjs";
+import { obtenerSimulacionPorSimulacionUID } from "../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs";
+import { actualizarRangoFechasPorSimulacionUID } from "../../../repositorio/simulacionDePrecios/actualizarRangoFechasPorSimulacionUID.mjs";
+import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs";
 
-export const guardarSimulacion = async (entrada) => {
+export const actualizarSimulacionPorFechasPorApartamentos = async (entrada) => {
     const mutex = new Mutex()
     try {
 
-
-        const nombre = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.nombre,
-            nombreCampo: "El campo del nombre de la simulación",
-            filtro: "strictoConEspacios",
+        const simulacionUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.simulacionUID,
+            nombreCampo: "El  simulacionUID",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
 
         const fechaCreacion = (await validadoresCompartidos.fechas.validarFecha_ISO({
@@ -44,6 +45,7 @@ export const guardarSimulacion = async (entrada) => {
             fechaSalida: fechaSalida,
             tipoVector: "diferente"
         })
+        await obtenerSimulacionPorSimulacionUID(simulacionUID)
         const controlIDVUnicos = {}
         for (const apartamentoIDV of apartamentosIDVARRAY) {
             if (controlIDVUnicos.hasOwnProperty(apartamentoIDV)) {
@@ -66,38 +68,30 @@ export const guardarSimulacion = async (entrada) => {
             const error = "La fecha de creacion simulada no puede ser superior a la fecha de entrada simulada.";
             throw new Error(error);
         }
-        await eliminarBloqueoCaducado();
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                reserva: {
-                    tipoOperacion: "crearDesglose",
-                    fechaEntrada: fechaEntrada,
-                    fechaSalida: fechaSalida,
-                    fechaCreacion: fechaCreacion,
-                    apartamentosArray: apartamentosIDVARRAY,
-                    capaOfertas: "si",
-                    zonasArray: ["global", "publica", "privada"],
-                    descuentosParaRechazar: [],
-                    capaDescuentosPersonalizados: "no",
-                    descuentosArray: [],
-                    capaImpuestos: "si",
-                }
-            },
-        })
-        const reservaUID = await generadorReservaUID()
-
-        const simuacion = await insertarSimulacion({
-            desgloseFinanciero,
-            nombre,
+        await eliminarBloqueoCaducado()
+        await actualizarRangoFechasPorSimulacionUID({
             fechaCreacion,
             fechaEntrada,
             fechaSalida,
             apartamentosIDVARRAY,
-            reservaUID
+            simulacionUID
+        })
+        const desgloseFinanciero = await procesador({
+            entidades: {
+                simulacion: {
+                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
+                    simulacionUID
+                }
+            },
+        })
+        await actualizarDesgloseFinacieroPorSimulacionUID({
+            desgloseFinanciero,
+            simulacionUID
         })
         const ok = {
             ok: "Se ha guarado la nueva simulacion",
-            simuacionUID: simuacion.uid
+            simulacionUID,
+            desgloseFinanciero
         }
         return ok
     } catch (errorCapturado) {

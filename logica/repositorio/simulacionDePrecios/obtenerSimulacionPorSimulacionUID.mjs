@@ -4,7 +4,7 @@ export const obtenerSimulacionPorSimulacionUID = async (simulacionUID) => {
     try {
         const consulta = `
         SELECT
-        uid,
+        "simulacionUID",
         "desgloseFinanciero",
         "instantaneaNoches",
         "instantaneaSobreControlPrecios",
@@ -19,7 +19,7 @@ export const obtenerSimulacionPorSimulacionUID = async (simulacionUID) => {
         FROM
         "simulacionesDePrecio"
         WHERE
-        uid = $1;
+        "simulacionUID" = $1;
         `;
         const resuelve = await conexion.query(consulta, [simulacionUID]);
         if (resuelve.rowCount === 0) {

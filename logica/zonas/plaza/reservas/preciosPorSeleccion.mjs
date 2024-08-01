@@ -51,8 +51,8 @@ export const preciosPorSeleccion = async (entrada) => {
 
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
-        const fechaEntrad_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
-        if (fechaEntrad_objeto < tiempoZH.startOf('day')) {
+        const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
+        if (fechaEntrada_objeto < tiempoZH.startOf('day')) {
             const error = "La fecha de entrada no puede ser inferior a la fecha actual. Solo se pueden hacer reservas a partir de hoy";
             throw new Error(error);
         }

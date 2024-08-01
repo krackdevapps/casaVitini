@@ -36,8 +36,8 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
 
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
-        const fechaEntrad_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
-        if (fechaEntrad_objeto < tiempoZH.startOf('day')) {
+        const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
+        if (fechaEntrada_objeto < tiempoZH.startOf('day')) {
             const error = "La fecha de entrada no puede ser inferior a la fecha actual. Solo se pueden hacer reservas a partir de hoy";
             throw new Error(error);
         }
@@ -68,7 +68,7 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
                 apartamentosDisponibles: configuracionesApartamentosVerificadas.configuracionApartamento
             }
             for (const apartamentoIDV of apartamentosDisponiblesEncontrados) {
-                     const desgloseFinanciero = await procesador({
+                const desgloseFinanciero = await procesador({
                     entidades: {
                         reserva: {
                             tipoOperacion: "crearDesglose",
@@ -86,7 +86,7 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
                     },
                 })
                 estructura.ok.contenedorFinanciero[apartamentoIDV] = desgloseFinanciero
-            }    
+            }
         }
 
         return estructura

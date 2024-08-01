@@ -47,6 +47,7 @@ export const detallesSimulacion = async (entrada) => {
         const ok = {
             ok: "Aquí tienes los detalles de la simulacion",
             nombre,
+            simulacionUID,
             fechaCreacion,
             fechaEntrada,
             fechaSalida,

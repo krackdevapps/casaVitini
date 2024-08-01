@@ -24,6 +24,7 @@ export const aplicarDescuento = async (data) => {
         const contenedorPorApartamento = estructura.contenedorOfertas.entidades.reserva.desgloses.porApartamento
         const contenedorPorDia = estructura.contenedorOfertas.entidades.reserva.desgloses.porDia
 
+        console.log("contenedor oferta", JSON.stringify(contenedorOfertas))
 
         if (!contenedorTotalesBase.hasOwnProperty("totalDescuento")) {
             contenedorTotalesBase.totalDescuento = "0.00"
@@ -127,8 +128,8 @@ export const aplicarDescuento = async (data) => {
             contenedorTotalesBase.totalFinal = "0.00"
         }
         const totalFinal = contenedorTotalesBase.totalFinal
-        const nochesReserva = estructura.entidades.reserva.nochesReserva
-        const promedioNocheNetoConDescuentos = new Decimal(totalFinal).div(nochesReserva)
+        const nochesSimulacion = estructura.entidades.reserva.nochesReserva
+        const promedioNocheNetoConDescuentos = new Decimal(totalFinal).div(nochesSimulacion)
         contenedorTotalesBase.promedioNocheNetoConDescuentos = promedioNocheNetoConDescuentos.isPositive() ? promedioNocheNetoConDescuentos.toFixed(2) : "0.00"
 
         const totalNetoSinDescuentosAplicados = new Decimal(totalNeto).minus(totalDescuento)

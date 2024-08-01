@@ -1,11 +1,11 @@
-import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs"
-import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
-import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
-import { eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID.mjs"
-import { eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID.mjs"
-import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"
-import { procesador } from "../../../../../sistema/contenedorFinanciero/procesador.mjs"
-import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
+import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs"
+import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
+import { eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID.mjs"
+import { eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID.mjs"
+import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
+import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
+import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.mjs"
+import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
 
 export const eliminarDescuentoEnReserva = async (entrada) => {
     try {
@@ -14,9 +14,9 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-        const reservaUID = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.reservaUID,
-            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+        const simulacionUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.simulacionUID,
+            nombreCampo: "El identificador universal de la simulacionUID (simulacionUID)",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -52,24 +52,17 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        const reserva = await obtenerReservaPorReservaUID(reservaUID)
-        const estadoReserva = reserva.estadoIDV
-        if (estadoReserva === "cancelada") {
-            const error = "La reserva esta cancelada, no se puede alterar los descuentos"
-            throw new Error(error)
-        }
-        await campoDeTransaccion("iniciar")
-
+        await obtenerSimulacionPorSimulacionUID(simulacionUID)
         if (origen === "porAdministrador") {
             await eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID({
-                reservaUID,
+                simulacionUID,
                 ofertaUID,
                 posicion
 
             })
         } else if (origen === "porCondicion") {
             await eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID({
-                reservaUID,
+                simulacionUID,
                 ofertaUID,
                 posicion
 
@@ -81,16 +74,17 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
 
         const desgloseFinanciero = await procesador({
             entidades: {
-                reserva: {
+                simulacion: {
                     tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                    reservaUID: reservaUID,
+                    simulacionUID: simulacionUID,
                     capaImpuestos: "si"
                 }
             },
         })
-        await actualizarDesgloseFinacieroPorReservaUID({
+        await campoDeTransaccion("iniciar")
+        await actualizarDesgloseFinacieroPorSimulacionUID({
             desgloseFinanciero,
-            reservaUID
+            simulacionUID
         })
         await campoDeTransaccion("confirmar")
 
