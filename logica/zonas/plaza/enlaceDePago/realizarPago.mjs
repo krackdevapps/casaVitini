@@ -34,7 +34,7 @@ export const realizarPago = async (entrada, salida) => {
             const error = "Este enlace de pago ya esta pagado";
             throw new Error(error);
         }
-        const reserva = obtenerReservaPorReservaUID(reservaUID)
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoReservaIDV;
         if (estadoReserva === "cancelada") {
             const error = "La reserva esta cancelada";

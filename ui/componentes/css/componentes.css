@@ -787,7 +787,7 @@ main[zonaCSS="/"] {
     align-items: stretch;
     width: 100%;
     /* padding: 10px; */
-    max-width: 720px;
+    max-width: 1280px;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI {
@@ -1204,9 +1204,9 @@ main[zonaCSS="/"] {
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
-    top: -50%;
-    margin-left: 50%;
-    transform: translate(-50%, 0%);
+    /* top: -50%; */
+    /* margin-left: 50%; */
+    /* transform: translate(-50%, 0%); */
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background-color: rgb(255 255 255 / 0.4);
@@ -1221,6 +1221,7 @@ main[zonaCSS="/"] {
     flex-wrap: wrap;
     padding: 14px;
     border-radius: 15px;
+    width: 100%;
 }
 
 [zonaCSS="/alojamiento"] .plaza_alojamiento_marcoBotonIreAResumenReserva {
@@ -1229,14 +1230,14 @@ main[zonaCSS="/"] {
     color: #fff;
     text-align: center;
     z-index: 200;
-    bottom: 10px;
+    bottom: 18px;
     display: flex;
     flex-direction: column;
     width: 100%;
     align-items: center;
     pointer-events: none;
     opacity: 0;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 [zonaCSS="/alojamiento"] .plaza_alojamiento_marcoIntermedioBotonIrResumenReserva {
@@ -1256,7 +1257,8 @@ main[zonaCSS="/"] {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    border-radius: 10px;
+    border-radius: 90px;
+    gap: 10px;
     background: rgba(255, 255, 255, 0.4);
     cursor: default;
     user-select: none;
@@ -1286,6 +1288,7 @@ main[zonaCSS="/"] {
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
+    
 }
 
 .plaza_alojamiento_contenedorApartamento:hover+.plaza_alojamiento_contenedorApartamento_selectorUI {
@@ -2352,6 +2355,10 @@ main[zonaCSS="/"] {
         display: none;
     }
 
+    [gridUID="gridSimulaciones"] {
+        display: none;
+    }
+
     [zonaCSS="administracion/clientes/buscador"] [contenedor="resultados"] {
         gap: 6px;
     }
@@ -2442,7 +2449,17 @@ main[zonaCSS="/"] {
     border: 0px solid rgba(0, 0, 0, 0.3);
     border-radius: 16px;
 }
-
+[zonaCSS="/alojamiento"] .ofertaUIContenedorDetalles {
+    display: flex;
+    align-content: stretch;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 6px;
+    flex-direction: column;
+    padding: 12px;
+    border: 0px solid rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+}
 @media (max-width: 720px) {
     [nombreColumna="telefono"] {
         display: none;
@@ -3835,15 +3852,11 @@ main[zonaCSS="/"] {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
-    border-radius: 8px;
     text-align: center;
 }
 
 .advertenciaInmersiva .boton:hover {
     background: #0044ff;
-    border-radius: 8px;
-    border-radius: 8px;
-    text-align: center;
     color: white;
 }
 
@@ -7377,6 +7390,17 @@ main[zonaCSS="/"] {
     -webkit-backdrop-filter: blur(50px);
 }
 
+[zonaCSS="/alojamiento"] .ofertaUI {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 6px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: black;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
 [zonaCSS="administracion/comportamiento_de_precios"] .comportamientoUI {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
@@ -7553,6 +7577,10 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 12px;
     margin: 0px;
 }
+[zonaCSS="/alojamiento"] .ofertaUITituloOferta {
+    padding: 12px;
+    margin: 0px;
+}
 
 [ui="reservaUI"] .compomentes_ui_totales_ofertas_contenedorConjuntoOferta {
     display: flex;
@@ -7580,6 +7608,10 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="administracion/ofertas"] .ofertaUIFechaContenedor {
+    border-radius: 10px;
+}
+
+[zonaCSS="/alojamiento"] .ofertaUIFechaContenedor {
     border-radius: 10px;
 }
 
@@ -7654,6 +7686,10 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="administracion/ofertas"] .ofertaUITituloFecha {
+    font-weight: bold;
+}
+
+[zonaCSS="/alojamiento"] .ofertaUITituloFecha {
     font-weight: bold;
 }
 
@@ -14428,6 +14464,10 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 14px;
 }
 
+.borderRadius16 {
+    border-radius: 16px;
+}
+
 .backgroundGrey1 {
     background: rgba(0, 0, 0, 0.1);
 }
@@ -14484,6 +14524,10 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .padding6 {
     padding: 6px;
+}
+
+.padding5 {
+    padding: 5px;
 }
 
 .paddinHorizontal6 {
@@ -14792,4 +14836,29 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .ocultoInicial {
     display: none;
+}
+
+[zonaCSS="/alojamiento"] .botonOfertaEnApartamento {
+    /* color: blue; */
+    padding: 12px;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    transition: background 500ms linear;
+}
+
+[zonaCSS="/alojamiento"] .botonOfertaEnApartamento:hover {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+
+
 }

@@ -30,7 +30,7 @@ export const eliminarCheckOutAdelantado = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-        const reserva = obtenerReservaPorReservaUID(reservaUID)
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
         // validar que la reserva no este cancelada
         if (reserva.estadoReservaIDV === "cancelada") {
             const error = "No se puede alterar una fecha de checkin de una reserva cancelada";

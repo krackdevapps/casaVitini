@@ -67,10 +67,27 @@ export const validarObjetoOferta = async (data) => {
             const error = "el campo zonaIDV solo admite global, publica o privada"
             throw new Error(error)
         }
+
+        const mensajeError = (data) => {
+            const numeroMaximo = data.numeroMaximo
+            const tipoCondicionIDV = data.tipoCondicionIDV
+            const m = `El contnedor ${tipoCondicionIDV} no espera mas de ${numeroMaximo} de llaves en el objeto`
+            return m
+        }
+
         const codigosDescuentosBase64DeLaMismaOferta = []
         for (const condicion of condicionesArray) {
             const tipoCondicionIDV = condicion?.tipoCondicion
             if (tipoCondicionIDV === "conFechaEntradaEntreRango") {
+
+                if (Object.keys(condicion).length > 3) {
+                    const m = mensajeError({
+                        tipoCondicionIDV,
+                        numeroMaximo: 3
+                    })
+                    throw new Error(m)
+                }
+
                 const fechaInicioRango_ISO = condicion?.fechaInicioRango_ISO
                 const fechaFinalRango_ISO = condicion?.fechaFinalRango_ISO
                 if (!fechaInicioRango_ISO) {
@@ -99,6 +116,15 @@ export const validarObjetoOferta = async (data) => {
             } else if (tipoCondicionIDV === "conFechaCreacionEntreRango") {
             } else if (tipoCondicionIDV === "porNumeroDeApartamentos") {
 
+                if (Object.keys(condicion).length > 3) {
+                    const m = mensajeError({
+                        tipoCondicionIDV,
+                        numeroMaximo: 3
+                    })
+                    throw new Error(m)
+                }
+
+
                 const tipoConteo = condicion.tipoConteo
                 if (tipoConteo !== "aPartirDe" && tipoConteo !== "numeroExacto" && tipoConteo !== "hastaUnNumeroExacto") {
                     const error = `En la condiicon ${tipoCondicionIDV} el tipoConteo solo puede ser aPartirDe, numeroExacto o hastaUnNumeroExacto`
@@ -116,6 +142,15 @@ export const validarObjetoOferta = async (data) => {
                 })
 
             } else if (tipoCondicionIDV === "porApartamentosEspecificos") {
+                if (Object.keys(condicion).length > 3) {
+                    const m = mensajeError({
+                        tipoCondicionIDV,
+                        numeroMaximo: 3
+                    })
+                    throw new Error(m)
+                }
+
+
                 const tipoDeEspecificidad = condicion.tipoDeEspecificidad
                 if (tipoDeEspecificidad !== "exactamente"
                     &&
@@ -140,6 +175,11 @@ export const validarObjetoOferta = async (data) => {
                 })
                 const contenedorControlIDVUnicos = {}
                 for (const contenedorApartamento of apartamentos) {
+                    if (Object.keys(contenedorApartamento).length > 1) {
+                        const m = "El contenedor de apartamentos en la condicion porApartamentosEspecificos solo espera una llave"
+                        throw new Error(m)
+                    }
+
                     if (!contenedorApartamento.hasOwnProperty("apartamentoIDV")) {
                         const m = "Se esperaba que el contenedor de apartamentos de la condicion de porApartamentosEspecificos tuviera la llave apartamentoIDV"
                         throw new Error(m)
@@ -164,6 +204,15 @@ export const validarObjetoOferta = async (data) => {
                     })
                 }
             } else if (tipoCondicionIDV === "porDiasDeAntelacion") {
+
+                if (Object.keys(condicion).length > 3) {
+                    const m = mensajeError({
+                        tipoCondicionIDV,
+                        numeroMaximo: 3
+                    })
+                    throw new Error(m)
+                }
+
                 const tipoConteo = condicion.tipoConteo
                 if (tipoConteo !== "aPartirDe"
                     &&
@@ -185,6 +234,16 @@ export const validarObjetoOferta = async (data) => {
                 })
 
             } else if (tipoCondicionIDV === "porDiasDeReserva") {
+
+                if (Object.keys(condicion).length > 3) {
+                    const m = mensajeError({
+                        tipoCondicionIDV,
+                        numeroMaximo: 3
+                    })
+                    throw new Error(m)
+                }
+
+
                 const tipoConteo = condicion.tipoConteo
                 if (tipoConteo !== "aPartirDe" && tipoConteo !== "numeroExacto" && tipoConteo !== "hastaUnNumeroExacto") {
                     const error = `En la condiicon ${tipoCondicionIDV} el campo tipoConteo solo puede ser aPartirDe o numeroExacto`
@@ -202,6 +261,15 @@ export const validarObjetoOferta = async (data) => {
                 })
 
             } else if (tipoCondicionIDV === "porRangoDeFechas") {
+                if (Object.keys(condicion).length > 3) {
+                    const m = mensajeError({
+                        tipoCondicionIDV,
+                        numeroMaximo: 3
+                    })
+                    throw new Error(m)
+                }
+
+
                 const fechaInicioRango_ISO = condicion?.fechaInicioRango_ISO
                 const fechaFinalRango_ISO = condicion?.fechaFinalRango_ISO
                 if (!fechaInicioRango_ISO) {
@@ -229,6 +297,15 @@ export const validarObjetoOferta = async (data) => {
 
                 })
             } else if (tipoCondicionIDV === "porCodigoDescuento") {
+
+                if (Object.keys(condicion).length > 2) {
+                    const m = mensajeError({
+                        tipoCondicionIDV,
+                        numeroMaximo: 2
+                    })
+                    throw new Error(m)
+                }
+
                 const codigoDescuentoAsci = condicion?.codigoDescuento
                 const codigoDescuentoBase64 = validadoresCompartidos.tipos.cadena({
                     string: codigoDescuentoAsci,
@@ -279,6 +356,11 @@ export const validarObjetoOferta = async (data) => {
         const tipoDescuento = descuentosJSON.tipoDescuento
         if (tipoDescuento === "totalNeto") {
 
+            if (Object.keys(descuentosJSON).length > 3) {
+                const m = "El objeto de descuentosJSON para totalNeto no espera mas de 3 llaves"
+                throw new Error(m)
+            }
+
             const tipoAplicacion = descuentosJSON.tipoAplicacion
             const descuentoTotal = descuentosJSON.descuentoTotal
 
@@ -296,7 +378,12 @@ export const validarObjetoOferta = async (data) => {
                 limpiezaEspaciosAlrededor: "si",
             })
 
-        } else  if (tipoDescuento === "mismoDescuentoParaCadaApartamento") {
+        } else if (tipoDescuento === "mismoDescuentoParaCadaApartamento") {
+
+            if (Object.keys(descuentosJSON).length > 3) {
+                const m = "El objeto de descuentosJSON para mismoDescuentoParaCadaApartamento no espera mas de 3 llaves"
+                throw new Error(m)
+            }
 
             const tipoAplicacion = descuentosJSON.tipoAplicacion
             const descuentoTotal = descuentosJSON.descuentoTotal
@@ -315,7 +402,13 @@ export const validarObjetoOferta = async (data) => {
                 limpiezaEspaciosAlrededor: "si",
             })
 
-        } else  if (tipoDescuento === "individualPorApartamento") {
+        } else if (tipoDescuento === "individualPorApartamento") {
+
+            if (Object.keys(descuentosJSON).length > 2) {
+                const m = "El objeto de descuentosJSON para individualPorApartamento no espera mas de 2 llaves"
+                throw new Error(m)
+            }
+
 
             const apartamentos = validadoresCompartidos.tipos.array({
                 array: descuentosJSON.apartamentos,
@@ -323,7 +416,10 @@ export const validarObjetoOferta = async (data) => {
             })
 
             for (const apartamentoIndividual of apartamentos) {
-
+                if (Object.keys(apartamentoIndividual).length > 3) {
+                    const m = "El contenedor de apartamentoIndividual del objeto de descuentosJSON para individualPorApartamento no espera mas de 3 llaves"
+                    throw new Error(m)
+                }
                 const tipoAplicacion = apartamentoIndividual.tipoAplicacion
                 const descuentoTotal = apartamentoIndividual.descuentoTotal
                 const apartamentoIDV = apartamentoIndividual.apartamentoIDV
@@ -366,10 +462,15 @@ export const validarObjetoOferta = async (data) => {
                 tipoVector: "diferente"
             })
 
-
             const subTipoDescuento = descuentosJSON.subTipoDescuento
-
             if (subTipoDescuento === "totalNetoPorRango") {
+
+                if (Object.keys(descuentosJSON).length > 6) {
+                    const m = "El objeto de descuentosJSON para porRango en el subTipo totalNetoPorRango no espera mas de 6 llaves"
+                    throw new Error(m)
+                }
+
+                
                 const tipoAplicacion = descuentosJSON.tipoAplicacion
                 const descuentoTotal = descuentosJSON.descuentoTotal
 
@@ -387,6 +488,10 @@ export const validarObjetoOferta = async (data) => {
                     limpiezaEspaciosAlrededor: "si",
                 })
             } else if (subTipoDescuento === "porDiasDelRango") {
+                if (Object.keys(descuentosJSON).length > 5) {
+                    const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango no espera mas de 5 llaves"
+                    throw new Error(m)
+                }
 
                 const descuentoPorDias = validadoresCompartidos.tipos.array({
                     array: descuentosJSON.descuentoPorDias,
@@ -418,6 +523,15 @@ export const validarObjetoOferta = async (data) => {
                     }
 
                     if (tipoDescuentoDelDia === "netoPorDia") {
+
+
+
+                        if (Object.keys(dia).length > 4) {
+                            const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango, en el tipo de descuento netoPorDia no espera mas de 4 llaves"
+                            throw new Error(m)
+                        }
+
+
                         const tipoAplicacion = dia.tipoAplicacion
                         const descuentoTotal = dia.descuentoTotal
 
@@ -436,6 +550,13 @@ export const validarObjetoOferta = async (data) => {
                         })
                     } else if (tipoDescuentoDelDia === "netoPorApartamentoDelDia") {
 
+
+                        if (Object.keys(dia).length > 3) {
+                            const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango, en el tipo de descuento netoPorApartamentoDelDia no espera mas de 3 llaves"
+                            throw new Error(m)
+                        }
+
+
                         const fechaDelDia = await validadoresCompartidos.fechas.validarFecha_ISO({
                             fecha_ISO: dia.fecha,
                             nombreCampo: `La fecha de final del dia`
@@ -446,6 +567,12 @@ export const validarObjetoOferta = async (data) => {
                             nombreCampo: `El array de apatamento en el dia ${fechaDelDia}`
                         })
                         for (const apartmentoDelDia of apartamentos) {
+
+                            if (Object.keys(apartmentoDelDia).length > 3) {
+                                const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango, en el tipo de descuento netoPorApartamentoDelDia, concretamenteo en el conteneodr de apartamentos no espera mas de 3 llaves"
+                                throw new Error(m)
+                            }
+    
                             const apartamentoIDV = validadoresCompartidos.tipos.cadena({
                                 string: apartmentoDelDia.apartamentoIDV,
                                 nombreCampo: `el identificador visual del apartamento dentro del dia ${fechaDelDia}.`,

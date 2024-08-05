@@ -10,6 +10,8 @@ import { actualizarFechaEntradaReserva } from "../../../../../repositorio/reserv
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
 import { actualizarFechaSalidaReserva } from "../../../../../repositorio/reservas/rangoFlexible/actualizarFechaSalidaReserva.mjs";
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
+import { utilidades } from "../../../../../componentes/utilidades.mjs";
+import { eliminarSobreControlApartamentoPorNochePorArrayDeFechas } from "../../../../../repositorio/reservas/transacciones/sobreControl/eliminarSobreControlApartamentoPorNochePorArrayDeFechas.mjs";
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -58,16 +60,67 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         await campoDeTransaccion("iniciar")
         const mesSeleccionado = fechaSolicitada_array[1];
         const anoSeleccionado = fechaSolicitada_array[0];
-        const reserva = obtenerReservaPorReservaUID(reservaUID)
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
 
         if (reserva.estadoReservaIDV === "cancelada") {
             const error = "La reserva no se puede modificar por que esta cancelada, una reserva cancelada no interfiere en los dias ocupados";
             throw new Error(error);
         }
+
+
+
         const fechaEntrada = reserva.fechaEntrada;
         const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
         const fechaSalida = reserva.fechaSalida;
         const fechaSalida_Objeto = DateTime.fromISO(fechaSalida, { zone: zonaHoraria });
+
+        // const constructorFechasFinales = (data) => {
+        //     try {
+        //         const sentidoRango = data.sentidoRango
+        //         const fechaEntrada_inicial = data.fechaEntrada_inicial
+        //         const fechaSalida_inicial = data.fechaSalida_inicial
+        //         const fechaSolicitada = data.fechaSolicitada
+        //         const fechaFinal = {
+        //             fechaEntrada_final: fechaEntrada_inicial,
+        //             fechaSalida_final: fechaSalida_inicial
+        //         }
+        //         if (sentidoRango === "pasado") {
+        //             fechaFinal.fechaEntrada_final = fechaSolicitada
+        //         } else if (sentidoRango === "futuro") {
+        //             fechaFinal.fechaSalida_final = fechaSolicitada
+        //         } else {
+        //             const m = "constructorFechasFinales no reconoce le sentido de rango"
+        //             throw new Error(m)
+        //         }
+        //         return fechaFinal
+        //     } catch (error) {
+        //         throw error
+        //     }
+        // }
+
+        // const fechasFinales = constructorFechasFinales({
+        //     sentidoRango,
+        //     fechaEntrada_inicial: fechaEntrada,
+        //     fechaSalida_inicial: fechaSalida,
+        //     fechaSolicitada: fechaSolicitada_ISO
+        // })
+
+
+        // const diasObsoletos = utilidades.conversor.compararFechasYExtraerDiasQueNoEstenEnElRangoSegundo({
+        //     fechaInicio_rango_uno: fechaEntrada,
+        //     fechaFin_rango_uno: fechaSalida,
+        //     fechaInicio_rango_dos: fechasFinales.fechaEntrada_final,
+        //     fechaFin_rango_dos: fechasFinales.fechaSalida_final,
+        // })
+
+        // if (diasObsoletos.length > 0) {
+        //   await eliminarSobreControlApartamentoPorNochePorArrayDeFechas({
+        //         reservaUID,
+        //         fechasNochesARRAY: diasObsoletos,
+
+        //     })
+        // }
+  
         const metadatos = {
             reservaUID,
             mesCalendario: mesSeleccionado,
@@ -159,6 +212,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 reservaUID: reservaUID
             })
             const nuevaFechaSalida = reservaActualizada.fechaSalida;
+
             const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)
             await campoDeTransaccion("confirmar")
             const ok = {

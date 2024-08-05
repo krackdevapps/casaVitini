@@ -29,9 +29,6 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
         const instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion || []
         const instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador || []
 
-        console.log(instantaneaOfertasPorCondicion)
-
-
         await constructorInstantaneaNoches({
             estructura,
             instantaneaNoches,
@@ -69,7 +66,7 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
         })
         await aplicarImpuestos({
             estructura,
-            simulacionUID,
+            simulacionUID: Number(simulacionUID),
             origen: "simulacion"
         })
     } catch (error) {

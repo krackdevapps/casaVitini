@@ -1,6 +1,6 @@
 import { conexion } from "../../componentes/db.mjs";
 
-export const obtenerTodosImpuestosConOrdenamiento = async (data) => {
+export const obtenerTodasSimulacionesConOrdenamiento = async (data) => {
     try {
 
         const nombreColumna = data.nombreColumna
@@ -23,15 +23,14 @@ export const obtenerTodosImpuestosConOrdenamiento = async (data) => {
 
         const consulta = `
         SELECT
-        "impuestoUID",
+        "simulacionUID",
         nombre,
-        "tipoImpositivo",
-        "tipoValorIDV",
-        "entidadIDV",
-        "estadoIDV",
+        to_char("fechaCreacion", 'YYYY-MM-DD') as "fechaCreacion",
+        to_char("fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada",
+        to_char("fechaSalida", 'YYYY-MM-DD') as "fechaSalida",
         COUNT(*) OVER() as total_filas
         FROM 
-        impuestos
+        "simulacionesDePrecio"
         ${constructosSQL(nombreColumna, sentidoColumna)}
         LIMIT $1
         OFFSET $2;  
@@ -41,10 +40,6 @@ export const obtenerTodosImpuestosConOrdenamiento = async (data) => {
             numeroPagina
         ]
         const resuelve = await conexion.query(consulta, parametros);
-        // if (resuelve.rowCount === 0) {
-        //     const error = "No hay ningun impuesto en sl sistema";
-        //     throw new Error(error);
-        // }
         const resultados = {
             totalFilas: resuelve?.rows[0]?.total_filas ? resuelve.rows[0].total_filas : 0,
             resultados: resuelve.rows

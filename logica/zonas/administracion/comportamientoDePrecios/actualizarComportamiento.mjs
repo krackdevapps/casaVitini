@@ -5,8 +5,8 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { actualizarComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/actualizarComportamientoDePrecio.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
-import { validarComportamiento } from "./validarComportamiento.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { validarComportamiento } from "../../../sistema/contenedorFinanciero/comportamientoPrecios/validarComportamiento.mjs";
 
 export const actualizarComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();
@@ -71,6 +71,8 @@ export const actualizarComportamiento = async (entrada, salida) => {
         await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
-        mutex.release();
+        if (mutex) {
+            mutex.release()
+        }
     }
 }

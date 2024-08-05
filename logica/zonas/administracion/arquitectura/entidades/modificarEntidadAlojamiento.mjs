@@ -18,6 +18,7 @@ import { actualizaApartamentoPorApartamentoIDVPorReservaUID } from "../../../../
 import { insertarCaracteristicaArrayEnConfiguracionDeAlojamiento } from "../../../../repositorio/arquitectura/entidades/apartamento/insertarCaracteristicaArrayEnConfiguracionDeAlojamiento.mjs";
 import { actualizarIDVenOfertas } from "../../../../sistema/arquitectura/entidades/actualizarIDVenOfertas.mjs";
 import { actualizarIDVenInstantaneasContenedorFinanciero } from "../../../../sistema/arquitectura/entidades/actualizarIDVenInstantaneasContenedorFinanciero.mjs";
+import { actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion } from "../../../../sistema/arquitectura/entidades/actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion.mjs";
 
 export const modificarEntidadAlojamiento = async (entrada) => {
     const mutex = new Mutex();
@@ -111,24 +112,29 @@ export const modificarEntidadAlojamiento = async (entrada) => {
 
 
             //if (apartamentoIDV !== entidadIDV) {
-                await actualizaApartamentoPorApartamentoIDVPorReservaUID({
-                    reservasUIDArray,
-                    antiguoApartamentoIDV: entidadIDV,
-                    nuevoApartamentoIDV: apartamentoIDV,
-                    apartamentoUI: apartamentoUI
-                })
+            await actualizaApartamentoPorApartamentoIDVPorReservaUID({
+                reservasUIDArray,
+                antiguoApartamentoIDV: entidadIDV,
+                nuevoApartamentoIDV: apartamentoIDV,
+                apartamentoUI: apartamentoUI
+            })
 
-                // Actualizar en ofertas
-                await actualizarIDVenOfertas({
-                    origenIDV: entidadIDV,
-                    destinoIDV: apartamentoIDV
-                })
-                // Actualizar todos los IDV de todas las instantaneas
-                await actualizarIDVenInstantaneasContenedorFinanciero({
-                    origenIDV: entidadIDV,
-                    destinoIDV: apartamentoIDV,
-                    reservasUIDArray
-                })
+            // Actualizar en ofertas
+            await actualizarIDVenOfertas({
+                origenIDV: entidadIDV,
+                destinoIDV: apartamentoIDV
+            })
+            // Actualizar todos los IDV de todas las instantaneas
+            await actualizarIDVenInstantaneasContenedorFinanciero({
+                origenIDV: entidadIDV,
+                destinoIDV: apartamentoIDV,
+                reservasUIDArray
+            })
+
+            await actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion({
+                origenIDV: entidadIDV,
+                destinoIDV: apartamentoIDV,
+            })
             //}
 
             // Se recontruye el contendor fiancniero desde isntantaneas

@@ -3,7 +3,7 @@ import { evitarDuplicados } from "../../../sistema/contenedorFinanciero/comporta
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { insertarComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/insertarComportamientoDePrecio.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
-import { validarComportamiento } from "./validarComportamiento.mjs";
+import { validarComportamiento } from "../../../sistema/contenedorFinanciero/comportamientoPrecios/validarComportamiento.mjs";
 
 export const crearComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();

@@ -7,6 +7,7 @@ import { Mutex } from "async-mutex";
 import { insertarSimulacion } from "../../../repositorio/simulacionDePrecios/insertarSimulacion.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { generadorReservaUID } from "../../../componentes/generadorReservaUID.mjs";
+import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const guardarSimulacion = async (entrada) => {
     const mutex = new Mutex()
@@ -44,6 +45,8 @@ export const guardarSimulacion = async (entrada) => {
             fechaSalida: fechaSalida,
             tipoVector: "diferente"
         })
+        await campoDeTransaccion("iniciar")
+
         const controlIDVUnicos = {}
         for (const apartamentoIDV of apartamentosIDVARRAY) {
             if (controlIDVUnicos.hasOwnProperty(apartamentoIDV)) {
@@ -86,7 +89,7 @@ export const guardarSimulacion = async (entrada) => {
         })
         const reservaUID = await generadorReservaUID()
 
-        const simuacion = await insertarSimulacion({
+        const simulacion = await insertarSimulacion({
             desgloseFinanciero,
             nombre,
             fechaCreacion,
@@ -95,12 +98,16 @@ export const guardarSimulacion = async (entrada) => {
             apartamentosIDVARRAY,
             reservaUID
         })
+        await campoDeTransaccion("confirmar")
+
         const ok = {
             ok: "Se ha guarado la nueva simulacion",
-            simuacionUID: simuacion.uid
+            simulacionUID: simulacion.simulacionUID
         }
         return ok
     } catch (errorCapturado) {
+        await campoDeTransaccion("cancelar")
+
         throw errorCapturado
     } finally {
         if (mutex) {

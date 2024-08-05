@@ -61,6 +61,11 @@ export const detallesReserva = async (data) => {
         }
         if (capas.includes(contenedorCapas[3])) {
             reserva.contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
+            
+            const contenedorOfertasPorAdmimnistrador = reserva.contenedorFinanciero.desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador
+            for (const contenedorOferta of contenedorOfertasPorAdmimnistrador) {
+                await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
+            }
         }
         if (capas.includes(contenedorCapas[4])) {
             reserva.detallesPagos = await detallesPagos(reservaUID)

@@ -1062,7 +1062,8 @@ const casaVitini = {
                                 contenedorOrigenIDV: "[calendario=entrada]",
                                 instanciaUID_contenedorFechas,
                                 rangoIDV: "inicioRango",
-                                metodoSelectorDia: metodoSelectorPasarela
+                                metodoSelectorDia: metodoSelectorPasarela,
+                                tituloCalendario: "Selecciona una fecha de entrada por favor"
                             })
                         })
                         const textoDiaEntrada = document.createElement('div');
@@ -1095,7 +1096,9 @@ const casaVitini = {
                                 contenedorOrigenIDV: "[calendario=salida]",
                                 instanciaUID_contenedorFechas,
                                 rangoIDV: "finalRango",
-                                metodoSelectorDia: metodoSelectorPasarela
+                                metodoSelectorDia: metodoSelectorPasarela,
+                                tituloCalendario: "Selecciona una fecha de salida por favor"
+
                             })
                         })
                         const textoDiaSalida = document.createElement('div');
@@ -1221,6 +1224,7 @@ const casaVitini = {
                         }
                     },
                     buscarApartamentosDisponibles: async () => {
+
                         document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
                         const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                         const fechaSalidaVolatil_Humana = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
@@ -1241,6 +1245,7 @@ const casaVitini = {
                             return casaVitini.ui.componentes.advertenciaInmersiva(error)
                         }
                         document.body.removeAttribute("style")
+                        document.body.style.backgroundColor = "rgb(214, 192, 157)"
                         document.querySelector(".bloquePernoctacion")?.remove()
                         document.querySelector(".bloqueBotonResumenReserva")?.remove()
                         document.querySelectorAll("[componente=superBloque]").forEach((contenedorAlojamientoRenderizado) => {
@@ -1319,7 +1324,7 @@ const casaVitini = {
                             const tituloBloqueAlojamiento = document.createElement("p")
                             tituloBloqueAlojamiento.setAttribute("class", "tituloBloqueAlojamiento parpadeaFondoTransparente")
                             tituloBloqueAlojamiento.setAttribute("componente", "tituloInfoSeleccionar")
-                            tituloBloqueAlojamiento.innerText = "Aquí tienes el alojamiento disponible para seleccionar."
+                            tituloBloqueAlojamiento.innerText = "Aquí tienes el alojamiento disponible para seleccionar. A medida que elijas los apartamentos, los precios se actualizarán y se aplicarán las ofertas correspondientes en función de tu selección. Las ofertas que aparecen bajo el precio son las que se han aplicado. Puedes hacer clic en la oferta para ver sus detalles. En el siguiente paso, se te mostrará un resumen de tu reserva con toda la información detallada."
                             superBloqueReservaRenderizado.appendChild(tituloBloqueAlojamiento);
                             const bloqueAlojamientoUI = document.createElement("div")
                             bloqueAlojamientoUI.classList.add("bloqueAlojamiento")
@@ -1336,6 +1341,8 @@ const casaVitini = {
                                 const habitaciones = apartamento[1].habitaciones
                                 const caracteristicas = apartamento[1].caracteristicas
                                 const totalInicial = contenedorFinanciero[apartamentoIDV].global.totales.totalFinal
+                                const contenedorOFertasPorCondicion = contenedorFinanciero[apartamentoIDV].contenedorOfertas.entidades.reserva.ofertas.porCondicion
+
                                 // let precioBrutoPorDia = apartamento[1].preciosTotales.totalBrutoPordia
                                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                                 const bloqueApartamento = document.createElement("div")
@@ -1349,6 +1356,7 @@ const casaVitini = {
 
                                     const selectorApartamento = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
                                     const selectorSelectorApartamento = selectorApartamento.querySelector("[componente=selectorApartamento]")
+
                                     if (selectorApartamento.getAttribute("estadoApartamento") !== "seleccionado") {
                                         selectorApartamento.setAttribute("estadoApartamento", "seleccionado")
                                         selectorSelectorApartamento.style.opacity = "1"
@@ -1356,23 +1364,38 @@ const casaVitini = {
                                         selectorApartamento.removeAttribute("estadoApartamento")
                                         selectorSelectorApartamento.removeAttribute("style")
                                     }
+                                    const numeroApartamentosSeleccionado = document.querySelectorAll("[apartamentoIDV][estadoApartamento=seleccionado]").length
                                     const selectorApartamentosSeleccionados = document.querySelectorAll("[estadoApartamento=seleccionado]")
                                     const marcoFlotante = document.querySelector("[componente=marcoFlotanteIrAResumen]")
                                     const selectorInfoTextoParpadeo = document.querySelector("[componente=tituloInfoSeleccionar]")
+                                    const selectorBotonIrAlResumen = marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
+                                    const selectorEstadoSeleccion = selectorBotonIrAlResumen.querySelector("[contenedor=estadoSeleccion]")
+                                    selectorEstadoSeleccion.innerHTML = null
                                     if (selectorApartamentosSeleccionados.length > 0) {
                                         selectorInfoTextoParpadeo.classList.remove("parpadeaFondoTransparente")
                                         marcoFlotante.style.opacity = "1"
                                         marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
                                             .style.pointerEvents = "all"
+
+                                        if (numeroApartamentosSeleccionado === 1) {
+                                            selectorEstadoSeleccion.innerText = `1 Apartamento seleccionado`
+                                        } else if (numeroApartamentosSeleccionado > 1) {
+                                            selectorEstadoSeleccion.innerText = `${numeroApartamentosSeleccionado} Apartamentos seleccionados`
+                                        }
+
                                     } else {
                                         selectorInfoTextoParpadeo.classList.add("parpadeaFondoTransparente")
                                         marcoFlotante.removeAttribute("style")
-                                        marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
-                                            .removeAttribute("style")
+
+
+
+                                        // marcoFlotante.querySelector("[componente=botonIrAResumenReserva]")
+                                        //     .removeAttribute("style")
                                     }
 
                                     casaVitini.ui.vistas.alojamiento.portada.actualizarPreciosPorSeleccion()
                                 })
+                                bloqueAlojamientoUI.appendChild(bloqueApartamento)
                                 const bloqueImagen = document.createElement("div")
                                 bloqueImagen.setAttribute("class", "bloqueImagen")
 
@@ -1382,7 +1405,7 @@ const casaVitini = {
                                 bloqueVerticalTitulo.setAttribute("class", "bloqueVerticalTitulo")
                                 const elementoTituloNombre = document.createElement("div")
                                 elementoTituloNombre.setAttribute("class", "elementoTituloPrincipal")
-                                elementoTituloNombre.innerText = apartamentoUI + "_test_nuevoSistema"
+                                elementoTituloNombre.innerText = apartamentoUI + "test_nuevoSistema"
                                 bloqueVerticalTitulo.appendChild(elementoTituloNombre)
                                 const bloqueTituloApartamentoComponenteUI = document.createElement("div")
                                 bloqueTituloApartamentoComponenteUI.setAttribute("class", "tituloApartamentoComponenteUI")
@@ -1396,14 +1419,43 @@ const casaVitini = {
                                     caracteristicaUI.innerText = caracteristica.caracteristicaUI
                                     bloqueCaracteristicas.appendChild(caracteristicaUI)
                                 }
-                                contenedorTitulo.appendChild(bloqueCaracteristicas)
+                                if (caracteristicas.length > 0) {
+                                    contenedorTitulo.appendChild(bloqueCaracteristicas)
+                                }
+
                                 bloqueApartamento.appendChild(contenedorTitulo)
-                                const elementoTituloCocina = document.createElement("div")
-                                elementoTituloCocina.setAttribute("class", "elementoTitulo")
-                                elementoTituloCocina.setAttribute("valorInicial", totalInicial)
-                                elementoTituloCocina.setAttribute("componente", "valorTotal")
-                                elementoTituloCocina.innerText = `${totalInicial}$ Total con impuestos y ofertas aplicadas`
-                                bloqueTituloApartamentoComponenteUI.appendChild(elementoTituloCocina)
+
+                                const contenedorTotalYOfertas = document.createElement("div")
+                                contenedorTotalYOfertas.classList.add(
+                                    "flexVertical",
+                                    "gap6"
+
+                                )
+                                contenedorTotalYOfertas.setAttribute("contenedor", "totalYOfertas")
+                                bloqueTituloApartamentoComponenteUI.appendChild(contenedorTotalYOfertas)
+
+                                const totaUI = document.createElement("div")
+                                totaUI.setAttribute("class", "elementoTitulo")
+                                totaUI.setAttribute("totalInicial", totalInicial)
+                                totaUI.setAttribute("contenedorOfertasInicial", JSON.stringify(contenedorOFertasPorCondicion))
+                                totaUI.setAttribute("componente", "valorTotal")
+                                contenedorTotalYOfertas.appendChild(totaUI)
+
+                                const contenedorOfertasUI = document.createElement("div")
+                                contenedorOfertasUI.classList.add(
+                                    "flexVertical",
+                                    "gap6"
+                                )
+                                contenedorOfertasUI.setAttribute("contenedor", "ofertas")
+                                contenedorTotalYOfertas.appendChild(contenedorOfertasUI)
+
+
+                                casaVitini.ui.vistas.alojamiento.portada.aplicaPrecioAlApartamento({
+                                    apartamentoIDV: apartamentoIDV,
+                                    contenedorOfertas: contenedorOFertasPorCondicion,
+                                    total: totalInicial
+                                })
+
                                 const bloqueHabitaciones = document.createElement("div")
                                 bloqueHabitaciones.classList.add("plaza_alojamiento_contenedorApartmento_contenedorHabitaciones")
                                 bloqueHabitaciones.setAttribute("componente", "bloqueHabitaciones")
@@ -1472,7 +1524,6 @@ const casaVitini = {
                                     bloqueHabitaciones.appendChild(habitacionBloque)
                                 }
                                 // bloqueTituloImagen.appendChild(bloqueHabitaciones)
-                                bloqueAlojamientoUI.appendChild(bloqueApartamento)
                                 const metadatos = {
                                     apartamentoIDV: apartamentoIDV,
                                     instanciaUID: instanciaUID,
@@ -1491,9 +1542,24 @@ const casaVitini = {
                             botonResumenReserva.classList.add("plaza_alojamiento_boronResumenReservaEnMarcoFlotante")
                             botonResumenReserva.classList.add("parpadeaFondoSemiBlanco")
                             botonResumenReserva.setAttribute("componente", "botonIrAResumenReserva")
-                            botonResumenReserva.innerText = "Ir al resumen de mi reserva"
+                            //botonResumenReserva.innerText = "Ir al resumen de mi reserva"
                             botonResumenReserva.addEventListener("click", casaVitini.ui.vistas.alojamiento.portada.iraResumenReserva)
                             marcoIntermedio.append(botonResumenReserva)
+
+                            const contenedorEstadoSeleccion = document.createElement("div")
+                            contenedorEstadoSeleccion.setAttribute("contenedor", "estadoSeleccion")
+                            botonResumenReserva.appendChild(contenedorEstadoSeleccion)
+
+
+                            const info = document.createElement("div")
+                            info.classList.add(
+                                "negrita"
+                            )
+                            info.innerText = "Ir al resumen de mi reserva"
+                            botonResumenReserva.appendChild(info)
+
+
+
                             marcoBotonFlotanteIrAResumenReserva.append(marcoIntermedio)
                             superBloqueReservaRenderizado.appendChild(marcoBotonFlotanteIrAResumenReserva)
                         }
@@ -1656,16 +1722,26 @@ const casaVitini = {
                         })
                         if (apartamentosSeleccionados.length === 1) {
                             selectorTodosApartamentos.forEach((apartamento) => {
-                                const valorInicial = apartamento.querySelector("[componente=valorTotal]").getAttribute("valorInicial")
-                                apartamento.querySelector("[componente=valorTotal]").innerText = `${valorInicial}$ Total con impuestos y ofertas aplicadas`
-
+                                const apartamentoIDV = apartamento.getAttribute("apartamentoIDV")
+                                const totalInicial = apartamento.querySelector("[componente=valorTotal]").getAttribute("totalInicial")
+                                const contenedorOfertasInicial = JSON.parse(apartamento.querySelector("[componente=valorTotal]").getAttribute("contenedorOfertasInicial")) || []
+                                casaVitini.ui.vistas.alojamiento.portada.aplicaPrecioAlApartamento({
+                                    apartamentoIDV: apartamentoIDV,
+                                    contenedorOfertas: contenedorOfertasInicial,
+                                    total: totalInicial
+                                })
                             })
 
                         } else if (apartamentosSeleccionados.length > 1) {
                             selectorApartamentosNoSeleccionados.forEach((apartamento) => {
-                                const valorInicial = apartamento.querySelector("[componente=valorTotal]").getAttribute("valorInicial")
-                                apartamento.querySelector("[componente=valorTotal]").innerText = `${valorInicial}$ Total con impuestos y ofertas aplicadas`
-
+                                const apartamentoIDV = apartamento.getAttribute("apartamentoIDV")
+                                const totalInicial = apartamento.querySelector("[componente=valorTotal]").getAttribute("totalInicial")
+                                const contenedorOfertasInicial = JSON.parse(apartamento.querySelector("[componente=valorTotal]").getAttribute("contenedorOfertasInicial")) || []
+                                casaVitini.ui.vistas.alojamiento.portada.aplicaPrecioAlApartamento({
+                                    apartamentoIDV: apartamentoIDV,
+                                    contenedorOfertas: contenedorOfertasInicial,
+                                    total: totalInicial
+                                })
                             })
 
                             const contenedorInstanciasUID = {}
@@ -1676,6 +1752,9 @@ const casaVitini = {
                                 contenedorApartamento.setAttribute("instanciaUID", instanciaUID_proceso)
                                 const selectorTotalUI = contenedorApartamento.querySelector(`[componente=valorTotal]`)
                                 selectorTotalUI.innerText = "Calculando precio..."
+                                const selectorContenedorOfertas = contenedorApartamento.querySelector("[contenedor=ofertas]")
+                                selectorContenedorOfertas.innerHTML = null
+
                             })
 
                             const respuestaServidor = await casaVitini.shell.servidor({
@@ -1684,35 +1763,303 @@ const casaVitini = {
                                 fechaSalida: fechaSalida,
                                 apartamentosIDVARRAY: apartamentosSeleccionados
                             })
+
+
                             if (respuestaServidor?.error) {
                                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                                 return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor.error)
                             }
                             if (respuestaServidor.ok) {
                                 const preciosPorSeleccion = respuestaServidor.preciosPorSeleccion
+                                const desgloseFinanciero = respuestaServidor.desgloseFinanciero
+                                const contenedorOFertasPorCondicion = desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porCondicion
+
+
+
+                                const contenedorSimplificadoOfertas = []
+                                contenedorOFertasPorCondicion.forEach((contenedorOferta, i) => {
+                                    if (i < 2) {
+                                        const nombreOferta = contenedorOferta.oferta.nombreOferta
+                                        const estructura = {
+                                            nombreOferta,
+                                            contenedorOferta
+                                        }
+                                        contenedorSimplificadoOfertas.push(estructura)
+                                    }
+                                })
+
+
                                 apartamentosSeleccionados.forEach((apartamentoIDV) => {
                                     const instanciaUID = contenedorInstanciasUID[apartamentoIDV]
-                                    const selectorContenedorApartamento = contenedorSobreBloque.querySelector(`[apartamentoIDV="${apartamentoIDV}"][instanciaUID="${instanciaUID}"]`)
+                                    const selectorContenedorApartamento = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"][instanciaUID="${instanciaUID}"]`)
                                     if (selectorContenedorApartamento) {
-                                        const selectorTotalUI = selectorContenedorApartamento.querySelector(`[componente=valorTotal]`)
-
                                         const valorFinalUI = preciosPorSeleccion[apartamentoIDV].precioEnBaseASeleccion
-                                        selectorTotalUI.innerText = `${valorFinalUI}$ Total con impuestos y ofertas aplicadas`
+                                        casaVitini.ui.vistas.alojamiento.portada.aplicaPrecioAlApartamento({
+                                            apartamentoIDV,
+                                            contenedorOfertas: contenedorOFertasPorCondicion,
+                                            total: valorFinalUI
+                                        })
                                     }
                                 })
                             }
                         }
+                    },
+                    aplicaPrecioAlApartamento: (data) => {
+                        const apartamentoIDV = data.apartamentoIDV
+                        const total = data.total
+                        const contenedorOfertas = data.contenedorOfertas
+                        console.log("S", apartamentoIDV)
+
+                        const selectorApartamento = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
+                        const selectorTotalUI = selectorApartamento.querySelector(`[componente=valorTotal]`)
+                        const selectorContenedorOfertas = selectorApartamento.querySelector(`[contenedor=ofertas]`)
+                        selectorContenedorOfertas.innerHTML = null
+                        selectorTotalUI.innerText = `${total}$ Total`
+
+                        const contenedorSimplificadoOfertas = []
+                        contenedorOfertas.forEach((contenedorOferta, i) => {
+                            // if (i < 2) {
+                            const nombreOferta = contenedorOferta.oferta.nombreOferta
+                            const estructura = {
+                                nombreOferta,
+                                contenedorOferta
+                            }
+                            contenedorSimplificadoOfertas.push(estructura)
+                            // }
+                        })
+
+                        contenedorSimplificadoOfertas.forEach((contenedorOferta) => {
+                            const nombreOferta = contenedorOferta.nombreOferta
+                            const contenedorOfertaIndividual = document.createElement("a")
+                            contenedorOfertaIndividual.setAttribute("contenedor", "ofertaIndividual")
+                            contenedorOfertaIndividual.classList.add(
+                                "botonOfertaEnApartamento",
+                            )
+                            contenedorOfertaIndividual.innerText = nombreOferta
+                            contenedorOfertaIndividual.addEventListener("click", (e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                e.stopImmediatePropagation()
+                                const main = document.querySelector("main")
+                                const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                                ui.style.zIndex = "300"
+                                const contenedor = ui.querySelector("[componente=contenedor]")
+                                main.appendChild(ui)
 
 
+                                const tituloUI = document.createElement("p")
+                                tituloUI.classList.add("titulo")
+                                tituloUI.setAttribute("componente", "titulo")
+                                tituloUI.innerText = "Detalles de la oferta seleccionada"
+                                contenedor.appendChild(tituloUI)
 
-                        // Revertir apartamentos no selecionados
+                                const botonCancelar1 = document.createElement("div")
+                                botonCancelar1.classList.add("boton")
+                                botonCancelar1.style.borderRadius = "100px"
+                                botonCancelar1.setAttribute("boton", "cancelar")
+                                botonCancelar1.innerText = "Volver a la selección de apartamentos"
+                                botonCancelar1.addEventListener("click", () => {
+                                    return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                })
+                                contenedor.appendChild(botonCancelar1)
+
+                                const ofertaUI = casaVitini.ui.vistas.alojamiento.portada.ofertas.ofertaUI({
+                                    contenedorOferta: contenedorOferta.contenedorOferta.oferta
+                                })
+                                contenedor.appendChild(ofertaUI)
+
+                                const botonCancelar = document.createElement("div")
+                                botonCancelar.classList.add("boton")
+                                botonCancelar.setAttribute("boton", "cancelar")
+                                botonCancelar.style.borderRadius = "100px"
+                                botonCancelar.innerText = "Volver a la selección de apartamentos"
+                                botonCancelar.addEventListener("click", () => {
+                                    return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                })
+                                contenedor.appendChild(botonCancelar)
+
+                            })
+                            selectorContenedorOfertas.appendChild(contenedorOfertaIndividual)
+                        })
 
 
+                        // if (contenedorOfertas.length > 2) {
+                        //     const contenedorVerResto = document.createElement("a")
+                        //     contenedorVerResto.innerText = "Ver el resto de ofertas aplicadas"
+                        //     selectorContenedorOfertas.appendChild(contenedorVerResto)
+                        // }
 
 
+                    },
+                    ofertas: {
+                        ofertaUI: function (data) {
+                            console.log("data", data)
+                            const contenedorOferta = data.contenedorOferta
+                            const nombreOferta = contenedorOferta.nombreOferta
+                            const fechaInicio = contenedorOferta.fechaInicio
+                            const fechaFinal = contenedorOferta.fechaFinal
+                            const entidadIDV = contenedorOferta.entidadIDV
+                            const estadoIDV = contenedorOferta.estadoIDV
+                            const zonaIDV = contenedorOferta.zonaIDV
+                            const condicionesArray = contenedorOferta.condicionesArray
+                            const descuentosJSON = contenedorOferta.descuentosJSON
+                            const estadoUI = {
+                                activado: "Activada",
+                                desactivado: "Desactivada"
+                            }
+                            const entidadUI = {
+                                reserva: "Reserva"
+                            }
+                            const zonaUI = {
+                                global: "Global",
+                                privado: "privado",
+                                publico: "publica"
+                            }
+                            const ofertaUI = document.createElement("a")
+                            ofertaUI.classList.add("ofertaUI")
+                            const tituloOferta = document.createElement("p")
+                            tituloOferta.classList.add(
+                                "ofertaUITituloOferta",
+                                "negrita"
+                            )
+                            tituloOferta.innerText = nombreOferta
+                            ofertaUI.appendChild(tituloOferta)
+                            const contenedorGlobalOferta = document.createElement("div")
+                            contenedorGlobalOferta.classList.add("ofertaUIContenedorGlobalOferta")
+                            //-------------------------------------
+                            const contenedorDetalleOferta = document.createElement("div")
+                            contenedorDetalleOferta.classList.add("ofertaUIContenedorDetalles")
+                            //-------------------------------------
+                            const fechaInicioContenedor = document.createElement("div")
+                            fechaInicioContenedor.classList.add("ofertaUIFechaContenedor")
+                            const tituloFechaInicio = document.createElement("div")
+                            tituloFechaInicio.classList.add("ofertaUITituloFecha")
+                            tituloFechaInicio.innerText = "Fecha de inicio"
+                            fechaInicioContenedor.appendChild(tituloFechaInicio)
+                            const datoFechaInicio = document.createElement("div")
+                            datoFechaInicio.classList.add("ofertaUIDatoFecha")
+                            datoFechaInicio.innerText = fechaInicio
+                            fechaInicioContenedor.appendChild(datoFechaInicio)
+                            contenedorDetalleOferta.appendChild(fechaInicioContenedor)
+                            const fechaFinContenedor = document.createElement("div")
+                            fechaFinContenedor.classList.add("ofertaUIFechaContenedor")
+                            const tituloFechaFin = document.createElement("div")
+                            tituloFechaFin.classList.add("ofertaUITituloFecha")
+                            tituloFechaFin.innerText = "Fecha de Fin"
+                            fechaFinContenedor.appendChild(tituloFechaFin)
+                            const datoFechaFin = document.createElement("div")
+                            datoFechaFin.classList.add("ofertaUIDatoFecha")
+                            datoFechaFin.innerText = fechaFinal
+                            fechaFinContenedor.appendChild(datoFechaFin)
+                            contenedorDetalleOferta.appendChild(fechaFinContenedor)
+                            contenedorGlobalOferta.appendChild(contenedorDetalleOferta)
+                            ofertaUI.appendChild(contenedorGlobalOferta)
 
+                            const contenedorCYD = document.createElement("div")
+                            contenedorCYD.classList.add(
+                                "flexVertical",
+                                "gap6"
+                            )
+                            contenedorCYD.setAttribute("contenedor", "condicionesDescuentos")
 
+                            const condicionesUI = this.condicionesUI({
+                                condicionesArray
+                            })
+                            contenedorCYD.appendChild(condicionesUI)
 
+                            const descuentoUI = this.descuentosUI({
+                                descuentosJSON
+                            })
+                            contenedorCYD.appendChild(descuentoUI)
+
+                            contenedorGlobalOferta.appendChild(contenedorCYD)
+                            return ofertaUI
+                        },
+                        condicionesUI: (data) => {
+                            const condicionesArray = data.condicionesArray
+                            const contenedorCondiciones = document.createElement("div")
+                            contenedorCondiciones.setAttribute("contenedor", "condiciones")
+                            contenedorCondiciones.classList.add(
+                                "flexVertical",
+                                "gap6",
+                                "backgroundGrey1",
+                                "padding6",
+                                "borderRadius14"
+                            )
+                            const tituloContendor = document.createElement("div")
+                            tituloContendor.classList.add(
+                                "negrita",
+                                "padding6",
+
+                            )
+                            tituloContendor.innerText = "Condiciones de la oferta"
+                            contenedorCondiciones.appendChild(tituloContendor)
+
+                            condicionesArray.forEach((condicion) => {
+                                const tipoCondicion = condicion.tipoCondicion
+
+                                const contenedorCondicion = document.createElement("div")
+                                contenedorCondicion.classList.add("contenedorCondicion")
+                                contenedorCondicion.setAttribute("tipoCondicion", tipoCondicion)
+                                contenedorCondicion.classList.add(
+                                    "flexVertical",
+                                    "padding6",
+                                )
+                                const definicionCondicion = casaVitini
+                                    .ui
+                                    .componentes
+                                    .contenedorFinanciero
+                                    .componentesUI
+                                    .ofertas
+                                    .componentesUI
+                                    .definicionCondiciones({
+                                        tipoCondicion,
+                                        condicion
+                                    })
+                                contenedorCondicion.appendChild(definicionCondicion)
+                                contenedorCondiciones.appendChild(contenedorCondicion)
+                            })
+                            return contenedorCondiciones
+
+                        },
+                        descuentosUI: (data) => {
+                            const descuentosJSON = data.descuentosJSON
+                            const tipoDescuento = descuentosJSON?.tipoDescuento
+                            const subTipoDescuento = descuentosJSON?.subTipoDescuento
+
+                            const contenedorDescuentos = document.createElement("div")
+                            contenedorDescuentos.setAttribute("contenedor", "descuentos")
+                            contenedorDescuentos.classList.add(
+                                "flexVertical",
+                                "backgroundGrey1",
+                                "padding6",
+                                "borderRadius14",
+                                "gap6"
+                            )
+                            const tituloContendor = document.createElement("div")
+                            tituloContendor.classList.add(
+                                "negrita",
+                                "padding6",
+
+                            )
+                            tituloContendor.innerText = "Descuentos de la oferta"
+                            contenedorDescuentos.appendChild(tituloContendor)
+
+                            const desfinicionDescuento = casaVitini
+                                .ui
+                                .componentes
+                                .contenedorFinanciero
+                                .componentesUI
+                                .ofertas
+                                .componentesUI.definicionDescuentos({
+                                    tipoDescuento,
+                                    subTipoDescuento,
+                                    descuentosJSON
+                                })
+                            contenedorDescuentos.appendChild(desfinicionDescuento)
+
+                            return contenedorDescuentos
+                        },
                     }
 
                 },
@@ -2039,21 +2386,22 @@ const casaVitini = {
 
                         const infoPreConfirmar = document.createElement("p")
                         infoPreConfirmar.classList.add(
-                            "padding16"
+                            "padding14"
                         )
                         infoPreConfirmar.innerText = "Para confirmar la reserva, haz clic en el botón de abajo. Una vez confirmada la reserva, los partamentos quedarán bloqueados y tendrás 48 horas para realizar la transferencia bancaria. Si no realizas la transferencia bancaria en se plazo, los apartamentos volverán a estar disponibles para reservar."
                         contenedor.appendChild(infoPreConfirmar)
 
                         const infoAceptacion = document.createElement("p")
                         infoAceptacion.classList.add(
-                            "padding16"
+                            "padding14"
                         )
                         infoAceptacion.innerText = "Confirmar esta reserva implica la aceptación de nuestras políticas de privacidad y el consentimiento para su aplicación, así como nuestras políticas de cancelación de la reserva. Por favor, lea detenidamente toda la información sobre nuestras políticas de privacidad, el uso de cookies y las condiciones de uso haciendo clic aquí."
                         contenedor.appendChild(infoAceptacion)
 
                         const portilicasCancelacion = document.createElement("a")
                         portilicasCancelacion.classList.add(
-                            "areaSinDecoracionPredeterminada"
+                            "areaSinDecoracionPredeterminada",
+                            "padding14"
                         )
                         portilicasCancelacion.href = "/politicas/cacelacion"
                         portilicasCancelacion.target = "_blank"
@@ -2062,7 +2410,8 @@ const casaVitini = {
 
                         const portilicasPrivacida = document.createElement("a")
                         portilicasPrivacida.classList.add(
-                            "areaSinDecoracionPredeterminada"
+                            "areaSinDecoracionPredeterminada",
+                            "padding14"
                         )
                         portilicasPrivacida.href = "/politicas/privacidad"
                         portilicasPrivacida.target = "_blank"
@@ -2986,10 +3335,10 @@ const casaVitini = {
                             condicionesArray.forEach((condicion) => {
                                 const tipoCondicion = condicion.tipoCondicion
 
-                                const contendorCondicion = document.createElement("div")
-                                contendorCondicion.classList.add("contenedorCondicion")
-                                contendorCondicion.setAttribute("tipoCondicion", tipoCondicion)
-                                contendorCondicion.classList.add(
+                                const contenedorCondicion = document.createElement("div")
+                                contenedorCondicion.classList.add("contenedorCondicion")
+                                contenedorCondicion.setAttribute("tipoCondicion", tipoCondicion)
+                                contenedorCondicion.classList.add(
                                     "flexVertical",
                                     "padding6",
                                 )
@@ -3002,15 +3351,15 @@ const casaVitini = {
                                     tituloCondicion.classList.add(
                                         "negrita",
                                     )
-                                    contendorCondicion.appendChild(tituloCondicion)
+                                    contenedorCondicion.appendChild(tituloCondicion)
 
                                     const descripcionCondicion = document.createElement("div")
                                     descripcionCondicion.innerText = "Esta condicion determina que la oferta se aplica cuando la fecha de entrada de la reserva esta entre el rango de vigencia de la oferta"
-                                    contendorCondicion.appendChild(descripcionCondicion)
+                                    contenedorCondicion.appendChild(descripcionCondicion)
 
                                     const rangoVigencia = document.createElement("div")
                                     rangoVigencia.innerText = `${fechaInicioRango_ISO} >>> ${fechaFinalRango_ISO}`
-                                    contendorCondicion.appendChild(rangoVigencia)
+                                    contenedorCondicion.appendChild(rangoVigencia)
 
                                 } else if (tipoCondicion === "conFechaCreacionEntreRango") {
                                     const tituloCondicion = document.createElement("div")
@@ -3018,11 +3367,11 @@ const casaVitini = {
                                     tituloCondicion.classList.add(
                                         "negrita",
                                     )
-                                    contendorCondicion.appendChild(tituloCondicion)
+                                    contenedorCondicion.appendChild(tituloCondicion)
 
                                     const descripcionCondicion = document.createElement("div")
                                     descripcionCondicion.innerText = "Esta condicion determina que la oferta se aplica cuando la fecha de creacion de la reserva esta entr el rango de vigencia de la oferta"
-                                    contendorCondicion.appendChild(descripcionCondicion)
+                                    contenedorCondicion.appendChild(descripcionCondicion)
 
                                 } else if (tipoCondicion === "porNumeroDeApartamentos") {
                                     const tipoConteo = condicion.tipoConteo
@@ -3033,21 +3382,21 @@ const casaVitini = {
                                     tituloCondicion.classList.add(
                                         "negrita",
                                     )
-                                    contendorCondicion.appendChild(tituloCondicion)
+                                    contenedorCondicion.appendChild(tituloCondicion)
 
                                     if (tipoConteo === "aPartirDe") {
                                         const descripcionCondicion = document.createElement("div")
                                         descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} o mas apartamentos`
-                                        contendorCondicion.appendChild(descripcionCondicion)
+                                        contenedorCondicion.appendChild(descripcionCondicion)
 
                                     } else if (tipoConteo === "numeroExacto") {
                                         const descripcionCondicion = document.createElement("div")
                                         if (numeroDeApartamentos === "1") {
                                             descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} apartamento exactamente. Ni mas ni menos.`
-                                            contendorCondicion.appendChild(descripcionCondicion)
+                                            contenedorCondicion.appendChild(descripcionCondicion)
                                         } else {
                                             descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} apartamentos exactamente. Ni mas ni menos.`
-                                            contendorCondicion.appendChild(descripcionCondicion)
+                                            contenedorCondicion.appendChild(descripcionCondicion)
                                         }
                                     }
 
@@ -3062,11 +3411,11 @@ const casaVitini = {
                                     tituloCondicion.classList.add(
                                         "negrita",
                                     )
-                                    contendorCondicion.appendChild(tituloCondicion)
+                                    contenedorCondicion.appendChild(tituloCondicion)
 
                                     const descripcionCondicion = document.createElement("div")
                                     descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva contiene los apartamentos en especifico: ${apartametnosFormateados}`
-                                    contendorCondicion.appendChild(descripcionCondicion)
+                                    contenedorCondicion.appendChild(descripcionCondicion)
 
                                 } else if (tipoCondicion === "porDiasDeAntelacion") {
                                     const numeroDeDias = condicion.numeroDeDias
@@ -3077,27 +3426,27 @@ const casaVitini = {
                                     tituloCondicion.classList.add(
                                         "negrita",
                                     )
-                                    contendorCondicion.appendChild(tituloCondicion)
+                                    contenedorCondicion.appendChild(tituloCondicion)
 
                                     const descripcionCondicion = document.createElement("div")
                                     if (tipoConteo === "aPartirDe") {
                                         if (numeroDeDias === "1") {
                                             descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dia de antelación o mas`
-                                            contendorCondicion.appendChild(descripcionCondicion)
+                                            contenedorCondicion.appendChild(descripcionCondicion)
 
                                         } else {
                                             descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dias de antelación o mas`
-                                            contendorCondicion.appendChild(descripcionCondicion)
+                                            contenedorCondicion.appendChild(descripcionCondicion)
 
                                         }
                                     } else if (tipoConteo === "numeroExacto") {
                                         if (numeroDeDias === "1") {
                                             descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dia de antelación exactamente`
-                                            contendorCondicion.appendChild(descripcionCondicion)
+                                            contenedorCondicion.appendChild(descripcionCondicion)
 
                                         } else {
                                             descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dias de antelación exactamente`
-                                            contendorCondicion.appendChild(descripcionCondicion)
+                                            contenedorCondicion.appendChild(descripcionCondicion)
 
                                         }
                                     }
@@ -3111,27 +3460,27 @@ const casaVitini = {
                                     tituloCondicion.classList.add(
                                         "negrita",
                                     )
-                                    contendorCondicion.appendChild(tituloCondicion)
+                                    contenedorCondicion.appendChild(tituloCondicion)
 
                                     const descripcionCondicion = document.createElement("div")
                                     if (tipoConteo === "aPartirDe") {
                                         if (diasDeReserva === "1") {
                                             descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dia de duración o mas`
-                                            contendorCondicion.appendChild(descripcionCondicion)
+                                            contenedorCondicion.appendChild(descripcionCondicion)
 
                                         } else {
                                             descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dias de duración o mas`
-                                            contendorCondicion.appendChild(descripcionCondicion)
+                                            contenedorCondicion.appendChild(descripcionCondicion)
 
                                         }
                                     } else if (tipoConteo === "numeroExacto") {
                                         if (diasDeReserva === "1") {
                                             descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dia de duración exactamente`
-                                            contendorCondicion.appendChild(descripcionCondicion)
+                                            contenedorCondicion.appendChild(descripcionCondicion)
 
                                         } else {
                                             descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dias de duración exactamente`
-                                            contendorCondicion.appendChild(descripcionCondicion)
+                                            contenedorCondicion.appendChild(descripcionCondicion)
                                         }
                                     }
 
@@ -3144,11 +3493,11 @@ const casaVitini = {
                                     tituloCondicion.classList.add(
                                         "negrita",
                                     )
-                                    contendorCondicion.appendChild(tituloCondicion)
+                                    contenedorCondicion.appendChild(tituloCondicion)
 
                                     const descripcionCondicion = document.createElement("div")
                                     descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando el rango de la reserva se cruza con el rango determinado en esta condicion. Del ${fechaInicioRango_ISO} al ${fechaFinalRango_ISO}`
-                                    contendorCondicion.appendChild(descripcionCondicion)
+                                    contenedorCondicion.appendChild(descripcionCondicion)
 
                                 } else if (tipoCondicion === "porCodigoDescuento") {
                                     const codigoDescuento = condicion.codigoDescuento
@@ -3158,13 +3507,13 @@ const casaVitini = {
                                     tituloCondicion.classList.add(
                                         "negrita",
                                     )
-                                    contendorCondicion.appendChild(tituloCondicion)
+                                    contenedorCondicion.appendChild(tituloCondicion)
 
                                     const codigoUI = document.createElement("div")
                                     codigoUI.innerText = atob(codigoDescuento)
 
 
-                                    contendorCondicion.appendChild(codigoUI)
+                                    contenedorCondicion.appendChild(codigoUI)
 
                                 } else {
                                     const error = "El renderizador de condiciones de oferta ha recibido un identifcador no reconocido: " + tipoCondicion
@@ -3172,7 +3521,7 @@ const casaVitini = {
                                 }
 
 
-                                contenedorCondiciones.appendChild(contendorCondicion)
+                                contenedorCondiciones.appendChild(contenedorCondicion)
 
                             })
                             return contenedorCondiciones
@@ -17861,6 +18210,8 @@ const casaVitini = {
                     }
 
                     if (rangoIDV === "inicioRango") {
+                        const tituloCalendario = data?.tituloCalendario || "Selecciona una fecha de entrada para buscar reservas por un rango"
+
                         if (selectorCalendario?.getAttribute("calendarioIO") === "entrada") {
                             return
                         }
@@ -17876,7 +18227,7 @@ const casaVitini = {
 
                             configuracionCalendario.tipoFecha = "entrada"
                             configuracionCalendario.calendarioIO = "entrada"
-                            configuracionCalendario.mensajeInfo = "Selecciona una fecha de entrada para buscar reservas por un rango"
+                            configuracionCalendario.mensajeInfo = tituloCalendario
                             //configuracionCalendario.seleccionableDiaLimite = "si"
 
                         } else if (fechasSeleccionadas().fechaSalida?.volatil) {
@@ -17888,7 +18239,7 @@ const casaVitini = {
 
                             configuracionCalendario.tipoFecha = "entrada"
                             configuracionCalendario.calendarioIO = "entrada"
-                            configuracionCalendario.mensajeInfo = "Selecciona una fecha de entrada para buscar reservas por un rango"
+                            configuracionCalendario.mensajeInfo = tituloCalendario
                             // configuracionCalendario.seleccionableDiaLimite = "si"
 
                         } else {
@@ -17897,10 +18248,12 @@ const casaVitini = {
 
                             configuracionCalendario.tipoFecha = "entrada"
                             configuracionCalendario.calendarioIO = "entrada"
-                            configuracionCalendario.mensajeInfo = "Selecciona una fecha de entrada para buscar reservas por un rango"
+                            configuracionCalendario.mensajeInfo = tituloCalendario
                             //configuracionCalendario.seleccionableDiaLimite = "si"
                         }
                     } else if (rangoIDV === "finalRango") {
+                        const tituloCalendario = data?.tituloCalendario || "Selecciona una fecha de salida para buscar reservas por un rango"
+
                         if (selectorCalendario?.getAttribute("calendarioIO") === "salida") {
                             return
                         }
@@ -17914,7 +18267,7 @@ const casaVitini = {
 
                             configuracionCalendario.tipoFecha = "salida"
                             configuracionCalendario.calendarioIO = "salida"
-                            configuracionCalendario.mensajeInfo = "Selecciona una fecha de salida para buscar reservas por un rango"
+                            configuracionCalendario.mensajeInfo = tituloCalendario
                             //configuracionCalendario.seleccionableDiaLimite = "si"
 
                         } else if (fechasSeleccionadas().fechaEntrada?.volatil) {
@@ -17927,7 +18280,7 @@ const casaVitini = {
 
                             configuracionCalendario.tipoFecha = "salida"
                             configuracionCalendario.calendarioIO = "salida"
-                            configuracionCalendario.mensajeInfo = "Selecciona una fecha de salida para buscar reservas por un rango"
+                            configuracionCalendario.mensajeInfo = tituloCalendario
                             //  configuracionCalendario.seleccionableDiaLimite = "si"
 
                         } else {
@@ -17936,7 +18289,7 @@ const casaVitini = {
 
                             configuracionCalendario.tipoFecha = "salida"
                             configuracionCalendario.calendarioIO = "salida"
-                            configuracionCalendario.mensajeInfo = "Selecciona una fecha de salida para buscar reservas por un rango"
+                            configuracionCalendario.mensajeInfo = tituloCalendario
                             // configuracionCalendario.seleccionableDiaLimite = "si"
                         }
                     } else if (rangoIDV === "unico") {
@@ -20883,10 +21236,11 @@ const casaVitini = {
                                         nocheRenderizada?.remove()
                                     }
                                 })
-
+                                let posicion = 0
                                 for (const [fechaNoche, desglose] of Object.entries(desglosePorNoche)) {
                                     const precioNetoNoche = desglose.precioNetoNoche
                                     const apartamentosPorNoche = desglose.apartamentosPorNoche
+                                    const nochesRenderizdas = contenedorDesglosePorNoche_renderizado.querySelectorAll("[noche]")
 
                                     const contenedorNoche_selector = contenedorDesglosePorNoche_renderizado.querySelector(`[noche="${fechaNoche}"]`)
                                     if (!contenedorNoche_selector) {
@@ -20904,7 +21258,15 @@ const casaVitini = {
                                         titulo.innerText = fechaNoche
                                         contenedorNoche.appendChild(titulo)
 
-                                        contenedorDesglosePorNoche_renderizado.appendChild(contenedorNoche)
+                                        //contenedorDesglosePorNoche_renderizado.appendChild(contenedorNoche)
+
+                                        if (posicion < nochesRenderizdas.length) {
+                                            const elementosArray = Array.from(nochesRenderizdas);
+                                            contenedorDesglosePorNoche_renderizado.insertBefore(contenedorNoche, elementosArray[posicion]);
+                                        } else {
+                                            contenedorDesglosePorNoche_renderizado.appendChild(contenedorNoche);
+                                        }
+
                                         const totalesNoche = document.createElement("div")
                                         totalesNoche.classList.add("padding6")
                                         totalesNoche.setAttribute("contenedor", "totalesNoche")
@@ -20915,7 +21277,11 @@ const casaVitini = {
                                         // totalNetoNocheUI.innerText = precioNetoNoche + "$ Total neto noche"
                                         totalesNoche.appendChild(totalNetoNocheUI)
                                         contenedorNoche.appendChild(totalesNoche)
+
+
                                     }
+                                    posicion++
+
                                     const contenedorNoche_renderizado = contenedorDesglosePorNoche_renderizado.querySelector(`[noche="${fechaNoche}"]`)
                                     const totalNetoNocheUI = contenedorNoche_renderizado.querySelector(`[componente=totalNetoNoche]`)
                                     totalNetoNocheUI.innerText = precioNetoNoche + "$ Total neto noche"
@@ -21144,7 +21510,6 @@ const casaVitini = {
                             const ofertasPorAdministrador = ofertas.porAdministrador
                             const porTotal = data.porTotal
                             const entidades = data.entidades
-
 
                             const ofertasPorCondicionArray = Object.keys(ofertasPorCondicion)
                             const ofertasPorAdministradorArray = Object.keys(ofertasPorAdministrador)
@@ -21516,12 +21881,7 @@ const casaVitini = {
                                         contenedorGlobalOferta.appendChild(contenedorAutorizacion)
                                     }
 
-
-
-
-
                                     if (modoUI === "administracion") {
-
                                         const contenedorBotones = document.createElement("div")
                                         contenedorBotones.classList.add(
                                             "flexHorizontal",
@@ -21684,7 +22044,7 @@ const casaVitini = {
 
 
                             },
-                            condicionesUI: (data) => {
+                            condicionesUI: function (data) {
                                 const contenedorOferta = data.contenedorOferta
                                 const oferta = contenedorOferta.oferta
                                 const condicionesArray = oferta.condicionesArray
@@ -21742,268 +22102,279 @@ const casaVitini = {
 
 
 
-                                    const contendorCondicion = document.createElement("div")
-                                    contendorCondicion.classList.add("contenedorCondicion")
-                                    contendorCondicion.setAttribute("tipoCondicion", tipoCondicion)
-                                    contendorCondicion.classList.add(
+                                    const contenedorCondicion = document.createElement("div")
+                                    contenedorCondicion.classList.add("contenedorCondicion")
+                                    contenedorCondicion.setAttribute("tipoCondicion", tipoCondicion)
+                                    contenedorCondicion.classList.add(
                                         "flexVertical",
                                         "padding6",
                                     )
                                     document.querySelector(destino)
-                                        .querySelector("[contenedor=financiero]").
-                                        querySelector("[contenedor=ofertas]")
+                                        .querySelector("[contenedor=financiero]")
+                                        .querySelector("[contenedor=ofertas]")
                                         .querySelector(`[contenedor=${destinoOrigenOferta}]`)
                                         .querySelector(`[ofertaUID="${ofertaUID}"]`)
                                         .querySelector("[contenedor=condiciones]")
-                                        .appendChild(contendorCondicion)
+                                        .appendChild(contenedorCondicion)
 
-
-                                    if (tipoCondicion === "conFechaEntradaEntreRango") {
-                                        const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
-                                        const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
-
-                                        const tituloCondicion = document.createElement("div")
-                                        tituloCondicion.innerText = "Por fecha de entrada"
-                                        tituloCondicion.classList.add(
-                                            "negrita",
-                                        )
-                                        contendorCondicion.appendChild(tituloCondicion)
-
-
-                                        const descripcionCondicion = document.createElement("div")
-                                        descripcionCondicion.innerText = "Esta condicion determina que la oferta se aplica cuando la fecha de entrada de la reserva esta entre el rango de vigencia de la oferta"
-                                        contendorCondicion.appendChild(descripcionCondicion)
-
-                                        const rangoVigencia = document.createElement("div")
-                                        rangoVigencia.innerText = `${fechaInicioRango_ISO} >>> ${fechaFinalRango_ISO}`
-                                        contendorCondicion.appendChild(rangoVigencia)
-
-                                    } else if (tipoCondicion === "conFechaCreacionEntreRango") {
-                                        const tituloCondicion = document.createElement("div")
-                                        tituloCondicion.innerText = "Por fecha de creacion entre el rango"
-                                        tituloCondicion.classList.add(
-                                            "negrita",
-                                        )
-                                        contendorCondicion.appendChild(tituloCondicion)
-
-                                        const descripcionCondicion = document.createElement("div")
-                                        descripcionCondicion.innerText = "Esta condicion determina que la oferta se aplica cuando la fecha de creacion de la reserva esta entr el rango de vigencia de la oferta"
-                                        contendorCondicion.appendChild(descripcionCondicion)
-
-
-                                    } else if (tipoCondicion === "porNumeroDeApartamentos") {
-                                        const tipoConteo = condicion.tipoConteo
-                                        const numeroDeApartamentos = condicion.numeroDeApartamentos
-
-                                        const tituloCondicion = document.createElement("div")
-                                        tituloCondicion.innerText = "Por numero de apartamentos"
-                                        tituloCondicion.classList.add(
-                                            "negrita",
-                                        )
-                                        contendorCondicion.appendChild(tituloCondicion)
-
-
-                                        if (tipoConteo === "aPartirDe") {
-                                            const descripcionCondicion = document.createElement("div")
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} o mas apartamentos`
-                                            contendorCondicion.appendChild(descripcionCondicion)
-
-                                        } else if (tipoConteo === "numeroExacto") {
-                                            const descripcionCondicion = document.createElement("div")
-                                            if (numeroDeApartamentos === "1") {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} apartamento exactamente. Ni mas ni menos.`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-                                            } else {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} apartamentos exactamente. Ni mas ni menos.`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-                                            }
-                                        } else if (tipoConteo === "hastaUnNumeroExacto") {
-                                            const descripcionCondicion = document.createElement("div")
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene hasta ${numeroDeApartamentos} o menos apartamentos`
-                                            contendorCondicion.appendChild(descripcionCondicion)
-
-                                        }
-
-
-                                    } else if (tipoCondicion === "porApartamentosEspecificos") {
-                                        const apartamentos = condicion.apartamentos
-                                        const tipoDeEspecificidad = condicion.tipoDeEspecificidad
-                                        // exactamente, alguno, exactamenteEntreOtros, noDebeContenedorExactamente, noDebeContenedorAlguno,noDebeContenedorExactamenteEntreOtros
-                                        const apartametnosFormateados = casaVitini.utilidades.cadenas.contructorComasEY({
-                                            array: apartamentos,
-                                            articulo: "el"
-                                        })
-                                        const tituloCondicion = document.createElement("div")
-                                        tituloCondicion.innerText = "Por apartamentos especificos"
-                                        tituloCondicion.classList.add(
-                                            "negrita",
-                                        )
-                                        contendorCondicion.appendChild(tituloCondicion)
-
-                                        const descripcionCondicion = document.createElement("div")
-
-                                        if (tipoDeEspecificidad === "exactamente") {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva contiene los apartamentos en especifico: ${apartametnosFormateados}`
-
-                                        } else if (tipoDeEspecificidad === "alguno") {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva contiene algunos de los apartamentos en especifico: ${apartametnosFormateados}`
-
-                                        } else if (tipoDeEspecificidad === "exactamenteEntreOtros") {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva contiene extactamente los apartamentos en especifico, entre otros: ${apartametnosFormateados}`
-
-                                        } else if (tipoDeEspecificidad === "noDebeContenedorExactamente") {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva NO contiene extactamente los apartamentos en especifico: ${apartametnosFormateados}`
-
-                                        } else if (tipoDeEspecificidad === "noDebeContenedorAlguno") {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva NO contiene alguno de los apartamentos en especifico: ${apartametnosFormateados}`
-
-                                        }
-                                        // else if (tipoDeEspecificidad === "exactamnoDebeContenedorExactamenteEntreOtrosente") {
-
-                                        // } 
-                                        contendorCondicion.appendChild(descripcionCondicion)
-
-                                    } else if (tipoCondicion === "porDiasDeAntelacion") {
-                                        const numeroDeDias = condicion.numeroDeDias
-                                        const tipoConteo = condicion.tipoConteo
-
-                                        const tituloCondicion = document.createElement("div")
-                                        tituloCondicion.innerText = "Por dias de antelacion"
-                                        tituloCondicion.classList.add(
-                                            "negrita",
-                                        )
-                                        contendorCondicion.appendChild(tituloCondicion)
-
-                                        const descripcionCondicion = document.createElement("div")
-                                        if (tipoConteo === "aPartirDe") {
-                                            if (numeroDeDias === "1") {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dia de antelación o mas`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            } else {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dias de antelación o mas`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            }
-                                        } else if (tipoConteo === "numeroExacto") {
-                                            if (numeroDeDias === "1") {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dia de antelación exactamente`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            } else {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dias de antelación exactamente`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            }
-                                        } else if (tipoConteo === "hastaUnNumeroExacto") {
-                                            if (numeroDeDias === "1") {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene hasta ${numeroDeDias} dia de antelación o mas`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            } else {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene hasra ${numeroDeDias} dias de antelación o mas`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            }
-                                        }
-
-                                    } else if (tipoCondicion === "porDiasDeReserva") {
-                                        const diasDeReserva = condicion.diasDeReserva
-                                        const tipoConteo = condicion.tipoConteo
-
-                                        const tituloCondicion = document.createElement("div")
-                                        tituloCondicion.innerText = "Por dias de duración"
-                                        tituloCondicion.classList.add(
-                                            "negrita",
-                                        )
-                                        contendorCondicion.appendChild(tituloCondicion)
-
-                                        const descripcionCondicion = document.createElement("div")
-                                        if (tipoConteo === "aPartirDe") {
-                                            if (diasDeReserva === "1") {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dia de duración o mas`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            } else {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dias de duración o mas`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            }
-                                        } else if (tipoConteo === "numeroExacto") {
-                                            if (diasDeReserva === "1") {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dia de duración exactamente`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            } else {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dias de duración exactamente`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            }
-                                        } else if (tipoConteo === "hastaUnNumeroExacto") {
-                                            if (diasDeReserva === "1") {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene hasta ${diasDeReserva} dia de duración o mas`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            } else {
-                                                descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene hasta ${diasDeReserva} dias de duración o mas`
-                                                contendorCondicion.appendChild(descripcionCondicion)
-
-                                            }
-                                        }
-                                    } else if (tipoCondicion === "porRangoDeFechas") {
-                                        const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
-                                        const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
-
-                                        const tituloCondicion = document.createElement("div")
-                                        tituloCondicion.innerText = "Por rango de fechas"
-                                        tituloCondicion.classList.add(
-                                            "negrita",
-                                        )
-                                        contendorCondicion.appendChild(tituloCondicion)
-
-                                        const descripcionCondicion = document.createElement("div")
-                                        descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando el rango de la reserva se cruza con el rango determinado en esta condicion. Del ${fechaInicioRango_ISO} al ${fechaFinalRango_ISO}`
-                                        contendorCondicion.appendChild(descripcionCondicion)
-
-                                    } else if (tipoCondicion === "porCodigoDescuento") {
-                                        const codigoDescuento = condicion.codigoDescuento
-                                        const tituloCondicion = document.createElement("div")
-                                        tituloCondicion.innerText = "Por codigo de descuento"
-                                        tituloCondicion.classList.add(
-                                            "negrita",
-                                        )
-                                        contendorCondicion.appendChild(tituloCondicion)
-
-
-                                        const codigoUI = document.createElement("div")
-                                        codigoUI.innerText = atob(codigoDescuento)
-
-
-                                        contendorCondicion.appendChild(codigoUI)
-
-
-                                        // const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
-                                        // const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
-
-                                        // const tituloCondicion = document.createElement("div")
-                                        // tituloCondicion.innerText = "Por rango de fechas"
-                                        // contendorCondicion.appendChild(tituloCondicion)
-
-                                        // const descripcionCondicion = document.createElement("div")
-                                        // descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando el rango de la reserva se cruza con el rango determinado en esta condicion. Del ${fechaInicioRango_ISO} al ${fechaFinalRango_ISO}`
-                                        // contendorCondicion.appendChild(descripcionCondicion)
-
-                                    } else {
-                                        const error = "El renderizador de condiciones de oferta ha recibido un identifcador no reconocido: " + tipoCondicion
-                                        return casaVitini.ui.componentes.advertenciaInmersiva(error)
-                                    }
-
-
-                                    contenedorCondiciones_renderizado.appendChild(contendorCondicion)
+                                    const definicionCondicion = this.definicionCondiciones({
+                                        tipoCondicion,
+                                        condicion
+                                    })
+                                    contenedorCondicion.appendChild(definicionCondicion)
+                                    contenedorCondiciones_renderizado.appendChild(contenedorCondicion)
 
                                 })
                             },
-                            descuentosUI: (data) => {
+                            definicionCondiciones: (data) => {
+                                const condicion = data.condicion
+                                const tipoCondicion = data.tipoCondicion
+
+                                const contenedorCondicion = document.createElement("div")
+
+                                if (tipoCondicion === "conFechaEntradaEntreRango") {
+                                    const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
+                                    const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
+
+                                    const tituloCondicion = document.createElement("div")
+                                    tituloCondicion.innerText = "Por fecha de entrada"
+                                    tituloCondicion.classList.add(
+                                        "negrita",
+                                    )
+                                    contenedorCondicion.appendChild(tituloCondicion)
+
+
+                                    const descripcionCondicion = document.createElement("div")
+                                    descripcionCondicion.innerText = "Esta condicion determina que la oferta se aplica cuando la fecha de entrada de la reserva esta entre el rango de vigencia de la oferta"
+                                    contenedorCondicion.appendChild(descripcionCondicion)
+
+                                    const rangoVigencia = document.createElement("div")
+                                    rangoVigencia.innerText = `${fechaInicioRango_ISO} >>> ${fechaFinalRango_ISO}`
+                                    contenedorCondicion.appendChild(rangoVigencia)
+
+                                } else if (tipoCondicion === "conFechaCreacionEntreRango") {
+                                    const tituloCondicion = document.createElement("div")
+                                    tituloCondicion.innerText = "Por fecha de creacion entre el rango"
+                                    tituloCondicion.classList.add(
+                                        "negrita",
+                                    )
+                                    contenedorCondicion.appendChild(tituloCondicion)
+
+                                    const descripcionCondicion = document.createElement("div")
+                                    descripcionCondicion.innerText = "Esta condicion determina que la oferta se aplica cuando la fecha de creacion de la reserva esta entr el rango de vigencia de la oferta"
+                                    contenedorCondicion.appendChild(descripcionCondicion)
+
+
+                                } else if (tipoCondicion === "porNumeroDeApartamentos") {
+                                    const tipoConteo = condicion.tipoConteo
+                                    const numeroDeApartamentos = condicion.numeroDeApartamentos
+
+                                    const tituloCondicion = document.createElement("div")
+                                    tituloCondicion.innerText = "Por numero de apartamentos"
+                                    tituloCondicion.classList.add(
+                                        "negrita",
+                                    )
+                                    contenedorCondicion.appendChild(tituloCondicion)
+
+
+                                    if (tipoConteo === "aPartirDe") {
+                                        const descripcionCondicion = document.createElement("div")
+                                        descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} o mas apartamentos`
+                                        contenedorCondicion.appendChild(descripcionCondicion)
+
+                                    } else if (tipoConteo === "numeroExacto") {
+                                        const descripcionCondicion = document.createElement("div")
+                                        if (numeroDeApartamentos === "1") {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} apartamento exactamente. Ni mas ni menos.`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+                                        } else {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} apartamentos exactamente. Ni mas ni menos.`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+                                        }
+                                    } else if (tipoConteo === "hastaUnNumeroExacto") {
+                                        const descripcionCondicion = document.createElement("div")
+                                        descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene hasta ${numeroDeApartamentos} o menos apartamentos`
+                                        contenedorCondicion.appendChild(descripcionCondicion)
+
+                                    }
+
+
+                                } else if (tipoCondicion === "porApartamentosEspecificos") {
+                                    const apartamentos = condicion.apartamentos
+                                    const tipoDeEspecificidad = condicion.tipoDeEspecificidad
+                                    // exactamente, alguno, exactamenteEntreOtros, noDebeContenedorExactamente, noDebeContenedorAlguno,noDebeContenedorExactamenteEntreOtros
+                                    const apartametnosFormateados = casaVitini.utilidades.cadenas.contructorComasEY({
+                                        array: apartamentos,
+                                        articulo: "el"
+                                    })
+                                    const tituloCondicion = document.createElement("div")
+                                    tituloCondicion.innerText = "Por apartamentos especificos"
+                                    tituloCondicion.classList.add(
+                                        "negrita",
+                                    )
+                                    contenedorCondicion.appendChild(tituloCondicion)
+
+                                    const descripcionCondicion = document.createElement("div")
+
+                                    if (tipoDeEspecificidad === "exactamente") {
+                                        descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva contiene los apartamentos en especifico: ${apartametnosFormateados}`
+
+                                    } else if (tipoDeEspecificidad === "alguno") {
+                                        descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva contiene algunos de los apartamentos en especifico: ${apartametnosFormateados}`
+
+                                    } else if (tipoDeEspecificidad === "exactamenteEntreOtros") {
+                                        descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva contiene extactamente los apartamentos en especifico, entre otros: ${apartametnosFormateados}`
+
+                                    } else if (tipoDeEspecificidad === "noDebeContenedorExactamente") {
+                                        descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva NO contiene extactamente los apartamentos en especifico: ${apartametnosFormateados}`
+
+                                    } else if (tipoDeEspecificidad === "noDebeContenedorAlguno") {
+                                        descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva NO contiene alguno de los apartamentos en especifico: ${apartametnosFormateados}`
+
+                                    }
+                                    // else if (tipoDeEspecificidad === "exactamnoDebeContenedorExactamenteEntreOtrosente") {
+
+                                    // } 
+                                    contenedorCondicion.appendChild(descripcionCondicion)
+
+                                } else if (tipoCondicion === "porDiasDeAntelacion") {
+                                    const numeroDeDias = condicion.numeroDeDias
+                                    const tipoConteo = condicion.tipoConteo
+
+                                    const tituloCondicion = document.createElement("div")
+                                    tituloCondicion.innerText = "Por dias de antelacion"
+                                    tituloCondicion.classList.add(
+                                        "negrita",
+                                    )
+                                    contenedorCondicion.appendChild(tituloCondicion)
+
+                                    const descripcionCondicion = document.createElement("div")
+                                    if (tipoConteo === "aPartirDe") {
+                                        if (numeroDeDias === "1") {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dia de antelación o mas`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        } else {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dias de antelación o mas`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        }
+                                    } else if (tipoConteo === "numeroExacto") {
+                                        if (numeroDeDias === "1") {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dia de antelación exactamente`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        } else {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dias de antelación exactamente`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        }
+                                    } else if (tipoConteo === "hastaUnNumeroExacto") {
+                                        if (numeroDeDias === "1") {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene hasta ${numeroDeDias} dia de antelación o mas`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        } else {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene hasra ${numeroDeDias} dias de antelación o mas`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        }
+                                    }
+
+                                } else if (tipoCondicion === "porDiasDeReserva") {
+                                    const diasDeReserva = condicion.diasDeReserva
+                                    const tipoConteo = condicion.tipoConteo
+
+                                    const tituloCondicion = document.createElement("div")
+                                    tituloCondicion.innerText = "Por dias de duración"
+                                    tituloCondicion.classList.add(
+                                        "negrita",
+                                    )
+                                    contenedorCondicion.appendChild(tituloCondicion)
+
+                                    const descripcionCondicion = document.createElement("div")
+                                    if (tipoConteo === "aPartirDe") {
+                                        if (diasDeReserva === "1") {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dia de duración o mas`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        } else {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dias de duración o mas`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        }
+                                    } else if (tipoConteo === "numeroExacto") {
+                                        if (diasDeReserva === "1") {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dia de duración exactamente`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        } else {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dias de duración exactamente`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        }
+                                    } else if (tipoConteo === "hastaUnNumeroExacto") {
+                                        if (diasDeReserva === "1") {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene hasta ${diasDeReserva} dia de duración o mas`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        } else {
+                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene hasta ${diasDeReserva} dias de duración o mas`
+                                            contenedorCondicion.appendChild(descripcionCondicion)
+
+                                        }
+                                    }
+                                } else if (tipoCondicion === "porRangoDeFechas") {
+                                    const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
+                                    const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
+
+                                    const tituloCondicion = document.createElement("div")
+                                    tituloCondicion.innerText = "Por rango de fechas"
+                                    tituloCondicion.classList.add(
+                                        "negrita",
+                                    )
+                                    contenedorCondicion.appendChild(tituloCondicion)
+
+                                    const descripcionCondicion = document.createElement("div")
+                                    descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando el rango de la reserva se cruza con el rango determinado en esta condicion. Del ${fechaInicioRango_ISO} al ${fechaFinalRango_ISO}`
+                                    contenedorCondicion.appendChild(descripcionCondicion)
+
+                                } else if (tipoCondicion === "porCodigoDescuento") {
+                                    const codigoDescuento = condicion.codigoDescuento
+                                    const tituloCondicion = document.createElement("div")
+                                    tituloCondicion.innerText = "Por codigo de descuento"
+                                    tituloCondicion.classList.add(
+                                        "negrita",
+                                    )
+                                    contenedorCondicion.appendChild(tituloCondicion)
+
+
+                                    const codigoUI = document.createElement("div")
+                                    codigoUI.innerText = atob(codigoDescuento)
+
+
+                                    contenedorCondicion.appendChild(codigoUI)
+
+
+                                    // const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
+                                    // const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
+
+                                    // const tituloCondicion = document.createElement("div")
+                                    // tituloCondicion.innerText = "Por rango de fechas"
+                                    // contenedorCondicion.appendChild(tituloCondicion)
+
+                                    // const descripcionCondicion = document.createElement("div")
+                                    // descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando el rango de la reserva se cruza con el rango determinado en esta condicion. Del ${fechaInicioRango_ISO} al ${fechaFinalRango_ISO}`
+                                    // contenedorCondicion.appendChild(descripcionCondicion)
+
+                                } else {
+                                    const error = "El renderizador de condiciones de oferta ha recibido un identifcador no reconocido: " + tipoCondicion
+                                    return casaVitini.ui.componentes.advertenciaInmersiva(error)
+                                }
+
+                                return contenedorCondicion
+                            },
+                            descuentosUI: function (data) {
                                 const destino = data.destino
                                 const contenedorOferta = data.contenedorOferta
                                 const ofertaUID = contenedorOferta.oferta.ofertaUID
@@ -22031,9 +22402,6 @@ const casaVitini = {
                                         "padding6",
                                         "borderRadius8"
                                     )
-
-
-
                                     document.querySelector(destino)
                                         .querySelector("[contenedor=financiero]")
                                         .querySelector("[contenedor=ofertas]")
@@ -22055,15 +22423,30 @@ const casaVitini = {
                                 tituloContendor.classList.add(
                                     "negrita",
                                     "padding6",
-
                                 )
                                 tituloContendor.innerText = "Descuentos de la oferta"
                                 contenedorDescuentos_renderizado.appendChild(tituloContendor)
+
+                                const desfinicionDescuento = this.definicionDescuentos({
+                                    tipoDescuento,
+                                    subTipoDescuento,
+                                    descuentosJSON
+                                })
+                                contenedorDescuentos_renderizado.appendChild(desfinicionDescuento)
+                            },
+                            definicionDescuentos: (data) => {
+                                const tipoDescuento = data.tipoDescuento
+                                const subTipoDescuento = data.subTipoDescuento
+                                const descuentosJSON = data.descuentosJSON
+
+                                const contenedorDescuento = document.createElement("div")
 
                                 const descripcionDescuento = document.createElement("p")
                                 descripcionDescuento.classList.add(
                                     "padding6"
                                 )
+                                contenedorDescuento.appendChild(descripcionDescuento)
+
 
                                 if (tipoDescuento === "porRango" && subTipoDescuento === "porDiasDelRango") {
 
@@ -22072,7 +22455,7 @@ const casaVitini = {
                                     const descuentoPorDias = descuentosJSON.descuentoPorDias
 
                                     descripcionDescuento.innerText = `Esta oferta aplica un descuento a los dias de la reserva. A continuación se detallan los dias donde la oferta aplica descuentos y que tipo de desceuntos aplica en cada dia.`
-                                    contenedorDescuentos_renderizado.appendChild(descripcionDescuento)
+                                    contenedorDescuento.appendChild(descripcionDescuento)
 
                                     for (const descuentoPorDia of descuentoPorDias) {
                                         const tipoDescuentoPorDia = descuentoPorDia.tipoDescuento
@@ -22151,18 +22534,11 @@ const casaVitini = {
 
                                         }
 
-                                        contenedorDescuentos_renderizado.appendChild(contenedorDia)
+                                        contenedorDescuento.appendChild(contenedorDia)
 
                                     }
                                 } else if (tipoDescuento === "porRango" && subTipoDescuento === "totalNetoPorRango") {
-                                    // {
-                                    //     "tipoDescuento": "porRango",
-                                    //     "descuentoTotal": "10.00",
-                                    //     "tipoAplicacion": "porcentaje",
-                                    //     "subTipoDescuento": "totalNetoPorRango",
-                                    //     "fechaFinalRango_ISO": "2024-06-13",
-                                    //     "fechaInicioRango_ISO": "2024-06-11"
-                                    // }
+
                                     const fechaInicioRango_ISO = descuentosJSON.fechaInicioRango_ISO
                                     const fechaFinalRango_ISO = descuentosJSON.fechaFinalRango_ISO
                                     const descuentoTotal = descuentosJSON.descuentoTotal
@@ -22173,7 +22549,7 @@ const casaVitini = {
                                     } else if (tipoAplicacion === "cantidadFija") {
                                         descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}$ a los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
                                     }
-                                    contenedorDescuentos_renderizado.appendChild(descripcionDescuento)
+                                    contenedorDescuento.appendChild(descripcionDescuento)
 
                                 } else if (tipoDescuento === "totalNeto") {
                                     const descuentoTotal = descuentosJSON.descuentoTotal
@@ -22185,14 +22561,14 @@ const casaVitini = {
                                     } else if (tipoAplicacion === "cantidadFija") {
                                         descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal} al total neto de la reserva.`
                                     }
-                                    contenedorDescuentos_renderizado.appendChild(descripcionDescuento)
+                                    contenedorDescuento.appendChild(descripcionDescuento)
 
 
                                 } else if (tipoDescuento === "individualPorApartamento") {
 
 
                                     descripcionDescuento.innerText = `Esta oferta aplica un descuento al total de los apartamentos especificados. A continuacion se detallan los apartamentos que esta oferta aplica descuentos. Si la reserva no tiene todos los apartamentos especificados en esta oferta, entonces solo aplicara el Descuentos en los apartamentos que coincidan de la oferta en la reserva.`
-                                    contenedorDescuentos_renderizado.appendChild(descripcionDescuento)
+                                    contenedorDescuento.appendChild(descripcionDescuento)
 
                                     const contenedorApartamentos = document.createElement("div")
                                     contenedorApartamentos.classList.add(
@@ -22233,7 +22609,7 @@ const casaVitini = {
                                         contenedorApartamentos.appendChild(contenedorApartamento)
                                     }
 
-                                    contenedorDescuentos_renderizado.appendChild(contenedorApartamentos)
+                                    contenedorDescuento.appendChild(contenedorApartamentos)
 
 
                                 } else if (tipoDescuento === "mismoDescuentoParaCadaApartamento") {
@@ -22246,15 +22622,14 @@ const casaVitini = {
                                     } else if (tipoAplicacion === "cantidadFija") {
                                         descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal} al total neto de cada apartamento individualmente de la reserva.`
                                     }
-                                    contenedorDescuentos_renderizado.appendChild(descripcionDescuento)
+                                    contenedorDescuento.appendChild(descripcionDescuento)
 
 
                                 } else {
                                     const mensaje = "No se reconoce el tipo de descuento resibido"
                                     return casaVitini.ui.componentes.advertenciaInmersiva(mensaje)
                                 }
-
-
+                                return contenedorDescuento
 
                             },
                             utilidades: {
@@ -22411,6 +22786,13 @@ const casaVitini = {
                                     }
                                 })
 
+                                if (Object.entries(porApartamento).length === 0) {
+                                    const contenedorApartamento_obosoletos = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[contenedor=porApartamento]").querySelectorAll("[apartamentoIDV]")
+                                    console.log("contenedores, obsoletos", contenedorApartamento_obosoletos)
+                                    contenedorApartamento_obosoletos.forEach((contenedorObsoleto) =>
+                                        contenedorObsoleto.querySelector("[contenedor=descuentosDelApartamento]")?.remove()
+                                    )
+                                }
 
                                 Object.entries(porApartamento).forEach(([apartamentoIDV, descuentosDelApartamento]) => {
                                     const contenedorApartamento = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[contenedor=porApartamento]").querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
@@ -22419,8 +22801,6 @@ const casaVitini = {
                                     const totalNetoConDescuentos = descuentosDelApartamento.totalNetoConDescuentos
                                     const totalNetoSinDescuentos = descuentosDelApartamento.totalNetoSinDescuentos
                                     const totalDescuentosAplicados = descuentosDelApartamento.totalDescuentosAplicados
-
-
 
                                     const contenedorDescuentosPorApartamento_selector = contenedorApartamento.querySelector("[contenedor=descuentosDelApartamento]")
                                     if (!contenedorDescuentosPorApartamento_selector) {
@@ -22460,12 +22840,9 @@ const casaVitini = {
                                         contenedorDescuentosDelApartamento.appendChild(tituloContenedorDescuentos)
                                         contenedorDescuentosPorApartamento.appendChild(contenedorDescuentosDelApartamento)
 
-
-
-
-
                                     }
                                     const contenedorDescuentosPorApartamento_renderizado = contenedorApartamento.querySelector("[contenedor=descuentosDelApartamento]")
+                                    console.log("contenedorDescuentosPorApartamento_renderizado", contenedorDescuentosPorApartamento_renderizado)
 
                                     const totalConDescuentosAplicados = contenedorDescuentosPorApartamento_renderizado.querySelector("[dato=totalConDescuentosAplicados]")
                                     totalConDescuentosAplicados.innerText = `${totalDescuentosAplicados}$ Suma total de descuentos aplicados al apartamento`
@@ -22474,6 +22851,8 @@ const casaVitini = {
                                     totalNetoConDescuentosUI.innerText = `${totalNetoConDescuentos}$ Neto del apartamento con descuentos aplicados`
 
                                     const contenedorDesgloseDescuentos = contenedorDescuentosPorApartamento_renderizado.querySelector("[contenedor=descuentos]")
+                                    console.log("contenedorDesgloseDescuentos", contenedorDesgloseDescuentos)
+
                                     contenedorDesgloseDescuentos.innerHTML = null
 
                                     descuentosAplicados.forEach((detallesDelDescuento) => {
@@ -22484,6 +22863,8 @@ const casaVitini = {
                                         const porcentaje = detallesDelDescuento.porcentaje
                                         const descuentoAplicado = detallesDelDescuento.descuentoAplicado
                                         const totalConDescuento = detallesDelDescuento.totalConDescuento
+
+                                        console.log("ofertaUID", ofertaUID)
 
                                         const contenedor = document.createElement("div")
                                         contenedor.classList.add("porApartamento")
@@ -22511,7 +22892,6 @@ const casaVitini = {
                                     })
 
                                 })
-
 
                                 const fechasNocheObsoletas = Object.keys(porDia)
                                 const selectorNochesRenderizadas = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[contenedor=porNoche]").querySelectorAll(`[noche]`)
@@ -22728,6 +23108,11 @@ const casaVitini = {
                         const instanciaUID = data.instanciaUID
                         const contenedorFinanciero = document.querySelector(destino).querySelector("[contenedor=financiero]")
                         const modoUI = contenedorFinanciero.getAttribute("modoUI")
+
+                        if (modoUI === "plaza" && impuestos.length === 0) {
+                            return
+
+                        }
 
                         const contenedorImpuestos_selector = contenedorFinanciero.querySelector("[contenedor=impuestos]")
 
@@ -23076,7 +23461,7 @@ const casaVitini = {
                             )
 
                             const totalReservaNetoUI = document.createElement("div")
-                            totalReservaNetoUI.classList.add("detalleDelTotal")
+                            //totalReservaNetoUI.classList.add("detalleDelTotal")
                             totalReservaNetoUI.innerText = "Total reserva neto"
                             contenedorTotalNetoUI.appendChild(totalReservaNetoUI)
 
@@ -23095,7 +23480,7 @@ const casaVitini = {
                             )
 
                             const totalReservaNetoDiaUI = document.createElement("div")
-                            totalReservaNetoDiaUI.classList.add("detalleDelTotal")
+                            //totalReservaNetoDiaUI.classList.add("detalleDelTotal")
                             totalReservaNetoDiaUI.innerText = "Precio medio neto de la reserva por noche"
                             contenedorPromedioNoche.appendChild(totalReservaNetoDiaUI)
 
@@ -23136,7 +23521,7 @@ const casaVitini = {
                             )
 
                             const totalDescuentosAplicadosUI = document.createElement("div")
-                            totalDescuentosAplicadosUI.classList.add("detalleDelTotal")
+                            //totalDescuentosAplicadosUI.classList.add("detalleDelTotal")
                             totalDescuentosAplicadosUI.innerText = "Descuento total por todas las ofertas aplicadas"
                             contenedorTotalDescuentosAplicados.appendChild(totalDescuentosAplicadosUI)
 
@@ -23153,7 +23538,7 @@ const casaVitini = {
                             )
 
                             const totalNetoConDescuentosUI = document.createElement("div")
-                            totalNetoConDescuentosUI.classList.add("detalleDelTotal")
+                            //totalNetoConDescuentosUI.classList.add("detalleDelTotal")
                             totalNetoConDescuentosUI.innerText = "Total neto con descuentos aplicados"
                             contenedorTotalNetoConDescuentos.appendChild(totalNetoConDescuentosUI)
 
@@ -23172,7 +23557,7 @@ const casaVitini = {
                             )
 
                             const precioMedioConDescuentos = document.createElement("div")
-                            precioMedioConDescuentos.classList.add("detalleDelTotal")
+                            //precioMedioConDescuentos.classList.add("detalleDelTotal")
                             precioMedioConDescuentos.innerText = "Precio medio neto de la reserva por noche con descuentos aplicados"
                             contenedorPromedio.appendChild(precioMedioConDescuentos)
 
@@ -23218,7 +23603,7 @@ const casaVitini = {
                             )
 
                             const totalImpuestosUI = document.createElement("div")
-                            totalImpuestosUI.classList.add("detalleDelTotal")
+                            //totalImpuestosUI.classList.add("detalleDelTotal")
                             totalImpuestosUI.innerText = "Total impuestos aplicados"
                             contenedorTotalImpuestosAplicados.appendChild(totalImpuestosUI)
 

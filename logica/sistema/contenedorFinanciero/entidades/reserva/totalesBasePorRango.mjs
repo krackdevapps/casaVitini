@@ -16,7 +16,6 @@ export const totalesBasePorRango = async (data) => {
         const apartamentosArray = data.apartamentosArray
         const reservaUID = data.reservaUID
 
-
         const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada, fechaSalida)
         diasArray.pop()
         const contenedorEntidadtes = estructura.entidades
@@ -101,7 +100,6 @@ export const totalesBasePorRango = async (data) => {
                         contenedorSobreControles[fecha_ISO][apartamentoIDV] = detallesSobreControl
                     }
                 }
-                // Error aqui
                 const precioNetoApartamento = new Decimal(apartamentosPorNoche[apartamentoIDV].precioNetoApartamento)
                 const totalNetoNoche = noche.precioNetoNoche || "0.00"
                 noche.precioNetoNoche = new Decimal(totalNetoNoche).plus(precioNetoApartamento).toFixed(2)

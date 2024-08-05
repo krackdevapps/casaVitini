@@ -93,15 +93,15 @@ export const utilidades = {
         const dia1 = parseInt(partesFecha1[2], 10)
         const mes1 = parseInt(partesFecha1[1], 10)
         const anio1 = parseInt(partesFecha1[0], 10)
-        
+
         const partesFecha2 = fecha2.split('-');
         const dia2 = parseInt(partesFecha2[2], 10)
-        const mes2 = parseInt(partesFecha2[1], 10) 
+        const mes2 = parseInt(partesFecha2[1], 10)
         const anio2 = parseInt(partesFecha2[0], 10)
-        
+
         const date1 = DateTime.local(anio1, mes1, dia1);
         const date2 = DateTime.local(anio2, mes2, dia2);
-        return date1.toISODate() === date2.toISODate();        
+        return date1.toISODate() === date2.toISODate();
     },
     contructorComasEY: (data) => {
         const array = data.array
@@ -187,6 +187,39 @@ export const utilidades = {
                 inicio_objeto.setDate(inicio_objeto.getDate() + 1);
             }
             return fechas;
+        },
+        compararFechasYExtraerDiasQueNoEstenEnElRangoSegundo: (data) => {
+
+            const fechaInicio_rango_uno = data.fechaInicio_rango_uno
+            const fechaFin_rango_uno = data.fechaFin_rango_uno
+            const fechaInicio_rango_dos = data.fechaInicio_rango_dos
+            const fechaFin_rango_dos = data.fechaFin_rango_dos
+
+
+            const fechaInicio_rango_uno_objeto = DateTime.fromISO(fechaInicio_rango_uno);
+            const fechaFin_rango_uno_objeto = DateTime.fromISO(fechaFin_rango_uno);
+
+            // Rango de fechas 2 (inicio y fin)
+            const fechaInicio_rango_dos_objeto = DateTime.fromISO(fechaInicio_rango_dos);
+            const fechaFin_rango_dos_objeto = DateTime.fromISO(fechaFin_rango_dos);
+
+            // Función para generar una lista de fechas entre dos fechas
+            const generaListaDeDias = (inicio, fin) => {
+                const fechas = [];
+                let actual = inicio;
+                while (actual <= fin) {
+                    fechas.push(actual.toISODate());
+                    actual = actual.plus({ days: 1 });
+                }
+                return fechas;
+            }
+
+            // Generar listas de fechas para ambos rangos
+            const fechasRango1 = generaListaDeDias(fechaInicio_rango_uno_objeto, fechaFin_rango_uno_objeto);
+            const fechasRango2 = generaListaDeDias(fechaInicio_rango_dos_objeto, fechaFin_rango_dos_objeto);
+
+            // Encontrar días del rango 2 que no están en el rango 1
+            return fechasRango1.filter(fechaControl => !fechasRango2.includes(fechaControl));
         }
     },
     ralentizador: async (milisegundos) => {

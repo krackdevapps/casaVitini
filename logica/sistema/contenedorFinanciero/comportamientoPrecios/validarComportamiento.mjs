@@ -1,10 +1,7 @@
-import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { validadoresCompartidos } from "../../validadores/validadoresCompartidos.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
-import Decimal from "decimal.js";
-import { utilidades } from "../../../componentes/utilidades.mjs";
 export const validarComportamiento = async (comportamiento) => {
     try {
-
         validadoresCompartidos.tipos.cadena({
             string: comportamiento.nombreComportamiento,
             nombreCampo: "El campo del nombreComportamiento",
@@ -12,92 +9,25 @@ export const validarComportamiento = async (comportamiento) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-
         const contenedor = validadoresCompartidos.tipos.objetoLiteral({
             objetoLiteral: comportamiento.contenedor,
             nombreCampo: "El array de apartamentos",
         })
-
         const tipo = contenedor?.tipo
 
-        // if (tipo === "porAntelacion") {
-        //     const fechaInicio_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
-        //         fecha_ISO: contenedor.fechaInicio,
-        //         nombreCampo: "La fecha de inicio del comportamiento"
-        //     });
-        //     const fechaFinal_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
-        //         fecha_ISO: contenedor.fechaFinal,
-        //         nombreCampo: "La fecha final del comportameinto"
-        //     });
-        //     await validadoresCompartidos.fechas.validacionVectorial({
-        //         fechaEntrada: fechaInicio_ISO,
-        //         fechaSalida: fechaFinal_ISO,
-        //         tipoVector: "igual"
-        //     })
-        //     const perfilesAntelacion = validadoresCompartidos.tipos.array({
-        //         array: contenedor.perfilesAntelacion,
-        //         nombreCampo: "Dentro del contenedor, en perfilesAntelacion"
-        //     })
-        //     const diasAntelacionRepeditos = {}
-        //     for (const perfil of perfilesAntelacion) {
-        //         const diasAntelacion = validadoresCompartidos.tipos.cadena({
-        //             string: perfil.diasAntelacion,
-        //             nombreCampo: "El campo diasAntelacion en el perfil " + tipo,
-        //             filtro: "cadenaConNumerosEnteros",
-        //             sePermiteVacio: "no",
-        //             devuelveUnTipoNumber: "no",
-        //             impedirCero: "si",
-        //             limpiezaEspaciosAlrededor: "si",
-        //         })
-        //         if (!diasAntelacionRepeditos.hasOwnProperty(diasAntelacion)) {
-        //             diasAntelacionRepeditos[diasAntelacion] = new Decimal(0)
-        //         } else {
-        //             const valorActual = diasAntelacionRepeditos[diasAntelacion]
-        //             diasAntelacionRepeditos[diasAntelacion] = valorActual.plus(1)
-        //         }
-        //         const conteoActual = diasAntelacionRepeditos[diasAntelacion]
-        //         if (conteoActual > 1) {
-        //             const error = `Hay mas de un perfil con ${diasAntelacion}, no se pueden repetir perfiles con los mismos dias de antelacion.`;
-        //             throw new Error(error);
-        //         }
-        //         const apartamentos = perfil.apartamentos
-        //         for (const [apartamentoIDV, comportamiento] of Object.entries(apartamentos)) {
-        //             validadoresCompartidos.tipos.cadena({
-        //                 string: apartamentoIDV,
-        //                 nombreCampo: "El campo apartamentoIDV",
-        //                 filtro: "strictoIDV",
-        //                 sePermiteVacio: "no",
-        //                 limpiezaEspaciosAlrededor: "si",
-        //             })
-        //             await obtenerConfiguracionPorApartamentoIDV({
-        //                 apartamentoIDV,
-        //                 errorSi: "noExiste"
-        //             })
-        //             const simboloIDV = comportamiento.simboloIDV
-        //             const cantidad = comportamiento.cantidad
-        //             if (
-        //                 simboloIDV !== "aumentoPorcentaje" &&
-        //                 simboloIDV !== "aumentoCantidad" &&
-        //                 simboloIDV !== "reducirCantidad" &&
-        //                 simboloIDV !== "reducirPorcentaje" &&
-        //                 simboloIDV !== "precioEstablecido"
-        //             ) {
-        //                 const error = `El campo simbolo de ${apartamentoIDV} solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido`;
-        //                 throw new Error(error);
-        //             }
-        //             validadoresCompartidos.tipos.cadena({
-        //                 string: cantidad,
-        //                 nombreCampo: `El campo cantidad en el ${apartamentoIDV}`,
-        //                 filtro: "cadenaConNumerosConDosDecimales",
-        //                 sePermiteVacio: "no",
-        //                 impedirCero: "si",
-        //                 devuelveUnTipoNumber: "no",
-        //                 limpiezaEspaciosAlrededor: "si",
-        //             })
-        //         }
-        //     }
-        // } else 
         if (tipo === "porRango") {
+            const llaves_nivel_1 = [
+                "fechaInicio",
+                "fechaFinal",
+                "apartamentos",
+                "tipo"
+            ]
+
+            const llaves_objeto_nivel_1 = Object.keys(contenedor)
+            if (llaves_objeto_nivel_1.length > llaves_nivel_1.length) {
+                const m = `En el objeto de ${tipo} no se esperan mas de ${llaves_nivel_1.length} llaves`
+                throw new Error(m)
+            }
 
             const fechaInicio_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: contenedor.fechaInicio,
@@ -115,7 +45,6 @@ export const validarComportamiento = async (comportamiento) => {
             })
 
         } else if (tipo === "porCreacion") {
-
             const fechaInicio_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: contenedor.fechaInicio,
                 nombreCampo: "La fecha de inicio del comportamiento"
@@ -146,6 +75,22 @@ export const validarComportamiento = async (comportamiento) => {
             })
 
 
+            const llaves_nivel_1 = [
+                "fechaInicio",
+                "fechaFinal",
+                "apartamentos",
+                "tipo",
+                "fechaFinal_creacionReserva",
+                "fechaInicio_creacionReserva"
+            ]
+
+            const llaves_objeto_nivel_1 = Object.keys(contenedor)
+            if (llaves_objeto_nivel_1.length > llaves_nivel_1.length) {
+                const m = `En el objeto de ${tipo} no se esperan mas de ${llaves_nivel_1.length} llaves`
+                throw new Error(m)
+            }
+ 
+
         } else if (tipo === "porDias") {
             const diasArray = validadoresCompartidos.tipos.array({
                 array: contenedor.dias,
@@ -164,6 +109,19 @@ export const validarComportamiento = async (comportamiento) => {
                 const error = "En el array de diasArray no se reconoce: " + elementosNoEnArreglo2;
                 throw new Error(error);
             }
+
+            const llaves_nivel_1 = [
+                "apartamentos",
+                "tipo",
+                "dias",
+            ]
+
+            const llaves_objeto_nivel_1 = Object.keys(contenedor)
+            if (llaves_objeto_nivel_1.length > llaves_nivel_1.length) {
+                const m = `En el objeto de ${tipo} no se esperan mas de ${llaves_nivel_1.length} llaves`
+                throw new Error(m)
+            }
+ 
         } else {
             const error = "Por favor determine si el tipo de bloqueo es porRango, porDias o porCreacion.";
             throw new Error(error);
@@ -174,7 +132,20 @@ export const validarComportamiento = async (comportamiento) => {
         })
         const controladorIDVRepetidos = {}
         for (const detallesApartamento of apartamentos) {
-            const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+
+            const llaves_nivel_1_apartamentos = [
+                "cantidad",
+                "simboloIDV",
+                "apartamentoIDV",
+            ]
+
+            const llaves_objeto_nivel_1_apartamentos = Object.keys(detallesApartamento)
+            if (llaves_objeto_nivel_1_apartamentos.length > llaves_nivel_1_apartamentos.length) {
+                const m = "En el objeto de porRango no se esperan mas de 4 llaves"
+                throw new Error(m)
+            }
+
+             const apartamentoIDV = validadoresCompartidos.tipos.cadena({
                 string: detallesApartamento.apartamentoIDV,
                 nombreCampo: "El campo apartamentoIDV",
                 filtro: "strictoIDV",

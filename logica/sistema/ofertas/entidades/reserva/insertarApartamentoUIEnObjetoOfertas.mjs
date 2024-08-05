@@ -4,6 +4,7 @@ export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => 
     try {
         // Descuentos por apartamentos
         const descuentosPorApartamentos = contenedorOferta?.descuentosJSON?.apartamentos || []
+
         for (const contenedorApartamento of descuentosPorApartamentos) {
             const apartamentoIDV = contenedorApartamento.apartamentoIDV
 
@@ -13,6 +14,7 @@ export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => 
             })).apartamentoUI
             contenedorApartamento.apartamentoUI = apartamentoUI
         }
+        console.log("descuentosPorApartamentos", descuentosPorApartamentos)
 
         // Descuentos por dias con apartamentos especificos
         const descuentosPorDiasConApartamentos = contenedorOferta?.descuentosJSON?.descuentoPorDias || []
@@ -35,7 +37,7 @@ export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => 
             const tipoCondicion = contenedorCondicion.tipoCondicion
             if (tipoCondicion === "porCodigoDescuento") {
                 const codigoDescuento = contenedorCondicion.codigoDescuento
-                contenedorCondicion.codigoDescuento = Buffer.from(codigoDescuento, 'base64').toString('utf-8');
+                //contenedorCondicion.codigoDescuento = Buffer.from(codigoDescuento, 'base64').toString('utf-8');
             }
 
             if (tipoCondicion === "porApartamentosEspecificos") {
