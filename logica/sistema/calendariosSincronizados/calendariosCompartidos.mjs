@@ -13,7 +13,7 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
     try {
         const calendariosporUIDPublico = await obtenerCalendarioPorCalendarioUIDPublico({
             publicoUID: calendarioUIDPublico,
-            errorSi: "no Existe"
+            errorSi: "noExiste"
         })
         const apartamentoIDV = calendariosporUIDPublico.apartamentoIDV;
         const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
@@ -137,7 +137,7 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
                     start: fechaEntrada_objeto.toISO(),
                     end: fechaSalida_objeto.toISO(),
                     summary: `${apartamentoUI} de la reserva ${reservaUID} en casavitini.com`,
-                    description: "Detalles de la reserva: https://casavitini.com/administracion/reservas/" + reservaUID
+                    description: "Detalles de la reserva: https://casavitini.com/administracion/reservas/reserva:" + reservaUID
                 };
                 eventos.push(estructuraEVENTO);
 

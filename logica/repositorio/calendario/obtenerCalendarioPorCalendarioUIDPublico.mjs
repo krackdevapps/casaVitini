@@ -26,7 +26,7 @@ export const obtenerCalendarioPorCalendarioUIDPublico = async (data) => {
         } else if (errorSi === "desactivado") {
             return resuelve.rows
         } else {
-            const error = "el adaptador obtenerHabitacionComoEntidadPorHabitacionIDV necesita errorSi en existe, noExiste o desactivado"
+            const error = "el adaptador obtenerCalendarioPorCalendarioUIDPublico necesita errorSi en existe, noExiste o desactivado"
             throw new Error(error)
         }
     } catch (errorAdaptador) {

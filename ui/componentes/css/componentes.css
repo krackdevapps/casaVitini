@@ -332,6 +332,14 @@ main[zonaCSS="/"] {
     align-items: center;
 }
 
+[zonaCSS="administracion/calendario"] .infoEvento {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    pointer-events: none;
+}
+
 [zonaCSS="administracion/calendario"] .administracion_calendario_marcoMes {
     list-style: none;
     display: grid;
@@ -428,6 +436,8 @@ main[zonaCSS="/"] {
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     margin-bottom: 10px;
+    overflow: hidden;
+    padding: 10px;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_inicioFinal {
@@ -451,6 +461,8 @@ main[zonaCSS="/"] {
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     margin-bottom: 10px;
+    overflow: hidden;
+    padding: 10px;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_inicioSolo {
@@ -474,6 +486,8 @@ main[zonaCSS="/"] {
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     margin-bottom: 10px;
+    overflow: hidden;
+    padding: 10px;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_finalSolo {
@@ -497,8 +511,8 @@ main[zonaCSS="/"] {
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     margin-bottom: 10px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 10px;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_selecionado {
@@ -1288,7 +1302,7 @@ main[zonaCSS="/"] {
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
-    
+
 }
 
 .plaza_alojamiento_contenedorApartamento:hover+.plaza_alojamiento_contenedorApartamento_selectorUI {
@@ -2449,6 +2463,7 @@ main[zonaCSS="/"] {
     border: 0px solid rgba(0, 0, 0, 0.3);
     border-radius: 16px;
 }
+
 [zonaCSS="/alojamiento"] .ofertaUIContenedorDetalles {
     display: flex;
     align-content: stretch;
@@ -2460,6 +2475,7 @@ main[zonaCSS="/"] {
     border: 0px solid rgba(0, 0, 0, 0.3);
     border-radius: 16px;
 }
+
 @media (max-width: 720px) {
     [nombreColumna="telefono"] {
         display: none;
@@ -7401,6 +7417,7 @@ main[zonaCSS="/"] {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
 }
+
 [zonaCSS="administracion/comportamiento_de_precios"] .comportamientoUI {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
@@ -7577,6 +7594,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 12px;
     margin: 0px;
 }
+
 [zonaCSS="/alojamiento"] .ofertaUITituloOferta {
     padding: 12px;
     margin: 0px;
@@ -12118,8 +12136,8 @@ grid-template-columns: 0.5fr 1.5fr;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    /* border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px; */
 }
 
 .plaza_servicios_iconoCaractaristica {

@@ -8,16 +8,17 @@ export const horaEntradaSalida = async () => {
             "zonaHoraria"
         ];
         const paresConfiguracion = await obtenerParConfiguracion(configuracionesSolicitadas)
+        console.log("paresC", paresConfiguracion)
         const estructuraFinal = {}
-        for (const parConfirmacion of paresConfiguracion) {
-            const configuracionUID = parConfirmacion.configuracionUID
-            const valor = parConfirmacion.valor
-            estructuraFinal[configuracionUID] = valor
-        }
-        const horaEntradaArray = estructuraFinal.horaEntradaTZ.split(":")
+        // for (const parConfirmacion of paresConfiguracion) {
+        //     const configuracionUID = parConfirmacion.configuracionUID
+        //     const valor = parConfirmacion.valor
+        //     estructuraFinal[configuracionUID] = valor
+        // }
+        const horaEntradaArray = paresConfiguracion.horaEntradaTZ.split(":")
         const horaEntrda_HORA = horaEntradaArray[0]
         const horaEntrda_MINUTO = horaEntradaArray[1]
-        const horaSalidaArray = estructuraFinal.horaSalidaTZ.split(":")
+        const horaSalidaArray = paresConfiguracion.horaSalidaTZ.split(":")
         const horaSalida_HORA = horaSalidaArray[0]
         const horaSalida_MINUTO = horaSalidaArray[1]
         estructuraFinal.horaEntrada_objeto = {

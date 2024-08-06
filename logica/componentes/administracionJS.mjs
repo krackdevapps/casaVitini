@@ -22699,7 +22699,7 @@ const casaVitini = {
                             subTipoDescuento,
                             descuentosJSON
                         })
-                        contenedorDescuentos.appendChild(desfinicionDescuento)
+                    contenedorDescuentos.appendChild(desfinicionDescuento)
 
                     return contenedorDescuentos
                 },
@@ -33838,7 +33838,6 @@ const casaVitini = {
                 await casaVitini.administracion.calendario.constructorMesNuevo(calendarioResuelto)
                 // casaVitini.administracion.calendario.controlVertical();
             },
-
             controlVertical: () => {
 
                 const selectorSeccion = document.querySelector('main')
@@ -33972,6 +33971,80 @@ const casaVitini = {
                     instanciaUID: instanciaUID,
                     tipoRegistro: tipoRegistroFinal,
                 }
+                const ventanaDetallesDelEventoTruncado = (data) => {
+
+                    const urlUI = data.urlUI
+                    const eventoUID = data.eventoUID
+                    const nombreEventoFinal = data.nombreEventoFinal
+                    const detallesDelEventoUI= data.detallesDelEventoUI
+                    const main = document.querySelector("main")
+                    const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                    main.appendChild(ui)
+                    const contenedor = ui.querySelector("[componente=contenedor]")
+
+                    const titulo = document.createElement("div")
+                    titulo.classList.add(
+                        "titulo"
+                    )
+                    titulo.innerText = `Detalles del evento`
+                    contenedor.appendChild(titulo)
+
+                    
+                    const info = document.createElement("p")
+                    info.classList.add(
+                        "textoCentrado"
+                    )
+                    info.innerText = "Se ha desplegable esta pantalla de información por que el texto del evento no cabia en la celda del evento y se mostraba truncado con elipsis."
+                    contenedor.appendChild(info)
+
+                    const infoDetallesDelEvento = document.createElement("p")
+                    infoDetallesDelEvento.classList.add(
+                        "textoCentrado"
+                    )
+                    infoDetallesDelEvento.innerText = detallesDelEventoUI
+                    if (detallesDelEventoUI) {
+                        contenedor.appendChild(infoDetallesDelEvento)
+
+                    }
+
+
+                            
+                    const nobreDelEvento = document.createElement("p")
+                    nobreDelEvento.classList.add(
+                        "textoCentrado",
+                        "negrita"
+                    )
+                    nobreDelEvento.innerText = nombreEventoFinal
+                    contenedor.appendChild(nobreDelEvento)
+
+                   
+                    const botonIrAlEvento = document.createElement("div")
+                    botonIrAlEvento.classList.add("boton")
+                    botonIrAlEvento.setAttribute("boton", "cancelar")
+                    botonIrAlEvento.innerText = "Ir al evento"
+                    botonIrAlEvento.addEventListener("click", () => {
+                        const navegacion = {
+                            vista: urlUI,
+                            tipoOrigen: "menuNavegador"
+                        }
+                        casaVitini.shell.navegacion.controladorVista(navegacion)
+                    })
+                    if (urlUI) {
+                        contenedor.appendChild(botonIrAlEvento)    
+                    }
+                    
+
+
+                    const botonCancelar = document.createElement("div")
+                    botonCancelar.classList.add("boton")
+                    botonCancelar.setAttribute("boton", "cancelar")
+                    botonCancelar.innerText = "Cerrar y volver a la reserva"
+                    botonCancelar.addEventListener("click", () => {
+                        return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                    })
+                    contenedor.appendChild(botonCancelar)
+
+                }
                 const obtenerCoordenadasCeldaGrid = (celdaGrid) => {
                     const selectorDiaRenderizado = document.querySelector(`[dia="${celdaGrid}"]`);
                     const gridContainer = selectorDiaRenderizado.parentElement;
@@ -34052,6 +34125,7 @@ const casaVitini = {
                     const detallesDelEvento = metadatos.detallesDelEvento
 
                     let nombreEventoFinal = "Evento sin infomración"
+                    let detallesDelEventoUI
                     let urlUI
                     if (tipoEvento === "reserva") {
                         const reservaUID = detallesDelEvento.reservaUID
@@ -34087,12 +34161,22 @@ const casaVitini = {
                             nombreEventoFinal = `Airbnb (${apartamentoUI})`
                             urlUI = urlEvento
                         } else {
-                            nombreEventoFinal = `Airbnb (${apartamentoUI}), sin info`
+                            nombreEventoFinal = `Airbnb (${apartamentoUI}), sin informacíon`
+                            detallesDelEventoUI = "Este evento proviene de airbnb y no proporciona mas información. Esto suele ser debido cuano el evento de calendario de airbnb proviene de otra fuente como bookin"
                             //urlUI = ""
                         }
                     }
                     const eventoUI = document.createElement("a")
-                    eventoUI.innerText = nombreEventoFinal
+
+                    const contenedorInfoEvento = document.createElement("div")
+                    contenedorInfoEvento.classList.add(
+                        "infoEvento"
+                    )
+                    contenedorInfoEvento.setAttribute("dato", "textoEvento")
+                    contenedorInfoEvento.innerText = nombreEventoFinal
+                    eventoUI.appendChild(contenedorInfoEvento)
+                    // Construir un div en ves del innerText para el tema de la elipsis.
+                    //eventoUI.innerText = nombreEventoFinal
                     eventoUI.style.marginTop = altura + "px"
                     eventoUI.setAttribute("vista", urlUI)
                     eventoUI.setAttribute("componente", "eventoUI")
@@ -34114,6 +34198,30 @@ const casaVitini = {
                         selectorEventoUIRenderizado.forEach((eventoRenderizado) => {
                             eventoRenderizado.classList.remove("administracion_calendario_eventoUI_selecionado")
                         })
+                    })
+                    eventoUI.addEventListener("click", (e) => {
+                        e.preventDefault()
+                        const contnedorTexto = e.target.querySelector("[dato=textoEvento]")
+                        const tieneElipsis = (elemento) => {
+                            return elemento.scrollWidth > elemento.clientWidth;
+                        }
+
+                        if (tieneElipsis(contnedorTexto)) {
+
+                            ventanaDetallesDelEventoTruncado({
+                                urlUI,
+                                eventoUID,
+                                nombreEventoFinal,
+                                detallesDelEventoUI
+                            })
+
+                        } else if (urlUI) {
+                            const navegacion = {
+                                vista: urlUI,
+                                tipoOrigen: "menuNavegador"
+                            }
+                            casaVitini.shell.navegacion.controladorVista(navegacion)
+                        }
                     })
                     return eventoUI
                 }
