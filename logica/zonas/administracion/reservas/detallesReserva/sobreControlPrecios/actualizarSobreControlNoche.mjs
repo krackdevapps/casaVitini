@@ -6,7 +6,7 @@ import { actualizarSobreControlDeLaNoche } from "../../../../../repositorio/rese
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"
 import { procesador } from "../../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
-import _ from 'lodash';
+//import _ from 'lodash';
 
 
 export const actualizarSobreControlNoche = async (entrada) => {

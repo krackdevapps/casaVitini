@@ -9,7 +9,7 @@ const entorno = process.env.ENTORNO_DB || "nativo"
 if (entorno === "nativo") {
     configuracion.host = 'localhost'
     configuracion.user = process.env.BASEDEDATOS_USER
-    configuracion.password = "hola"
+    configuracion.password = process.env.BASEDEDATOS_PASSDEV
     configuracion.database = "casaVitiniDev"
     configuracion.max = 1000
     configuracion.port = 5432

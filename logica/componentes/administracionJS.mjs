@@ -18791,8 +18791,6 @@ const casaVitini = {
 
                     }
                     const simulaciones = respuestaServidor.simulaciones
-
-
                     const sentidoColumna = respuestaServidor.sentidoColumna
                     const nombreColumna = respuestaServidor.nombreColumna
                     const pagina = respuestaServidor.pagina

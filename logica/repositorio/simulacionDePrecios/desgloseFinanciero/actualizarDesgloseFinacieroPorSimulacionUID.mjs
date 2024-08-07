@@ -14,7 +14,7 @@ export const actualizarDesgloseFinacieroPorSimulacionUID = async (data) => {
 
         const instantaneaImpuestos = JSON.stringify(_.cloneDeep(desgloseFinanciero.entidades.reserva.instantaneaImpuestos));
         delete desgloseFinanciero.entidades.reserva.instantaneaImpuestos
-
+        console.log(instantaneaImpuestos.foo)
         const simulacionUID = data.simulacionUID
         const consulta = `
         UPDATE

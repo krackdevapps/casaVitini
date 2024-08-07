@@ -5,7 +5,7 @@ import { actualizarSobreControlDeLaNoche } from "../../../../repositorio/simulac
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
 import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
-import _ from 'lodash';
+//import _ from 'lodash';
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 
 
