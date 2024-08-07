@@ -332,18 +332,18 @@ const casaVitini = {
                     })
                     diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
                     diaSeleccionadoComoElemento.classList.add("calendarioDiaSeleccionado")
-                    let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                    let fechaEntradaSeleccionada = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                     let diaSeleccionadoEntrada
                     let mesSeleccionadoEntrada
                     let anoSeleccionadoEntrada
                     let datosFechaEntradaSeleccionada
-                    if (fechaEntradaSelecionda) {
-                        const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
-                        diaSeleccionadoEntrada = fechaEntradaSelecionda_array[0]
+                    if (fechaEntradaSeleccionada) {
+                        const fechaEntradaSeleccionada_array = fechaEntradaSeleccionada.split("/")
+                        diaSeleccionadoEntrada = fechaEntradaSeleccionada_array[0]
                         diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                        mesSeleccionadoEntrada = fechaEntradaSelecionda_array[1]
+                        mesSeleccionadoEntrada = fechaEntradaSeleccionada_array[1]
                         mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                        anoSeleccionadoEntrada = fechaEntradaSelecionda_array[2]
+                        anoSeleccionadoEntrada = fechaEntradaSeleccionada_array[2]
                         anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
                         datosFechaEntradaSeleccionada = "existen"
                     }
@@ -385,7 +385,7 @@ const casaVitini = {
                     if (calendarioIO === "salida") {
                         document.querySelector("[calendario=salida]").setAttribute("memoriaVolatil", fechaSeleccionadaUI)
                         document.querySelector("#fechaSalida").innerText = fechaSeleccionadaUI
-                        if (fechaEntradaSelecionda) {
+                        if (fechaEntradaSeleccionada) {
                             if (mesSeleccionadoEntrada === mesSeleccionado && anoSeleccionado === anoSeleccionadoEntrada) {
                                 selectorDias.forEach((dia) => {
                                     if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) > diaSeleccionadoEntrada) {
@@ -1046,7 +1046,7 @@ const casaVitini = {
                         zona: constructorURLFinal,
                         EstadoInternoZona: "estado",
                         tipoCambio: "parcial",
-                        conpontenteExistente: "navegacionZonaAdministracion",
+                        conponenteExistente: "navegacionZonaAdministracion",
                         funcionPersonalizada: "casaVitini.administracion.reservas.buscador.mostrarReservasResueltas",
                         datosPaginacion: transaccion
                     }
@@ -2415,7 +2415,7 @@ const casaVitini = {
                                     zona: directoriosFusion,
                                     EstadoInternoZona: "estado",
                                     tipoCambio: "parcial",
-                                    conpontenteExistente: componentesExistenteUID,
+                                    conponenteExistente: componentesExistenteUID,
                                     funcionPersonalizada: "casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.limpiarMenusCategorias"
                                 }
                                 window.history.replaceState(estado, titulo, directoriosFusion);
@@ -3888,7 +3888,7 @@ const casaVitini = {
                                     zona: directoriosFusion,
                                     EstadoInternoZona: "estado",
                                     tipoCambio: "parcial",
-                                    conpontenteExistente: componentesExistenteUID,
+                                    conponenteExistente: componentesExistenteUID,
                                     funcionPersonalizada: funcionPersonalizada
                                 }
                                 if (!categoriaActual) {
@@ -13324,7 +13324,7 @@ const casaVitini = {
                                         zona: directoriosFusion,
                                         EstadoInternoZona: "estado",
                                         tipoCambio: "parcial",
-                                        conpontenteExistente: componentesExistenteUID,
+                                        conponenteExistente: componentesExistenteUID,
                                         funcionPersonalizada: "casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.limpiarMenusCategorias"
                                     }
                                     window.history.pushState(estado, titulo, directoriosFusion);
@@ -13355,7 +13355,7 @@ const casaVitini = {
                                 zona: directoriosFusion,
                                 EstadoInternoZona: "estado",
                                 tipoCambio: "parcial",
-                                conpontenteExistente: componentesExistenteUID,
+                                conponenteExistente: componentesExistenteUID,
                                 funcionPersonalizada: "casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.limpiarMenusCategorias"
                             }
                             window.history.pushState(estado, titulo, directoriosFusion);
@@ -16586,7 +16586,7 @@ const casaVitini = {
                         zona: constructorURLFinal,
                         EstadoInternoZona: "estado",
                         tipoCambio: "parcial",
-                        conpontenteExistente: "zonaNavegacionPaginadaClientes",
+                        conponenteExistente: "zonaNavegacionPaginadaClientes",
                         funcionPersonalizada: "casaVitini.administracion.clientes.buscador.mostrarClientesResueltos",
                         datosPaginacion: transaccion
                     }
@@ -17227,7 +17227,7 @@ const casaVitini = {
                             zona: constructorURLFinal,
                             EstadoInternoZona: "estado",
                             tipoCambio: "parcial",
-                            conpontenteExistente: "clienteUID" + clienteUID,
+                            conponenteExistente: "clienteUID" + clienteUID,
                             funcionPersonalizada: "casaVitini.administracion.clientes.detallesCliente.portada.mostrarReservasDelClienteResueltas",
                             datosPaginacion: transaccion
                         }
@@ -18892,7 +18892,7 @@ const casaVitini = {
                         zona: constructorURLFinal,
                         EstadoInternoZona: "estado",
                         tipoCambio: "parcial",
-                        conpontenteExistente: "contenedorBotonesImpuestos",
+                        conponenteExistente: "contenedorBotonesImpuestos",
                         funcionPersonalizada: "casaVitini.administracion.simuladorDePrecios.portada.mostrarImpuestosResueltos",
                         datosPaginacion: transaccion
                     }
@@ -21530,7 +21530,7 @@ const casaVitini = {
                     zona: constructorURLFinal,
                     EstadoInternoZona: "estado",
                     tipoCambio: "parcial",
-                    conpontenteExistente: "contenedorBotonesImpuestos",
+                    conponenteExistente: "contenedorBotonesImpuestos",
                     funcionPersonalizada: "casaVitini.administracion.impuestos.mostrarImpuestosResueltos",
                     datosPaginacion: transaccion
                 }
@@ -31457,7 +31457,7 @@ const casaVitini = {
                         zona: constructorURLFinal,
                         EstadoInternoZona: "estado",
                         tipoCambio: "parcial",
-                        conpontenteExistente: "zonaNavegacionPaginadaUsuarios",
+                        conponenteExistente: "zonaNavegacionPaginadaUsuarios",
                         funcionPersonalizada: "casaVitini.administracion.usuarios.portada.mostrarUsuariosResueltos",
                         datosPaginacion: transaccion
                     }
@@ -33883,7 +33883,7 @@ const casaVitini = {
                     zona: constructorURLFinal,
                     EstadoInternoZona: "estado",
                     tipoCambio: "parcial",
-                    conpontenteExistente: "marcoCalendarioGlobal",
+                    conponenteExistente: "marcoCalendarioGlobal",
                     funcionPersonalizada: "casaVitini.administracion.calendario.irAFecha",
                     datosPaginacion: configuracion
                 }
@@ -33973,7 +33973,7 @@ const casaVitini = {
                     const urlUI = data.urlUI
                     const eventoUID = data.eventoUID
                     const nombreEventoFinal = data.nombreEventoFinal
-                    const detallesDelEventoUI= data.detallesDelEventoUI
+                    const detallesDelEventoUI = data.detallesDelEventoUI
                     const main = document.querySelector("main")
                     const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
                     main.appendChild(ui)
@@ -33986,7 +33986,7 @@ const casaVitini = {
                     titulo.innerText = `Detalles del evento`
                     contenedor.appendChild(titulo)
 
-                    
+
                     const info = document.createElement("p")
                     info.classList.add(
                         "textoCentrado"
@@ -34005,7 +34005,7 @@ const casaVitini = {
                     }
 
 
-                            
+
                     const nobreDelEvento = document.createElement("p")
                     nobreDelEvento.classList.add(
                         "textoCentrado",
@@ -34014,7 +34014,7 @@ const casaVitini = {
                     nobreDelEvento.innerText = nombreEventoFinal
                     contenedor.appendChild(nobreDelEvento)
 
-                   
+
                     const botonIrAlEvento = document.createElement("div")
                     botonIrAlEvento.classList.add("boton")
                     botonIrAlEvento.setAttribute("boton", "cancelar")
@@ -34027,9 +34027,9 @@ const casaVitini = {
                         casaVitini.shell.navegacion.controladorVista(navegacion)
                     })
                     if (urlUI) {
-                        contenedor.appendChild(botonIrAlEvento)    
+                        contenedor.appendChild(botonIrAlEvento)
                     }
-                    
+
 
 
                     const botonCancelar = document.createElement("div")
