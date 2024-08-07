@@ -14,6 +14,7 @@ import { configuracionSession } from './middleware/almacenSessiones.mjs';
 import { detectorDeLlavesRepetidas } from './middleware/detectorDeLlavesRepetidas.mjs';
 import { controlInputRaw } from './middleware/controlInputRaw.mjs';
 import { jsonHeader } from './middleware/jsonHeader.mjs';
+import { antiPrototypePollutiion } from './middleware/antyPrototypePolluttion.mjs';
 dotenv.config()
 
 process.on('uncaughtException', (error) => {
@@ -27,19 +28,24 @@ app.set('views', './ui/constructor')
 app.set('view engine', 'ejs')
 app.use(controlSizePeticion);
 app.use(jsonHeader)
-app.use(express.json({ limit: '50MB', extended: true }))
+app.use(express.json({
+  limit: '50MB',
+  extended: true,
+  strict: true
+}))
+app.use(antiPrototypePollutiion)
 app.use(controlJSON)
 app.use(express.urlencoded({ extended: true }))
-app.use(express.raw({ limit: '50MB' }))
+//app.use(express.raw({ limit: '50MB' }))
 app.use(controlTipoVerbo)
-app.set('trust proxy', true)
+//app.set('trust proxy', true)
 app.disable('x-powered-by')
 app.use('/componentes', express.static(path.join('./ui/componentes')))
 app.use(controlBaseDeDatos)
 app.use(configuracionSession)
 app.use(router)
 app.use(manejador404)
-export default app
+//export default app
 
 const puerto = process.env.PORT_HTTP
 const puertoSec = process.env.PORT_HTTPS

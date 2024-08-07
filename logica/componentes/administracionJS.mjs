@@ -18775,7 +18775,7 @@ const casaVitini = {
                         return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                     }
 
-                    if (respuestaServidor?.totalImpuestos === 0) {
+                    if (respuestaServidor?.totalSimulaciones === 0) {
                         const espacioClientes = document.querySelector("[componente=espacio]")
                         document.querySelector("[gridUID=gridImpuestos]")?.remove()
                         document.querySelector("[componente=estadoBusqueda]")?.remove()

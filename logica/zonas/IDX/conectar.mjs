@@ -54,7 +54,6 @@ export const conectar = async (entrada) => {
         }
 
         // Se valida si existe el usuario
-
         try {
             await obtenerIDX(usuario)
         } catch (error) {
