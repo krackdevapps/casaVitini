@@ -3144,166 +3144,20 @@ const casaVitini = {
                             )
                             tituloContendor.innerText = "Descuentos de la oferta"
                             contenedorDescuentos.appendChild(tituloContendor)
+                
+                            const desfinicionDescuento = casaVitini
+                                .ui
+                                .componentes
+                                .contenedorFinanciero
+                                .componentesUI
+                                .ofertas
+                                .componentesUI.definicionDescuentos({
+                                    tipoDescuento,
+                                    subTipoDescuento,
+                                    descuentosJSON
+                                })
+                            contenedorDescuentos.appendChild(desfinicionDescuento)
 
-                            const descripcionDescuento = document.createElement("p")
-                            descripcionDescuento.classList.add(
-                                "padding6"
-                            )
-
-                            if (tipoDescuento === "porRango" && subTipoDescuento === "porDiasDelRango") {
-                                const fechaInicioRango_ISO = descuentosJSON.fechaInicioRango_ISO
-                                const fechaFinalRango_ISO = descuentosJSON.fechaFinalRango_ISO
-                                const descuentoPorDias = descuentosJSON.descuentoPorDias
-
-                                descripcionDescuento.innerText = `Esta oferta aplica un descuento a los dias de la reserva. A continuación se detallan los dias donde la oferta aplica descuentos y que tipo de desceuntos aplica en cada dia.`
-                                contenedorDescuentos.appendChild(descripcionDescuento)
-
-                                for (const descuentoPorDia of descuentoPorDias) {
-                                    const tipoDescuentoPorDia = descuentoPorDia.tipoDescuento
-                                    const descuentoTotal = descuentoPorDia.descuentoTotal
-                                    const fechaNoche = descuentoPorDia.fecha
-
-                                    const contenedorDia = document.createElement("div")
-                                    contenedorDia.classList.add(
-                                        "flexVertical"
-                                    )
-                                    const tituloContenedorDia = document.createElement("div")
-                                    tituloContenedorDia.classList.add(
-                                        "negrita",
-                                        "padding6"
-                                    )
-                                    tituloContenedorDia.innerText = fechaNoche
-                                    contenedorDia.appendChild(tituloContenedorDia)
-
-                                    if (tipoDescuentoPorDia === "netoPorDia") {
-                                        const tipoAplicacion = descuentoPorDia.tipoAplicacion
-                                        const descripcionDescuentoTotalNeto = document.createElement("div")
-
-                                        descripcionDescuentoTotalNeto.classList.add(
-                                            "padding6"
-                                        )
-                                        if (tipoAplicacion === "porcentaje") {
-                                            descripcionDescuentoTotalNeto.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% a los netos de los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
-                                        } else if (tipoAplicacion === "cantidadFija") {
-                                            descripcionDescuentoTotalNeto.innerText = `Esta oferta aplica un descuento del ${descuentoTotal} a los netos de los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
-                                        }
-                                        contenedorDia.appendChild(descripcionDescuentoTotalNeto)
-
-                                    } else if (tipoDescuentoPorDia === "netoPorApartamentoDelDia") {
-
-                                        const contenedorApartamentosDelDia = document.createElement("div")
-                                        contenedorApartamentosDelDia.classList.add(
-                                            "flexVertical",
-                                            "gap6"
-                                        )
-
-                                        const apartamentos = descuentoPorDia.apartamentos
-                                        for (const apartamento of apartamentos) {
-                                            const apartamentoUI = apartamento.apartamentoUI
-                                            const apartamentoIDV = apartamento.apartamentoIDV
-                                            const descuentoTotal = apartamento.descuentoTotal
-                                            const tipoAplicacion = apartamento.tipoAplicacion
-
-                                            const contenedorApartamento = document.createElement("div")
-                                            contenedorApartamento.classList.add(
-                                                "padding10",
-                                                "borderGrey1",
-                                                "borderRadius6"
-
-                                            )
-                                            contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-
-                                            const tituloApartamento = document.createElement("div")
-                                            tituloApartamento.classList.add("negrita")
-                                            tituloApartamento.innerText = apartamentoUI
-                                            contenedorApartamento.appendChild(tituloApartamento)
-
-
-                                            const descuentoApartamento = document.createElement("div")
-                                            if (tipoAplicacion === "porcentaje") {
-                                                descuentoApartamento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% al ${apartamentoUI}`
-                                            } else if (tipoAplicacion === "cantidadFija") {
-                                                descuentoApartamento.innerText = `Esta oferta aplica un descuento de ${descuentoTotal} al ${apartamentoUI}`
-                                            }
-                                            contenedorApartamento.appendChild(descuentoApartamento)
-                                            contenedorApartamentosDelDia.appendChild(contenedorApartamento)
-
-                                        }
-                                        contenedorDia.appendChild(contenedorApartamentosDelDia)
-                                    }
-                                    contenedorDescuentos.appendChild(contenedorDia)
-                                }
-                            } else if (tipoDescuento === "porRango" && subTipoDescuento === "totalNetoPorRango") {
-
-                                const fechaInicioRango_ISO = descuentosJSON.fechaInicioRango_ISO
-                                const fechaFinalRango_ISO = descuentosJSON.fechaFinalRango_ISO
-                                const descuentoTotal = descuentosJSON.descuentoTotal
-                                const tipoAplicacion = descuentosJSON.tipoAplicacion
-
-                                if (tipoAplicacion === "porcentaje") {
-                                    descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% a los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
-                                } else if (tipoAplicacion === "cantidadFija") {
-                                    descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}$ a los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
-                                }
-                                contenedorDescuentos.appendChild(descripcionDescuento)
-                            } else if (tipoDescuento === "totalNeto") {
-                                const descuentoTotal = descuentosJSON.descuentoTotal
-                                const tipoAplicacion = descuentosJSON.tipoAplicacion
-
-
-                                if (tipoAplicacion === "porcentaje") {
-                                    descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% al total neto de la reserva.`
-                                } else if (tipoAplicacion === "cantidadFija") {
-                                    descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal} al total neto de la reserva.`
-                                }
-                                contenedorDescuentos.appendChild(descripcionDescuento)
-                            } else if (tipoDescuento === "individualPorApartamento") {
-                                descripcionDescuento.innerText = `Esta oferta aplica un descuento al total de los apartamentos especificados. A continuacion se detallan los apartamentos que esta oferta aplica descuentos. Si la reserva no tiene todos los apartamentos especificados en esta oferta, entonces solo aplicara el Descuentos en los apartamentos que coincidan de la oferta en la reserva.`
-                                contenedorDescuentos.appendChild(descripcionDescuento)
-
-                                const contenedorApartamentos = document.createElement("div")
-                                contenedorApartamentos.classList.add(
-                                    "gap6",
-                                    "flexVertical"
-                                )
-
-                                const apartamentos = descuentosJSON.apartamentos
-                                for (const apartamento of apartamentos) {
-                                    const apartamentoIDV = apartamento.apartamentoIDV
-                                    const apartamentoUI = apartamento.apartamentoUI
-                                    const descuentoTotal = apartamento.descuentoTotal
-                                    const tipoAplicacion = apartamento.tipoAplicacion
-
-                                    const contenedorApartamento = document.createElement("div")
-                                    contenedorApartamento.classList.add(
-                                        "padding10",
-                                        "borderGrey1",
-                                        "borderRadius8"
-                                    )
-                                    contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-
-
-                                    const apartamentoTitulo = document.createElement("div")
-                                    apartamentoTitulo.classList.add("negrita")
-                                    apartamentoTitulo.innerHTML = apartamentoUI
-                                    contenedorApartamento.appendChild(apartamentoTitulo)
-
-                                    const tipoAplicacionUI = document.createElement("div")
-                                    tipoAplicacionUI.classList.add("tipoAplicacionUI")
-                                    if (tipoAplicacion === "cantidadFija") {
-                                        tipoAplicacionUI.innerText = `Descuento de ${descuentoTotal}$ sobre el neto del apartamento`
-                                    } else if (tipoAplicacion === "porcentaje") {
-                                        tipoAplicacionUI.innerText = `Descuento del ${descuentoTotal}% sobre el neto del apartamento`
-                                    }
-                                    contenedorApartamento.appendChild(tipoAplicacionUI)
-
-                                    contenedorApartamentos.appendChild(contenedorApartamento)
-                                }
-                                contenedorDescuentos.appendChild(contenedorApartamentos)
-                            } else {
-                                const mensaje = "No se reconoce el tipo de descuento resibido"
-                                return casaVitini.ui.componentes.advertenciaInmersiva(mensaje)
-                            }
                             return contenedorDescuentos
                         },
                         condicionesUI: (data) => {
@@ -3342,187 +3196,19 @@ const casaVitini = {
                                     "flexVertical",
                                     "padding6",
                                 )
-                                if (tipoCondicion === "conFechaEntradaEntreRango") {
-                                    const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
-                                    const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
-
-                                    const tituloCondicion = document.createElement("div")
-                                    tituloCondicion.innerText = "Por fecha de entrada"
-                                    tituloCondicion.classList.add(
-                                        "negrita",
-                                    )
-                                    contenedorCondicion.appendChild(tituloCondicion)
-
-                                    const descripcionCondicion = document.createElement("div")
-                                    descripcionCondicion.innerText = "Esta condicion determina que la oferta se aplica cuando la fecha de entrada de la reserva esta entre el rango de vigencia de la oferta"
-                                    contenedorCondicion.appendChild(descripcionCondicion)
-
-                                    const rangoVigencia = document.createElement("div")
-                                    rangoVigencia.innerText = `${fechaInicioRango_ISO} >>> ${fechaFinalRango_ISO}`
-                                    contenedorCondicion.appendChild(rangoVigencia)
-
-                                } else if (tipoCondicion === "conFechaCreacionEntreRango") {
-                                    const tituloCondicion = document.createElement("div")
-                                    tituloCondicion.innerText = "Por fecha de creacion entre el rango"
-                                    tituloCondicion.classList.add(
-                                        "negrita",
-                                    )
-                                    contenedorCondicion.appendChild(tituloCondicion)
-
-                                    const descripcionCondicion = document.createElement("div")
-                                    descripcionCondicion.innerText = "Esta condicion determina que la oferta se aplica cuando la fecha de creacion de la reserva esta entr el rango de vigencia de la oferta"
-                                    contenedorCondicion.appendChild(descripcionCondicion)
-
-                                } else if (tipoCondicion === "porNumeroDeApartamentos") {
-                                    const tipoConteo = condicion.tipoConteo
-                                    const numeroDeApartamentos = condicion.numeroDeApartamentos
-
-                                    const tituloCondicion = document.createElement("div")
-                                    tituloCondicion.innerText = "Por numero de apartamentos"
-                                    tituloCondicion.classList.add(
-                                        "negrita",
-                                    )
-                                    contenedorCondicion.appendChild(tituloCondicion)
-
-                                    if (tipoConteo === "aPartirDe") {
-                                        const descripcionCondicion = document.createElement("div")
-                                        descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} o mas apartamentos`
-                                        contenedorCondicion.appendChild(descripcionCondicion)
-
-                                    } else if (tipoConteo === "numeroExacto") {
-                                        const descripcionCondicion = document.createElement("div")
-                                        if (numeroDeApartamentos === "1") {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} apartamento exactamente. Ni mas ni menos.`
-                                            contenedorCondicion.appendChild(descripcionCondicion)
-                                        } else {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeApartamentos} apartamentos exactamente. Ni mas ni menos.`
-                                            contenedorCondicion.appendChild(descripcionCondicion)
-                                        }
-                                    }
-
-                                } else if (tipoCondicion === "porApartamentosEspecificos") {
-                                    const apartamentos = condicion.apartamentos
-                                    const apartametnosFormateados = casaVitini.utilidades.cadenas.contructorComasEY({
-                                        array: apartamentos,
-                                        articulo: "el"
+                                const definicionCondicion = casaVitini
+                                    .ui
+                                    .componentes
+                                    .contenedorFinanciero
+                                    .componentesUI
+                                    .ofertas
+                                    .componentesUI
+                                    .definicionCondiciones({
+                                        tipoCondicion,
+                                        condicion
                                     })
-                                    const tituloCondicion = document.createElement("div")
-                                    tituloCondicion.innerText = "Por apartamentos especificos"
-                                    tituloCondicion.classList.add(
-                                        "negrita",
-                                    )
-                                    contenedorCondicion.appendChild(tituloCondicion)
-
-                                    const descripcionCondicion = document.createElement("div")
-                                    descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva contiene los apartamentos en especifico: ${apartametnosFormateados}`
-                                    contenedorCondicion.appendChild(descripcionCondicion)
-
-                                } else if (tipoCondicion === "porDiasDeAntelacion") {
-                                    const numeroDeDias = condicion.numeroDeDias
-                                    const tipoConteo = condicion.tipoConteo
-
-                                    const tituloCondicion = document.createElement("div")
-                                    tituloCondicion.innerText = "Por dias de antelacion"
-                                    tituloCondicion.classList.add(
-                                        "negrita",
-                                    )
-                                    contenedorCondicion.appendChild(tituloCondicion)
-
-                                    const descripcionCondicion = document.createElement("div")
-                                    if (tipoConteo === "aPartirDe") {
-                                        if (numeroDeDias === "1") {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dia de antelación o mas`
-                                            contenedorCondicion.appendChild(descripcionCondicion)
-
-                                        } else {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dias de antelación o mas`
-                                            contenedorCondicion.appendChild(descripcionCondicion)
-
-                                        }
-                                    } else if (tipoConteo === "numeroExacto") {
-                                        if (numeroDeDias === "1") {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dia de antelación exactamente`
-                                            contenedorCondicion.appendChild(descripcionCondicion)
-
-                                        } else {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${numeroDeDias} dias de antelación exactamente`
-                                            contenedorCondicion.appendChild(descripcionCondicion)
-
-                                        }
-                                    }
-
-                                } else if (tipoCondicion === "porDiasDeReserva") {
-                                    const diasDeReserva = condicion.diasDeReserva
-                                    const tipoConteo = condicion.tipoConteo
-
-                                    const tituloCondicion = document.createElement("div")
-                                    tituloCondicion.innerText = "Por dias de duración"
-                                    tituloCondicion.classList.add(
-                                        "negrita",
-                                    )
-                                    contenedorCondicion.appendChild(tituloCondicion)
-
-                                    const descripcionCondicion = document.createElement("div")
-                                    if (tipoConteo === "aPartirDe") {
-                                        if (diasDeReserva === "1") {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dia de duración o mas`
-                                            contenedorCondicion.appendChild(descripcionCondicion)
-
-                                        } else {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dias de duración o mas`
-                                            contenedorCondicion.appendChild(descripcionCondicion)
-
-                                        }
-                                    } else if (tipoConteo === "numeroExacto") {
-                                        if (diasDeReserva === "1") {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dia de duración exactamente`
-                                            contenedorCondicion.appendChild(descripcionCondicion)
-
-                                        } else {
-                                            descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando la reserva tiene ${diasDeReserva} dias de duración exactamente`
-                                            contenedorCondicion.appendChild(descripcionCondicion)
-                                        }
-                                    }
-
-                                } else if (tipoCondicion === "porRangoDeFechas") {
-                                    const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
-                                    const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
-
-                                    const tituloCondicion = document.createElement("div")
-                                    tituloCondicion.innerText = "Por rango de fechas"
-                                    tituloCondicion.classList.add(
-                                        "negrita",
-                                    )
-                                    contenedorCondicion.appendChild(tituloCondicion)
-
-                                    const descripcionCondicion = document.createElement("div")
-                                    descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando el rango de la reserva se cruza con el rango determinado en esta condicion. Del ${fechaInicioRango_ISO} al ${fechaFinalRango_ISO}`
-                                    contenedorCondicion.appendChild(descripcionCondicion)
-
-                                } else if (tipoCondicion === "porCodigoDescuento") {
-                                    const codigoDescuento = condicion.codigoDescuento
-
-                                    const tituloCondicion = document.createElement("div")
-                                    tituloCondicion.innerText = "Por codigo de descuento"
-                                    tituloCondicion.classList.add(
-                                        "negrita",
-                                    )
-                                    contenedorCondicion.appendChild(tituloCondicion)
-
-                                    const codigoUI = document.createElement("div")
-                                    codigoUI.innerText = atob(codigoDescuento)
-
-
-                                    contenedorCondicion.appendChild(codigoUI)
-
-                                } else {
-                                    const error = "El renderizador de condiciones de oferta ha recibido un identifcador no reconocido: " + tipoCondicion
-                                    return casaVitini.ui.componentes.advertenciaInmersiva(error)
-                                }
-
-
+                                contenedorCondicion.appendChild(definicionCondicion)
                                 contenedorCondiciones.appendChild(contenedorCondicion)
-
                             })
                             return contenedorCondiciones
                         },
@@ -21869,7 +21555,7 @@ const casaVitini = {
                                         contenedorAutorizacion.setAttribute("contenedor", "autorizacion")
 
                                         const textoAutorizacion = document.createElement("div")
-                                        textoAutorizacion.innerText = "Estado de la autorizacíon"
+                                        textoAutorizacion.innerText = "Estado de la autorizacíón"
                                         contenedorAutorizacion.appendChild(textoAutorizacion)
 
 

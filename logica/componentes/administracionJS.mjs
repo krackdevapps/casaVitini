@@ -9373,7 +9373,7 @@ const casaVitini = {
                                 campo = document.createElement("input")
                                 campo.classList.add("detallesReserva_campoNombreEnlace")
                                 campo.setAttribute("campo", "horasCaducidad")
-                                campo.placeholder = "Caducida en horas, por defecto 72h"
+                                campo.placeholder = "Caducidad en horas, por defecto, 72h."
                                 bloque.appendChild(campo)
                                 const campoDescripcion = document.createElement("textarea")
                                 campoDescripcion.classList.add("detallesReserva_campoDescripcion")
@@ -9600,8 +9600,7 @@ const casaVitini = {
                                 contenedorAdvertenciaInmersiva.appendChild(titulo)
                                 const infoGlobal = document.createElement("div")
                                 infoGlobal.classList.add("detallesReserva_reembolso_infoGlobal")
-                                infoGlobal.innerText = `Estos son las listas de pagos de esta reserva. Los pagos pueden realizarse por la pasarela o si realiza un pago en efectivo deberá añadir un pago manual desde el botón correspondiente. Para ver los detalles de un pago y sus reembolsos si los hubiera pulse en un pago. Para realizar un reembolso entra en los detalles de un pago y desde ahí podrás realizar el reembolso
-                        `
+                                infoGlobal.innerText = `Estos son los de pagos de esta reserva. Los pagos pueden realizarse por la pasarela o, si realiza un pago en efectivo, deberá añadir un pago manual desde el botón correspondiente. Para ver los detalles de un pago y sus reembolsos si los hubiera pulsado en un pago. Para realizar un reembolso, entra en los detalles de un pago y desde ahí podrás realizar el reembolso.`
                                 contenedorAdvertenciaInmersiva.appendChild(infoGlobal)
                                 const bloqueTransacciones = document.createElement("div")
                                 bloqueTransacciones.classList.add("detallesReserva_transacciones_bloqueGlobal")
@@ -10009,7 +10008,7 @@ const casaVitini = {
                                 const infoNoPagos = document.createElement("div")
                                 infoNoPagos.classList.add("reservaDetalles_transacciones_textoV1")
                                 infoNoPagos.setAttribute("contenedor", "infoNoPagos")
-                                infoNoPagos.innerText = "Esta reserva no tiene ningún pago. Los pagos que se realicen por la pasarela de pagos se mostraran automáticamente aquí. Sin embargo si ha cobrado esta reserva por ejemplo en efectivo o con un TPV debería de añadir un pago manual. No es obligatorio añadir un pago manual pero si quiere tener un seguimiento centralizado de todos los pago en esta reserva tiene esa opción."
+                                infoNoPagos.innerText = "Esta reserva no tiene ningún pago. Los pagos que se realicen por la pasarela de pagos se mostrarán automáticamente aquí. Sin embargo, si ha cobrado esta reserva, por ejemplo, en efectivo o con un TPV, debería de añadir un pago manual. No es obligatorio añadir un pago manual, pero si quiere tener un seguimiento centralizado de todos los pagos en esta reserva, tiene esa opción."
                                 return infoNoPagos
                             }
                         },
@@ -11123,7 +11122,7 @@ const casaVitini = {
                                     contenedor.setAttribute("contenedorTipoPago", "efectivo")
                                     info = document.createElement("div")
                                     info.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                    info.innerText = `Determina la cantidad del pago, recuerda que debe se tener dos decimales siempre, por ejemplo 10.00`
+                                    info.innerText = `Determina la cantidad del pago, recuerda que debe tener dos decimales siempre, por ejemplo, 10.00.`
                                     contenedor.appendChild(info)
                                     let campo = document.createElement("input")
                                     campo.classList.add("detallesReserva_campoNombreEnlace")
@@ -11138,17 +11137,17 @@ const casaVitini = {
                                     contenedor.setAttribute("contenedorTipoPago", "transferenciaBancaria")
                                     info = document.createElement("div")
                                     info.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                    info.innerText = `Determina la cantidad de la transferncia bancaria, reuerda que  la cantidad debe tener dos decimales siempre, por ejemplo 10.00`
+                                    info.innerText = `Determina la cantidad de la transferencia bancaria. Recuerda que la cantidad debe tener dos decimales siempre, por ejemplo, 10.00.`
                                     contenedor.appendChild(info)
                                     let campo = document.createElement("input")
                                     campo.classList.add("detallesReserva_campoNombreEnlace")
                                     campo.setAttribute("campo", "transferenciaUID")
-                                    campo.placeholder = "Codigo identificador de la transferencia bancaria"
+                                    campo.placeholder = "Código identificador de la transferencia bancaria."
                                     contenedor.appendChild(campo)
                                     campo = document.createElement("input")
                                     campo.classList.add("detallesReserva_campoNombreEnlace")
                                     campo.setAttribute("campo", "cantidad")
-                                    campo.placeholder = "Cantidad especificada en la tranferencia bancaria, ejemplo 12.95"
+                                    campo.placeholder = "Cantidad especificada en la transferencia bancaria, ejemplo: 12.95."
                                     contenedor.appendChild(campo)
                                     return contenedor
                                 },
@@ -11158,17 +11157,17 @@ const casaVitini = {
                                     contenedor.setAttribute("contenedorTipoPago", "cheque")
                                     info = document.createElement("div")
                                     info.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                    info.innerText = `Determina la cantidad del pago en modalidad cheque, recuerda que debe se tener dos decimales siempre, por ejemplo 10.00`
+                                    info.innerText = `Determina la cantidad del pago en modalidad cheque bancario. Recuerda que la cantidad especificada debe tener dos decimales siempre, por ejemplo, 10.00.`
                                     contenedor.appendChild(info)
                                     let campo = document.createElement("input")
                                     campo.classList.add("detallesReserva_campoNombreEnlace")
                                     campo.setAttribute("campo", "chequeUID")
-                                    campo.placeholder = "Codigo identificador del cheque"
+                                    campo.placeholder = "Código identificador del cheque."
                                     contenedor.appendChild(campo)
                                     campo = document.createElement("input")
                                     campo.classList.add("detallesReserva_campoNombreEnlace")
                                     campo.setAttribute("campo", "cantidad")
-                                    campo.placeholder = "Cantidad especificada en el cheque, ejemplo 12.95"
+                                    campo.placeholder = "Cantidad especificada en el cheque, ejemplo: 12.95."
                                     contenedor.appendChild(campo)
                                     return contenedor
                                 },
@@ -11178,17 +11177,17 @@ const casaVitini = {
                                     contenedor.setAttribute("contenedorTipoPago", "tarjeta")
                                     info = document.createElement("div")
                                     info.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                    info.innerText = `Determina la cantidad del pago en tarjeta, inserte los datos de pago hecho por el TPV`
+                                    info.innerText = `Determina la cantidad del pago en tarjeta, inserte los datos del pago realizado con el TPV.`
                                     contenedor.appendChild(info)
                                     let campo = document.createElement("input")
                                     campo.classList.add("detallesReserva_campoNombreEnlace")
                                     campo.setAttribute("campo", "tarjetaUltimos")
-                                    campo.placeholder = "Cuatro ultimos digitos de la tarjeta"
+                                    campo.placeholder = "Cuatro últimos dígitos de la tarjeta."
                                     contenedor.appendChild(campo)
                                     campo = document.createElement("input")
                                     campo.classList.add("detallesReserva_campoNombreEnlace")
                                     campo.setAttribute("campo", "cantidad")
-                                    campo.placeholder = "Cantidad especificada en el pago por TPV, ejemplo 12.95"
+                                    campo.placeholder = "Cantidad especificada en el pago por TPV, ejemplo: 12.95."
                                     contenedor.appendChild(campo)
                                     return contenedor
                                 },
@@ -11198,12 +11197,12 @@ const casaVitini = {
                                     contenedor.setAttribute("contenedorTipoPago", "pasarela")
                                     info = document.createElement("div")
                                     info.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                    info.innerText = `Si algun pago no se ha sincronizado o si quieres sincronizar un pago, inserta el codigo identificador del pago de la pasarela`
+                                    info.innerText = `Si algún pago no se ha sincronizado o si quieres sincronizar un pago, inserta el código identificador del pago de la pasarela.`
                                     contenedor.appendChild(info)
                                     let campo = document.createElement("input")
                                     campo.classList.add("detallesReserva_campoNombreEnlace")
                                     campo.setAttribute("campo", "pagoUIDPasarela")
-                                    campo.placeholder = "Codigo identificador de pago, por ejemplo h8qikEKdMiyPEtm5pKgjwv1fMSeZY"
+                                    campo.placeholder = "Código identificador de pago, por ejemplo: h8qikEKdMiyPEtm5pKgjwv1fMSeZY"
                                     contenedor.appendChild(campo)
                                     return contenedor
                                 }
@@ -11417,7 +11416,7 @@ const casaVitini = {
                                 campo = document.createElement("input")
                                 campo.classList.add("detallesReserva_campoNombreEnlace")
                                 campo.setAttribute("campo", "horasCaducidad")
-                                campo.placeholder = "Caducida en horas, por defecto 72h"
+                                campo.placeholder = "Caducidad en horas, por defecto, 72h."
                                 bloque.appendChild(campo)
                                 const campoDescripcion = document.createElement("textarea")
                                 campoDescripcion.classList.add("detallesReserva_campoDescripcion")
