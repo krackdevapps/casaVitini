@@ -63,7 +63,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
 
         if (reserva.estadoReservaIDV === "cancelada") {
-            const error = "La reserva no se puede modificar por que esta cancelada, una reserva cancelada no interfiere en los dias ocupados";
+            const error = "La reserva no se puede modificar porque está cancelada., una reserva cancelada no interfiere en los dias ocupados";
             throw new Error(error);
         }
 
@@ -120,7 +120,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
 
         //     })
         // }
-  
+
         const metadatos = {
             reservaUID,
             mesCalendario: mesSeleccionado,

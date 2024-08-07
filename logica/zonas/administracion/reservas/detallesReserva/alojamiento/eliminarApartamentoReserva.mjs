@@ -54,7 +54,7 @@ export const eliminarApartamentoReserva = async (entrada) => {
         // Comprobar que la reserva exisste     
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         if (reserva.estadoReservaIDV === "cancelada") {
-            const error = "La reserva no se puede modificar por que esta cancelada";
+            const error = "La reserva no se puede modificar porque está cancelada.";
             throw new Error(error);
         }
         // Comprobar si existen totales en esta reserva
@@ -70,8 +70,8 @@ export const eliminarApartamentoReserva = async (entrada) => {
                 reservaUID,
                 apartamentoUID,
                 tipoBloqueo,
-                 fechaEntrada,
-                 fechaSalida,
+                fechaEntrada,
+                fechaSalida,
                 zonaIDV: "publico",
                 origen: "eliminacionApartamentoDeReserva"
             })

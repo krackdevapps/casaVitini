@@ -33,17 +33,17 @@ export const eliminarHabitacionDeConfiguracionDeAlojamiento = async (entrada, sa
             errorSi: "noExiste"
         })
         if (configuracionApartamento?.estadoConfiguracionIDV === "disponible") {
-            const error = "No se puede eliminar una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama";
+            const error = "No se puede eliminar una habitación cuando el estado de la configuración es disponible. Cambie el estado a no disponible para realizar añadir una cama.";
             throw new Error(error);
         }
 
         const habitacionEliminada = await eliminarHabitacionDelApartamentoPorApartamentoIDV(habitacionUID)
         if (habitacionEliminada.length === 0) {
-            const error = "No se encuetra la habitaicon a eliminar";
+            const error = "No se encuentra la habitación a eliminar";
             throw new Error(error);
         }
         const ok = {
-            ok: "Se ha eliminado correctamente la habitacion como entidad",
+            ok: "Se ha eliminado correctamente la habitación como entidad",
         }
         salida.json(ok)
     } catch (errorCapturado) {

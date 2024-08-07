@@ -35,7 +35,7 @@ export const eliminarCamaFisicaDeHabitacion = async (entrada) => {
         })
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         if (reserva.estadoReservaIDV === "cancelada") {
-            const error = "La reserva no se puede modificar por que esta cancelada";
+            const error = "La reserva no se puede modificar porque está cancelada.";
             throw new Error(error);
         }
         await eliminarCamaFisicaDeLaHabitacion({

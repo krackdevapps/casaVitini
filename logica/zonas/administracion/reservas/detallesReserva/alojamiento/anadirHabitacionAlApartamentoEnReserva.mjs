@@ -47,7 +47,7 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada) => {
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         if (reserva.estadoReservaIDV === "cancelada") {
-            const error = "La reserva no se puede modificar por que esta cancelada";
+            const error = "La reserva no se puede modificar porque está cancelada.";
             throw new Error(error);
         }
         await obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV({
@@ -61,7 +61,7 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada) => {
             reservaUID
         });
         if (resuelveHabitaciones.length === 0) {
-            const error = `El apartamento no tiene disponibles mas habitaciones para ser anadidas en base a su configuracion glboal`;
+            const error = `El apartamento no tiene disponibles más habitaciones para ser añadidas basándonos en su configuración global.`;
             throw new Error(error);
         }
 

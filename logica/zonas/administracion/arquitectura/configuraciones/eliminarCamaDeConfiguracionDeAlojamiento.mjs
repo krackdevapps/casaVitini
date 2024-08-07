@@ -35,12 +35,12 @@ export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) 
             errorSi: "noExiste"
         })
         if (detallesApartamento.estadoConfiguracionIDV === "disponible") {
-            const error = "No se puede eliminar una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama";
+            const error = "No se puede eliminar una habitación cuando el estado de la configuración es disponible. Cambie el estado a no disponible para realizar añadir una cama.";
             throw new Error(error);
         }
         await eliminarCamaDeLaHabitacionPorCamaUID(camaUID)
         const ok = {
-            ok: "Se ha eliminado correctamente la cama de la habitacion"
+            ok: "Se ha eliminado correctamente la cama de la habitación"
         };
         return ok
 

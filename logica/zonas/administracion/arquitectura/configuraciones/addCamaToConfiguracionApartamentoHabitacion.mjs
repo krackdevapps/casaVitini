@@ -54,7 +54,7 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
             errorSi: "noExiste"
         })
         if (obtenerConfiguracionPorApartamento_.estadoConfiguracionIDV === "disponible") {
-            const error = "No se puede anadir una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama";
+            const error = "No se puede añadir una habitación cuando el estado de la configuración es Disponible. Cambie el estado a no disponible para realizar añadir una cama.";
             throw new Error(error);
         }
         const dataObtenerCamaPorHabitacion = {
@@ -74,7 +74,7 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
 
         const nuevoUID = nuevaCamaDeLaHabitacion.componenteUID;
         const ok = {
-            ok: "Se ha insertardo la cama correctamente en la habitacion",
+            ok: "Se ha insertado la cama correctamente en la habitación.",
             nuevoUID: nuevoUID,
             camaUI: camaUI,
             camaIDV: camaIDV,

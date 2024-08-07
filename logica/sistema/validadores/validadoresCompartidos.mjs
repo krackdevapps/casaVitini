@@ -821,7 +821,7 @@ export const validadoresCompartidos = {
                     throw new Error(error)
                 }
                 if (typeof phone !== "string") {
-                    const error = "el campo Telefono debe de ser una cadena."
+                    const error = "el campo Teléfono debe de ser una cadena."
                     throw new Error(error)
                 }
                 const filtroTelefono = /[^0-9]+/g
@@ -831,7 +831,7 @@ export const validadoresCompartidos = {
                     .trim()
 
                 if (filtroTelefono.test(telefonoLimpio)) {
-                    const error = "el campo Telefono no cumple con el formato esperado, el formado esperado es una cadena con numeros"
+                    const error = "el campo Teléfono no cumple con el formato esperado, el formado esperado es una cadena con numeros"
                     throw new Error(error)
                 }
                 return telefonoLimpio

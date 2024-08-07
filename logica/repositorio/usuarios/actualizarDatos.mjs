@@ -31,7 +31,7 @@ export const actualizarDatos = async (data) => {
         );
         if (resuelveNuevoCorreoPorVerifical.rowCount > 0) {
             //const cuentaConCorreoAsociado = resuelveNuevoCorreoPorVerifical.rows[0].usuario
-            const error = "El correo electronico ya tiene un VitiniIDX asociado. Utiliza esa cuenta, recuperala o inserta otro correo electronico para esta cuenta."
+            const error = "El Correo electrónico ya tiene un VitiniIDX asociado. Utiliza esa cuenta, recuperala o inserta otro Correo electrónico para esta cuenta."
             throw new Error(error)
         }
 

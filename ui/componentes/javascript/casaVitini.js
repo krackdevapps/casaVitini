@@ -1945,7 +1945,7 @@ const casaVitini = {
                             fechaFinContenedor.classList.add("ofertaUIFechaContenedor")
                             const tituloFechaFin = document.createElement("div")
                             tituloFechaFin.classList.add("ofertaUITituloFecha")
-                            tituloFechaFin.innerText = "Fecha de Fin"
+                            tituloFechaFin.innerText = "Fecha de fin"
                             fechaFinContenedor.appendChild(tituloFechaFin)
                             const datoFechaFin = document.createElement("div")
                             datoFechaFin.classList.add("ofertaUIDatoFecha")
@@ -2331,7 +2331,7 @@ const casaVitini = {
                         campoTelefonoTitular.classList.add(
                             "campoTitular"
                         )
-                        campoTelefonoTitular.placeholder = "Telefono del titular de la reserva"
+                        campoTelefonoTitular.placeholder = "Teléfono del titular de la reserva"
                         campoTelefonoTitular.setAttribute("campo", "telefonoTitular")
                         contenedorTitular.appendChild(campoTelefonoTitular)
 
@@ -3539,7 +3539,7 @@ const casaVitini = {
                             bloqueDatoTitular.classList.add("plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular_bloque")
                             bloqueTituloTitular = document.createElement("div")
                             bloqueTituloTitular.classList.add("plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular_bloqueTitulo")
-                            bloqueTituloTitular.innerText = "Telefono"
+                            bloqueTituloTitular.innerText = "Teléfono"
                             bloqueDatoTitular.appendChild(bloqueTituloTitular)
                             const telefonoTitularUI = document.createElement("div")
                             telefonoTitularUI.classList.add("negrita")
@@ -3696,7 +3696,7 @@ const casaVitini = {
                             // Añadir banner informativo
                             const contenedorBanner = document.createElement("a")
                             contenedorBanner.classList.add("plaza_reservas_reservaConfirmada_bannerV2")
-                            contenedorBanner.innerText = "Esta página muestra el resumen de tu reserva confirmada pero no encuentra ninguna reserva guardada en la cache local de tu navegador. Cuando haces una reserva los datos de la reserva luego de guardarse en el servidor de Casa Vitini, el sistema guarda una copia local en tu navegador. Esto se hace para la comodida del usuario. Para que pueda acceder al resumen de su reserva confiramda comodamente. Pero si el usuario borra la cache de navegador o esta se borra por la configuracion del navegador ya no se puede acceder a la reserva por que ya no existe en la cache del navegador. Si quieres vovler a ver el resumen de tu reserva tienes varias opciones. La mas comoda e inmediata es registrar una nueva cuenta en MiCasa para obtener tu VitiniID y poder acceder a tu cuenta de usuario donde podra ver tus reservas. Otra opcion es ponerte en contacto con nosotros. Para ellos ves al apartado Contacto donde podra obtener las distintas formas de contacto con nosotros y te responderemos lo antes posible. Ten en cuenta que debido a las zonas horaria si cuando nos llamas no estamos disponibles por la diferencia horaria puedes enviarnos un mail o un mensaje instantaneo. La primera opcion, registrar una cuenta es una opcion instantanea y es la que te recomendamos."
+                            contenedorBanner.innerText = "Esta página muestra el resumen de tu reserva confirmada, pero no encuentra ninguna reserva guardada en la caché local de tu navegador. Cuando haces una reserva, los datos de la reserva, luego de guardarse en el servidor de Casa Vitini, se guarda una copia local en tu navegador. Esto se hace para la comodidad del usuario. Para que pueda acceder al resumen de su reserva confirmada cómodamente. Pero si el usuario borra la caché de navegador o esta se borra por la configuración del navegador, ya no se puede acceder a la reserva porque ya no existe en la caché del navegador. Si quieres volver a ver el resumen de tu reserva, tienes varias opciones. La más cómoda e inmediata es registrar una nueva cuenta en Mi Casaa para obtener tu VitiniID y poder acceder a tu cuenta de usuario donde podrá ver tus reservas. Otra opción es ponerte en contacto con nosotros. Para ellos ves al apartado Contacto, donde podrás obtener las distintas formas de contacto con nosotros y te responderemos lo antes posible. Ten en cuenta que, debido a las zonas horarias, si cuando nos llamas no estamos disponibles por la diferencia horaria, puedes enviarnos un correo o un mensaje instantáneo. La primera opción, registrar una cuenta, es una opción instantánea y es la que te recomendamos."
                             marcoElastico.appendChild(contenedorBanner)
                             const botonIniciarReserva = document.createElement("a")
                             botonIrARegistrarse.classList.add("plaza_reservas_reservaConfirmada_banner")
@@ -4120,7 +4120,7 @@ const casaVitini = {
                                 telefonoUI.classList.add("detallesUsuario_contenedorCampoEInfo")
                                 titulo = document.createElement("p")
                                 titulo.classList.add("tituloDato")
-                                titulo.innerText = "Telefono"
+                                titulo.innerText = "Teléfono"
                                 telefonoUI.appendChild(titulo)
                                 const campoTelefono = document.createElement("input")
                                 campoTelefono.classList.add("detallesUsuario_campoDatosUsuario")
@@ -5186,7 +5186,7 @@ const casaVitini = {
                                             origenUI = "Cliente"
                                         }
                                         if (origenIDV === "administracion") {
-                                            origenUI = "Adminitracion"
+                                            origenUI = "Adminitración"
                                         }
                                         const marcoElastico = document.createElement("div")
                                         marcoElastico.classList.add("marcoElasticoRelativo")
@@ -5785,7 +5785,7 @@ const casaVitini = {
                                                     const titulo = "Añadir titular a la reserva"
                                                     const tituloUI = casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.reservaUI.titular.componentes.titulo(titulo)
                                                     destinoRenderizado.appendChild(tituloUI)
-                                                    const info = "Esta reserva ahora mismo no tiene níngun titular asignado. Para añadir un titular a la reserva puedes buscar con el campo de busqueda inferior un cliente existente para asociarlo como titular. Tambien puedes crear un cliente nuevo rellenando el formulario para crear un cliente y añadirlo como titular a esta reserva"
+                                                    const info = "Esta reserva ahora mismo no tiene ningún titular asignado. Para añadir un titular a la reserva, puedes buscar con el campo de búsqueda inferior un cliente existente para asociarlo como titular. También puedes crear un cliente nuevo rellenando el formulario para crear un cliente y añadirlo como titular a esta reserva."
                                                     const infoUI = casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.reservaUI.titular.componentes.infoUI(info)
                                                     destinoRenderizado.appendChild(infoUI)
 
@@ -6065,13 +6065,13 @@ const casaVitini = {
                                                 telefono.classList.add("administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_campo")
                                                 telefono.setAttribute("campo", "telefono")
                                                 telefono.setAttribute("formulario", "AnadirPernoctante")
-                                                telefono.placeholder = "Telefono"
+                                                telefono.placeholder = "Teléfono"
                                                 nuevoClienteUI.appendChild(telefono)
                                                 const correoElecotronico = document.createElement("input")
                                                 correoElecotronico.classList.add("administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_campo")
                                                 correoElecotronico.setAttribute("campo", "correoElectronico")
                                                 correoElecotronico.setAttribute("formulario", "AnadirPernoctante")
-                                                correoElecotronico.placeholder = "Correo electronico"
+                                                correoElecotronico.placeholder = "Correo electrónico"
                                                 nuevoClienteUI.appendChild(correoElecotronico)
                                                 const botonGuardarNuevoCliente = document.createElement("div")
                                                 botonGuardarNuevoCliente.classList.add("administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_botonV1")
@@ -6173,7 +6173,7 @@ const casaVitini = {
                                                     const titulo = "Añadir titular a la reserva"
                                                     const tituloUI = casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.reservaUI.titular.componentes.titulo(titulo)
                                                     selectorDestinoRenderizado.appendChild(tituloUI)
-                                                    const info = "Esta reserva ahora mismo no tiene níngun titular asignado. Para añadir un titular a la reserva puedes buscar con el campo de busqueda inferior un cliente existente para asociarlo como titular. Tambien puedes crear un cliente nuevo rellenando el formulario para crear un cliente y añadirlo como titular a esta reserva"
+                                                    const info = "Esta reserva ahora mismo no tiene ningún titular asignado. Para añadir un titular a la reserva, puedes buscar con el campo de búsqueda inferior un cliente existente para asociarlo como titular. También puedes crear un cliente nuevo rellenando el formulario para crear un cliente y añadirlo como titular a esta reserva."
                                                     const infoUI = casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.reservaUI.titular.componentes.infoUI(info)
                                                     selectorDestinoRenderizado.appendChild(infoUI)
                                                     const buscadorUI = casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.reservaUI.titular.componentes.buscadorRapido.UI({
@@ -6229,7 +6229,7 @@ const casaVitini = {
                                             contenedorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_contenedor")
                                             nombreDato = document.createElement("div")
                                             nombreDato.classList.add("administracion_reservas_detallesReserva_infoTitular_nombreDato")
-                                            nombreDato.innerText = "Telefono"
+                                            nombreDato.innerText = "Teléfono"
                                             contenedorDato.appendChild(nombreDato)
                                             valorDato = document.createElement("div")
                                             valorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_dato")
@@ -6291,7 +6291,7 @@ const casaVitini = {
                                             contenedorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_contenedor")
                                             nombreDato = document.createElement("div")
                                             nombreDato.classList.add("administracion_reservas_detallesReserva_infoTitular_nombreDato")
-                                            nombreDato.innerText = "Telefono"
+                                            nombreDato.innerText = "Teléfono"
                                             contenedorDato.appendChild(nombreDato)
                                             valorDato = document.createElement("div")
                                             valorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_dato")
@@ -6743,7 +6743,7 @@ const casaVitini = {
                                         const divBotones = document.createElement('div');
                                         divBotones.setAttribute('class', css);
                                         divBotones.setAttribute("componente", "panelDetallesReserva")
-                                        // Crear el primer botón: p.botonSimpleV2 - Anadir apartamento
+                                        // Crear el primer botón: p.botonSimpleV2 - Añadir apartamento
                                         const botonNuevaReserva = document.createElement('a');
                                         botonNuevaReserva.setAttribute('class', 'adminitracion_reservas_DetallesReserva_botonCategoria');
                                         botonNuevaReserva.setAttribute('categoriaReserva', 'alojamiento');
@@ -7650,7 +7650,7 @@ const casaVitini = {
                                                 if (selector === "bloqueoPermanente") {
                                                     const opcion = document.createElement("p")
                                                     opcion.classList.add("opcionCambioCama")
-                                                    opcion.innerText = `Eliminar ${apartamentoUI} bloquearlo permanentemente. (Debera desbloquearlo manualmente el bloqueo permanente)`
+                                                    opcion.innerText = `Eliminar ${apartamentoUI} bloquearlo permanentemente. (Deberá desbloquearlo manualmente el bloqueo permanente)`
                                                     opcion.setAttribute("componente", "menuVolatil")
                                                     opcion.addEventListener("click", () => {
                                                         casaVitini.shell.controladoresUI.limpiarTodoElementoFlotante()
@@ -8245,7 +8245,7 @@ const casaVitini = {
                                                     tituloCamasFisicas.classList.add(
                                                         "padding6"
                                                     )
-                                                    tituloCamasFisicas.innerText = "Camas fisicas"
+                                                    tituloCamasFisicas.innerText = "Camas físicas"
                                                     contenedorCamasFisicas.appendChild(tituloCamasFisicas)
                                                     respuestaServidor.listaCamasFisicas.forEach(cama => {
                                                         const camaIDV = cama.camaIDV
@@ -9498,13 +9498,13 @@ const casaVitini = {
                                                         telefono.classList.add("administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_campo")
                                                         telefono.setAttribute("campo", "telefono")
                                                         telefono.setAttribute("formulario", "AnadirPernoctante")
-                                                        telefono.placeholder = "Telefono"
+                                                        telefono.placeholder = "Teléfono"
                                                         nuevoClienteUI.appendChild(telefono)
                                                         const correoElecotronico = document.createElement("input")
                                                         correoElecotronico.classList.add("administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_campo")
                                                         correoElecotronico.setAttribute("campo", "correoElectronico")
                                                         correoElecotronico.setAttribute("formulario", "AnadirPernoctante")
-                                                        correoElecotronico.placeholder = "Correo electronico"
+                                                        correoElecotronico.placeholder = "Correo electrónico"
                                                         nuevoClienteUI.appendChild(correoElecotronico)
                                                         const botonGuardarNuevoCliente = document.createElement("div")
                                                         botonGuardarNuevoCliente.classList.add("administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_botonV1")
@@ -9614,7 +9614,7 @@ const casaVitini = {
                                                             const titulo = "Añadir titular a la reserva"
                                                             const tituloUI = casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.reservaUI.titular.componentes.titulo(titulo)
                                                             selectorDestinoRenderizado.appendChild(tituloUI)
-                                                            const info = "Esta reserva ahora mismo no tiene níngun titular asignado. Para añadir un titular a la reserva puedes buscar con el campo de busqueda inferior un cliente existente para asociarlo como titular. Tambien puedes crear un cliente nuevo rellenando el formulario para crear un cliente y añadirlo como titular a esta reserva"
+                                                            const info = "Esta reserva ahora mismo no tiene ningún titular asignado. Para añadir un titular a la reserva, puedes buscar con el campo de búsqueda inferior un cliente existente para asociarlo como titular. También puedes crear un cliente nuevo rellenando el formulario para crear un cliente y añadirlo como titular a esta reserva."
                                                             const infoUI = casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.reservaUI.titular.componentes.infoUI(info)
                                                             selectorDestinoRenderizado.appendChild(infoUI)
                                                             const nuevoClienteUI = casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.reservaUI.titular.componentes.nuevoCliente.UI({
@@ -9666,7 +9666,7 @@ const casaVitini = {
                                                     contenedorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_contenedor")
                                                     nombreDato = document.createElement("div")
                                                     nombreDato.classList.add("administracion_reservas_detallesReserva_infoTitular_nombreDato")
-                                                    nombreDato.innerText = "Telefono"
+                                                    nombreDato.innerText = "Teléfono"
                                                     contenedorDato.appendChild(nombreDato)
                                                     valorDato = document.createElement("div")
                                                     valorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_dato")
@@ -9728,7 +9728,7 @@ const casaVitini = {
                                                     contenedorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_contenedor")
                                                     nombreDato = document.createElement("div")
                                                     nombreDato.classList.add("administracion_reservas_detallesReserva_infoTitular_nombreDato")
-                                                    nombreDato.innerText = "Telefono"
+                                                    nombreDato.innerText = "Teléfono"
                                                     contenedorDato.appendChild(nombreDato)
                                                     valorDato = document.createElement("div")
                                                     valorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_dato")
@@ -9777,7 +9777,7 @@ const casaVitini = {
                                                 botonCambiarDeHabitacion: (pernoctanteUID) => {
                                                     const boton = document.createElement("div")
                                                     boton.classList.add("administracion_reservas_detallesReservas_gestionTitular_botonCerrar")
-                                                    boton.innerText = "Cambiar de habitacion"
+                                                    boton.innerText = "Cambiar de habitación"
                                                     boton.setAttribute("componente", "botonOpcionClientePool")
                                                     boton.addEventListener("click", () => {
                                                         document.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.categoriasGlobales.alojamiento.pernoctantes.cambiarDeHabitacion.ocultarSelectoresCambioHabitacion)
@@ -9905,7 +9905,7 @@ const casaVitini = {
                                                         const titulo = "Detalles del pernoctante"
                                                         const tituloUI = this.titulo(titulo)
                                                         ui.appendChild(tituloUI)
-                                                        const info = "Vista rapída de los detalles del pernoctante"
+                                                        const info = "Vista rápida de los detalles del pernoctante"
                                                         const infoUI = this.infoUI(info)
                                                         ui.appendChild(infoUI)
 
@@ -10232,13 +10232,13 @@ const casaVitini = {
                                                             telefono.classList.add("administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_campo")
                                                             telefono.setAttribute("campo", "telefono")
                                                             telefono.setAttribute("formulario", "AnadirPernoctante")
-                                                            telefono.placeholder = "Telefono"
+                                                            telefono.placeholder = "Teléfono"
                                                             nuevoClienteUI.appendChild(telefono)
                                                             const correoElecotronico = document.createElement("input")
                                                             correoElecotronico.classList.add("administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_campo")
                                                             correoElecotronico.setAttribute("campo", "correoElectronico")
                                                             correoElecotronico.setAttribute("formulario", "AnadirPernoctante")
-                                                            correoElecotronico.placeholder = "Correo electronico"
+                                                            correoElecotronico.placeholder = "Correo electrónico"
                                                             nuevoClienteUI.appendChild(correoElecotronico)
                                                             const botonGuardarNuevoCliente = document.createElement("div")
                                                             botonGuardarNuevoCliente.classList.add("administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_botonV1")
@@ -10789,7 +10789,7 @@ const casaVitini = {
                                                 // Cambiar habitacion
                                                 botonOpcionCliente = document.createElement("div")
                                                 botonOpcionCliente.classList.add("administracionReservasDetallesBotonOpcionCliente")
-                                                botonOpcionCliente.innerText = "Cambiar de habitacion"
+                                                botonOpcionCliente.innerText = "Cambiar de habitación"
                                                 botonOpcionCliente.setAttribute("componente", "botonOpcionClientePool")
                                                 botonOpcionCliente.addEventListener("click", () => {
                                                     casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.categoriasGlobales.alojamiento.pernoctantes.cambiarDeHabitacion.mostrasSelectorCambioPernoctanteHabitacion(pernoctanteUID)
@@ -11002,7 +11002,7 @@ const casaVitini = {
                                                             const titulo = "Añadir pernoctante a la reserva"
                                                             const tituloUI = this.componentes.titulo(titulo)
                                                             destinoRenderizado.appendChild(tituloUI)
-                                                            const info = "Esta reserva ahora mismo no tiene níngun titular asignado. Para añadir un titular a la reserva puedes buscar con el campo de busqueda inferior un cliente existente para asociarlo como titular. Tambien puedes crear un cliente nuevo rellenando el formulario para crear un cliente y añadirlo como titular a esta reserva"
+                                                            const info = "Esta reserva ahora mismo no tiene ningún titular asignado. Para añadir un titular a la reserva, puedes buscar con el campo de búsqueda inferior un cliente existente para asociarlo como titular. También puedes crear un cliente nuevo rellenando el formulario para crear un cliente y añadirlo como titular a esta reserva."
                                                             const infoUI = this.componentes.infoUI(info)
                                                             destinoRenderizado.appendChild(infoUI)
                                                             const nuevoClienteUI = this.componentes.nuevoCliente.UI({
@@ -11056,7 +11056,7 @@ const casaVitini = {
                                                 const titulo = `Añadir pernoctante en la ${habitacionUI} del ${apartamentoUI}`
                                                 const tituloUI = this.componentes.titulo(titulo)
                                                 contenedor.appendChild(tituloUI)
-                                                const info = "Esta reserva ahora mismo no tiene níngun titular asignado. Para añadir un titular a la reserva puedes buscar con el campo de busqueda inferior un cliente existente para asociarlo como titular. Tambien puedes crear un cliente nuevo rellenando el formulario para crear un cliente y añadirlo como titular a esta reserva"
+                                                const info = "Esta reserva ahora mismo no tiene ningún titular asignado. Para añadir un titular a la reserva, puedes buscar con el campo de búsqueda inferior un cliente existente para asociarlo como titular. También puedes crear un cliente nuevo rellenando el formulario para crear un cliente y añadirlo como titular a esta reserva."
                                                 const infoUI = this.componentes.infoUI(info)
                                                 contenedor.appendChild(infoUI)
 
@@ -11382,13 +11382,13 @@ const casaVitini = {
                                                         telefono.classList.add("administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_campo")
                                                         telefono.setAttribute("campo", "telefono")
                                                         telefono.setAttribute("formulario", "AnadirPernoctante")
-                                                        telefono.placeholder = "Telefono"
+                                                        telefono.placeholder = "Teléfono"
                                                         nuevoClienteUI.appendChild(telefono)
                                                         const correoElecotronico = document.createElement("input")
                                                         correoElecotronico.classList.add("administracion_reservas_detallesReservas_gestionTitular_nuevoClienteUI_campo")
                                                         correoElecotronico.setAttribute("campo", "correoElectronico")
                                                         correoElecotronico.setAttribute("formulario", "AnadirPernoctante")
-                                                        correoElecotronico.placeholder = "Correo electronico"
+                                                        correoElecotronico.placeholder = "Correo electrónico"
                                                         nuevoClienteUI.appendChild(correoElecotronico)
                                                         const botonGuardarNuevoCliente = document.createElement("div")
                                                         botonGuardarNuevoCliente.setAttribute("boton", "crearCliente")
@@ -11666,7 +11666,7 @@ const casaVitini = {
                                                     contenedorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_contenedor")
                                                     nombreDato = document.createElement("div")
                                                     nombreDato.classList.add("administracion_reservas_detallesReserva_infoTitular_nombreDato")
-                                                    nombreDato.innerText = "Telefono"
+                                                    nombreDato.innerText = "Teléfono"
                                                     contenedorDato.appendChild(nombreDato)
                                                     valorDato = document.createElement("div")
                                                     valorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_dato")
@@ -11728,7 +11728,7 @@ const casaVitini = {
                                                     contenedorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_contenedor")
                                                     nombreDato = document.createElement("div")
                                                     nombreDato.classList.add("administracion_reservas_detallesReserva_infoTitular_nombreDato")
-                                                    nombreDato.innerText = "Telefono"
+                                                    nombreDato.innerText = "Teléfono"
                                                     contenedorDato.appendChild(nombreDato)
                                                     valorDato = document.createElement("div")
                                                     valorDato.classList.add("administracion_reservas_detallesReserva_infoTitular_dato")
@@ -13031,7 +13031,7 @@ const casaVitini = {
                                             bloqueInterno.classList.add("detallesReserva_reembolso_bloqueInterno_campoConfiramcion")
                                             const info = document.createElement("div")
                                             info.classList.add("detallesReserva_reembolso_emitirReembolso_texto")
-                                            info.innerText = `Para realizar el reembolso por favor escribe reembolso en minúsculas en el campo de texto y pulse realizar reembolso. Se exige escribir reembolso como medida para evitar un falso clic en el botón de confirmación al querer hacer clic en el botón de cerrar opciones de emisión de reembolso`
+                                            info.innerText = `Para realizar el reembolso, por favor, escribe reembolso en minúsculas en el campo de texto y, pulse realizar reembolso. Se exige escribir reembolso como medida para evitar un falso clic en el botón de confirmación al querer hacer clic en el botón de cerrar opciones de emisión de reembolso.`
                                             bloqueInterno.appendChild(info)
                                             bloqueReembolso.appendChild(bloqueInterno)
                                             const infoTotalReembolsable = document.createElement("div")
@@ -13167,7 +13167,7 @@ const casaVitini = {
                                             bloqueInterno.classList.add("detallesReserva_reembolso_bloqueInterno_campoConfiramcion")
                                             const infoCampoConfirmacion = document.createElement("div")
                                             infoCampoConfirmacion.classList.add("detallesReserva_reembolso_emitirReembolso_texto")
-                                            infoCampoConfirmacion.innerText = `Para realizar el reembolso por favor escribe reembolso en minúsculas en el campo de texto y pulse realizar reembolso. Se exigue escribir reembolso como medida para evitar un falso click en el boton de confirmacion al querer hacer click en el boton de cerrar opciones de emision de reembolso`
+                                            infoCampoConfirmacion.innerText = `Para realizar el reembolso, por favor, escribe reembolso en minúsculas en el campo de texto y, pulse realizar reembolso. Se exige escribir reembolso como medida para evitar un falso clic en el botón de confirmación al querer hacer click en el botón de cerrar opciones de emisión de reembolso.`
                                             bloqueInterno.appendChild(infoCampoConfirmacion)
                                             const campoConfirmacion = document.createElement("input")
                                             campoConfirmacion.classList.add("detallesReserva_reembolso_campoConfirmacion")
@@ -14905,28 +14905,28 @@ const casaVitini = {
                                         bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
                                         const tituloBloquoApartamentos = document.createElement("div")
                                         tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                        tituloBloquoApartamentos.innerText = "Selecciona que tipo de bloqueo quieres aplicar a los apartamentos de esta reserva tras la cancelación."
+                                        tituloBloquoApartamentos.innerText = "Selecciona qué tipo de bloqueo quieres aplicar a los apartamentos de esta reserva tras la cancelación."
                                         bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
                                         let opcionBloqueoApartamento = document.createElement("p")
                                         opcionBloqueoApartamento.classList.add("detallesReservaCancelarOcionBloqueoApartamentos")
                                         opcionBloqueoApartamento.setAttribute("componente", "cancelarReservaOpcionBloqueo")
                                         opcionBloqueoApartamento.setAttribute("cancelarReservatipoBloqueo", "rangoTemporal")
                                         opcionBloqueoApartamento.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.categoriasGlobales.cancelarReserva.seleccionarOpcionBloqueoApartametos)
-                                        opcionBloqueoApartamento.innerText = "Bloquear los apartamentos de esta reserva tras a cancelación durante el mismo rango que tiene esta reserva"
+                                        opcionBloqueoApartamento.innerText = "Bloquear los apartamentos de esta reserva tras la cancelación durante el mismo rango que tiene esta reserva."
                                         bloqueBloqueoApartamentos.appendChild(opcionBloqueoApartamento)
                                         opcionBloqueoApartamento = document.createElement("p")
                                         opcionBloqueoApartamento.classList.add("detallesReservaCancelarOcionBloqueoApartamentos")
                                         opcionBloqueoApartamento.setAttribute("componente", "cancelarReservaOpcionBloqueo")
                                         opcionBloqueoApartamento.setAttribute("cancelarReservatipoBloqueo", "permanente")
                                         opcionBloqueoApartamento.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.categoriasGlobales.cancelarReserva.seleccionarOpcionBloqueoApartametos)
-                                        opcionBloqueoApartamento.innerText = "Bloquear los apartamentos de esta reserva tras a cancelación con un bloqueo permanente. Deberá liberarlos manualmente"
+                                        opcionBloqueoApartamento.innerText = "Bloquear los apartamentos de esta reserva tras la cancelación con un bloqueo permanente. Deberá liberarlos manualmente."
                                         bloqueBloqueoApartamentos.appendChild(opcionBloqueoApartamento)
                                         opcionBloqueoApartamento = document.createElement("p")
                                         opcionBloqueoApartamento.classList.add("detallesReservaCancelarOcionBloqueoApartamentos")
                                         opcionBloqueoApartamento.setAttribute("componente", "cancelarReservaOpcionBloqueo")
                                         opcionBloqueoApartamento.setAttribute("cancelarReservatipoBloqueo", "sinBloqueo")
                                         opcionBloqueoApartamento.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.reservas.detallesReserva.categoriasGlobales.cancelarReserva.seleccionarOpcionBloqueoApartametos)
-                                        opcionBloqueoApartamento.innerText = "Liberar los apartamentos de esta reserva tras la cancelación para que pasen a estar disponibles para su reserva"
+                                        opcionBloqueoApartamento.innerText = "Liberar los apartamentos de esta reserva tras la cancelación para que pasen a estar disponibles para su reserva."
                                         bloqueBloqueoApartamentos.appendChild(opcionBloqueoApartamento)
                                         contenedorCancelacion.appendChild(bloqueBloqueoApartamentos)
                                         const bloqueBotones = document.createElement("div")
@@ -14937,7 +14937,7 @@ const casaVitini = {
                                         //  advertenciaInmersivaIU.appendChild(entradaPalabraCancelar)
                                         const infoBotonCancelar = document.createElement("div")
                                         infoBotonCancelar.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                        infoBotonCancelar.innerText = "Para que se habilite el botón tienes que seleccionar unas de las tres opciones de arriba."
+                                        infoBotonCancelar.innerText = "Para que se habilite el botón, tienes que seleccionar una de las tres opciones de arriba. Confirmar y cancelar reserva."
                                         bloqueBloqueoApartamentos.appendChild(infoBotonCancelar)
                                         const botonCancelar = document.createElement("div")
                                         botonCancelar.classList.add("detallesReservaCancelarBoton")
@@ -14952,7 +14952,7 @@ const casaVitini = {
                                         const infoEliminarReserva = document.createElement("div")
                                         infoEliminarReserva.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
                                         //infoEliminarReserva.style.marginTop = "50px"
-                                        infoEliminarReserva.innerText = "También puedes eliminar irreversiblemente una reserva. La eliminación irreversible de una reserva borra la información de la reserva, así como los pagos asociados a la reserva y toda la información relacionada con la reserva, menos los datos de los clientes y titulares que permanencen disponible para otras reservas. A diferencia de la cancelación los datos de la reserva dejaran de estar disponibles."
+                                        infoEliminarReserva.innerText = "También puedes eliminar irreversiblemente una reserva. La eliminación irreversible de una reserva borra la información de la reserva, así como los pagos asociados a la reserva y toda la información relacionada con la reserva, menos los datos de los clientes y titulares que permanecen disponibles para otras reservas. A diferencia de la cancelación, los datos de la reserva dejarán de estar disponibles."
                                         bloqueBotones.appendChild(infoEliminarReserva)
                                         const botonEliminarReserva = document.createElement("div")
                                         botonEliminarReserva.classList.add("administracion_reservas_detallesReserva_cancelarReserva_botonV1")
@@ -15052,7 +15052,7 @@ const casaVitini = {
                                             bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
                                             const infoSeguridad = document.createElement("div")
                                             infoSeguridad.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                            infoSeguridad.innerText = "Para eliminar una reserva irreversiblemente junto con toda su información relacionada debe escribir su contraseña de usuario y su cuenta debe tener autorización administrativa."
+                                            infoSeguridad.innerText = "Para eliminar una reserva irreversiblemente junto con toda su información relacionada, debe escribir su contraseña de usuario y su cuenta debe tener autorización administrativa."
                                             bloqueBloqueoApartamentos.appendChild(infoSeguridad)
                                             const campo = document.createElement("input")
                                             campo.classList.add("administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_campo")
@@ -15245,7 +15245,7 @@ const casaVitini = {
                                         contenedorAdvertenciaInmersiva.appendChild(titulo)
                                         const infoGlobal = document.createElement("div")
                                         infoGlobal.classList.add("detallesReserva_reembolso_infoGlobal")
-                                        infoGlobal.innerText = `En la miscelánea de la reserva encontrara operaciones y demás propósitos u opciones que por su idiosincrasia especifica no requieren de un contexto dedicado`
+                                        infoGlobal.innerText = `En la miscelánea de la reserva encontrará operaciones y demás propósitos u opciones que, por su idiosincrasia específica, no requieren de un contexto dedicado.`
                                         contenedorAdvertenciaInmersiva.appendChild(infoGlobal)
                                         let boton = document.createElement("div")
                                         boton.classList.add("administracion_reservas_detallesReserfa_miscelanea_botonOpcion")
@@ -17788,7 +17788,7 @@ const casaVitini = {
                         marcoMes.setAttribute("class", "marcoMes")
                         marcoMes.setAttribute("componente", "marcoMes")
                         calendario.appendChild(marcoMes)
-                        const pilaDias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+                        const pilaDias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
                         for (const nombreDia of pilaDias) {
                             let diaSemana = document.createElement("li")
                             diaSemana.setAttribute("class", "nombreDia")
@@ -18117,7 +18117,7 @@ const casaVitini = {
                         marcoMes.setAttribute("class", "marcoMes")
                         marcoMes.setAttribute("componente", "marcoMes")
                         calendario.appendChild(marcoMes)
-                        const pilaDias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+                        const pilaDias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
                         for (const nombreDia of pilaDias) {
                             let diaSemana = document.createElement("li")
                             diaSemana.setAttribute("class", "nombreDia")
@@ -21605,7 +21605,7 @@ const casaVitini = {
                                             "botonV1",
                                             "comportamientoBoton"
                                         )
-                                        botonEliminar.innerText = "Elimnar oferta de la reserva " + posicion
+                                        botonEliminar.innerText = "Eliminar oferta de la reserva " + posicion
                                         botonEliminar.addEventListener("click", () => {
                                             casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.componentesUI.eliminarOfertaEnReserva.ui({
                                                 origen: destinoOrigenOferta,
@@ -21655,7 +21655,7 @@ const casaVitini = {
                                             "botonV1",
                                             "comportamientoBoton"
                                         )
-                                        botonEliminar.innerText = "Elimnar oferta de la reserva " + posicion
+                                        botonEliminar.innerText = "Eliminar oferta de la reserva " + posicion
                                         botonEliminar.addEventListener("click", () => {
                                             casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.eliminarOfertaEnReserva.ui({
                                                 origen: destinoOrigenOferta,
@@ -22129,7 +22129,7 @@ const casaVitini = {
 
                                 const descripcionDescuento = document.createElement("p")
                                 descripcionDescuento.classList.add(
-                                    "padding6"
+                                    // "padding6"
                                 )
                                 contenedorDescuento.appendChild(descripcionDescuento)
 
@@ -22140,7 +22140,7 @@ const casaVitini = {
                                     const fechaFinalRango_ISO = descuentosJSON.fechaFinalRango_ISO
                                     const descuentoPorDias = descuentosJSON.descuentoPorDias
 
-                                    descripcionDescuento.innerText = `Esta oferta aplica un descuento a los dias de la reserva. A continuación se detallan los dias donde la oferta aplica descuentos y que tipo de desceuntos aplica en cada dia.`
+                                    descripcionDescuento.innerText = `Esta oferta aplica un descuento a los días de la reserva. A continuación se detallan los días donde la oferta aplica descuentos y qué tipo de descuentos aplica en cada día.`
                                     contenedorDescuento.appendChild(descripcionDescuento)
 
                                     for (const descuentoPorDia of descuentoPorDias) {
@@ -22169,9 +22169,9 @@ const casaVitini = {
                                                 "padding6"
                                             )
                                             if (tipoAplicacion === "porcentaje") {
-                                                descripcionDescuentoTotalNeto.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% a los netos de los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
+                                                descripcionDescuentoTotalNeto.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% a los netos de los días de la reserva que están dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
                                             } else if (tipoAplicacion === "cantidadFija") {
-                                                descripcionDescuentoTotalNeto.innerText = `Esta oferta aplica un descuento del ${descuentoTotal} a los netos de los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
+                                                descripcionDescuentoTotalNeto.innerText = `Esta oferta aplica un descuento del ${descuentoTotal} a los netos de los días de la reserva que están dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
                                             }
                                             contenedorDia.appendChild(descripcionDescuentoTotalNeto)
 
@@ -22231,9 +22231,9 @@ const casaVitini = {
                                     const tipoAplicacion = descuentosJSON.tipoAplicacion
 
                                     if (tipoAplicacion === "porcentaje") {
-                                        descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% a los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
+                                        descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}% a los días de la reserva que están dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
                                     } else if (tipoAplicacion === "cantidadFija") {
-                                        descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}$ a los dias de la reserva que estan dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
+                                        descripcionDescuento.innerText = `Esta oferta aplica un descuento del ${descuentoTotal}$ a los días de la reserva que están dentro del rango establecido entre en el ${fechaInicioRango_ISO} y el ${fechaFinalRango_ISO}.`
                                     }
                                     contenedorDescuento.appendChild(descripcionDescuento)
 
@@ -22253,7 +22253,7 @@ const casaVitini = {
                                 } else if (tipoDescuento === "individualPorApartamento") {
 
 
-                                    descripcionDescuento.innerText = `Esta oferta aplica un descuento al total de los apartamentos especificados. A continuacion se detallan los apartamentos que esta oferta aplica descuentos. Si la reserva no tiene todos los apartamentos especificados en esta oferta, entonces solo aplicara el Descuentos en los apartamentos que coincidan de la oferta en la reserva.`
+                                    descripcionDescuento.innerText = `Esta oferta aplica un descuento al total de los apartamentos especificados. A continuación se detallan los apartamentos en los que esta oferta aplica descuentos. Si la reserva no tiene todos los apartamentos especificados en esta oferta, entonces solo aplicará el Descuento en los apartamentos que coincidan con la oferta en la reserva.`
                                     contenedorDescuento.appendChild(descripcionDescuento)
 
                                     const contenedorApartamentos = document.createElement("div")
@@ -22312,7 +22312,7 @@ const casaVitini = {
 
 
                                 } else {
-                                    const mensaje = "No se reconoce el tipo de descuento resibido"
+                                    const mensaje = "No se reconoce el tipo de descuento recibido."
                                     return casaVitini.ui.componentes.advertenciaInmersiva(mensaje)
                                 }
                                 return contenedorDescuento
@@ -22435,7 +22435,7 @@ const casaVitini = {
                                 contenedorDescuentoTotal.appendChild(descuentoAplicadoUI)
 
                                 const totalConDescuentoUI = document.createElement("div")
-                                totalConDescuentoUI.innerText = `Este Descuento aplicado deja el total en ${totalConDescuento}`
+                                totalConDescuentoUI.innerText = `Este descuento aplicado deja el total en ${totalConDescuento}`
                                 contenedorDescuentoTotal.appendChild(totalConDescuentoUI)
 
                                 contenedorDeDescuentos.appendChild(contenedorDescuentoTotal)
@@ -22912,7 +22912,7 @@ const casaVitini = {
                                 "padding6",
                                 "textoCentrado"
                             )
-                            info.innerText = "No hay impuestos en este contenedor financiero"
+                            info.innerText = "No hay impuestos en este contenedor financiero."
                             const info_rederizado = contenedorImpuestos_renderizado.querySelector("[elemento=info]")
                             if (!info_rederizado) {
                                 contenedorImpuestos_renderizado.appendChild(info)
@@ -23842,7 +23842,7 @@ const casaVitini = {
                         const boton = document.createElement('p');
                         boton.classList.add('crearOFertaBotonAnadirApartamento');
                         boton.setAttribute('componente', 'botonAnadirApartamentoOferta');
-                        boton.textContent = 'Anadir apartamento';
+                        boton.textContent = 'Añadir apartamento';
                         boton.addEventListener("click", (e) => {
                             const data = {
                                 e: e,

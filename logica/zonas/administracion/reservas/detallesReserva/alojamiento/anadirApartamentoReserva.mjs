@@ -50,7 +50,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
 
         const detallesReserva = await obtenerReservaPorReservaUID(reservaUID)
         if (detallesReserva.estadoReservaIDV === "cancelada") {
-            const error = "La reserva no se puede modificar por que esta cancelada";
+            const error = "La reserva no se puede modificar porque está cancelada.";
             throw new Error(error);
         }
         await campoDeTransaccion("iniciar")

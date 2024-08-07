@@ -46,7 +46,7 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         if (reserva.estadoReservaIDV === "cancelada") {
-            const error = "La reserva no se puede modificar por que esta cancelada";
+            const error = "La reserva no se puede modificar porque está cancelada.";
             throw new Error(error);
         }
         if (reserva.estadoPagoIDV === "pagado") {
@@ -58,8 +58,8 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
             throw new Error(error);
         }
         const pernoctanteDeLaReserva = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
-             reservaUID,
-             pernoctanteUID
+            reservaUID,
+            pernoctanteUID
         })
         if (!pernoctanteDeLaReserva?.componenteUID) {
             const error = "No existe el pernoctante, por lo tanto no se puede mover de habitacion";

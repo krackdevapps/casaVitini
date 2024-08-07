@@ -34,10 +34,10 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-  
+
         const resolverReserva = await obtenerReservaPorReservaUID(reservaUID)
         if (resolverReserva.estadoReserva === "cancelada") {
-            const error = "La reserva no se puede modificar por que esta cancelada";
+            const error = "La reserva no se puede modificar porque está cancelada.";
             throw new Error(error);
         }
         // validar habitacion
@@ -46,7 +46,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
             habitacionUID: habitacionUID
         })
 
- 
+
         const datosValidados = await validadoresCompartidos.clientes.validarCliente({
             cliente: {
                 nombre: entrada.body.nombre,
@@ -58,7 +58,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
                 notas: entrada.body.notas,
             },
             operacion: "crear"
-          
+
         });
 
         const nuevoCliente = await insertarCliente(datosValidados);

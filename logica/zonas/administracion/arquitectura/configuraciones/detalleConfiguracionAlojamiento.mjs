@@ -86,7 +86,7 @@ export const detalleConfiguracionAlojamiento = async (entrada, salida) => {
             habitaciones.push(detalleHabitacion)
         }
         const ok = {
-            ok: "Detalles de la configuracion de alojamiento",
+            ok: "Detalles de la configuración de alojamiento",
             apartamentoIDV: apartamentoIDV,
             apartamentoUI: apartamentoUI,
             estadoConfiguracion: estadoConfiguracion,

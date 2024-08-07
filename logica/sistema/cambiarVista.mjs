@@ -7,7 +7,6 @@ export const cambiarVista = async (transaccion) => {
         const rolIDV = transaccion.rolIDV
         let selectorRama = './ui/vistas'
         let urlResuelta = "";
-        // si solo hay adminitracion
         let zona = arbol[0].toLowerCase()
         if (arbol.length > 1 && arbol[0].toLowerCase() === "administracion") {
             zona = arbol[1].toLowerCase()

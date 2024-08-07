@@ -34,7 +34,7 @@ export const addHabitacionToConfiguracionApartamento = async (entrada, salida) =
             errorSi: "noExiste"
         })
         if (obtenerConfiguracionPorApartamento_.estadoConfiguracionIDV === "disponible") {
-            const error = "No se puede anadir una habitacion cuando el estado de la configuracion es Disponible, cambie el estado a no disponible para realizar anadir una cama";
+            const error = "No se puede añadir una habitación cuando el estado de la configuración es Disponible. Cambie el estado a no disponible para realizar añadir una cama.";
             throw new Error(error);
         }
         const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
@@ -53,7 +53,7 @@ export const addHabitacionToConfiguracionApartamento = async (entrada, salida) =
                 errorSi: "existe"
             })
         } catch (error) {
-            const m = `Ya existe la ${habitacionUI} en esta configuracion del ${apartamentoUI}`;
+            const m = `Ya existe la ${habitacionUI} en esta configuración del ${apartamentoUI}`;
             throw new Error(m);
         }
 

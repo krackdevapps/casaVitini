@@ -26,7 +26,7 @@ export const validarModificacionRangoFechaResereva = async (data) => {
         const estadoPago = reserva.estadoPagoIDV
 
         if (estadoPago === "cancelada") {
-            const error = "La reserva no se puede modificar por que esta cancelada"
+            const error = "La reserva no se puede modificar porque está cancelada."
             throw new Error(error)
         }
         const fechaEntradaReserva_ISO = reserva.fechaEntrada
@@ -37,7 +37,6 @@ export const validarModificacionRangoFechaResereva = async (data) => {
             return apartamento.apartamentoIDV
         })
         const apartamentosConConfiguracionDisponible = []
-        // consulta apartamentos NO diponibles en configuracion global
 
         const configuracionesApartamentosSoloDiponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
             estadoIDV: "disponible",

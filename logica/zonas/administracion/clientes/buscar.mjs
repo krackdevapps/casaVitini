@@ -78,7 +78,7 @@ export const buscar = async (entrada, salida) => {
         const consultaConteoTotalFilas = resultadosBusqueda[0]?.totalClientes ? resultadosBusqueda[0].totalClientes : 0;
         if (tipoBusqueda === "rapido") {
             resultadosBusqueda.forEach((cliente) => {
-                delete cliente.Telefono;
+                delete cliente.Teléfono;
                 delete cliente.mail;
                 delete cliente.notas;
             });

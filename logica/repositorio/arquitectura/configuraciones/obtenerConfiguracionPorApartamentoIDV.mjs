@@ -16,14 +16,14 @@ export const obtenerConfiguracionPorApartamentoIDV = async (data) => {
         const resuelve = await conexion.query(consulta, [apartamentoIDV]);
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {
-                const error = "No existe ningúna configuracion de alojamniento con el identicador visual apartmentoIDV que has pasado.";
+                const error = "No existe ninguna configuración de alojamiento con el identificador visual apartmentoIDV que has pasado.";
                 throw new Error(error)
             }
             return resuelve.rows[0]
 
         } else if (errorSi === "existe") {
             if (resuelve.rowCount > 0) {
-                const error = "Ya existe una configuracion de alojamniento con el identicador visual apartmentoIDV que has pasado.";
+                const error = "Ya existe una configuración de alojamiento con el identificador visual apartmentoIDV que has pasado.";
                 throw new Error(error)
             }
             return resuelve.rows[0]

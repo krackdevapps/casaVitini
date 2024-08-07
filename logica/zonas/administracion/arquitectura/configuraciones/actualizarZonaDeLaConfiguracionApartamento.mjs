@@ -36,7 +36,7 @@ export const actualizarZonaDeLaConfiguracionApartamento = async (entrada, salida
         })
 
         if (nuevaZona !== "publica" && nuevaZona !== "privada" && nuevaZona !== "global") {
-            const m = "El campo nueva zona solo espera, publica, privadao o global"
+            const m = "El campo nuevaZona solo espera, publica, privada o global"
             throw new Error(m)
         }
         await obtenerConfiguracionPorApartamentoIDV({
@@ -48,7 +48,7 @@ export const actualizarZonaDeLaConfiguracionApartamento = async (entrada, salida
             nuevaZona
         })
         const ok = {
-            ok: "Se ha actualizado la zona de la configuracion de alojamiento",
+            ok: "Se ha actualizado la zona de la configuración de alojamiento.",
             apartamentoIDV,
             nuevaZona
         };

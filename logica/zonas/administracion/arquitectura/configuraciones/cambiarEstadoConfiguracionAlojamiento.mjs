@@ -76,18 +76,18 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
                 }
                 if (habitacionesSinCama.length > 0) {
                     const funsionArray = habitacionesSinCama.join(", ").replace(/,([^,]*)$/, ' y $1');
-                    const error = `No se puede establecer el estado disponible por que la configuracion no es valida. Por favor revisa las camas asignadas en las habitaciones. En las habitaciones ${funsionArray} no hay una sola cama signada como opcion. Por favor asigna la camas`;
+                    const error = `No se puede establecer el estado disponible porque la configuración no es válida. Por favor, revisa las camas asignadas en las habitaciones. En las habitaciones ${funsionArray} no hay una sola cama signada como opción. Por favor, asigna la cama`;
                     throw new Error(error);
                 }
             }
             // Mira que tenga un perfil de precio creado y superiro 0
             const perfilPrecioDelApartamento = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
             if (perfilPrecioDelApartamento.length === 0) {
-                const error = "La configuración no es válida. No se puede establecer en disponible por que esta configuración no tiene asignado un perfil de precio para poder calcular los impuestos. Por favor establece un perfil de precio para esta configuración.";
+                const error = "La configuración no es válida. No se puede establecer en disponible porque esta configuración no tiene asignado un perfil de precio para poder calcular los impuestos. Por favor, establece un perfil de precio para esta configuración.";
                 throw new Error(error);
             }
             if (perfilPrecioDelApartamento.precio <= 0) {
-                const error = "El apartamento tiene una configuracion correcta y tambien tiene un perfil de precio pero en el perfil de precio hay establecido 0.00 como precio base y no esta permitido.";
+                const error = "El apartamento tiene una configuración correcta y también tiene un perfil de precio, pero en el perfil de precio está establecido 0.00 como precio base y no está permitido.";
                 throw new Error(error);
             }
             // No puede haber un estado disponible con precio base en 0.00

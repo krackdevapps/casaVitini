@@ -39,7 +39,7 @@ export const eliminarConfiguracionDeAlojamiento = async (entrada, salida) => {
         })
         if (apartamentosReserva.length > 0) {
             const error = {
-                error: "No se puede borrar esta configuracion de alojamiento por que esta en reservas activas presentes o futuras. Puedes modificar completamente esta configuración de alojamiento pero no borrarla por temas de integridad. Si esta configuración de alojamienton no estuviera en ninguna reserva activa si se podria borrar.",
+                error: "No se puede borrar esta configuración de alojamiento porque está en reservas activas presentes o futuras. Puedes modificar completamente esta configuración de alojamiento pero no borrarla por temas de integridad. Si esta configuración de alojamiento no estuviera en ninguna reserva activa, sí se podría borrar.",
                 reservasActivas: apartamentosReserva
             }
             throw error
@@ -47,7 +47,7 @@ export const eliminarConfiguracionDeAlojamiento = async (entrada, salida) => {
 
         await eliminarConfiguracionPorApartamentoIDV(apartamentoIDV)
         const ok = {
-            ok: "Se ha eliminado correctamente la configuracion de apartamento",
+            ok: "Se ha eliminado correctamente la configuración de apartamento",
         };
         return ok
 

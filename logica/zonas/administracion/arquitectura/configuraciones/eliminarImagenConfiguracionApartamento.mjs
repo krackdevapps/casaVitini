@@ -26,7 +26,7 @@ export const eliminarImagenConfiguracionApartamento = async (entrada, salida) =>
             errorSi: "noExiste"
         })
         if (configuracionApartamento.estadoConfiguracionIDV === "disponible") {
-            const error = "No se puede actualizar la imagen de una configuracion de apartamento cuando esta disponbile,cambie el estado primero";
+            const error = "No se puede actualizar la imagen de una configuración de apartamento cuando está disponible. Cambie el estado primero.";
             throw new Error(error);
         }
         await actualizarImagenDelApartamentoPorApartamentoIDV({

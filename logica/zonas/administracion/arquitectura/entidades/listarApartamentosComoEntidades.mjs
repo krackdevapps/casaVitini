@@ -17,7 +17,7 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
 
         if (todosLosApartamentosComoEntidad.length === 0) {
             const ok = {
-                ok: "No existe ningun apartamento como entidad, por favor crea uno para poder construir una configuracion de alojamiento sobre el",
+                ok: "No existe ningún apartamento como entidad, por favor crea uno para poder construir una configuración de alojamiento sobre él.",
                 "apartamentosComoEntidadesDisponibles": []
             };
             return ok
@@ -53,7 +53,7 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
                 }
             }
             const ok = {
-                ok: "Apartamento especificos disponibles",
+                ok: "AApartamentos específicos disponibles.",
                 apartamentosComoEntidadesDisponibles: estructuraFinal
             };
             return ok

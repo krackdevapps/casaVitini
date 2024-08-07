@@ -29,7 +29,7 @@ export const obtenerPDF = async (entrada, salida) => {
         const datosDelUsuario = await obtenerDatosPersonales(usuario)
         const usuarioMail = datosDelUsuario.mail;
         if (!usuarioMail) {
-            const error = "Se necesita que definas tu dirección de correo elecroníco en Mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo eletroníco que usastes para confirmar la reserva. Es decir debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de correo electronico y confirmarlo con el correo de confirmacion que te enviaremos. Una vez hecho eso podras ver tus reservas";
+            const error = "Se necesita que definas tu dirección de correo elecroníco en Mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo eletroníco que usastes para confirmar la reserva. Es decir debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de Correo electrónico y confirmarlo con el correo de confirmacion que te enviaremos. Una vez hecho eso podras ver tus reservas";
             throw new Error(error);
         }
         // Comporbar si el mail esta verificado
@@ -39,7 +39,7 @@ export const obtenerPDF = async (entrada, salida) => {
         })
         const estadoCuentaVerificada = cuentaUsuario.cuentaVerificadaIDV;
         if (estadoCuentaVerificada !== "si") {
-            const error = "Tienes que verificar tu dirección de correo electronico para poder acceder a las reservas asociadas a tu direcíon de correo electroníco. Para ello pulsa en verificar tu correo electrónico.";
+            const error = "Tienes que verificar tu dirección de Correo electrónico para poder acceder a las reservas asociadas a tu direcíon de correo electroníco. Para ello pulsa en verificar tu correo electrónico.";
             throw new Error(error);
         }
         await obtenerReservaPorReservaUID(reservaUID)

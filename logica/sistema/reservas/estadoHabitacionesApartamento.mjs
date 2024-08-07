@@ -31,7 +31,7 @@ export const estadoHabitacionesApartamento = async (transacion) => {
         const configuracionDeHabitacionesDelApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
 
         if (configuracionDeHabitacionesDelApartamento.length === 0) {
-            const error = `Este apartamento no tiene habitaciones disponbiles para seleccionar. Si desea tener disponibles habitaciones a este apartamento, añada habitaciones seleccionables en la configuracion de alojamiento con identificador visual ${apartamentoIDV}`
+            const error = `Este apartamento no tiene habitaciones disponibles para seleccionar. Si desea tener disponibles habitaciones a este apartamento, añada habitaciones seleccionables en la configuración de alojamiento con identificador visual ${apartamentoIDV}`
             throw new Error(error)
         }
 

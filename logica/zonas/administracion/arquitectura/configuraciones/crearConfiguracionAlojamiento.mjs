@@ -49,7 +49,7 @@ export const crearConfiguracionAlojamiento = async (entrada) => {
             precioInicial: "0.00"
         })
         const ok = {
-            ok: "Se ha creado correctament la nuevo configuracion del apartamento",
+            ok: "Se ha creado correctament la nuevo configuración del apartamento",
             apartamentoIDV: apartamentoIDV
         };
         return ok
