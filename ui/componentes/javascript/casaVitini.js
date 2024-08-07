@@ -16829,7 +16829,7 @@ const casaVitini = {
                 casaVitini.shell.controladoresUI.limpiarTodoElementoFlotante()
 
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                const mensaje = "Se ha producido un error en la red y no se ha podido comunicar con el servidor, si es por una causa circunstancial de la red, reintentalo y deberia funcionar. Comprueba que tienes acceso a la red. Por ejemplo, comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos es probable que el problema este en el servidor de Casa Vitini"
+                const mensaje = "Se ha producido un error en la red y no se ha podido comunicar con el servidor. Si es por una causa circunstancial de la red, reinténtalo y debería funcionar. Comprueba que tienes acceso a la red. Por ejemplo, comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos, es probable que el problema esté en el servidor de Casa Vitini."
                 const advertenciaInmersivaUI = document.createElement("div")
                 advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersivaSuperpuesta")
                 advertenciaInmersivaUI.setAttribute("identificadorVisual", "errorConexion")

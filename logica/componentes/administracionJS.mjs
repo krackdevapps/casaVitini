@@ -9349,7 +9349,7 @@ const casaVitini = {
                                 let info = document.createElement("div")
                                 info.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
                                 info.innerText = `
-                        Genera un enlace de pago para poder enviarlo a un cliente y que realice el pago de la reserva. No es obligatorio escribir un nombre, pero si recomendable por si necesita acordarse de por qué genero este enlace. Si no define ningún nombre, este se llamará "Enlace de pago de la reserva ${reservaUID}". Este es el nombre automático que tendrá este enlace si no define un nombre en específico. Recuerde que todos los enlaces generados y su gestión centralizada la puede encontrar en el panel de administración en el botón de Enlaces de pago desde el menú administración o en su reserva correspondiente dentro del apartado enlaces de pago.`
+                        Genera un enlace de pago para poder enviarlo a un cliente y que realice el pago de la reserva. No es obligatorio escribir un nombre, pero sí recomendable, por si necesita acordarse de por qué genera este enlace. Si no define ningún nombre, este se llamará "Enlace de pago de la reserva ${reservaUID}". Este es el nombre automático que tendrá este enlace si no define un nombre en específico. Recuerde que todos los enlaces generados y su gestión centralizada la puede encontrar en el panel de administración, en el botón de Enlaces de pago desde el menú administración o en su reserva correspondiente dentro del apartado enlaces de pago.`
                                 bloque.appendChild(info)
                                 let campo = document.createElement("input")
                                 campo.classList.add("detallesReserva_campoNombreEnlace")
@@ -9368,7 +9368,7 @@ const casaVitini = {
                                 bloque.appendChild(campo)
                                 info = document.createElement("div")
                                 info.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                info.innerText = `Determina el tiempo de vigencia del enlace. Por defecto el sistema aplica 72h si no especificas una vigencia concreta. Pasada la vigencia el enlace ya no puede realizar el cobro y desaparece`
+                                info.innerText = `Determina el tiempo de vigencia del enlace. Por defecto, el sistema aplica 72h si no especificas una vigencia concreta. Pasada la vigencia, el enlace ya no puede realizar el cobro y desaparece.`
                                 bloque.appendChild(info)
                                 campo = document.createElement("input")
                                 campo.classList.add("detallesReserva_campoNombreEnlace")
@@ -9393,7 +9393,7 @@ const casaVitini = {
                                 bloqueBotones.appendChild(botonConfirmar)
                                 const botonCancelar = document.createElement("div")
                                 botonCancelar.classList.add("detallesReservaCancelarBoton")
-                                botonCancelar.innerText = "Cancelar la creacíon del enlace"
+                                botonCancelar.innerText = "Cancelar la creación del enlace"
                                 botonCancelar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
                                 bloqueBotones.appendChild(botonCancelar)
                                 contenidoAdvertenciaInmersiva.appendChild(bloqueBotones)
@@ -11412,7 +11412,7 @@ const casaVitini = {
                                 bloque.appendChild(campo)
                                 info = document.createElement("div")
                                 info.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                info.innerText = `Determina el tiempo de vigencia del enlace. Por defecto el sistema aplica 72h si no especificas una vigencia concreta. Pasada la vigencia el enlace ya no puede realizar el cobro y desaparece `
+                                info.innerText = `Determina el tiempo de vigencia del enlace. Por defecto, el sistema aplica 72h si no especificas una vigencia concreta. Pasada la vigencia, el enlace ya no puede realizar el cobro y desaparece.`
                                 bloque.appendChild(info)
                                 campo = document.createElement("input")
                                 campo.classList.add("detallesReserva_campoNombreEnlace")
@@ -11437,7 +11437,7 @@ const casaVitini = {
                                 bloqueBotones.appendChild(botonConfirmar)
                                 const botonCancelar = document.createElement("div")
                                 botonCancelar.classList.add("detallesReservaCancelarBoton")
-                                botonCancelar.innerText = "Cancelar la creacíon del enlace"
+                                botonCancelar.innerText = "Cancelar la creación del enlace"
                                 botonCancelar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
                                 bloqueBotones.appendChild(botonCancelar)
                                 contenidoAdvertenciaInmersiva.appendChild(bloqueBotones)
