@@ -28,7 +28,7 @@ export const eliminarCuentaDesdeAdministracion = async (entrada, salida) => {
         if (rolIDV === rolAdministrador) {
             const administradores = await obtenerAdministradores(rolAdministrador)
             if (administradores.length === 1) {
-                const error = "No se puede eliminar esta cuenta por que es la unica cuenta adminsitradora existente. Si quieres eliminar esta cuenta tienes que crear otra cuenta administradora. Por que en el sistema debe de existir al menos una cuenta adminitrador";
+                const error = "No se puede eliminar esta cuenta porque es la única cuenta administrativa existente. Si quieres eliminar esta cuenta, tienes que crear otra cuenta administradora. En el sistema debe existir al menos una cuenta administrador.";
                 throw new Error(error);
             }
         }

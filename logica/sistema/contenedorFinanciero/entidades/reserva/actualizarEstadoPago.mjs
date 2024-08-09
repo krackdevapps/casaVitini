@@ -34,7 +34,7 @@ export const actualizarEstadoPago = async (reservaUID) => {
         } else if (faltantePorPagarDecimal.lessThan(totalFinal)) {
             estadoDelpago = "pagadoParcialmente";
         } else {
-            const error = "Error en el calculo del estado del pago"
+            const error = "Error en el cálculo del estado del pago"
             throw new Error(error)
         }
         await actualizarEstadoPagoPorReservaUID({

@@ -26,7 +26,7 @@ export const eliminarIrreversiblementeReserva = async (entrada) => {
         })
         const clave = entrada.body.clave;
         if (!clave) {
-            const error = "No has enviado la clave de tu usuario para confirmar la operacion";
+            const error = "No has enviado la clave de tu usuario para confirmar la operación";
             throw new Error(error);
         }
         const usuarioIDX = entrada.session.usuario;
@@ -47,20 +47,20 @@ export const eliminarIrreversiblementeReserva = async (entrada) => {
         };
         const controlClave = vitiniCrypto(metadatos);
         if (!controlClave) {
-            const error = "Revisa la contrasena actual que has escrito por que no es correcta por lo tanto no se puede eliminar tu cuenta";
+            const error = "Revisa la contraseña actual que has escrito porque no es correcta, por lo tanto, no se puede eliminar tu cuenta";
             throw new Error(error);
         }
         const rol = usuario.rolIDV;
         const rolAdministrador = "administrador";
         if (rol !== rolAdministrador) {
-            const error = "Tu cuenta no esta autorizada para eliminar reservas. Puedes cancelar reservas pero no eliminarlas.";
+            const error = "Tu cuenta no está autorizada para eliminar reservas. Puedes cancelar las reservas pero no eliminarlas.";
             throw new Error(error);
         }
         await obtenerReservaPorReservaUID(reservaUID)
         await eliminarReservaIrreversiblementePorReservaUID(reservaUID)
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha eliminado la reserva y su informacion asociada de forma irreversible"
+            ok: "Se ha eliminado la reserva y su información asociada de forma irreversible."
         };
         return ok
     } catch (errorCapturado) {

@@ -43,7 +43,7 @@ export const eliminarCamaFisicaDeHabitacion = async (entrada) => {
             componenteUID
         })
         const ok = {
-            ok: "Se ha eliminado la cama fisica de la habitacion"
+            ok: "Se ha eliminado la cama física de la habitación"
         }
         return ok
     } catch (errorCapturado) {

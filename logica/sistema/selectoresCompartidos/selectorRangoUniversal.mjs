@@ -26,7 +26,7 @@ export const selectorRangoUniversal = async (metadatos) => {
 
         const tipoLimite = metadatos.tipoLimite
         if (tipoLimite !== "incluido" && tipoLimite !== "noIncluido") {
-            const mensaje = "El selector de rango universal, necesita un tipo de limite"
+            const mensaje = "El selector de rango universal, necesita un tipo de límite"
             throw new Error(mensaje)
         }
         const inicioRango = DateTime.fromISO(fechaInicio_rango_ISO)

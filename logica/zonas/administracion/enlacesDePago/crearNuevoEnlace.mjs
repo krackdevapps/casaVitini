@@ -60,11 +60,11 @@ export const crearNuevoEnlace = async (entrada, salida) => {
         const estadoReserva = resuelveValidarReserva.estadoReservaIDV;
 
         if (estadoReserva === "cancelada") {
-            const error = "No se puede generar un enlace de pago una reserva cancelada";
+            const error = "No se puede generar un enlace de pago, porque la reserva está cancelada.";
             throw new Error(error);
         }
         if (estadoReserva !== "confirmada") {
-            const error = "No se puede generar un enlace de pago una reserva que no esta confirmada por que entonces el cliente podria pagar una reserva cuyo alojamiento no esta garantizado, reservado sin pagar vamos";
+            const error = "No se puede generar un enlace de pago de una reserva que no está confirmada, porque entonces el cliente podría pagar una reserva cuyo alojamiento no está garantizado. Reservado sin pagar.";
             throw new Error(error);
         }
         const generarCadenaAleatoria = (longitud) => {
@@ -109,11 +109,7 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             return codigoGenerado;
         };
 
-
         const codigoAleatorioUnico = await controlCodigo();
-
-
-
 
         const fechaActual = new Date();
         const fechaDeCaducidad = new Date(fechaActual.getTime() + (horasCaducidad * 60 * 60 * 1000));

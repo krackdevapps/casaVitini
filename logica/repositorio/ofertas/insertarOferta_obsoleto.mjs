@@ -56,7 +56,7 @@ export const insertarOferta = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
-            const error = "Ha ocurrido un error y no se ha insertado la nueva oferta";
+            const error = "Ha ocurrido un error y no se ha insertado la nueva oferta.";
             throw new Error(error);
         }
         return resuelve.rows[0].uid

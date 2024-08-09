@@ -64,7 +64,7 @@ export const apartamentosPorRango = async (data) => {
             zonaArray: zonaConfiguracionAlojamientoArray
         })
         if (configuracionesAlojamientoSoloDisponible.length === 0) {
-            const error = "No hay ningun apartamento disponible"
+            const error = "No hay ningún apartamento disponible."
             throw new Error(error)
         }
         const configuracionesAlojamientoNODisponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
@@ -100,7 +100,7 @@ export const apartamentosPorRango = async (data) => {
         const ok = {
             apartamentosNoDisponibles: apartamentosNoDisponiblesArray,
             apartamentosDisponibles: apartamentosDisponiblesFinal,
-            detalles: "Se esta teniendo en cuenta, los apartamentos en reservas y los apartamentos no disponbiles definidos por la configuración global de alojamiento"
+            detalles: "Se están teniendo en cuenta, los apartamentos en reservas y los apartamentos no disponibles definidos por la configuración global de alojamiento."
         }
         return ok
     } catch (errorCapturado) {

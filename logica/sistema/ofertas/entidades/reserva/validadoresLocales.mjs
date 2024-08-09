@@ -18,7 +18,7 @@ export const validadoresLocales = {
     simboloNumero: (simboloNumero) => {
         try {
             if (!simboloNumero || (simboloNumero !== "numeroExacto" && simboloNumero !== "aPartirDe")) {
-                const error = "El campo simboloNumero debe de ser un numer entero y positivo";
+                const error = "El campo simboloNumero debe de ser un número entero y positivo.";
                 throw new Error(error);
             }
         } catch (errorCapturado) {
@@ -49,7 +49,7 @@ export const validadoresLocales = {
     controlLimitePorcentaje: (tipoDescuento, cantidad) => {
         try {
             if (tipoDescuento === "porcentaje" && new Decimal(cantidad).greaterThan(100)) {
-                const error = "Cuidado! No se puede acepatar un porcentaje superior a 100% por que sino la oferta podria generar numeros negativos.";
+                const error = "Cuidado! No se puede aceptar un porcentaje superior al 100% porque  sino la oferta, podría generar números negativos.";
                 throw new Error(error);
             }
         } catch (errorCapturado) {

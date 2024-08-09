@@ -49,7 +49,7 @@ export const detallesDeEntidadDeAlojamiento = async (entrada, salida) => {
                 errorSi: "noExiste"
             })
             if (!habitacionesComoEntidad?.habitacionIDV) {
-                const error = "No existe la habitacion";
+                const error = "No existe la habitación";
                 throw new Error(error);
             }
             const ok = {

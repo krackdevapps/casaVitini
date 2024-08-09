@@ -7,7 +7,7 @@ export const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
     try {
         const filtroCadena = /^[a-z0-9]+$/;
         if (!apartamentoIDV || !filtroCadena.test(apartamentoIDV)) {
-            const error = "Hay que definir la apartamentoIDV, solo se admiten numeros sin espacios.";
+            const error = "Hay que definir el apartamentoIDV, solo se admiten números sin espacios.";
             throw new Error(error);
         }
         const plataformaDeOrigen = "airbnb"
@@ -20,7 +20,7 @@ export const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
             calendariosPorApartamento: []
         }
         if (calendarios.length > 0) {
-            const errorDeFormato = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb"
+            const errorDeFormato = "En la dirección URL que has introducido no hay un calendario iCal de Airbnb."
             const calendariosPorApartamento = []
             for (const detallesDelCalendario of calendarios) {
 

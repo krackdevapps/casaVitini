@@ -32,7 +32,7 @@ export const crearConfiguracionAlojamiento = async (entrada) => {
             errorSi: "noExiste"
         })).apartamentoUI
         if (!apartamentoUI) {
-            const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podras crear la configuiracíon";
+            const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podrás crear la configuración.";
             throw new Error(error);
         }
         await obtenerConfiguracionPorApartamentoIDV({
@@ -49,7 +49,7 @@ export const crearConfiguracionAlojamiento = async (entrada) => {
             precioInicial: "0.00"
         })
         const ok = {
-            ok: "Se ha creado correctament la nuevo configuración del apartamento",
+            ok: "Se ha creado correctamente la nueva configuración del apartamento.",
             apartamentoIDV: apartamentoIDV
         };
         return ok

@@ -27,7 +27,7 @@ export const resolverQR = async (entrada) => {
         })
 
         const ok = {
-            ok: "Aqui tiene la url de tu codigo qr resuelta"
+            ok: "Aquí tiene la URL de tu código QR resuelta."
         }
 
         if (codigoIDV === "reserva") {
@@ -48,7 +48,7 @@ export const resolverQR = async (entrada) => {
                 const datosDelUsuario = await obtenerDatosPersonales(usuario)
                 const usuarioMail = datosDelUsuario.mail;
                 if (!usuarioMail) {
-                    const error = "Se necesita que definas tu dirección de correo elecroníco en Mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo eletroníco que usastes para confirmar la reserva. Es decir debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de Correo electrónico y confirmarlo con el correo de confirmacion que te enviaremos. Una vez hecho eso podras ver tus reservas";
+                    const error = "Se necesita que definas tu dirección de correo electrónico en mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo electrónico que usaste para confirmar la reserva. Es decir, debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de correo electrónico y confirmarlo con el correo de confirmación que te enviaremos. Una vez hecho eso, podrás ver tus reservas.";
                     throw new Error(error);
                 }
 
@@ -60,7 +60,7 @@ export const resolverQR = async (entrada) => {
                 })
                 const estadoCuentaVerificada = cuentaUsuario.cuentaVerificadaIDV;
                 if (estadoCuentaVerificada !== "si") {
-                    const error = "Tienes que verificar tu dirección de Correo electrónico para poder acceder a las reservas asociadas a tu direcíon de correo electroníco. Para ello pulsa en verificar tu correo electrónico.";
+                    const error = "Tienes que verificar tu dirección de correo electrónico para poder acceder a las reservas asociadas a tu dirección de correo electrónico. Para ello, pulsa en verificar tu correo electrónico.";
                     throw new Error(error);
                 }
 
@@ -91,7 +91,7 @@ export const resolverQR = async (entrada) => {
 
 
         } else {
-            const m = "No se reconode el codigoIDV"
+            const m = "No se reconoce el codigoIDV"
             throw new Error(m)
         }
         return ok

@@ -69,7 +69,7 @@ export const anadirPernoctanteHabitacion = async (entrada) => {
         })
 
         if (pernoctanteDeLaReserva.length > 0) {
-            const error = "Este cliente ya es un pernoctante dentro de esta reserva, mejor muevalo de habitacion";
+            const error = "Este cliente ya es un pernoctante dentro de esta reserva, mejor muévalo de habitación";
             throw new Error(error);
         }
 
@@ -81,7 +81,7 @@ export const anadirPernoctanteHabitacion = async (entrada) => {
         await campoDeTransaccion("confirmar")
 
         const ok = {
-            ok: "Se ha anadido correctamente el cliente en la habitacin de la reserva",
+            ok: "Se ha añadido correctamente el cliente en la habitación de la reserva",
             pernoctante: nuevoPernoctanteEnLaHabitacion,
             cliente
         };

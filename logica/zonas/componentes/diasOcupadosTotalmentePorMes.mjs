@@ -26,11 +26,11 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         })
         validadoresCompartidos.fechas.cadenaMes
         if (mes < 0 || mes > 12) {
-            const error = "El campo 'mes' solo puede ser un numero entero y positivo entre el 1 y el 12";
+            const error = "El campo 'mes' solo puede ser un número entero y positivo entre el 1 y el 12";
             throw new Error(error);
         }
         if (ano < 0) {
-            const error = "El campo 'ano' solo puede ser un numero entero y positivo y superior a 0";
+            const error = "El campo año solo puede ser un número entero y positivo y superior a 0";
             throw new Error(error);
         }
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
@@ -47,12 +47,12 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         const rolEmpleado = "empleado";
         if (anoActual > ano) {
             if (rol !== rolAdministrador && rol !== rolEmpleado) {
-                const error = "Este componete solo proporciona informacion de fechas anteriores a la actual con una cuenta de tipo Administrador o Empleado";
+                const error = "Este componente solo proporciona información de fechas anteriores a la actual con una cuenta de tipo Administrador o Empleado.";
                 throw new Error(error);
             }
         } else if (anoActual === ano && mesActual > mes) {
             if (rol !== rolAdministrador && rol !== rolEmpleado) {
-                const error = "Este componete solo proporciona informacion de fechas anteriores a la actual con una cuenta de tipo Administrador o Empleado";
+                const error = "Este componente solo proporciona información de fechas anteriores a la actual con una cuenta de tipo Administrador o Empleado.";
                 throw new Error(error);
             }
         }
@@ -68,7 +68,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
             zonaArray: ["publica", "global", "privada"]
         })
         if (configuracionesDisponibles.length === 0) {
-            const error = "No hay ningun apartamento disponible";
+            const error = "No hay ningún apartamento disponible.";
             throw new Error(error);
         }
         const apartamentosDisponbiles = [];

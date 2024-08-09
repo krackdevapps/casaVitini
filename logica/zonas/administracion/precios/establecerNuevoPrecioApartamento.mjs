@@ -38,7 +38,7 @@ export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
             errorSi: "noExiste"
         })
         if (configuracionApartamento.estadoConfiguracion === "disponible") {
-            const error = "No se puede puede establecer un precio a este apartmento cuadno la configuracion esta en modo disponible. Primero desactive la configuracion del apartmento dejandola en estado No disponible y luego podra hacer las modificaciones que necesite";
+            const error = "No se puede establecer un precio a este apartamento cuando la configuración está en modo disponible. Primero desactive la configuración del apartamento dejándola en estado no disponible y luego podrá hacer las modificaciones que necesite.";
             throw new Error(error);
         }
         const detallesApartamento = {};

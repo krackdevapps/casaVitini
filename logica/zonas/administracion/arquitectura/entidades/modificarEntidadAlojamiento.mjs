@@ -89,7 +89,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 apartamentoIDVSelector: entidadIDV
             })
             if (apartamentoComoEntidadActualizado.rowCount === 0) {
-                const error = "No se ha podido guardar los datos por que no se han encontrado el apartamento";
+                const error = "No se han podido guardar los datos porque no se ha encontrado el apartamento.";
                 throw new Error(error);
             }
             await eliminarCaracteristicasDelApartamentoPorApartamentoIDV(apartamentoIDV)
@@ -172,7 +172,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 errorSi: "noExiste"
             })
             if (!habitacionEntidad?.habitacionIDV) {
-                const error = "No existe la habitacion, revisa el habitacionIDV";
+                const error = "No existe la habitación, revisa el habitacionIDV";
                 throw new Error(error);
             }
             // Comprobar que no existe el nuevo IDV
@@ -196,7 +196,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
             })
             await campoDeTransaccion("confirmar")
             const ok = {
-                ok: "Se ha actualizado correctamente la habitacion"
+                ok: "Se ha actualizado correctamente la habitación."
             };
             return ok
 

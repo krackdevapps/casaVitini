@@ -40,7 +40,7 @@ export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida)
         })
 
         if (!cuentaIDX.clave) {
-            const error = "No se puede activar una cuenta que carece de contrasena, por favor establece una contrasena primero";
+            const error = "No se puede activar una cuenta que carece de contraseña. Por favor, establece una contraseña primero.";
             throw new Error(error);
         }
         await campoDeTransaccion("iniciar")

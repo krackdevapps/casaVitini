@@ -17,7 +17,7 @@ export const apartamentosDisponiblesConfigurados = async (entrada) => {
         })
 
         if (apartamentosDisponiblesConfigurados_.length === 0) {
-            const error = "No hay ningun apartamento disponible configurado";
+            const error = "No hay ningún apartamento disponible configurado.";
             throw new Error(error);
         }
 

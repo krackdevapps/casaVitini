@@ -21,7 +21,7 @@ export const actualizarEstadoDelInterruptor = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se puede actualizar el interruptor por que existe ningun interruptor con ese interruptorIDV : " + interruptorIDV;
+            const error = "No se puede actualizar el interruptor porque existe ningún interruptor con ese interruptorIDV: " + interruptorIDV;
             throw new Error(error)
         }
         return resuelve.rows[0]

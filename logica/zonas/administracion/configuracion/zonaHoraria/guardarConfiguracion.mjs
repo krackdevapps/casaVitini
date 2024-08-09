@@ -19,7 +19,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
         })
 
         if (!listaZonasHorarias.includes(zonaHoraria)) {
-            const error = "El codigo de la zona horaria no existe";
+            const error = "El código de la zona horaria no existe.";
             throw new Error(error);
         }
 
@@ -27,7 +27,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
             zonaHoraria: zonaHoraria
         })
         const ok = {
-            ok: "Se ha actualizado correctamente la configuracion"
+            ok: "Se ha actualizado correctamente la configuración"
         }
         return ok
     } catch (errorCapturado) {

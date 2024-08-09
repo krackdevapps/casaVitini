@@ -26,7 +26,7 @@ export const desactivarCuenta = async (data) => {
             usuario,
         ]);
         if (usuraioActualizado.rowCount === 0) {
-            const error = "No se ha podido actualizar el estao de verificacion de la cuenta de usuario por que no se encuentra el usuario."
+            const error = "No se ha podido actualizar el estado de verificación de la cuenta de usuario porque no se encuentra el usuario."
             throw new Error(error)
         }
         return usuraioActualizado.rows[0]

@@ -45,7 +45,7 @@ export const actualizarDatosUsuarioDesdeMiCasa = async (entrada) => {
         }
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha actualiza correctamente los datos del usuario",
+            ok: "Se han actualizado correctamente los datos del usuario.",
             datosActualizados: usurarioActualizado
         }
         return ok

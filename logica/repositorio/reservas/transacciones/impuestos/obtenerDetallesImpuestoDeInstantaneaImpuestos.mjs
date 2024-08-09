@@ -21,7 +21,7 @@ export const obtenerDetallesImpuestoDeInstantaneaImpuestos = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningun impuesto en la instantanea de impuesto de la reserva"
+            const error = "No existe ningún impuesto en la instantánea de impuesto de la reserva."
             throw new Error(error)
         }
         return resuelve.rows[0]

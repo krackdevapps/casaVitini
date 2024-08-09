@@ -65,7 +65,7 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
         }
         const clienteUID = pernoctante?.clienteUID;
         if (clienteUID) {
-            const error = "El pernoctnte ya es un cliente y no un clientePool";
+            const error = "El pernoctante ya es un cliente y no un clientePool";
             throw new Error(error);
         }
         const nuevoClienteAdd = await insertarCliente(datosValidados);
@@ -82,7 +82,7 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
         primerApellido = primerApellido ? primerApellido : "";
         segundoApellido = segundoApellido ? segundoApellido : "";
         const ok = {
-            ok: "Se ha guardado al nuevo cliente y sustituido por el clientePool, tambien se ha eliminado al clientePool de la base de datos",
+            ok: "Se ha guardado al nuevo cliente y sustituido por el clientePool, también se ha eliminado al clientePool de la base de datos.",
             nuevoClienteUID: nuevoUIDCliente,
             nombreCompleto: `${nombre} ${primerApellido} ${segundoApellido}`,
             pasaporte: pasaporte,

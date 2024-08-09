@@ -77,7 +77,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
         })
         const apartamentosDisponiblesResueltos = resuelveApartamentosDisponibles.apartamentosDisponibles;
         if (apartamentosDisponiblesResueltos.length === 0) {
-            const error = "No hay ningun apartamento disponbile para las fechas de la reserva";
+            const error = "No hay ningún apartamento disponible para las fechas de la reserva";
             throw new Error(error);
         }
         if (apartamentosDisponiblesResueltos.length > 0) {
@@ -101,7 +101,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             await campoDeTransaccion("confirmar")
 
             const ok = {
-                ok: "apartamento anadido correctamente",
+                ok: "Apartamento añadido correctamente",
                 apartamentoIDV: apartamentoIDV,
                 apartamentoUI: apartamento.apartamentoUI,
                 nuevoUID: nuevoApartamentoEnReserva.componenteUID,

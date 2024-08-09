@@ -25,7 +25,7 @@ export const eliminarSimulacion = async (entrada) => {
         await eliminarSimulacionPorSimulacionUID(simulacionUID)
 
         const ok = {
-            ok: "Se ha eliminado la simulacion con exito",
+            ok: "Se ha eliminado la simulación con éxito",
         }
         return ok
     } catch (errorCapturado) {

@@ -18,7 +18,7 @@ export const obtenerImagenApartamentoPorApartamentoIDV = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningun apartamento con ese apartamentoIDV";
+            const error = "No existe ningún apartamento con ese apartamentoIDV";
             throw new Error(error)
         }
         return resuelve.rows[0]

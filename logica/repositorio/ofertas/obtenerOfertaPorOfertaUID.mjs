@@ -19,7 +19,7 @@ export const obtenerOferatPorOfertaUID = async (ofertaUID) => {
         `
         const resuelve = await conexion.query(consulta, [ofertaUID])
         if (resuelve.rowCount === 0) {
-            const error = "No existe la oferta, revisa el ofertaUID introducie en el campo ofertaUID, recuerda que debe de ser un number";
+            const error = "No existe la oferta. Revisa el ofertaUID introducido en el campo ofertaUID, recuerda que debe de ser un number";
             throw new Error(error)
         }
         return resuelve.rows[0]

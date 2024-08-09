@@ -139,7 +139,7 @@ export const preciosPorSeleccion = async (entrada) => {
         })
 
         const ok = {
-            ok: "Aquí tíenes el desglose financiero en base a las fechas seleccionadas y los apartmentos seleccionados",
+            ok: "Aquí tienes el desglose financiero basándose en las fechas seleccionadas y los apartamentos seleccionados.",
             preciosPorSeleccion,
             desgloseFinanciero
         }

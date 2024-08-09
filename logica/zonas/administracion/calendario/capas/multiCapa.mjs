@@ -109,12 +109,12 @@ export const multiCapa = async (entrada) => {
                         if (elementosFaltantes.length === 1) {
                             error = "En el array de apartamentosIDV hay un identificador que no existe: " + elementosFaltantes[0];
                         } if (elementosFaltantes.length === 2) {
-                            error = "En el array de apartamentosIDV hay identifcadores que no existen: " + elementosFaltantes.join("y");
+                            error = "En el array de apartamentosIDV hay identificadores que no existen: " + elementosFaltantes.join("y");
                         }
                         if (elementosFaltantes.length > 2) {
                             const conComa = elementosFaltantes;
                             const ultima = elementosFaltantes.pop();
-                            error = "En el array de apartamentosIDV hay identifcadores que no existen: " + conComa.join(", ") + " y " + ultima;
+                            error = "En el array de apartamentosIDV hay identificadores que no existen: " + conComa.join(", ") + " y " + ultima;
                         }
                         throw new Error(error);
                     }
@@ -176,12 +176,12 @@ export const multiCapa = async (entrada) => {
                         if (elementosFaltantes.length === 1) {
                             error = "En el array de calendariosUIDS hay un identificador que no existe: " + elementosFaltantes[0];
                         } if (elementosFaltantes.length === 2) {
-                            error = "En el array de calendariosUIDS hay identifcadores que no existen: " + elementosFaltantes.join("y");
+                            error = "En el array de calendariosUIDS hay identificadores que no existen: " + elementosFaltantes.join("y");
                         }
                         if (elementosFaltantes.length > 2) {
                             const conComa = elementosFaltantes;
                             const ultima = elementosFaltantes.pop();
-                            error = "En el array de calendariosUIDS hay identifcadores que no existen: " + conComa.join(", ") + " y " + ultima;
+                            error = "En el array de calendariosUIDS hay identificadores que no existen: " + conComa.join(", ") + " y " + ultima;
                         }
                         throw new Error(error);
                     }
@@ -214,12 +214,12 @@ export const multiCapa = async (entrada) => {
             if (elementosFaltantes.length === 1) {
                 error = "En el array de capasIDV hay un identificador que no existe: " + elementosFaltantes[0];
             } if (elementosFaltantes.length === 2) {
-                error = "En el array de capasIDV hay identifcadores que no existen: " + elementosFaltantes.join("y");
+                error = "En el array de capasIDV hay identificadores que no existen: " + elementosFaltantes.join("y");
             }
             if (elementosFaltantes.length > 2) {
                 const conComa = elementosFaltantes;
                 const ultima = elementosFaltantes.pop();
-                error = "En el array de capasIDV hay identifcadores que no existen: " + conComa.join(", ") + " y " + ultima;
+                error = "En el array de capasIDV hay identificadores que no existen: " + conComa.join(", ") + " y " + ultima;
             }
             throw new Error(error);
         }

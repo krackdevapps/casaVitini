@@ -11,7 +11,7 @@ export const pagosDeLaReserva = async (reservaUID) => {
     try {
         const filtroCadena = /^[0-9]+$/;
         if (!reservaUID || !filtroCadena.test(reservaUID)) {
-            const error = "el campo 'reservaUID' solo puede ser una cadena de letras minúsculas y numeros sin espacios.";
+            const error = "El campo 'reservaUID' solo puede ser una cadena de letras minúsculas y números sin espacios.";
             throw new Error(error);
         }
         await obtenerReservaPorReservaUID(reservaUID);

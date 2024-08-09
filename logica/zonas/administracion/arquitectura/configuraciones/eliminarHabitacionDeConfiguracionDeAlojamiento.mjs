@@ -23,7 +23,7 @@ export const eliminarHabitacionDeConfiguracionDeAlojamiento = async (entrada, sa
         const detallesHabitacionDelApartamento = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
 
         if (!detallesHabitacionDelApartamento?.componenteUID) {
-            const error = "No existe la habitacion, revisa el habitacionUID";
+            const error = "No existe la habitación, revisa el habitacionUID";
             throw new Error(error);
         }
         const apartamentoIDV = detallesHabitacionDelApartamento.apartamentoIDV;

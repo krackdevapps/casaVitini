@@ -25,7 +25,7 @@ export const insertarEnlaceDeRecuperacion = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha creado el enlace de recuperacion"
+            const error = "No se ha creado el enlace de recuperación."
             throw new Error(error)
         }
         return resuelve.rows[0]

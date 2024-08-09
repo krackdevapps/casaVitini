@@ -14,7 +14,7 @@ export const eliminarSessionPorUsuarioPorSessionIDX = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
-            const error = "No existe la session";
+            const error = "No existe la sesión.";
             throw new Error(error);
         }
         return resuelve.rows[0]

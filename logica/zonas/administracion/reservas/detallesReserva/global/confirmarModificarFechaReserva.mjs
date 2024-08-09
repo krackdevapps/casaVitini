@@ -63,7 +63,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
 
         if (reserva.estadoReservaIDV === "cancelada") {
-            const error = "La reserva no se puede modificar porque está cancelada., una reserva cancelada no interfiere en los dias ocupados";
+            const error = "La reserva no se puede modificar porque está cancelada. Una reserva cancelada no interfiere en los días ocupados.";
             throw new Error(error);
         }
 
@@ -135,7 +135,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
             const transaccionInterna = await validarModificacionRangoFechaResereva(metadatos);
             const codigoFinal = transaccionInterna.ok;
 
-            const mensajeSinPasado = "No se puede aplicar esa fecha de entrada a la reserva por que en base a los apartamentos de esta reserva no hay dias libres. Puedes ver a continuacíon lo eventos que lo impiden.";
+            const mensajeSinPasado = "No se puede aplicar esa fecha de entrada a la reserva porque, sobre la base de los apartamentos de esta reserva, no hay días libres. Puedes ver a continuación los eventos que lo impiden.";
 
             if ((codigoFinal === "noHayRangoPasado")
                 &&
@@ -184,7 +184,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
             }
             const transaccionInterna = await validarModificacionRangoFechaResereva(metadatos);
             const codigoFinal = transaccionInterna.ok;
-            const mensajeSinFuturo = "No se puede seleccionar esa fecha de salida. Con los apartamentos existentes en la reserva no se puede por que hay otros eventos que lo impiden. Puedes ver los eventos que lo impiden detallados a continuación.";
+            const mensajeSinFuturo = "No se puede seleccionar esa fecha de salida. Con los apartamentos existentes en la reserva no se puede porque hay otros eventos que lo impiden. Puedes ver los eventos que lo impiden detallados a continuación.";
             if ((codigoFinal === "noHayRangoFuturo")
                 &&
                 (fechaSalida_Objeto < fechaSolicitada_objeto)) {

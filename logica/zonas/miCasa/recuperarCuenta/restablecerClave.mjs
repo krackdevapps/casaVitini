@@ -24,7 +24,7 @@ export const restablecerClave = async (entrada, salida) => {
         validadoresCompartidos.claves.minimoRequisitos(clave);
 
         if (clave !== claveConfirmada) {
-            const error = "Las claves no coinciden. Por favor escribe tu nueva clave dos veces.";
+            const error = "Las claves no coinciden. Por favor, escribe tu nueva clave dos veces.";
             throw new Error(error);
         }
 

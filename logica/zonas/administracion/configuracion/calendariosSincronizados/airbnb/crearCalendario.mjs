@@ -43,7 +43,7 @@ export const crearCalendario = async (entrada, salida) => {
             errorSi: "noExiste"
         })
 
-        const errorDeFormato = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb";
+        const errorDeFormato = "En la dirección URL que has introducido no hay un calendario iCal de Airbnb";
         let calendarioRaw;
         try {
             const maxContentLengthBytes = 10 * 1024 * 1024; // 10 MB
@@ -107,7 +107,7 @@ export const crearCalendario = async (entrada, salida) => {
         const nuevoCalendario = await insertarCalendarioSincronizado(dataInsertarCalendarioSincronizado)
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha guardado el nuevo calendario y esta listo para ser sincronizado",
+            ok: "Se ha guardado el nuevo calendario y está listo para ser sincronizado.",
             nuevoUID: nuevoCalendario.calendarioUID
         };
         return ok

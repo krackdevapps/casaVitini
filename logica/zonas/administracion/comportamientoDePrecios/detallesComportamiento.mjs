@@ -36,7 +36,7 @@ export const detallesComportamiento = async (entrada, salida) => {
 
 
         const ok = {
-            ok: "Aquí tiene los detalles del comportamient",
+            ok: "Aquí tiene los detalles del comportamiento",
             detallesComportamiento
         };
         return ok

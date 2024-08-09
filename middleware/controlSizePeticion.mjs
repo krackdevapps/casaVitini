@@ -4,7 +4,7 @@ export const controlSizePeticion = (req, res, next) => {
 
   if (contentLength && parseInt(contentLength) > MAX_SIZE) {
 
-    res.status(413).send('Solicitud demasiado grande, maximo 50MB');
+    res.status(413).send('Solicitud demasiado grande, máximo 50MB');
   } else {
     next();
   }

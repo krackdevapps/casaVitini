@@ -12,7 +12,7 @@ export const puerto = async (entrada, salida) => {
         }
         const filtroZona = /^[a-zA-Z\/\-_]+$/;
         if (!filtroZona.test(zonaRaw)) {
-            const error = "Las rutas de la zonas solo admiten minusculas y mayusculas junto con barras, nada mas ni siqueira espacios";
+            const error = "Las rutas de las zonas solo admiten minúsculas y mayúsculas junto con barras, nada más ni siquiera espacios.";
             throw new Error(error);
         }
         const arbol = zonaRaw
@@ -67,7 +67,7 @@ export const puerto = async (entrada, salida) => {
         const estructura = exploradorArbol(zonas, ruta)
         const X = estructura[arbol.pop()]
         if (typeof X !== "function") {
-            const error = "Dentro de esta zona no hay ninguna funcion."
+            const error = "Dentro de esta zona no hay ninguna función."
             throw new Error(error)
         }
 

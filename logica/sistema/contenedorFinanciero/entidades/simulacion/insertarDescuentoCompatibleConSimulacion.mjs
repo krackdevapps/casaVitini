@@ -63,7 +63,7 @@ export const insertarDescuentoCompatibleConSimulacion = async (data) => {
         ofertaFormateada.autorizacion = "aceptada"
 
         if (ofertaFormateada.oferta.ofertaUID !== String(ofertaUID)) {
-            const error = "La oferta seleccionada no es compatible condicionalmente con esta reserva. Si desea igualmente aplicar los descuentos de esta oferta hazlo mediante el boton de insertar descuentos"
+            const error = "La oferta seleccionada no es compatible condicionalmente con esta reserva. Si desea igualmente aplicar los descuentos de esta oferta, hazlo mediante el botón de insertar descuentos."
             throw new Error(error)
         }
 
@@ -85,7 +85,7 @@ export const insertarDescuentoCompatibleConSimulacion = async (data) => {
         })
         const capaImpuestos = data.capaImpuestos
         if (capaImpuestos !== "si" && capaImpuestos !== "no") {
-            const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos en si o no"
+            const error = "El procesador de precios está mal configurado, necesita parámetros capaImpuestos en sí o no."
             throw new Error(error)
         }
         if (capaImpuestos === "si") {

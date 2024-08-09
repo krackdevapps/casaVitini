@@ -9,7 +9,7 @@ export const controlCaducidadEnlacesDePago = async () => {
 
         const enlacesDePagoCaducados = await eliminarEnlacesDePagoPorCaducidad(fechaActual)
         if (enlacesDePagoCaducados.length === 0) {
-            const ok = "Ningun enlace ha caducado"
+            const ok = "Ningún enlace ha caducado."
             return ok
         }
         if (enlacesDePagoCaducados.length > 0) {

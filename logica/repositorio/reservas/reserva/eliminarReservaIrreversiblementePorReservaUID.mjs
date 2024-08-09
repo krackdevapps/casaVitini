@@ -10,7 +10,7 @@ export const eliminarReservaIrreversiblementePorReservaUID = async (reservaUID) 
         `;
         const resuelve = await conexion.query(consulta, [reservaUID]);
         if (resuelve.rowCount === 0) {
-            const error = "No existe la reservas que quieres eliminar";
+            const error = "No existe la reserva que quieres eliminar.";
             throw new Error(error);
         }
         return resuelve.rows[0]

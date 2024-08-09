@@ -25,14 +25,14 @@ export const enviarMailReservaConfirmada = async (reservaUID) => {
         const destino = emailDestinoTitular
         const asunto = "Reserva confirmada"
         const mensaje = `<html>
-        Tu reserva esta confirmada a nombre de ${nombreCompletoTitularReserva}. Le enviamos un PDF adjunto al mensaje con el resumen de su reserva para su comomidad.
+        Tu reserva está confirmada a nombre de ${nombreCompletoTitularReserva}. Le enviamos un PDF adjunto al mensaje con el resumen de su reserva para su comodidad.
         <br>
-        El numero de su reserva es: ${reservaUID}
+        El número de su reserva es: ${reservaUID}
         <br>
         Cree su VitiniID para poder tener acceso persistente a la copia de su reserva.
         <br>
         <a href="https://casavitini.com/micasa/reservas/${reservaUID}">Ir a mi reserva (Necesita un VitiniID)</a>
-        <a href="https://casavitini.com/micasa/crear_nueva_cuenta">Crear mi VitiniID (Es rapido y gratuito)</a>
+        <a href="https://casavitini.com/micasa/crear_nueva_cuenta">Crear mi VitiniID (Es rápido y gratuito)</a>
         </html>`
         const pdf = await generadorPDF(reserva)
         const composicionDelMensaje = {

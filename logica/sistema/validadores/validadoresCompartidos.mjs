@@ -54,12 +54,12 @@ export const validadoresCompartidos = {
 
                 const correoElectronico = validadoresCompartidos.tipos.correoElectronico({
                     mail: cliente.correoElectronico,
-                    nombreCampo: "El coreo electronico instroducido",
+                    nombreCampo: "El coreo electrónico introducido",
                     sePermiteVacio: "si"
                 })
                 const telefono = validadoresCompartidos.tipos.telefono({
                     phone: cliente.telefono,
-                    nombreCampo: "El teelfono instroducido",
+                    nombreCampo: "El teléfono introducido",
                     sePermiteVacio: "si"
                 })
 
@@ -83,7 +83,7 @@ export const validadoresCompartidos = {
                         errorSi: "existe"
                     })
                 } else {
-                    const m = "validarClinete necesita el parametro operacion en actualizar o crear"
+                    const m = "validarClinete necesita el parámetro de operación en actualizar o crear"
                     throw new Error(m)
                 }
 
@@ -129,17 +129,17 @@ export const validadoresCompartidos = {
                         usuario
                     })
                     if (otroUsuariosConMismoMail.length > 0) {
-                        const m = "Este mail se esta usando en otra cuenta, por favor escoge otro o recupera tu cuenta."
+                        const m = "Este correo se está usando en otra cuenta, por favor escoge otro o recupera tu cuenta."
                         throw new Error(m)
                     }
                 } else if (operacion === "crear") {
                     const otroUsuariosConMismoMail = await obtenerDatosPersonalesPorMail(mail)
                     if (otroUsuariosConMismoMail.length > 0) {
-                        const m = "Este mail se esta usando en otra cuenta, por favor escoge otro o recupera tu cuenta."
+                        const m = "Este correo se está usando en otra cuenta, por favor escoge otro o recupera tu cuenta."
                         throw new Error(m)
                     }
                 } else {
-                    const error = "El validador de unicidadCorreo esta mal configurado. Si la operacio es actualizar, falta el usuario."
+                    const error = "El validador de unicidadCorreo está mal configurado. Si la operación es actualizar, falta el usuario."
                     throw new Error(error)
                 }
 
@@ -191,7 +191,7 @@ export const validadoresCompartidos = {
                 if (data.mail) {
                     validadoresCompartidos.tipos.correoElectronico({
                         mail: data.mail,
-                        nombreCampo: "El coreo electronico instroducido",
+                        nombreCampo: "El correo electrónico introducido",
                         sePermiteVacio: "no"
                     })
                 }
@@ -199,7 +199,7 @@ export const validadoresCompartidos = {
                 if (data.telefono) {
                     validadoresCompartidos.tipos.telefono({
                         phone: data.telefono,
-                        nombreCampo: "El telefono instroducido",
+                        nombreCampo: "El teléfono introducido",
                         sePermiteVacio: "no"
                     })
                 }
@@ -213,10 +213,10 @@ export const validadoresCompartidos = {
         validarFecha_ISO: async (configuracion) => {
             try {
                 if (!configuracion.hasOwnProperty("nombreCampo")) {
-                    throw new Error("El validador de fechas ISO mal configurado. no encuentra la llave nombreCampo en el objeto");
+                    throw new Error("El validador de fechas ISO mal configurado. No encuentra la llave nombreCampo en el objeto");
                 }
                 if (!configuracion.hasOwnProperty("fecha_ISO")) {
-                    throw new Error("El validador de fechas ISO mal configurado. no encuentra la llave fecha_ISO en el objeto");
+                    throw new Error("El validador de fechas ISO mal configurado. No encuentra la llave fecha_ISO en el objeto");
                 }
 
                 const fecha_ISO = configuracion.fecha_ISO
@@ -234,7 +234,7 @@ export const validadoresCompartidos = {
                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                 const fechaControl = DateTime.fromISO(fecha_ISO, { zone: zonaHoraria }).isValid;
                 if (!fechaControl) {
-                    const error = `${nombreCampo} no es valida, representacion no terraquea`
+                    const error = `${nombreCampo} no es válida, representación no terráquea`
                     throw new Error(error)
                 }
                 return fecha_ISO
@@ -266,7 +266,7 @@ export const validadoresCompartidos = {
                     year: ano
                 }, { zone: zonaHoraria }).isValid;
                 if (!fechaControl) {
-                    const error = "La fecha no es valida, representacion no terraquea"
+                    const error = "La fecha no es válida, representación no terráquea"
                     throw new Error(error)
                 }
                 const estructura = {
@@ -291,7 +291,7 @@ export const validadoresCompartidos = {
                 //Ojo por que esto es nes-ano:
                 const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
                 if (!filtroFecha.test(fechaMesAno)) {
-                    const error = "La fecha no cumple el formato especifico. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante. Por ejemplo 5-2024 o 10-2024";
+                    const error = "La fecha no cumple el formato específico. En este caso se espera una cadena con este formado MM-YYYY. Si el mes tiene un dígito, es un dígito, sin el cero delante. Por ejemplo, 5-2024 o 10-2024";
                     throw new Error(error);
                 }
             } catch (errorCapturado) {
@@ -324,7 +324,7 @@ export const validadoresCompartidos = {
                         throw new Error(error);
                     }
                 } else {
-                    const error = "El validador de fechas validacionVectorail esta mas configurado. Necesita la especificaicon de tipoVector.                    "
+                    const error = "El validador de fechas validacionVectorail está más configurado. Necesita la especificación de tipoVector"
                     throw new Error(error)
                 }
 
@@ -337,7 +337,7 @@ export const validadoresCompartidos = {
             try {
                 const filtro = /(1[0-2]|[1-9])$/
                 if (!filtro.test(mes)) {
-                    const error = "El mes (mesCalendario) debe de ser una cadena que contenga un numero del 1 al 12";
+                    const error = "El mes (mesCalendario) debe de ser una cadena que contenga un número del 1 al 12";
                     throw new Error(error);
                 }
             } catch (errorCapturado) {
@@ -370,7 +370,7 @@ export const validadoresCompartidos = {
 
                 await validadoresCompartidos.fechas.validarFecha_ISO({
                     fecha_ISO: fechaInicioRango_ISO,
-                    nombreCampo: "La fecha fe inicio del rango"
+                    nombreCampo: "La fecha de inicio del rango"
                 })
                 await validadoresCompartidos.fechas.validarFecha_ISO({
                     fecha_ISO: fechaFinRango_ISO,
@@ -392,7 +392,7 @@ export const validadoresCompartidos = {
                 if (!clave &&
                     typeof clave !== "srting" &&
                     clave.length < 12) {
-                    const error = "La contraseña debe de tener un minimo de 12 caracteres"
+                    const error = "La contraseña debe de tener un mínimo de 12 caracteres"
                     throw new Error(error)
                 }
                 let tieneMayuscula = false;
@@ -415,15 +415,15 @@ export const validadoresCompartidos = {
                     }
                 }
                 if (!tieneMayuscula) {
-                    const error = "Por favor ponga como minimo una mayuscula en su contraseña"
+                    const error = "Por favor, ponga como mínimo una mayúscula en su contraseña"
                     throw new Error(error)
                 }
                 if (!tieneNumero) {
-                    const error = "Por favor ponga como minimo un numero en su contraseña"
+                    const error = "Por favor, ponga como mínimo un número en su contraseña"
                     throw new Error(error)
                 }
                 if (!tieneCaracterEspecial) {
-                    const error = "Por favor ponga como minimo un caracter especial en su contraseña, como por ejemplo: ! @ # $ % ^ & * ( ) _ +"
+                    const error = "Por favor ponga como mínimo un carácter especial en su contraseña, como por ejemplo: ! @ # $ % ^ & * ( ) _ +"
                     throw new Error(error)
                 }
             } catch (errorCapturado) {
@@ -445,11 +445,11 @@ export const validadoresCompartidos = {
 
 
             if (!configuracion.hasOwnProperty("string")) {
-                throw new Error("El validador de numeros no encuentra la llave string en el objeto");
+                throw new Error("El validador de números no encuentra la llave string en el objeto");
             }
 
             if (!nombreCampo) {
-                const mensaje = `El validador de cadenas, necesito un nombre de campo.`
+                const mensaje = `El validador de cadenas, necesita un nombre de campo.`
                 throw new Error(mensaje)
             }
             if (typeof string !== "string") {
@@ -458,18 +458,18 @@ export const validadoresCompartidos = {
             }
             if (typeof sePermiteVacio !== "string" &&
                 (sePermiteVacio !== "si" && sePermiteVacio !== "no")) {
-                const mensaje = `El validor de cadena esta mal configurado, sePermiteVacio solo acepta si o no y es obligatorio declararlo en la configuracíon.`
+                const mensaje = `El validador de cadena está mal configurado, sePermiteVacio solo acepta sí o no y es obligatorio declararlo en la configuración.`
                 throw new Error(mensaje)
             }
             if (typeof limpiezaEspaciosAlrededor !== "string" &&
                 (limpiezaEspaciosAlrededor !== "si" && limpiezaEspaciosAlrededor !== "no")) {
-                const mensaje = `El validor de cadena esta mal configurado, limpiezaEspaciosAlrededor solo acepta si o no.`
+                const mensaje = `El validador de cadena está mal configurado, limpiezaEspaciosAlrededor solo acepta si o no.`
                 throw new Error(mensaje)
             }
             if (limpiezaEspaciosInternos &&
                 typeof limpiezaEspaciosInternos !== "string" &&
                 (limpiezaEspaciosInternos !== "si" && limpiezaEspaciosInternos !== "no")) {
-                const mensaje = `El validor de cadena esta mal configurado, limpiezaEspaciosInternos solo acepta si o no.`
+                const mensaje = `El validador de cadena está mal configurado, limpiezaEspaciosInternos solo acepta si o no.`
                 throw new Error(mensaje)
             }
             if (limpiezaEspaciosInternos === "si") {
@@ -479,7 +479,7 @@ export const validadoresCompartidos = {
             if (limpiezaEspaciosInternosGrandes &&
                 typeof limpiezaEspaciosInternosGrandes !== "string" &&
                 (limpiezaEspaciosInternosGrandes !== "si" && limpiezaEspaciosInternosGrandes !== "no")) {
-                const mensaje = `El validor de cadena esta mal configurado, limpiezaEspaciosInternosGrandes solo acepta si o no.`
+                const mensaje = `El validador de cadena está mal configurado, limpiezaEspaciosInternosGrandes solo acepta si o no.`
                 throw new Error(mensaje)
             }
             if (limpiezaEspaciosInternosGrandes === "si") {
@@ -489,11 +489,11 @@ export const validadoresCompartidos = {
             if (soloMinusculas &&
                 typeof soloMayusculas !== "string" &&
                 (soloMinusculas !== "si" && soloMinusculas !== "no")) {
-                const mensaje = `El validor de cadena esta mal configurado, soloMinusculas solo acepta si o no.`
+                const mensaje = `El validador de cadena está mal configurado, soloMinusculas solo acepta si o no.`
                 throw new Error(mensaje)
             }
             if (soloMayusculas !== "si" && soloMayusculas !== "no") {
-                const mensaje = `El validor de cadena esta mal configurado, soloMayusculas solo acepta si o no.`
+                const mensaje = `El validador de cadena está mal configurado, soloMayusculas solo acepta si o no.`
                 throw new Error(mensaje)
             }
             if (limpiezaEspaciosAlrededor === "si") {
@@ -504,7 +504,7 @@ export const validadoresCompartidos = {
             if (sePermiteVacio === "si" && string === "") {
                 return string
             } else if (string.length === 0 || string === "") {
-                const mensaje = `${nombreCampo} esta vacío.`
+                const mensaje = `${nombreCampo} está vacío.`
                 throw new Error(mensaje)
             }
 
@@ -520,7 +520,7 @@ export const validadoresCompartidos = {
                 try {
                     const filtro = /^[a-zA-Z0-9_\-\/\.\@]+$/;
                     if (!filtro.test(string)) {
-                        const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros y los siguientes caracteres: _, -, ., / y @`
+                        const mensaje = `${nombreCampo} solo acepta una cadena de mayúsculas, minúsculas, números y los siguientes caracteres: _, -, ., / y @`
                         throw new Error(mensaje)
                     }
                 } catch (errorCapturado) {
@@ -530,7 +530,7 @@ export const validadoresCompartidos = {
                 try {
                     const filtro = /^[a-zA-Z0-9]+$/;
                     if (!filtro.test(string)) {
-                        const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas y numeros.`
+                        const mensaje = `${nombreCampo} solo acepta una cadena de mayúsculas, minúsculas y números.`
                         throw new Error(mensaje)
                     }
                 } catch (errorCapturado) {
@@ -541,7 +541,7 @@ export const validadoresCompartidos = {
                     const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ\+@\u00E1\u00E9\u00ED\u00F3\u00FA\u00C1\u00C9\u00CD\u00D3\u00DA]+$/g;
 
                     if (!filtro.test(string)) {
-                        const mensaje = `${nombreCampo} solo acepta una cadena de mayusculas, minusculas, numeros, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y /`
+                        const mensaje = `$${nombreCampo} solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y /`
                         throw new Error(mensaje)
                     }
 
@@ -570,13 +570,13 @@ export const validadoresCompartidos = {
 
                     const filtro = /^\d+\.\d{2}$/
                     if (!filtro.test(string)) {
-                        const mensaje = `${nombreCampo} solo acepta una cadena con numeros con dos decimales separados por punto, por ejemplo 00.00`
+                        const mensaje = `${nombreCampo} solo acepta una cadena con números con dos decimales separados por punto, por ejemplo 00.00`
                         throw new Error(mensaje)
                     }
 
                     const impedirCero = configuracion.impedirCero || "si"
                     if (impedirCero !== "si" && impedirCero !== "no") {
-                        const mensaje = `El validor de cadena esta mal configurado, impedirCero solo acepta si o no.`
+                        const mensaje = `El validador de cadena está mal configurado, impedirCero solo acepta si o no.`
                         throw new Error(mensaje)
                     }
 
@@ -591,7 +591,7 @@ export const validadoresCompartidos = {
                     const devuelveUnTipoNumber = configuracion.devuelveUnTipoNumber
                     if (typeof devuelveUnTipoNumber !== "string" &&
                         (devuelveUnTipoNumber !== "si" && devuelveUnTipoNumber !== "no")) {
-                        const mensaje = `El validor de cadena esta mal configurado, devuelveUnTipoNumber solo acepta si o no.`
+                        const mensaje = `El validador de cadena está mal configurado, devuelveUnTipoNumber solo acepta si o no.`
                         throw new Error(mensaje)
                     }
 
@@ -606,23 +606,23 @@ export const validadoresCompartidos = {
                 try {
                     const filtro = /^[0-9]+$/
                     if (!filtro.test(string)) {
-                        const mensaje = `${nombreCampo} solo acepta una cadena con numeros enteros`
+                        const mensaje = `${nombreCampo} solo acepta una cadena con números enteros.`
                         throw new Error(mensaje)
                     }
                     const maximoDeLargo = configuracion.maximoDeLargo
                     if (maximoDeLargo && typeof maximoDeLargo !== "number") {
-                        const mensaje = `El validor de cadena esta mal configurado, maximoDeLargo solo acepta numeros.`
+                        const mensaje = `El validador de cadena está mal configurado, maximoDeLargo solo acepta números.`
                         throw new Error(mensaje)
                     }
                     if (maximoDeLargo) {
                         if (string.length > maximoDeLargo) {
-                            const mensaje = `${nombreCampo} solo acepta un maximo de ${maximoDeLargo} numeros.`
+                            const mensaje = `${nombreCampo} solo acepta un máximo de ${maximoDeLargo} números.`
                             throw new Error(mensaje)
                         }
                     }
                     const impedirCero = configuracion.impedirCero || "si"
                     if (impedirCero !== "si" && impedirCero !== "no") {
-                        const mensaje = `El validor de cadena esta mal configurado, impedirCero solo acepta si o no.`
+                        const mensaje = `El validador de cadena está mal configurado, impedirCero solo acepta si o no.`
                         throw new Error(mensaje)
                     }
 
@@ -636,7 +636,7 @@ export const validadoresCompartidos = {
                     const devuelveUnTipoNumber = configuracion.devuelveUnTipoNumber
                     if (typeof devuelveUnTipoNumber !== "string" &&
                         (devuelveUnTipoNumber !== "si" && devuelveUnTipoNumber !== "no")) {
-                        const mensaje = `El validor de cadena esta mal configurado, devuelveUnTipoNumber solo acepta si o no.`
+                        const mensaje = `El validador de cadena está mal configurado, devuelveUnTipoNumber solo acepta si o no.`
                         throw new Error(mensaje)
                     }
                     if (devuelveUnTipoNumber === "si") {
@@ -660,7 +660,7 @@ export const validadoresCompartidos = {
                 try {
                     const filtro = /^[A-Za-z0-9_\-/%=:]*$/;
                     if (!filtro.test(string)) {
-                        const mensaje = `${nombreCampo} solo acepta una cadena de minusculas, mayusculas, numeros y estos caracteres: _, \, %, -, /, = y :`
+                        const mensaje = `${nombreCampo} solo acepta una cadena de minúsculas, mayúsculas, números y estos caracteres: _, \, %, -, /, = y :`
                         throw new Error(mensaje)
                     }
                 } catch (errorCapturado) {
@@ -668,7 +668,7 @@ export const validadoresCompartidos = {
                 }
             }
             else {
-                const mensaje = `El validador de cadenas, necesito un identificador de filtro valido`
+                const mensaje = `El validador de cadenas, necesita un identificador de filtro válido`
                 throw new Error(mensaje)
             }
             return string
@@ -685,57 +685,57 @@ export const validadoresCompartidos = {
 
 
             if (!configuracion.hasOwnProperty("number")) {
-                throw new Error("El validador de numeros no encuentra la llave number en el objeto");
+                throw new Error("El validador de números no encuentra la llave number en el objeto");
             }
 
             if (!configuracion.hasOwnProperty("nombreCampo")) {
-                throw new Error("El validador de numeros no encuentra la llave nombreCampo en el objeto");
+                throw new Error("El validador de números no encuentra la llave nombreCampo en el objeto");
             }
 
 
             if (!nombreCampo) {
-                const mensaje = `El validador de cadenas, necesito un nombre de campo.`
+                const mensaje = `El validador de cadenas, necesita un nombre de campo.`
                 throw new Error(mensaje)
             }
             if (typeof number !== "number") {
-                const mensaje = `${nombreCampo} debe de ser un numero.`
+                const mensaje = `${nombreCampo} debe de ser un número.`
                 throw new Error(mensaje)
             }
             if (typeof sePermiteVacio !== "string" &&
                 (sePermiteVacio !== "si" && sePermiteVacio !== "no")) {
-                const mensaje = `El validor de cadena esta mal configurado, sePermiteVacio solo acepta si o no y es obligatorio declararlo en la configuracíon.`
+                const mensaje = `El validador de cadena está mal configurado, sePermiteVacio solo acepta sí o no y es obligatorio declararlo en la configuración.`
                 throw new Error(mensaje)
             }
 
             if (typeof limpiezaEspaciosAlrededor !== "string" &&
                 (limpiezaEspaciosAlrededor !== "si" && limpiezaEspaciosAlrededor !== "no")) {
-                const mensaje = `El validor de cadena esta mal configurado, limpiezaEspaciosAlrededor solo acepta si o no.`
+                const mensaje = `El validador de cadena está mal configurado, limpiezaEspaciosAlrededor solo acepta si o no.`
                 throw new Error(mensaje)
             }
 
             if (sePermitenNegativos &&
                 typeof sePermitenNegativos !== "string" &&
                 (sePermitenNegativos !== "si" && sePermitenNegativos !== "no")) {
-                const mensaje = `El validor de numero esta mal configurado, sePermitenNegativos solo acepta si o no.`
+                const mensaje = `El validador de número está mal configurado, sePermitenNegativos solo acepta si o no.`
                 throw new Error(mensaje)
             }
             if (sePermitenNegativos === "no") {
                 if (number < 0) {
-                    const mensaje = `No se permiten numeros negativos, por favor revisalo.`
+                    const mensaje = `No se permiten números negativos, por favor revísalo.`
                     throw new Error(mensaje)
                 }
             }
 
             if (sePermiteCero === "no") {
                 if (number === 0) {
-                    const mensaje = `No se permiten el cero, por favor revisalo.`
+                    const mensaje = `No se permite el cero, por favor revísalo.`
                     throw new Error(mensaje)
                 }
             }
             if (filtro === "numeroSimple") {
                 try {
                     if (!Number.isInteger(number)) {
-                        const mensaje = `${nombreCampo} solo acepta numeros enteros, sin decimales.`
+                        const mensaje = `${nombreCampo} solo acepta números enteros, sin decimales.`
                         throw new Error(mensaje)
                     }
                 } catch (errorCapturado) {
@@ -743,7 +743,7 @@ export const validadoresCompartidos = {
                 }
 
             } else {
-                const mensaje = `El validador de numeros, necesito un identificador de filtro valido`
+                const mensaje = `El validador de números, necesitó un identificador de filtro válido`
                 throw new Error(mensaje)
 
             }
@@ -758,19 +758,19 @@ export const validadoresCompartidos = {
                 const sePermiteVacio = configuracion.sePermiteVacio
 
                 if (!configuracion.hasOwnProperty("mail")) {
-                    throw new Error("El validador de mail no encuentra la llave mail en el objeto");
+                    throw new Error("El validador de correo no encuentra la llave de correo en el objeto.");
                 }
 
                 if (!configuracion.hasOwnProperty("nombreCampo")) {
-                    throw new Error("El validador de numeros no encuentra la llave nombreCampo en el objeto");
+                    throw new Error("El validador de números no encuentra la llave nombreCampo en el objeto");
                 }
                 if (typeof sePermiteVacio !== "mail" &&
                     (sePermiteVacio !== "si" && sePermiteVacio !== "no")) {
-                    const mensaje = `El validor de mail esta mal configurado, sePermiteVacio solo acepta si o no y es obligatorio declararlo en la configuracíon.`
+                    const mensaje = `El validador de mail está mal configurado, sePermiteVacio solo acepta sí o no y es obligatorio declararlo en la configuración.`
                     throw new Error(mensaje)
                 }
                 if (typeof mail !== "string") {
-                    const error = "El campo de correo electroníco debe de ser una cadena"
+                    const error = "El campo de correo electrónico debe de ser una cadena."
                     throw new Error(error)
                 }
                 mail = mail
@@ -779,14 +779,14 @@ export const validadoresCompartidos = {
                 if (sePermiteVacio === "si" && mail === "") {
                     return mail
                 } else if (mail.length === 0 || mail === "") {
-                    const mensaje = `${nombreCampo} esta vacío.`
+                    const mensaje = `${nombreCampo} está vacío.`
                     throw new Error(mensaje)
                 }
 
                 const filtroCorreoElectronico = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
 
                 if (!filtroCorreoElectronico.test(mail)) {
-                    const error = "El campo de correo electroníco no cumple con el formato esperado, el formato esperado es asi como usuario@servidor.com"
+                    const error = "El campo de correo electrónico no cumple con el formato esperado. El formato esperado es así como usuario@servidor.com"
                     throw new Error(error)
                 }
                 return mail
@@ -807,21 +807,21 @@ export const validadoresCompartidos = {
                 }
 
                 if (!configuracion.hasOwnProperty("nombreCampo")) {
-                    throw new Error("El validador de mail no encuentra la llave nombreCampo en el objeto");
+                    throw new Error("El validador de correo no encuentra la llave nombreCampo en el objeto");
                 }
                 if (sePermiteVacio === "si" && phone === "") {
                     return phone
                 } else if (phone.length === 0 || phone === "") {
-                    const mensaje = `${nombreCampo} esta vacío.`
+                    const mensaje = `${nombreCampo} está vacío.`
                     throw new Error(mensaje)
                 }
 
                 if (!phone) {
-                    const error = "El campo del telefono está vacío."
+                    const error = "El campo del teléfono está vacío."
                     throw new Error(error)
                 }
                 if (typeof phone !== "string") {
-                    const error = "el campo Teléfono debe de ser una cadena."
+                    const error = "El campo teléfono debe de ser una cadena."
                     throw new Error(error)
                 }
                 const filtroTelefono = /[^0-9]+/g
@@ -831,7 +831,7 @@ export const validadoresCompartidos = {
                     .trim()
 
                 if (filtroTelefono.test(telefonoLimpio)) {
-                    const error = "el campo Teléfono no cumple con el formato esperado, el formado esperado es una cadena con numeros"
+                    const error = "El campo Teléfono no cumple con el formato esperado. El formado esperado es una cadena con números."
                     throw new Error(error)
                 }
                 return telefonoLimpio
@@ -847,7 +847,7 @@ export const validadoresCompartidos = {
                 const sePermiteArrayVacio = configuracion?.sePermiteArrayVacio || "no"
 
                 if (!nombreCampo) {
-                    const mensaje = `El validador de arrays, necesito un nombre de campo.`
+                    const mensaje = `EEl validador de arrays, necesita un nombre de campo.`
                     throw new Error(mensaje)
                 }
                 if (!Array.isArray(array) || array == null || array === undefined) {
@@ -858,7 +858,7 @@ export const validadoresCompartidos = {
 
 
                 if (sePermiteArrayVacio !== "no" && sePermiteArrayVacio !== "si") {
-                    const error = `${nombreCampo} el valdidador array mal configurado, si se define sePermiteArrayVacio tiene que esta en si o no. Predeterminadamente es no.`;
+                    const error = `${nombreCampo} el valdidador array mal configurado, si se define sePermiteArrayVacio tiene que está en sí o no. Predeterminadamente es no.`;
                     throw new Error(error);
                 }
 
@@ -872,7 +872,7 @@ export const validadoresCompartidos = {
                     array.forEach((item, posicion) => {
                         validadoresCompartidos.tipos.cadena({
                             string: item,
-                            nombreCampo: `${nombreCampo} es un array que en la posicion ${(posicion + 1)} tiene un tipo que no es cadena, este array solo acepta cadenas.`,
+                            nombreCampo: `${nombreCampo} es un array que en la posición ${(posicion + 1)} tiene un tipo que no es cadena. Este array solo acepta cadenas.`,
                             filtro: "strictoIDV",
                             sePermiteVacio: "no",
                             limpiezaEspaciosAlrededor: "si"
@@ -882,7 +882,7 @@ export const validadoresCompartidos = {
                     array.forEach((item, posicion) => {
                         validadoresCompartidos.tipos.cadena({
                             string: item,
-                            nombreCampo: `${nombreCampo} es un array que en la posicion ${(posicion + 1)}`,
+                            nombreCampo: `${nombreCampo} es un array que en la posición ${(posicion + 1)}`,
                             filtro: "strictoConEspacios",
                             sePermiteVacio: "no",
                             limpiezaEspaciosAlrededor: "si"
@@ -892,7 +892,7 @@ export const validadoresCompartidos = {
                     array.every((cadena, index) => {
                         validadoresCompartidos.tipos.cadena({
                             string: cadena,
-                            nombreCampo: `En la posicion ${index} del array debe haber una cadena con numeros`,
+                            nombreCampo: `En la posición ${index} del array debe haber una cadena con números`,
                             filtro: "cadenaConNumerosEnteros",
                             sePermiteVacio: "no",
                             limpiezaEspaciosAlrededor: "si"
@@ -903,7 +903,7 @@ export const validadoresCompartidos = {
                 const sePermitenDuplicados = configuracion.sePermitenDuplicados
                 if (sePermitenDuplicados) {
                     if (sePermitenDuplicados !== "si" && sePermitenDuplicados !== "no") {
-                        const mensaje = `El validor de cadena esta mal configurado, sePermitenDuplicados solo acepta si o no.`
+                        const mensaje = `El validador de cadena está mal configurado, sePermitenDuplicados solo acepta si o no.`
                         throw new Error(mensaje)
                     }
                     if (sePermitenDuplicados === "no") {
@@ -916,7 +916,7 @@ export const validadoresCompartidos = {
                         });
                         const controlDuplicados = new Set(arrayFiltrado).size !== arrayFiltrado.length;
                         if (controlDuplicados) {
-                            const error = `${nombreCampo} que es un array filtrado, tiene duplicados y no deberia tener.`;
+                            const error = `${nombreCampo} que es un array filtrado, tiene duplicados y no debería tener.`;
                             throw new Error(error);
                         }
                     }
@@ -935,12 +935,12 @@ export const validadoresCompartidos = {
                 const nombreCampo = configuracion.nombreCampo
 
                 if (!nombreCampo) {
-                    const mensaje = `El validador de objetos, necesito un nombre de campo.`
+                    const mensaje = `El validador de objetos, necesita un nombre de campo.`
                     throw new Error(mensaje)
                 }
                 const control = objetoLiteral !== null && typeof objetoLiteral === 'object' && objetoLiteral.constructor === Object;
                 if (!control) {
-                    const error = `${nombreCampo} se esperara que fuera un objeto literal`;
+                    const error = `${nombreCampo} se esperará que fuera un objeto literal`;
                     throw new Error(error);
                 }
                 return objetoLiteral
@@ -996,7 +996,7 @@ export const validadoresCompartidos = {
                 throw new Error(error);
             }
             if (!filtroHora.test(hora)) {
-                const error = `${nombreCampo} debe de ser 00:00 y no puede ser superior a 23:59, si quieres poner la hora por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35`;
+                const error = `${nombreCampo} debe de ser 00:00 y no puede ser superior a 23:59. Si quieres poner la hora, por ejemplo 7:35 -> Tienes que poner el 0 delante del siete, por ejemplo 07:35`;
                 throw new Error(error);
             }
             return hora
@@ -1087,7 +1087,7 @@ export const validadoresCompartidos = {
         limiteCienNumero: (cantidad) => {
             try {
                 if (new Decimal(cantidad).greaterThan(100)) {
-                    const error = "Cuidado! No se puede acepatar un porcentaje superior a 100% por que sino la oferta podria generar numeros negativos.";
+                    const error = "Cuidado! No se puede aceptar un porcentaje superior a 100% porque, sino la oferta podría generar números negativos.";
                     throw new Error(error);
                 }
             } catch (errorCapturado) {

@@ -40,7 +40,7 @@ export const obtenerCamaComoEntidadPorCamaIDVPorTipoIDV = async (data) => {
         } else if (errorSi === "desactivado") {
             return resuelve.rows[0]
         } else {
-            const error = "el adaptador obtenerCamaComoEntidadPorCamaIDVPorTipoIDV necesita errorSi en existe, noExiste o desactivado"
+            const error = "El adaptador obtenerCamaComoEntidadPorCamaIDVPorTipoIDV necesita errorSi en existe, noExiste o desactivado"
             throw new Error(error)
         }
     } catch (errorCapturado) {

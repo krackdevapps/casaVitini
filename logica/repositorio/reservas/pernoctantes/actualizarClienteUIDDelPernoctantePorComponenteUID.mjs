@@ -23,7 +23,7 @@ export const actualizarClienteUIDDelPernoctantePorComponenteUID = async (data) =
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha podido actualizar al pernoctante dentro de la reserva";
+            const error = "No se ha podido actualizar al pernoctante dentro de la reserva.";
             throw new Error(error);
         }
         return resuelve.rows[0]

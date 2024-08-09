@@ -68,7 +68,7 @@ export const actualizarSobreControlNoche = async (entrada) => {
                 array: operacionIDV,
                 articulo: "el"
             })
-            const error = `el campo tipoOperacion solo permite los siguientes identidficadores visuales de operacion ${operacionesUI}`
+            const error = `El campo tipoOperacion solo permite los siguientes identificadores visuales de operación ${operacionesUI}`
             throw new Error(error)
         }
 

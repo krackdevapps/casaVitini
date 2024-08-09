@@ -25,7 +25,7 @@ export const validarComportamiento = async (comportamiento) => {
 
             const llaves_objeto_nivel_1 = Object.keys(contenedor)
             if (llaves_objeto_nivel_1.length > llaves_nivel_1.length) {
-                const m = `En el objeto de ${tipo} no se esperan mas de ${llaves_nivel_1.length} llaves`
+                const m = `En el objeto de ${tipo} no se esperan más de ${llaves_nivel_1.length} llaves`
                 throw new Error(m)
             }
 
@@ -35,7 +35,7 @@ export const validarComportamiento = async (comportamiento) => {
             });
             const fechaFinal_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: contenedor.fechaFinal,
-                nombreCampo: "La fecha final del comportameinto"
+                nombreCampo: "La fecha final del comportamiento"
             });
 
             await validadoresCompartidos.fechas.validacionVectorial({
@@ -51,7 +51,7 @@ export const validarComportamiento = async (comportamiento) => {
             });
             const fechaFinal_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: contenedor.fechaFinal,
-                nombreCampo: "La fecha final del comportameinto"
+                nombreCampo: "La fecha final del comportamiento"
             });
 
             await validadoresCompartidos.fechas.validacionVectorial({
@@ -118,7 +118,7 @@ export const validarComportamiento = async (comportamiento) => {
 
             const llaves_objeto_nivel_1 = Object.keys(contenedor)
             if (llaves_objeto_nivel_1.length > llaves_nivel_1.length) {
-                const m = `En el objeto de ${tipo} no se esperan mas de ${llaves_nivel_1.length} llaves`
+                const m = `En el objeto de ${tipo} no se esperan más de ${llaves_nivel_1.length} llaves`
                 throw new Error(m)
             }
  
@@ -141,7 +141,7 @@ export const validarComportamiento = async (comportamiento) => {
 
             const llaves_objeto_nivel_1_apartamentos = Object.keys(detallesApartamento)
             if (llaves_objeto_nivel_1_apartamentos.length > llaves_nivel_1_apartamentos.length) {
-                const m = "En el objeto de porRango no se esperan mas de 4 llaves"
+                const m = "En el objeto de porRango no se esperan más de 4 llaves"
                 throw new Error(m)
             }
 
@@ -158,7 +158,7 @@ export const validarComportamiento = async (comportamiento) => {
 
             const apartamentoIDV_minusculas = apartamentoIDV.toLowerCase()
             if (controladorIDVRepetidos.hasOwnProperty(apartamentoIDV_minusculas)) {
-                const error = `El identificador visual ${apartamentoIDV} esta repetido en el array de apartamentos`;
+                const error = `El identificador visual ${apartamentoIDV} está repetido en el array de apartamentos`;
                 throw new Error(error);
             }
             controladorIDVRepetidos[apartamentoIDV_minusculas] = null
@@ -174,7 +174,7 @@ export const validarComportamiento = async (comportamiento) => {
                 simboloIDV !== "reducirPorcentaje" &&
                 simboloIDV !== "precioEstablecido"
             ) {
-                const error = `El campo simbolo de ${apartamentoIDV} solo admite aumentoPorcentaje,aumentoCantidad,reducirCantidad,reducirPorcentaje y precioEstablecido`;
+                const error = `El campo símbolo de ${apartamentoIDV} solo admite aumentoPorcentaje, aumentoCantidad, reducirCantidad, reducirPorcentaje y precioEstablecido`;
                 throw new Error(error);
             }
             validadoresCompartidos.tipos.cadena({

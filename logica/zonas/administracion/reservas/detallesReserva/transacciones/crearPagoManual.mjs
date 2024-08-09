@@ -128,7 +128,7 @@ export const crearPagoManual = async (entrada) => {
             estructuraFinal.detallesDelPago = pagoUID;
 
         } else if (plataformaDePago === "pasarela") {
-            const deshabilitado = "La opcion de asociar un pago a la pasarela esta temporalmente deshabilitada";
+            const deshabilitado = "La opción de asociar un pago a la pasarela está temporalmente deshabilitada.";
             throw new Error(deshabilitado);
 
             const pagoUIDPasarela = validadoresCompartidos.tipos.cadena({
@@ -155,10 +155,10 @@ export const crearPagoManual = async (entrada) => {
                 let error;
                 switch (errorUID) {
                     case "NOT_FOUND":
-                        error = "La pasarela informa de que el idenficador de pago que tratas de asocias con Casa Vitini no existe, por favor revisa el identificador de pago";
+                        error = "La pasarela informa de que el identificador de pago que tratas de asociar con Casa Vitini no existe. Por favor, revisa el identificador de pago.";
                         throw new Error(error);
                     default:
-                        error = "La pasarela informa de un error generico";
+                        error = "La pasarela informa de un error genérico";
                         throw new Error(error);
                 }
             }
@@ -181,7 +181,7 @@ export const crearPagoManual = async (entrada) => {
                 //pagadorPasaporte: pagadorPasaporte
             };
             const pagoUID = await sql.insertarPago(nuevoPago);
-            estructuraFinal.ok = "Se ha insertado los datos importados de la pasarela";
+            estructuraFinal.ok = "Se han insertado los datos importados de la pasarela.";
             estructuraFinal.detallesDelPago = pagoUID;
         } else if (plataformaDePago === "tarjeta") {
             const cantidad_ = cantidadValidada(cantidad)

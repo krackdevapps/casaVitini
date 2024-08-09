@@ -37,7 +37,7 @@ export const actualizarAutorizacionOfertaPorReservaUIDPorSimulacionUID = async (
     ]
     const resuelve = await conexion.query(consulta, parametros);
     if (resuelve.rowCount === 0) {
-      const error = "No existe ninguna oferta dentro del contenedorFinanciero de la reserva con los datos de seleccion pasados."
+      const error = "No existe ninguna oferta dentro del contenedorFinanciero de la reserva con los datos de selección pasados."
       throw new Error(error)
     }
     return resuelve.rows[0]

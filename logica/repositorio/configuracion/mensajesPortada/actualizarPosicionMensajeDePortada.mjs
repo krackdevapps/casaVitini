@@ -21,7 +21,7 @@ export const actualizarPosicionDelMensajeDePortada = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningun mensaje con ese UID para actualizarle la posicion";
+            const error = "No existe ningún mensaje con ese UID para actualizarle la posición.";
             throw new Error(error)
         }
         return resuelve.rows[0]

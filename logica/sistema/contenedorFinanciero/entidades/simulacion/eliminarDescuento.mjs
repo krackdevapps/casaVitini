@@ -10,11 +10,11 @@ export const eliminarDescuento = async (data) => {
         const estructura = data.estructura
         const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaEntrada,
-            nombreCampo: "La fecha de entrada del actualizarDesgloseFinanciero"
+            nombreCampo: "La fecha de entrada"
         })
         const fechaSalida = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaSalida,
-            nombreCampo: "La fecha de salida del actualizarDesgloseFinanciero"
+            nombreCampo: "La fecha de salida "
         })
         await validadoresCompartidos.fechas.validacionVectorial({
             fechaEntrada: data.fechaEntrada,
@@ -23,7 +23,7 @@ export const eliminarDescuento = async (data) => {
         })
         const apartamentosArray = validadoresCompartidos.tipos.array({
             array: data.apartamentosArray,
-            nombreCampo: "El array de apartamentos en el actualizarDesgloseFinanciero",
+            nombreCampo: "El array de apartamentos",
             filtro: "soloCadenasIDV",
             sePermitenDuplicados: "no"
         })
@@ -38,7 +38,7 @@ export const eliminarDescuento = async (data) => {
 
         const ofertaUIDParaEliminar = validadoresCompartidos.tipos.numero({
             number: data?.ofertaUID,
-            nombreCampo: "El campo de ofertaUID dentro del actualizarDesgloseFinanciero",
+            nombreCampo: "El campo de ofertaUID dentro",
             filtro: "numeroSimple",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
@@ -69,7 +69,7 @@ export const eliminarDescuento = async (data) => {
 
         if (origen === "porAdministrador") {
             if (!instantaneaOfertasPorAdministrador[posicion]) {
-                const error = "No existe la posicion"
+                const error = "No existe la posición"
                 throw new Error(error)
             }
 
@@ -81,14 +81,14 @@ export const eliminarDescuento = async (data) => {
 
         if (origen === "porCondicion") {
             if (!instantaneaOfertasPorCondicion[posicion]) {
-                const error = "No existe la posicion"
+                const error = "No existe la posición"
                 throw new Error(error)
             }
             const ofertaUID = instantaneaOfertasPorCondicion[posicion].oferta.ofertaUID
             if (ofertaUIDParaEliminar === ofertaUID) {
                 instantaneaOfertasPorCondicion.splice(posicion, 1);
             } else {
-                const error = `Dentro de la posicion ${posicion}, no se encuentra en ofertaUID ${ofertaUIDParaEliminar}, en esta posicion está el ofertaUID ${ofertaUID}`
+                const error = `Dentro de la posición ${posicion}, no se encuentra en ofertaUID ${ofertaUIDParaEliminar}, en esta posición está el ofertaUID ${ofertaUID}`
                 throw new Error(error)
             }
 

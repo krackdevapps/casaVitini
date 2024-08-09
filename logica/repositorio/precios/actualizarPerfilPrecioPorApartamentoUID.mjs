@@ -16,7 +16,7 @@ export const actualizarPerfilPrecioPorApartamentoUID = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningun perfil de precio que actualizar para este apartamento";
+            const error = "No existe ningún perfil de precio que actualizar para este apartamento.";
             throw new Error(error);
         }
         return resuelve.rows[0]

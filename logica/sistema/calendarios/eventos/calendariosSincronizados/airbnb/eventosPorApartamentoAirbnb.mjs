@@ -10,12 +10,12 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
         const calendarioUID = contenedorDatos.calendarioUID
         const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
         if (!filtroFecha.test(fecha)) {
-            const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante."
+            const error = "La fecha no cumple el formato específico para el calendario. En este caso se espera una cadena con este formado MM-YYYY. Si el mes tiene un dígito, es un dígito, sin el cero delante."
             throw new Error(error)
         }
         const filtroCadena = /^[0-9]+$/;
         if (!filtroCadena.test(calendarioUID) || typeof calendarioUID !== "string") {
-            const error = "1el campo 'calendarioUID' solo puede ser una cadena de letras minúsculas y numeros."
+            const error = "El campo 'calendarioUID' solo puede ser una cadena de letras minúsculas y números."
             throw new Error(error)
         }
         // Validar que le nombre del calendarioUID existe como tal

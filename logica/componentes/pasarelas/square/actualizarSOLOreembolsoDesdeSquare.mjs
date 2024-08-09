@@ -34,7 +34,7 @@ export const actualizarSOLOreembolsoDesdeSquare = async (reembolsoUID) => {
             fechaActualizacion: actualizacionUTC,
         })
         const ok = {
-            ok: "Se ha actualziad correctamente los datos del reembolso en la pasarela"
+            ok: "Se han actualizado correctamente los datos del reembolso en la pasarela."
         };
         return ok;
 }

@@ -909,7 +909,7 @@ const casaVitini = {
                     return casaVitini.componentes.loginUI()
                 } else if (respuestaServidor.tipo === "ROL") {
                     this.controladoresUI.interrumpitTransicionVistas()
-                    const mensaje = "Tu VitiniID no esta autorizado a realizar esta operacíon."
+                    const mensaje = "Tu VitiniID no esta autorizado a realizar esta operación."
                     casaVitini.ui.componentes.advertenciaInmersiva(mensaje)
                     return
                 } else if (respuestaServidor.codigo === "mantenimiento") {
@@ -3985,7 +3985,7 @@ const casaVitini = {
                                 botonZonaHoraria.setAttribute("href", "/micasa/zona_horaria")
                                 botonZonaHoraria.setAttribute("vista", "/micasa/zona_horaria")
                                 botonZonaHoraria.classList.add("miCasa_marcoUsuario_opcion")
-                                botonZonaHoraria.innerText = "Configuracíon de la zona horaria"
+                                botonZonaHoraria.innerText = "Configuración de la zona horaria"
                                 botonZonaHoraria.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                 const botonCerrarSession = document.createElement("a")
                                 botonCerrarSession.setAttribute("class", "botonUsuario")
@@ -7073,7 +7073,7 @@ const casaVitini = {
                                             divPernoctantesSinAlojamiento.setAttribute('componente', 'espacioPernoctantesSinAlojamiento');
                                             const tituloPernoctantesSinHabitacion = document.createElement("div")
                                             tituloPernoctantesSinHabitacion.classList.add("administracion_reservas_detallesReservas_tituloPernoctantesSinHabitacion")
-                                            tituloPernoctantesSinHabitacion.innerText = "Pernoctantes asociados a esta reserva sin habitacíon asignada"
+                                            tituloPernoctantesSinHabitacion.innerText = "Pernoctantes asociados a esta reserva sin habitación asignada"
                                             divPernoctantesSinAlojamiento.appendChild(tituloPernoctantesSinHabitacion)
                                             const contenedorPernoctantesSinHabitacion = document.createElement("div")
                                             contenedorPernoctantesSinHabitacion.classList.add("administracion_reservas_detallesReserva_contenedorPernoctantesSinHabitacion")
@@ -7271,7 +7271,7 @@ const casaVitini = {
                                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                                             const titulo = constructor.querySelector("[componente=titulo]")
-                                            titulo.innerText = "Confirmar la elimiacíon"
+                                            titulo.innerText = "Confirmar la elimiación"
                                             const mensaje = constructor.querySelector("[componente=mensajeUI]")
                                             mensaje.innerText = mensajeUI
 
@@ -7478,7 +7478,7 @@ const casaVitini = {
                                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                                             const titulo = constructor.querySelector("[componente=titulo]")
-                                            titulo.innerText = "Confirmar la elimiacíon"
+                                            titulo.innerText = "Confirmar la elimiación"
                                             const mensaje = constructor.querySelector("[componente=mensajeUI]")
                                             mensaje.innerText = mensajeUI
 
@@ -8488,7 +8488,7 @@ const casaVitini = {
                                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                                             const titulo = constructor.querySelector("[componente=titulo]")
-                                            titulo.innerText = "Confirmar la elimiacíon"
+                                            titulo.innerText = "Confirmar la elimiación"
                                             const mensaje = constructor.querySelector("[componente=mensajeUI]")
                                             mensaje.innerText = mensajeUI
 
@@ -12721,7 +12721,7 @@ const casaVitini = {
                                                     selectorReembolso.appendChild(campoPalabra)
                                                     const botonEliminarReembolso = document.createElement("div")
                                                     botonEliminarReembolso.classList.add("boton_opciones_reembolso_v2")
-                                                    botonEliminarReembolso.innerText = "Confirmar la eliminacíon irreversible del reembolso"
+                                                    botonEliminarReembolso.innerText = "Confirmar la eliminación irreversible del reembolso"
                                                     botonEliminarReembolso.addEventListener("click", () => {
                                                         const metadatosEliminarReembolso = {
                                                             instanciaUIDDetalleDelPago: instanciaUIDDetalleDelPago,
@@ -12835,7 +12835,7 @@ const casaVitini = {
                                                     bloque.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloque")
                                                     bloqueTitulo = document.createElement("div")
                                                     bloqueTitulo.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueTitulo")
-                                                    bloqueTitulo.innerText = "Fecha de creacíon UTC"
+                                                    bloqueTitulo.innerText = "Fecha de creación UTC"
                                                     bloque.appendChild(bloqueTitulo)
                                                     bloqueDato = document.createElement("div")
                                                     bloqueDato.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueDato")
@@ -12848,7 +12848,7 @@ const casaVitini = {
                                                     bloque.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloque")
                                                     bloqueTitulo = document.createElement("div")
                                                     bloqueTitulo.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueTitulo")
-                                                    bloqueTitulo.innerText = "Fecha de creacíon hora local"
+                                                    bloqueTitulo.innerText = "Fecha de creación hora local"
                                                     bloque.appendChild(bloqueTitulo)
                                                     bloqueDato = document.createElement("div")
                                                     bloqueDato.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueDato")
@@ -12861,7 +12861,7 @@ const casaVitini = {
                                                     bloque.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloque")
                                                     bloqueTitulo = document.createElement("div")
                                                     bloqueTitulo.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueTitulo")
-                                                    bloqueTitulo.innerText = "Fecha de actualizacíon UTC"
+                                                    bloqueTitulo.innerText = "Fecha de actualización UTC"
                                                     bloque.appendChild(bloqueTitulo)
                                                     bloqueDato = document.createElement("div")
                                                     bloqueDato.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueDato")
@@ -12876,7 +12876,7 @@ const casaVitini = {
                                                     bloque.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloque")
                                                     bloqueTitulo = document.createElement("div")
                                                     bloqueTitulo.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueTitulo")
-                                                    bloqueTitulo.innerText = "Fecha de actualizacíon UTC"
+                                                    bloqueTitulo.innerText = "Fecha de actualización UTC"
                                                     bloque.appendChild(bloqueTitulo)
                                                     bloqueDato = document.createElement("div")
                                                     bloqueDato.classList.add("administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloqueDato")
@@ -15397,13 +15397,13 @@ const casaVitini = {
                             contenedorCrearCuenta.className = 'miCasa_crearCuenta_contenedorCrearCuenta';
                             const texto = document.createElement('p');
                             texto.className = 'texto padding6';
-                            texto.textContent = 'Si olvidaste tu contraseña o por el contrario, creaste tu VitiniID pero no lo verificaste con tu cuenta de correo electrónico, por favor, proporciona la dirección de correo electrónico con la que creaste tu VitniniID. Te enviaremos un mensaje a tu buzón con un enlace temporal para restablecer tu contraseña o un enlace de verificación para verificar tu cuenta.';
+                            texto.textContent = 'Si olvidaste tu contraseña o, por el contrario, creaste tu VitiniID, pero no lo verificaste con tu cuenta de correo electrónico, por favor, proporciona la dirección de correo electrónico con la que creaste tu VitniniID. Te enviaremos un mensaje a tu buzón con un enlace temporal para restablecer tu contraseña o un enlace de verificación para verificar tu cuenta..';
                             const input = document.createElement('input');
                             input.type = 'text'
                             input.autocomplete = "mail"
                             input.className = 'miCasa_crearCuenta_campo';
                             input.setAttribute('campo', 'mail');
-                            input.placeholder = 'Escribe tu direcíon de correo electroníco';
+                            input.placeholder = 'Escribe tu direción de correo electroníco';
                             const contenedorBotones = document.createElement('div');
                             contenedorBotones.className = 'miCuenta_cambioClave_contenedorBotones';
                             const botonEnviar = document.createElement('div');
@@ -15733,12 +15733,12 @@ const casaVitini = {
                             marcoElastico.style.gap = "4px"
                             const titulo = document.createElement("div")
                             titulo.classList.add("titulo")
-                            titulo.innerText = "El código de verificacíon es erróneo"
+                            titulo.innerText = "El código de verificación es erróneo"
                             marcoElastico.appendChild(titulo)
                             // Añadir banner informativo
                             const contenedorBanner = document.createElement("a")
                             contenedorBanner.classList.add("plaza_reservas_reservaConfirmada_bannerV2")
-                            contenedorBanner.innerText = "El código de verificacíon es erróneo. Revisa el código introducido."
+                            contenedorBanner.innerText = "El código de verificación es erróneo. Revisa el código introducido."
                             marcoElastico.appendChild(contenedorBanner)
                             const botonIniciarReserva = document.createElement("a")
                             botonIniciarReserva.classList.add("plaza_reservas_reservaConfirmada_banner")
@@ -15934,7 +15934,7 @@ const casaVitini = {
                             tituloGlobal.innerText = "Enlace de pago"
                             contenedorEnlaceDePago.appendChild(tituloGlobal)
                             const info = {
-                                titulo: "Informacíon acerca de este enlace de pago",
+                                titulo: "Información acerca de este enlace de pago",
                                 descripcion: respuestaServidor?.error
                             }
                             return casaVitini.ui.componentes.mensajeSimple(info)
@@ -24568,7 +24568,7 @@ const casaVitini = {
 
                     const textoInfo = document.createElement("div")
                     textoInfo.classList.add("texto")
-                    textoInfo.innerText = "Ha aceptado las politicas de privacidad y condiciones de uso de Casa Vitini, si quiere puede revocarlas en cualquier momento borrando la cache de su navegador o pulsando en el boton de revocar de abajo."
+                    textoInfo.innerText = "Ha aceptado las políticas de privacidad y condiciones de uso de Casa Vitini, si quiere, puede revocarlas en cualquier momento borrando la cache de su navegador o pulsando en el botón de revocar de abajo."
                     contenedorDecision.appendChild(textoInfo)
 
                     const botonRechazar = document.createElement("a")

@@ -21,7 +21,7 @@ export const actualizarEventosCalendarioPorCalendarioUID = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
-            const error = "Los datos actualizados tras la sincronizacion se han enviado a la base de datos pero el servidor de base de datos informa que no se ha actualizado el calendario. Vuelve a intentarlo mas tarde.";
+            const error = "Los datos actualizados tras la sincronización se han enviado a la base de datos, pero el servidor de base de datos informa que no se ha actualizado el calendario. Vuelve a intentarlo más tarde.";
             throw new Error(error);
         }
         return resuelve.rows[0]

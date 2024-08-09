@@ -70,7 +70,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
             clienteUID: clienteUID
         })
         if (clienteComoPernoctanteEnLaReserva.componenteUID) {
-            const error = "Este cliente ya es un pernoctante dentro de esta reserva, mejor muevalo de habitacion";
+            const error = "Este cliente ya es un pernoctante dentro de esta reserva, mejor muévalo de habitación";
             throw new Error(error);
         }
         // Buscar reservas que interfieren para verificar que el pernoctante no esta en otra reserva del mismo rango
@@ -93,7 +93,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
             }
         }
         if (interruptorClienteEncontrado === "encontrado") {
-            const error = "Este cliente no se puede anadir a esta reserva por que esta en otra reserva cuyo rango de fecha coincide con esta, dicho de otra manera, si se anadiese este cliente en esta reserva, puede que en un dia o en mas de un dia este cliente estaria asignado a un apartmento distingo en fechas coincidentes";
+            const error = "Este cliente no se puede añadir a esta reserva porque está en otra reserva cuyo rango de fecha coincide con esta. Dicho de otra manera, si se añadiese este cliente en esta reserva, puede que en un día o en más de un día este cliente estaría asignado a un apartamento distingo en fechas coincidentes.";
             throw new Error(error);
         }
         const pernoctanteActualizado = await actualizarPernoctantePoolPorClienteUID({
@@ -104,7 +104,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
         await eliminarClienteDelPool(pernoctanteUID)
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha acualizado el pernoctante correctamente",
+            ok: "Se ha actualizado el pernoctante correctamente",
             pernoctanteUID: pernoctanteUID,
             habitacionUID: pernoctanteActualizado.habitacion,
             nombreCompleto: nombreCompleto,

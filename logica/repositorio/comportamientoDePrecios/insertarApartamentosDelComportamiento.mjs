@@ -32,7 +32,7 @@ export const insertarApartamentosDelComportamientoDePrecio = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha podido insertar los nuevo apartamentos en el comportamiento";
+            const error = "No se han podido insertar los nuevos apartamentos en el comportamiento.";
             throw new Error(error)
         }
         return resuelve.rows[0]

@@ -19,7 +19,7 @@ export const eliminarHabitacionDelApartamento = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se puede eliminar la habitacion por que no se encuentra dentro de la reserva."
+            const error = "No se puede eliminar la habitación porque no se encuentra dentro de la reserva."
             throw new Error(error)
         }
         return resuelve.rows[0]

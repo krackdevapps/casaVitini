@@ -21,20 +21,20 @@ export const obtenerCamasFisicasPorReservaUIDArrayPorCamaIDV = async (data) => {
         const resuelve = await conexion.query(consulta, parametros);
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {
-                const error = "No se encuentra la cama fisisca dentro de la reserva"
+                const error = "No se encuentra la cama física dentro de la reserva."
                 throw new Error(error)
             }
             return resuelve.rows
         } else if (errorSi === "existe") {
             if (resuelve.rowCount > 0) {
-                const error = "Ya existe la cama fisica en la reserva"
+                const error = "Ya existe la cama física en la reserva."
                 throw new Error(error)
             }
             return resuelve.rows
         } else if (errorSi === "desactivado") {
             return resuelve.rows
         } else {
-            const error = "el adaptador obtenerCamasFisicasPorReservaUID necesita errorSi en existe, noExiste o desactivado"
+            const error = "El adaptador obtenerCamasFisicasPorReservaUID necesita errorSi en existe, noExiste o desactivado"
             throw new Error(error)
         }
     } catch (errorCapturado) {

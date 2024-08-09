@@ -13,7 +13,7 @@ export const insertarFilaDatosPersonales = async (usuarioIDX) => {
         `;
         const resuelve = await conexion.query(consulta, [usuarioIDX])
         if (resuelve.rowCount === 0) {
-            const error = "No se ha insertado la ficha de datos personales de este usuario";
+            const error = "No se ha insertado la ficha de datos personales de este usuario.";
             throw new Error(error);
         }
         return resuelve.rows[0]

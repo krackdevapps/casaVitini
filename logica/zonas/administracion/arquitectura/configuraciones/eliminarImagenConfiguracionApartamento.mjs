@@ -34,7 +34,7 @@ export const eliminarImagenConfiguracionApartamento = async (entrada, salida) =>
             imagen: null
         })
         const ok = {
-            ok: "Se ha borrado imagen correctamnte"
+            ok: "Se ha borrado la imagen correctamente"
         };
         return ok
 

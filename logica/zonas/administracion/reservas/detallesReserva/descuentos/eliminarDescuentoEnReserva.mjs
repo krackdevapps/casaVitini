@@ -40,7 +40,7 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
         if (posicion === "0") {
-            const m = "No puedes pasar una posicion en 0, recuerda que aqui las posiciones empiezan a contar desde 1"
+            const m = "No puedes pasar una posición en 0, recuerda que aquí las posiciones empiezan a contar desde 1"
             throw new Errror(m)
         }
 
@@ -55,7 +55,7 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
         if (estadoReserva === "cancelada") {
-            const error = "La reserva esta cancelada, no se puede alterar los descuentos"
+            const error = "LLa reserva está cancelada, no se pueden alterar los descuentos."
             throw new Error(error)
         }
         await campoDeTransaccion("iniciar")
@@ -95,7 +95,7 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
         await campoDeTransaccion("confirmar")
 
         const ok = {
-            ok: "Se ha eliminado correctamente la oferta de la instantanea de la reserva",
+            ok: "Se ha eliminado correctamente la oferta de la instantánea de la reserva",
             orgien: origen,
             ofertaUID: ofertaUID
         }

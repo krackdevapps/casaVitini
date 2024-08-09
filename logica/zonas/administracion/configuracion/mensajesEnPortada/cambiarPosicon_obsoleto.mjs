@@ -44,20 +44,20 @@ export const cambiarPosicon = async (entrada, salida) => {
         ];
         const resuelveActualizacion = await conexion.query(actualizarMensaje, datosDelMensaje);
         if (resuelveActualizacion.rowCount === 0) {
-            const error = "No se ha podido actualizar el mensaje por que no se ha encontrado";
+            const error = "No se ha podido actualizar el mensaje porque no se ha encontrado.";
             throw new Error(error);
         }
         const mensajeGuardado = resuelveEstado.rows[0].mensaje;
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha actualizado correctamente la posicion del mensaje",
+            ok: "Se ha actualizado correctamente la posición del mensaje.",
             mensajeUID: mensajeUID,
             mensaje: atob(mensajeGuardado)
         };
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-        throw errorFinal
+        throw errorCapturado
     }
 
 }

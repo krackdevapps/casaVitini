@@ -41,7 +41,7 @@ export const reconstruirDesgloseDesdeInstantaneas = async (entrada) => {
         })
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha reconstruido el desglose desde las instantaneas"
+            ok: "Se ha reconstruido el desglose desde las instantáneas"
         }
         return ok
     } catch (errorCapturado) {

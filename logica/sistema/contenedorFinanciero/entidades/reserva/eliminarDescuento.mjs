@@ -69,7 +69,7 @@ export const eliminarDescuento = async (data) => {
 
         if (origen === "porAdministrador") {
             if (!instantaneaOfertasPorAdministrador[posicion]) {
-                const error = "No existe la posicion"
+                const error = "No existe la posición"
                 throw new Error(error)
             }
 
@@ -81,14 +81,14 @@ export const eliminarDescuento = async (data) => {
 
         if (origen === "porCondicion") {
             if (!instantaneaOfertasPorCondicion[posicion]) {
-                const error = "No existe la posicion"
+                const error = "No existe la posición"
                 throw new Error(error)
             }
             const ofertaUID = instantaneaOfertasPorCondicion[posicion].oferta.ofertaUID
             if (ofertaUIDParaEliminar === ofertaUID) {
                 instantaneaOfertasPorCondicion.splice(posicion, 1);
             } else {
-                const error = `Dentro de la posicion ${posicion}, no se encuentra en ofertaUID ${ofertaUIDParaEliminar}, en esta posicion está el ofertaUID ${ofertaUID}`
+                const error = `Dentro de la posición ${posicion}, no se encuentra en ofertaUID ${ofertaUIDParaEliminar}, en esta posición está el ofertaUID ${ofertaUID}`
                 throw new Error(error)
             }
 

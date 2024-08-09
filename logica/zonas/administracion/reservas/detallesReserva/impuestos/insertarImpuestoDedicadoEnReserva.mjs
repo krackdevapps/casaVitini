@@ -60,7 +60,7 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
         if (estadoReserva === "cancelada") {
-            const error = "La reserva esta cancelada, es inmutable"
+            const error = "La reserva está cancelada, es inmutable."
             throw new Error(error)
         }
 
@@ -110,7 +110,7 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
         })
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha insertado el impuesto correctamen el impuesto dedicado en la reserva",
+            ok: "Se ha insertado el impuesto correctamente el impuesto dedicado en la reserva",
             reservaUID,
             impuestoDedicado: estructura
         }

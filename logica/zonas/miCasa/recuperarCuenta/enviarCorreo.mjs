@@ -51,7 +51,7 @@ export const enviarCorreo = async (entrada) => {
 
         const datosDelUsuario = await obtenerDatosPersonalesPorMail(mail)
         if (!datosDelUsuario?.mail) {
-            const error = "La dirección de correo electrònico no consta en nínguna cuenta de usuario. Registrate y crea tu VitiniID si lo neceistas.";
+            const error = "La dirección de correo electrónico no consta en ninguna cuenta de usuario. Regístrate y crea tu VitiniID si lo necesitas.";
             throw new Error(error);
         }
 
@@ -79,7 +79,7 @@ export const enviarCorreo = async (entrada) => {
             const origen = process.env.CORREO_DIRRECION_DE_ORIGEN;
             const destino = mail;
             const asunto = "Recuperar tu VitiniID";
-            const mensaje = `<html>Aquí tíenes el enlace para recuperar tu cuenta. Este enlace tiene una duración de 30 minutos. <a href="https://${hostActual}/micasa/recuperar_cuenta/${codigoGenerado}">Recuperar mi cuenta</a>
+            const mensaje = `Aquí tienes el enlace para recuperar tu cuenta. Este enlace tiene una duración de 30 minutos. <a href="https://${hostActual}/micasa/recuperar_cuenta/${codigoGenerado}">Recuperar mi cuenta</a>
                     <br>
                     Casa Vitini
                     </html>`;
@@ -108,9 +108,9 @@ export const enviarCorreo = async (entrada) => {
             const origen = process.env.CORREO_DIRRECION_DE_ORIGEN;
             const destino = mail;
             const asunto = "Verifica tu mail";
-            const mensaje = `<html>Aquí tíenes el enlace de verificación. Los enlaces de verificación tienen una validez de una hora desde que se generan.
+            const mensaje = `<html>Aquí tienes el enlace de verificación. El enlace tiene una validez de una hora desde que se genera.
                     <br>
-                    <a href="https://casavitini.com/micasa/verificar_cuenta/${codigoGenerado}">Verificar mi mail</a>
+                    <a href="https://casavitini.com/micasa/verificar_cuenta/${codigoGenerado}">Verificar mi correo.</a>
                     <br>
                     Casa Vitini
                     </html>`;

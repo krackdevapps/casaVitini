@@ -66,7 +66,7 @@ export const crearTitular = async (entrada, salida) => {
         await campoDeTransaccion("confirmar")
 
         const ok = {
-            ok: "Se  ha insertado el nuevo cliente en la base de datos y se ha asociado a la reserva",
+            ok: "Se ha insertado el nuevo cliente en la base de datos y se ha asociado a la reserva",
             nombreCompleto: nombreCompleto,
             clienteUID: clienteUID,
             nombre: nombre_,

@@ -51,7 +51,7 @@ export const fusion = async (entrada, salida) => {
         }
 
         if (clienteUID_destino === clienteUID_origen) {
-            const m = "El cliente de ORIGEN y el cliente de DESTINO es el mismo"
+            const m = "El cliente de ORIGEN y el cliente de DESTINO es el mismo."
             throw new Error(m)
         }
 
@@ -69,7 +69,7 @@ export const fusion = async (entrada, salida) => {
 
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha completado la fusion",
+            ok: "Se ha completado la fusión",
         }
         return ok
     } catch (errorCapturado) {

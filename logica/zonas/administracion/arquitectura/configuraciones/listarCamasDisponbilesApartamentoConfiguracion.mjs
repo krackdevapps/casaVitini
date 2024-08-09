@@ -23,7 +23,7 @@ export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, sa
         const detallesHabitacionDelApartamento = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
         if (!detallesHabitacionDelApartamento?.componenteUID) {
             const ok = {
-                ok: "No hay ninguna habitacion con ese identificador disponible para este apartamento"
+                ok: "No hay ninguna habitación con ese identificador disponible para este apartamento."
             };
             return ok
         }

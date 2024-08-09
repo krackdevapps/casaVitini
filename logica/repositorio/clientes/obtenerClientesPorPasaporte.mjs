@@ -13,7 +13,7 @@ export const obtenerClientesPorPasaporte = async (data) => {
         const resuelve = await conexion.query(consulta, [pasaporte])
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {
-                const error = "No se encuentra ningun cliente con ese pasaporte"
+                const error = "No se encuentra ningún cliente con ese pasaporte."
                 throw new Error(error)
             }
             return resuelve.rows[0]
@@ -27,7 +27,7 @@ export const obtenerClientesPorPasaporte = async (data) => {
         } else if (errorSi === "desactivado") {
             return resuelve.rows[0]
         } else {
-            const error = "el adaptador obtenerClientesPorPasaporte necesita errorSi en existe, noExiste o desactivado"
+            const error = "El adaptador obtenerClientesPorPasaporte necesita errorSi en existe, noExiste o desactivado"
             throw new Error(error)
         }
     } catch (errorCapturado) {

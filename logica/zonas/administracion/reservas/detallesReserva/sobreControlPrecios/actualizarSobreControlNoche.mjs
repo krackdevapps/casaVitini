@@ -68,14 +68,14 @@ export const actualizarSobreControlNoche = async (entrada) => {
                 array: operacionIDV,
                 articulo: "el"
             })
-            const error = `el campo tipoOperacion solo permite los siguientes identidficadores visuales de operacion ${operacionesUI}`
+            const error = `El campo tipoOperacion solo permite los siguientes identificadores visuales de operación ${operacionesUI}`
             throw new Error(error)
         }
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
         if (estadoReserva === "cancelada") {
-            const error = "La reserva esta cancelada, no se puede alterar los descuentos"
+            const error = "La reserva está cancelada, no se pueden alterar los descuentos."
             throw new Error(error)
         }
         const instantaneaNetoApartamento = await obtenerDetalleNochePorFechaNochePorApartamentoIDV({

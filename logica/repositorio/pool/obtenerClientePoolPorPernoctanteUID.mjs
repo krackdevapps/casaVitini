@@ -10,7 +10,7 @@ export const obtenerClientePoolPorPernoctanteUID = async (pernoctantaUID) => {
         "pernoctanteUID" = $1;`;
         const resuelve = await conexion.query(consulta, [pernoctantaUID])
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningun cliente pool con ese pernoctanteUID";
+            const error = "No existe ningún cliente pool con ese pernoctanteUID";
             throw new Error(error)
         }
         return resuelve.rows[0]

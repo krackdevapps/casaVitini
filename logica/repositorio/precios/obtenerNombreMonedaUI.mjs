@@ -4,7 +4,7 @@ export const obtenerNombreMonedaUI = async (moneda) => {
         const monedaIDV = moneda
         const filtroCadena = /^[a-z]+$/;
         if (!monedaIDV || !filtroCadena.test(monedaIDV)) {
-            const error = "El campo monedaIDV solo puede ser un una cadena de minúsculas"
+            const error = "El campo monedaIDV solo puede ser una cadena de minúsculas."
             throw new Error(error)
         }
         const seleccionarMoneda = `
@@ -24,9 +24,9 @@ export const obtenerNombreMonedaUI = async (moneda) => {
         const monedaUI = detallesMoneda.monedaUI
         const simbolo = detallesMoneda.simbolo
         const ok = {
-            "monedaIDV": monedaIDV,
-            "monedaUI": monedaUI,
-            "simbolo": simbolo
+            monedaIDV: monedaIDV,
+            monedaUI: monedaUI,
+            simbolo: simbolo
         }
         return ok
     } catch (errorCapturado) {

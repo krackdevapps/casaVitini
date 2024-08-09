@@ -23,7 +23,7 @@ export const cancelarReserva = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
         const mensaje = {
-            error: "Funcion temporalmente deshabilitdad"
+            error: "Función temporalmente deshabilitada."
         }
         throw new Error(mensaje)
       

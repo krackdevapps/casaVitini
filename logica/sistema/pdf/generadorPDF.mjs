@@ -26,7 +26,7 @@ export const generadorPDF = async (reserva) => {
         const contenedorTitular = reserva.titular
 
         if (!contenedorTitular.hasOwnProperty("tipoTitularIDV")) {
-            const error = "No se puede generar un pdf de una reserva que no tiene un titular asingado, primero asocia o crea un titular para esta reserva"
+            const error = "No se puede generar un pdf de una reserva que no tiene un titular asignado. Primero asocia o crea un titular para esta reserva"
             throw new Error(error)
         }
 

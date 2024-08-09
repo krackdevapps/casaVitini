@@ -17,14 +17,14 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
 
         const sessionesActivasDelUsuario = await obtenerSessionesActivasPorUsuario(usuarioIDX)
         if (sessionesActivasDelUsuario.length === 0) {
-            const error = "No existe ninguna session activa para este usuario";
+            const error = "No existe ninguna sesión activa para este usuario.";
             throw new Error(error);
         }
         const calcularTiempoRestante = (fechaObjetivo) => {
             const ahora = DateTime.utc(); // Fecha actual en UTC
             const caducidad = DateTime.fromISO(fechaObjetivo, { zone: 'utc' });
             if (caducidad <= ahora) {
-                return "Esta session esta caducada y si no se hace una nueva peticion en la proxima hora con el id de session de esta se destruira";
+                return "Esta sesión está caducada y si no se hace una nueva petición en la próxima hora, con él, el id de sesión de esta se destruirá";
             }
             const diferencia = caducidad.diff(ahora);
             if (diferencia.as('days') >= 2) {
@@ -45,7 +45,7 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
             detallesSession.ip = ipFormateada;
         });
         const ok = {
-            ok: "Sessiones activas",
+            ok: "Sesiones activas",
             sessionIDX: entrada.sessionID,
             sessionesActivas: sessionesActivasDelUsuario
         };

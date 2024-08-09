@@ -17,7 +17,7 @@ export const obtenerPDFPorEnlaceUID = async (enalceUID) => {
 
         const resuelve = await conexion.query(consulta, enalceUID)
         if (resuelve.rowCount === 0) {
-            const error = "No existe el enlace para generar el PDF";
+            const error = "No existe el enlace para generar el PDF.";
             throw new Error(error);
         }
         return resuelve.rows[0]

@@ -24,7 +24,7 @@ export const desasociarClienteComoTitular = async (entrada, salida) => {
         await eliminarTitularPoolPorReservaUID(reservaUID)
         await eliminarTitularPorReservaUID(reservaUID)
         const ok = {
-            ok: "Se ha eliminado el titular de la reserva, la reserva ahora no tiene titular"
+            ok: "Se ha eliminado el titular de la reserva, ahora no tiene titular"
         };
         return ok
     } catch (errorCapturado) {

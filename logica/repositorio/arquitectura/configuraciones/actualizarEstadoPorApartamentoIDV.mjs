@@ -14,7 +14,7 @@ export const actualizarEstadoPorApartamentoIDV = async (data) => {
         `
         const resuelve = await conexion.query(consulta, [nuevoEstado, apartamentoIDV]);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningún apartamento con el identicador visual por lo tanto no se puede actualizar el estado";
+            const error = "No existe ningún apartamento con el identificador visual, por lo tanto, no se puede actualizar el estado.";
             throw new Error(error);
         }
         return resuelve.rows[0]

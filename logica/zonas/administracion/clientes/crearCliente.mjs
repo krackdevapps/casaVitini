@@ -32,7 +32,7 @@ export const crearCliente = async (entrada, salida) => {
         const nuevoUIDCliente = await insertarCliente(datosValidados);
         if (nuevoUIDCliente) {
             const ok = {
-                ok: "Se ha anadido correctamente el cliente",
+                ok: "Se ha añadido correctamente el cliente",
                 nuevoUIDCliente: nuevoUIDCliente.clienteUID
             };
             return ok

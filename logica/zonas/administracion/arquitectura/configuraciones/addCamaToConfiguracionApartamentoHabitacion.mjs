@@ -45,7 +45,7 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
         const capacidad = obtenerDetallesPorCama_.capacidad;
         const habitacionDelApartamento = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
         if (!habitacionDelApartamento?.componenteUID) {
-            const error = "No hay ninguna habitacíon con ese UID";
+            const error = "No hay ninguna habitación con ese UID";
             throw new Error(error);
         }
         const apartamentoIDV = habitacionDelApartamento.apartamentoIDV;

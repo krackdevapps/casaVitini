@@ -26,7 +26,7 @@ export const obtenerImpuestoPorImpuestoUIDPorReservaUID = async (data) => {
         const resuelve = await conexion.query(consulta, parametros);
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {
-                const error = "No existe el impuesto en la instantanea de impuestos de la reserva"
+                const error = "No existe el impuesto en la instantánea de impuestos de la reserva."
                 throw new Error(error)
             }
         } else if (errorSi === "existe") {

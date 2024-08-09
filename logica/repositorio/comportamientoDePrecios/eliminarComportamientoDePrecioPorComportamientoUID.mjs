@@ -9,7 +9,7 @@ export const eliminarComportamientoDePrecioPorComportamientoUID = async (comport
    
         const resuelve = await conexion.query(consulta, [comportamientoUID]);
         if (resuelve.rowCount === 0) {
-            const error = "No se encontrado ningun comportamiento de precio que eliminar";
+            const error = "No se ha encontrado ningún comportamiento de precio que eliminar.";
             throw new Error(error)
         }
         return resuelve.rows[0]

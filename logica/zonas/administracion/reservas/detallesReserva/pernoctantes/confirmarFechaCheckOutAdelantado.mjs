@@ -49,12 +49,12 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
         }
         // Validar que el pernoctatne sea cliente y no cliente pool
         if (!pernoctate.clienteUID) {
-            const error = "El pernoctante esta pendiente de validacion documental. Valide primero la documentacion antes de hacer el checkin";
+            const error = "El pernoctante está pendiente de validación documental. Valide primero la documentación antes de hacer el checkin";
             throw new Error(error);
         }
         const fechaCheckIn = pernoctate.fechaCheckIn;
         if (!fechaCheckIn) {
-            const error = "No puedes determinar un checkout adelantado a un pernoctante que no ha reazliado el checkin. Primero realiza el checkin";
+            const error = "No puedes determinar un checkout adelantado a un pernoctante que no ha realizado el check-in. Primero realiza el check-in.";
             throw new Error(error);
         }
 
@@ -70,7 +70,7 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
         const fechaSalida = reserva.fechaSalida;
         const fechaSalida_Objeto = DateTime.fromISO(fechaSalida);
         if (fechaCheckOut_Objeto >= fechaSalida_Objeto) {
-            const error = "La fecha de Checkout adelantado no puede ser superior o igual a la fecha de salida de la reserva, si el checkout se hace el mismo dia que finaliza la reserva no hace falta has un checkout adelantado";
+            const error = "La fecha de Checkout adelantado no puede ser superior o igual a la fecha de salida de la reserva. Si el checkout se hace el mismo día que finaliza la reserva, no hace falta, haz un checkout adelantado.";
             throw new Error(error);
         }
         if (fechaCheckIn) {

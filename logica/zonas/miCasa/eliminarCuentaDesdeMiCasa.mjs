@@ -18,7 +18,7 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
         const clave = entrada.body.clave;
 
         if (!clave) {
-            const error = "No has escrito tu contrasena. Es necesaria para eliminar tu cuenta";
+            const error = "No has escrito tu contraseña. Es necesaria para eliminar tu cuenta.";
             throw new Error(error);
         }
         mutex.acquire()
@@ -38,7 +38,7 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
         };
         const controlClave = vitiniCrypto(metadatos);
         if (!controlClave) {
-            const error = "Revisa la contrasena actual que has escrito por que no es correcta por lo tanto no se puede eliminar tu cuenta";
+            const error = "Revisa la contraseña actual que has escrito porque no es correcta, por lo tanto, no se puede eliminar tu cuenta";
             throw new Error(error);
         }
         // Validar si es un usuario administrador
@@ -47,7 +47,7 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
         if (rol === rolAdministrador) {
             const adminsitradores = await obtenerAdministradores(rolAdministrador)
             if (adminsitradores.length === 1) {
-                const error = "No se puede eliminar esta cuenta por que es la unica cuenta adminsitradora existente. Si quieres eliminar esta cuenta tienes que crear otra cuenta administradora. Por que en el sistema debe de existir al menos una cuenta adminitrador";
+                const error = "No se puede eliminar esta cuenta porque es la única cuenta administrativa existente. Si quieres eliminar esta cuenta, tienes que crear otra cuenta administradora. En el sistema debe de existir al menos una cuenta administrador";
                 throw new Error(error);
             }
         }

@@ -24,16 +24,16 @@ export const guardarSimulacion = async (entrada) => {
 
         const fechaCreacion = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaCreacion,
-            nombreCampo: "La fecha de fechaCreacion en generarSimulacion"
+            nombreCampo: "La fecha de fechaCreacion"
         }))
 
         const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaEntrada,
-            nombreCampo: "La fecha de entrada en generarSimulacion"
+            nombreCampo: "La fecha de entrada"
         }))
         const fechaSalida = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaSalida,
-            nombreCampo: "La fecha de salida en generarSimulacion"
+            nombreCampo: "La fecha de salida"
         }))
         const apartamentosIDVARRAY = validadoresCompartidos.tipos.array({
             array: entrada.body.apartamentosIDVARRAY,
@@ -50,7 +50,7 @@ export const guardarSimulacion = async (entrada) => {
         const controlIDVUnicos = {}
         for (const apartamentoIDV of apartamentosIDVARRAY) {
             if (controlIDVUnicos.hasOwnProperty(apartamentoIDV)) {
-                const m = `El identificador visual ${apartamentoIDV} esta repetido.`
+                const m = `El identificador visual ${apartamentoIDV} está repetido.`
                 throw new Error(m)
             }
             controlIDVUnicos[apartamentoIDV] = true
@@ -66,7 +66,7 @@ export const guardarSimulacion = async (entrada) => {
         const fechaCreacion_objeto = DateTime.fromISO(fechaCreacion, { zone: zonaHoraria });
 
         if (fechaEntrada_objeto < fechaCreacion_objeto) {
-            const error = "La fecha de creacion simulada no puede ser superior a la fecha de entrada simulada.";
+            const error = "La fecha de creación simulada no puede ser superior a la fecha de entrada simulada.";
             throw new Error(error);
         }
         await eliminarBloqueoCaducado();
@@ -101,7 +101,7 @@ export const guardarSimulacion = async (entrada) => {
         await campoDeTransaccion("confirmar")
 
         const ok = {
-            ok: "Se ha guarado la nueva simulacion",
+            ok: "Se ha guardado la nueva simulación",
             simulacionUID: simulacion.simulacionUID
         }
         return ok

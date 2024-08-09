@@ -27,7 +27,7 @@ export const insertarPerfilPrecio = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha insertado el perfil de precio en el apartametno";
+            const error = "No se ha insertado el perfil de precio en el apartamiento.";
             throw new Error(error);
         }
         return resuelve.rows[0]

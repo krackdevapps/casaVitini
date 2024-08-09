@@ -20,7 +20,7 @@ export const eliminarApartamentoPorReservaUIDPorApartamentoUID = async (data) =>
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha podido eliminar el apartamento de la reserva por que no se encuentra."
+            const error = "No se ha podido eliminar el apartamento de la reserva porque no se encuentra."
             throw new Error(error)
         }
         return resuelve.rows[0]

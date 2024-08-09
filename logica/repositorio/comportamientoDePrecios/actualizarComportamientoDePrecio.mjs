@@ -21,7 +21,7 @@ export const actualizarComportamientoDePrecio = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningun comportamiento de precio con ese comportamientoUID, revisa el identificador";
+            const error = "No existe ningún comportamiento de precio con ese comportamientoUID. Revisa el identificador.";
             throw new Error(error)
         }
         return resuelve.rows[0]

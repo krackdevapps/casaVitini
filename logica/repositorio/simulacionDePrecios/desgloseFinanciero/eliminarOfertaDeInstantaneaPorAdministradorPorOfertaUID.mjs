@@ -34,7 +34,7 @@ export const eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID = async (da
 
         const resuelve = await conexion.query(consulta, parametros);
         if (!resuelve.rows[0].elemento) {
-            const error = "No se encuentra la oferta que quieres eliminar dentro de la simulacion, resiva el simulacionUID, ofertaUID y la posicion.";
+            const error = "No se encuentra la oferta que quieres eliminar dentro de la simulación. Revisa el simulacionUID, ofertaUID y la posición.";
             throw new Error(error)
         }
         return resuelve.rows[0]

@@ -39,7 +39,7 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
         })
         if (impuestosPorNombre.length > 0) {
             if (detallesDelImpuesto.impuestoUID !== impuestoUID) {
-                const error = "Ya existe un impuesto con ese nombre exacto. Por favor selecciona otro nombre para este impuesto con el fin de tener nombres unicos en los impuestos y poder distingirlos correctamente.";
+                const error = "Ya existe un impuesto con ese nombre exacto. Por favor, selecciona otro nombre para este impuesto con el fin de tener nombres únicos en los impuestos y poder distinguirlos correctamente.";
                 throw new Error(error);
             }
         }

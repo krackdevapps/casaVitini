@@ -38,7 +38,7 @@ export const detallesDelPernoctantePorPernoctaneUID = async (entrada, salida) =>
             pernoctanteUID: pernoctanteUID
         })
         if (!pernoctante?.componenteUID) {
-            const error = "No existe ningun pernoctante con ese UID dentro del la reserva";
+            const error = "No existe ningún pernoctante con ese UID dentro de la reserva";
             throw new Error(error);
         }
         const clienteUID = pernoctante.clienteUID;

@@ -12,16 +12,16 @@ export const generarSimulacion = async (entrada) => {
 
         const fechaCreacion = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaCreacion,
-            nombreCampo: "La fecha de fechaCreacion en generarSimulacion"
+            nombreCampo: "La fecha de fechaCreacion"
         }))
 
         const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaEntrada,
-            nombreCampo: "La fecha de entrada en generarSimulacion"
+            nombreCampo: "La fecha de entrada"
         }))
         const fechaSalida = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaSalida,
-            nombreCampo: "La fecha de salida en generarSimulacion"
+            nombreCampo: "La fecha de salida"
         }))
         const apartamentosIDVARRAY = validadoresCompartidos.tipos.array({
             array: entrada.body.apartamentosIDVARRAY,
@@ -37,7 +37,7 @@ export const generarSimulacion = async (entrada) => {
         const controlIDVUnicos = {}
         for (const apartamentoIDV of apartamentosIDVARRAY) {
             if (controlIDVUnicos.hasOwnProperty(apartamentoIDV)) {
-                const m = `El identificador visual ${apartamentoIDV} esta repetido.`
+                const m = `El identificador visual ${apartamentoIDV} está repetido.`
                 throw new Error(m)
             }
             controlIDVUnicos[apartamentoIDV] = true
@@ -54,7 +54,7 @@ export const generarSimulacion = async (entrada) => {
         const fechaCreacion_objeto = DateTime.fromISO(fechaCreacion, { zone: zonaHoraria });
 
         if (fechaEntrada_objeto < fechaCreacion_objeto) {
-            const error = "La fecha de creacion simulada no puede ser superior a la fecha de entrada simulada.";
+            const error = "La fecha de creación simulada no puede ser superior a la fecha de entrada simulada.";
             throw new Error(error);
         }
 
@@ -78,7 +78,7 @@ export const generarSimulacion = async (entrada) => {
         })
 
         const ok = {
-            ok: "Aquí tíenes el desglose financiero en base a las fechas seleccionadas y los apartmentos seleccionados",
+            ok: "Aquí tienes el desglose financiero basándose en las fechas seleccionadas y los apartamentos seleccionados.",
             desgloseFinanciero
         }
 

@@ -39,20 +39,20 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
         validadoresCompartidos.claves.minimoRequisitos(claveNueva);
 
         if (!claveConfirmada) {
-            const error = "Vuelve a escribir tu contrasena de nuevo";
+            const error = "Vuelve a escribir tu contraseña de nuevo.";
             throw new Error(error);
         }
         if (claveNueva.trim() !== claveConfirmada) {
-            const error = "La contrasenas no coinciden, revisa la contrasenas escritas";
+            const error = "Las contraseñas no coinciden, revisa las contraseñas escritas.";
             throw new Error(error);
         }
         if (usuarioIDX === "crear" || usuarioIDX === "buscador") {
-            const error = "El nombre de usuario no esta disponbile, escoge otro";
+            const error = "El nombre de usuario no está disponible, escoge otro.";
             throw new Error(error);
         }
 
         if (claveNueva === usuarioIDX) {
-            const error = "El nombre de usuario y la contrasena no pueden ser iguales por temas de seguridad.";
+            const error = "El nombre de usuario y la contraseña no pueden ser iguales por temas de seguridad.";
             throw new Error(error);
         }
 

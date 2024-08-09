@@ -34,7 +34,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
         if (palabra !== "reconstruir") {
-            const error = "Por favor escribe correctamente la palabra reconstruir en el campo de texto. Escribe la palabra reconstruir en minusculas y sin espacios internos. Esto está asi para evitar falsos clicks."
+            const error = "Por favor, escribe correctamente la palabra, reconstruir en el campo de texto. Escribe la palabra, reconstruir en minúsculas y sin espacios internos. Esto está así para evitar falsos clics."
             throw new Error(error)
         }
 
@@ -56,7 +56,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                 })
             }
         } catch (error) {
-            const m = "No se puede reconstruir este desglose financiero de esta reserva desde los hubs de precios, por que hay apartamentos que ya no existen como configuracionn de alojamiento en el hub de configuraciones de alojamiento."
+            const m = "No se puede reconstruir este desglose financiero de esta reserva desde los hubs de precios, porque hay apartamentos que ya no existen como configuración de alojamiento en el hub de configuraciones de alojamiento."
             throw new Error(m)
         }
         const desgloseFinanciero = await procesador({
@@ -82,7 +82,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         })
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha reconstruido el desglose desde las instantaneas"
+            ok: "Se ha reconstruido el desglose desde las instantáneas"
         }
         return ok
     } catch (errorCapturado) {

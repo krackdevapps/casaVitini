@@ -33,7 +33,7 @@ export const eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID = async (data) 
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se encuentra la oferta que quieres eliminar dentro de la reserva, resiva el simulacionUID, ofertaUID y la posicion.";
+            const error = "No se encuentra la oferta que quieres eliminar dentro de la reserva, revisa el simulacionUID, ofertaUID y la posicion.";
             throw new Error(error)
         }
         return resuelve.rows[0]

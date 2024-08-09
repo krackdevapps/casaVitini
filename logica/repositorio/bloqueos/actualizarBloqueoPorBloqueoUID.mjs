@@ -40,7 +40,7 @@ export const actualizarBloqueoPorBloqueoUID = async (data) => {
 
         const resuelve = await conexion.query(consulta, datosParaActualizar)
         if (resuelve.rowCount === 0) {
-            const error = "No se ha podido actualizar el bloqueo con los nuevo datos.";
+            const error = "No se ha podido actualizar el bloqueo con los nuevos datos.";
             throw new Error(error)
         }
         return resuelve.rows[0]

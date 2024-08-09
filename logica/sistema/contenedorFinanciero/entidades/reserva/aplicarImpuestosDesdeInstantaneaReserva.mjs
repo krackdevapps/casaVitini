@@ -22,7 +22,7 @@ export const aplicarImpuestosDesdeInstantaneaReserva = async (data) => {
             const reservaUID = data.reservaUID
 
             if (typeof reservaUID !== "number") {
-                const error = "reservaUID en aplicarImpuestos debe de ser un numero."
+                const error = "reservaUID en aplicarImpuestos debe de ser un número."
                 throw new Error(error)
             }
 
@@ -30,7 +30,7 @@ export const aplicarImpuestosDesdeInstantaneaReserva = async (data) => {
             const instantaneaImpuestos = contenedorFinanciero.instantaneaImpuestos
             impuestos.push(...instantaneaImpuestos)
         } else {
-            const error = "aplicarImpuestos necesita un origen, este puede ser administracion o reserva"
+            const error = "aplicarImpuestos necesita un origen, este puede ser administración o reserva"
             throw new Error(error)
         }
 

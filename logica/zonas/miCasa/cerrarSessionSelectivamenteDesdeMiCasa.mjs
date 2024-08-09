@@ -18,7 +18,7 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
             const sessionIDX = entrada.body.sessionIDX;
             const filtroSessionIDX = /^[a-zA-Z0-9_-]+$/;
             if (!sessionIDX || !filtroSessionIDX.test(sessionIDX)) {
-                const error = "El campo sessionIDX solo admite minúsculas, mayúsculas, numeros y nada mas";
+                const error = "El campo sessionIDX solo admite minúsculas, mayúsculas, números y nada más";
                 throw new Error(error);
             }
 
@@ -28,7 +28,7 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
             })
 
             const ok = {
-                ok: "Se ha cerrado correctamente la session",
+                ok: "Se ha cerrado correctamente la sesión",
                 sessionAtual: entrada.sessionID
             };
             return ok
@@ -40,7 +40,7 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
                 usuarioIDX: usuarioIDX
             })
             const ok = {
-                ok: "Se ha cerrado correctamente el resto de sessiones",
+                ok: "Se ha cerrado correctamente el resto de sesiones",
                 sessionAtual: entrada.sessionID
             };
             return ok

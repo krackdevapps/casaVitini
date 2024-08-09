@@ -13,7 +13,7 @@ export const obtenerCalendarioPorCalendarioUIDPublico = async (data) => {
         const resuelve = await conexion.query(consulta, [publicoUID])
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {
-                error: "22 No existe el calendarioUID, revisa el nombre identificador"
+                const error = "No existe el calendarioUID, revisa el nombre identificador"
                 throw new Error(error)
             }
             return resuelve.rows[0]

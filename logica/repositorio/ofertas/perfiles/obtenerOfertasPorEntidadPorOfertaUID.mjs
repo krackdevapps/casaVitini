@@ -30,7 +30,7 @@ export const obtenerOfertasPorEntidadPorOfertaUID = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
-            const error = "No se encuentra ninguna oferta con ese entidadIDV y ofertaIDV"
+            const error = "No se encuentra ninguna oferta con esa entidadIDV y ofertaIDV"
             throw new Error(error)
 
         }

@@ -69,7 +69,7 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
         })
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha actualizado el estado de autorizacion de la oferta en la reserva",
+            ok: "Se ha actualizado el estado de autorización de la oferta en la reserva",
             autorizacion: nuevaAutorizacion
         }
         return ok

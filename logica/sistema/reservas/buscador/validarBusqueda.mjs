@@ -4,7 +4,7 @@ export const validadorBusqueda = (configuracion) => {
     try {
         const pagina = validadoresCompartidos.tipos.numero({
             number: configuracion.pagina || 1,
-            nombreCampo: "El numero de página aqui",
+            nombreCampo: "El número de página aquí",
             filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",

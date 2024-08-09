@@ -75,7 +75,7 @@ export const listarMisReservas = async (entrada) => {
         const datosDelUsuario = await obtenerDatosPersonales(usuario)
         const usuarioMail = datosDelUsuario.mail;
         if (!usuarioMail) {
-            const error = "Se necesita que definas tu dirección de correo elecroníco en Mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo eletroníco que usastes para confirmar la reserva. Es decir debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de Correo electrónico y confirmarlo con el correo de confirmacion que te enviaremos. Una vez hecho eso podras ver tus reservas";
+            const error = "Se necesita que definas tu dirección de correo electrónico en mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo electrónico que usaste para confirmar la reserva. Es decir, debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de correo electrónico y confirmarlo con el correo de confirmación que te enviaremos. Una vez hecho eso, podrás ver tus reservas.";
             throw new Error(error);
         }
         // Comporbar si el mail esta verificado
@@ -87,7 +87,7 @@ export const listarMisReservas = async (entrada) => {
         const estadoCuentaVerificada = cuentaUsuario.cuentaVerificadaIDV;
 
         if (estadoCuentaVerificada !== "si") {
-            const error = "Tienes que verificar tu dirección de Correo electrónico para poder acceder a las reservas asociadas a tu direcíon de correo electroníco.";
+            const error = "Tienes que verificar tu dirección de correo electrónico para poder acceder a las reservas asociadas a tu dirección de correo electrónico.";
             throw new Error(error);
         }
         const reservasUIDArray = []
@@ -123,7 +123,7 @@ export const listarMisReservas = async (entrada) => {
         })
         const consultaConteoTotalFilas = listaReservas[0]?.total_filas ? listaReservas[0].total_filas : 0;
         if (listaReservas.length === 0) {
-            const error = `No hay ninguna reserva realizada y confirmada con la dirección de Correo electrónico ${usuarioMail}`;
+            const error = `No hay ninguna reserva realizada y confirmada con la dirección de correo electrónico  ${usuarioMail}`;
             throw new Error(error);
         }
         for (const detallesFila of listaReservas) {
@@ -131,7 +131,7 @@ export const listarMisReservas = async (entrada) => {
         }
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
         const ok = {
-            ok: "Aqui tienes tus reservas",
+            ok: "Aquí tienes tus reservas.",
             pagina: Number(paginaActual),
             paginasTotales: totalPaginas,
             totalReservas: Number(consultaConteoTotalFilas),

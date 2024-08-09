@@ -56,11 +56,11 @@ export const eliminarHabitacionReserva = async (entrada) => {
             throw new Error(error);
         }
         if (reserva.estadoPagoIDV === "pagado") {
-            const error = "La reserva no se puede modificar por que esta pagada";
+            const error = "La reserva no se puede modificar porque está pagada.";
             throw new Error(error);
         }
         if (reserva.estadoPagoIDV === "reembolsado") {
-            const error = "La reserva no se puede modificar por que esta reembolsada";
+            const error = "La reserva no se puede modificar porque está reembolsada.";
             throw new Error(error);
         }
         // validar habitacion
@@ -74,14 +74,14 @@ export const eliminarHabitacionReserva = async (entrada) => {
                 reservaUID: reservaUID,
                 habitacionUID: habitacionUID
             })
-            ok.ok = "Se ha eliminado al habitacion correctamente y los pernoctanes que contenia"
+            ok.ok = "Se ha eliminado la habitación correctamente y los pernoctanes que contenía"
 
         } else if (pernoctantes === "conservar") {
             await actualizarHabitacionDelPernoctantePorHabitacionUID({
                 reservaUID: reservaUID,
                 habitacionUID: habitacionUID
             })
-            ok.ok = "Se ha eliminado la habitacion correctamente pero los pernoctantes que contenia siguen asignados a la reserva"
+            ok.ok = "Se ha eliminado la habitación correctamente, pero los pernoctantes que contenía siguen asignados a la reserva"
         }
         await eliminarHabitacionDelApartamento({
             reservaUID: reservaUID,

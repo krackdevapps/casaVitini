@@ -26,7 +26,7 @@ export const insertarCamaEnLaHabitacion = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const msg = "No se ha insertado la cama en la habitacion."
+            const msg = "No se ha insertado la cama en la habitación."
             throw new Error(msg)
         }
         return resuelve.rows[0]

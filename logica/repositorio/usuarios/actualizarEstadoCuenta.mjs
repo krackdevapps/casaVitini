@@ -23,7 +23,7 @@ export const actualizarEstadoCuenta = async (data) => {
             parametros
         )
         if (resuelve.rowCount === 0) {
-            const error = "No se encuentra el usuario";
+            const error = "No se encuentra el usuario.";
             throw new Error(error);
         }
     } catch (errorCapturado) {

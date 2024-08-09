@@ -12,7 +12,7 @@ export const obtenerEnlaceDePagoPorEnlaceUID = async (enlaceUID) => {
             WHERE "enlaceUID" = $1;`;
         const resuelve = await conexion.query(consulta, [enlaceUID]);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha podido obtener ningun enlace de pago con ese enlaceUID";
+            const error = "No se ha podido obtener ningún enlace de pago con ese enlaceUID";
             throw new Error(error)
         }
         return resuelve.rows[0]

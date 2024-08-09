@@ -25,7 +25,7 @@ export const validarObjeto = (data) => {
                 array: zonas,
                 articulo: "la"
             })
-            const error = "No se reconcoe la zona del sobrecontrol, solo existen: " + zonasUI
+            const error = "No se reconoce la zona del sobrecontrol, solo existen: " + zonasUI
             throw new Error(error)
         }
 

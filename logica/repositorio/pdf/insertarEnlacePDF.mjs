@@ -26,7 +26,7 @@ export const insertarEnlacePDF = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
-            const error = "No se ha podido crear el enlace";
+            const error = "No se ha podido crear el enlace.";
             throw new Error(error);
         }
         return resuelve.rows[0]

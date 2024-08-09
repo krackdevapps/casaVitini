@@ -55,7 +55,7 @@ export const validadorFuturo = async (data) => {
                 tipoElemento: "bloqueo",
                 apartamentoIDV: apartamento,
                 tipoBloqueo: tipoBloqueo,
-                motivo: motivo || "(Sin motivo espeficado en el bloqueo)"
+                motivo: motivo || "(Sin motivo especificado en el bloqueo)"
             }
             contenedorBloqueosEncontrados.push(estructura)
         }
@@ -225,13 +225,13 @@ export const validadorFuturo = async (data) => {
                 ok: "rangoFuturoLimitado",
                 limiteFuturo: fechaMasCercana,
                 origen: eventosOrdenadorPorFechaDeEntrada[0].tipoElemento,
-                comportamiento: "No se ha sumado un dia por que es un bloqueo",
+                comportamiento: "No se ha sumado un día porque es un bloqueo.",
                 eventos: eventosOrdenadorPorFechaDeEntrada
             }
             if (sePermiteElMismoDia === "si") {
                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                 ok.limiteFuturo = DateTime.fromISO(fechaMasCercana, { zone: zonaHoraria }).plus({ days: 1 }).toISODate()
-                ok.comportamiento = "Se ha sumado un dia por que es una reserva o un evento sincronizado"
+                ok.comportamiento = "Se ha sumado un día porque es una reserva o un evento sincronizado."
             }
             return ok
         }

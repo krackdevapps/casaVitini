@@ -87,13 +87,13 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             const tiempoZH = DateTime.now().setZone(zonaHoraria).startOf('day');
             const fechaFin_TZ_Objeto = DateTime.fromISO(fechaFin, { zone: zonaHoraria });
             if (tiempoZH > fechaFin_TZ_Objeto) {
-                const error = "La fecha de fin del bloqueo no puede ser inferior a la fecha actual porque estarías creando un bloqueo enteramente en el pasado. Puedes crear un bloqueo que empieza en el pasado, pero debe que acabar en el futuro o en hoy. Los bloqueo que acaban en el pasado son automaticamente borrados por ser bloqueos caducos.";
+                const error = "La fecha de fin del bloqueo no puede ser inferior a la fecha actual, porque estarías creando un bloqueo enteramente en el pasado. Puedes crear un bloqueo que empieza en el pasado, pero debe que acabar en el futuro o en hoy. Los bloqueos que acaban en el pasado son automáticamente borrados por ser bloqueos caducos.";
                 throw new Error(error);
             }
         }
         if (motivo) {
             if (!filtroTextoSimple.test(motivo)) {
-                const error = "Por temas de seguridad ahora mismo en el campo motivo, solo pueden aceptarse minúsculas, mayúsculas, espacio y números. Mas adelante se aceptarán todos los caracteres.";
+                const error = "Por temas de seguridad, ahora mismo en el campo motivo, solo pueden aceptarse minúsculas, mayúsculas, espacio y números. Más adelante se aceptarán todos los caracteres.";
                 throw new Error(error);
             }
         } else {

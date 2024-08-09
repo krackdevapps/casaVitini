@@ -52,7 +52,7 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
             }
         } catch (error) {
 
-            const m = "No se puede reconstruir este desglose financiero de esta reserva desde los hubs de precios, por que hay apartamentos que ya no existen como configuracionn de alojamiento en el hub de configuraciones de alojamiento."
+            const m = "No se puede reconstruir este desglose financiero de esta reserva desde los hubs de precios, porque hay apartamentos que ya no existen como configuración de alojamiento en el hub de configuraciones de alojamiento."
             throw new Error(m)
         }
 

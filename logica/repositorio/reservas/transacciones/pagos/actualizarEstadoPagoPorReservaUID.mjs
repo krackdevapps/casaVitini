@@ -15,7 +15,7 @@ export const actualizarEstadoPagoPorReservaUID = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ninguna reserva con ese reservaUID ";
+            const error = "No existe ninguna reserva con ese reservaUID";
             throw new Error(error);
         }
         return resuelve.rows

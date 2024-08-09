@@ -31,7 +31,7 @@ export const realizarPago = async (entrada, salida) => {
         const totalPago = enlaceDePago.cantidad;
         const estadoPagoObtenido = enlaceDePago.estadoPago;
         if (estadoPagoObtenido === "pagado") {
-            const error = "Este enlace de pago ya esta pagado";
+            const error = "Este enlace de pago ya está pagado.";
             throw new Error(error);
         }
         const reserva = await obtenerReservaPorReservaUID(reservaUID)

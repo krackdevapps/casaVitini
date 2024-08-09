@@ -17,7 +17,7 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
         const claveConfirmada = entrada.body.claveConfirmada;
 
         if (claveNueva !== claveConfirmada) {
-            const error = "No has escrito dos veces la misma nueva contrasena, revisa las claves que has escrito y cerciorate que ambas claves nueva son iguales";
+            const error = "No has escrito dos veces la misma nueva contraseña, revisa las claves que has escrito y cerciórate que ambas claves nuevas son iguales.";
             throw new Error(error);
         }
 
@@ -26,7 +26,7 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
 
 
         if (claveNueva === claveActual) {
-            const error = "Has escrito una clave nueva que es la misma que la actual. Por favor revisa lo campos.";
+            const error = "Has escrito una clave nueva que es la misma que la actual. Por favor, revisa los campos.";
             throw new Error(error);
         }
         await campoDeTransaccion("iniciar")
@@ -45,7 +45,7 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
         };
         const controlClave = vitiniCrypto(metadatos);
         if (!controlClave) {
-            const error = "Revisa la contrasena actual que has escrito por que no es correcta por lo tanto no se puede cambiar la contrasena";
+            const error = "Revisa la contraseña actual que has escrito porque no es correcta, por lo tanto, no se puede cambiar la contraseña";
             throw new Error(error);
         }
         const cryptoData = {
@@ -63,7 +63,7 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
         })
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha actualizado la nueva contrasena."
+            ok: "Se ha actualizado la nueva contraseña."
         };
         return ok
 

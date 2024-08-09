@@ -85,10 +85,10 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
         await campoDeTransaccion("confirmar")
         const ok = {};
         if (tipoElinacion === "habitacion") {
-            ok.ok = "Se ha eliminado al pernoctante de la habitacion"
+            ok.ok = "Se ha eliminado al pernoctante de la habitación"
         }
         if (tipoElinacion === "reserva") {
-            ok.ok = "Se ha eliminar al pernoctante de la reserva"
+            ok.ok = "Se ha eliminado al pernoctante de la reserva"
         }
         return ok
     } catch (errorCapturado) {

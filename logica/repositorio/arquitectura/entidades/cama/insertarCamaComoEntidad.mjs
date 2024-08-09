@@ -33,7 +33,7 @@ export const insertarCamaComoEntidad = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No seha insertado la cama como entidad"
+            const error = "No se ha insertado la cama como entidad."
             throw error
         }
         return resuelve.rows[0]

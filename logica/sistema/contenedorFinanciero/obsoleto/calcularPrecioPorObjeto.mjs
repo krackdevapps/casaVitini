@@ -12,11 +12,11 @@ export const calcularPrecioPorObjeto = async (reserva) => {
 
         const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_Humana({
             fecha_ISO: fechaEntrada_Humano,
-            nombreCampo: "La fecha de entrad en calcularPrecioPorObjeto"
+            nombreCampo: "La fecha de entrada"
         })).fecha_ISO;
         const fechaSalida = (await validadoresCompartidos.fechas.validarFecha_Humana({
             fecha_ISO: fechaSalida_Humano,
-            nombreCampo: "LA fecha de saldai en calcularPrecioPorObjeto"
+            nombreCampo: "La fecha de salida"
         })).fecha_ISO;
 
         const alojamientoArreglo = Object.keys(alojamiento);
@@ -50,17 +50,6 @@ export const calcularPrecioPorObjeto = async (reserva) => {
         };
 
         delete desglosePrecioApartamentos.metadatos;
-        // precioFinal.fechas = {};
-        // precioFinal.fechas.entrada = fechaEntrada_Humano;
-        // precioFinal.fechas.salida = fechaSalida_Humano;
-        // precioFinal.fechas.creacion_ISO_UTC = reserva.creacion_ISO_UTC;
-        // precioFinal.fechas.numeroDeDiasConNoche = numeroNoches;
-        // delete desglosePrecioApartamentos.metadatos;
-        // precioFinal.desgloseFinanciero = desglosePrecioApartamentos;
-        // precioFinal.desgloseFinanciero.totales = {};
-        // precioFinal.desgloseFinanciero.totales.promedioNetoPorNoche = totalNetoDecimal.dividedBy(numeroNoches).toFixed(2);
-        // precioFinal.desgloseFinanciero.totales.totalReservaNetoSinOfertas = new Decimal(totalNeto).toString();
-        // precioFinal.desgloseFinanciero.totales.totalReservaNeto = new Decimal(totalNeto).toString();
         return precioFinal;
     } catch (errorCapturado) {
         throw errorCapturado

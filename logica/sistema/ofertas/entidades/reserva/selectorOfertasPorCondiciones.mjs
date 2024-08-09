@@ -24,7 +24,7 @@ export const selectorOfertasPorCondiciones = async (ofertasEncontradasPorFecha) 
                     cantidad: cantidad
                 }
                 if (simboloNumero === "aPartirDe" && numero <= numeroApartamentos) {
-                    ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} o mas apartamentos`
+                    ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} o más apartamentos`
                     ofertasSeleccionadasPorCondiciones.push(ofertaEstructuraFinal)
                 }
                 if (simboloNumero === "numeroExacto" && numero === numeroApartamentos) {
@@ -48,11 +48,11 @@ export const selectorOfertasPorCondiciones = async (ofertasEncontradasPorFecha) 
                 const fechaEntrada_Objeto = DateTime.fromISO(fechaEntradaReserva_ISO, { zone: codigoZonaHoraria.zonaHoraria });
                 const diasAntelacion = Math.floor(fechaEntrada_Objeto.diff(tiempoZH, 'days').days);
                 if (simboloNumero === "aPartirDe" && numero <= diasAntelacion) {
-                    ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de antelacion o mas `
+                    ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} días de antelación o más. `
                     ofertasSeleccionadasPorCondiciones.push(ofertaEstructuraFinal)
                 }
                 if (simboloNumero === "numeroExacto" && numero === diasAntelacion) {
-                    ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de antelacion concretamente`
+                    ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} días de antelación concretamente.`
                     ofertasSeleccionadasPorCondiciones.push(ofertaEstructuraFinal)
                 }
             }
@@ -72,11 +72,11 @@ export const selectorOfertasPorCondiciones = async (ofertasEncontradasPorFecha) 
                 const fechaSalidaReservaObjeto = DateTime.fromISO(fechaSalidaReserva_ISO);
                 const diasDeLaReserva = Math.floor(fechaSalidaReservaObjeto.diff(fechaEntradaReservaObjeto, 'days').days);
                 if (simboloNumero === "aPartirDe" && numero <= diasDeLaReserva) {
-                    ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de duracion o mas`
+                    ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} días de duración o más`
                     ofertasSeleccionadasPorCondiciones.push(ofertaEstructuraFinal)
                 }
                 if (simboloNumero === "numeroExacto" && numero === diasDeLaReserva) {
-                    ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de duracion concretamente`
+                    ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} días de duración concretamente.`
                     ofertasSeleccionadasPorCondiciones.push(ofertaEstructuraFinal)
                 }
             }
@@ -131,7 +131,7 @@ export const selectorOfertasPorCondiciones = async (ofertasEncontradasPorFecha) 
                         ofertasSeleccionadasPorCondiciones.push(ofertaEstructuraFinal)
                     }
                     if (descuentoAplicadoA === "totalNetoApartamentoDedicado") {
-                        ofertaEstructuraFinal.definicion = `Oferta aplicada con descuentos indivudales por apartamento. Estos descuentos se aplican al neto de cada apartamamento por separado`
+                        ofertaEstructuraFinal.definicion = `Oferta aplicada con descuentos individuales por apartamento. Estos descuentos se aplican al neto de cada apartamento por separado.`
                         const arrayApartamentos = []
                         for (const detalleApartamento of apartamentosDedicadosOferta) {
                             const apartamentoIDV = detalleApartamento.apartamentoIDV

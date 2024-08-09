@@ -17,21 +17,21 @@ export const obtenerEnlaceDePagoPorCodigoUPID = async (data) => {
         const resuelve = await conexion.query(consulta, [codigoUPID]);
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {
-                const error = "No se ha podido obtener ningun enlace de pago con ese codigoUPID";
+                const error = "No se ha podido obtener ningún enlace de pago con ese codigoUPID";
                 throw new Error(error)
             }
             return resuelve.rows[0]
 
         } else if (errorSi === "existe") {
             if (resuelve.rowCount > 0) {
-                const error = "Ya exiete el enlace de pago";
+                const error = "Ya existe el enlace de pago.";
                 throw new Error(error)
             }
             return resuelve.rows[0]
         } else if (errorSi === "desactivado") {
             return resuelve.rows
         } else {
-            const error = "el adaptador obtenerEnlaceDePagoPorCodigoUPID necesita errorSi en existe, noExiste o desactivado"
+            const error = "El adaptador obtenerEnlaceDePagoPorCodigoUPID necesita errorSi en existe, noExiste o desactivado"
             throw new Error(error)
         }
     } catch (errorCapturado) {

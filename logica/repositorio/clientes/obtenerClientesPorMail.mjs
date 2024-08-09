@@ -14,7 +14,7 @@ export const obtenerClientesPorMail = async (data) => {
         const resuelve = await conexion.query(consulta, [mail])
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {
-                const error = "No se encuentra ningun apartamento como entidad con ese apartamentoIDV"
+                const error = "No se encuentra ningún apartamento como entidad con ese apartamentoIDV"
                 throw new Error(error)
             }
             return resuelve.rows
@@ -29,7 +29,7 @@ export const obtenerClientesPorMail = async (data) => {
         } else if (errorSi === "desactivado") {
             return resuelve.rows
         } else {
-            const error = "el adaptador obtenerApartamentoComoEntidadPorApartamentoIDV necesita errorSi en existe, noExiste o desactivado"
+            const error = "El adaptador obtenerClientesPorMail necesita errorSi en existe, noExiste o desactivado"
             throw new Error(error)
         }
     } catch (errorCapturado) {

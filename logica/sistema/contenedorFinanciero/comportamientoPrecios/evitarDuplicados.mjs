@@ -16,10 +16,10 @@ export const evitarDuplicados = async (data) => {
         const transaccion = data.transaccion
 
         if (transaccion !== "crear" && transaccion !== "actualizar") {
-            const error = `El sistema de evitar duplicados necesita un tipo de transaccion para ver si es un operacion de creacion o actualizacion`
+            const error = `El sistema de evitar duplicados necesita un tipo de transacción para ver si es una operación de creación o actualización.`
             throw new Error(error)
         }
-        const mensajeNombreRepetido = "El nombre que tratas de poner a este comportamiento de precio ya existe. Por favor con el fin de evitar confusiones e ilegibilidad, escoge otro nombre para este comportamiento de precio";
+        const mensajeNombreRepetido = "El nombre que tratas de poner a este comportamiento de precio ya existe. Por favor, con el fin de evitar confusiones e ilegibilidad, escoge otro nombre para este comportamiento de precio.";
         const comportamientosConNombreIgual = await obtenerNombreComportamientoPorNombreUI(nombreComportamiento)
 
         if (transaccion === "actualizar") {
@@ -92,7 +92,7 @@ export const evitarDuplicados = async (data) => {
             }
             if (comportamientosEnConflicto.length > 0) {
                 const error = {
-                    error: "No se puede crear este comportamiento por que entra en conflicto con los apartamentos en otros comportamientos",
+                    error: "No se puede crear este comportamiento porque entra en conflicto con los apartamentos en otros comportamientos.",
                     comportamientosEnConflicto: comportamientosEnConflicto,
                 }
                 throw error
@@ -157,7 +157,7 @@ export const evitarDuplicados = async (data) => {
             }
             if (Object.keys(arbolComportamientoCoincidentes).length > 0) {
                 const errorCompuesto = {
-                    error: `No se puede crear este comportamiento de por dias por que hay apartamentos en este comportamiento que existen en otros comportamientos por dias que coinciden en el dias y el apartamento. Es decir hay comportamientos que tiene el mismo dia y el mismo apartamento coincidiendo.`,
+                    error: `No se puede crear este comportamiento de porDias porque hay apartamentos en este comportamiento que existen en otros comportamientos por días que coinciden en el día y el apartamento. Es decir, hay comportamientos que tienen el mismo día y el mismo apartamento coincidiendo.`,
                     comportamientosCoincidentes: arbolComportamientoCoincidentes
                 }
                 throw errorCompuesto

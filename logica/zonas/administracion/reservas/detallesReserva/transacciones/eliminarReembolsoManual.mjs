@@ -20,7 +20,7 @@ export const eliminarReembolsoManual = async (entrada, salida) => {
             soloMinusculas: "si"
         })
         if (palabra !== "eliminar") {
-            const error = "Necesario escribir la la palabra eliminar para confirmar la eliminación y evitar falsos clicks";
+            const error = "Necesario escribir la palabra, eliminar para confirmar la eliminación y evitar falsos clics";
             throw new Error(error);
         }
         const reembolsoUID = validadoresCompartidos.tipos.cadena({
@@ -35,7 +35,7 @@ export const eliminarReembolsoManual = async (entrada, salida) => {
         await eliminarReembolsoPorReembosloUID(reembolsoUID)
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha eliminado irreversiblemente el el reembolso",
+            ok: "Se ha eliminado irreversiblemente el reembolso.",
             reembolsoUID: reembolsoUID
         };
         return ok

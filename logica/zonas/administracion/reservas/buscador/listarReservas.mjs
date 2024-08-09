@@ -132,7 +132,7 @@ export const listarReservas = async (entrada, salida) => {
             Object.assign(ok, resultados)
         }
         else {
-            const error = "Hay que especificar el tipo de consulta, si es hoy, rango o porTerminos, revisa los parametros de tu busqueda";
+            const error = "Hay que especificar el tipo de consulta, si es hoy, rango o porTerminos. Revisa los parámetros de tu búsqueda";
             throw new Error(error);
         }
 

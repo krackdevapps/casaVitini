@@ -13,7 +13,7 @@ export const obtenerMensajePorPosicion = async (posicion) => {
 
         const resuelve = await conexion.query(consulta, [posicion]);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningun mensaje con esa posicion";
+            const error = "No existe ningún mensaje con esa posición.";
             throw new Error(error)
         }
         return resuelve.rows[0]

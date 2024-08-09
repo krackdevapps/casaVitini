@@ -17,7 +17,7 @@ export const obtenerDetallesCliente = async (clienteUID) => {
         "clienteUID" = $1`;
         const resuelve = await conexion.query(consulta, [clienteUID])
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningun cliente con ese UID";
+            const error = "No existe ningún cliente con ese UID";
             throw new Error(error)
         }
         return resuelve.rows[0]

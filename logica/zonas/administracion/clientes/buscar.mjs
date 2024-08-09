@@ -40,7 +40,7 @@ export const buscar = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
         if (tipoBusqueda && tipoBusqueda !== "rapido") {
-            const m = "Si se defdine tipoBusqueda, solo puede ser rapido o no definnirse"
+            const m = "Si se define tipoBusqueda, solo puede ser rápido o no definirse"
             throw new Error(m)
         }
 

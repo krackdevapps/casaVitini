@@ -44,11 +44,11 @@ export const porDiasDeReserva = async (reserva) => {
                 descuentoUI = `de ${cantidad}$`
             }
             if (simboloNumero === "aPartirDe" && numero <= diasDeLaReserva) {
-                ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de duración o mas.`
+                ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de duración o más.`
                 ofertasSeleccionadas.push(ofertaEstructuraFinal)
             }
             if (simboloNumero === "numeroExacto" && numero === diasDeLaReserva) {
-                ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de duración concretament.`
+                ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} días de duración concretamente.`
                 ofertasSeleccionadas.push(ofertaEstructuraFinal)
             }
         }

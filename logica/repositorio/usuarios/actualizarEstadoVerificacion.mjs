@@ -22,7 +22,7 @@ export const actualizarEstadoVerificacion = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
-            const error = "El codigo que has introducino no existe";
+            const error = "El código que has introducido no existe.";
             throw new Error(error);
         }
         return resuelve.rows[0]

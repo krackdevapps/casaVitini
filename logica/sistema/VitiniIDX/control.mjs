@@ -23,7 +23,7 @@ export class VitiniIDX {
             if (!VitiniIDX) {
                 const msgError = {
                     tipo: "IDX",
-                    mensaje: "Tienes que identificarte para seguir"
+                    mensaje: "Tienes que identificarte para seguir."
                 };
                 throw msgError
             }

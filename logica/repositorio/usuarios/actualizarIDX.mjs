@@ -20,7 +20,7 @@ export const actualizarIDX = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
-            const error = "No existe el usuario";
+            const error = "No existe el usuario.";
             throw new Error(error);
         }
         return resuelve.rows[0]

@@ -33,7 +33,7 @@ export const actualizarDesgloseFinacieroPorModoSimplePorSimulacionUID = async (d
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha podido insertar el desgloseFinaciero en la la simulacion.";
+            const error = "No se ha podido insertar el desgloseFinaciero en la simulación.";
             throw new Error(error)
         }
         return resuelve.rows[0]

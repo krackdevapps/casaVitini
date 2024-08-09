@@ -28,7 +28,7 @@ export const actualizarEnlaceDePagoPorReservaUID = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha podido actualizar el enlace de pago por que no se ha encontrado ningun enlace de pago con ese enlaceUID";
+            const error = "No se ha podido actualizar el enlace de pago porque no se ha encontrado ningún enlace de pago con ese enlaceUID";
             throw new Error(error)
         }
         return resuelve.rows[0]

@@ -20,7 +20,7 @@ export const obtenerHabitacionDelLaReserva = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No existe la habitacion dentro de esta reserva";
+            const error = "No existe la habitación dentro de esta reserva.";
             throw new Error(error);
         }
         return resuelve.rows[0]

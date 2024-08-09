@@ -6,7 +6,7 @@ export const calendarios_compartidos = async (entrada, salida) => {
     try {
         const urlPath = validadoresCompartidos.tipos.urlPath({
             urlPath: entrada.url.toLowerCase(),
-            nombreCampo: "La url no cumple el formato esperado"
+            nombreCampo: "La URL no cumple el formato esperado."
         })
         const urlArray = urlPath.toLowerCase()
             .split("/")

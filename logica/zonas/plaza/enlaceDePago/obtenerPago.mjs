@@ -19,7 +19,7 @@ export const obtenerPago = async (entrada, salida) => {
 
         const filtroCadena = /^[a-z0-9]+$/;
         if (!pagoUID || !filtroCadena.test(pagoUID)) {
-            const error = "el codigo de un enlace de pago solo puede ser una cadena de minuscuals y numeros y ya esta";
+            const error = "El código de un enlace de pago solo puede ser una cadena de minúsculos y números";
             throw new Error(error);
         }
         const enalceDePago = await obtenerEnlaceDePagoPorCodigoUPID({
@@ -28,7 +28,7 @@ export const obtenerPago = async (entrada, salida) => {
         })
         const estadoPago = enalceDePago?.estadoPago;
         if (estadoPago === "pagado") {
-            const error = "Este enlace de pago esta pagado";
+            const error = "Este enlace de pago está pagado.";
             throw new Error(error);
         }
         const codigo = enalceDePago.codigo;

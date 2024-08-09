@@ -67,7 +67,7 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
         })
 
         const ok = {
-            ok: "Se ha actualizado imagen correctamnte",
+            ok: "Se ha actualizado la imagen correctamente",
             imagen: String(contenidoArchivo)
         };
         return ok

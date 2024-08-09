@@ -40,7 +40,7 @@ export const insertarUsuario = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
-            const error = "No se ha insertado el nuevo usuario en la base de datos";
+            const error = "No se ha insertado el nuevo usuario en la base de datos.";
             throw new Error(error);
         }
         return resuelve.rows[0]

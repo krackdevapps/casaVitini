@@ -44,7 +44,7 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
 
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "El estado del comportamiento se ha actualziado correctamente",
+            ok: "El estado del comportamiento se ha actualizado correctamente.",
             estadoComportamiento: comportamientoActualizado.estadoIDV
         };
         return ok

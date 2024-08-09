@@ -53,7 +53,7 @@ export const actualizarCalendario = async (entrada) => {
 
         let calendarioRaw = null;
         if (url) {
-            const errorDeFormado = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb";
+            const errorDeFormado = "En la dirección URL que has introducido no hay un calendario iCal de Airbnb";
             try {
                 const calendarioData = await axios.get(url);
                 calendarioRaw = calendarioData.data;

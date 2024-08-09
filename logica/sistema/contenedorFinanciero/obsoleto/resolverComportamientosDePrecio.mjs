@@ -5,11 +5,11 @@ import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mj
 export const resolverComportamientosDePrecio = async (fechaEntrada, fechaSalida) => {
     await validadoresCompartidos.fechas.validarFecha_ISO({
         fecha_ISO: fechaEntrada,
-        nombreCampo: "La fecha de entrado del comportamiento"
+        nombreCampo: "La fecha de entrada del comportamiento"
     });
     await validadoresCompartidos.fechas.validarFecha_ISO({
         fecha_ISO: fechaSalida,
-        nombreCampo: "La fecah de salida del comportamiento"
+        nombreCampo: "La fecha de salida del comportamiento"
     });
 
     const estructuraComportamientos = [];

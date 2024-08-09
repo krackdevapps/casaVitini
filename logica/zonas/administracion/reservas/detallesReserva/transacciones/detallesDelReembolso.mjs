@@ -29,7 +29,7 @@ export const detallesDelReembolso = async (entrada, salida) => {
         const fechaCreacion = detallesDelReembolso.fechaCreacion;
         const fechaActualizacion = detallesDelReembolso.fechaActualizacion;
         const ok = {
-            ok: "Aqui tienes los detalles del reembolso",
+            ok: "Aquí tienes los detalles del reembolso.",
             pagoUID: pagoUID,
             cantidad: cantidad,
             plataformaDePag: plataformaDePag,

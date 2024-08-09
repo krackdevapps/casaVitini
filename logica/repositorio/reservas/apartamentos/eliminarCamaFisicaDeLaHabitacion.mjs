@@ -18,7 +18,7 @@ export const eliminarCamaFisicaDeLaHabitacion = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha encontrado ninguna cama fisica que liminar con ese componenteUID y reservaUID"
+            const error = "No se ha encontrado ninguna cama física que eliminar con ese componenteUID y reservaUID"
             throw new Error(error)
         }
         return resuelve.rows[0]

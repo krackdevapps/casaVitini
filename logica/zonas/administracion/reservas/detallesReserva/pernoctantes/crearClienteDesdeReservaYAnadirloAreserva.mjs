@@ -70,7 +70,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
             clienteUID: nuevoUIDCliente
         })
         const ok = {
-            ok: "Se ha anadido correctamente el cliente en la habitacin de la reserva",
+            ok: "Se ha añadido correctamente el cliente en la habitación de la reserva",
             nuevoUIDPernoctante: nuevoPernoctaneInsertado.componenteUID,
             nuevoUIDCliente: nuevoUIDCliente,
             nuevoCliente: {

@@ -44,7 +44,7 @@ export const modificarCliente = async (entrada, salida) => {
         //await obtenerDetallesCliente(clienteUID)
         const clienteActualziado = await actualizarCliente(datosValidados)
         const ok = {
-            ok: "Se ha anadido correctamente el cliente",
+            ok: "Se ha añadido correctamente el cliente",
             detallesCliente: clienteActualziado
         };
         return ok

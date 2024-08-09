@@ -29,7 +29,7 @@ export const actualizarEstadoReserva = async (entrada) => {
         })
 
         if (nuevoEstado !== "pendiente" && nuevoEstado !== "confirmada") {
-            const m = "El lcampo nuevo estado solo puede ser pendiente o confirmada"
+            const m = "El campo nuevo estado solo puede ser pendiente o confirmada."
             throw new Error(m)
 
         }

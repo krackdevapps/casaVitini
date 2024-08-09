@@ -35,7 +35,7 @@ export const pdfReserva = async (entrada) => {
 
         const pdf = await generadorPDF(reserva);
         const ok = {
-            ok: "Aquí esta el pdf en base64",
+            ok: "Aquí está el pdf en base64",
             pdf: pdf
         }
         return ok

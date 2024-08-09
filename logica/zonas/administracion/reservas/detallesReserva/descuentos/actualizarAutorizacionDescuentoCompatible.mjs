@@ -45,7 +45,7 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
         if (estadoReserva === "cancelada") {
-            const error = "La reserva esta cancelada, no se puede alterar los descuentos"
+            const error = "La reserva está cancelada, no se pueden alterar los descuentos."
             throw new Error(error)
         }
         await campoDeTransaccion("iniciar")
@@ -75,7 +75,7 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
         })
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha actualizado el estado de autorizacion de la oferta en la reserva",
+            ok: "Se ha actualizado el estado de autorización de la oferta en la reserva",
             autorizacion: nuevaAutorizacion
         }
         return ok

@@ -44,7 +44,7 @@ export const validarImpuesto = (impuesto) => {
                 sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
-            const m = "el campo estadoIDV solo puede ser activado o desactivo"
+            const m = "El campo estadoIDV solo puede ser activado o desactivado"
             throw new Error(m)
         }
         return impuesto

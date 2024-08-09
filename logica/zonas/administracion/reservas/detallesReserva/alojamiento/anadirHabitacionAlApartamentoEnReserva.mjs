@@ -79,7 +79,7 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada) => {
             })
 
             const ok = {
-                ok: `Se ha anadido la ${habitacionUI} al apartamento`,
+                ok: `Se ha añadido la ${habitacionUI} al apartamento`,
                 nuevoUID: nuevaHabitacionDelApartamento.componenteUID
             }
             return ok

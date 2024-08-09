@@ -112,7 +112,7 @@ export const aplicarDescuento = async (data) => {
                     })
                 }
             } else {
-                const error = "No se reconoce le tipoDescuento en aplicarDescuento"
+                const error = "No se reconoce el tipoDescuento en aplicarDescuento"
                 throw new Error(error)
             }
         }

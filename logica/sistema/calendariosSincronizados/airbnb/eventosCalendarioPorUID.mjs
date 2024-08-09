@@ -13,7 +13,7 @@ export const eventosCalendarioPorUID = async (calendarioUID) => {
             calendariosPorApartamento: []
         }
         if (calendario.calendarioUID) {
-            const errorDeFormato = "En la direccion URL que has introducido no hay un calendario iCal de Airbnb"
+            const errorDeFormato = "En la dirección URL que has introducido no hay un calendario iCal de Airbnb."
             const calendarioUID = calendario.uid
             const url = calendario.url
             const nombre = calendario.nombre

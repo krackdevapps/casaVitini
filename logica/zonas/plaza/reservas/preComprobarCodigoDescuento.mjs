@@ -21,7 +21,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
         if (tipoContenedorCodigo === "cadena") {
             const codigoDescuentoB64 = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.codigoDescuento,
-                nombreCampo: "No has escrito ningún codigo de descuento, recuerda que",
+                nombreCampo: "No has escrito ningún código de descuento, recuerda que",
                 filtro: "transformaABase64",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
@@ -37,7 +37,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             codigoDescuentoArrayAsci.forEach((codigo) => {
                 const codigoDescuentoB64 = validadoresCompartidos.tipos.cadena({
                     string: codigo,
-                    nombreCampo: "No has escrito ningún codigo de descuento, recuerda que",
+                    nombreCampo: "No has escrito ningún código de descuento, recuerda que",
                     filtro: "transformaABase64",
                     sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
@@ -47,7 +47,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             })
         } else {
             const m = "El campo tipo contenedorCodigo solo espera cadena o array"
-            throw new Error(error)
+            throw new Error(m)
         }
 
 
@@ -77,7 +77,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
         })
         //Buscar en ofertas activas, publicas o globales, que tienen este codigo
         if (ofertasActivas.length === 0) {
-            const m = "El codigo introducido no se reconoce 1"
+            const m = "El código introducido no se reconoce"
             throw new Error(m)
         }
 
@@ -126,7 +126,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
 
         } else if (ofertaAnalizadasPorCondiciones.length > 0) {
             const ok = {
-                ok: "El codigo de descuento es valido",
+                ok: "El código de descuento es válido",
                 ofertas: ofertaAnalizadasPorCondiciones,
             }
             for (const contenedorOferta of ofertaAnalizadasPorCondiciones) {

@@ -11,7 +11,7 @@ export const obtenerTodosLosRoles = async () => {
 
         const resuelve = await conexion.query(consulta);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningun rol";
+            const error = "No existe ningún rol.";
             throw new Error(error);
         }
         return resuelve.rows

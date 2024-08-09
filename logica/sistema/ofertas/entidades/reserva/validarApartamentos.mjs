@@ -43,12 +43,12 @@ export const validarApartamentos = async (data) => {
                     (tipoDescuentoApartamento !== "cantidadFija" &&
                     tipoDescuentoApartamento !== "porcentaje" &&
                     tipoDescuentoApartamento !== "precioEstablecido") {
-                    const error = `El apartamento ${apartamentoUI} debe de tener un tipo de descuente seleccionado, revisa los apartamentos para ver si en alguno falta un tipo de descuente`;
+                    const error = `El apartamento ${apartamentoUI} debe de tener un tipo de descuento seleccionado. Revisa los apartamentos para ver si en alguno falta un tipo de descuento.`;
                     throw new Error(error);
                 }
                 const cantidadPorApartamento = validadoresCompartidos.tipos.cadena({
                     string: apartamentoSeleccionado.cantidad,
-                    nombreCampo: "El campo cantidad del ${apartamentoUI} dedicado ",
+                    nombreCampo: "El campo cantidad del ${apartamentoUI} dedicado",
                     filtro: "cadenaConNumerosConDosDecimales",
                     sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
@@ -79,7 +79,7 @@ export const validarApartamentos = async (data) => {
             !apartamentosIDVEncontrados.includes(apartamentoIDV)
         });
         if (cadenasNoCoincidentes.length > 0) {
-            const error = `Se hace referencia a identificadores visuales de apartamentos que no existen. Por favor revisa los identificadores de los apartamentos a lo que quieres aplicar una oferta por que no existen`;
+            const error = `Se hace referencia a identificadores visuales de apartamentos que no existen. Por favor, revisa los identificadores de los apartamentos a los que quieres aplicar una oferta porque no existen.`;
             throw new Error(error);
         }
     } catch (errorCapturado) {

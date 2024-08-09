@@ -51,7 +51,7 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
         }
         // Validar que el pernoctatne sea cliente y no cliente pool
         if (!pernoctate.clienteUID) {
-            const error = "El pernoctante esta pendiente de validacion documental. Valide primero la documentacion antes de hacer el checkin";
+            const error = "El pernoctante está pendiente de validación documental. Valide primero la documentación antes de hacer el check-in";
             throw new Error(error);
         }
         const checkoutAdelantado_ISO = pernoctate.fechaCheckOutAdelantado;

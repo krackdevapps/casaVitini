@@ -37,7 +37,7 @@ export const guardarConfiguracion = async (entrada) => {
         await actualizarParConfiguracion(dataActualizarConfiguracion)
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha actualizado correctamente la configuracion"
+            ok: "Se ha actualizado correctamente la configuración"
         };
         return ok
     } catch (errorCapturado) {

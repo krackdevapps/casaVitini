@@ -29,7 +29,7 @@ export const actualizarOferta = async (entrada) => {
         const oferta = await obtenerOferatPorOfertaUID(ofertaUID)
         const estadoOferta = oferta.estadoIDV;
         if (estadoOferta === "activado") {
-            const error = "No se puede modificar una oferta activa. Primero desactiva con el boton de estado.";
+            const error = "No se puede modificar una oferta activa. Primero desactiva con el botón de estado.";
             throw new Error(error);
         }
 
@@ -68,7 +68,7 @@ export const actualizarOferta = async (entrada) => {
         })
 
         const ok = {
-            ok: "La oferta  se ha actualizado bien junto con los apartamentos dedicados",
+            ok: "La oferta se ha actualizado bien junto con los apartamentos dedicados",
             ofertaActualizada: ofertaActualizada
         };
         return ok

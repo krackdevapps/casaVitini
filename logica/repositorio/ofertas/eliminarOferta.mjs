@@ -7,7 +7,7 @@ export const eliminarOferta = async (ofertaUID) => {
         `;
         const resuelve = await conexion.query(consulta, [ofertaUID])
         if (resuelve.rowCount === 0) {
-            const error = "No se encuetra la oferta que quieres eliminar, revisa el ofertaUID.";
+            const error = "No se encuentra la oferta que quieres eliminar, revisa el ofertaUID.";
             throw new Error(error);
         }
         return resuelve.rows[0]

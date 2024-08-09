@@ -9,7 +9,7 @@ export const campoDeTransaccion = async (operacion) => {
         } else if (operacion === "cancelar") {
             await conexion.query("ROLLBACK")
         } else {
-            const msg = "El campo de transaccion necesita un identificador de operacion valida"
+            const msg = "El campo de transacción necesita un identificador de operación válido."
             throw new Error(msg)
         }
     } catch (errorCapturado) {

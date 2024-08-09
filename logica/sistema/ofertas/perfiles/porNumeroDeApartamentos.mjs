@@ -30,7 +30,7 @@ export const porNumeroDeApartamentos = async (reserva) => {
                 cantidad: cantidad.toFixed(2)
             }
             if (simboloNumero === "aPartirDe" && numero <= numeroApartamentos) {
-                estructuraOferta.definicion = `Oferta aplicada a reserva con ${numero} o mas apartamentos`
+                estructuraOferta.definicion = `Oferta aplicada a reserva con ${numero} o más apartamentos`
                 ofertasSeleccionadas.push(estructuraOferta)
             }
             if (simboloNumero === "numeroExacto" && numero === numeroApartamentos) {

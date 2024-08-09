@@ -53,7 +53,7 @@ export const listarApartamentosComoEntidades = async (entrada, salida) => {
                 }
             }
             const ok = {
-                ok: "AApartamentos específicos disponibles.",
+                ok: "Apartamentos específicos disponibles.",
                 apartamentosComoEntidadesDisponibles: estructuraFinal
             };
             return ok

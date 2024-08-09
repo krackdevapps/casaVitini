@@ -23,7 +23,7 @@ export const insertarApartamentoEnReservaAdministrativa = async (data) => {
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = `No se el ${apartamentoUI} (${apartamentoIDV}) en la reserva,por lo tanto no se ha podido crear la reserva.`;
+            const error = `No se el ${apartamentoUI} (${apartamentoIDV}) en la reserva, por lo tanto no se ha podido crear la reserva.`;
             throw new Error(error);
         }
         return resuelve.rows[0]

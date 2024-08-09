@@ -34,7 +34,7 @@ export const obtenerDetallesDelPago = async (entrada) => {
 
 
         const ok = {
-            ok: "Aqui tienes los pagos de esta reserva",
+            ok: "Aquí tienes los pagos de esta reserva",
             detallesDelPago: detallesDelPago,
             deglosePorReembolso: []
         };

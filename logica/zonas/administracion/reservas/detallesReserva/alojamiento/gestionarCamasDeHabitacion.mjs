@@ -108,7 +108,7 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
                     nuevaCamaIDV: nuevaCamaIDV,
                     camaUI: camaUI
                 })
-                ok.ok = "Se ha anadido correctamente la nueva cama compartida a la habitacion"
+                ok.ok = "Se ha añadido correctamente la nueva cama compartida a la habitación"
                 ok.nuevoUID = nuevaCamaEnHabitacion.componenteUID
             }
             return ok
@@ -155,7 +155,7 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
             }
             if (camaFisicaEnOTrasReservas.length > 0) {
                 estructura.estadoCamaFisica = "ocupada"
-                estructura.descripcion = "La cama fisica no se ha insertado en la habitacion por que esta ocupada en otra habitacion, a continuacion se detalle el lugar de la cama fisica"
+                estructura.descripcion = "La cama física no se ha insertado en la habitación porque está ocupada en otra habitación. A continuación se detalla el lugar de la cama física"
                 estructura.reservas = camaFisicaEnOTrasReservas
             } else if (camaFisicaEnOTrasReservas.length === 0) {
 
@@ -167,7 +167,7 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
                 })
                 const componenteUID = camaFisicaInsertada.componenteUID
                 estructura.estadoCamaFisica = "aceptada"
-                estructura.descripcion = "La cama fisica se ha insertaado en la habitacion por que estaba disponible"
+                estructura.descripcion = "La cama física se ha instalado en la habitación porque estaba disponible."
                 estructura.camaIDV = nuevaCamaIDV
                 estructura.componenteUID = componenteUID
                 estructura.camaUI = camaUI

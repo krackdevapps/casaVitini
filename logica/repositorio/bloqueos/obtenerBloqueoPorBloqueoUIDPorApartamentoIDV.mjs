@@ -27,7 +27,7 @@ export const obtenerBloqueoPorBloqueoUIDPorApartamentoIDV = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
-            const error = "No existe nigun bloquoe con ese bloqueoUID y ese apartamentoIDV";
+            const error = "No existe ningún bloqueo con ese bloqueoUID y ese apartamentoIDV";
             throw new Error(error);
         }
         return resuelve.rows[0]

@@ -42,7 +42,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
         const comportamientoDePrecio = await obtenerComportamientoDePrecioPorComportamientoUID(comportamientoUID)
         const estadoComportamiento = comportamientoDePrecio?.estadoIDV;
         if (estadoComportamiento === "activado") {
-            const error = "No se puede modificar un comportamiento de precio que esta activo. Primero desativalo con el boton de estado de color rojo en la parte superior izquierda, al lado del nombre.";
+            const error = "No se puede modificar un comportamiento de precio que está activo. Primero desactívalo con el botón de estado de color rojo en la parte superior izquierda, al lado del nombre.";
             throw new Error(error);
         }
 
@@ -63,7 +63,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
         }
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados",
+            ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados.",
             comportamientoActualizado,
         };
         return ok

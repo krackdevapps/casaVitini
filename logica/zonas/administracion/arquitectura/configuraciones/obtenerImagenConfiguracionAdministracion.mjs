@@ -26,7 +26,7 @@ export const obtenerImagenConfiguracionAdministracion = async (entrada) => {
 
         const imagen = configuracionDelApartamento.imagen;
         const ok = {
-            ok: "Imagen de la configuración adminsitrativa del apartamento, png codificado en base64",
+            ok: "Imagen de la configuración administrativa del apartamento, png codificado en base64",
             imagen: imagen
         };
         return ok

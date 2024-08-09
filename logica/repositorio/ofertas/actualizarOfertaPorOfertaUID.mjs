@@ -43,7 +43,7 @@ export const actualizarOfertaPorOfertaUID = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha podido actualizar la oferta";
+            const error = "No se ha podido actualizar la oferta.";
             throw new Error(error)
         }
         return resuelve.rows[0]

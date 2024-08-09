@@ -48,7 +48,7 @@ export const porRangoDeFechas = async (reserva) => {
         if (tipoDescuento === "cantidadFija") {
             descuentoUI = `de ${cantidad}$`
         }
-        detallesOferta.definicion = `Oferta aplicada a los días que están dentro del rango de la oferta. El rango de esta oferta empieza el ${fechaInicio} y acaba ${fechaFin}. Los dia de las reserva que esten dentro del rango recibiran un descuento ${descuentoUI} sobre el total neto del dia.`
+        detallesOferta.definicion = `Oferta aplicada a los días que están dentro del rango de la oferta. El rango de esta oferta empieza el ${fechaInicio} y acaba ${fechaFin}. Los días de las reservas que estén dentro del rango recibirán un descuento ${descuentoUI} sobre el total neto del día.`
         let descuento = new Decimal("0")
         for (const detalleNoche of totalesPorNoche) {
             const fechaDiaConNoche_Humana = detalleNoche.fechaDiaConNoche

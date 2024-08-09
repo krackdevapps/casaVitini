@@ -32,7 +32,7 @@ export const insertarImpuesto = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha insertado el impuesto"
+            const error = "No se ha insertado el impuesto."
             throw error
         }
         return resuelve.rows[0]

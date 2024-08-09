@@ -22,7 +22,7 @@ export const obtenerClientesPorPasaporteIgnorandoClienteUID = async (data) => {
         const resuelve = await conexion.query(consulta, parametros)
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {
-                const error = "No se encuentra ningun cliente distinto al clienteUID con ese pasaporte"
+                const error = "No se encuentra ningún cliente distinto al clienteUID con ese pasaporte."
                 throw new Error(error)
             }
             return resuelve.rows[0]
@@ -30,14 +30,14 @@ export const obtenerClientesPorPasaporteIgnorandoClienteUID = async (data) => {
         } else if (errorSi === "existe") {
 
             if (resuelve.rowCount > 0) {
-                const error = "Ya existe un cliente distinco a ese clienteUID con ese pasaporte"
+                const error = "Ya existe un cliente distinto a ese clienteUID con ese pasaporte."
                 throw new Error(error)
             }
             return resuelve.rows[0]
         } else if (errorSi === "desactivado") {
             return resuelve.rows[0]
         } else {
-            const error = "el adaptador obtenerClientesPorPasaporteIgnorandoClienteUID necesita errorSi en existe, noExiste o desactivado"
+            const error = "El adaptador obtenerClientesPorPasaporteIgnorandoClienteUID necesita errorSi en existe, noExiste o desactivado"
             throw new Error(error)
         }
     } catch (errorCapturado) {

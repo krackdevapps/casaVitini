@@ -226,7 +226,7 @@ export const selectorPorCondicion = async (data) => {
                     resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
                 }
             } else {
-                const error = `En la oferta ${nombreOferta} no se reconoce el identificador de condicion ${tipoCondicion}`
+                const error = `En la oferta ${nombreOferta} no se reconoce el identificador de condición ${tipoCondicion}`
                 throw new Error(error)
             }
         }

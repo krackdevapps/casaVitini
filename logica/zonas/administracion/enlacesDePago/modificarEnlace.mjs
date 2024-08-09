@@ -61,7 +61,7 @@ export const modificarEnlace = async (entrada, salida) => {
             enlaceUID: enlaceUID,
         })
         const ok = {
-            ok: "Se ha actualizado corratmente los datos del enlace"
+            ok: "Se han actualizado correctamente los datos del enlace."
         };
         return ok
 

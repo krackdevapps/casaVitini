@@ -20,7 +20,7 @@ export const aplicarComportamiento = (data) => {
         } else if (simboloIDV === "precioEstablecido") {
             precioFinalPorNoche = new Decimal(cantidad);
         } else {
-            const error = "No se reconcoe el simboloIDV del comportamiento"
+            const error = "No se reconoce el simboloIDV del comportamiento."
             throw new Error(error)
         }
         if (precioFinalPorNoche.isPositive()) {

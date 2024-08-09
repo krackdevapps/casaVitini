@@ -86,7 +86,7 @@ export const insertarDescuentoPorAdministrador = async (data) => {
         })
         const capaImpuestos = data.capaImpuestos
         if (capaImpuestos !== "si" && capaImpuestos !== "no") {
-            const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos en si o no"
+            const error = "El procesador de precios está mal configurado, necesita parámetros capaImpuestos en sí o no."
             throw new Error(error)
         }
         if (capaImpuestos === "si") {

@@ -52,11 +52,11 @@ export const crearDesgloseFinanciero = async (data) => {
         const capaDescuentosPersonalizados = data?.capaDescuentosPersonalizados
 
         if (capaOfertas !== "si" && capaOfertas !== "no") {
-            const error = "El procesador de precios esta mal configurado, necesita parametro capaOfertas"
+            const error = "El procesador de precios está mal configurado, necesita parámetro capaOfertas"
             throw new Error(error)
         }
         if (capaDescuentosPersonalizados !== "si" && capaDescuentosPersonalizados !== "no") {
-            const error = "El procesador de precios esta mal configurado, necesita parametro capaDescuentosPersonalizados con un si o un no"
+            const error = "El procesador de precios está mal configurado, necesita parámetros capaDescuentosPersonalizados con un sí o un no."
             throw new Error(error)
         }
 
@@ -85,7 +85,7 @@ export const crearDesgloseFinanciero = async (data) => {
 
             const contieneSoloValoresPermitidos = zonasArray.every(zonaIDV => zonasIDVControl.includes(zonaIDV));
             if (!contieneSoloValoresPermitidos) {
-                const error = "En el array de zonasArray hay identificadores visuales de zona no reconocidos. Los identificadores visuales reconocidos son publica, privada y global"
+                const error = "En el array de zonasArray hay identificadores visuales de zona no reconocidos. Los identificadores visuales reconocidos son pública, privada y global"
                 throw new Error(error)
             }
             const descuentosParaRechazar = validadoresCompartidos.tipos.array({
@@ -143,7 +143,7 @@ export const crearDesgloseFinanciero = async (data) => {
 
         const capaImpuestos = data.capaImpuestos
         if (capaImpuestos !== "si" && capaImpuestos !== "no") {
-            const error = "El procesador de precios esta mal configurado, necesita parametro capaImpuestos en si o no"
+            const error = "El procesador de precios está mal configurado, necesita parámetros capaImpuestos en sí o no."
             throw new Error(error)
         }
         if (capaImpuestos === "si") {

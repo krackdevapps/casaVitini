@@ -65,13 +65,13 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
                 errorSi: "noExiste"
             })
             if (!obtenerHabitacionComoEntidad?.habitacionIDV) {
-                const error = "No existe la habitacion, revisa el habitacionIDV";
+                const error = "No existe la habitación, revisa el habitacionIDV";
                 throw new Error(error);
             }
             await eliminarHabitacionComoEntidad(entidadIDV)
 
             const ok = {
-                ok: "Se ha eliminado correctamente la habitacion como entidad",
+                ok: "Se ha eliminado correctamente la habitación como entidad",
             };
             return ok
 
@@ -104,7 +104,7 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
                 })
                 if (reservasEnUso.length > 0) {
                     const error = {
-                        error: "No se puede borrar esta cama fisica por que esta en reservas activas presentes o futuras.",
+                        error: "No se puede borrar esta cama física porque está en reservas activas presentes o futuras.",
                         reservasActiva: reservasEnUso
                     }
                     throw error

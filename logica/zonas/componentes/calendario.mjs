@@ -104,7 +104,7 @@ export const calendario = async (entrada, salida) => {
                 throw new Error(error);
             }
             if (ano < 1 || ano > 9999) {
-                const error = "El ano solo puede ser un numero entre 1 y 9999";
+                const error = "El año solo puede ser un número entre 1 y 9999";
                 throw new Error(error);
             }
             const calendario = {};

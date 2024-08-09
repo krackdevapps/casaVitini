@@ -51,11 +51,11 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             zonaArray: ["privada", "global"]
         })
         if (configuracionesDisponibles.length === 0) {
-            const error = "No hay ningun apartamento disponible ahora mismo";
+            const error = "No hay ningún apartamento disponible ahora mismo.";
             throw new Error(error);
         }
         if (apartamentos.length > configuracionesDisponibles.length) {
-            const error = "El tamano de posiciones del array de apartamentos es demasiado grande";
+            const error = "El tamaño de posiciones del array de apartamentos es demasiado grande";
             throw new Error(error);
         }
 
@@ -74,7 +74,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         });
         const apartamentosDisponibles = resuelveApartamentosDisponibles.apartamentosDisponibles;
         if (apartamentosDisponibles.length === 0) {
-            const error = "No hay ningun apartamento disponible para estas fechas";
+            const error = "No hay ningún apartamento disponible para estas fechas.";
             throw new Error(error);
         }
         if (apartamentosDisponibles.length > 0) {
@@ -83,7 +83,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             };
             const controlApartamentosDisponibles = validarApartamentosDisonbiles(apartamentos, apartamentosDisponibles);
             if (!controlApartamentosDisponibles) {
-                const error = "Los apartamentos solicitados para este rango de fechas no estan disponbiles.";
+                const error = "Los apartamentos solicitados para este rango de fechas no están disponibles.";
                 throw new Error(error);
             }
             // insertar fila reserva y en la tabla reservarAartametnos insertar las correspondientes filas
@@ -139,7 +139,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             //await actualizadorIntegradoDesdeInstantaneas(reservaUIDNuevo)
             await campoDeTransaccion("confirmar")
             const ok = {
-                ok: "Se ha anadido al reserva vacia",
+                ok: "Se ha creado la reserva vacía",
                 reservaUID: reservaUID
             };
             return ok

@@ -25,12 +25,12 @@ export const obtenerImpuestoPorImpuestoUIDPorSimulacionUID = async (data) => {
         const resuelve = await conexion.query(consulta, parametros);
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {
-                const error = "No existe el impuesto en la instantanea de impuestos de la simulacion"
+                const error = "No existe el impuesto en la instantánea de impuestos de la simulación."
                 throw new Error(error)
             }
         } else if (errorSi === "existe") {
             if (resuelve.rowCount > 0) {
-                const error = "Ya existe el impuesto en la simulacion."
+                const error = "Ya existe el impuesto en la simulación."
                 throw new Error(error)
             }
         } else {

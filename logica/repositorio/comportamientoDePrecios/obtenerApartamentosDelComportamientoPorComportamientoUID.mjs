@@ -12,7 +12,7 @@ export const obtenerApartamentosDelComportamientoPorComportamientoUID = async (c
    
         const resuelve = await conexion.query(consulta, [comportamientoUID]);
         if (resuelve.rowCount === 0) {
-            const error = "No se encontrado ningun apartamento para este comportamiento de precio, revisa el comportamientoUID";
+            const error = "No se ha encontrado ningún apartamento para este comportamiento de precio. Revisa el comportamientoUID";
             throw new Error(error)
         }
         return resuelve.rows

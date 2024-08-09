@@ -15,7 +15,6 @@ export const desgloseTotal = async (reservaUID) => {
 
     const totalesPorNoches = await obtenerTotalesPorNochePorReservaUID(reservaUID)
     if (totalesPorNoches.length === 0) {
-        const error = "Esta reserva no tiene informacion sobre los totales por noche"
         desgloseFinanciero.totalesPorNoche = []
     } else {
         desgloseFinanciero.totalesPorNoche = totalesPorNoches
@@ -23,10 +22,9 @@ export const desgloseTotal = async (reservaUID) => {
 
     const totalesPorApartmento = await obtenerTotalesPorApartamentoPorReservaUID(reservaUID)
     if (totalesPorApartmento.length === 0) {
-        const error = "Esta reserva no informacion sobre los totales por apartamento"
         desgloseFinanciero.totalesPorApartamento = []
     } else {
-        desgloseFinanciero.totalesPorApartamento = rtotalesPorApartmento
+        desgloseFinanciero.totalesPorApartamento = totalesPorApartmento
     }
 
     const ofertasAplicadas = await obtenerOfertasPorReservaUID(reservaUID)
@@ -64,23 +62,12 @@ export const desgloseTotal = async (reservaUID) => {
 
     const impuestosAplicados = await obtenerImpuestosPorReservaUID(reservaUID)
     if (impuestosAplicados.length === 0) {
-        const error = "Esta reserva no tiene informacion sobre los impuestos"
         desgloseFinanciero.impuestos = []
     } else {
         desgloseFinanciero.impuestos = impuestosAplicados
     }
-    /*
-    promedioNetoPorNoche
-    totalReservaNetoSinOfertas
-    totalReservaNeto
-    totalDescuentosAplicados
-    totalImpuestos
-    totalConImpuestos
-    */
-    // Extraer datos de pago de la reserva
     const totalesDeLaReserva = await obtenerTotalesGlobal(reservaUID)
     if (totalesDeLaReserva.length === 0) {
-        const error = "Esta reserva no disponible informacion sobre los totales"
         desgloseFinanciero.totales = []
     } else {
         desgloseFinanciero.totales = totalesDeLaReserva

@@ -79,7 +79,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             }
             const nuevoApartamentoComEntidad = await insertarApartamentoComoEntidad(dataInsertarApartamentoComoEntidad)
             const ok = {
-                ok: "Se ha creado correctament la nuevo entidad como apartamento",
+                ok: "Se ha creado correctamente la nueva entidad como apartamento.",
                 nuevoUID: nuevoApartamentoComEntidad.apartamentoIDV
             };
             return ok
@@ -151,7 +151,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             const nuevaHabitacionComoEntidad = await insertarHabitacionComoEntidad(dataInsertarHabitacionComoEntidad)
 
             const ok = {
-                ok: "Se ha creado correctament la nuevo entidad como habitacion",
+                ok: "Se ha creado correctamente la nueva entidad como habitación",
                 nuevoUID: nuevaHabitacionComoEntidad.habitacionIDV
             };
             return ok
@@ -243,7 +243,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
 
             const nuevaCama = await insertarCamaComoEntidad(dataInsertarCamaComoEntidad)
             const ok = {
-                ok: "Se ha creado correctament la nuevo entidad como cama",
+                ok: "Se ha creado correctamente la nueva entidad como cama.",
                 nuevoUID: nuevaCama.camaIDV
             };
             return ok

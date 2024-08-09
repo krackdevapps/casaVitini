@@ -28,7 +28,7 @@ export const obtenerReembolsosPorPagoUIDPorReembolsoUIDPasarela = async (data) =
 
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No existe ningún reembolso con ese pagoUID y con ese Identificador de reeembolso de pasarela";
+            const error = "No existe ningún reembolso con ese pagoUID y con ese identificador de reembolso de pasarela.";
             throw new Error(error);
         }
         return resuelve.rows

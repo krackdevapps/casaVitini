@@ -17,7 +17,7 @@ export const actualizarEstadoDelComportamientoDePrecio = async (data) => {
         ];
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
-            const error = "No se ha actualizar el estado del comportamiento de precio";
+            const error = "No se ha actualizado el estado del comportamiento de precio.";
             throw new Error(error)
         }
         return resuelve.rows[0]

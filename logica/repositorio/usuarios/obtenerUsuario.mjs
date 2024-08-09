@@ -29,8 +29,8 @@ export const obtenerUsuario = async (data) => {
         } else if (errorSi === "desactivado") {
             return resuelve.rows[0]
         } else {
-            const error = "el adaptador obtenerUsuario necesita errorSi en existe, noExiste o desactivado"
-           throw new Error(error)
+            const error = "El adaptador obtenerUsuario necesita errorSi en existe, noExiste o desactivado"
+            throw new Error(error)
         }
     } catch (errorCapturado) {
         throw errorCapturado

@@ -43,12 +43,12 @@ export const moverPosicion = async (entrada, salida) => {
         const totalMensajes = todosLosMensaje.length
 
         if (Number(totalMensajes) === 1) {
-            const error = "Solo hay un mensaje, por lo tanto mover la poscion es irrelevante.";
+            const error = "Solo hay un mensaje, por lo tanto, mover la posición es irrelevante.";
             throw new Error(error);
         }
 
         if (Number(totalMensajes) < Number(nuevaPosicion)) {
-            const error = "La posicion no puede ser superior a: " + totalMensajes;
+            const error = "La posición no puede ser superior a: " + totalMensajes;
             throw new Error(error);
         }
 
@@ -94,7 +94,7 @@ export const moverPosicion = async (entrada, salida) => {
 
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha actualizado correctamente la posicion",
+            ok: "Se ha actualizado correctamente la posición",
             mensajeSeleccionado: mensajeSeleccionado,
             mensajeAfectado: mensajeAfectado
         };

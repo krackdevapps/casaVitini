@@ -62,7 +62,7 @@ export const insertarImpuestoEnSimulacion = async (entrada) => {
         })
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha insertado el impuesto correctamen en la reserva y el contenedor financiero se ha renderizado",
+            ok: "Se ha insertado el impuesto correctamente en la reserva y el contenedor financiero se ha renderizado.",
             simulacionUID
         }
         return ok

@@ -72,7 +72,7 @@ export const modificarBloqueo = async (entrada, salida) => {
             const tiempoZH = DateTime.now().setZone(zonaHoraria).startOf('day');
             const fechaFin_TZ_Objeto = DateTime.fromISO(fechaFin_ISO, { zone: zonaHoraria });
             if (tiempoZH > fechaFin_TZ_Objeto) {
-                const error = "La fecha de fin del bloqueo no puede ser inferior a la fecha actual porque estarías creando un bloqueo enteramente en el pasado. Puedes crear un bloqueo que empieza en el pasado, pero debe que acabar en el futuro o en hoy. Los bloqueo que acaban en el pasado son automaticamente borrados por ser bloqueos caducos.";
+                const error = "La fecha de fin del bloqueo no puede ser inferior a la fecha actual, porque estarías creando un bloqueo enteramente en el pasado. Puedes crear un bloqueo que empieza en el pasado, pero debe que acabar en el futuro o en hoy. Los bloqueos que acaban en el pasado son automáticamente borrados por ser bloqueos caducos.";
                 throw new Error(error);
             }
         }

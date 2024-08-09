@@ -48,13 +48,13 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
 
             const zonaIDV = configuracionApartamento.zonaIDV
             if (zonaIDV !== "privada" && zonaIDV !== "global" && zonaIDV !== "publica") {
-                const error = "No se puede poner en disponible esta configuracíon por que no es valida. Necesitas establecer la zona de esta configuracuion de alojamiento en privada, publica o global";
+                const error = "No se puede poner en disponible esta configuración porque no es válida. Necesitas establecer la zona de esta configuración de alojamiento en privada, publica o global";
                 throw new Error(error);
             }
 
             const habitacionesPorApartmento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
             if (habitacionesPorApartmento.length === 0) {
-                const error = "No se puede poner en disponible esta configuracíon por que no es valida. Necesitas al menos una habitacíon en esta configuracíon y este apartamento no la tiene";
+                const error = "No se puede poner en disponible esta configuración porque no es válida. Necesitas al menos una habitación en esta configuración y este apartamento no la tiene";
                 throw new Error(error);
             }
             // Mirar que todas las habitaciones tengan una cama asignada

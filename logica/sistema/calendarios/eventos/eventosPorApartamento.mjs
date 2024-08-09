@@ -8,12 +8,12 @@ export const eventosPorApartamneto = async (metadatos) => {
         const apartamentoIDV = metadatos.apartamentoIDV
         const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
         if (!filtroFecha.test(fecha)) {
-            const error = "La fecha no cumple el formato especifico para el calendario. En este caso se espera una cadena con este formado MM-YYYY, si el mes tiene un digio, es un digito, sin el cero delante."
+            const error = "La fecha no cumple el formato específico para el calendario. En este caso se espera una cadena con este formado MM-YYYY. Si el mes tiene un dígito, es un dígito, sin el cero delante."
             throw new Error(error)
         }
         const filtroCadena = /^[a-z0-9]+$/;
         if (!filtroCadena.test(apartamentoIDV) || typeof apartamentoIDV !== "string") {
-            const error = "el campo 'apartamentoIDV' solo puede ser una cadena de letras minúsculas y numeros."
+            const error = "El campo 'apartamentoIDV' solo puede ser una cadena de letras minúsculas y números."
             throw new Error(error)
         }
         // Validar que le nombre del apartamento existe como tal

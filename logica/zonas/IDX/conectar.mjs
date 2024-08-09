@@ -93,7 +93,7 @@ export const conectar = async (entrada) => {
         }
         await controladorIntentos.restablece(usuario);
         if (estadoCuenta === "desactivado") {
-            const error = "Esta cuenta esta desactivada";
+            const error = "Esta cuenta está desactivada.";
             throw new Error(error);
         }
         const fechaActualISO = DateTime.utc().toISO();

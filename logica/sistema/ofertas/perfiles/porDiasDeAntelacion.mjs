@@ -45,11 +45,11 @@ export const porDiasDeAntelacion = async (reserva) => {
 
             const diasAntelacion = Math.floor(fechaEntrada_Objeto.diff(fechaActual_objeto, 'days').days);
             if (simboloNumero === "aPartirDe" && numero <= diasAntelacion) {
-                ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de antelacion o mas `
+                ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} días de antelación o más `
                 ofertasSeleccionadas.push(ofertaEstructuraFinal)
             }
             if (simboloNumero === "numeroExacto" && numero === diasAntelacion) {
-                ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} dias de antelacion concretamente`
+                ofertaEstructuraFinal.definicion = `Oferta aplicada a reserva con ${numero} días de antelación concretamente`
                 ofertasSeleccionadas.push(ofertaEstructuraFinal)
             }
         }

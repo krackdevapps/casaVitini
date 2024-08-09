@@ -19,7 +19,7 @@ export const insertarHabitacionEnApartamento = async (data) => {
 
         const resuelve = await conexion.query(consulta, [apartamentoIDV, habitacionIDV])
         if (resuelve.rowCount === 0) {
-            const error = `Se han pasado las validaciones pero la base de datos no ha insertado el registro`;
+            const error = `Se han pasado las validaciones, pero la base de datos no ha insertado el registro.`;
             throw new Error(error);
         }
         return resuelve.rows[0]

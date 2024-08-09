@@ -31,7 +31,7 @@ export const insertarTitularPool = async (data) => {
         ]
         const resuelveInsertarCliente = await conexion.query(insertarCliente, datosClientes)
         if (resuelveInsertarCliente.rowCount === 0) {
-            const error = "No se ha insertardo el cliente en la base de datos"
+            const error = "No se ha insertado el cliente en la base de datos."
             throw new Error(error)
         }
         const nuevoCliente = resuelveInsertarCliente.rows[0]

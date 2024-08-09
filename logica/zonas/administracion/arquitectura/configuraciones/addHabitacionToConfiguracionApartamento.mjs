@@ -65,7 +65,7 @@ export const addHabitacionToConfiguracionApartamento = async (entrada, salida) =
         const nuevoHabitacion = await insertarHabitacionEnApartamento(dataInsertarHabitacionEnApartamento)
 
         const ok = {
-            ok: "Se ha insertado correctamente la nueva habitacion",
+            ok: "Se ha insertado correctamente la nueva habitación",
             habitacionUID: nuevoHabitacion.componenteUID,
             habitacionIDV: habitacionIDV,
             habitacionUI: habitacionUI

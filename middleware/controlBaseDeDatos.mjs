@@ -10,7 +10,7 @@ export const controlBaseDeDatos = async (entrada, salida, next) => {
     } else if (entrada.method === 'POST') {
       const error = {
         codigo: 'mantenimiento',
-        error: 'Casa Vitini esta en modo mantenimiento. Ahora mismo el procesador de peticiones no acepta peticiones. En breve se reanudara el sistema. Disculpe las molestias.'
+        error: 'Casa Vitini está en modo mantenimiento. Ahora mismo, el procesador de peticiones no acepta peticiones. En breve se reanudará el sistema. Disculpe las molestias.'
       };
       salida.json(error);
     }

@@ -10,7 +10,7 @@ export const procesador = async (data) => {
         const estructura = estructuraDesgloseFinanciero()
         const entidades = data?.entidades || {}
         if (!entidades) {
-            const error = "El procesador de precios esta mal configurado, tener definida la llave entidades."
+            const error = "El procesador de precios está mal configurado, debe tener definida la llave de entidades."
             throw new Error(error)
         }
 
@@ -27,7 +27,7 @@ export const procesador = async (data) => {
                 ...simulacion
             })
         }else {
-            const error = "El procesador de precios esta mal configurado, necesita dentro de la llave entidades un objeto con le nombre de la entidad."
+            const error = "El procesador de precios está mal configurado, necesita dentro de la llave de entidades un objeto con le nombre de la entidad."
             throw new Error(error)
         }
 

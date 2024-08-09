@@ -105,7 +105,7 @@ export const insertarImpuestoDedicadoEnSimulacion = async (entrada) => {
         })
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha insertado el impuesto correctamen el impuesto dedicado en la reserva",
+            ok: "Se ha insertado el impuesto correctamente, el impuesto dedicado en la reserva.",
             simulacionUID,
             impuestoDedicado: estructura
         }

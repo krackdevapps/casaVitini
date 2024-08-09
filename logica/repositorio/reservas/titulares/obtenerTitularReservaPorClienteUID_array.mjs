@@ -11,7 +11,7 @@ export const obtenerTitularReservaPorClienteUID = async (clienteUID_array) => {
 
         const resuelve = await conexion.query(consulta, [clienteUID_array])
         if (resuelve.rowCount === 0) {
-            const error = "Esta reserva no tiene ningun titular asignado";
+            const error = "Esta reserva no tiene ningún titular asignado.";
             throw new Error(error);
         }
         return resuelve.rows[0]

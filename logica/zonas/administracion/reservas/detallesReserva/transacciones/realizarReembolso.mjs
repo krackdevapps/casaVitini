@@ -49,7 +49,7 @@ export const realizarReembolso = async (entrada, salida) => {
             soloMinusculas: "si"
         })
         if (palabra !== "reembolso") {
-            const error = "Escriba la palabra reembolso en le campo de confirmacion";
+            const error = "Escriba la palabra reembolso en el campo de confirmación";
             throw new Error(error);
         }
 
@@ -62,7 +62,7 @@ export const realizarReembolso = async (entrada, salida) => {
         })
 
         if (tipoReembolso !== "porPorcentaje" && tipoReembolso !== "porCantidad") {
-            const error = "el campo 'tipoReembolso' solo puede ser porPorcentaje o porCantidad.";
+            const error = "El campo 'tipoReembolso' solo puede ser porPorcentaje o porCantidad.";
             throw new Error(error)
         }
 
@@ -76,7 +76,7 @@ export const realizarReembolso = async (entrada, salida) => {
 
         const tipoDeReembolso = ["efectivo", "cheque", "pasarela", "tarjeta"];
         if (!tipoDeReembolso.some(palabra => plataformaDePagoEntrada.includes(palabra))) {
-            const error = "Selecciona eltipo de plataforma en la que se va ha hacer el reembolso, por ejemplo, pasarela, tarjeta, efectivo o cheque";
+            const error = "Selecciona el tipo de plataforma en la que se va a hacer el reembolso, por ejemplo, pasarela, tarjeta, efectivo o cheque";
             throw new Error(error);
         }
         const detallesReserva = await obtenerReservaPorReservaUID(reservaUID);
@@ -113,16 +113,16 @@ export const realizarReembolso = async (entrada, salida) => {
             });
             const totalReembolsable = new Decimal(controlTotalPago).minus(totalReembolsado);
             if (Number(cantidad) >= Number(totalReembolsable)) {
-                const error = `El valor del reembolso ${cantidad} supera el valor total reembolsable de este pago (${totalReembolsable}). Recuerda que no puedes realizar un reembolso que supere la cantidad reembolsable del pago. Ten encuenta el resto de reembolsos a la hora de hacer un reembolso mas de este pago`;
+                const error = `El valor del reembolso ${cantidad} supera el valor total reembolsable de este pago (${totalReembolsable}). Recuerda que no puedes realizar un reembolso que supere la cantidad reembolsable del pago. Ten en cuenta el resto de reembolsos a la hora de hacer un reembolso más de este pago.`;
                 throw new Error(error);
             }
         }
         if (plataformaDePagoEntrada === "pasarela" && plataformaDePago !== "pasarela") {
-            const error = `No se puede enviar este reembolso a la pasarela por que este pago no se hizo por la pasarela. Para realizar un reembolso a atraves de la pasarela, el pago del cual forma parte el reembolso tiene que haberse producido por la pasarela.`;
+            const error = `No se puede enviar este reembolso a la pasarela porque este pago no se hizo por la pasarela. Para realizar un reembolso a través de la pasarela, el pago del cual forma parte del reembolso tiene que haberse producido por la pasarela.`;
             throw new Error(error);
         }
         if (plataformaDePago === "pasarela" && plataformaDePagoEntrada === "pasarela") {
-            const error = `La opcionn de enviar un reembolso a la pasarela esta deshabilitada.`;
+            const error = `La opción de enviar un reembolso a la pasarela está deshabilitada.`;
             throw new Error(error);
 
             const totalFormatoSquare = Number(cantidad.replace(".", ""));
@@ -143,13 +143,13 @@ export const realizarReembolso = async (entrada, salida) => {
                         error = "La pasarela informa que el reembolso es superior a la cantidad del pago que se quiere reembolsar";
                         throw new Error(error);
                     case "CURRENCY_MISMATCH":
-                        error = "Revisa el codigo de la moneda introducido. Solo se aceptan dolares. Coodigo: USD";
+                        error = "Revisa el código de la moneda introducido. Solo se aceptan dólares. Código: USD";
                         throw new Error(error);
                     case "NOT_FOUND":
                         error = "La pasarela informa de que el idenficador del reembolso no existe en la pasarela";
                         throw new Error(error);
                     default:
-                        error = "La pasarela informa de un error generico";
+                        error = "La pasarela informa de un error genérico";
                         throw new Error(error);
                 }
             }
@@ -176,9 +176,9 @@ export const realizarReembolso = async (entrada, salida) => {
             reembolsoUID: reembolsoUID
         };
         if (plataformaDePagoEntrada === "pasarela") {
-            ok.ok = "Se ha guardado el reembolso en la base de datos y enviado con exito a la pasarela. El dinero del reembolso se esta reembolsando a traves de la pasarela";
+            ok.ok = "Se ha guardado el reembolso en la base de datos y enviado con éxito a la pasarela. El dinero del reembolso se está reembolsando a través de la pasarela.";
         } else {
-            ok.ok = "Se ha guardado el reembolso en la base de datos verifique que el reembolso sea entrago al cliente";
+            ok.ok = "Se ha guardado el reembolso en la base de datos. Verifique que el reembolso sea entregado al cliente.";
         }
         return ok
 

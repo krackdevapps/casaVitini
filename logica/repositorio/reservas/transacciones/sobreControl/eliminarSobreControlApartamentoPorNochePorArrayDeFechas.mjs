@@ -19,7 +19,6 @@ export const eliminarSobreControlApartamentoPorNochePorArrayDeFechas = async (da
       reservaUID,
       fechasNochesARRAY,
     ]
-    console.log("parameteos", parametros)
     const resuelve = await conexion.query(consultaBorradoApartamento, parametros);
     return resuelve.rows[0]
 

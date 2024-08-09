@@ -28,7 +28,7 @@ export const reconstruirDesgloseDesdeInstantaneas = async (entrada) => {
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
         if (estadoReserva === "cancelada") {
-            const error = "La reserva esta cancelada, no se puede alterar los descuentos"
+            const error = "La reserva está cancelada, no se pueden alterar los descuentos."
             throw new Error(error)
         }
         await campoDeTransaccion("iniciar")
@@ -47,7 +47,7 @@ export const reconstruirDesgloseDesdeInstantaneas = async (entrada) => {
         })
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha reconstruido el desglose desde las instantaneas"
+            ok: "Se ha reconstruido el desglose desde las instantáneas"
         }
         return ok
     } catch (errorCapturado) {

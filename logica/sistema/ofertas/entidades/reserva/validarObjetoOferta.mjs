@@ -59,19 +59,19 @@ export const validarObjetoOferta = async (data) => {
             nombreCampo: "El objeto de descuentosJSON"
         })
         if (condicionesArray.length === 0) {
-            const error = "Añade al menos una condiciona la oferta"
+            const error = "Añade al menos una condición a la oferta."
             throw new Error(error)
         }
         const zonaIDV = oferta.zonaIDV
         if (zonaIDV !== "global" && zonaIDV !== "publica" && zonaIDV !== "privada") {
-            const error = "el campo zonaIDV solo admite global, publica o privada"
+            const error = "El campo zonaIDV solo admite global, pública o privada"
             throw new Error(error)
         }
 
         const mensajeError = (data) => {
             const numeroMaximo = data.numeroMaximo
             const tipoCondicionIDV = data.tipoCondicionIDV
-            const m = `El contnedor ${tipoCondicionIDV} no espera mas de ${numeroMaximo} de llaves en el objeto`
+            const m = `El contenedor ${tipoCondicionIDV} no espera más de ${numeroMaximo} de llaves en el objeto`
             return m
         }
 
@@ -164,24 +164,24 @@ export const validarObjetoOferta = async (data) => {
                     // &&
                     // tipoDeEspecificidad !== "noDebeContenedorExactamenteEntreOtros"
                 ) {
-                    const error = "el campo tipoDeEspecificidad solo admite exactamente, alguno o exactamenteEntreOtros"
+                    const error = "El campo tipoDeEspecificidad solo admite, exactamente, alguno o exactamenteEntreOtros"
                     throw new Error(error)
                 }
                 const apartamentos = condicion.apartamentos
                 validadoresCompartidos.tipos.array({
                     array: apartamentos,
-                    nombreCampo: "Array de apartamento en la condicion de porApartamentosEspecificos",
+                    nombreCampo: "Array de apartamento en la condición de porApartamentosEspecificos",
                     sePermitenDuplicados: "no"
                 })
                 const contenedorControlIDVUnicos = {}
                 for (const contenedorApartamento of apartamentos) {
                     if (Object.keys(contenedorApartamento).length > 1) {
-                        const m = "El contenedor de apartamentos en la condicion porApartamentosEspecificos solo espera una llave"
+                        const m = "El contenedor de apartamentos en la condición porApartamentosEspecificos solo espera una llave."
                         throw new Error(m)
                     }
 
                     if (!contenedorApartamento.hasOwnProperty("apartamentoIDV")) {
-                        const m = "Se esperaba que el contenedor de apartamentos de la condicion de porApartamentosEspecificos tuviera la llave apartamentoIDV"
+                        const m = "Se esperaba que el contenedor de apartamentos de la condición de porApartamentosEspecificos tuviera la llave apartamentoIDV"
                         throw new Error(m)
                     }
                     const apartamentoIDV = contenedorApartamento.apartamentoIDV
@@ -219,13 +219,13 @@ export const validarObjetoOferta = async (data) => {
                     tipoConteo !== "numeroExacto"
                     &&
                     tipoConteo !== "hastaUnNumeroExacto") {
-                    const error = `En la condicion ${tipoCondicionIDV} el campo tipoConteo solo puede ser aPartirDe o numeroExacto`
+                    const error = `En la condición ${tipoCondicionIDV} el campo tipoConteo solo puede ser aPartirDe o numeroExacto`
                     throw new Error(error)
 
                 }
                 validadoresCompartidos.tipos.cadena({
                     string: condicion.numeroDeDias,
-                    nombreCampo: "El campo numeroDeDias en la condicion " + tipoCondicionIDV,
+                    nombreCampo: "El campo numeroDeDias en la condición " + tipoCondicionIDV,
                     filtro: "cadenaConNumerosEnteros",
                     sePermiteVacio: "no",
                     devuelveUnTipoNumber: "no",
@@ -246,13 +246,13 @@ export const validarObjetoOferta = async (data) => {
 
                 const tipoConteo = condicion.tipoConteo
                 if (tipoConteo !== "aPartirDe" && tipoConteo !== "numeroExacto" && tipoConteo !== "hastaUnNumeroExacto") {
-                    const error = `En la condiicon ${tipoCondicionIDV} el campo tipoConteo solo puede ser aPartirDe o numeroExacto`
+                    const error = `En la condición ${tipoCondicionIDV} el campo tipoConteo solo puede ser aPartirDe o numeroExacto`
                     throw new Error(error)
 
                 }
                 validadoresCompartidos.tipos.cadena({
                     string: condicion.numeroDeDias,
-                    nombreCampo: "El campo numeroDeDias en la condicion " + tipoCondicionIDV,
+                    nombreCampo: "El campo numeroDeDias en la condición " + tipoCondicionIDV,
                     filtro: "cadenaConNumerosEnteros",
                     sePermiteVacio: "no",
                     impedirCero: "si",
@@ -273,12 +273,12 @@ export const validarObjetoOferta = async (data) => {
                 const fechaInicioRango_ISO = condicion?.fechaInicioRango_ISO
                 const fechaFinalRango_ISO = condicion?.fechaFinalRango_ISO
                 if (!fechaInicioRango_ISO) {
-                    const error = "En el tipo de condicion porRangoDeFechas no hay definida la fecha de inicio del rango"
+                    const error = "En el tipo de condición porRangoDeFechas no hay definida la fecha de inicio del rango"
                     throw new Error(error)
 
                 }
                 if (!fechaFinalRango_ISO) {
-                    const error = "En el tipo de condicion porRangoDeFechas no hay definida la fecha del find el rango"
+                    const error = "En el tipo de condicion porRangoDeFechas no hay definida la fecha del fin del rango"
                     throw new Error(error)
 
                 }
@@ -309,7 +309,7 @@ export const validarObjetoOferta = async (data) => {
                 const codigoDescuentoAsci = condicion?.codigoDescuento
                 const codigoDescuentoBase64 = validadoresCompartidos.tipos.cadena({
                     string: codigoDescuentoAsci,
-                    nombreCampo: "Te falta el codigo de descuento en la condicion de codigo de descuento.",
+                    nombreCampo: "Te falta el código de descuento en la condición de código de descuento.",
                     filtro: "transformaABase64",
                     sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
@@ -325,14 +325,14 @@ export const validarObjetoOferta = async (data) => {
         if (codigosDescuentosBase64DeLaMismaOferta.length > 0) {
             const controlDescuentosRepetidos = new Set(codigosDescuentosBase64DeLaMismaOferta).size !== codigosDescuentosBase64DeLaMismaOferta.length;
             if (controlDescuentosRepetidos) {
-                const error = "Dentro de esta oferta tienes codigos de descuento repetidos"
+                const error = "Dentro de esta oferta tienes códigos de descuento repetidos"
                 throw new Error(error)
             }
             if (modo === "crearOferta") {
                 const ofertasConElMismoCodigo = await obtenerOfertasPorCodigoDescuentoArray(codigosDescuentosBase64DeLaMismaOferta)
                 if (ofertasConElMismoCodigo.length > 0) {
                     const e = {
-                        error: `Revisa los codigos de descuento de esta oferta por que existen en otras ofertas. Cada codigo de descuento sirve para cada oferta, aunque una oferta puede tener varios codigos de descuento, no pueden existir codigo de descuentos iguales. A continguacions se muestran las ofertas con el mismo codigo.`,
+                        error: `Revisa los códigos de descuento de esta oferta porque existen en otras ofertas. Cada código de descuento sirve para cada oferta. Aunque una oferta puede tener varios códigos de descuento, no pueden existir códigos de descuentos iguales. A continuación se muestran las ofertas con el mismo código.`,
                         ofertasConElMismoCodigo: ofertasConElMismoCodigo
                     }
                     throw e
@@ -345,7 +345,7 @@ export const validarObjetoOferta = async (data) => {
                 })
                 if (ofertasConElMismoCodigo.length > 0) {
                     const e = {
-                        error: `Revisa los codigos de descuento de esta oferta por que existen en otras ofertas. Cada codigo de descuento sirve para cada oferta, aunque una oferta puede tener varios codigos de descuento, no pueden existir codigo de descuentos iguales. A continguacions se muestran las ofertas con el mismo codigo.`,
+                        error: `Revisa los códigos de descuento de esta oferta porque existen en otras ofertas. Cada código de descuento sirve para cada oferta. Aunque una oferta puede tener varios códigos de descuento, no pueden existir códigos de descuentos iguales. A continuación se muestran las ofertas con el mismo código.`,
                         ofertasConElMismoCodigo: ofertasConElMismoCodigo
                     }
                     throw e
@@ -357,7 +357,7 @@ export const validarObjetoOferta = async (data) => {
         if (tipoDescuento === "totalNeto") {
 
             if (Object.keys(descuentosJSON).length > 3) {
-                const m = "El objeto de descuentosJSON para totalNeto no espera mas de 3 llaves"
+                const m = "El objeto de descuentosJSON para totalNeto no espera más de 3 llaves"
                 throw new Error(m)
             }
 
@@ -365,12 +365,12 @@ export const validarObjetoOferta = async (data) => {
             const descuentoTotal = descuentosJSON.descuentoTotal
 
             if (tipoAplicacion !== "porcentaje" && tipoAplicacion !== "cantidadFija") {
-                const error = `En la descuentos, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
+                const error = `En el descuento, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
                 throw new Error(error)
             }
             validadoresCompartidos.tipos.cadena({
                 string: descuentoTotal,
-                nombreCampo: `El campo descuentoTotla solo puede ser una cadena con un numero don dos decimales separados por punto, tal que asi 0.00`,
+                nombreCampo: `El campo descuentoTotla solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
                 filtro: "cadenaConNumerosConDosDecimales",
                 sePermiteVacio: "no",
                 impedirCero: "si",
@@ -389,12 +389,12 @@ export const validarObjetoOferta = async (data) => {
             const descuentoTotal = descuentosJSON.descuentoTotal
 
             if (tipoAplicacion !== "porcentaje" && tipoAplicacion !== "cantidadFija") {
-                const error = `En la descuentos, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
+                const error = `En el descuento, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
                 throw new Error(error)
             }
             validadoresCompartidos.tipos.cadena({
                 string: descuentoTotal,
-                nombreCampo: `El campo descuentoTotla solo puede ser una cadena con un numero don dos decimales separados por punto, tal que asi 0.00`,
+                nombreCampo: `El campo descuentoTotla solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
                 filtro: "cadenaConNumerosConDosDecimales",
                 sePermiteVacio: "no",
                 impedirCero: "si",
@@ -405,7 +405,7 @@ export const validarObjetoOferta = async (data) => {
         } else if (tipoDescuento === "individualPorApartamento") {
 
             if (Object.keys(descuentosJSON).length > 2) {
-                const m = "El objeto de descuentosJSON para individualPorApartamento no espera mas de 2 llaves"
+                const m = "El objeto de descuentosJSON para individualPorApartamento no espera más de 2 llaves"
                 throw new Error(m)
             }
 
@@ -424,17 +424,17 @@ export const validarObjetoOferta = async (data) => {
                 const descuentoTotal = apartamentoIndividual.descuentoTotal
                 const apartamentoIDV = apartamentoIndividual.apartamentoIDV
                 if (tipoAplicacion !== "porcentaje" && tipoAplicacion !== "cantidadFija") {
-                    const error = `En la descuentos, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
+                    const error = `En los descuentos, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
                     throw new Error(error)
                 }
 
                 if (!apartamentoIndividual.hasOwnProperty("apartamentoIDV")) {
-                    const error = `Dentro del descuentos individualPorApartamento, en el contenedor de apartamentos, hay un objeto sin la llave apartamentoIDV`
+                    const error = `Dentro de los descuentos individualPorApartamento, en el contenedor de apartamentos, hay un objeto sin la llave apartamentoIDV`
                     throw new Error(error)
                 }
                 validadoresCompartidos.tipos.cadena({
                     string: descuentoTotal,
-                    nombreCampo: `El campo descuentoTotal en ${tipoDescuento}, en el ${apartamentoIDV} solo puede ser una cadena con un numero don dos decimales separados por punto, tal que asi 0.00`,
+                    nombreCampo: `El campo descuentoTotal en ${tipoDescuento}, en el ${apartamentoIDV} solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
                     filtro: "cadenaConNumerosConDosDecimales",
                     sePermiteVacio: "no",
                     impedirCero: "si",
@@ -450,11 +450,11 @@ export const validarObjetoOferta = async (data) => {
 
             await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: fechaInicioRango_ISO,
-                nombreCampo: `La fecha de incio de la condicion ${fechaInicioRango_ISO}`
+                nombreCampo: `La fecha de incio de la condición ${fechaInicioRango_ISO}`
             })
             await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: fechaFinalRango_ISO,
-                nombreCampo: `La fecha de final de la condicion ${fechaFinalRango_ISO}`
+                nombreCampo: `La fecha de final de la condición ${fechaFinalRango_ISO}`
             })
             await validadoresCompartidos.fechas.validacionVectorial({
                 fechaEntrada: fechaInicioRango_ISO,
@@ -466,7 +466,7 @@ export const validarObjetoOferta = async (data) => {
             if (subTipoDescuento === "totalNetoPorRango") {
 
                 if (Object.keys(descuentosJSON).length > 6) {
-                    const m = "El objeto de descuentosJSON para porRango en el subTipo totalNetoPorRango no espera mas de 6 llaves"
+                    const m = "El objeto de descuentosJSON para porRango en el subTipo totalNetoPorRango no espera más de 6 llaves"
                     throw new Error(m)
                 }
 
@@ -475,12 +475,12 @@ export const validarObjetoOferta = async (data) => {
                 const descuentoTotal = descuentosJSON.descuentoTotal
 
                 if (tipoAplicacion !== "porcentaje" && tipoAplicacion !== "cantidadFija") {
-                    const error = `En ${subTipoDescuento} el tipo aplicacion del descuento solo puede ser porcentaje o cantidadFija`
+                    const error = `En ${subTipoDescuento} el tipo aplicación del descuento solo puede ser porcentaje o cantidadFija`
                     throw new Error(error)
                 }
                 validadoresCompartidos.tipos.cadena({
                     string: descuentoTotal,
-                    nombreCampo: `El campo descuentoTotal en ${subTipoDescuento} del dia solo puede ser una cadena con un numero don dos decimales separados por punto, tal que asi 0.00`,
+                    nombreCampo: `El campo descuentoTotal en ${subTipoDescuento} del día solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
                     filtro: "cadenaConNumerosConDosDecimales",
                     sePermiteVacio: "no",
                     impedirCero: "si",
@@ -489,7 +489,7 @@ export const validarObjetoOferta = async (data) => {
                 })
             } else if (subTipoDescuento === "porDiasDelRango") {
                 if (Object.keys(descuentosJSON).length > 5) {
-                    const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango no espera mas de 5 llaves"
+                    const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango no espera más de 5 llaves"
                     throw new Error(m)
                 }
 
@@ -503,7 +503,7 @@ export const validarObjetoOferta = async (data) => {
 
                     const fechaDelDia = await validadoresCompartidos.fechas.validarFecha_ISO({
                         fecha_ISO: dia.fecha,
-                        nombreCampo: `La fecha del dia`
+                        nombreCampo: `La fecha del día`
                     })
 
                     const fechaEnRango = await validadoresCompartidos.fechas.fechaEnRango({
@@ -514,34 +514,31 @@ export const validarObjetoOferta = async (data) => {
 
 
                     if (!fechaEnRango) {
-                        const error = `Dentro el dia con fecha ${fechaDelDia} esta fuera del rango entre ${fechaInicioRango_ISO} y ${fechaFinalRango_ISO}`
+                        const error = `Dentro el día con fecha ${fechaDelDia} está fuera del rango entre ${fechaInicioRango_ISO} y ${fechaFinalRango_ISO}`
                         throw new Error(error)
                     }
                     if (!tipoDescuentoDelDia && tipoDescuentoDelDia !== "netoPorDia" && tipoDescuentoDelDia !== "netoPorApartamentoDelDia") {
-                        const error = `Dentro el dia con fecha ${fechaDelDia} el tipo de descuento del dia solo puede ser netoPorDia o netoPorApartamentoDelDia`
+                        const error = `Dentro el día con fecha ${fechaDelDia} el tipo de descuento del día solo puede ser netoPorDia o netoPorApartamentoDelDia`
                         throw new Error(error)
                     }
 
                     if (tipoDescuentoDelDia === "netoPorDia") {
 
-
-
                         if (Object.keys(dia).length > 4) {
-                            const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango, en el tipo de descuento netoPorDia no espera mas de 4 llaves"
+                            const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango, en el tipo de descuento netoPorDia no espera más de 4 llaves"
                             throw new Error(m)
                         }
-
 
                         const tipoAplicacion = dia.tipoAplicacion
                         const descuentoTotal = dia.descuentoTotal
 
                         if (tipoAplicacion !== "porcentaje" && tipoAplicacion !== "cantidadFija") {
-                            const error = `En el dia ${fechaDelDia} el tipo aplicacion del descuento solo puede ser porcentaje o cantidadFija`
+                            const error = `En el día ${fechaDelDia} el tipo aplicación del descuento solo puede ser porcentaje o cantidadFija`
                             throw new Error(error)
                         }
                         validadoresCompartidos.tipos.cadena({
                             string: descuentoTotal,
-                            nombreCampo: `En el dia ${fechaDelDia}, el campo descuentoTotal solo puede ser una cadena con un numero con dos decimales separados por punto.`,
+                            nombreCampo: `En el día ${fechaDelDia}, el campo descuentoTotal solo puede ser una cadena con un número con dos decimales separados por punto.`,
                             filtro: "cadenaConNumerosConDosDecimales",
                             sePermiteVacio: "no",
                             impedirCero: "si",
@@ -552,30 +549,30 @@ export const validarObjetoOferta = async (data) => {
 
 
                         if (Object.keys(dia).length > 3) {
-                            const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango, en el tipo de descuento netoPorApartamentoDelDia no espera mas de 3 llaves"
+                            const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango, en el tipo de descuento netoPorApartamentoDelDia no espera más de 3 llaves"
                             throw new Error(m)
                         }
 
 
                         const fechaDelDia = await validadoresCompartidos.fechas.validarFecha_ISO({
                             fecha_ISO: dia.fecha,
-                            nombreCampo: `La fecha de final del dia`
+                            nombreCampo: `La fecha de final del día`
                         })
 
                         const apartamentos = validadoresCompartidos.tipos.array({
                             array: dia.apartamentos,
-                            nombreCampo: `El array de apatamento en el dia ${fechaDelDia}`
+                            nombreCampo: `El array de apatamentos en el día ${fechaDelDia}`
                         })
                         for (const apartmentoDelDia of apartamentos) {
 
                             if (Object.keys(apartmentoDelDia).length > 3) {
-                                const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango, en el tipo de descuento netoPorApartamentoDelDia, concretamenteo en el conteneodr de apartamentos no espera mas de 3 llaves"
+                                const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango, en el tipo de descuento netoPorApartamentoDelDia, concretamenteo en el conteneodr de apartamentos no espera más de 3 llaves"
                                 throw new Error(m)
                             }
     
                             const apartamentoIDV = validadoresCompartidos.tipos.cadena({
                                 string: apartmentoDelDia.apartamentoIDV,
-                                nombreCampo: `el identificador visual del apartamento dentro del dia ${fechaDelDia}.`,
+                                nombreCampo: `El identificador visual del apartamento dentro del día ${fechaDelDia}.`,
                                 filtro: "strictoIDV",
                                 sePermiteVacio: "no",
                                 limpiezaEspaciosAlrededor: "si",
@@ -592,13 +589,13 @@ export const validarObjetoOferta = async (data) => {
 
                             const tipoAplicacionDentroDelDia = apartmentoDelDia.tipoAplicacion
                             if (tipoAplicacionDentroDelDia !== "porcentaje" && tipoAplicacionDentroDelDia !== "cantidadFija") {
-                                const error = `Dentro el dia con fecha ${fechaDelDia} el tipo de descuento del ${apartamentoUI} (${apartamentoIDV}) solo puede ser porcentaje o cantidadFija`
+                                const error = `Dentro el día con fecha ${fechaDelDia} el tipo de descuento del ${apartamentoUI} (${apartamentoIDV}) solo puede ser porcentaje o cantidadFija`
                                 throw new Error(error)
                             }
 
                             validadoresCompartidos.tipos.cadena({
                                 string: apartmentoDelDia.descuentoTotal,
-                                nombreCampo: `El campo descuentoTotal del dia ${fechaDelDia} en el ${apartamentoUI} (${apartamentoIDV}) solo puede ser una cadena con un numero con dos decimales separados por punto, tal que asi 0.00`,
+                                nombreCampo: `El campo descuentoTotal del día ${fechaDelDia} en el ${apartamentoUI} (${apartamentoIDV}) solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
                                 filtro: "cadenaConNumerosConDosDecimales",
                                 sePermiteVacio: "no",
                                 impedirCero: "si",
@@ -607,7 +604,7 @@ export const validarObjetoOferta = async (data) => {
                             })
                         }
                     } else {
-                        const error = "No se reconove subTipoDescuento, debe ser porDialDelRango o totalNetoPorRango: " + tipoDescuentoDelDia
+                        const error = "No se reconoce subTipoDescuento, debe ser porDialDelRango o totalNetoPorRango: " + tipoDescuentoDelDia
                         throw new Error(error)
                     }
                 }
@@ -616,7 +613,7 @@ export const validarObjetoOferta = async (data) => {
                 throw new Error(error)
             }
         } else {
-            const error = "No se reconoce el tipo de Descuento, el tipo de descuento solo puede ser totalNetoApartamentoDedicado, totalNetoReserva o porRango"
+            const error = "No se reconoce el tipo de descuento, el tipo de descuento solo puede ser totalNetoApartamentoDedicado, totalNetoReserva o porRango"
             throw new Error(error)
         }
     } catch (error) {

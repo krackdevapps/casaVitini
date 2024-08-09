@@ -23,7 +23,7 @@ export const eliminarPagoManual = async (entrada) => {
             soloMinusculas: "si"
         })
         if (palabra !== "eliminar") {
-            const error = "Necesario escribir la la palabra eliminar para confirmar la eliminación y evitar falsos clicks";
+            const error = "Necesario escribir la palabra, eliminar para confirmar la eliminación y evitar falsos clics";
             throw new Error(error);
         }
         const pagoUID = validadoresCompartidos.tipos.cadena({

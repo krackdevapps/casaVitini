@@ -31,7 +31,7 @@ export const obtener_reservas = async (entrada) => {
         }
         
         const ok = {
-            ok: "Aquí tienes las reservas de origen publico pendientes por revisar",
+            ok: "Aquí tienes las reservas de origen público pendientes por revisar.",
             reservas: reservas
         };
 
