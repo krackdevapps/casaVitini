@@ -19,7 +19,7 @@ export const detalleImpuesto = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
 
-        const perfilImpuesto =await obtenerImpuestosPorImppuestoUID(impuestoUID)
+        const perfilImpuesto = await obtenerImpuestosPorImppuestoUID(impuestoUID)
         const ok = {
             ok: perfilImpuesto
         };

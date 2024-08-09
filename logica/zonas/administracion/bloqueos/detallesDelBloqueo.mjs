@@ -37,25 +37,25 @@ export const detallesDelBloqueo = async (entrada) => {
         const apartamentoUI = apartamento.apartamentoUI
         const detallesDelBloqueo = await obtenerBloqueoPorBloqueoUID(bloqueoUID)
 
-            const tipoBloqueoIDV = detallesDelBloqueo.tipoBloqueoIDV;
-            const fechaInicio = detallesDelBloqueo.fechaInicio;
-            const fechaFin = detallesDelBloqueo.fechaFin;
-            const motivo = detallesDelBloqueo.motivo || "";
-            const zonaIDV = detallesDelBloqueo.zonaIDV;
-            const estructuraBloqueo = {
-                bloqueoUID,
-                tipoBloqueoIDV,
-                fechaInicio,
-                fechaFin,
-                motivo,
-                zonaIDV
-            };
-            const ok = {};
-            ok.apartamentoIDV = apartamentoIDV;
-            ok.apartamentoUI = apartamentoUI;
-            ok.ok = estructuraBloqueo;
-            return ok
-        
+        const tipoBloqueoIDV = detallesDelBloqueo.tipoBloqueoIDV;
+        const fechaInicio = detallesDelBloqueo.fechaInicio;
+        const fechaFin = detallesDelBloqueo.fechaFin;
+        const motivo = detallesDelBloqueo.motivo || "";
+        const zonaIDV = detallesDelBloqueo.zonaIDV;
+        const estructuraBloqueo = {
+            bloqueoUID,
+            tipoBloqueoIDV,
+            fechaInicio,
+            fechaFin,
+            motivo,
+            zonaIDV
+        };
+        const ok = {};
+        ok.apartamentoIDV = apartamentoIDV;
+        ok.apartamentoUI = apartamentoUI;
+        ok.ok = estructuraBloqueo;
+        return ok
+
     } catch (errorCapturado) {
         throw errorCapturado
     }

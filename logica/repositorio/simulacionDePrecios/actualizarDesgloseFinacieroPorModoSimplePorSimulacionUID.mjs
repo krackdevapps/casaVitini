@@ -29,7 +29,7 @@ export const actualizarDesgloseFinacieroPorModoSimplePorSimulacionUID = async (d
             instantaneaSobreControlPrecios,
             apartamentosIDVARRAY,
             simulacionUID,
-            
+
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

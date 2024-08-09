@@ -2,7 +2,7 @@ import Decimal from "decimal.js";
 import { obtenerTotalReembolsado } from "../../contenedorFinanciero/entidades/reserva/obtenerTotalReembolsado.mjs";
 import { pagosDeLaReserva } from "./pagosDeLaReserva.mjs";
 
-export  const detallesPagos = async (reservaUID) => {
+export const detallesPagos = async (reservaUID) => {
     try {
 
         const detallesPagosReserva = await pagosDeLaReserva(reservaUID);

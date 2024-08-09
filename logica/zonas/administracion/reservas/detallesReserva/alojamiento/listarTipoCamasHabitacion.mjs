@@ -71,7 +71,7 @@ export const listarTipoCamasHabitacion = async (entrada, salida) => {
         const camasFisicas = await obtenerTodasLasCamaPorTipoIDV("fisica")
 
         estructura.listaCamasFisicas = camasFisicas
-  
+
         return estructura
 
     } catch (errorCapturado) {

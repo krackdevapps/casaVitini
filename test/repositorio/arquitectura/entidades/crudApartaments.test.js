@@ -44,7 +44,7 @@ describe('crud apartament as entity', () => {
     test('select apartament by IDV', async () => {
         const respons = await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV: IDVStart,
-            errorSi:"noExiste"
+            errorSi: "noExiste"
         })
         expect(respons).not.toBeUndefined();
         expect(typeof respons).toBe('object');
@@ -67,15 +67,15 @@ describe('crud apartament as entity', () => {
     })
     test('update apartament', async () => {
         const updateEntity = {
-            apartamentoIDVNuevo:IDVFinal,
-            apartamentoUI:UIStart,
-            apartamentoIDVSelector:IDVStart,
+            apartamentoIDVNuevo: IDVFinal,
+            apartamentoUI: UIStart,
+            apartamentoIDVSelector: IDVStart,
         }
         const respons = await actualizarApartamentoComoEntidadPorApartamentoIDV(updateEntity);
         expect(respons).not.toBeUndefined();
         expect(typeof respons).toBe('object');
 
-        
+
     })
     test('delete all features of apartament', async () => {
         const respons = await eliminarCaracteristicasDelApartamentoPorApartamentoIDV(IDVStart)

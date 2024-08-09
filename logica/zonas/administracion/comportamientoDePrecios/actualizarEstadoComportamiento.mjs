@@ -40,7 +40,7 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
             comportamientoUID
         })
 
-    
+
 
         await campoDeTransaccion("confirmar")
         const ok = {

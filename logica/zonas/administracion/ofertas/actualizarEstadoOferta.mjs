@@ -38,8 +38,8 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
         await campoDeTransaccion("iniciar")
 
         const data = {
-            ofertaUID:ofertaUID,
-            estadoIDV:estadoIDV,
+            ofertaUID: ofertaUID,
+            estadoIDV: estadoIDV,
         }
         const ofertaActualizada = await actualizarEstadoOferata(data)
         await campoDeTransaccion("confirmar")

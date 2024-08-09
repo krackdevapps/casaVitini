@@ -23,7 +23,7 @@ export const pdfReserva = async (entrada) => {
         })
 
         await obtenerReservaPorReservaUID(reservaUID)
-    
+
         const reserva = await detallesReserva({
             reservaUID: reservaUID,
             capas: [

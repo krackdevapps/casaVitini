@@ -38,19 +38,19 @@ export const estadoHabitacionesApartamento = async (entrada, salida) => {
         const ok = {
             ok: []
         }
-            for (const habitacionIDV of resuelveHabitaciones) {
-                const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV({
-                    habitacionIDV,
-                    errorSi: "noExiste"
-                })
-                const habitaconUI = habitacion.habitacionUI;
-                const habitacionResuelta = {
-                    habitacionIDV: habitacionIDV,
-                    habitacionUI: habitaconUI
-                };
-                ok.ok.push(habitacionResuelta);
-            }
-        
+        for (const habitacionIDV of resuelveHabitaciones) {
+            const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                habitacionIDV,
+                errorSi: "noExiste"
+            })
+            const habitaconUI = habitacion.habitacionUI;
+            const habitacionResuelta = {
+                habitacionIDV: habitacionIDV,
+                habitacionUI: habitaconUI
+            };
+            ok.ok.push(habitacionResuelta);
+        }
+
         return ok
     } catch (errorCapturado) {
         throw errorCapturado

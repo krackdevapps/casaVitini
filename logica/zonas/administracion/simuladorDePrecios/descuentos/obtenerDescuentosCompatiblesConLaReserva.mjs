@@ -22,7 +22,7 @@ export const obtenerDescuentosCompatiblesConLaReserva = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
 
-      const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
+        const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
         const fechaCreacion = simulacion.fechaCreacion

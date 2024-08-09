@@ -33,7 +33,7 @@ describe('crud recovery links', () => {
     test('insert new recovery link', async () => {
         const response = await insertarEnlaceDeRecuperacion({
             usuarioIDX: usuarioTest,
-            codigoGenerado:codigoPublico,
+            codigoGenerado: codigoPublico,
             fechaCaducidadUTC: "2022-10-10",
         })
         nuevoEnlaceUID = response.enlaceUID

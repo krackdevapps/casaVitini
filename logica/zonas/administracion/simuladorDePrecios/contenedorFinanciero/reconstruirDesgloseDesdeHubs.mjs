@@ -47,7 +47,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
         const apartamentosArray = simulacion.apartamentosIDVARRAY
-      
+
         try {
             for (const apartamentoIDV of apartamentosArray) {
                 await obtenerConfiguracionPorApartamentoIDV({

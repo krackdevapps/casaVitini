@@ -28,7 +28,7 @@ export const detallesSimulacion = async (entrada) => {
         const apartamentosIDVARRAY = simulacion.apartamentosIDVARRAY
         const apartamentos = []
         for (const apartamentoIDV of apartamentosIDVARRAY) {
-             await obtenerConfiguracionPorApartamentoIDV({
+            await obtenerConfiguracionPorApartamentoIDV({
                 apartamentoIDV,
                 errorSi: "noExiste"
             })

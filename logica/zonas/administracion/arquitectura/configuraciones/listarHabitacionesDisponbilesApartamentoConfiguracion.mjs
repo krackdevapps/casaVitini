@@ -20,44 +20,44 @@ export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entr
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-            
+
         const configuracionDelApartamento = await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
         })
 
-        
-            const habitacionesDelApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
-            const habitacionesEnConfiguracionArrayLimpio = [];
-            for (const detalleHabitacion of habitacionesDelApartamento) {
-                const habitacionIDV = detalleHabitacion.habitacionIDV;
-                habitacionesEnConfiguracionArrayLimpio.push(habitacionIDV);
+
+        const habitacionesDelApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
+        const habitacionesEnConfiguracionArrayLimpio = [];
+        for (const detalleHabitacion of habitacionesDelApartamento) {
+            const habitacionIDV = detalleHabitacion.habitacionIDV;
+            habitacionesEnConfiguracionArrayLimpio.push(habitacionIDV);
+        }
+        const todasLasHabitacione = await obtenerTodasLasHabitaciones()
+        const habitacionComoEntidadArrayLimpio = [];
+        const habitacionesComoEntidadEstructuraFinal = {};
+        for (const detalleHabitacion of todasLasHabitacione) {
+            const habitacionUI = detalleHabitacion.habitacionUI;
+            const habitacionIDV = detalleHabitacion.habitacionIDV;
+            habitacionComoEntidadArrayLimpio.push(habitacionIDV);
+            habitacionesComoEntidadEstructuraFinal[habitacionIDV] = habitacionUI;
+        }
+        const habitacionesDisponiblesNoInsertadas = habitacionComoEntidadArrayLimpio.filter(entidad => !habitacionesEnConfiguracionArrayLimpio.includes(entidad));
+        const estructuraFinal = [];
+        for (const habitacionDisponible of habitacionesDisponiblesNoInsertadas) {
+            if (habitacionesComoEntidadEstructuraFinal[habitacionDisponible]) {
+                const estructuraFinalObjeto = {
+                    habitacionIDV: habitacionDisponible,
+                    habitacionUI: habitacionesComoEntidadEstructuraFinal[habitacionDisponible]
+                };
+                estructuraFinal.push(estructuraFinalObjeto);
             }
-            const todasLasHabitacione = await obtenerTodasLasHabitaciones()
-            const habitacionComoEntidadArrayLimpio = [];
-            const habitacionesComoEntidadEstructuraFinal = {};
-            for (const detalleHabitacion of todasLasHabitacione) {
-                const habitacionUI = detalleHabitacion.habitacionUI;
-                const habitacionIDV = detalleHabitacion.habitacionIDV;
-                habitacionComoEntidadArrayLimpio.push(habitacionIDV);
-                habitacionesComoEntidadEstructuraFinal[habitacionIDV] = habitacionUI;
-            }
-            const habitacionesDisponiblesNoInsertadas = habitacionComoEntidadArrayLimpio.filter(entidad => !habitacionesEnConfiguracionArrayLimpio.includes(entidad));
-            const estructuraFinal = [];
-            for (const habitacionDisponible of habitacionesDisponiblesNoInsertadas) {
-                if (habitacionesComoEntidadEstructuraFinal[habitacionDisponible]) {
-                    const estructuraFinalObjeto = {
-                        habitacionIDV: habitacionDisponible,
-                        habitacionUI: habitacionesComoEntidadEstructuraFinal[habitacionDisponible]
-                    };
-                    estructuraFinal.push(estructuraFinalObjeto);
-                }
-            }
-            const ok = {
-                ok: estructuraFinal
-            };
-            return ok
-        
+        }
+        const ok = {
+            ok: estructuraFinal
+        };
+        return ok
+
     } catch (errorCapturado) {
         throw errorCapturado
     }

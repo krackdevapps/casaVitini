@@ -27,7 +27,7 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             errorSi: "noExiste"
         })).apartamentoUI
 
-        
+
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
         const ano = fechaArray[1]

@@ -100,7 +100,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 origen: origen,
                 fechaCreacion: fechaCreacion,
                 estadoPago: estadoPago,
-                reservaUID:reservaUID
+                reservaUID: reservaUID
             })
             for (const apartamentoIDV of apartamentos) {
                 const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({

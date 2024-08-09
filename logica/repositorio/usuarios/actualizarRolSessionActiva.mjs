@@ -4,7 +4,7 @@ export const actualizarRolSessionActiva = async (data) => {
     const usuarioIDX = data.usuarioIDX
     const nuevoRol = data.nuevoRol
     try {
-        const consulta =`
+        const consulta = `
         UPDATE 
         sessiones
         SET 

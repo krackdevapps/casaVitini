@@ -182,7 +182,7 @@ export const selectorPorCondicion = async (data) => {
                     }
                 } else if (tipoDeEspecificidad === "noDebeContenedorExactamente") {
 
-                   // const comparadorCantidad = apartamentosDeLaReserva.length === apartamentosOferta.length
+                    // const comparadorCantidad = apartamentosDeLaReserva.length === apartamentosOferta.length
                     const selector = apartamentosDeLaReserva.every(apartamentoIDV => !apartamentosOferta.includes(apartamentoIDV))
 
                     if (selector /*&& comparadorCantidad*/) {

@@ -12,7 +12,7 @@ export const opcionesCrearOferta = async (entrada, salida) => {
         IDX.control()
 
         const opcionesCrearOferta = {
-            aplicacionSobre:await obtenerTodosAplicacionSobreIDV(),
+            aplicacionSobre: await obtenerTodosAplicacionSobreIDV(),
             tipoOfertas: await obtenerTodosLosTipoOfertaIDV(),
             tipoDescuento: await obtenerTodosLosTiposDescuento()
         };
@@ -22,5 +22,5 @@ export const opcionesCrearOferta = async (entrada, salida) => {
         return ok
     } catch (errorCapturado) {
         throw errorCapturado
-    } 
+    }
 }

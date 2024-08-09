@@ -33,7 +33,7 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
             soloMinusculas: "si"
         })
         await eliminarUsuarioPorRolPorEstadoVerificacion();
-        usuariosLimite(nuevoIDX)    
+        usuariosLimite(nuevoIDX)
         await obtenerUsuario({
             usuario: nuevoIDX,
             errorSi: "existe"

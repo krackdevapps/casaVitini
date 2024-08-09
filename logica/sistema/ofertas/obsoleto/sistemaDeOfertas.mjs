@@ -32,7 +32,7 @@ export const sistemaDeOfertas = async (reserva) => {
     const ofertasPorDiasDeAntelacion = await porDiasDeAntelacion(reserva)
     contenedorOferta.push(ofertasPorDiasDeAntelacion)
 
-    
+
     //Sumar el total
     for (const detallesOferta of contenedorOferta) {
         const totalOferta = detallesOferta.descuentoGlobal

@@ -19,7 +19,7 @@ export const configuracionApartamento = async (entrada) => {
             sePermitenDuplicados: "no"
         })
         const transactor = await configuracionApartamento_(apartamentos);
-       return transactor
+        return transactor
     } catch (errorCapturado) {
         throw errorCapturado
     }

@@ -13,7 +13,7 @@ export const eliminarPerfilImpuesto = async (entrada, salida) => {
         IDX.control()
 
         await mutex.acquire();
-   
+
         const impuestoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.impuestoUID,
             nombreCampo: "El UID del impuesto",

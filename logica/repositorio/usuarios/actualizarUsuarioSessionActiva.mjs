@@ -4,7 +4,7 @@ export const actualizarSessionActiva = async (data) => {
     const usuarioIDX = data.usuarioIDX
     const nuevoIDX = data.nuevoIDX
     try {
-        const consulta =`
+        const consulta = `
         UPDATE 
         sessiones
         SET 

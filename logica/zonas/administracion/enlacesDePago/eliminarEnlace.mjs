@@ -19,7 +19,7 @@ export const eliminarEnlace = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-        
+
         await obtenerEnlaceDePagoPorEnlaceUID(enlaceUID)
         await eliminarEnlaceDePagoPorEnlaceUID(enlaceUID)
         const ok = {

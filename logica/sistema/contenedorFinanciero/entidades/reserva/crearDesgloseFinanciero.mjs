@@ -98,7 +98,7 @@ export const crearDesgloseFinanciero = async (data) => {
             constructorEstructuraDescuentos(estructura)
             contructorEstructuraDescuentosReserva(estructura)
 
-            const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64|| []
+            const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64 || []
             const ofertasSelecionadasPorCondicion = await selecionarOfertasPorCondicion({
                 estructura,
                 fechaActual,

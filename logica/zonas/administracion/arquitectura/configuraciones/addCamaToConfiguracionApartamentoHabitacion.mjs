@@ -70,7 +70,7 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
             habitacionUID: habitacionUID,
             camaIDV: camaIDV
         }
-      const nuevaCamaDeLaHabitacion =  await insertarCamaEnHabitacion(dataInsertarCamaEnHabitacion)
+        const nuevaCamaDeLaHabitacion = await insertarCamaEnHabitacion(dataInsertarCamaEnHabitacion)
 
         const nuevoUID = nuevaCamaDeLaHabitacion.componenteUID;
         const ok = {

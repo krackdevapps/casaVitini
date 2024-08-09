@@ -27,7 +27,7 @@ export const cambiarPosicon = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
         const mensajeB64 = btoa(mensaje);
-  
+
         await obtenerMensajePorMensajeUID(mensajeUID)
         await campoDeTransaccion("iniciar")
         const actualizarMensaje = `

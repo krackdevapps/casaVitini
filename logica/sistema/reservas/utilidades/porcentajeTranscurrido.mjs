@@ -27,8 +27,8 @@ export const porcentajeTranscurrido = async (reservaUID) => {
         if (porcentajeTranscurrido <= 0) {
             porcentajeFinal = "0";
         }
-     
-        
+
+
         return porcentajeFinal
     } catch (errorCapturado) {
         throw errorCapturado

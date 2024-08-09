@@ -17,7 +17,7 @@ export const cambiarVista = async (transaccion) => {
             rama = rama.toLowerCase()
             if (controlFiltro.test(rama)) {
                 selectorRama = selectorRama + "/" + rama
-       
+
                 if (fs.existsSync(selectorRama)) {
                     const archivoIDX = selectorRama + "/IDX"
                     if (fs.existsSync(archivoIDX)) {
@@ -27,9 +27,9 @@ export const cambiarVista = async (transaccion) => {
                             break
                         }
                         const roles = fs.readFileSync(archivoIDX, 'utf-8')
-                        .replaceAll(" ", "")
-                        .split(",")
-                        .filter(espacio => espacio)
+                            .replaceAll(" ", "")
+                            .split(",")
+                            .filter(espacio => espacio)
                         if (roles.length > 0 && !roles.includes(rolIDV)) {
                             portal = "ROL"
                             urlResuelta = ""

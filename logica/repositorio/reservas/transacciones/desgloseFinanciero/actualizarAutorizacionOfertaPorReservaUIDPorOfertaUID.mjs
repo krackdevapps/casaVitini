@@ -2,11 +2,11 @@ import { conexion } from "../../../../componentes/db.mjs";
 
 
 export const actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID = async (data) => {
-    try {
-        const ofertaUID = data.ofertaUID
-        const reservaUID = data.reservaUID
-        const nuevaAutorizacion = data.nuevaAutorizacion
-        const consulta = `
+  try {
+    const ofertaUID = data.ofertaUID
+    const reservaUID = data.reservaUID
+    const nuevaAutorizacion = data.nuevaAutorizacion
+    const consulta = `
         WITH updated_array AS (
               SELECT
                 "reservaUID",
@@ -30,19 +30,19 @@ export const actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID = async (data
             FROM updated_array
             WHERE "reservaFinanciero"."reservaUID" = updated_array."reservaUID"
             RETURNING *;`
-        const parametros = [
-            reservaUID,
-            ofertaUID,
-            nuevaAutorizacion
-        ]
-        const resuelve = await conexion.query(consulta, parametros);
-        if (resuelve.rowCount === 0) {
-            const error = "No existe ninguna oferta dentro del contenedorFinanciero de la reserva con los datos de selección pasados."
-            throw new Error(error)
-        }
-        return resuelve.rows[0]
-    } catch (errorCapturado) {
-        throw errorCapturado
+    const parametros = [
+      reservaUID,
+      ofertaUID,
+      nuevaAutorizacion
+    ]
+    const resuelve = await conexion.query(consulta, parametros);
+    if (resuelve.rowCount === 0) {
+      const error = "No existe ninguna oferta dentro del contenedorFinanciero de la reserva con los datos de selección pasados."
+      throw new Error(error)
     }
+    return resuelve.rows[0]
+  } catch (errorCapturado) {
+    throw errorCapturado
+  }
 }
 

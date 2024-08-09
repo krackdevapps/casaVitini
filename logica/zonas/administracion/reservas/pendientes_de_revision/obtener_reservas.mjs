@@ -12,7 +12,7 @@ export const obtener_reservas = async (entrada) => {
         IDX.control()
 
 
-        const reseervasPendientesDeRevision = await obtenerReservaPendientesDeRevision( {
+        const reseervasPendientesDeRevision = await obtenerReservaPendientesDeRevision({
             estadoReserva: "pendiente"
         })
 
@@ -26,10 +26,10 @@ export const obtener_reservas = async (entrada) => {
                     "titular",
                     "desgloseFinanciero"
                 ]
-            });    
+            });
             reservas.push(reserva)
         }
-        
+
         const ok = {
             ok: "Aquí tienes las reservas de origen público pendientes por revisar.",
             reservas: reservas

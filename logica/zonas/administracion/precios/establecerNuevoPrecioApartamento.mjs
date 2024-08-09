@@ -79,10 +79,10 @@ export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
                 const tipoValorIDV = detalleImpuesto.tipoValorIDV;
                 const impuestoUID = detalleImpuesto.impuestoUID
 
-               const impuestosFinal = {
-                     nombreImpuesto,
-                     tipoImpositivo,
-                   tipoValorIDV,
+                const impuestosFinal = {
+                    nombreImpuesto,
+                    tipoImpositivo,
+                    tipoValorIDV,
                     impuestoUID
                 };
                 if (tipoValorIDV === "porcentaje") {

@@ -36,5 +36,5 @@ export const eliminarMensaje = async (entrada, salida) => {
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         throw errorCapturado
-    } 
+    }
 }

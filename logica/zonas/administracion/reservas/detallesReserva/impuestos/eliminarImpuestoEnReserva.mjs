@@ -49,7 +49,7 @@ export const eliminarImpuestoEnReserva = async (entrada) => {
             errorSi: "noExiste"
         })
 
-     //   await campoDeTransaccion("iniciar")
+        //   await campoDeTransaccion("iniciar")
         // Eliminar impuesto
         await eliminarImpuestoPorImpuestoUIDPorReservaUID({
             reservaUID,
@@ -69,7 +69,7 @@ export const eliminarImpuestoEnReserva = async (entrada) => {
             reservaUID
         })
 
-       // await campoDeTransaccion("confirmar")
+        // await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",
             contenedorFinanciero: desgloseFinanciero

@@ -12,7 +12,7 @@ export const porRango_cualquieraQueCoincida = async (data) => {
 
 
         const sqlORderBy = await constructorOrderBy(nombreColumna, sentidoColumna)
-        
+
         const consulta = `
             SELECT r."reservaUID",
                    to_char(r."fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada",

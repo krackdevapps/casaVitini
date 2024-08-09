@@ -31,7 +31,7 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
         }
         validadoresCompartidos.claves.minimoRequisitos(claveNuevaDos);
 
-   
+
         const cryptoData = {
             sentido: "cifrar",
             clavePlana: claveNueva

@@ -27,37 +27,37 @@ export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, sa
             };
             return ok
         }
-            const camasDeLaHabitacion = await obtenerCamasDeLaHabitacionPorHabitacionUID(habitacionUID)
-            const camasArrayLimpioEnHabitacion = [];
-            for (const detalleHabitacion of camasDeLaHabitacion) {
-                const camaIDV = detalleHabitacion.camaIDV;
-                camasArrayLimpioEnHabitacion.push(camaIDV);
+        const camasDeLaHabitacion = await obtenerCamasDeLaHabitacionPorHabitacionUID(habitacionUID)
+        const camasArrayLimpioEnHabitacion = [];
+        for (const detalleHabitacion of camasDeLaHabitacion) {
+            const camaIDV = detalleHabitacion.camaIDV;
+            camasArrayLimpioEnHabitacion.push(camaIDV);
+        }
+        const todasLasCamasDelTipoCompartida = await obtenerCamaComoEntidadPorTipoIDV("compartida")
+        const camasComoEntidadArrayLimpio = [];
+        const camasComoEntidadEstructuraFinal = {};
+        for (const detalleHabitacion of todasLasCamasDelTipoCompartida) {
+            const camaUI = detalleHabitacion.camaUI;
+            const camaIDV = detalleHabitacion.camaIDV;
+            camasComoEntidadArrayLimpio.push(camaIDV);
+            camasComoEntidadEstructuraFinal[camaIDV] = camaUI;
+        }
+        const camasDisponiblesNoInsertadas = camasComoEntidadArrayLimpio.filter(entidad => !camasArrayLimpioEnHabitacion.includes(entidad));
+        const estructuraFinal = [];
+        for (const camaDisponible of camasDisponiblesNoInsertadas) {
+            if (camasComoEntidadEstructuraFinal[camaDisponible]) {
+                const estructuraFinalObjeto = {
+                    camaIDV: camaDisponible,
+                    camaUI: camasComoEntidadEstructuraFinal[camaDisponible]
+                };
+                estructuraFinal.push(estructuraFinalObjeto);
             }
-            const todasLasCamasDelTipoCompartida = await obtenerCamaComoEntidadPorTipoIDV("compartida")
-            const camasComoEntidadArrayLimpio = [];
-            const camasComoEntidadEstructuraFinal = {};
-            for (const detalleHabitacion of todasLasCamasDelTipoCompartida) {
-                const camaUI = detalleHabitacion.camaUI;
-                const camaIDV = detalleHabitacion.camaIDV;
-                camasComoEntidadArrayLimpio.push(camaIDV);
-                camasComoEntidadEstructuraFinal[camaIDV] = camaUI;
-            }
-            const camasDisponiblesNoInsertadas = camasComoEntidadArrayLimpio.filter(entidad => !camasArrayLimpioEnHabitacion.includes(entidad));
-            const estructuraFinal = [];
-            for (const camaDisponible of camasDisponiblesNoInsertadas) {
-                if (camasComoEntidadEstructuraFinal[camaDisponible]) {
-                    const estructuraFinalObjeto = {
-                        camaIDV: camaDisponible,
-                        camaUI: camasComoEntidadEstructuraFinal[camaDisponible]
-                    };
-                    estructuraFinal.push(estructuraFinalObjeto);
-                }
-            }
-            const ok = {
-                ok: estructuraFinal
-            };
-            return ok
-        
+        }
+        const ok = {
+            ok: estructuraFinal
+        };
+        return ok
+
     } catch (errorCapturado) {
         throw errorCapturado
     }

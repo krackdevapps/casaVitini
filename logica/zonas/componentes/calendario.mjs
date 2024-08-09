@@ -28,7 +28,7 @@ export const calendario = async (entrada, salida) => {
 
         const paresConfiguracion = await obtenerParametroConfiguracion([
             "limiteFuturoReserva",
-            "diasAntelacionReserva", 
+            "diasAntelacionReserva",
             "diasMaximosReserva"
         ])
         const limiteFuturoReserva = paresConfiguracion.limiteFuturoReserva

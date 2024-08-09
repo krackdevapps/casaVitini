@@ -2,7 +2,7 @@ import { obtenerParConfiguracion } from '../../repositorio/configuracion/parConf
 import { validadoresCompartidos } from '../validadores/validadoresCompartidos.mjs';
 export const obtenerParametroConfiguracion = async (configuracionUID) => {
     try {
-       const confArrayUIDS = validadoresCompartidos.tipos.array({
+        const confArrayUIDS = validadoresCompartidos.tipos.array({
             array: configuracionUID,
             nombreCampo: "El array depbtemerParametroConfiguracion ",
             filtro: "soloCadenasIDV",

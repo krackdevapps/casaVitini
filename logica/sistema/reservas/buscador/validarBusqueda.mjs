@@ -27,9 +27,9 @@ export const validadorBusqueda = (configuracion) => {
             soloMinusculas: "si"
         })
         if (sentidoColumna) {
-            validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)    
+            validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
         }
-        
+
     } catch (errorCapturado) {
         throw errorCapturado
     }

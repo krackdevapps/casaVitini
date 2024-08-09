@@ -16,9 +16,9 @@ export const actualizarUsuarioSessionActiva = async (data) => {
         const parametros = [
             nuevoIDX,
             usuarioIDX
-            
+
         ];
-        
+
         const resuelve = await conexion.query(consulta, parametros)
         return resuelve.rows[0]
     } catch (errorCapturado) {

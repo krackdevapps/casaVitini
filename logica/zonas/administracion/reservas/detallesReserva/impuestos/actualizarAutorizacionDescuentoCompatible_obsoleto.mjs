@@ -55,7 +55,7 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             ofertaUID,
             errorSi: "noExiste"
         })
-           await actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID({
+        await actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID({
             ofertaUID,
             reservaUID,
             nuevaAutorizacion

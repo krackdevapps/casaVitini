@@ -50,7 +50,7 @@ export const modificarEnlace = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        await controlCaducidadEnlacesDePago();       
+        await controlCaducidadEnlacesDePago();
         await obtenerEnlaceDePagoPorEnlaceUID(enlaceUID)
         const fechaDeCaducidad = new Date(fechaActual.getTime() + (horasCaducidad * 60 * 60 * 1000));
         await actualizarEnlaceDePagoPorEnlaceUID({

@@ -12,12 +12,12 @@ export const enviarMail = async (entrada) => {
         const origen = entrada.origen;
         const asunto = entrada.asunto;
         const mensaje = entrada.mensaje;
-        
+
         if (!filtroCorreo.test(destino)) {
             const error = "La dirección de destino no tiene un formato correcto."
             throw new Error(error)
         }
-        
+
 
         // if (!filtroCorreo.test(origen)) {
         //     const error = "La dirección de origen no tiene un formato correcto"

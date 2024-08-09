@@ -89,7 +89,7 @@ export const validarComportamiento = async (comportamiento) => {
                 const m = `En el objeto de ${tipo} no se esperan mas de ${llaves_nivel_1.length} llaves`
                 throw new Error(m)
             }
- 
+
 
         } else if (tipo === "porDias") {
             const diasArray = validadoresCompartidos.tipos.array({
@@ -121,7 +121,7 @@ export const validarComportamiento = async (comportamiento) => {
                 const m = `En el objeto de ${tipo} no se esperan más de ${llaves_nivel_1.length} llaves`
                 throw new Error(m)
             }
- 
+
         } else {
             const error = "Por favor determine si el tipo de bloqueo es porRango, porDias o porCreacion.";
             throw new Error(error);
@@ -145,7 +145,7 @@ export const validarComportamiento = async (comportamiento) => {
                 throw new Error(m)
             }
 
-             const apartamentoIDV = validadoresCompartidos.tipos.cadena({
+            const apartamentoIDV = validadoresCompartidos.tipos.cadena({
                 string: detallesApartamento.apartamentoIDV,
                 nombreCampo: "El campo apartamentoIDV",
                 filtro: "strictoIDV",

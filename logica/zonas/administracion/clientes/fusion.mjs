@@ -63,7 +63,7 @@ export const fusion = async (entrada, salida) => {
         await actualizarTitularEnReservaPorClienteUID({
             clienteUID_origen,
             clienteUID_destino
-        })  
+        })
 
         await eliminarClientePorClienteUID(clienteUID_origen)
 

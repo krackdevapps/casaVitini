@@ -57,7 +57,7 @@ export const eliminarSobreControlNoche = async (entrada) => {
                     tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
                     reservaUID: reservaUID,
                     capaOfertas: "si",
-                   // zonasArray: ["global", "publica"],
+                    // zonasArray: ["global", "publica"],
                     capaDescuentosPersonalizados: "no",
                     capaImpuestos: "si"
                 }

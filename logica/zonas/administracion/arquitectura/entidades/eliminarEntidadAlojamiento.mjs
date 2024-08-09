@@ -52,7 +52,7 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
                 const m = "Esta entidad de apartamento está siendo usada como base para una configuración de alojamiento. No puedes eliminar esta entidad mientras sea usada como base para la configuración de alojamiento. Puedes editarla pero no eliminarla."
                 throw new Error(m)
             }
-   
+
             await eliminarApartamentoComoEntidad(entidadIDV)
             const ok = {
                 ok: "Se ha eliminado correctamente el apartamento como entidad",

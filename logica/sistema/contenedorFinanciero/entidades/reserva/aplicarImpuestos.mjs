@@ -27,7 +27,7 @@ export const aplicarImpuestos = async (data) => {
                 throw new Error(error)
             }
             const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
-            const impuestosDeLaReserva = contenedorFinanciero.instantaneaImpuestos || []
+            const impuestosDeLaReserva = contenedorFinanciero.instantaneaImpuestos || []
             impuestos.push(...impuestosDeLaReserva)
             instantaneaImpuestos.push(...impuestosDeLaReserva)
         } else {

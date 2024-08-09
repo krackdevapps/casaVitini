@@ -4,7 +4,7 @@ export const generadorReservaUID = async () => {
     try {
         const generarCodigoAleatorio = async () => {
             const totalReservas = await obtenerNumeroTotalReservas()
-            const logitudNumeroTotalReservas = String(totalReservas).length < 6 ? 6 :String(totalReservas).length
+            const logitudNumeroTotalReservas = String(totalReservas).length < 6 ? 6 : String(totalReservas).length
             const limiteAnchoAleatorio = Number(logitudNumeroTotalReservas) + 1
             const rangoMinimo = Math.pow(10, limiteAnchoAleatorio - 1);
             const rangoMaximo = Math.pow(10, limiteAnchoAleatorio) - 1;

@@ -37,7 +37,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         })
         if (palabra !== "reconstruir") {
             const error = "Por favor, escribe correctamente la palabra, reconstruir en el campo de texto. Escribe la palabra, reconstruir en minúsculas y sin espacios internos. Esto está así para evitar falsos clics."
-            throw new Error(error)   
+            throw new Error(error)
         }
 
         mutex.acquire()
@@ -69,7 +69,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             const m = "No se puede reconstruir este desglose financiero de esta reserva desde los hubs de precios, porque hay apartamentos que ya no existen como configuración de alojamiento en el hub de configuraciones de alojamiento."
             throw new Error(m)
         }
-  
+
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {

@@ -7,7 +7,7 @@ import { obtenerPDFPorEnlaceUID } from "../../repositorio/pdf/obtenerPDFPorEnlac
 
 export const pdf = async (entrada, salida) => {
     try {
-    return 
+        return
         const nombreEnlace = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombreEnlace,
             nombreCampo: "El campo del nombre del enlace",

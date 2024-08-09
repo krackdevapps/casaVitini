@@ -20,7 +20,7 @@ export const multiCapa = async (entrada) => {
         IDX.control()
 
         const fecha = entrada.body.fecha;
-      await  validadoresCompartidos.fechas.fechaMesAno(fecha)
+        await validadoresCompartidos.fechas.fechaMesAno(fecha)
 
         const contenedorCapas = validadoresCompartidos.tipos.objetoLiteral({
             objetoLiteral: entrada.body.contenedorCapas,

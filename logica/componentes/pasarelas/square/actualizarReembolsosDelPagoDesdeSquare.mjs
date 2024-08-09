@@ -29,7 +29,7 @@ export const actualizarReembolsosDelPagoDesdeSquare = async (pagoUID, pagoUIDPas
                 pagoUID: pagoUID,
                 reembolsoUIDPasarela: reembolsoUIDPasarela
             })
-            if (reembolsoPorPagoUIDPorReembolsoUIDPasarela.length === 0) {               
+            if (reembolsoPorPagoUIDPorReembolsoUIDPasarela.length === 0) {
                 await insertarReembolso({
                     pagoUID: pagoUID,
                     cantidad: cantidad,

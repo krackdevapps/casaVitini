@@ -18,7 +18,7 @@ export const actualizarIDVenInstantaneasContenedorFinanciero = async (data) => {
         // Actualizar los IDV de las instantena
         if (origenIDV === destinoIDV) {
             const m = "No se puede actualizar un orgienIDV y un destinoIDV siendo el mismo, podría provocar problema de integridad en el contenedor financiero."
-          //  throw new Error(m)
+            //  throw new Error(m)
         }
         // Actualizar contenedorFinacniero
 
@@ -27,7 +27,7 @@ export const actualizarIDVenInstantaneasContenedorFinanciero = async (data) => {
         // En condiciones hay que actualizar los IDV de la condicon por apartamento especificos
         for (const contenedor of contenedoresFinancieros) {
             const componenteUID = contenedor.componenteUID
-            const reservaUID =  Number(contenedor.reservaUID)
+            const reservaUID = Number(contenedor.reservaUID)
             const instantaneaNoches = contenedor.instantaneaNoches || {}
             const instantaneaSobreControlPrecios = contenedor.instantaneaSobreControlPrecios || {}
             const instantaneaOfertasPorCondicion = contenedor.instantaneaOfertasPorCondicion || []

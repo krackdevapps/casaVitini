@@ -5,7 +5,7 @@ import { obtenerReservasDeTodosLosApartamentosPorMesPorAno } from "../../../repo
 
 export const eventosTodosLosApartamentos = async (fecha) => {
     try {
-      await  validadoresCompartidos.fechas.fechaMesAno(fecha)
+        await validadoresCompartidos.fechas.fechaMesAno(fecha)
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
         const ano = fechaArray[1]
@@ -36,7 +36,7 @@ export const eventosTodosLosApartamentos = async (fecha) => {
 
         for (const detalles of reservas) {
             const apartamentoIDV = detalles.apartamentoIDV
-            const apartamento =  await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
                 errorSi: "noExiste"
             })
@@ -74,7 +74,7 @@ export const eventosTodosLosApartamentos = async (fecha) => {
                 }
                 if (calendarioObjeto[fechaInternaHumana]) {
                     calendarioObjeto[fechaInternaHumana].push(estructuraReservaEnDia)
-                } 
+                }
             }
         }
         const ok = {

@@ -7,7 +7,7 @@ import { controlCaducidad } from "./controlCaducidad.mjs";
 
 export const crearEnlacePDF = async (reservaUID) => {
     try {
-        
+
         await obtenerReservaPorReservaUID(reservaUID)
         await controlCaducidad();
         const generarCadenaAleatoria = (longitud) => {

@@ -23,7 +23,7 @@ export const detallesReserva = async (data) => {
             "pernoctantes",
             "desgloseFinanciero",
             "detallesPagos"
-        ]   
+        ]
         validadoresCompartidos.tipos.array({
             array: capas,
             nombreCampo: "El array capas en detallesReserva",
@@ -52,7 +52,7 @@ export const detallesReserva = async (data) => {
         if (capas.includes(contenedorCapas[0])) {
             reserva.titular = await detallesTitular(reservaUID)
         }
-      
+
         if (capas.includes(contenedorCapas[1])) {
             reserva.alojamiento = await detallesAlojamiento(reservaUID)
         }
@@ -61,7 +61,7 @@ export const detallesReserva = async (data) => {
         }
         if (capas.includes(contenedorCapas[3])) {
             reserva.contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
-            
+
             const contenedorOfertasPorAdmimnistrador = reserva.contenedorFinanciero.desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador
             for (const contenedorOferta of contenedorOfertasPorAdmimnistrador) {
                 await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)

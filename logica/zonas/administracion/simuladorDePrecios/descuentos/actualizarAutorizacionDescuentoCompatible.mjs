@@ -62,7 +62,7 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
                     capaImpuestos: "si"
                 }
             },
-        })       
+        })
         await actualizarDesgloseFinacieroPorSimulacionUID({
             desgloseFinanciero,
             simulacionUID

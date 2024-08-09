@@ -470,7 +470,7 @@ export const validarObjetoOferta = async (data) => {
                     throw new Error(m)
                 }
 
-                
+
                 const tipoAplicacion = descuentosJSON.tipoAplicacion
                 const descuentoTotal = descuentosJSON.descuentoTotal
 
@@ -569,7 +569,7 @@ export const validarObjetoOferta = async (data) => {
                                 const m = "El objeto de descuentosJSON para porRango en el subTipo porDiasDelRango, en el tipo de descuento netoPorApartamentoDelDia, concretamenteo en el conteneodr de apartamentos no espera más de 3 llaves"
                                 throw new Error(m)
                             }
-    
+
                             const apartamentoIDV = validadoresCompartidos.tipos.cadena({
                                 string: apartmentoDelDia.apartamentoIDV,
                                 nombreCampo: `El identificador visual del apartamento dentro del día ${fechaDelDia}.`,

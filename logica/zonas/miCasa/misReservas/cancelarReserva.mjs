@@ -26,7 +26,7 @@ export const cancelarReserva = async (entrada, salida) => {
             error: "Función temporalmente deshabilitada."
         }
         throw new Error(mensaje)
-      
+
     } catch (errorCapturado) {
         throw errorFinal
     }

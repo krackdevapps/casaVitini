@@ -1,20 +1,20 @@
 import { conexion } from "../../componentes/db.mjs"
 
 export const obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoUID = async (metadatos) => {
-    try {
-        const fechaInicio_ISO = metadatos.fechaInicio_ISO
-        const fechaFinal_ISO = metadatos.fechaFinal_ISO
-        const tipoIDV = metadatos.tipoIDV
-        const comportamientoUID = metadatos.comportamientoUID
+  try {
+    const fechaInicio_ISO = metadatos.fechaInicio_ISO
+    const fechaFinal_ISO = metadatos.fechaFinal_ISO
+    const tipoIDV = metadatos.tipoIDV
+    const comportamientoUID = metadatos.comportamientoUID
 
-        const parametrosBusqueda = [
-            fechaInicio_ISO,
-            fechaFinal_ISO,
-            tipoIDV,
-            comportamientoUID
-        ]
+    const parametrosBusqueda = [
+      fechaInicio_ISO,
+      fechaFinal_ISO,
+      tipoIDV,
+      comportamientoUID
+    ]
 
-        const consultaBloqueos = `
+    const consultaBloqueos = `
       SELECT 
       "comportamientoUID",
       "tipoIDV",
@@ -49,9 +49,9 @@ export const obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoU
       "comportamientoUID" <> $4
         ;`
 
-        const resuelveBloqueos = await conexion.query(consultaBloqueos, parametrosBusqueda)
-        return resuelveBloqueos.rows
-    } catch (errorCapturado) {
-        throw errorCapturado
-    }
+    const resuelveBloqueos = await conexion.query(consultaBloqueos, parametrosBusqueda)
+    return resuelveBloqueos.rows
+  } catch (errorCapturado) {
+    throw errorCapturado
+  }
 }
