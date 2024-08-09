@@ -28,6 +28,6 @@ export const cancelarReserva = async (entrada, salida) => {
         throw new Error(mensaje)
 
     } catch (errorCapturado) {
-        throw errorFinal
+        throw errorCapturado
     }
 }

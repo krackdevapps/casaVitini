@@ -30,6 +30,6 @@ export const obtenerNombreMonedaUI = async (moneda) => {
         }
         return ok
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 }

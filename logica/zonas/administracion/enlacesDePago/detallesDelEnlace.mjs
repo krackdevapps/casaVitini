@@ -23,7 +23,7 @@ export const detallesDelEnlace = async (entrada, salida) => {
         })
 
         await controlCaducidadEnlacesDePago();
-        const enlaceDePago = obtenerEnlaceDePagoPorEnlaceUID(enlaceUID)
+        const enlaceDePago =await obtenerEnlaceDePagoPorEnlaceUID(enlaceUID)
 
         const nombreEnlace = enlaceDePago.nombreEnlace;
         const codigo = enlaceDePago.codigo;

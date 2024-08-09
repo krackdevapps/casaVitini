@@ -44,15 +44,15 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
             const ipFormateada = detallesSession.ip.split(":")[detallesSession.ip.split(":").length - 1];
             detallesSession.ip = ipFormateada;
         });
+        await campoDeTransaccion("confirmar");
         const ok = {
             ok: "Sesiones activas",
             sessionIDX: entrada.sessionID,
             sessionesActivas: sessionesActivasDelUsuario
         };
         return ok
-        await campoDeTransaccion("confirmar");
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
-        throw errorFinal
+        throw errorCapturado
     }
 }

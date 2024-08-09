@@ -46,6 +46,6 @@ export const vitiniCrypto = (metadatos) => {
       return verificarContrasena(clavePlana, salt, claveHash);
     }
   } catch (errorCapturado) {
-    throw error;
+    throw errorCapturado;
   }
 }

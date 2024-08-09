@@ -12,7 +12,7 @@ export const validadoresLocales = {
                 sePermitenNegativos: "no"
             })
         } catch (errorCapturado) {
-            throw error
+            throw errorCapturado
         }
     },
     simboloNumero: (simboloNumero) => {
@@ -22,7 +22,7 @@ export const validadoresLocales = {
                 throw new Error(error);
             }
         } catch (errorCapturado) {
-            throw error
+            throw errorCapturado
         }
     },
     tipoDescuento: (tipoDescuento) => {
@@ -32,7 +32,7 @@ export const validadoresLocales = {
                 throw new Error(error);
             }
         } catch (errorCapturado) {
-            throw error
+            throw errorCapturado
         }
     },
     contextoAplicacion: (contextoAplicacion) => {
@@ -42,7 +42,7 @@ export const validadoresLocales = {
                 throw new Error(error);
             }
         } catch (errorCapturado) {
-            throw error
+            throw errorCapturado
         }
 
     },
@@ -53,7 +53,7 @@ export const validadoresLocales = {
                 throw new Error(error);
             }
         } catch (errorCapturado) {
-            throw error
+            throw errorCapturado
         }
     }
 };

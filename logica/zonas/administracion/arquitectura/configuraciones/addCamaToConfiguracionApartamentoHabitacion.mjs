@@ -49,7 +49,7 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
             throw new Error(error);
         }
         const apartamentoIDV = habitacionDelApartamento.apartamentoIDV;
-        const obtenerConfiguracionPorApartamento_ = obtenerConfiguracionPorApartamentoIDV({
+        const obtenerConfiguracionPorApartamento_ = await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
         })

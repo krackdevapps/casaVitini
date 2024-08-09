@@ -42,7 +42,7 @@ export const crearComportamiento = async (entrada, salida) => {
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar");
-        throw errorFinal
+        throw errorCapturado
     } finally {
         if (mutex) {
             mutex.release();

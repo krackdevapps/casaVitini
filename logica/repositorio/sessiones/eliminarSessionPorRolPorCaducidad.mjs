@@ -8,6 +8,6 @@ export const eliminarSessionPorRolPorCaducidad = async () => {
         WHERE "ultimoLogin" < NOW() - interval '6 months' AND "rolIDV" <> $1;`;
         await conexion.query(consultaCuentaAntiguas, ["administrador"]);
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 }

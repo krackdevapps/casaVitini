@@ -1951,6 +1951,7 @@ const casaVitini = {
 
                         }
                     } catch (errorCapturado) {
+                        throw errorCapturado
                     }
                 },
                 seleccionarApartamento: (apartamento) => {

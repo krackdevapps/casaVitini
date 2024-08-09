@@ -2697,7 +2697,7 @@ const casaVitini = {
                                 throw new Error(error)
                             }
                         } catch (errorCapturado) {
-                            throw error
+                            throw errorCapturado
                         }
                     },
                     contenedorCodigoDescuentosV2: {
@@ -16025,7 +16025,7 @@ const casaVitini = {
                                 await casaVitini.componentes.square.inyectorMetodosPago(instanciaUID);
                                 await casaVitini.componentes.square.inyectorFlujoPago(instanciaUID);
                             } catch (errorCapturado) {
-                                return casaVitini.ui.componentes.advertenciaInmersiva(error.message)
+                                return casaVitini.ui.componentes.advertenciaInmersiva(errorCapturado.message)
                             }
                         }
                     }
@@ -16185,7 +16185,7 @@ const casaVitini = {
                                 overflow: false,
                             });
                         } catch (errorCapturado) {
-                            console.error(error);
+                            console.error(errorCapturado);
                         }
                     };
 
@@ -16669,7 +16669,7 @@ const casaVitini = {
                     advertenciaInmersivaUI.appendChild(marcoElastico)
                     document.querySelector("main").appendChild(advertenciaInmersivaUI)
                 } catch (errorCapturado) {
-                    casaVitini.ui.componentes.advertenciaInmersiva(error.message)
+                    casaVitini.ui.componentes.advertenciaInmersiva(errorCapturado.message)
                 }
             },
             grid: (metadatos) => {
@@ -24086,7 +24086,7 @@ const casaVitini = {
                                 casaVitini.ui.componentes.advertenciaInmersiva(error)
                             }
                         } catch (errorCapturado) {
-                            return casaVitini.ui.componentes.advertenciaInmersiva(error)
+                            return casaVitini.ui.componentes.advertenciaInmersiva(errorCapturado)
                         }
                     }
                     if (nombreContenedor) {

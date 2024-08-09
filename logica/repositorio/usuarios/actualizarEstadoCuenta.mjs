@@ -27,6 +27,6 @@ export const actualizarEstadoCuenta = async (data) => {
             throw new Error(error);
         }
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 };

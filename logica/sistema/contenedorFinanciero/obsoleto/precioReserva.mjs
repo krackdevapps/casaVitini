@@ -70,6 +70,6 @@ export const precioReserva = async (metadatos) => {
         //     return ok
 
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 }

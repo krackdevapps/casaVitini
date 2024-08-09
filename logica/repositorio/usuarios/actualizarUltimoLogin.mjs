@@ -23,6 +23,6 @@ export const actualizarUltimoLogin = async (data) => {
         }
         return resuelve.rows[0]
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 };

@@ -13,7 +13,7 @@ export const obtenerCamasDeLaHabitacionPorHabitacionUID = async (habitacionUID) 
         const resuelve = await conexion.query(consulta, [habitacionUID])
         return resuelve.rows
     } catch (errorAdaptador) {
-        throw new Error(errorAdaptador)
+        throw errorAdaptador
     }
 
 }

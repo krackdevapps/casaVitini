@@ -37,7 +37,7 @@ export const conectar = async (entrada) => {
                     return nuevoIntento.intentos;
 
                 } catch (errorCapturado) {
-                    throw error;
+                    throw errorCapturado;
                 }
             },
             restablece: async (IDX_) => {
@@ -48,7 +48,7 @@ export const conectar = async (entrada) => {
                         intento: intento
                     })
                 } catch (errorCapturado) {
-                    throw error;
+                    throw errorCapturado;
                 }
             }
         }

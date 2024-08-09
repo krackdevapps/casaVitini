@@ -16,6 +16,6 @@ export const obtenerSessionesActivasPorUsuario = async (usuarioIDX) => {
         const resuelve = await conexion.query(consulta, [usuarioIDX])
         return resuelve.rows
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 };

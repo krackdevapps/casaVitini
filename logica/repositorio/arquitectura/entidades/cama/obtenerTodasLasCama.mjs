@@ -7,6 +7,6 @@ export const obtenerTodasLasCamas = async () => {
         const resolucionNombre = await conexion.query(consulta)
         return resolucionNombre.rows
     } catch (errorCapturado) {
-        throw error;
+        throw errorCapturado;
     }
 }
