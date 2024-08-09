@@ -25,7 +25,7 @@ export const puerto = async (entrada, salida) => {
         }
 
         const ruta = arbol.join(".")
-        const contructorArbol = async (zonaBusqueda) => {
+        const constructorArbol = async (zonaBusqueda) => {
             const arbol = {}
             const cargarModulosDesdeDirectorio = async (rutaActual, arbol) => {
                 const arbolDeLaRuta = await fs.promises.readdir(rutaActual, { withFileTypes: true })
@@ -48,7 +48,7 @@ export const puerto = async (entrada, salida) => {
         }
 
         const directorioZonas = './logica/zonas'
-        const zonas = await contructorArbol(directorioZonas)
+        const zonas = await constructorArbol(directorioZonas)
         const exploradorArbol = (zonas, ruta) => {
             const partes = ruta.split('.')
             let rama = zonas;

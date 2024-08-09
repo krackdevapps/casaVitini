@@ -6,8 +6,8 @@ import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
 import { selecionarOfertasPorCondicion } from "../../../ofertas/entidades/reserva/selecionarOfertasPorCondicion.mjs";
 import { aplicarDescuentosPersonalizados } from "../../../ofertas/entidades/reserva/aplicarDescuentosPersonalizados.mjs";
 import { aplicarDescuento } from "../../../ofertas/entidades/reserva/aplicarDescuento.mjs";
-import { contructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/reserva/contructorEstructuraDescuentosReserva.mjs";
-import { constructorEstructuraDescuentos } from "../../../ofertas/global/contructorEstructuraDescuentos.mjs";
+import { constructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/reserva/constructorEstructuraDescuentosReserva.mjs";
+import { constructorEstructuraDescuentos } from "../../../ofertas/global/constructorEstructuraDescuentos.mjs";
 import { aplicarImpuestos } from "./aplicarImpuestos.mjs";
 import { constructorInstantaneaNoches } from "./constructorInstantaneaNoches.mjs";
 
@@ -96,7 +96,7 @@ export const crearDesgloseFinanciero = async (data) => {
                 sePermiteArrayVacio: "si"
             })
             constructorEstructuraDescuentos(estructura)
-            contructorEstructuraDescuentosReserva(estructura)
+            constructorEstructuraDescuentosReserva(estructura)
 
             const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64 || []
             const ofertasSelecionadasPorCondicion = await selecionarOfertasPorCondicion({
@@ -126,7 +126,7 @@ export const crearDesgloseFinanciero = async (data) => {
                 sePermitenDuplicados: "si"
             })
             constructorEstructuraDescuentos(estructura)
-            contructorEstructuraDescuentosReserva(estructura)
+            constructorEstructuraDescuentosReserva(estructura)
 
             const ofertasSelecionadasPorAdminstrador = await aplicarDescuentosPersonalizados({
                 descuentosArray

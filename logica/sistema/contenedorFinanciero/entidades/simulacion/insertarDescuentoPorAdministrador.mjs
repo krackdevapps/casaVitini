@@ -1,7 +1,7 @@
 import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs";
 import { aplicarDescuento } from "../../../ofertas/entidades/simulacion/aplicarDescuento.mjs";
-import { constructorEstructuraDescuentos } from "../../../ofertas/global/contructorEstructuraDescuentos.mjs";
-import { contructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/simulacion/contructorEstructuraDescuentosReserva.mjs";
+import { constructorEstructuraDescuentos } from "../../../ofertas/global/constructorEstructuraDescuentos.mjs";
+import { constructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/simulacion/constructorEstructuraDescuentosReserva.mjs";
 import { aplicarDescuentosPersonalizados } from "../../../ofertas/entidades/reserva/aplicarDescuentosPersonalizados.mjs";
 import { obtenerOfertasPorEntidadPorOfertaUID } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorEntidadPorOfertaUID.mjs";
 import { totalesBasePorRango } from "../simulacion/totalesBasePorRango.mjs";
@@ -60,7 +60,7 @@ export const insertarDescuentoPorAdministrador = async (data) => {
             apartamentosArray
         })
         constructorEstructuraDescuentos(estructura)
-        contructorEstructuraDescuentosReserva(estructura)
+        constructorEstructuraDescuentosReserva(estructura)
         await aplicarDescuento({
             origen: "porCondicion",
             ofertasParaAplicarDescuentos: instantaneaOfertasPorCondicion,

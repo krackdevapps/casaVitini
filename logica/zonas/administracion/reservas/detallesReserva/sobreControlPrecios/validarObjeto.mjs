@@ -21,7 +21,7 @@ export const validarObjeto = (data) => {
 
         }
         if (!zonas.includes(zonaSobreControl)) {
-            const zonasUI = utilidades.contructorComasEY({
+            const zonasUI = utilidades.constructorComasEY({
                 array: zonas,
                 articulo: "la"
             })

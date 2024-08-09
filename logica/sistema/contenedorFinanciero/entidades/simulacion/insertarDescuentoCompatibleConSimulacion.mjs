@@ -1,6 +1,6 @@
 import { aplicarDescuento } from "../../../ofertas/entidades/simulacion/aplicarDescuento.mjs";
-import { constructorEstructuraDescuentos } from "../../../ofertas/global/contructorEstructuraDescuentos.mjs";
-import { contructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/simulacion/contructorEstructuraDescuentosReserva.mjs";
+import { constructorEstructuraDescuentos } from "../../../ofertas/global/constructorEstructuraDescuentos.mjs";
+import { constructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/simulacion/constructorEstructuraDescuentosReserva.mjs";
 import { obtenerOfertasPorEntidadPorOfertaUID } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorEntidadPorOfertaUID.mjs";
 import { totalesBasePorRango } from "../simulacion/totalesBasePorRango.mjs";
 import { selectorPorCondicion } from "../../../ofertas/entidades/reserva/selectorPorCondicion.mjs";
@@ -51,7 +51,7 @@ export const insertarDescuentoCompatibleConSimulacion = async (data) => {
             apartamentosArray
         })
         constructorEstructuraDescuentos(estructura)
-        contructorEstructuraDescuentosReserva(estructura)
+        constructorEstructuraDescuentosReserva(estructura)
 
         const ofertaFormateada = await selectorPorCondicion({
             oferta,

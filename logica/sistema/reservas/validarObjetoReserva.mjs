@@ -173,7 +173,7 @@ export const validarObjetoReserva = async (data) => {
                 return apartamentoUI
             })
 
-            const constructo = utilidades.contructorComasEY({
+            const constructo = utilidades.constructorComasEY({
                 array: apartamentoUIOcupados,
                 articulo: "el"
             })

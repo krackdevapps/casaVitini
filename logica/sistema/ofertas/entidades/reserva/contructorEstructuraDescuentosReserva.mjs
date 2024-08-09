@@ -1,4 +1,4 @@
-export const contructorEstructuraDescuentosReserva = (estructura) => {
+export const constructorEstructuraDescuentosReserva = (estructura) => {
     const entidades = estructura.contenedorOfertas.entidades
     if (!entidades.hasOwnProperty("reserva")) {
         entidades.reserva = {

@@ -103,7 +103,7 @@ export const utilidades = {
         const date2 = DateTime.local(anio2, mes2, dia2);
         return date1.toISODate() === date2.toISODate();
     },
-    contructorComasEY: (data) => {
+    constructorComasEY: (data) => {
         const array = data.array
         const articulo = data.articulo
         if (array.length === 1) {

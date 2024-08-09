@@ -44,7 +44,7 @@ export const cambiarVista = async (transaccion) => {
                 break
             }
         }
-        // Contructor Parametros
+        // constructor Parametros
         let parametros = []
         let urlResueltoParseador = urlResuelta.split("/")
         urlResueltoParseador = urlResueltoParseador.filter(rama => rama)

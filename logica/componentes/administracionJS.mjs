@@ -3860,8 +3860,8 @@ const casaVitini = {
                             const categoriaActual = document.querySelector("[estadoCategoria=actual]")?.getAttribute("categoriaReserva")
                             const funcionPersonalizada = `casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.${categoriaALaQueIr}.arranque`
                             //casaVitini.administracion.reservas.detallesReserva.reservaUI.categorias.limpiarMenusCategorias()
-                            const contructorDireccionFuncion = casaVitini.administracion.reservas.detallesReserva.categoriasGlobales[categoriaALaQueIr]?.arranque
-                            if (typeof contructorDireccionFuncion === "function") {
+                            const constructorDireccionFuncion = casaVitini.administracion.reservas.detallesReserva.categoriasGlobales[categoriaALaQueIr]?.arranque
+                            if (typeof constructorDireccionFuncion === "function") {
                                 await casaVitini.administracion.reservas.detallesReserva.categoriasGlobales[categoriaALaQueIr]?.arranque();
                                 const granuladoURL = casaVitini.utilidades.granuladorURL()
                                 const posicionReservaUID = granuladoURL.directorios.findIndex(directorio => directorio === "reservas") + 1;
@@ -11593,12 +11593,12 @@ const casaVitini = {
                                     const instanciaUID_insertarDescuentosUI = ui.getAttribute("instanciaUID")
                                     const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
                                     main.appendChild(ui)
-                                    const contructor = ui.querySelector("[componente=contenedor]")
+                                    const constructor = ui.querySelector("[componente=contenedor]")
                                     const spinner = casaVitini.ui.componentes.spinner({
                                         mensaje: "Obteniendo ofertas...",
                                         textoBoton: "Cancelar"
                                     })
-                                    contructor.appendChild(spinner)
+                                    constructor.appendChild(spinner)
 
                                     const transaccion = {
                                         zona: "administracion/ofertas/listasOfertasAdministracion"
@@ -11613,7 +11613,7 @@ const casaVitini = {
                                     }
                                     if (respuestaServidor?.ok) {
                                         spinner.remove()
-                                        contructor.appendChild(this.botonCancelar())
+                                        constructor.appendChild(this.botonCancelar())
 
                                         const ofertas = respuestaServidor.ok
 
@@ -11624,7 +11624,7 @@ const casaVitini = {
                                             "flexVertical",
                                             "gap6",
                                         )
-                                        contructor.appendChild(contenedorOfertas)
+                                        constructor.appendChild(contenedorOfertas)
                                         const estadoUI_ = (estadoIDV) => {
 
                                             if (estadoIDV === "activado") {
@@ -11717,7 +11717,7 @@ const casaVitini = {
 
                                             contenedorOfertas.appendChild(contenedorOferta)
                                         })
-                                        contructor.appendChild(this.botonCancelar())
+                                        constructor.appendChild(this.botonCancelar())
 
                                     }
 
@@ -11784,12 +11784,12 @@ const casaVitini = {
                                     const instanciaUID_insertarDescuentosUI = ui.getAttribute("instanciaUID")
                                     const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
                                     main.appendChild(ui)
-                                    const contructor = ui.querySelector("[componente=contenedor]")
+                                    const constructor = ui.querySelector("[componente=contenedor]")
                                     const spinner = casaVitini.ui.componentes.spinner({
                                         mensaje: "Obteniendo ofertas compatibles con la oferta...",
                                         textoBoton: "Cancelar"
                                     })
-                                    contructor.appendChild(spinner)
+                                    constructor.appendChild(spinner)
 
                                     const transaccion = {
                                         zona: "administracion/reservas/detallesReserva/descuentos/obtenerDescuentosCompatiblesConLaReserva",
@@ -11814,11 +11814,11 @@ const casaVitini = {
                                             "flexVertical",
                                             "gap6",
                                         )
-                                        contructor.appendChild(contenedorOfertas)
+                                        constructor.appendChild(contenedorOfertas)
 
                                         spinner.remove()
                                         if (ofertas.length > 0) {
-                                            contructor.appendChild(this.botonCancelar())
+                                            constructor.appendChild(this.botonCancelar())
 
                                         } else {
                                             const info = document.createElement("p")
@@ -11826,7 +11826,7 @@ const casaVitini = {
                                                 "textoCentrado"
                                             )
                                             info.innerText = "No hay ofertas compatibles con esta reserva.Si quieres insertar ofertas no compatibles de manera arbitraria, a esta reserva usa el botón de insertar descuentos."
-                                            contructor.appendChild(info)
+                                            constructor.appendChild(info)
 
                                         }
 
@@ -11919,7 +11919,7 @@ const casaVitini = {
 
                                             contenedorOfertas.appendChild(contenedorOfertaUI)
                                         })
-                                        contructor.appendChild(this.botonCancelar())
+                                        constructor.appendChild(this.botonCancelar())
 
                                     }
 
@@ -12395,12 +12395,12 @@ const casaVitini = {
                                     const instanciaUID_insertarImpuestoUI = ui.getAttribute("instanciaUID")
                                     const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
                                     main.appendChild(ui)
-                                    const contructor = ui.querySelector("[componente=contenedor]")
+                                    const constructor = ui.querySelector("[componente=contenedor]")
                                     const spinner = casaVitini.ui.componentes.spinner({
                                         mensaje: "Obteniendo impuestos...",
                                         textoBoton: "Cancelar"
                                     })
-                                    contructor.appendChild(spinner)
+                                    constructor.appendChild(spinner)
 
                                     const transaccion = {
                                         zona: "administracion/impuestos/listarTodosLosImpuestos"
@@ -12415,7 +12415,7 @@ const casaVitini = {
                                     }
                                     if (respuestaServidor?.ok) {
                                         spinner.remove()
-                                        contructor.appendChild(this.botonCancelar())
+                                        constructor.appendChild(this.botonCancelar())
 
                                         const impuestos = respuestaServidor.impuestos
 
@@ -12426,7 +12426,7 @@ const casaVitini = {
                                             "flexVertical",
                                             "gap6",
                                         )
-                                        contructor.appendChild(contenedorOfertas)
+                                        constructor.appendChild(contenedorOfertas)
                                         const estadoUI_ = (estadoIDV) => {
 
                                             if (estadoIDV === "activado") {
@@ -12519,7 +12519,7 @@ const casaVitini = {
 
                                             contenedorOfertas.appendChild(contenedorOferta)
                                         })
-                                        contructor.appendChild(this.botonCancelar())
+                                        constructor.appendChild(this.botonCancelar())
 
                                     }
 
@@ -19571,12 +19571,12 @@ const casaVitini = {
                             const instanciaUID_insertarDescuentosUI = ui.getAttribute("instanciaUID")
                             const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
                             main.appendChild(ui)
-                            const contructor = ui.querySelector("[componente=contenedor]")
+                            const constructor = ui.querySelector("[componente=contenedor]")
                             const spinner = casaVitini.ui.componentes.spinner({
                                 mensaje: "Obteniendo ofertas...",
                                 textoBoton: "Cancelar"
                             })
-                            contructor.appendChild(spinner)
+                            constructor.appendChild(spinner)
 
                             const transaccion = {
                                 zona: "administracion/ofertas/listasOfertasAdministracion"
@@ -19591,7 +19591,7 @@ const casaVitini = {
                             }
                             if (respuestaServidor?.ok) {
                                 spinner.remove()
-                                contructor.appendChild(this.botonCancelar())
+                                constructor.appendChild(this.botonCancelar())
 
                                 const ofertas = respuestaServidor.ok
 
@@ -19602,7 +19602,7 @@ const casaVitini = {
                                     "flexVertical",
                                     "gap6",
                                 )
-                                contructor.appendChild(contenedorOfertas)
+                                constructor.appendChild(contenedorOfertas)
                                 const estadoUI_ = (estadoIDV) => {
 
                                     if (estadoIDV === "activado") {
@@ -19695,7 +19695,7 @@ const casaVitini = {
 
                                     contenedorOfertas.appendChild(contenedorOferta)
                                 })
-                                contructor.appendChild(this.botonCancelar())
+                                constructor.appendChild(this.botonCancelar())
 
                             }
 
@@ -19756,12 +19756,12 @@ const casaVitini = {
                             const instanciaUID_insertarDescuentosUI = ui.getAttribute("instanciaUID")
                             const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
                             main.appendChild(ui)
-                            const contructor = ui.querySelector("[componente=contenedor]")
+                            const constructor = ui.querySelector("[componente=contenedor]")
                             const spinner = casaVitini.ui.componentes.spinner({
                                 mensaje: "Obteniendo ofertas compatibles con la oferta...",
                                 textoBoton: "Cancelar"
                             })
-                            contructor.appendChild(spinner)
+                            constructor.appendChild(spinner)
 
                             const transaccion = {
                                 zona: "administracion/simuladorDePrecios/descuentos/obtenerDescuentosCompatiblesConLaReserva",
@@ -19786,11 +19786,11 @@ const casaVitini = {
                                     "flexVertical",
                                     "gap6",
                                 )
-                                contructor.appendChild(contenedorOfertas)
+                                constructor.appendChild(contenedorOfertas)
 
                                 spinner.remove()
                                 if (ofertas.length > 0) {
-                                    contructor.appendChild(this.botonCancelar())
+                                    constructor.appendChild(this.botonCancelar())
 
                                 } else {
                                     const info = document.createElement("p")
@@ -19798,7 +19798,7 @@ const casaVitini = {
                                         "textoCentrado"
                                     )
                                     info.innerText = "No hay ofertas compatibles con esta reserva.Si quieres insertar ofertas no compatibles de manera arbitraria, a esta reserva usa el botón de insertar descuentos."
-                                    contructor.appendChild(info)
+                                    constructor.appendChild(info)
 
                                 }
 
@@ -19891,7 +19891,7 @@ const casaVitini = {
 
                                     contenedorOfertas.appendChild(contenedorOfertaUI)
                                 })
-                                contructor.appendChild(this.botonCancelar())
+                                constructor.appendChild(this.botonCancelar())
 
                             }
 
@@ -20353,12 +20353,12 @@ const casaVitini = {
                             const instanciaUID_insertarImpuestoUI = ui.getAttribute("instanciaUID")
                             const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
                             main.appendChild(ui)
-                            const contructor = ui.querySelector("[componente=contenedor]")
+                            const constructor = ui.querySelector("[componente=contenedor]")
                             const spinner = casaVitini.ui.componentes.spinner({
                                 mensaje: "Obteniendo impuestos...",
                                 textoBoton: "Cancelar"
                             })
-                            contructor.appendChild(spinner)
+                            constructor.appendChild(spinner)
 
                             const transaccion = {
                                 zona: "administracion/impuestos/listarTodosLosImpuestos"
@@ -20373,7 +20373,7 @@ const casaVitini = {
                             }
                             if (respuestaServidor?.ok) {
                                 spinner.remove()
-                                contructor.appendChild(this.botonCancelar())
+                                constructor.appendChild(this.botonCancelar())
 
                                 const impuestos = respuestaServidor.impuestos
 
@@ -20384,7 +20384,7 @@ const casaVitini = {
                                     "flexVertical",
                                     "gap6",
                                 )
-                                contructor.appendChild(contenedorOfertas)
+                                constructor.appendChild(contenedorOfertas)
                                 const estadoUI_ = (estadoIDV) => {
 
                                     if (estadoIDV === "activado") {
@@ -20476,7 +20476,7 @@ const casaVitini = {
 
                                     contenedorOfertas.appendChild(contenedorOferta)
                                 })
-                                contructor.appendChild(this.botonCancelar())
+                                constructor.appendChild(this.botonCancelar())
 
                             }
 
@@ -27697,19 +27697,19 @@ const casaVitini = {
                         contenedorZonaUI.appendChild(zonaUI)
                         contenedorTipoBloqueo.appendChild(contenedorZonaUI)
                         if (tipoBloqueoIDV === "rangoTemporal") {
-                            const metadatosContructorRangoTemporalUI = {
+                            const metadatosconstructorRangoTemporalUI = {
                                 fechaInicio,
                                 fechaFin,
                                 modo: "estadoConDatos"
                             }
-                            const selectorRangoUI = casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.selectorRangoTemporalUI(metadatosContructorRangoTemporalUI)
+                            const selectorRangoUI = casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.selectorRangoTemporalUI(metadatosconstructorRangoTemporalUI)
                             bloqueBloqueoUI.appendChild(selectorRangoUI)
                         }
                         if (tipoBloqueoIDV === "permanente") {
-                            const metadatosContructorRangoTemporalUI = {
+                            const metadatosconstructorRangoTemporalUI = {
                                 modo: "estadoInicial"
                             }
-                            const selectorRangoUI = casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.selectorRangoTemporalUI(metadatosContructorRangoTemporalUI)
+                            const selectorRangoUI = casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.selectorRangoTemporalUI(metadatosconstructorRangoTemporalUI)
                             bloqueBloqueoUI.appendChild(selectorRangoUI)
                         }
                         ///Contendor Zona
@@ -28629,10 +28629,10 @@ const casaVitini = {
                     contenedorZonaUI.appendChild(zonaUI)
                     contenedorOpcionesTroncales.appendChild(contenedorZonaUI)
                     bloqueBloqueoUI.appendChild(contenedorOpcionesTroncales)
-                    const metadatosContructorRangoTemporalUI = {
+                    const metadatosconstructorRangoTemporalUI = {
                         modo: "estadoInicial"
                     }
-                    const selectorRangoUI = casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.selectorRangoTemporalUI(metadatosContructorRangoTemporalUI)
+                    const selectorRangoUI = casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.selectorRangoTemporalUI(metadatosconstructorRangoTemporalUI)
                     bloqueBloqueoUI.appendChild(selectorRangoUI)
                     ///Contendor Zona
                     const motivoUI = document.createElement("textarea")
@@ -34088,7 +34088,7 @@ const casaVitini = {
                     const items = Array.from(gridContainer.children);
                     const index = items.indexOf(selectorDiaRenderizado);
                     const columns = parseInt(getComputedStyle(gridContainer).gridTemplateColumns.split(" ").length);
-                    const row = Math.floor(index/columns) + 1;
+                    const row = Math.floor(index / columns) + 1;
                     const column = (index % columns) + 1;
                     //
                     //
@@ -34144,7 +34144,7 @@ const casaVitini = {
                     //Calcula la diferencia en milisegundos
                     const diferenciaEnMilisegundos = Math.abs(fecha2.getTime() - fecha1.getTime());
                     //Convierte la diferencia a días
-                    const diferenciaEnDiasSalida = Math.ceil(diferenciaEnMilisegundos/(1000 * 60 * 60 * 24));
+                    const diferenciaEnDiasSalida = Math.ceil(diferenciaEnMilisegundos / (1000 * 60 * 60 * 24));
                     return diferenciaEnDiasSalida
                 }
                 const constructorEventoUI = (metadatos) => {

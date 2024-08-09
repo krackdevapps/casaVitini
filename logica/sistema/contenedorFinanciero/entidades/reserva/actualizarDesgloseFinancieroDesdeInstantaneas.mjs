@@ -1,7 +1,7 @@
 import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs";
 import { aplicarDescuento } from "../../../ofertas/entidades/reserva/aplicarDescuento.mjs";
-import { constructorEstructuraDescuentos } from "../../../ofertas/global/contructorEstructuraDescuentos.mjs";
-import { contructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/reserva/contructorEstructuraDescuentosReserva.mjs";
+import { constructorEstructuraDescuentos } from "../../../ofertas/global/constructorEstructuraDescuentos.mjs";
+import { constructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/reserva/constructorEstructuraDescuentosReserva.mjs";
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs";
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
 import { aplicarImpuestos } from "./aplicarImpuestos.mjs";
@@ -49,7 +49,7 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
         })
 
         constructorEstructuraDescuentos(estructura)
-        contructorEstructuraDescuentosReserva(estructura)
+        constructorEstructuraDescuentosReserva(estructura)
 
         await aplicarDescuento({
             origen: "porCondicion",

@@ -37,9 +37,9 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const anoActual = tiempoZH.year;
         const mesActual = tiempoZH.month;
-        const contructorMes = DateTime.fromObject({ year: ano, month: mes, day: 1 });
+        const constructorMes = DateTime.fromObject({ year: ano, month: mes, day: 1 });
         // Obtén el último día del mes
-        const ultimoDiaDelMes = contructorMes.endOf("month");
+        const ultimoDiaDelMes = constructorMes.endOf("month");
         // Extrae el número del último día del mes
         const numeroUltimoDia = ultimoDiaDelMes.day;
         const rol = entrada.session.rolIDV;

@@ -13,7 +13,7 @@ export const validarObjeto = (data) => {
         } else if (zonaSobreControl === zonas[2]) {
         }
         if (!zonas.includes(zonaSobreControl)) {
-            const zonasUI = utilidades.contructorComasEY({
+            const zonasUI = utilidades.constructorComasEY({
                 array: zonas,
                 articulo: "la"
             })

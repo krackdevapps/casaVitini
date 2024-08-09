@@ -1,5 +1,5 @@
 import { conexion } from "../../../../componentes/db.mjs"
-import { constructorOrderBy } from "../../../../sistema/reservas/buscador/contructorOrderBy.mjs"
+import { constructorOrderBy } from "../../../../sistema/reservas/buscador/constructorOrderBy.mjs"
 
 
 export const porRango_porFechaDeSalida = async (data) => {

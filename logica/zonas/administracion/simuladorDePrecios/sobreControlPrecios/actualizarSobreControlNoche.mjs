@@ -64,7 +64,7 @@ export const actualizarSobreControlNoche = async (entrada) => {
         ]
 
         if (!operacionIDV.includes(tipoOperacion)) {
-            const operacionesUI = utilidades.contructorComasEY({
+            const operacionesUI = utilidades.constructorComasEY({
                 array: operacionIDV,
                 articulo: "el"
             })
