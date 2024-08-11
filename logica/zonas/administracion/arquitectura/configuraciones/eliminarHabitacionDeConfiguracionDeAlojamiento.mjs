@@ -1,4 +1,4 @@
-import { eliminarHabitacionDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/eliminarHabitacionDelApartamentoPorApartamentoIDV.mjs";
+import { eliminarHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/configuraciones/eliminarHabitacionDelApartamentoPorHabitacionUID.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
@@ -37,7 +37,7 @@ export const eliminarHabitacionDeConfiguracionDeAlojamiento = async (entrada, sa
             throw new Error(error);
         }
 
-        const habitacionEliminada = await eliminarHabitacionDelApartamentoPorApartamentoIDV(habitacionUID)
+        const habitacionEliminada = await eliminarHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
         if (habitacionEliminada.length === 0) {
             const error = "No se encuentra la habitación a eliminar";
             throw new Error(error);

@@ -56,18 +56,20 @@ describe('crud hosting configuracion', () => {
         await insertarCamaComoEntidad({
             camaIDV: camaIDV,
             camaUI: camaUI,
-            capacidad: 3
+            capacidad: 3,
+            tipoCama: "compartida"
         })
     })
     test('insert hosting void', async () => {
         const response = await insertarConfiguracionApartamento({
             apartamentoIDV: IDVStart,
             estadoInicial: "nodisponible",
+            zonaIDV: "global"
         })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })
-
+    
     test('insert room in hosting configuracion', async () => {
         const roomInHostingConfiguracion = {
             apartamentoIDV: IDVStart,
@@ -110,7 +112,11 @@ describe('crud hosting configuracion', () => {
 
 
     test('select images of hostin ', async () => {
-        const response = await obtenerImagenApartamentoPorApartamentoIDV(IDVStart)
+        const response = await obtenerImagenApartamentoPorApartamentoIDV({
+            apartamentoIDV: IDVStart,
+            estadoConfiguracionIDV_array: ["nodisponible"]
+        })
+        console.log("respuesta", response)
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })
@@ -136,7 +142,8 @@ describe('crud hosting configuracion', () => {
     test('select room of apartament by habitacionIDV', async () => {
         const response = await obtenerHabitacionDelApartamentoPorHabitacionIDV({
             apartamentoIDV: IDVStart,
-            habitacionIDV: habitacionIDV
+            habitacionIDV: habitacionIDV,
+            errorSi: "noExiste"
         })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');

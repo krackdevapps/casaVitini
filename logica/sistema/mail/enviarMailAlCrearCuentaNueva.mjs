@@ -2,7 +2,7 @@ import { enviarMail } from "./enviarMail.mjs"
 export const enviarMailAlCrearCuentaNueva = async (datosConfirmacion) => {
     try {
         const codigoVerificacion = datosConfirmacion.codigoVerificacion
-        // Contruimos el mensaje
+        // construimos el mensaje
         const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
         const destino = datosConfirmacion.mail
         const asunto = "Verifica tu cuenta"

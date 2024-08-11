@@ -20,7 +20,7 @@ export const enviarMailReservaConfirmada = async (reservaUID) => {
         const nombreCompletoTitularReserva = reserva.titular.nombreTitular
         const emailDestinoTitular = reserva.titular.mailTitular
         const hostActual = "localhost"
-        // Contruimos el mensaje
+        // construimos el mensaje
         const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
         const destino = emailDestinoTitular
         const asunto = "Reserva confirmada"

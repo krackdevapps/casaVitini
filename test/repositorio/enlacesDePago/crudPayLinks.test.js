@@ -12,28 +12,30 @@ import { obtenerEnlaceDePagoPorEnlaceUID } from '../../../logica/repositorio/enl
 import { obtenerTodosEnlaceDePago } from '../../../logica/repositorio/enlacesDePago/obtenerTodosLosEnlaceDePago.mjs';
 import { eliminarEnlaceDePagoPorEnlaceUID } from '../../../logica/repositorio/enlacesDePago/eliminarEnlaceDePagoPorEnlaceUID.mjs';
 import { eliminarEnlaceDePagoPorReservaUID } from '../../../logica/repositorio/enlacesDePago/eliminarEnlaceDePagoPorReservaUID.mjs';
+import { generadorReservaUID } from '../../../logica/componentes/generadorReservaUID.mjs';
 
 describe('crud pay links', () => {
     const enlaceTVI = "enlaceTest"
     let nuevoEnlaceUID = 0
-    let reservaUID = 0
+    let reservaUID
     const reservaTVI = "reservaTest"
     const codigoPublico = "weopikfnwonerof"
 
     beforeAll(async () => {
+        reservaUID = await generadorReservaUID()
+
         await eliminarEnlaceDePagoPorEnlaceTVI(enlaceTVI)
         await eliminarReservaPorReservaTVI(reservaTVI)
-        const nuevaReserva = await insertarReservaAdministrativa({
+        await insertarReservaAdministrativa({
             fechaEntrada: "2020-10-10",
             fechaSalida: "2020-11-11",
             estadoReserva: "confirmada",
             origen: "test",
             creacion: "2020-11-11",
             estadoPago: "noPagado",
+            reservaUID: reservaUID,
             reservaTVI: reservaTVI
         })
-        reservaUID = nuevaReserva.reservaUID
-
     })
     test('insert new pay link', async () => {
         const response = await insertarEnlaceDePago({

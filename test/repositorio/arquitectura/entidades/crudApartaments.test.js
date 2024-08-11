@@ -50,7 +50,10 @@ describe('crud apartament as entity', () => {
         expect(typeof respons).toBe('object');
     })
     test('select apartament by UI', async () => {
-        const respons = await obtenerApartamentoComoEntidadPorApartamentoUI(UIStart)
+        const respons = await obtenerApartamentoComoEntidadPorApartamentoUI({
+            apartamentoUI: UIStart,
+            errorSi: "noExiste"
+        })
         expect(respons).not.toBeUndefined();
         expect(typeof respons).toBe('object');
     })

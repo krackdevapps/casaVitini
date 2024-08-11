@@ -11,7 +11,7 @@ import { insertarCliente } from '../../../logica/repositorio/clientes/insertarCl
 import { obtenerResultadosBusqueda } from '../../../logica/repositorio/clientes/obtenerResultadosBusqueda.mjs';
 
 describe('crud clients', () => {
-    const clineteTVI = "clienteTest"
+    const clienteTVI = "clienteTest"
     const calendarioIDV = "calendarioParaTest"
     const bloqueoIDV = "bloqueoTest"
     const nombreCliente = "clienteTest"
@@ -25,7 +25,7 @@ describe('crud clients', () => {
     let nuevoClienteUID = 0
 
     beforeAll(async () => {
-        await eliminarClientePorClienteIDV(clineteTVI)
+        await eliminarClientePorClienteIDV(clienteTVI)
     })
     test('insert new client', async () => {
         const response = await insertarCliente({
@@ -58,12 +58,18 @@ describe('crud clients', () => {
 
 
     test('selec client by mail', async () => {
-        const response = await obtenerClientesPorMail(correoElectronico);
+        const response = await obtenerClientesPorMail({
+            mail: correoElectronico,
+            errorSi: "noExiste"
+        });
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })
     test('selec client by pasaporte', async () => {
-        const response = await obtenerClientesPorPasaporte(pasaporte);
+        const response = await obtenerClientesPorPasaporte({
+            pasaporte: pasaporte,
+            errorSi: "noExiste"
+        });
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })
@@ -107,6 +113,6 @@ describe('crud clients', () => {
     })
 
     afterAll(async () => {
-        await eliminarClientePorClienteIDV(clineteTVI)
+        await eliminarClientePorClienteIDV(clienteTVI)
     });
 })

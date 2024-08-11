@@ -2,10 +2,10 @@
 import { describe, expect, test } from '@jest/globals';
 import { eliminarCamaComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs';
 import { insertarCamaComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/cama/insertarCamaComoEntidad.mjs';
-import { obtenerCamaComoEntidadPorCamaIDV } from '../../../../logica/repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDV.mjs';
 import { obtenerCamaComoEntidadPorCamaUI } from '../../../../logica/repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaUI.mjs';
 import { obtenerTodasLasHabitaciones } from '../../../../logica/repositorio/arquitectura/entidades/habitacion/obtenerTodasLasHabitaciones.mjs';
 import { actualizarCamaComoEntidadPorCamaIDV } from '../../../../logica/repositorio/arquitectura/entidades/cama/actualizarCamaComoEntidadPorCamaIDV.mjs';
+import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from '../../../../logica/repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs';
 
 describe('crud bed as entity', () => {
     const IDVStart = "camaTestInicial"
@@ -20,18 +20,26 @@ describe('crud bed as entity', () => {
             camaIDV: IDVStart,
             camaUI: UIStart,
             capacidad: 2,
+            tipoCama: "compartida"
         }
         const respons = await insertarCamaComoEntidad(makeEntity)
         expect(respons).not.toBeUndefined();
         expect(typeof respons).toBe('object');
     })
     test('select bed by camaIDV', async () => {
-        const respons = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV(IDVStart)
+        const respons = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
+            camaIDV: IDVStart,
+            tipoIDVArray: ["compartida"],
+            errorSi: "noExiste"
+        })
         expect(respons).not.toBeUndefined();
         expect(typeof respons).toBe('object');
     })
     test('select bed by camaUI', async () => {
-        const respons = await obtenerCamaComoEntidadPorCamaUI(UIStart)
+        const respons = await obtenerCamaComoEntidadPorCamaUI({
+            camaUI: UIStart,
+            errorSi: "noExiste"
+        })
         expect(respons).not.toBeUndefined();
         expect(typeof respons).toBe('object');
     })
@@ -45,7 +53,7 @@ describe('crud bed as entity', () => {
             camaIDVNuevo: IDVFinal,
             camaUI: UIStart,
             capacidad: 4,
-            camaIDVSelector: IDVStart,
+            camaIDV: IDVStart,
         }
         const respons = await actualizarCamaComoEntidadPorCamaIDV(updateEntity);
         expect(respons).not.toBeUndefined();

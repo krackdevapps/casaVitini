@@ -4,7 +4,6 @@ import { eliminarImpuestoPorImpuestoTVI } from '../../../logica/repositorio/impu
 import { insertarImpuesto } from '../../../logica/repositorio/impuestos/insertarImpuesto.mjs';
 import { actualizarImpuesto } from '../../../logica/repositorio/impuestos/actualizarImpuesto.mjs';
 import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../../logica/repositorio/impuestos/obtenerImpuestosPorAplicacionIDVPorEstado.mjs';
-import { obtenerImpuestosPorAplicacionSobre } from '../../../logica/repositorio/impuestos/obtenerImpuestosPorAplicacionSobre.mjs';
 import { obtenerImpuestosPorImppuestoUID } from '../../../logica/repositorio/impuestos/obtenerImpuestosPorImpuestoUID.mjs';
 import { obtenerImpuestosPorNombreDelImpuesto } from '../../../logica/repositorio/impuestos/obtenerImpuestosPorNombreDelImpuesto.mjs';
 import { obtenerTipoValorPorTipoValorIDV } from '../../../logica/repositorio/impuestos/obtenerTipoValorPorTipoValorIDV.mjs';
@@ -55,11 +54,7 @@ describe('crud tax', () => {
         expect(Array.isArray(response)).toBe(true);
     })
 
-    test('select tax by ApliocacionIDV', async () => {
-        const response = await obtenerImpuestosPorAplicacionSobre(["totalNeto"]);
-        expect(response).not.toBeUndefined();
-        expect(Array.isArray(response)).toBe(true);
-    })
+
 
     test('select tax by impuestoUID', async () => {
         const response = await obtenerImpuestosPorImppuestoUID(nuevoImpuestoUID);

@@ -2,7 +2,7 @@ import { conexion } from "../../../componentes/db.mjs";
 
 export const actualizarParConfiguracion = async (data) => {
     try {
-
+        const contenedorConfiguracionActualizada = {}
         for (const [configuracionUID, valor] of Object.entries(data)) {
             const consulta = ` 
             UPDATE "configuracionGlobal"
@@ -23,9 +23,11 @@ export const actualizarParConfiguracion = async (data) => {
                 const error = "No se ha podido actualizar la configruacion con el configuracionUID: " + configuracionUID;
                 throw new Error(error)
             }
-
+            const objeto = resuelve.rows[0]
+            const [llave, valor_] = Object.entries(objeto)[0]
+            contenedorConfiguracionActualizada[llave] = valor_
         }
-        return
+        return contenedorConfiguracionActualizada
     } catch (errorCapturado) {
         throw errorCapturado
     }

@@ -1,15 +1,15 @@
 import { conexion } from "../../../componentes/db.mjs";
 
-export const eliminarHabitacionDelApartamentoPorApartamentoIDV = async (apartamentoIDV) => {
+export const eliminarHabitacionDelApartamentoPorHabitacionUID = async (habitacionUID) => {
     try {
         const consulta =  `
         DELETE FROM "configuracionHabitacionesDelApartamento"
         WHERE
-        "apartamentoIDV" = $1
+        "componenteUID" = $1
         RETURNING 
         *
         ;`;
-        const resuelve = await conexion.query(consulta, [apartamentoIDV]);
+        const resuelve = await conexion.query(consulta, [habitacionUID]);
         return resuelve.rows
     } catch (errorAdaptador) {
         throw errorAdaptador

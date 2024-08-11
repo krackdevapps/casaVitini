@@ -37,7 +37,7 @@ describe('crud room as entity', () => {
     })
     test('select room by habitacionUI', async () => {
         const respuesta = await obtenerHabitacionComoEntidadPorHabitacionUI({
-            habitacionII: UIStart,
+            habitacionUI: UIStart,
             errorSi: "desactivado"
         })
         expect(respuesta).not.toBeUndefined();

@@ -9,11 +9,11 @@ import { insertarCalendarioSincronizado } from '../../../logica/repositorio/cale
 import { actualizarEventosCalendarioPorCalendarioUID } from '../../../logica/repositorio/calendario/actualizarEventosCalendarioPorCalendarioUID.mjs';
 import { actualizarCalendarioSincronizado } from '../../../logica/repositorio/calendario/actualizarCalendarioSincronizado.mjs';
 import { obtenerCalendarioPorCalendarioUIDPublico } from '../../../logica/repositorio/calendario/obtenerCalendarioPorCalendarioUIDPublico.mjs';
-import { obtenerCalendariosPorCalendarioUID } from '../../../logica/repositorio/calendario/obtenerCalendariosPorCalendarioUID.mjs';
 import { obtenerCalendariosPorPlataformaIDV } from '../../../logica/repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs';
 import { obtenerCalendariosPorPlataformaIDVPorCalendarioUID } from '../../../logica/repositorio/calendario/obtenerCalendariosPorPlataformaIDVPorCalendarioUID.mjs';
 import { eliminarCalendarioSincronizadoPorCalendarioIDV } from '../../../logica/repositorio/calendario/eliminarCalendarioSincronizadoPorCalendarioIDV.mjs';
 import { eliminarCalendarioSincronizadoPorCalendarioUID } from '../../../logica/repositorio/calendario/eliminarCalendarioSincronizadoPorCalendarioUID.mjs';
+import { obtenerCalendarioPorCalendarioUID } from '../../../logica/repositorio/calendario/obtenerCalendarioPorCalendarioUID.mjs';
 
 describe('select and update calendars', () => {
     const apartamentoIDVInicial = "apartamento1TESTInicial"
@@ -37,6 +37,7 @@ describe('select and update calendars', () => {
         await insertarConfiguracionApartamento({
             apartamentoIDV: apartamentoIDVInicial,
             estadoInicial: "nodisponible",
+            zonaIDV: "global"
         })
 
     })
@@ -76,13 +77,16 @@ describe('select and update calendars', () => {
     })
 
     test('selec calendar by UIDPublico', async () => {
-        const response = await obtenerCalendarioPorCalendarioUIDPublico(nuevoCalendarioUIDPublico);
+        const response = await obtenerCalendarioPorCalendarioUIDPublico({
+            publicoUID: nuevoCalendarioUIDPublico,
+            errorSi: "noExiste"
+        });
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })
 
     test('selec select calendar by calendarioUID', async () => {
-        const response = await obtenerCalendariosPorCalendarioUID(nuevoCalendarioUID);
+        const response = await obtenerCalendarioPorCalendarioUID(nuevoCalendarioUID);
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })

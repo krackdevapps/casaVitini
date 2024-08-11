@@ -80,7 +80,7 @@ export const actualizarIDVenInstantaneasContenedorFinanciero = async (data) => {
                 instantaneaSobreControlPrecios,
                 instantaneaOfertasPorAdministrador,
             })
-            // Faltaria recontruir el desglose financiero desde instantaneas una vez estan las instantaneas actualizadas
+            // Faltaria reconstruir el desglose financiero desde instantaneas una vez estan las instantaneas actualizadas
 
 
             const desgloseFinanciero = await procesador({

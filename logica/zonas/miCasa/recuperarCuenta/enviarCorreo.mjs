@@ -75,7 +75,7 @@ export const enviarCorreo = async (entrada) => {
                 codigoGenerado: codigoGenerado,
                 fechaCaducidadUTC: fechaCaducidadUTC
             })
-            // Contruimos el mensaje
+            // construimos el mensaje
             const origen = process.env.CORREO_DIRRECION_DE_ORIGEN;
             const destino = mail;
             const asunto = "Recuperar tu VitiniID";
@@ -104,7 +104,7 @@ export const enviarCorreo = async (entrada) => {
                 fechaActualUTC: fechaActualUTC,
                 usuario: usuario
             })
-            // Contruimos el mensaje
+            // construimos el mensaje
             const origen = process.env.CORREO_DIRRECION_DE_ORIGEN;
             const destino = mail;
             const asunto = "Verifica tu mail";

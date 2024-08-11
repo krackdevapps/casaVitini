@@ -24,7 +24,7 @@ export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
             const ahora = DateTime.utc(); // Fecha actual en UTC
             const caducidad = DateTime.fromISO(fechaObjetivo, { zone: 'utc' });
             if (caducidad <= ahora) {
-                return "Esta sesión está caducada y si no se hace una nueva petición en la próxima hora, con él, el id de sesión de esta se destruirá";
+                return "Esta sesión está caducada y si no se hace una nueva petición en la próxima hora, la sesión sera destruida";
             }
             const diferencia = caducidad.diff(ahora);
             if (diferencia.as('days') >= 2) {

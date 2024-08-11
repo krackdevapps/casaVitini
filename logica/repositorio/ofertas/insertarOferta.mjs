@@ -10,6 +10,7 @@ export const insertarOferta = async (data) => {
         const descuentosJSON = JSON.stringify(data.descuentosJSON)
         const estado = data.estado
         const zonaIDV = data.zonaIDV
+        const ofertaTVI = data.ofertaTVI
 
         const consulta = `
             INSERT INTO "ofertas"
@@ -21,7 +22,8 @@ export const insertarOferta = async (data) => {
                 "condicionesArray",
                 "descuentosJSON",
                 "estadoIDV",
-                "zonaIDV"
+                "zonaIDV",
+                "ofertaTVI"
             )
             VALUES
             (
@@ -32,7 +34,9 @@ export const insertarOferta = async (data) => {
                 NULLIF($5::jsonb, NULL),
                 NULLIF($6::jsonb, NULL),
                 COALESCE($7::text, NULL),
-                COALESCE($8::text, NULL)
+                COALESCE($8::text, NULL),
+                COALESCE($9::text, NULL)
+
 
             )
             RETURNING *;
@@ -46,7 +50,8 @@ export const insertarOferta = async (data) => {
             condicionesArray,
             descuentosJSON,
             estado,
-            zonaIDV
+            zonaIDV,
+            ofertaTVI
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {

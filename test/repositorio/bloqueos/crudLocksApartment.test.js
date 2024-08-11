@@ -11,13 +11,13 @@ import { obtenerBloqueosPorRangoPorApartamentoIDV } from '../../../logica/reposi
 import { obtenerObtenerBloqueosPorRangoPorTipo } from '../../../logica/repositorio/bloqueos/obtenerObtenerBloqueosPorRangoPorTipo.mjs';
 import { obtenerTodosLosBloqueos } from '../../../logica/repositorio/bloqueos/obtenerTodosLosBloqueos.mjs';
 import { eliminarBloqueoPorBloqueoUID } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorBloqueoUID.mjs';
-import { eliminarBloqueoPorFechaSalida } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorFechaSalida.mjs';
 import { insertarConfiguracionApartamento } from '../../../logica/repositorio/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
 import { eliminarConfiguracionPorApartamentoIDV } from '../../../logica/repositorio/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
 import { eliminarApartamentoComoEntidad } from '../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
 import { insertarApartamentoComoEntidad } from '../../../logica/repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
 import { obtenerBloqueosPorMes } from '../../../logica/repositorio/bloqueos/obtenerBloqueosPorMes.mjs';
 import { obtenerTodosLosbloqueosPorMesPorAnoPorTipo } from '../../../logica/repositorio/bloqueos/obtenerTodosLosbloqueosPorMesPorAnoPorTipo.mjs';
+import { eliminarBloqueoPorFechaActual } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorFechaActual.mjs';
 describe('crud locks for apartments', () => {
     const apartamentoIDVInicial = "apartamento1TESTInicial"
     const tipoPermanente = "permanente"
@@ -43,13 +43,14 @@ describe('crud locks for apartments', () => {
         await insertarConfiguracionApartamento({
             apartamentoIDV: apartamentoIDVInicial,
             estadoInicial: "nodisponible",
+            zonaIDV: "global"
         })
 
     })
     test('insert new apartmen lock', async () => {
         const response = await insertarNuevoBloqueo({
             apartamentoIDV: apartamentoIDVInicial,
-            tipoBloqueo: tipoRangoTemporal,
+            tipoBloqueoIDV: tipoRangoTemporal,
             fechaInicio_ISO: fechaInicio_ISO,
             fechaFin_ISO: fechaFin_ISO,
             motivo: "Bloqueo creado durante la prueba de test",
@@ -63,7 +64,7 @@ describe('crud locks for apartments', () => {
     test('update lock', async () => {
         const response = await actualizarBloqueoPorBloqueoUID({
             apartamentoIDV: apartamentoIDVInicial,
-            tipoBloqueo: tipoRangoTemporal,
+            tipoBloqueoIDV: tipoRangoTemporal,
             fechaInicio_ISO: fechaInicio_ISO,
             fechaFin_ISO: fechaFin_ISO,
             motivo: "Bloqueo creado durante la prueba de test",
@@ -156,7 +157,7 @@ describe('crud locks for apartments', () => {
     })
 
     test('delete lock by date', async () => {
-        const response = await eliminarBloqueoPorFechaSalida(fechaActual_ISO);
+        const response = await eliminarBloqueoPorFechaActual(fechaActual_ISO);
         expect(response).not.toBeUndefined();
         expect(Array.isArray(response)).toBe(true);
     })

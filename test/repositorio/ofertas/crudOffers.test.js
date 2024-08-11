@@ -1,79 +1,94 @@
 
 import { describe, expect, test } from '@jest/globals';
+import { insertarOferta } from '../../../logica/repositorio/ofertas/insertarOferta.mjs';
+import { eliminarOfertaPorOfertaTVI } from '../../../logica/repositorio/ofertas/eliminarOfertaPorOfertaTVI.mjs';
+
+const contenedoOferta = {
+    "nombreOferta": "testing_all_conditions",
+    "zonaIDV": "global",
+    "entidadIDV": "reserva",
+    "fechaInicio": "2024-08-07",
+    "fechaFinal": "2024-08-09",
+    "condicionesArray": [
+        {
+            "tipoCondicion": "conFechaEntradaEntreRango",
+            "fechaInicioRango_ISO": "2024-08-14",
+            "fechaFinalRango_ISO": "2024-08-17"
+        },
+        {
+            "tipoCondicion": "conFechaCreacionEntreRango"
+        },
+        {
+            "tipoCondicion": "porNumeroDeApartamentos",
+            "tipoConteo": "numeroExacto",
+            "numeroDeApartamentos": "6"
+        },
+        {
+            "tipoCondicion": "porApartamentosEspecificos",
+            "tipoDeEspecificidad": "alguno",
+            "apartamentos": [
+                {
+                    "apartamentoIDV": "apartamento5"
+                },
+                {
+                    "apartamentoIDV": "apartamento7"
+                }
+            ]
+        },
+        {
+            "tipoCondicion": "porDiasDeAntelacion",
+            "tipoConteo": "numeroExacto",
+            "numeroDeDias": "8"
+        },
+        {
+            "tipoCondicion": "porDiasDeReserva",
+            "tipoConteo": "hastaUnNumeroExacto",
+            "numeroDeDias": "6"
+        },
+        {
+            "tipoCondicion": "porRangoDeFechas",
+            "fechaInicioRango_ISO": "2024-08-14",
+            "fechaFinalRango_ISO": "2024-08-16"
+        },
+        {
+            "tipoCondicion": "porCodigoDescuento",
+            "codigoDescuento": "hola"
+        }
+    ],
+    "descuentosJSON": {
+        "tipoDescuento": "totalNeto",
+        "tipoAplicacion": "cantidadFija",
+        "descuentoTotal": "10.00"
+    },
+    "zona": "administracion/ofertas/crearOferta"
+}
 
 describe('crud ofers', () => {
     const ofertaTVI = "ofertaTest"
-    const usuarioTest = "usuario_for_testing"
-    let nuevaOfertaUID = 0
-    const reservaTVI = "reservaTest"
-    const codigoPublico = "weopikfnwonerof"
-
+    let nuevaOfertaUID
     beforeAll(async () => {
-        await eliminarEnlacesDeRecuperacionPorUsuario(usuarioTest)
-        await eliminarUsuario(usuarioTest)
-        await insertarUsuario({
-            usuarioIDX: usuarioTest,
-            rolIDV: "cliente",
-            estadoCuenta: "desactivado",
-            nuevaSal: "123",
-            hashCreado: "123",
-            cuentaVerificada: "noVerificada",
-            fechaCaducidadCuentaNoVerificada: null,
-        })
+        await eliminarOfertaPorOfertaTVI(ofertaTVI)
 
     })
     test('insert offer', async () => {
         const response = await insertarOferta({
-            nombreOferta: "oferta_test",
-            fechaInicio_ISO: "2020-10-10",
-            fechaFin_ISO: "2020-10-11",
-            simboloNumero: "aPartirDe",
-            numero: "1",
-            descuentoAplicadoA: "totalNetoReserva",
-            tipoOferta: "porApartamentosEspecificos",
-            cantidad: 10.00,
-            tipoDescuento: "porcentaje",
-            ofertaTVI: ofertaTVI
+            nombreOferta: contenedoOferta.nombreOferta,
+            zonaIDV: contenedoOferta.zonaIDV,
+            entidadIDV: "reserva",
+            fechaInicio: contenedoOferta.fechaInicio,
+            fechaFinal: contenedoOferta.fechaFinal,
+            condicionesArray: contenedoOferta.condicionesArray,
+            descuentosJSON: contenedoOferta.descuentosJSON,
+            estado: "desactivado",
+            ofertaTVI
         })
         nuevaOfertaUID = response.ofertaUID
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })
 
-    test('update pay link with enlaceUID', async () => {
-        const response = await actualizarEnlaceDeRecuperacionPorUsuario({
-            usuario: usuarioTest,
-            codigoGenerado: codigoPublico,
-            fechaActualUTC: "2020-11-11",
-        });
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-    })
-
-
-    test('select recovery link by codigoUPID', async () => {
-        const response = await obtenerEnlacesRecuperacionPorCodigoUPID(codigoPublico);
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-    })
-
-
-
-    test('delete recovery link usuario', async () => {
-        const response = await eliminarEnlacesDeRecuperacionPorUsuario(usuarioTest);
-        expect(response).not.toBeUndefined();
-        expect(Array.isArray(response)).toBe(true);
-    })
-
-    test('delete recovery link by actual date', async () => {
-        const response = await eliminarEnlacesDeRecuperacionPorFechaCaducidad("2020-10-10");
-        expect(response).not.toBeUndefined();
-        expect(Array.isArray(response)).toBe(true);
-    })
-
     afterAll(async () => {
-        await eliminarUsuario(usuarioTest)
-        await eliminarEnlacesDeRecuperacionPorUsuario(usuarioTest)
+        await eliminarOfertaPorOfertaTVI(ofertaTVI)
 
 
     });

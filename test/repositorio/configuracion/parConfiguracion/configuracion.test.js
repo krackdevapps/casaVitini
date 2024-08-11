@@ -6,18 +6,21 @@ import { actualizarParConfiguracion } from '../../../../logica/repositorio/confi
 
 describe('handler configruacion', () => {
 
-    const configuracionUID = "zonaHoraria"
+    const arrayDeConfiguracionesUID = ["zonaHoraria"]
     let valorConfiguracion
 
     test('selec configuracion', async () => {
-        const response = await obtenerParConfiguracion([configuracionUID])
+        const response = await obtenerParConfiguracion(arrayDeConfiguracionesUID)
         valorConfiguracion = response.zonaHoraria
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })
     test('update configuracion', async () => {
         const response = await actualizarParConfiguracion({
-            [configuracionUID]: valorConfiguracion,
+            diasAntelacionReserva: "10",
+            diasMaximosReserva: "10",
+            limiteFuturoReserva: "350",
+
         })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');

@@ -137,7 +137,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
             })
             //}
 
-            // Se recontruye el contendor fiancniero desde isntantaneas
+            // Se reconstruye el contendor fiancniero desde isntantaneas
             await campoDeTransaccion("confirmar")
 
 

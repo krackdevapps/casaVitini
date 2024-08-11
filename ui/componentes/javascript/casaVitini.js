@@ -478,6 +478,7 @@ const casaVitini = {
             },
         },
         arranque: async () => {
+            console.log("test")
             window.addEventListener("popstate", casaVitini.shell.navegacion.navegacionInversa)
             await casaVitini.shell.controladoresUI.controladorEstadoIDX()
             document.getElementById("botonMenuResponsivo").addEventListener("click", () => {
@@ -17771,7 +17772,7 @@ const casaVitini = {
                         const spinner = casaVitini.ui.componentes.spinner(mensajeSpinner)
                         const contenedorCarga = document.createElement("div")
                         contenedorCarga.classList.add("componente_calendario_contenedoCarga")
-                        contenedorCarga.setAttribute("contenedor", "contruyendoCalendario")
+                        contenedorCarga.setAttribute("contenedor", "construyendoCalendario")
                         contenedorCarga.setAttribute("elemento", "flotante")
                         contenedorCarga.appendChild(spinner)
                         contenedoCalendarioIntermedio.appendChild(calendario)
@@ -18101,7 +18102,7 @@ const casaVitini = {
                         const spinner = casaVitini.ui.componentes.spinnerSimple()
                         const contenedorCarga = document.createElement("div")
                         contenedorCarga.classList.add("componente_calendario_contenedoCarga_calendarioIncrustado")
-                        contenedorCarga.setAttribute("contenedor", "contruyendoCalendario")
+                        contenedorCarga.setAttribute("contenedor", "construyendoCalendario")
                         contenedorCarga.setAttribute("elemento", "flotante")
                         contenedorCarga.appendChild(spinner)
                         contenedoCalendarioIntermedio.appendChild(calendario)
@@ -20095,7 +20096,7 @@ const casaVitini = {
                             }
                         }
                         if (selectorCalendarioRenderizado) {
-                            selectorCalendarioRenderizado.querySelector("[contenedor=contruyendoCalendario]")?.remove()
+                            selectorCalendarioRenderizado.querySelector("[contenedor=construyendoCalendario]")?.remove()
                             selectorCalendarioRenderizado.querySelector("[contenedor=calendario]").removeAttribute("style")
                         }
                     } catch (errorCapturado) {
@@ -20145,13 +20146,13 @@ const casaVitini = {
                             anoActual = anoActual - 1
                         }
                     }
-                    const calendarioContruir = {
+                    const calendarioconstruir = {
                         tipo: "personalizado",
                         comando: "construyeObjeto",
                         ano: anoActual,
                         mes: mesActual
                     }
-                    const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendarioContruir)
+                    const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendarioconstruir)
                     calendarioResuelto.instanciaUID = instanciaUID
                     calendarioResuelto.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
                     calendarioResuelto.instanciaUID_procesoCambioMes = instanciaUID_procesoCambioMes
@@ -20163,15 +20164,15 @@ const casaVitini = {
                     const contenedorCalendario = calendarioRenderizado.querySelector(`[contenedor=calendario]`)
                     const selectorMarcoMesRenderizado = calendarioRenderizado.querySelector(`[componente=marcoMes]`)
                     selectorMarcoMesRenderizado.setAttribute("inctanciaUID_procesoCambioMes", instanciaUID_procesoCambioMes)
-                    const contenedorContruyendoCalendarioRenderizado = calendarioRenderizado.querySelectorAll("[contenedor=contruyendoCalendario]")
-                    contenedorContruyendoCalendarioRenderizado.forEach((contenedorRenderizado) => {
+                    const contenedorconstruyendoCalendarioRenderizado = calendarioRenderizado.querySelectorAll("[contenedor=construyendoCalendario]")
+                    contenedorconstruyendoCalendarioRenderizado.forEach((contenedorRenderizado) => {
                         contenedorRenderizado.remove()
                     })
                     const mensajeSpinner = "Construyendo mes..."
                     const spinner = casaVitini.ui.componentes.spinner(mensajeSpinner)
                     const contenedorCarga = document.createElement("div")
                     contenedorCarga.classList.add("componente_calendario_contenedoCarga_Mes")
-                    contenedorCarga.setAttribute("contenedor", "contruyendoCalendario")
+                    contenedorCarga.setAttribute("contenedor", "construyendoCalendario")
                     contenedorCarga.setAttribute("elemento", "flotante")
                     contenedorCarga.appendChild(spinner)
                     contenedorCalendario.appendChild(contenedorCarga)
@@ -24508,8 +24509,15 @@ const casaVitini = {
                     botonAceptar.classList.add("botonPrivacidad")
                     botonAceptar.innerText = "Aceptar todo"
                     botonAceptar.addEventListener("click", () => {
+                        console.log("boton aceptar")
                         casaVitini.componentes.privacidad.crearCookieConsentimiento()
-                        casaVitini.shell.arranque()
+                       // casaVitini.shell.arranque()
+                       const url = window.location.pathname;
+                       if (url === "/") {
+                           return casaVitini.shell.navegacion.controladorVista("portada")
+                       } else {
+                           return casaVitini.shell.navegacion.controladorVista(url)
+                       }
                     })
                     contenedorDecision.appendChild(botonAceptar)
                     return contenedorDecision

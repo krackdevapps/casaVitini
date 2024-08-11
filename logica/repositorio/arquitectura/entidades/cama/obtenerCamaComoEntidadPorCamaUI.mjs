@@ -14,11 +14,13 @@ export const obtenerCamaComoEntidadPorCamaUI = async (data) => {
                 const error = "No se encuntra ninguna cama con ese camaUI"
                 throw new Error(error)
             }
+            return resuelve.rows[0]
         } else if (errorSi === "existe") {
             if (resuelve.rowCount > 0) {
                 const error = "Ya existe una cama con ese camaIDV"
                 throw new Error(error)
             }
+            return resuelve.rows[0]
         } else if (errorSi === "desactivado") {
             return resuelve.rows[0]
         } else {

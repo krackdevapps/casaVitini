@@ -1,5 +1,5 @@
 import { clienteSquare } from "./squareClient.mjs";
-export const contruyeSession = async () => {
+export const construyeSession = async () => {
     try {
         const locationResponse = await clienteSquare.locationsApi.retrieveLocation(process.env.SQUARE_LOCATION_ID);
         const currency = locationResponse.result.location.currency;
