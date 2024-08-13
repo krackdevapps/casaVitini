@@ -11,6 +11,11 @@ export const puerto = async (entrada, salida) => {
             throw new Error(error);
         }
         const filtroZona = /^[a-zA-Z\/\-_]+$/;
+        const tipoEntrada = typeof zonaRaw
+        if (tipoEntrada !== "string") {
+            const error = "Las rutas de las zonas se esperan que esten especificadas como cadenas";
+            throw new Error(error);
+        }
         if (!filtroZona.test(zonaRaw)) {
             const error = "Las rutas de las zonas solo admiten minúsculas y mayúsculas junto con barras, nada más ni siquiera espacios.";
             throw new Error(error);

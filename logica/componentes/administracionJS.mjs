@@ -2287,7 +2287,7 @@ const casaVitini = {
                             contenedorProgreso.style.overflow = "hidden"
                             divPrincipal.appendChild(contenedorProgreso);
                             const barraProgresso = document.createElement("div")
-                            barraProgresso.style.height = "100 % "
+                            barraProgresso.style.height = "100%"
                             barraProgresso.style.background = "grey"
                             barraProgresso.style.width = porcentajeTranscurrido + "%"
                             contenedorProgreso.appendChild(barraProgresso);
@@ -7653,7 +7653,7 @@ const casaVitini = {
                                         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                                     }
                                     if (respuestaServidor?.ok) {
-                                        document.querySelector("[pernoctanteUID=" + pernoctanteUID + "]")
+                                        document.querySelector(`[pernoctanteUID="${pernoctanteUID}"]`)
                                             .remove()
                                         const datoPernoctante = {
                                             tipoPernoctante: tipoCliente,
@@ -7674,7 +7674,7 @@ const casaVitini = {
                                         }
                                         const pernoctantePasaporteUI = casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.alojamiento.pernoctantes.pernoctantePasaporteUI(datosPasaporte)
                                         bloqueClienteMover.appendChild(pernoctantePasaporteUI)
-                                        const selectorHabitacionDestino = document.querySelector("[habitacionUID=" + habitacionUID + "]")
+                                        const selectorHabitacionDestino = document.querySelector(`[habitacionUID="${habitacionUID}"]`)
                                         selectorHabitacionDestino?.appendChild(bloqueClienteMover)
                                         casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.alojamiento.pernoctantes.controlEspacioPernoctantesSinAlojamiento()
                                     }
@@ -10738,7 +10738,7 @@ const casaVitini = {
                                 contenedorPorPorcentaje.appendChild(resultadoPorcentaje)
                                 const campoPorcentajeReembolso = document.createElement("input")
                                 campoPorcentajeReembolso.classList.add("detallesReserva_reembolso_campo")
-                                campoPorcentajeReembolso.placeholder = "0 % "
+                                campoPorcentajeReembolso.placeholder = "0%"
                                 campoPorcentajeReembolso.addEventListener("input", (e) => {
                                     const entrada = e.target.value
                                     const selectorInformacionResultadoPorcentaje = document.querySelector("[informacionPorcentaje=informacionPorcentaje]")
@@ -11821,7 +11821,7 @@ const casaVitini = {
                                             info.classList.add(
                                                 "textoCentrado"
                                             )
-                                            info.innerText = "No hay ofertas compatibles con esta reserva.Si quieres insertar ofertas no compatibles de manera arbitraria, a esta reserva usa el botón de insertar descuentos."
+                                            info.innerText = "No hay ofertas compatibles con esta reserva. Si quieres insertar ofertas no compatibles de manera arbitraria, a esta reserva usa el botón de insertar descuentos."
                                             constructor.appendChild(info)
 
                                         }
@@ -12505,8 +12505,8 @@ const casaVitini = {
                                                 "limpiezaBotonA"
                                             )
                                             botonVerOferta.innerText = "Ir al impuesto"
-                                            botonVerOferta.setAttribute("href", "/administracion/impuestos/" + impuesto)
-                                            botonVerOferta.setAttribute("vista", "/administracion/impuestos/" + impuesto)
+                                            botonVerOferta.setAttribute("href", "/administracion/impuestos/" + impuestoUID)
+                                            botonVerOferta.setAttribute("vista", "/administracion/impuestos/" + impuestoUID)
                                             botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                             contendorBotones.appendChild(botonVerOferta)
 
@@ -19793,7 +19793,7 @@ const casaVitini = {
                                     info.classList.add(
                                         "textoCentrado"
                                     )
-                                    info.innerText = "No hay ofertas compatibles con esta reserva.Si quieres insertar ofertas no compatibles de manera arbitraria, a esta reserva usa el botón de insertar descuentos."
+                                    info.innerText = "No hay ofertas compatibles con esta reserva. Si quieres insertar ofertas no compatibles de manera arbitraria, a esta reserva usa el botón de insertar descuentos."
                                     constructor.appendChild(info)
 
                                 }
@@ -20462,8 +20462,8 @@ const casaVitini = {
                                         "limpiezaBotonA"
                                     )
                                     botonVerOferta.innerText = "Ir al impuesto"
-                                    botonVerOferta.setAttribute("href", "/administracion/impuestos/" + impuesto)
-                                    botonVerOferta.setAttribute("vista", "/administracion/impuestos/" + impuesto)
+                                    botonVerOferta.setAttribute("href", "/administracion/impuestos/" + impuestoUID)
+                                    botonVerOferta.setAttribute("vista", "/administracion/impuestos/" + impuestoUID)
                                     botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                     contendorBotones.appendChild(botonVerOferta)
 
@@ -23659,7 +23659,7 @@ const casaVitini = {
                     const tituloUI = document.createElement("p")
                     tituloUI.classList.add("titulo")
                     tituloUI.setAttribute("componente", "titulo")
-                    tituloUI.innerText = "Añadir condición de oferta"
+                    tituloUI.innerText = "Añadir condición"
                     constructor.appendChild(tituloUI)
 
                     const divContenedorHorizontalTipoOfertas = document.createElement("div");
@@ -32886,7 +32886,7 @@ const casaVitini = {
         calendario: {
             arranque: async () => {
                 const html = document.querySelector("html")
-                html.style.height = "100 % "
+                html.style.height = "100%"
 
                 const main = document.querySelector("main")
                 main.setAttribute("zonaCSS", "administracion/calendario")
@@ -32903,7 +32903,7 @@ const casaVitini = {
                 //window.addEventListener("resize", casaVitini.administracion.calendario.controlVertical);
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                 const sectionRenderizada = document.querySelector("main")
-                sectionRenderizada.style.maxWidth = "100 % "
+                sectionRenderizada.style.maxWidth = "100%"
                 const instanciaUID_seccion = sectionRenderizada.getAttribute("instanciaUID")
                 const metadatosControaldorLogo = {
                     sectionUID: instanciaUID_seccion,

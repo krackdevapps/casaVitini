@@ -14289,8 +14289,8 @@ const casaVitini = {
                                                             "limpiezaBotonA"
                                                         )
                                                         botonVerOferta.innerText = "Ir al impuesto"
-                                                        botonVerOferta.setAttribute("href", "/administracion/impuestos/" + impuesto)
-                                                        botonVerOferta.setAttribute("vista", "/administracion/impuestos/" + impuesto)
+                                                        botonVerOferta.setAttribute("href", "/administracion/impuestos/" + impuestoUID)
+                                                        botonVerOferta.setAttribute("vista", "/administracion/impuestos/" + impuestoUID)
                                                         botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                                         contendorBotones.appendChild(botonVerOferta)
 
@@ -18121,10 +18121,10 @@ const casaVitini = {
                         const selectorCalendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                         const instanciaUID_procesoCambioMes = calendario.instanciaUID_procesoCambioMes
 
-                        const metodoSelectorDia = selectorCalendarioRenderizado.querySelector("[metodoSelectorDia]").getAttribute("metodoSelectorDia")
                         if (!selectorCalendarioRenderizado) {
                             return
                         }
+                        const metodoSelectorDia = selectorCalendarioRenderizado.querySelector("[metodoSelectorDia]").getAttribute("metodoSelectorDia")
                         if (instanciaUID_procesoCambioMes) {
                             const selectorMarcoMesRenderizadoEnEspera = selectorCalendarioRenderizado
                                 .querySelector(`[inctanciaUID_procesoCambioMes="${instanciaUID_procesoCambioMes}"]`)
