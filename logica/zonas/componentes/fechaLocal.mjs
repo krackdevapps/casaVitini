@@ -19,7 +19,7 @@ export const fechaLocal = async (entrada, salida) => {
             minuto: minuto,
             fechaISO: fechaActualTZ
         };
-        salida.json(estructura);
+       return estructura
     } catch (errorCapturado) {
         throw errorCapturado
     }

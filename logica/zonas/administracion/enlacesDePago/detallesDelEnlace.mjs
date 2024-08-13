@@ -51,7 +51,7 @@ export const detallesDelEnlace = async (entrada, salida) => {
                 caducidadNicaragua: caducidadNicaragua
             }
         }
-        salida.json(ok)
+      return  ok
     } catch (errorCapturado) {
         throw errorCapturado
     }

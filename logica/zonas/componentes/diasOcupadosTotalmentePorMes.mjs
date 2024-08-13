@@ -234,7 +234,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         const objetofinal = {
             ok: respuestaFinal
         };
-        salida.json(objetofinal);
+        return objetofinal
     } catch (errorCapturado) {
         throw errorCapturado
     }

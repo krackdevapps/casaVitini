@@ -29,7 +29,7 @@ export const listarEntidadesAlojamiento = async (entrada, salida) => {
         const ok = {
             ok: estructuraFinal
         }
-        salida.json(ok)
+       return ok
     } catch (errorCapturado) {
         throw errorCapturado
     }

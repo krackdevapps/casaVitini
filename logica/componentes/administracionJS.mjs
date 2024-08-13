@@ -1861,12 +1861,10 @@ const casaVitini = {
                         marcoElastico.classList.add("marcoElasticoError")
                         const spinnerContainer = document.createElement("div");
                         spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
-                        spinnerContainer.classList.add("lds - spinner");
+                        spinnerContainer.classList.add("lds", "spinner");
                         for (let i = 0; i < 12; i++) {
                             const div = document.createElement("div");
                             spinnerContainer.appendChild(div);
-
-
                         }
 
                         marcoElastico.appendChild(spinnerContainer)
@@ -1887,16 +1885,13 @@ const casaVitini = {
                         advertenciaInmersivaUI.appendChild(marcoElastico)
                         selectorBloqueEspacioApartamentos.appendChild(advertenciaInmersivaUI)
 
-
                         const transaccion = {
                             zona: "administracion/reservas/nuevaReserva/apartamentosDisponiblesAdministracion",
                             fechaEntrada: fechaEntrada,
                             fechaSalida: fechaSalida
                         }
                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-
                         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-
                         if (!instanciaRenderizada) {
                             return
                         }
@@ -13745,7 +13740,7 @@ const casaVitini = {
             arranque: () => {
 
                 const html = document.querySelector("html")
-                html.style.height = "100 % "
+                html.style.height = "100%"
                 const main = document.querySelector("main")
                 main.setAttribute("zonaCSS", "administracion")
 
@@ -18194,8 +18189,8 @@ const casaVitini = {
                         const totalNocheBruto = detalleApartamento.totalNocheBruto
                         const bloqueApartamento = document.createElement("a")
                         bloqueApartamento.classList.add("preciosEImpuestosBloqueApartamento")
-                        bloqueApartamento.setAttribute("href", "/administracion/precios/apartamentos: " + apartamentoIDV)
-                        bloqueApartamento.setAttribute("vista", "/administracion/precios/apartamentos: " + apartamentoIDV)
+                        bloqueApartamento.setAttribute("href", "/administracion/precios/apartamentos:" + apartamentoIDV)
+                        bloqueApartamento.setAttribute("vista", "/administracion/precios/apartamentos:" + apartamentoIDV)
                         bloqueApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
                         bloqueApartamento.addEventListener("click", casaVitini.administracion.precios.entrarDetallesApartamento)
                         const tituloApartamento = document.createElement("p")
@@ -22486,8 +22481,8 @@ const casaVitini = {
                                 const ofertaUI = document.createElement("a")
                                 ofertaUI.classList.add("ofertaUI")
                                 ofertaUI.setAttribute("ofertaUID", ofertaUID)
-                                ofertaUI.setAttribute("href", "/administracion/gestion_de_ofertas/oferta: " + ofertaUID)
-                                ofertaUI.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta: " + ofertaUID)
+                                ofertaUI.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                ofertaUI.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
                                 ofertaUI.addEventListener("click", casaVitini.administracion.gestion_de_ofertas.traductorCambioVista)
                                 const tituloOferta = document.createElement("p")
                                 tituloOferta.classList.add("ofertaUITituloOferta")

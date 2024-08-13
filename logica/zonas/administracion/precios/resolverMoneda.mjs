@@ -21,7 +21,7 @@ export const resolverMoneda = async (entrada, salida) => {
         })
 
         const transaccionInterna = await obtenerNombreMonedaUI(monedaIDV);
-        salida.json(transaccionInterna);
+        return transaccionInterna
     } catch (errorCapturado) {
         throw errorCapturado
     }

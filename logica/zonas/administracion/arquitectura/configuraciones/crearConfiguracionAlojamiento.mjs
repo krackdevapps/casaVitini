@@ -5,6 +5,7 @@ import { Mutex } from "async-mutex";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarConfiguracionApartamento } from "../../../../repositorio/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs";
+import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
 
 export const crearConfiguracionAlojamiento = async (entrada) => {
     const mutex = new Mutex()
@@ -16,9 +17,6 @@ export const crearConfiguracionAlojamiento = async (entrada) => {
         IDX.control()
 
         mutex.acquire()
-
-        // Esto tiene que ser una transaccion
-
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El apartamentoIDV",
@@ -35,6 +33,8 @@ export const crearConfiguracionAlojamiento = async (entrada) => {
             const error = "No existe el apartamento como entidad. Primero crea la entidad y luego podrás crear la configuración.";
             throw new Error(error);
         }
+
+        await campoDeTransaccion("iniciar")
         await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "existe"
@@ -48,12 +48,15 @@ export const crearConfiguracionAlojamiento = async (entrada) => {
             apartamentoIDV: apartamentoIDV,
             precioInicial: "0.00"
         })
+        await campoDeTransaccion("confirmar")
+
         const ok = {
             ok: "Se ha creado correctamente la nueva configuración del apartamento.",
             apartamentoIDV: apartamentoIDV
         };
         return ok
     } catch (errorCapturado) {
+        await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
         if (mutex) {

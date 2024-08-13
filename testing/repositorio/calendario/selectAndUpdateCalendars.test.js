@@ -131,7 +131,7 @@ describe('select and update calendars', () => {
         await eliminarApartamentoComoEntidad(apartamentoIDVInicial)
         await eliminarConfiguracionPorApartamentoIDV(apartamentoIDVInicial)
         await eliminarCalendarioSincronizadoPorCalendarioIDV(calendarioIDV);
-        await eliminarCalendarioSincronizadoPorCalendarioUID(nuevoBloqueoUID);
+        await eliminarCalendarioSincronizadoPorCalendarioUID(nuevoCalendarioUID);
 
     });
 })

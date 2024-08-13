@@ -52,7 +52,7 @@ export const actualizarZonaDeLaConfiguracionApartamento = async (entrada, salida
             apartamentoIDV,
             nuevaZona
         };
-        salida.json(ok)
+        return ok
 
     } catch (errorCapturado) {
         throw errorCapturado

@@ -4,9 +4,6 @@ import { eliminarApartamentoComoEntidad } from "../../../../repositorio/arquitec
 import { eliminarHabitacionComoEntidad } from "../../../../repositorio/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs";
 import { eliminarCamaComoEntidad } from "../../../../repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs";
 import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs";
-import { codigoZonaHoraria } from "../../../../sistema/configuracion/codigoZonaHoraria.mjs";
-import { DateTime } from "luxon";
-import { obtenerReservasPresentesFuturas } from "../../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPresentesFuturas.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { reservasPresentesFuturas } from "../../../../sistema/reservas/reservasPresentasFuturas.mjs";
@@ -58,8 +55,7 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
                 ok: "Se ha eliminado correctamente el apartamento como entidad",
             };
             return ok
-        }
-        if (tipoEntidad === "habitacion") {
+        } else if (tipoEntidad === "habitacion") {
             const obtenerHabitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
                 habitacionIDV: entidadIDV,
                 errorSi: "noExiste"
@@ -75,8 +71,7 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
             };
             return ok
 
-        }
-        if (tipoEntidad === "cama") {
+        } else if (tipoEntidad === "cama") {
             const tipoIDV = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.tipoIDV,
                 nombreCampo: "El campo tipoIDV de la cama",
@@ -115,6 +110,9 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
                 ok: "Se ha eliminado correctamente la cama como entidad",
             }
             return ok
+        } else {
+            const m = "No se reconoce el tipo de entidad"
+            throw new Error(m)
         }
     } catch (errorCapturado) {
         throw errorCapturado

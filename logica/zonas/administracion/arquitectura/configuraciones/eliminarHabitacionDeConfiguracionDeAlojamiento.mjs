@@ -45,7 +45,7 @@ export const eliminarHabitacionDeConfiguracionDeAlojamiento = async (entrada, sa
         const ok = {
             ok: "Se ha eliminado correctamente la habitación como entidad",
         }
-        salida.json(ok)
+        return ok
     } catch (errorCapturado) {
         throw errorCapturado
     }

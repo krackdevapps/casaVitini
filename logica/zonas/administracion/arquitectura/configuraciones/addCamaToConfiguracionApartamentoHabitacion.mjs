@@ -4,7 +4,6 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/a
 import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../repositorio/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
 import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from "../../../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salida) => {
@@ -24,13 +23,11 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
 
         const habitacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.habitacionUID,
-            nombreCampo: "El camaIDV",
+            nombreCampo: "El habitacionUID",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-
-
 
         const obtenerDetallesPorCama_ = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
             camaIDV,

@@ -7,12 +7,10 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/a
 
 export const eliminarImagenConfiguracionApartamento = async (entrada, salida) => {
     try {
-
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El apartamentoIDV",

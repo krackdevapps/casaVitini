@@ -110,7 +110,6 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 return reserva.reservaUID
             })
 
-
             //if (apartamentoIDV !== entidadIDV) {
             await actualizaApartamentoPorApartamentoIDVPorReservaUID({
                 reservasUIDArray,
@@ -140,12 +139,10 @@ export const modificarEntidadAlojamiento = async (entrada) => {
             // Se reconstruye el contendor fiancniero desde isntantaneas
             await campoDeTransaccion("confirmar")
 
-
             const ok = {
                 ok: "Se ha actualizado correctamente el apartamento",
                 apartamentoComoEntidadActualizado
             }
-
             return ok
 
         } else if (tipoEntidad === "habitacion") {
@@ -187,7 +184,6 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                     throw new Error(error);
                 }
             }
-
 
             await actualizarHabitacionComoEntidadPorHabitacionIDV({
                 habitacionIDVNuevo: habitacionIDV,

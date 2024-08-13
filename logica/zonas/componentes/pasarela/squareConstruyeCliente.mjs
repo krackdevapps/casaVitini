@@ -13,7 +13,7 @@ export const squareConstruyeCliente = async (entrada, salida) => {
             squareAccountCurrency: currency,
             idempotencyKey
         };
-        salida.json(clienteMetadatos);
+        return clienteMetadatos
     } catch (errorCapturado) {
         throw errorCapturado
     }

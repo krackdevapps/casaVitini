@@ -81,7 +81,7 @@ export const calendario = async (entrada, salida) => {
                     }
                 }
             };
-            salida.json(respuesta);
+           return respuesta
         }
         if (tipo === "personalizado") {
             const ano = validadoresCompartidos.tipos.numero({
@@ -176,7 +176,7 @@ export const calendario = async (entrada, salida) => {
                     ano: primeraFechaDisponible.year
                 }
             };
-            salida.json(calendario);
+           return calendario
         }
     } catch (errorCapturado) {
         throw errorCapturado

@@ -2,7 +2,6 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { obtenerOfertaConApartamentos } from "../../../sistema/ofertas/obsoleto/obtenerOfertaConApartamentos.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
-
 export const detallesOferta = async (entrada, salida) => {
     try {
         const session = entrada.session
@@ -26,7 +25,6 @@ export const detallesOferta = async (entrada, salida) => {
                 condicion.codigoDescuento = Buffer.from(codigoDescuentoB64, 'base64').toString('utf-8');
             }
         })
-
         const ok = {
             ok: detallesOferta
         };

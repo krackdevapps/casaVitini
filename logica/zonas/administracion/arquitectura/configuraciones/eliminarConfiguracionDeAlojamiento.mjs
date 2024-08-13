@@ -9,10 +9,10 @@ import { reservasPresentesFuturas } from "../../../../sistema/reservas/reservasP
 import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from "../../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs";
 import { obtenerApartamentoDeLaReservasPorApartamentoIDVPorReservaUIDArray } from "../../../../repositorio/reservas/apartamentos/obtenerApartamentoDeLaReservasPorApartamentoIDVPorReservaUIDArray.mjs";
 
-export const eliminarConfiguracionDeAlojamiento = async (entrada, salida) => {
+export const eliminarConfiguracionDeAlojamiento = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 

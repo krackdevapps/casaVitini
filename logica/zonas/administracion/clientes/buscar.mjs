@@ -104,7 +104,7 @@ export const buscar = async (entrada, salida) => {
             respuesta.sentidoColumna = sentidoColumna;
         }
         respuesta.clientes = resultadosBusqueda;
-        salida.json(respuesta);
+       return respuesta
     } catch (errorCapturado) {
         throw errorCapturado
     }
