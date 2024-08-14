@@ -1,6 +1,5 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarBloqueoPorBloqueoIDV } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorBloqueoIDV.mjs';
 import { insertarConfiguracionApartamento } from '../../../logica/repositorio/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
 import { eliminarConfiguracionPorApartamentoIDV } from '../../../logica/repositorio/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
 import { eliminarApartamentoComoEntidad } from '../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
@@ -11,14 +10,15 @@ import { actualizarCalendarioSincronizado } from '../../../logica/repositorio/ca
 import { obtenerCalendarioPorCalendarioUIDPublico } from '../../../logica/repositorio/calendario/obtenerCalendarioPorCalendarioUIDPublico.mjs';
 import { obtenerCalendariosPorPlataformaIDV } from '../../../logica/repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs';
 import { obtenerCalendariosPorPlataformaIDVPorCalendarioUID } from '../../../logica/repositorio/calendario/obtenerCalendariosPorPlataformaIDVPorCalendarioUID.mjs';
-import { eliminarCalendarioSincronizadoPorCalendarioIDV } from '../../../logica/repositorio/calendario/eliminarCalendarioSincronizadoPorCalendarioIDV.mjs';
+import { eliminarCalendarioSincronizadoPorTestingIV } from '../../../logica/repositorio/calendario/eliminarCalendarioSincronizadoPorTestingIV.mjs';
 import { eliminarCalendarioSincronizadoPorCalendarioUID } from '../../../logica/repositorio/calendario/eliminarCalendarioSincronizadoPorCalendarioUID.mjs';
 import { obtenerCalendarioPorCalendarioUID } from '../../../logica/repositorio/calendario/obtenerCalendarioPorCalendarioUID.mjs';
+import { eliminarBloqueoPorTestingVI } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorTestingVI.mjs';
 
 describe('select and update calendars', () => {
     const apartamentoIDVInicial = "apartamento1TESTInicial"
-    const calendarioIDV = "calendarioParaTest"
-    const bloqueoIDV = "bloqueoTest"
+    const testingVI_calendar = "calendarioParaTest"
+    const testingVI = "bloqueoTest"
     const nombreCalendario = "calendarioTest"
     const paltaformaOrigen = "plataformaTest"
 
@@ -26,9 +26,11 @@ describe('select and update calendars', () => {
     const nuevoCalendarioUIDPublico = "codigo_calendario_publico"
 
     beforeAll(async () => {
-        await eliminarCalendarioSincronizadoPorCalendarioIDV(calendarioIDV)
+        await eliminarCalendarioSincronizadoPorTestingIV(testingVI_calendar)
         await eliminarConfiguracionPorApartamentoIDV(apartamentoIDVInicial)
         await eliminarApartamentoComoEntidad(apartamentoIDVInicial)
+        await eliminarBloqueoPorTestingVI(testingVI)
+
 
         await insertarApartamentoComoEntidad({
             apartamentoIDV: apartamentoIDVInicial,
@@ -49,7 +51,7 @@ describe('select and update calendars', () => {
             plataformaOrigen: paltaformaOrigen,
             calendarioRaw: null,
             codigoAleatorioUnico: nuevoCalendarioUIDPublico,
-            calendarioIDV: calendarioIDV,
+            testingVI: testingVI_calendar,
         })
         nuevoCalendarioUID = response.calendarioUID
         expect(response).not.toBeUndefined();
@@ -108,29 +110,17 @@ describe('select and update calendars', () => {
     })
 
 
-    test('delete calendar by calendarioIDV', async () => {
-        const response = await eliminarCalendarioSincronizadoPorCalendarioIDV(calendarioIDV);
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-    })
-
     test("delete calendar by calendarioUID", async () => {
         const response = await eliminarCalendarioSincronizadoPorCalendarioUID(nuevoCalendarioUID);
         expect(response).not.toBeUndefined();
         expect(Array.isArray(response)).toBe(true);
     })
 
-    test('delete lock by bloqueoUID', async () => {
-        const response = await eliminarBloqueoPorBloqueoIDV(apartamentoIDVInicial);
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-    })
-
     afterAll(async () => {
-        await eliminarBloqueoPorBloqueoIDV(bloqueoIDV)
+        await eliminarBloqueoPorTestingVI(testingVI)
         await eliminarApartamentoComoEntidad(apartamentoIDVInicial)
         await eliminarConfiguracionPorApartamentoIDV(apartamentoIDVInicial)
-        await eliminarCalendarioSincronizadoPorCalendarioIDV(calendarioIDV);
+        await eliminarCalendarioSincronizadoPorTestingIV(testingVI_calendar)
         await eliminarCalendarioSincronizadoPorCalendarioUID(nuevoCalendarioUID);
 
     });

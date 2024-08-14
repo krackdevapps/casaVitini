@@ -8,7 +8,7 @@ export const insertarCalendarioSincronizado = async (data) => {
         const plataformaOrigen = data.plataformaOrigen
         const calendarioRaw = data.calendarioRaw
         const codigoAleatorioUnico = data.codigoAleatorioUnico
-        const calendarioIDV = data.calendarioIDV
+        const testingVI = data.testingVI
 
         const consulta = `
         INSERT INTO "calendariosSincronizados"
@@ -19,7 +19,7 @@ export const insertarCalendarioSincronizado = async (data) => {
         "plataformaOrigenIDV",
         "dataIcal", 
         "publicoUID",
-        "calendarioIDV"
+        "testingVI"
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING 
@@ -32,7 +32,7 @@ export const insertarCalendarioSincronizado = async (data) => {
             plataformaOrigen,
             calendarioRaw,
             codigoAleatorioUnico,
-            calendarioIDV
+            testingVI
         ];
 
         const resuelve = await conexion.query(consulta, parametros);

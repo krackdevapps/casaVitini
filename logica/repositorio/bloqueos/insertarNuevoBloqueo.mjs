@@ -9,6 +9,7 @@ export const insertarNuevoBloqueo = async (data) => {
         const fechaFin = data.fechaFin || null
         const motivo = data.motivo
         const zonaIDV = data.zonaIDV
+        const testingVI = data.testingVI
 
         const consulta = `
         INSERT INTO "bloqueosApartamentos"
@@ -18,9 +19,10 @@ export const insertarNuevoBloqueo = async (data) => {
         "fechaInicio",
         "fechaFin",
         motivo,
-        "zonaIDV"
+        "zonaIDV",
+        "testingVI"
         )
-        VALUES ($1, $2, $3, $4, $5, $6) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7) 
         RETURNING 
         *
         `;
@@ -30,9 +32,9 @@ export const insertarNuevoBloqueo = async (data) => {
             fechaInicio,
             fechaFin,
             motivo,
-            zonaIDV
+            zonaIDV,
+            testingVI
         ];
-
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
             const error = "No se ha podido insertar el nuevo bloqueo";

@@ -1,7 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { insertarNuevoBloqueo } from '../../../logica/repositorio/bloqueos/insertarNuevoBloqueo.mjs';
-import { eliminarBloqueoPorBloqueoIDV } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorBloqueoIDV.mjs';
 import { actualizarBloqueoPorBloqueoUID } from '../../../logica/repositorio/bloqueos/actualizarBloqueoPorBloqueoUID.mjs';
 import { obtenerBloqueosPorTipoIDVPorApartamentoIDV } from '../../../logica/repositorio/bloqueos/obtenerBloqueosPorTipoIDVPorApartamentoIDV.mjs';
 import { obtenerBloqueoPorBloqueoUIDPorApartamentoIDV } from '../../../logica/repositorio/bloqueos/obtenerBloqueoPorBloqueoUIDPorApartamentoIDV.mjs';
@@ -18,21 +17,23 @@ import { insertarApartamentoComoEntidad } from '../../../logica/repositorio/arqu
 import { obtenerBloqueosPorMes } from '../../../logica/repositorio/bloqueos/obtenerBloqueosPorMes.mjs';
 import { obtenerTodosLosbloqueosPorMesPorAnoPorTipo } from '../../../logica/repositorio/bloqueos/obtenerTodosLosbloqueosPorMesPorAnoPorTipo.mjs';
 import { eliminarBloqueoPorFechaActual } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorFechaActual.mjs';
+import { eliminarBloqueoPorTestingVI } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorTestingVI.mjs';
+
 describe('crud locks for apartments', () => {
-    const apartamentoIDVInicial = "apartamento1TESTInicial"
+    const apartamentoIDVInicial = "apartamento1TESTInicialtesting"
     const tipoPermanente = "permanente"
     const tipoRangoTemporal = "rangoTemporal"
     const fechaInicio_ISO = "2025-10-02"
     const fechaFin_ISO = "2026-10-02"
     const zonaIDV = "global"
-    const bloqueoIDV = "bloqueoTest"
+    const testingVI = "bloqueoTesttesting"
     const mes = "10"
     const ano = "2025"
     const fechaActual_ISO = "2027-10-02"
     let nuevoBloqueoUID = 0
 
     beforeAll(async () => {
-        await eliminarBloqueoPorBloqueoIDV(bloqueoIDV)
+        await eliminarBloqueoPorTestingVI(testingVI)
         await eliminarConfiguracionPorApartamentoIDV(apartamentoIDVInicial)
         await eliminarApartamentoComoEntidad(apartamentoIDVInicial)
 
@@ -51,15 +52,16 @@ describe('crud locks for apartments', () => {
         const response = await insertarNuevoBloqueo({
             apartamentoIDV: apartamentoIDVInicial,
             tipoBloqueoIDV: tipoRangoTemporal,
-            fechaInicio_ISO: fechaInicio_ISO,
-            fechaFin_ISO: fechaFin_ISO,
+            fechaInicio: fechaInicio_ISO,
+            fechaFin: fechaFin_ISO,
             motivo: "Bloqueo creado durante la prueba de test",
             zonaIDV: zonaIDV,
-            bloqueoIDV: bloqueoIDV
+            testingVI: testingVI
         })
         nuevoBloqueoUID = response.bloqueoUID
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
+        
     })
     test('update lock', async () => {
         const response = await actualizarBloqueoPorBloqueoUID({
@@ -168,14 +170,10 @@ describe('crud locks for apartments', () => {
         expect(Array.isArray(response)).toBe(true);
     })
 
-    test('delete lock by bloqueoUID', async () => {
-        const response = await eliminarBloqueoPorBloqueoIDV(apartamentoIDVInicial);
-        expect(response).not.toBeUndefined();
-        expect(Array.isArray(response)).toBe(true);
-    })
+
 
     afterAll(async () => {
-        await eliminarBloqueoPorBloqueoIDV(bloqueoIDV)
+        await eliminarBloqueoPorTestingVI(testingVI)
         await eliminarApartamentoComoEntidad(apartamentoIDVInicial)
         await eliminarConfiguracionPorApartamentoIDV(apartamentoIDVInicial)
 

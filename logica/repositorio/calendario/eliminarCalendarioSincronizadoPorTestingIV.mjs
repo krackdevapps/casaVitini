@@ -1,15 +1,15 @@
 import { conexion } from "../../componentes/db.mjs"
 // Este script
-export const eliminarCalendarioSincronizadoPorCalendarioIDV = async (calendarioIDV) => {
+export const eliminarCalendarioSincronizadoPorTestingIV = async (testingVI) => {
     try {
         const consulta = `
         DELETE FROM "calendariosSincronizados"
-        WHERE "calendarioIDV" = $1
+        WHERE "testingVI" = $1
         RETURNING *;
         `;
 
-        const resuelve = await conexion.query(consulta, [calendarioIDV]);
-        return resuelve.rows[0]
+        const resuelve = await conexion.query(consulta, [testingVI]);
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

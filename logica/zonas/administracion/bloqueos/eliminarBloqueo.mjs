@@ -12,13 +12,12 @@ export const eliminarBloqueo = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
-        const bloqueoUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.bloqueoUID,
-            nombreCampo: "El identificador universal de bloqueoUID",
-            filtro: "numeroSimple",
+        const bloqueoUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.bloqueoUID,
+            nombreCampo: "El identificador universal de la bloque (bloqueoUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no",
             devuelveUnTipoNumber: "si"
         })
 

@@ -3696,9 +3696,7 @@ const casaVitini = {
                             const botonCerrar = document.createElement("a");
                             botonCerrar.setAttribute("class", "adminitracion_reservas_DetallesReserva_botonCategoria");
                             botonCerrar.textContent = "Cerrar";
-                            botonCerrar.addEventListener("click", (e) => {
-                                e.target.closest("[contenedor=menuResponsivoDesplegado]").remove()
-                            })
+                            botonCerrar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
                             contenedor.appendChild(botonCerrar);
                             const metadatosMenuResponsivo = {
                                 rectangularidad: "vertical",
@@ -17860,7 +17858,7 @@ const casaVitini = {
                             const clienteDestino = document.querySelector("[contenedor=destino]").querySelector("[estado=seleccionado]")
 
                             if (!clienteOrigen) {
-                                const m = "Por favor, primero selecciona el cliente de ORIGEN.Para ello, busca en el campo de búsqueda del campo cliente ORIGEN y selecciona el cliente ORIGEN."
+                                const m = "Por favor, primero selecciona el cliente de ORIGEN. Para ello, busca en el campo de búsqueda del campo cliente ORIGEN y selecciona el cliente ORIGEN."
                                 casaVitini.ui.componentes.advertenciaInmersiva(m)
                             } else if (!clienteDestino) {
                                 const m = "Por favor, primero selecciona el cliente de DESTINO; para ello, busca en el campo de búsqueda del campo cliente DESTINO y selecciona el cliente DESTINO."
@@ -18000,7 +17998,7 @@ const casaVitini = {
                         const titulo = constructor.querySelector("[componente=titulo]")
                         titulo.innerText = "Operacion de fusión irreversible"
                         const mensaje = constructor.querySelector("[componente=mensajeUI]")
-                        mensaje.innerText = `Se va a fusionar como cliente ORIGEN a ${nombreOrigen} (${pasaporteOrigen}) con el cliente DESTINO ${nombreDestino} (${pasaporteDestino}). Esta operación irreversible. El cliente ORIGEN será eliminado y sustituido por el cliente destino en todas las reservas donde esté presente el cliente ORIGEN. Una vez se haya sustituido al cliente ORIGEN por el DESTINO en las reservas, el cliente ORIGEN será eliminado del hub de clientes.`
+                        mensaje.innerText = `Se va a fusionar como cliente ORIGEN a ${nombreOrigen} (${pasaporteOrigen}) con el cliente DESTINO ${nombreDestino} (${pasaporteDestino}). Esta operación es irreversible. El cliente ORIGEN será eliminado y sustituido por el cliente destino en todas las reservas donde esté presente el cliente ORIGEN. Una vez se haya sustituido al cliente ORIGEN por el DESTINO en las reservas, el cliente ORIGEN será eliminado del hub de clientes.`
 
                         const contenedorFusion = document.createElement("div")
                         contenedorFusion.classList.add(

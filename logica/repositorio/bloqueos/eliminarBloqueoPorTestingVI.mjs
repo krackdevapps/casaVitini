@@ -1,14 +1,14 @@
 import { conexion } from "../../componentes/db.mjs";
 
-export const eliminarBloqueoPorBloqueoIDV = async (bloqueoIDV) => {
+export const eliminarBloqueoPorTestingVI = async (testingVI) => {
     try {
 
         const consulta = `
         DELETE FROM "bloqueosApartamentos"
-        WHERE "bloqueoIDV" = $1;
+        WHERE "testingVI" = $1;
         `;
 
-        const resuelve = await conexion.query(consulta, [bloqueoIDV])
+        const resuelve = await conexion.query(consulta, [testingVI])
         return resuelve.rows
     } catch (errorAdaptador) {
         throw errorAdaptador

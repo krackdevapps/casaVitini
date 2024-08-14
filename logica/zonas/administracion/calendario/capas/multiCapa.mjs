@@ -155,6 +155,17 @@ export const multiCapa = async (entrada) => {
                 }
             },
             calendariosAirbnb: async () => {
+                
+                if (!contenedorCapas.hasOwnProperty("capasCompuestas")) {
+                    const m = "En el objeto de contenedorCapas, en este tipo de capa, la de calendariosAirbnb, se espera una llave capasCompuestas"
+                    throw new Error(m)
+                }
+                const capasCompuestas = contenedorCapas?.capasCompuestas
+                if (!capasCompuestas.hasOwnProperty("calendariosAirbnb")) {
+                    const m = "Dentro de la llave capaCompuesta, se espera una llave porApartamento"
+                    throw new Error(m)
+                }
+                
                 const calendariosUID = validadoresCompartidos.tipos.array({
                     array: contenedorCapas.capasCompuestas.calendariosAirbnb,
                     nombreCampo: "El array de capasCompuesta de los calendarios Airbnbn",
@@ -167,7 +178,7 @@ export const multiCapa = async (entrada) => {
 
                 if (calendariosPorPlataforma.length > 0) {
                     const calendariosUIDValidos = calendariosPorPlataforma.map((calendarioUID) => {
-                        return String(calendarioUID.uid);
+                        return String(calendarioUID.calendarioUID);
                     });
                     const controlCalendariosF2 = calendariosUID.every(calendariosUID => calendariosUIDValidos.includes(calendariosUID));
                     if (!controlCalendariosF2) {
@@ -176,7 +187,7 @@ export const multiCapa = async (entrada) => {
                         if (elementosFaltantes.length === 1) {
                             error = "En el array de calendariosUIDS hay un identificador que no existe: " + elementosFaltantes[0];
                         } if (elementosFaltantes.length === 2) {
-                            error = "En el array de calendariosUIDS hay identificadores que no existen: " + elementosFaltantes.join("y");
+                            error = "En el array de calendariosUIDS hay identificadores que no existen: " + elementosFaltantes.join(" y ");
                         }
                         if (elementosFaltantes.length > 2) {
                             const conComa = elementosFaltantes;

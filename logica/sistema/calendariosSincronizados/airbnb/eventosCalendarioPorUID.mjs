@@ -39,7 +39,6 @@ export const eventosCalendarioPorUID = async (calendarioUID) => {
                 calendarioDatos = calendarioRaw
                 estructura.estadoSincronizacion = "sincronizado"
             } catch (errorCapturado) {
-
                 estructura.estadoSincronizacion = "noSincronizado"
             }
             const jcalData = ICAL.parse(calendarioDatos);
