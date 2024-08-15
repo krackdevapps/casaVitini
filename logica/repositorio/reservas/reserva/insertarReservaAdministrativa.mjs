@@ -9,7 +9,7 @@ export const insertarReservaAdministrativa = async (data) => {
         const fechaCreacion = data.fechaCreacion
         const estadoPago = data.estadoPago
         const reservaUID = data.reservaUID
-        const reservaTVI = data.reservaTVI
+        const testingVI = data.testingVI
         const consulta = `
         INSERT INTO
         reservas 
@@ -21,7 +21,7 @@ export const insertarReservaAdministrativa = async (data) => {
         "fechaCreacion",
         "estadoPagoIDV",
         "reservaUID",
-        "reservaTVI"
+        "testingVI"
         )
         VALUES
         ($1,$2,$3,$4,$5,$6,$7,$8)
@@ -35,7 +35,7 @@ export const insertarReservaAdministrativa = async (data) => {
             fechaCreacion,
             estadoPago,
             reservaUID,
-            reservaTVI
+            testingVI
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

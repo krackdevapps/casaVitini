@@ -1,7 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { actualizarCliente } from '../../../logica/repositorio/clientes/actualizarCliente.mjs';
-import { eliminarClientePorClienteIDV } from '../../../logica/repositorio/clientes/eliminarClientePorClienteIDV.mjs';
 import { obtenerClientesPorMail } from '../../../logica/repositorio/clientes/obtenerClientesPorMail.mjs';
 import { obtenerClientesPorPasaporte } from '../../../logica/repositorio/clientes/obtenerClientesPorPasaporte.mjs';
 import { obtenerReservasDelCliente } from '../../../logica/repositorio/clientes/obtenerReservasDelCliente.mjs';
@@ -9,9 +8,10 @@ import { obtenerReservasDelClienteComoPernoctante } from '../../../logica/reposi
 import { obtenerReservasDelClienteComoTitular } from '../../../logica/repositorio/clientes/obtenerReservasDelClienteComoTitular.mjs';
 import { insertarCliente } from '../../../logica/repositorio/clientes/insertarCliente.mjs';
 import { obtenerResultadosBusqueda } from '../../../logica/repositorio/clientes/obtenerResultadosBusqueda.mjs';
+import { eliminarClientePorTestingVI } from '../../../logica/repositorio/clientes/eliminarClientePorTestingVI.mjs';
 
 describe('crud clients', () => {
-    const clienteTVI = "clienteTest"
+    const testingVI = "clienteTest"
     const calendarioIDV = "calendarioParaTest"
     const bloqueoIDV = "bloqueoTest"
     const nombreCliente = "clienteTest"
@@ -25,7 +25,7 @@ describe('crud clients', () => {
     let nuevoClienteUID = 0
 
     beforeAll(async () => {
-        await eliminarClientePorClienteIDV(clienteTVI)
+        await eliminarClientePorTestingVI(testingVI)
     })
     test('insert new client', async () => {
         const response = await insertarCliente({
@@ -113,6 +113,6 @@ describe('crud clients', () => {
     })
 
     afterAll(async () => {
-        await eliminarClientePorClienteIDV(clienteTVI)
+        await eliminarClientePorTestingVI(testingVI)
     });
 })

@@ -5,11 +5,11 @@ import { insertarComportamientoDePrecio } from "../../../repositorio/comportamie
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { validarComportamiento } from "../../../sistema/contenedorFinanciero/comportamientoPrecios/validarComportamiento.mjs";
 
-export const crearComportamiento = async (entrada, salida) => {
+export const crearComportamiento = async (entrada) => {
     const mutex = new Mutex();
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
         await mutex.acquire();
@@ -17,11 +17,11 @@ export const crearComportamiento = async (entrada, salida) => {
             nombreComportamiento: entrada.body.nombreComportamiento,
             estadoInicalDesactivado: "desactivado",
             contenedor: entrada.body.contenedor,
-            transaccion: "crear"
+            transaccion: "crear",
+            testing: entrada.body.testing
         }
 
         await validarComportamiento(comportamiento)
-
         await campoDeTransaccion("iniciar")
 
         const dataEvitarDuplicados = {

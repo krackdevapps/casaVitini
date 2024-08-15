@@ -1,8 +1,6 @@
 import { Mutex } from "async-mutex";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-
-import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 import { actualizarCliente } from "../../../repositorio/clientes/actualizarCliente.mjs";
 
 export const modificarCliente = async (entrada, salida) => {

@@ -2,16 +2,21 @@ import { obtenerCalendarioPorCalendarioUID } from "../../../../../repositorio/ca
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
 
-export const exportarCalendario = async (entrada, salida) => {
+export const exportarCalendario = async (entrada) => {
     try {
+             
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
+        const m = "metodo obsoleto"
+        throw new Error(m)
+        return
+
         const calendarioUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.calendarioUID,
-            nombreCampo: "El campo nuevoPreci",
+            nombreCampo: "El campo calendarioUID",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",

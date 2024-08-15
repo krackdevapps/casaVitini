@@ -2,6 +2,7 @@ import { conexion } from "../../componentes/db.mjs";
 export const insertarComportamientoDePrecio = async (data) => {
     try {
         const nombreComportamiento = data.nombreComportamiento
+        const testing = data.testing
         const contenedor = data.contenedor
         const estadoInicalDesactivado = "desactivado";
         const consulta = `
@@ -9,13 +10,15 @@ export const insertarComportamientoDePrecio = async (data) => {
             (
                 "nombreComportamiento",
                 "estadoIDV",
-                 contenedor
+                 contenedor,
+                "testingVI"
             )
             VALUES
             (
                 COALESCE($1::text, NULL),
                 COALESCE($2::text, NULL),
-                COALESCE($3::jsonb, NULL)
+                COALESCE($3::jsonb, NULL),
+                $4
             )
             RETURNING 
             *;
@@ -23,7 +26,8 @@ export const insertarComportamientoDePrecio = async (data) => {
         const parametros = [
             nombreComportamiento,
             estadoInicalDesactivado,
-            contenedor
+            contenedor,
+            testing
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

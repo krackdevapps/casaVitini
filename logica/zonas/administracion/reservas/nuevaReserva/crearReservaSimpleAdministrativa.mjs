@@ -86,6 +86,17 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 const error = "Los apartamentos solicitados para este rango de fechas no están disponibles.";
                 throw new Error(error);
             }
+            const testing = entrada.body.testing
+            if (testing) {
+                validadoresCompartidos.tipos.cadena({
+                    string: entrada.body.testing,
+                    nombreCampo: "El campo origen",
+                    filtro: "strictoIDV",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+                })
+            }
+
             // insertar fila reserva y en la tabla reservarAartametnos insertar las correspondientes filas
             const estadoReserva = "confirmada";
             const origen = "administracion";
@@ -93,14 +104,15 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             const estadoPago = "noPagado";
             await campoDeTransaccion("iniciar")
             const reservaUID = await generadorReservaUID()
-            const reservaInsertada = await insertarReservaAdministrativa({
+            await insertarReservaAdministrativa({
                 fechaEntrada: fechaEntrada,
                 fechaSalida: fechaSalida,
                 estadoReserva: estadoReserva,
                 origen: origen,
                 fechaCreacion: fechaCreacion,
                 estadoPago: estadoPago,
-                reservaUID: reservaUID
+                reservaUID: reservaUID,
+                testingVI: testing
             })
             for (const apartamentoIDV of apartamentos) {
                 const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
@@ -114,7 +126,6 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                     apartamentoUI: apartamentoUI,
                 })
             }
-
 
             const desgloseFinanciero = await procesador({
                 entidades: {

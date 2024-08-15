@@ -86,6 +86,11 @@ export const validadoresCompartidos = {
                     const m = "validarClinete necesita el parámetro de operación en actualizar o crear"
                     throw new Error(m)
                 }
+                const testing = cliente.testing
+                if (testing && testing !==  "testing") {
+                    const m = "La llave testing solo acepta como valor testing, esta llave es para testing."
+                    throw new Error(m)
+                }
 
                 // if (clienteConMismoPasaporte?.clienteUID) {
                 //     const nombreClienteExistente = clienteConMismoPasaporte.nombre
@@ -103,7 +108,8 @@ export const validadoresCompartidos = {
                     correoElectronico: correoElectronico,
                     notas: notas,
                     mail: correoElectronico,
-                    clienteUID
+                    clienteUID,
+                    testing
                 }
                 return datosValidados
             } catch (errorCapturado) {

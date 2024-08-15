@@ -1,6 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerReservasDelClienteComoTitular } from "../../../repositorio/clientes/obtenerReservasDelClienteComoTitular.mjs";
 import { obtenerReservasDelClienteComoPernoctante } from "../../../repositorio/clientes/obtenerReservasDelClienteComoPernoctante.mjs";
 import { obtenerReservasDelCliente } from "../../../repositorio/clientes/obtenerReservasDelCliente.mjs";

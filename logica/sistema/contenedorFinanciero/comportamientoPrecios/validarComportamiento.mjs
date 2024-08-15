@@ -14,7 +14,11 @@ export const validarComportamiento = async (comportamiento) => {
             nombreCampo: "El array de apartamentos",
         })
         const tipo = contenedor?.tipo
-
+        const testing = comportamiento.testing
+        if (testing && testing !==  "testing") {
+            const m = "La llave testing solo acepta como valor testing, esta llave es para testing."
+            throw new Error(m)
+        }
         if (tipo === "porRango") {
             const llaves_nivel_1 = [
                 "fechaInicio",

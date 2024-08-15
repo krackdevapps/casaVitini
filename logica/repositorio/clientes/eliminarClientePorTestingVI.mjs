@@ -1,12 +1,12 @@
 import { conexion } from "../../componentes/db.mjs";
-export const eliminarClientePorClienteIDV = async (clienteUID) => {
+export const eliminarClientePorTestingVI = async (testingVI) => {
     try {
         const consulta = `
         DELETE FROM clientes
-        WHERE "clienteTVI" = $1
+        WHERE "testingVI" = $1
         RETURNING
         *;`;
-        const resuelve = await conexion.query(consulta, [clienteUID])
+        const resuelve = await conexion.query(consulta, [testingVI])
         return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado

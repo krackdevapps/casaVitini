@@ -7,11 +7,11 @@ import { obtenerPerfilPrecioPorApartamentoUID } from "../../../repositorio/preci
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerImpuestosPorEntidadIDV } from "../../../repositorio/impuestos/obtenerImpuestosPorEntidadIDV.mjs";
 
-export const establecerNuevoPrecioApartamento = async (entrada, salida) => {
+export const establecerNuevoPrecioApartamento = async (entrada) => {
     const mutex = new Mutex
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 

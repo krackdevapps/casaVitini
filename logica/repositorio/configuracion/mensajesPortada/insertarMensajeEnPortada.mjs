@@ -6,7 +6,7 @@ export const insertarMensajeEnPortada = async (data) => {
         const mensajeB64 = data.mensajeB64
         const estadoInicial = data.estadoInicial
         const posicionInicial = data.posicionInicial
-        const mensajeTVI = data.mensajeTVI
+        const testing = data.testing
 
         const consulta = `
         INSERT INTO 
@@ -15,7 +15,7 @@ export const insertarMensajeEnPortada = async (data) => {
         mensaje,
         "estadoIDV",
         posicion,
-        "mensajeTVI"
+        "testingVI"
         )
         VALUES 
         ($1, $2, $3, $4)
@@ -26,7 +26,7 @@ export const insertarMensajeEnPortada = async (data) => {
             mensajeB64,
             estadoInicial,
             posicionInicial,
-            mensajeTVI
+            testing
         ]
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows[0]

@@ -91,6 +91,7 @@ export const buscar = async (entrada, salida) => {
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
         const corretorNumeroPagina = String(pagina).replace("0", "");
         const respuesta = {
+            ok: "Resultados de la busqueda",
             buscar: buscar,
             totalClientes: Number(consultaConteoTotalFilas),
             paginasTotales: totalPaginas,

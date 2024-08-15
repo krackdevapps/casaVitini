@@ -16,7 +16,7 @@ export const actualizarCalendario = async (entrada) => {
 
         const calendarioUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.calendarioUID,
-            nombreCampo: "El campo nuevoPreci",
+            nombreCampo: "El campo calendarioUID",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -62,9 +62,11 @@ export const actualizarCalendario = async (entrada) => {
 
                 // Verifica si el componente es un calendario (VCALENDAR)
                 if (jcal?.name.toLowerCase() !== 'vcalendar') {
+                    
                     throw new Error(errorDeFormado);
                 }
             } catch (errorCapturado) {
+                console.error(errorCapturado)
                 throw new Error(errorDeFormado);
             }
         }

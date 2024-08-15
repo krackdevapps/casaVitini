@@ -25608,6 +25608,7 @@ const casaVitini = {
                         zona: "administracion/comportamientoDePrecios/crearComportamiento",
                         ...contenedorComportamiento
                     }
+                    console.log("transaccion", transaccion)
 
 
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)

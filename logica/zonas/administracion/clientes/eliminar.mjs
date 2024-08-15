@@ -4,10 +4,10 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
 import { eliminarClientePorClienteUID } from "../../../repositorio/clientes/eliminarClientePorClienteUID.mjs";
 
-export const eliminar = async (entrada, salida) => {
+export const eliminar = async (entrada ) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()

@@ -8,10 +8,10 @@ import { actualizarPosicionDelMensajeDePortada } from "../../../../repositorio/c
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";
 
 
-export const moverPosicion = async (entrada, salida) => {
+export const moverPosicion = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
@@ -104,4 +104,4 @@ export const moverPosicion = async (entrada, salida) => {
         throw errorCapturado
     }
 
-}
+} 

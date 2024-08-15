@@ -8,6 +8,7 @@ export const insertarCliente = async (nuevoCliente) => {
         const telefono = nuevoCliente.telefono
         const correoElectronico = nuevoCliente.correoElectronico
         const notas = nuevoCliente.notas
+        const testing = nuevoCliente.testing
 
         const insertarCliente = `
         INSERT INTO 
@@ -19,9 +20,10 @@ export const insertarCliente = async (nuevoCliente) => {
         pasaporte,
         telefono,
         mail,
-        notas
+        notas,
+        "testingVI"
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7) 
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8) 
         RETURNING
         *
         `
@@ -32,7 +34,8 @@ export const insertarCliente = async (nuevoCliente) => {
             pasaporte,
             telefono,
             correoElectronico,
-            notas
+            notas,
+            testing
         ]
         const resuelve = await conexion.query(insertarCliente, datosClientes)
         return resuelve.rows[0]

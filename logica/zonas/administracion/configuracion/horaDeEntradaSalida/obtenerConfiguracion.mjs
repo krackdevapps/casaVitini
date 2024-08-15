@@ -1,12 +1,11 @@
 import { obtenerParConfiguracion } from "../../../../repositorio/configuracion/parConfiguracion/obtenerParConfiguracion.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
-import { obtenerCalendarios as oc } from "../calendariosSincronizados/obtenerCalendarios.mjs";
 
 
-export const obtenerConfiguracion = async (entrada, salida) => {
+export const obtenerConfiguracion = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
         const paresConf = ["horaEntradaTZ", "horaSalidaTZ"]

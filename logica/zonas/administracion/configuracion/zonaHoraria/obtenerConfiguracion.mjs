@@ -16,7 +16,6 @@ export const obtenerConfiguracion = async (entrada, salida) => {
             ok: {
                 zonaHoraria: paresConfiguracion.zonaHoraria,
                 listaZonasHorarias: listaZonasHorarias
-
             },
         };
         return ok

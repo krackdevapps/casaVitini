@@ -4,7 +4,6 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../repositorio/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
 import { actualizarEstadoDelComportamientoDePrecio } from "../../../repositorio/comportamientoDePrecios/actualizarEstadoDelComportamientoDePrecio.mjs";
-import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const actualizarEstadoComportamiento = async (entrada, salida) => {
     const mutex = new Mutex();
