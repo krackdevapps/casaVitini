@@ -16,12 +16,14 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
 
         await mutex.acquire();
 
-        const ofertaUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.ofertaUID,
-            nombreCampo: "El campo ofertaUID ",
-            filtro: "numeroSimple",
+        const ofertaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.ofertaUID,
+            nombreCampo: "El identificador universal de la oferta (ofertaUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            sePermitenNegativos: "no",
+            devuelveUnTipoNumber: "si"
         })
 
         const estadoIDV = validadoresCompartidos.tipos.cadena({

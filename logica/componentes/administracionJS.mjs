@@ -16236,12 +16236,12 @@ const casaVitini = {
                 const instanciaUID = main.getAttribute("instanciaUID")
                 const parametroBuscar = granuladoURL.parametros.buscar
                 const rawArray = granuladoURL.rawArray
-                console.log("rawArray", rawArray, "comandoINicial", comandoInicial)
+
                 if (rawArray.length === 2) {
                     main.setAttribute("zonaCSS", "administracion/clientes/buscador")
                     casaVitini.administracion.clientes.buscador.buscadorUI()
                 } else if (comandoInicial === "fusion") {
-                    console.log("fusion")
+
                     casaVitini.administracion.clientes.fusion.portada()
                     main.setAttribute("zonaCSS", "administracion/clientes/fusion")
 
@@ -17870,7 +17870,7 @@ const casaVitini = {
                     }
                 },
                 listaResultadosUI: async function (data) {
-                    console.log("data", data)
+
                     const contenedor = data.contenedor
                     const terminoBusqueda = data.terminoBusqueda
                     const selectorContenedor = document.querySelector(`[contenedor="${contenedor}"]`)
@@ -19080,7 +19080,7 @@ const casaVitini = {
                             }
                             selectorSentido.add(opcion);
                         })
-                        console.log("destino", destino)
+
                         document.querySelector(destino).appendChild(contenedorFiltrosOrden)
                     },
                     pasarela: (e) => {
@@ -19268,7 +19268,7 @@ const casaVitini = {
                     }
                     if (respuestaServidor?.ok) {
                         const simuacionUID = respuestaServidor.simulacionUID
-                        console.log("resp", respuestaServidor)
+
 
                         const entrada = {
                             vista: "/administracion/simulador_de_precios/simulacion:" + simuacionUID,
@@ -19416,7 +19416,7 @@ const casaVitini = {
 
                             }
                             const altura = window.scrollY || window.pageYOffset;
-                            console.log("altura", altura)
+
                             if (altura > 20) {
                                 selectorTitulo.style.boxShadow = "0px 0px 28px 0px rgba(0, 0, 0, 0.5)"
                                 selectorTitulo.style.backdropFilter = "blur(50px)"
@@ -22691,7 +22691,7 @@ const casaVitini = {
                     transaccion.zona = "administracion/ofertas/crearOferta"
                     transaccion.entidadIDV = "reserva"
 
-                    console.log("oferta", transaccion)
+
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                     if (!pantallaDeCargaRenderizada) {
@@ -25608,7 +25608,7 @@ const casaVitini = {
                         zona: "administracion/comportamientoDePrecios/crearComportamiento",
                         ...contenedorComportamiento
                     }
-                    console.log("transaccion", transaccion)
+
 
 
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)

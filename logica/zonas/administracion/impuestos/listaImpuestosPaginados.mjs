@@ -88,6 +88,7 @@ export const listaImpuestosPaginados = async (entrada) => {
             ok.nombreColumna = nombreColumna;
             ok.sentidoColumna = sentidoColumna;
         }
+        ok.ok = "Aqui tienes los impuestos paginados"
         ok.totalImpuestos = Number(consultaConteoTotalFilas);
         ok.paginasTotales = totalPaginas;
         ok.pagina = pagina;

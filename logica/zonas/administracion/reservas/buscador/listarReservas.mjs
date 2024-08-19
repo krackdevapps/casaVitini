@@ -6,11 +6,11 @@ import { validadorBusqueda } from "../../../../sistema/reservas/buscador/validar
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
-export const listarReservas = async (entrada, salida) => {
+export const listarReservas = async (entrada) => {
     try {
 
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
@@ -88,7 +88,6 @@ export const listarReservas = async (entrada, salida) => {
                     nombreCampo: "La fecha de salida para listar reservas por rango"
                 })
             }
-
             if (fechaEntrada && fechaSalida) {
                 await validadoresCompartidos.fechas.validacionVectorial({
                     fechaEntrada: fechaEntrada,
@@ -96,7 +95,6 @@ export const listarReservas = async (entrada, salida) => {
                     tipoVector: "igual"
                 })
             }
-
 
             const data = {
                 numeroPorPagina: numeroPorPagina,
@@ -145,7 +143,7 @@ export const listarReservas = async (entrada, salida) => {
             ok.nombreColumna = "estadoReserva"
         }
 
-
+        ok.ok = "Resultados del busqueda"
         return ok
     } catch (errorCapturado) {
         throw errorCapturado

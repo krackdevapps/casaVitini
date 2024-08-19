@@ -9,6 +9,7 @@ export const insertarUsuario = async (data) => {
     const cuentaVerificada = data.cuentaVerificada
     const codigoAleatorioUnico = data.codigoAleatorioUnico
     const fechaCaducidadCuentaNoVerificada = data.fechaCaducidadCuentaNoVerificada
+    const testingVI = data.testingVI
 
     try {
         const consulta = `
@@ -21,10 +22,11 @@ export const insertarUsuario = async (data) => {
         clave,
         "cuentaVerificadaIDV",
         "codigoVerificacion",
-        "fechaCaducidadCuentaNoVerificada"
+        "fechaCaducidadCuentaNoVerificada",
+        "testingVI"
         )
         VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING
         *
         `;
@@ -36,7 +38,8 @@ export const insertarUsuario = async (data) => {
             hashCreado,
             cuentaVerificada,
             codigoAleatorioUnico,
-            fechaCaducidadCuentaNoVerificada
+            fechaCaducidadCuentaNoVerificada,
+            testingVI
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {

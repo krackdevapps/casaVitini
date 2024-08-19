@@ -69,7 +69,7 @@ describe('crud hosting configuracion', () => {
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })
-    
+
     test('insert room in hosting configuracion', async () => {
         const roomInHostingConfiguracion = {
             apartamentoIDV: IDVStart,
@@ -116,7 +116,7 @@ describe('crud hosting configuracion', () => {
             apartamentoIDV: IDVStart,
             estadoConfiguracionIDV_array: ["nodisponible"]
         })
-        console.log("respuesta", response)
+
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })

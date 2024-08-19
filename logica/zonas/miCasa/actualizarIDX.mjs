@@ -1,7 +1,6 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../repositorio/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
@@ -9,12 +8,12 @@ import { actualizarIDX as actualizarIDV_ } from "../../repositorio/usuarios/actu
 import { usuariosLimite } from "../../sistema/usuarios/usuariosLimite.mjs";
 import { actualizarUsuarioSessionActiva } from "../../repositorio/usuarios/actualizarSessionActiva.mjs";
 
-export const actualizarIDX = async (entrada, salida) => {
+export const actualizarIDX = async (entrada) => {
     const mutex = new Mutex()
     try {
         mutex.acquire()
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.control()
 
         const actualIDX = entrada.session.usuario;

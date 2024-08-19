@@ -6,6 +6,7 @@ import { actualizarEstadoComportamiento } from '../../../../logica/zonas/adminis
 import { detallesComportamiento } from '../../../../logica/zonas/administracion/comportamientoDePrecios/detallesComportamiento.mjs';
 import { listaComportamientosPrecios } from '../../../../logica/zonas/administracion/comportamientoDePrecios/listaComportamientosPrecios.mjs';
 import { eliminarComportamiento } from '../../../../logica/zonas/administracion/comportamientoDePrecios/eliminarComportamiento.mjs';
+import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
 
 describe('behavior of prices clients', () => {
     const fakeAdminSession = {
@@ -14,9 +15,32 @@ describe('behavior of prices clients', () => {
     }
     const testingVI = "testing"
     let comportamientoUID
-
+    const apartamentoIDV = "apartamentfortestingadddiscountstoreserve"
+    const apartamentoUI = "Apartamento temporal creado para discounts"
+    const habitacionIDV = "temporalroomfortestingadddiscountstoreserve"
+    const habitacionUI = "Habitacion temporal para testing discounts"
+    const camaIDV = "temporalbedfortestingaddapartamentotoreserve"
+    const camaUI = "Cama temporal para testing de discounts"
     beforeAll(async () => {
         await eliminarComportamientoPorTestinVI(testingVI)
+        process.env.TESTINGVI = testingVI
+
+    
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV,
+            habitacionIDV: habitacionIDV,
+            camaIDV: camaIDV
+        })
+        await makeHostArquitecture({
+            operacion: "construir",
+            apartamentoIDV: apartamentoIDV,
+            apartamentoUI: apartamentoUI,
+            habitacionIDV: habitacionIDV,
+            habitacionUI: habitacionUI,
+            camaIDV: camaIDV,
+            camaUI: camaUI,
+        })
     })
 
     test('make behavior type by range of price with ok', async () => {
@@ -31,19 +55,9 @@ describe('behavior of prices clients', () => {
                     fechaFinal: "2024-08-16",
                     apartamentos: [
                         {
-                            apartamentoIDV: "apartamento7",
+                            apartamentoIDV: apartamentoIDV,
                             cantidad: "10.00",
                             simboloIDV: "aumentoCantidad"
-                        },
-                        {
-                            apartamentoIDV: "apartamento5",
-                            cantidad: "10.00",
-                            simboloIDV: "reducirPorcentaje"
-                        },
-                        {
-                            apartamentoIDV: "apartamento6",
-                            cantidad: "10.00",
-                            simboloIDV: "reducirCantidad"
                         }
                     ]
                 },
@@ -86,19 +100,9 @@ describe('behavior of prices clients', () => {
                     fechaFinal: "2024-08-16",
                     apartamentos: [
                         {
-                            apartamentoIDV: "apartamento7",
+                            apartamentoIDV: apartamentoIDV,
                             cantidad: "10.00",
                             simboloIDV: "aumentoCantidad"
-                        },
-                        {
-                            apartamentoIDV: "apartamento5",
-                            cantidad: "10.00",
-                            simboloIDV: "reducirPorcentaje"
-                        },
-                        {
-                            apartamentoIDV: "apartamento6",
-                            cantidad: "10.00",
-                            simboloIDV: "reducirCantidad"
                         }
                     ]
                 },
@@ -171,5 +175,11 @@ describe('behavior of prices clients', () => {
 
     afterAll(async () => {
         await eliminarComportamientoPorTestinVI(testingVI)
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV,
+            habitacionIDV: habitacionIDV,
+            camaIDV: camaIDV
+        })
     });
 })

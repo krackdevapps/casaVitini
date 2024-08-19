@@ -75,6 +75,7 @@ export const listaSimulacionesPaginados = async (entrada) => {
             ok.nombreColumna = nombreColumna;
             ok.sentidoColumna = sentidoColumna;
         }
+        ok.ok = "Simulacion paginadas"
         ok.totalSimulaciones = Number(consultaConteoTotalFilas);
         ok.paginasTotales = totalPaginas;
         ok.pagina = pagina;

@@ -48,9 +48,7 @@ export const crearPagoManual = async (entrada) => {
         }
 
         await obtenerReservaPorReservaUID(reservaUID);
-
         const fechaActual = DateTime.utc().toISO();
-
         const estructuraFinal = {};
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
 

@@ -1,9 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarEnlaceDePagoPorEnlaceTVI } from '../../../logica/repositorio/enlacesDePago/eliminarEnlaceDePagoPorEnlaceTVI.mjs';
 import { insertarEnlaceDePago } from '../../../logica/repositorio/enlacesDePago/insertarEnlaceDePago.mjs';
 import { insertarReservaAdministrativa } from '../../../logica/repositorio/reservas/reserva/insertarReservaAdministrativa.mjs';
-import { eliminarReservaPorReservaTVI } from '../../../logica/repositorio/reservas/reserva/eliminarReservaPorReservaTVI.mjs';
 import { actualizarEnlaceDePagoPorEnlaceUID } from '../../../logica/repositorio/enlacesDePago/actualizarEnlaceDePagoPorEnlaceUID.mjs';
 import { actualizarEnlaceDePagoPorReservaUID } from '../../../logica/repositorio/enlacesDePago/actualizarEnlaceDePagoPorReservaUID.mjs';
 import { actualizarEstadoEnlaceDePagoPorEnlaceUID } from '../../../logica/repositorio/enlacesDePago/actualizarEstadoEnlaceDePagoPorEnlaceUID.mjs';
@@ -13,9 +11,11 @@ import { obtenerTodosEnlaceDePago } from '../../../logica/repositorio/enlacesDeP
 import { eliminarEnlaceDePagoPorEnlaceUID } from '../../../logica/repositorio/enlacesDePago/eliminarEnlaceDePagoPorEnlaceUID.mjs';
 import { eliminarEnlaceDePagoPorReservaUID } from '../../../logica/repositorio/enlacesDePago/eliminarEnlaceDePagoPorReservaUID.mjs';
 import { generadorReservaUID } from '../../../logica/componentes/generadorReservaUID.mjs';
+import { eliminarEnlaceDePagoPorTestingVI } from '../../../logica/repositorio/enlacesDePago/eliminarEnlaceDePagoPorTestingVI.mjs';
+import { eliminarReservaPorTestingVI } from '../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
 
 describe('crud pay links', () => {
-    const enlaceTVI = "enlaceTest"
+    const testingVI = "enlaceTest"
     let nuevoEnlaceUID = 0
     let reservaUID
     const reservaTVI = "reservaTest"
@@ -24,8 +24,8 @@ describe('crud pay links', () => {
     beforeAll(async () => {
         reservaUID = await generadorReservaUID()
 
-        await eliminarEnlaceDePagoPorEnlaceTVI(enlaceTVI)
-        await eliminarReservaPorReservaTVI(reservaTVI)
+        await eliminarEnlaceDePagoPorTestingVI(testingVI)
+        await eliminarReservaPorTestingVI(reservaTVI)
         await insertarReservaAdministrativa({
             fechaEntrada: "2020-10-10",
             fechaSalida: "2020-11-11",
@@ -46,7 +46,7 @@ describe('crud pay links', () => {
             cantidad: "10.100",
             codigoAleatorioUnico: codigoPublico,
             estadoPagoInicial: "noPagado",
-            enlaceTVI: enlaceTVI
+            testingVI: testingVI
         })
         nuevoEnlaceUID = response.enlaceUID
         expect(response).not.toBeUndefined();
@@ -124,8 +124,7 @@ describe('crud pay links', () => {
     })
 
     afterAll(async () => {
-        await eliminarEnlaceDePagoPorEnlaceTVI(enlaceTVI)
-        await eliminarReservaPorReservaTVI(reservaTVI)
-
+        await eliminarEnlaceDePagoPorTestingVI(testingVI)
+        await eliminarReservaPorTestingVI(reservaTVI)
     });
 })

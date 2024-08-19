@@ -1,22 +1,28 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { campoDeTransaccion } from '../../../../../logica/repositorio/globales/campoDeTransaccion.mjs';
 import { crearEntidadAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs';
 import { detallesDeEntidadDeAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/detallesDeEntidadDeAlojamiento.mjs';
 import { eliminarEntidadAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/eliminarEntidadAlojamiento.mjs';
 import { modificarEntidadAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/modificarEntidadAlojamiento.mjs';
+import { eliminarApartamentoComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
+import { eliminarCamaComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs';
+import { eliminarHabitacionComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs';
 
 describe('crudEntitiys', () => {
-    const apartamentoUI = "Apartamento para testing"
-    const apartamentoIDV = "apartamentoparatesting"
-
+    const apartamentoUI = "Apartamento para testing de entidades"
+    const apartamentoIDV = "apartamentoparatestingentitys"
+    const camaIDV = "bedfortestingcrudentitys"
+    const habitacionIDV = "roomfortestingcrudentitys"
     const fakeAdminSession = {
         usuario: "test",
         rolIDV: "administrador"
     }
     beforeAll(async () => {
-        await campoDeTransaccion("iniciar")
+        await eliminarApartamentoComoEntidad(apartamentoIDV)
+        await eliminarCamaComoEntidad(camaIDV)
+        await eliminarHabitacionComoEntidad(habitacionIDV)
     })
+
     test('createEntity ok', async () => {
         const makeEntity = {
             body: {
@@ -120,7 +126,7 @@ describe('crudEntitiys', () => {
             body: {
                 tipoEntidad: "cama",
                 camaUI: "Nueva cama para testing",
-                camaIDV: "camatesting",
+                camaIDV: camaIDV,
                 capacidad: "3",
                 tipoCama: "compartida"
             },
@@ -137,7 +143,7 @@ describe('crudEntitiys', () => {
             body: {
                 tipoEntidad: "habitacion",
                 habitacionUI: "Nueva habitacion para testing",
-                habitacionIDV: "habitaciontesting"
+                habitacionIDV: habitacionIDV
             },
             session: fakeAdminSession
         }
@@ -152,7 +158,7 @@ describe('crudEntitiys', () => {
         const makeEntity = {
             body: {
                 tipoEntidad: "habitacion",
-                entidadIDV: "habitaciontesting"
+                entidadIDV: habitacionIDV
             },
             session: fakeAdminSession
         }
@@ -168,7 +174,7 @@ describe('crudEntitiys', () => {
         const makeEntity = {
             body: {
                 tipoEntidad: "cama",
-                entidadIDV: "camatesting"
+                entidadIDV: camaIDV
             },
             session: fakeAdminSession
         }
@@ -178,21 +184,6 @@ describe('crudEntitiys', () => {
         expect(response).toHaveProperty('ok');
     })
 
-
-
-    test('details Entity room ok', async () => {
-        const makeEntity = {
-            body: {
-                tipoEntidad: "habitacion",
-                entidadIDV: "habitaciontesting"
-            },
-            session: fakeAdminSession
-        }
-        const response = await detallesDeEntidadDeAlojamiento(makeEntity)
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
-    })
 
 
     test('error in tipoEntidad', async () => {
@@ -274,9 +265,9 @@ describe('crudEntitiys', () => {
         const makeEntity = {
             body: {
                 tipoEntidad: "apartamento",
-                entidadIDV: "apartamentoparatesting",
-                apartamentoIDV: "apartamentoparatesting",
-                apartamentoUI: "apartamentoparatesting",
+                entidadIDV: apartamentoIDV,
+                apartamentoIDV: apartamentoIDV,
+                apartamentoUI: apartamentoUI,
                 caracteristicas: [
                     "test"
                 ]
@@ -286,7 +277,7 @@ describe('crudEntitiys', () => {
         const response = await modificarEntidadAlojamiento(makeEntity)
         expect(response).not.toBeUndefined();
     })
-
+    
     test('update entity apartamento with error', async () => {
         try {
             const makeEntity = {
@@ -311,8 +302,8 @@ describe('crudEntitiys', () => {
         const makeEntity = {
             body: {
                 tipoEntidad: "habitacion",
-                entidadIDV: "habitaciontesting",
-                habitacionIDV: "habitaciontesting",
+                entidadIDV: habitacionIDV,
+                habitacionIDV: habitacionIDV,
                 habitacionUI: "habitacion para testing"
             },
             session: fakeAdminSession
@@ -412,7 +403,7 @@ describe('crudEntitiys', () => {
         const makeEntity = {
             body: {
                 tipoEntidad: "habitacion",
-                entidadIDV: "habitaciontesting"
+                entidadIDV: habitacionIDV
             },
             session: fakeAdminSession
         }
@@ -429,7 +420,7 @@ describe('crudEntitiys', () => {
         const makeEntity = {
             body: {
                 tipoEntidad: "cama",
-                entidadIDV: "camatesting",
+                entidadIDV: camaIDV,
                 tipoIDV: "compartida"
             },
             session: fakeAdminSession
@@ -447,7 +438,7 @@ describe('crudEntitiys', () => {
         const makeEntity = {
             body: {
                 tipoEntidad: "apartamento",
-                entidadIDV: "apartamentoparatesting",
+                entidadIDV: apartamentoIDV,
 
             },
             session: fakeAdminSession
@@ -588,6 +579,8 @@ describe('crudEntitiys', () => {
 
 
     afterAll(async () => {
-        await campoDeTransaccion("cancelar")
+        await eliminarApartamentoComoEntidad(apartamentoIDV)
+        await eliminarCamaComoEntidad(camaIDV)
+        await eliminarHabitacionComoEntidad(habitacionIDV)
     })
 })

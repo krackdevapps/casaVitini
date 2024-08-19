@@ -17,9 +17,8 @@ describe('Config Sync Calendars', () => {
         rolIDV: "administrador"
     }
     let calendarioUID
-    const testingVI = "testing"
-    const apartamentoIDV = "testingApartment"
-    const apartamentoUI = "Apartamento para testing"
+    const apartamentoIDV = "testingapartmentforcalendar"
+    const apartamentoUI = "Apartamento para testing de calendarios"
     const fakeIcal = `BEGIN:VCALENDAR
 PRODID;X-RICAL-TZSOURCE=TZINFO:-//Airbnb Inc//Hosting Calendar 0.8.8//EN
 CALSCALE:GREGORIAN

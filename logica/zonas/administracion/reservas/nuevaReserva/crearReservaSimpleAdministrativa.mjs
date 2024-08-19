@@ -86,11 +86,11 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 const error = "Los apartamentos solicitados para este rango de fechas no están disponibles.";
                 throw new Error(error);
             }
-            const testing = entrada.body.testing
-            if (testing) {
+            const testingVI = process.env.TESTINGVI
+            if (testingVI) {
                 validadoresCompartidos.tipos.cadena({
-                    string: entrada.body.testing,
-                    nombreCampo: "El campo origen",
+                    string: testingVI,
+                    nombreCampo: "El campo testingVI",
                     filtro: "strictoIDV",
                     sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
@@ -112,7 +112,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 fechaCreacion: fechaCreacion,
                 estadoPago: estadoPago,
                 reservaUID: reservaUID,
-                testingVI: testing
+                testingVI: testingVI
             })
             for (const apartamentoIDV of apartamentos) {
                 const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({

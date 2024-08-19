@@ -8,7 +8,7 @@ export const insertarCliente = async (nuevoCliente) => {
         const telefono = nuevoCliente.telefono
         const correoElectronico = nuevoCliente.correoElectronico
         const notas = nuevoCliente.notas
-        const testing = nuevoCliente.testing
+        const testingVI = nuevoCliente.testingVI
 
         const insertarCliente = `
         INSERT INTO 
@@ -35,7 +35,7 @@ export const insertarCliente = async (nuevoCliente) => {
             telefono,
             correoElectronico,
             notas,
-            testing
+            testingVI
         ]
         const resuelve = await conexion.query(insertarCliente, datosClientes)
         return resuelve.rows[0]

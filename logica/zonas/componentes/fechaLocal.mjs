@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../sistema/configuracion/codigoZonaHoraria.mjs";
-export const fechaLocal = async (entrada, salida) => {
+export const fechaLocal = async () => {
     try {
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
@@ -11,6 +11,7 @@ export const fechaLocal = async (entrada, salida) => {
         const hora = tiempoZH.hour;
         const minuto = tiempoZH.minute;
         const estructura = {
+            ok: "Fecha local",
             zonaHoraria: zonaHoraria,
             dia: dia,
             mes: mes,

@@ -55,6 +55,17 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
+        const testingVI = process.env.TESTINGVI
+        if (testingVI) {
+            validadoresCompartidos.tipos.cadena({
+                string: testingVI,
+                nombreCampo: "El campo testingVI",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+        }
+
         await controlCaducidadEnlacesDePago();
         const resuelveValidarReserva = await obtenerReservaPorReservaUID(reservaUID);
         const estadoReserva = resuelveValidarReserva.estadoReservaIDV;
@@ -122,6 +133,7 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             cantidad: cantidad,
             codigoAleatorioUnico: codigoAleatorioUnico,
             estadoPagoInicial: estadoPagoInicial,
+            testingVI: testingVI
         })
 
         const enlaceUID = nuevoEnlaceDePago.enlaceUID;

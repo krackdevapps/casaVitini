@@ -5,11 +5,11 @@ import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransac
 import { insertarOferta } from "../../../repositorio/ofertas/insertarOferta.mjs";
 import { validarObjetoOferta } from "../../../sistema/ofertas/entidades/reserva/validarObjetoOferta.mjs";
 
-export const crearOferta = async (entrada, salida) => {
+export const crearOferta = async (entrada) => {
     const mutex = new Mutex()
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
@@ -32,7 +32,7 @@ export const crearOferta = async (entrada, salida) => {
             fechaFinal,
             condicionesArray,
             descuentosJSON,
-            estado: estadoInicial
+            estado: estadoInicial,
         }
         await validarObjetoOferta({
             oferta: oferta,

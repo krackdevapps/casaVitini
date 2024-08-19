@@ -9,7 +9,7 @@ export const insertarEnlaceDePago = async (data) => {
         const cantidad = data.cantidad
         const codigoAleatorioUnico = data.codigoAleatorioUnico
         const estadoPagoInicial = data.estadoPagoInicial
-        const enlaceTVI = data.enlaceTVI
+        const testingVI = data.testingVI
         const consulta = `
         INSERT INTO "enlacesDePago"
         (
@@ -20,7 +20,7 @@ export const insertarEnlaceDePago = async (data) => {
         cantidad,
         codigo,
         "estadoPagoIDV",
-        "enlaceTVI"
+        "testingVI"
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
         RETURNING
@@ -34,7 +34,7 @@ export const insertarEnlaceDePago = async (data) => {
             cantidad,
             codigoAleatorioUnico,
             estadoPagoInicial,
-            enlaceTVI
+            testingVI
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

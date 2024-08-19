@@ -9,7 +9,7 @@ export const obtenerReembolsoPorReembolsoUID = async (reembolsoUID) => {
             cantidad,
             "plataformaDePagoIDV",
             "reembolsoUIDPasarela",
-            "estado",
+            "estadoIDV",
             "fechaCreacion"::text AS "fechaCreacion",
             "fechaActualizacion"::text AS "fechaActualizacion"
         FROM 

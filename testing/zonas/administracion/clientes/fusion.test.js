@@ -35,6 +35,7 @@ describe('fusion clients', () => {
 
     beforeAll(async () => {
         await eliminarClientePorTestingVI(testingVI)
+        process.env.TESTINGVI = testingVI;
     })
 
     test('create new client origin with ok', async () => {

@@ -8,7 +8,7 @@ import { eliminarEnlacesDeRecuperacionPorUsuario } from "../../../repositorio/en
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { vitiniCrypto } from "../../../sistema/VitiniIDX/vitiniCrypto.mjs";
 
-export const restablecerClave = async (entrada, salida) => {
+export const restablecerClave = async (entrada) => {
     try {
         const codigo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.codigo,

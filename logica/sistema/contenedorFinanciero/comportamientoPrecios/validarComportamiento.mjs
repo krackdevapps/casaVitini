@@ -13,12 +13,17 @@ export const validarComportamiento = async (comportamiento) => {
             objetoLiteral: comportamiento.contenedor,
             nombreCampo: "El array de apartamentos",
         })
-        const tipo = contenedor?.tipo
-        const testing = comportamiento.testing
-        if (testing && testing !==  "testing") {
-            const m = "La llave testing solo acepta como valor testing, esta llave es para testing."
-            throw new Error(m)
+        const testingVI = comportamiento.testingVI
+        if (testingVI) {
+            validadoresCompartidos.tipos.cadena({
+                string: testingVI,
+                nombreCampo: "El campo testingVI",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
         }
+        const tipo = contenedor?.tipo
         if (tipo === "porRango") {
             const llaves_nivel_1 = [
                 "fechaInicio",

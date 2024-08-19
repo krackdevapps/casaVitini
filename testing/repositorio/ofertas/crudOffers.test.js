@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { insertarOferta } from '../../../logica/repositorio/ofertas/insertarOferta.mjs';
-import { eliminarOfertaPorOfertaTVI } from '../../../logica/repositorio/ofertas/eliminarOfertaPorOfertaTVI.mjs';
+import { eliminarOfertaPorTestingVI } from '../../../logica/repositorio/ofertas/eliminarOfertaPorTestingVI.mjs';
 
 const contenedoOferta = {
     "nombreOferta": "testing_all_conditions",
@@ -64,10 +64,10 @@ const contenedoOferta = {
 }
 
 describe('crud ofers', () => {
-    const ofertaTVI = "ofertaTest"
+    const testingVI = "ofertaTest"
     let nuevaOfertaUID
     beforeAll(async () => {
-        await eliminarOfertaPorOfertaTVI(ofertaTVI)
+        await eliminarOfertaPorTestingVI(testingVI)
 
     })
     test('insert offer', async () => {
@@ -80,7 +80,7 @@ describe('crud ofers', () => {
             condicionesArray: contenedoOferta.condicionesArray,
             descuentosJSON: contenedoOferta.descuentosJSON,
             estado: "desactivado",
-            ofertaTVI
+            testingVI
         })
         nuevaOfertaUID = response.ofertaUID
         expect(response).not.toBeUndefined();
@@ -88,7 +88,7 @@ describe('crud ofers', () => {
     })
 
     afterAll(async () => {
-        await eliminarOfertaPorOfertaTVI(ofertaTVI)
+        await eliminarOfertaPorTestingVI(testingVI)
 
 
     });

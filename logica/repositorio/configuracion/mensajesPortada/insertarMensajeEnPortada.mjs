@@ -6,7 +6,7 @@ export const insertarMensajeEnPortada = async (data) => {
         const mensajeB64 = data.mensajeB64
         const estadoInicial = data.estadoInicial
         const posicionInicial = data.posicionInicial
-        const testing = data.testing
+        const testingVI = data.testingVI
 
         const consulta = `
         INSERT INTO 
@@ -26,7 +26,7 @@ export const insertarMensajeEnPortada = async (data) => {
             mensajeB64,
             estadoInicial,
             posicionInicial,
-            testing
+            testingVI
         ]
         const resuelve = await conexion.query(consulta, parametros);
         return resuelve.rows[0]

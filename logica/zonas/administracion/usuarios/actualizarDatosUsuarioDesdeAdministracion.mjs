@@ -1,6 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerIDX } from "../../../repositorio/usuarios/obtenerIDX.mjs";
 import { actualizarDatos } from "../../../repositorio/usuarios/actualizarDatos.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";

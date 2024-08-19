@@ -18,7 +18,10 @@ export const crearComportamiento = async (entrada) => {
             estadoInicalDesactivado: "desactivado",
             contenedor: entrada.body.contenedor,
             transaccion: "crear",
-            testing: entrada.body.testing
+        }
+        const testingVI = process.env.TESTINGVI
+        if (testingVI) {
+            comportamiento.testingVI = testingVI
         }
 
         await validarComportamiento(comportamiento)

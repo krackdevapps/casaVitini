@@ -7,6 +7,10 @@ export const cambiarVista = async (transaccion) => {
         const rolIDV = transaccion.rolIDV
         let selectorRama = './ui/vistas'
         let urlResuelta = "";
+        if (arbol.length === 0) {
+            const m = "Vista debe tener datos del directorio, pasar solo una barra no es el formato esperado."
+            throw new Error(m)
+        }
         let zona = arbol[0].toLowerCase()
         if (arbol.length > 1 && arbol[0].toLowerCase() === "administracion") {
             zona = arbol[1].toLowerCase()

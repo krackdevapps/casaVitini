@@ -15,15 +15,10 @@ import { eliminarBloqueo } from '../../../../logica/zonas/administracion/bloqueo
 describe('crud locks for apartments', () => {
     const apartamentoIDV = "apartamento1testing"
     const tipoPermanente = "permanente"
-    const tipoRangoTemporal = "rangoTemporal"
     const fechaInicio = "2025-10-02"
     const fechaFin = "2026-10-02"
-    const zonaIDV = "global"
     const testingVI = "bloqueoTest"
-    const mes = "10"
-    const ano = "2025"
-    const fechaActual_ISO = "2027-10-02"
-    let nuevoBloqueoUID = 0
+    let nuevoBloqueoUID
 
     const fakeAdminSession = {
         usuario: "test",
@@ -66,7 +61,7 @@ describe('crud locks for apartments', () => {
 
     })
 
-    
+
 
     test('insert new apartmen lock by permanent range with ok', async () => {
         const newLock = {
@@ -159,7 +154,7 @@ describe('crud locks for apartments', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
 
-    })  
+    })
 
     afterAll(async () => {
         await eliminarBloqueoPorTestingVI(testingVI)

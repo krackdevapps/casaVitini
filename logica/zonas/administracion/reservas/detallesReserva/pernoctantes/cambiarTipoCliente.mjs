@@ -12,6 +12,8 @@ import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeT
 export const cambiarTipoCliente = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
+        const m = "Funcion deshabilitada"
+        throw new Error(m)
 
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)

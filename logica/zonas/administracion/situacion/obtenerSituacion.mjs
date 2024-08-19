@@ -7,7 +7,6 @@ import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../sistema/conf
 import { obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc } from "../../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc.mjs";
 import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
-import { obtenerReservasPorRango } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasPorRango.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerReservasQueRodeanUnaFecha } from "../../../repositorio/reservas/selectoresDeReservas/obtenerReservasQueRodeanUnaFecha.mjs";
 

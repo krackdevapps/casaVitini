@@ -86,10 +86,16 @@ export const validadoresCompartidos = {
                     const m = "validarClinete necesita el parámetro de operación en actualizar o crear"
                     throw new Error(m)
                 }
-                const testing = cliente.testing
-                if (testing && testing !==  "testing") {
-                    const m = "La llave testing solo acepta como valor testing, esta llave es para testing."
-                    throw new Error(m)
+                const testingVI = process.env.TESTINGVI
+                if (testingVI) {
+                    validadoresCompartidos.tipos.cadena({
+                        string: testingVI,
+                        nombreCampo: "El campo testingVI",
+                        filtro: "strictoIDV",
+                        sePermiteVacio: "no",
+                        limpiezaEspaciosAlrededor: "si",
+                    })
+                    cliente.testingVI = testingVI
                 }
 
                 // if (clienteConMismoPasaporte?.clienteUID) {
@@ -109,7 +115,7 @@ export const validadoresCompartidos = {
                     notas: notas,
                     mail: correoElectronico,
                     clienteUID,
-                    testing
+                    testingVI
                 }
                 return datosValidados
             } catch (errorCapturado) {

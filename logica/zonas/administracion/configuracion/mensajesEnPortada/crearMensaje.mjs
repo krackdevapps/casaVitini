@@ -22,19 +22,7 @@ export const crearMensaje = async (entrada, salida) => {
         const bufferObj = Buffer.from(mensaje, "utf8");
         const mensajeB64 = bufferObj.toString("base64");
 
-        const testing = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.testing,
-            nombreCampo: "El campo del mensaje",
-            filtro: "strictoConEspacios",
-            sePermiteVacio: "si",
-            limpiezaEspaciosAlrededor: "si",
-        })
 
-        if (testing && testing !== "testing") {
-            const m = "La llave testing solo permite una cadena con testing"
-            throw new Error(m)
-            
-        }
         await campoDeTransaccion("iniciar")
 
         const todosLosMensajes = await obtenerTodosLosMensjaes()
@@ -43,9 +31,20 @@ export const crearMensaje = async (entrada, salida) => {
         const dataNuevoMensaje = {
             mensajeB64: mensajeB64,
             estadoInicial: "desactivado",
-            posicionInicial: posicionInicial,
-            testing: testing
+            posicionInicial: posicionInicial
         }
+        const testingVI = process.env.TESTINGVI
+        if (testingVI) {
+            validadoresCompartidos.tipos.cadena({
+                string: testingVI,
+                nombreCampo: "El campo del mensaje",
+                filtro: "strictoConEspacios",
+                sePermiteVacio: "si",
+                limpiezaEspaciosAlrededor: "si",
+            })
+            dataNuevoMensaje.testingVI = testingVI
+        }
+
         const nuevoMensaje = await insertarMensajeEnPortada(dataNuevoMensaje)
         await campoDeTransaccion("confirmar")
         const ok = {

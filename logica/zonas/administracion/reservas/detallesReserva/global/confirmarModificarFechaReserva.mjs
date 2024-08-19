@@ -10,8 +10,6 @@ import { actualizarFechaEntradaReserva } from "../../../../../repositorio/reserv
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
 import { actualizarFechaSalidaReserva } from "../../../../../repositorio/reservas/rangoFlexible/actualizarFechaSalidaReserva.mjs";
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
-import { utilidades } from "../../../../../componentes/utilidades.mjs";
-import { eliminarSobreControlApartamentoPorNochePorArrayDeFechas } from "../../../../../repositorio/reservas/transacciones/sobreControl/eliminarSobreControlApartamentoPorNochePorArrayDeFechas.mjs";
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
     const mutex = new Mutex()

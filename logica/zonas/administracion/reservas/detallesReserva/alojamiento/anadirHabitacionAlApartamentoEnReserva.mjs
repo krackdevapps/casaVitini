@@ -65,25 +65,30 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada) => {
             throw new Error(error);
         }
 
-        if (resuelveHabitaciones.includes(habitacionIDV)) {
-            const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV({
-                habitacionIDV,
-                errorSi: "noExiste"
-            })
-            const habitacionUI = habitacion.habitacionUI
-            const nuevaHabitacionDelApartamento = await insertarHabitacionEnApartamento({
-                reservaUID: reservaUID,
-                apartamentoUID: apartamentoUID,
-                habitacionIDV: habitacionIDV,
-                habitacionUI: habitacionUI
-            })
+        if (!resuelveHabitaciones.includes(habitacionIDV)) {
+            const error = `No existe el identificador visual de la habitación en esta configuración`;
+            throw new Error(error);
 
-            const ok = {
-                ok: `Se ha añadido la ${habitacionUI} al apartamento`,
-                nuevoUID: nuevaHabitacionDelApartamento.componenteUID
-            }
-            return ok
         }
+
+        const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+            habitacionIDV,
+            errorSi: "noExiste"
+        })
+        const habitacionUI = habitacion.habitacionUI
+        const nuevaHabitacionDelApartamento = await insertarHabitacionEnApartamento({
+            reservaUID: reservaUID,
+            apartamentoUID: apartamentoUID,
+            habitacionIDV: habitacionIDV,
+            habitacionUI: habitacionUI
+        })
+
+        const ok = {
+            ok: `Se ha añadido la ${habitacionUI} al apartamento`,
+            nuevoUID: nuevaHabitacionDelApartamento.componenteUID
+        }
+        return ok
+
     } catch (errorCapturado) {
         throw errorCapturado
     } finally {

@@ -2,7 +2,7 @@ import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { obtenerImpuestosPorNombreDelImpuesto } from "../../../repositorio/impuestos/obtenerImpuestosPorNombreDelImpuesto.mjs";
 import { insertarImpuesto } from "../../../repositorio/impuestos/insertarImpuesto.mjs";
-import { validarImpuesto } from "./validarImpuesto.mjs";
+import { validarImpuesto } from "../../../sistema/impuestos/validarImpuesto.mjs";
 
 export const crearNuevoImpuesto = async (entrada, salida) => {
     const mutex = new Mutex()

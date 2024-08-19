@@ -81,6 +81,7 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
             }
         }
         const ok = {
+            ok: "Aquí tienes las configuraciones solicitadas",
             configuracionApartamento: configuracion
         }
         return ok

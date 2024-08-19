@@ -68,7 +68,7 @@ export const conectar = async (entrada) => {
         const claveHash = cuentaUsuario.clave;
         const estadoCuenta = cuentaUsuario.estadoCuentaIDV;
         const intentos = cuentaUsuario.intentos || 0;
-        const ip = entrada.socket.remoteAddress;
+        const ip = entrada.socket?.remoteAddress;
         const userAgent = entrada.get('User-Agent');
         if (intentos >= intentosMaximos) {
             const error = "Cuenta bloqueada tras 10 intentos. Recupera tu cuenta con tu correo.";

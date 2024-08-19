@@ -1,11 +1,9 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs"
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs"
-
 import { obtenerClientesPorMail } from "../../../repositorio/clientes/obtenerClientesPorMail.mjs";
 import { obtenerTitularReservaPorClienteUID_array } from "../../../repositorio/reservas/titulares/obtenerTitularReservaPorClienteUID.mjs";
 import { obtenerTitularReservaPoolPorMail } from "../../../repositorio/reservas/titulares/obtenerTitularReservaPoolPorMail.mjs";
 import { obtenerReservasComoLista } from "../../../repositorio/miCasa/reservas/obtenerReservasComoLista.mjs";
-import { obtenerDatosPersonalesPorMail } from "../../../repositorio/usuarios/obtenerDatosPersonalesPorMail.mjs";
 import { obtenerDatosPersonales } from "../../../repositorio/usuarios/obtenerDatosPersonales.mjs";
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
 

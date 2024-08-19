@@ -1,5 +1,4 @@
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs"
-import { obtenerImpuestosPorImppuestoUID } from "../../../../../repositorio/impuestos/obtenerImpuestosPorImpuestoUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { insertarImpuestoPorReservaUID } from "../../../../../repositorio/reservas/transacciones/impuestos/insertarImpuestoPorReservaUID.mjs"

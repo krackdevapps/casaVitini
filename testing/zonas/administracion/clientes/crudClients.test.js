@@ -13,7 +13,7 @@ describe('crud clients', () => {
         usuario: "test",
         rolIDV: "administrador"
     }
-    const testingVI = "testing"
+    const testingVI = "testingclientscrud"
     let clienteUID
     const fakeClient = {
         nombre: "fakeName",
@@ -23,15 +23,13 @@ describe('crud clients', () => {
         telefono: "122333411",
         correoElectronico: "fake@mail.com",
         notas: "fakeNoteText",
-        testing: testingVI
+        testingVI: testingVI
     }
-    const apartamentoIDV = "apartamentotestingcalendars"
 
-    let calendarioUID
     beforeAll(async () => {
         await eliminarClientePorTestingVI(testingVI)
+        process.env.TESTINGVI = testingVI;
     })
-
 
     test('create new client with ok', async () => {
         const newClient = {

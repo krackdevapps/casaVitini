@@ -18,7 +18,7 @@ export const calendarios_compartidos = async (entrada, salida) => {
         salida.send(calendarioPublico);
 
     } catch (errorCapturado) {
-        console.log("errorCapturado", errorCapturado)
+
         const errorFinal = filtroError(errorCapturado);
         salida.status(404)
         salida.json(errorFinal);

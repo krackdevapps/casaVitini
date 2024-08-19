@@ -7,7 +7,7 @@ export const insertarImpuesto = async (data) => {
         const tipoValorIDV = data.tipoValorIDV
         const entidadIDV = data.entidadIDV
         const estadoIDV = data.estadoIDV
-        const impuestoTVI = data.impuestoTVI
+        const testingVI = data.testingVI
 
         const consulta = `
         INSERT INTO impuestos
@@ -17,7 +17,7 @@ export const insertarImpuesto = async (data) => {
         "tipoValorIDV",
         "entidadIDV",
         "estadoIDV",
-        "impuestoTVI"
+        "testingVI"
         )
         VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *
@@ -28,7 +28,7 @@ export const insertarImpuesto = async (data) => {
             tipoValorIDV,
             entidadIDV,
             estadoIDV,
-            impuestoTVI
+            testingVI
         ];
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

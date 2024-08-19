@@ -16,7 +16,16 @@ export const enviarCorreo = async (entrada) => {
             nombreCampo: "El campo del mail de recuperación",
             sePermiteVacio: "no"
         })
-
+        const testingVI = process.env.TESTINGVI
+        if (testingVI) {
+            validadoresCompartidos.tipos.cadena({
+                string: testingVI,
+                nombreCampo: "El campo testingVI",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+        }
         const generarCadenaAleatoria = (longitud) => {
             const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let cadenaAleatoria = '';
@@ -91,7 +100,9 @@ export const enviarCorreo = async (entrada) => {
             };
             // Enviamos el mensaje
             await campoDeTransaccion("confirmar")
-            enviarMail(composicionDelMensaje);
+            if (!testingVI) {
+                enviarMail(composicionDelMensaje);
+            }
             const ok = {
                 ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para recuperar tu cuenta",
             };
@@ -122,7 +133,9 @@ export const enviarCorreo = async (entrada) => {
             };
             // Enviamos el mensaje
             await campoDeTransaccion("confirmar")
-            enviarMail(composicionDelMensaje);
+            if (!testingVI) {
+                enviarMail(composicionDelMensaje);
+            }
             const ok = {
                 ok: "Se ha enviado un mensaje a tu correo con un enlace temporal para verificar tu VitiniID",
             };

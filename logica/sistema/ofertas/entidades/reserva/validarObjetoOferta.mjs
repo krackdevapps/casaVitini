@@ -67,7 +67,17 @@ export const validarObjetoOferta = async (data) => {
             const error = "El campo zonaIDV solo admite global, pública o privada"
             throw new Error(error)
         }
-
+        const testingVI = process.env.TESTINGVI
+        if (testingVI) {
+            validadoresCompartidos.tipos.cadena({
+                string: testingVI,
+                nombreCampo: "El campo testingVI",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+            oferta.testingVI = testingVI
+        }
         const mensajeError = (data) => {
             const numeroMaximo = data.numeroMaximo
             const tipoCondicionIDV = data.tipoCondicionIDV

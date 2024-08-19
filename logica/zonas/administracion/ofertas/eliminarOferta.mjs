@@ -1,32 +1,31 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerOferatPorOfertaUID } from "../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs";
-import { eliminarOferta as eliminarOferta_ } from "../../../repositorio/ofertas/eliminarOferta.mjs";
+import { eliminarOfertaPorOfertaUID } from "../../../repositorio/ofertas/eliminarOfertaPorOfertaUID.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 
-export const eliminarOferta = async (entrada, salida) => {
+export const eliminarOferta = async (entrada) => {
     const mutex = new Mutex()
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
 
         await mutex.acquire();
 
-        const ofertaUID = validadoresCompartidos.tipos.numero({
-            number: entrada.body.ofertaUID,
-            nombreCampo: "El identificador universal de la oferta (ofertaUID)",
-            filtro: "numeroSimple",
+        const ofertaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.ofertaUID,
+            nombreCampo: "El identificador universal de la reserva (ofertaUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            devuelveUnTipoNumber: "si"
         })
         await obtenerOferatPorOfertaUID(ofertaUID)
         await campoDeTransaccion("iniciar")
-        await eliminarOferta_(ofertaUID)
+        await eliminarOfertaPorOfertaUID(ofertaUID)
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha eliminado la oferta correctamente",

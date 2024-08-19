@@ -2,15 +2,14 @@ import { Mutex } from "async-mutex";
 import { obtenerDatosPersonales } from "../../repositorio/usuarios/obtenerDatosPersonales.mjs";
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
-
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 
-export const datosPersonalesDesdeMiCasa = async (entrada, salida) => {
+export const datosPersonalesDesdeMiCasa = async (entrada) => {
 
     const mutex = new Mutex()
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.control()
 
         mutex.acquire()

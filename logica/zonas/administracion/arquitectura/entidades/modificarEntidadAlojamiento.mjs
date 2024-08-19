@@ -19,6 +19,7 @@ import { insertarCaracteristicaArrayEnConfiguracionDeAlojamiento } from "../../.
 import { actualizarIDVenOfertas } from "../../../../sistema/arquitectura/entidades/actualizarIDVenOfertas.mjs";
 import { actualizarIDVenInstantaneasContenedorFinanciero } from "../../../../sistema/arquitectura/entidades/actualizarIDVenInstantaneasContenedorFinanciero.mjs";
 import { actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion } from "../../../../sistema/arquitectura/entidades/actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 
 export const modificarEntidadAlojamiento = async (entrada) => {
     const mutex = new Mutex();
@@ -92,6 +93,8 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 const error = "No se han podido guardar los datos porque no se ha encontrado el apartamento.";
                 throw new Error(error);
             }
+
+
             await eliminarCaracteristicasDelApartamentoPorApartamentoIDV(apartamentoIDV)
             if (caracteristicas.length > 0) {
                 await insertarCaracteristicaArrayEnConfiguracionDeAlojamiento({
@@ -99,44 +102,50 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                     apartamentoIDV: apartamentoIDV
                 })
             }
-            const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-            const tiempoZH = DateTime.now().setZone(zonaHoraria);
-            const fechaActual = tiempoZH.toISODate();
 
-            const reservasActivas = await obtenerReservasPresentesFuturas({
-                fechaActual: fechaActual,
+            const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
+                apartamentoIDV: apartamentoIDV,
+                errorSi: "desactivado"
             })
-            const reservasUIDArray = reservasActivas.map((reserva) => {
-                return reserva.reservaUID
-            })
+            if (configuracionAlojamiento) {
+                // Hay que detectar si la entidad de alojamiento, existe en una configuracion de alojamiento para hcaer lo sigueinte
 
-            //if (apartamentoIDV !== entidadIDV) {
-            await actualizaApartamentoPorApartamentoIDVPorReservaUID({
-                reservasUIDArray,
-                antiguoApartamentoIDV: entidadIDV,
-                nuevoApartamentoIDV: apartamentoIDV,
-                apartamentoUI: apartamentoUI
-            })
+                const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
+                const tiempoZH = DateTime.now().setZone(zonaHoraria);
+                const fechaActual = tiempoZH.toISODate();
 
-            // Actualizar en ofertas
-            await actualizarIDVenOfertas({
-                origenIDV: entidadIDV,
-                destinoIDV: apartamentoIDV
-            })
-            // Actualizar todos los IDV de todas las instantaneas
-            await actualizarIDVenInstantaneasContenedorFinanciero({
-                origenIDV: entidadIDV,
-                destinoIDV: apartamentoIDV,
-                reservasUIDArray
-            })
+                const reservasActivas = await obtenerReservasPresentesFuturas({
+                    fechaActual: fechaActual,
+                })
+                const reservasUIDArray = reservasActivas.map((reserva) => {
+                    return reserva.reservaUID
+                })
 
-            await actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion({
-                origenIDV: entidadIDV,
-                destinoIDV: apartamentoIDV,
-            })
-            //}
+                //if (apartamentoIDV !== entidadIDV) {
+                await actualizaApartamentoPorApartamentoIDVPorReservaUID({
+                    reservasUIDArray,
+                    antiguoApartamentoIDV: entidadIDV,
+                    nuevoApartamentoIDV: apartamentoIDV,
+                    apartamentoUI: apartamentoUI
+                })
 
-            // Se reconstruye el contendor fiancniero desde isntantaneas
+                // Actualizar en ofertas
+                await actualizarIDVenOfertas({
+                    origenIDV: entidadIDV,
+                    destinoIDV: apartamentoIDV
+                })
+                // Actualizar todos los IDV de todas las instantaneas
+                await actualizarIDVenInstantaneasContenedorFinanciero({
+                    origenIDV: entidadIDV,
+                    destinoIDV: apartamentoIDV,
+                    reservasUIDArray
+                })
+                await actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion({
+                    origenIDV: entidadIDV,
+                    destinoIDV: apartamentoIDV,
+                })
+            }
+
             await campoDeTransaccion("confirmar")
 
             const ok = {

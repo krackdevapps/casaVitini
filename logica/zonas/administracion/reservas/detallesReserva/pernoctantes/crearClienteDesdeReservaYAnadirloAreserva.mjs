@@ -56,6 +56,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
                 telefono: entrada.body.telefono,
                 correoElectronico: entrada.body.correoElectronico,
                 notas: entrada.body.notas,
+                testingVI: entrada.body.testingVI
             },
             operacion: "crear"
 

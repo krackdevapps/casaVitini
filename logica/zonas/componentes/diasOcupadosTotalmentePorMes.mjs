@@ -8,7 +8,7 @@ import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../repositorio/r
 import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../../repositorio/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs";
 
 
-export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
+export const diasOcupadosTotalmentePorMes = async (entrada) => {
     try {
         const ano = validadoresCompartidos.tipos.numero({
             number: entrada.body.ano,
@@ -42,7 +42,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada, salida) => {
         const ultimoDiaDelMes = constructorMes.endOf("month");
         // Extrae el número del último día del mes
         const numeroUltimoDia = ultimoDiaDelMes.day;
-        const rol = entrada.session.rolIDV;
+        const rol = entrada.session?.rolIDV;
         const rolAdministrador = "administrador";
         const rolEmpleado = "empleado";
         if (anoActual > ano) {

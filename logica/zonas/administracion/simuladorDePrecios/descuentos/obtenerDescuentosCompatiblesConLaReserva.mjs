@@ -1,6 +1,4 @@
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs"
-import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs"
-import { obtenerReservaPorReservaUID } from "../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
 import { selecionarOfertasPorCondicion } from "../../../../sistema/ofertas/entidades/reserva/selecionarOfertasPorCondicion.mjs"

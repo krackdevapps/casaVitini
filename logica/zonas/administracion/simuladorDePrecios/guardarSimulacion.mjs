@@ -45,6 +45,16 @@ export const guardarSimulacion = async (entrada) => {
             fechaSalida: fechaSalida,
             tipoVector: "diferente"
         })
+        const testingVI = process.env.TESTINGVI
+        if (testingVI) {
+            validadoresCompartidos.tipos.cadena({
+                string: testingVI,
+                nombreCampo: "El campo testingVI",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+        }
         await campoDeTransaccion("iniciar")
 
         const controlIDVUnicos = {}
@@ -96,7 +106,8 @@ export const guardarSimulacion = async (entrada) => {
             fechaEntrada,
             fechaSalida,
             apartamentosIDVARRAY,
-            reservaUID
+            reservaUID,
+            testingVI
         })
         await campoDeTransaccion("confirmar")
 

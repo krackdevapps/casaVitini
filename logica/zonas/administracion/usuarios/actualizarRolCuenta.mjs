@@ -1,6 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
 import { obtenerRol } from "../../../repositorio/usuarios/obtenerRol.mjs";
 import { actualizarRol } from "../../../repositorio/usuarios/actualizarRol.mjs";

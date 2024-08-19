@@ -1,7 +1,7 @@
 import { conexion } from "../../componentes/db.mjs";
 export const actualizarPernoctanteEnReservaPorClienteUID = async (data) => {
     try {
-        
+
         const clienteUID_origen = data.clienteUID_origen
         const clienteUID_destino = data.clienteUID_destino
 
@@ -18,7 +18,7 @@ export const actualizarPernoctanteEnReservaPorClienteUID = async (data) => {
             clienteUID_destino,
             clienteUID_origen
         ]
-        console.log(datosCliente)
+
         const resuelve = await conexion.query(consulta, datosCliente);
         return resuelve.rows[0]
     } catch (errorCapturado) {

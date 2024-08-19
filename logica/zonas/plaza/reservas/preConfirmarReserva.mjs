@@ -28,6 +28,15 @@ export const preConfirmarReserva = async (entrada) => {
             filtroTitular: "si"
         })
 
+
+        const testingVI = process.env.TESTINGVI
+        if (testingVI) {
+            reserva.testingVI = testingVI
+        }
+
+        // Si existe la variable, la reserva se guarda con variable de entorno
+        // No se envia el email de confirmacion en entorno de pruebas
+
         await campoDeTransaccion("iniciar")
         await eliminarBloqueoCaducado()
         const resolvertInsertarReserva = await insertarReserva(reserva)
@@ -46,7 +55,12 @@ export const preConfirmarReserva = async (entrada) => {
             ]
         })
         const pdf = await generadorPDF(resolverDetallesReserva);
-        enviarMailReservaConfirmada(reservaUID);
+
+        if (!testingVI) {
+            enviarMailReservaConfirmada(reservaUID);
+
+        }
+
         const ok = {
             ok: "Reserva confirmada",
             detalles: resolverDetallesReserva,

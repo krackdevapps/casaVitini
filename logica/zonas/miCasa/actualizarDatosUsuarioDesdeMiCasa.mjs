@@ -1,7 +1,6 @@
 import { actualizarDatos } from "../../repositorio/usuarios/actualizarDatos.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 import { desactivarCuenta } from "../../repositorio/usuarios/desactivarCuenta.mjs";
 import { obtenerDatosPersonales } from "../../repositorio/usuarios/obtenerDatosPersonales.mjs";

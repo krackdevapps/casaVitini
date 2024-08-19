@@ -24,7 +24,16 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "no",
         })
-
+        const testingVI = entrada.body.testingVI
+        if (testingVI) {
+            validadoresCompartidos.tipos.cadena({
+                string: entrada.body.testingVI,
+                nombreCampo: "El campo testingVI",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+        }
         if (tipoEntidad === "apartamento") {
             const apartamentoUI = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.apartamentoUI,
@@ -238,7 +247,8 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 camaIDV: camaIDV_unico,
                 camaUI,
                 capacidad,
-                tipoCama
+                tipoCama,
+                testingVI
             }
 
             const nuevaCama = await insertarCamaComoEntidad(dataInsertarCamaComoEntidad)

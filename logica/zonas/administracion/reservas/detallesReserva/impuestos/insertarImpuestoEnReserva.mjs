@@ -2,8 +2,6 @@ import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeT
 import { obtenerImpuestosPorImppuestoUID } from "../../../../../repositorio/impuestos/obtenerImpuestosPorImpuestoUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
-import { eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID.mjs"
-import { eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID.mjs"
 import { insertarImpuestoPorReservaUID } from "../../../../../repositorio/reservas/transacciones/impuestos/insertarImpuestoPorReservaUID.mjs"
 import { obtenerImpuestoPorImpuestoUIDPorReservaUID } from "../../../../../repositorio/reservas/transacciones/impuestos/obtenerImpuestoPorImpuestoUIDPorReservaUID.mjs"
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"

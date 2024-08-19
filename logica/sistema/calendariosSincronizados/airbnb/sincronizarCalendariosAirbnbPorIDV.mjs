@@ -5,9 +5,10 @@ import { obtenerCalendariosPorPlataformaIDVPorApartamentoIDV } from '../../../re
 
 export const sincronizarCalendariosAirbnbPorIDV = async (apartamentoIDV) => {
     try {
+
         const filtroCadena = /^[a-z0-9]+$/;
         if (!apartamentoIDV || !filtroCadena.test(apartamentoIDV)) {
-            const error = "Hay que definir el apartamentoIDV, solo se admiten números sin espacios.";
+            const error = "Hay que definir el apartamentoIDV, solo se admiten minusculas y numeros sin espacios.";
             throw new Error(error);
         }
         const plataformaDeOrigen = "airbnb"

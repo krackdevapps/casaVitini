@@ -2,9 +2,10 @@
 import { controlCaducidadEnlacesDePago } from "../../../sistema/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
-
 import { actualizarEnlaceDePagoPorEnlaceUID } from "../../../repositorio/enlacesDePago/actualizarEnlaceDePagoPorEnlaceUID.mjs";
 import { obtenerEnlaceDePagoPorEnlaceUID } from "../../../repositorio/enlacesDePago/obtenerEnlaceDePagoPorEnlaceUID.mjs";
+import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
+import { DateTime } from "luxon";
 
 export const modificarEnlace = async (entrada, salida) => {
     try {
@@ -19,13 +20,15 @@ export const modificarEnlace = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
         const horasCaducidad = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.horasCaducidad || 72,
+            string: entrada.body.horasCaducidad || "72",
             nombreCampo: "El campo horasCaducidad",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
 
         const nombreEnlace = validadoresCompartidos.tipos.cadena({
@@ -48,11 +51,15 @@ export const modificarEnlace = async (entrada, salida) => {
             filtro: "cadenaConNumerosConDosDecimales",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
+
         })
 
         await controlCaducidadEnlacesDePago();
         await obtenerEnlaceDePagoPorEnlaceUID(enlaceUID)
-        const fechaDeCaducidad = new Date(fechaActual.getTime() + (horasCaducidad * 60 * 60 * 1000));
+        const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
+        const tiempoZH = DateTime.now().setZone(zonaHoraria);
+        const fechaDeCaducidad = tiempoZH.plus({ hours: horasCaducidad }).toISO();
         await actualizarEnlaceDePagoPorEnlaceUID({
             nombreEnlace: nombreEnlace,
             descripcion: descripcion,

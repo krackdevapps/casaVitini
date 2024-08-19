@@ -37,17 +37,17 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-        const tipoElinacion = validadoresCompartidos.tipos.cadena({
+        const tipoEliminacion = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoEliminacion,
-            nombreCampo: "El tipoElinacion",
+            nombreCampo: "El tipoEliminacion",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
 
-        if (tipoElinacion !== "habitacion" && tipoElinacion !== "reserva") {
-            const error = "El campo 'tipoElinacion' solo puede ser 'habitacion' o 'reserva'";
+        if (tipoEliminacion !== "habitacion" && tipoEliminacion !== "reserva") {
+            const error = "El campo 'tipoEliminacion' solo puede ser 'habitacion' o 'reserva'";
             throw new Error(error);
         }
         await campoDeTransaccion("iniciar")
@@ -69,14 +69,14 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
             throw new Error(error);
         }
         await eliminarClientePoolPorPernoctanteUID(pernoctanteUID)
-        if (tipoElinacion === "habitacion") {
+        if (tipoEliminacion === "habitacion") {
             await actualizarHabitacionDelPernoctantePorComponenteUID({
                 reservaUID: reservaUID,
                 habitacionUID: null,
                 pernoctanteUID: pernoctanteUID
             })
         }
-        if (tipoElinacion === "reserva") {
+        if (tipoEliminacion === "reserva") {
             await eliminarPernoctantePorPernoctanteUID({
                 reservaUID: reservaUID,
                 pernoctanteUID: pernoctanteUID
@@ -84,10 +84,10 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
         }
         await campoDeTransaccion("confirmar")
         const ok = {};
-        if (tipoElinacion === "habitacion") {
+        if (tipoEliminacion === "habitacion") {
             ok.ok = "Se ha eliminado al pernoctante de la habitación"
         }
-        if (tipoElinacion === "reserva") {
+        if (tipoEliminacion === "reserva") {
             ok.ok = "Se ha eliminado al pernoctante de la reserva"
         }
         return ok

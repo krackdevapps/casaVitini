@@ -13,10 +13,10 @@ import { eliminarHabitacionComoEntidad } from '../../../../../logica/repositorio
 import { addHabitacionToConfiguracionApartamento } from '../../../../../logica/zonas/administracion/arquitectura/configuraciones/addHabitacionToConfiguracionApartamento.mjs';
 
 describe('configuration of hosting', () => {
-    const apartamentoIDV = "testingApartment"
-    const apartamentoUI = "Apartamento para testing"
-    const habitacionIDV = "habitacionparatesting"
-    const camaIDV = "camatesting"
+    const apartamentoIDV = "testingapartmentforconfigurationshostings"
+    const apartamentoUI = "Apartamento para testing de configuraciones de alojamiento"
+    const habitacionIDV = "habitacionparatestingdeconfiguraciones"
+    const camaIDV = "camatestingdeconfiguraciones"
     let habitacionUID
     const fakeAdminSession = {
         usuario: "test",

@@ -10,7 +10,7 @@ export const insertarOferta = async (data) => {
         const descuentosJSON = JSON.stringify(data.descuentosJSON)
         const estado = data.estado
         const zonaIDV = data.zonaIDV
-        const ofertaTVI = data.ofertaTVI
+        const testingVI = data.testingVI
 
         const consulta = `
             INSERT INTO "ofertas"
@@ -23,7 +23,7 @@ export const insertarOferta = async (data) => {
                 "descuentosJSON",
                 "estadoIDV",
                 "zonaIDV",
-                "ofertaTVI"
+                "testingVI"
             )
             VALUES
             (
@@ -51,7 +51,7 @@ export const insertarOferta = async (data) => {
             descuentosJSON,
             estado,
             zonaIDV,
-            ofertaTVI
+            testingVI
         ];
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {

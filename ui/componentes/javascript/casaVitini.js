@@ -478,7 +478,7 @@ const casaVitini = {
             },
         },
         arranque: async () => {
-            console.log("test")
+
             window.addEventListener("popstate", casaVitini.shell.navegacion.navegacionInversa)
             await casaVitini.shell.controladoresUI.controladorEstadoIDX()
             document.getElementById("botonMenuResponsivo").addEventListener("click", () => {
@@ -1809,7 +1809,7 @@ const casaVitini = {
                         const apartamentoIDV = data.apartamentoIDV
                         const total = data.total
                         const contenedorOfertas = data.contenedorOfertas
-                        console.log("S", apartamentoIDV)
+
 
                         const selectorApartamento = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
                         const selectorTotalUI = selectorApartamento.querySelector(`[componente=valorTotal]`)
@@ -1894,7 +1894,7 @@ const casaVitini = {
                     },
                     ofertas: {
                         ofertaUI: function (data) {
-                            console.log("data", data)
+
                             const contenedorOferta = data.contenedorOferta
                             const nombreOferta = contenedorOferta.nombreOferta
                             const fechaInicio = contenedorOferta.fechaInicio
@@ -22429,7 +22429,7 @@ const casaVitini = {
 
                                 if (Object.entries(porApartamento).length === 0) {
                                     const contenedorApartamento_obosoletos = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[contenedor=porApartamento]").querySelectorAll("[apartamentoIDV]")
-                                    console.log("contenedores, obsoletos", contenedorApartamento_obosoletos)
+
                                     contenedorApartamento_obosoletos.forEach((contenedorObsoleto) =>
                                         contenedorObsoleto.querySelector("[contenedor=descuentosDelApartamento]")?.remove()
                                     )
@@ -22483,7 +22483,7 @@ const casaVitini = {
 
                                     }
                                     const contenedorDescuentosPorApartamento_renderizado = contenedorApartamento.querySelector("[contenedor=descuentosDelApartamento]")
-                                    console.log("contenedorDescuentosPorApartamento_renderizado", contenedorDescuentosPorApartamento_renderizado)
+
 
                                     const totalConDescuentosAplicados = contenedorDescuentosPorApartamento_renderizado.querySelector("[dato=totalConDescuentosAplicados]")
                                     totalConDescuentosAplicados.innerText = `${totalDescuentosAplicados}$ Suma total de descuentos aplicados al apartamento`
@@ -22492,7 +22492,7 @@ const casaVitini = {
                                     totalNetoConDescuentosUI.innerText = `${totalNetoConDescuentos}$ Neto del apartamento con descuentos aplicados`
 
                                     const contenedorDesgloseDescuentos = contenedorDescuentosPorApartamento_renderizado.querySelector("[contenedor=descuentos]")
-                                    console.log("contenedorDesgloseDescuentos", contenedorDesgloseDescuentos)
+
 
                                     contenedorDesgloseDescuentos.innerHTML = null
 
@@ -22505,7 +22505,7 @@ const casaVitini = {
                                         const descuentoAplicado = detallesDelDescuento.descuentoAplicado
                                         const totalConDescuento = detallesDelDescuento.totalConDescuento
 
-                                        console.log("ofertaUID", ofertaUID)
+
 
                                         const contenedor = document.createElement("div")
                                         contenedor.classList.add("porApartamento")
@@ -24509,15 +24509,15 @@ const casaVitini = {
                     botonAceptar.classList.add("botonPrivacidad")
                     botonAceptar.innerText = "Aceptar todo"
                     botonAceptar.addEventListener("click", () => {
-                        console.log("boton aceptar")
+
                         casaVitini.componentes.privacidad.crearCookieConsentimiento()
-                       // casaVitini.shell.arranque()
-                       const url = window.location.pathname;
-                       if (url === "/") {
-                           return casaVitini.shell.navegacion.controladorVista("portada")
-                       } else {
-                           return casaVitini.shell.navegacion.controladorVista(url)
-                       }
+                        // casaVitini.shell.arranque()
+                        const url = window.location.pathname;
+                        if (url === "/") {
+                            return casaVitini.shell.navegacion.controladorVista("portada")
+                        } else {
+                            return casaVitini.shell.navegacion.controladorVista(url)
+                        }
                     })
                     contenedorDecision.appendChild(botonAceptar)
                     return contenedorDecision

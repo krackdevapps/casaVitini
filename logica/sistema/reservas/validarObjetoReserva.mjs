@@ -133,15 +133,12 @@ export const validarObjetoReserva = async (data) => {
             const habitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV) || []
 
             habitacionesPorApartamento.forEach((habitacionApartamento) => {
-                const habitacionIDV = habitacionApartamento.habitacion
-                const habitacionUID = habitacionApartamento.uid
+                const habitacionIDV = habitacionApartamento.habitacionIDV
+                const habitacionUID = habitacionApartamento.componenteUID
                 habitacionesEstructura[habitacionIDV] = habitacionUID
                 habitacionesSoloIDV.push(habitacionIDV)
             })
-
         }
-
-
         const resueleApartamentosDisponibles = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,

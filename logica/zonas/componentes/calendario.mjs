@@ -3,9 +3,7 @@ import { codigoZonaHoraria } from "../../sistema/configuracion/codigoZonaHoraria
 import { obtenerParametroConfiguracion } from "../../sistema/configuracion/obtenerParametroConfiguracion.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
-
-
-export const calendario = async (entrada, salida) => {
+export const calendario = async (entrada) => {
     try {
         const tipo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipo,
@@ -63,6 +61,7 @@ export const calendario = async (entrada, salida) => {
                 dia: fechaLimiteFuturo.day,
             };
             const respuesta = {
+                ok: "Aqui tienes los datos de contruccio del calendario",
                 calendario: "ok",
                 ano: anoActual,
                 mes: mesActual,
@@ -81,9 +80,8 @@ export const calendario = async (entrada, salida) => {
                     }
                 }
             };
-           return respuesta
-        }
-        if (tipo === "personalizado") {
+            return respuesta
+        } else if (tipo === "personalizado") {
             const ano = validadoresCompartidos.tipos.numero({
                 number: entrada.body.ano,
                 nombreCampo: "El campo del año",
@@ -141,6 +139,7 @@ export const calendario = async (entrada, salida) => {
             const fecha = DateTime.fromObject({ year: ano, month: mes, day: 1 });
             const numeroDeDiasPorMes = fecha.daysInMonth;
             const posicionDiaComienzoMes = fecha.weekday;
+            calendario.ok = "Aqui tienes los datos de contruccio del calendario"
             calendario.calendario = "ok";
             calendario.ano = ano;
             calendario.mes = mes;
@@ -176,7 +175,7 @@ export const calendario = async (entrada, salida) => {
                     ano: primeraFechaDisponible.year
                 }
             };
-           return calendario
+            return calendario
         }
     } catch (errorCapturado) {
         throw errorCapturado

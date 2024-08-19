@@ -2,7 +2,6 @@
 import { describe, expect, test } from '@jest/globals';
 import { obtenerReservasDelCliente } from '../../../logica/repositorio/clientes/obtenerReservasDelCliente.mjs';
 import { insertarComportamientoDePrecio } from '../../../logica/repositorio/comportamientoDePrecios/insertarComportamientoDePrecio.mjs';
-import { eliminarComportamientoPorComportamientoTVI } from '../../../logica/repositorio/comportamientoDePrecios/eliminarComportamientoPorComportamientoTVI.mjs';
 import { insertarApartamentoComoEntidad } from '../../../logica/repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
 import { insertarConfiguracionApartamento } from '../../../logica/repositorio/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
 import { eliminarApartamentoComoEntidad } from '../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
@@ -17,9 +16,10 @@ import { obtenerComportamientosPorRangoPorTipoIDV } from '../../../logica/reposi
 import { obtenerComportamientosPorTipoIDVPorDiasArray } from '../../../logica/repositorio/comportamientoDePrecios/obtenerComportamientosPorTipoIDVPorDiasArray.mjs';
 import { obtenerComportamientosOrdenadorPorFechaInicio } from '../../../logica/repositorio/comportamientoDePrecios/obtenerTodosComportamientosOrdenadorPorFechaInicio.mjs';
 import { eliminarComportamientoPorComportamientoUID } from '../../../logica/repositorio/comportamientoDePrecios/eliminarComportamientoPorComportamientoUID.mjs';
+import { eliminarComportamientoPorTestingVI } from '../../../logica/repositorio/comportamientoDePrecios/eliminarComportamientoPorTestingVI.mjs';
 
 describe('crud prices behavior by range', () => {
-    const clineteTVI = "clienteTest"
+    const testingVI = "clienteTest"
     const nombreComportamiento = "comportamientoTest"
     const fechaInicio = "2020-01-01"
     const fechaFinal = "2022-01-01"
@@ -31,7 +31,7 @@ describe('crud prices behavior by range', () => {
     let nuevoComportamientoUID = 0
 
     beforeAll(async () => {
-        await eliminarComportamientoPorComportamientoTVI(comportamientoTVI)
+        await eliminarComportamientoPorTestingVI(comportamientoTVI)
         await eliminarApartamentoComoEntidad(apartamentoTest)
         await eliminarConfiguracionPorApartamentoIDV(apartamentoTest)
 
@@ -199,7 +199,7 @@ describe('crud prices behavior by range', () => {
     })
 
     afterAll(async () => {
-        await eliminarComportamientoPorComportamientoTVI(comportamientoTVI)
+        await eliminarComportamientoPorTestingVI(comportamientoTVI)
         await eliminarApartamentoComoEntidad(apartamentoTest)
         await eliminarConfiguracionPorApartamentoIDV(apartamentoTest)
     });

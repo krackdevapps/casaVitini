@@ -1,6 +1,6 @@
 
 import { obtenerMensajes as om } from "../../../repositorio/portada/obtenerMensajes.mjs";
-export const obtenerMensajes = async (entrada, salida) => {
+export const obtenerMensajes = async () => {
     try {
         const mensajes = await om()
 

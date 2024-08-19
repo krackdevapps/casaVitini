@@ -21,6 +21,7 @@ export const estadoReserva = async (entrada, salida) => {
         })
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const ok = {
+            ok: "Datos de los estados de la reserva",
             estadoReserva: reserva.estadoReservaIDV,
             estadoPago: reserva.estadoPagoIDV
         };

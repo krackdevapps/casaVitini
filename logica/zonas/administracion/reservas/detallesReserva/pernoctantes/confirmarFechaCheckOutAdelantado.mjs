@@ -16,7 +16,7 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
         IDX.control()
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pernoctanteUID,
-            nombreCampo: "El identificador universal de la reserva (pernoctanteUID)",
+            nombreCampo: "El identificador universal (pernoctanteUID)",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -24,7 +24,7 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
         })
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
-            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            nombreCampo: "El identificador universal (reservaUID)",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",

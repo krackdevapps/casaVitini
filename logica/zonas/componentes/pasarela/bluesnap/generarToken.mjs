@@ -1,4 +1,6 @@
 export const generarToken = async (entrada, salida) => {
+    const m = "Funcion deshabilitada"
+    throw new Error(m)
     const entornoApi = process.env.BLUESNAP_ENTORNO;
     const blueSnapUser = process.env.BLUESNAP_USER;
     const blueSnapPass = process.env.BLUESNAP_PASS;

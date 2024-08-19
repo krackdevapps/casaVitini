@@ -75,6 +75,8 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             entidadIDV: "reserva",
             codigosDescuentoArray: codigosDescuentoArray
         })
+
+
         //Buscar en ofertas activas, publicas o globales, que tienen este codigo
         if (ofertasActivas.length === 0) {
             const m = "El código introducido no se reconoce"

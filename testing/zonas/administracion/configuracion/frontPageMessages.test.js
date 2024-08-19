@@ -18,13 +18,14 @@ describe('Frontpage messages system', () => {
     let mensajeUID
     beforeAll(async () => {
         await elminarMensajeEnPortadaPorTestingVI(testingVI)
+        process.env.TESTINGVI = testingVI
+
     })
 
     test('create new message with ok', async () => {
         const m = {
             body: {
                 mensaje: "Mensaje de prueba para testing",
-                testing: "testing"
             },
             session: fakeAdminSession
         }
@@ -81,7 +82,6 @@ describe('Frontpage messages system', () => {
         const m_volatil = {
             body: {
                 mensaje: "Mensaje de prueba para testing",
-                testing: "testing"
             },
             session: fakeAdminSession
         }

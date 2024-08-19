@@ -29,6 +29,7 @@ export const insertarReserva = async (reserva) => {
         const fechaCreacion = DateTime.utc().toISO()
         const alojamiento = reserva.alojamiento
         const datosTitular = reserva.datosTitular
+        const testingVI = reserva.testingVI
         const titularReservaPool = datosTitular.nombreTitular
         const pasaporteTitularPool = datosTitular.pasaporteTitular
         const correoTitular = datosTitular.correoTitular
@@ -43,7 +44,8 @@ export const insertarReserva = async (reserva) => {
             origen: origen,
             fechaCreacion,
             estadoPago: estadoPago,
-            reservaUID: reservaUID
+            reservaUID: reservaUID,
+            testingVI: testingVI
         })
         await insertarTitularPool({
             titularReservaPool: titularReservaPool,

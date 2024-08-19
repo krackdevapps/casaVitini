@@ -1,6 +1,5 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { buscarUsuariosPorTermino } from "../../../repositorio/usuarios/buscarUsuarios.mjs";
 
 export const buscarUsuarios = async (entrada, salida) => {
@@ -73,6 +72,7 @@ export const buscarUsuarios = async (entrada, salida) => {
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
         const corretorNumeroPagina = String(numeroPagina).replace("0", "");
         const Respuesta = {
+            ok: "Resultados de la busqueda",
             buscar: buscar,
             totalUsuarios: Number(consultaConteoTotalFilas),
             nombreColumna: nombreColumna,

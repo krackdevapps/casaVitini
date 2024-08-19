@@ -47,7 +47,7 @@ export const generarSimulacion = async (entrada) => {
                 errorSi: "noExiste"
             })
         }
-
+     
         mutex.acquire()
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });

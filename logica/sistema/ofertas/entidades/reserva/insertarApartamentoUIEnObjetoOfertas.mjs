@@ -14,7 +14,7 @@ export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => 
             })).apartamentoUI
             contenedorApartamento.apartamentoUI = apartamentoUI
         }
-        console.log("descuentosPorApartamentos", descuentosPorApartamentos)
+
 
         // Descuentos por dias con apartamentos especificos
         const descuentosPorDiasConApartamentos = contenedorOferta?.descuentosJSON?.descuentoPorDias || []

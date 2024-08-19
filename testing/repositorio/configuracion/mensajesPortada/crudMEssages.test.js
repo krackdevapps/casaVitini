@@ -1,7 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { insertarMensajeEnPortada } from '../../../../logica/repositorio/configuracion/mensajesPortada/insertarMensajeEnPortada.mjs';
-import { eliminarMensajeEnPortadaPorMensajeTVI } from '../../../../logica/repositorio/configuracion/mensajesPortada/elminarMensajeEnPortadaPorMensajeTVI.mjs';
 import { actualizarContenidoMensajeDePortada } from '../../../../logica/repositorio/configuracion/mensajesPortada/actualizarContenidoMensajeDePortada.mjs';
 import { actualizarEstadoMensajeDePortada } from '../../../../logica/repositorio/configuracion/mensajesPortada/actualizarEstadoMensajeDePortada.mjs';
 import { actualizaOrdenDePosiciones } from '../../../../logica/repositorio/configuracion/mensajesPortada/actualizarOrdenDePosiciones.mjs';
@@ -10,13 +9,14 @@ import { obtenerMensajePorMensajeUID } from '../../../../logica/repositorio/conf
 import { obtenerMensajePorPosicion } from '../../../../logica/repositorio/configuracion/mensajesPortada/obtenerMensajePorPosicion.mjs';
 import { obtenerTodosLosMensjaes } from '../../../../logica/repositorio/configuracion/mensajesPortada/obtenerTodosLosMensajes.mjs';
 import { eliminarMensajeEnPortada } from '../../../../logica/repositorio/configuracion/mensajesPortada/elminarMensajeEnPortada.mjs';
+import { elminarMensajeEnPortadaPorTestingVI } from '../../../../logica/repositorio/configuracion/mensajesPortada/elminarMensajeEnPortadaPorTestingVI.mjs';
 
 describe('crud messages of front page', () => {
-    const mensajeTVI = "mensajeTEST"
-    let nuevoMensajeUID = 0
+    const testingVI = "mensajeTEST"
+    let nuevoMensajeUID
 
     beforeAll(async () => {
-        await eliminarMensajeEnPortadaPorMensajeTVI(mensajeTVI)
+        await elminarMensajeEnPortadaPorTestingVI(testingVI)
 
     })
     test('insert new message', async () => {
@@ -24,7 +24,7 @@ describe('crud messages of front page', () => {
             mensajeB64: "testBase64",
             estadoInicial: "desactivado",
             posicionInicial: "999",
-            mensajeTVI: mensajeTVI
+            testingVI: testingVI
         })
         nuevoMensajeUID = response.mensajeUID
         expect(response).not.toBeUndefined();
@@ -90,6 +90,6 @@ describe('crud messages of front page', () => {
     })
 
     afterAll(async () => {
-        await eliminarMensajeEnPortadaPorMensajeTVI(mensajeTVI)
+        await elminarMensajeEnPortadaPorTestingVI(testingVI)
     });
 })

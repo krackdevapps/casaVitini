@@ -20,6 +20,8 @@ export const insertarSimulacion = async (data) => {
         const instantaneaOfertasPorCondicion = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porCondicion)
         const instantaneaOfertasPorAdministrador = JSON.stringify(desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador)
 
+        const testingVI = data.testingVI
+
         const consulta = `
         INSERT INTO
         "simulacionesDePrecio"
@@ -34,9 +36,10 @@ export const insertarSimulacion = async (data) => {
         "fechaEntrada",
         "fechaSalida",
         "apartamentosIDVARRAY",
-        "reservaUID"
+        "reservaUID",
+        "testingVI"
         )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
         RETURNING *
         `
         const parametros = [
@@ -50,7 +53,8 @@ export const insertarSimulacion = async (data) => {
             fechaEntrada,
             fechaSalida,
             apartamentosIDVARRAY,
-            reservaUID
+            reservaUID,
+            testingVI
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

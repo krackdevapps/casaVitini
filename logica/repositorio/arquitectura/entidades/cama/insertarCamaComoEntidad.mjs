@@ -6,6 +6,7 @@ export const insertarCamaComoEntidad = async (data) => {
     const camaUI = data.camaUI
     const capacidad = data.capacidad
     const tipoCama = data.tipoCama
+    const testingVI = data.testingVI
 
     try {
         const consulta = `
@@ -14,14 +15,16 @@ export const insertarCamaComoEntidad = async (data) => {
         "camaIDV",
         "camaUI",
         capacidad,
-        "tipoIDV"
+        "tipoIDV",
+        "testingVI"
         )
         VALUES 
         (
         $1,
         $2,
         $3,
-        $4
+        $4,
+        $5
         )
         RETURNING *
         `;
@@ -29,7 +32,8 @@ export const insertarCamaComoEntidad = async (data) => {
             camaIDV,
             camaUI,
             capacidad,
-            tipoCama
+            tipoCama,
+            testingVI
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {
