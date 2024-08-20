@@ -1,6 +1,5 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerInterruptorPorInterruptorIDV } from "../../../../repositorio/configuracion/interruptores/obtenerInterruptorPorInterruptorIDV.mjs";
 import { actualizarEstadoDelInterruptor } from "../../../../repositorio/configuracion/interruptores/actualizarEstadoDelInterruptor.mjs";
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs";

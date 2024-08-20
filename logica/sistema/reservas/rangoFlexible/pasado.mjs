@@ -13,15 +13,6 @@ export const validadorPasado = async (data) => {
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
         const apartamentosReservaActual = data.apartamentosReservaActual
         const reservaUID = data.reservaUID
-
-        // cuidado con el primer rangoPasadoLibre, si no hay apartamentos en futuro tambien da rangoPasadolibre
-        // if (resuelveConsultaAlojamientoReservaActual.rowCount === 0) {
-        //     const ok = {
-        //         ok: "rangoPasadoLibre"
-        //     }
-        //     return ok
-        // }
-
         const anoReservaSalida = fechaSalidaReserva_ISO.split("-")[0]
         const mesReservaSalida = fechaSalidaReserva_ISO.split("-")[1]
 
@@ -37,8 +28,8 @@ export const validadorPasado = async (data) => {
         }
         /// No se tiene en en cuenta los apartamentos, solo busca bloqueos a saco partir de la fecha
         const configuracionBloqueos = {
-            fechaInicioRango_ISO: fechaSeleccionadaParaPasado_ISO,
-            fechaFinRango_ISO: fechaEntradaReserva_ISO,
+            fechaInicioRango: fechaSeleccionadaParaPasado_ISO,
+            fechaFinRango: fechaEntradaReserva_ISO,
             apartamentoIDV: apartamentosReservaActual,
             zonaBloqueo_array: [
                 "global",
@@ -48,12 +39,12 @@ export const validadorPasado = async (data) => {
         const bloqueosSeleccionados = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
         const contenedorBloqueosEncontrados = []
         for (const detallesDelBloqueo of bloqueosSeleccionados) {
-            const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada
-            const fechaSalidaBloqueo_ISO = detallesDelBloqueo.fechaSalida
-            const apartamento = detallesDelBloqueo.apartamento
-            const bloqueoUID = detallesDelBloqueo.uid
+            const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaInicio
+            const fechaSalidaBloqueo_ISO = detallesDelBloqueo.fechaFin
+            const apartamento = detallesDelBloqueo.apartamentoIDV
+            const bloqueoUID = detallesDelBloqueo.bloqueoUID
             const motivo = detallesDelBloqueo.motivo
-            const tipoBloqueo = detallesDelBloqueo.tipoBloqueo
+            const tipoBloqueo = detallesDelBloqueo.tipoBloqueoIDV
             const estructura = {
                 fechaEntrada: fechaEntradaBloqueo_ISO,
                 fechaSalida: fechaSalidaBloqueo_ISO,
@@ -78,7 +69,7 @@ export const validadorPasado = async (data) => {
             const reservaUID = detallesReserva.reservaUID
             const fechaEntrada = detallesReserva.fechaEntrada
             const fechaSalida = detallesReserva.fechaSalida
-            const apartamentos = detallesReserva.apartamentos
+            const apartamentos = detallesReserva.apartamentosIDV
             const estructura = {
                 fechaEntrada: fechaEntrada,
                 fechaSalida: fechaSalida,

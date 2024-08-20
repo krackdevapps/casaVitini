@@ -65,59 +65,10 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
             throw new Error(error);
         }
 
-
-
         const fechaEntrada = reserva.fechaEntrada;
         const fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
         const fechaSalida = reserva.fechaSalida;
         const fechaSalida_Objeto = DateTime.fromISO(fechaSalida, { zone: zonaHoraria });
-
-        // const constructorFechasFinales = (data) => {
-        //     try {
-        //         const sentidoRango = data.sentidoRango
-        //         const fechaEntrada_inicial = data.fechaEntrada_inicial
-        //         const fechaSalida_inicial = data.fechaSalida_inicial
-        //         const fechaSolicitada = data.fechaSolicitada
-        //         const fechaFinal = {
-        //             fechaEntrada_final: fechaEntrada_inicial,
-        //             fechaSalida_final: fechaSalida_inicial
-        //         }
-        //         if (sentidoRango === "pasado") {
-        //             fechaFinal.fechaEntrada_final = fechaSolicitada
-        //         } else if (sentidoRango === "futuro") {
-        //             fechaFinal.fechaSalida_final = fechaSolicitada
-        //         } else {
-        //             const m = "constructorFechasFinales no reconoce le sentido de rango"
-        //             throw new Error(m)
-        //         }
-        //         return fechaFinal
-        //     } catch (error) {
-        //         throw error
-        //     }
-        // }
-
-        // const fechasFinales = constructorFechasFinales({
-        //     sentidoRango,
-        //     fechaEntrada_inicial: fechaEntrada,
-        //     fechaSalida_inicial: fechaSalida,
-        //     fechaSolicitada: fechaSolicitada_ISO
-        // })
-
-
-        // const diasObsoletos = utilidades.conversor.compararFechasYExtraerDiasQueNoEstenEnElRangoSegundo({
-        //     fechaInicio_rango_uno: fechaEntrada,
-        //     fechaFin_rango_uno: fechaSalida,
-        //     fechaInicio_rango_dos: fechasFinales.fechaEntrada_final,
-        //     fechaFin_rango_dos: fechasFinales.fechaSalida_final,
-        // })
-
-        // if (diasObsoletos.length > 0) {
-        //   await eliminarSobreControlApartamentoPorNochePorArrayDeFechas({
-        //         reservaUID,
-        //         fechasNochesARRAY: diasObsoletos,
-
-        //     })
-        // }
 
         const metadatos = {
             reservaUID,
@@ -148,8 +99,8 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
             if ((codigoFinal === "rangoPasadoLimitado")
                 &&
                 (fechaEntrada_Objeto > fechaSolicitada_objeto)) {
-                const fechaLimite_objeto = DateTime.fromISO(transaccionInterna.limitePasado);
-                if (fechaLimite_objeto > fechaSolicitada_objeto) {
+                const fechaLimite_objeto = DateTime.fromISO(transaccionInterna.limitePasado, { zone: zonaHoraria });
+                if (fechaLimite_objeto >= fechaSolicitada_objeto) {
                     const estructura = {
                         detallesDelError: mensajeSinPasado,
                         ...transaccionInterna
@@ -174,8 +125,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
             };
             return ok
 
-        }
-        if (sentidoRango === "futuro") {
+        } else if (sentidoRango === "futuro") {
             if (fechaSolicitada_objeto <= fechaEntrada_Objeto) {
                 const error = "La fecha de salida solicitada no puede ser igual o inferior a la fecha de entrada de la reserva.";
                 throw new Error(error);
@@ -191,12 +141,10 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                     ...transaccionInterna
                 };
                 throw new vitiniSysError(estructura);
-            }
-
-            if ((codigoFinal === "rangoFuturoLimitado")
+            } else if ((codigoFinal === "rangoFuturoLimitado")
                 &&
                 (fechaSalida_Objeto < fechaSolicitada_objeto)) {
-                const fechaLimite_objeto = DateTime.fromISO(transaccionInterna.limiteFuturo);
+                const fechaLimite_objeto = DateTime.fromISO(transaccionInterna.limiteFuturo, { zone: zonaHoraria });
                 if (fechaLimite_objeto <= fechaSolicitada_objeto) {
                     const estructura = {
                         detallesDelError: mensajeSinFuturo,
@@ -210,7 +158,6 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 reservaUID: reservaUID
             })
             const nuevaFechaSalida = reservaActualizada.fechaSalida;
-
             const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)
             await campoDeTransaccion("confirmar")
             const ok = {

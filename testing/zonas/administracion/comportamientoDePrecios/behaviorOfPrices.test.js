@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { crearComportamiento } from '../../../../logica/zonas/administracion/comportamientoDePrecios/crearComportamiento.mjs';
-import { eliminarComportamientoPorTestinVI } from '../../../../logica/repositorio/comportamientoDePrecios/eliminarComportamientoPorTestinVI.mjs';
+import { eliminarComportamientoPorTestingVI } from '../../../../logica/repositorio/comportamientoDePrecios/eliminarComportamientoPorTestingVI.mjs';
 import { actualizarEstadoComportamiento } from '../../../../logica/zonas/administracion/comportamientoDePrecios/actualizarEstadoComportamiento.mjs';
 import { detallesComportamiento } from '../../../../logica/zonas/administracion/comportamientoDePrecios/detallesComportamiento.mjs';
 import { listaComportamientosPrecios } from '../../../../logica/zonas/administracion/comportamientoDePrecios/listaComportamientosPrecios.mjs';
@@ -22,7 +22,7 @@ describe('behavior of prices clients', () => {
     const camaIDV = "temporalbedfortestingaddapartamentotoreserve"
     const camaUI = "Cama temporal para testing de discounts"
     beforeAll(async () => {
-        await eliminarComportamientoPorTestinVI(testingVI)
+        await eliminarComportamientoPorTestingVI(testingVI)
         process.env.TESTINGVI = testingVI
 
     
@@ -41,6 +41,7 @@ describe('behavior of prices clients', () => {
             camaIDV: camaIDV,
             camaUI: camaUI,
         })
+  
     })
 
     test('make behavior type by range of price with ok', async () => {
@@ -174,7 +175,7 @@ describe('behavior of prices clients', () => {
     })
 
     afterAll(async () => {
-        await eliminarComportamientoPorTestinVI(testingVI)
+        await eliminarComportamientoPorTestingVI(testingVI)
         await makeHostArquitecture({
             operacion: "eliminar",
             apartamentoIDV: apartamentoIDV,

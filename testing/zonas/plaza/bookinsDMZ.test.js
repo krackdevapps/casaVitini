@@ -33,7 +33,6 @@ describe('miCasa bookins', () => {
     const fechaInicioVirutal_offer = DateTime.fromISO(fechaCreacionVirtual).minus({ days: 2 }).toISODate();
     const fechaFinalVirtual_offer = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 3 }).toISODate();
 
-
     const fechaInicioVirutal = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 2 }).toISODate();
     const fechaFinalVirtual = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 3 }).toISODate();
     const codeOffer = "testingDMZBookinmethods"
@@ -57,6 +56,10 @@ describe('miCasa bookins', () => {
     }
 
     beforeAll(async () => {
+        // await actualizarEstado({
+        //     interruptorIDV: "aceptarReservasPublicas",
+        //     estado: "activado"
+        // })
         process.env.TESTINGVI = testingVI
         await eliminarClientePorTestingVI(testingVI)
         await eliminarReservaPorTestingVI(testingVI)

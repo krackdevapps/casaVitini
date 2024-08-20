@@ -30,8 +30,8 @@ export const validadorFuturo = async (data) => {
             throw new Error(error)
         }
         const configuracionBloqueos = {
-            fechaInicioRango_ISO: fechaSalidaReserva_ISO,
-            fechaFinRango_ISO: fechaSeleccionadaParaFuturo_ISO,
+            fechaInicioRango: fechaSalidaReserva_ISO,
+            fechaFinRango: fechaSeleccionadaParaFuturo_ISO,
             apartamentoIDV: apartamentosReservaActual,
             zonaBloqueo_array: [
                 "global",
@@ -39,15 +39,14 @@ export const validadorFuturo = async (data) => {
             ],
         }
         const bloqueosSeleccionados = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
-
         const contenedorBloqueosEncontrados = []
         for (const detallesDelBloqueo of bloqueosSeleccionados) {
-            const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaEntrada
-            const fechaSalidaBloqueo_ISO = detallesDelBloqueo.fechaSalida
-            const apartamento = detallesDelBloqueo.apartamento
-            const bloqueoUID = detallesDelBloqueo.uid
+            const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaInicio
+            const fechaSalidaBloqueo_ISO = detallesDelBloqueo.fechaFin
+            const apartamento = detallesDelBloqueo.apartamentoIDV
+            const bloqueoUID = detallesDelBloqueo.bloqueoUID
             const motivo = detallesDelBloqueo.motivo
-            const tipoBloqueo = detallesDelBloqueo.tipoBloqueo
+            const tipoBloqueo = detallesDelBloqueo.tipoBloqueoIDV
             const estructura = {
                 fechaEntrada: fechaEntradaBloqueo_ISO,
                 fechaSalida: fechaSalidaBloqueo_ISO,
@@ -72,7 +71,7 @@ export const validadorFuturo = async (data) => {
             const reserva = detallesReserva.reserva
             const fechaEntrada = detallesReserva.fechaEntrada
             const fechaSalida = detallesReserva.fechaSalida
-            const apartamentos = detallesReserva.apartamentos
+            const apartamentos = detallesReserva.apartamentosIDV
             const estructura = {
                 fechaEntrada: fechaEntrada,
                 fechaSalida: fechaSalida,
