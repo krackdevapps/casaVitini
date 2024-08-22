@@ -19534,9 +19534,9 @@ const casaVitini = {
 
                         for (const contenedorApartamento of apartamentos) {
                             const apartamentoIDV = contenedorApartamento.apartamentoIDV
-                            const error = "Sin información"
+                            const error = `Configuracíon de alojamiento inexistente (${apartamentoIDV})`
                             const configuracionDeAlojamiento = await casaVitini.administracion.componentes.obtenerConfiguracionAlojamiento(apartamentoIDV)
-                            const apartamentoUI = configuracionDeAlojamiento.apartamentoUI || error
+                            const apartamentoUI = configuracionDeAlojamiento?.apartamentoUI || error
                             const infoSinApartamento = document.querySelector("[componente=infoSinApartamento]")
                             infoSinApartamento.style.display = "none"
 
@@ -22897,9 +22897,9 @@ const casaVitini = {
 
                             for (const contenedorApartamento of apartamentos) {
                                 const apartamentoIDV = contenedorApartamento.apartamentoIDV
-                                const error = "Sin información"
+                                const error = `Configuracíon de alojamiento inexistente (${apartamentoIDV})`
                                 const configuracionDeAlojamiento = await casaVitini.administracion.componentes.obtenerConfiguracionAlojamiento(apartamentoIDV)
-                                const apartamentoUI = configuracionDeAlojamiento.apartamentoUI || error
+                                const apartamentoUI = configuracionDeAlojamiento?.apartamentoUI || error
                                 const infoSinApartamento = descuentoUI.querySelector("[componente=infoSinApartamento]")
                                 infoSinApartamento.style.display = "none"
 
@@ -22970,9 +22970,9 @@ const casaVitini = {
                             const apartamentoIDV = apartamento.apartamentoIDV
                             const descuentoTotal = apartamento.descuentoTotal
                             const tipoAplicacion = apartamento.tipoAplicacion
-                            const error = "Sin información"
+                            const error = `Configuracíon de alojamiento inexistente (${apartamentoIDV})`
                             const configuracionDeAlojamiento = await casaVitini.administracion.componentes.obtenerConfiguracionAlojamiento(apartamentoIDV)
-                            const apartamentoUI = configuracionDeAlojamiento.apartamentoUI || error
+                            const apartamentoUI = configuracionDeAlojamiento?.apartamentoUI || error
                             const infoSinApartamento = contenedorApartamentos.querySelector("[componente=infoSinApartamento]")
                             infoSinApartamento.style.display = "none"
 
@@ -23072,9 +23072,9 @@ const casaVitini = {
                                         const apartamentoIDV = apartamento.apartamentoIDV
                                         const descuentoTotal = apartamento.descuentoTotal
                                         const tipoAplicacion = apartamento.tipoAplicacion
-                                        const error = "Sin información"
+                                        const error = `Configuracíon de alojamiento inexistente (${apartamentoIDV})`
                                         const configuracionDeAlojamiento = await casaVitini.administracion.componentes.obtenerConfiguracionAlojamiento(apartamentoIDV)
-                                        const apartamentoUI = configuracionDeAlojamiento.apartamentoUI || error
+                                        const apartamentoUI = configuracionDeAlojamiento?.apartamentoUI || error
                                         const infoSinApartamento = contenedorDia.querySelector("[componente=infoSinApartamento]")
                                         infoSinApartamento.style.display = "none"
 
@@ -28773,8 +28773,8 @@ const casaVitini = {
                         const botonAnadirApartamento = document.createElement("a")
                         botonAnadirApartamento.classList.add("confAlojamiento_entidades_botonContenedor")
                         botonAnadirApartamento.innerText = "Crear un nuevo apartamento"
-                        botonAnadirApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo: apartamento")
-                        botonAnadirApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo: apartamento")
+                        botonAnadirApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
+                        botonAnadirApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
                         botonAnadirApartamento.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                         contenedorBotonSeccionEntidad.appendChild(botonAnadirApartamento)
                         contenedorApartamentos.appendChild(contenedorBotonSeccionEntidad)
@@ -28794,8 +28794,8 @@ const casaVitini = {
                                 const contenedorDetalleApartamento = document.createElement("a")
                                 contenedorDetalleApartamento.classList.add("confAlojamiento_entidades_contenedorDetalles")
                                 contenedorDetalleApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-                                contenedorDetalleApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento: " + apartamentoIDV)
-                                contenedorDetalleApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento: " + apartamentoIDV)
+                                contenedorDetalleApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
+                                contenedorDetalleApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
                                 contenedorDetalleApartamento.addEventListener("click", casaVitini.administracion.arquitectura_del_alojamiento.entidades.traductorCambioVista)
                                 const tituloApartamento = document.createElement("div")
                                 tituloApartamento.classList.add("confAlojamiento_entidades_titulo")
@@ -28819,8 +28819,8 @@ const casaVitini = {
                         const botonAnadirHabitacion = document.createElement("a")
                         botonAnadirHabitacion.classList.add("confAlojamiento_entidades_botonContenedor")
                         botonAnadirHabitacion.innerText = "Crear una nueva habitación"
-                        botonAnadirHabitacion.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo: habitacion")
-                        botonAnadirHabitacion.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo: habitacion")
+                        botonAnadirHabitacion.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:habitacion")
+                        botonAnadirHabitacion.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:habitacion")
                         botonAnadirHabitacion.addEventListener("click", casaVitini.administracion.arquitectura_del_alojamiento.entidades.traductorCambioVista)
                         contenedorBotonSeccionHabitacion.appendChild(botonAnadirHabitacion)
                         contenedorHabitaciones.appendChild(contenedorBotonSeccionHabitacion)
@@ -28864,8 +28864,8 @@ const casaVitini = {
                         const botonAnadirCamas = document.createElement("a")
                         botonAnadirCamas.classList.add("confAlojamiento_entidades_botonContenedor")
                         botonAnadirCamas.innerText = "Crear una nueva cama"
-                        botonAnadirCamas.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo: cama")
-                        botonAnadirCamas.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo: cama")
+                        botonAnadirCamas.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:cama")
+                        botonAnadirCamas.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:cama")
                         botonAnadirCamas.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                         contenedorBotonSeccionCamas.appendChild(botonAnadirCamas)
                         contenedorCamas.appendChild(contenedorBotonSeccionCamas)
@@ -29922,8 +29922,8 @@ const casaVitini = {
                             const botonIrPerfilPrecio = document.createElement("a")
                             botonIrPerfilPrecio.classList.add("arquitecturaConfApartamento_boton")
                             botonIrPerfilPrecio.innerText = "Ir al perfil del precio"
-                            botonIrPerfilPrecio.setAttribute("vista", "/administracion/precios/apartamentos: " + apartamentoIDV)
-                            botonIrPerfilPrecio.setAttribute("href", "/administracion/precios/apartamentos: " + apartamentoIDV)
+                            botonIrPerfilPrecio.setAttribute("vista", "/administracion/precios/apartamentos:" + apartamentoIDV)
+                            botonIrPerfilPrecio.setAttribute("href", "/administracion/precios/apartamentos:" + apartamentoIDV)
                             botonIrPerfilPrecio.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                             contenedorBotonesGlobalesApartamento.appendChild(botonIrPerfilPrecio)
                             const botonAddHabitacion = document.createElement("div")
@@ -30994,8 +30994,8 @@ const casaVitini = {
                                 const enlace = document.createElement("a")
                                 enlace.classList.add("enlace")
                                 enlace.innerText = "Ir directo a crear un nuevo apartamento como entidad"
-                                enlace.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo: apartamento")
-                                enlace.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo: apartamento")
+                                enlace.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
+                                enlace.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
                                 enlace.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                 main.appendChild(enlace)
                             }
@@ -34637,7 +34637,7 @@ const casaVitini = {
                 }
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                 if (respuestaServidor?.error) {
-                    console.error(respuestaServidor)
+                   // console.error(respuestaServidor)
                 }
                 if (respuestaServidor.ok) {
                     return respuestaServidor

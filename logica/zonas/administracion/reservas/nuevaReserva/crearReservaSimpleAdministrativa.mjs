@@ -150,7 +150,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             //await actualizadorIntegradoDesdeInstantaneas(reservaUIDNuevo)
             await campoDeTransaccion("confirmar")
             const ok = {
-                ok: "Se ha creado la reserva vacía",
+                ok: "Se ha creado la reserva",
                 reservaUID: reservaUID
             };
             return ok

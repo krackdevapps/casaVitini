@@ -141,10 +141,8 @@ describe('configuration of hosting', () => {
     })
 
 
-
     //Insertar cama en la habitacion
     test('add bed in room in configuracion hosting with ok', async () => {
-
         const makeEntity = {
             body: {
                 camaIDV: camaIDV,
@@ -156,8 +154,22 @@ describe('configuration of hosting', () => {
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
-
     })
+
+
+        //delete host configuration
+        test('add bed in room in configuracion hosting with ok', async () => {
+            const makeEntity = {
+                body: {
+                    apartamentoIDV
+                },
+                session: fakeAdminSession
+            }
+            const response = await eliminarConfiguracionDeAlojamiento(makeEntity)
+            expect(response).not.toBeUndefined();
+            expect(typeof response).toBe('object');
+            expect(response).toHaveProperty('ok');
+        })
     afterAll(async () => {
         await campoDeTransaccion("cancelar")
         await eliminarCamaComoEntidad(camaIDV)

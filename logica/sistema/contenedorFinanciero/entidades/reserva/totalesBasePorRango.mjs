@@ -71,9 +71,9 @@ export const totalesBasePorRango = async (data) => {
             const noche = desglosePorNoche[fecha_ISO]
             noche.precioNetoNoche = "0.00"
             for (const apartamentoIDV of apartamentosArray) {
-
-                const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
-                const precioBase = perfilPrecio.precio
+    
+               // const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
+               // const precioBase = perfilPrecio.precio
 
                 const apartamentosPorNoche = noche.apartamentosPorNoche
                 if (apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {

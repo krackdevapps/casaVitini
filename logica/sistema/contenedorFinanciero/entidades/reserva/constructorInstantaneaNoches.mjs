@@ -75,13 +75,12 @@ export const constructorInstantaneaNoches = async (data) => {
             }
             const noche = contenedorInstantaneaNoche[fecha_ISO]
             for (const apartamentoIDV of apartamentosArray) {
-
-                const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
-                const precioBase = perfilPrecio.precio
-
+        
                 const apartamentosPorNoche = noche.apartamentosPorNoche
-                if (!apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {
 
+                if (!apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {
+                    const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
+                    const precioBase = perfilPrecio.precio
                     apartamentosPorNoche[apartamentoIDV] = {
                         apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV({
                             apartamentoIDV,

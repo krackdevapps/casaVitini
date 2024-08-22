@@ -11,7 +11,7 @@ describe('handler configruacion', () => {
 
     test('selec configuracion', async () => {
         const response = await obtenerInterruptorPorInterruptorIDV(interruptorIDV)
-        estadoInterruptor = response.estado
+        estadoInterruptor = response.estadoIDV
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })

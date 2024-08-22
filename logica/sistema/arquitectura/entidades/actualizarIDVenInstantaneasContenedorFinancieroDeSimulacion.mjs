@@ -82,7 +82,7 @@ export const actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion = async
                     simulacion: {
                         tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
                         simulacionUID
-                    }
+                    } 
                 },
             })
             await actualizarDesgloseFinacieroPorSimulacionUID({

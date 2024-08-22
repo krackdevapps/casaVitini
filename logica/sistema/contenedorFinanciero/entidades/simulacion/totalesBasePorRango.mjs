@@ -75,8 +75,8 @@ export const totalesBasePorRango = async (data) => {
 
             for (const apartamentoIDV of apartamentosArray) {
 
-                const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
-                const precioBase = perfilPrecio.precio
+               // const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
+               // const precioBase = perfilPrecio.precio
 
 
                 const apartamentosPorNoche = noche.apartamentosPorNoche

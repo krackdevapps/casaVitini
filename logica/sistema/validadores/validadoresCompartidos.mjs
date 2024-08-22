@@ -122,7 +122,6 @@ export const validadoresCompartidos = {
                 throw errorCapturado
             }
         },
-
     },
     usuarios: {
         unicidadCorreo: async (data) => {
@@ -154,15 +153,12 @@ export const validadoresCompartidos = {
                     const error = "El validador de unicidadCorreo está mal configurado. Si la operación es actualizar, falta el usuario."
                     throw new Error(error)
                 }
-
             } catch (errorCapturado) {
                 throw errorCapturado
             }
         },
         datosUsuario: (data) => {
             try {
-
-
                 data.nombre = validadoresCompartidos.tipos.cadena({
                     string: data.nombre,
                     nombreCampo: "El campo del nombre",
@@ -180,7 +176,6 @@ export const validadoresCompartidos = {
                     soloMayusculas: "si"
 
                 })
-
                 data.segundoApellido = validadoresCompartidos.tipos.cadena({
                     string: data.segundoApellido,
                     nombreCampo: "El campo del segundo apellido",
@@ -189,7 +184,6 @@ export const validadoresCompartidos = {
                     limpiezaEspaciosAlrededor: "si",
                     soloMayusculas: "si"
                 })
-
                 data.pasaporte = validadoresCompartidos.tipos.cadena({
                     string: data.pasaporte,
                     nombreCampo: "El campo del pasaporte",
@@ -198,7 +192,6 @@ export const validadoresCompartidos = {
                     limpiezaEspaciosAlrededor: "si",
                     limpiezaEspaciosInternos: "si",
                     soloMayusculas: "si"
-
                 })
                 if (data.mail) {
                     validadoresCompartidos.tipos.correoElectronico({
@@ -207,7 +200,6 @@ export const validadoresCompartidos = {
                         sePermiteVacio: "no"
                     })
                 }
-
                 if (data.telefono) {
                     validadoresCompartidos.tipos.telefono({
                         phone: data.telefono,
@@ -215,7 +207,6 @@ export const validadoresCompartidos = {
                         sePermiteVacio: "no"
                     })
                 }
-
             } catch (errorCapturado) {
                 throw errorCapturado
             }
@@ -561,8 +552,6 @@ export const validadoresCompartidos = {
                     throw errorCapturado
                 }
             } else if (filtro === "sustitucionSinEspacios") {
-
-
                 const filtro = /[^a-zA-Z0-9_\-\/\.]/g;
                 string = string.replace(filtro, '');
             } else if (filtro === "transformaABase64") {
@@ -695,7 +684,6 @@ export const validadoresCompartidos = {
             const limpiezaEspaciosAlrededor = configuracion.limpiezaEspaciosAlrededor
             const sePermitenNegativos = configuracion.sePermitenNegativos || "no"
 
-
             if (!configuracion.hasOwnProperty("number")) {
                 throw new Error("El validador de números no encuentra la llave number en el objeto");
             }
@@ -760,8 +748,6 @@ export const validadoresCompartidos = {
 
             }
             return number
-
-
         },
         correoElectronico: (configuracion) => {
             try {
@@ -867,8 +853,6 @@ export const validadoresCompartidos = {
                     throw new Error(error);
                 }
 
-
-
                 if (sePermiteArrayVacio !== "no" && sePermiteArrayVacio !== "si") {
                     const error = `${nombreCampo} el valdidador array mal configurado, si se define sePermiteArrayVacio tiene que está en sí o no. Predeterminadamente es no.`;
                     throw new Error(error);
@@ -878,7 +862,6 @@ export const validadoresCompartidos = {
                     const error = `${nombreCampo} es un array vacío`;
                     throw new Error(error);
                 }
-
 
                 if (filtro === "strictoIDV") {
                     array.forEach((item, posicion) => {
@@ -1125,5 +1108,4 @@ export const validadoresCompartidos = {
             return true;
         }
     },
-
 }

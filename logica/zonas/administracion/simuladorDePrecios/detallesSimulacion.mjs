@@ -28,18 +28,18 @@ export const detallesSimulacion = async (entrada) => {
         const apartamentosIDVARRAY = simulacion.apartamentosIDVARRAY
         const apartamentos = []
         for (const apartamentoIDV of apartamentosIDVARRAY) {
-            await obtenerConfiguracionPorApartamentoIDV({
-                apartamentoIDV,
-                errorSi: "noExiste"
-            })
+            // await obtenerConfiguracionPorApartamentoIDV({
+            //     apartamentoIDV,
+            //     errorSi: "noExiste"
+            // })
             const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
-                errorSi: "noExiste"
-            })
+                errorSi: "desactivado"
+            }) 
 
             const estructura = {
                 apartamentoIDV,
-                apartamentoUI: apartamento.apartamentoUI
+                apartamentoUI: apartamento?.apartamentoUI || "Sin informacion"
             }
             apartamentos.push(estructura)
         }
