@@ -4229,6 +4229,7 @@ const casaVitini = {
                             }
                             if (respuestaServidor?.ok) {
                                 const sessionesActivas = respuestaServidor?.sessionesActivas
+
                                 if (sessionesActivas.length === 0) {
                                     // no hay sessiones
                                 } else {

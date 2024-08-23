@@ -106,10 +106,15 @@ export const utilidades = {
     constructorComasEY: (data) => {
         const array = data.array
         const articulo = data.articulo
+
+
         if (array.length === 1) {
             return array[0];
-        } else {
+        } else if (articulo.length> 0) { 
             const formattedString = array.slice(0, -1).join(', ' + articulo + " ") + ' y ' + articulo + " " + array.slice(-1);
+            return formattedString;
+        } else if (articulo.length === 0) {
+            const formattedString = array.slice(0, -1).join(', ' + articulo) + ' y ' + articulo + array.slice(-1);
             return formattedString;
         }
 

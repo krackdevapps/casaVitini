@@ -8,6 +8,7 @@ import { porcentajeTranscurrido } from "./utilidades/porcentajeTranscurrido.mjs"
 import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
 import { detallesPagos } from "./detallesReserva/detallesPagos.mjs"
 import { insertarApartamentoUIEnObjetoOfertas } from "../ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs"
+import { enlacesDePagoDeLaReserva } from "./detallesReserva/enlacesDePagoDeLaReserva.mjs"
 export const detallesReserva = async (data) => {
     try {
         const capas = data.capas
@@ -22,14 +23,15 @@ export const detallesReserva = async (data) => {
             "alojamiento",
             "pernoctantes",
             "desgloseFinanciero",
-            "detallesPagos"
+            "detallesPagos",
+            "enlacesDePago"
         ]
         validadoresCompartidos.tipos.array({
             array: capas,
             nombreCampo: "El array capas en detallesReserva",
             filtro: "strictoIDV"
         })
-
+        
         const capasNoIdentificadas = capas.filter(capaIDV => !contenedorCapas.includes(capaIDV));
         if (capasNoIdentificadas.length > 0) {
             const constructoCapasNoConocidas = utilidades.constructorComasEY({
@@ -38,7 +40,7 @@ export const detallesReserva = async (data) => {
             })
             const constructoCapasConocidas = utilidades.constructorComasEY({
                 array: contenedorCapas,
-                arituclo: "la"
+                articulo: ""
             })
             const capasConocidasUI = `Las capas disponibles son ${constructoCapasConocidas}`
             let error
@@ -52,7 +54,6 @@ export const detallesReserva = async (data) => {
         if (capas.includes(contenedorCapas[0])) {
             reserva.titular = await detallesTitular(reservaUID)
         }
-
         if (capas.includes(contenedorCapas[1])) {
             reserva.alojamiento = await detallesAlojamiento(reservaUID)
         }
@@ -61,7 +62,6 @@ export const detallesReserva = async (data) => {
         }
         if (capas.includes(contenedorCapas[3])) {
             reserva.contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
-
             const contenedorOfertasPorAdmimnistrador = reserva.contenedorFinanciero.desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador
             for (const contenedorOferta of contenedorOfertasPorAdmimnistrador) {
                 await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
@@ -69,6 +69,9 @@ export const detallesReserva = async (data) => {
         }
         if (capas.includes(contenedorCapas[4])) {
             reserva.detallesPagos = await detallesPagos(reservaUID)
+        }
+        if (capas.includes(contenedorCapas[5])) {
+        reserva.enlacesDePago = await enlacesDePagoDeLaReserva(reservaUID)
         }
         return reserva
     } catch (errorCapturado) {

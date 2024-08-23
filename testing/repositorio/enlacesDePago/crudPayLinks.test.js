@@ -15,17 +15,17 @@ import { eliminarEnlaceDePagoPorTestingVI } from '../../../logica/repositorio/en
 import { eliminarReservaPorTestingVI } from '../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
 
 describe('crud pay links', () => {
-    const testingVI = "enlaceTest"
+    const testingVI = "testingpaylinkgadapters"
     let nuevoEnlaceUID = 0
     let reservaUID
-    const reservaTVI = "reservaTest"
     const codigoPublico = "weopikfnwonerof"
 
     beforeAll(async () => {
+        process.env.TESTINGVI = testingVI
         reservaUID = await generadorReservaUID()
 
         await eliminarEnlaceDePagoPorTestingVI(testingVI)
-        await eliminarReservaPorTestingVI(reservaTVI)
+        await eliminarReservaPorTestingVI(testingVI)
         await insertarReservaAdministrativa({
             fechaEntrada: "2020-10-10",
             fechaSalida: "2020-11-11",
@@ -34,7 +34,7 @@ describe('crud pay links', () => {
             creacion: "2020-11-11",
             estadoPago: "noPagado",
             reservaUID: reservaUID,
-            reservaTVI: reservaTVI
+            testingVI: testingVI,
         })
     })
     test('insert new pay link', async () => {
@@ -52,7 +52,6 @@ describe('crud pay links', () => {
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
     })
-
 
     test('update pay link with enlaceUID', async () => {
         const response = await actualizarEnlaceDePagoPorEnlaceUID({
@@ -125,6 +124,6 @@ describe('crud pay links', () => {
 
     afterAll(async () => {
         await eliminarEnlaceDePagoPorTestingVI(testingVI)
-        await eliminarReservaPorTestingVI(reservaTVI)
+        await eliminarReservaPorTestingVI(testingVI)
     });
 })

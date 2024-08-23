@@ -9091,13 +9091,17 @@ const casaVitini = {
 
                             const reservaUID = document.querySelector("[reservaUID]").getAttribute("reservaUID")
                             const transaccion = {
-                                zona: "administracion/enlacesDePago/obtenerEnlaces",
-                                reservaUID: reservaUID
+                                zona: "administracion/reservas/detallesReserva/global/obtenerReserva",
+                                reservaUID: String(reservaUID),
+                                capas: [
+                                    "enlacesDePago"
+                                ]
                             }
+                            console.log("transac", transaccion)
 
                             const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                             const instanciaDestino = document.querySelector(`[componente=categoriaEnlacesDePago][instanciaUID="${instanciaUID}"]`)
-                            if (!instanciaDestino) { }
+                            if (!instanciaDestino) { return }
                             instanciaDestino.innerHTML = null
                             if (respuestaServidor?.error) {
                                 const errorUI = document.createElement("p")
@@ -9132,8 +9136,8 @@ const casaVitini = {
                                 contenedorEnlacesDePago.appendChild(contenedorListaEnlacesDePagos)
 
 
-                                instanciaDestino.style.justifyContent = "flex - start";
-                                const enlacesDePagoGenerados = respuestaServidor?.ok
+                                instanciaDestino.style.justifyContent = "flex-start";
+                                const enlacesDePagoGenerados = respuestaServidor?.ok.enlacesDePago
                                 if (enlacesDePagoGenerados.length === 0) {
                                     const infoSinEnlaces = document.createElement("div")
                                     infoSinEnlaces.classList.add("reservaDetalles_transacciones_enlacesDePago_infoSinEnlaces")
@@ -9142,6 +9146,8 @@ const casaVitini = {
                                     contenedorDinamico.appendChild(infoSinEnlaces)
                                 }
                                 if (enlacesDePagoGenerados.length > 0) {
+                                    const contenedorEnlacesDePago = instanciaDestino.querySelector(`[componente=contenedorListaEnlacesDePago]`)
+
                                     for (const detallesDelEnlace of enlacesDePagoGenerados) {
                                         /*
                                             {
@@ -9158,69 +9164,16 @@ const casaVitini = {
                                             nombreEnlace: detallesDelEnlace.nombreEnlace,
                                             enlace: detallesDelEnlace.enlace,
                                             cantidad: detallesDelEnlace.cantidad,
-                                            estadoPago: detallesDelEnlace.estadoPago,
+                                            estadoPago: detallesDelEnlace.estadoPagoIDV,
                                             instanciaUID: instanciaUID
                                         }
                                         const enlaceUI = casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.enlacesDePago.enlaceUI(metadatos)
-                                        instanciaDestino.appendChild(enlaceUI)
+                                        contenedorEnlacesDePago.appendChild(enlaceUI)
                                     }
                                 }
 
                             }
                         },
-                        //arranque_obsoleto: async () => {
-                        //    document.body.style.overflow = "hidden";
-                        //    const advertenciasInmersivasRenderizadas = document.querySelectorAll("[componente=advertenciaInmersiva]")
-                        //    advertenciasInmersivasRenderizadas.forEach((advertencia) =>
-                        //        advertencia.remove()
-                        //    )
-                        //    const advertenciaInmersivaIU = document.createElement("div")
-                        //    advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                        //    advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                        //    advertenciaInmersivaIU.setAttribute("componenteUID", "enlaceDePagoUI")
-                        //    const spinnerContainer = document.createElement("div");
-                        //    spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
-                        //    spinnerContainer.classList.add("lds-spinner");
-                        //    for (let i = 0; i < 12; i++) {
-                        //        const div = document.createElement("div");
-                        //        spinnerContainer.appendChild(div);
-                        //    }
-                        //    const info = document.createElement("div")
-                        //    info.setAttribute("class", "advertenciaInfoFlujoPago")
-                        //    info.setAttribute("componente", "mensajeFlujoPasarela")
-                        //    info.innerText = "Esperando a la Casa Vitini..."
-                        //    const botoCancelar = document.createElement("div")
-                        //    botoCancelar.setAttribute("class", "botonV1AdvertenciaInmersiva")
-                        //    botoCancelar.innerText = "Cancelar"
-                        //    botoCancelar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
-                        //    const advertenciaInmersivaIURenderizada = document.querySelector("[componenteUID=enlaceDePagoUI]")
-                        //    if (!advertenciaInmersivaIURenderizada) {
-                        //        advertenciaInmersivaIU.appendChild(spinnerContainer)
-                        //        advertenciaInmersivaIU.appendChild(info)
-                        //        advertenciaInmersivaIU.appendChild(botoCancelar)
-                        //        document.body.appendChild(advertenciaInmersivaIU)
-                        //    } else {
-                        //        advertenciaInmersivaIURenderizada.appendChild(spinnerContainer)
-                        //        advertenciaInmersivaIURenderizada.appendChild(info)
-                        //        advertenciaInmersivaIURenderizada.appendChild(botoCancelar)
-                        //    }
-                        //    const reservaUID = document.querySelector("[reservaUID]").getAttribute("reservaUID")
-                        //    const transaccion = {
-                        //        zona: "administracion/enlacesDePago/detallesDelEnlace",
-                        //        enlaceUID: Number(reservaUID)
-                        //    }
-                        //    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                        //    if (respuestaServidor?.noExisteElEnlace === "reservaSinEnlace") {
-                        //        casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.enlacesDePago.crearEnlace.UI()
-                        //    }
-                        //    if (respuestaServidor?.error) {
-                        //        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                        //        casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-                        //    }
-                        //    if (respuestaServidor?.ok) {
-                        //        casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.enlacesDePago.UI.detallesEnlace(respuestaServidor?.ok)
-                        //    }
-                        //},
                         eliminarEnlace: {
                             UI: async (datosElimiacion) => {
                                 document.body.style.overflow = "hidden";
@@ -9471,7 +9424,7 @@ const casaVitini = {
                             const estadoPago = metadatos.estadoPago
                             const instanciaUID = metadatos.instanciaUID
                             const bloqueDatosGenerales = document.createElement("div")
-                            bloqueDatosGenerales.classList.add("detallesReserva_transacciones_bloqueDatosGenerales")
+                            bloqueDatosGenerales.classList.add("detallesReserva_enlacesDePago_bloqueDatosGenerales")
                             bloqueDatosGenerales.setAttribute("enlacePagoUID", enlaceUID)
                             const contenedorDatosEnlace = document.createElement("div")
                             contenedorDatosEnlace.classList.add("administracion_reservas_detallesReservas_enlacesDePago_contenedorDatosEnlace")
@@ -23196,7 +23149,7 @@ const casaVitini = {
                     }
                     const transaccion = {
                         zona: "administracion/ofertas/actualizarEstadoOferta",
-                        ofertaUID: Number(ofertaUID),
+                        ofertaUID: String(ofertaUID),
                         estadoIDV: estadoOfertaPropuesto
                     }
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
@@ -23250,7 +23203,7 @@ const casaVitini = {
                         const ofertaUID = document.querySelector("[ofertaUID]").getAttribute("ofertaUID")
                         const transaccion = {
                             zona: "administracion/ofertas/eliminarOferta",
-                            ofertaUID: Number(ofertaUID)
+                            ofertaUID: String(ofertaUID)
                         }
                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -26912,8 +26865,8 @@ const casaVitini = {
                             enlaceUI.appendChild(precioUI)
                             const tituloReserva = document.createElement("a")
                             tituloReserva.classList.add("enlaceUIContenedor_vinculo")
-                            tituloReserva.setAttribute("href", "/administracion/reservas/reserva: " + reservaUID + "/enlaces_de_pago")
-                            tituloReserva.setAttribute("vista", "/administracion/reservas/reserva: " + reservaUID + "/enlaces_de_pago")
+                            tituloReserva.setAttribute("href", "/administracion/reservas/reserva:" + reservaUID + "/enlaces_de_pago")
+                            tituloReserva.setAttribute("vista", "/administracion/reservas/reserva:" + reservaUID + "/enlaces_de_pago")
                             tituloReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                             tituloReserva.innerText = `Reserva ${reservaUID} (Ir a la reserva)`
                             enlaceUI.appendChild(tituloReserva)
@@ -28138,7 +28091,7 @@ const casaVitini = {
                         const apartamentoIDV = document.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")
                         const transaccion = {
                             zona: "administracion/bloqueos/eliminarBloqueo",
-                            bloqueoUID: Number(bloqueoUID)
+                            bloqueoUID: String(bloqueoUID)
                         }
                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
 

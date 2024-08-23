@@ -6,8 +6,11 @@ export const controlCaducidadEnlacesDePago = async () => {
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaActual = tiempoZH.toISO();
+        console.log("fechaActual", fechaActual)
 
         const enlacesDePagoCaducados = await eliminarEnlacesDePagoPorCaducidad(fechaActual)
+        console.log("enlacesDePagoCaducados", enlacesDePagoCaducados)
+
         if (enlacesDePagoCaducados.length === 0) {
             const ok = "Ningún enlace ha caducado."
             return ok

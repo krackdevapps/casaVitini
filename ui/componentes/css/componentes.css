@@ -7820,7 +7820,8 @@ grid-template-columns: 0.5fr 1.5fr;
     background: black;
 }
 
-[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoUI {
+[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoUI,
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .crearOfertaApartamentoUI {
     background: rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
@@ -7832,7 +7833,8 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 6px;
 }
 
-[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoUI:hover {
+[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoUI:hover,
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .crearOfertaApartamentoUI:hover {
     color: white;
     background: black;
 }
@@ -7859,7 +7861,8 @@ grid-template-columns: 0.5fr 1.5fr;
     background: black;
 }
 
-[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoTItulo {
+[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoTItulo,
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .crearOfertaApartamentoTItulo {
     font-weight: bold;
     margin: 0px;
     padding: 2px;
@@ -7878,7 +7881,8 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 2px;
 }
 
-[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaApartamentoEstado {
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaApartamentoEstado,
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .crearOfertaApartamentoEstado {
     margin: 0px;
     padding: 2px;
 }
@@ -10197,6 +10201,25 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: stretch;
 }
 
+[ui="reservaUI"] .detallesReserva_enlacesDePago_bloqueDatosGenerales {
+    background: rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 6px;
+    border-radius: 11px;
+    gap: 4px;
+    align-items: stretch;
+    align-content: flex-start;
+    justify-content: space-between;
+    /* border: 1px solid #a3a3a3; */
+}
+
+@media (max-width: 720px) {
+    [ui="reservaUI"] .detallesReserva_enlacesDePago_bloqueDatosGenerales {
+        flex-direction: column;
+    }
+}
 [ui="reservaUI"] .detallesReserva_transacciones_bloqueDatosGenerales {
     background: rgba(255, 255, 255, 0.4);
     display: flex;
@@ -10208,7 +10231,10 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: stretch;
     align-content: flex-start;
     justify-content: space-between;
+    /* border: 1px solid #a3a3a3; */
 }
+
+
 
 [ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_botonV1 {
     background: rgba(255, 255, 255, 0.4);
@@ -10237,13 +10263,9 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_contenedorBotones {
     display: flex;
-    gap: 4px;
-}
+    gap: 6px;
+    flex-direction: column;
 
-@media (max-width: 720px) {
-    .detallesReserva_transacciones_bloqueDatosGenerales {
-        flex-direction: column;
-    }
 }
 
 [ui="reservaUI"] .detallesReserva_transacciones_bloqueBotones {
@@ -10354,14 +10376,14 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [ui="reservaUI"] .administracion_reservas_detallesReserva_enlacesDePago_contenedorEnlacesDePago {
     display: flex;
-    gap: 4px;
+    gap: 6px;
     flex-direction: column;
-    padding: 4px;
+    padding: 6px;
 }
 
 [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorListaEnlacesDePago {
     display: flex;
-    gap: 4px;
+    gap: 6px;
     flex-direction: column;
     align-items: stretch;
 }
@@ -10727,7 +10749,11 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     gap: 10px;
     padding: 4px;
+    flex-direction: column;
+
 }
+
+
 
 .plaza_enlacesDePago_obtenerPago_contenedorPagoGlobal {
     display: grid;

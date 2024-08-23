@@ -1,16 +1,14 @@
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs";
-import { detallesReserva as detallesReserva_ } from "../../../../../sistema/reservas/detallesReserva.mjs";
+import { detallesReserva } from "../../../../../sistema/reservas/detallesReserva.mjs";
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const obtenerReserva = async (entrada) => {
     try {
-
         const session = entrada.session
         const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
@@ -31,8 +29,8 @@ export const obtenerReserva = async (entrada) => {
         const metadatos = {
             reservaUID: reservaUID,
             capas
-        };
-        const resuelveDetallesReserva = await detallesReserva_(metadatos);
+        }
+        const resuelveDetallesReserva = await detallesReserva(metadatos);
         const ok = {
             ok: resuelveDetallesReserva
         }
