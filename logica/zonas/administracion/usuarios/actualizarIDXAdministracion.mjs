@@ -6,6 +6,7 @@ import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransac
 import { actualizarIDX } from "../../../repositorio/usuarios/actualizarIDX.mjs";
 import { usuariosLimite } from "../../../sistema/usuarios/usuariosLimite.mjs";
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
+import { validadorIDX } from "../../../sistema/VitiniIDX/validadorIDX.mjs";
 
 export const actualizarIDXAdministracion = async (entrada, salida) => {
     try {
@@ -38,8 +39,7 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
             errorSi: "existe"
         })
 
-
-
+        await validadorIDX(nuevoIDX)
 
         await campoDeTransaccion("iniciar")
         await actualizarIDX({

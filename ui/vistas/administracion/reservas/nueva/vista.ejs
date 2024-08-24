@@ -29,7 +29,12 @@
         <div class="administracion_reservas_crearReserva elementoOcultoInicialmente" componente="espacioApartamento">
         </div>
         <div class="bloqueBotones elementoOcultoInicialmente" componente="espacioBotonConfirmarReserva">
-            <div class="botonConfirmarCrearReservaNueva" componente="botonConfirmarReserva">Confirmar reserva y proceder a editarla</div>
+            <select selector="estadoInicialReserva" class="simplificadorCampo limpiezaBotonA botonV1">
+                <option value="pendiente">Estado: Pendiente</option>
+                <option value="confirmada">Estado: Confirmada</option>
+            </select>
+            <div class="simplificadorCampo limpiezaBotonA botonV1" componente="botonConfirmarReserva">Confirmar reserva y proceder a editarla</div>
+
         </div>
     </div>
 </div>

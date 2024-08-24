@@ -7,6 +7,7 @@ import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccio
 import { actualizarIDX as actualizarIDV_ } from "../../repositorio/usuarios/actualizarIDX.mjs";
 import { usuariosLimite } from "../../sistema/usuarios/usuariosLimite.mjs";
 import { actualizarUsuarioSessionActiva } from "../../repositorio/usuarios/actualizarSessionActiva.mjs";
+import { validadorIDX } from "../../sistema/VitiniIDX/validadorIDX.mjs";
 
 export const actualizarIDX = async (entrada) => {
     const mutex = new Mutex()
@@ -31,7 +32,7 @@ export const actualizarIDX = async (entrada) => {
             throw new Error(error)
 
         }
-
+        await validadorIDX(nuevoIDX)
         await obtenerUsuario({
             usuario: actualIDX,
             errorSi: "noExiste"

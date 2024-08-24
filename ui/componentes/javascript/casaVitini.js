@@ -66,7 +66,7 @@ const casaVitini = {
 
                 main.style.transition = "opacity 0s linear"
                 main.style.opacity = "0"
-                main.style.display = "none"
+                main.style.pointerEvents = "none"
 
                 const selectorPantallaCargaRenderizda = document.querySelector("[ui=pantallaDeCarga]")
                 if (!selectorPantallaCargaRenderizda) {
@@ -143,7 +143,7 @@ const casaVitini = {
                     contenedorVista.removeAttribute("rama")
                     await casaVitini.shell.controladoresUI.controladorEstadoIDX()
                     contenedorVista.innerHTML = null
-                    casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna("opacity")
+                    casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna(["opacity", "transition"])
                     document.querySelectorAll("html, #uiLogo, body, header, [componente=contenedorMenu], #botonMenuResponsivo")
                         .forEach((elementoReseteo) => {
                             elementoReseteo.removeAttribute("style")
@@ -170,7 +170,7 @@ const casaVitini = {
                     main.removeAttribute("zonaCSS")
                     main.removeAttribute("ui")
                     await casaVitini.shell.controladoresUI.controladorEstadoIDX()
-                    casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna("opacity")
+                    casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna(["opacity", "transition"])
                     let urlVista = respuestaServidor.url
                     if (privacidad) {
                         urlVista = vista === "portada" ? "/" : vista;
@@ -211,13 +211,12 @@ const casaVitini = {
                         const x = "casaVitini.ui.vistas." + arranqueVistaPublica + "()"
                         await eval(x)
                     } else if (arranqueVistaAdministrativa) {
-
                         const x = "casaVitini?.administracion?." + arranqueVistaAdministrativa + "()"
-
                         await eval(x)
                     }
                     selectorPantallaCargaRenderizdaPostPeticion?.remove()
-                    main.style.transition = "opacity 450ms linear"
+                    console.log("test")
+                    main.style.transition = "opacity 500ms linear"
                     main.style.opacity = "1"
                 }
             },
@@ -364,7 +363,7 @@ const casaVitini = {
 
                     const bloqueusuario = document.createElement("a")
                     bloqueusuario.setAttribute("href", "/micasa")
-                    bloqueusuario.setAttribute("class", "uiCategoria")
+                    bloqueusuario.classList.add("uiCategoria", "elipsisIDX")
                     bloqueusuario.setAttribute("bloqueID", "usuario")
                     bloqueusuario.setAttribute("tipoMenu", "volatil")
                     bloqueusuario.setAttribute("vista", "/micasa")
@@ -443,7 +442,7 @@ const casaVitini = {
 
                     const bloqueusuario = document.createElement("a")
                     bloqueusuario.setAttribute("href", "/micasa")
-                    bloqueusuario.setAttribute("class", "uiCategoria")
+                    bloqueusuario.classList.add("uiCategoria", "elipsisIDX")
                     bloqueusuario.setAttribute("bloqueID", "usuario")
                     bloqueusuario.setAttribute("tipoMenu", "volatil")
                     bloqueusuario.setAttribute("vista", "/micasa")
@@ -489,7 +488,7 @@ const casaVitini = {
             for (const vistaMenu of vistas) {
                 vistaMenu.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             }
-            document.querySelector("#navegadorResponsivo").style.opacity = "1"
+            document.querySelector("#navegadorResponsivo").classList.remove("ocultoInicial")
             const url = window.location.pathname;
             if (url === "/") {
                 return casaVitini.shell.navegacion.controladorVista("portada")
@@ -588,20 +587,28 @@ const casaVitini = {
                 pantallaCarga?.remove()
 
             },
-            eliminarTodasLasPropiedadesCSSMenosUna: (propiedad) => {
+            eliminarTodasLasPropiedadesCSSMenosUna: (propiedadesArray) => {
                 const elemento = document.querySelector("main");
+            
+                // Obtener las propiedades inline actuales
                 const propiedadesInline = elemento.style.cssText;
-                const propiedadDeseada = propiedad;
+                console.log("propiedadesInline", propiedadesInline);
+            
+                // Filtrar las propiedades que están en el array
                 const propiedadesFiltradas = propiedadesInline
                     .split(";")
-                    .filter((propiedad) => {
+                    .filter(propiedad => {
                         const [nombre] = propiedad.split(":");
-                        return nombre.trim() === propiedadDeseada;
+                        return propiedadesArray.includes(nombre.trim());
                     })
                     .join(";");
+            
+                console.log("propiedadesFiltradas", propiedadesFiltradas);
+            
+                // Asignar solo las propiedades filtradas al elemento
                 elemento.style.cssText = propiedadesFiltradas;
-
             },
+            
             controlHorizotnalVetana: () => {
                 const currentWidth = window.innerWidth;
                 const previousWidth = casaVitini.componentes.controladores.anchoActualVentanad
@@ -872,6 +879,7 @@ const casaVitini = {
                 }
             },
             limpiarMain: () => {
+                console.log("limpiar")
                 const selectorPantallaCargaRenderizdaPostPeticion = document.querySelector("[ui=pantallaDeCarga]")
                 selectorPantallaCargaRenderizdaPostPeticion?.remove()
                 const main = document.querySelector("main")
@@ -16564,7 +16572,7 @@ const casaVitini = {
             },
             advertenciaInmersiva: (advertencia) => {
                 document.body.style.overflow = 'hidden';
-                const advertenciaInmersivaUI = document.createElement("section")
+                const advertenciaInmersivaUI = document.createElement("dialog")
                 advertenciaInmersivaUI.setAttribute("class", "errorUI")
                 advertenciaInmersivaUI.setAttribute("componente", "advertenciaInmersiva")
                 const marcoElastico = document.createElement("div")

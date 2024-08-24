@@ -13,6 +13,7 @@ import { obtenerDatosPersonalesPorMail } from "../../repositorio/usuarios/obtene
 import { obtenerUsuario } from "../../repositorio/usuarios/obtenerUsuario.mjs";
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
 import { usuariosLimite } from "../../sistema/usuarios/usuariosLimite.mjs";
+import { validadorIDX } from "../../sistema/VitiniIDX/validadorIDX.mjs";
 
 export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
     try {
@@ -28,7 +29,7 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-
+        await validadorIDX(usuarioIDX)
         const mail = validadoresCompartidos.tipos
             .correoElectronico({
                 mail: entrada.body.mail,

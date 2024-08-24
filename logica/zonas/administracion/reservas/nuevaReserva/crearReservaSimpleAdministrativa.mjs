@@ -44,6 +44,19 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada)
         const fechaSalida_objeto = DateTime.fromISO(fechaSalida)
 
+        const estadoInicialIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.estadoInicialIDV,
+            nombreCampo: "El selector de estadoInicialIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const estadoInicialesIDV = ["pendiente", "confirmada"]
+        if (!estadoInicialesIDV.includes(estadoInicialIDV)) {
+            const error = "El campo de estadoInicialIDV solo acepta pendiente o confirmada";
+            throw new Error(error);
+        }
+
         await eliminarBloqueoCaducado();
         // validar que en el array hay un maximo de posiciones no superior al numero de filas que existen en los apartementos
         const configuracionesDisponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
@@ -64,8 +77,6 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida";
             throw new Error(error);
         }
-        const rol = entrada.session.rolIDV;
-
         const resuelveApartamentosDisponibles = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
@@ -96,9 +107,6 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                     limpiezaEspaciosAlrededor: "si",
                 })
             }
-
-            // insertar fila reserva y en la tabla reservarAartametnos insertar las correspondientes filas
-            const estadoReserva = "confirmada";
             const origen = "administracion";
             const fechaCreacion = DateTime.utc().toISO();
             const estadoPago = "noPagado";
@@ -107,7 +115,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             await insertarReservaAdministrativa({
                 fechaEntrada: fechaEntrada,
                 fechaSalida: fechaSalida,
-                estadoReserva: estadoReserva,
+                estadoReserva: estadoInicialIDV,
                 origen: origen,
                 fechaCreacion: fechaCreacion,
                 estadoPago: estadoPago,

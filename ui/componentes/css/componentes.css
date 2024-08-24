@@ -372,6 +372,7 @@ main[zonaCSS="/"] {
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 29):nth-of-type(-n + 35) {
     grid-row: 4;
+ 
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 36):nth-of-type(-n + 42) {
@@ -438,6 +439,13 @@ main[zonaCSS="/"] {
     margin-bottom: 10px;
     overflow: hidden;
     padding: 10px;
+
+    scale: 1;
+    transition: scale 500ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_inicioFinal {
@@ -463,6 +471,13 @@ main[zonaCSS="/"] {
     margin-bottom: 10px;
     overflow: hidden;
     padding: 10px;
+
+    scale: 1;
+    transition: scale 500ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_inicioSolo {
@@ -488,6 +503,13 @@ main[zonaCSS="/"] {
     margin-bottom: 10px;
     overflow: hidden;
     padding: 10px;
+
+    scale: 1;
+    transition: scale 500ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_finalSolo {
@@ -513,6 +535,13 @@ main[zonaCSS="/"] {
     margin-bottom: 10px;
     overflow: hidden;
     padding: 10px;
+
+    scale: 1;
+    transition: scale 500ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_selecionado {
@@ -2852,10 +2881,17 @@ main[zonaCSS="/"] {
     background-color: rgba(255, 255, 255, 0.3);
     display: flex;
     border-radius: 12px;
-    padding: 4px;
-    justify-content: space-around;
+    padding: 6px;
+    justify-content: center;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
+    scale: 1;
+    transition: scale .4s ease-in-out;
+    gap: 6px;
+
+    @starting-style {
+        scale: 0;
+    }
 }
 
 [ui="reservaUI"] .reservaDetallesBloqueFecha {
@@ -3829,6 +3865,7 @@ main[zonaCSS="/"] {
     user-select: none;
     cursor: default;
     z-index: 500;
+
 }
 
 .advertenciaInmersiva {
@@ -5343,7 +5380,7 @@ main[zonaCSS="/"] {
 }
 
 [zonaCSS="administracion/reservas/nueva"] .bloqueApartamentoUI {
-    background-color: #ffffff5c;
+    background-color: #2231d35c;
     padding: 6px;
     border-radius: 12px;
     gap: 6px;
@@ -5352,6 +5389,13 @@ main[zonaCSS="/"] {
     flex-wrap: nowrap;
     align-items: stretch;
     justify-content: space-between;
+    scale: 1;
+    transition: scale .4s ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
+    
 }
 
 [zonaCSS="administracion/reservas/nueva"] .tituloApartamentoUI {
@@ -10220,6 +10264,7 @@ grid-template-columns: 0.5fr 1.5fr;
         flex-direction: column;
     }
 }
+
 [ui="reservaUI"] .detallesReserva_transacciones_bloqueDatosGenerales {
     background: rgba(255, 255, 255, 0.4);
     display: flex;
@@ -12009,8 +12054,9 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia {
     position: relative;
-    min-height: 80px;
+    min-height: 46px;
     min-width: 20px;
+    transition: all 500ms linear;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia::before {

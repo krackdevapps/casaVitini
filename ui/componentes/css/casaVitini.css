@@ -67,7 +67,7 @@
     display: flex;
     flex-wrap: nowrap;
     align-content: center;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     border: 1px solid transparent;
     /* padding: 10px; */
@@ -77,6 +77,13 @@
 #imgLogo {
     background: transparent;
     pointer-events: none;
+    scale: 1;
+    transition: all .500s ease-in-out;
+    width: 100%;
+
+    @starting-style {
+        scale: 0;
+    }
 }
 
 .uiNavegacion {
@@ -112,7 +119,13 @@
     align-items: center;
     height: 33px;
 }
+.elipsisIDX {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 180px;
+    display: block;
 
+}
 
 @media (max-width: 920px) {
     .uiCategoria {
@@ -206,6 +219,7 @@ header {
     border-radius: 100%;
     background: rgba(0, 0, 0, 0.317);
 }
+
 .esferaUI_flotante {
     display: none;
 }
@@ -272,8 +286,19 @@ header {
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 8px;
-    opacity: 0;
+    /* opacity: 0; */
     transition: all 1000ms;
+    scale: 1;
+    transition: scale 500ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+
+    }
+}
+
+.ocultoInicial {
+    display: none;
 }
 
 .uiMenuResponsivoDesplegado {
@@ -305,28 +330,34 @@ header {
     color: white;
 }
 
-@media (max-width: 920px) {
+@media (max-width: 1080px) {
     .uiMenuResponsivo {
         display: none;
     }
 
     .uiMenuResponsivoDesplegado {
         display: block;
+        scale: 1;
+        transition: scale 500ms ease-in-out;
+
+        @starting-style {
+            scale: 0;
+        }
     }
 
     #imgLogo {
-        background: transparent;
-        pointer-events: none;
         width: 140px;
-        transition: all 500ms linear;
+
     }
 
     .uiPanelGlobal {
         align-items: center;
     }
+
     .uiCategoria {
         justify-content: flex-start;
     }
+
     .esferaUI {
         display: none;
     }

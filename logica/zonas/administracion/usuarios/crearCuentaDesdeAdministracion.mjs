@@ -10,6 +10,7 @@ import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { usuariosLimite } from "../../../sistema/usuarios/usuariosLimite.mjs";
 import { obtenerUsuarioPorCodigoVerificacion } from "../../../repositorio/usuarios/obtenerUsuarioPorCodigoVerificacion.mjs";
+import { validadorIDX } from "../../../sistema/VitiniIDX/validadorIDX.mjs";
 
 export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -49,7 +50,7 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
                 limpiezaEspaciosAlrededor: "si",
             })
         }
-
+        await validadorIDX(usuarioIDX)
 
         // validar rol      
         await obtenerRol(rolIDV)

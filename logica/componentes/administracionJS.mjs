@@ -1960,7 +1960,7 @@ const casaVitini = {
                         } else {
                             selectorEspacioBotonConfimrar.classList.add("elementoOcultoInicialmente")
                         }
-
+                        return
                     }
                     apartamento.target.style.background = "blue"
                     apartamento.target.style.color = "white"
@@ -1975,6 +1975,7 @@ const casaVitini = {
                 confirmarReservaNueva: async () => {
                     const fechaEntrada = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                     const fechaSalida = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                    const estadoInicialIDV = document.querySelector("[selector=estadoInicialReserva]").value
 
                     const apartamentos = []
                     document.querySelectorAll("[estado=seleccionado]").forEach((apartamentoSeleccionado) => {
@@ -1991,6 +1992,7 @@ const casaVitini = {
                         zona: "administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa",
                         fechaEntrada: fechaEntrada,
                         fechaSalida: fechaSalida,
+                        estadoInicialIDV: estadoInicialIDV,
                         apartamentos: apartamentos
                     }
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
@@ -15408,6 +15410,15 @@ const casaVitini = {
                         bloqueConfiguracion.appendChild(valorConfiguracion)
                         contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
                         marcoElastico.appendChild(contenedorConfiguracionGlobal)
+
+
+
+
+
+
+
+
+                        
                         const contenedorBotones = document.createElement("div")
                         contenedorBotones.setAttribute("contenedor", "botones")
                         contenedorBotones.classList.add("administracion_configuracion_contenedorBotones")
@@ -34590,7 +34601,7 @@ const casaVitini = {
                 }
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                 if (respuestaServidor?.error) {
-                   // console.error(respuestaServidor)
+                    // console.error(respuestaServidor)
                 }
                 if (respuestaServidor.ok) {
                     return respuestaServidor
