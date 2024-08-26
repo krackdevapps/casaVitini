@@ -9,7 +9,7 @@ export const enlacesDePagoDeLaReserva = async (reservaUID) => {
         const enlacesDePagoDeLaReserva = await obtenerEnlaceDePagoPorReservaUID(reservaUID)
         const ok = []
         for (const detallesEnlace of enlacesDePagoDeLaReserva) {
-            console.log("detalles", detallesEnlace)
+
             const nombreEnlace = detallesEnlace.nombreEnlace;
             const enlaceUID = detallesEnlace.enlaceUID;
             const reservaUID = detallesEnlace.reservaUID;

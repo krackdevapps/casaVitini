@@ -9099,7 +9099,7 @@ const casaVitini = {
                                     "enlacesDePago"
                                 ]
                             }
-                            console.log("transac", transaccion)
+
 
                             const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                             const instanciaDestino = document.querySelector(`[componente=categoriaEnlacesDePago][instanciaUID="${instanciaUID}"]`)
@@ -15346,21 +15346,23 @@ const casaVitini = {
                         const diasMaximosReserva = configuracionGlobal.diasMaximosReserva
                         const diasAntelacionReserva = configuracionGlobal.diasAntelacionReserva
                         const limiteFuturoReserva = configuracionGlobal.limiteFuturoReserva
+                        const horaLimiteDelMismoDia = configuracionGlobal?.horaLimiteDelMismoDia || ""
+
                         const contenedorConfiguracionGlobal = document.createElement("div")
                         contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
                         const informacion = document.createElement("div")
                         informacion.classList.add("administracion_configuracion_informacion")
-                        informacion.innerText = "Determina los límites de las reservas que pre confirman los clientes desde Casa Vitini.A diferencia de las reservas que se confirman en el panel de administración.Las reservas que preconfirman los clientes tienen unos límites.Como unos días de antelación, número de días máximos de duración o un límite futuro para aceptar reservas hasta un punto en el futuro."
+                        informacion.innerText = "Determina los límites de las reservas que pre confirman los clientes desde Casa Vitini. A diferencia de las reservas que se confirman en el panel de administración. Las reservas que preconfirman los clientes tienen unos límites. Como unos días de antelación, número de días máximos de duración o un límite futuro para aceptar reservas hasta un punto en el futuro."
                         contenedorConfiguracionGlobal.appendChild(informacion)
-                        bloqueConfiguracion = document.createElement("div")
+                        let bloqueConfiguracion = document.createElement("div")
                         bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
-                        tituloConfiguracion = document.createElement("div")
+                        let tituloConfiguracion = document.createElement("div")
                         tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
                         tituloConfiguracion.innerText = "Dias de antelación"
                         bloqueConfiguracion.appendChild(tituloConfiguracion)
-                        descripcionConfiguracion = document.createElement("div")
+                        let descripcionConfiguracion = document.createElement("div")
                         descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
-                        descripcionConfiguracion.innerText = "Determina el número de días de antelación escribiendo el número de días de antelación.Si, por ejemplo, escribes un mínimo de diez días de antelación, se aceptarán reservas a partir del día número 11 desde el día presente.El día presente cuenta como día 0. Si, por ejemplo quisieras aceptar reservas para el mismo día, entonces establece los días de antelación en 0"
+                        descripcionConfiguracion.innerText = "Determina el número de días de antelación escribiendo el número de días de antelación.Si, por ejemplo, escribes un mínimo de diez días de antelación, se aceptarán reservas a partir del día número 11 desde el día presente. El día presente cuenta como día 0. Si, por ejemplo quisieras aceptar reservas para el mismo día, entonces establece los días de antelación en 0"
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         let valorConfiguracion = document.createElement("input")
                         valorConfiguracion.setAttribute("campo", "diasAntelacionReserva")
@@ -15370,6 +15372,9 @@ const casaVitini = {
                         valorConfiguracion.value = diasAntelacionReserva
                         valorConfiguracion.placeholder = "Determina el numero de días de antelación"
                         bloqueConfiguracion.appendChild(valorConfiguracion)
+                        const horaLimite = casaVitini.administracion.configuracion.limitesReservaPublica.componentesUI.horaDelMismoDia(horaLimiteDelMismoDia)
+                        bloqueConfiguracion.appendChild(horaLimite)
+
                         contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
                         bloqueConfiguracion = document.createElement("div")
                         bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
@@ -15398,7 +15403,7 @@ const casaVitini = {
                         bloqueConfiguracion.appendChild(tituloConfiguracion)
                         descripcionConfiguracion = document.createElement("div")
                         descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
-                        descripcionConfiguracion.innerText = "Determina el número máximo de días en lo que se está dispuesto a aceptar una reserva.Por ejemplo, si no aceptas reservas más allá de un año."
+                        descripcionConfiguracion.innerText = "Determina el número máximo de días en lo que se está dispuesto a aceptar una reserva. Por ejemplo, si no aceptas reservas más allá de un año."
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         valorConfiguracion = document.createElement("input")
                         valorConfiguracion.setAttribute("campo", "limiteFuturoReserva")
@@ -15411,14 +15416,6 @@ const casaVitini = {
                         contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
                         marcoElastico.appendChild(contenedorConfiguracionGlobal)
 
-
-
-
-
-
-
-
-                        
                         const contenedorBotones = document.createElement("div")
                         contenedorBotones.setAttribute("contenedor", "botones")
                         contenedorBotones.classList.add("administracion_configuracion_contenedorBotones")
@@ -15490,6 +15487,37 @@ const casaVitini = {
                             campo.setAttribute("valorInicial", campo.value)
                         })
                     }
+                },
+                componentesUI: {
+                    horaDelMismoDia: (horaLimiteDelMismoDia) => {
+                        const contenedor = document.createElement("div")
+                        contenedor.classList.add(
+                            "ocultoInicialmente",
+                            "flexVertical",
+                            "padding6",
+                            "gap6",
+                            "backgroundGrey1",
+                            "borderRadius12"
+                        )
+
+                        const descripcion = document.createElement("p")
+                        descripcion.classList.add(
+                            "padding6"
+                        )
+                        descripcion.innerText = `Cuando seleccionas 0 días de antelación, permites aceptar reservas el mismo día presente. Es necesario determinar una hora máxima para aceptar reservas el mismo día. Por ejemplo, puedes no aceptar reservas más tarde de las 11 de la mañana. Escribe la hora en formato 24 H y con los minutos. Por ejemplo, si la hora máxima para hacer una reserva en el mismo día es a las once en punto de la mañana, entonces escribe 11:00. Si es a las nueve de la mañana en punto, entonces escribe 09:00. Siempre escribe los dos dígitos tanto para la hora como para los minutos. Este campo solo es obligatorio rellenarlo cuando los días de antelación son 0, si no puedes dejarlo en blanco.`
+                        contenedor.appendChild(descripcion)
+
+                        const campoHora = document.createElement("input")
+                        campoHora.classList.add("administracion_configuracion_valorConfiguracionInput")
+                        campoHora.placeholder = "Escribe la hora en formato 24H, tal que asi 00:00"
+                        campoHora.setAttribute("campo", "horaLimiteDelMismoDia")
+                        campoHora.addEventListener("input", casaVitini.administracion.configuracion.limitesReservaPublica.controlCampo)
+                        campoHora.setAttribute("valorInicial", horaLimiteDelMismoDia)
+                        campoHora.value = horaLimiteDelMismoDia
+                        contenedor.appendChild(campoHora)
+                        return contenedor
+                    }
+
                 }
             },
             interruptores: {
@@ -34049,9 +34077,7 @@ const casaVitini = {
                     const columns = parseInt(getComputedStyle(gridContainer).gridTemplateColumns.split(" ").length);
                     const row = Math.floor(index / columns) + 1;
                     const column = (index % columns) + 1;
-                    //
-                    //
-                    //
+
                     const estructuraFinal = {
                         fila: row,
                         columna: column
@@ -34095,16 +34121,34 @@ const casaVitini = {
                     const gridRows = gridStyles.gridTemplateRows.split(" ").length;
                     return gridRows
                 }
+                const numeroDeFilasConDia = () => {
+                    const grid = document.querySelector("[componente=marcoMes]");
+
+                    // Selecciona todas las celdas con el atributo 'dia'
+                    const celdasConDia = grid.querySelectorAll("[dia]");
+
+                    // Crear un Set para almacenar las filas únicas
+                    const filasUnicas = new Set();
+
+                    celdasConDia.forEach(celda => {
+                        // Obtener el número de fila de la celda (usando su propiedad de estilo gridRow)
+                        const numeroDeFila = window.getComputedStyle(celda).gridRowStart;
+                        filasUnicas.add(numeroDeFila);
+                    });
+
+                    // El tamaño del Set es el número de filas con al menos una celda con el atributo 'dia'
+                    return filasUnicas.size;
+                };
                 const diferenciaDeDias = (fechaIncioMes_ISO, fechaSalidaEvento_ISO) => {
-                    const fecha1 = new Date(fechaIncioMes_ISO); //Primera fecha en formato ISO
-                    const fecha2 = new Date(fechaSalidaEvento_ISO); //Segunda fecha en formato ISO
+                    const fecha1 = new Date(fechaIncioMes_ISO); // Primera fecha en formato ISO
+                    const fecha2 = new Date(fechaSalidaEvento_ISO); // Segunda fecha en formato ISO
                     fecha1.setHours(0, 0, 0, 0);
                     fecha2.setHours(0, 0, 0, 0);
-                    //Calcula la diferencia en milisegundos
-                    const diferenciaEnMilisegundos = Math.abs(fecha2.getTime() - fecha1.getTime());
-                    //Convierte la diferencia a días
-                    const diferenciaEnDiasSalida = Math.ceil(diferenciaEnMilisegundos / (1000 * 60 * 60 * 24));
-                    return diferenciaEnDiasSalida
+                    // Calcula la diferencia en milisegundos
+                    const diferenciaEnMilisegundos = fecha2.getTime() - fecha1.getTime();
+                    // Convierte la diferencia a días y añade 1 para incluir ambos días
+                    const diferenciaEnDiasSalida = diferenciaEnMilisegundos / (1000 * 60 * 60 * 24) + 1;
+                    return diferenciaEnDiasSalida;
                 }
                 const constructorEventoUI = (metadatos) => {
                     const eventoUID = metadatos.eventoUID
@@ -34344,142 +34388,128 @@ const casaVitini = {
                                 tipoEvento: tipoEvento,
                                 detallesDelEvento: detallesDelEvento
                             }
+
+
+                            // Inicio del renderizador de eventos
                             if (mesRenderizado === mesEntrada && anoRenderizado === anoEntrada) {
-                                const selectorContenedorDia = selectorMesDestino.querySelector(`[dia="${diaEntrada}"]`)
-                                const eventosContenedor = selectorContenedorDia.getAttribute("eventosContenedor")
-                                const posicionEventoUI = (JSON.parse(eventosContenedor)).eventos[eventoUID]
-                                const conteoEventos = Object.keys(JSON.parse(eventosContenedor).eventos).length - 1
-                                const coordenadasDiaInicio = obtenerCoordenadasCeldaGrid(diaEntrada);
-                                const inicioFila = coordenadasDiaInicio.fila - 1
-                                const inicioColumna = coordenadasDiaInicio.columna
-                                const restoDeCeldas = 7 - inicioColumna
-                                const finalColumna = (duracion_en_dias - 1) >= restoDeCeldas ? (restoDeCeldas + 1) : (duracion_en_dias);
-                                let alturaFinal
-                                if (posicionEventoUI === 0) {
-                                    alturaFinal = 40
-                                } else if (posicionEventoUI === 1) {
-                                    alturaFinal = 90
-                                } else if (posicionEventoUI > 1) {
-                                    alturaFinal = (posicionEventoUI * 40) + ((posicionEventoUI + 1) * 10) + 30
-                                }
-                                let restoDeDiasDelEvento = restoDeCeldas > duracion_en_dias ? 0 : (duracion_en_dias - 1) - restoDeCeldas
-                                let filaSiguiente = inicioFila + 1
-                                const numeroFilasTotales = numeroDeFilasTotales()
-                                if (restoDeDiasDelEvento <= 0) {
+                            } else {
+                                diaEntrada = 1
+                            }
+
+                            const selectorContenedorDia = selectorMesDestino.querySelector(`[dia="${diaEntrada}"]`)
+                            const eventosContenedor = selectorContenedorDia.getAttribute("eventosContenedor")
+                            const posicionEventoUI = (JSON.parse(eventosContenedor)).eventos[eventoUID]
+                            const conteoEventos = Object.keys(JSON.parse(eventosContenedor).eventos).length - 1
+                            const coordenadasDiaInicio = obtenerCoordenadasCeldaGrid(diaEntrada);
+                            const inicioFila = coordenadasDiaInicio.fila - 1
+                            const celdasPorFilaConAtributo = obtenerNumeroDeCeldasConAtributoEnFila(inicioFila + 1, "dia")
+                            const inicioColumna = coordenadasDiaInicio.columna
+                            const celdasNoExistentes = 7 - celdasPorFilaConAtributo
+                            const inicioColumnaSinPrimeraPosicion = inicioColumna - 1
+                            const inicioFilaDia = inicioFila - 1
+                            let restoDeCeldas
+                            let diasRestantes
+
+                            if (inicioFilaDia === 1 || inicioFilaDia < numeroDeFilasConDia()) {
+                                restoDeCeldas = celdasPorFilaConAtributo - (inicioColumnaSinPrimeraPosicion - celdasNoExistentes)
+                            } else if (inicioFilaDia === numeroDeFilasConDia()) {
+                                restoDeCeldas = celdasPorFilaConAtributo - inicioColumnaSinPrimeraPosicion
+                            }
+                            let finalColumna
+
+                            if (mesRenderizado === mesEntrada && anoRenderizado === anoEntrada) {
+                                finalColumna = (duracion_en_dias) >= restoDeCeldas ? (restoDeCeldas) : (duracion_en_dias);
+
+                            } else {
+                                const fechaIncioMes_ISO = `${anoRenderizado}-${String(mesRenderizado).padStart(2, "0")}-01`
+                                console.log("fechaIncioMes_ISO", fechaIncioMes_ISO, fechaSalida)
+
+                                diasRestantes = diferenciaDeDias(fechaIncioMes_ISO, fechaSalida);
+                                console.log("diasRestantes", diasRestantes)
+
+                                finalColumna = diasRestantes >= restoDeCeldas ? (restoDeCeldas) : (diasRestantes)
+                               // finalColumna = restoDeDiasDelEvento >= celdasPorFilaConAtributo ? celdasPorFilaConAtributo : restoDeDiasDelEvento;
+
+                            }
+
+
+                            let filaSiguiente = inicioFila
+                            let alturaFinal
+                            if (posicionEventoUI === 0) {
+                                alturaFinal = 40
+                            } else if (posicionEventoUI === 1) {
+                                alturaFinal = 90
+                            } else if (posicionEventoUI > 1) {
+                                alturaFinal = (posicionEventoUI * 40) + ((posicionEventoUI + 1) * 10) + 30
+                            }
+                            const numeroFilasTotales = numeroDeFilasConDia()
+
+                            let restoDeDiasDelEvento
+                            if (mesRenderizado === mesEntrada && anoRenderizado === anoEntrada) {
+                                restoDeDiasDelEvento = restoDeCeldas > duracion_en_dias ? 0 : (duracion_en_dias) - restoDeCeldas
+
+                                if (restoDeDiasDelEvento === 0) {
                                     configuracionEventoUI.css = "administracion_calendario_eventoUI_inicioFinal"
                                 } else {
                                     configuracionEventoUI.css = "administracion_calendario_eventoUI_inicioSolo"
                                 }
-                                configuracionEventoUI.altura = alturaFinal
-                                configuracionEventoUI.inicioColumna = inicioColumna
-                                configuracionEventoUI.finalColumna = finalColumna
-                                configuracionEventoUI.inicioFila = inicioFila
-                                const eventoUI = constructorEventoUI(configuracionEventoUI)
-                                selectorMesDestino.appendChild(eventoUI)
-                                const posicionDiaUno = obtenerCoordenadasCeldaGrid(1).columna
-                                const filaInicialDelEvento = (obtenerCoordenadasCeldaGrid(diaEntrada).fila - 2)
-                                let sumadorDiaFila
-                                if ((filaInicialDelEvento) === 1) {
-                                    sumadorDiaFila = siguienteLunes(posicionDiaUno)
-                                } else {
-                                    let sumaDias = 7 * (filaInicialDelEvento - 1)
-                                    sumadorDiaFila = siguienteLunes(posicionDiaUno) + sumaDias
-                                }
-                                while (restoDeDiasDelEvento > 0 && numeroFilasTotales >= filaSiguiente) {
-                                    const selectorContenedorDia_loop = selectorMesDestino.querySelector(`[dia="${sumadorDiaFila}"]`)
-                                    const eventosContenedor_loop = selectorContenedorDia_loop.getAttribute("eventosContenedor")
-                                    sumadorDiaFila = 7 + sumadorDiaFila
-                                    const posicionEventoUI_loop = (JSON.parse(eventosContenedor_loop)).eventos[eventoUID]
-                                    let alturaFinal
-                                    if (posicionEventoUI_loop === 0) {
-                                        alturaFinal = 40
-                                    } else if (posicionEventoUI_loop === 1) {
-                                        alturaFinal = 90
-                                    } else if (posicionEventoUI_loop > 1) {
-                                        alturaFinal = (posicionEventoUI_loop * 40) + ((posicionEventoUI_loop + 1) * 10) + 30
-                                    }
-                                    const celdasPorFilaConAtributo = obtenerNumeroDeCeldasConAtributoEnFila(filaSiguiente + 1, "dia")
-                                    const finalColumna_ = restoDeDiasDelEvento >= celdasPorFilaConAtributo ? celdasPorFilaConAtributo : (restoDeDiasDelEvento);
-                                    restoDeDiasDelEvento = Math.abs(restoDeDiasDelEvento - finalColumna_)
-                                    if (restoDeDiasDelEvento <= 0) {
-                                        configuracionEventoUI.css = "administracion_calendario_eventoUI_finalSolo"
-                                    } else {
-                                        configuracionEventoUI.css = "administracion_calendario_eventoUI_transicion"
-                                    }
-                                    configuracionEventoUI.altura = alturaFinal
-                                    configuracionEventoUI.inicioColumna = 1
-                                    configuracionEventoUI.finalColumna = finalColumna_
-                                    configuracionEventoUI.inicioFila = filaSiguiente
-                                    const eventoUI = constructorEventoUI(configuracionEventoUI)
-                                    selectorMesDestino.appendChild(eventoUI)
-                                    filaSiguiente = filaSiguiente + 1
-                                }
                             } else {
-                                const selectorContenedorDia = selectorMesDestino.querySelector(`[dia="1"]`)
-                                const eventosContenedor = selectorContenedorDia.getAttribute("eventosContenedor")
-                                const posicionEventoUI = (JSON.parse(eventosContenedor)).eventos[eventoUID]
-                                const coordenadasDiaInicio = obtenerCoordenadasCeldaGrid(1);
-                                const inicioFila = coordenadasDiaInicio.fila - 1
-                                const inicioColumna = coordenadasDiaInicio.columna
-                                const restoDeCeldas = 7 - inicioColumna
-                                const fechaIncioMes_ISO = `${anoRenderizado}-${String(mesRenderizado).padStart(2, "0")}-01`
-                                //const fechaSalidaEvento_ISO = `${anoSalida}-${mesSalida}-${diaSalida}`;
-                                const diasRestantes = diferenciaDeDias(fechaIncioMes_ISO, fechaSalida);
-                                const finalColumna = diasRestantes >= restoDeCeldas ? (restoDeCeldas + 1) : (diasRestantes + 1);
-                                let alturaFinal
-                                if (posicionEventoUI === 0) {
-                                    alturaFinal = 40
-                                } else if (posicionEventoUI === 1) {
-                                    alturaFinal = 90
-                                } else if (posicionEventoUI > 1) {
-                                    alturaFinal = (posicionEventoUI * 40) + ((posicionEventoUI + 1) * 10) + 30
+                                restoDeDiasDelEvento = restoDeCeldas > diasRestantes ? 0 : Math.abs((diasRestantes) - restoDeCeldas)
+                                if (restoDeDiasDelEvento <= 0) {
+                                    configuracionEventoUI.css = "administracion_calendario_eventoUI_finalSolo"
+                                } else {
+                                    configuracionEventoUI.css = "administracion_calendario_eventoUI_transicion"
                                 }
-                                let restoDeDiasDelEvento = restoDeCeldas > diasRestantes ? 0 : Math.abs((diasRestantes) - restoDeCeldas)
-                                let filaSiguiente = inicioFila + 1
-                                const numeroFilasTotales = numeroDeFilasTotales()
+                            }
+
+
+                            configuracionEventoUI.altura = alturaFinal
+                            configuracionEventoUI.inicioColumna = inicioColumna
+                            configuracionEventoUI.finalColumna = finalColumna
+                            configuracionEventoUI.inicioFila = inicioFila
+                            const eventoUI = constructorEventoUI(configuracionEventoUI)
+                            selectorMesDestino.appendChild(eventoUI)
+                            const posicionDiaUno = obtenerCoordenadasCeldaGrid(1).columna
+                            const filaInicialDelEvento = (obtenerCoordenadasCeldaGrid(diaEntrada).fila - 2)
+                            let sumadorDiaFila
+
+                            if (filaInicialDelEvento === 1) {
+                                sumadorDiaFila = siguienteLunes(posicionDiaUno)
+                            } else {
+                                let sumaDias = 7 * (filaInicialDelEvento - 1)
+                                sumadorDiaFila = siguienteLunes(posicionDiaUno) + sumaDias
+                            }
+                            while (restoDeDiasDelEvento > 0 && numeroFilasTotales >= filaSiguiente) {
+                                filaSiguiente = filaSiguiente + 1
+
+                                const selectorContenedorDia_loop = selectorMesDestino.querySelector(`[dia="${sumadorDiaFila}"]`)
+                                const eventosContenedor_loop = selectorContenedorDia_loop.getAttribute("eventosContenedor")
+                                sumadorDiaFila = 7 + sumadorDiaFila
+                                const posicionEventoUI_loop = (JSON.parse(eventosContenedor_loop)).eventos[eventoUID]
+                                let alturaFinal
+                                if (posicionEventoUI_loop === 0) {
+                                    alturaFinal = 40
+                                } else if (posicionEventoUI_loop === 1) {
+                                    alturaFinal = 90
+                                } else if (posicionEventoUI_loop > 1) {
+                                    alturaFinal = (posicionEventoUI_loop * 40) + ((posicionEventoUI_loop + 1) * 10) + 30
+                                }
+                                const celdasPorFilaConAtributo = obtenerNumeroDeCeldasConAtributoEnFila(filaSiguiente + 1, "dia")
+                                const finalColumna_ = restoDeDiasDelEvento >= celdasPorFilaConAtributo ? celdasPorFilaConAtributo : (restoDeDiasDelEvento);
+                                restoDeDiasDelEvento = Math.abs(restoDeDiasDelEvento - finalColumna_)
                                 if (restoDeDiasDelEvento <= 0) {
                                     configuracionEventoUI.css = "administracion_calendario_eventoUI_finalSolo"
                                 } else {
                                     configuracionEventoUI.css = "administracion_calendario_eventoUI_transicion"
                                 }
                                 configuracionEventoUI.altura = alturaFinal
-                                configuracionEventoUI.inicioColumna = inicioColumna
-                                configuracionEventoUI.finalColumna = finalColumna
-                                configuracionEventoUI.inicioFila = inicioFila
+                                configuracionEventoUI.inicioColumna = 1
+                                configuracionEventoUI.finalColumna = finalColumna_
+                                configuracionEventoUI.inicioFila = filaSiguiente
                                 const eventoUI = constructorEventoUI(configuracionEventoUI)
                                 selectorMesDestino.appendChild(eventoUI)
-                                const posicionDiaUno = obtenerCoordenadasCeldaGrid(1).columna
-                                let sumadorDiaFila = siguienteLunes(posicionDiaUno)
-                                while (restoDeDiasDelEvento > 0 && numeroFilasTotales >= filaSiguiente) {
-                                    const selectorContenedorDia_loop = selectorMesDestino.querySelector(`[dia="${sumadorDiaFila}"]`)
-                                    sumadorDiaFila = 7 + sumadorDiaFila
-                                    const eventosContenedor__loop = selectorContenedorDia_loop.getAttribute("eventosContenedor")
-                                    const posicionEventoUI_loop = (JSON.parse(eventosContenedor__loop)).eventos[eventoUID]
-                                    let alturaFinal
-                                    if (posicionEventoUI_loop === 0) {
-                                        alturaFinal = 40
-                                    } else if (posicionEventoUI_loop === 1) {
-                                        alturaFinal = 90
-                                    } else if (posicionEventoUI_loop > 1) {
-                                        alturaFinal = (posicionEventoUI_loop * 40) + ((posicionEventoUI_loop + 1) * 10) + 30
-                                    }
-                                    const celdasPorFilaConAtributo = obtenerNumeroDeCeldasConAtributoEnFila(filaSiguiente + 1, "dia")
-                                    const finalColumna_ = restoDeDiasDelEvento >= celdasPorFilaConAtributo ? celdasPorFilaConAtributo : restoDeDiasDelEvento;
-                                    restoDeDiasDelEvento = restoDeDiasDelEvento - finalColumna_
-                                    if (restoDeDiasDelEvento <= 0) {
-                                        configuracionEventoUI.css = "administracion_calendario_eventoUI_finalSolo"
-                                    } else {
-                                        configuracionEventoUI.css = "administracion_calendario_eventoUI_transicion"
-                                    }
-                                    configuracionEventoUI.altura = alturaFinal
-                                    configuracionEventoUI.inicioColumna = 1
-                                    configuracionEventoUI.finalColumna = finalColumna_
-                                    configuracionEventoUI.inicioFila = filaSiguiente
-                                    const eventoUI = constructorEventoUI(configuracionEventoUI)
-                                    selectorMesDestino.appendChild(eventoUI)
-                                    filaSiguiente = filaSiguiente + 1
-                                }
                             }
+
                         }
                     }
                 }

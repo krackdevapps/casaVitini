@@ -38,6 +38,19 @@ export const guardarConfiguracion = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
 
+        const horaLimiteDelMismoDia = entrada.body?.horaLimiteDelMismoDia || ""
+        if (horaLimiteDelMismoDia.length > 0) {
+            validadoresCompartidos.tipos.horas({
+                hora: horaLimiteDelMismoDia || "",
+                nombreCampo: "El campo horaLimiteDelMismoDia",
+            })
+        }
+        if (diasAntelacionReserva === 0 && horaLimiteDelMismoDia.length === 0) {
+            const error = "Por favor, si especificas 0 días de antelación y permites reservas el mismo día, determina una hora límite para hacer la reserva el mismo día.";
+            throw new Error(error);
+        }
+
+
         if (Number(diasAntelacionReserva) >= Number(limiteFuturoReserva)) {
             const error = "Los días de antelación no pueden ser iguales o superiores a los días del limiteFuturoReserva porque entonces no se permiten reservas de más de 0 días";
             throw new Error(error);
@@ -60,8 +73,10 @@ export const guardarConfiguracion = async (entrada, salida) => {
             diasAntelacionReserva: diasAntelacionReserva,
             diasMaximosReserva: diasMaximosReserva,
             limiteFuturoReserva: limiteFuturoReserva,
+            horaLimiteDelMismoDia: horaLimiteDelMismoDia
 
         }
+
 
         await actualizarParConfiguracion(dataActualizarParConfiguracion)
 

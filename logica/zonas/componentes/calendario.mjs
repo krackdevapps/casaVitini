@@ -24,14 +24,29 @@ export const calendario = async (entrada) => {
         const mesPresenteTZ = tiempoZH.month;
         const anoPresenteTZ = tiempoZH.year;
 
+
         const paresConfiguracion = await obtenerParametroConfiguracion([
             "limiteFuturoReserva",
             "diasAntelacionReserva",
-            "diasMaximosReserva"
+            "diasMaximosReserva",
+            "horaLimiteDelMismoDia"
         ])
         const limiteFuturoReserva = paresConfiguracion.limiteFuturoReserva
-        const diasAntelacionReserva = paresConfiguracion.diasAntelacionReserva
+        let diasAntelacionReserva = paresConfiguracion.diasAntelacionReserva
         const diasMaximosReserva = paresConfiguracion.diasMaximosReserva
+        const horaLimiteDelMismoDia = paresConfiguracion.horaLimiteDelMismoDia
+
+        const horaComparar = DateTime.fromFormat(horaLimiteDelMismoDia, "HH:mm", { zone: zonaHoraria });
+
+
+        if (diasAntelacionReserva === "0") {
+            if (tiempoZH > horaComparar) {
+
+                diasAntelacionReserva = "1"
+            } else {
+
+            }
+        }
 
 
         if (tipo === "actual") {

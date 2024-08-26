@@ -10,7 +10,8 @@ export const obtenerConfiguracion = async (entrada, salida) => {
         const dadaObtenerPares = [
             "diasMaximosReserva",
             "diasAntelacionReserva",
-            "limiteFuturoReserva"
+            "limiteFuturoReserva",
+            "horaLimiteDelMismoDia"
         ]
         const paresConfiguracion = await obtenerParConfiguracion(dadaObtenerPares)
         const ok = {

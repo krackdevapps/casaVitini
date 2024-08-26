@@ -10,6 +10,7 @@ import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { generadorPDF } from "../../../sistema/pdf/generadorPDF.mjs";
 import { utilidades } from "../../../componentes/utilidades.mjs";
+import { validarHoraLimitePublica } from "../../../sistema/reservas/validarHoraLimitePublica.mjs";
 
 export const preConfirmarReserva = async (entrada) => {
     const mutex = new Mutex()
@@ -28,7 +29,6 @@ export const preConfirmarReserva = async (entrada) => {
             filtroTitular: "si"
         })
 
-
         const testingVI = process.env.TESTINGVI
         if (testingVI) {
             reserva.testingVI = testingVI
@@ -36,6 +36,7 @@ export const preConfirmarReserva = async (entrada) => {
 
         // Si existe la variable, la reserva se guarda con variable de entorno
         // No se envia el email de confirmacion en entorno de pruebas
+        await validarHoraLimitePublica()
 
         await campoDeTransaccion("iniciar")
         await eliminarBloqueoCaducado()

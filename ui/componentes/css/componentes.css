@@ -5492,7 +5492,7 @@ main[zonaCSS="/"] {
 
 [zonaCSS="administracion/situacion"] .espacioSituacion {
     display: grid;
-    grid-gap: 10px;
+    grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
     justify-items: stretch;
     justify-content: center;
@@ -5500,7 +5500,6 @@ main[zonaCSS="/"] {
     grid-template-columns: repeat(3, 1fr);
     align-items: stretch;
     width: 100%;
-    padding: 10px;
 }
 
 @media (max-width: 1000px) {
@@ -10455,7 +10454,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="administracion/configuracion"] .administracion_configuracion_bloqueConfiguracion {
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 6px;
     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
@@ -10464,7 +10463,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
-    gap: 0px;
+    gap: 6px;
     text-decoration: none;
     cursor: default;
     color: black;
@@ -11482,7 +11481,24 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     align-items: center;
 }
-
+[zonaCSS="/alojamiento"] .bannerTiempoRestante,
+[zonaCSS="/alojamiento/resumen"] .bannerTiempoRestante  {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 16px;
+    gap: 6px;
+    user-select: none;
+    -webkit-user-select: none;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    transition: all 500ms;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 [zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_banner {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
