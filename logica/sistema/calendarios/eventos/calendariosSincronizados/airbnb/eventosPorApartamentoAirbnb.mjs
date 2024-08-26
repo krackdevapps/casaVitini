@@ -4,6 +4,7 @@ import { DateTime } from "luxon";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { eventosCalendarioPorUID } from "../../../../calendariosSincronizados/airbnb/eventosCalendarioPorUID.mjs";
 import { obtenerCalendarioPorCalendarioUID } from "../../../../../repositorio/calendario/obtenerCalendarioPorCalendarioUID.mjs";
+import { codigoZonaHoraria } from "../../../../configuracion/codigoZonaHoraria.mjs";
 export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
     try {
         const fecha = contenedorDatos.fecha
@@ -26,7 +27,7 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             apartamentoIDV,
             errorSi: "noExiste"
         })).apartamentoUI
-
+        const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
 
         const fechaArray = fecha.split("-")
         const mes = fechaArray[0]
@@ -72,10 +73,15 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             uidTemporalContador = uidTemporalContador + 1
             // Definir las fechas en formato ISO
             detallesDelEvento.eventoUID = "calendarioAirbnbUID_" + calendarioUID + "_apartamentoIDV_" + apartamentoIDV + "_uidEvento_" + uidTemporalContador
-            const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada);
-            const fechaSalida_objeto = DateTime.fromISO(fechaSalida);
-            const diferenciaEnDias = fechaSalida_objeto.diff(fechaEntrada_objeto, 'days').days;
-            detallesDelEvento.duracion_en_dias = diferenciaEnDias + 1
+            const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
+            const fechaSalida_objeto = DateTime.fromISO(fechaSalida, { zone: zonaHoraria });
+
+            console.log("fechaEntrada_objeto", fechaEntrada_objeto, "fechaSalida_objeto", fechaSalida_objeto)
+
+            const diferenciaEnDias = fechaSalida_objeto.diff(fechaEntrada_objeto, 'days').days + 1;
+            console.log("diferenciaEnDias", diferenciaEnDias, )
+
+            detallesDelEvento.duracion_en_dias = diferenciaEnDias
             detallesDelEvento.fechaEntrada = fechaEntrada
             detallesDelEvento.fechaSalida = fechaSalida
             detallesDelEvento.apartamentoUI = apartamentoUI

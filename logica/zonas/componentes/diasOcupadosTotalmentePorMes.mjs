@@ -186,6 +186,8 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
             const calendarioObjeto = detallesDelCalendario.calendarioObjeto;
             for (const detallesDelEvento of calendarioObjeto) {
                 const fechaInicioEvento_ISO = detallesDelEvento.fechaInicio;
+                // Por el formato de airnb, restar un dia a la fecha final
+
                 const fechaFinalEvento_ISO = detallesDelEvento.fechaFinal;
                 const apartamentosPorReservaArray = [apartamentoIDV];
                 const fechasInternas = obtenerFechasInternas(fechaInicioEvento_ISO, fechaFinalEvento_ISO);

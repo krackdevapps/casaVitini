@@ -14,7 +14,9 @@ export const calendarios_compartidos = async (entrada, salida) => {
             .filter(urlPath => urlPath.trim() !== "");
         const calendarioUIDPublico = urlArray[0];
         const calendarioPublico = await calendariosCompartidos(calendarioUIDPublico)
-        salida.attachment('eventos.ics');
+
+        const nombreFinalCalendarioIDV = "casaVitini-calendar-" + urlArray
+        salida.attachment(nombreFinalCalendarioIDV);
         salida.send(calendarioPublico);
 
     } catch (errorCapturado) {

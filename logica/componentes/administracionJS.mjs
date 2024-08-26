@@ -34013,7 +34013,6 @@ const casaVitini = {
                     titulo.innerText = `Detalles del evento`
                     contenedor.appendChild(titulo)
 
-
                     const info = document.createElement("p")
                     info.classList.add(
                         "textoCentrado"
@@ -34028,10 +34027,7 @@ const casaVitini = {
                     infoDetallesDelEvento.innerText = detallesDelEventoUI
                     if (detallesDelEventoUI) {
                         contenedor.appendChild(infoDetallesDelEvento)
-
                     }
-
-
 
                     const nobreDelEvento = document.createElement("p")
                     nobreDelEvento.classList.add(
@@ -34040,7 +34036,6 @@ const casaVitini = {
                     )
                     nobreDelEvento.innerText = nombreEventoFinal
                     contenedor.appendChild(nobreDelEvento)
-
 
                     const botonIrAlEvento = document.createElement("div")
                     botonIrAlEvento.classList.add("boton")
@@ -34057,8 +34052,6 @@ const casaVitini = {
                         contenedor.appendChild(botonIrAlEvento)
                     }
 
-
-
                     const botonCancelar = document.createElement("div")
                     botonCancelar.classList.add("boton")
                     botonCancelar.setAttribute("boton", "cancelar")
@@ -34067,7 +34060,6 @@ const casaVitini = {
                         return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                     })
                     contenedor.appendChild(botonCancelar)
-
                 }
                 const obtenerCoordenadasCeldaGrid = (celdaGrid) => {
                     const selectorDiaRenderizado = document.querySelector(`[dia="${celdaGrid}"]`);
@@ -34364,6 +34356,7 @@ const casaVitini = {
                             const fechaEntrada = detallesDelEvento.fechaEntrada
                             const fechaSalida = detallesDelEvento.fechaSalida
                             const duracion_en_dias = detallesDelEvento.duracion_en_dias
+                            
                             const tipoEvento = detallesDelEvento.tipoEvento
                             let diaEntrada
                             let mesEntrada
@@ -34422,16 +34415,10 @@ const casaVitini = {
 
                             } else {
                                 const fechaIncioMes_ISO = `${anoRenderizado}-${String(mesRenderizado).padStart(2, "0")}-01`
-                                console.log("fechaIncioMes_ISO", fechaIncioMes_ISO, fechaSalida)
-
                                 diasRestantes = diferenciaDeDias(fechaIncioMes_ISO, fechaSalida);
-                                console.log("diasRestantes", diasRestantes)
-
                                 finalColumna = diasRestantes >= restoDeCeldas ? (restoDeCeldas) : (diasRestantes)
-                               // finalColumna = restoDeDiasDelEvento >= celdasPorFilaConAtributo ? celdasPorFilaConAtributo : restoDeDiasDelEvento;
-
+                                // finalColumna = restoDeDiasDelEvento >= celdasPorFilaConAtributo ? celdasPorFilaConAtributo : restoDeDiasDelEvento;
                             }
-
 
                             let filaSiguiente = inicioFila
                             let alturaFinal
@@ -34461,8 +34448,7 @@ const casaVitini = {
                                     configuracionEventoUI.css = "administracion_calendario_eventoUI_transicion"
                                 }
                             }
-
-
+                            console.log("eventoUID", eventoUID, finalColumna, duracion_en_dias)
                             configuracionEventoUI.altura = alturaFinal
                             configuracionEventoUI.inicioColumna = inicioColumna
                             configuracionEventoUI.finalColumna = finalColumna
