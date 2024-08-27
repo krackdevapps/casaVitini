@@ -1005,7 +1005,7 @@ export const validadoresCompartidos = {
                 const error = `${nombreCampo} está vacío`;
                 throw new Error(error);
             }
-            const filtroURL = /^[a-zA-Z0-9/_./]+$/;
+            const filtroURL = /^[a-zA-Z0-9/_.:/]+$/;
             if (!filtroURL.test(urlPath)) {
                 const error = `${nombreCampo} no cumple con el formato esperado de una url.`;
                 throw new Error(error);

@@ -8,7 +8,6 @@ import { confirmarModificarFechaReserva } from '../../logica/zonas/administracio
 
 describe('critical: flexible global date range bookins', () => {
     const testingVI = "testingflexibledaterangebookin"
-
     const apartamentoIDV = "apartmentflexibledaterangebookin"
     const apartamentoUI = "Apartamento temporal flexibledaterangebookin"
     const habitacionIDV = "flexibledaterangebookin"
@@ -48,6 +47,7 @@ describe('critical: flexible global date range bookins', () => {
                 fechaEntrada: "2026-10-10",
                 fechaSalida: "2026-10-20",
                 apartamentos: [apartamentoIDV],
+                estadoInicialIDV: "confirmada"
             },
             session: fakeAdminSession
         }
@@ -65,6 +65,8 @@ describe('critical: flexible global date range bookins', () => {
                     fechaEntrada: "2026-10-02",
                     fechaSalida: "2026-10-08",
                     apartamentos: [apartamentoIDV],
+                    estadoInicialIDV: "confirmada"
+
                 },
                 session: fakeAdminSession
             }
@@ -82,6 +84,8 @@ describe('critical: flexible global date range bookins', () => {
                     fechaEntrada: "2026-10-22",
                     fechaSalida: "2026-10-28",
                     apartamentos: [apartamentoIDV],
+                    estadoInicialIDV: "confirmada"
+
                 },
                 session: fakeAdminSession
             }
@@ -133,7 +137,6 @@ describe('critical: flexible global date range bookins', () => {
                 sentidoRango: "pasado",
                 mesCalendario: "09",
                 anoCalendario: "2026"
-
             },
             session: fakeAdminSession
         }

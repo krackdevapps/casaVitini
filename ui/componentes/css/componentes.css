@@ -441,10 +441,12 @@ main[zonaCSS="/"] {
     padding: 10px;
 
     scale: 1;
-    transition: scale 500ms ease-in-out;
+    opacity: 1;
+    transition: scale, opacity 500ms ease-in-out;
 
     @starting-style {
         scale: 0;
+        opacity 0;
     }
 }
 
@@ -1331,7 +1333,12 @@ main[zonaCSS="/"] {
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
+    scale: 1;
+    transition: scale 500ms ease-in-out;
 
+    @starting-style {
+        scale: 0;
+    }
 }
 
 .plaza_alojamiento_contenedorApartamento:hover+.plaza_alojamiento_contenedorApartamento_selectorUI {
@@ -14191,6 +14198,13 @@ grid-template-columns: 0.5fr 1.5fr;
     left: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
+
+    transition: opacity 3s;
+    opacity: 1;
+    @starting-style {
+        opacity: 0;
+
+    }
 }
 
 [zonaCSS="/micasa"] .videoPresentacion {

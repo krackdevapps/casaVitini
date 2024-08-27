@@ -9,8 +9,11 @@ import { exportarClendario } from './airbnb/exportarCalendario.mjs';
 import { horaEntradaSalida } from '../horaEntradaSalida.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 
-export const calendariosCompartidos = async (calendarioUIDPublico) => {
+export const calendariosCompartidos = async (data) => {
     try {
+        const calendarioUIDPublico = data.calendarioUIDPublico
+        const formato = data.formato
+
         const calendariosporUIDPublico = await obtenerCalendarioPorCalendarioUIDPublico({
             publicoUID: calendarioUIDPublico,
             errorSi: "noExiste"
@@ -27,6 +30,7 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
         const fechaInicio = DateTime.fromISO(fechaActual_ISO);
         const fechaFin = DateTime.fromISO(fechaLimite);
         const matrizHoraEntradaSalida = await horaEntradaSalida();
+        ("matrizHoraEntradaSalida", matrizHoraEntradaSalida)
         const generarFechasEnRango = (fechaInicio, fechaFin) => {
             const fechasEnRango = [];
             let fechaActual = fechaInicio;
@@ -51,11 +55,12 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
         const eventos = [];
         if (bloqueosPorTipoPorApartamentoIDV.length > 0) {
             for (const detallesdelBloqueo of bloqueosPorTipoPorApartamentoIDV) {
-                const bloqueoUID = detallesdelBloqueo.uid;
+                const bloqueoUID = detallesdelBloqueo.bloqueoUID;
                 const estructuraEVENTO = {
                     start: fechaInicio,
                     end: fechaFin,
                     summary: 'Bloqueo permanente en casavitini.com',
+                    uid: `bloqueo_${bloqueoUID}`,
                     description: `Detalles del bloqueo: https://casavitini.com/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
                 };
                 eventos.push(estructuraEVENTO);
@@ -71,7 +76,7 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
             for (const detalleDelBloqueo of bloqueosPorRangoPorTipo) {
                 const fechaEntradaBloqueo_ISO = detalleDelBloqueo.fechaInicio;
                 const fechaSalidaBloqueo_ISO = detalleDelBloqueo.fechaFin;
-                const bloqueoUID = detalleDelBloqueo.uid;
+                const bloqueoUID = detalleDelBloqueo.bloqueoUID;
                 // Aqui hay que hacer que no muestre la hora
                 const fechaEntrada_objeto = (DateTime.fromObject({
                     year: fechaEntradaBloqueo_ISO.split("-")[0],
@@ -96,6 +101,7 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
                     start: fechaEntrada_objeto.toISO(),
                     end: fechaSalida_objeto.toISO(),
                     summary: `Bloqueo temporal del ${apartamentoUI} en casavitini.com`,
+                    uid: `bloqueo_${bloqueoUID}`,
                     description: `Detalles del bloqueo: https://casavitini.com/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
                 };
                 eventos.push(estructuraEVENTO);
@@ -105,6 +111,7 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
                 fechaIncioRango_ISO: fechaActual_ISO,
                 fechaFinRango_ISO: fechaLimite,
             })
+                ("reservasPorRanfgo", reservasPorRango)
             for (const reserva of reservasPorRango) {
 
                 const reservaUID = reserva.reservaUID;
@@ -137,6 +144,7 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
                     start: fechaEntrada_objeto.toISO(),
                     end: fechaSalida_objeto.toISO(),
                     summary: `${apartamentoUI} de la reserva ${reservaUID} en casavitini.com`,
+                    uid: `reserva_${reservaUID}`,
                     description: "Detalles de la reserva: https://casavitini.com/administracion/reservas/reserva:" + reservaUID
                 };
                 eventos.push(estructuraEVENTO);
@@ -152,8 +160,53 @@ export const calendariosCompartidos = async (calendarioUIDPublico) => {
                 }
             }
         }
-        const calendario = await exportarClendario(eventos);
-        return calendario
+
+        if (formato === "ics_v2") {
+            const calendario = await exportarClendario(eventos);
+            return calendario
+        } else if (formato === "ics_v2_airbnb") {
+            const contendorEventosFormateados = eventos.map(evento => {
+                const start = evento.start
+                const end = evento.end
+                const summary = evento.summary
+                const uid = evento.uid
+                const description = evento.description
+
+                const fechaInicioSinHora = DateTime.fromISO(start).toISODate()
+                const fechaFinalSinHora = DateTime.fromISO(end).toISODate()
+
+                const fechaInicioFormatoAirbnb = fechaInicioSinHora.replaceAll("-", "")
+                const fechaFinalFormatoAirbnb = fechaFinalSinHora.replaceAll("-", "")
+                // DESCRIPTION:${description}
+
+                const constructorEvetno = `
+                BEGIN:VEVENT
+                DTEND;VALUE=DATE:${fechaFinalFormatoAirbnb}
+                DTSTART;VALUE=DATE:${fechaInicioFormatoAirbnb}
+                UID:${uid}
+                SUMMARY:${summary}
+                END:VEVENT`
+                return constructorEvetno
+            })
+
+            const estructuraGlobal = `
+            BEGIN:VCALENDAR
+            PRODID;X-RICAL-TZSOURCE=TZINFO:-//CasaVitini//Vitini Calendar//EN
+            CALSCALE:GREGORIAN
+            VERSION:2.0
+            ${contendorEventosFormateados.join("\n")}   
+            END:VCALENDAR
+            `
+                .split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0)
+                .join('\n');
+
+            return estructuraGlobal
+        } else {
+            const m = "No se reconoce le tipo de formato, solo puede ser ics_v1 o ics_v1_airbnb"
+            throw new Error(m)
+        }
     } catch (errorCapturado) {
         throw errorCapturado
     }

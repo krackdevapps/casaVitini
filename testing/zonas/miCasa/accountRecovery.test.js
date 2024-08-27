@@ -11,8 +11,8 @@ import { verificarCuenta } from '../../../logica/zonas/miCasa/verificarCuenta.mj
 import { restablecerClave } from '../../../logica/zonas/miCasa/recuperarCuenta/restablecerClave.mjs';
 
 describe('account recovery', () => {
-    const testingVI = "testingbookingmicasa"
-    const usuarioIDV_inicial = "userfortestingformicasametodos"
+    const testingVI = "testingbooki"
+    const usuarioIDV_inicial = "userfortestingf"
     const fakeAdminSession = {
         usuario: usuarioIDV_inicial,
         rolIDV: "administrador",

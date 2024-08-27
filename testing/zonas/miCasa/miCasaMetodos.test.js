@@ -15,8 +15,8 @@ import { obtenerUsuario } from '../../../logica/repositorio/usuarios/obtenerUsua
 import { eliminarCuentaDesdeMiCasa } from '../../../logica/zonas/miCasa/eliminarCuentaDesdeMiCasa.mjs';
 
 describe('miCasa Metodos', () => {
-    const testingVI = "testingmicasametodos"
-    const usuarioIDV_inicial = "userfortestingformicasametodos"
+    const testingVI = "testingmicasatodos"
+    const usuarioIDV_inicial = "userfortestingfo"
     const clave_inicial = "123456789A!"
     const fakeAdminSession = {
         usuario: usuarioIDV_inicial,

@@ -55,7 +55,7 @@ describe('critical: entityAndConfigHostingValidation', () => {
     const fechaCreacionVirtual = DateTime.utc().toISO();
     const fechaInicioVirutal_futuro = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 2 }).toISODate();
     const fechaFinalVirtual_futuro = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 3 }).toISODate();
-    
+
     const fechaCreacionSimulacion = DateTime.fromISO(fechaCreacionVirtual).minus({ days: 5 }).toISODate();
 
     const fechaInicioVirutal_pasado = DateTime.fromISO(fechaCreacionVirtual).minus({ days: 4 }).toISODate();
@@ -67,6 +67,8 @@ describe('critical: entityAndConfigHostingValidation', () => {
                 fechaEntrada: fechaInicioVirutal_futuro,
                 fechaSalida: fechaFinalVirtual_futuro,
                 apartamentos: [apartamentoIDV],
+                estadoInicialIDV: "confirmada"
+
             },
             session: fakeAdminSession
         }
@@ -101,6 +103,8 @@ describe('critical: entityAndConfigHostingValidation', () => {
                 fechaEntrada: fechaInicioVirutal_pasado,
                 fechaSalida: fechaFinalVirtual_pasado,
                 apartamentos: [apartamentoIDV],
+                estadoInicialIDV: "confirmada"
+
             },
             session: fakeAdminSession
         }
@@ -117,7 +121,7 @@ describe('critical: entityAndConfigHostingValidation', () => {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
                 fechaCreacion: fechaCreacionSimulacion,
-                fechaEntrada:fechaInicioVirutal_pasado,
+                fechaEntrada: fechaInicioVirutal_pasado,
                 fechaSalida: fechaFinalVirtual_pasado,
                 apartamentosIDVARRAY: [apartamentoIDV],
             },
@@ -131,16 +135,16 @@ describe('critical: entityAndConfigHostingValidation', () => {
     })
 
     test('delete configuracion hosting with ok', async () => {
-            const makeEntity = {
-                body: {
-                    apartamentoIDV
-                },
-                session: fakeAdminSession
-            }
-            const response = await eliminarConfiguracionDeAlojamiento(makeEntity)
-            expect(response).not.toBeUndefined();
-            expect(typeof response).toBe('object');
-            expect(response).toHaveProperty('ok');
+        const makeEntity = {
+            body: {
+                apartamentoIDV
+            },
+            session: fakeAdminSession
+        }
+        const response = await eliminarConfiguracionDeAlojamiento(makeEntity)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
     })
 
     // Reconstrui desde instantaneas en reserva y simulacion

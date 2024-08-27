@@ -46,6 +46,8 @@ describe('critical: control avaible apartments when creating bookins', () => {
                 fechaEntrada: "2026-10-10",
                 fechaSalida: "2026-10-20",
                 apartamentos: [apartamentoIDV],
+                estadoInicialIDV: "confirmada"
+
             },
             session: fakeAdminSession
         }

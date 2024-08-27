@@ -6,9 +6,9 @@ export const exportarClendario = async (eventos) => {
         prodId: { company: 'Airbnb Inc', product: 'Hosting Calendar 0.8.8', language: 'EN', tzSource: 'TZINFO' },
         timezone: 'UTC',
         version: "2.0",
-        CALSCALE:"GREGORIAN"
+        CALSCALE: "GREGORIAN"
     });
-     const eventosFormato = [
+    const eventosFormato = [
         {
             start: 'VALUE=DATE:20240824',
             end: 'VALUE=DATE:20240830',
@@ -17,7 +17,7 @@ export const exportarClendario = async (eventos) => {
             description: 'Reserva de casavitini'
         }
     ]
-    eventosFormato.forEach(evento => {
+    eventos.forEach(evento => {
         cal.createEvent({
             start: evento.start,
             end: evento.end,

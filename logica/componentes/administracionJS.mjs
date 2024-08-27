@@ -15008,13 +15008,25 @@ const casaVitini = {
                                     datosCalendario.appendChild(urlCalendarioImportado)
                                     titulo = document.createElement("p")
                                     titulo.classList.add("tituloDatoCalendario")
-                                    titulo.innerText = "URL del calendario para exportar"
+                                    titulo.innerText = "URL del calendario para exportar formato ICS"
                                     datosCalendario.appendChild(titulo)
-                                    const urlCalendarioExportar = document.createElement("div")
-                                    urlCalendarioExportar.classList.add("urlCalendario")
-                                    urlCalendarioExportar.innerText = "https://" + dominioActual + "/calendarios_compartidos/" + publicoUID
-                                    datosCalendario.appendChild(urlCalendarioExportar)
+                                    const urlCalendarioExportarICS = document.createElement("div")
+                                    urlCalendarioExportarICS.classList.add("urlCalendario")
+                                    urlCalendarioExportarICS.innerText = "https://" + dominioActual + "/calendarios_compartidos/formato:ics_v1/" + publicoUID
+                                    datosCalendario.appendChild(urlCalendarioExportarICS)
                                     contenedorCalendarioIndiviudal.appendChild(datosCalendario)
+
+                                    titulo = document.createElement("p")
+                                    titulo.classList.add("tituloDatoCalendario")
+                                    titulo.innerText = "URL del calendario para exportar formato ICS Airbnb"
+                                    datosCalendario.appendChild(titulo)
+                                    const urlCalendarioExportarICSAirbnbn = document.createElement("div")
+                                    urlCalendarioExportarICSAirbnbn.classList.add("urlCalendario")
+                                    urlCalendarioExportarICSAirbnbn.innerText = "https://" + dominioActual + "/calendarios_compartidos/formato:ics_v1_airbnb/" + publicoUID
+                                    datosCalendario.appendChild(urlCalendarioExportarICSAirbnbn)
+                                    contenedorCalendarioIndiviudal.appendChild(datosCalendario)
+
+
                                     const contenedorBotonesCalendario = document.createElement("div")
                                     contenedorBotonesCalendario.classList.add("contenedorBotonesCalendario")
                                     const botonEliminar = document.createElement("div")
@@ -34356,7 +34368,7 @@ const casaVitini = {
                             const fechaEntrada = detallesDelEvento.fechaEntrada
                             const fechaSalida = detallesDelEvento.fechaSalida
                             const duracion_en_dias = detallesDelEvento.duracion_en_dias
-                            
+
                             const tipoEvento = detallesDelEvento.tipoEvento
                             let diaEntrada
                             let mesEntrada
@@ -34448,7 +34460,7 @@ const casaVitini = {
                                     configuracionEventoUI.css = "administracion_calendario_eventoUI_transicion"
                                 }
                             }
-                            console.log("eventoUID", eventoUID, finalColumna, duracion_en_dias)
+                            ("eventoUID", eventoUID, finalColumna, duracion_en_dias)
                             configuracionEventoUI.altura = alturaFinal
                             configuracionEventoUI.inicioColumna = inicioColumna
                             configuracionEventoUI.finalColumna = finalColumna

@@ -45,7 +45,6 @@ export const constructorObjetoEvento = (calendarioDatos) => {
 
         const fechaInicioEvento = eventoObjeto.fechaInicio
         const fechaFinalEvento = eventoObjeto.fechaFinal
-        console.log("fechaInicioEvento", fechaInicioEvento, "fechaFinalEvento", fechaFinalEvento, (fechaInicioEvento === fechaFinalEvento))
         // Corrector dia final de airbnb
         // if (fechaInicioEvento === fechaFinalEvento) {
         //     const fechaFinalCorregida = DateTime
@@ -53,7 +52,7 @@ export const constructorObjetoEvento = (calendarioDatos) => {
         //         .minus({ days: 1 })
         //         .toISODate();
         //     eventoObjeto.fechaFinal = fechaFinalCorregida
-        //     console.log("fecha corregida", fechaFinalEvento, fechaFinalCorregida)
+        //     ("fecha corregida", fechaFinalEvento, fechaFinalCorregida)
         // }
 
 

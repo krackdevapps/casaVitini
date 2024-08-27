@@ -16,8 +16,8 @@ import { listarMisReservas } from '../../../logica/zonas/miCasa/misReservas/list
 import { obtenerPDF } from '../../../logica/zonas/miCasa/misReservas/obtenerPDF.mjs';
 
 describe('miCasa bookins', () => {
-    const testingVI = "testingbookingmicasa"
-    const usuarioIDV_inicial = "userfortestingformicasametodos"
+    const testingVI = "testingbmicasa"
+    const usuarioIDV_inicial = "userfortestingfo"
     const clave_inicial = "123456789A!"
     const fakeAdminSession = {
         usuario: usuarioIDV_inicial,
@@ -33,7 +33,7 @@ describe('miCasa bookins', () => {
     const camaIDV = "bedtestingholder"
     const camaUI = "Cama temporal para testing holder"
 
-    const usuario_cliente = "testinguserbookinsmicasa"
+    const usuario_cliente = "testinguserb"
     const fakeClientSession = {
         usuario: usuario_cliente,
         rolIDV: "cliente",
@@ -77,6 +77,8 @@ describe('miCasa bookins', () => {
                 fechaEntrada: "2026-10-10",
                 fechaSalida: "2026-10-20",
                 apartamentos: [apartamentoIDV],
+                estadoInicialIDV: "confirmada"
+
             },
             session: fakeAdminSession
         })

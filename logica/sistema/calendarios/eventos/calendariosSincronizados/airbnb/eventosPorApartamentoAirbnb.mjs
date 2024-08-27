@@ -1,6 +1,4 @@
 import { DateTime } from "luxon";
-
-
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { eventosCalendarioPorUID } from "../../../../calendariosSincronizados/airbnb/eventosCalendarioPorUID.mjs";
 import { obtenerCalendarioPorCalendarioUID } from "../../../../../repositorio/calendario/obtenerCalendarioPorCalendarioUID.mjs";
@@ -76,10 +74,8 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
             const fechaSalida_objeto = DateTime.fromISO(fechaSalida, { zone: zonaHoraria });
 
-            console.log("fechaEntrada_objeto", fechaEntrada_objeto, "fechaSalida_objeto", fechaSalida_objeto)
 
             const diferenciaEnDias = fechaSalida_objeto.diff(fechaEntrada_objeto, 'days').days + 1;
-            console.log("diferenciaEnDias", diferenciaEnDias, )
 
             detallesDelEvento.duracion_en_dias = diferenciaEnDias
             detallesDelEvento.fechaEntrada = fechaEntrada
