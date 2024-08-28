@@ -87,6 +87,7 @@ export const validadorFuturo = async (data) => {
             const eventosCalendarioPorIDV = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV)
             calendariosSincronizados.push(eventosCalendarioPorIDV)
         }
+
         const contenedorEventosCalendariosSincronizados = []
         // Iteramos el array con todos los grupos por apartamentoIDV
         for (const contenedorCalendariosPorIDV of calendariosSincronizados) {

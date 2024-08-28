@@ -6,16 +6,13 @@ export const horaLimiteDelMismoDia = async () => {
     try {
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
+        const fechaActual = tiempoZH.toISODate()
+
         const paresConfiguracion = await obtenerParametroConfiguracion([
             "horaLimiteDelMismoDia",
             "diasAntelacionReserva"
         ])
-        const horaLimiteDelMismoDia = paresConfiguracion.horaLimiteDelMismoDia
         const diasAntelacionReserva = paresConfiguracion.diasAntelacionReserva
-        const horaComparar = DateTime.fromFormat(horaLimiteDelMismoDia, "HH:mm", { zone: zonaHoraria });
-        const intervalo = Interval.fromDateTimes(tiempoZH, horaComparar);
-        const duracion = intervalo.toDuration(['days', 'hours', 'minutes', 'seconds']);
-        const fechaActual = tiempoZH.toISODate()
 
         const mismoDiaAceptable = diasAntelacionReserva === "0" ? "si" : "no"
         const ok = {
@@ -26,6 +23,12 @@ export const horaLimiteDelMismoDia = async () => {
 
         }
         if (mismoDiaAceptable === "si") {
+            const horaLimiteDelMismoDia = paresConfiguracion.horaLimiteDelMismoDia
+            const horaComparar = DateTime.fromFormat(horaLimiteDelMismoDia, "HH:mm", { zone: zonaHoraria });
+            const intervalo = Interval.fromDateTimes(tiempoZH, horaComparar);
+            const duracion = intervalo.toDuration(['days', 'hours', 'minutes', 'seconds']);
+
+
             ok.horaLimiteDelMismoDia = horaLimiteDelMismoDia
             if (tiempoZH > horaComparar) {
                 ok.estadoAceptacion = "no"

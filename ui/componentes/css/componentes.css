@@ -5387,7 +5387,7 @@ main[zonaCSS="/"] {
 }
 
 [zonaCSS="administracion/reservas/nueva"] .bloqueApartamentoUI {
-    background-color: #2231d35c;
+    background-color: #ffffff5c;
     padding: 6px;
     border-radius: 12px;
     gap: 6px;
@@ -14649,6 +14649,9 @@ grid-template-columns: 0.5fr 1.5fr;
 .padding5 {
     padding: 5px;
 }
+.padding4 {
+    padding: 4px;
+}
 
 .paddinHorizontal6 {
     padding-left: 6px;
@@ -14981,4 +14984,7 @@ grid-template-columns: 0.5fr 1.5fr;
     color: white;
 
 
+}
+.breakWordkAll {
+    word-break: break-all;
 }

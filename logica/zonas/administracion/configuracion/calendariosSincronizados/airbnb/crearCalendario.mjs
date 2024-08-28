@@ -29,39 +29,12 @@ export const crearCalendario = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        const url = validadoresCompartidos.tipos.url({
-            url: entrada.body.url,
-            nombreCampo: "El campo de la url del calendario",
-            arrayDeDominiosPermitidos: [
-                "www.airbnb.com",
-                "airbnb.com"
-            ]
-        })
+
         await campoDeTransaccion("iniciar")
         await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
         })
-
-        const errorDeFormato = "En la dirección URL que has introducido no hay un calendario iCal de Airbnb";
-        let calendarioRaw;
-        try {
-            const maxContentLengthBytes = 10 * 1024 * 1024; // 10 MB
-            const calendarioData = await axios.get(url, {
-                maxContentLength: maxContentLengthBytes,
-            }); calendarioRaw = calendarioData.data;
-            const jcalData = ICAL.parse(calendarioRaw); // Intenta analizar el contenido como datos jCal
-            const jcal = new ICAL.Component(jcalData); // Crea un componente jCal
-
-
-            // Verifica si el componente es un calendario (VCALENDAR)
-            if (jcal?.name.toLowerCase() !== 'vcalendar') {
-                throw new Error(errorDeFormato);
-            }
-        } catch (errorCapturado) {
-
-            throw new Error(errorDeFormato);
-        }
         const generarCadenaAleatoria = (longitud) => {
             const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let cadenaAleatoria = '';
@@ -97,10 +70,9 @@ export const crearCalendario = async (entrada, salida) => {
         const plataformaOrigen = "airbnb";
         const dataInsertarCalendarioSincronizado = {
             nombre: nombre,
-            url: url,
+            //url: url,
             apartamentoIDV: apartamentoIDV,
             plataformaOrigen: plataformaOrigen,
-            calendarioRaw: calendarioRaw,
             codigoAleatorioUnico: codigoAleatorioUnico
         }
 

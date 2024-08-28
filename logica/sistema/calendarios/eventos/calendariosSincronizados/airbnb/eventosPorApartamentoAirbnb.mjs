@@ -61,9 +61,8 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
         let uidTemporalContador = 0
         const eventosCalendarioAirbnb = await eventosCalendarioPorUID(calendarioUID)
         // 
-        const arrayEventosAirbnb = eventosCalendarioAirbnb.calendariosPorApartamento[0].calendarioObjeto
+        const arrayEventosAirbnb = eventosCalendarioAirbnb.calendarioDelApartamento.calendarioObjeto
         for (const detallesDelEvento of arrayEventosAirbnb) {
-            const eventoUID = detallesDelEvento.uid
             const fechaEntrada = detallesDelEvento.fechaInicio
             const fechaSalida = detallesDelEvento.fechaFinal
             delete detallesDelEvento.fechaInicio

@@ -2431,10 +2431,17 @@ const casaVitini = {
 
                         const infoTitular = document.createElement("p")
                         infoTitular.classList.add(
-                            "padding14"
+                            "padding6"
                         )
                         infoTitular.innerText = "Para garantizar una reserva exitosa, por favor sigue las siguientes instrucciones: Ingresa los datos del titular de la reserva. Si estás viajando desde fuera de Nicaragua, proporciona los detalles de tu pasaporte. Si eres residente de Nicaragua, proporciona tu número de identificación nacional. Es crucial asegurar la precisión de esta información para confirmar tu reserva de manera eficiente y proporcionarte una experiencia fluida. Agradecemos tu atención a estos detalles. ¡Gracias!"
                         contenedorTitular.appendChild(infoTitular)
+
+                        const tituloTitularInfo = document.createElement("p")
+                        tituloTitularInfo.innerText = "Nombre completo del titular de la reserva"
+                        tituloTitularInfo.classList.add(
+                            "paddinHorizontal6"
+                        )
+                        contenedorTitular.appendChild(tituloTitularInfo)
 
                         const campoNombreTitular = document.createElement("input")
                         campoNombreTitular.classList.add(
@@ -2443,6 +2450,13 @@ const casaVitini = {
                         campoNombreTitular.placeholder = "Nombre del titular de la reserva"
                         campoNombreTitular.setAttribute("campo", "nombreTitular")
                         contenedorTitular.appendChild(campoNombreTitular)
+
+                        const tituloPasaporteInfo = document.createElement("p")
+                        tituloPasaporteInfo.innerText = "Pasaporte o documento nacional de identificación del titular de la reserva"
+                        tituloPasaporteInfo.classList.add(
+                            "paddinHorizontal6"
+                        )
+                        contenedorTitular.appendChild(tituloPasaporteInfo)
 
 
                         const campoPasaporteTitular = document.createElement("input")
@@ -2453,6 +2467,13 @@ const casaVitini = {
                         campoPasaporteTitular.setAttribute("campo", "pasaporteTitular")
                         contenedorTitular.appendChild(campoPasaporteTitular)
 
+                        const tituloTelefonoInfo = document.createElement("p")
+                        tituloTelefonoInfo.innerText = "Telefono del titular de la reserva"
+                        tituloTelefonoInfo.classList.add(
+                            "paddinHorizontal6"
+                        )
+                        contenedorTitular.appendChild(tituloTelefonoInfo)
+
 
                         const campoTelefonoTitular = document.createElement("input")
                         campoTelefonoTitular.classList.add(
@@ -2462,6 +2483,12 @@ const casaVitini = {
                         campoTelefonoTitular.setAttribute("campo", "telefonoTitular")
                         contenedorTitular.appendChild(campoTelefonoTitular)
 
+                        const tituloMailInfo = document.createElement("p")
+                        tituloMailInfo.innerText = "Correo electrónico titular de la reserva"
+                        tituloMailInfo.classList.add(
+                            "paddinHorizontal6"
+                        )
+                        contenedorTitular.appendChild(tituloMailInfo)
 
                         const campoMailTitular = document.createElement("input")
                         campoMailTitular.classList.add(
@@ -2530,9 +2557,9 @@ const casaVitini = {
                             "areaSinDecoracionPredeterminada",
                             "padding14"
                         )
-                        portilicasCancelacion.href = "/politicas/cacelacion"
+                        portilicasCancelacion.href = "/politicas/cancelacion"
                         portilicasCancelacion.target = "_blank"
-                        portilicasCancelacion.innerText = "Ver políticas de cancelación de la reserva."
+                        portilicasCancelacion.innerText = "Ver políticas de cancelación de la reserva. (Se abrirá otra ventana del navegador.)"
                         contenedor.appendChild(portilicasCancelacion)
 
                         const portilicasPrivacida = document.createElement("a")
@@ -2542,7 +2569,7 @@ const casaVitini = {
                         )
                         portilicasPrivacida.href = "/politicas/privacidad"
                         portilicasPrivacida.target = "_blank"
-                        portilicasPrivacida.innerText = "Ver políticas de privacidad, condiciones de uso y gestión de cookies."
+                        portilicasPrivacida.innerText = "Ver políticas de privacidad, condiciones de uso y gestión de cookies. (Se abrirá otra ventana del navegador.)"
                         contenedor.appendChild(portilicasPrivacida)
 
                         const botonConfirmar = document.createElement("div")

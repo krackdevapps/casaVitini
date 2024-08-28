@@ -81,6 +81,9 @@ export const obtenerResultadosBusqueda = async (data) => {
         LIMIT $2 OFFSET $3;`;
 
         const resuelve = await conexion.query(consultaConstructor, [terminosFormateados, numeroPorPagina, numeroPagina(numeroPagina_humano)]);
+        resuelve.rows.forEach(cliente => {           
+            delete cliente.testingVI
+        })
         return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado

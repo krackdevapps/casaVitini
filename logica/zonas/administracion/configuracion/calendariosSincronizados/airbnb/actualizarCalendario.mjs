@@ -41,7 +41,13 @@ export const actualizarCalendario = async (entrada) => {
             nombreCampo: "El campo de la url del calendario",
             arrayDeDominiosPermitidos: [
                 "www.airbnb.com",
-                "airbnb.com"
+                "airbnb.com",
+                "airbnb.es",
+                "www.airbnb.es",
+                "www.booking.com",
+                "booking.com",
+                "www.booking.es",
+                "booking.es"
             ]
         })
 

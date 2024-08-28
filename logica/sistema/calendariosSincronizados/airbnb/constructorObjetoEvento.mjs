@@ -1,5 +1,4 @@
 import ICAL from 'ical.js';
-import { DateTime } from 'luxon';
 
 export const constructorObjetoEvento = (calendarioDatos) => {
 

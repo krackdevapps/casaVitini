@@ -2,7 +2,6 @@ import axios from 'axios';
 import ICAL from 'ical.js';
 import { obtenerCalendariosPorPlataformaIDVPorCalendarioUID } from '../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDVPorCalendarioUID.mjs';
 import { actualizarEventosCalendarioPorCalendarioUID } from '../../../repositorio/calendario/actualizarEventosCalendarioPorCalendarioUID.mjs';
-import { DateTime } from 'luxon';
 import { constructorObjetoEvento } from './constructorObjetoEvento.mjs';
 export const eventosCalendarioPorUID = async (calendarioUID) => {
     try {
@@ -11,19 +10,21 @@ export const eventosCalendarioPorUID = async (calendarioUID) => {
             calendarioUID: calendarioUID,
             plataformaDeOrigen: plataformaDeOrigen,
         })
+        const nombre = calendario.nombre
+        const url = calendario?.url
+        let calendarioDatos = calendario.dataIcal
+
         const ok = {
-            calendariosPorApartamento: []
-        }
-        if (calendario.calendarioUID) {
-            const errorDeFormato = "En la dirección URL que has introducido no hay un calendario iCal de Airbnb."
-            const calendarioUID = calendario.uid
-            const url = calendario.url
-            const nombre = calendario.nombre
-            let calendarioDatos = calendario.dataIcal
-            ok.apartamentoIDV = calendario.apartamentoIDV
-            const estructura = {
-                calendarioRaw: calendarioDatos
+            apartamentoIDV: calendario.apartamentoIDV,
+            calendarioDelApartamento: {
+                calendarioRaw: calendarioDatos,
+                calendarioObjeto: []
             }
+        }
+        // Si no toene url, devuelve un array vacio
+        // Si tiene url pero no hay datos Ical devuelve un array vacio
+        if (url) {
+            const errorDeFormato = "En la dirección URL que has introducido no hay un calendario iCal de Airbnb."
             try {
                 const calendarioData = await axios.get(url);
                 const calendarioRaw = calendarioData.data
@@ -32,62 +33,17 @@ export const eventosCalendarioPorUID = async (calendarioUID) => {
                 if (jcal?.name.toLowerCase() !== 'vcalendar') {
                     throw new Error(errorDeFormato)
                 }
-
                 await actualizarEventosCalendarioPorCalendarioUID({
                     calendarioRaw: calendarioRaw,
                     calendarioUID: calendarioUID
                 })
-
-                calendarioDatos = calendarioRaw
-                estructura.estadoSincronizacion = "sincronizado"
+                ok.calendarioDelApartamento.calendarioRaw = calendarioRaw
+                ok.calendarioDelApartamento.estadoSincronizacion = "sincronizado"
             } catch (errorCapturado) {
-                estructura.estadoSincronizacion = "noSincronizado"
+                ok.calendarioDelApartamento.estadoSincronizacion = "noSincronizado"
             }
-              // const jcalData = ICAL.parse(calendarioDatos);
-                // const jcal = new ICAL.Component(jcalData);
-                // const eventosCalenario = jcal.jCal[2]
-                const calendarioObjeto = constructorObjetoEvento(calendarioDatos)
-                // eventosCalenario.forEach((event) => {
-                //     const detallesEventoSinFormatear = event[1]
-                //     // 
-                //     const eventoObjeto = {}
-                //     detallesEventoSinFormatear.forEach((detallesEvento) => {
-                //         const idCajon = detallesEvento[0]
-                //         if (idCajon === "categories") {
-                //             eventoObjeto.categoriaEvento = detallesEvento[3]
-                //         }
-                //         if (idCajon === "summary") {
-                //             eventoObjeto.nombreEvento = detallesEvento[3]
-                //         }
-                //         if (idCajon === "dtstart") {
-                //             eventoObjeto.fechaInicio = detallesEvento[3]
-                //         }
-                //         if (idCajon === "dtend") {
-                //             const fechaEnDTEND = detallesEvento[3]
-                //             const fechaFinalCorregida = DateTime.fromISO(fechaEnDTEND)
-                //                 .minus({ days: 1 })
-                //                 .toISODate();
-                //             eventoObjeto.fechaFinal = fechaFinalCorregida                        }
-                //         if (idCajon === "uid") {
-                //             eventoObjeto.uid = detallesEvento[3]
-                //         }
-                //         if (idCajon === "last-modified") {
-                //             eventoObjeto.ultimaModificaion = detallesEvento[3]
-                //         }
-                //         if (idCajon === "dtstamp") {
-                //             eventoObjeto.creacionEvento = detallesEvento[3]
-                //         }
-                //         if (idCajon === "description") {
-                //             eventoObjeto.descripcion = detallesEvento[3]
-                //         }
-                //         if (idCajon === "url") {
-                //             eventoObjeto.url = detallesEvento[3]
-                //         }
-                //     })
-                //     calendarioObjeto.push(eventoObjeto)
-                // });
-            estructura.calendarioObjeto = calendarioObjeto
-            ok.calendariosPorApartamento.push(estructura)
+            const calendarioObjeto = constructorObjetoEvento(calendarioDatos)
+            ok.calendarioDelApartamento.calendarioObjeto = calendarioObjeto
         }
         return ok
     } catch (errorCapturado) {

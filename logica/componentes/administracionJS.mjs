@@ -2289,6 +2289,7 @@ const casaVitini = {
                             contenedorProgreso.style.overflow = "hidden"
                             divPrincipal.appendChild(contenedorProgreso);
                             const barraProgresso = document.createElement("div")
+                            barraProgresso.setAttribute("componente", "progreso")
                             barraProgresso.style.height = "100%"
                             barraProgresso.style.background = "grey"
                             barraProgresso.style.width = porcentajeTranscurrido + "%"
@@ -2691,7 +2692,7 @@ const casaVitini = {
                                 //const selectorTotalFinal = document.querySelector(`[reservaUID="${reservaUID}"]`).querySelector("[dataReserva=totalReservaConImpuestos]")
                                 //selectorTotalFinal.innerText = totalFinal
 
-                                casaVitini.administracion.reservas.detallesReserva.reservaUI.calcularPrecioReserva()
+                                casaVitini.administracion.reservas.detallesReserva.reservaUI.actualizarReservaRenderizada()
                                 if (sentidoRangoRespueata === "pasado" && pantallaDeCargaRenderizada) {
                                     const selectorFechaEntrada = document.querySelector("[calendario=entrada]")
                                     const selectorFechaEntradaUI = document.querySelector("[fechaUI=fechaInicio]")
@@ -3908,7 +3909,7 @@ const casaVitini = {
                             }
                         },
                     },
-                    calcularPrecioReserva: async () => {
+                    actualizarReservaRenderizada: async () => {
                         const reservaUID = document.querySelector("[reservaUID]").getAttribute("reservaUID")
                         const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
                         const selectorEstadoPago = document.querySelector("[dataReserva=estadoPago]")
@@ -3928,6 +3929,8 @@ const casaVitini = {
                             casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                         }
                         if (respuestaServidor?.ok) {
+                            console.log("respuestaServidro", respuestaServidor)
+                            const porcentajeTranscurrido = respuestaServidor.ok.global.porcentajeTranscurrido
                             const estadoPago = respuestaServidor.ok.global.estadoPagoIDV
                             const estadoPagoUI = {
                                 pagado: "Pagado",
@@ -3944,6 +3947,8 @@ const casaVitini = {
                                 const section = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                                 const selectorListaDePagosRenderizada = section.querySelector("[contenedorID=transacciones]")
                                 const selectorDesgloseFinancieroUIRenderizado = section.querySelector("[componente=contenedorDesgloseTotal]")
+                                const selectorProgreso = section.querySelector("[componente=progreso]")
+                                selectorProgreso.style.width = porcentajeTranscurrido + "%"
 
                                 if (selectorListaDePagosRenderizada) {
                                     casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.transacciones.actualizarDatosGlobalesPago({
@@ -3951,8 +3956,6 @@ const casaVitini = {
                                     })
                                 }
                                 if (selectorDesgloseFinancieroUIRenderizado) {
-                                    const instanciaUIDContenedorFinanciero = null
-
                                     casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.desgloseTotal.controladores.desplegarContenedorFinanciero({
                                         reservaUID
                                     })
@@ -4864,7 +4867,7 @@ const casaVitini = {
                                     //}
                                     document.querySelector("[componente=espacioAlojamiento]").appendChild(apartamentoComponenteUI)
                                     casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.alojamiento.componentesUI.controlEspacioAlojamiento()
-                                    casaVitini.administracion.reservas.detallesReserva.reservaUI.calcularPrecioReserva()
+                                    casaVitini.administracion.reservas.detallesReserva.reservaUI.actualizarReservaRenderizada()
                                 }
                             },
                             eliminarApartamento: async (metadatos) => {
@@ -4936,7 +4939,7 @@ const casaVitini = {
                                     casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.alojamiento.pernoctantes.controlEspacioPernoctantesSinAlojamiento()
                                 }
                                 if (respuestaServidor?.estadoDesgloseFinanciero === "actualizar") {
-                                    casaVitini.administracion.reservas.detallesReserva.reservaUI.calcularPrecioReserva()
+                                    casaVitini.administracion.reservas.detallesReserva.reservaUI.actualizarReservaRenderizada()
                                 }
                             },
                         },
@@ -15012,7 +15015,7 @@ const casaVitini = {
                                     datosCalendario.appendChild(titulo)
                                     const urlCalendarioExportarICS = document.createElement("div")
                                     urlCalendarioExportarICS.classList.add("urlCalendario")
-                                    urlCalendarioExportarICS.innerText = "https://" + dominioActual + "/calendarios_compartidos/formato:ics_v1/" + publicoUID
+                                    urlCalendarioExportarICS.innerText = "https://" + dominioActual + "/calendarios_compartidos/formato:ics_v2/" + publicoUID
                                     datosCalendario.appendChild(urlCalendarioExportarICS)
                                     contenedorCalendarioIndiviudal.appendChild(datosCalendario)
 
@@ -15022,7 +15025,7 @@ const casaVitini = {
                                     datosCalendario.appendChild(titulo)
                                     const urlCalendarioExportarICSAirbnbn = document.createElement("div")
                                     urlCalendarioExportarICSAirbnbn.classList.add("urlCalendario")
-                                    urlCalendarioExportarICSAirbnbn.innerText = "https://" + dominioActual + "/calendarios_compartidos/formato:ics_v1_airbnb/" + publicoUID
+                                    urlCalendarioExportarICSAirbnbn.innerText = "https://" + dominioActual + "/calendarios_compartidos/formato:ics_v2_airbnb/" + publicoUID
                                     datosCalendario.appendChild(urlCalendarioExportarICSAirbnbn)
                                     contenedorCalendarioIndiviudal.appendChild(datosCalendario)
 
@@ -15144,12 +15147,14 @@ const casaVitini = {
                             const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                             const selectorEspacioFormulario = document.querySelector("[componente=espacioFormulario_Airbnb]")
                             selectorEspacioFormulario.innerHTML = null
-                            const formularioUI = await casaVitini.administracion.configuracion.calendariosSincronizados.airbnb.formularioCalendario()
+                            const formularioUI = await casaVitini.administracion.configuracion.calendariosSincronizados.airbnb.formularioCalendario({
+                                modo: "crear"
+                            })
                             formularioUI.setAttribute("instanciaUID", instanciaUID)
                             selectorEspacioFormulario.appendChild(formularioUI)
                             const botonCrearCalendario = document.createElement("div")
                             botonCrearCalendario.classList.add("botonCrearCalendario")
-                            botonCrearCalendario.innerText = "Crear y sincronizar calenadrio"
+                            botonCrearCalendario.innerText = "Crear perfil del calenadrio sincronizado"
                             botonCrearCalendario.addEventListener("click", async () => {
                                 const transaccion = {
                                     zona: "administracion/configuracion/calendariosSincronizados/airbnb/crearCalendario"
@@ -15191,7 +15196,10 @@ const casaVitini = {
                             selectorEspacioFormulario.appendChild(botonCrearCalendario)
                         }
                     },
-                    formularioCalendario: async () => {
+                    formularioCalendario: async (data) => {
+
+                        const modo = data.modo
+
                         const formularioUI = document.createElement("div")
                         formularioUI.classList.add("formularioUI")
                         formularioUI.setAttribute("componente", "formularioUI")
@@ -15241,31 +15249,86 @@ const casaVitini = {
                             })
                         }
                         formularioUI.appendChild(tipoApartamentoUI)
-                        definicion = document.createElement("p")
-                        definicion.classList.add("definicion")
-                        definicion.innerText = "Copia aquí la url del calendario de Airbnb, la url debe de ser la que comparte Airbnb para sincronizar calendarios en formato iCal, la url debe de estar en https"
-                        formularioUI.appendChild(definicion)
-                        const urlCalendario = document.createElement("input")
-                        urlCalendario.classList.add("nombreCalendario")
-                        urlCalendario.setAttribute("campo", "url")
-                        urlCalendario.placeholder = "Escribe la url del calendario"
-                        formularioUI.appendChild(urlCalendario)
+
+                        if (modo === "editar") {
+
+                            const contenedorURL = document.createElement("div")
+                            contenedorURL.classList.add(
+                                "padding10",
+                                "flexVertical",
+                                "gap6"
+                            )
+                            formularioUI.appendChild(contenedorURL)
+
+                            definicion = document.createElement("p")
+                            definicion.innerText = "Url del calendario de Casa Vitini para exportar. Copia esta url en el otro sistema para sincronziar el calenedario de Casa Vitini con la plataforma de terceros compatible con ICS"
+                            contenedorURL.appendChild(definicion)
+
+                            const icsv2ui = document.createElement("p")
+                            icsv2ui.innerText = "Formato: ICS V2"
+                            icsv2ui.classList.add(
+                                "negrita"
+                            )
+                            contenedorURL.appendChild(icsv2ui)
+
+                            const urlCalendarioExport = document.createElement("p")
+                            urlCalendarioExport.classList.add(
+                                "breakWordkAll"
+                            )
+                            urlCalendarioExport.setAttribute("data", "urlExportacion")
+                            contenedorURL.appendChild(urlCalendarioExport)
+
+                            const icsv2uiAirbnb = document.createElement("p")
+                            icsv2uiAirbnb.innerText = "Formato: ICS V2 Airbnb"
+                            icsv2uiAirbnb.classList.add(
+                                "negrita"
+                            )
+                            contenedorURL.appendChild(icsv2uiAirbnb)
+
+                            const urlCalendarioExport_airbnb = document.createElement("p")
+                            urlCalendarioExport_airbnb.classList.add(
+                                "breakWordkAll"
+                            )
+                            urlCalendarioExport_airbnb.setAttribute("data", "urlExportacionAirbnbn")
+                            contenedorURL.appendChild(urlCalendarioExport_airbnb)
+
+
+                            definicion = document.createElement("p")
+                            definicion.classList.add("definicion")
+                            definicion.innerText = "Copia aquí la url del calendario de Airbnb, la url debe de ser la que comparte Airbnb para sincronizar calendarios en formato iCal, la url debe de estar en https"
+                            formularioUI.appendChild(definicion)
+                            const urlCalendario = document.createElement("input")
+                            urlCalendario.classList.add("nombreCalendario")
+                            urlCalendario.setAttribute("campo", "url")
+                            urlCalendario.placeholder = "Escribe la url del calendario"
+                            formularioUI.appendChild(urlCalendario)
+                        }
+
                         return formularioUI
                     },
                     editarCalendarioUI: async (detallesDelCalendario) => {
-
+                        console.log("detalelsCaledn", detallesDelCalendario)
                         const calendarioUID = detallesDelCalendario.calendarioUID
                         const nombre = detallesDelCalendario.nombre
                         const url = detallesDelCalendario.url
                         const apartamentoIDV = detallesDelCalendario.apartamentoIDV
                         const plataformaOrigen = detallesDelCalendario.plataformaOrigenIDV
                         const apartamentoUI = detallesDelCalendario.apartamentoUI
+                        const publicoUID = detallesDelCalendario.publicoUID
+                        const dominioActual = window.location.hostname
+
+                        const urlExportacion =  "https://" + dominioActual + "/calendarios_compartidos/formato:ics_v2/" + publicoUID
+                        const urlExportacionAirbnb =  "https://" + dominioActual + "/calendarios_compartidos/formato:ics_v2_airbnb/" + publicoUID
+
+
                         const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                         const plataformaOrigenUI = plataformaOrigen.charAt(0).toUpperCase() + plataformaOrigen.slice(1);
                         const selectorTitulo = document.querySelector("[componente=titutoGlobal]")
                         selectorTitulo.innerText = `Detalles del calendario de ${plataformaOrigenUI}`
                         const selectorEspacioCalendarios = document.querySelector("[componente=calendariosSincronizados]")
-                        const formularioUI = await casaVitini.administracion.configuracion.calendariosSincronizados.airbnb.formularioCalendario();
+                        const formularioUI = await casaVitini.administracion.configuracion.calendariosSincronizados.airbnb.formularioCalendario({
+                            modo: "editar"
+                        });
                         formularioUI.setAttribute("instanciaUID", instanciaUID)
                         formularioUI.setAttribute("calendarioUID", calendarioUID)
                         const nombreInput = formularioUI.querySelector("[campo=nombre]");
@@ -15274,6 +15337,10 @@ const casaVitini = {
                         const apartamentoIDVSelect = formularioUI.querySelector("[campo=apartamentoIDV]");
                         apartamentoIDVSelect.value = apartamentoIDV;
                         apartamentoIDVSelect.setAttribute("valorInicial", apartamentoIDV);
+                        const urlExportacionUI = formularioUI.querySelector("[data=urlExportacion]");
+                        urlExportacionUI.innerText = urlExportacion;
+                        const urlExportacionAirbnbUI = formularioUI.querySelector("[data=urlExportacionAirbnbn]");
+                        urlExportacionAirbnbUI.innerText = urlExportacionAirbnb;
                         const urlInput = formularioUI.querySelector("[campo=url]");
                         urlInput.value = url;
                         urlInput.setAttribute("valorInicial", url);
@@ -34594,7 +34661,7 @@ const casaVitini = {
                                 const apartamentoIDV = detallesDelCalendario.apartamentoIDV
                                 const apartamentoUI = detallesDelCalendario.apartamentoUI
                                 const nombre = detallesDelCalendario.nombre
-                                const calendarioUID = detallesDelCalendario.uid
+                                const calendarioUID = detallesDelCalendario.calendarioUID
                                 const detallesApartamento = {
                                     apartamentoIDV: apartamentoIDV,
                                     apartamentoUI: apartamentoUI,

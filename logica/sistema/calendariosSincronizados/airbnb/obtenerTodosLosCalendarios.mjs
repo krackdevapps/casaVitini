@@ -13,16 +13,22 @@ export const obtenerTodosLosCalendarios = async () => {
         }
 
         for (const detallesDelCalendario of calendarios) {
-            const calendarioUID = detallesDelCalendario.uid
+            const calendarioUID = detallesDelCalendario.calendarioUID
             const nombre = detallesDelCalendario.nombre
             const url = detallesDelCalendario.url
             let calendarioDatos = detallesDelCalendario.dataIcal
             const apartamentoIDV = detallesDelCalendario.apartamentoIDV
+            
+            if (!url || !calendarioDatos) {
+                continue
+            }
             const estructura = {
                 apartamentoIDV: apartamentoIDV,
                 nombreCalendario: nombre,
                 calendarioRaw: calendarioDatos
             }
+
+
             try {
                 const calendarioData = await axios.get(url);
                 const calendarioRaw = calendarioData.data
@@ -42,10 +48,7 @@ export const obtenerTodosLosCalendarios = async () => {
                 estructura.estadoSincronizacion = "noSincronizado"
             }
 
-            if (!calendarioDatos) {
-                const m = `El calendario ${nombre}, sincronizado con el ${apartamentoIDV} no tiene datos en iCal`
-                throw new Error(m)
-            }
+       
 
          // const jcalData = ICAL.parse(calendarioDatos);
                 // const jcal = new ICAL.Component(jcalData);

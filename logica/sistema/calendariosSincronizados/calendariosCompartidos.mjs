@@ -30,7 +30,6 @@ export const calendariosCompartidos = async (data) => {
         const fechaInicio = DateTime.fromISO(fechaActual_ISO);
         const fechaFin = DateTime.fromISO(fechaLimite);
         const matrizHoraEntradaSalida = await horaEntradaSalida();
-        ("matrizHoraEntradaSalida", matrizHoraEntradaSalida)
         const generarFechasEnRango = (fechaInicio, fechaFin) => {
             const fechasEnRango = [];
             let fechaActual = fechaInicio;
@@ -111,7 +110,6 @@ export const calendariosCompartidos = async (data) => {
                 fechaIncioRango_ISO: fechaActual_ISO,
                 fechaFinRango_ISO: fechaLimite,
             })
-                ("reservasPorRanfgo", reservasPorRango)
             for (const reserva of reservasPorRango) {
 
                 const reservaUID = reserva.reservaUID;
@@ -204,7 +202,7 @@ export const calendariosCompartidos = async (data) => {
 
             return estructuraGlobal
         } else {
-            const m = "No se reconoce le tipo de formato, solo puede ser ics_v1 o ics_v1_airbnb"
+            const m = "No se reconoce le tipo de formato, solo puede ser ics_v2 o ics_v2_airbnb"
             throw new Error(m)
         }
     } catch (errorCapturado) {

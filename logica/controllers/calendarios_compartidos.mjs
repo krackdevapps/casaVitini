@@ -10,7 +10,6 @@ export const calendarios_compartidos = async (entrada, salida) => {
             nombreCampo: "La URL no cumple el formato esperado."
         })
         console.log("urlPath", urlPath)
-        console.log("entrada", entrada)
 
         const urlArray = urlPath.toLowerCase()
             .split("/")
@@ -24,7 +23,7 @@ export const calendarios_compartidos = async (entrada, salida) => {
             "ics_v2_airbnb"
         ]
         if (!contenedorFormatosIDV.includes(formato)) {
-            const m = "No se reconoce el formato del calendario solicidado, los formatos solo pueden ser ics_v1 o ics_v1_airbnb"
+            const m = "No se reconoce el formato del calendario solicidado, los formatos solo pueden ser ics_v2 o ics_v2_airbnb"
             throw new Error(m)
         }
  
