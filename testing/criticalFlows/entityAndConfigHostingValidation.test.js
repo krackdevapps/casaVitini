@@ -8,6 +8,7 @@ import { eliminarConfiguracionDeAlojamiento } from '../../logica/zonas/administr
 import { reconstruirDesgloseDesdeInstantaneas as rcddi_reservas } from '../../logica/zonas/administracion/reservas/detallesReserva/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
 import { reconstruirDesgloseDesdeInstantaneas as rcddi_simulacion } from '../../logica/zonas/administracion/simuladorDePrecios/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
 import { guardarSimulacion } from '../../logica/zonas/administracion/simuladorDePrecios/guardarSimulacion.mjs';
+import { eliminarSimulacionPorTestingVI } from '../../logica/repositorio/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
 
 describe('critical: entityAndConfigHostingValidation', () => {
     const testingVI = "testingcriticalavaibleapartmentwhencreatinbookins"
@@ -35,6 +36,7 @@ describe('critical: entityAndConfigHostingValidation', () => {
         })
 
         await eliminarReservaPorTestingVI(testingVI)
+        await eliminarSimulacionPorTestingVI(testingVI)
         await makeHostArquitecture({
             operacion: "construir",
             apartamentoIDV: apartamentoIDV,
@@ -183,5 +185,7 @@ describe('critical: entityAndConfigHostingValidation', () => {
         })
 
         await eliminarReservaPorTestingVI(testingVI)
+        await eliminarSimulacionPorTestingVI(testingVI)
+
     });
 })

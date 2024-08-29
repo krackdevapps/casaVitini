@@ -350,6 +350,7 @@ main[zonaCSS="/"] {
     grid-template-rows: 0.01fr auto;
 }
 
+
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 1):nth-of-type(-n + 7) {
     grid-row: 0;
     background-color: red;
@@ -372,7 +373,7 @@ main[zonaCSS="/"] {
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 29):nth-of-type(-n + 35) {
     grid-row: 4;
- 
+
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 36):nth-of-type(-n + 42) {
@@ -418,7 +419,19 @@ main[zonaCSS="/"] {
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 7) {
     grid-column: 7/7;
 }
-
+[zonaCSS="administracion/calendario"] .animacion_eventoUI {
+    transition: height 500ms linear, padding 500ms linear, opacity 500ms linear, margin-bottom 500ms linear, margin-top 500ms linear, scale 500ms linear;
+    opacity: 1;
+    scale: 1;
+    @starting-style {
+        height: 0px;
+        padding: 0px;
+        opacity: 0;
+        margin-bottom: 0px;
+        margin-top: 0px;
+        scale: 1;
+    }
+}
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_transicion {
     background: rgba(255, 255, 255, 0.3);
     height: 40px;
@@ -438,17 +451,9 @@ main[zonaCSS="/"] {
     backdrop-filter: blur(50px);
     margin-bottom: 10px;
     overflow: hidden;
-    padding: 10px;
-
-    scale: 1;
-    opacity: 1;
-    transition: scale, opacity 500ms ease-in-out;
-
-    @starting-style {
-        scale: 0;
-        opacity 0;
-    }
-}
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_inicioFinal {
     background: rgba(255, 255, 255, 0.3);
@@ -472,14 +477,10 @@ main[zonaCSS="/"] {
     backdrop-filter: blur(50px);
     margin-bottom: 10px;
     overflow: hidden;
-    padding: 10px;
 
-    scale: 1;
-    transition: scale 500ms ease-in-out;
-
-    @starting-style {
-        scale: 0;
-    }
+    padding-left: 10px;
+    padding-right: 10px;
+ 
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_inicioSolo {
@@ -504,14 +505,10 @@ main[zonaCSS="/"] {
     backdrop-filter: blur(50px);
     margin-bottom: 10px;
     overflow: hidden;
-    padding: 10px;
 
-    scale: 1;
-    transition: scale 500ms ease-in-out;
-
-    @starting-style {
-        scale: 0;
-    }
+    padding-left: 10px;
+    padding-right: 10px;
+ 
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_finalSolo {
@@ -536,14 +533,10 @@ main[zonaCSS="/"] {
     backdrop-filter: blur(50px);
     margin-bottom: 10px;
     overflow: hidden;
-    padding: 10px;
 
-    scale: 1;
-    transition: scale 500ms ease-in-out;
+    padding-left: 10px;
+    padding-right: 10px;
 
-    @starting-style {
-        scale: 0;
-    }
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_selecionado {
@@ -5402,7 +5395,7 @@ main[zonaCSS="/"] {
     @starting-style {
         scale: 0;
     }
-    
+
 }
 
 [zonaCSS="administracion/reservas/nueva"] .tituloApartamentoUI {
@@ -11488,8 +11481,9 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     align-items: center;
 }
+
 [zonaCSS="/alojamiento"] .bannerTiempoRestante,
-[zonaCSS="/alojamiento/resumen"] .bannerTiempoRestante  {
+[zonaCSS="/alojamiento/resumen"] .bannerTiempoRestante {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
@@ -11506,6 +11500,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     align-items: center;
 }
+
 [zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_banner {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -14201,6 +14196,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
     transition: opacity 3s;
     opacity: 1;
+
     @starting-style {
         opacity: 0;
 
@@ -14649,6 +14645,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .padding5 {
     padding: 5px;
 }
+
 .padding4 {
     padding: 4px;
 }
@@ -14985,6 +14982,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
 }
+
 .breakWordkAll {
     word-break: break-all;
 }

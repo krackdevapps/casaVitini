@@ -114,6 +114,7 @@ describe('price overrride of simulation', () => {
     afterAll(async () => {
         await eliminarOfertaPorTestingVI(testingVI)
         await eliminarImpuestoPorTestingVI(testingVI)
+        await eliminarSimulacionPorTestingVI(testingVI)
         await makeHostArquitecture({
             operacion: "eliminar",
             apartamentoIDV: apartamentoIDV,

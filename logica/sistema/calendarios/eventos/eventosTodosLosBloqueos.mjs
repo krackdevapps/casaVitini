@@ -12,6 +12,8 @@ export const eventosTodosLosBloqueos = async (fecha) => {
         const mes = fechaArray[0]
         const ano = fechaArray[1]
         const fechaObjeto = DateTime.fromObject({ year: ano, month: mes, day: 1 });
+
+
         const numeroDeDiasDelMes = fechaObjeto.daysInMonth;
         const calendarioObjeto = {}
         const calendarioBloqueosObjeto = {}
@@ -30,6 +32,11 @@ export const eventosTodosLosBloqueos = async (fecha) => {
             }
             return fechasInternas;
         }
+
+        const fechaInicialVirtual = DateTime.fromObject({ year: ano, month: mes, day: 1 }).minus({day: 1}).toISODate()
+        const ultimoDiaDelMes = DateTime.fromObject({ year: ano, month: mes }).endOf('month').day
+        const fechaFinalVirtual =  DateTime.fromObject({ year: ano, month: mes, day: ultimoDiaDelMes }).plus({day: 1}).toISODate()
+
         const bloqueoPermanente = "permanente"
         const bloqueos = await obtenerTodosLosbloqueosPorMesPorAnoPorTipo({
             mes: mes,
@@ -39,29 +46,33 @@ export const eventosTodosLosBloqueos = async (fecha) => {
         const bloqueosSeleccionados = bloqueos.map((detallesBloqueo) => {
             return detallesBloqueo
         })
-        for (const detallesReserva of bloqueosSeleccionados) {
-
-
-            const bloqueoUID = detallesReserva.bloqueoUID
-            const tipoBloqueo = detallesReserva.tipoBloqueoIDV
-            const fechaEntrada = detallesReserva.fechaInicio
-            const fechaSalida = detallesReserva.fechaFin
-            const apartamentoIDV = detallesReserva.apartamentoIDV
+        for (const detallesBloqueo of bloqueosSeleccionados) {
+            const bloqueoUID = detallesBloqueo.bloqueoUID
+            const tipoBloqueo = detallesBloqueo.tipoBloqueoIDV
+            const fechaEntrada = detallesBloqueo.fechaInicio
+            const fechaSalida = detallesBloqueo.fechaFin
+            const apartamentoIDV = detallesBloqueo.apartamentoIDV
             const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV: apartamentoIDV,
                 errorSi: "noExiste"
             })
             const apartamentoUI = apartamento.apartamentoUI
-            detallesReserva.apartamentoUI = apartamentoUI
-            detallesReserva.fechaEntrada = fechaEntrada
-            detallesReserva.fechaSalida = fechaSalida
+            detallesBloqueo.apartamentoUI = apartamentoUI
+            if (tipoBloqueo === "rangoTemporal") {
+                detallesBloqueo.fechaEntrada = fechaEntrada
+                detallesBloqueo.fechaSalida = fechaSalida
+            } else if (tipoBloqueo === "permanente") {
+                detallesBloqueo.fechaEntrada = fechaInicialVirtual
+                detallesBloqueo.fechaSalida = fechaFinalVirtual
+            }
+       
             // El calenadrio espera que en detalles del evento, este el fechaEntrad y fechaSalida
-            delete detallesReserva.fechaInicio
-            delete detallesReserva.fechaFin
+            delete detallesBloqueo.fechaInicio
+            delete detallesBloqueo.fechaFin
 
-            detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
-            detallesReserva.tipoEvento = "todosLosBloqueos"
-            detallesReserva.eventoUID = "todosLosBloqueos_" + bloqueoUID
+            detallesBloqueo.duracion_en_dias = detallesBloqueo.duracion_en_dias + 1
+            detallesBloqueo.tipoEvento = "todosLosBloqueos"
+            detallesBloqueo.eventoUID = "todosLosBloqueos_" + bloqueoUID
             if (tipoBloqueo === "rangoTemporal") {
                 const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada, fechaSalida)
                 for (const fechaInterna_ISO of arrayConFechasInternas) {
@@ -85,8 +96,8 @@ export const eventosTodosLosBloqueos = async (fecha) => {
                     const estructuraBloqueoDia = {
                         eventoUID: "todosLosBloqueos_" + bloqueoUID,
                         tipoBloqueo: tipoBloqueo,
-                        //fechaEntrada: fechaEntrada_Humana,
-                        //fechaSalida: fechaSalida_Humana,
+                        fechaEntrada: fechaInicialVirtual,
+                        fechaSalida: fechaFinalVirtual,
                         apartamentoIDV: apartamentoIDV,
                         apartamentoUI: apartamentoUI
                     }

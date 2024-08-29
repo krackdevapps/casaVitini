@@ -130,6 +130,7 @@ describe('taxes of simulation', () => {
 
     afterAll(async () => {
         await eliminarOfertaPorTestingVI(testingVI)
+        await eliminarSimulacionPorTestingVI(testingVI)
         await eliminarImpuestoPorTestingVI(testingVI)
         await makeHostArquitecture({
             operacion: "eliminar",

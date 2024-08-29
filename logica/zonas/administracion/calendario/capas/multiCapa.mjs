@@ -6,7 +6,6 @@ import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
 import { obtenerCalendariosPorPlataformaIDV } from "../../../../repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs";
 import { eventosPorApartamneto } from "../../../../sistema/calendarios/eventos/eventosPorApartamento.mjs";

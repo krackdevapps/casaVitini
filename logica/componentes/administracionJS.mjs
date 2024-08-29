@@ -15511,7 +15511,7 @@ const casaVitini = {
                         contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
                         const informacion = document.createElement("div")
                         informacion.classList.add("administracion_configuracion_informacion")
-                        informacion.innerText = "Los interruptores permiten activar o desactivar funciones específicas.Como, por ejemplo, permitir reservas públicas o no.Puede activar y desactivar los interruptores y tener un control más modular del sistema."
+                        informacion.innerText = "Los interruptores permiten activar o desactivar funciones específicas. Como, por ejemplo, permitir reservas públicas o no.Puede activar y desactivar los interruptores y tener un control más modular del sistema."
                         contenedorConfiguracionGlobal.appendChild(informacion)
                         bloqueConfiguracion = document.createElement("div")
                         bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
@@ -15521,7 +15521,7 @@ const casaVitini = {
                         bloqueConfiguracion.appendChild(tituloConfiguracion)
                         descripcionConfiguracion = document.createElement("div")
                         descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
-                        descripcionConfiguracion.innerText = "Este interruptor determina si se deben permitir reservas públicas ahora mismo.Si el interruptor está activado, personas en todo el mundo podrán pre confirmar reservas desde Casa Vitini."
+                        descripcionConfiguracion.innerText = "Este interruptor determina si se deben permitir reservas públicas ahora mismo. Si el interruptor está activado, personas en todo el mundo podrán pre confirmar reservas desde Casa Vitini."
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         const io_aceptarReservasPublicas_UI = document.createElement("select")
                         io_aceptarReservasPublicas_UI.setAttribute("interruptor", "aceptarReservasPublicas")
@@ -30260,9 +30260,8 @@ const casaVitini = {
                                         "borderRadius10",
                                         "areaSinDecoracionPredeterminada",
                                         "backgroundGrey1",
-                                        "padding6",
+                                        "padding12",
                                         "comportamientoBoton"
-
                                     )
                                     reservaActivaContenedorUI.setAttribute("href", `/administracion/reservas/reserva:${reservaUID}/alojamiento`)
                                     reservaActivaContenedorUI.setAttribute("vista", `/administracion/reservas/reserva:${reservaUID}/alojamiento`)
@@ -34122,27 +34121,23 @@ const casaVitini = {
                         const reservaUID = detallesDelEvento.reservaUID
                         nombreEventoFinal = "Reserva " + reservaUID
                         urlUI = "/administracion/reservas/reserva:" + reservaUID
-                    }
-                    if (tipoEvento === "todosLosApartamentos") {
+                    } else if (tipoEvento === "todosLosApartamentos") {
                         const reservaUID = detallesDelEvento.reservaUID
                         const apartamentoUI = detallesDelEvento.apartamentoUI
                         nombreEventoFinal = apartamentoUI
                         urlUI = `/administracion/reservas/reserva:${reservaUID}`
-                    }
-                    if (tipoEvento === "porApartamento") {
+                    } else if (tipoEvento === "porApartamento") {
                         const reservaUID = detallesDelEvento.reservaUID
                         const apartamentoUI = detallesDelEvento.apartamentoUI
                         nombreEventoFinal = apartamentoUI
                         urlUI = `/administracion/reservas/reserva:${reservaUID}`
-                    }
-                    if (tipoEvento === "todosLosBloqueos") {
+                    } else if (tipoEvento === "todosLosBloqueos") {
                         const bloqueoUID = detallesDelEvento.bloqueoUID
                         const apartamentoIDV = detallesDelEvento.apartamentoIDV
                         const apartamentoUI = detallesDelEvento.apartamentoUI
                         nombreEventoFinal = `Bloqueo ${apartamentoUI}`
                         urlUI = `/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
-                    }
-                    if (tipoEvento === "calendarioAirbnb") {
+                    } else if (tipoEvento === "calendarioAirbnb") {
                         const descripcion = detallesDelEvento.descripcion || ""
                         const apartamentoUI = detallesDelEvento.apartamentoUI
                         const regex = /Reservation URL: (https:\/\/www\.airbnb\.com\/hosting\/reservations\/details\/[A-Za-z0-9]+)/;
@@ -34157,6 +34152,18 @@ const casaVitini = {
                             //urlUI = ""
                         }
                     }
+
+                    const nombreClaseDinamica = `evento_margin-top-${altura}`;
+                    if (!document.querySelector(`.${nombreClaseDinamica}`)) {
+                        // Si no existe, crea un nuevo estilo
+                        const style = document.createElement('style');
+                        style.innerHTML = `
+                            .${nombreClaseDinamica} {
+                                margin-top: ${altura}px;
+                        `;
+                        document.querySelector("main").appendChild(style);
+                    }
+
                     const eventoUI = document.createElement("a")
 
                     const contenedorInfoEvento = document.createElement("div")
@@ -34166,14 +34173,18 @@ const casaVitini = {
                     contenedorInfoEvento.setAttribute("dato", "textoEvento")
                     contenedorInfoEvento.innerText = nombreEventoFinal
                     eventoUI.appendChild(contenedorInfoEvento)
-                    //Construir un div en ves del innerText para el tema de la elipsis.
-                    //eventoUI.innerText = nombreEventoFinal
-                    eventoUI.style.marginTop = altura + "px"
-                    eventoUI.setAttribute("vista", urlUI)
+                    
+                    eventoUI.classList.add(
+                        nombreClaseDinamica,
+                        css,
+                        "animacion_eventoUI"
+                    )
+
+                    //eventoUI.style.marginTop = altura + "px"
                     eventoUI.setAttribute("componente", "eventoUI")
                     eventoUI.setAttribute("eventoUID", eventoUID)
-                    eventoUI.classList.add(css)
                     if (urlUI) {
+                        eventoUI.setAttribute("vista", urlUI)
                         eventoUI.setAttribute("href", urlUI)
                     }
                     eventoUI.style.gridColumn = `${inicioColumna} /${finalColumna} span `
@@ -34198,14 +34209,12 @@ const casaVitini = {
                         }
 
                         if (tieneElipsis(contnedorTexto)) {
-
                             ventanaDetallesDelEventoTruncado({
                                 urlUI,
                                 eventoUID,
                                 nombreEventoFinal,
                                 detallesDelEventoUI
                             })
-
                         } else if (urlUI) {
                             const navegacion = {
                                 vista: urlUI,
@@ -34407,7 +34416,6 @@ const casaVitini = {
                                     configuracionEventoUI.css = "administracion_calendario_eventoUI_transicion"
                                 }
                             }
-                            ("eventoUID", eventoUID, finalColumna, duracion_en_dias)
                             configuracionEventoUI.altura = alturaFinal
                             configuracionEventoUI.inicioColumna = inicioColumna
                             configuracionEventoUI.finalColumna = finalColumna

@@ -137,28 +137,18 @@ export const calendariosCompartidos = async (data) => {
                     reservaUID: reservaUID,
                     apartamentoIDV: apartamentoIDV
                 })
-
-                const estructuraEVENTO = {
-                    start: fechaEntrada_objeto.toISO(),
-                    end: fechaSalida_objeto.toISO(),
-                    summary: `${apartamentoUI} de la reserva ${reservaUID} en casavitini.com`,
-                    uid: `reserva_${reservaUID}`,
-                    description: "Detalles de la reserva: https://casavitini.com/administracion/reservas/reserva:" + reservaUID
-                };
-                eventos.push(estructuraEVENTO);
-
                 if (apartamentoPorApartamentoIDVPorReservaUID) {
                     const evento = {
-                        start: DateTime.fromISO(fechaEntrada),
-                        end: DateTime.fromISO(fechaSalida),
-                        sumario: "Reserva " + reservaUID,
-                        descripcion: "Reserva en CasaVitini del " + apartamentoUI
+                        start: fechaEntrada_objeto.toISO(),
+                        end: fechaSalida_objeto.toISO(),
+                        summary: `${apartamentoUI} de la reserva ${reservaUID} en casavitini.com`,
+                        uid: `reserva_${reservaUID}`,
+                        description: "Detalles de la reserva: https://casavitini.com/administracion/reservas/reserva:" + reservaUID
                     };
-                    // eventos.push(evento)
+                     eventos.push(evento)
                 }
             }
         }
-
         if (formato === "ics_v2") {
             const calendario = await exportarClendario(eventos);
             return calendario
