@@ -289,8 +289,6 @@ export const validarObjetoReserva = async (data) => {
                 sePermiteVacio: "no"
             })
 
-
-
             reservaObjeto.datosTitular.nombreTitular = nombreTitular
             reservaObjeto.datosTitular.pasaporteTitular = pasaporteTitular
             reservaObjeto.datosTitular.telefonoTitular = telefonoTitular

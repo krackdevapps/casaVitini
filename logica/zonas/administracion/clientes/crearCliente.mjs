@@ -3,10 +3,8 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { insertarCliente } from "../../../repositorio/clientes/insertarCliente.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
-
 export const crearCliente = async (entrada, salida) => {
     const mutex = new Mutex();
-    let bloqueoCrearCliente
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -14,7 +12,7 @@ export const crearCliente = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        bloqueoCrearCliente = await mutex.acquire();
+        await mutex.acquire();
 
         const nuevoCliente = {
             nombre: entrada.body.nombre,
@@ -49,6 +47,8 @@ export const crearCliente = async (entrada, salida) => {
     } catch (errorCapturado) {
         throw errorCapturado
     } finally {
-        bloqueoCrearCliente();
+        if (mutex) {
+            mutex.release();
+        }
     }
 }

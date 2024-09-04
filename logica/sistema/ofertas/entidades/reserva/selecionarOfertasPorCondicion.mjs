@@ -1,5 +1,4 @@
 import { obtenerOfertasPorRangoActualPorEstado } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorRangoActualPorEstado.mjs"
-import { obtenerOfertasPorRangoPorEstado } from "../../../../repositorio/ofertas/perfiles/obtenerOfertasPorRangoPorEstado.mjs"
 import { selectorPorCondicion } from "./selectorPorCondicion.mjs"
 
 export const selecionarOfertasPorCondicion = async (data) => {

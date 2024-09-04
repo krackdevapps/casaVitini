@@ -4,12 +4,12 @@ import { calendariosCompartidos } from '../sistema/calendariosSincronizados/cale
 
 export const calendarios_compartidos = async (entrada, salida) => {
     try {
-        console.log("entrada calendario compartido", entrada.body)
+
         const urlPath = validadoresCompartidos.tipos.urlPath({
             urlPath: entrada.url.toLowerCase(),
             nombreCampo: "La URL no cumple el formato esperado."
         })
-        console.log("urlPath", urlPath)
+
 
         const urlArray = urlPath.toLowerCase()
             .split("/")
@@ -26,7 +26,7 @@ export const calendarios_compartidos = async (entrada, salida) => {
             const m = "No se reconoce el formato del calendario solicidado, los formatos solo pueden ser ics_v2 o ics_v2_airbnb"
             throw new Error(m)
         }
- 
+
         const calendarioPublico = await calendariosCompartidos({
             calendarioUIDPublico,
             formato

@@ -40,13 +40,26 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
-                    tipoOperacion: "insertarDescuentoPorAdministrador",
-                    reservaUID: reservaUID,
-                    ofertaUID: ofertaUID,
-                    capaImpuestos: "si"
-                }
+                    origen: "hubReservas",
+                    reservaUID: reservaUID
+                },
+                servicios: {
+                    origen: "instantaneaServiciosEnReserva",
+                    reservaUID: reservaUID
+                },
             },
-            capaImpuestos: "si",
+            capas: {
+                ofertas: {
+                    operacion: {
+                        tipo: "insertarDescuentoPorAdministrador",
+                    },
+                    ofertaUID: ofertaUID
+                },
+                impuestos: {
+                    origen: "instantaneaImpuestos",
+                    reservaUID: reservaUID
+                }
+            }
         })
         await campoDeTransaccion("iniciar")
         await actualizarDesgloseFinacieroPorReservaUID({

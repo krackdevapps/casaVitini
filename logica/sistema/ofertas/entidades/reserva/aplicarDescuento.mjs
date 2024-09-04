@@ -17,9 +17,9 @@ export const aplicarDescuento = async (data) => {
             const error = "aplicarDescuento necesita llave origen, esta puede ser porCondicion o porAdminstrador"
             throw new Error(error)
         }
-        const contenedorTotalesBase = estructura.global.totales
+        const contenedorTotalesBase = estructura.entidades.reserva.global.totales
         const totalNeto = new Decimal(contenedorTotalesBase.totalNeto)
-        const contenedorOfertas = estructura.contenedorOfertas.entidades.reserva.ofertas[origen]
+        const contenedorOfertas = estructura.contenedorOfertas.ofertas[origen]
         const contenedorPorTotal = estructura.contenedorOfertas.entidades.reserva.desgloses.porTotal
         const contenedorPorApartamento = estructura.contenedorOfertas.entidades.reserva.desgloses.porApartamento
         const contenedorPorDia = estructura.contenedorOfertas.entidades.reserva.desgloses.porDia
@@ -117,8 +117,8 @@ export const aplicarDescuento = async (data) => {
             }
         }
 
-        const totalDescuento = estructura.global.totales.totalDescuento
-        estructura.global.totales.totalDescuento = new Decimal(totalDescuento).toFixed(2)
+        const totalDescuento = estructura.entidades.reserva.global.totales.totalDescuento
+        estructura.entidades.reserva.global.totales.totalDescuento = new Decimal(totalDescuento).toFixed(2)
 
         const totalFinalConDescuentos = totalNeto.minus(totalDescuento)
         if (totalFinalConDescuentos.isPositive()) {
@@ -127,7 +127,7 @@ export const aplicarDescuento = async (data) => {
             contenedorTotalesBase.totalFinal = "0.00"
         }
         const totalFinal = contenedorTotalesBase.totalFinal
-        const nochesReserva = estructura.entidades.reserva.nochesReserva
+        const nochesReserva = estructura.entidades.reserva.global.rango.nochesReserva
         const promedioNocheNetoConDescuentos = new Decimal(totalFinal).div(nochesReserva)
         contenedorTotalesBase.promedioNocheNetoConDescuentos = promedioNocheNetoConDescuentos.isPositive() ? promedioNocheNetoConDescuentos.toFixed(2) : "0.00"
 

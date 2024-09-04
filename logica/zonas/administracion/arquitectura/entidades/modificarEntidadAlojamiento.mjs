@@ -283,6 +283,9 @@ export const modificarEntidadAlojamiento = async (entrada) => {
         await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
-        mutex.release();
+        if (mutex) {
+            mutex.release();    
+        }
+        
     }
 }

@@ -419,10 +419,12 @@ main[zonaCSS="/"] {
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 7) {
     grid-column: 7/7;
 }
+
 [zonaCSS="administracion/calendario"] .animacion_eventoUI {
     transition: height 500ms linear, padding 500ms linear, opacity 500ms linear, margin-bottom 500ms linear, margin-top 500ms linear, scale 500ms linear;
     opacity: 1;
     scale: 1;
+
     @starting-style {
         height: 0px;
         padding: 0px;
@@ -432,6 +434,7 @@ main[zonaCSS="/"] {
         scale: 1;
     }
 }
+
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_transicion {
     background: rgba(255, 255, 255, 0.3);
     height: 40px;
@@ -453,7 +456,7 @@ main[zonaCSS="/"] {
     overflow: hidden;
     padding-left: 10px;
     padding-right: 10px;
-  }
+}
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_inicioFinal {
     background: rgba(255, 255, 255, 0.3);
@@ -480,7 +483,7 @@ main[zonaCSS="/"] {
 
     padding-left: 10px;
     padding-right: 10px;
- 
+
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_inicioSolo {
@@ -508,7 +511,7 @@ main[zonaCSS="/"] {
 
     padding-left: 10px;
     padding-right: 10px;
- 
+
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_finalSolo {
@@ -2402,6 +2405,19 @@ main[zonaCSS="/"] {
         display: none;
     }
 
+    [gridUID="gridServicios"] {
+        display: none;
+    }
+
+    [zonaCSS="/administracion/servicios"] [contenedor="filtrosOrden"] {
+        display: flex
+    }
+
+    [zonaCSS="/administracion/servicios"] [contenedor="resultados"] {
+        gap: 6px;
+    }
+
+
     [zonaCSS="administracion/clientes/buscador"] [contenedor="resultados"] {
         gap: 6px;
     }
@@ -2755,7 +2771,7 @@ main[zonaCSS="/"] {
     justify-items: stretch;
     justify-content: center;
     align-content: center;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0.3fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 0.4fr;
     grid-template-rows: 1fr;
     grid-auto-flow: row;
     grid-template-areas:
@@ -2812,7 +2828,7 @@ main[zonaCSS="/"] {
     align-items: center;
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 920px) {
     [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
         display: none;
     }
@@ -3763,10 +3779,10 @@ main[zonaCSS="/"] {
 
 [ui="reservaUI"] .opcionCambioCama {
     background-color: rgba(255, 255, 255, 0.3);
-    padding: 10px;
+    padding: 12px;
     user-select: none;
     cursor: default;
-    border-radius: 6px;
+    border-radius: 12px;
 }
 
 [ui="reservaUI"] .errorCategorialGlobal {
@@ -3903,8 +3919,8 @@ main[zonaCSS="/"] {
 
 .advertenciaInmersiva .boton {
     background: #00000036;
-    padding: 8px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 12px;
     text-align: center;
 }
 
@@ -5564,6 +5580,12 @@ main[zonaCSS="/"] {
 
 [zonaCSS="administracion/situacion"] .situacionBarraProgressoReserva {
     background: #505050;
+    transition: width 500ms ease-in-out;
+
+    @starting-style {
+        width: 0;
+    }
+
 }
 
 [zonaCSS="administracion/situacion"] .situacionDetallesGenerales {
@@ -5759,6 +5781,11 @@ main[zonaCSS="/"] {
     resize: none;
     background: rgb(255 255 255 / 0.5);
     margin: 8px;
+}
+
+.resizeOnlyVertical {
+    resize: vertical;
+
 }
 
 [zonaCSS="administracion/clientes/nuevo"] .nuevoClienteBoton {
@@ -6977,6 +7004,36 @@ main[zonaCSS="/"] {
     -webkit-backdrop-filter: blur(50px);
 }
 
+[zonaCSS="/administracion/servicios/servicioUI"] .servicioUI {
+    /* height: 100%; */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding: 12px;
+    gap: 6px;
+}
+
+
+[zonaCSS="/administracion/servicios/servicioUI"] .administracion_ofertas_crearOfertas_contenedorFecha {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearComportameintoContendorFechas {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -7062,6 +7119,33 @@ main[zonaCSS="/"] {
     align-items: stretch;
 }
 
+[zonaCSS="/administracion/servicios/servicioUI"] .crearOfertaContenedorHorizontalV2 {
+    /*width: 100%; */
+    display: grid;
+    grid-template-columns: 0.25fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
+[zonaCSS="/administracion/servicios/servicioUI"] .crearOfertaContenedorHorizontalV2 {
+    /*width: 100%; */
+    display: grid;
+    grid-template-columns: 0.25fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
+
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalModoCrear {
     display: flex;
     grid-template-columns: 0.25fr 1fr;
@@ -7075,6 +7159,18 @@ main[zonaCSS="/"] {
     flex-direction: column;
 }
 
+[zonaCSS="/administracion/servicios/servicioUI"] .crearOfertaContenedorHorizontalModoCrear {
+    display: flex;
+    grid-template-columns: 0.25fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    flex-direction: column;
+}
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontal {
     /*width: 100%; */
@@ -7089,6 +7185,25 @@ main[zonaCSS="/"] {
     align-items: stretch;
 }
 
+[zonaCSS="/administracion/servicios/servicioUI"] .crearOfertaContenedorHorizontal {
+    /*width: 100%; */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
+
+[zonaCSS="/administracion/servicios/servicioUI"] .contenedorSelectoresGlobales {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px
+}
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .contenedorZonaOferta {
     display: flex;
@@ -7122,6 +7237,25 @@ main[zonaCSS="/"] {
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .creatOfertaBotonEstado {
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    border-radius: 12px;
+    padding: 6px;
+    font-weight: bold;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    padding: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+
+[zonaCSS="/administracion/servicios/servicioUI"] .creatOfertaBotonEstado {
     background: rgba(255, 255, 255, 0.3);
     display: flex;
     border-radius: 12px;
@@ -7275,10 +7409,6 @@ main[zonaCSS="/"] {
     padding: 10px;
 }
 
-.gap6 {
-    gap: 6px;
-}
-
 
 .margin10 {
     margin: 10px;
@@ -7294,6 +7424,22 @@ main[zonaCSS="/"] {
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .contenedorFecha {
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    border-radius: 12px;
+    padding: 10px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+
+[zonaCSS="/administracion/servicios/servicioUI"] .contenedorFecha {
     background: rgba(255, 255, 255, 0.3);
     display: flex;
     flex-direction: column;
@@ -7382,6 +7528,17 @@ main[zonaCSS="/"] {
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaEpacioBotones {
     display: flex;
+    justify-content: center;
+    align-items: stretch;
+    align-content: center;
+    flex-direction: column;
+    gap: 6px;
+}
+
+[zonaCSS="/administracion/servicios/servicioUI"] .contenedorBotones {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
     justify-content: center;
     align-items: stretch;
     align-content: center;
@@ -10418,7 +10575,7 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 6px;
 }
 
-[ui="reservaUI"] .administracion_reservas_detallesReserva_enlacesDePago_contenedorEnlacesDePago {
+[ui="reservaUI"] .administracion_reservas_detallesReserva_servicios_contenedor {
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -10656,6 +10813,11 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: flex-end;
 }
 
+[zonaCSS="/administracion/servicios"] .contenedorBotonesGlobales {
+    display: flex;
+    justify-content: flex-end;
+}
+
 [zonaCSS="administracion/impuestos"] .administracion_impuestos_botonV1 {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -10675,6 +10837,32 @@ grid-template-columns: 0.5fr 1.5fr;
     text-decoration: none;
     color: black;
 }
+
+[zonaCSS="/administracion/servicios"] .botonNuevo {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-decoration: none;
+    color: black;
+}
+
+
+[zonaCSS="/administracion/servicios"] .botonNuevo:hover {
+    background: white;
+}
+
 
 .administracion_impuestos_botonV1:hover {
     background: white;
@@ -10966,7 +11154,7 @@ grid-template-columns: 0.5fr 1.5fr;
 [ui="reservaUI"] .administracion_reservas_detallesReserva_infoTitular_contenedorGlobal {
     background: rgb(255 255 255 / 0.3);
     border-radius: 10px;
-    padding: 10px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -12172,7 +12360,7 @@ grid-template-columns: 0.5fr 1.5fr;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     text-align: justify;
-    margin: 6px;
+    margin: 18px;
 
 }
 
@@ -14203,6 +14391,16 @@ grid-template-columns: 0.5fr 1.5fr;
     }
 }
 
+[zonaCSS="administracion/reservas/detallesReserva"] .barraProgresso {
+    height: 100%;
+    background: grey;
+    transition: width 500ms ease-in-out;
+
+    @starting-style {
+        width: 0;
+    }
+}
+
 [zonaCSS="/micasa"] .videoPresentacion {
     min-width: 100%;
     min-height: 100%;
@@ -14425,6 +14623,28 @@ grid-template-columns: 0.5fr 1.5fr;
     max-width: 720px;
 }
 
+[zonaCSS="/alojamiento/resumen"] [servicioUID] .contenedorGlobal {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+
+}
+
+[zonaCSS="/alojamiento/resumen"] [servicioUID] .esferaSeleccionable {
+    margin: 5px;
+    height: 24px;
+    width: 24px;
+    border: 2px solid #373737;
+    border-radius: 100%;
+}
+
+[zonaCSS="/alojamiento/resumen"] [servicioUID] .indicadorDeSeleccion {
+    margin: 3px;
+    height: 14px;
+    width: 14px;
+    border-radius: 100%;
+}
+
 [zonaCSS="privacidad"] .contenedorDecision {
     display: flex;
     width: 100%;
@@ -14498,6 +14718,7 @@ grid-template-columns: 0.5fr 1.5fr;
     text-align: center;
 }
 
+
 .padding6Horizontal {
     padding-left: 6px;
     padding-right: 6px;
@@ -14510,6 +14731,14 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .gap6 {
     gap: 6px;
+}
+
+.ga8 {
+    gap: 8px;
+}
+
+.gap10 {
+    gap: 10px;
 }
 
 .flexVertical {
@@ -14956,6 +15185,15 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .ocultoInicial {
     display: none;
+}
+
+.area300px {
+    height: 300px;
+}
+
+input,
+textarea {
+    outline: none;
 }
 
 [zonaCSS="/alojamiento"] .botonOfertaEnApartamento {

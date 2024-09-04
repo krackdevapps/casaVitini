@@ -1,11 +1,14 @@
 export const constructorEstructuraDescuentosReserva = (estructura) => {
-    const entidades = estructura.contenedorOfertas.entidades
+    const contenedorOfertas = estructura.contenedorOfertas
+    const entidades = contenedorOfertas.entidades
+
+    contenedorOfertas.ofertas = {
+        porCondicion: [],
+        porAdministrador: []
+    }
+
     if (!entidades.hasOwnProperty("reserva")) {
         entidades.reserva = {
-            ofertas: {
-                porCondicion: [],
-                porAdministrador: []
-            },
             desgloses: {
                 porDia: {},
                 porApartamento: {},

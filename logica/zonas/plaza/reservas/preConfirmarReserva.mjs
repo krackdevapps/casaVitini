@@ -56,12 +56,9 @@ export const preConfirmarReserva = async (entrada) => {
             ]
         })
         const pdf = await generadorPDF(resolverDetallesReserva);
-
         if (!testingVI) {
             enviarMailReservaConfirmada(reservaUID);
-
         }
-
         const ok = {
             ok: "Reserva confirmada",
             detalles: resolverDetallesReserva,

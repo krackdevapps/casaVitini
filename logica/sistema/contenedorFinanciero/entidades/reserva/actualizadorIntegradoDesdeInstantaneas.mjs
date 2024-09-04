@@ -5,11 +5,20 @@ export const actualizadorIntegradoDesdeInstantaneas = async (reservaUID) => {
     const desgloseFinanciero = await procesador({
         entidades: {
             reserva: {
-                tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                reservaUID: reservaUID,
-                capaImpuestos: "si"
-            }
+                origen: "hubReservas",
+                reservaUID: reservaUID
+            },
+            servicios: {
+                origen: "instantaneaServiciosEnReserva",
+                reservaUID: reservaUID
+            },
         },
+        capas: {
+            impuestos: {
+                origen: "instantaneaImpuestos",
+                reservaUID: reservaUID
+            }
+        }
     })
     await actualizarDesgloseFinacieroPorReservaUID({
         desgloseFinanciero,

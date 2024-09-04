@@ -26,9 +26,28 @@ export const constructorInstantaneaNoches = async (data) => {
             estructura.entidades.reserva = {}
         }
         const reservaEntidad = contenedorEntidadtes.reserva
-        reservaEntidad.fechaEntrada = fechaEntrada
-        reservaEntidad.fechaSalida = fechaEntrada
-        reservaEntidad.nochesReserva = diasArray.length.toString()
+        // reservaEntidad.fechaEntrada = fechaEntrada
+        // reservaEntidad.fechaSalida = fechaSalida
+        // reservaEntidad.nochesReserva = diasArray.length.toString()
+        
+        if (!reservaEntidad.hasOwnProperty("global")) {
+            reservaEntidad.global = {}
+        }
+        const global = reservaEntidad.global
+        global.rango = {
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
+            nochesReserva: diasArray.length.toString()
+        }
+        global.totales = {
+            totalNeto: "0.00",
+            totalDescuento: "0.00",
+            totalFinal: "0.00",
+            impuestosAplicados: "0.00",
+            promedioNocheNeto: "0.00",
+            promedioNocheNetoConDescuentos: "0.00"
+        }
+
 
         if (!reservaEntidad.hasOwnProperty("instantaneaNoches")) {
             reservaEntidad.instantaneaNoches = {}

@@ -64,8 +64,6 @@ export const insertarDescuentoCompatibleConReserva = async (data) => {
         })
         ofertaFormateada.autorizacion = "aceptada"
 
-
-
         if (ofertaFormateada.oferta.ofertaUID !== String(ofertaUID)) {
             const error = "La oferta seleccionada no es compatible condicionalmente con esta reserva. Si desea igualmente aplicar los descuentos de esta oferta, hazlo mediante el botón de insertar descuentos."
             throw new Error(error)
@@ -99,7 +97,6 @@ export const insertarDescuentoCompatibleConReserva = async (data) => {
                 reservaUID
             })
         }
-
     } catch (error) {
         throw error
     }

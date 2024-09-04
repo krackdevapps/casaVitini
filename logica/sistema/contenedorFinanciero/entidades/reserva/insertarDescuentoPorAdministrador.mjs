@@ -24,6 +24,11 @@ export const insertarDescuentoPorAdministrador = async (data) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
+        await obtenerOfertasPorEntidadPorOfertaUID({
+            ofertaUID,
+            entidadIDV: "reserva"
+        })
+        
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const fechaEntrada = reserva.fechaEntrada
         const fechaSalida = reserva.fechaSalida
@@ -33,10 +38,6 @@ export const insertarDescuentoPorAdministrador = async (data) => {
             return detallesApartamento.apartamentoIDV
         })
 
-        await obtenerOfertasPorEntidadPorOfertaUID({
-            ofertaUID,
-            entidadIDV: "reserva"
-        })
 
         const desgloseFinancieroReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
         const instantaneaNoches = desgloseFinancieroReserva.instantaneaNoches

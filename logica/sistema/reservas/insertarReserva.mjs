@@ -11,10 +11,10 @@ import { procesador } from '../contenedorFinanciero/procesador.mjs';
 import { insertarDesgloseFinacieroPorReservaUID } from '../../repositorio/reservas/transacciones/desgloseFinanciero/insertarDesgloseFinacieroPorReservaUID.mjs';
 import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from '../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs';
 import { generadorReservaUID } from '../../componentes/generadorReservaUID.mjs';
+import { validarServiciosPubicos } from '../servicios/validarServiciosPublicos.mjs';
 
 export const insertarReserva = async (reserva) => {
     try {
-
         const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: reserva.fechaEntrada,
             nombreCampo: "La fecha de entrada de la reserva a confirmar"
@@ -35,7 +35,10 @@ export const insertarReserva = async (reserva) => {
         const correoTitular = datosTitular.correoTitular
         const telefonoTitular = datosTitular.telefonoTitular
         const codigoDescuentosArrayBASE64 = reserva.codigosDescuento
-
+        const serviciosUIDSolicitados = reserva?.servicios || []
+        if (serviciosUIDSolicitados.length > 0) {
+            await validarServiciosPubicos(serviciosUIDSolicitados)
+        }
         const reservaUID = await generadorReservaUID()
         const nuevaReserva = await insertarReservaAdministrativa({
             fechaEntrada: fechaEntrada,
@@ -101,7 +104,6 @@ export const insertarReserva = async (reserva) => {
                     reservaUID: reservaUID,
                     camaUI: camaUI
                 })
-                const camaUID = nuevaCamaEnLaHabitacion.componenteUID
             }
         }
         const apartamentosArray = Object.keys(alojamiento);
@@ -109,24 +111,38 @@ export const insertarReserva = async (reserva) => {
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
-                    tipoOperacion: "crearDesglose",
+                    origen: "externo",
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
                     apartamentosArray: apartamentosArray,
-                    capaOfertas: "si",
-                    zonasArray: ["global", "publica"],
-                    capaDescuentosPersonalizados: "no",
-                    capaImpuestos: "si",
-                    codigoDescuentosArrayBASE64
-                }
+                },
+                servicios: {
+                    origen: "hubServicios",
+                    serviciosUIDSolicitados
+                },
             },
-        })
+            capas: {
+                ofertas: {
+                    zonasArray: ["global", "publica"],
+                    configuracion: {
+                        descuentosPersonalizados: "no",
+                        descuentosArray: []
+                    },
+                    operacion: {
+                        tipo: "insertarDescuentosPorCondiconPorCoodigo",
+                        codigoDescuentosArrayBASE64: codigoDescuentosArrayBASE64
 
+                    }
+                },
+                impuestos: {
+                    origen: "hubImuestos"
+                }
+            }
+        })
         await insertarDesgloseFinacieroPorReservaUID({
             reservaUID,
             desgloseFinanciero
         })
-
         return nuevaReserva
     } catch (errorCapturado) {
         throw errorCapturado

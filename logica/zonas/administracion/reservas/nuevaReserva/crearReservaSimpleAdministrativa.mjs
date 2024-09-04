@@ -41,6 +41,13 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             fecha_ISO: fechaSalida,
             nombreCampo: "La fecha de salida de la reserva"
         })
+
+        await validadoresCompartidos.fechas.validacionVectorial({
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
+            tipoVector: "diferente"
+        })
+
         const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada)
         const fechaSalida_objeto = DateTime.fromISO(fechaSalida)
 
@@ -134,20 +141,23 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                     apartamentoUI: apartamentoUI,
                 })
             }
-
             const desgloseFinanciero = await procesador({
                 entidades: {
                     reserva: {
-                        tipoOperacion: "crearDesglose",
+                        origen: "externo",
                         fechaEntrada: fechaEntrada,
                         fechaSalida: fechaSalida,
                         apartamentosArray: apartamentos,
-                        capaOfertas: "si",
-                        zonasArray: ["global", "privada"],
-                        capaDescuentosPersonalizados: "no",
-                        capaImpuestos: "si"
-                    }
+                    },
                 },
+                capas: {
+                    ofertas: {
+                        zonasArray: ["global", "privada"]
+                    },
+                    impuestos: {
+                        origen: "hubImuestos"
+                    }
+                }
             })
 
             await insertarDesgloseFinacieroPorReservaUID({

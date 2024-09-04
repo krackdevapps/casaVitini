@@ -9,6 +9,7 @@ import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mj
 import { detallesPagos } from "./detallesReserva/detallesPagos.mjs"
 import { insertarApartamentoUIEnObjetoOfertas } from "../ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs"
 import { enlacesDePagoDeLaReserva } from "./detallesReserva/enlacesDePagoDeLaReserva.mjs"
+import { obtenerServiciosPorReservaUID } from "../../repositorio/servicios/obtenerServiciosPorReservaUID.mjs"
 export const detallesReserva = async (data) => {
     try {
         const capas = data.capas
@@ -24,14 +25,15 @@ export const detallesReserva = async (data) => {
             "pernoctantes",
             "desgloseFinanciero",
             "detallesPagos",
-            "enlacesDePago"
+            "enlacesDePago",
+            "servicios"
         ]
         validadoresCompartidos.tipos.array({
             array: capas,
             nombreCampo: "El array capas en detallesReserva",
             filtro: "strictoIDV"
         })
-        
+
         const capasNoIdentificadas = capas.filter(capaIDV => !contenedorCapas.includes(capaIDV));
         if (capasNoIdentificadas.length > 0) {
             const constructoCapasNoConocidas = utilidades.constructorComasEY({
@@ -62,7 +64,7 @@ export const detallesReserva = async (data) => {
         }
         if (capas.includes(contenedorCapas[3])) {
             reserva.contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
-            const contenedorOfertasPorAdmimnistrador = reserva.contenedorFinanciero.desgloseFinanciero.contenedorOfertas.entidades.reserva.ofertas.porAdministrador
+            const contenedorOfertasPorAdmimnistrador = reserva.contenedorFinanciero.desgloseFinanciero.contenedorOfertas.ofertas.porAdministrador
             for (const contenedorOferta of contenedorOfertasPorAdmimnistrador) {
                 await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
             }
@@ -71,7 +73,10 @@ export const detallesReserva = async (data) => {
             reserva.detallesPagos = await detallesPagos(reservaUID)
         }
         if (capas.includes(contenedorCapas[5])) {
-        reserva.enlacesDePago = await enlacesDePagoDeLaReserva(reservaUID)
+            reserva.enlacesDePago = await enlacesDePagoDeLaReserva(reservaUID)
+        }
+        if (capas.includes(contenedorCapas[6])) {
+            reserva.servicios = await obtenerServiciosPorReservaUID(reservaUID)
         }
         return reserva
     } catch (errorCapturado) {

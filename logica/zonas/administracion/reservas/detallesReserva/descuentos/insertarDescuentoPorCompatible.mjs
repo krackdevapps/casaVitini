@@ -59,16 +59,27 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
         })
         // Desde aqui se envia esto mas el ofertaUID
         const desgloseFinanciero = await procesador({
+     
             entidades: {
                 reserva: {
-                    tipoOperacion: "insertarDescuentoCompatibleConReserva",
-                    reservaUID,
-                    ofertaUID,
-                    fechaEntrada: fechaEntradaReserva,
-                    fechaSalida: fechaSalidaReserva,
-                    fechaActual: fechaCreacion_simple,
-                    apartamentosArray: apartamentosArray,
-                    capaImpuestos: "si"
+                    origen: "hubReservas",
+                    reservaUID: reservaUID
+                },
+                servicios: {
+                    origen: "instantaneaServiciosEnReserva",
+                    reservaUID: reservaUID
+                },
+            },
+            capas: {
+                ofertas: {
+                    operacion: {
+                        tipo: "insertarDescuentoCompatibleConReserva",
+                    },
+                    ofertaUID: ofertaUID
+                },
+                impuestos: {
+                    origen: "instantaneaImpuestos",
+                    reservaUID: reservaUID
                 }
             }
         })

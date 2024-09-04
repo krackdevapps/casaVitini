@@ -18,15 +18,12 @@ export const totalesBasePorRango = async (data) => {
 
         const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada, fechaSalida)
         diasArray.pop()
-        const contenedorEntidadtes = estructura.entidades
+        const contenedorEntidades = estructura.entidades
 
-        if (!contenedorEntidadtes.hasOwnProperty("reserva")) {
-            estructura.entidades.reserva = {}
-        }
-        const reservaEntidad = contenedorEntidadtes.reserva
-        reservaEntidad.fechaEntrada = fechaEntrada
-        reservaEntidad.fechaSalida = fechaSalida
-        reservaEntidad.nochesReserva = diasArray.length.toString()
+        const reservaEntidad = contenedorEntidades.reserva
+        // reservaEntidad.fechaEntrada = fechaEntrada
+        // reservaEntidad.fechaSalida = fechaSalida
+        // reservaEntidad.nochesReserva = diasArray.length.toString()
         const instantaneaNoches = reservaEntidad.instantaneaNoches
 
 
@@ -37,16 +34,10 @@ export const totalesBasePorRango = async (data) => {
 
         if (instantaneaNoches) {
             reservaEntidad.desglosePorNoche = _.cloneDeep(instantaneaNoches);
-
         }
 
         const desglosePorNoche = reservaEntidad.desglosePorNoche
         const desglosePorApartamento = reservaEntidad.desglosePorApartamento
-
-        const indiceDias = await constructorIndiceDias({
-            fechaEntrada: fechaEntrada,
-            fechaSalida: fechaSalida
-        })
 
         for (const [fecha_ISO, detallesDelDia] of Object.entries(desglosePorNoche)) {
             if (diasArray.includes(fecha_ISO)) {
@@ -71,9 +62,9 @@ export const totalesBasePorRango = async (data) => {
             const noche = desglosePorNoche[fecha_ISO]
             noche.precioNetoNoche = "0.00"
             for (const apartamentoIDV of apartamentosArray) {
-    
-               // const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
-               // const precioBase = perfilPrecio.precio
+
+                // const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
+                // const precioBase = perfilPrecio.precio
 
                 const apartamentosPorNoche = noche.apartamentosPorNoche
                 if (apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {
@@ -117,7 +108,7 @@ export const totalesBasePorRango = async (data) => {
                 desglosePorApartamento[apartamentoIDV].totalNeto = new Decimal(totalPorApartamento).plus(precioNetoApartamento).toFixed(2)
             }
         }
-        const totales = estructura.global.totales
+        const totales = estructura.entidades.reserva.global.totales
         totales.totalNeto = new Decimal("0.00")
         totales.totalFinal = "0.00"
 
@@ -125,7 +116,7 @@ export const totalesBasePorRango = async (data) => {
             const totalNetoPorApartmento = detallesApartamento.totalNeto
             detallesApartamento.precioMedioNetoNoche = new Decimal(totalNetoPorApartmento).div(diasArray.length).toDecimalPlaces(2).toFixed(2);
             const totalNeto = totales.totalNeto
-            estructura.global.totales.totalNeto = totalNeto.plus(totalNetoPorApartmento)
+            estructura.entidades.reserva.global.totales.totalNeto = totalNeto.plus(totalNetoPorApartmento)
         })
         const totalNeto = totales.totalNeto
         totales.totalNeto = totalNeto.toFixed(2)

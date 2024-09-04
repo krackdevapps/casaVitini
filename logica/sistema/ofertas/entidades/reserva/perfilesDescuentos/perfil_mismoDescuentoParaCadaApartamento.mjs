@@ -34,8 +34,8 @@ export const perfil_mismoDescuentoParaCadaApartamento = (data) => {
                 descuentoTotal,
                 total: totalPorApartametno
             })
-            const totalDescuento = estructura.global.totales.totalDescuento
-            estructura.global.totales.totalDescuento = new Decimal(totalDescuento).plus(totalCalculado.descuentoAplicado)
+            const totalDescuento = estructura.entidades.reserva.global.totales.totalDescuento
+            estructura.entidades.reserva.global.totales.totalDescuento = new Decimal(totalDescuento).plus(totalCalculado.descuentoAplicado)
 
             const porApartamento = {
                 apartamentoIDV,

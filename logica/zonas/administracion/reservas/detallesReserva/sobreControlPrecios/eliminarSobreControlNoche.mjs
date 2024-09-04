@@ -54,12 +54,20 @@ export const eliminarSobreControlNoche = async (entrada) => {
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
-                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                    reservaUID: reservaUID,
-                    capaOfertas: "si",
-                    // zonasArray: ["global", "publica"],
-                    capaDescuentosPersonalizados: "no",
-                    capaImpuestos: "si"
+                    origen: "hubReservas",
+                    reservaUID: reservaUID
+                },
+                servicios: {
+                    origen: "instantaneaServiciosEnReserva",
+                    reservaUID: reservaUID
+                },
+            },
+            capas: {
+                ofertas: {
+                },
+                impuestos: {
+                    origen: "instantaneaImpuestos",
+                    reservaUID: reservaUID
                 }
             }
         })

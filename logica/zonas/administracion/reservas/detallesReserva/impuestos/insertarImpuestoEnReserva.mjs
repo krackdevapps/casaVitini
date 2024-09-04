@@ -57,10 +57,21 @@ export const insertarImpuestoEnReserva = async (entrada) => {
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
-                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
+                    origen: "hubReservas",
                     reservaUID: reservaUID
-                }
+                },
+                servicios: {
+                    origen: "instantaneaServiciosEnReserva",
+                    reservaUID: reservaUID
+                },
             },
+            capas: {
+                impuestos: {
+                    origen: "instantaneaImpuestos",
+                    reservaUID: reservaUID
+
+                }
+            }
         })
         await actualizarDesgloseFinacieroPorReservaUID({
             desgloseFinanciero,

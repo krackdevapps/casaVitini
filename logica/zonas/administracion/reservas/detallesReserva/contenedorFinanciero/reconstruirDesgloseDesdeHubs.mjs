@@ -73,17 +73,18 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
-                    tipoOperacion: "crearDesglose",
+                    origen: "externo",
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
                     apartamentosArray: apartamentosArray,
-                    capaOfertas: "si",
-                    zonasArray: ["global", "publica"],
-                    capaDescuentosPersonalizados: "no",
-                    capaImpuestos: "si"
-
-                }
+                },
             },
+            capas: {
+                ofertas: {},
+                impuestos: {
+                    origen: "hubImuestos"
+                }
+            }
         })
         await actualizarDesgloseFinacieroPorReservaUID({
             desgloseFinanciero,
