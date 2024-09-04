@@ -23962,29 +23962,7 @@ const casaVitini = {
                         const contenedorImpuestos_selector = contenedorFinanciero.querySelector("[contenedor=impuestos]")
 
                         if (!contenedorImpuestos_selector) {
-                            // const contenedor = document.createElement("div")
-                            // contenedor.classList.add(
-                            //     "contenedorImpuestos",
-                            //     "flexVertical",
-                            //     "gap6",
-                            //     "padding6"
-                            // )
-                            // contenedor.setAttribute("contenedor", "impuestos")
-                            // contenedor.setAttribute("componente", "plegable")
-                            // contenedorFinanciero.appendChild(contenedor)
-
-                            // const tituloContenedor = document.createElement("div")
-                            // tituloContenedor.setAttribute("elemento", "impuestos")
-                            // tituloContenedor.classList.add(
-                            //     "negrita",
-                            //     "textoCentrado",
-                            //     "padding6"
-                            // )
-                            // tituloContenedor.innerText = "Impuestos aplicados"
-                            // contenedor.appendChild(tituloContenedor)
-
-
-                            const contenedor = document.createElement('details');
+                        const contenedor = document.createElement('details');
                                  contenedor.classList.add(
                                 "contenedorImpuestos",
                                 "flexVertical",
@@ -24004,10 +23982,6 @@ const casaVitini = {
                             contenedor.appendChild(tituloContenedorPlegable)
 
                             contenedorFinanciero.appendChild(contenedor)
-
-
-
-
 
                             if (modoUI === "administracion") {
 
