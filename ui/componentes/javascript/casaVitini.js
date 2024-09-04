@@ -23188,16 +23188,6 @@ const casaVitini = {
                                     contenedorCondicion.appendChild(codigoUI)
 
 
-                                    // const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
-                                    // const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
-
-                                    // const tituloCondicion = document.createElement("div")
-                                    // tituloCondicion.innerText = "Por rango de fechas"
-                                    // contenedorCondicion.appendChild(tituloCondicion)
-
-                                    // const descripcionCondicion = document.createElement("div")
-                                    // descripcionCondicion.innerText = `Esta condicion determina que la oferta se aplica cuando el rango de la reserva se cruza con el rango determinado en esta condicion. Del ${fechaInicioRango_ISO} al ${fechaFinalRango_ISO}`
-                                    // contenedorCondicion.appendChild(descripcionCondicion)
 
                                 } else {
                                     const error = "El renderizado de condiciones de oferta ha recibido un identificador no reconocido: " + tipoCondicion
