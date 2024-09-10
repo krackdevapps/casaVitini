@@ -5,6 +5,12 @@ import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccio
 
 export const verificarCuenta = async (entrada) => {
     try {
+
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
+
         const codigo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.codigo,
             nombreCampo: "El tipo valor",

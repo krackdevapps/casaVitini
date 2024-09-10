@@ -12,7 +12,10 @@ export const modificarBloqueo = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 4
+        })
         const bloqueoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.bloqueoUID,
             nombreCampo: "El identificador universal de la bloque (bloqueoUID)",

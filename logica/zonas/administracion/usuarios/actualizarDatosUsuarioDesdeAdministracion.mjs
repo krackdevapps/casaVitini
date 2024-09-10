@@ -10,6 +10,12 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
+
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 7
+        })
+
         const usuarioIDX = validadoresCompartidos.tipos.cadena({
             string: entrada.body.usuarioIDX,
             nombreCampo: "El nombre de usuario (VitiniIDX)",

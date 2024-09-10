@@ -15,7 +15,10 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 9
+        })
         await mutex.acquire();
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
@@ -56,7 +59,6 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
                 telefono: entrada.body.telefono,
                 correoElectronico: entrada.body.correoElectronico,
                 notas: entrada.body.notas,
-                testingVI: entrada.body.testingVI
             },
             operacion: "crear"
 

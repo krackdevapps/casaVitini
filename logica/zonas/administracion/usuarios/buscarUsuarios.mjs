@@ -1,6 +1,8 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { buscarUsuariosPorTermino } from "../../../repositorio/usuarios/buscarUsuarios.mjs";
+import { controlEstructuraPorJoi } from "../../../sistema/validadores/controlEstructuraPorJoi.mjs";
+import Joi from "joi";
 
 export const buscarUsuarios = async (entrada, salida) => {
     try {
@@ -9,6 +11,18 @@ export const buscarUsuarios = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+
+        const esquemaBusqueda = Joi.object({
+            buscar: Joi.string().required(),
+            pagina: Joi.number(),
+            nombreColumna: Joi.string(),
+            sentidoColumna: Joi.string()
+        }).required()
+
+        controlEstructuraPorJoi({
+            schema: esquemaBusqueda,
+            objeto: entrada.body
+        })
 
         const buscar = validadoresCompartidos.tipos.cadena({
             string: entrada.body.buscar,

@@ -15,7 +15,10 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 3
+        })
         await mutex.acquire();
 
         const apartamentoUID = validadoresCompartidos.tipos.cadena({

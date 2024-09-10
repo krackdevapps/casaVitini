@@ -1,8 +1,6 @@
 import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-import { obtenerOferatPorOfertaUID } from "../../../repositorio/ofertas/obtenerOfertaPorOfertaUID.mjs";
-import { actualizarEstadoOferata } from "../../../repositorio/ofertas/actualizarEstadoOferta.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { obtenerServicioPorServicioUID } from "../../../repositorio/servicios/obtenerServicioPorServicioUID.mjs";
 import { actualizarEstadoServicioPorServicioUID } from "../../../repositorio/servicios/actualizarEstadoServicioPorServicioUID.mjs";
@@ -16,6 +14,11 @@ export const actualizarEstadoServicio = async (entrada, salida) => {
         IDX.control()
 
         await mutex.acquire();
+
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
 
         const servicioUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.servicioUID,

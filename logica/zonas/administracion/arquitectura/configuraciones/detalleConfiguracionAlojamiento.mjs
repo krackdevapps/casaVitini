@@ -15,7 +15,10 @@ export const detalleConfiguracionAlojamiento = async (entrada) => {
         IDX.empleados()
         IDX.control()
 
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El apartamentoIDV",

@@ -4,6 +4,7 @@ import { obtenerOfertasPorNombreUI } from "../../../repositorio/ofertas/obtenerO
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
 import { insertarOferta } from "../../../repositorio/ofertas/insertarOferta.mjs";
 import { validarObjetoOferta } from "../../../sistema/ofertas/entidades/reserva/validarObjetoOferta.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const crearOferta = async (entrada) => {
     const mutex = new Mutex()
@@ -12,7 +13,11 @@ export const crearOferta = async (entrada) => {
         const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
-
+        
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 7
+        })
         await mutex.acquire();
 
         const nombreOferta = entrada.body.nombreOferta

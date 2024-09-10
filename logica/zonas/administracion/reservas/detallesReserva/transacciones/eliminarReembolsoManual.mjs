@@ -11,6 +11,11 @@ export const eliminarReembolsoManual = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
+
         const palabra = validadoresCompartidos.tipos.cadena({
             string: entrada.body.palabra,
             nombreCampo: "El campo de la palabra",

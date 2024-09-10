@@ -1,6 +1,6 @@
 export const filtroError = (error) => {
     try {
-        const objetoError = {}
+       const objetoError = {}
         if (error.hasOwnProperty('message')) {
             objetoError.error = error.message
         } else {

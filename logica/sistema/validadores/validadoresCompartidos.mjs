@@ -516,8 +516,7 @@ export const validadoresCompartidos = {
                     .toLowerCase()
             }
             if (soloMayusculas === "si") {
-                string = string
-                    .toUpperCase()
+                string = string.toUpperCase()
             }
             if (filtro === "strictoSinEspacios") {
                 try {
@@ -1106,6 +1105,70 @@ export const validadoresCompartidos = {
                 }
             }
             return true;
+        },
+        numeroDeLLavesEsperadas: (data) => {
+            try {
+                const objeto = data.objeto
+                const numeroDeLLavesMaximo = data.numeroDeLLavesMaximo
+                const numeroLlaves = Object.keys(objeto)
+
+                const fraseUI = (numero) => {
+                    if (numero === 0) {
+                        return "No se esperan llaves en el objeto de entrada"
+                    } else if (numero === 1) {
+                        return "Solo se espera una llave en el objeto de entrada"
+                    } else if (numero > 1) {
+                        return `Solo se esperan ${numero} en el objeto de entrada`
+                    }
+                }
+                if (numeroLlaves.length > numeroDeLLavesMaximo) {
+                    const m = fraseUI(numeroDeLLavesMaximo)
+                    throw new Error(m)
+                }
+            } catch (error) {
+                throw error
+            }
+
+
         }
     },
+    expresionesRegulares: {
+        cadenas: {
+            strictoIDV: {
+                expresion: /^[a-zA-Z0-9]+$/,
+                definicionUI: "solo espera minusculas, mayusculas y numeros enteros."
+            },
+            strictoSinEspacio: {
+                expresion: /^[a-zA-Z0-9_\-\/\.\@]+$/,
+                definicionUI: "solo espera minusculas, mayusculas, numeros, @, ., /, _, y espacios"
+            },
+            cadenaConNumerosConDosDecimales: {
+                expresion: /^\d+\.\d{2}$/,
+                definicionUI: "solo espera un numero con dos decimales separados por punto, por ejemplo 0.00"
+            },
+            cadenaConNumerosEnteros: {
+                expresion: /^[0-9]+$/,
+                definicionUI: "solo acepta una cadena con números enteros."
+            },
+            cadenaBase64: {
+                expresion: /^[A-Za-z0-9+/=]+$/,
+                definicionUI: "solo acepta una cadena en base 64."
+            },
+            url: {
+                expresion: /^[A-Za-z0-9_\-/%=:]*$/,
+                definicionUI: "solo acepta una cadena de minúsculas, mayúsculas, números y estos caracteres: _, \, %, -, /, = y :"
+            },
+            url: {
+                expresion: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/,
+                definicionUI: "El campo de correo electrónico no cumple con el formato esperado. El formato esperado es así como usuario@servidor.com"
+            },
+            cadenaConTelefono: {
+                expresion: /[^0-9]/g,
+                definicionUI: "El campo Teléfono no cumple con el formato esperado. El formado esperado es una cadena con números."
+            },
+
+        },
+
+    }
+
 }

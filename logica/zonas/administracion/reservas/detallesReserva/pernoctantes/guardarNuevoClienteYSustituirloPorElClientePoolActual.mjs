@@ -16,7 +16,10 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 8
+        })
         await mutex.acquire();
 
         const reservaUID = validadoresCompartidos.tipos.cadena({

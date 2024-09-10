@@ -13,7 +13,10 @@ export const crearCliente = async (entrada, salida) => {
         IDX.control()
 
         await mutex.acquire();
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 7
+        })
         const nuevoCliente = {
             nombre: entrada.body.nombre,
             primerApellido: entrada.body.primerApellido,

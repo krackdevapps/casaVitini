@@ -14,6 +14,10 @@ export const eliminarServicio = async (entrada) => {
         IDX.control()
 
         await mutex.acquire();
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
 
         const servicioUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.servicioUID,

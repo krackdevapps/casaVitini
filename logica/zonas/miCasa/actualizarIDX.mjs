@@ -18,6 +18,12 @@ export const actualizarIDX = async (entrada) => {
         IDX.control()
 
         const actualIDX = entrada.session.usuario;
+
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
+        
         const nuevoIDX = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nuevoIDX,
             nombreCampo: "El nombre de usuario (VitiniIDX)",

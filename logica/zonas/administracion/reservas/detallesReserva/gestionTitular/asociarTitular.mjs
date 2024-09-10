@@ -13,6 +13,10 @@ export const asociarTitular = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const clienteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.clienteUID,
             nombreCampo: "El identificador universal de la clienteUID (clienteUID)",

@@ -12,7 +12,10 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const camaIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.camaIDV,
             nombreCampo: "El camaIDV",

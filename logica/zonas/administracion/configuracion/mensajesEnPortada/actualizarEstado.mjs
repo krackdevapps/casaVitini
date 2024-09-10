@@ -11,7 +11,10 @@ export const actualizarEstado = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const mensajeUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.mensajeUID,
             nombreCampo: "El campo mensajeUID",

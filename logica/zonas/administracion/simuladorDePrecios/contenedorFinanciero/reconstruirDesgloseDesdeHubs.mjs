@@ -15,7 +15,10 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const simulacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.simulacionUID,
             nombreCampo: "El identificador universal de la simulacionUID (simulacionUID)",

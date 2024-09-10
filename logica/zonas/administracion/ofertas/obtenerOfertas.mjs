@@ -9,7 +9,10 @@ export const detallesOferta = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const ofertaUID = validadoresCompartidos.tipos.numero({
             string: entrada.body.ofertaUID,
             nombreCampo: "El identificador universal de la oferta (ofertaUID)",

@@ -16,7 +16,10 @@ export const crearPagoManual = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 4
+        })
         const plataformaDePago = validadoresCompartidos.tipos.cadena({
             string: entrada.body.plataformaDePago,
             nombreCampo: "El nombre de plataformaDePago",

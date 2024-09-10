@@ -11,6 +11,10 @@ import { eliminarEnlacesDeRecuperacionPorUsuario } from "../../../repositorio/en
 
 export const enviarCorreo = async (entrada) => {
     try {
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const mail = validadoresCompartidos.tipos.correoElectronico({
             mail: entrada.body.mail,
             nombreCampo: "El campo del mail de recuperación",

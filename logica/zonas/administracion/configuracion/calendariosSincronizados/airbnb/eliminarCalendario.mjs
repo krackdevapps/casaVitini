@@ -10,7 +10,10 @@ export const eliminarCalendario = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const calendarioUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.calendarioUID,
             nombreCampo: "El campo nuevoPreci",

@@ -19,6 +19,11 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 3
+        })
+        
         await mutex.acquire();
 
         const reservaUID = validadoresCompartidos.tipos.cadena({

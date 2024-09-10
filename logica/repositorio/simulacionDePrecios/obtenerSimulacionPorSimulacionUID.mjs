@@ -1,5 +1,4 @@
 import { conexion } from "../../componentes/db.mjs";
-
 export const obtenerSimulacionPorSimulacionUID = async (simulacionUID) => {
     try {
         const consulta = `
@@ -12,6 +11,7 @@ export const obtenerSimulacionPorSimulacionUID = async (simulacionUID) => {
         "instantaneaOfertasPorAdministrador",
         "instantaneaImpuestos",
         "nombre",
+        "zonaIDV",
         to_char("fechaCreacion", 'YYYY-MM-DD') as "fechaCreacion", 
         to_char("fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada", 
         to_char("fechaSalida", 'YYYY-MM-DD') as "fechaSalida",
@@ -30,5 +30,4 @@ export const obtenerSimulacionPorSimulacionUID = async (simulacionUID) => {
     } catch (errorCapturado) {
         throw errorCapturado
     }
-
 }

@@ -1,6 +1,7 @@
 import { obtenerServiciosPorReservaUID } from "../../../../repositorio/servicios/obtenerServiciosPorReservaUID.mjs"
 import { obtenerServicioPorServicioUID } from "../../../../repositorio/servicios/obtenerServicioPorServicioUID.mjs"
 import { constructorInstantaneaServicios } from "./constructorInstantaneaServicios.mjs"
+import { obtenerServiciosPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/servicios/obtenerServiciosPorSimulacionUID.mjs"
 
 export const procesadorServicios = async (data) => {
     try {
@@ -21,10 +22,21 @@ export const procesadorServicios = async (data) => {
             }
             const serviciosDeLaReserva = await obtenerServiciosPorReservaUID(reservaUID)
             servicios.push(...serviciosDeLaReserva)
-        } else {
+        }   else if (origen === "instantaneaServiciosEnSimulacion") {
+            const simulacionUID = data.simulacionUID
+            if (!simulacionUID) {
+                const m = "No llega el simulacionUID a instantaneaServiciosEnSimulacion"
+                throw new Error(m)
+            }
+            const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
+            console.log("serviciosDeLaSimulacion", serviciosDeLaSimulacion)
+
+            servicios.push(...serviciosDeLaSimulacion)
+        }else {
             const m = "La confguracion de servicios en el procesador esta mal configurada, necesita origen en huServicios o instantaneaServiciosEnReserva"
             throw new Error(m)
         }
+        console.log("serviciosDeLASimulacioin", servicios)
         await constructorInstantaneaServicios({
             estructura,
             servicios

@@ -14,6 +14,11 @@ export const eliminarServicioEnReserva = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
+
         const servicioUID_enReserva = validadoresCompartidos.tipos.cadena({
             string: entrada.body.servicioUID_enReserva,
             nombreCampo: "El identificador universal de la servicio (servicioUID_enReserva)",

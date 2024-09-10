@@ -10,7 +10,11 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 3
+        })
+        
         const usuarioIDX = entrada.session.usuario;
         const claveActual = entrada.body.claveActual;
         const claveNueva = entrada.body.claveNueva;

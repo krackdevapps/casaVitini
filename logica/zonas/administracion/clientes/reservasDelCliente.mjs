@@ -3,6 +3,8 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { obtenerReservasDelClienteComoTitular } from "../../../repositorio/clientes/obtenerReservasDelClienteComoTitular.mjs";
 import { obtenerReservasDelClienteComoPernoctante } from "../../../repositorio/clientes/obtenerReservasDelClienteComoPernoctante.mjs";
 import { obtenerReservasDelCliente } from "../../../repositorio/clientes/obtenerReservasDelCliente.mjs";
+import Joi from "joi";
+import { controlEstructuraPorJoi } from "../../../sistema/validadores/controlEstructuraPorJoi.mjs";
 
 export const reservasDelCliente = async (entrada) => {
     try {
@@ -11,6 +13,18 @@ export const reservasDelCliente = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+
+        const esquemaBusqueda = Joi.object({
+            clienteUID: Joi.string(),
+            pagina: Joi.number(),
+            nombreColumna: Joi.string(),
+            sentidoColumna: Joi.string()
+        }).required()
+
+        controlEstructuraPorJoi({
+            schema: esquemaBusqueda,
+            objeto: entrada.body
+        })
 
         const clienteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.clienteUID,

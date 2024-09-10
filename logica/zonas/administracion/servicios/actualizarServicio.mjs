@@ -16,6 +16,11 @@ export const actualizarServicio = async (entrada) => {
 
         await mutex.acquire()
 
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 4
+        })
+
         const servicioUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.servicioUID,
             nombreCampo: "El identificador universal de la servicioUID (servicioUID)",

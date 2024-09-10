@@ -4,6 +4,11 @@ import { Mutex } from "async-mutex";
 export const actualizarNombreSimulacion = async (entrada) => {
     const mutex = new Mutex()
     try {
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
+        
         const nombre = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombre,
             nombreCampo: "El campo del nombre de la simulación",

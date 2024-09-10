@@ -1,5 +1,6 @@
 import { eliminarSessionPorUsuarioPorSessionIDX } from "../../repositorio/sessiones/eliminarSessionPorUsuarioPorSessionIDX.mjs";
 import { eliminarTodasLasSessionesMenosPorUsuario } from "../../repositorio/sessiones/eliminarTodasLasSessionesMenosPorUsuario.mjs";
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../sistema/VitiniIDX/control.mjs";
 
 
@@ -11,10 +12,16 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
 
         const usuarioIDX = entrada.session.usuario;
         const tipoOperacion = entrada.body.tipoOperacion;
+
         if (tipoOperacion !== "cerrarUna" && tipoOperacion !== "todasMenosActual") {
             const error = "El campo tipoOperacion necesita especificar si es cerrarUna o todasMenosUna";
             throw new Error(error);
         } else if (tipoOperacion === "cerrarUna") {
+
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 2
+            })
             const sessionIDX = entrada.body.sessionIDX;
             const filtroSessionIDX = /^[a-zA-Z0-9_-]+$/;
             if (!sessionIDX || !filtroSessionIDX.test(sessionIDX)) {
@@ -34,6 +41,10 @@ export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) =>
             return ok
 
         } else if (tipoOperacion === "todasMenosActual") {
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 1
+            })
             const sessionIDXActual = entrada.sessionID;
             await eliminarTodasLasSessionesMenosPorUsuario({
                 sessionIDX: sessionIDXActual,

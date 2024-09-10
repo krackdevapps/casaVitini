@@ -13,7 +13,10 @@ export const actualizarCalendario = async (entrada) => {
         const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 4
+        })
         const calendarioUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.calendarioUID,
             nombreCampo: "El campo calendarioUID",

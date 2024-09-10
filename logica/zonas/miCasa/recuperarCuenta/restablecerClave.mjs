@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
-
 import { eliminarEnlacesDeRecuperacionPorFechaCaducidad } from "../../../repositorio/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorFechaCaducidad.mjs";
 import { obtenerEnlacesRecuperacionPorCodigoUPID } from "../../../repositorio/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorCodigoUPID.mjs";
 import { actualizarClave } from "../../../repositorio/usuarios/actualizarClave.mjs";
@@ -10,6 +9,12 @@ import { vitiniCrypto } from "../../../sistema/VitiniIDX/vitiniCrypto.mjs";
 
 export const restablecerClave = async (entrada) => {
     try {
+
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 3
+        })
+
         const codigo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.codigo,
             nombreCampo: "El codigo de verificación",

@@ -36,7 +36,6 @@ export const aplicarOfertas = async (data) => {
         constructorEstructuraDescuentosReserva(estructura)
 
         if (operacion?.tipo === "insertarDescuentosPorCondiconPorCoodigo") {
-            // POR CODIGO 
             validadoresCompartidos.tipos.array({
                 array: zonasArray,
                 nombreCampo: "El array de zonasArray en el procesador de precios",

@@ -1178,6 +1178,14 @@ main[zonaCSS="/"] {
     justify-content: center;
 }
 
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .reservaDetalles_transacciones_enlacesDePago_infoSinEnlaces {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+}
+
+
 .bloqueCalendarioNuevo {
     position: absolute;
     display: flex;
@@ -2385,11 +2393,13 @@ main[zonaCSS="/"] {
         gap: 3px;
     }
 
+}
 
-
-
-
-
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .selectorZonas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 @media (max-width: 720px) {
@@ -10500,6 +10510,18 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-user-select: none;
 }
 
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .detallesReserva_transacciones_botonV1 {
+    display: flex;
+    padding: 10px;
+    border-radius: 11px;
+    text-decoration: none;
+    cursor: default;
+    background: rgba(255, 255, 255, 0.6);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+
 [ui="reservaUI"] .detallesReserva_transacciones_botonV1:hover {
     background: white;
 }
@@ -11706,9 +11728,31 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 
+[zonaCSS="/alojamiento/resumen"] .plaza_reservas_reservaConfirmada_banner {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    user-select: none;
+    -webkit-user-select: none;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    transition: all 500ms;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 [zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_banner:hover {
     background: rgba(255, 255, 255, 0.8);
 }
+
+[zonaCSS="/alojamiento/resumen"] .plaza_reservas_reservaConfirmada_banner:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
 
 
 [zonaCSS=miCasa] .plaza_reservas_reservaConfirmada_banner {
@@ -14741,6 +14785,11 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 10px;
 }
 
+.gridHorizotnal2C {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 .flexVertical {
     display: flex;
     flex-direction: column;
@@ -14929,6 +14978,8 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     align-items: center;
 }
+
+
 
 .botonV2 {
     padding: 8px;
@@ -15183,6 +15234,25 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
+@keyframes parpadeoElementoIndicadorAzul {
+    0% {
+        background: transparent;
+    }
+
+    50% {
+        background: blue;
+    }
+
+    100% {
+        background: transparent;
+    }
+}
+
+.parpadeoFondoAzul {
+    animation: parpadeoElementoIndicadorAzul 2s infinite linear;
+}
+
+
 .ocultoInicial {
     display: none;
 }
@@ -15192,7 +15262,8 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 input,
-textarea {
+textarea,
+select {
     outline: none;
 }
 

@@ -9,7 +9,10 @@ export const detallesDelReembolso = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const reembolsoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reembolsoUID,
             nombreCampo: "El identificador universal (reembolsoUID)",

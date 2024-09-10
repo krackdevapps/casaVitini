@@ -12,7 +12,10 @@ export const obtenerElasticidadDelRango = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 4
+        })
         await mutex.acquire()
 
         const reservaUID = validadoresCompartidos.tipos.cadena({

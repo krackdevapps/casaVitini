@@ -6,6 +6,12 @@ import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransac
 
 export const validarCodigo = async (entrada) => {
     try {
+
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
+
         const codigo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.codigo,
             nombreCampo: "El codigo de verificación",

@@ -35,6 +35,10 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             })
         }
         if (tipoEntidad === "apartamento") {
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 3
+            })
             const apartamentoUI = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.apartamentoUI,
                 nombreCampo: "El campo del apartamentoUI",
@@ -93,7 +97,10 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             };
             return ok
         } else if (tipoEntidad === "habitacion") {
-
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 3
+            })
             const habitacionUI = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.habitacionUI,
                 nombreCampo: "El campo del habitacionUI",
@@ -166,7 +173,10 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
             return ok
 
         } else if (tipoEntidad === "cama") {
-
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 5
+            })
             const camaUI = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.camaUI,
                 nombreCampo: "El campo del camaUI",

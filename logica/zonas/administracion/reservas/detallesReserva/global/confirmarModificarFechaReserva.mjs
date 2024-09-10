@@ -22,7 +22,10 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         IDX.control()
 
         await mutex.acquire();
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 3
+        })
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reserva (reservaUID)",

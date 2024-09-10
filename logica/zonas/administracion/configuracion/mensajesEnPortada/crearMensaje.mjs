@@ -11,7 +11,10 @@ export const crearMensaje = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const mensaje = validadoresCompartidos.tipos.cadena({
             string: entrada.body.mensaje,
             nombreCampo: "El campo del mensaje",

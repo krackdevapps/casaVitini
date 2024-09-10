@@ -2,14 +2,17 @@ import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { selectorPorCondicion } from "../../../sistema/ofertas/entidades/reserva/selectorPorCondicion.mjs";
-import { validarObjetoReserva } from "../../../sistema/reservas/validarObjetoReserva.mjs";
 import { obtenerOfertasPorRangoActualPorEstadoPorCodigoDescuentoArray } from "../../../repositorio/ofertas/perfiles/obtenerOfertasPorRangoActualPorEstadoPorCodigoDescuentoArray.mjs";
 import { Mutex } from "async-mutex";
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { validarObjetoReservaPublica } from "../../../sistema/reservas/nuevaReserva/reservaPulica/validarObjetoReservaPublica.mjs";
+import { disponibilidadApartamentos } from "../../../sistema/reservas/nuevaReserva/reservaPulica/disponibilidadApartamentos.mjs";
 export const preComprobarCodigoDescuento = async (entrada) => {
     const mutex = new Mutex()
     try {
+
+        // Sscript obsoletizable
         const tipoContenedorCodigo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoContenedorCodigo,
             nombreCampo: "El campo de tipoContenedorCodigo",
@@ -50,23 +53,32 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             throw new Error(m)
         }
 
-
         await utilidades.ralentizador(2000)
         mutex.acquire()
 
-        const reserva = entrada.body.reserva;
-        await validarObjetoReserva({
-            reservaObjeto: reserva,
-            filtroHabitacionesCamas: "no",
-            filtroTitular: "no"
+        const reservaPublica = entrada.body.reserva;
+        await validarObjetoReservaPublica({
+            reservaPublica: reservaPublica,
+            filtroHabitacionesCamas: "desactivado",
+            filtroTitular: "desactivado"
         })
 
-        const apartamentosArray = Object.keys(reserva.alojamiento)
-        const fechaEntradaReserva = reserva.fechaEntrada
-        const fechaSalidaReserva = reserva.fechaSalida
+        const apartamentosArray = Object.keys(reservaPublica.alojamiento)
+        const fechaEntradaReserva = reservaPublica.fechaEntrada
+        const fechaSalidaReserva = reservaPublica.fechaSalida
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaActual = tiempoZH.toISODate();
+
+        const fechaEntrada = reservaPublica.fechaEntrada
+        const fechaSalida = reservaPublica.fechaSalida
+        const apartamentosIDVArray = Object.keys(reservaPublica.alojamiento)
+
+        await disponibilidadApartamentos({
+            fechaEntrada,
+            fechaSalida,
+            apartamentosIDVArray
+        })
 
         const ofertasActivas = await obtenerOfertasPorRangoActualPorEstadoPorCodigoDescuentoArray({
             fechaActual: fechaActual,

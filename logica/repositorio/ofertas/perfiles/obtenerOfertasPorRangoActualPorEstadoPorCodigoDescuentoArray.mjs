@@ -29,12 +29,12 @@ export const obtenerOfertasPorRangoActualPorEstadoPorCodigoDescuentoArray = asyn
                 AND
                 "zonaIDV" = ANY($4)
                 AND
-                EXISTS (
-                    SELECT 1
-                    FROM jsonb_array_elements("condicionesArray") AS elem
-                    WHERE elem->>'tipoCondicion' = 'porCodigoDescuento'
-                      AND elem->>'codigoDescuento' = ANY($5)
-                );
+                   NOT EXISTS (
+                       SELECT 1
+                       FROM jsonb_array_elements("condicionesArray") AS elem
+                       WHERE elem->>'tipoCondicion' = 'porCodigoDescuento'
+                       AND NOT (elem->>'codigoDescuento' = ANY($5))
+                   );
 
         ;`
         const parametros = [

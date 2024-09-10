@@ -12,7 +12,11 @@ export const actualizarDatosUsuarioDesdeMiCasa = async (entrada) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session)
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 6
+        })
+        
         const usuarioIDX = entrada.session.usuario;
         const datosUsuario = {
             nombre: entrada.body.nombre,

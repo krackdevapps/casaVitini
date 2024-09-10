@@ -16,6 +16,11 @@ export const resolverQR = async (entrada) => {
         IDX.clientes()
         IDX.control()
 
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
+
         const usuario = entrada.session.usuario
         const rol = IDX.rol()
         const codigoIDV = validadoresCompartidos.tipos.cadena({

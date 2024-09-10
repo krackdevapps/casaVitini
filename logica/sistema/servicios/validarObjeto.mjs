@@ -1,9 +1,37 @@
+import Joi from "joi"
+import { controlEstructuraPorJoi } from "../validadores/controlEstructuraPorJoi.mjs"
 import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
 
 export const validarServicio = async (data) => {
     try {
         const servicio = data.servicio
         const numeroLlaves = Object.keys(data)
+
+        const schema = Joi.object({
+            nombreServicio: Joi.required(),
+            zonaIDV: Joi.string(),
+            contenedor: Joi.object({
+                fechaInicio: Joi.date(),
+                fechaFinal: Joi.date(),
+                disponibilidadIDV: Joi.string(),
+                tituloPublico: Joi.string(),
+                precio: Joi.string(),
+                definicion: Joi.string(),
+                duracionIDV: Joi.string()
+            }).required().messages({
+                'object.base': '{{#label}} debe ser un array'
+            }),
+        }).required().messages({
+            'any.required': '{{#label}} es una llave obligatoria'
+        })
+
+        controlEstructuraPorJoi({
+            schema: schema,
+            objeto: servicio
+        })
+
+
+
         if (numeroLlaves.length > 3) {
             const m = "Se esperaban no mas de 3 llaves en el primer nivel del objeto"
             throw new Error(m)
@@ -47,7 +75,6 @@ export const validarServicio = async (data) => {
             "rango"
         ]
 
-
         if (typeof duracionIDV !== "string" || !duraciones.includes(duracionIDV)) {
             const m = "El campo duracionIDV solo espera permanente o rango"
             throw new Error(m)
@@ -89,33 +116,8 @@ export const validarServicio = async (data) => {
             throw new Error(m)
         }
 
-        // const cantidadIDV = contenedor.cantidadIDV
-        // const cantidades = [
-        //     "infinita",
-        //     "limitada"
-        // ]
-        // if (typeof cantidadIDV !== "string" || !cantidades.includes(cantidadIDV)) {
-        //     const m = "El campo cantidadIDV solo espera infinita o limitada"
-        //     throw new Error(m)
-        // }
-
-        // if (cantidadIDV === "limitada") {
-        //     validadoresCompartidos.tipos.cadena({
-        //         string: contenedor.cantidadCampo,
-        //         nombreCampo: "El campo de cantidad",
-        //         filtro: "cadenaConNumerosEnteros",
-        //         sePermiteVacio: "si",
-        //         impedirCero: "si",
-        //         devuelveUnTipoNumber: "no",
-        //         limpiezaEspaciosAlrededor: "si",
-        //     })
-        //     llavesValidadas = llavesValidadas + 1
-        // } else if (cantidadIDV === "infinita") {
-        //     delete contenedor.cantidadCampo
-        // }
-
         validadoresCompartidos.tipos.cadena({
-            string: contenedor.tituloPublico,
+            string: contenedor.disponibilidadIDV,
             nombreCampo: "El tituloPublico",
             filtro: "strictoConEspacios",
             sePermiteVacio: "no",

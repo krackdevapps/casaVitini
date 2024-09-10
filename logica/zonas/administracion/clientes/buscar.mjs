@@ -1,3 +1,4 @@
+import Joi from "joi";
 import { obtenerResultadosBusqueda } from "../../../repositorio/clientes/obtenerResultadosBusqueda.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
@@ -10,6 +11,19 @@ export const buscar = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+
+        const esquemaBusqueda = Joi.object({
+            buscar: Joi.string(),
+            pagina: Joi.number(),
+            nombreColumna: Joi.string(),
+            sentidoColumna: Joi.string(),
+            tipoBusqueda: Joi.string()
+        }).required()
+
+        controlEstructuraPorJoi({
+            schema: esquemaBusqueda,
+            objeto: entrada.body
+        })
 
         const buscar = validadoresCompartidos.tipos.cadena({
             string: entrada.body.buscar || "",

@@ -16,7 +16,10 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
         if (!await interruptor("aceptarReservasPublicas")) {
             throw new Error(mensajesUI.aceptarReservasPublicas);
         }
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaEntrada,
             nombreCampo: "La fecha de entrada en apartamentosDisponiblesPublico"
@@ -71,19 +74,32 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
                 const desgloseFinanciero = await procesador({
                     entidades: {
                         reserva: {
-                            tipoOperacion: "crearDesglose",
+                            origen: "externo",
                             fechaEntrada: fechaEntrada,
                             fechaSalida: fechaSalida,
-                            fechaCreacion: fechaActual_ISO,
                             apartamentosArray: [apartamentoIDV],
-                            capaOfertas: "si",
-                            zonasArray: ["global", "publica"],
-                            descuentosParaRechazar: [],
-                            capaDescuentosPersonalizados: "no",
-                            descuentosArray: [],
-                            capaImpuestos: "si",
-                        }
+                        },
+                        servicios: {
+                            origen: "hubServicios",
+                            serviciosUIDSolicitados: []
+                        },
                     },
+                    capas: {
+                        ofertas: {
+                            zonasArray: ["global", "publica"],
+                            configuracion: {
+                                descuentosPersonalizados: "no",
+                                descuentosArray: []
+                            },
+                            operacion: {
+                                tipo: "insertarDescuentosPorCondiconPorCoodigo",
+                                codigoDescuentosArrayBASE64: []
+                            }
+                        },
+                        impuestos: {
+                            origen: "hubImuestos"
+                        }
+                    }
                 })
                 estructura.ok.contenedorFinanciero[apartamentoIDV] = desgloseFinanciero
             }

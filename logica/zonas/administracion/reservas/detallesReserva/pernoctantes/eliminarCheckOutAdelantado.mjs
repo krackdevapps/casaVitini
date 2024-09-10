@@ -13,6 +13,12 @@ export const eliminarCheckOutAdelantado = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
+        
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pernoctanteUID,
             nombreCampo: "El identificador universal de la pernoctanteUID (pernoctanteUID)",

@@ -15,6 +15,10 @@ export const eliminarCheckIN = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
 
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pernoctanteUID,

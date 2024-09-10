@@ -17,7 +17,10 @@ export const multiCapa = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const fecha = entrada.body.fecha;
         await validadoresCompartidos.fechas.fechaMesAno(fecha)
 

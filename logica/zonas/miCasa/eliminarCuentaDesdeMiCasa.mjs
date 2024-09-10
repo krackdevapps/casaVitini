@@ -6,6 +6,7 @@ import { obtenerAdministradores } from "../../repositorio/usuarios/obtenerAdmini
 import { eliminarUsuario } from "../../repositorio/usuarios/eliminarUsuario.mjs";
 import { eliminarSessionPorUsuario } from "../../repositorio/sessiones/eliminarSessionPorUsuario.mjs";
 import { campoDeTransaccion } from "../../repositorio/globales/campoDeTransaccion.mjs";
+import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -13,6 +14,10 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.control()
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
 
         const usuarioIDX = entrada.session.usuario;
         const clave = entrada.body.clave;

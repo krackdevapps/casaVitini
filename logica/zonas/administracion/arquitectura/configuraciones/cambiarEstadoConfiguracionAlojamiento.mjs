@@ -16,7 +16,10 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
         const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         mutex.acquire()
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({

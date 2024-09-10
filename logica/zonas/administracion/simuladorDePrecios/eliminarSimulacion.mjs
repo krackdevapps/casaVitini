@@ -11,6 +11,10 @@ export const eliminarSimulacion = async (entrada) => {
         IDX.empleados()
         IDX.control()
 
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        }) 
         const simulacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.simulacionUID,
             nombreCampo: "El  simulacionUID",

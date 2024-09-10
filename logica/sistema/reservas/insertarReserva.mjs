@@ -12,6 +12,8 @@ import { insertarDesgloseFinacieroPorReservaUID } from '../../repositorio/reserv
 import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from '../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs';
 import { generadorReservaUID } from '../../componentes/generadorReservaUID.mjs';
 import { validarServiciosPubicos } from '../servicios/validarServiciosPublicos.mjs';
+import { obtenerServicioPorServicioUID } from '../../repositorio/servicios/obtenerServicioPorServicioUID.mjs';
+import { insertarServicioPorReservaUID } from '../../repositorio/reservas/servicios/insertarServicioPorReservaUID.mjs';
 
 export const insertarReserva = async (reserva) => {
     try {
@@ -28,17 +30,15 @@ export const insertarReserva = async (reserva) => {
         const origen = "cliente"
         const fechaCreacion = DateTime.utc().toISO()
         const alojamiento = reserva.alojamiento
-        const datosTitular = reserva.datosTitular
+        const titular = reserva.titular
         const testingVI = reserva.testingVI
-        const titularReservaPool = datosTitular.nombreTitular
-        const pasaporteTitularPool = datosTitular.pasaporteTitular
-        const correoTitular = datosTitular.correoTitular
-        const telefonoTitular = datosTitular.telefonoTitular
-        const codigoDescuentosArrayBASE64 = reserva.codigosDescuento
-        const serviciosUIDSolicitados = reserva?.servicios || []
-        if (serviciosUIDSolicitados.length > 0) {
-            await validarServiciosPubicos(serviciosUIDSolicitados)
-        }
+        const titularReservaPool = titular.nombreTitular
+        const pasaporteTitularPool = titular.pasaporteTitular
+        const correoTitular = titular.correoTitular
+        const telefonoTitular = titular.telefonoTitular
+        const codigosDescuento = reserva.codigosDescuento
+        const contendorServicios = reserva?.servicios || []
+
         const reservaUID = await generadorReservaUID()
         const nuevaReserva = await insertarReservaAdministrativa({
             fechaEntrada: fechaEntrada,
@@ -98,7 +98,7 @@ export const insertarReserva = async (reserva) => {
                 })
                 const camaUI = cama.camaUI
 
-                const nuevaCamaEnLaHabitacion = await insertarCamaEnLaHabitacion({
+                await insertarCamaEnLaHabitacion({
                     habitacionUID: habitacionUID,
                     nuevaCamaIDV: camaIDV,
                     reservaUID: reservaUID,
@@ -107,7 +107,13 @@ export const insertarReserva = async (reserva) => {
             }
         }
         const apartamentosArray = Object.keys(alojamiento);
-
+        const serviciosUID = contendorServicios.map((contenedor) => {
+            return contenedor.servicioUID
+        })
+        const codigoDescuentosArrayBASE64 = codigosDescuento.map((contenedor) => {
+            return contenedor.codigoUID
+        })
+        
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
@@ -118,7 +124,7 @@ export const insertarReserva = async (reserva) => {
                 },
                 servicios: {
                     origen: "hubServicios",
-                    serviciosUIDSolicitados
+                    serviciosUIDSolicitados: serviciosUID
                 },
             },
             capas: {
@@ -143,6 +149,17 @@ export const insertarReserva = async (reserva) => {
             reservaUID,
             desgloseFinanciero
         })
+        for (const servicioUID of serviciosUID) {
+            const servicio = await obtenerServicioPorServicioUID(servicioUID)
+            const nombreServicico = servicio.nombre
+            const contenedorServicio = servicio.contenedor
+            await insertarServicioPorReservaUID({
+                reservaUID,
+                nombre: nombreServicico,
+                contenedor: contenedorServicio
+            })
+        }
+
         return nuevaReserva
     } catch (errorCapturado) {
         throw errorCapturado

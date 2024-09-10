@@ -10,7 +10,10 @@ export const guardarConfiguracion = async (entrada) => {
         const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const horaEntradaTZ = validadoresCompartidos.tipos.horas({
             hora: entrada.body.horaEntradaTZ,
             nombreCampo: "El campo de la hora de entrada"

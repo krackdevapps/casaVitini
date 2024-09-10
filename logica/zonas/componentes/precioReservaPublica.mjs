@@ -1,33 +1,75 @@
 import { procesador } from "../../sistema/contenedorFinanciero/procesador.mjs"
-import { validarObjetoReserva } from "../../sistema/reservas/validarObjetoReserva.mjs"
+import { limitesReservaPublica } from "../../sistema/reservas/limitesReservaPublica.mjs"
+import { disponibilidadApartamentos } from "../../sistema/reservas/nuevaReserva/reservaPulica/disponibilidadApartamentos.mjs"
+import { validarDescuentosPorCodigo } from "../../sistema/reservas/nuevaReserva/reservaPulica/validarDescuentosPorCodigo.mjs"
+import { validarObjetoReservaPublica } from "../../sistema/reservas/nuevaReserva/reservaPulica/validarObjetoReservaPublica.mjs"
 import { validarServiciosPubicos } from "../../sistema/servicios/validarServiciosPublicos.mjs"
 
 export const precioReservaPublica = async (entrada) => {
     try {
-        const reservaObjeto = entrada.body?.reserva
-
-        const numeroLlaves = Object.keys(entrada.body).length
-        if (numeroLlaves > 2) {
-            const m = "Solo se esperas dos llaves en el json"
-            throw new Error(m)
-        }
-
-        await validarObjetoReserva({
-            reservaObjeto: reservaObjeto,
-            filtroTitular: "no",
-            filtroHabitacionesCamas: "no"
+        const reservaPublica = entrada.body?.reserva
+        await validarObjetoReservaPublica({
+            reservaPublica: reservaPublica,
+            filtroTitular: "desactivado",
+            filtroHabitacionesCamas: "desactivado",
         })
 
-        const serviciosUIDSolicitados = entrada.body.reserva?.servicios || []
-        if (serviciosUIDSolicitados.length > 0) {
-            await validarServiciosPubicos(serviciosUIDSolicitados)
-        }
-        const fechaEntradaReserva = reservaObjeto.fechaEntrada
-        const fechaSalidaReserva = reservaObjeto.fechaSalida
-        const alojamiento = reservaObjeto.alojamiento
+        const fechaEntrada = reservaPublica.fechaEntrada
+        const fechaSalida = reservaPublica.fechaSalida
+        const apartamentosIDVArray = Object.keys(reservaPublica.alojamiento)
+
+        await limitesReservaPublica({
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida
+        })
+
+        await disponibilidadApartamentos({
+            fechaEntrada,
+            fechaSalida,
+            apartamentosIDVArray
+        })
+
+        const fechaEntradaReserva = reservaPublica.fechaEntrada
+        const fechaSalidaReserva = reservaPublica.fechaSalida
+        const alojamiento = reservaPublica.alojamiento
         const apartamentosIDV = Object.keys(alojamiento)
-        const codigoDescuentosArrayBASE64 = reservaObjeto.codigosDescuento
-  
+        const contenedorCodigosDescuento = reservaPublica.codigosDescuento || []
+        const serviciosUIDSolicitados = reservaPublica?.servicios || []
+
+        const ok = {
+            ok: "Precio actualizado en base a componentes solicitados"
+        }
+
+        const constructorInformacionObsoleta = (data) => {
+            if (!data.hasOwnProperty("control")) {
+                data.control = {}
+            }
+        }
+
+        const serviciosSiReconocidos = []
+        if (serviciosUIDSolicitados.length > 0) {
+            const controlServicios = await validarServiciosPubicos(serviciosUIDSolicitados)
+            constructorInformacionObsoleta(ok)
+            ok.control.servicios = controlServicios
+            controlServicios.serviciosSiReconocidos.forEach((contenedor) => {
+                serviciosSiReconocidos.push(contenedor.servicioUID)
+            })
+        }
+
+        const codigosDescuentosSiReconocidos = []
+        if (contenedorCodigosDescuento.length > 0) {
+            const controlCodigosDescuentos = await validarDescuentosPorCodigo({
+                zonasArray: ["global", "publica"],
+                contenedorCodigosDescuento: contenedorCodigosDescuento,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
+                apartamentosArray: apartamentosIDV
+            })
+            constructorInformacionObsoleta(ok)
+            ok.control.codigosDescuentos = controlCodigosDescuentos
+            codigosDescuentosSiReconocidos.push(...controlCodigosDescuentos.codigosDescuentosSiReconocidos)
+        }
+
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
@@ -38,7 +80,7 @@ export const precioReservaPublica = async (entrada) => {
                 },
                 servicios: {
                     origen: "hubServicios",
-                    serviciosUIDSolicitados
+                    serviciosUIDSolicitados: serviciosSiReconocidos
                 },
             },
             capas: {
@@ -50,7 +92,7 @@ export const precioReservaPublica = async (entrada) => {
                     },
                     operacion: {
                         tipo: "insertarDescuentosPorCondiconPorCoodigo",
-                        codigoDescuentosArrayBASE64: codigoDescuentosArrayBASE64
+                        codigoDescuentosArrayBASE64: codigosDescuentosSiReconocidos
                     }
                 },
                 impuestos: {
@@ -58,13 +100,10 @@ export const precioReservaPublica = async (entrada) => {
                 }
             }
         })
-        const ok = {
-            ok: desgloseFinanciero
-        }
+
+        ok.desgloseFinanciero = desgloseFinanciero
         return ok
     } catch (error) {
-
         throw error
     }
-
 }

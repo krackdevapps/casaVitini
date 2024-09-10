@@ -15,7 +15,10 @@ export const obtenerPDF = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const usuario = entrada.session.usuario;
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,

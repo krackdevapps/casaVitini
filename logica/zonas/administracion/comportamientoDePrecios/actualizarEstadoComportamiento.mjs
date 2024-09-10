@@ -13,7 +13,10 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         await mutex.acquire();
         const comportamientoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.comportamientoUID,

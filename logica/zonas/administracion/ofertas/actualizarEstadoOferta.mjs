@@ -15,7 +15,10 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
         IDX.control()
 
         await mutex.acquire();
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const ofertaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.ofertaUID,
             nombreCampo: "El identificador universal de la oferta (ofertaUID)",

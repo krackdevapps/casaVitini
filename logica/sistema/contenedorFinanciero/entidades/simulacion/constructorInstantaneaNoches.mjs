@@ -26,9 +26,29 @@ export const constructorInstantaneaNoches = async (data) => {
             estructura.entidades.reserva = {}
         }
         const simulacionEntidad = contenedorEntidades.reserva
-        simulacionEntidad.fechaEntrada = fechaEntrada
-        simulacionEntidad.fechaSalida = fechaEntrada
-        simulacionEntidad.nochesSimulacion = diasArray.length.toString()
+        // simulacionEntidad.fechaEntrada = fechaEntrada
+        // simulacionEntidad.fechaSalida = fechaEntrada
+        // simulacionEntidad.nochesSimulacion = diasArray.length.toString()
+        if (!simulacionEntidad.hasOwnProperty("global")) {
+            simulacionEntidad.global = {}
+        }
+
+        const global = simulacionEntidad.global
+        global.rango = {
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida,
+            nochesReserva: diasArray.length.toString()
+        }
+        global.totales = {
+            totalNeto: "0.00",
+            totalDescuento: "0.00",
+            totalFinal: "0.00",
+            impuestosAplicados: "0.00",
+            promedioNocheNeto: "0.00",
+            promedioNocheNetoConDescuentos: "0.00"
+        }
+
+
 
         if (!simulacionEntidad.hasOwnProperty("instantaneaNoches")) {
             simulacionEntidad.instantaneaNoches = {}

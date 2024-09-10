@@ -1,6 +1,7 @@
 import Decimal from 'decimal.js';
 import { obtenerDesgloseFinancieroPorReservaUID } from '../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs';
 import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../../../repositorio/impuestos/obtenerImpuestosPorAplicacionIDVPorEstado.mjs';
+import { obtenerDesgloseFinancieroPorSimulacionUID } from '../../../../repositorio/simulacionDePrecios/desgloseFinanciero/obtenerDesgloseFinancieroPorSimulacionUID.mjs';
 const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
 Decimal.set({ precision: precisionDecimal });
 export const aplicarImpuestos = async (data) => {
@@ -22,14 +23,21 @@ export const aplicarImpuestos = async (data) => {
                     entidad: "reserva"
                 })
                 impuestos.push(...impuestosDeAdministracion)
-               // instantaneaImpuestos.push(...impuestosDeAdministracion)
-            } else if (origen === "instantaneaImpuestos") {
+                // instantaneaImpuestos.push(...impuestosDeAdministracion)
+            } else if (origen === "instantaneaImpuestosEnReserva") {
                 const reservaUID = data.reservaUID
 
                 const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
                 const impuestosDeLaReserva = contenedorFinanciero.instantaneaImpuestos || []
                 impuestos.push(...impuestosDeLaReserva)
-               // instantaneaImpuestos.push(...impuestosDeLaReserva)
+                // instantaneaImpuestos.push(...impuestosDeLaReserva)
+            } else if (origen === "instantaneaSimulacion") {
+                const simulacionUID = data.simulacionUID
+
+                const contenedorFinanciero = await obtenerDesgloseFinancieroPorSimulacionUID(simulacionUID)
+                const impuestosDeLaSimulacion = contenedorFinanciero.instantaneaImpuestos || []
+                impuestos.push(...impuestosDeLaSimulacion)
+                // instantaneaImpuestos.push(...impuestosDeLaReserva)
             } else {
                 const error = "aplicarImpuestos necesita un origen, este puede ser administración o reserva"
                 throw new Error(error)
@@ -79,7 +87,7 @@ export const aplicarImpuestos = async (data) => {
                 // instantaneaImpuestos.push(...impuestosDeAdministracion)
             } else if (origen === "instantaneaImpuestos") {
                 const reservaUID = data.reservaUID
-                console.log("reservaUID", reservaUID)
+
                 if (typeof reservaUID !== "number") {
                     const error = "reservaUID en aplicarImpuestos debe de ser un número."
                     throw new Error(error)
@@ -87,7 +95,7 @@ export const aplicarImpuestos = async (data) => {
                 const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
                 const impuestosDeLaReserva = contenedorFinanciero.instantaneaImpuestos || []
                 impuestos.push(...impuestosDeLaReserva)
-               // instantaneaImpuestos.push(...impuestosDeLaReserva)
+                // instantaneaImpuestos.push(...impuestosDeLaReserva)
             } else {
                 const error = "aplicarImpuestos necesita un origen, este puede ser hubImuestos o reserva"
                 throw new Error(error)
@@ -137,7 +145,7 @@ export const aplicarImpuestos = async (data) => {
                 entidad: "global"
             })
             impuestos.push(...impuestosDeAdministracion)
-           // instantaneaImpuestos.push(...impuestosDeAdministracion)
+            // instantaneaImpuestos.push(...impuestosDeAdministracion)
         } else if (origen === "instantaneaImpuestos") {
             const reservaUID = data.reservaUID
             if (typeof reservaUID !== "number") {
@@ -147,7 +155,7 @@ export const aplicarImpuestos = async (data) => {
             const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
             const impuestosDeLaReserva = contenedorFinanciero.instantaneaImpuestos || []
             impuestos.push(...impuestosDeLaReserva)
-           // instantaneaImpuestos.push(...impuestosDeLaReserva)
+            // instantaneaImpuestos.push(...impuestosDeLaReserva)
         } else {
             const error = "aplicarImpuestos necesita un origen, este puede ser hubImuestos o reserva"
             throw new Error(error)

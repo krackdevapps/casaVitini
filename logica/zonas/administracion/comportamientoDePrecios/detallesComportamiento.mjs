@@ -9,7 +9,10 @@ export const detallesComportamiento = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const comportamientoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.comportamientoUID,
             nombreCampo: "El identificador universal de la reserva (comportamientoUID)",

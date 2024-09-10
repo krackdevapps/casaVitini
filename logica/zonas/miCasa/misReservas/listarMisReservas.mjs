@@ -6,6 +6,8 @@ import { obtenerTitularReservaPoolPorMail } from "../../../repositorio/reservas/
 import { obtenerReservasComoLista } from "../../../repositorio/miCasa/reservas/obtenerReservasComoLista.mjs";
 import { obtenerDatosPersonales } from "../../../repositorio/usuarios/obtenerDatosPersonales.mjs";
 import { obtenerUsuario } from "../../../repositorio/usuarios/obtenerUsuario.mjs";
+import Joi from "joi";
+import { controlEstructuraPorJoi } from "../../../sistema/validadores/controlEstructuraPorJoi.mjs";
 
 export const listarMisReservas = async (entrada) => {
     try {
@@ -15,6 +17,17 @@ export const listarMisReservas = async (entrada) => {
         IDX.control()
 
         const usuario = entrada.session.usuario
+        const esquemaBusqueda = Joi.object({
+            pagina: Joi.number(),
+            nombreColumna: Joi.string(),
+            sentidoColumna: Joi.string()
+        }).required()
+
+        controlEstructuraPorJoi({
+            schema: esquemaBusqueda,
+            objeto: entrada.body
+        })
+
         const paginaActual = validadoresCompartidos.tipos.numero({
             number: entrada.body.pagina,
             nombreCampo: "El numero de página",

@@ -11,7 +11,10 @@ export const eliminar = async (entrada ) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const clienteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.clienteUID,
             nombreCampo: "El identificador universal del cliente (clienteUID)",

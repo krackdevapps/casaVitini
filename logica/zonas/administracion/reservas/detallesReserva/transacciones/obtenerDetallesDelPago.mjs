@@ -13,6 +13,12 @@ export const obtenerDetallesDelPago = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
+
         const pagoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pagoUID,
             nombreCampo: "El campo pagoUID",

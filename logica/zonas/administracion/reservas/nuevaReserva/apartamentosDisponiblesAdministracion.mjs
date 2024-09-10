@@ -12,6 +12,11 @@ export const apartamentosDisponiblesAdministracion = async (entrada) => {
         IDX.empleados()
         IDX.control()
 
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
+
         const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaEntrada,
             nombreCampo: "La fecha de entrada de la reserva"

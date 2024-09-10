@@ -10,6 +10,10 @@ import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../..
 
 export const diasOcupadosTotalmentePorMes = async (entrada) => {
     try {
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const ano = validadoresCompartidos.tipos.numero({
             number: entrada.body.ano,
             nombreCampo: "El campo del año",

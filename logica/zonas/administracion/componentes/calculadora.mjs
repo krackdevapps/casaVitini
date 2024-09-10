@@ -9,7 +9,10 @@ export const calculadora = (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 3
+        })
         const numero1 = entrada.body.numero1;
         const numero2 = entrada.body.numero2;
         const operador = entrada.body.operador;

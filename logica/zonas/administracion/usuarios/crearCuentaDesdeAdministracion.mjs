@@ -23,6 +23,11 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
 
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 3
+        })
+
         const clave = entrada.body.clave;
         const usuarioIDX = validadoresCompartidos.tipos.cadena({
             string: entrada.body.usuarioIDX,

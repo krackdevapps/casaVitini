@@ -48,6 +48,11 @@ export const modificarEntidadAlojamiento = async (entrada) => {
         })
 
         if (tipoEntidad === "apartamento") {
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 5
+            })
+
             const apartamentoIDV = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.apartamentoIDV,
                 nombreCampo: "El apartamentoIDV",
@@ -155,7 +160,10 @@ export const modificarEntidadAlojamiento = async (entrada) => {
             return ok
 
         } else if (tipoEntidad === "habitacion") {
-
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 4
+            })
             const habitacionIDV = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.habitacionIDV,
                 nombreCampo: "El habitacionIDV",
@@ -206,6 +214,10 @@ export const modificarEntidadAlojamiento = async (entrada) => {
             return ok
 
         } else if (tipoEntidad === "cama") {
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 5
+            })
             const camaIDV = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.camaIDV,
                 nombreCampo: "El camaIDV",

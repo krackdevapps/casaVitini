@@ -26,10 +26,7 @@ export const constructorInstantaneaNoches = async (data) => {
             estructura.entidades.reserva = {}
         }
         const reservaEntidad = contenedorEntidadtes.reserva
-        // reservaEntidad.fechaEntrada = fechaEntrada
-        // reservaEntidad.fechaSalida = fechaSalida
-        // reservaEntidad.nochesReserva = diasArray.length.toString()
-        
+       
         if (!reservaEntidad.hasOwnProperty("global")) {
             reservaEntidad.global = {}
         }

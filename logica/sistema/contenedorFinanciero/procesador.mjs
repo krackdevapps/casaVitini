@@ -58,10 +58,10 @@ export const procesador = async (data) => {
 
         await aplicarOfertas({
             estructura,
-            zonasArray: capas.ofertas?.zonasArray,
-            configuracion: capas.ofertas?.configuracion,
-            operacion: capas.ofertas?.operacion,
-            ofertaUID: capas.ofertas?.ofertaUID,
+            zonasArray: capas?.ofertas?.zonasArray,
+            configuracion: capas?.ofertas?.configuracion,
+            operacion: capas?.ofertas?.operacion,
+            ofertaUID: capas?.ofertas?.ofertaUID,
             pipe
             //descuentosArray: capas.ofertas.descuentosArray
         })

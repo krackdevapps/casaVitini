@@ -9,7 +9,10 @@ export const precioRangoApartamentos = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const fechaEntrada = entrada.body.fechaEntrada;
         const fechaSalida = entrada.body.fechaSalida;
         await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada)

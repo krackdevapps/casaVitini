@@ -1,12 +1,7 @@
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
-import { obtenerPerfilPrecioPorApartamentoUID } from "../../../../repositorio/precios/obtenerPerfilPrecioPorApartamentoUID.mjs";
 import { Mutex } from "async-mutex";
-import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
-import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../../../../repositorio/arquitectura/configuraciones/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs";
-import { actualizarEstadoPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/actualizarEstadoPorApartamentoIDV.mjs";
 import { actualizarZonaIDVDeLaConfiguracion } from "../../../../repositorio/arquitectura/configuraciones/actualizarZonaIDVDeLaConfiguracion.mjs";
 
 export const actualizarZonaDeLaConfiguracionApartamento = async (entrada, salida) => {
@@ -17,7 +12,10 @@ export const actualizarZonaDeLaConfiguracionApartamento = async (entrada, salida
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         mutex.acquire()
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({

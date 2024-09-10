@@ -12,7 +12,10 @@ export const eliminarComportamiento = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         await mutex.acquire()
 
         const comportamientoUID = validadoresCompartidos.tipos.cadena({

@@ -10,6 +10,10 @@ export const detallesServicio = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const servicioUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.servicioUID,
             nombreCampo: "El identificador universal del servicioUID (servicioUID)",

@@ -14,6 +14,11 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 3
+        })
+
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pernoctanteUID,
             nombreCampo: "El identificador universal de la pernoctantaUID (pernoctantaUID)",

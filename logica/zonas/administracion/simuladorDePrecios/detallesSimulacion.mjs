@@ -1,8 +1,8 @@
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { obtenerSimulacionPorSimulacionUID } from "../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs";
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { obtenerServiciosPorSimulacionUID } from "../../../repositorio/simulacionDePrecios/servicios/obtenerServiciosPorSimulacionUID.mjs";
 export const detallesSimulacion = async (entrada) => {
     try {
         const session = entrada.session
@@ -10,6 +10,10 @@ export const detallesSimulacion = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
 
         const simulacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.simulacionUID,
@@ -22,10 +26,11 @@ export const detallesSimulacion = async (entrada) => {
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
 
         const nombre = simulacion.nombre
+        const zonaIDV = simulacion.zonaIDV
         const fechaCreacion = simulacion.fechaCreacion
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
-        const apartamentosIDVARRAY = simulacion.apartamentosIDVARRAY
+        const apartamentosIDVARRAY = simulacion.apartamentosIDVARRAY || []
         const apartamentos = []
         for (const apartamentoIDV of apartamentosIDVARRAY) {
             // await obtenerConfiguracionPorApartamentoIDV({
@@ -44,14 +49,20 @@ export const detallesSimulacion = async (entrada) => {
             apartamentos.push(estructura)
         }
 
+        const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
+
+
+
         const ok = {
             ok: "Aquí tienes los detalles de la simulación",
             nombre,
+            zonaIDV,
             simulacionUID,
             fechaCreacion,
             fechaEntrada,
             fechaSalida,
             apartamentos,
+            servicios: serviciosDeLaSimulacion,
             contenedorFinanciero: simulacion
         }
         return ok

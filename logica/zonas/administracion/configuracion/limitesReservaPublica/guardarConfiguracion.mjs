@@ -9,7 +9,10 @@ export const guardarConfiguracion = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 3
+        })
         const diasAntelacionReserva = validadoresCompartidos.tipos.cadena({
             string: entrada.body.diasAntelacionReserva,
             nombreCampo: "El campo diasAntelacionReserva",

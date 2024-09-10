@@ -1,7 +1,41 @@
 import { validadoresCompartidos } from "../../validadores/validadoresCompartidos.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
+import Joi from "joi";
+import { controlEstructuraPorJoi } from "../../validadores/controlEstructuraPorJoi.mjs";
 export const validarComportamiento = async (comportamiento) => {
     try {
+
+        const schema = Joi.object({
+            nombreComportamiento: Joi.required(),
+            testingVI: Joi.string(),
+            estadoInicalDesactivado: Joi.string(),
+            transaccion: Joi.string(),
+            contenedor: Joi.object({
+                tipo: Joi.required(),
+                fechaInicio: Joi.date(),
+                fechaFinal: Joi.date(),
+                fechaInicio_creacionReserva: Joi.date(),
+                fechaFinal_creacionReserva: Joi.date(),
+                apartamentos: Joi.array().items(Joi.object({
+                    apartamentoIDV: Joi.required(),
+                    simboloIDV: Joi.required(),
+                    cantidad: Joi.required(),
+                }).messages({
+                    'object.base': '{{#label}} debe ser un objeto'
+                }))
+            }).required().messages({
+                'array.base': '{{#label}} debe ser un array'
+            }),
+        }).required().messages({
+            'any.required': '{{#label}} es una llave obligatoria'
+        })
+
+        controlEstructuraPorJoi({
+            schema: schema,
+            objeto: comportamiento
+        })
+
+
         validadoresCompartidos.tipos.cadena({
             string: comportamiento.nombreComportamiento,
             nombreCampo: "El campo del nombreComportamiento",

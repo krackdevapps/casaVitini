@@ -35,7 +35,10 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
         })
 
         if (tipoEntidad === "apartamento") {
-
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 2
+            })
             await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV: entidadIDV,
                 errorSi: "noExiste"
@@ -56,6 +59,10 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
             };
             return ok
         } else if (tipoEntidad === "habitacion") {
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 2
+            })
             const obtenerHabitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
                 habitacionIDV: entidadIDV,
                 errorSi: "noExiste"
@@ -72,6 +79,10 @@ export const eliminarEntidadAlojamiento = async (entrada, salida) => {
             return ok
 
         } else if (tipoEntidad === "cama") {
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 3
+            })
             const tipoIDV = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.tipoIDV,
                 nombreCampo: "El campo tipoIDV de la cama",

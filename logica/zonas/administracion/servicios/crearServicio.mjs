@@ -2,6 +2,7 @@ import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 import { validarServicio } from "../../../sistema/servicios/validarObjeto.mjs";
 import { insertarServicio } from "../../../repositorio/servicios/insertarServicio.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const crearServicio = async (entrada) => {
     const mutex = new Mutex();
@@ -13,6 +14,11 @@ export const crearServicio = async (entrada) => {
         IDX.control()
 
         await mutex.acquire();
+
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 3
+        })
 
         const servicio = {
             nombreServicio: entrada.body.nombreServicio,

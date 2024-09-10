@@ -12,6 +12,12 @@ export const conectar = async (entrada) => {
         await eliminarUsuarioPorRolPorEstadoVerificacion();
         await eliminarSessionPorRolPorCaducidad();
         const errorUI_IDX = "Datos de identificación incorrectos.";
+
+        const numeroLlaves = Object.keys(entrada.body)
+        if (numeroLlaves.length > 2) {
+            const m = "No se esperan mas de dos llaves en el objeto de identificacion"
+            throw new Error(m)
+        }
         const usuario = validadoresCompartidos.tipos.cadena({
             string: entrada.body.usuario,
             nombreCampo: "El nombre de usuario (VitiniIDX)",
@@ -25,6 +31,8 @@ export const conectar = async (entrada) => {
             const error = "Falta especificar la clave";
             throw new Error(error);
         }
+
+  
         const intentosMaximos = 10;
         const controladorIntentos = {
             suma: async (numeroIntentosActuales, IDX_) => {

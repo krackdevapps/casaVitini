@@ -38,18 +38,18 @@ export const calendario = async (entrada) => {
 
         const horaComparar = DateTime.fromFormat(horaLimiteDelMismoDia, "HH:mm", { zone: zonaHoraria });
 
-
         if (diasAntelacionReserva === "0") {
             if (tiempoZH > horaComparar) {
-
                 diasAntelacionReserva = "1"
-            } else {
-
             }
         }
 
-
         if (tipo === "actual") {
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 2
+            })
+
             const anoActual = anoPresenteTZ;
             const mesActual = mesPresenteTZ;
             const diaActual = diaHoyTZ;
@@ -97,6 +97,11 @@ export const calendario = async (entrada) => {
             };
             return respuesta
         } else if (tipo === "personalizado") {
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 3
+            })
+
             const ano = validadoresCompartidos.tipos.numero({
                 number: entrada.body.ano,
                 nombreCampo: "El campo del año",

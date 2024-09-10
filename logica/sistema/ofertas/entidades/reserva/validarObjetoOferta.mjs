@@ -8,6 +8,7 @@ export const validarObjetoOferta = async (data) => {
     try {
         const oferta = data.oferta
         const modo = data.modo
+    
         if (modo !== "actualizarOferta" && modo !== "crearOferta") {
             const m = "validarObjetOferta requiero campo modo en actualizarOferta o crearOfert para procesar el objeto"
             throw new Error(m)
@@ -58,6 +59,7 @@ export const validarObjetoOferta = async (data) => {
             objetoLiteral: oferta.descuentosJSON,
             nombreCampo: "El objeto de descuentosJSON"
         })
+
         if (condicionesArray.length === 0) {
             const error = "Añade al menos una condición a la oferta."
             throw new Error(error)

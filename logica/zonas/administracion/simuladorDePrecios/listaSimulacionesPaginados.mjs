@@ -1,5 +1,7 @@
+import Joi from "joi";
 import { obtenerTodasSimulacionesConOrdenamiento } from "../../../repositorio/simulacionDePrecios/obtenerTodasSimulacionesConOrdenamiento.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
+import { controlEstructuraPorJoi } from "../../../sistema/validadores/controlEstructuraPorJoi.mjs";
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 
 export const listaSimulacionesPaginados = async (entrada) => {
@@ -10,6 +12,17 @@ export const listaSimulacionesPaginados = async (entrada) => {
         IDX.empleados()
         IDX.control()
 
+        const esquemaBusqueda = Joi.object({
+            pagina: Joi.number(),
+            nombreColumna: Joi.string(),
+            sentidoColumna: Joi.string()
+        }).required()
+
+        controlEstructuraPorJoi({
+            schema: esquemaBusqueda,
+            objeto: entrada.body
+        })
+        
         let nombreColumna = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombreColumna || "",
             nombreCampo: "El campo del nombre de la columna",

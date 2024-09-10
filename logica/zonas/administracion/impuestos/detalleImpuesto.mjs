@@ -9,7 +9,10 @@ export const detalleImpuesto = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const impuestoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.impuestoUID,
             nombreCampo: "El  impuestoUID",

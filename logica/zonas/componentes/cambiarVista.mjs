@@ -3,6 +3,10 @@ import { validadoresCompartidos } from "../../sistema/validadores/validadoresCom
 
 export const cambiarVista = async (entrada) => {
     try {
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const vista = validadoresCompartidos.tipos.cadena({
             string: entrada.body.vista,
             nombreCampo: "La url como vista",

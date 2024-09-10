@@ -16,7 +16,10 @@ export const establecerNuevoPrecioApartamento = async (entrada) => {
         IDX.control()
 
         await mutex.acquire();
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El campo apartamentoIDV",

@@ -20,7 +20,10 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         await mutex.acquire();
 
         const reservaUID = validadoresCompartidos.tipos.cadena({

@@ -3,6 +3,11 @@ import { validadoresCompartidos } from "../../sistema/validadores/validadoresCom
 
 export const imagenDelApartamento = async (entrada) => {
     try {
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
+
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El campo del identiifcador visual de apartamento (apartamentoIDV)",

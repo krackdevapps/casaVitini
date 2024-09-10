@@ -8,7 +8,6 @@ export const selecionarOfertasPorCondicion = async (data) => {
         const fechaSalida = data.fechaSalida
         const apartamentosArray = data.apartamentosArray
         const zonasArray = data.zonasArray
-        const descuentosParaRechazar = data?.descuentosParaRechazar || []
         const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64 || []
 
         const ofertasSeleccionadasPorRango = await obtenerOfertasPorRangoActualPorEstado({
@@ -19,11 +18,6 @@ export const selecionarOfertasPorCondicion = async (data) => {
         })
         const ofertaAnalizadasPorCondiciones = []
         for (const oferta of ofertasSeleccionadasPorRango) {
-            const ofertaUID = String(oferta.ofertaUID)
-
-            if (descuentosParaRechazar.length > 0 && descuentosParaRechazar.includes(ofertaUID)) {
-                continue
-            }
             const resultadoSelector = await selectorPorCondicion({
                 oferta,
                 apartamentosArray,
@@ -34,10 +28,10 @@ export const selecionarOfertasPorCondicion = async (data) => {
             })
             resultadoSelector.autorizacion = "aceptada"
             const condicionesQueNoSeCumple = resultadoSelector.condicionesQueNoSeCumple
+
             if (condicionesQueNoSeCumple.length === 0) {
                 ofertaAnalizadasPorCondiciones.push(resultadoSelector)
             }
-
         }
         return ofertaAnalizadasPorCondiciones
     } catch (error) {

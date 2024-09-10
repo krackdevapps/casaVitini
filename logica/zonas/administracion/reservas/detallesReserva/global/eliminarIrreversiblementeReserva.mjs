@@ -14,7 +14,10 @@ export const eliminarIrreversiblementeReserva = async (entrada) => {
         const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         await mutex.acquire();
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,

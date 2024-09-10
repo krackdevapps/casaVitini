@@ -14,7 +14,10 @@ export const eliminarOferta = async (entrada) => {
         IDX.control()
 
         await mutex.acquire();
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const ofertaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.ofertaUID,
             nombreCampo: "El identificador universal de la reserva (ofertaUID)",

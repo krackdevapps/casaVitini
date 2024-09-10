@@ -1,8 +1,10 @@
 
+import Joi from "joi";
 import { hoy } from "../../../../sistema/reservas/buscador/hoy.mjs";
 import { porTerminos } from "../../../../sistema/reservas/buscador/porTerminos.mjs";
 import { rango } from "../../../../sistema/reservas/buscador/rango.mjs";
 import { validadorBusqueda } from "../../../../sistema/reservas/buscador/validarBusqueda.mjs";
+import { controlEstructuraPorJoi } from "../../../../sistema/validadores/controlEstructuraPorJoi.mjs";
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs";
 
@@ -14,6 +16,23 @@ export const listarReservas = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+
+        const esquemaBusqueda = Joi.object({
+            tipoConsulta: Joi.string(),
+            pagina: Joi.number(),
+            nombreColumna: Joi.string(),
+            sentidoColumna: Joi.string(),
+            tipoCoincidencia: Joi.string(),
+            fechaEntrada: Joi.date(),
+            fechaSalida: Joi.date(),
+            termino: Joi.string()
+        }).required()
+
+        controlEstructuraPorJoi({
+            schema: esquemaBusqueda,
+            objeto: entrada.body
+        })
+
 
         const tipoConsulta = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoConsulta,

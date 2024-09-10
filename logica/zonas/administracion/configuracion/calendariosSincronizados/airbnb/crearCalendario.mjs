@@ -14,7 +14,10 @@ export const crearCalendario = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
         const nombre = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombre,
             nombreCampo: "El campo del nombre",

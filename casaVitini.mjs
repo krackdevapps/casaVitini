@@ -19,6 +19,8 @@ dotenv.config()
 
 process.on('uncaughtException', (error) => {
   console.error('Alerta! ->>:', error.message);
+  console.error('Alerta! ->>:', error);
+
 });
 
 const app = express()

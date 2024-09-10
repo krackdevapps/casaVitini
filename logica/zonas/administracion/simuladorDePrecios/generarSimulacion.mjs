@@ -9,7 +9,10 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arqu
 export const generarSimulacion = async (entrada) => {
     const mutex = new Mutex()
     try {
-
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 4
+        }) 
         const fechaCreacion = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaCreacion,
             nombreCampo: "La fecha de fechaCreacion"
@@ -59,24 +62,57 @@ export const generarSimulacion = async (entrada) => {
         }
 
         await eliminarBloqueoCaducado();
+        // const desgloseFinanciero = await procesador({
+        //     entidades: {
+        //         reserva: {
+        //             tipoOperacion: "crearDesglose",
+        //             fechaEntrada: fechaEntrada,
+        //             fechaSalida: fechaSalida,
+        //             fechaCreacion: fechaCreacion,
+        //             apartamentosArray: apartamentosIDVARRAY,
+        //             capaOfertas: "si",
+        //             zonasArray: ["global", "publica", "privada"],
+        //             descuentosParaRechazar: [],
+        //             capaDescuentosPersonalizados: "no",
+        //             descuentosArray: [],
+        //             capaImpuestos: "si",
+        //         }
+        //     },
+        // })
+
+        const serviciosSiReconocidos = []
+        const codigosDescuentosSiReconocidos = []
+
         const desgloseFinanciero = await procesador({
             entidades: {
-                reserva: {
-                    tipoOperacion: "crearDesglose",
+                simulacion: {
+                    origen: "externo",
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
-                    fechaCreacion: fechaCreacion,
                     apartamentosArray: apartamentosIDVARRAY,
-                    capaOfertas: "si",
-                    zonasArray: ["global", "publica", "privada"],
-                    descuentosParaRechazar: [],
-                    capaDescuentosPersonalizados: "no",
-                    descuentosArray: [],
-                    capaImpuestos: "si",
-                }
+                },
+                servicios: {
+                    origen: "hubServicios",
+                    serviciosUIDSolicitados: serviciosSiReconocidos
+                },
             },
+            capas: {
+                ofertas: {
+                    zonasArray: ["global", "publica"],
+                    configuracion: {
+                        descuentosPersonalizados: "no",
+                        descuentosArray: []
+                    },
+                    operacion: {
+                        tipo: "insertarDescuentosPorCondiconPorCoodigo",
+                        codigoDescuentosArrayBASE64: codigosDescuentosSiReconocidos
+                    }
+                },
+                impuestos: {
+                    origen: "hubImuestos"
+                }
+            }
         })
-
         const ok = {
             ok: "Aquí tienes el desglose financiero basándose en las fechas seleccionadas y los apartamentos seleccionados.",
             desgloseFinanciero

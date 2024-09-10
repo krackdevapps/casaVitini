@@ -15,6 +15,11 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
         IDX.administradores()
         IDX.control()
 
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
+        })
+        
         const usuarioIDX = validadoresCompartidos.tipos.cadena({
             string: entrada.body.usuarioIDX,
             nombreCampo: "El usuarioIDX",

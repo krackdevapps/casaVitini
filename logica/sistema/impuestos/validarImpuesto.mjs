@@ -1,6 +1,24 @@
+import Joi from "joi"
 import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
+import { controlEstructuraPorJoi } from "../validadores/controlEstructuraPorJoi.mjs"
 export const validarImpuesto = (impuesto) => {
     try {
+
+
+        const esquemaBusqueda = Joi.object({
+            nombre: Joi.string(),
+            impuestoUID: Joi.string(),
+            tipoImpositivo: Joi.string(),
+            tipoValorIDV: Joi.string(),
+            entidadIDV: Joi.string(),
+            estadoIDV: Joi.string()
+        }).required()
+        controlEstructuraPorJoi({
+            schema: esquemaBusqueda,
+            objeto: impuesto
+        })
+
+
         validadoresCompartidos.tipos.cadena({
             string: impuesto.nombre,
             nombreCampo: "El nombre del impuesto",
@@ -28,13 +46,24 @@ export const validarImpuesto = (impuesto) => {
             const m = "tipoValorIDV solo espera porcentaje o taja"
             throw new Error(m)
         }
-        validadoresCompartidos.tipos.cadena({
+        const entidadIDV = validadoresCompartidos.tipos.cadena({
             string: impuesto.entidadIDV,
             nombreCampo: "El tipo entidadIDV",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
+        const entidadesIDV = [
+            "reserva",
+            "servicio",
+            "global"
+        ]
+
+        if (!entidadesIDV.includes(entidadIDV)) {
+            const m = "En la llave entidadIDV, solo se espera reserva, servicio o global"
+            throw new Error(m)
+
+        }
         const estadoIDV = impuesto.estadoIDV
         if (estadoIDV && (estadoIDV !== "desactivado" && estadoIDV !== "activado")) {
             validadoresCompartidos.tipos.cadena({

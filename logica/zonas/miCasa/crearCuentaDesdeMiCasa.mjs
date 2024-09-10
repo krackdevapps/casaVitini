@@ -17,6 +17,10 @@ import { validadorIDX } from "../../sistema/VitiniIDX/validadorIDX.mjs";
 
 export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
     try {
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 4
+        })
 
         const claveNueva = entrada.body.claveNueva;
         const claveConfirmada = entrada.body.claveConfirmada;

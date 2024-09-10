@@ -23,6 +23,10 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         IDX.control()
 
         await mutex.acquire();
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 4
+        })
 
         const fechaEntrada = entrada.body.fechaEntrada;
         const fechaSalida = entrada.body.fechaSalida;

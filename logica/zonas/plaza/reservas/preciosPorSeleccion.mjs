@@ -8,6 +8,9 @@ import { procesador } from "../../../sistema/contenedorFinanciero/procesador.mjs
 import { utilidades } from "../../../componentes/utilidades.mjs";
 import { Mutex } from "async-mutex";
 import Decimal from "decimal.js";
+import { validarHoraLimitePublica } from "../../../sistema/reservas/validarHoraLimitePublica.mjs";
+import { limitesReservaPublica } from "../../../sistema/reservas/limitesReservaPublica.mjs";
+import { disponibilidadApartamentos } from "../../../sistema/reservas/nuevaReserva/reservaPulica/disponibilidadApartamentos.mjs";
 
 export const preciosPorSeleccion = async (entrada) => {
     const mutex = new Mutex()
@@ -15,6 +18,10 @@ export const preciosPorSeleccion = async (entrada) => {
         if (!await interruptor("aceptarReservasPublicas")) {
             throw new Error(mensajesUI.aceptarReservasPublicas);
         }
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 3
+        })
 
         const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaEntrada,
@@ -46,6 +53,7 @@ export const preciosPorSeleccion = async (entrada) => {
         })
 
 
+
         await utilidades.ralentizador(2000)
         mutex.acquire()
 
@@ -57,24 +65,45 @@ export const preciosPorSeleccion = async (entrada) => {
             throw new Error(error);
         }
         await eliminarBloqueoCaducado();
-        const fechaActual_ISO = tiempoZH.toISODate();
-
+        await validarHoraLimitePublica()
+        await limitesReservaPublica({
+            fechaEntrada: fechaEntrada,
+            fechaSalida: fechaSalida
+        })
+        await disponibilidadApartamentos({
+            fechaEntrada,
+            fechaSalida,
+            apartamentosIDVArray: apartamentosIDVARRAY
+        })
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
-                    tipoOperacion: "crearDesglose",
+                    origen: "externo",
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
-                    fechaCreacion: fechaActual_ISO,
-                    apartamentosArray: apartamentosIDVARRAY,
-                    capaOfertas: "si",
-                    zonasArray: ["global", "publica"],
-                    descuentosParaRechazar: [],
-                    capaDescuentosPersonalizados: "no",
-                    descuentosArray: [],
-                    capaImpuestos: "si",
-                }
+                    apartamentosArray:apartamentosIDVARRAY,
+                },
+                servicios: {
+                    origen: "hubServicios",
+                    serviciosUIDSolicitados: []
+                },
             },
+            capas: {
+                ofertas: {
+                    zonasArray: ["global", "publica"],
+                    configuracion: {
+                        descuentosPersonalizados: "no",
+                        descuentosArray: []
+                    },
+                    operacion: {
+                        tipo: "insertarDescuentosPorCondiconPorCoodigo",
+                        codigoDescuentosArrayBASE64: []
+                    }
+                },
+                impuestos: {
+                    origen: "hubImuestos"
+                }
+            }
         })
         const impuestosAplicados = desgloseFinanciero.global.totales.impuestosAplicados
         const desglosePorApartamento = desgloseFinanciero.entidades.reserva.desglosePorApartamento
@@ -130,9 +159,7 @@ export const preciosPorSeleccion = async (entrada) => {
             const proporcionDescuentos = new Decimal(descuentosEnProporcion).div(numeroApartamentosSeleccionados)
             const descuentoDelApartamento = descuentosPorApartamento[apartamentoIDV] || 0
             const precioApartamentoSeleccionadoNeto = new Decimal(netoDelApartamento).minus(proporcionDescuentos).minus(descuentoDelApartamento)
-
             const prePrecioApartamentoSeleccionadoFinal = (precioApartamentoSeleccionadoNeto).plus(proporcionImpuestos)
-
             preciosPorSeleccion[apartamentoIDV] = {
                 precioEnBaseASeleccion: prePrecioApartamentoSeleccionadoFinal.isNegative() ? "0.00" : prePrecioApartamentoSeleccionadoFinal.toFixed(2)
             }

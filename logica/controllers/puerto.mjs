@@ -6,6 +6,7 @@ export const puerto = async (entrada, salida) => {
     try {
 
         const zonaRaw = entrada.body.zona;
+        delete entrada.body.zona
         if (!zonaRaw) {
             const error = "zonaIndefinida";
             throw new Error(error);
@@ -79,7 +80,7 @@ export const puerto = async (entrada, salida) => {
         const respuesta = await X(entrada, salida)
         salida.json(respuesta)
     } catch (errorCapturado) {
-        console.error(errorCapturado.stack);
+        console.error("errorCapturado", errorCapturado.stack);
         const errorFinal = filtroError(errorCapturado)
         salida.json(errorFinal)
     }
