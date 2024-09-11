@@ -4,6 +4,8 @@ import { validadoresCompartidos } from "../../../../sistema/validadores/validado
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { insertarServicioPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/servicios/insertarServicioPorSimulacionUID.mjs"
+import { validarDataGlobalDeSimulacion } from "../../../../sistema/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { generarDesgloseSimpleGuardarlo } from "../../../../sistema/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
 
 export const insertarServicioEnSimulacion = async (entrada) => {
     try {
@@ -34,81 +36,23 @@ export const insertarServicioEnSimulacion = async (entrada) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-
+        await campoDeTransaccion("iniciar")
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
         const servicio = await obtenerServicioPorServicioUID(servicioUID)
         const nombreServicico = servicio.nombre
         const contenedorServicio = servicio.contenedor
-        await campoDeTransaccion("iniciar")
         const servicioInsertado = await insertarServicioPorSimulacionUID({
             simulacionUID,
             nombre: nombreServicico,
             contenedor: contenedorServicio
         })
-
-        // Validador para comprobar que se tiene los datos globales para hacer una genracioin de desglose financiero
-
-        // Si hay datos globales, generamos desglose finacniero y enviamos el desglose financiero para que luego se reconstruya
-        // Si no enviamos el ok, pero no eviamos le desglose financiero
-
-
-
-        // // const desgloseFinanciero = await procesador({
-        // //     entidades: {
-        // //         reserva: {
-        // //             origen: "hubReservas",
-        // //             reservaUID: reservaUID
-        // //         },
-        // //         servicios: {
-        // //             origen: "instantaneaServiciosEnReserva",
-        // //             reservaUID: reservaUID
-        // //         },
-        // //     },
-        // //     capas: {
-        // //         impuestos: {
-        // //             origen: "instantaneaImpuestos",
-        // //             reservaUID: reservaUID
-        // //         }
-        // //     }
-        // // })
-
-        // const desgloseFinanciero = await procesador({
-        //     entidades: {
-        //         simulacion: {
-        //             origen: "hubSimulaciones",
-        //             simulacionUID
-        //         },
-        //         servicios: {
-        //             origen: "instantaneaServiciosEnSimulacion",
-        //             simulacionUID
-        //         },
-        //     },
-        //     capas: {
-        //         ofertas: {
-        //             // zonasArray: ["global", "publica"],
-        //             // configuracion: {
-        //             //     descuentosPersonalizados: "no",
-        //             //     descuentosArray: []
-        //             // },
-        //             // operacion: {
-        //             //     tipo: "insertarDescuentosPorCondiconPorCoodigo",
-        //             //     codigoDescuentosArrayBASE64: codigosDescuentosSiReconocidos
-        //             // }
-        //         },
-        //         impuestos: {
-        //             origen: "instantaneaSimulacion"
-        //         }
-        //     }
-        // })
-
-        // await actualizarDesgloseFinacieroPorSimulacionUID({
-        //     desgloseFinanciero,
-        //     simulacionUID
-        // })
+        await validarDataGlobalDeSimulacion(simulacionUID)
+        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha insertado el servicio correctamente en la reserva y el contenedor financiero se ha renderizado.",
-            servicio: servicioInsertado
+            servicio: servicioInsertado,
+            desgloseFinanciero: desgloseFinanciero
         }
         return ok
     } catch (errorCapturado) {

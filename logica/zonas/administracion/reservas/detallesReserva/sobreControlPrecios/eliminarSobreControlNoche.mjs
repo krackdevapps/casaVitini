@@ -71,7 +71,7 @@ export const eliminarSobreControlNoche = async (entrada) => {
                 ofertas: {
                 },
                 impuestos: {
-                    origen: "instantaneaImpuestos",
+                    origen: "instantaneaImpuestosEnReserva",
                     reservaUID: reservaUID
                 }
             }

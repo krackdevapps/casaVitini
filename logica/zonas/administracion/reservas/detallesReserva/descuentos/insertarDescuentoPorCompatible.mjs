@@ -81,7 +81,7 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
                     ofertaUID: ofertaUID
                 },
                 impuestos: {
-                    origen: "instantaneaImpuestos",
+                    origen: "instantaneaImpuestosEnReserva",
                     reservaUID: reservaUID
                 }
             }

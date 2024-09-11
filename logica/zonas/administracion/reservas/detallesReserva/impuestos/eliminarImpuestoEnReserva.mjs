@@ -73,7 +73,7 @@ export const eliminarImpuestoEnReserva = async (entrada) => {
             },
             capas: {
                 impuestos: {
-                    origen: "instantaneaImpuestos",
+                    origen: "instantaneaImpuestosEnReserva",
                     reservaUID: reservaUID
                 }
             }

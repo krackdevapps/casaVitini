@@ -1,8 +1,6 @@
 import { conexion } from "../../../componentes/db.mjs";
-
 export const obtenerDesgloseFinancieroPorSimulacionUID = async (simulacionUID) => {
     try {
-
         const consulta = `
         SELECT
             *

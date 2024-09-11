@@ -15,7 +15,7 @@ export const actualizadorIntegradoDesdeInstantaneas = async (reservaUID) => {
         },
         capas: {
             impuestos: {
-                origen: "instantaneaImpuestos",
+                origen: "instantaneaImpuestosEnReserva",
                 reservaUID: reservaUID
             }
         }

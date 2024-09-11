@@ -24,7 +24,7 @@ export const obtenerSimulacionPorSimulacionUID = async (simulacionUID) => {
         const resuelve = await conexion.query(consulta, [simulacionUID]);
         if (resuelve.rowCount === 0) {
             const error = "No existe ninguna simulacion con ese simulacionUID";
-            throw new Error(error);
+            throw  new Error(error);
         }
         return resuelve.rows[0]
     } catch (errorCapturado) {

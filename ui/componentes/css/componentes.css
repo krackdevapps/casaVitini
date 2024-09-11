@@ -10603,6 +10603,12 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     padding: 6px;
 }
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .contenedorServicios {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    padding: 6px;
+}
 
 [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorListaEnlacesDePago {
     display: flex;
@@ -10610,7 +10616,12 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     align-items: stretch;
 }
-
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .listaServicios {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    align-items: stretch;
+}
 [zonaCSS="administracion/configuracion"] .administracion_configuracion_contenedorConfiguracion {
     border-radius: 16px;
     display: flex;
@@ -14818,6 +14829,10 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .flexDerecha {
     justify-content: flex-end;
+}
+
+.flexApiladoI {
+    justify-content: flex-start;
 }
 
 

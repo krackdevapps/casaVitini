@@ -97,6 +97,7 @@ export const calendario = async (entrada) => {
             };
             return respuesta
         } else if (tipo === "personalizado") {
+            console.log(entrada.body)
             validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
                 objeto: entrada.body,
                 numeroDeLLavesMaximo: 3

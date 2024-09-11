@@ -1,7 +1,6 @@
 import { actualizarRangoFechasPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/actualizarRangoFechasPorSimulacionUID.mjs"
-import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { eliminarBloqueoCaducado } from "../../../bloqueos/eliminarBloqueoCaducado.mjs"
-import { procesador } from "../../procesador.mjs"
+import { generarDesgloseSimpleGuardarlo } from "../../../simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
 import { validarDataGlobalSimulacion } from "./validarDataGlobalSimulacion.mjs"
 
 export const actualizarSimulacionDesdeDataGlobal = async (data) => {
@@ -16,7 +15,6 @@ export const actualizarSimulacionDesdeDataGlobal = async (data) => {
         const simulacionUID = dataValidada.simulacionUID
         const zonaIDV = dataValidada.zonaIDV
 
-
         await eliminarBloqueoCaducado()
         await actualizarRangoFechasPorSimulacionUID({
             fechaCreacion,
@@ -26,39 +24,7 @@ export const actualizarSimulacionDesdeDataGlobal = async (data) => {
             simulacionUID,
             zonaIDV
         })
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                simulacion: {
-                    origen: "hubSimulaciones",
-                    simulacionUID: simulacionUID
-                },
-                servicios: {
-                    origen: "instantaneaServiciosEnSimulacion",
-                    simulacionUID: simulacionUID
-                },
-            },
-            capas: {
-                ofertas: {
-                    zonasArray: [zonaIDV],
-                    configuracion: {
-                        descuentosPersonalizados: "no",
-                        descuentosArray: []
-                    },
-                    // operacion: {
-                    //     tipo: "insertarDescuentosPorCondiconPorCoodigo",
-                    //     codigoDescuentosArrayBASE64: codigosDescuentosSiReconocidos
-                    // }
-                },
-                impuestos: {
-                    origen: "hubImuestos"
-                }
-            }
-        })
-
-        await actualizarDesgloseFinacieroPorSimulacionUID({
-            desgloseFinanciero,
-            simulacionUID
-        })
+        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         return desgloseFinanciero
     } catch (errorCapturado) {
         throw errorCapturado

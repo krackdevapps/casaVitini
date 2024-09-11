@@ -71,7 +71,7 @@ export const insertarImpuestoEnReserva = async (entrada) => {
             },
             capas: {
                 impuestos: {
-                    origen: "instantaneaImpuestos",
+                    origen: "instantaneaImpuestosEnReserva",
                     reservaUID: reservaUID
 
                 }

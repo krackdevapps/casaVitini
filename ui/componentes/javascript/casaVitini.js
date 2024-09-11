@@ -9241,7 +9241,7 @@ const casaVitini = {
 
                                                 const resolucionCalendario = {
                                                     tipo: "personalizado",
-                                                    comando: "construyeObjeto",
+                                                    //comando: "construyeObjeto",
                                                     ano: Number(anoEntrada),
                                                     mes: Number(mesEntrada)
                                                 }
@@ -9528,7 +9528,7 @@ const casaVitini = {
                                                 const anoSalida = fechaSalidaArray[0]
                                                 const resolucionCalendario = {
                                                     tipo: "personalizado",
-                                                    comando: "construyeObjeto",
+                                                    // comando: "construyeObjeto",
                                                     mes: Number(mesSalida),
                                                     ano: Number(anoSalida),
                                                 }
@@ -20794,7 +20794,7 @@ const casaVitini = {
                     }
                     const calendarioconstruir = {
                         tipo: "personalizado",
-                        comando: "construyeObjeto",
+                        //comando: "construyeObjeto",
                         ano: anoActual,
                         mes: mesActual
                     }
@@ -22147,15 +22147,31 @@ const casaVitini = {
                                 }
                                 const porServicio_renderizado = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[entidad=servicio]").querySelector("[contenedor=porServicio]")
 
+                                const serviciosUID_Renderizados = []
+                                const serviciosUI_Renderizados = porServicio_renderizado.querySelectorAll("[servicioUID]")
+
+                                serviciosUI_Renderizados.forEach(servicio => {
+                                    serviciosUID_Renderizados.push(servicio.servicioUID)
+                                });
+
+                                serviciosUI_Renderizados.forEach((servicioUI) => {
+                                    const servicioUID = servicioUI.getAttribute("servicioUID")
+                                    if (!serviciosUID_Renderizados.includes(servicioUID)) {
+                                        servicioUI?.remove()
+                                    }
+                                })
+
+
+                                let posicion = 0
                                 for (const servicio of desglosePorServicios) {
                                     const servicioUID_enReserva = servicio.servicioUID
+                                    const serviciosRenderizados = porServicio_renderizado.querySelectorAll("[servicioUID]")
 
                                     const contenedorServicio_selector = porServicio_renderizado.querySelector(`[servicioUID="${servicioUID_enReserva}"]`)
                                     if (!contenedorServicio_selector) {
                                         const contenedorServicio = document.createElement("div")
                                         contenedorServicio.classList.add("contenedorApartamento")
                                         contenedorServicio.setAttribute("servicioUID", servicioUID_enReserva)
-                                        porServicio_renderizado.appendChild(contenedorServicio)
 
                                         const nombreInterno = servicio.nombre
                                         const contenedor = servicio.contenedor
@@ -22174,6 +22190,13 @@ const casaVitini = {
                                                 variable: "Disponibilidad variable"
                                             }
                                         }
+                                        if (posicion < serviciosRenderizados.length) {
+                                            const elementosArray = Array.from(serviciosRenderizados);
+                                            porServicio_renderizado.insertBefore(contenedorServicio, elementosArray[posicion]);
+                                        } else {
+                                            porServicio_renderizado.appendChild(contenedorServicio);
+                                        }
+
 
                                         const servicioUI = document.createElement("div")
                                         servicioUI.setAttribute("servicioUID_enReserva", servicioUID_enReserva)
@@ -22272,6 +22295,7 @@ const casaVitini = {
 
                                         contenedorServicio.appendChild(servicioUI)
                                     }
+                                    posicion++
 
 
                                     // const contenedorApartamento_renderizado = porApartamento_renderizado.querySelector(`[apartamentoIDV=${apartamentoIDV}]`)

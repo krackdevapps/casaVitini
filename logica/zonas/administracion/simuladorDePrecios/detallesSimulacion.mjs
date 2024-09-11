@@ -3,6 +3,7 @@ import { validadoresCompartidos } from "../../../sistema/validadores/validadores
 import { obtenerSimulacionPorSimulacionUID } from "../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerServiciosPorSimulacionUID } from "../../../repositorio/simulacionDePrecios/servicios/obtenerServiciosPorSimulacionUID.mjs";
+import { obtenerCodigosDescuentoPorSimulacionUID } from "../../../repositorio/simulacionDePrecios/codigosDescuento/obtenerCodigosDescuentoPorSimulacionUID.mjs";
 export const detallesSimulacion = async (entrada) => {
     try {
         const session = entrada.session
@@ -40,7 +41,7 @@ export const detallesSimulacion = async (entrada) => {
             const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
                 errorSi: "desactivado"
-            }) 
+            })
 
             const estructura = {
                 apartamentoIDV,
@@ -50,8 +51,7 @@ export const detallesSimulacion = async (entrada) => {
         }
 
         const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
-
-
+        const codigosDescuentoDeLaSimulacion = await obtenerCodigosDescuentoPorSimulacionUID(simulacionUID)
 
         const ok = {
             ok: "Aquí tienes los detalles de la simulación",
@@ -62,6 +62,7 @@ export const detallesSimulacion = async (entrada) => {
             fechaEntrada,
             fechaSalida,
             apartamentos,
+            codigosDescuento: codigosDescuentoDeLaSimulacion,
             servicios: serviciosDeLaSimulacion,
             contenedorFinanciero: simulacion
         }

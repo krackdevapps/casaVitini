@@ -76,7 +76,7 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             },
             capas: {
                 impuestos: {
-                    origen: "instantaneaImpuestos",
+                    origen: "instantaneaImpuestosEnReserva",
                     reservaUID: reservaUID
                 }
             }

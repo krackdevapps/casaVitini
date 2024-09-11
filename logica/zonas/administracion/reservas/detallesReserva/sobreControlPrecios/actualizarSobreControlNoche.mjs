@@ -112,7 +112,7 @@ export const actualizarSobreControlNoche = async (entrada) => {
             },
             capas: {
                 impuestos: {
-                    origen: "instantaneaImpuestos",
+                    origen: "instantaneaImpuestosEnReserva",
                     reservaUID: reservaUID
 
                 }

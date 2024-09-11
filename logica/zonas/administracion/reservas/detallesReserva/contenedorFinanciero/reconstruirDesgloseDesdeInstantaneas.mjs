@@ -49,7 +49,7 @@ export const reconstruirDesgloseDesdeInstantaneas = async (entrada) => {
             },
             capas: {
                 impuestos: {
-                    origen: "instantaneaImpuestos",
+                    origen: "instantaneaImpuestosEnReserva",
                     reservaUID: reservaUID
                 }
             }

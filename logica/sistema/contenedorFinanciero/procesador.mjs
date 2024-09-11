@@ -69,6 +69,7 @@ export const procesador = async (data) => {
             estructura,
             origen: capas.impuestos.origen,
             reservaUID: capas.impuestos.reservaUID,
+            simulacionUID: capas.impuestos.simulacionUID,
 
         })
         sumarTotales({
