@@ -5,6 +5,8 @@ import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
 import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
+import { validarDataGlobalDeSimulacion } from "../../../../sistema/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { generarDesgloseSimpleGuardarlo } from "../../../../sistema/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
 
 export const reconstruirDesgloseDesdeInstantaneas = async (entrada) => {
     const mutex = new Mutex()
@@ -30,18 +32,9 @@ export const reconstruirDesgloseDesdeInstantaneas = async (entrada) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                simulacion: {
-                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                    simulacionUID
-                }
-            },
-        })
-        await actualizarDesgloseFinacieroPorSimulacionUID({
-            desgloseFinanciero,
-            simulacionUID
-        })
+        await validarDataGlobalDeSimulacion(simulacionUID)
+        await generarDesgloseSimpleGuardarlo(simulacionUID)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha reconstruido el desglose desde las instantáneas"

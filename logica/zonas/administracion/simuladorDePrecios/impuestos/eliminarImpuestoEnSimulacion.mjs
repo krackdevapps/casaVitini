@@ -1,12 +1,12 @@
 import { Mutex } from "async-mutex"
 import { campoDeTransaccion } from "../../../../repositorio/globales/campoDeTransaccion.mjs"
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
-import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
 import { obtenerImpuestoPorImpuestoUIDPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/obtenerImpuestoPorImpuestoUIDPorSimulacionUID.mjs"
-import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { eliminarImpuestoPorImpuestoUIDPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/eliminarImpuestoPorImpuestoUIDPorSimulacionUID.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
+import { validarDataGlobalDeSimulacion } from "../../../../sistema/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { generarDesgloseSimpleGuardarlo } from "../../../../sistema/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
 
 export const eliminarImpuestoEnSimulacion = async (entrada) => {
     const mutex = new Mutex()
@@ -41,7 +41,8 @@ export const eliminarImpuestoEnSimulacion = async (entrada) => {
         })
 
         mutex.acquire()
-        const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
+        await obtenerSimulacionPorSimulacionUID(simulacionUID)
+        await validarDataGlobalDeSimulacion(simulacionUID)
 
         await obtenerImpuestoPorImpuestoUIDPorSimulacionUID({
             simulacionUID,
@@ -55,19 +56,7 @@ export const eliminarImpuestoEnSimulacion = async (entrada) => {
             simulacionUID,
             impuestoUID
         })
-
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                simulacion: {
-                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                    simulacionUID
-                }
-            },
-        })
-        await actualizarDesgloseFinacieroPorSimulacionUID({
-            desgloseFinanciero,
-            simulacionUID
-        })
+        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",

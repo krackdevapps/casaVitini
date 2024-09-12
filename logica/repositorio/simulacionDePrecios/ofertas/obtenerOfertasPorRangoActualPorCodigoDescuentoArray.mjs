@@ -8,13 +8,20 @@ export const obtenerOfertasPorRangoActualPorCodigoDescuentoArray = async (data) 
         const codigosDescuentoArray = data.codigosDescuentoArray
         const consulta = `
              SELECT 
-                *
+                "ofertaUID",
+                "nombreOferta",
+                "entidadIDV",
+                "estadoIDV",
+                to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
+                to_char("fechaFinal", 'YYYY-MM-DD') as "fechaFinal", 
+                "condicionesArray",
+                "descuentosJSON"
             FROM
                 ofertas
             WHERE
                 "entidadIDV" = $1::text
                 AND
-                "zonaIDV" = ANY($1)
+                "zonaIDV" = ANY($2)
                 AND
                    NOT EXISTS (
                        SELECT 1
@@ -30,7 +37,7 @@ export const obtenerOfertasPorRangoActualPorCodigoDescuentoArray = async (data) 
             codigosDescuentoArray
         ]
         const resuelve = await conexion.query(consulta, parametros)
-        return resuelve.rows[0]
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

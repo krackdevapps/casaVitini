@@ -33,10 +33,10 @@ export const aplicarImpuestos = async (data) => {
                 // instantaneaImpuestos.push(...impuestosDeLaReserva)
             } else if (origen === "instantaneaSimulacion") {
                 const simulacionUID = data.simulacionUID
-                console.log("simulacionUID impuestos", simulacionUID)
+
 
                 const contenedorFinanciero = await obtenerDesgloseFinancieroPorSimulacionUID(simulacionUID)
-                console.log("contenedorFInanciero impuestos", contenedorFinanciero)
+
                 const impuestosDeLaSimulacion = contenedorFinanciero.instantaneaImpuestos || []
                 impuestos.push(...impuestosDeLaSimulacion)
                 // instantaneaImpuestos.push(...impuestosDeLaReserva)
@@ -100,10 +100,10 @@ export const aplicarImpuestos = async (data) => {
                 // instantaneaImpuestos.push(...impuestosDeLaReserva)
             } else if (origen === "instantaneaSimulacion") {
                 const simulacionUID = data.simulacionUID
-                console.log("simulacionUID impuestos", simulacionUID)
+
 
                 const contenedorFinanciero = await obtenerDesgloseFinancieroPorSimulacionUID(simulacionUID)
-                console.log("contenedorFInanciero impuestos", contenedorFinanciero)
+
                 const impuestosDeLaSimulacion = contenedorFinanciero.instantaneaImpuestos || []
                 impuestos.push(...impuestosDeLaSimulacion)
                 // instantaneaImpuestos.push(...impuestosDeLaReserva)
@@ -169,10 +169,10 @@ export const aplicarImpuestos = async (data) => {
             // instantaneaImpuestos.push(...impuestosDeLaReserva)
         } else if (origen === "instantaneaSimulacion") {
             const simulacionUID = data.simulacionUID
-            console.log("simulacionUID impuestos", simulacionUID)
+
 
             const contenedorFinanciero = await obtenerDesgloseFinancieroPorSimulacionUID(simulacionUID)
-            console.log("contenedorFInanciero impuestos", contenedorFinanciero)
+
             const impuestosDeLaSimulacion = contenedorFinanciero.instantaneaImpuestos || []
             impuestos.push(...impuestosDeLaSimulacion)
             // instantaneaImpuestos.push(...impuestosDeLaReserva)

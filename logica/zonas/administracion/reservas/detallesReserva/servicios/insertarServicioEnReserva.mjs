@@ -47,6 +47,7 @@ export const insertarServicioEnReserva = async (entrada) => {
         const servicio = await obtenerServicioPorServicioUID(servicioUID)
         const nombreServicico = servicio.nombre
         const contenedorServicio = servicio.contenedor
+        contenedorServicio.servicioUID = servicio.servicioUID
         await campoDeTransaccion("iniciar")
         const servicioEnReserva = await insertarServicioPorReservaUID({
             reservaUID,

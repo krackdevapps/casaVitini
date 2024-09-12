@@ -7,6 +7,8 @@ import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
 //import _ from 'lodash';
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
+import { generarDesgloseSimpleGuardarlo } from "../../../../sistema/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
+import { validarDataGlobalDeSimulacion } from "../../../../sistema/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
 
 
 export const actualizarSobreControlNoche = async (entrada) => {
@@ -18,7 +20,7 @@ export const actualizarSobreControlNoche = async (entrada) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 3
+            numeroDeLLavesMaximo: 5
         })
 
         const simulacionUID = validadoresCompartidos.tipos.cadena({
@@ -78,6 +80,7 @@ export const actualizarSobreControlNoche = async (entrada) => {
         }
 
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
+        await validarDataGlobalDeSimulacion(simulacionUID)
 
         const instantaneaNetoApartamento = await obtenerDetalleNochePorFechaNochePorApartamentoIDV({
             simulacionUID,
@@ -95,23 +98,24 @@ export const actualizarSobreControlNoche = async (entrada) => {
             fechaNoche,
             nuevoSobreControl: estructuraSobreControl
         })
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                simulacion: {
-                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                    simulacionUID: simulacionUID,
-                    capaOfertas: "si",
-                    zonasArray: ["global", "publica"],
-                    capaDescuentosPersonalizados: "no",
-                    capaImpuestos: "si"
+        // const desgloseFinanciero = await procesador({
+        //     entidades: {
+        //         simulacion: {
+        //             tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
+        //             simulacionUID: simulacionUID,
+        //             capaOfertas: "si",
+        //             zonasArray: ["global", "publica"],
+        //             capaDescuentosPersonalizados: "no",
+        //             capaImpuestos: "si"
 
-                }
-            }
-        })
-        await actualizarDesgloseFinacieroPorSimulacionUID({
-            desgloseFinanciero,
-            simulacionUID
-        })
+        //         }
+        //     }
+        // })
+        // await actualizarDesgloseFinacieroPorSimulacionUID({
+        //     desgloseFinanciero,
+        //     simulacionUID
+        // })
+        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         const ok = {
             ok: {
                 ...desgloseFinanciero,

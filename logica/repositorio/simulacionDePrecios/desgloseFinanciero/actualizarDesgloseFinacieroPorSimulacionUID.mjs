@@ -12,7 +12,7 @@ export const actualizarDesgloseFinacieroPorSimulacionUID = async (data) => {
         const instantaneaOfertasPorAdministrador = JSON.stringify(desgloseFinanciero.contenedorOfertas.ofertas.porAdministrador)
         const instantaneaSobreControlPrecios = desgloseFinanciero.entidades.reserva.contenedorSobreControles
 
-        const instantaneaImpuestos = JSON.stringify(_.cloneDeep(desgloseFinanciero.entidades.reserva.instantaneaImpuestos));
+        const instantaneaImpuestos = JSON.stringify(_.cloneDeep(desgloseFinanciero.instantaneaImpuestos));
         delete desgloseFinanciero.entidades.reserva.instantaneaImpuestos
 
         const simulacionUID = data.simulacionUID

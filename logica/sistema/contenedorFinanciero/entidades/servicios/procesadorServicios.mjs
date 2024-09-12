@@ -22,21 +22,21 @@ export const procesadorServicios = async (data) => {
             }
             const serviciosDeLaReserva = await obtenerServiciosPorReservaUID(reservaUID)
             servicios.push(...serviciosDeLaReserva)
-        }   else if (origen === "instantaneaServiciosEnSimulacion") {
+        } else if (origen === "instantaneaServiciosEnSimulacion") {
             const simulacionUID = data.simulacionUID
             if (!simulacionUID) {
                 const m = "No llega el simulacionUID a instantaneaServiciosEnSimulacion"
                 throw new Error(m)
             }
             const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
-            console.log("serviciosDeLaSimulacion", serviciosDeLaSimulacion)
+
 
             servicios.push(...serviciosDeLaSimulacion)
-        }else {
+        } else {
             const m = "La confguracion de servicios en el procesador esta mal configurada, necesita origen en huServicios o instantaneaServiciosEnReserva"
             throw new Error(m)
         }
-        console.log("serviciosDeLASimulacioin", servicios)
+
         await constructorInstantaneaServicios({
             estructura,
             servicios

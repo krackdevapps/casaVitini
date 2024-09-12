@@ -4,7 +4,7 @@ import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
 import { selecionarOfertasPorCondicion } from "../../../../sistema/ofertas/entidades/reserva/selecionarOfertasPorCondicion.mjs"
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
 
-export const obtenerDescuentosCompatiblesConLaReserva = async (entrada) => {
+export const obtenerDescuentosCompatiblesConLaSimulacion = async (entrada) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session)
@@ -37,7 +37,9 @@ export const obtenerDescuentosCompatiblesConLaReserva = async (entrada) => {
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
             apartamentosArray,
-            zonasArray
+            zonasArray,
+            ignorarCodigosDescuentos: "si"
+            
         })
 
         const ok = {

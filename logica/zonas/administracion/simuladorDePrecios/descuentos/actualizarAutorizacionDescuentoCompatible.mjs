@@ -8,6 +8,8 @@ import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simul
 import { obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
 import { actualizarAutorizacionOfertaPorReservaUIDPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarAutorizacionOfertaPorReservaUIDPorSimulacionUID.mjs"
 import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
+import { validarDataGlobalDeSimulacion } from "../../../../sistema/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { generarDesgloseSimpleGuardarlo } from "../../../../sistema/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
 
 export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
     const mutex = new Mutex()
@@ -47,6 +49,7 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
         }
         mutex.acquire()
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
+        await validarDataGlobalDeSimulacion(simulacionUID)
         await campoDeTransaccion("iniciar")
         await obtenerOferatPorOfertaUID(ofertaUID)
         await obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion({
@@ -59,19 +62,8 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             ofertaUID,
             nuevaAutorizacion
         })
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                simulacion: {
-                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                    simulacionUID,
-                    capaImpuestos: "si"
-                }
-            },
-        })
-        await actualizarDesgloseFinacieroPorSimulacionUID({
-            desgloseFinanciero,
-            simulacionUID
-        })
+        await generarDesgloseSimpleGuardarlo(simulacionUID)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el estado de autorización de la oferta en la reserva",

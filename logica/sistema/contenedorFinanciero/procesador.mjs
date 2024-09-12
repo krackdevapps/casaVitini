@@ -62,6 +62,8 @@ export const procesador = async (data) => {
             configuracion: capas?.ofertas?.configuracion,
             operacion: capas?.ofertas?.operacion,
             ofertaUID: capas?.ofertas?.ofertaUID,
+            ignorarCodigosDescuentos: capas?.ofertas?.ignorarCodigosDescuentos,
+            codigoDescuentosArrayBASE64: capas?.ofertas?.codigoDescuentosArrayBASE64,
             pipe
             //descuentosArray: capas.ofertas.descuentosArray
         })

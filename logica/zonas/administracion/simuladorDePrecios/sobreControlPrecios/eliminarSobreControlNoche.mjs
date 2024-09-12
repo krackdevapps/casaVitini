@@ -6,6 +6,8 @@ import { validadoresCompartidos } from "../../../../sistema/validadores/validado
 import _ from 'lodash';
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
+import { validarDataGlobalDeSimulacion } from "../../../../sistema/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { generarDesgloseSimpleGuardarlo } from "../../../../sistema/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
 
 export const eliminarSobreControlNoche = async (entrada) => {
     try {
@@ -42,6 +44,8 @@ export const eliminarSobreControlNoche = async (entrada) => {
         })
 
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
+        await validarDataGlobalDeSimulacion(simulacionUID)
+
         const instantaneaNetoApartamento = await obtenerDetalleNochePorFechaNochePorApartamentoIDV({
             simulacionUID,
             apartamentoIDV,
@@ -53,21 +57,23 @@ export const eliminarSobreControlNoche = async (entrada) => {
             apartamentoIDV,
             fechaNoche
         })
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                simulacion: {
-                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                    simulacionUID,
-                    capaOfertas: "si",
-                    capaDescuentosPersonalizados: "no",
-                    capaImpuestos: "si"
-                }
-            }
-        })
-        await actualizarDesgloseFinacieroPorSimulacionUID({
-            desgloseFinanciero,
-            simulacionUID
-        })
+        // const desgloseFinanciero = await procesador({
+        //     entidades: {
+        //         simulacion: {
+        //             tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
+        //             simulacionUID,
+        //             capaOfertas: "si",
+        //             capaDescuentosPersonalizados: "no",
+        //             capaImpuestos: "si"
+        //         }
+        //     }
+        // })
+        // await actualizarDesgloseFinacieroPorSimulacionUID({
+        //     desgloseFinanciero,
+        //     simulacionUID
+        // })
+        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
+
         const ok = {
             ok: {
                 ...desgloseFinanciero,

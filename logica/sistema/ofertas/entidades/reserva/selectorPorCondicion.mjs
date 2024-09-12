@@ -11,6 +11,13 @@ export const selectorPorCondicion = async (data) => {
         const fechaEntrada_reserva = data.fechaEntrada_reserva
         const fechaSalida_reserva = data.fechaSalida_reserva
         const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64
+        const ignorarCodigosDescuentos = data.ignorarCodigosDescuentos
+
+        if (ignorarCodigosDescuentos !== "si" && ignorarCodigosDescuentos !== "no") {
+            const m = "En selectorPorCondicion ignorarCodigosDescuentos debe de estar en si o en no"
+            throw new Error(m)
+        }
+
         const resultadoSelector = {
             oferta,
             condicionesQueSeCumplen: [],
@@ -36,10 +43,13 @@ export const selectorPorCondicion = async (data) => {
             } else if (tipoCondicion === "conFechaCreacionEntreRango") {
                 const fechaInicioOferta = oferta.fechaInicio
                 const fechaFinalOferata = oferta.fechaFinal
-
                 const fechaInicioOferta_objeto = DateTime.fromISO(fechaInicioOferta)
                 const fechaFinalOferta_objeto = DateTime.fromISO(fechaFinalOferata)
                 const fechaActual_objeto = DateTime.fromISO(fechaActual_reserva)
+
+
+
+
 
                 const fechaDentroDelRango = fechaActual_objeto >= fechaInicioOferta_objeto && fechaActual_objeto <= fechaFinalOferta_objeto;
                 if (!fechaDentroDelRango) {
@@ -219,12 +229,15 @@ export const selectorPorCondicion = async (data) => {
 
 
             } else if (tipoCondicion === "porCodigoDescuento") {
-                const codigoDescuentoBase64 = condicion.codigoDescuento
-                if (codigoDescuentosArrayBASE64.includes(codigoDescuentoBase64)) {
-                    resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
-                } else {
-                    resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
+                if (ignorarCodigosDescuentos === "no") {
+                    const codigoDescuentoBase64 = condicion.codigoDescuento
+                    if (codigoDescuentosArrayBASE64.includes(codigoDescuentoBase64)) {
+                        resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
+                    } else {
+                        resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
+                    }
                 }
+
             } else {
                 const error = `En la oferta ${nombreOferta} no se reconoce el identificador de condición ${tipoCondicion}`
                 throw new Error(error)

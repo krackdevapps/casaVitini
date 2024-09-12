@@ -4,6 +4,7 @@ import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../reposit
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
 import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.mjs"
+import { validarDataGlobalDeSimulacion } from "../../../../sistema/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
 
 export const insertarDescuentoPorAdministrador = async (entrada) => {
@@ -18,7 +19,7 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
         })
-        
+
         const simulacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.simulacionUID,
             nombreCampo: "El identificador universal de la reserva (simulacionUID)",
@@ -36,19 +37,49 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-        await obtenerSimulacionPorSimulacionUID(simulacionUID)
+        const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
+        await validarDataGlobalDeSimulacion(simulacionUID)
+        const zonaIDV = simulacion.zonaIDV
+
         await obtenerOferatPorOfertaUID(ofertaUID)
+        await campoDeTransaccion("iniciar")
+
+        // const desgloseFinanciero = await procesador({
+        //     entidades: {
+        //         simulacion: {
+        //             tipoOperacion: "insertarDescuentoPorAdministrador",
+        //             simulacionUID: simulacionUID,
+        //             ofertaUID: ofertaUID,
+        //             capaImpuestos: "si"
+        //         }
+        //     }
+        // })
+
         const desgloseFinanciero = await procesador({
             entidades: {
                 simulacion: {
-                    tipoOperacion: "insertarDescuentoPorAdministrador",
-                    simulacionUID: simulacionUID,
-                    ofertaUID: ofertaUID,
-                    capaImpuestos: "si"
+                    origen: "hubSimulaciones",
+                    simulacionUID: simulacionUID
+                },
+                servicios: {
+                    origen: "instantaneaServiciosEnSimulacion",
+                    simulacionUID: simulacionUID
+                },
+            },
+            capas: {
+                ofertas: {
+                    zonasArray: [zonaIDV],
+                    operacion: {
+                        tipo: "insertarDescuentoPorAdministrador",
+                    },
+                    ofertaUID: ofertaUID
+                },
+                impuestos: {
+                    origen: "instantaneaSimulacion",
+                    simulacionUID: simulacionUID
                 }
             }
         })
-        await campoDeTransaccion("iniciar")
         await actualizarDesgloseFinacieroPorSimulacionUID({
             desgloseFinanciero,
             simulacionUID

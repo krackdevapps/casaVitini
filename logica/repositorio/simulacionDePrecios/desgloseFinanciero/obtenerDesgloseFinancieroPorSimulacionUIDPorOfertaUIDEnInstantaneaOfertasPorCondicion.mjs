@@ -33,6 +33,8 @@ export const obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaO
                 const error = "Ya existe esta oferta en la sección de ofertas por condición dentro de esta simulacionesDePrecio. Si quieres volver a aplicar esta oferta, por favor usa el botón Insertar descuentos, para insertarla libremente."
                 throw new Error(error)
             }
+        } else if (errorSi === "desactivado") {
+            return resuelve.rows[0]
         } else {
             const error = "Se necesita definir errorSi en obtenerDesgloseFinancieroPorsimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion"
             throw new Error(error)

@@ -5,6 +5,8 @@ import { obtenerImpuestoPorImpuestoUIDPorSimulacionUID_simple } from "../../../.
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
 import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.mjs"
+import { generarDesgloseSimpleGuardarlo } from "../../../../sistema/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
+import { validarDataGlobalDeSimulacion } from "../../../../sistema/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
 
 export const insertarImpuestoDedicadoEnSimulacion = async (entrada) => {
@@ -62,6 +64,7 @@ export const insertarImpuestoDedicadoEnSimulacion = async (entrada) => {
             return cadenaAleatoria;
         };
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
+        await validarDataGlobalDeSimulacion(simulacionUID)
 
 
 
@@ -97,18 +100,8 @@ export const insertarImpuestoDedicadoEnSimulacion = async (entrada) => {
             simulacionUID,
             impuesto: estructura
         })
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                simulacion: {
-                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                    simulacionUID
-                }
-            },
-        })
-        await actualizarDesgloseFinacieroPorSimulacionUID({
-            desgloseFinanciero,
-            simulacionUID
-        })
+        await generarDesgloseSimpleGuardarlo(simulacionUID)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha insertado el impuesto correctamente, el impuesto dedicado en la reserva.",

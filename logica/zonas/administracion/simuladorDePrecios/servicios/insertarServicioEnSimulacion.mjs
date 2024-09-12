@@ -41,6 +41,7 @@ export const insertarServicioEnSimulacion = async (entrada) => {
         const servicio = await obtenerServicioPorServicioUID(servicioUID)
         const nombreServicico = servicio.nombre
         const contenedorServicio = servicio.contenedor
+        contenedorServicio.servicioUID = servicio.servicioUID
         const servicioInsertado = await insertarServicioPorSimulacionUID({
             simulacionUID,
             nombre: nombreServicico,

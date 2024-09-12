@@ -9,7 +9,7 @@ import { insertarDescuentoPorAdministrador } from '../../../../logica/zonas/admi
 import { DateTime } from 'luxon';
 import { insertarDescuentoPorCompatible } from '../../../../logica/zonas/administracion/simuladorDePrecios/descuentos/insertarDescuentoPorCompatible.mjs';
 import { actualizarAutorizacionDescuentoCompatible } from '../../../../logica/zonas/administracion/simuladorDePrecios/descuentos/actualizarAutorizacionDescuentoCompatible.mjs';
-import { obtenerDescuentosCompatiblesConLaReserva } from '../../../../logica/zonas/administracion/simuladorDePrecios/descuentos/obtenerDescuentosCompatiblesConLaReserva.mjs';
+import { obtenerDescuentosCompatiblesConLaSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/descuentos/obtenerDescuentosCompatiblesConLaSimulacion.mjs';
 import { eliminarDescuentoEnReserva } from '../../../../logica/zonas/administracion/simuladorDePrecios/descuentos/eliminarDescuentoEnReserva.mjs';
 
 describe('discounts of simulation', () => {
@@ -153,7 +153,7 @@ describe('discounts of simulation', () => {
             },
             session: fakeAdminSession
         }
-        const response = await obtenerDescuentosCompatiblesConLaReserva(m)
+        const response = await obtenerDescuentosCompatiblesConLaSimulacion(m)
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');

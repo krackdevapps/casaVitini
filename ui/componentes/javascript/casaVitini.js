@@ -17255,7 +17255,7 @@ const casaVitini = {
                 boton.setAttribute("class", "errorBoton")
                 boton.innerText = "Aceptar"
                 boton.addEventListener("click", (e) => {
-                    e.target.parentNode.parentNode.remove()
+                    e.target.closest("[componente=advertenciaInmersiva]")?.remove()
                 })
                 marcoElastico.appendChild(boton)
                 advertenciaInmersivaUI.appendChild(marcoElastico)
@@ -23090,7 +23090,7 @@ const casaVitini = {
                                         )
                                         botonEliminar.innerText = "Eliminar oferta de la reserva " + posicion
                                         botonEliminar.addEventListener("click", () => {
-                                            casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.eliminarOfertaEnReserva.ui({
+                                            casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.eliminarOfertaEnSimulacion.ui({
                                                 origen: destinoOrigenOferta,
                                                 ofertaUID,
                                                 posicion,

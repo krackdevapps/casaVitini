@@ -7,7 +7,7 @@ export const generarDesgloseSimpleGuardarlo = async (simulacionUID) => {
     try {
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
         const zonaIDV = simulacion.zonaIDV
-        console.log("simulacionUID >>> ", simulacionUID)
+
         const desgloseFinanciero = await procesador({
             entidades: {
                 simulacion: {

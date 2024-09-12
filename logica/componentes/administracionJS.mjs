@@ -12632,8 +12632,8 @@ const casaVitini = {
                                                 "limpiezaBotonA"
                                             )
                                             botonVerOferta.innerText = "Ir a la oferta"
-                                            botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta: " + ofertaUID)
-                                            botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta: " + ofertaUID)
+                                            botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                            botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
                                             botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                             contendorBotones.appendChild(botonVerOferta)
 
@@ -12840,8 +12840,8 @@ const casaVitini = {
                                                 "limpiezaBotonA"
                                             )
                                             botonVerOferta.innerText = "Ir a la oferta"
-                                            botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta: " + ofertaUID)
-                                            botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta: " + ofertaUID)
+                                            botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                            botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
                                             botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                             contendorBotones.appendChild(botonVerOferta)
 
@@ -21998,8 +21998,8 @@ const casaVitini = {
                                         "limpiezaBotonA"
                                     )
                                     botonVerOferta.innerText = "Ir a la oferta"
-                                    botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta: " + ofertaUID)
-                                    botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta: " + ofertaUID)
+                                    botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                    botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
                                     botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                     contendorBotones.appendChild(botonVerOferta)
 
@@ -22077,7 +22077,7 @@ const casaVitini = {
                             constructor.appendChild(spinner)
 
                             const transaccion = {
-                                zona: "administracion/simuladorDePrecios/descuentos/obtenerDescuentosCompatiblesConLaReserva",
+                                zona: "administracion/simuladorDePrecios/descuentos/obtenerDescuentosCompatiblesConLaSimulacion",
                                 simulacionUID
                             }
 
@@ -22195,8 +22195,8 @@ const casaVitini = {
                                         "limpiezaBotonA"
                                     )
                                     botonVerOferta.innerText = "Ir a la oferta"
-                                    botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta: " + ofertaUID)
-                                    botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta: " + ofertaUID)
+                                    botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                    botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
                                     botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                     contendorBotones.appendChild(botonVerOferta)
 
@@ -22539,7 +22539,7 @@ const casaVitini = {
                         }
 
                     },
-                    eliminarOfertaEnReserva: {
+                    eliminarOfertaEnSimulacion: {
                         ui: async function (data) {
 
                             const nombreOferta = data.nombreOferta
@@ -22591,7 +22591,7 @@ const casaVitini = {
                             }
                             casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const transaccion = {
-                                zona: "administracion/simuladorDePrecios/descuentos/eliminarDescuentoEnReserva",
+                                zona: "administracion/simuladorDePrecios/descuentos/eliminarDescuentoEnSimulacion",
                                 simulacionUID: String(simulacionUID),
                                 ofertaUID: String(ofertaUID),
                                 origen,
@@ -23989,7 +23989,7 @@ const casaVitini = {
                                     return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                                 }
                                 if (respuestaServidor?.ok) {
-                                    console.log("respuestaServidor", respuestaServidor)
+
                                     const servicioData = respuestaServidor.servicio
                                     const nombreInterno = servicioData.nombre
                                     const contenedor = servicioData.contenedor
@@ -24177,7 +24177,7 @@ const casaVitini = {
                                 const nombreInterno = data.nombreInterno
                                 const instanciaUID_contenedorServicios = data.instanciaUID_contenedorServicios
                                 const servicioUID_enSimulacion = data.servicioUID_enSimulacion
-                                console.log("servicioUID_enSimulacion", servicioUID_enSimulacion)
+
                                 const simulacionUID = document.querySelector("[simulacionUID]").getAttribute("simulacionUID")
 
 
@@ -24253,8 +24253,8 @@ const casaVitini = {
                                     }
                                     const desgloseFinanciero = respuestaServidor?.desgloseFinanciero
                                     if (desgloseFinanciero) {
-                                        console.log("test")
-                                        console.log("desglose a leliminar", desgloseFinanciero)
+
+
                                         casaVitini.ui.componentes.contenedorFinanciero.constructor({
                                             destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
                                             contenedorFinanciero: { desgloseFinanciero },
@@ -24318,6 +24318,7 @@ const casaVitini = {
                         )
 
                         const campoCodigo = document.createElement("input")
+                        campoCodigo.setAttribute("campo", "codigoDescuento")
                         campoCodigo.classList.add(
                             "padding10",
                             "borderRadius8",
@@ -24334,7 +24335,7 @@ const casaVitini = {
                         )
                         botonComprobar.innerText = "Eliminar"
                         botonComprobar.addEventListener("click", (e) => {
-                          
+
                             const contenedorDescuentos = e.target.closest("[contenedor=codigosDescuento]")
                             const numeroCampos = contenedorDescuentos.querySelectorAll("[componente=campoDescuento]")
                             if (numeroCampos.length === 1) {
@@ -24348,14 +24349,390 @@ const casaVitini = {
                         contenedor.appendChild(botonComprobar)
                         return contenedor
                     },
-                    botonComprobar: () => {
+                    botonComprobar: function () {
                         const boton = document.createElement("div")
                         boton.setAttribute("boton", "comprobar")
                         boton.classList.add(
                             "botonV1"
                         )
                         boton.innerText = "Comprobar codigo."
+                        boton.addEventListener("click", () => {
+                            this.cribadoOfertas.ui()
+                        })
                         return boton
+                    },
+                    cribadoOfertas: {
+                        ui: async function () {
+                            const main = document.querySelector("main")
+                            const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                            main.appendChild(ui)
+                            const instanciaUID_cribadoOfertas = ui.getAttribute("instanciaUID")
+                            const simulacionUID = main.querySelector("[simulacionUID]").getAttribute("simulacionUID")
+                            const contenedorDescuentosSimulacion = main.querySelector("[contenedor=codigosDescuento]")
+                            const selectorCamposCodigos = contenedorDescuentosSimulacion.querySelector("[contenedor=listaDescuentos]").querySelectorAll("[campo=codigoDescuento]")
+                            const codigosDescuentosPorVerificar = []
+                            selectorCamposCodigos.forEach((contenedor) => {
+                                const campo = contenedor.value
+                                if (campo.length > 0) {
+                                    codigosDescuentosPorVerificar.push(campo)
+                                }
+                            })
+
+                            if (codigosDescuentosPorVerificar.length === 0) {
+                                const m = "Escribe algún código en el campo de códigos, están todos vacíos."
+                                return casaVitini.ui.componentes.advertenciaInmersiva(m)
+                            }
+
+                            const constructor = ui.querySelector("[componente=contenedor]")
+                            const spinner = casaVitini.ui.componentes.spinner({
+                                mensaje: "Obteniendo ofertas compatibles con los codigos de descuento...",
+                                textoBoton: "Cancelar"
+                            })
+                            constructor.appendChild(spinner)
+
+                            const transaccion = {
+                                zona: "administracion/simuladorDePrecios/descuentos/comprobarCodigosEnSimulacion",
+                                simulacionUID,
+                                codigosDescuentos: codigosDescuentosPorVerificar
+                            }
+
+                            const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+
+
+                            const uiRenderizada = document.querySelectorAll(`[instanciaUID="${instanciaUID_cribadoOfertas}"]`)
+                            if (!uiRenderizada) { return }
+                            spinner.remove()
+                            if (respuestaServidor?.error) {
+                                casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                            }
+                            if (respuestaServidor?.ok) {
+                                constructor.appendChild(this.componentes.botonCancelar())
+                                const ofertasCompatibles = respuestaServidor.ofertas.compatible
+                                const ofertasIncompatibles = respuestaServidor.ofertas.incompatible
+
+
+                                // Nombre d ela oferta 
+                                // condiciones que se cumplen y no
+                                // boton para ira  al oferta
+                                // Si se puee insertar oferta por condicion
+
+                                const contenedorOfertas = document.createElement("div")
+                                contenedorOfertas.classList.add(
+                                    "maxWidth1280px",
+                                    "width100",
+                                    "flexVertical",
+                                    "gap6",
+                                )
+                                constructor.appendChild(contenedorOfertas)
+
+                                const contenedorCompatibles = document.createElement("div")
+                                contenedorCompatibles.classList.add(
+                                    "flexVertical",
+                                    "gap6"
+                                )
+                                if (ofertasCompatibles.length > 0) {
+                                    contenedorOfertas.appendChild(contenedorCompatibles)
+                                }
+                                const tituloCompatibles = document.createElement("p")
+                                tituloCompatibles.classList.add(
+                                    "padding6"
+                                )
+                                tituloCompatibles.innerText = "Ofertas compatibles por código y el resto de condiciones. Estas ofertas son compatibles totalmente con la simulación. Puede añadirlas desde aquí."
+                                contenedorCompatibles.appendChild(tituloCompatibles)
+
+                                ofertasCompatibles.forEach((oferta) => {
+
+                                    const ofertaUI = this.componentes.ofertaUI({
+                                        contenedorOferta: oferta,
+                                        simulacionUID,
+                                        instanciaUID_cribadoOfertas
+                                    })
+                                    const enSimulacion = oferta?.enSimulacion
+                                    if (enSimulacion === "si") {
+                                        ofertaUI.querySelector("[boton=insertarOferta]")?.remove()
+                                        const info = document.createElement("p")
+                                        info.classList.add(
+                                            "padding6"
+                                        )
+                                        info.innerText = "Esta oferta compatible ya está añadida a la simulación. Las ofertas basadas en condiciones solo se pueden añadir una vez. Si necesitas añadir esta oferta, puedes hacerlo administrativamente desde el contenedor financiero."
+                                        ofertaUI.appendChild(info)
+                                    }
+
+
+                                    contenedorCompatibles.appendChild(ofertaUI)
+                                })
+
+                                const contenedorIncompatibles = document.createElement("div")
+                                contenedorIncompatibles.classList.add(
+                                    "flexVertical",
+                                    "gap6"
+                                )
+                                if (ofertasIncompatibles.length > 0) {
+                                    contenedorOfertas.appendChild(contenedorIncompatibles)
+                                }
+
+                                const tituloIncompatibles = document.createElement("p")
+                                tituloIncompatibles.classList.add(
+                                    "padding6"
+                                )
+                                tituloIncompatibles.innerText = "Ofertas compatibles por código por no con el resto de condiciones. Las condiciones que no se cumplen están marcadas con un borde rojo."
+                                contenedorIncompatibles.appendChild(tituloIncompatibles)
+
+
+                                ofertasIncompatibles.forEach((oferta) => {
+                                    const condicionesQueNoSeCumple = oferta.condicionesQueNoSeCumple
+                                    const ofertaUI = this.componentes.ofertaUI({
+                                        contenedorOferta: oferta,
+                                        instanciaUID_cribadoOfertas
+                                    })
+                                    ofertaUI.querySelector("[boton=insertarOferta]")?.remove()
+                                    contenedorIncompatibles.appendChild(ofertaUI)
+
+                                    condicionesQueNoSeCumple.forEach((condicionIDV) => {
+
+                                        const selectorContenedorCondicion = ofertaUI.querySelector(`[tipoCondicion="${condicionIDV}"]`)
+                                        selectorContenedorCondicion.classList.add(
+                                            "borderRadius12",
+                                        )
+                                        selectorContenedorCondicion.style.border = "1px solid red"
+                                    })
+
+
+                                })
+
+                                constructor.appendChild(this.componentes.botonCancelar())
+
+
+                            }
+
+                        },
+                        componentes: {
+                            condicionesUI: (data) => {
+                                const condicionesArray = data.condicionesArray
+                                const contenedorCondiciones = document.createElement("div")
+                                contenedorCondiciones.setAttribute("contenedor", "condiciones")
+                                contenedorCondiciones.classList.add(
+                                    "flexVertical",
+                                    "gap6",
+                                    "backgroundGrey1",
+                                    "padding6",
+                                    "borderRadius14"
+                                )
+                                const tituloContendor = document.createElement("div")
+                                tituloContendor.classList.add(
+                                    "negrita",
+                                    "padding6",
+
+                                )
+                                tituloContendor.innerText = "Condiciones de la oferta"
+                                contenedorCondiciones.appendChild(tituloContendor)
+
+                                condicionesArray.forEach((condicion) => {
+                                    const tipoCondicion = condicion.tipoCondicion
+
+                                    const contenedorCondicion = document.createElement("div")
+                                    contenedorCondicion.classList.add("contenedorCondicion")
+                                    contenedorCondicion.setAttribute("tipoCondicion", tipoCondicion)
+                                    contenedorCondicion.classList.add(
+                                        "flexVertical",
+                                        "padding6",
+                                    )
+                                    const definicionCondicion = casaVitini
+                                        .ui
+                                        .componentes
+                                        .contenedorFinanciero
+                                        .componentesUI
+                                        .ofertas
+                                        .componentesUI
+                                        .definicionCondiciones({
+                                            tipoCondicion,
+                                            condicion
+                                        })
+                                    contenedorCondicion.appendChild(definicionCondicion)
+                                    contenedorCondiciones.appendChild(contenedorCondicion)
+                                })
+                                return contenedorCondiciones
+
+                            },
+                            ofertaUI: function (data) {
+
+                                const contenedorOferta = data.contenedorOferta
+                                const simulacionUID = data.simulacionUID
+                                const instanciaUID_cribadoOfertas = data.instanciaUID_cribadoOfertas
+
+                                const ofertaData = contenedorOferta.oferta
+                                const nombreOferta = ofertaData.nombreOferta
+                                const ofertaUID = ofertaData.ofertaUID
+                                const fechaInicio = ofertaData.fechaInicio
+                                const fechaFinal = ofertaData.fechaFinal
+                                const estadoIDV = ofertaData.estadoIDV
+                                const zonaIDV = ofertaData.zonaIDV
+                                const condicionesArray = ofertaData.condicionesArray
+
+
+                                const estadoUI_ = (estadoIDV) => {
+
+                                    if (estadoIDV === "activado") {
+                                        return "Activada"
+                                    } else if (estadoIDV === "desactivado") {
+                                        return "Desactivada"
+                                    }
+
+                                }
+
+                                const contenedorOfertaUI = document.createElement("div")
+                                contenedorOfertaUI.setAttribute("ofertaUID", ofertaUID)
+                                contenedorOfertaUI.classList.add(
+                                    "borderRadius12",
+                                    "width100",
+                                    "flexVertical",
+                                    "backgroundGrey1",
+                                    "padding6",
+                                    "gap6"
+                                )
+
+                                const contenedorGlobal = document.createElement("div")
+                                contenedorGlobal.classList.add(
+                                    "flexVertical",
+                                    "padding12",
+                                    "gap6"
+                                )
+
+                                const nombreOfertaUI = document.createElement("div")
+                                nombreOfertaUI.classList.add("negrita")
+                                nombreOfertaUI.innerText = nombreOferta
+                                contenedorGlobal.appendChild(nombreOfertaUI)
+
+                                const estadoTitulo = document.createElement("div")
+                                estadoTitulo.innerText = "Estado de la oferta"
+                                contenedorGlobal.appendChild(estadoTitulo)
+
+
+                                const estadoUI = document.createElement("div")
+                                estadoUI.classList.add("negrita")
+                                estadoUI.innerText = estadoUI_(estadoIDV)
+                                contenedorGlobal.appendChild(estadoUI)
+                                contenedorOfertaUI.appendChild(contenedorGlobal)
+
+                                const descuentosUI = this.condicionesUI({ condicionesArray })
+                                contenedorOfertaUI.appendChild(descuentosUI)
+
+                                const contendorBotones = document.createElement("div")
+                                contendorBotones.classList.add(
+                                    "flexHorizontal",
+                                    "gap6",
+                                )
+
+                                const botonInsertar = document.createElement("div")
+                                botonInsertar.setAttribute("boton", "insertarOferta")
+                                botonInsertar.classList.add(
+                                    "borderRadius8",
+                                    "backgroundGrey1",
+                                    "comportamientoBoton",
+                                    "padding8"
+                                )
+                                botonInsertar.innerText = "Insertar descuento en la reserva"
+                                botonInsertar.addEventListener("click", () => {
+                                    this.confirmarInsertar({
+                                        simulacionUID,
+                                        ofertaUID,
+                                        instanciaUID_cribadoOfertas,
+                                    })
+
+                                })
+                                contendorBotones.appendChild(botonInsertar)
+
+                                const botonVerOferta = document.createElement("a")
+                                botonVerOferta.classList.add(
+                                    "borderRadius8",
+                                    "backgroundGrey1",
+                                    "comportamientoBoton",
+                                    "padding8",
+                                    "limpiezaBotonA"
+                                )
+                                botonVerOferta.innerText = "Ir a la oferta"
+                                botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                                contendorBotones.appendChild(botonVerOferta)
+
+                                contenedorOfertaUI.appendChild(contendorBotones)
+
+                                return contenedorOfertaUI
+                            },
+                            botonCancelar: () => {
+                                const botonCancelar = document.createElement("div")
+                                botonCancelar.classList.add("boton")
+                                botonCancelar.setAttribute("boton", "cancelar")
+                                botonCancelar.innerText = "Cerrar y volver a la simulación"
+                                botonCancelar.addEventListener("click", () => {
+                                    return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                })
+                                return botonCancelar
+                            },
+                            confirmarInsertar: async function (data) {
+                                const simulacionUID = data.simulacionUID
+                                const ofertaUID = String(data.ofertaUID)
+                                const instanciaUID_cribadoOfertas = data.instanciaUID_cribadoOfertas
+                                const main = document.querySelector("main")
+                                const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                                const instanciaUID = ui.getAttribute("instanciaUID")
+                                main.appendChild(ui)
+                                const contenedor = ui.querySelector("[componente=contenedor]")
+                                contenedor.innerHTML = null
+
+                                const spinner = casaVitini.ui.componentes.spinner({
+                                    mensaje: "Insertando oferta en la simulación..."
+                                })
+                                contenedor.appendChild(spinner)
+
+                                const transaccion = {
+                                    zona: "administracion/simuladorDePrecios/descuentos/insertarDescuentoPorCompatiblePorCodigo",
+                                    simulacionUID: String(simulacionUID),
+                                    ofertaUID,
+                                    codigosDescuentos: [
+                                        "ey"
+                                    ]
+                                }
+                                const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                const uiRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                                uiRenderizada?.remove()
+
+
+                                if (respuestaServidor?.error) {
+                                    return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                                }
+
+                                if (respuestaServidor?.ok) {
+                                    const uiOfertaEnInstancia = document.querySelector(`[instanciaUID="${instanciaUID_cribadoOfertas}"] [ofertaUID="${ofertaUID}"]`)
+                                    if (uiOfertaEnInstancia) {
+                                        uiOfertaEnInstancia.querySelector("[boton=insertarOferta]")?.remove()
+                                        const info = document.createElement("p")
+                                        info.classList.add(
+                                            "padding6"
+                                        )
+                                        info.innerText = "Oferta recién añadida correctamente a la simulación. No se puede volver a añadir una oferta basada en condiciones. Para añadir una oferta arbitrariamente, hazlo mediante el botón de añadir ofertas administrativamente en la sección ofertas del contenedor financiero de la simulación."
+                                        uiOfertaEnInstancia.appendChild(info)
+
+
+                                    }
+                                    const uiSimulacion = document.querySelector(`[simulacionUID="${simulacionUID}"]`)
+                                    if (uiSimulacion) {
+                                        const desgloseFinanciero = respuestaServidor?.desgloseFinanciero
+                                        if (desgloseFinanciero) {
+                                            casaVitini.ui.componentes.contenedorFinanciero.constructor({
+                                                destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
+                                                contenedorFinanciero: { desgloseFinanciero },
+                                                modoUI: "simulador"
+                                            })
+                                        }
+                                    }
+
+                                }
+
+                            },
+                        }
                     }
                 }
             }

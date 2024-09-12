@@ -8,6 +8,7 @@ import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simul
 import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
+import { validarDataGlobalDeSimulacion } from "../../../../sistema/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
 
 export const insertarDescuentoPorCompatible = async (entrada) => {
     const mutex = new Mutex()
@@ -17,7 +18,6 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -44,10 +44,8 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        const fechaEntrada = simulacion.fechaEntrada
-        const fechaSalida = simulacion.fechaSalida
-        const fechaCreacion = simulacion.fechaCreacion
         const apartamentosArray = simulacion.apartamentosIDVARRAY
+        const zonaIDV = simulacion.zonaIDV
 
         try {
             for (const apartamentoIDV of apartamentosArray) {
@@ -63,6 +61,7 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
         }
 
         await obtenerOferatPorOfertaUID(ofertaUID)
+        await validarDataGlobalDeSimulacion(simulacionUID)
         await obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion({
             simulacionUID,
             ofertaUID,
@@ -71,18 +70,45 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
         // validar aqui que la oferta por condicion no esta ya en la instantanea
 
 
-        // Desde aqui se envia esto mas el ofertaUID
+        // // Desde aqui se envia esto mas el ofertaUID
+        // const desgloseFinanciero = await procesador({
+        //     entidades: {
+        //         simulacion: {
+        //             tipoOperacion: "insertarDescuentoCompatibleConSimulacion",
+        //             simulacionUID,
+        //             ofertaUID,
+        //             fechaEntrada: fechaEntrada,
+        //             fechaSalida: fechaSalida,
+        //             fechaActual: fechaCreacion,
+        //             apartamentosArray: apartamentosArray,
+        //             capaImpuestos: "si"
+        //         }
+        //     }
+        // })
+        console.log("!!!!!!!")
         const desgloseFinanciero = await procesador({
             entidades: {
                 simulacion: {
-                    tipoOperacion: "insertarDescuentoCompatibleConSimulacion",
-                    simulacionUID,
-                    ofertaUID,
-                    fechaEntrada: fechaEntrada,
-                    fechaSalida: fechaSalida,
-                    fechaActual: fechaCreacion,
-                    apartamentosArray: apartamentosArray,
-                    capaImpuestos: "si"
+                    origen: "hubSimulaciones",
+                    simulacionUID: simulacionUID
+                },
+                servicios: {
+                    origen: "instantaneaServiciosEnSimulacion",
+                    simulacionUID: simulacionUID
+                },
+            },
+            capas: {
+                ofertas: {
+                    zonasArray: [zonaIDV],
+                    operacion: {
+                        tipo:  "insertarDescuentoCompatibleConReserva",
+                    },
+                    ofertaUID: ofertaUID,
+                    ignorarCodigosDescuentos: "si"
+                },
+                impuestos: {
+                    origen: "instantaneaSimulacion",
+                    simulacionUID: simulacionUID
                 }
             }
         })

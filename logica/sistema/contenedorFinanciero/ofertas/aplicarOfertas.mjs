@@ -68,7 +68,6 @@ export const aplicarOfertas = async (data) => {
             instantaneaOfertasPorCondicion.push(...insertarDescuentosPorCondiconPorCoodigo)
         } else if (operacion?.tipo === "insertarDescuentoPorAdministrador") {
             const ofertaUID = data?.ofertaUID
-
             if (!ofertaUID) {
                 const m = "No llega ofertaUID en insertarDescuentoPorAdministrador"
                 throw new Error(m)
@@ -77,6 +76,7 @@ export const aplicarOfertas = async (data) => {
                 ofertaUID,
                 entidadIDV: "reserva"
             })
+            
             const ofertasSelecionadasPorAdminstrador = await aplicarDescuentosPersonalizados({
                 descuentosArray: [ofertaUID]
             })
@@ -84,6 +84,9 @@ export const aplicarOfertas = async (data) => {
 
         } else if (operacion?.tipo === "insertarDescuentoCompatibleConReserva") {
             const ofertaUID = data.ofertaUID
+            const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64 || []
+            const ignorarCodigosDescuentos = data.ignorarCodigosDescuentos
+            console.log("data", data)
             const oferta = await obtenerOfertasPorEntidadPorOfertaUID({
                 ofertaUID,
                 entidadIDV: "reserva"
@@ -94,6 +97,8 @@ export const aplicarOfertas = async (data) => {
                 fechaActual_reserva: fechaActual,
                 fechaEntrada_reserva: fechaEntrada,
                 fechaSalida_reserva: fechaSalida,
+                codigoDescuentosArrayBASE64: codigoDescuentosArrayBASE64,
+                ignorarCodigosDescuentos: ignorarCodigosDescuentos
             })
             ofertaFormateada.autorizacion = "aceptada"
             if (ofertaFormateada.oferta.ofertaUID !== String(ofertaUID)) {

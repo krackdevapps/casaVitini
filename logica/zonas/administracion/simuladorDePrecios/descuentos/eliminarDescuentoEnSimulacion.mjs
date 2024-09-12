@@ -5,9 +5,11 @@ import { eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID } from "../../../..
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
 import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.mjs"
+import { generarDesgloseSimpleGuardarlo } from "../../../../sistema/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
+import { validarDataGlobalDeSimulacion } from "../../../../sistema/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
 
-export const eliminarDescuentoEnReserva = async (entrada) => {
+export const eliminarDescuentoEnSimulacion = async (entrada) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session)
@@ -16,7 +18,7 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 3
+            numeroDeLLavesMaximo: 4
         })
 
         const simulacionUID = validadoresCompartidos.tipos.cadena({
@@ -58,6 +60,7 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
         })
 
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
+        await validarDataGlobalDeSimulacion(simulacionUID)
         if (origen === "porAdministrador") {
             await eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID({
                 simulacionUID,
@@ -77,20 +80,8 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
             throw new Error(error)
         }
 
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                simulacion: {
-                    tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                    simulacionUID: simulacionUID,
-                    capaImpuestos: "si"
-                }
-            },
-        })
         await campoDeTransaccion("iniciar")
-        await actualizarDesgloseFinacieroPorSimulacionUID({
-            desgloseFinanciero,
-            simulacionUID
-        })
+        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         await campoDeTransaccion("confirmar")
 
         const ok = {
