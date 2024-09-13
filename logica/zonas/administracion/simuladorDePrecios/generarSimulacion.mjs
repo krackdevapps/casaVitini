@@ -12,7 +12,7 @@ export const generarSimulacion = async (entrada) => {
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 4
-        }) 
+        })
         const fechaCreacion = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaCreacion,
             nombreCampo: "La fecha de fechaCreacion"
@@ -50,7 +50,7 @@ export const generarSimulacion = async (entrada) => {
                 errorSi: "noExiste"
             })
         }
-     
+
         mutex.acquire()
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
@@ -104,7 +104,7 @@ export const generarSimulacion = async (entrada) => {
                         descuentosArray: []
                     },
                     operacion: {
-                        tipo: "insertarDescuentosPorCondiconPorCoodigo",
+                        tipo: "insertarDescuentosPorCondicionPorCodigo",
                         codigoDescuentosArrayBASE64: codigosDescuentosSiReconocidos
                     }
                 },

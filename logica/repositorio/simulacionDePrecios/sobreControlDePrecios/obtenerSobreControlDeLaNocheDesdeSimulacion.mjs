@@ -1,8 +1,8 @@
-import { conexion } from "../../../../componentes/db.mjs";
+import { conexion } from "../../../componentes/db.mjs";
 
-export const obtenerSobreControlDeLaNoche = async (data) => {
+export const obtenerSobreControlDeLaNocheDesdeSimulacion = async (data) => {
   try {
-    const reservaUID = data.reservaUID
+    const simulacionUID = data.simulacionUID
     const fechaNoche = data.fechaNoche
     const apartamentoIDV = data.apartamentoIDV
 
@@ -11,18 +11,18 @@ export const obtenerSobreControlDeLaNoche = async (data) => {
          "nochesSobreControl".key AS "fechaNoche",
          "detallesSobreControl" AS "detallesSobreControl"
        FROM
-         "reservaFinanciero",
+         "simulacionesDePrecio",
          jsonb_each("instantaneaSobreControlPrecios") AS "nochesSobreControl"(key, "apartamentosDeLaNoche"),
          jsonb_each("apartamentosDeLaNoche") AS apartamentos(apartamento_id, "detallesSobreControl")
        WHERE
          apartamento_id = $3
          AND
-         "reservaUID" = $1
+         "simulacionUID" = $1
          AND
          "nochesSobreControl".key = $2;
      `;
     const parametros = [
-      reservaUID,
+      simulacionUID,
       fechaNoche,
       apartamentoIDV
     ]

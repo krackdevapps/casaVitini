@@ -69,6 +69,10 @@ export const precioReservaPublica = async (entrada) => {
             ok.control.codigosDescuentos = controlCodigosDescuentos
             codigosDescuentosSiReconocidos.push(...controlCodigosDescuentos.codigosDescuentosSiReconocidos)
         }
+        
+        const soloCodigosBase64Descunetos = codigosDescuentosSiReconocidos.map((contenedor) => {
+            return contenedor.codigoUID
+        })
 
         const desgloseFinanciero = await procesador({
             entidades: {
@@ -77,6 +81,7 @@ export const precioReservaPublica = async (entrada) => {
                     fechaEntrada: fechaEntradaReserva,
                     fechaSalida: fechaSalidaReserva,
                     apartamentosArray: apartamentosIDV,
+                    origenSobreControl: "reserva"
                 },
                 servicios: {
                     origen: "hubServicios",
@@ -86,14 +91,12 @@ export const precioReservaPublica = async (entrada) => {
             capas: {
                 ofertas: {
                     zonasArray: ["global", "publica"],
-                    configuracion: {
-                        descuentosPersonalizados: "no",
-                        descuentosArray: []
-                    },
                     operacion: {
-                        tipo: "insertarDescuentosPorCondiconPorCoodigo",
-                        codigoDescuentosArrayBASE64: codigosDescuentosSiReconocidos
-                    }
+                        tipo: "insertarDescuentosPorCondicionPorCodigo",
+                    },
+                    codigoDescuentosArrayBASE64: soloCodigosBase64Descunetos,
+                    ignorarCodigosDescuentos: "no"
+
                 },
                 impuestos: {
                     origen: "hubImuestos"

@@ -4,6 +4,7 @@ import { insertarServicioPorReservaUID } from "../../../../../repositorio/reserv
 import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { obtenerServicioPorServicioUID } from "../../../../../repositorio/servicios/obtenerServicioPorServicioUID.mjs"
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"
+import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { procesador } from "../../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
 
@@ -55,28 +56,8 @@ export const insertarServicioEnReserva = async (entrada) => {
             contenedor: contenedorServicio
         })
 
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                reserva: {
-                    origen: "hubReservas",
-                    reservaUID: reservaUID
-                },
-                servicios: {
-                    origen: "instantaneaServiciosEnReserva",
-                    reservaUID: reservaUID
-                },
-            },
-            capas: {
-                impuestos: {
-                    origen: "instantaneaImpuestosEnReserva",
-                    reservaUID: reservaUID
-                }
-            }
-        })
-        await actualizarDesgloseFinacieroPorReservaUID({
-            desgloseFinanciero,
-            reservaUID
-        })
+        await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha insertado el servicio correctamente en la reserva y el contenedor financiero se ha renderizado.",

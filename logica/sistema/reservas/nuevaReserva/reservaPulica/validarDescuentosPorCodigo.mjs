@@ -38,15 +38,16 @@ export const validarDescuentosPorCodigo = async (data) => {
             throw new Error(error)
         }
 
-        const insertarDescuentosPorCondiconPorCoodigo = await selecionarOfertasPorCondicion({
+        const insertarDescuentosPorCondicionPorCodigo = await selecionarOfertasPorCondicion({
             fechaActual,
             fechaEntrada,
             fechaSalida,
             apartamentosArray,
             zonasArray,
-            codigoDescuentosArrayBASE64
+            codigoDescuentosArrayBASE64,
+            ignorarCodigosDescuentos: "no"
         })
-        ofertasPorCodigoEncontradas.push(...insertarDescuentosPorCondiconPorCoodigo)
+        ofertasPorCodigoEncontradas.push(...insertarDescuentosPorCondicionPorCodigo)
 
         const control = {
             codigosDescuentosSiReconocidos: [],
@@ -56,17 +57,31 @@ export const validarDescuentosPorCodigo = async (data) => {
         ofertasPorCodigoEncontradas.forEach((contenedorOferta) => {
             const condiciones = contenedorOferta.oferta.condicionesArray
             const nombreOferta = contenedorOferta.oferta.nombreOferta
+            const ofertaUID = contenedorOferta.oferta.ofertaUID
+
+            const estructura = {
+                ofertaUID: ofertaUID,
+                codigosUID: [],
+                descuentoUI: nombreOferta
+
+            }
 
             condiciones.forEach((contenedorCondiciones) => {
                 const tipoCondicion = contenedorCondiciones.tipoCondicion
                 if (tipoCondicion === "porCodigoDescuento") {
                     const codigoDescuento = contenedorCondiciones.codigoDescuento
-                    control.codigosDescuentosSiReconocidos.push({
-                        codigoUID: codigoDescuento,
-                        descuentoUI: nombreOferta
-                    })
+                    if (codigoDescuentosArrayBASE64.includes(codigoDescuento)) {
+                        estructura.codigosUID.push(codigoDescuento)
+                    }
                 }
             })
+
+            if (estructura.codigosUID.length > 0) {
+                control.codigosDescuentosSiReconocidos.push(estructura)
+
+            }
+
+
         })
 
         const contenedorUIDValidos = control.codigosDescuentosSiReconocidos.map((contenedor) => {

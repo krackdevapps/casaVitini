@@ -4,6 +4,7 @@ import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../reposit
 import { obtenerDetalleNochePorFechaNochePorApartamentoIDV } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDetalleNochePorFechaNochePorApartamentoIDV.mjs"
 import { actualizarSobreControlDeLaNoche } from "../../../../../repositorio/reservas/transacciones/sobreControl/actualizarSobreControlDeLaNoche.mjs"
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"
+import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { procesador } from "../../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
 //import _ from 'lodash';
@@ -99,30 +100,8 @@ export const actualizarSobreControlNoche = async (entrada) => {
             fechaNoche,
             nuevoSobreControl: estructuraSobreControl
         })
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                reserva: {
-                    origen: "hubReservas",
-                    reservaUID: reservaUID
-                },
-                servicios: {
-                    origen: "instantaneaServiciosEnReserva",
-                    reservaUID: reservaUID
-                },
-            },
-            capas: {
-                impuestos: {
-                    origen: "instantaneaImpuestosEnReserva",
-                    reservaUID: reservaUID
+        const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)
 
-                }
-            }
-        })
-
-        await actualizarDesgloseFinacieroPorReservaUID({
-            desgloseFinanciero,
-            reservaUID
-        })
         const ok = {
             ok: {
                 ...desgloseFinanciero,

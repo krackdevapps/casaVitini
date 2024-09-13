@@ -124,7 +124,7 @@ export const guardarSimulacion_obsoleto = async (entrada) => {
                         descuentosArray: []
                     },
                     operacion: {
-                        tipo: "insertarDescuentosPorCondiconPorCoodigo",
+                        tipo: "insertarDescuentosPorCondicionPorCodigo",
                         codigoDescuentosArrayBASE64: codigosDescuentosSiReconocidos
                     }
                 },

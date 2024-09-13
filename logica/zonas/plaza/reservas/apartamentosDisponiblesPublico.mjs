@@ -78,6 +78,7 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
                             fechaEntrada: fechaEntrada,
                             fechaSalida: fechaSalida,
                             apartamentosArray: [apartamentoIDV],
+                            origenSobreControl: "reserva"
                         },
                         servicios: {
                             origen: "hubServicios",
@@ -87,14 +88,12 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
                     capas: {
                         ofertas: {
                             zonasArray: ["global", "publica"],
-                            configuracion: {
-                                descuentosPersonalizados: "no",
-                                descuentosArray: []
-                            },
                             operacion: {
-                                tipo: "insertarDescuentosPorCondiconPorCoodigo",
-                                codigoDescuentosArrayBASE64: []
-                            }
+                                tipo: "insertarDescuentosPorCondicionPorCodigo",
+                            },
+                            codigoDescuentosArrayBASE64: [],
+                            ignorarCodigosDescuentos: "no"
+
                         },
                         impuestos: {
                             origen: "hubImuestos"

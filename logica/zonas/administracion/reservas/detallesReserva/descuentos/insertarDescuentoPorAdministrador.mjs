@@ -3,6 +3,7 @@ import { obtenerOferatPorOfertaUID } from "../../../../../repositorio/ofertas/ob
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"
+import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { procesador } from "../../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
 
@@ -40,6 +41,7 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
             const error = "La reserva está cancelada, no se pueden alterar los descuentos."
             throw new Error(error)
         }
+        await campoDeTransaccion("iniciar")
         await obtenerOferatPorOfertaUID(ofertaUID)
         const desgloseFinanciero = await procesador({
             entidades: {
@@ -65,11 +67,8 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
                 }
             }
         })
-        await campoDeTransaccion("iniciar")
-        await actualizarDesgloseFinacieroPorReservaUID({
-            desgloseFinanciero,
-            reservaUID
-        })
+        await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",

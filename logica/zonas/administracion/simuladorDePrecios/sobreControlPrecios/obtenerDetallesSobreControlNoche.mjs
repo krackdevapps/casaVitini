@@ -1,8 +1,8 @@
 import { obtenerDetalleNochePorFechaNochePorApartamentoIDV } from "../../../../repositorio/simulacionDePrecios/sobreControlDePrecios/obtenerDetalleNochePorFechaNochePorApartamentoIDV.mjs"
-import { obtenerSobreControlDeLaNoche } from "../../../../repositorio/simulacionDePrecios/sobreControlDePrecios/obtenerSobreControlDeLaNoche.mjs"
 import { VitiniIDX } from "../../../../sistema/VitiniIDX/control.mjs"
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
+import { obtenerSobreControlDeLaNocheDesdeSimulacion } from "../../../../repositorio/simulacionDePrecios/sobreControlDePrecios/obtenerSobreControlDeLaNocheDesdeSimulacion.mjs"
 
 export const obtenerDetallesSobreControlNoche = async (entrada) => {
     try {
@@ -43,7 +43,7 @@ export const obtenerDetallesSobreControlNoche = async (entrada) => {
             apartamentoIDV,
             fechaNoche
         })
-        const detallesSobreControlApartamento = await obtenerSobreControlDeLaNoche({
+        const detallesSobreControlApartamento = await obtenerSobreControlDeLaNocheDesdeSimulacion({
             simulacionUID,
             apartamentoIDV,
             fechaNoche

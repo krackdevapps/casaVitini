@@ -57,21 +57,7 @@ export const eliminarSobreControlNoche = async (entrada) => {
             apartamentoIDV,
             fechaNoche
         })
-        // const desgloseFinanciero = await procesador({
-        //     entidades: {
-        //         simulacion: {
-        //             tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-        //             simulacionUID,
-        //             capaOfertas: "si",
-        //             capaDescuentosPersonalizados: "no",
-        //             capaImpuestos: "si"
-        //         }
-        //     }
-        // })
-        // await actualizarDesgloseFinacieroPorSimulacionUID({
-        //     desgloseFinanciero,
-        //     simulacionUID
-        // })
+  
         const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
 
         const ok = {

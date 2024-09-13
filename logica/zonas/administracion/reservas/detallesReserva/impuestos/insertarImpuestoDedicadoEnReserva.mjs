@@ -4,6 +4,7 @@ import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../reposit
 import { insertarImpuestoPorReservaUID } from "../../../../../repositorio/reservas/transacciones/impuestos/insertarImpuestoPorReservaUID.mjs"
 import { obtenerImpuestoPorImpuestoUIDPorReservaUID_simple } from "../../../../../repositorio/reservas/transacciones/impuestos/obtenerImpuestoPorImpuestoUIDPorReservaUID_simple.mjs"
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"
+import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { procesador } from "../../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
 
@@ -99,29 +100,8 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
             reservaUID,
             impuesto: estructura
         })
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                reserva: {
-                    origen: "hubReservas",
-                    reservaUID: reservaUID
-                },
-                servicios: {
-                    origen: "instantaneaServiciosEnReserva",
-                    reservaUID: reservaUID
-                },
-            },
-            capas: {
-                impuestos: {
-                    origen: "instantaneaImpuestosEnReserva",
-                    reservaUID: reservaUID
+        await actualizadorIntegradoDesdeInstantaneas(reservaUID)
 
-                }
-            }
-        })
-        await actualizarDesgloseFinacieroPorReservaUID({
-            desgloseFinanciero,
-            reservaUID
-        })
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha insertado el impuesto correctamente el impuesto dedicado en la reserva",

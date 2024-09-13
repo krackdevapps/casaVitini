@@ -44,17 +44,6 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
         await obtenerOferatPorOfertaUID(ofertaUID)
         await campoDeTransaccion("iniciar")
 
-        // const desgloseFinanciero = await procesador({
-        //     entidades: {
-        //         simulacion: {
-        //             tipoOperacion: "insertarDescuentoPorAdministrador",
-        //             simulacionUID: simulacionUID,
-        //             ofertaUID: ofertaUID,
-        //             capaImpuestos: "si"
-        //         }
-        //     }
-        // })
-
         const desgloseFinanciero = await procesador({
             entidades: {
                 simulacion: {

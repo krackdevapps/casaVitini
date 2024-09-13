@@ -15,6 +15,8 @@ export const totalesBasePorRango = async (data) => {
         const fechaSalida = data.fechaSalida
         const apartamentosArray = data.apartamentosArray
         const reservaUID = data.reservaUID
+        const simulacionUID = data.simulacionUID
+        const origenSobreControl = data.origenSobreControl
 
         const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada, fechaSalida)
         diasArray.pop()
@@ -72,6 +74,8 @@ export const totalesBasePorRango = async (data) => {
                     const netoApartamento = apartamentosPorNoche[apartamentoIDV].precioNetoApartamento
                     const sobreControl = await aplicarSobreControl({
                         reservaUID,
+                        simulacionUID,
+                        origenSobreControl,
                         netoApartamento: netoApartamento,
                         fechaNoche: fecha_ISO,
                         apartamentoIDV: apartamentoIDV

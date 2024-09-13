@@ -76,7 +76,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             const servicioUID_enSimulacion = servicio.servicioUID
             const servicioUID = servicio.contenedor.servicioUID
             await eliminarServicioEnSimulacionPorServicioUID(servicioUID_enSimulacion)
-            
+
             const servicioDelHub = await obtenerServicioPorServicioUID(servicioUID)
             const nombreServicico = servicioDelHub.nombre
             const contenedorServicio = servicioDelHub.contenedor
@@ -89,12 +89,13 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         }
         const desgloseFinanciero = await procesador({
             entidades: {
-                simulacion: {
+                reserva: {
                     origen: "externo",
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
                     fechaCreacion: fechaCreacion,
                     apartamentosArray: apartamentosArray,
+                    origenSobreControl: "simulacion"
                 },
                 servicios: {
                     origen: "instantaneaServiciosEnSimulacion",
@@ -116,9 +117,12 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             desgloseFinanciero,
             simulacionUID
         })
+
+        const instantaneaServiciosActualizada = await obtenerServiciosPorSimulacionUID(simulacionUID)
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha reconstruido el desglose desde las instantáneas"
+            ok: "Se ha reconstruido el desglose desde las instantáneas",
+            instantaneaServicios: instantaneaServiciosActualizada
         }
         return ok
     } catch (errorCapturado) {

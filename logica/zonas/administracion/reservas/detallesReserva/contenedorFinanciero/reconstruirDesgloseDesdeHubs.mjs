@@ -7,6 +7,10 @@ import { procesador } from "../../../../../sistema/contenedorFinanciero/procesad
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../../repositorio/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
+import { obtenerServiciosPorReservaUID } from "../../../../../repositorio/servicios/obtenerServiciosPorReservaUID.mjs"
+import { obtenerServicioPorServicioUID } from "../../../../../repositorio/servicios/obtenerServicioPorServicioUID.mjs"
+import { eliminarServicioEnReservaPorServicioUID } from "../../../../../repositorio/reservas/servicios/eliminarServicioEnReservaPorServicioUID.mjs"
+import { insertarServicioPorReservaUID } from "../../../../../repositorio/reservas/servicios/insertarServicioPorReservaUID.mjs"
 
 export const reconstruirDesgloseDesdeHubs = async (entrada) => {
     const mutex = new Mutex()
@@ -73,6 +77,25 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             throw new Error(m)
         }
 
+        const serviciosInstantaneaReserva = await obtenerServiciosPorReservaUID(reservaUID)
+
+        for (const servicio of serviciosInstantaneaReserva) {
+            const servicioUID_enSimulacion = servicio.servicioUID
+            const servicioUID = servicio.contenedor.servicioUID
+            await eliminarServicioEnReservaPorServicioUID(servicioUID_enSimulacion)
+
+            const servicioDelHub = await obtenerServicioPorServicioUID(servicioUID)
+            const nombreServicico = servicioDelHub.nombre
+            const contenedorServicio = servicioDelHub.contenedor
+            contenedorServicio.servicioUID = servicioDelHub.servicioUID
+            await insertarServicioPorReservaUID({
+                simulacionUID,
+                nombre: nombreServicico,
+                contenedor: contenedorServicio
+            })
+        }
+
+
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
@@ -80,6 +103,11 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
                     apartamentosArray: apartamentosArray,
+                    origenSobreControl: "reserva"
+                },
+                servicios: {
+                    origen: "instantaneaServiciosEnReserva",
+                    reservaUID: reservaUID
                 },
             },
             capas: {

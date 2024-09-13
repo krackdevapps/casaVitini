@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js';
-import { obtenerSobreControlDeLaNoche } from '../../../../repositorio/reservas/transacciones/sobreControl/obtenerSobreControlDeLaNoche.mjs';
+import { obtenerSobreControlDeLaNocheDesdeReserva } from '../../../../repositorio/reservas/transacciones/sobreControl/obtenerSobreControlDeLaNocheDesdeReserva.mjs';
+import { obtenerSobreControlDeLaNocheDesdeSimulacion } from '../../../../repositorio/simulacionDePrecios/sobreControlDePrecios/obtenerSobreControlDeLaNocheDesdeSimulacion.mjs';
 const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
 
 Decimal.set({ precision: precisionDecimal });
@@ -8,12 +9,31 @@ export const aplicarSobreControl = async (data) => {
         const netoApartamento = new Decimal(data.netoApartamento)
         const fechaNoche = data.fechaNoche
         const apartamentoIDV = data.apartamentoIDV
-        const reservaUID = data.reservaUID
-        const sobreControl = await obtenerSobreControlDeLaNoche({
-            reservaUID,
-            fechaNoche,
-            apartamentoIDV
-        })
+
+
+        const origenSobreControl = data.origenSobreControl
+        let sobreControl
+        if (origenSobreControl === "reserva") {
+            const reservaUID = data.reservaUID
+
+            sobreControl = await obtenerSobreControlDeLaNocheDesdeReserva({
+                reservaUID,
+                fechaNoche,
+                apartamentoIDV
+            })
+
+        } else if (origenSobreControl === "simulacion") {
+            const simulacionUID = data.simulacionUID
+
+            sobreControl = await obtenerSobreControlDeLaNocheDesdeSimulacion({
+                simulacionUID,
+                fechaNoche,
+                apartamentoIDV
+            })
+        } else {
+            const m = "origenSobreControl debe estar en reserva o simulacion"
+            throw new Error(m)
+        }
         const respuesta = {}
         const detallesSobreControl = sobreControl?.detallesSobreControl
         const operacion = detallesSobreControl?.operacion

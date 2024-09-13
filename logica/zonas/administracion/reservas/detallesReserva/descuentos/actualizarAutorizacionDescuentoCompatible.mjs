@@ -8,6 +8,7 @@ import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"
 import { procesador } from "../../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
 import { actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID.mjs"
+import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 
 export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
     const mutex = new Mutex()
@@ -63,28 +64,8 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             reservaUID,
             nuevaAutorizacion
         })
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                reserva: {
-                    origen: "hubReservas",
-                    reservaUID: reservaUID
-                },
-                servicios: {
-                    origen: "instantaneaServiciosEnReserva",
-                    reservaUID: reservaUID
-                },
-            },
-            capas: {
-                impuestos: {
-                    origen: "instantaneaImpuestosEnReserva",
-                    reservaUID: reservaUID
-                }
-            }
-        })
-        await actualizarDesgloseFinacieroPorReservaUID({
-            desgloseFinanciero,
-            reservaUID
-        })
+        await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el estado de autorización de la oferta en la reserva",

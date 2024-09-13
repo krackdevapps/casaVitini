@@ -16,7 +16,7 @@ export const totalesBasePorRango = async (data) => {
         const apartamentosArray = data.apartamentosArray
         const simulacionUID = data.simulacionUID
 
-
+        console.log(">>>", data)
         const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada, fechaSalida)
         diasArray.pop()
         const contenedorEntidadtes = estructura.entidades
@@ -25,9 +25,9 @@ export const totalesBasePorRango = async (data) => {
             estructura.entidades.reserva = {}
         }
         const simulacionEntidad = contenedorEntidadtes.reserva
-        simulacionEntidad.fechaEntrada = fechaEntrada
-        simulacionEntidad.fechaSalida = fechaSalida
-        simulacionEntidad.nochesReserva = diasArray.length.toString()
+        // simulacionEntidad.fechaEntrada = fechaEntrada
+        // simulacionEntidad.fechaSalida = fechaSalida
+        // simulacionEntidad.nochesReserva = diasArray.length.toString()
         const instantaneaNoches = simulacionEntidad.instantaneaNoches
 
 
@@ -124,7 +124,7 @@ export const totalesBasePorRango = async (data) => {
                 desglosePorApartamento[apartamentoIDV].totalNeto = new Decimal(totalPorApartamento).plus(precioNetoApartamento).toFixed(2)
             }
         }
-        const totales = estructura.global.totales
+        const totales = estructura.entidades.reserva.global.totales
         totales.totalNeto = new Decimal("0.00")
         totales.totalFinal = "0.00"
 
@@ -132,7 +132,7 @@ export const totalesBasePorRango = async (data) => {
             const totalNetoPorApartmento = detallesApartamento.totalNeto
             detallesApartamento.precioMedioNetoNoche = new Decimal(totalNetoPorApartmento).div(diasArray.length).toDecimalPlaces(2).toFixed(2);
             const totalNeto = totales.totalNeto
-            estructura.global.totales.totalNeto = totalNeto.plus(totalNetoPorApartmento)
+            estructura.entidades.reserva.global.totales.totalNeto = totalNeto.plus(totalNetoPorApartmento)
         })
         const totalNeto = totales.totalNeto
         totales.totalNeto = totalNeto.toFixed(2)

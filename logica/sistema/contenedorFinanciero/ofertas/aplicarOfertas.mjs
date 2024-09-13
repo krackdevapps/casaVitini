@@ -35,7 +35,8 @@ export const aplicarOfertas = async (data) => {
         constructorEstructuraDescuentos(estructura)
         constructorEstructuraDescuentosReserva(estructura)
 
-        if (operacion?.tipo === "insertarDescuentosPorCondiconPorCoodigo") {
+        if (operacion?.tipo === "insertarDescuentosPorCondicionPorCodigo") {
+            const ignorarCodigosDescuentos = data.ignorarCodigosDescuentos
             validadoresCompartidos.tipos.array({
                 array: zonasArray,
                 nombreCampo: "El array de zonasArray en el procesador de precios",
@@ -53,8 +54,8 @@ export const aplicarOfertas = async (data) => {
                 const error = "En el array de zonasArray hay identificadores visuales de zona no reconocidos. Los identificadores visuales reconocidos son pública, privada y global"
                 throw new Error(error)
             }
-            const codigoDescuentosArrayBASE64 = operacion.codigoDescuentosArrayBASE64 || []
-            const insertarDescuentosPorCondiconPorCoodigo = await selecionarOfertasPorCondicion({
+            const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64 || []
+            const insertarDescuentosPorCondicionPorCodigo = await selecionarOfertasPorCondicion({
                 estructura,
                 fechaActual,
                 fechaEntrada,
@@ -62,10 +63,11 @@ export const aplicarOfertas = async (data) => {
                 apartamentosArray,
                 zonasArray,
                 descuentosParaRechazar,
-                codigoDescuentosArrayBASE64
+                codigoDescuentosArrayBASE64,
+                ignorarCodigosDescuentos: ignorarCodigosDescuentos
             })
 
-            instantaneaOfertasPorCondicion.push(...insertarDescuentosPorCondiconPorCoodigo)
+            instantaneaOfertasPorCondicion.push(...insertarDescuentosPorCondicionPorCodigo)
         } else if (operacion?.tipo === "insertarDescuentoPorAdministrador") {
             const ofertaUID = data?.ofertaUID
             if (!ofertaUID) {
@@ -76,7 +78,7 @@ export const aplicarOfertas = async (data) => {
                 ofertaUID,
                 entidadIDV: "reserva"
             })
-            
+
             const ofertasSelecionadasPorAdminstrador = await aplicarDescuentosPersonalizados({
                 descuentosArray: [ofertaUID]
             })

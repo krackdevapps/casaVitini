@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { obtenerSobreControlDeLaNoche } from '../../../../repositorio/simulacionDePrecios/sobreControlDePrecios/obtenerSobreControlDeLaNoche.mjs';
+import { obtenerSobreControlDeLaNocheDesdeSimulacion } from '../../../../repositorio/simulacionDePrecios/sobreControlDePrecios/obtenerSobreControlDeLaNocheDesdeSimulacion.mjs';
 const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
 
 Decimal.set({ precision: precisionDecimal });
@@ -9,7 +9,7 @@ export const aplicarSobreControl = async (data) => {
         const fechaNoche = data.fechaNoche
         const apartamentoIDV = data.apartamentoIDV
         const simulacionUID = data.simulacionUID
-        const sobreControl = await obtenerSobreControlDeLaNoche({
+        const sobreControl = await obtenerSobreControlDeLaNocheDesdeSimulacion({
             simulacionUID,
             fechaNoche,
             apartamentoIDV

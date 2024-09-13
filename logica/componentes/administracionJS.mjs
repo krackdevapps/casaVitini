@@ -13633,7 +13633,8 @@ const casaVitini = {
                                     const contenedorOpciones = document.createElement("select")
                                     contenedorOpciones.classList.add(
                                         "padding10",
-                                        "borderRadius10"
+                                        "borderRadius10",
+                                        "selectorLista"
                                     )
                                     contenedorOpciones.setAttribute("comNuevoImpuesto", "tipoValor")
                                     const tipoValorLista = [
@@ -21826,42 +21827,45 @@ const casaVitini = {
 
 
 
-
-
-                        if (servicios.length === 0) {
-                            const contenedorServicios = simulacionUI.querySelector(`[contenedor=servicios]`)
-
-                            const infoSinEnlaces = casaVitini
-                                .administracion
-                                .simuladorDePrecios
-                                .componentes
-                                .servicios
-                                .componentesUI
-                                .infoSinServiciosUI()
-                            contenedorServicios.appendChild(infoSinEnlaces)
-                        }
-
                         const selectorZonaIDV = simulacionUI.querySelector("[selector=zonaIDV]")
                         selectorZonaIDV.value = zonaIDV
 
-                        if (servicios.length > 0) {
-                            const contenedorListaServicios = simulacionUI.querySelector(`[componente=contenedorListaServiciosEnReserva]`)
-                            for (const servicioEnReserva of servicios) {
-                                const servicioUI = casaVitini
-                                    .administracion
-                                    .simuladorDePrecios
-                                    .componentes
-                                    .servicios
-                                    .componentesUI
-                                    .servicioUI({
-                                        servicioUID_enSimulacion: servicioEnReserva.servicioUID,
-                                        instanciaUID_contenedorServicios: simulacionUID,
-                                        nombreInterno: servicioEnReserva.nombre,
-                                        contenedor: servicioEnReserva.contenedor
-                                    })
-                                contenedorListaServicios.appendChild(servicioUI)
-                            }
-                        }
+                        casaVitini.administracion.simuladorDePrecios.componentes.servicios.actualizarContenedor({
+                            servicios,
+                            simulacionUID
+                        })
+                        // if (servicios.length === 0) {
+                        //     const contenedorServicios = simulacionUI.querySelector(`[contenedor=servicios]`)
+
+                        //     const infoSinEnlaces = casaVitini
+                        //         .administracion
+                        //         .simuladorDePrecios
+                        //         .componentes
+                        //         .servicios
+                        //         .componentesUI
+                        //         .infoSinServiciosUI()
+                        //     contenedorServicios.appendChild(infoSinEnlaces)
+                        // }
+
+
+                        // if (servicios.length > 0) {
+                        //     const contenedorListaServicios = simulacionUI.querySelector(`[componente=contenedorListaServiciosEnReserva]`)
+                        //     for (const servicioEnReserva of servicios) {
+                        //         const servicioUI = casaVitini
+                        //             .administracion
+                        //             .simuladorDePrecios
+                        //             .componentes
+                        //             .servicios
+                        //             .componentesUI
+                        //             .servicioUI({
+                        //                 servicioUID_enSimulacion: servicioEnReserva.servicioUID,
+                        //                 instanciaUID_contenedorServicios: simulacionUID,
+                        //                 nombreInterno: servicioEnReserva.nombre,
+                        //                 contenedor: servicioEnReserva.contenedor
+                        //             })
+                        //         contenedorListaServicios.appendChild(servicioUI)
+                        //     }
+                        // }
 
                         if (contenedorFinanciero.desgloseFinanciero) {
                             casaVitini.ui.componentes.contenedorFinanciero.constructor({
@@ -22962,7 +22966,8 @@ const casaVitini = {
                             const contenedorOpciones = document.createElement("select")
                             contenedorOpciones.classList.add(
                                 "padding10",
-                                "borderRadius10"
+                                "borderRadius10",
+                                "selectorLista"
                             )
                             contenedorOpciones.setAttribute("comNuevoImpuesto", "tipoValor")
                             const tipoValorLista = [
@@ -23273,6 +23278,8 @@ const casaVitini = {
                                 }
                                 if (respuestaServidor?.ok) {
                                     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                    const servicios = respuestaServidor.instantaneaServicios
+                                    casaVitini.administracion.simuladorDePrecios.componentes.servicios.actualizarContenedor({ servicios })
                                     return casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.desplegarContenedorFinanciero({
                                         simulacionUID
                                     })
@@ -23306,7 +23313,8 @@ const casaVitini = {
                                 modoUI: "simulador"
                             })
                         }
-                    }
+                    },
+
                 },
                 eliminarSimulacion: {
                     UI: function () {
@@ -23925,7 +23933,8 @@ const casaVitini = {
                                         botonInsertar.innerText = "Insertar servicios en la simulación"
                                         botonInsertar.addEventListener("click", () => {
                                             this.confirmarInsertar({
-                                                servicioUID
+                                                servicioUID,
+                                                instanciaUID_insertarServiciosUI
                                             })
 
                                         })
@@ -23965,15 +23974,16 @@ const casaVitini = {
                             },
                             confirmarInsertar: async function (data) {
                                 const simulacionUID = document.querySelector("[simulacionUID]").getAttribute("simulacionUID")
+                                const instanciaUID_insertarServiciosUI = data.instanciaUID_insertarServiciosUI
                                 const servicioUID = String(data.servicioUID)
-                                const ui = document.querySelector(`[contenedor=servicios]`)
-                                // const contenedor = ui.querySelector("[componente=contenedorInfoSinServicios]")
+                                const ui = document.querySelector(`[instanciaUID="${instanciaUID_insertarServiciosUI}"]`)
+                                const contenedor = ui.querySelector("[componente=contenedor]")
+                                contenedor.innerHTML = null
 
-
-                                // const spinner = casaVitini.ui.componentes.spinner({
-                                //     mensaje: "Insertando servicio en la reserva..."
-                                // })
-                                // contenedor.appendChild(spinner)
+                                const spinner = casaVitini.ui.componentes.spinner({
+                                    mensaje: "Insertando servicio en la simulación..."
+                                })
+                                contenedor.appendChild(spinner)
 
                                 const transaccion = {
                                     zona: "administracion/simuladorDePrecios/servicios/insertarServicioEnSimulacion",
@@ -24274,6 +24284,43 @@ const casaVitini = {
                             return infoSinEnlaces
                         }
                     },
+                    actualizarContenedor: (data) => {
+                        const servicios = data.servicios
+                        const simulacionUID = data.simulacionUID
+                        const simulacionUI = document.querySelector("[simulacionUID]")
+                        const contenedorListaServicios = simulacionUI.querySelector(`[componente=contenedorListaServiciosEnReserva]`)
+                        contenedorListaServicios.innerHTML = null
+                        console.log("servicios", servicios)
+                        if (servicios.length === 0) {
+                            const contenedorServicios = simulacionUI.querySelector(`[contenedor=servicios]`)
+                            const infoSinEnlaces = casaVitini
+                                .administracion
+                                .simuladorDePrecios
+                                .componentes
+                                .servicios
+                                .componentesUI
+                                .infoSinServiciosUI()
+                            contenedorServicios.appendChild(infoSinEnlaces)
+                        } else {
+                            for (const servicioEnReserva of servicios) {
+                                const servicioUI = casaVitini
+                                    .administracion
+                                    .simuladorDePrecios
+                                    .componentes
+                                    .servicios
+                                    .componentesUI
+                                    .servicioUI({
+                                        servicioUID_enSimulacion: servicioEnReserva.servicioUID,
+                                        instanciaUID_contenedorServicios: simulacionUID,
+                                        nombreInterno: servicioEnReserva.nombre,
+                                        contenedor: servicioEnReserva.contenedor
+                                    })
+                                contenedorListaServicios.appendChild(servicioUI)
+                            }
+                        }
+
+
+                    }
 
                 },
                 contenedorCodigosDescuento: {

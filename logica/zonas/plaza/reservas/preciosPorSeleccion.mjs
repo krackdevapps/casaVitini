@@ -81,7 +81,8 @@ export const preciosPorSeleccion = async (entrada) => {
                     origen: "externo",
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
-                    apartamentosArray:apartamentosIDVARRAY,
+                    apartamentosArray: apartamentosIDVARRAY,
+                    origenSobreControl: "reserva"
                 },
                 servicios: {
                     origen: "hubServicios",
@@ -91,14 +92,12 @@ export const preciosPorSeleccion = async (entrada) => {
             capas: {
                 ofertas: {
                     zonasArray: ["global", "publica"],
-                    configuracion: {
-                        descuentosPersonalizados: "no",
-                        descuentosArray: []
-                    },
                     operacion: {
-                        tipo: "insertarDescuentosPorCondiconPorCoodigo",
-                        codigoDescuentosArrayBASE64: []
-                    }
+                        tipo: "insertarDescuentosPorCondicionPorCodigo",
+                    },
+                    codigoDescuentosArrayBASE64: [],
+                    ignorarCodigosDescuentos: "no"
+
                 },
                 impuestos: {
                     origen: "hubImuestos"

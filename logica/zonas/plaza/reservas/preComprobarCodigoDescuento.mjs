@@ -87,7 +87,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             entidadIDV: "reserva",
             codigosDescuentoArray: codigosDescuentoArray
         })
-
+        const ok = {}
 
         //Buscar en ofertas activas, publicas o globales, que tienen este codigo
         if (ofertasActivas.length === 0) {
@@ -99,6 +99,19 @@ export const preComprobarCodigoDescuento = async (entrada) => {
         const ofertasExistentesPeroConCondicionesQueNoSeCumplen = []
         // Comporbar si por condiciones la reserva entra en las ofertas encontradas
         for (const oferta of ofertasActivas) {
+
+            const condicionesDeLaOferta = oferta.condicionesArray
+            let ofertaSinCodigoDescuento = "si"
+            condicionesDeLaOferta.forEach((contenedor) => {
+                const tipoCondicion = contenedor.tipoCondicion
+                if (tipoCondicion === "porCodigoDescuento") {
+                    ofertaSinCodigoDescuento = "no"
+                }
+            })
+            if (ofertaSinCodigoDescuento === "si") {
+                continue
+            }
+
             const resultadoSelector = await selectorPorCondicion({
                 // falta pasar pora qui los datos
                 oferta,
@@ -106,7 +119,8 @@ export const preComprobarCodigoDescuento = async (entrada) => {
                 fechaActual_reserva: fechaActual,
                 fechaEntrada_reserva: fechaEntradaReserva,
                 fechaSalida_reserva: fechaSalidaReserva,
-                codigoDescuentosArrayBASE64: codigosDescuentoArray
+                codigoDescuentosArrayBASE64: codigosDescuentoArray,
+                ignorarCodigosDescuentos: "no"
             })
             resultadoSelector.autorizacion = "aceptada"
             const condicionesQueNoSeCumple = resultadoSelector.condicionesQueNoSeCumple
@@ -128,21 +142,18 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             }
 
             if (ofertasNecesariasDeCondiciones.length === 0) {
-                const error = "No se reconoce el codigo 3"
+                const error = "No se reconoce el codigo"
                 throw new Error(error)
             } else {
-                const ok = {
-                    error: "Tu código es válido, pero para acceder a esta oferta debes cumplir con las condiciones establecidas. Revisa las condiciones de la oferta para verificar si las cumples. Fíjate en el apartado 'Condiciones de la oferta'. En este apartado encontrarás las condiciones y una definición de las mismas.",
-                    ofertas: ofertasExistentesPeroConCondicionesQueNoSeCumplen,
-                }
-                return ok
+                ok.error = "Tu código es válido, pero para acceder a esta oferta debes cumplir con las condiciones establecidas. Revisa las condiciones de la oferta para verificar si las cumples. Fíjate en el apartado 'Condiciones de la oferta'. En este apartado encontrarás las condiciones y una definición de las mismas."
+                ok.ofertas = ofertasExistentesPeroConCondicionesQueNoSeCumplen
+
             }
 
         } else if (ofertaAnalizadasPorCondiciones.length > 0) {
-            const ok = {
-                ok: "El código de descuento es válido",
-                ofertas: ofertaAnalizadasPorCondiciones,
-            }
+            ok.ok = "El código de descuento es válido"
+            ok.ofertas = ofertaAnalizadasPorCondiciones
+
             for (const contenedorOferta of ofertaAnalizadasPorCondiciones) {
                 const descuentosPorApartamentos = contenedorOferta?.oferta?.descuentosJSON?.apartamentos || []
                 for (const contenedorApartamento of descuentosPorApartamentos) {
@@ -169,9 +180,12 @@ export const preComprobarCodigoDescuento = async (entrada) => {
                     }
                 }
             }
-            return ok
+        } else {
+            ok.ok = "No se han encontrado ofertas con ese codigo de descuento"
+            ok.ofertas = []
         }
-        return estructura
+    
+        return ok
     } catch (errorCapturado) {
         throw errorCapturado
     } finally {

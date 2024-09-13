@@ -1,4 +1,3 @@
-import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs";
 import { aplicarDescuento } from "../../../ofertas/entidades/reserva/aplicarDescuento.mjs";
 import { constructorEstructuraDescuentos } from "../../../ofertas/global/constructorEstructuraDescuentos.mjs";
 import { constructorEstructuraDescuentosReserva } from "../../../ofertas/entidades/reserva/constructorEstructuraDescuentosReserva.mjs";
@@ -45,7 +44,8 @@ export const actualizarDesgloseFinancieroDesdeInstantaneas = async (data) => {
             instantaneaNoches,
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
-            apartamentosArray
+            apartamentosArray,
+            origenSobreControl: "reserva"
         })
 
         constructorEstructuraDescuentos(estructura)

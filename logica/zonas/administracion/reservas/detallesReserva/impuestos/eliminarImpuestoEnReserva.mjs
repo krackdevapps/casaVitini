@@ -6,6 +6,7 @@ import { procesador } from "../../../../../sistema/contenedorFinanciero/procesad
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
 import { obtenerImpuestoPorImpuestoUIDPorReservaUID } from "../../../../../repositorio/reservas/transacciones/impuestos/obtenerImpuestoPorImpuestoUIDPorReservaUID.mjs"
 import { eliminarImpuestoPorImpuestoUIDPorReservaUID } from "../../../../../repositorio/reservas/transacciones/impuestos/eliminarImpuestoPorImpuestoUIDPorReservaUID.mjs"
+import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 
 export const eliminarImpuestoEnReserva = async (entrada) => {
     const mutex = new Mutex()
@@ -60,28 +61,8 @@ export const eliminarImpuestoEnReserva = async (entrada) => {
             impuestoUID
         })
 
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                reserva: {
-                    origen: "hubReservas",
-                    reservaUID: reservaUID
-                },
-                servicios: {
-                    origen: "instantaneaServiciosEnReserva",
-                    reservaUID: reservaUID
-                },
-            },
-            capas: {
-                impuestos: {
-                    origen: "instantaneaImpuestosEnReserva",
-                    reservaUID: reservaUID
-                }
-            }
-        })
-        await actualizarDesgloseFinacieroPorReservaUID({
-            desgloseFinanciero,
-            reservaUID
-        })
+        const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+
 
         // await campoDeTransaccion("confirmar")
         const ok = {

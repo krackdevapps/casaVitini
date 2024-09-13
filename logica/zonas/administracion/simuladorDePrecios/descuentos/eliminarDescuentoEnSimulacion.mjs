@@ -81,7 +81,7 @@ export const eliminarDescuentoEnSimulacion = async (entrada) => {
         }
 
         await campoDeTransaccion("iniciar")
-        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
+        await generarDesgloseSimpleGuardarlo(simulacionUID)
         await campoDeTransaccion("confirmar")
 
         const ok = {

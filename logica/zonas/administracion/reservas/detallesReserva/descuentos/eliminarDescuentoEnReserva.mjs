@@ -4,6 +4,7 @@ import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../reposit
 import { eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID.mjs"
 import { eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID.mjs"
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"
+import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { procesador } from "../../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
 
@@ -83,28 +84,8 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
             throw new Error(error)
         }
 
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                reserva: {
-                    origen: "hubReservas",
-                    reservaUID: reservaUID
-                },
-                servicios: {
-                    origen: "instantaneaServiciosEnReserva",
-                    reservaUID: reservaUID
-                },
-            },
-            capas: {
-                impuestos: {
-                    origen: "instantaneaImpuestosEnReserva",
-                    reservaUID: reservaUID
-                }
-            }
-        })
-        await actualizarDesgloseFinacieroPorReservaUID({
-            desgloseFinanciero,
-            reservaUID
-        })
+        await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+
         await campoDeTransaccion("confirmar")
 
         const ok = {

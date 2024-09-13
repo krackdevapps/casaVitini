@@ -7,6 +7,7 @@ import { codigoZonaHoraria } from "../../../configuracion/codigoZonaHoraria.mjs"
 import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs"
 import { constructorInstantaneaNoches } from "./constructorInstantaneaNoches.mjs"
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs"
+import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 
 
 export const procesadorReserva = async (data) => {
@@ -25,8 +26,9 @@ export const procesadorReserva = async (data) => {
         let instantaneaOfertasPorAdministrador
         const operacion = data.operacion
         const reservaUID = data.reservaUID
+        const simulacionUID = data.simulacionUID
 
-
+        let origenSobreControl
         if (origen === "externo") {
 
             fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
@@ -61,12 +63,13 @@ export const procesadorReserva = async (data) => {
                     errorSi: "noExiste"
                 })
             }
-
+            origenSobreControl = data.origenSobreControl
         } else if (origen === "hubReservas") {
             const reserva = await obtenerReservaPorReservaUID(reservaUID)
             fechaEntrada = reserva.fechaEntrada
             fechaSalida = reserva.fechaSalida
             fechaActual = reserva.fechaCreacion_simple
+            origenSobreControl = "reserva"
 
             const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
             apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
@@ -74,6 +77,33 @@ export const procesadorReserva = async (data) => {
             })
  
             const desgloseFinancieroReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
+            instantaneaNoches = desgloseFinancieroReserva.instantaneaNoches
+            instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion || []
+            instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador || []
+        } else if (origen === "hubSimulaciones") {
+            const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
+            fechaEntrada = simulacion.fechaEntrada
+            fechaSalida = simulacion.fechaSalida
+            fechaActual = simulacion.fechaCreacion
+            apartamentosArray = simulacion.apartamentosIDVARRAY
+            origenSobreControl = "simulacion"
+
+            for (const apartamentoIDV of apartamentosArray) {
+                await obtenerConfiguracionPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "noExiste"
+                })
+            }
+
+            const desgloseFinancieroReserva = {
+                desgloseFinanciero: simulacion.desgloseFinanciero,
+                instantaneaNoches: simulacion.instantaneaNoches,
+                instantaneaSobreControlPrecios: simulacion.instantaneaSobreControlPrecios,
+                instantaneaOfertasPorAdministrador: simulacion.instantaneaOfertasPorAdministrador,
+                instantaneaOfertasPorCondicion: simulacion.instantaneaOfertasPorCondicion,
+                instantaneaImpuestos: simulacion.instantaneaImpuestos,
+            }
+
             instantaneaNoches = desgloseFinancieroReserva.instantaneaNoches
             instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion || []
             instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador || []
@@ -96,6 +126,8 @@ export const procesadorReserva = async (data) => {
             apartamentosArray
         })
         await totalesBasePorRango({
+            simulacionUID,
+            origenSobreControl,
             reservaUID,
             estructura,
             instantaneaNoches,

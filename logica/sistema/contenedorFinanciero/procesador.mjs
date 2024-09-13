@@ -30,15 +30,15 @@ export const procesador = async (data) => {
             })
         }
         // Refactorizar
-        if (entidades.hasOwnProperty("simulacion")) {
-            controlError = false
-            const simulacion = entidades.simulacion
-            await procesadorSimulacion({
-                estructura,
-                ...simulacion,
-                pipe
-            })
-        }
+        // if (entidades.hasOwnProperty("simulacion")) {
+        //     controlError = false
+        //     const simulacion = entidades.simulacion
+        //     await procesadorSimulacion({
+        //         estructura,
+        //         ...simulacion,
+        //         pipe
+        //     })
+        // }
 
         if (entidades.hasOwnProperty("servicios")) {
             controlError = false

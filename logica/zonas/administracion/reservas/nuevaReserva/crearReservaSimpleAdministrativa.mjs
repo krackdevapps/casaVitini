@@ -145,6 +145,9 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                     apartamentoUI: apartamentoUI,
                 })
             }
+    
+
+
             const desgloseFinanciero = await procesador({
                 entidades: {
                     reserva: {
@@ -152,11 +155,21 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                         fechaEntrada: fechaEntrada,
                         fechaSalida: fechaSalida,
                         apartamentosArray: apartamentos,
+                        origenSobreControl: "reserva"
+                    },
+                    servicios: {
+                        origen: "hubServicios",
+                        serviciosUIDSolicitados: []
                     },
                 },
                 capas: {
                     ofertas: {
-                        zonasArray: ["global", "privada"]
+                        zonasArray: ["global", "privada"],
+                        // operacion: {
+                        //     tipo: "insertarDescuentosPorCondicionPorCodigo",
+                        // },
+                        // codigoDescuentosArrayBASE64: soloCodigosBase64Descunetos,
+                        ignorarCodigosDescuentos: "si"
                     },
                     impuestos: {
                         origen: "hubImuestos"

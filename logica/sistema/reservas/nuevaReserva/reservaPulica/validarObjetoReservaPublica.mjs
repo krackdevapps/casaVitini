@@ -172,11 +172,23 @@ export const validarObjetoReservaPublica = async (data) => {
                 }),
             codigosDescuento: Joi.array().items(
                 Joi.object({
-                    codigoUID: Joi.string().required().messages({
+                    codigosUID: Joi.array().items(
+                        Joi.string().required().messages({
+                            'string.base': '{{#label}} debe ser una cadena',
+                            'any.required': '{{#label}} es una campo obligatorio',
+                        })
+                    ).min(1)
+                        .messages({
+                            'array.base': '{{#label}} debe ser un array',
+                            'any.required': '{{#label}} es un array campo obligatorio',
+                            'array.min': '{{#label}} debe contener al menos un servicios si de declara la llave servicios',
+
+                        }),
+                    descuentoUI: Joi.string().required().messages({
                         'string.base': '{{#label}} debe ser una cadena',
                         'any.required': '{{#label}} es una campo obligatorio',
                     }),
-                    descuentoUI: Joi.string().required().messages({
+                    ofertaUID: Joi.string().required().messages({
                         'string.base': '{{#label}} debe ser una cadena',
                         'any.required': '{{#label}} es una campo obligatorio',
                     })
@@ -352,25 +364,30 @@ export const validarObjetoReservaPublica = async (data) => {
         const codigosDescuento = reservaPublica.codigosDescuento || []
         const codigosUIDUnicos = {}
         codigosDescuento.forEach((contenedor, i) => {
-            const codigoASCI = contenedor.codigoUID
+            const codigosASCI = contenedor.codigosUID
 
-            if (codigosUIDUnicos[codigoASCI]) {
-                const m = `El codigo ${codigoASCI} esta repetido, no se permite codigos de descuentos repetidos`
-                throw new Error(m)
-            }
-
-            codigosUIDUnicos[codigoASCI] = true
-            const codigoB64 = validadoresCompartidos.tipos.cadena({
-                string: codigoASCI,
-                nombreCampo: "Te falta el código de descuento en la condición de código de descuento.",
-                filtro: "transformaABase64",
-                sePermiteVacio: "no",
-                limpiezaEspaciosAlrededor: "si",
+            codigosASCI.forEach((codigoASCI) => {
+                if (codigosUIDUnicos[codigoASCI]) {
+                    const m = `El codigo ${codigoASCI} esta repetido, no se permite codigos de descuentos repetidos`
+                    throw new Error(m)
+                }
+    
+                codigosUIDUnicos[codigoASCI] = true
+                const codigoB64 = validadoresCompartidos.tipos.cadena({
+                    string: codigoASCI,
+                    nombreCampo: "Te falta el código de descuento en la condición de código de descuento.",
+                    filtro: "transformaABase64",
+                    sePermiteVacio: "no",
+                    limpiezaEspaciosAlrededor: "si",
+    
+                })
+                codigosDescuento[i].codigoUID = codigoB64
 
             })
-            codigosDescuento[i].codigoUID = codigoB64
-        })
+
         
+        })
+
         const servicios = reservaPublica.servicios || []
         servicios.forEach((contenedor, i) => {
             const servicioUID = contenedor.servicioUID

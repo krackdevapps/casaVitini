@@ -10,7 +10,7 @@ export const generarDesgloseSimpleGuardarlo = async (simulacionUID) => {
 
         const desgloseFinanciero = await procesador({
             entidades: {
-                simulacion: {
+                reserva: {
                     origen: "hubSimulaciones",
                     simulacionUID: simulacionUID
                 },

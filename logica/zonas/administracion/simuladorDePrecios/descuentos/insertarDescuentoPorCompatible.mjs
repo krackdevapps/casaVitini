@@ -67,25 +67,7 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
             ofertaUID,
             errorSi: "existe"
         })
-        // validar aqui que la oferta por condicion no esta ya en la instantanea
-
-
-        // // Desde aqui se envia esto mas el ofertaUID
-        // const desgloseFinanciero = await procesador({
-        //     entidades: {
-        //         simulacion: {
-        //             tipoOperacion: "insertarDescuentoCompatibleConSimulacion",
-        //             simulacionUID,
-        //             ofertaUID,
-        //             fechaEntrada: fechaEntrada,
-        //             fechaSalida: fechaSalida,
-        //             fechaActual: fechaCreacion,
-        //             apartamentosArray: apartamentosArray,
-        //             capaImpuestos: "si"
-        //         }
-        //     }
-        // })
-        console.log("!!!!!!!")
+      
         const desgloseFinanciero = await procesador({
             entidades: {
                 simulacion: {

@@ -45,7 +45,6 @@ export const preConfirmarReserva = async (entrada) => {
         const codigosDescuento = reservaPublica.codigosDescuento
         const serviciosPorValidar = reservaPublica?.servicios
 
-
         await validarHoraLimitePublica()
 
         await limitesReservaPublica({

@@ -1,6 +1,6 @@
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { obtenerDetalleNochePorFechaNochePorApartamentoIDV } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDetalleNochePorFechaNochePorApartamentoIDV.mjs"
-import { obtenerSobreControlDeLaNoche } from "../../../../../repositorio/reservas/transacciones/sobreControl/obtenerSobreControlDeLaNoche.mjs"
+import { obtenerSobreControlDeLaNocheDesdeReserva } from "../../../../../repositorio/reservas/transacciones/sobreControl/obtenerSobreControlDeLaNocheDesdeReserva.mjs"
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
 
@@ -47,7 +47,7 @@ export const obtenerDetallesSobreControlNoche = async (entrada) => {
             apartamentoIDV,
             fechaNoche
         })
-        const detallesSobreControlApartamento = await obtenerSobreControlDeLaNoche({
+        const detallesSobreControlApartamento = await obtenerSobreControlDeLaNocheDesdeReserva({
             reservaUID,
             apartamentoIDV,
             fechaNoche

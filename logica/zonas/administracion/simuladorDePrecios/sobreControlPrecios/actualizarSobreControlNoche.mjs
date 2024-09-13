@@ -98,23 +98,7 @@ export const actualizarSobreControlNoche = async (entrada) => {
             fechaNoche,
             nuevoSobreControl: estructuraSobreControl
         })
-        // const desgloseFinanciero = await procesador({
-        //     entidades: {
-        //         simulacion: {
-        //             tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-        //             simulacionUID: simulacionUID,
-        //             capaOfertas: "si",
-        //             zonasArray: ["global", "publica"],
-        //             capaDescuentosPersonalizados: "no",
-        //             capaImpuestos: "si"
 
-        //         }
-        //     }
-        // })
-        // await actualizarDesgloseFinacieroPorSimulacionUID({
-        //     desgloseFinanciero,
-        //     simulacionUID
-        // })
         const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         const ok = {
             ok: {
