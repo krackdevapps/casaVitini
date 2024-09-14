@@ -18,6 +18,7 @@ export const precioReservaPublica = async (entrada) => {
         const fechaSalida = reservaPublica.fechaSalida
         const apartamentosIDVArray = Object.keys(reservaPublica.alojamiento)
 
+   
         await limitesReservaPublica({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida
@@ -35,6 +36,9 @@ export const precioReservaPublica = async (entrada) => {
         const apartamentosIDV = Object.keys(alojamiento)
         const contenedorCodigosDescuento = reservaPublica.codigosDescuento || []
         const serviciosUIDSolicitados = reservaPublica?.servicios || []
+
+
+        // Si la fecha de entrad es inferior a HOY, que aviso que no se puede
 
         const ok = {
             ok: "Precio actualizado en base a componentes solicitados"
@@ -66,10 +70,31 @@ export const precioReservaPublica = async (entrada) => {
                 apartamentosArray: apartamentosIDV
             })
             constructorInformacionObsoleta(ok)
-            ok.control.codigosDescuentos = controlCodigosDescuentos
             codigosDescuentosSiReconocidos.push(...controlCodigosDescuentos.codigosDescuentosSiReconocidos)
+
+            const cSiReconocidos = controlCodigosDescuentos.codigosDescuentosSiReconocidos
+            cSiReconocidos.forEach((contenedor) => {
+                const codigosUID = contenedor.codigosUID
+                codigosUID.forEach((codigo, i) => {
+                    const buffer = Buffer.from(codigo, 'base64');
+                    codigo = buffer.toString('utf-8');
+                    codigosUID[i] =  buffer.toString('utf-8');
+                })
+            })
+            const cNoReconocidos = controlCodigosDescuentos.codigosDescuentosNoReconocidos
+            cNoReconocidos.forEach((contenedor) => {
+                const codigosUID = contenedor.codigosUID
+                codigosUID.forEach((codigo, i) => {
+                    const buffer = Buffer.from(codigo, 'base64');
+                    codigo = buffer.toString('utf-8');
+                    codigosUID[i] =  buffer.toString('utf-8');
+                })
+            })
+
+            ok.control.codigosDescuentos = controlCodigosDescuentos
+
         }
-        
+
         const soloCodigosBase64Descunetos = codigosDescuentosSiReconocidos.map((contenedor) => {
             return contenedor.codigoUID
         })

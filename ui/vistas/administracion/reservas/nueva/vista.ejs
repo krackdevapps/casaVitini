@@ -2,24 +2,28 @@
 <p class="titulo">Anadir nueva reserva</p>
 <div class="marcoSeparador">
     <div class="espacioEntreElementos">
-            <p class="infoCrearReservaAdministratia">Selecciona un rango con una fecha de entrada y una fecha de salida para ver los apartamentos disponibles en ese rango de fecha. Luego selecciona los apartamentos y pulsa en crear reserva. Tras pulsar en crear reserva podrás añadir el resto de los datos como los pernoctantes o los tipos de cama. Ahora lo relevante es confirmar que los apartamentos son reservables en el rango de fechas seleccionado.</p>
-   
+        <p class="infoCrearReservaAdministratia">Selecciona un rango con una fecha de entrada y una fecha de salida para
+            ver los apartamentos disponibles en ese rango de fecha. Luego selecciona los apartamentos y pulsa en crear
+            reserva. Tras pulsar en crear reserva podrás añadir el resto de los datos como los pernoctantes o los tipos
+            de cama. Ahora lo relevante es confirmar que los apartamentos son reservables en el rango de fechas
+            seleccionado.</p>
+
         <div class="reservaDetallesBloqueFecha" contenedor="selectorRango">
-            
-            <div class=" fechaEntradaElemento diaEntradaNuevo" componente="fechaEntrada"
-                calendario="entrada" contenedor="desplegarCalendario" paralizadorEvento="ocultadorCalendarios">
+
+            <div class=" fechaEntradaElemento diaEntradaNuevo" componente="fechaEntrada" calendario="entrada"
+                contenedor="desplegarCalendario" paralizadorEvento="ocultadorCalendarios">
                 <p class="adminsitracionReservasTituloNombre marginCeroparaP componenteFechaEntrada desactivaEventos">
                     Fecha de entrada</p>
                 <p class="marginCeroparaP componenteFechaEntrada desactivaEventos textoCentrado" id="fechaEntrada"
-                fechaUI="fechaInicio">(Seleccionar)</p>
+                    fechaUI="fechaInicio">(Seleccionar)</p>
             </div>
             <div class="administracionReservaBloqueDual">
                 <p class="botonBuscarAlojamiento" componente="botonBuscarAlojamiento">
                     Buscar alojamiento disponible
                 </p>
             </div>
-            <div class=" fechaSalidaElemento" componente="fechaSalida"
-                calendario="salida" contenedor="desplegarCalendario"  paralizadorEvento="ocultadorCalendarios">
+            <div class=" fechaSalidaElemento" componente="fechaSalida" calendario="salida"
+                contenedor="desplegarCalendario" paralizadorEvento="ocultadorCalendarios">
                 <p class="adminsitracionReservasTituloNombre marginCeroparaP componenteFechaSalida desactivaEventos">
                     Fecha de salida</p>
                 <p class="marginCeroparaP componenteFechaSalida desactivaEventos textoCentrado" id="fechaSalida"
@@ -29,11 +33,27 @@
         <div class="administracion_reservas_crearReserva elementoOcultoInicialmente" componente="espacioApartamento">
         </div>
         <div class="bloqueBotones elementoOcultoInicialmente" componente="espacioBotonConfirmarReserva">
-            <select selector="estadoInicialReserva" class="simplificadorCampo limpiezaBotonA botonV1">
-                <option value="pendiente">Estado: Pendiente</option>
-                <option value="confirmada">Estado: Confirmada</option>
-            </select>
-            <div class="simplificadorCampo limpiezaBotonA botonV1" componente="botonConfirmarReserva">Confirmar reserva y proceder a editarla</div>
+
+            <div componente="selectorConfiguracionInicialOfertas"
+                class="opcionesOfertas gap6 borderRadius12 borderGrey1 padding6 ratonDefault">
+                <p class="botonV1" configuracionOfertaIDV="aplicarTodasLasOfertas">
+                    Aplicar ofertas aunque tengan códigos de descuento como condición
+                </p>
+                <p class="botonV1" configuracionOfertaIDV="aplicarTodasRechazandoLasQueTenganCodigosDeDescuento">Aplicar
+                    ofertas, pero
+                    rechazar las que tengan códigos de descuento como condición</p>
+                    <p class="botonV1" configuracionOfertaIDV="noAplicarOfertas">No aplicar ninguna oferta</p>
+            </div>
+            <div class="gridHorizotnal2C gap6">
+                <select selector="estadoInicialReserva" class="simplificadorCampo limpiezaBotonA botonV1">
+                    <option value="pendiente">Estado: Pendiente</option>
+                    <option value="confirmada">Estado: Confirmada</option>
+                </select>
+
+                <div class="simplificadorCampo limpiezaBotonA botonV1" componente="botonConfirmarReserva">Crear reserva
+                </div>
+            </div>
+
 
         </div>
     </div>

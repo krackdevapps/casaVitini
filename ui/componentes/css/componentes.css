@@ -829,6 +829,13 @@ main[zonaCSS="/"] {
     width: 100%;
     /* padding: 10px; */
     max-width: 1280px;
+    scale: 1;
+    transition: scale 250ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
+
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI {
@@ -1197,6 +1204,13 @@ main[zonaCSS="/"] {
     width: 100%;
     z-index: 1000;
     pointer-events: none;
+    /* 
+    scale: 1;
+    transition: scale 500ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    } */
 }
 
 [zonaCSS="administracion/calendario"] .adminsitracion_calendario_bloqueCalendario {
@@ -1210,7 +1224,7 @@ main[zonaCSS="/"] {
     flex: 1;
 }
 
-[zonaCSS="/alojamiento"] .bloqueAlojamiento {
+/* [zonaCSS="/alojamiento"] .bloqueAlojamiento {
     display: flex;
     grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
     grid-auto-rows: minmax(100px, auto);
@@ -1221,6 +1235,26 @@ main[zonaCSS="/"] {
     justify-content: center;
     align-items: stretch;
     align-content: stretch;
+} */
+
+
+[zonaCSS="/alojamiento"] .bloqueAlojamiento {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 6px;
+    max-width: 100%;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+@media (max-width: 920px) {
+    [zonaCSS="/alojamiento"] .bloqueAlojamiento {
+        grid-template-columns: 1fr ;
+
+    }
 }
 
 [zonaCSS="/alojamiento"] .bloquePasosReservaNuevo {
@@ -1231,7 +1265,7 @@ main[zonaCSS="/"] {
     justify-content: flex-start;
     /* background-color: rgb(255 255 255 / 0.3);*/
     border-radius: 12px;
-    padding: 6px;
+    padding: 0px;
     gap: 6px;
 }
 
@@ -1332,17 +1366,21 @@ main[zonaCSS="/"] {
     justify-content: space-between;
     padding: 6px;
     gap: 6px;
-    min-height: 200px;
+    min-height: 500px;
     background: rgba(255, 255, 255, 0.2);
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
     scale: 1;
-    transition: scale 500ms ease-in-out;
+    transition: scale 500ms ease-in-out, box-shadow 500ms ease-in-out;
 
     @starting-style {
         scale: 0;
     }
+}
+[zonaCSS="/alojamiento"] .plaza_alojamiento_contenedorApartamento:hover {
+    z-index: 12;
+    box-shadow: 0px 0px 20px 10px #0000007a;
 }
 
 .plaza_alojamiento_contenedorApartamento:hover+.plaza_alojamiento_contenedorApartamento_selectorUI {
@@ -2805,8 +2843,8 @@ main[zonaCSS="/"] {
 
 
 .administracion_reserva_detallesReserva_marcoMenuExpandido_vertical {
-    display: flex;
-    gap: 4px;
+    display: grid;
+    gap: 10px;
     padding: 0px;
     justify-items: stretch;
     justify-content: center;
@@ -2814,6 +2852,7 @@ main[zonaCSS="/"] {
     flex-direction: column;
     align-items: stretch;
     flex-wrap: nowrap;
+    grid-template-columns: 1fr 1fr;
 }
 
 .administracion_reservas_detallesReseerva_iconoMiscelanea {
@@ -2914,6 +2953,8 @@ main[zonaCSS="/"] {
     scale: 1;
     transition: scale .4s ease-in-out;
     gap: 6px;
+    align-items: stretch;
+    flex-direction: column;
 
     @starting-style {
         scale: 0;
@@ -10603,6 +10644,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     padding: 6px;
 }
+
 [zonaCSS="administracion/simuladorDePrecios/detalles"] .contenedorServicios {
     display: flex;
     gap: 6px;
@@ -10616,12 +10658,14 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     align-items: stretch;
 }
+
 [zonaCSS="administracion/simuladorDePrecios/detalles"] .listaServicios {
     display: flex;
     gap: 6px;
     flex-direction: column;
     align-items: stretch;
 }
+
 [zonaCSS="administracion/configuracion"] .administracion_configuracion_contenedorConfiguracion {
     border-radius: 16px;
     display: flex;
@@ -11708,7 +11752,7 @@ grid-template-columns: 0.5fr 1.5fr;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
-    border-radius: 20px;
+    border-radius: 15px;
     padding: 16px;
     gap: 6px;
     user-select: none;
@@ -11863,6 +11907,8 @@ grid-template-columns: 0.5fr 1.5fr;
     -webkit-user-select: none;
     pointer-events: all;
     padding-top: 40px;
+
+
 }
 
 .administracion_calendario_componente_calendario_contenedoCarga {
@@ -11905,6 +11951,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     align-content: center;
     align-items: center;
+
 }
 
 [ui="reservaUI"] .administracion_calendario_contenedorCalentadioIntermedio {
@@ -11940,6 +11987,8 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     align-content: center;
     align-items: center;
+
+
 }
 
 .componentes_contenedor_mensajeSimple {
@@ -12459,6 +12508,17 @@ grid-template-columns: 0.5fr 1.5fr;
 .plaza_servicios_tituloCaracteristica {
     font-weight: bold;
     margin: 0px;
+}
+
+[zonaCSS="/alojamiento"] .fondoAlojamiento {
+    background-image: url("/componentes/imagenes/test/image00061.jpeg");
+    flex: 1;
+    border-radius: 15px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    border-radius: 12px;
 }
 
 .plaza_servicios_contenedorCaracteristicaTexto {
@@ -14788,7 +14848,7 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 6px;
 }
 
-.ga8 {
+.gap8 {
     gap: 8px;
 }
 
@@ -14799,6 +14859,23 @@ grid-template-columns: 0.5fr 1.5fr;
 .gridHorizotnal2C {
     display: grid;
     grid-template-columns: 1fr 1fr;
+}
+
+.gridHorizotnal3C {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+[zonaCSS="administracion/reservas/nueva"] .opcionesOfertas {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="administracion/reservas/nueva"] .opcionesOfertas {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .flexVertical {
@@ -14924,11 +15001,6 @@ grid-template-columns: 0.5fr 1.5fr;
 [contenedor=financiero] .comportamientoBotonApartamento:hover {
     transition: all 500ms;
     background: rgba(0, 0, 0, 0.1);
-}
-
-.blur {
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
 }
 
 .padding6 {

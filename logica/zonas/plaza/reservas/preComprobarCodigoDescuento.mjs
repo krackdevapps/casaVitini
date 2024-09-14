@@ -12,46 +12,51 @@ export const preComprobarCodigoDescuento = async (entrada) => {
     const mutex = new Mutex()
     try {
 
-        // Sscript obsoletizable
-        const tipoContenedorCodigo = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoContenedorCodigo,
-            nombreCampo: "El campo de tipoContenedorCodigo",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 2
         })
+
+
+        // Sscript obsoletizable
+        // const tipoContenedorCodigo = validadoresCompartidos.tipos.cadena({
+        //     string: entrada.body.tipoContenedorCodigo,
+        //     nombreCampo: "El campo de tipoContenedorCodigo",
+        //     filtro: "strictoIDV",
+        //     sePermiteVacio: "no",
+        //     limpiezaEspaciosAlrededor: "si",
+        // })
         const codigosDescuentoArray = []
-        if (tipoContenedorCodigo === "cadena") {
+        // if (tipoContenedorCodigo === "cadena") {
+        //     const codigoDescuentoB64 = validadoresCompartidos.tipos.cadena({
+        //         string: entrada.body.codigoDescuento,
+        //         nombreCampo: "No has escrito ningún código de descuento, recuerda que",
+        //         filtro: "transformaABase64",
+        //         sePermiteVacio: "no",
+        //         limpiezaEspaciosAlrededor: "si",
+        //     })
+        //     codigosDescuentoArray.push(codigoDescuentoB64)
+        // } else
+        // if (tipoContenedorCodigo === "array") {
+        const codigoDescuentoArrayAsci = validadoresCompartidos.tipos.array({
+            array: entrada.body.codigoDescuento,
+            nombreCampo: "El campo codigoDescuento",
+            sePermitenDuplicados: "no"
+        })
+        codigoDescuentoArrayAsci.forEach((codigo) => {
             const codigoDescuentoB64 = validadoresCompartidos.tipos.cadena({
-                string: entrada.body.codigoDescuento,
+                string: codigo,
                 nombreCampo: "No has escrito ningún código de descuento, recuerda que",
                 filtro: "transformaABase64",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
             codigosDescuentoArray.push(codigoDescuentoB64)
-        } else if (tipoContenedorCodigo === "array") {
-            const codigoDescuentoArrayAsci = validadoresCompartidos.tipos.array({
-                array: entrada.body.codigoDescuento,
-                nombreCampo: "El campo codigoDescuento",
-                sePermitenDuplicados: "no"
-            })
-
-            codigoDescuentoArrayAsci.forEach((codigo) => {
-                const codigoDescuentoB64 = validadoresCompartidos.tipos.cadena({
-                    string: codigo,
-                    nombreCampo: "No has escrito ningún código de descuento, recuerda que",
-                    filtro: "transformaABase64",
-                    sePermiteVacio: "no",
-                    limpiezaEspaciosAlrededor: "si",
-                })
-
-                codigosDescuentoArray.push(codigoDescuentoB64)
-            })
-        } else {
-            const m = "El campo tipo contenedorCodigo solo espera cadena o array"
-            throw new Error(m)
-        }
+        })
+        // } else {
+        //     const m = "El campo tipo contenedorCodigo solo espera cadena o array"
+        //     throw new Error(m)
+        // }
 
         await utilidades.ralentizador(2000)
         mutex.acquire()
@@ -181,10 +186,16 @@ export const preComprobarCodigoDescuento = async (entrada) => {
                 }
             }
         } else {
-            ok.ok = "No se han encontrado ofertas con ese codigo de descuento"
-            ok.ofertas = []
+            const numeroCodigos = codigosDescuentoArray.length
+            let m
+            if (numeroCodigos === 1) {
+                m = "El codigo introducido no correponde a ninguna oferta"
+            } else {
+                m = "Los codigos introducidos no correponden a ninguna oferta"
+            }
+            throw new Error(m)
         }
-    
+
         return ok
     } catch (errorCapturado) {
         throw errorCapturado

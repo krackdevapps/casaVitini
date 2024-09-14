@@ -16,7 +16,7 @@ export const totalesBasePorRango = async (data) => {
         const apartamentosArray = data.apartamentosArray
         const simulacionUID = data.simulacionUID
 
-        console.log(">>>", data)
+
         const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada, fechaSalida)
         diasArray.pop()
         const contenedorEntidadtes = estructura.entidades
@@ -75,8 +75,8 @@ export const totalesBasePorRango = async (data) => {
 
             for (const apartamentoIDV of apartamentosArray) {
 
-               // const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
-               // const precioBase = perfilPrecio.precio
+                // const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
+                // const precioBase = perfilPrecio.precio
 
 
                 const apartamentosPorNoche = noche.apartamentosPorNoche

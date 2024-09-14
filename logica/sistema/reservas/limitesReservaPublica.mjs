@@ -47,7 +47,7 @@ export const limitesReservaPublica = async (fechas) => {
             ? 0 :
             Math.ceil(diasAntelacionReserva)
         if (diasDeAntelacion < diasAntelacionReserva) {
-            const error = `Casa Vitini solo acepta reservas con un minimo de ${diasAntelacionReserva} dias de antelacion. Gracias.`
+            const error = `Casa Vitini solo acepta reservas con un mínimo de ${diasAntelacionReserva} días de antelación. Revisé las fechas seleccionadas. Gracias y disculpen las molestias.`
             throw new Error(error)
         }
 

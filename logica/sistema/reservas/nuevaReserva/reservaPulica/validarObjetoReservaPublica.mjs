@@ -363,15 +363,15 @@ export const validarObjetoReservaPublica = async (data) => {
 
         const codigosDescuento = reservaPublica.codigosDescuento || []
         const codigosUIDUnicos = {}
-        codigosDescuento.forEach((contenedor, i) => {
+        codigosDescuento.forEach((contenedor) => {
             const codigosASCI = contenedor.codigosUID
 
-            codigosASCI.forEach((codigoASCI) => {
+            codigosASCI.forEach((codigoASCI, i) => {
                 if (codigosUIDUnicos[codigoASCI]) {
                     const m = `El codigo ${codigoASCI} esta repetido, no se permite codigos de descuentos repetidos`
                     throw new Error(m)
                 }
-    
+
                 codigosUIDUnicos[codigoASCI] = true
                 const codigoB64 = validadoresCompartidos.tipos.cadena({
                     string: codigoASCI,
@@ -379,13 +379,11 @@ export const validarObjetoReservaPublica = async (data) => {
                     filtro: "transformaABase64",
                     sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
-    
-                })
-                codigosDescuento[i].codigoUID = codigoB64
 
+                })
+                codigosASCI[i] = codigoB64
             })
 
-        
         })
 
         const servicios = reservaPublica.servicios || []
@@ -410,8 +408,8 @@ export const validarObjetoReservaPublica = async (data) => {
             nombreCampo: "El campo fechaSalida del objetoReserva"
         })
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
-        const tiempoZH = DateTime.now().setZone(zonaHoraria);
-        const fechaActualTZ = tiempoZH.toISODate()
+        const fechaPresenteTZ = DateTime.now().setZone(zonaHoraria);
+        const fechaActualTZ = fechaPresenteTZ.toISODate()
         const fechaEntradaReserva_ISO = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
         const fechaSalidaReserva_ISO = DateTime.fromISO(fechaSalida, { zone: zonaHoraria });
 
@@ -420,9 +418,9 @@ export const validarObjetoReservaPublica = async (data) => {
             fechaSalida: fechaSalida,
             tipoVector: "diferente"
         })
-
-        if (fechaEntradaReserva_ISO < fechaActualTZ) {
-            const error = "La fecha de entrada no puede ser anterior a la fecha actual"
+        console.log("fechaEntradaReserva_ISO", fechaEntradaReserva_ISO, "fechaActualTZ", fechaPresenteTZ)
+        if (fechaEntradaReserva_ISO < fechaPresenteTZ) {
+            const error = `La fecha de entrada seleccionada (${fechaEntrada}) es anterior a la fecha actual (${fechaActualTZ}). Por favor, revise la fecha de entrada para que sea presente o futura. Gracias`
             throw new Error(error)
         }
         if (fechaEntradaReserva_ISO >= fechaSalidaReserva_ISO) {

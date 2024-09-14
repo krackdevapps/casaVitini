@@ -14,10 +14,13 @@ export const validarDescuentosPorCodigo = async (data) => {
         const fechaSalida = data.fechaSalida
         const apartamentosArray = data.apartamentosArray
 
-        const codigoDescuentosArrayBASE64 = contenedorCodigosDescuento.map((contenedor) => {
-            return contenedor.codigoUID
+        const codigoDescuentosArrayBASE64 = []
+        contenedorCodigosDescuento.forEach((contenedor) => {
+            const codigosUID = contenedor.codigosUID
+            codigosUID.forEach((codigoUID) => {
+                codigoDescuentosArrayBASE64.push(codigoUID)
+            })
         })
-
 
         const ofertasPorCodigoEncontradas = []
         validadoresCompartidos.tipos.array({
@@ -63,7 +66,6 @@ export const validarDescuentosPorCodigo = async (data) => {
                 ofertaUID: ofertaUID,
                 codigosUID: [],
                 descuentoUI: nombreOferta
-
             }
 
             condiciones.forEach((contenedorCondiciones) => {
@@ -78,21 +80,22 @@ export const validarDescuentosPorCodigo = async (data) => {
 
             if (estructura.codigosUID.length > 0) {
                 control.codigosDescuentosSiReconocidos.push(estructura)
-
             }
-
-
         })
-
-        const contenedorUIDValidos = control.codigosDescuentosSiReconocidos.map((contenedor) => {
-            return contenedor.codigoUID
+        const contenedorUIDValidos = []
+        control.codigosDescuentosSiReconocidos.forEach((contenedor) => {
+            const codigosUID = contenedor.codigosUID
+            codigosUID.forEach(codigo => {
+                contenedorUIDValidos.push(codigo)
+            })
         })
-
         contenedorCodigosDescuento.forEach((contenedor) => {
-            const codigoUID = contenedor.codigoUID
-            if (!contenedorUIDValidos.includes(codigoUID)) {
-                control.codigosDescuentosNoReconocidos.push(contenedor)
-            }
+            const codigosUID = contenedor.codigosUID
+            codigosUID.forEach((codigoUID) => {
+                if (!contenedorUIDValidos.includes(codigoUID)) {
+                    control.codigosDescuentosNoReconocidos.push(contenedor)
+                }
+            })
         })
 
         return control

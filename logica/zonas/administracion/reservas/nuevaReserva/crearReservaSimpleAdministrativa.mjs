@@ -25,7 +25,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         await mutex.acquire();
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 4
+            numeroDeLLavesMaximo: 5
         })
 
         const fechaEntrada = entrada.body.fechaEntrada;
@@ -67,6 +67,27 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             const error = "El campo de estadoInicialIDV solo acepta pendiente o confirmada";
             throw new Error(error);
         }
+
+
+        const estadoIniciarOfertasIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.estadoIniciarOfertasIDV,
+            nombreCampo: "El selector de estadoIniciarOfertasIDV",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        const selectoresOfertas = [
+            "aplicarTodasLasOfertas",
+            "aplicarTodasRechazandoLasQueTenganCodigosDeDescuento",
+            "noAplicarOfertas"
+
+        ]
+        if (!selectoresOfertas.includes(estadoIniciarOfertasIDV)) {
+            const error = "El campo de estadoIniciarOfertasIDV solo acepta aplicarTodasLasOfertas, aplicarTodasRechazandoLasQueTenganCodigosDeDescuento, noAplicarOfertas";
+            throw new Error(error);
+        }
+
+
 
         await eliminarBloqueoCaducado();
         // validar que en el array hay un maximo de posiciones no superior al numero de filas que existen en los apartementos
@@ -145,8 +166,25 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                     apartamentoUI: apartamentoUI,
                 })
             }
-    
 
+            const configuracionOfertasInicial = (data) => {
+                if (data === "aplicarTodasLasOfertas") {
+                    return {
+                        tipo: "insertarDescuentosPorCondicionPorCodigo",
+                        ignorarCodigosDescuentos: "si"
+                    }
+                } else if (data === "aplicarTodasRechazandoLasQueTenganCodigosDeDescuento") {
+                    return {
+                        tipo: "insertarDescuentosPorCondicionPorCodigo",
+                        ignorarCodigosDescuentos: "no"
+                    }
+                } else if (data === "noAplicarOfertas") {
+                    return {
+                        tipo: "",
+                        ignorarCodigosDescuentos: "no"
+                    }
+                }
+            }
 
             const desgloseFinanciero = await procesador({
                 entidades: {
@@ -165,11 +203,12 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 capas: {
                     ofertas: {
                         zonasArray: ["global", "privada"],
-                        // operacion: {
-                        //     tipo: "insertarDescuentosPorCondicionPorCodigo",
-                        // },
-                        // codigoDescuentosArrayBASE64: soloCodigosBase64Descunetos,
-                        ignorarCodigosDescuentos: "si"
+                        operacion: {
+                            tipo: configuracionOfertasInicial(estadoIniciarOfertasIDV)
+                                .tipo,
+                        },
+                        ignorarCodigosDescuentos: configuracionOfertasInicial(estadoIniciarOfertasIDV)
+                            .ignorarCodigosDescuentos
                     },
                     impuestos: {
                         origen: "hubImuestos"

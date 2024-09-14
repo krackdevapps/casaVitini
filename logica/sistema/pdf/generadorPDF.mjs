@@ -73,7 +73,6 @@ export const generadorPDF = async (reserva) => {
                     headerRows: 0,
                     body: [
                         [
-
                             {
                                 image: require.resolve('../../../componentes/pdf/logo.png'),
                                 width: 100,
@@ -119,8 +118,6 @@ export const generadorPDF = async (reserva) => {
                     ]
                 }
             },
-
-
             footer: (currentPage, pageCount) => {
                 return [
                     {

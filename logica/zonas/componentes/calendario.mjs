@@ -17,7 +17,7 @@ export const calendario = async (entrada) => {
             const error = "El campo de tipo solo puede ser actual o personalizado"
             throw new Error(error)
         }
-
+        console.log("entrada", entrada.body)
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const diaHoyTZ = tiempoZH.day;

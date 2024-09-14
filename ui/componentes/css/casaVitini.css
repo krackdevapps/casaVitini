@@ -124,7 +124,8 @@
     overflow: hidden;
     max-width: 180px;
     display: block;
-
+    white-space: nowrap;
+  
 }
 
 @media (max-width: 920px) {

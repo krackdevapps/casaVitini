@@ -10,7 +10,6 @@ import { selectorPorCondicion } from "../../ofertas/entidades/reserva/selectorPo
 export const aplicarOfertas = async (data) => {
     try {
         const estructura = data.estructura
-        const configuracion = data.configuracion
         const zonasArray = data.zonasArray
         const operacion = data.operacion
         const pipe = data.pipe
@@ -23,7 +22,6 @@ export const aplicarOfertas = async (data) => {
         const fechaEntrada = global?.rango?.fechaEntrada
         const fechaSalida = global?.rango?.fechaSalida
         const apartamentosArray = pipe.apartamentosArray
-
 
         const descuentosParaRechazar = validadoresCompartidos.tipos.array({
             array: data?.descuentosParaRechazar || [],
@@ -88,7 +86,7 @@ export const aplicarOfertas = async (data) => {
             const ofertaUID = data.ofertaUID
             const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64 || []
             const ignorarCodigosDescuentos = data.ignorarCodigosDescuentos
-            console.log("data", data)
+
             const oferta = await obtenerOfertasPorEntidadPorOfertaUID({
                 ofertaUID,
                 entidadIDV: "reserva"
