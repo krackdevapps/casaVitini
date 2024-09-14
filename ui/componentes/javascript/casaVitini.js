@@ -2979,11 +2979,18 @@ const casaVitini = {
                             const codigosDescuentosSiReconocidos = control?.codigosDescuentos?.codigosDescuentosSiReconocidos || []
                             const codigosDescuentosNoReconocidos = control?.codigosDescuentos?.codigosDescuentosNoReconocidos || []
 
-                            codigosDescuentosSiReconocidos.forEach((contenedor, i) => {
-                                codigosDescuentosSiReconocidos[i].codigoUID = casaVitini.utilidades.conversor.base64HaciaCadena(contenedor.codigoUID)
+                            codigosDescuentosSiReconocidos.forEach((contenedor) => {
+                                const codigosUID = contenedor.codigosUID
+                                codigosUID.forEach((codigoUID, i) => {
+                                    codigosUID[i] = casaVitini.utilidades.conversor.base64HaciaCadena(codigoUID)
+                                })
+
                             })
                             codigosDescuentosNoReconocidos.forEach((contenedor, i) => {
-                                codigosDescuentosNoReconocidos[i].codigoUID = casaVitini.utilidades.conversor.base64HaciaCadena(contenedor.codigoUID)
+                                const codigosUID = contenedor.codigosUID
+                                codigosUID.forEach((codigoUID, i) => {
+                                    codigosUID[i] = casaVitini.utilidades.conversor.base64HaciaCadena(codigoUID)
+                                })
                             })
 
 
