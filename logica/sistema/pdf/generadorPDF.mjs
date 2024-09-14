@@ -326,6 +326,57 @@ export const generadorPDF = async (reserva) => {
             }
             docDefinition.content.push(tablaFormatoPDFMake)
         }
+        const totalesPorServicio = contenedorFinanciero.desgloseFinanciero.entidades.servicios.desglosePorServicios
+        if (Object.entries(totalesPorServicio).length > 0) {
+            const tablaFormatoPDFMake = {
+                style: 'tablaTotales',
+                layout: 'lightHorizontalLines',
+                table: {
+                    widths: ['*', 100],
+                    body: [
+                        [
+                            [
+                                {
+                                    text: 'Servicios',
+                                    style: 'tituloColumnaIzquierda',
+                                }
+                            ],
+                            [
+                                {
+                                    text: 'Total',
+                                    style: 'tituloColumnaDerecha',
+                                }
+                            ]
+                        ],
+                    ]
+                }
+            }
+            for (const [apartamentoIDV, contenedor] of Object.entries(totalesPorServicio)) {
+                const nombre = contenedor.nombre
+                const totalNeto = contenedor.contenedor.precio
+                const fila = [
+                    [
+                        {
+                            text: nombre,
+                            style: 'apartamentoNombre',
+                        },
+                    ],
+                    [
+                        {
+                            text: totalNeto + '$',
+                            style: 'valorTotal',
+                        },
+                    ],
+                ]
+                tablaFormatoPDFMake.table.body.push(fila)
+            }
+            docDefinition.content.push(tablaFormatoPDFMake)
+        }
+
+
+
+
+
         const impuestos = contenedorFinanciero.desgloseFinanciero.impuestos
         if (impuestos.length > 0) {
             const tablaFormatoPDFMake = {
@@ -385,7 +436,7 @@ export const generadorPDF = async (reserva) => {
         const objetoTraductor = {
             totalNeto: "Total reserva neto",
             totalFinal: "Total bruto final a pagar",
-            totalDescuento: "Total suma descuentos aplicados",
+            totalDescuentos: "Total suma descuentos aplicados",
             promedioNocheNeto: "Promedio neto por noche ponderado",
             impuestosAplicados: "Total impuestos aplicados",
             totalNetoConDescuentos: "Total neto con descuentos aplicados",
